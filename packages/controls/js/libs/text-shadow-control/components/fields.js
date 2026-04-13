@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useContext } from '@wordpress/element';
+import { useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -205,4 +205,4 @@ const Fields = ({ itemId, item }) => {
 	);
 };
 
-export default memo(Fields);
+export default Fields;

@@ -5,19 +5,20 @@ namespace Blockera\Editor\StyleDefinitions;
 class Color extends BaseStyleDefinition {
 
 	protected function css( array $setting): array {
-
-        $declaration = [];
-        $cssProperty = $setting['type'];
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'color' !== $cssProperty) {
-
-            return $declaration;
+		if (! isset($setting['type']) || 'color' !== $setting['type']) {
+			return [];
 		}
 
-		$this->setDeclaration($cssProperty, $setting[ $cssProperty ] ? blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) : '');
+		$cssProperty = $setting['type'];
 
+		if (! isset($setting[ $cssProperty ]) || '' === $setting[ $cssProperty ]) {
+			return [];
+		}
+
+		$value = $setting[ $cssProperty ];
+		$this->setDeclaration($cssProperty, blockera_get_value_addon_real_value($value));
 		$this->setCss($this->declarations);
 
-        return $this->css;
-    }
+		return $this->css;
+	}
 }

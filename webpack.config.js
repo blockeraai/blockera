@@ -16,10 +16,12 @@ const exportDefaultPackages = [];
 
 module.exports = (env, argv) => {
 	if (!argv) {
-		return require(path.resolve(
-			process.cwd(),
-			'packages/dev-cypress/js/webpack.config.js'
-		));
+		return require(
+			path.resolve(
+				process.cwd(),
+				'packages/dev-cypress/js/webpack.config.js'
+			)
+		);
 	}
 
 	const BLOCKERA_NAMESPACE = '@blockera/';
@@ -39,9 +41,9 @@ module.exports = (env, argv) => {
 				parentDirectory = 'features-library/';
 			}
 
-			const {
-				version,
-			} = require(`./packages/${parentDirectory}${name}/package.json`);
+			const { version } = require(
+				`./packages/${parentDirectory}${name}/package.json`
+			);
 
 			return [packageName, version.replace(/\./g, '_')];
 		})

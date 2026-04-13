@@ -6,6 +6,14 @@ import type { FeatureConfig } from '../../../extensions/libs/base';
 
 export type EditorFeatureWrapperProps = {
 	/**
+	 * The block name.
+	 */
+	name?: string,
+	/**
+	 * The block client ID.
+	 */
+	clientId?: string,
+	/**
 	 * CSS classes to apply to the tooltip.
 	 */
 	className?: string,

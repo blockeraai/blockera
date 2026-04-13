@@ -30,7 +30,9 @@ export function Spotlighter(
 	/* helper to fully remove SVG & restore parent styles */
 	const cleanup = () => {
 		const svg = svgRef.current;
-		if (!svg) return;
+		if (!svg) {
+			return;
+		}
 		const parent = svg.parentNode;
 		if (parent instanceof HTMLElement) {
 			parent.style.overflow = (svg: any)._prevOverflow;
@@ -44,19 +46,27 @@ export function Spotlighter(
 
 	/* click handler defined once so we can deregister */
 	function outsideHandler(ev: MouseEvent) {
-		if (!onClickOutside) return;
+		if (!onClickOutside) {
+			return;
+		}
 		const parent = svgRef.current?.parentNode;
-		if (!(parent instanceof HTMLElement)) return;
+		if (!(parent instanceof HTMLElement)) {
+			return;
+		}
 
 		const child =
 			typeof target === 'string'
 				? parent.querySelector(target)
 				: target.current;
 
-		if (!child) return;
+		if (!child) {
+			return;
+		}
 
 		// If click was inside spotlighted child, do nothing
-		if (child.contains((ev.target: any))) return;
+		if (child.contains((ev.target: any))) {
+			return;
+		}
 
 		// Otherwise it was on dimmed area (or overlay); fire callback
 		onClickOutside(ev);
@@ -86,7 +96,9 @@ export function Spotlighter(
 		const prevOverflow = parent.style.overflow;
 		const prevTouch = parent.style.touchAction;
 
-		if (prevPos === 'static') parent.style.position = 'relative';
+		if (prevPos === 'static') {
+			parent.style.position = 'relative';
+		}
 		parent.style.overflow = 'hidden';
 		parent.style.touchAction = 'none';
 
@@ -142,7 +154,9 @@ export function Spotlighter(
 					? parent.querySelector(target)
 					: target.current;
 
-			if (!targetEl) return;
+			if (!targetEl) {
+				return;
+			}
 
 			const p = parent.getBoundingClientRect();
 			const t = targetEl.getBoundingClientRect();
@@ -174,8 +188,9 @@ export function Spotlighter(
 		window.addEventListener('scroll', update, true);
 
 		/* ─── outside-click listener ─── */
-		if (onClickOutside)
+		if (onClickOutside) {
 			parent.addEventListener('click', outsideHandler, true);
+		}
 
 		/* ─── cleanup ─── */
 		return () => {

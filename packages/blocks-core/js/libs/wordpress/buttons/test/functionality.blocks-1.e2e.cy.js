@@ -10,16 +10,11 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 
 describe('Buttons Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:buttons -->
@@ -40,6 +35,28 @@ describe('Buttons Block', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		cy.checkBlockCardItems(['normal', 'hover', 'core/button']);
+
+		cy.checkBlockStatesPickerItems(
+			[
+				'states/hover',
+				'states/focus',
+				'states/focus-within',
+				'states/first-child',
+				'states/last-child',
+				'states/only-child',
+				'states/empty',
+				'states/before',
+				'states/after',
+				'elements/bold',
+				'elements/italic',
+				'elements/kbd',
+				'elements/code',
+				'elements/span',
+				'elements/mark',
+				'core/button',
+			],
+			true
+		);
 
 		//
 		// 1. Edit Block
@@ -199,7 +216,7 @@ describe('Buttons Block', () => {
 					.should('include', 'overline');
 			});
 
-		let expectedCSS = '.wp-block-button__link{text-decoration:inherit';
+		let expectedCSS = 'text-decoration:inherit';
 
 		cy.get('link[id^="@blockera/blocks-core-styles-"]')
 			.should('exist')
@@ -240,18 +257,19 @@ describe('Buttons Block', () => {
 		});
 
 		// there is no ; at the end of the rule
-		expectedCSS = '.wp-block-button__link{text-decoration:inherit';
+		expectedCSS = 'text-decoration:inherit';
 
-		if (enabledOptimizeStyleGeneration) {
-			cy.get('style#blockera-inline-css')
-				.invoke('text')
-				.then((styleContent) => {
-					cy.normalizeCSSContent(styleContent).then(
-						(normalizedContent) => {
-							expect(normalizedContent).to.include(expectedCSS);
-						}
-					);
-				});
-		}
+		//Check block
+		cy.get('style[id="blockera-block-buttons-inline-css"]')
+			.should('exist')
+			.then(($style) => {
+				const styleContent = $style.text();
+
+				cy.normalizeCSSContent(styleContent).then(
+					(normalizedContent) => {
+						expect(normalizedContent).to.include(expectedCSS);
+					}
+				);
+			});
 	});
 });

@@ -5,7 +5,11 @@
 	"autoload": {
 		"psr-4": {
 			"Blockera\\Feature\\Icon\\": "src/"
-		}
+		},
+		"files": [
+			"src/functions.php",
+			"src/hooks.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

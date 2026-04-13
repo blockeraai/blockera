@@ -6,7 +6,6 @@
  */
 
 use Blockera\Utils\Env;
-use Blockera\Utils\Utils;
 
 if (! function_exists('blockera_core_config')) {
 
@@ -19,37 +18,83 @@ if (! function_exists('blockera_core_config')) {
      * @return mixed config value.
      */
     function blockera_core_config( string $key, array $args = []) {
+        // Early return for empty key (fast path).
         if (! $key) {
             return false;
         }
 
-        // Create cache key based on input parameters.
-        $cache_key           = md5($key . serialize($args));
+		/**
+		 * Optimize cache key generation.
+		 * - For empty args (most common case), use key directly (fastest path)
+		 * - For non-empty args, build string manually (faster than md5+serialize)
+		 * This avoids expensive serialize() calls while maintaining uniqueness.
+		 */
         static $config_cache = [];
+        
+        if (empty($args)) {
+            $cache_key = $key;
+        } else {
+            // Build cache key manually: faster than serialize for simple arrays.
+            // Most common case is ['root' => ...], so optimize for that.
+            if (count($args) === 1 && isset($args['root'])) {
+                $cache_key = $key . '|root:' . $args['root'];
+            } else {
+                // For multiple args, build string (still faster than serialize).
+                ksort($args);
+                $parts = [];
+                foreach ($args as $k => $v) {
+                    $parts[] = $k . ':' . ( is_string($v) ? $v : serialize($v) );
+                }
+                $cache_key = $key . '|' . implode('&', $parts);
+            }
+        }
 
-        // Return cached result if available.
+        // Return cached result if available (hot path - most common scenario).
         if (isset($config_cache[ $cache_key ])) {
             return $config_cache[ $cache_key ];
         }
 
+        // Split key once and reuse.
         $keyNodes = explode('.', $key);
+        $keyCount = count($keyNodes);
+        
+        if (0 === $keyCount) {
+            return false;
+        }
 
         // Cache config directory and files mapping.
         static $mapped_configs = [];
         $config_dir            = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
         
         if (! isset($mapped_configs[ $config_dir ])) {
-            $config_files                  = glob($config_dir . '/config/*.php');
-            $config_keys                   = array_map(
-                function ( string $file): string {
-                    return Utils::camelCase(str_replace('.php', '', basename($file)));
-                },
-                $config_files
-            );
-            $mapped_configs[ $config_dir ] = array_combine($config_keys, $config_files);
+            $config_files = glob($config_dir . '/config/*.php');
+            if (false === $config_files) {
+                $config_files = [];
+            }
+            
+            // Optimize camelCase conversion: inline the logic to avoid function call overhead.
+            // Utils::camelCase does: lcfirst(pascalCase(str_replace('.php', '', basename($file)))).
+            // We inline this for better performance (avoids multiple function calls).
+            $mapped = [];
+            foreach ($config_files as $file) {
+                $basename = basename($file, '.php');
+                // Inline camelCase: split by '-', capitalize each part, join, lowercase first char.
+                $parts = explode('-', $basename);
+                $camel = '';
+                $first = true;
+                foreach ($parts as $part) {
+                    if ('' !== $part) {
+                        $camel .= $first ? strtolower($part) : ucfirst($part);
+                        $first  = false;
+                    }
+                }
+                $mapped[ $camel ] = $file;
+            }
+            $mapped_configs[ $config_dir ] = $mapped;
         }
 
-        $firstNode = array_shift($keyNodes);
+        // Use direct array access instead of array_shift (avoids array modification overhead).
+        $firstNode = $keyNodes[0];
 
         if (! isset($mapped_configs[ $config_dir ][ $firstNode ])) {
             $config_cache[ $cache_key ] = false;
@@ -58,7 +103,10 @@ if (! function_exists('blockera_core_config')) {
 
         $config = require $mapped_configs[ $config_dir ][ $firstNode ];
 
-        foreach ($keyNodes as $node) {
+        // Iterate from index 1 (skip first node already processed).
+        // Use for loop instead of foreach for slightly better performance.
+        for ($i = 1; $i < $keyCount; $i++) {
+            $node = $keyNodes[ $i ];
             if (! isset($config[ $node ])) {
                 break;
             }
@@ -131,51 +179,108 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
      * @return mixed
      */
     function blockera_get_value_addon_real_value( $value) { 
-        global $blockeraApp;
-
         if (is_numeric($value)) {
             return $value;
         }
 
         if (is_string($value)) {
-            return substr($value, -4) === 'func' ? substr($value, 0, -4) : $value;
+			$len = strlen($value);
+			if (4 <= $len && 'func' === substr($value, -4)) {
+				return substr($value, 0, -4);
+			}
+
+			if ('0px' === $value) {
+				return '0';
+			}
+
+            return $value;
         }
 
-        if (is_array($value) && ! empty($value['isValueAddon']) && ! empty($value['valueType'])) {
+        if (! is_array($value)) {
+            return $value;
+        }
 
-            if ('dynamic-value' === $value['valueType'] && blockera_get_experimental([ 'data', 'dynamicValue' ])) {
+        if (! isset($value['isValueAddon']) || ! $value['isValueAddon'] || ! isset($value['valueType']) || '' === $value['valueType']) {
+            return $value;
+        }
 
-                $valueAddons = $blockeraApp->getRegisteredValueAddons($value['valueType']);
+        $valueType = $value['valueType'];
 
-                if (empty($valueAddons)) {
+        if ('variable' === $valueType) {
 
-                    return '';
-                }
+            $settings = $value['settings'];
 
-                $groupName = $value['settings']['group'];
+            if (! isset($settings['var'])) {
+                return $value;
+            }
 
-                $groupItems = $valueAddons[ $groupName ]['items'];
+            $var    = $settings['var'];
+            $varStr = 'var(' . $var . ')';
 
-                foreach ($groupItems as $name => $item) {
+            if (isset($settings['value'])) {
 
-                    if ($name !== $value['name']) {
+                $settingsValue = $settings['value'];
 
-                        continue;
+                if ('' !== $settingsValue && $varStr !== $settingsValue) {
+
+                    $prefix = "var({$var}";
+
+                    if (str_starts_with($settingsValue, $prefix)) {
+                        return $settingsValue;
                     }
 
-                    $callback = $item['properties']['callback'];
-
-                    if (is_callable($callback)) {
-
-                        return $callback($item['instance']);
-                    }
+                    return $prefix . ', ' . $settingsValue . ')';
                 }
             }
 
-            // todo validate that variable is currently available or not.
-            if ('variable' === $value['valueType'] && isset($value['settings']['var'])) {
-                return 'var(' . $value['settings']['var'] . ')';
+            return $varStr;
+        }
+
+        static $dynamicValueEnabled = null;
+        if (null === $dynamicValueEnabled) {
+            $dynamicValueEnabled = blockera_get_experimental([ 'data', 'dynamicValue' ]);
+        }
+
+        if ('dynamic-value' === $valueType && $dynamicValueEnabled) {
+            global $blockeraApp;
+            $valueAddons = $blockeraApp->getRegisteredValueAddons($valueType);
+
+            if (empty($valueAddons)) {
+                return '';
             }
+
+            $settings = $value['settings'];
+
+            if (! isset($settings['group'])) {
+                return '';
+            }
+
+            $groupName = $settings['group'];
+
+            if (! isset($valueAddons[ $groupName ]['items'])) {
+                return '';
+            }
+
+            $groupItems = $valueAddons[ $groupName ]['items'];
+            $targetName = $value['name'];
+
+            foreach ($groupItems as $name => $item) {
+                if ($name !== $targetName) {
+                    continue;
+                }
+
+                if (! isset($item['properties']['callback'])) {
+                    break;
+                }
+
+                $callback = $item['properties']['callback'];
+
+                if (is_callable($callback)) {
+                    return $callback($item['instance']);
+                }
+                break;
+            }
+            return '';
         }
 
         return $value;
@@ -217,7 +322,14 @@ if (! function_exists('blockera_array_flat')) {
             return [];
         }
 
-        $result = array_merge(...array_values($nestedArray));
+        // Filter out non-array values before merging.
+        $arrayValues = array_filter($nestedArray, 'is_array');
+        
+        if (empty($arrayValues)) {
+            return [];
+        }
+
+        $result = array_merge(...array_values($arrayValues));
         
         // Handle nested arrays with same keys.
         foreach ($result as $key => $value) {
@@ -283,7 +395,6 @@ if (! function_exists('blockera_get_dist_assets')) {
     }
 }
 
-
 if (! function_exists('blockera_load_script_translations')) {
     /**
      * Load script translations.
@@ -339,16 +450,140 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 			return;
 		}
 
+		// Normalize CSS: remove extra whitespace and format for readability.
+		$css = preg_replace('/\s+/', ' ', $css); // Replace multiple spaces with single space.
+		$css = preg_replace('/\s*{\s*/', ' {' . "\n\t", $css); // Format opening braces.
+		$css = preg_replace('/\s*}\s*/', "\n" . '}' . "\n\n", $css); // Format closing braces.
+		$css = preg_replace('/\s*;\s*/', ';' . "\n\t", $css); // Format semicolons.
+		$css = preg_replace('/\s*,\s*/', ', ', $css); // Format commas in selectors.
+		$css = preg_replace('/\t}/', '}', $css); // Remove tab before closing brace.
+		$css = trim($css); // Remove leading/trailing whitespace.
+
 		add_filter(
 			'blockera/front-page/print-inline-css-styles',
 			function ( string $older_css ) use ( $css ): string {
 
-				if (false !== strpos($older_css, $css)) {
+				// Prevent duplicate CSS rules.
+				if ( false !== strpos( $older_css, $css ) ) {
 					return $older_css;
 				}
 
-				return $older_css . $css;
+				// Append new CSS with proper formatting.
+				return trim($older_css) . "\n" . trim($css);
 			}
 		);
+	}
+}
+
+if (! function_exists('blockera_enqueue_global_styles')) {
+	/**
+	 * Enqueues the global styles defined via theme.json.
+	 * Enqueueing the blockera global styles.
+	 * 
+	 * @see wp-includes/script-loader.php.
+	 *
+	 * @return void
+	 */
+	function blockera_enqueue_global_styles(): void {
+
+		$assets_on_demand = wp_should_load_block_assets_on_demand();
+		$is_block_theme   = wp_is_block_theme();
+		$is_classic_theme = ! $is_block_theme;
+
+		/*
+		* Global styles should be printed in the head for block themes, or for classic themes when loading assets on
+		* demand is disabled, which is the default.
+		* The footer should only be used for classic themes when loading assets on demand is enabled.
+		*
+		* See https://core.trac.wordpress.org/ticket/53494 and https://core.trac.wordpress.org/ticket/61965.
+		*/
+		if (
+			( $is_block_theme && doing_action( 'wp_footer' ) ) ||
+			( $is_classic_theme && doing_action( 'wp_footer' ) && ! $assets_on_demand ) ||
+			( $is_classic_theme && doing_action( 'wp_enqueue_scripts' ) && $assets_on_demand )
+		) {
+			return;
+		}
+
+		/*
+		* If loading the CSS for each block separately, then load the theme.json CSS conditionally.
+		* This removes the CSS from the global-styles stylesheet and adds it to the inline CSS for each block.
+		* This filter must be registered before calling wp_get_global_stylesheet();
+		*/
+		add_filter( 'wp_theme_json_get_style_nodes', 'wp_filter_out_block_nodes' );
+
+		$stylesheet = blockera_get_global_stylesheet();
+
+		if ( $is_block_theme ) {
+			/*
+			* Dequeue the Customizer's custom CSS
+			* and add it before the global styles custom CSS.
+			*/
+			remove_action( 'wp_head', 'wp_custom_css_cb', 101 );
+
+			/*
+			* Get the custom CSS from the Customizer and add it to the global stylesheet.
+			* Always do this in Customizer preview for the sake of live preview since it be empty.
+			*/
+			$custom_css = trim( wp_get_custom_css() );
+			if ( $custom_css || is_customize_preview() ) {
+				if ( is_customize_preview() ) {
+					/*
+					* When in the Customizer preview, wrap the Custom CSS in milestone comments to allow customize-preview.js
+					* to locate the CSS to replace for live previewing. Make sure that the milestone comments are omitted from
+					* the stored Custom CSS if by chance someone tried to add them, which would be highly unlikely, but it
+					* would break live previewing.
+					*/
+					$before_milestone = '/*BEGIN_CUSTOMIZER_CUSTOM_CSS*/';
+					$after_milestone  = '/*END_CUSTOMIZER_CUSTOM_CSS*/';
+					$custom_css       = str_replace( array( $before_milestone, $after_milestone ), '', $custom_css );
+					$custom_css       = $before_milestone . "\n" . $custom_css . "\n" . $after_milestone;
+				}
+				$custom_css = "\n" . $custom_css;
+			}
+			$stylesheet .= $custom_css;
+
+			// Add the global styles custom CSS at the end.
+			$stylesheet .= blockera_get_global_stylesheet( array( 'custom-css' ) );
+		}
+
+		if ( empty( $stylesheet ) ) {
+			return;
+		}
+
+		wp_register_style( 'global-styles', false );
+		wp_add_inline_style( 'global-styles', $stylesheet );
+		wp_enqueue_style( 'global-styles' );
+		
+		blockera_add_global_styles_for_blocks();
+	}
+}
+
+if (! function_exists('blockera_sort_css_by_block_number')) {
+	/**
+	 * Sort CSS array based on blockera-block-{number} in CSS strings.
+	 * It's used for development purposes to ensure the CSS is sorted by block number.
+	 *
+	 * @param array $css_array Array of CSS strings containing blockera-block-{number}.
+	 * @return array Sorted CSS array.
+	 */
+	function blockera_sort_css_by_block_number( array $css_array): array {
+		usort(
+            $css_array,
+            function( $a, $b) {
+				// Extract block number from first CSS string.
+				preg_match('/blockera-block-(\d+)/', $a, $matches_a);
+				$number_a = isset($matches_a[1]) ? (int) $matches_a[1] : PHP_INT_MAX;
+			
+				// Extract block number from second CSS string.
+				preg_match('/blockera-block-(\d+)/', $b, $matches_b);
+				$number_b = isset($matches_b[1]) ? (int) $matches_b[1] : PHP_INT_MAX;
+			
+				// Compare the numbers.
+				return $number_a <=> $number_b;
+			}
+        );
+		
+		return $css_array;
 	}
 }

@@ -39,15 +39,25 @@ export function WidthGenerator(id, props, options) {
 
 	const properties = {};
 
-	properties[
-		getBlockSupportStyleEngineConfig(
-			clonedSupports,
-			'blockeraWidth',
-			'width',
-			props.currentBlock,
-			'width'
-		)
-	] = value;
+	let key = getBlockSupportStyleEngineConfig(
+		clonedSupports,
+		'blockeraWidth',
+		'width',
+		props.currentBlock,
+		'width'
+	);
+
+	if (value === 'stretch' && key === 'width') {
+		if (!options.important) {
+			key =
+				'width: 100%; width: -moz-available; width: -webkit-fill-available; width';
+		} else {
+			key =
+				'width: 100% !important; width: -moz-available !important; width: -webkit-fill-available !important; width';
+		}
+	}
+
+	properties[key] = value;
 
 	return createCssDeclarations({
 		options,

@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
-import { memo, useState, useReducer } from '@wordpress/element';
+import { useState, useReducer } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,19 +16,13 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import {
-	isString,
-	isEmpty,
-	isUndefined,
-	hasSameProps,
-	useLateEffect,
-} from '@blockera/utils';
 import { Icon } from '@blockera/icons';
+import { isString, isEmpty, isUndefined, useLateEffect } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import { PromotionPopover } from '../';
+import { UpgradePrompt } from '../';
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
@@ -41,6 +35,7 @@ import { default as IconPickerPopover } from './components/icon-picker/icon-pick
 function IconControl({
 	id,
 	label,
+	labelProps: propsForLabelControl = {},
 	columns,
 	field = 'icon',
 	//
@@ -244,6 +239,7 @@ function IconControl({
 					blockName,
 					resetToDefault,
 				}}
+				{...propsForLabelControl}
 			>
 				<div
 					className={controlClassNames(
@@ -255,7 +251,7 @@ function IconControl({
 					onClick={openModal}
 				>
 					{isOpenPromotion && (
-						<PromotionPopover
+						<UpgradePrompt
 							heading={__('Custom SVG Icons', 'blockera')}
 							featuresList={[
 								__('Upload custom SVG icons', 'blockera'),
@@ -278,7 +274,7 @@ function IconControl({
 							<Tooltip
 								text={__('Remove Icon', 'blockera')}
 								style={{
-									'--tooltip-bg': '#e20000',
+									'--tooltip-bg': '#e20b0b',
 								}}
 								delay={300}
 							>
@@ -382,4 +378,4 @@ function IconControl({
 }
 
 // $FlowFixMe
-export default memo(IconControl, hasSameProps);
+export default IconControl;

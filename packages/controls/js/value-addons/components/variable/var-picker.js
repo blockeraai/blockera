@@ -180,7 +180,7 @@ export default function ({
 													gap: '5px',
 													padding: '0px 4px 0px 6px',
 													maxWidth: '118px',
-											  }
+												}
 											: {}),
 									}}
 								/>
@@ -199,7 +199,9 @@ export default function ({
 			placement="left-start"
 			onClose={() => {
 				controlProps.setOpen('');
-				if (onClose) onClose();
+				if (onClose) {
+					onClose();
+				}
 			}}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={

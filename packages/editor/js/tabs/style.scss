@@ -1,0 +1,1145 @@
+.editor-list-view-sidebar__list-view-container > .document-outline,
+.editor-list-view-sidebar__list-view-panel-content {
+	padding: 10px !important;
+}
+
+.editor-visual-editor.has-padding {
+	padding: 0 !important;
+}
+
+.interface-interface-skeleton__content {
+	position: relative;
+}
+
+.editor-editor-interface .interface-interface-skeleton__content {
+	border-top: none !important;
+}
+
+.edit-site-layout.is-full-canvas
+	.edit-site-layout__canvas
+	.blockera-tabs-wrapper {
+	visibility: visible;
+	height: auto;
+}
+
+/* Hide tabs in site editor while not full */
+.edit-site-layout:not(.is-full-canvas)
+	.edit-site-layout__canvas
+	.blockera-tabs-wrapper {
+	visibility: hidden;
+	height: 0;
+}
+
+/* Hide tabs in site editor while stylebook is open */
+.admin-ui-navigable-region.interface-interface-skeleton__content:has(
+		.edit-site-style-book
+	)
+	.blockera-tabs-wrapper {
+	visibility: hidden;
+	height: 0;
+}
+
+.blockera-tabs-wrapper {
+	transition: var(--blockera-controls-transition);
+	background: #f6f6f6;
+	display: grid;
+	grid-template-columns: auto auto;
+	box-shadow:
+		inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+		inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
+	height: var(--blockera-panel-tabs-height);
+	overflow: hidden;
+
+	/* Ensure tabs wrapper is positioned correctly within interface skeleton */
+	width: 100%;
+	flex-shrink: 0;
+	order: -1;
+}
+
+/* Inside shadow for the right side while having scrollbar */
+.blockera-tabs-wrapper.blockera-tabs-has-overflow .blockera-tabs-bar-settings {
+	box-shadow:
+		-1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+		0 0 10px #0000001f;
+}
+
+/* Inside shadow for the left side while having scrollbar.
+ * Uses JS-driven .blockera-tabs-has-overflow class instead of :has()
+ * for reliable updates when OverlayScrollbars changes attributes via JS. */
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:not(
+		:has(.blockera-tabs-bar-tabs__pinned-tabs)
+	)::before,
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:has(
+		.blockera-tabs-bar-tabs__pinned-tabs
+	)
+	.blockera-tabs-bar-tabs__pinned-tabs::before {
+	box-shadow: 4px 0 10px #0000004f;
+	content: "";
+	display: block;
+	width: 1px;
+	position: absolute;
+	left: -1px;
+	top: 0;
+	bottom: 0;
+	background: transparent;
+	z-index: 131;
+	pointer-events: none;
+}
+
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:has(
+		.blockera-tabs-bar-tabs__pinned-tabs
+	)
+	.blockera-tabs-bar-tabs__pinned-tabs::before {
+	left: initial;
+	right: 0;
+}
+
+/* Hide the actions add button when there is no tabs overflow */
+.blockera-tabs-wrapper:not(.blockera-tabs-has-overflow)
+	.blockera-tabs-bar-settings
+	> .blockera-tabs-bar-actions {
+	display: none;
+}
+
+/* Tabs bar */
+.blockera-tabs-bar {
+	position: relative;
+	display: flex;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+	gap: 0;
+	height: var(--blockera-panel-tabs-height);
+	width: 100%;
+	box-sizing: border-box;
+	overflow-x: hidden; /* Hide browser default horizontal scrollbar */
+	overflow-y: hidden; /* Hide browser default vertical scrollbar */
+}
+
+.blockera-tabs-bar-tabs {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	gap: 0;
+	min-width: 0;
+	height: var(--blockera-panel-tabs-height);
+	position: relative;
+	padding-left: 1px;
+}
+
+/**
+ * Container-level indicator - used ONLY for animations when switching tabs
+ *
+ * Architecture:
+ * - Hidden by default (display: none)
+ * - Shown during tab switch animations (when .is-animating-indicator class is added)
+ * - Positioned using CSS custom properties (--active-tab-left, --active-tab-width)
+ * - Uses CSS transitions for smooth animation (can be disabled via --indicator-transition)
+ *
+ * Why container-level?
+ * - Allows smooth animation across tabs (not constrained to a single tab)
+ * - Positioned relative to container, so it can move freely
+ * - After animation, hidden and tab's own indicator takes over
+ */
+.blockera-tabs-bar-tabs::before {
+	content: "";
+	height: 2px;
+	position: absolute;
+	top: 0;
+	left: var(--active-tab-left, 0);
+	width: var(--active-tab-width, 0);
+	background: var(--blockera-controls-primary-color);
+	z-index: 2;
+	transition: var(--indicator-transition, left 0.3s ease, width 0.3s ease);
+	pointer-events: none;
+	display: none; /* Hidden by default - only shown during animations */
+}
+
+/* Show container indicator when animating (tab indicator is hidden during this time) */
+.blockera-tabs-bar-tabs.is-animating-indicator::before {
+	display: block;
+}
+
+.blockera-tabs-bar-tabs::-webkit-scrollbar {
+	height: 4px;
+}
+
+.blockera-tabs-bar-tabs::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+.blockera-tabs-bar-tabs::-webkit-scrollbar-thumb {
+	background: #888888;
+	border-radius: 2px;
+}
+
+.blockera-tabs-bar-tabs::-webkit-scrollbar-thumb:hover {
+	background: #555555;
+}
+
+.blockera-tabs-bar-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+.blockera-tabs-bar .blockera-tabs-bar-actions {
+	padding-left: 5px;
+}
+
+.blockera-tabs-bar .blockera-tabs-bar-actions div[tabindex="0"] {
+	display: flex;
+	justify-content: center;
+}
+
+.blockera-tabs-bar-actions .components-button {
+	color: var(--wp-components-color-foreground, #1e1e1e) !important;
+	background-color: transparent !important;
+	min-width: 26px !important;
+	height: 26px;
+	min-height: 26px;
+
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+.blockera-tabs-bar-actions .components-button:hover {
+	color: var(--blockera-controls-primary-color) !important;
+	background-color: transparent !important;
+}
+
+.blockera-tabs-bar-actions .components-button:focus {
+	outline: none !important;
+	box-shadow: none !important;
+	background-color: transparent !important;
+}
+
+.blockera-tabs-bar-actions .components-button[data-focus-visible="true"] {
+	outline-offset: 0 !important;
+	box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
+		var(--blockera-controls-primary-color) !important;
+	outline: none !important;
+}
+
+/** Tabs Bar Settings */
+.blockera-tabs-bar-settings {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	position: relative;
+	padding: 0 8px;
+}
+
+.blockera-tabs-bar-settings .components-button {
+	color: var(--wp-components-color-foreground, #1e1e1e) !important;
+	background-color: transparent !important;
+
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+/* Toolbar Context Menu */
+.blockera-tabs-toolbar-menu .components-button {
+	color: var(--wp-components-color-foreground, #1e1e1e) !important;
+	background-color: transparent !important;
+	min-width: 26px !important;
+	height: 26px;
+	min-height: 26px;
+	padding: 0;
+}
+
+.blockera-tabs-toolbar-menu .components-button:hover {
+	color: var(--blockera-controls-primary-color) !important;
+	background-color: transparent !important;
+}
+
+.blockera-tabs-toolbar-menu .components-button:focus {
+	outline: none !important;
+	box-shadow: none !important;
+	background-color: transparent !important;
+}
+
+.blockera-tabs-bar-settings .components-button[data-focus-visible="true"] {
+	outline-offset: 0 !important;
+	box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
+		var(--blockera-controls-primary-color) !important;
+	outline: none !important;
+}
+
+.blockera-tabs-toolbar-menu .components-button svg {
+	width: 24px;
+	height: 24px;
+	fill: currentColor;
+}
+
+.blockera-tabs-toolbar-menu-popover {
+	z-index: 100001;
+}
+
+.blockera-tabs-toolbar-menu-popover [role="menu"] {
+	min-width: 300px;
+}
+
+.blockera-tabs-toolbar-menu-popover [role="group"] {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.blockera-tabs-toolbar-menu-popover .components-menu-item__button {
+	width: 100%;
+	min-height: 32px !important;
+}
+
+.blockera-tabs-toolbar-menu-popover
+	.components-menu-item__button:hover:not([aria-disabled="true"]) {
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color-soft);
+}
+
+.blockera-tabs-toolbar-menu-popover .components-menu-item__button[disabled] {
+	cursor: default;
+}
+
+.blockera-tabs-toolbar-menu-popover
+	.components-menu-item__button[disabled]:hover {
+	background-color: transparent;
+}
+
+.blockera-tabs-toolbar-menu-popover
+	.components-menu-item__button.is-active-item
+	svg {
+	fill: var(--blockera-controls-primary-color);
+	width: 26px;
+	height: 26px;
+}
+
+.blockera-tabs-toolbar-menu-popover .components-menu-item__info {
+	color: #757575;
+	font-size: 12px;
+	margin-top: 2px;
+	white-space: normal;
+	line-height: 1.4;
+}
+
+.blockera-tabs-toolbar-menu-popover .blockera-tabs-closed-time {
+	color: #757575;
+	font-size: 12px;
+	white-space: nowrap;
+	margin-left: 8px;
+}
+
+/* Recently closed tab icon */
+.blockera-tabs-toolbar-menu-popover .blockera-tabs-closed-tab-icon {
+	flex-shrink: 0;
+	margin-right: 8px;
+}
+
+/* Recently closed tab title */
+.blockera-tabs-toolbar-menu-popover .blockera-tabs-closed-tab-title {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Recently closed tab status badge (for non-published items) */
+.blockera-tabs-toolbar-menu-popover .blockera-tabs-closed-tab-status {
+	flex-shrink: 0;
+	background-color: #e3e3e3;
+	color: #1e1e1e;
+	font-size: 11px;
+	padding: 3px 5px;
+	border-radius: 3px;
+	margin-left: 8px;
+	text-transform: capitalize;
+	font-weight: 500;
+}
+
+.blockera-tabs-toolbar-menu-popover
+	.blockera-tabs-toolbar-menu-item__closed-tab.status-trash
+	.blockera-tabs-closed-tab-status {
+	background-color: #ffdada;
+	color: #cc1818;
+}
+
+.blockera-tabs-toolbar-menu-popover
+	.blockera-tabs-toolbar-menu-item__closed-tab
+	.components-menu-item__item {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1;
+	min-width: 0;
+}
+
+/* Wrapper for sortable tabs - applies transform without affecting tab dimensions */
+
+/* The wrapper div from SortableTab should not interfere with flex layout */
+.blockera-tabs-bar-tabs > div {
+	display: flex; /* Match parent flex layout, preserve natural width of tab */
+	flex-shrink: 0; /* Prevent wrapper from shrinking */
+	flex-grow: 0; /* Prevent wrapper from growing */
+	width: fit-content; /* Constrain wrapper to tab's natural width */
+	min-width: 0; /* Allow tab to control its own min-width */
+	max-width: 100%; /* Prevent wrapper from exceeding container */
+}
+
+/* Add extra padding to the last tab button to prevent it from being cut off */
+.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+	> .blockera-tabs-bar-tabs
+	> div:not(.blockera-tabs-bar-tabs__pinned-tabs)
+	> div[role="button"]:last-child {
+	padding-right: 30px;
+}
+
+/* Higher z-index for pinned tabs to make sure it's over not pinned tabs */
+.blockera-tabs-bar-tabs > div.blockera-tabs-bar-tabs__pinned-tabs {
+	z-index: 10;
+	background-color: #dddddd;
+}
+
+/* Ensure dragged wrapper appears above other tabs */
+.blockera-tabs-sortable-wrapper-dragging {
+	z-index: 1 !important;
+	position: relative;
+
+	.blockera-tabs-tab {
+		background-color: #ffffff;
+	}
+}
+
+.blockera-tabs-tab {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	background: transparent;
+	border-right: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+	padding: 0 8px;
+	max-width: 200px;
+	flex-shrink: 0;
+	transition: transform 0.2s ease-out;
+	position: relative; /* Overridden by .is-dragging */
+	background-color: var(--blockera-panel-tabs-tab-bg-color);
+	height: calc(var(--blockera-panel-tabs-height) - 2px);
+	margin-top: 1px;
+	cursor: pointer;
+	user-select: none;
+	margin-left: -1px;
+}
+
+.blockera-tabs-tab.show-icons {
+	padding: 0 6px;
+}
+
+/* Draggable tab styles */
+.blockera-tabs-tab.is-draggable {
+	cursor: grab;
+}
+
+.blockera-tabs-tab.is-draggable:active {
+	cursor: grabbing;
+}
+
+.blockera-tabs-tab.is-dragging {
+	position: relative;
+
+	/* opacity: 0.8; */
+	z-index: 1000;
+
+	/* With wrapper approach, tab maintains its natural dimensions */
+
+	/* Transform is applied to wrapper, not the tab itself */
+	will-change: transform;
+	transition: none !important; /* Override base transition for instant movement */
+
+	/* Remove from flow so other tabs can shift into its space */
+	pointer-events: none; /* Prevent interaction while dragging */
+}
+
+/* Hide the default browser drag image */
+.blockera-tabs-tab.is-dragging::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+}
+
+.blockera-tabs-tab:hover {
+	background: #f6f6f6;
+}
+
+.blockera-tabs-tab:not(.is-active):has(
+		.components-button[data-focus-visible="true"]
+	) {
+	background: #ffffff;
+}
+
+.blockera-tabs-tab.is-active {
+	background: #ffffff;
+}
+
+/**
+ * Tab-level indicator - always attached to the active tab
+ *
+ * Architecture:
+ * - Always visible when tab has .is-active class
+ * - Positioned relative to the tab (left: 0, right: 0 spans full width)
+ * - Moves naturally with the tab during sorting/dragging
+ * - Hidden during tab switch animations (container indicator takes over)
+ *
+ * Why tab-level?
+ * - Stays attached to the tab during drag/sort operations
+ * - No JavaScript needed to update position during sorting
+ * - Simple and performant (CSS handles positioning)
+ */
+.blockera-tabs-tab.is-active::before {
+	content: "";
+	height: 2px;
+	position: absolute;
+	top: -1px; /* Position at container top (tab has margin-top: 1px) */
+	left: -1px;
+	right: -1px;
+	background: var(--blockera-controls-primary-color);
+	z-index: 2;
+	pointer-events: none;
+}
+
+/* Hide tab indicator during animations - container indicator animates instead */
+.blockera-tabs-bar-tabs.is-animating-indicator
+	.blockera-tabs-tab.is-active::before {
+	display: none;
+}
+
+.blockera-tabs-tab.is-active::after {
+	content: "";
+	height: 1px;
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	right: 0;
+	background: #ffffff;
+}
+
+/* Tabs buttons styling */
+.blockera-tabs-tab .components-button {
+	min-width: 22px !important;
+	height: 22px !important;
+	line-height: 22px !important;
+	padding: 4px;
+}
+
+.blockera-tabs-tab .components-button svg {
+	width: 20px;
+	height: 20px;
+	fill: currentColor;
+}
+
+.blockera-tabs-tab-button {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	text-align: left;
+	min-width: 0;
+	overflow: visible;
+	color: var(--wp-components-color-foreground, #1e1e1e) !important;
+	font-weight: 400 !important;
+	font-size: 13px !important;
+	border-radius: 2px;
+}
+
+.blockera-tabs-tab-button svg {
+	fill: currentColor !important;
+}
+
+.blockera-tabs-tab-button:focus[data-focus-visible="true"] {
+	outline-offset: 0 !important;
+	box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
+		var(--blockera-controls-primary-color) !important;
+	outline: none !important;
+}
+
+.blockera-tabs-tab-button:hover {
+	color: var(--blockera-controls-primary-color) !important;
+	background-color: transparent !important;
+}
+
+.blockera-tabs-tab-button:focus {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.blockera-tabs-tab-button:active {
+	background-color: transparent !important;
+}
+
+.blockera-tabs-tab.is-active .blockera-tabs-tab-button {
+	color: var(--blockera-controls-primary-color) !important;
+
+	svg {
+		fill: currentColor !important;
+	}
+}
+
+.blockera-tabs-tab-title {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.blockera-tabs-tab-icon {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.blockera-tabs-unsaved-indicator {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: var(--blockera-controls-primary-color);
+	margin: 0 3px 0 2px;
+}
+
+.components-button.blockera-tabs-tab-close {
+	padding: 0;
+	min-width: auto;
+	flex-shrink: 0;
+	transition: all 0.2s ease;
+	color: var(--blockera-controls-border-color-hover) !important;
+	margin-right: -2px;
+}
+
+.blockera-tabs-tab-close[disabled] {
+	opacity: 0.5;
+}
+
+.components-button.blockera-tabs-tab-close svg {
+	fill: currentColor;
+	width: 22px;
+	height: 22px;
+}
+
+.components-button.blockera-tabs-tab-close:hover:not([disabled]) {
+	background-color: transparent !important;
+	--blockera-controls-primary-color: var(--blockera-notice-error-primary);
+	color: var(--blockera-controls-primary-color) !important;
+}
+
+.blockera-tabs-tab-close[data-focus-visible="true"]:not([disabled]) {
+	--blockera-controls-primary-color: var(--blockera-notice-error-primary);
+	color: var(--blockera-controls-primary-color) !important;
+	outline-offset: 0 !important;
+	box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
+		var(--blockera-controls-primary-color) !important;
+	outline: none !important;
+}
+
+.blockera-tabs-add-modal-content {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.blockera-tabs-add-modal-divider {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	text-align: center;
+	color: #757575;
+	font-size: 13px;
+}
+
+.blockera-tabs-add-modal-divider::before,
+.blockera-tabs-add-modal-divider::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: #dddddd;
+}
+
+.blockera-tabs-error {
+	color: #d63638;
+	font-size: 13px;
+	padding: 8px;
+	background: #fcf0f1;
+	border-radius: 4px;
+}
+
+.blockera-tabs-loading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.blockera-tabs-search-loading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.blockera-tabs-no-results {
+	padding: 12px;
+	text-align: center;
+	color: #757575;
+	font-size: 13px;
+	font-style: italic;
+}
+
+.blockera-tabs-search-results {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-height: 300px;
+	overflow-y: auto;
+	border: 1px solid #dddddd;
+	border-radius: 4px;
+	padding: 4px;
+}
+
+.blockera-tabs-search-result {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 12px;
+	background: #ffffff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	text-align: left;
+	transition: background-color 0.2s ease;
+}
+
+.blockera-tabs-search-result:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.blockera-tabs-search-result:hover:not(:disabled) {
+	background: #f0f0f1;
+}
+
+.blockera-tabs-result-title {
+	flex: 1;
+	font-size: 13px;
+	color: #1e1e1e;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-right: 12px;
+}
+
+.blockera-tabs-result-permalink {
+	font-size: 12px;
+	color: #757575;
+	flex-shrink: 0;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.blockera-tabs-create-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.blockera-tabs-add-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+/* Close Tab Confirmation Dialog */
+.blockera-tabs-close-confirm-dialog .components-modal__content {
+	padding: 24px;
+}
+
+.blockera-tabs-close-confirm-content {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.blockera-tabs-close-confirm-content p {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #1e1e1e;
+}
+
+.blockera-tabs-close-confirm-tab-title strong {
+	font-weight: 600;
+}
+
+.blockera-tabs-close-confirm-tabs-list {
+	margin: 10px 0 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.blockera-tabs-close-confirm-tab-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 13px;
+	color: #1e1e1e;
+	gap: 12px;
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color-soft);
+	border-radius: 2px;
+	padding: 6px 12px;
+	transition: var(--blockera-controls-transition);
+}
+
+.blockera-tabs-close-confirm-tab-item:hover {
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color);
+}
+
+.blockera-tabs-close-confirm-tab-title {
+	font-weight: 500;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin: 0;
+}
+
+.blockera-tabs-close-confirm-review-button {
+	flex-shrink: 0;
+}
+
+.blockera-tabs-close-confirm-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
+/* Rename modal styling */
+.blockera-tabs-rename-modal-content {
+	padding: 16px 0;
+}
+
+.blockera-tabs-rename-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 10px;
+	margin-top: 16px;
+}
+
+.blockera-tabs-rename-modal-actions-right {
+	display: flex;
+	gap: 8px;
+}
+
+/* Ensure tabs bar is positioned correctly within interface skeleton */
+.interface-interface-skeleton__content > .blockera-tabs-wrapper {
+	order: -1;
+	flex-shrink: 0;
+	position: sticky;
+	z-index: 1;
+	top: 0;
+}
+
+/* Pinned tabs styling */
+.blockera-tabs-bar-tabs__pinned-tabs {
+	position: sticky;
+	left: 1px;
+	top: 0;
+	z-index: 1;
+}
+
+.blockera-tabs-tab.is-pinned {
+	background-color: color-mix(
+		in srgb,
+		var(--blockera-controls-primary-color) 10%,
+		#ffffff
+	);
+	position: relative;
+}
+
+.blockera-tabs-tab.is-pinned.is-active {
+	background: linear-gradient(
+		0deg,
+		#ffffff,
+		color-mix(in srgb, var(--blockera-controls-primary-color) 8%, #ffffff)
+	);
+}
+
+.blockera-tabs-tab.is-pinned .blockera-tabs-tab-button {
+	font-weight: 500;
+}
+
+.blockera-tabs-tab.is-pinned.show-icons:not(.is-icon-only) {
+	padding: 0 10px 0 6px;
+}
+
+/* Renamed tab styling */
+.blockera-tabs-tab.renamed-tab .blockera-tabs-tab-title {
+	line-height: 16px;
+	font-size: 13px;
+	font-weight: 500;
+	padding: 2px 3px;
+	border-radius: var(--blockera-controls-border-radius);
+	display: inline-block;
+	background: color-mix(
+		in srgb,
+		var(--blockera-controls-primary-color) 4%,
+		#ffffff 100%
+	) !important;
+	box-shadow: 0 0 0 1px
+		color-mix(
+			in srgb,
+			var(--blockera-controls-primary-color) 40%,
+			#ffffff 100%
+		) !important;
+	color: var(--blockera-controls-primary-color) !important;
+}
+
+.blockera-tabs-tab.renamed-tab:not(.is-active):not(.is-pinned)
+	.blockera-tabs-tab-title {
+	--blockera-controls-primary-color: #6a6868;
+}
+
+/* Context menu styling */
+.blockera-tabs-context-menu {
+	z-index: 100000; /* Ensure it appears above editor elements */
+}
+
+.blockera-tabs-context-menu .components-popover__content {
+	min-width: 200px;
+	padding: 0;
+}
+
+.blockera-tabs-context-menu .components-menu-group {
+	margin: 0;
+	padding: 8px;
+}
+
+.blockera-tabs-context-menu .components-menu-group + .components-menu-group {
+	border-top: 1px solid #dddddd;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.blockera-tabs-context-menu .components-menu-item {
+	padding: 8px 12px;
+	font-size: 13px;
+	min-height: 36px;
+}
+
+.blockera-tabs-context-menu .components-menu-item:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.blockera-tabs-context-menu .components-menu-item:not(:disabled):hover {
+	background-color: #f0f0f1;
+}
+
+/**
+ * Command palette "Open as Tab" indicator for wrapped navigation commands
+ * Target command items by data-value attribute ending with ⌘TAB marker
+ */
+.commands-command-menu
+	[cmdk-item][data-value$="⌘TAB"]
+	.commands-command-menu__item {
+	width: 100%;
+	justify-content: space-between;
+}
+
+.commands-command-menu
+	[cmdk-item][data-value$="⌘TAB"]
+	.commands-command-menu__item::after {
+	content: var(--blockera-tab-indicator-text, "Opens in Tab");
+	font-weight: 400;
+	flex-shrink: 0;
+	margin-left: auto;
+	padding: 0 10px;
+	opacity: 0.5;
+}
+
+/**
+ * Add Tab Mode - Filter non-navigation commands
+ * When in add tab mode (via + button), only show navigation commands
+ *
+ * Hidden items are marked with data-blockera-hidden attribute
+ * Keyboard navigation is intercepted in JavaScript to skip hidden items
+ */
+body.blockera-tabs-add-tab-mode
+	.commands-command-menu
+	[cmdk-item][data-blockera-hidden="true"] {
+	display: none !important;
+}
+
+body.blockera-tabs-add-tab-mode
+	.commands-command-menu
+	[cmdk-item][data-blockera-visible="true"] {
+	display: flex !important;
+}
+
+/**
+ * Hide "Add new post/page" commands when NOT in add tab mode
+ * Stable command `id` (from @wordpress/commands) — avoids English-only data-value matching.
+ */
+body:not(.blockera-tabs-add-tab-mode)
+	.commands-command-menu
+	[cmdk-item][id="blockera-tabs/create-new-post"],
+body:not(.blockera-tabs-add-tab-mode)
+	.commands-command-menu
+	[cmdk-item][id="blockera-tabs/create-new-page"] {
+	display: none !important;
+}
+
+/**
+ * Lock icon styling for tabs locked by another user
+ */
+
+.blockera-tabs-tab-icon.lock-icon {
+	color: #cc1818;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.blockera-tabs-tab-icon.lock-icon svg {
+	width: 20px;
+	height: 20px;
+	fill: currentColor;
+}
+
+.blockera-tabs-tab.is-active .blockera-tabs-tab-icon.lock-icon {
+	color: #cc1818;
+}
+
+/* Drag placeholder styles */
+.blockera-tabs-drag-placeholder {
+	height: calc(var(--blockera-panel-tabs-height) - 2px);
+	background-color: rgba(0, 124, 186, 0.1);
+	border: 2px dashed var(--blockera-controls-primary-color);
+	margin: 1px 0;
+	flex-shrink: 0;
+	transition:
+		opacity 0.2s ease,
+		border-color 0.2s ease;
+	border-radius: 2px;
+	box-sizing: border-box;
+	min-width: 100px;
+}
+
+.blockera-tabs-drag-placeholder.is-valid {
+	border-color: var(--blockera-controls-primary-color);
+	background-color: rgba(0, 124, 186, 0.1);
+	opacity: 1;
+}
+
+.blockera-tabs-drag-placeholder.is-invalid {
+	border-color: #cc1818;
+	background-color: rgba(204, 24, 24, 0.1);
+	opacity: 0.8;
+}
+
+/**
+ * Tab Locked Modal styling
+ */
+.blockera-tabs-locked-modal .components-modal__content {
+	padding: 24px;
+}
+
+.blockera-tabs-locked-modal__avatar {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	object-fit: cover;
+}
+
+.blockera-tabs-locked-modal__content {
+	flex: 1;
+}
+
+.blockera-tabs-locked-modal__content p {
+	margin: 0 0 12px 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #1e1e1e;
+}
+
+.blockera-tabs-locked-modal__content p:last-of-type {
+	margin-bottom: 20px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.blockera-tabs-locked-modal__buttons {
+	margin-top: 16px;
+}
+
+.blockera-tabs-locked-modal__buttons .components-button {
+	min-height: 36px;
+}
+
+/**
+ * Tab unavailable (missing / inaccessible document) modal
+ */
+.blockera-tabs-unavailable-modal .components-modal__content {
+	padding: 24px;
+}
+
+.blockera-tabs-unavailable-modal__content p {
+	margin: 0 0 12px 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #1e1e1e;
+}
+
+.blockera-tabs-unavailable-modal__label {
+	margin-bottom: 16px;
+	word-break: break-word;
+}
+
+.blockera-tabs-unavailable-modal__content p:last-of-type {
+	margin-bottom: 20px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.blockera-tabs-unavailable-modal__buttons {
+	margin-top: 8px;
+}
+
+.blockera-tabs-unavailable-modal__buttons .components-button {
+	min-height: 36px;
+}
+
+/**
+ * Toolbar offset for text editor when tabs are visible.
+ */
+.blockera-tabs-wrapper ~ .editor-text-editor .editor-text-editor__toolbar {
+	top: var(--blockera-panel-tabs-height);
+}

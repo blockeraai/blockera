@@ -83,7 +83,7 @@ export const TextStroke = ({
 					</p>
 				</>
 			}
-			columns="columns-2"
+			columns="1fr 2.5fr"
 			{...labelProps}
 		>
 			<ColorControl
@@ -101,6 +101,11 @@ export const TextStroke = ({
 						</p>
 					</>
 				}
+				labelProps={{
+					changesetGraphPreview: {
+						type: 'color',
+					},
+				}}
 				columns="columns-2"
 				defaultValue={defaultValue.color}
 				onChange={(newValue, ref) => {
@@ -140,6 +145,11 @@ export const TextStroke = ({
 							</p>
 						</>
 					}
+					labelProps={{
+						changesetGraphPreview: {
+							type: 'string',
+						},
+					}}
 					columns="columns-2"
 					unitType="essential"
 					defaultValue={defaultValue.width}

@@ -3,8 +3,7 @@
  */
 import {
 	savePage,
-	createPost,
-	createTerm,
+	editPost,
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
@@ -13,28 +12,52 @@ import {
 
 describe('Post Terms Block', () => {
 	beforeEach(() => {
-		//
-		// Setup terms
-		//
-		createTerm('Category 1');
-		createTerm('Category 2');
+		// Step 1: Create categories sequentially
+		const categories = ['Category One', 'Category Two', 'Category Three'];
 
-		//
-		// Create post
-		//
-		createPost({
-			post_title: 'Post with categories',
+		// eslint-disable-next-line cypress/no-assigning-return-values
+		let categoryChain = cy.wpCli(
+			`term create category '${categories[0]}' || true`
+		);
+
+		for (let i = 1; i < categories.length; i++) {
+			categoryChain = categoryChain.then(() => {
+				return cy.wpCli(
+					`term create category '${categories[i]}' || true`
+				);
+			});
+		}
+
+		categoryChain.then(() => {
+			// Step 2: Create a post and get its ID
+			cy.wpCli(
+				`wp post create --post_type=post --post_title='Post with categories' --post_status=publish`
+			).then((result) => {
+				// Extract post ID from stdout message like "Success: Created post 22."
+				const match = result.stdout.match(/post (\d+)/);
+				const postId = match ? parseInt(match[1], 10) : NaN;
+
+				if (isNaN(postId)) {
+					throw new Error(
+						`Failed to get post ID from output: ${result.stdout}`
+					);
+				}
+
+				// Step 3: Assign categories to the post
+				const categoryNames = categories.join(' ');
+				cy.wpCli(
+					`wp post term set ${postId} category ${categoryNames}`
+				).then(() => {
+					// Step 4: Edit the post
+					cy.setScreenshotViewport('desktop');
+
+					editPost({ postID: postId });
+				});
+			});
 		});
 	});
 
 	it('Functionality + Inner blocks', () => {
-		//
-		// Set categories
-		//
-		cy.openDocumentSettingsPanel('Categories', 'Page');
-		cy.get('label').contains('Category 1').click();
-		cy.get('label').contains('Category 2').click();
-
 		//
 		// Append block
 		//
@@ -146,7 +169,15 @@ describe('Post Terms Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
-		cy.setColorControlValue('BG Color', 'ff0000');
+		cy.setColorControlValue('BG Color', '22ff00');
+
+		cy.getBlock('core/post-terms')
+			.first()
+			.within(() => {
+				cy.get('a')
+					.first()
+					.should('have.css', 'background-color', 'rgb(34, 255, 0)');
+			});
 
 		//
 		// 2. Assert inner blocks selectors in front end
@@ -179,7 +210,7 @@ describe('Post Terms Block', () => {
 			// elements/link
 			cy.get('a')
 				.first()
-				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+				.should('have.css', 'background-color', 'rgb(34, 255, 0)');
 		});
 	});
 });

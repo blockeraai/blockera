@@ -162,6 +162,12 @@
 		"tags": ["schedule", "agenda", "datebook"]
 	},
 	{
+		"iconName": "cart",
+		"title": "Cart",
+		"library": "wp",
+		"tags": ["shopping", "store", "checkout", "commerce"]
+	},
+	{
 		"iconName": "cancel-circle-filled",
 		"title": "cancel Circle Filled",
 		"library": "wp",
@@ -238,6 +244,12 @@
 		"title": "chevron Up",
 		"library": "wp",
 		"tags": ["arrow up", "scroll", "scroll to top"]
+	},
+	{
+		"iconName": "chevron-up-small",
+		"title": "Chevron Up Small",
+		"library": "wp",
+		"tags": ["chevron", "up", "small"]
 	},
 	{
 		"iconName": "chevron-up-down",
@@ -394,6 +406,12 @@
 		"title": "custom Post Type",
 		"library": "wp",
 		"tags": ["post type", "custom", "content"]
+	},
+	{
+		"iconName": "dashboard",
+		"title": "dashboard",
+		"library": "wp",
+		"tags": ["dashboard", "overview", "statistics", "panel"]
 	},
 	{
 		"iconName": "desktop",
@@ -1534,6 +1552,12 @@
 		"tags": ["blog", "cms", "website"]
 	},
 	{
+		"iconName": "arrow-down-left",
+		"title": "Arrow Down Left",
+		"library": "wp",
+		"tags": ["arrow", "down", "left"]
+	},
+	{
 		"iconName": "arrow-down-right",
 		"title": "Arrow Down Right",
 		"library": "wp",
@@ -1544,6 +1568,12 @@
 		"title": "Arrow Up Left",
 		"library": "wp",
 		"tags": ["arrow", "up", "left"]
+	},
+	{
+		"iconName": "arrow-up-right",
+		"title": "Arrow Up Right",
+		"library": "wp",
+		"tags": ["arrow", "up", "right"]
 	},
 	{
 		"iconName": "background",
@@ -1850,5 +1880,83 @@
 		"title": "ThumbsUp",
 		"library": "wp",
 		"tags": ["thumbs", "up", "like"]
+	},
+	{
+		"iconName": "breadcrumbs",
+		"title": "Breadcrumbs",
+		"library": "wp",
+		"tags": ["navigation", "links"]
+	},
+	{
+		"iconName": "corner-all",
+		"title": "Corner All",
+		"library": "wp",
+		"tags": ["radius", "corners"]
+	},
+	{
+		"iconName": "corner-bottom-left",
+		"title": "Corner Bottom Left",
+		"library": "wp",
+		"tags": ["radius", "corners"]
+	},
+	{
+		"iconName": "corner-bottom-right",
+		"title": "Corner Bottom Right",
+		"library": "wp",
+		"tags": ["radius", "corners"]
+	},
+	{
+		"iconName": "corner-top-left",
+		"title": "Corner Top Left",
+		"library": "wp",
+		"tags": ["radius", "corners"]
+	},
+	{
+		"iconName": "corner-top-right",
+		"title": "Corner Top Right",
+		"library": "wp",
+		"tags": ["radius", "corners"]
+	},
+	{
+		"iconName": "format-r-t-l",
+		"title": "RTL Format",
+		"library": "wp",
+		"tags": ["RTL", "right to left", "direction"]
+	},
+	{
+		"iconName": "gift",
+		"title": "Gift",
+		"library": "wp",
+		"tags": ["gift", "present", "reward"]
+	},
+	{
+		"iconName": "math",
+		"title": "Math",
+		"library": "wp",
+		"tags": ["formula", "equation", "science"]
+	},
+	{
+		"iconName": "term-count",
+		"title": "Term Count",
+		"library": "wp",
+		"tags": ["term", "count", "number", "tags"]
+	},
+	{
+		"iconName": "term-name",
+		"title": "Term Name",
+		"library": "wp",
+		"tags": ["term", "name", "tags"]
+	},
+	{
+		"iconName": "time-to-read",
+		"title": "Time To Read",
+		"library": "wp",
+		"tags": ["time", "reading", "duration", "clock"]
+	},
+	{
+		"iconName": "word-count",
+		"title": "Word Count",
+		"library": "wp",
+		"tags": ["word", "count", "number", "text"]
 	}
 ]

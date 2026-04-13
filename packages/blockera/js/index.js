@@ -31,9 +31,16 @@ import { initializer } from '@blockera/bootstrap';
 import {
 	applyHooks,
 	defineGlobalProps,
-	bootstrapBreakpoints,
-	bootstrapCanvasEditor,
+	bootstrapBlockAppSettings,
 	blockeraExtensionsBootstrap,
+	bootstrapEditor,
+	bootstrapTabs,
+	bootstrapPreviewMode,
+	bootstrapZoom,
+	bootstrapShortcuts,
+	bootstrapScrollbar,
+	bootstrapSlots,
+	bootstrapCommandBar,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
 import {
@@ -88,19 +95,39 @@ addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
 addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 	applyFilters('blockera.before.bootstrap', noop)();
 
+	// Bootstrap functions for extensions.
+	blockeraExtensionsBootstrap();
+
 	return () => {
 		defineGlobalProps(() => {
+			bootstrapBlockAppSettings();
+
 			// Bootstrap functions for blocks.
 			blockeraBootstrapBlocks();
 
-			// Bootstrap canvas editor UI on WordPress block editor.
-			bootstrapCanvasEditor();
+			// Bootstrap editor modules (sidebars, persistence)
+			bootstrapEditor();
 
-			// Bootstrap breakpoints.
-			bootstrapBreakpoints();
+			// Bootstrap tabs module
+			bootstrapTabs();
 
-			// Bootstrap functions for extensions.
-			blockeraExtensionsBootstrap();
+			// Bootstrap preview mode
+			bootstrapPreviewMode();
+
+			// Bootstrap zoom controls
+			bootstrapZoom();
+
+			// Bootstrap keyboard shortcuts extension
+			bootstrapShortcuts();
+
+			// Bootstrap scrollbar utilities
+			bootstrapScrollbar();
+
+			// Bootstrap slots system
+			bootstrapSlots();
+
+			// Bootstrap command bar (export-only, no-op but included for consistency)
+			bootstrapCommandBar();
 
 			applyFilters('blockera.after.bootstrap', noop)();
 		});

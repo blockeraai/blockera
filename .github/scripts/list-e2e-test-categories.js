@@ -40,6 +40,11 @@ const main = () => {
 		categories.add('general-1');
 	}
 
+	const baseFiles = getFiles('tests', /\/[\w-]+\.e2e\.cy\.js/);
+	if (baseFiles.length) {
+		categories.add('general-1');
+	}
+
 	// sort the categories
 	let sortedCategories = Array.from(categories).sort();
 

@@ -73,15 +73,13 @@ describe('Latest Posts Block', () => {
 		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
-			['Post content', 'Post meta'].forEach((item) => {
+			[
+				'Post content',
+				'Post meta',
+				'Featured image',
+				'Sorting and filtering',
+			].forEach((item) => {
 				cy.get('.components-tools-panel-header')
-					.contains(item)
-					.scrollIntoView()
-					.should('be.visible');
-			});
-
-			['Featured image', 'Sorting and filtering'].forEach((item) => {
-				cy.get('.components-panel__body-title button')
 					.contains(item)
 					.scrollIntoView()
 					.should('be.visible');

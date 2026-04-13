@@ -1,17 +1,25 @@
-.wp-block-home-link[class*="blockera-has-icon-"] .wp-block-navigation-item__content {
+/* Icon style */
+.wp-block-home-link[class*="blockera-has-icon-"]
+	.wp-block-navigation-item__content {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
 }
 
-.wp-block-home-link[class*="blockera-has-icon-"] .wp-block-navigation-item__content svg {
+.wp-block-home-link[class*="blockera-has-icon-"]
+	.wp-block-navigation-item__content
+	svg {
 	display: inline-block;
 	position: relative;
-	background: var(--blockera--icon--color);
+	fill: var(--blockera--icon--color, currentColor);
+	color: var(--blockera--icon--color, inherit);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
 	margin: auto 0;
 	align-self: center;
-	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg))
+		scaleX(var(--blockera--icon--flip-horizontal, 1))
+		scaleY(var(--blockera--icon--flip-vertical, 1));
 	vertical-align: text-bottom;
+	transition: inherit;
 }

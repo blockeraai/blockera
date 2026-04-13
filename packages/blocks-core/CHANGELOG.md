@@ -2,12 +2,58 @@
 
 ### New Features
 - Added a way for blocks to get a unique ID automatically, making them work more smoothly.
+- Added support for blocks to better integrate with the block editor's features.
+- `Post Time to Read` block: add support.
+- `Post Word Count` block: add support.
+- `Math` block: add support.
+- `Post Comments Count` block: add support.
+- `Post Comments Link` block: add support.
+- `Term Template` block: add support.
+- `Term Query → Term Name` block: add support.
+- `Term Query → Term Count` block: add support.
 
 ### Improvements
 - `List` block: `Icon` inner block added.
 - `List Item` block: `Icon` inner block added.
 - `Button` block: `Icon` inner block added.
 - `Page List` block: `Current Page` inner block added.
+- `Gallery` block: improve support.
+- `Search` block: improve support.
+- `Post Navigation Link` block: improve support.
+- `Image` block: `img/svg` inner block added.
+- `Audio` block: `caption` inner block added.
+- `Embed` block: `caption` inner block added.
+- `Calendar` block: `Body → Link Cells` and `Link` inner blocks added.
+- `Paragraph` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Button` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Buttons` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Column` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Columns` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Accordion Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Accordion Panel` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Comment Content` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Excerpt` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Details` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Group` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `List` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `List Item` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Navigation Link` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Navigation Submenu` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Content` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Navigation Link` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Title` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Quote` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Pullquote` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Table` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Term Description` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Term Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Verse` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Code` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Footnotes` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Preformatted` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Read More` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -17,6 +63,45 @@
 - Added E2E tests to check icon functionality of `Navigation Link` block.
 - Added E2E tests to check icon functionality of `Navigation Submenu` block.
 - Added E2E tests to check icon functionality of `Navigation Submenu` block.
+- Added E2E tests to check functionality and support of `Post Time to Read` block.
+- Added E2E tests to check functionality and support of `Post Word Count` block.
+- Added E2E tests to check functionality and support of `Math` block.
+- Added E2E tests to check functionality and support of `Accordion` block.
+- Added E2E tests to check functionality and support of `Accordion Item` block.
+- Added E2E tests to check functionality and support of `Accordion Heading` block.
+- Added E2E tests to check functionality and support of `Accordion Panel` block.
+- Added E2E tests to check functionality and support of `Post Comments Count` block.
+- Added E2E tests to check functionality and support of `Post Comments Link` block.
+- Added E2E tests to check functionality and support of `Term Template` block.
+- Added E2E tests to check functionality and support of `Term Query → Term Name` block.
+- Added E2E tests to check functionality and support of `Term Query → Term Count` block.
+- Added E2E tests to check functionality and support of `Image Block → Img/SVG` block.
+- Added E2E tests to check functionality `Paragraph` new inner block.
+- Added E2E tests to check functionality `Button` new inner block.
+- Added E2E tests to check functionality `Buttons` new inner block.
+- Added E2E tests to check functionality `Column` new inner block.
+- Added E2E tests to check functionality `Columns` new inner block.
+- Added E2E tests to check functionality `Accordion Heading` new inner block.
+- Added E2E tests to check functionality `Comment Content` new inner block.
+- Added E2E tests to check functionality `Post Excerpt` new inner block.
+- Added E2E tests to check functionality `Details` new inner block.
+- Added E2E tests to check functionality `Group` new inner block.
+- Added E2E tests to check functionality `Heading` new inner block.
+- Added E2E tests to check functionality `List` new inner block.
+- Added E2E tests to check functionality `List Item` new inner block.
+- Added E2E tests to check functionality `Navigation Link` new inner block.
+- Added E2E tests to check functionality `Navigation Submenu` new inner block.
+- Added E2E tests to check functionality `Post Content` new inner block.
+- Added E2E tests to check functionality `Post Navigation Link` new inner block.
+- Added E2E tests to check functionality `Post Template` new inner block.
+- Added E2E tests to check functionality `Post Title` new inner block.
+- Added E2E tests to check functionality `Quote` new inner block.
+- Added E2E tests to check functionality `Pullquote` new inner block.
+- Added E2E tests to check functionality `Table` new inner block.
+- Added E2E tests to check functionality `Term Description` new inner block.
+- Added E2E tests to check functionality `Term Template` new inner block.
+- Added E2E tests to check functionality `Verse` new inner block.
+- Added E2E tests to check functionality `Code` new inner block.
 
 ## 1.4.0 (2025-05-19)
 

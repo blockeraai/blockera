@@ -17,14 +17,15 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 
 	it('Width', () => {
 		appendBlocks(
-			`<!-- wp:outermost/icon-block {"iconName":"wordpress-image","width":"100px"} -->
-<div class="wp-block-outermost-icon-block"><div class="icon-container" style="width:100px"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"></path></svg></div></div>
-<!-- /wp:outermost/icon-block -->
-			`
+			`<!-- wp:outermost/icon-block {"iconName":"wordpress-atSymbol","width":"100px"} -->
+<div class="wp-block-outermost-icon-block"><div class="icon-container" style="width:100px;transform:rotate(0deg) scaleX(1) scaleY(1)"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.5939 21C14.1472 21 16.1269 20.5701 17.0711 20.1975L16.6447 18.879C16.0964 19.051 14.3299 19.6242 12.6548 19.6242C7.4467 19.6242 4.67513 16.8726 4.67513 12C4.67513 7.21338 7.50762 4.34713 12.2893 4.34713C17.132 4.34713 19.4162 7.55732 19.4162 10.7675C19.4162 14.035 19.0508 15.4968 17.4975 15.4968C16.5838 15.4968 16.0964 14.7803 16.0964 13.9777V7.5H14.4822V8.30255H14.3909C14.1777 7.67198 12.9898 7.12739 11.467 7.2707C9.18274 7.5 7.4467 9.27707 7.4467 11.8567C7.4467 14.5796 8.81726 16.672 11.467 16.758C13.203 16.8153 14.1168 16.0127 14.4822 15.1815H14.5736C14.7563 16.414 16.401 16.8439 17.467 16.8439C20.6954 16.8439 21 13.5764 21 10.7962C21 6.86943 18.0761 3 12.3807 3C6.50254 3 3 6.3535 3 11.9427C3 17.7325 6.38071 21 12.5939 21ZM11.7107 15.2962C9.73096 15.2962 9.03046 13.6051 9.03046 11.7707C9.03046 10.1083 10.0355 8.67516 11.7716 8.67516C13.599 8.67516 14.5736 9.36306 14.5736 11.7707C14.5736 14.1497 13.7513 15.2962 11.7107 15.2962Z"></path></svg></div></div>
+<!-- /wp:outermost/icon-block -->`
 		);
 
 		// Select target block
 		cy.getBlock('outermost/icon-block').first().click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera
@@ -75,14 +76,15 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 	describe('Color & Icon Color', () => {
 		it('Simple Value', () => {
 			appendBlocks(
-				`<!-- wp:outermost/icon-block {"iconName":"wordpress-image","customIconBackgroundColor":"#880000","iconBackgroundColorValue":"#880000","customIconColor":"#f3f3f3","iconColorValue":"#f3f3f3","width":"100px"} -->
-<div class="wp-block-outermost-icon-block"><div class="icon-container has-icon-color has-icon-background-color" style="background-color:#880000;color:#f3f3f3;width:100px"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"></path></svg></div></div>
-<!-- /wp:outermost/icon-block -->
-			`
+				`<!-- wp:outermost/icon-block {"iconName":"wordpress-atSymbol","customIconBackgroundColor":"#880000","iconBackgroundColorValue":"#880000","customIconColor":"#f3f3f3","iconColorValue":"#f3f3f3","width":"100px"} -->
+<div class="wp-block-outermost-icon-block"><div class="icon-container has-icon-color has-icon-background-color" style="background-color:#880000;color:#f3f3f3;width:100px;transform:rotate(0deg) scaleX(1) scaleY(1)"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.5939 21C14.1472 21 16.1269 20.5701 17.0711 20.1975L16.6447 18.879C16.0964 19.051 14.3299 19.6242 12.6548 19.6242C7.4467 19.6242 4.67513 16.8726 4.67513 12C4.67513 7.21338 7.50762 4.34713 12.2893 4.34713C17.132 4.34713 19.4162 7.55732 19.4162 10.7675C19.4162 14.035 19.0508 15.4968 17.4975 15.4968C16.5838 15.4968 16.0964 14.7803 16.0964 13.9777V7.5H14.4822V8.30255H14.3909C14.1777 7.67198 12.9898 7.12739 11.467 7.2707C9.18274 7.5 7.4467 9.27707 7.4467 11.8567C7.4467 14.5796 8.81726 16.672 11.467 16.758C13.203 16.8153 14.1168 16.0127 14.4822 15.1815H14.5736C14.7563 16.414 16.401 16.8439 17.467 16.8439C20.6954 16.8439 21 13.5764 21 10.7962C21 6.86943 18.0761 3 12.3807 3C6.50254 3 3 6.3535 3 11.9427C3 17.7325 6.38071 21 12.5939 21ZM11.7107 15.2962C9.73096 15.2962 9.03046 13.6051 9.03046 11.7707C9.03046 10.1083 10.0355 8.67516 11.7716 8.67516C13.599 8.67516 14.5736 9.36306 14.5736 11.7707C14.5736 14.1497 13.7513 15.2962 11.7107 15.2962Z"></path></svg></div></div>
+<!-- /wp:outermost/icon-block -->`
 			);
 
 			// Select target block
 			cy.getBlock('outermost/icon-block').first().click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -120,30 +122,8 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			//
 			// Test 2: Blockera value to WP data
 			//
-
-			cy.getParentContainer('BG Color').within(() => {
-				cy.get('button').click();
-			});
-
-			cy.get('.components-popover')
-				.last()
-				.within(() => {
-					cy.get('input').as('hexColorInput');
-					cy.get('@hexColorInput').clear();
-					cy.get('@hexColorInput').type('666');
-				});
-
-			cy.getParentContainer('Text Color').within(() => {
-				cy.get('button').click();
-			});
-
-			cy.get('.components-popover')
-				.last()
-				.within(() => {
-					cy.get('input').as('hexColorInput');
-					cy.get('@hexColorInput').clear();
-					cy.get('@hexColorInput').type('888');
-				});
+			cy.setColorControlValue('BG Color', '666666');
+			cy.setColorControlValue('Text Color', '888888');
 
 			//
 			// Check
@@ -173,26 +153,8 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			//
 			// Test 3: Clear Blockera value and check WP data
 			//
-
-			cy.getParentContainer('BG Color').within(() => {
-				cy.get('button').click();
-			});
-
-			cy.get('.components-popover')
-				.last()
-				.within(() => {
-					cy.get('button[aria-label="Reset Color (Clear)"]').click();
-				});
-
-			cy.getParentContainer('Text Color').within(() => {
-				cy.get('button').click();
-			});
-
-			cy.get('.components-popover')
-				.last()
-				.within(() => {
-					cy.get('button[aria-label="Reset Color (Clear)"]').click();
-				});
+			cy.clearColorControlValue('BG Color');
+			cy.clearColorControlValue('Text Color');
 
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
@@ -219,14 +181,15 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 
 		it('Variable Value', () => {
 			appendBlocks(
-				`<!-- wp:outermost/icon-block {"iconName":"wordpress-image","iconBackgroundColor":"contrast","iconBackgroundColorValue":"#111111","iconColor":"base","iconColorValue":"#f9f9f9","width":"100px"} -->
-<div class="wp-block-outermost-icon-block"><div class="icon-container has-icon-color has-icon-background-color has-contrast-background-color has-base-color" style="background-color:#111111;color:#f9f9f9;width:100px"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"></path></svg></div></div>
-<!-- /wp:outermost/icon-block -->
-			`
+				`<!-- wp:outermost/icon-block {"iconName":"wordpress-atSymbol","iconBackgroundColor":"contrast","iconBackgroundColorValue":"#111111","iconColor":"base","iconColorValue":"#f9f9f9","width":"100px"} -->
+<div class="wp-block-outermost-icon-block"><div class="icon-container has-icon-color has-icon-background-color has-contrast-background-color has-base-color" style="background-color:#111111;color:#f9f9f9;width:100px;transform:rotate(0deg) scaleX(1) scaleY(1)"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.5939 21C14.1472 21 16.1269 20.5701 17.0711 20.1975L16.6447 18.879C16.0964 19.051 14.3299 19.6242 12.6548 19.6242C7.4467 19.6242 4.67513 16.8726 4.67513 12C4.67513 7.21338 7.50762 4.34713 12.2893 4.34713C17.132 4.34713 19.4162 7.55732 19.4162 10.7675C19.4162 14.035 19.0508 15.4968 17.4975 15.4968C16.5838 15.4968 16.0964 14.7803 16.0964 13.9777V7.5H14.4822V8.30255H14.3909C14.1777 7.67198 12.9898 7.12739 11.467 7.2707C9.18274 7.5 7.4467 9.27707 7.4467 11.8567C7.4467 14.5796 8.81726 16.672 11.467 16.758C13.203 16.8153 14.1168 16.0127 14.4822 15.1815H14.5736C14.7563 16.414 16.401 16.8439 17.467 16.8439C20.6954 16.8439 21 13.5764 21 10.7962C21 6.86943 18.0761 3 12.3807 3C6.50254 3 3 6.3535 3 11.9427C3 17.7325 6.38071 21 12.5939 21ZM11.7107 15.2962C9.73096 15.2962 9.03046 13.6051 9.03046 11.7707C9.03046 10.1083 10.0355 8.67516 11.7716 8.67516C13.599 8.67516 14.5736 9.36306 14.5736 11.7707C14.5736 14.1497 13.7513 15.2962 11.7107 15.2962Z"></path></svg></div></div>
+<!-- /wp:outermost/icon-block -->`
 			);
 
 			// Select target block
 			cy.getBlock('outermost/icon-block').first().click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -411,13 +374,15 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 	});
 
 	it('Block card + CSS selectors in editor and front-end', () => {
-		appendBlocks(`<!-- wp:outermost/icon-block {"iconName":"wordpress-image","width":"100px"} -->
-<div class="wp-block-outermost-icon-block"><div class="icon-container" style="width:100px"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"></path></svg></div></div>
+		appendBlocks(`<!-- wp:outermost/icon-block {"iconName":"wordpress-atSymbol","width":"100px"} -->
+<div class="wp-block-outermost-icon-block"><div class="icon-container" style="width:100px;transform:rotate(0deg) scaleX(1) scaleY(1)"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.5939 21C14.1472 21 16.1269 20.5701 17.0711 20.1975L16.6447 18.879C16.0964 19.051 14.3299 19.6242 12.6548 19.6242C7.4467 19.6242 4.67513 16.8726 4.67513 12C4.67513 7.21338 7.50762 4.34713 12.2893 4.34713C17.132 4.34713 19.4162 7.55732 19.4162 10.7675C19.4162 14.035 19.0508 15.4968 17.4975 15.4968C16.5838 15.4968 16.0964 14.7803 16.0964 13.9777V7.5H14.4822V8.30255H14.3909C14.1777 7.67198 12.9898 7.12739 11.467 7.2707C9.18274 7.5 7.4467 9.27707 7.4467 11.8567C7.4467 14.5796 8.81726 16.672 11.467 16.758C13.203 16.8153 14.1168 16.0127 14.4822 15.1815H14.5736C14.7563 16.414 16.401 16.8439 17.467 16.8439C20.6954 16.8439 21 13.5764 21 10.7962C21 6.86943 18.0761 3 12.3807 3C6.50254 3 3 6.3535 3 11.9427C3 17.7325 6.38071 21 12.5939 21ZM11.7107 15.2962C9.73096 15.2962 9.03046 13.6051 9.03046 11.7707C9.03046 10.1083 10.0355 8.67516 11.7716 8.67516C13.599 8.67516 14.5736 9.36306 14.5736 11.7707C14.5736 14.1497 13.7513 15.2962 11.7107 15.2962Z"></path></svg></div></div>
 <!-- /wp:outermost/icon-block -->`);
 
 		cy.getBlock('outermost/icon-block').click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.addNewTransition();
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 

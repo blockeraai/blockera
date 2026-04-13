@@ -11,18 +11,23 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-global $blockera;
+// Blockera should be loaded only on frontend, editor and admin requests.
+if (! blockera_is_frontend_request() && ! blockera_is_editor_request() && ! blockera_is_admin_request()) {
+    return;
+}
+
+global $blockera, $blockera_cache_key, $blockera_cache_group, $blockera_block_supports;
 
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
-blockera_load('feature-icon.src.hooks', $external_dir);
+blockera_add_icon_style_definitions();
 
 // Add blockera object cache to non persistent group to compatible with third party cache plugins.
-$cache_group = 'plugins';
-$cache_key = 'blockera_instance' . BLOCKERA_SB_VERSION;
+$blockera_cache_group = 'plugins';
+$blockera_cache_key = 'blockera_instance' . BLOCKERA_SB_VERSION;
 
 // Initialize static cache.
-$blockera_cache = wp_cache_get($cache_key, $cache_group);
+$blockera_cache = wp_cache_get($blockera_cache_key, $blockera_cache_group);
 
 if ($blockera_cache !== false) {
     $blockera = $blockera_cache;
@@ -30,11 +35,11 @@ if ($blockera_cache !== false) {
     // Optimize class initialization.
     $blockera = \Blockera\Setup\Blockera::getInstance();
     // Cache the instance.
-    wp_cache_set($cache_key, $blockera, $cache_group);
+    wp_cache_set($blockera_cache_key, $blockera, $blockera_cache_group);
 }
 
 // Conditional loading based on context.
-if (is_admin()) {
+if (blockera_is_admin()) {
     blockera_load('editor.php.hooks', $external_dir);
     blockera_load('blockera-admin.php.hooks', $external_dir);
     blockera_load('wordpress.php.Admin.Menu.hooks', $external_dir);
@@ -42,12 +47,15 @@ if (is_admin()) {
 
 blockera_load('telemetry.php.hooks', $external_dir);
 
+// Set the block supports.
+$blockera->setBlockSupports($blockera_block_supports);
 // Initialize core components with optimized bootstrap.
 $blockera->bootstrap();
 
 // Register shutdown function for cleanup.
 function blockera_cleanup_cache() {
-    global $blockera;
-    wp_cache_delete('blockera_instance' . BLOCKERA_SB_VERSION, 'plugins');
+    global $blockera_cache_key, $blockera_cache_group;
+
+    wp_cache_delete($blockera_cache_key, $blockera_cache_group);
 }
 add_action('shutdown', 'blockera_cleanup_cache');

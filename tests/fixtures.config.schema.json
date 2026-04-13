@@ -1,0 +1,64 @@
+{
+	"$id": "https://blockera.ai/snapshot-tests-config.schema.json",
+	"title": "Snapshot Tests Config",
+	"description": "The configuration for snapshot tests.",
+	"type": "object",
+	"properties": {
+		"screenshot": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether to take a screenshot of the block."
+		},
+		"snapshot": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether to take a snapshot (html and CSS) of the block."
+		},
+		"tags-inline-style-check": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether to check for inline style attributes on tags with 'blockera-block' or 'be-transpiled' classes."
+		},
+		"html-search-replace": {
+			"type": "array",
+			"description": "List of search and replace operations to perform on the HTML output.",
+			"items": {
+				"type": "object",
+				"properties": {
+					"search": {
+						"description": "Search pattern(s) - can be a single text/regex pattern or an array of text/regex patterns.",
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							}
+						]
+					},
+					"replace": {
+						"type": "string",
+						"description": "The replacement string."
+					}
+				},
+				"required": ["search", "replace"],
+				"additionalProperties": false
+			}
+		},
+		"wp-post": {
+			"type": "object",
+			"description": "Configuration for the WordPress post created for this test.",
+			"properties": {
+				"post_type": {
+					"type": "string",
+					"description": "The post type to use for the test post (e.g., 'post', 'page', 'custom-post-type').",
+					"default": "post"
+				}
+			},
+			"additionalProperties": false
+		}
+	}
+}

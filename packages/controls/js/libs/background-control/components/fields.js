@@ -23,6 +23,7 @@ import { Icon } from '@blockera/icons';
 import { isValid as isValidVariable } from '../../../';
 import {
 	Flex,
+	Button,
 	BaseControl,
 	InputControl,
 	MediaImageControl,
@@ -62,7 +63,21 @@ const Fields: FieldItem = memo<FieldItem>(
 
 		const { getSelectedBlock = () => ({}) } =
 			select('core/block-editor') || {};
-		const { name = '' } = getSelectedBlock() || {};
+
+		let { name = '' } = getSelectedBlock() || {};
+		// Component tests (and some editor bootstraps) may not register these stores.
+		const { getSelectedBlockStyle = () => '' } =
+			select('blockera/editor') || {};
+		const { getActiveComplementaryArea = () => undefined } =
+			select('core/interface') || {};
+
+		const activeComplementaryArea =
+			getActiveComplementaryArea('core/edit-site');
+
+		if ('edit-site/global-styles' === activeComplementaryArea) {
+			name = getSelectedBlockStyle();
+		}
+
 		const { getExtension } = select('blockera/extensions/config') || {};
 		const blockeraBackground =
 			'function' === typeof getExtension
@@ -494,9 +509,9 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['image-attachment']
 							}
-							label={__('Effect', 'blockera')}
+							label={__('Scroll Attachment', 'blockera')}
 							labelPopoverTitle={__(
-								'Background Effect',
+								'Background Scroll Effect',
 								'blockera'
 							)}
 							labelDescription={
@@ -566,7 +581,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								<>
 									<p>
 										{__(
-											'Linear Gradient creates a smooth transition between multiple colors in a straight line. ',
+											'Linear Gradient creates a smooth transition between multiple colors in a straight line.',
 											'blockera'
 										)}
 									</p>
@@ -751,9 +766,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									'linear-gradient-attachment'
 								]
 							}
-							label={__('Effect', 'blockera')}
+							label={__('Scroll Attachment', 'blockera')}
 							labelPopoverTitle={__(
-								'Background Effect',
+								'Background Scroll Attachment',
 								'blockera'
 							)}
 							labelDescription={
@@ -1165,9 +1180,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									'radial-gradient-attachment'
 								]
 							}
-							label={__('Effect', 'blockera')}
+							label={__('Scroll Attachment', 'blockera')}
 							labelPopoverTitle={__(
-								'Background Effect',
+								'Background Scroll Attachment',
 								'blockera'
 							)}
 							labelDescription={
@@ -1242,7 +1257,7 @@ const Fields: FieldItem = memo<FieldItem>(
 											? 'transparent'
 											: item['mesh-gradient-colors'][
 													'--c0'
-											  ].color,
+												].color,
 										backgroundImage: item['mesh-gradient'],
 										...Object.assign(
 											// $FlowFixMe
@@ -1255,6 +1270,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										),
 									};
 								})()}
+							></div>
+
+							<Button
+								size="extra-small"
+								variant="tertiary"
+								data-test="mesh-gradient-regenerate"
 								onClick={() => {
 									changeRepeaterItem({
 										onChange,
@@ -1265,16 +1286,15 @@ const Fields: FieldItem = memo<FieldItem>(
 										value: meshGradientProvider(item, true),
 									});
 								}}
+								style={{
+									width: 'max-content',
+									padding: '0 10px',
+									gap: '4px',
+								}}
 							>
-								<span
-									className={controlInnerClassNames(
-										'mesh-generator-preview-regenerate'
-									)}
-								>
-									<Icon icon="regenerate" iconSize="18" />{' '}
-									{__('Regenerate', 'blockera')}
-								</span>
-							</div>
+								<Icon icon="regenerate" iconSize="18" />
+								{__('Regenerate', 'blockera')}
+							</Button>
 						</BaseControl>
 
 						<FeatureWrapper
@@ -1363,9 +1383,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									'mesh-gradient-attachment'
 								]
 							}
-							label={__('Effect', 'blockera')}
+							label={__('Scroll Attachment', 'blockera')}
 							labelPopoverTitle={__(
-								'Background Effect',
+								'Background Scroll Attachment',
 								'blockera'
 							)}
 							labelDescription={

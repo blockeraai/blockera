@@ -184,7 +184,7 @@ export const DashboardPanel = (): MixedElement => {
 							<Icon
 								library={'ui'}
 								icon={'arrow-new-tab'}
-								iconSize={22}
+								iconSize={24}
 								style={{
 									fill: 'currentColor',
 								}}
@@ -242,7 +242,7 @@ export const DashboardPanel = (): MixedElement => {
 							<Icon
 								library={'ui'}
 								icon={'arrow-new-tab'}
-								iconSize={22}
+								iconSize={24}
 								style={{
 									fill: 'currentColor',
 								}}
@@ -300,7 +300,7 @@ export const DashboardPanel = (): MixedElement => {
 							<Icon
 								library={'ui'}
 								icon={'arrow-new-tab'}
-								iconSize={22}
+								iconSize={24}
 								style={{
 									fill: 'currentColor',
 								}}
@@ -357,7 +357,7 @@ export const DashboardPanel = (): MixedElement => {
 							<Icon
 								library={'ui'}
 								icon={'arrow-new-tab'}
-								iconSize={22}
+								iconSize={24}
 								style={{
 									fill: 'currentColor',
 								}}

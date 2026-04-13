@@ -27,7 +27,14 @@ export {
 	getGradientVAFromIdString,
 	getGradientType,
 } from './gradient';
-export { getFontSizes, getFontSizeBy, getFontSize } from './font-size';
+export {
+	getFontSizes,
+	getFontSizeBy,
+	getFontSize,
+	getFontSizeVAStringFromId,
+	getFontSizeVAFromIdString,
+	getFontSizeVAFromVarString,
+} from './font-size';
 export {
 	getSpacings,
 	getSpacingBy,
@@ -35,7 +42,13 @@ export {
 	getSpacingVAFromIdString,
 	getSpacingVAFromVarString,
 } from './spacing';
-export { getWidthSizes, getWidthSizeBy, getWidthSize } from './width-size';
+export {
+	getWidthSizes,
+	getWidthSizeBy,
+	getWidthSize,
+	getWidthSizeVAFromIdString,
+	getWidthSizeVAFromVarString,
+} from './width-size';
 export {
 	getColors,
 	getColorBy,
@@ -47,7 +60,11 @@ export { getVariable } from './get-variable';
 export {
 	generateVariableString,
 	generateAttributeVarStringFromVA,
+	generateVariableStringFromAttributeVarString,
+	matchesVarStringMiddleType,
+	getValueAddonFromVarString,
 } from './utils';
+export type { GetValueAddonFromVarStringOptions } from './utils';
 
 export * from './types';
 export * from './store/types';

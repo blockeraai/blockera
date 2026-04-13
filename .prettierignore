@@ -2,3 +2,9 @@
 dist
 example
 vendor
+source-code-block-editor
+source-code-wordpress
+
+# Ignore test fixtures
+tests/**/input.html
+tests/**/*.css

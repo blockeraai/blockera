@@ -111,9 +111,13 @@
     <exclude-pattern>./packages/bootstrap/*</exclude-pattern>
     <exclude-pattern>.patch/*</exclude-pattern>
     <exclude-pattern>./tests/*</exclude-pattern>
+    <exclude-pattern>**/test/**</exclude-pattern>
+    <exclude-pattern>**/tests/**</exclude-pattern>
 
     <!-- Exclude third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./source-code-block-editor/*</exclude-pattern>
+    <exclude-pattern>./source-code-wordpress/*</exclude-pattern>
 
     <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
         <exclude-pattern>*</exclude-pattern>

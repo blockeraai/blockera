@@ -6,24 +6,31 @@ class FontWeight extends BaseStyleDefinition {
 
 	protected function css( array $setting): array {
 
-        $declaration = [];
-        $cssProperty = $setting['type'];
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'font-weight' !== $cssProperty) {
-
-            return $declaration;
+		if (! isset($setting['type']) || 'font-weight' !== $setting['type']) {
+			return [];
 		}
 
-		if (! empty($setting[ $cssProperty ]['weight'])) {
-			$this->setDeclaration($cssProperty, $setting[ $cssProperty ]['weight']);
+		$cssProperty = $setting['type'];
+
+		if (! isset($setting[ $cssProperty ])) {
+			return [];
 		}
 
-		if (! empty($setting[ $cssProperty ]['style'])) {
-			$this->setDeclaration('font-style', $setting[ $cssProperty ]['style']);
+		$fontWeightData = $setting[ $cssProperty ];
+		$declarations   = [];
+
+		if (isset($fontWeightData['weight'])) {
+			$declarations[ $cssProperty ] = $fontWeightData['weight'];
 		}
 
-		$this->setCss($this->declarations);
+		if (isset($fontWeightData['style'])) {
+			$declarations['font-style'] = $fontWeightData['style'];
+		}
 
-        return $this->css;
-    }
+		if ([] !== $declarations) {
+			$this->setCss($declarations);
+		}
+
+		return $this->css;
+	}
 }

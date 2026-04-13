@@ -1,0 +1,41 @@
+.blockera-block.blockera-block--1.wp-block-column {
+	background-color: #fecbcb;
+	flex-basis: 100px !important;
+}
+
+p.blockera-block.blockera-block--2 {
+	text-decoration: line-through;
+}
+
+p.blockera-block.blockera-block--3 {
+	font-weight: 1000;
+	font-style: normal;
+}
+
+p.blockera-block.blockera-block--5 {
+	line-height: 2;
+}
+
+p.blockera-block.blockera-block--6 {
+	font-size: 30px;
+}
+
+p.blockera-block.blockera-block--7 {
+	letter-spacing: 5px;
+}
+
+.blockera-block.blockera-block-u1bhkh.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 3px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 2;
+}
+
+.blockera-block.blockera-block-u1bhkh.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

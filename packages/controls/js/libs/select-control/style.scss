@@ -1,14 +1,14 @@
 .blockera-control-select.native {
-
 	.components-input-control__backdrop {
 		border-color: var(--blockera-controls-border-color) !important;
 	}
 
 	&:not(.no-border).is-hovered,
 	&:not(.no-border):hover {
-
 		.components-input-control__backdrop {
-			border-color: var(--blockera-controls-border-color-hover) !important;
+			border-color: var(
+				--blockera-controls-border-color-hover
+			) !important;
 		}
 	}
 
@@ -17,10 +17,10 @@
 	&:not(.no-border).is-focused,
 	&:not(.no-border):focus-within:hover,
 	&:not(.no-border):focus-within {
-
 		.components-input-control__backdrop {
 			border-color: var(--blockera-controls-primary-color) !important;
-			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color, transparent) !important;
+			box-shadow: 0 0 0 1px
+				var(--blockera-controls-primary-color, transparent) !important;
 		}
 	}
 
@@ -29,6 +29,10 @@
 		font-size: 12px !important;
 		height: var(--blockera-controls-input-height) !important;
 		min-height: var(--blockera-controls-input-height) !important;
+	}
+
+	.components-input-control-suffix-wrapper {
+		padding-inline-end: 8px !important;
 	}
 }
 
@@ -48,8 +52,9 @@
 	button {
 		display: flex !important;
 		align-items: center;
-		gap: 10px;
-		padding-left: 10px !important;
+		gap: 6px;
+		padding-right: 20px !important;
+		padding-left: 6px !important;
 		font-size: 12px !important;
 		height: var(--blockera-controls-input-height) !important;
 		min-height: var(--blockera-controls-input-height) !important;
@@ -78,7 +83,6 @@
 	}
 
 	&.input-hide-caret {
-
 		.components-input-control__suffix {
 			display: none;
 		}
@@ -100,7 +104,6 @@
 	}
 
 	&.no-border {
-
 		.components-input-control__container {
 			background: none;
 		}
@@ -119,8 +122,13 @@
 
 	&.is-hovered:hover .components-input-control__backdrop,
 	&.is-focused .components-input-control__backdrop,
-	button[aria-expanded="true"] + .components-input-control__suffix + .components-input-control__backdrop,
-	button[aria-expanded="true"] + div + .components-input-control__suffix + .components-input-control__backdrop {
+	button[aria-expanded="true"]
+		+ .components-input-control__suffix
+		+ .components-input-control__backdrop,
+	button[aria-expanded="true"]
+		+ div
+		+ .components-input-control__suffix
+		+ .components-input-control__backdrop {
 		border: 1px solid var(--blockera-controls-primary-color) !important;
 		--blockera-border-color: var(--blockera-controls-primary-color);
 	}
@@ -193,7 +201,6 @@
 	}
 
 	&.menu-position-top {
-
 		button + div {
 			bottom: 0 !important;
 			top: initial !important;
@@ -206,5 +213,9 @@
 			left: 0;
 			right: 0;
 		}
+	}
+
+	.components-input-control-suffix-wrapper {
+		padding-inline-end: 8px !important;
 	}
 }

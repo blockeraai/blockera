@@ -1,0 +1,118 @@
+.blockera-block.blockera-block-1.wp-block-query-title {
+	background-color: #ffe5e5;
+	border: 1px solid #0000001f;
+	border-radius: 10px;
+	padding: 10px 10px 10px 10px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 16px;
+}
+
+.blockera-block.blockera-block-1.wp-block-query-title:hover {
+	background-color: #ffc4c4;
+}
+
+.blockera-block.blockera-block-2.wp-block-query-title {
+	background-color: #ceebbf;
+	border-radius: 70px;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding: 10px 10px 10px 10px;
+	font-weight: 500;
+	font-style: normal;
+	font-size: 18px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-query-title {
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 20px;
+		padding: 35px 35px 35px 35px;
+	}
+
+}
+
+.blockera-block.blockera-block-2.wp-block-query-title::before {
+	font-weight: 1000;
+	font-style: normal;
+	background-color: #47ac15;
+	padding: 10px 20px 10px 20px;
+	border-radius: 50px;
+	border: 1px solid #00000030;
+	color: #f6f1f1;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-query-title::before {
+		align-self: stretch;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-2.wp-block-query-title::after {
+	font-weight: 1000;
+	font-style: normal;
+	padding: 10px 20px 10px 20px;
+	background-color: #33820b;
+	color: #ffffff;
+	border-radius: 30px;
+	border: 1px solid #00000042;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-query-title::after {
+		align-self: stretch;
+		content: "After";
+	}
+
+}
+
+.blockera-block-2 {
+	background-color: #ceebbf;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 500;
+	border-radius: 70px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block-1 {
+	background-color: #ffe5e5;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 600;
+	border-color: #0000001f;
+	border-radius: 10px;
+	border-width: 1px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 2;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

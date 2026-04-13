@@ -8,7 +8,7 @@ export default function MatrixNormalEmptyIcon({ direction = 'row' }) {
 				xmlns="http://www.w3.org/2000/svg"
 				data-test="matrix-normal-empty-row"
 			>
-				<rect x="9" y="7" width="4" height="8" rx="1" />
+				<path d="M9 5C9 4.44772 9.44772 4 10 4H12C12.5523 4 13 4.44772 13 5V17C13 17.5523 12.5523 18 12 18H10C9.44772 18 9 17.5523 9 17V5Z" />
 			</svg>
 		);
 	}
@@ -21,7 +21,7 @@ export default function MatrixNormalEmptyIcon({ direction = 'row' }) {
 			xmlns="http://www.w3.org/2000/svg"
 			data-test="matrix-normal-empty-column"
 		>
-			<path d="M14 9C14.5523 9 15 9.44772 15 10V12C15 12.5523 14.5523 13 14 13L8 13C7.44772 13 7 12.5523 7 12L7 10C7 9.44772 7.44772 9 8 9L14 9Z" />
+			<path d="M4 10C4 9.44772 4.44772 9 5 9H17C17.5523 9 18 9.44772 18 10V12C18 12.5523 17.5523 13 17 13H5C4.44772 13 4 12.5523 4 12V10Z" />
 		</svg>
 	);
 }

@@ -1,0 +1,117 @@
+{
+	"$schema": "./fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "http://localhost:\\d+",
+			"replace": "https://blockera.ai"
+		},
+		{
+			"search": "https://site-blockera.test",
+			"replace": "https://blockera.ai"
+		},
+		{
+			"search": "wp-elements-[^\\s\"']+",
+			"replace": "wp-elements-hash-id"
+		},
+		{
+			"search": "\\?p=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?p=post-id"
+		},
+		{
+			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?m=year-month-day"
+		},
+		{
+			"search": "\\?page_id=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?page_id=page-id"
+		},
+		{
+			"search": "\\?attachment_id=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?attachment_id=attachment-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])post-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "post-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])page-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "page-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])tag-link-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "tag-link-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])wp-image-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "wp-image-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])wp-block-gallery-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "wp-block-gallery-id"
+		},
+		{
+			"search": "\\?cat=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?cat=category-id"
+		},
+		{
+			"search": "uploads/\\d{4}/\\d{2}/featured-image-?[^\"']*\\.png",
+			"replace": "uploads/featured-image.png"
+		},
+		{
+			"search": "uploads/\\d{4}/\\d{2}/site-logo-?[^\"']*\\.png",
+			"replace": "uploads/site-logo.png"
+		},
+		{
+			"search": "srcset=(?:\"[^\"]*\"|'[^']*')",
+			"replace": ""
+		},
+		{
+			"search": "sizes=(?:\"[^\"]*\"|'[^']*')",
+			"replace": ""
+		},
+		{
+			"search": "src=[\"']https://secure\\.gravatar\\.com/avatar/[^\"']+[\"']",
+			"replace": "src='https://blockera.ai/avatar.png'"
+		},
+		{
+			"search": "data-id=[\"']\\d+[\"']",
+			"replace": "data-id=\"id\""
+		},
+		{
+			"search": "id=[\"']modal-\\d+[\"']",
+			"replace": "id=\"modal-id\""
+		},
+		{
+			"search": "id=[\"']modal-\\d+-content[\"']",
+			"replace": "id=\"modal-id-content\""
+		},
+		{
+			"search": "data-postid=[\"']\\d+[\"']",
+			"replace": "data-postid=\"post-id\""
+		},
+		{
+			"search": "data-commentid=[\"']\\d+[\"']",
+			"replace": "data-commentid=\"comment-id\""
+		},
+		{
+			"search": "#comment-\\d+(?=[\\s\"']|$)",
+			"replace": "#comment-id"
+		},
+		{
+			"search": "name=['\"]comment_post_ID['\"] value=['\"]\\d+['\"]",
+			"replace": "name='comment_post_ID' value='post-id'"
+		},
+		{
+			"search": "<time datetime=\"[^\"]+\"( class=\"[^\"]+\")?>(<a[^>]*>)?[^<]*(</a>)?</time>",
+			"replace": "<time datetime=\"Month Day, Year\"$1>$2Month Day, Year$3</time>"
+		},
+		{
+			"search": ">(?:January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}<",
+			"replace": ">Month Year<"
+		}
+	],
+	"wp-post": {
+		"post_type": "post"
+	},
+	"tags-inline-style-check": true
+}

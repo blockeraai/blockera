@@ -14,8 +14,10 @@ ob_start();
 
 include BLOCKERA_SB_PATH . 'assets/menu-logo.svg';
 
-$logo = ob_get_clean();
-$logo = base64_encode($logo);
+global $blockera_logo;
+
+$blockera_logo = ob_get_clean();
+$blockera_logo = base64_encode($blockera_logo);
 
 return apply_filters(
     'blockera.config.menu',
@@ -25,7 +27,7 @@ return apply_filters(
         'capability' => 'manage_options',
         'menu_slug'  => 'blockera-settings-dashboard',
         'callback'   => 'blockera_settings_page_template',
-        'icon_url'   => 'data:image/svg+xml;base64,' . $logo,
+        'icon_url'   => 'data:image/svg+xml;base64,' . $blockera_logo,
         'submenus'   => [
             'dashboard'        => [
                 'page_title' => __('Blockera Dashboard', 'blockera'),

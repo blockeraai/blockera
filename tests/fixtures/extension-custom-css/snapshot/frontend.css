@@ -1,0 +1,35 @@
+p.blockera-block.blockera-block-2 {
+	font-family: var(--wp--preset--font-family--fira-code);
+	font-size: 20px;
+}
+
+& {
+	n color: var(--wp--preset--color--accent-3, #503AA8);
+	n;
+}
+
+n & {
+	n color: red;
+	n;
+}
+
+nn&:hover {
+	n color: green;
+	n;
+}
+
+n .blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 1.6;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

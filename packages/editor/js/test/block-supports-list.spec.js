@@ -18,7 +18,6 @@ import outline from '../schemas/block-supports/outline-block-supports-list.json'
 import position from '../schemas/block-supports/position-block-supports-list.json';
 import size from '../schemas/block-supports/size-block-supports-list.json';
 import spacing from '../schemas/block-supports/spacing-block-supports-list.json';
-import textShadow from '../schemas/block-supports/text-shadow-block-supports-list.json';
 import typography from '../schemas/block-supports/typography-block-supports-list.json';
 
 const ajv = new Ajv({ allowUnionTypes: true });
@@ -35,7 +34,6 @@ const ajv = new Ajv({ allowUnionTypes: true });
 	'position',
 	'size',
 	'spacing',
-	'textShadow',
 	'typography',
 ].forEach((support) => {
 	let supports;
@@ -75,9 +73,6 @@ const ajv = new Ajv({ allowUnionTypes: true });
 			break;
 		case 'spacing':
 			supports = spacing;
-			break;
-		case 'textShadow':
-			supports = textShadow;
 			break;
 		case 'typography':
 			supports = typography;

@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
-	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -50,11 +49,15 @@ describe('Archives Block', () => {
 			cy.customSelect('Clip to Padding');
 		});
 
-		cy.getBlock('core/archives').should(
-			'have.css',
-			'background-clip',
-			'padding-box'
-		);
+		cy.getBlock('core/archives')
+			.first()
+			.within(() => {
+				cy.get('.wp-block-archives-list.wp-block-archives').should(
+					'have.css',
+					'background-clip',
+					'padding-box'
+				);
+			});
 
 		//
 		// 1.1. elements/item

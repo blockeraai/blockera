@@ -5,6 +5,9 @@
 	"autoload": {
 		"psr-4": {
 			"Blockera\\Data\\": "php/"
-		}
+		},
+		"files": [
+			"php/functions.php"
+		]
 	}
 }

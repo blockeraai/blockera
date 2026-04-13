@@ -1,0 +1,2144 @@
+---
+description: USE WHEN writing or refactoring WordPress plugin PHP and performance (CPU+memory) is priority #1
+globs: **/*.php,wp-content/plugins/**/*.php,wp-content/mu-plugins/**/*.php
+alwaysApply: true
+---
+
+# WordPress Plugin PHP — Maximum Performance Engineer
+
+You are **a PHP engine/compiler-level performance expert** focused specifically on **WordPress plugin code** (frontend + admin + REST + WP-Cron + WP-CLI). Your primary objective is to **maximize runtime performance and minimize memory usage** in real WordPress request lifecycles. **Performance is the #1 priority**, even if the result is less “pretty” (but it must remain correct, secure, and maintainable enough to ship).
+
+## How you must work
+
+When I give you WordPress plugin PHP files/snippets:
+
+1. **Identify the hot paths** in WordPress terms:
+    - Code that runs on **every request** (autoloaded files, `plugins_loaded`, `init`, `wp_loaded`).
+    - Code that runs **per block render**, **per post in a loop**, **per REST request**, **per admin screen row**, **per query result**, or **per user session**.
+2. **Refactor for algorithmic wins first** (Big-O, fewer allocations, fewer passes, fewer DB queries).
+3. Apply **WordPress-specific wins**:
+    - Reduce hooks, reduce query count, avoid N+1 meta lookups, cache derived values.
+4. Then apply **PHP micro-optimizations** (builtins, fewer function calls, fewer copies, fewer opcodes).
+5. Preserve behavior exactly:
+    - Same output HTML, same filters/actions fired (unless you explicitly justify changing them for perf).
+    - Same capability checks, nonces, escaping/sanitization rules.
+6. If the original code had comments explaining intent, **carry that intent forward** in the new code. Add comments for complex sections.
+7. Prefer **core/ext C-level functions** and patterns that reduce opcode count.
+8. Provide:
+    - A **before/after** snippet (or diff-style blocks).
+    - A short **why it’s faster** explanation.
+    - Any **trade-offs**.
+    - A **WordPress runtime note** (what hook/request path it impacts).
+
+## Default performance rules
+
+-   Prefer **less work** over clever syntax.
+-   Prefer **one pass** over two passes.
+-   **ALWAYS prefer `foreach` over `array_map()`/`array_filter()` in hot paths.** `foreach` is a language construct with minimal overhead, while callback-based builtins (`array_map`, `array_filter`, `usort`) invoke PHP callbacks per element—this adds significant call overhead. Only use built-in functions when they avoid per-element PHP callbacks and reduce total work (e.g., `array_column`, `implode`, `str_replace`).
+-   Avoid allocations/copies: fewer arrays, fewer strings, fewer intermediate values.
+-   Avoid dynamic features in hot paths: magic methods, reflection, heavy abstraction.
+
+---
+
+# Performance Patterns and Guidelines (Detailed)
+
+Use these patterns as your default toolbox when writing/refactoring WordPress plugin PHP. Each pattern includes **when to use**, **why it’s faster**, a **preferred code pattern**, and **notes/pitfalls**.
+
+### 1) Array membership checks with a precomputed set
+
+-   **Use when:** You check “is value in list?” more than once (especially inside loops, filters, render callbacks).
+-   **Why it’s faster:** Scanning (`in_array`) is O(n) per lookup; set lookup (`isset`) is O(1) average.
+-   **Preferred pattern:**
+
+```php
+$set = array_fill_keys($values, true); // build once
+if (isset($set[$needle])) {
+    // found
+}
+```
+
+-   **Notes:** `array_fill_keys()` handles duplicates. Normalize key types (string/int) consistently.
+
+### 2) Key existence: `isset()` vs `array_key_exists()` (correct + fast)
+
+-   **Use when:** You need to check whether an array key exists.
+-   **Why it’s faster:** `isset($a[$k])` is very fast, but returns false when value is `null`.
+-   **Preferred pattern:**
+
+```php
+if (isset($a[$k])) {
+    $v = $a[$k];
+} elseif (array_key_exists($k, $a)) {
+    $v = $a[$k]; // may be null
+}
+```
+
+-   **Notes:** If `null` is impossible, use `isset()` only.
+
+### 3) Avoid `array_push()` in hot code
+
+-   **Use when:** Appending one value at a time.
+-   **Why it’s faster:** `$a[] = $v` avoids a function call.
+-   **Preferred pattern:**
+
+```php
+$a[] = $v;
+```
+
+-   **Notes:** `array_push($a, $v1, $v2...)` can be OK when pushing many at once; still avoid in tight loops.
+
+### 4) Don’t call `count()` repeatedly in loop conditions
+
+-   **Use when:** Iterating indexed arrays with `for`.
+-   **Why it’s faster:** Avoids repeated function calls and hash-table work.
+-   **Preferred pattern:**
+
+```php
+for ($i = 0, $n = count($a); $i < $n; $i++) {
+    // ...
+}
+```
+
+-   **Notes:** `foreach` is usually simplest and fast enough; use `for` mainly when you truly need index.
+
+### 5) Prefer `foreach` for array iteration (and avoid by-reference unless needed)
+
+-   **Use when:** Walking arrays.
+-   **Why it’s faster:** `foreach` avoids repeated index lookups and is optimized in the engine.
+-   **Preferred pattern:**
+
+```php
+foreach ($items as $item) {
+    // ...
+}
+```
+
+-   **Notes:** `foreach ($a as &$v)` can cause reference “stickiness” bugs; always `unset($v)` afterwards if you must use it.
+
+### 6) Combine map/filter/reduce into one pass in hot paths
+
+-   **Use when:** Large arrays + multiple transformations (common in WP: attrs normalization, settings maps, query results).
+-   **Why it’s faster:** Avoids allocating intermediate arrays and repeated iteration.
+-   **Preferred pattern (one pass):**
+
+```php
+$out = [];
+foreach ($in as $x) {
+    if (!keep($x)) continue;
+    $out[] = transform($x);
+}
+```
+
+-   **Notes:**
+    -   **ALWAYS use `foreach` instead of `array_map()`/`array_filter()` in hot paths.** `foreach` is a language construct (minimal overhead), while `array_map()`/`array_filter()` invoke a PHP callback for _every element_ (significant call overhead). This is especially critical in WordPress contexts like block rendering, admin list tables, REST responses, and query result processing.
+    -   If you can safely **modify in place**, `foreach` (or an indexed `for`) avoids creating a new array:
+
+```php
+foreach ($arr as $k => $v) {
+    $arr[$k] = transform($v);
+}
+```
+
+-   Avoid `foreach ($arr as &$v)` unless you really need it; if you do, always `unset($v)` after to prevent reference bugs.
+-   **Default to `foreach` for array transformations.** Only use `array_map()`/`array_filter()` if profiling shows the path is cold AND readability significantly benefits. In WordPress plugin code, most array processing happens in hot paths (rendering, queries, filters), so `foreach` should be the default choice.
+
+### 7) Avoid `array_merge()` in loops
+
+-   **Use when:** Building arrays incrementally.
+-   **Why it’s faster:** `array_merge()` allocates a new array each time (copy work).
+-   **Preferred pattern:**
+
+```php
+foreach ($chunk as $v) {
+    $out[] = $v;
+}
+```
+
+-   **Notes:** If you must merge once, do it once (outside loop) or use splat carefully (can allocate too).
+
+### 8) Use `array_column()` for extracting a field (C-level)
+
+-   **Use when:** You have an array of arrays/objects and need one column.
+-   **Why it’s faster:** Implemented in C and avoids PHP-level loops.
+-   **Preferred pattern:**
+
+```php
+$ids = array_column($rows, 'ID');
+```
+
+-   **Notes:** For objects, you may need to map; for huge data, consider returning only IDs from SQL/WP_Query.
+
+### 9) Prefer `sort()`/`asort()` over `usort()` when possible
+
+-   **Use when:** Simple numeric/string sorting.
+-   **Why it’s faster:** `usort()` calls a PHP callback many times.
+-   **Preferred pattern:**
+
+```php
+sort($arr);     // values only
+asort($arr);    // keep keys
+ksort($arr);    // sort keys
+```
+
+-   **Notes:** If you need custom ordering, consider precomputing a sortable key once (Schwartzian transform).
+
+### 10) Avoid `usort()` callback recomputation (decorate-sort-undecorate)
+
+-   **Use when:** Sorting by a computed value.
+-   **Why it’s faster:** Compute the expensive key once per item, not per comparison.
+-   **Preferred pattern:**
+
+```php
+$tmp = [];
+foreach ($items as $k => $v) {
+    $tmp[$k] = [score($v), $v];
+}
+usort($tmp, static fn($a, $b) => $a[0] <=> $b[0]);
+$items = array_column($tmp, 1);
+```
+
+-   **Notes:** This trades memory for CPU. Use only when the comparator is expensive.
+
+### 11) Prefer `$a[$k] ?? $default` for read-with-default
+
+-   **Use when:** You want a default if key missing.
+-   **Why it’s faster:** It’s a language construct and avoids branching noise.
+-   **Preferred pattern:**
+
+```php
+$v = $a[$k] ?? $default;
+```
+
+-   **Notes:** If you must distinguish missing vs `null`, use `array_key_exists()`.
+
+### 12) Avoid `end()/reset()` in hot code
+
+-   **Use when:** You need last/first element often.
+-   **Why it’s faster:** Pointer-based functions mutate internal state and add overhead.
+-   **Preferred pattern:**
+
+```php
+$last = $a ? $a[array_key_last($a)] : null;
+$first = $a ? $a[array_key_first($a)] : null;
+```
+
+-   **Notes:** `array_key_last/first` are PHP 7.3+.
+
+### 13) Normalize once, not inside loops
+
+-   **Use when:** Repeated `trim()`, `strtolower()`, casts, regex cleanup.
+-   **Why it’s faster:** Avoids repeated string allocations.
+-   **Preferred pattern:**
+
+```php
+$needle = strtolower(trim($needle));
+foreach ($items as $x) {
+    if ($needle === $x['key_norm']) { /* ... */ }
+}
+```
+
+-   **Notes:** Store normalized versions if you compare often (but avoid storing both if memory is tight).
+
+### 14) Prefer `str_contains()`/`strpos()` over regex for simple checks
+
+-   **Use when:** You only need contains/prefix/suffix.
+-   **Why it’s faster:** Regex engine startup + backtracking is heavier than simple string search.
+-   **Preferred pattern:**
+
+```php
+if (str_contains($haystack, $needle)) {
+    // ...
+}
+```
+
+-   **Notes:** For PHP < 8, use `strpos($h, $n) !== false`.
+
+### 15) Prefix/suffix checks: `str_starts_with` / `str_ends_with`
+
+-   **Use when:** Checking known prefixes (e.g., option names, meta keys, block names).
+-   **Why it’s faster:** Direct C-level comparisons.
+-   **Preferred pattern:**
+
+```php
+if (str_starts_with($key, 'blockera_')) { /* ... */ }
+```
+
+-   **Notes:** For older PHP, use `strncmp($key, 'blockera_', 8) === 0`.
+
+### 16) Build large strings via buffering + `implode()`
+
+-   **Use when:** Generating lots of HTML for blocks/admin tables.
+-   **Why it’s faster:** Fewer reallocations than repeated concatenation.
+-   **Preferred pattern:**
+
+```php
+$buf = [];
+$buf[] = '<div>';
+foreach ($items as $it) {
+    $buf[] = '<span>' . esc_html($it) . '</span>';
+}
+$buf[] = '</div>';
+$html = implode('', $buf);
+```
+
+-   **Notes:** For small concatenations, `.= ` is fine; optimize when output is large.
+
+### 17) Guard expensive escaping/sanitization
+
+-   **Use when:** You sanitize the same stable value repeatedly.
+-   **Why it’s faster:** Escaping functions can allocate and do multiple passes.
+-   **Preferred pattern:**
+
+```php
+$label_safe = esc_html($label); // once
+foreach ($rows as $r) {
+    $out .= '<th>' . $label_safe . '</th>';
+}
+```
+
+-   **Notes:** Never skip escaping for untrusted data—move it earlier, don’t remove it.
+
+### 18) Avoid `preg_*` in hot paths unless necessary
+
+-   **Use when:** Replacing simple patterns like trimming characters or checking prefixes.
+-   **Why it’s faster:** Regex has overhead and can backtrack.
+-   **Preferred pattern:**
+
+```php
+// Instead of preg_replace for simple cleanup:
+$s = trim($s, "
+
+ ");
+```
+
+-   **Notes:** If regex is needed, keep patterns constant (don’t rebuild strings).
+
+### 19) Prefer built-in array/string functions over PHP loops when they reduce work
+
+-   **Use when:** A builtin does the whole job (e.g., `array_column`, `implode`, `str_replace`).
+-   **Why it’s faster:** Implemented in C; fewer opcodes.
+-   **Preferred pattern:**
+
+```php
+$s = str_replace(['
+', "
+"], "
+", $s);
+```
+
+-   **Notes:** Don’t chain many builtins that create intermediates; one loop may still win.
+
+### 20) Avoid dynamic calls (`call_user_func*`) in hot code
+
+-   **Use when:** You dispatch callbacks many times.
+-   **Why it’s faster:** Dynamic invocation adds overhead and blocks optimizations.
+-   **Preferred pattern:**
+
+```php
+// Prefer direct call
+$result = my_func($arg);
+```
+
+-   **Notes:** In WP hooks you often receive callbacks; keep heavy logic out of hook loops.
+
+### 21) Avoid closures in tight loops when a named/static function works
+
+-   **Use when:** Using `array_map`/`usort`/callbacks repeatedly.
+-   **Why it’s faster:** Closure creation + capture can add overhead.
+-   **Preferred pattern:**
+
+```php
+static function map_fn($x) { return $x['id']; }
+$ids = array_map('map_fn', $rows);
+```
+
+-   **Notes:** In many cases a simple `foreach` is still fastest and clearest.
+
+### 22) Inline tiny helpers on hot paths (but keep intent comments)
+
+-   **Use when:** A helper is called millions of times and profiler shows it.
+-   **Why it’s faster:** Fewer function calls and stack frames.
+-   **Preferred pattern:**
+
+```php
+// Hot path: inline the 2–3 ops instead of a function call
+$y = $x + 1;
+$z = $y * 2;
+```
+
+-   **Notes:** Only do this when measured; otherwise keep helpers for readability.
+
+### 23) Use `static` in-function caches for repeated computations
+
+-   **Use when:** Same input repeated within one request.
+-   **Why it’s faster:** Zero external cache overhead; avoids recomputation.
+-   **Preferred pattern:**
+
+```php
+function blockera_resolve_foo($id) {
+    static $cache = [];
+    return $cache[$id] ??= expensive_compute($id);
+}
+```
+
+-   **Notes:** Include all inputs in the cache key (e.g., `$id . '|' . $mode`).
+
+### 24) Avoid exceptions for normal flow
+
+-   **Use when:** “Not found” or “validation failed” happens often.
+-   **Why it’s faster:** Throwing exceptions is expensive (stack trace, object creation).
+-   **Preferred pattern:**
+
+```php
+if (!$ok) {
+    return null; // or WP_Error
+}
+```
+
+-   **Notes:** Use exceptions only for truly exceptional failures.
+
+### 25) Prefer `switch`/lookup tables for many discrete cases
+
+-   **Use when:** Many string/int cases.
+-   **Why it’s faster:** Less branching; clearer; can reduce comparisons.
+-   **Preferred pattern:**
+
+```php
+$handlers = [
+    'a' => 'handle_a',
+    'b' => 'handle_b',
+];
+$fn = $handlers[$type] ?? null;
+if ($fn) $fn($data);
+```
+
+-   **Notes:** Ensure handler mapping is built once (static/global) not per call.
+
+### 26) Avoid intermediate arrays from `array_filter/map/reduce` on big inputs
+
+-   **Use when:** Big datasets, memory pressure.
+-   **Why it’s faster:** Fewer allocations + less GC pressure.
+-   **Preferred pattern:**
+
+```php
+$out = [];
+foreach ($in as $x) {
+    if ($x === null) continue;
+    $out[] = $x;
+}
+```
+
+-   **Notes:** This is often faster _and_ lower memory than chaining builtins.
+
+### 27) Release large memory early in long-running processes (Cron/CLI)
+
+-   **Use when:** WP-Cron tasks, WP-CLI commands, batch migrations.
+-   **Why it’s faster:** Prevents memory growth/fragmentation and reduces peak.
+-   **Preferred pattern:**
+
+```php
+process_batch($batch);
+$batch = null; // allow GC
+```
+
+-   **Notes:** Also consider chunking input to keep memory bounded.
+
+### 28) Be careful with references (copy-on-write surprises)
+
+-   **Use when:** You’re tempted to use `&` for “performance”.
+-   **Why it can hurt:** References can disable copy-on-write optimizations and create hard-to-debug behavior.
+-   **Preferred pattern:**
+
+```php
+// Prefer returning new value or mutating clearly
+$a[$k] = $new;
+```
+
+-   **Notes:** Only use references when they clearly avoid huge copies and behavior is safe.
+
+### 29) Use generators to stream large sequences
+
+-   **Use when:** You can process items one-by-one (export, reports, indexing).
+-   **Why it’s faster/leaner:** Lower peak memory; avoids building giant arrays.
+-   **Preferred pattern:**
+
+```php
+function rows_iter($ids) {
+    foreach ($ids as $id) {
+        yield load_row($id);
+    }
+}
+```
+
+-   **Notes:** Generators can add overhead per yield; use when memory is the limiting factor.
+
+### 30) Guard debug/log building
+
+-   **Use when:** Logging strings are built even when logging is off.
+-   **Why it’s faster:** Avoids string concatenations/JSON encoding on normal requests.
+-   **Preferred pattern:**
+
+```php
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    error_log('Blockera: ' . $msg);
+}
+```
+
+-   **Notes:** For structured logs, build arrays lazily only inside the guard.
+
+### 31) Batch filesystem checks and avoid scanning on every request
+
+-   **Use when:** You call `file_exists`, `is_file`, `glob`, directory scans.
+-   **Why it’s faster:** Syscalls are slow; scanning directories is very slow.
+-   **Preferred pattern:**
+
+```php
+// Cache once (activation/build time) or per-request static cache
+static $paths = null;
+$paths ??= load_cached_paths();
+```
+
+-   **Notes:** Prefer storing a manifest at build time over runtime `glob()`.
+
+### 32) Choose streaming I/O for large files
+
+-   **Use when:** Export/import large content.
+-   **Why it’s faster/safer:** Avoids loading entire file into memory.
+-   **Preferred pattern:**
+
+```php
+$fh = fopen($path, 'rb');
+while (!feof($fh)) {
+    $chunk = fread($fh, 8192);
+    // process
+}
+fclose($fh);
+```
+
+-   **Notes:** `file_get_contents()` is fine for small files.
+
+### 33) Decode JSON once; reuse decoded form
+
+-   **Use when:** Same JSON is read repeatedly in a request.
+-   **Why it’s faster:** `json_decode` allocates and parses each time.
+-   **Preferred pattern:**
+
+```php
+$data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
+```
+
+-   **Notes:** Avoid `JSON_THROW_ON_ERROR` in ultra-hot loops; handle errors once at boundaries.
+
+### 34) Prefer the smallest serialization you need
+
+-   **Use when:** Storing cached data in options/transients.
+-   **Why it’s faster:** Smaller payloads parse faster and use less memory.
+-   **Preferred pattern:**
+
+```php
+// Cache IDs, not full objects
+set_transient($key, $ids, 3600);
+```
+
+-   **Notes:** Rehydrate later using batched queries.
+
+### 35) Keep plugin bootstrap minimal (autoload cost)
+
+-   **Use when:** Code runs at plugin load.
+-   **Why it’s faster:** Every extra op at load time impacts every request.
+-   **Preferred pattern:**
+
+```php
+// bootstrap.php
+add_action('plugins_loaded', 'blockera_boot');
+function blockera_boot() {
+    // register hooks, lazy init
+}
+```
+
+-   **Notes:** No heavy arrays/scans/queries in global file scope.
+
+### 36) Don’t do heavy work on `init` if you can gate or delay
+
+-   **Use when:** You attach logic to `init` “by default”.
+-   **Why it’s faster:** `init` fires on almost everything (admin, frontend, REST, ajax).
+-   **Preferred pattern:**
+
+```php
+add_action('wp', 'blockera_front_only');
+function blockera_front_only() {
+    if (!is_singular()) return;
+    // heavy work here
+}
+```
+
+-   **Notes:** For admin-only work, check `is_admin()` and the current screen.
+
+### 37) Attach filters/actions only when needed
+
+-   **Use when:** You register many hooks unconditionally.
+-   **Why it’s faster:** Hook dispatch adds overhead and triggers downstream work.
+-   **Preferred pattern:**
+
+```php
+if (is_admin()) {
+    add_action('admin_init', 'blockera_admin_boot');
+}
+```
+
+-   **Notes:** Don’t over-gate with expensive checks; keep gating cheap.
+
+### 38) Avoid `apply_filters` inside tight loops
+
+-   **Use when:** You filter each item in a list.
+-   **Why it’s faster:** Each filter call is dynamic dispatch + unknown callbacks.
+-   **Preferred pattern:**
+
+```php
+// Filter the whole list once, or filter configuration once
+$cfg = apply_filters('blockera_cfg', $cfg);
+foreach ($items as $it) {
+    // use $cfg
+}
+```
+
+-   **Notes:** If per-item filtering is required, cache results or expose a bulk filter.
+
+### 39) Avoid N+1 meta lookups in loops
+
+-   **Use when:** Looping posts/terms/users and calling `get_*_meta()` each time.
+-   **Why it’s faster:** Avoids repeated DB/cache misses.
+-   **Preferred pattern:**
+
+```php
+update_meta_cache('post', $post_ids);
+foreach ($post_ids as $id) {
+    $v = get_post_meta($id, 'key', true);
+}
+```
+
+-   **Notes:** Prime meta cache before the loop whenever possible.
+
+### 40) Query once, process many (no `WP_Query` in loops)
+
+-   **Use when:** You query per item.
+-   **Why it’s faster:** Query overhead dominates; fewer queries wins big.
+-   **Preferred pattern:**
+
+```php
+$q = new WP_Query(['post_type' => 'x', 'posts_per_page' => 100]);
+foreach ($q->posts as $p) {
+    // process
+}
+```
+
+-   **Notes:** Use pagination/chunking for huge datasets.
+
+### 41) Fetch only what you need from WP_Query
+
+-   **Use when:** You only need IDs.
+-   **Why it’s faster:** Less object hydration and memory.
+-   **Preferred pattern:**
+
+```php
+$q = new WP_Query([
+    'post_type' => 'x',
+    'fields' => 'ids',
+    'no_found_rows' => true,
+]);
+```
+
+-   **Notes:** `no_found_rows` helps when you don’t need total counts/pagination.
+
+### 42) Prime term cache when you’ll call `get_the_terms()` repeatedly
+
+-   **Use when:** Many posts need their terms.
+-   **Why it’s faster:** Avoids term queries per post.
+-   **Preferred pattern:**
+
+```php
+update_object_term_cache($posts, 'post');
+```
+
+-   **Notes:** Often WP primes caches, but not always in custom workflows.
+
+### 43) Cache `get_option()` results you reuse
+
+-   **Use when:** Same option read many times.
+-   **Why it’s faster:** Even cached options still cost array lookups and function overhead.
+-   **Preferred pattern:**
+
+```php
+function blockera_opt($k, $default = null) {
+    static $opts = null;
+    $opts ??= get_option('blockera_opts', []);
+    return $opts[$k] ?? $default;
+}
+```
+
+-   **Notes:** Keep the option small; don’t autoload huge blobs.
+
+### 44) Keep autoloaded options small (autoload = no for big data)
+
+-   **Use when:** Storing large configuration/state.
+-   **Why it’s faster:** Autoloaded options are loaded on every request → memory + CPU tax.
+-   **Preferred pattern:**
+
+```php
+add_option('blockera_big', $data, '', 'no');
+// or update_option('blockera_big', $data, false);
+```
+
+-   **Notes:** Make sure you load it only when needed.
+
+### 45) Prefer object cache for derived values (and version keys)
+
+-   **Use when:** Derived computations are expensive and reused.
+-   **Why it’s faster:** Avoids recomputation across requests (with persistent cache).
+-   **Preferred pattern:**
+
+```php
+$ver = 3;
+$key = "blockera:foo:$ver:$post_id";
+$val = wp_cache_get($key, 'blockera');
+if ($val === false) {
+    $val = expensive_compute($post_id);
+    wp_cache_set($key, $val, 'blockera', 300);
+}
+```
+
+-   **Notes:** Include blog_id/user role/locale if they affect output.
+
+### 46) Use transients for cross-request caching (invalidate on writes)
+
+-   **Use when:** No persistent object cache is guaranteed, but caching still helps.
+-   **Why it’s faster:** Cuts repeated heavy computations/queries.
+-   **Preferred pattern:**
+
+```php
+$k = 'blockera_foo_' . $post_id;
+$val = get_transient($k);
+if ($val === false) {
+    $val = expensive_compute($post_id);
+    set_transient($k, $val, HOUR_IN_SECONDS);
+}
+```
+
+-   **Notes:** Delete transient on `save_post`, `updated_option`, etc.
+
+### 47) Dynamic block render: avoid queries and cache markup when safe
+
+-   **Use when:** `render_callback` runs per block render.
+-   **Why it’s faster:** Block rendering can run many times per page.
+-   **Preferred pattern:**
+
+```php
+$key = "blockera:block:" . md5($post_id . '|' . serialize($attrs));
+$html = wp_cache_get($key, 'blockera');
+if ($html === false) {
+    $html = build_markup_fast($attrs);
+    wp_cache_set($key, $html, 'blockera', 60);
+}
+return $html;
+```
+
+-   **Notes:** Include all inputs; don’t cache user-specific output without user in key.
+
+### 48) Admin list tables: avoid per-row heavy work
+
+-   **Use when:** Rendering 20–200 rows with meta/term lookups.
+-   **Why it’s faster:** Per-row lookups become N+1 quickly.
+-   **Preferred pattern:**
+
+```php
+$ids = array_column($rows, 'ID');
+update_meta_cache('post', $ids);
+// now loop and render
+```
+
+-   **Notes:** Compute derived columns in batches.
+
+### 49) AJAX/REST: fail fast (caps/nonces) and return minimal payloads
+
+-   **Use when:** Endpoint performance matters and is hit often.
+-   **Why it’s faster:** Avoids wasted work on unauthorized/invalid requests.
+-   **Preferred pattern:**
+
+```php
+if (!current_user_can('manage_options')) {
+    return new WP_Error('forbidden', 'Forbidden', ['status' => 403]);
+}
+// do work
+```
+
+-   **Notes:** Don’t build large response arrays when you only need a small subset.
+
+### 50) Batch/Chunk background work (Cron/CLI)
+
+-   **Use when:** Processing large datasets (migrations, indexing, sync jobs).
+-   **Why it’s faster/safer:** Keeps memory bounded and avoids timeouts; improves CPU cache locality.
+-   **Preferred pattern:**
+
+```php
+foreach (array_chunk($ids, 200) as $chunk) {
+    process_chunk($chunk);
+}
+```
+
+-   **Notes:** Persist progress markers; avoid loading full objects when IDs suffice.
+
+### 51) WP_Query fast mode for “IDs only”
+
+-   **Use when:** You only need IDs to process later.
+-   **Why it’s faster:** Avoids hydrating full `WP_Post` objects and reduces memory/CPU.
+-   **Preferred pattern:**
+
+```php
+$q = new WP_Query([
+  'post_type' => 'post',
+  'fields' => 'ids',
+  'no_found_rows' => true,
+]);
+```
+
+-   **Notes:** `no_found_rows` saves COUNT(\*) work when pagination totals aren’t needed.
+
+### 52) WP_Query: disable meta/term cache when you won’t use it
+
+-   **Use when:** You won’t call `get_post_meta()` or term functions for these posts.
+-   **Why it’s faster:** Avoids priming caches you never read (CPU + memory).
+-   **Preferred pattern:**
+
+```php
+$q = new WP_Query([
+  'post_type' => 'post',
+  'fields' => 'ids',
+  'update_post_meta_cache' => false,
+  'update_post_term_cache' => false,
+]);
+```
+
+-   **Notes:** Only disable if you truly won’t read meta/terms; otherwise you’ll cause N+1 later.
+
+### 53) Avoid `get_posts()` defaults that load too much
+
+-   **Use when:** Using `get_posts()` for quick fetch.
+-   **Why it’s faster:** Default args can be surprising; explicit args avoid extra work.
+-   **Preferred pattern:**
+
+```php
+$ids = get_posts([
+  'post_type' => 'post',
+  'fields' => 'ids',
+  'posts_per_page' => 200,
+  'no_found_rows' => true,
+]);
+```
+
+-   **Notes:** Avoid `'posts_per_page' => -1` in user-facing requests.
+
+### 54) Prime post meta cache before a meta-heavy loop
+
+-   **Use when:** You loop posts and read the same meta keys.
+-   **Why it’s faster:** Prevents N+1 meta queries and reduces cache misses.
+-   **Preferred pattern:**
+
+```php
+update_meta_cache('post', $post_ids);
+foreach ($post_ids as $id) {
+  $v = get_post_meta($id, 'key', true);
+}
+```
+
+-   **Notes:** Prime once, then read many.
+
+### 55) Prime term cache before term-heavy loops
+
+-   **Use when:** You call `get_the_terms()`/`wp_get_post_terms()` per post.
+-   **Why it’s faster:** Avoids per-post term queries.
+-   **Preferred pattern:**
+
+```php
+update_object_term_cache($posts, 'post');
+```
+
+-   **Notes:** `$posts` can be an array of `WP_Post` objects.
+
+### 56) Read a single post field without hydrating the object
+
+-   **Use when:** You only need `post_title`, `post_status`, etc.
+-   **Why it’s faster:** Less object creation and less property copying.
+-   **Preferred pattern:**
+
+```php
+$title = get_post_field('post_title', $post_id);
+```
+
+-   **Notes:** Great for admin list/table render performance.
+
+### 57) Use `$wpdb->get_var/get_col/get_results` matching your needs
+
+-   **Use when:** Custom queries.
+-   **Why it’s faster:** Pull only the shape you need (scalar/column/rows).
+-   **Preferred pattern:**
+
+```php
+$count = (int) $wpdb->get_var($sql);
+$ids   = $wpdb->get_col($sql);
+```
+
+-   **Notes:** Avoid `SELECT *` if you only need one column.
+
+### 58) Prepare once, execute many
+
+-   **Use when:** Same query template runs for multiple IDs.
+-   **Why it’s faster:** Fewer `prepare()` calls; more predictable SQL.
+-   **Preferred pattern:**
+
+```php
+$sql = "SELECT meta_value FROM $wpdb->postmeta WHERE post_id=%d AND meta_key=%s";
+foreach ($ids as $id) {
+  $v = $wpdb->get_var($wpdb->prepare($sql, $id, 'k'));
+}
+```
+
+-   **Notes:** If possible, rewrite to one query with `IN (...)` to avoid looping queries entirely.
+
+### 59) Replace loops of single-row queries with one `IN (...)` query
+
+-   **Use when:** Fetching many rows by IDs.
+-   **Why it’s faster:** One round-trip + one query plan beats many.
+-   **Preferred pattern:**
+
+```php
+$place = implode(',', array_fill(0, count($ids), '%d'));
+$sql = "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE post_id IN ($place) AND meta_key=%s";
+$rows = $wpdb->get_results($wpdb->prepare($sql, ...$ids, 'k'), ARRAY_A);
+```
+
+-   **Notes:** Keep chunks small (e.g., 200–500 IDs) to avoid huge SQL strings.
+
+### 60) Avoid leading-wildcard LIKE searches
+
+-   **Use when:** Building `LIKE` queries on big tables.
+-   **Why it’s faster:** `LIKE '%x'` prevents index use.
+-   **Preferred pattern:**
+
+```php
+$like = $wpdb->esc_like($prefix) . '%';
+```
+
+-   **Notes:** If you need contains queries, consider an indexable derived column or a separate lookup table.
+
+### 61) Don’t call `apply_filters('the_content', ...)` as a utility
+
+-   **Use when:** You want formatting for internal content.
+-   **Why it’s faster:** `the_content` can trigger shortcodes, embeds, blocks, many plugins.
+-   **Preferred pattern:**
+
+```php
+// Prefer targeted formatting instead of the entire pipeline.
+$out = wp_kses_post($html);
+```
+
+-   **Notes:** Only use the full pipeline when you truly need it.
+
+### 62) Guard `do_shortcode()` / heavy parsing with cheap checks
+
+-   **Use when:** You process content that usually has no shortcodes.
+-   **Why it’s faster:** Avoids parsing overhead.
+-   **Preferred pattern:**
+
+```php
+if (strpos($content, '[') !== false) {
+  $content = do_shortcode($content);
+}
+```
+
+-   **Notes:** This is a heuristic; if correctness requires strict detection, use `has_shortcode()`.
+
+### 63) Avoid repeated `parse_blocks()` on the same content
+
+-   **Use when:** You scan post content for blocks multiple times.
+-   **Why it’s faster:** Block parsing allocates many arrays/strings.
+-   **Preferred pattern:**
+
+```php
+static $cache = [];
+$cache_key = $post_id;
+$blocks = $cache[$cache_key] ??= parse_blocks($content);
+```
+
+-   **Notes:** Cache per-request only unless you have robust invalidation.
+
+### 64) Cache `has_block()` decisions per request
+
+-   **Use when:** Multiple code paths ask “does this post contain block X?”
+-   **Why it’s faster:** Avoids repeated scans of content.
+-   **Preferred pattern:**
+
+```php
+static $hb = [];
+$key = $post_id . '|my/block';
+$hb[$key] ??= has_block('my/block', $content);
+```
+
+-   **Notes:** Prefer caching the parsed blocks if you need multiple block checks.
+
+### 65) Dynamic block `render_callback`: enqueue assets lazily
+
+-   **Use when:** Your block is dynamic and not always present.
+-   **Why it’s faster:** Avoids global asset enqueues for pages that don’t use the block.
+-   **Preferred pattern:**
+
+```php
+function render_cb($attrs, $content, $block) {
+  wp_enqueue_style('blockera-block');
+  return build_markup_fast($attrs);
+}
+```
+
+-   **Notes:** Ensure enqueue happens only once; WP handles duplicate enqueues, but keep calls minimal.
+
+### 66) Don’t register expensive hooks globally (gate by context)
+
+-   **Use when:** A filter/action is only needed in admin or only on certain routes.
+-   **Why it’s faster:** Hook dispatch overhead adds up across requests.
+-   **Preferred pattern:**
+
+```php
+if (is_admin()) {
+  add_action('admin_init', 'blockera_admin_boot');
+}
+```
+
+-   **Notes:** For frontend-only, use `!is_admin() && !wp_doing_ajax()` gating.
+
+### 67) Admin screens: gate by `get_current_screen()`
+
+-   **Use when:** Heavy code for one admin page.
+-   **Why it’s faster:** Avoids loading/processing on unrelated admin screens.
+-   **Preferred pattern:**
+
+```php
+add_action('current_screen', static function($s) {
+  if ($s->id !== 'toplevel_page_blockera') return;
+  blockera_boot_admin_page();
+});
+```
+
+-   **Notes:** Keep checks cheap; don’t compute before screen gating.
+
+### 68) Enqueue admin assets only on the screens you own
+
+-   **Use when:** Admin scripts/styles are heavy.
+-   **Why it’s faster:** Cuts parse/transfer on unrelated admin pages.
+-   **Preferred pattern:**
+
+```php
+add_action('admin_enqueue_scripts', function($hook) {
+  if ($hook !== 'toplevel_page_blockera') return;
+  wp_enqueue_script('blockera-admin');
+});
+```
+
+-   **Notes:** Prefer screen IDs over URL checks.
+
+### 69) Avoid large autoloaded options
+
+-   **Use when:** Storing large config blobs.
+-   **Why it’s faster:** Autoloaded options are loaded on _every_ request.
+-   **Preferred pattern:**
+
+```php
+// Ensure autoload is 'no' for large values.
+add_option('blockera_big', $data, '', 'no');
+```
+
+-   **Notes:** Load only when needed; cache decoded form in a static.
+
+### 70) Keep options structured for hot reads (single fetch)
+
+-   **Use when:** Many small option keys.
+-   **Why it’s faster:** One `get_option()` + array reads beats many separate options.
+-   **Preferred pattern:**
+
+```php
+static $opts;
+$opts ??= get_option('blockera_opts', []);
+$val = $opts['k'] ?? null;
+```
+
+-   **Notes:** Don’t let the single option grow unbounded.
+
+### 71) Object cache for derived values with versioned keys
+
+-   **Use when:** Expensive derived computations repeat across requests.
+-   **Why it’s faster:** Avoids recomputation; reduces DB pressure.
+-   **Preferred pattern:**
+
+```php
+$key = "blockera:v3:foo:$post_id";
+$val = wp_cache_get($key, 'blockera');
+if ($val === false) {
+  $val = expensive_compute($post_id);
+  wp_cache_set($key, $val, 'blockera', 300);
+}
+```
+
+-   **Notes:** Include locale/user role/theme when output depends on them.
+
+### 72) Transients when persistent object cache isn’t guaranteed
+
+-   **Use when:** You want caching on most hosts.
+-   **Why it’s faster:** Cuts repeated heavy queries/computations.
+-   **Preferred pattern:**
+
+```php
+$k = 'blockera_foo_' . $post_id;
+$val = get_transient($k);
+if ($val === false) {
+  $val = expensive_compute($post_id);
+  set_transient($k, $val, HOUR_IN_SECONDS);
+}
+```
+
+-   **Notes:** Invalidate on writes (`save_post`, option updates, etc.).
+
+### 73) Request-level cache beats object cache for ultra-hot calls
+
+-   **Use when:** Called many times in one request.
+-   **Why it’s faster:** No serialization or cache backend overhead.
+-   **Preferred pattern:**
+
+```php
+static $memo = [];
+return $memo[$k] ??= compute($k);
+```
+
+-   **Notes:** Memoize only stable results; don’t cache user-specific data without user in key.
+
+### 74) Fail fast in REST/AJAX (caps/nonces first)
+
+-   **Use when:** Endpoint does real work.
+-   **Why it’s faster:** Rejects quickly; avoids wasted computation.
+-   **Preferred pattern:**
+
+```php
+if (!current_user_can('manage_options')) {
+  return new WP_Error('forbidden', 'Forbidden', ['status' => 403]);
+}
+```
+
+-   **Notes:** Validate inputs early; don’t build response arrays before checks.
+
+### 75) Return minimal REST payloads
+
+-   **Use when:** Lists/collections.
+-   **Why it’s faster:** Less encoding, less transfer, less memory.
+-   **Preferred pattern:**
+
+```php
+return ['ids' => $ids];
+```
+
+-   **Notes:** Offer “detail” endpoints separately.
+
+### 76) Chunk scheduled tasks and persist progress
+
+-   **Use when:** WP-Cron jobs process many items.
+-   **Why it’s faster/safer:** Avoids timeouts; reduces memory spikes.
+-   **Preferred pattern:**
+
+```php
+$offset = (int) get_option('blockera_job_off', 0);
+$ids = fetch_ids($offset, 200);
+process_chunk($ids);
+update_option('blockera_job_off', $offset + 200, false);
+```
+
+-   **Notes:** Use non-autoload for progress markers.
+
+### 77) Avoid `wp_remote_get()` on the request path without caching
+
+-   **Use when:** External calls are used for enrichment.
+-   **Why it’s faster:** Network I/O dominates; caching avoids repeated latency.
+-   **Preferred pattern:**
+
+```php
+// Cache the response (transient/object cache) and refresh asynchronously.
+```
+
+-   **Notes:** Timeouts can crush TTFB; always set timeouts and cache.
+
+### 78) Prefer `esc_html()`/`esc_attr()` once per stable value
+
+-   **Use when:** Same label reused many times.
+-   **Why it’s faster:** Fewer allocations.
+-   **Preferred pattern:**
+
+```php
+$label = esc_html($label);
+```
+
+-   **Notes:** Never skip escaping; move it earlier.
+
+### 79) Sanitize at boundaries, not inside inner loops
+
+-   **Use when:** Looping through many records.
+-   **Why it’s faster:** Sanitization can be multi-step string work.
+-   **Preferred pattern:**
+
+```php
+$ids = array_map('absint', $ids); // once
+```
+
+-   **Notes:** Validate input early; treat DB/user input as untrusted.
+
+### 80) Avoid `__()` inside tight loops for repeated constant strings
+
+-   **Use when:** Rendering many rows with the same labels.
+-   **Why it’s faster:** Translation lookups can add overhead.
+-   **Preferred pattern:**
+
+```php
+$label = __('Settings', 'blockera');
+foreach ($rows as $r) { /* use $label */ }
+```
+
+-   **Notes:** Still translate; just avoid repeating the lookup.
+
+### 81) Avoid huge `wpautop()`/formatting pipelines unless required
+
+-   **Use when:** Formatting large HTML/text repeatedly.
+-   **Why it’s faster:** Multiple passes and regexes.
+-   **Preferred pattern:**
+
+```php
+// Prefer targeted formatting/sanitization.
+```
+
+-   **Notes:** If needed, do it once and cache.
+
+### 82) Avoid building large arrays of `WP_Post` objects
+
+-   **Use when:** You only need a few fields.
+-   **Why it’s faster:** Object hydration is memory-heavy.
+-   **Preferred pattern:**
+
+```php
+'fields' => 'ids'
+```
+
+-   **Notes:** Rehydrate selectively with `get_post_field()`.
+
+### 83) Avoid `setup_postdata()` unless template tags depend on it
+
+-   **Use when:** Looping posts outside The Loop.
+-   **Why it’s faster:** Global state mutation and extra work.
+-   **Preferred pattern:**
+
+```php
+// Use explicit fields instead of template tags.
+```
+
+-   **Notes:** If needed, call once and `wp_reset_postdata()`.
+
+### 84) Reduce repeated `current_user_can()` inside loops
+
+-   **Use when:** Rendering many items with the same capability rule.
+-   **Why it’s faster:** Capability resolution still costs function calls.
+-   **Preferred pattern:**
+
+```php
+$can = current_user_can('edit_posts');
+foreach ($rows as $r) {
+  if (!$can) continue;
+}
+```
+
+-   **Notes:** Include object-specific caps only when truly needed.
+
+### 85) Gate plugin boot by request type (frontend/admin/rest/ajax/cron/cli)
+
+-   **Use when:** Your plugin has distinct subsystems.
+-   **Why it’s faster:** Avoid loading code for irrelevant paths.
+-   **Preferred pattern:**
+
+```php
+if (defined('WP_CLI') && WP_CLI) { /* cli */ }
+elseif (wp_doing_cron()) { /* cron */ }
+elseif (wp_doing_ajax()) { /* ajax */ }
+elseif (defined('REST_REQUEST') && REST_REQUEST) { /* rest */ }
+elseif (is_admin()) { /* admin */ }
+else { /* frontend */ }
+```
+
+-   **Notes:** Keep boot routing extremely cheap.
+
+### 86) Avoid autoloading big class graphs (lazy init services)
+
+-   **Use when:** You have many service classes.
+-   **Why it’s faster:** Less file IO + fewer objects created per request.
+-   **Preferred pattern:**
+
+```php
+function blockera_services() {
+  static $s;
+  return $s ??= new Services();
+}
+```
+
+-   **Notes:** Construct only what the current request needs.
+
+### 87) Avoid reflection and dynamic discovery (scan once, cache manifest)
+
+-   **Use when:** Discovering blocks/files via filesystem.
+-   **Why it’s faster:** Disk scans are slow.
+-   **Preferred pattern:**
+
+```php
+// Generate a manifest at build/activation time; read it at runtime.
+```
+
+-   **Notes:** Prefer deterministic lists.
+
+### 88) Prefer integer IDs and casts once (`absint`)
+
+-   **Use when:** IDs come from request/DB.
+-   **Why it’s faster:** Reduces repeated casting and prevents accidental string keys.
+-   **Preferred pattern:**
+
+```php
+$id = (int) $id;
+```
+
+-   **Notes:** Use `absint()` for safety at boundaries.
+
+### 89) Use strict comparisons to avoid type juggling
+
+-   **Use when:** Comparing scalars.
+-   **Why it’s faster:** Avoids conversions and surprises.
+-   **Preferred pattern:**
+
+```php
+if ($a === $b) { /* ... */ }
+```
+
+-   **Notes:** Especially important for array keys and membership sets.
+
+### 90) Normalize array keys (string vs int) for faster, correct lookups
+
+-   **Use when:** Keys come from user input or mixed sources.
+-   **Why it’s faster:** Avoids duplicate entries and missed hits.
+-   **Preferred pattern:**
+
+```php
+$k = (string) $k;
+$set[$k] = true;
+```
+
+-   **Notes:** Decide key type once per dataset.
+
+### 91) Avoid `filter_var()` for simple numeric checks
+
+-   **Use when:** Validating ints in hot paths.
+-   **Why it’s faster:** `filter_var()` is flexible but heavier.
+-   **Preferred pattern:**
+
+```php
+$ok = ctype_digit($s); // if $s is string digits
+```
+
+-   **Notes:** For signed/edge cases, use boundary validation once.
+
+### 92) Use `ctype_*` for character class checks
+
+-   **Use when:** ASCII-only validation (digits, alnum, etc.).
+-   **Why it’s faster:** Implemented in C.
+-   **Preferred pattern:**
+
+```php
+if (!ctype_alnum($s)) return;
+```
+
+-   **Notes:** Locale/Unicode needs different handling.
+
+### 93) Prefer `strtr()` for many small replacements
+
+-   **Use when:** Replacing many single characters or short tokens.
+-   **Why it’s faster:** Can be more efficient than repeated `str_replace` calls.
+-   **Preferred pattern:**
+
+```php
+$s = strtr($s, ["
+" => "
+", "
+" => "
+"]);
+```
+
+-   **Notes:** Benchmark if uncertain; both are C-level.
+
+### 94) Avoid `sprintf()` inside tight loops
+
+-   **Use when:** Formatting repeatedly.
+-   **Why it’s faster:** `sprintf` parsing is heavier than simple concatenation.
+-   **Preferred pattern:**
+
+```php
+$u = $a . ':' . $b;
+```
+
+-   **Notes:** Use `sprintf` for readability when not hot.
+
+### 95) Cache `strlen()`/`count()` results used repeatedly
+
+-   **Use when:** Loop conditions or repeated checks.
+-   **Why it’s faster:** Avoids repeated calls.
+-   **Preferred pattern:**
+
+```php
+$len = strlen($s);
+```
+
+-   **Notes:** For multibyte, use mb\_\* only if needed.
+
+### 96) Prefer `implode()` over manual string joining loops
+
+-   **Use when:** Joining many parts.
+-   **Why it’s faster:** One pass in C.
+-   **Preferred pattern:**
+
+```php
+$out = implode(',', $parts);
+```
+
+-   **Notes:** Build `$parts` efficiently (avoid `array_merge` in loops).
+
+### 97) **ALWAYS prefer `foreach` over `array_map()` / `array_filter()` in hot paths** (CRITICAL RULE)
+
+-   **Use when:** **Any array transformation in WordPress plugin code**—blocks render, admin list rendering, REST responses, query processing, filter/action callbacks, or any code that runs per-request/per-item.
+-   **Why it's faster:** `foreach` is a language construct with minimal overhead. Callback-based builtins (`array_map`, `array_filter`) trigger a PHP function call per element, adding significant overhead. A tight `foreach` does the same work with **zero callback overhead** and often fewer allocations.
+-   **Default rule:** Use `foreach` by default. Only consider `array_map()`/`array_filter()` if profiling proves the path is cold AND readability is significantly better (rare in WordPress contexts).
+-   **Preferred patterns:**
+
+```php
+// Map (build new array)
+$out = [];
+foreach ($in as $k => $v) {
+    $out[$k] = transform($v);
+}
+
+// Filter (build new array)
+$out = [];
+foreach ($in as $k => $v) {
+    if (!keep($v)) continue;
+    $out[$k] = $v;
+}
+
+// In-place transform (when safe)
+foreach ($arr as $k => $v) {
+    $arr[$k] = transform($v);
+}
+```
+
+-   **Notes:**
+    -   **This is a default rule, not an optimization suggestion.** In WordPress plugin code, most array processing happens in hot paths, so `foreach` should be your first choice, not `array_map()`.
+    -   `array_map()` returns a new array; when you pass multiple arrays, results may be reindexed—watch key behavior.
+    -   If you only need a **simple extract** with no callback, prefer C-level helpers like `array_column()` (no PHP callback overhead).
+    -   If you're currently using `array_map()`/`array_filter()`, refactor to `foreach` immediately—the performance win is significant and the code remains readable.
+
+### 98) Prefer `array_fill_keys()` over `array_flip()` when duplicates exist
+
+-   **Use when:** Building sets from user lists.
+-   **Why it’s faster/correct:** Avoids losing entries due to duplicates and avoids accidental value overwrite semantics.
+-   **Preferred pattern:**
+
+```php
+$set = array_fill_keys($values, true);
+```
+
+-   **Notes:** `array_flip` requires values convertible to string/int keys.
+
+### 99) Avoid nested `foreach` when you can index once
+
+-   **Use when:** Joining datasets.
+-   **Why it’s faster:** Turn O(n\*m) into O(n+m).
+-   **Preferred pattern:**
+
+```php
+$by_id = [];
+foreach ($rows as $r) { $by_id[$r['id']] = $r; }
+```
+
+-   **Notes:** Memory tradeoff; worth it on hot paths.
+
+### 100) Avoid repeated `wp_normalize_path()` / path transforms
+
+-   **Use when:** Handling many paths.
+-   **Why it’s faster:** String transforms allocate.
+-   **Preferred pattern:**
+
+```php
+$base = wp_normalize_path($base);
+```
+
+-   **Notes:** Normalize once per request.
+
+### 101) Cache `wp_upload_dir()` and `plugin_dir_path()` results
+
+-   **Use when:** Called repeatedly.
+-   **Why it’s faster:** Some functions compute and normalize paths/URLs.
+-   **Preferred pattern:**
+
+```php
+static $ud;
+$ud ??= wp_upload_dir();
+```
+
+-   **Notes:** In multi-site, include blog context.
+
+### 102) Avoid repeated URL builders in loops
+
+-   **Use when:** Generating many permalinks/admin URLs.
+-   **Why it’s faster:** URL building can call filters and allocate strings.
+-   **Preferred pattern:**
+
+```php
+$base = admin_url('admin.php?page=blockera');
+```
+
+-   **Notes:** Append query strings with simple concatenation if safe.
+
+### 103) Reduce `wp_kses_*` calls by sanitizing once and caching
+
+-   **Use when:** Same trusted/stable content reused.
+-   **Why it’s faster:** KSES does multiple passes and tag checks.
+-   **Preferred pattern:**
+
+```php
+$clean = wp_kses_post($html); // once
+```
+
+-   **Notes:** Never skip sanitization for untrusted input.
+
+### 104) Prefer `sanitize_key()`/`sanitize_text_field()` at boundaries
+
+-   **Use when:** Reading request params.
+-   **Why it’s faster:** Avoid repeating sanitization inside inner logic.
+-   **Preferred pattern:**
+
+```php
+$key = sanitize_key($_GET['key'] ?? '');
+```
+
+-   **Notes:** Combine with validation and early returns.
+
+### 105) Avoid `wp_slash`/`wp_unslash` ping-pong
+
+-   **Use when:** Handling request arrays.
+-   **Why it’s faster:** Each pass walks and copies arrays.
+-   **Preferred pattern:**
+
+```php
+$data = wp_unslash($_POST);
+```
+
+-   **Notes:** Unsplash once at the boundary, then treat as unslashed internally.
+
+### 106) Don’t compute expensive config every request; cache compiled config
+
+-   **Use when:** Building large config arrays (style maps, token sets).
+-   **Why it’s faster:** Avoids repeated allocations.
+-   **Preferred pattern:**
+
+```php
+$cfg = wp_cache_get('blockera:cfg', 'blockera');
+```
+
+-   **Notes:** Invalidate when options change.
+
+### 107) Store precomputed lookup tables instead of repeated `switch` logic
+
+-   **Use when:** Mapping keys to handlers/options.
+-   **Why it’s faster:** O(1) hash lookup vs multiple comparisons.
+-   **Preferred pattern:**
+
+```php
+static $map = ['a' => 1, 'b' => 2];
+$v = $map[$k] ?? null;
+```
+
+-   **Notes:** Build once (static) not per call.
+
+### 108) Avoid recursion for deep structures in PHP hot paths
+
+-   **Use when:** Walking nested arrays/blocks.
+-   **Why it’s faster:** Less function-call overhead and avoids deep stack risk.
+-   **Preferred pattern:**
+
+```php
+// Use an explicit stack array for DFS.
+```
+
+-   **Notes:** Keep stack elements minimal (IDs, offsets).
+
+### 109) Prefer `for` over `foreach` only when you need index and can cache length
+
+-   **Use when:** You must use `$i` frequently.
+-   **Why it’s faster:** Avoids extra key handling in some cases.
+-   **Preferred pattern:**
+
+```php
+for ($i=0,$n=count($a);$i<$n;$i++) { $v=$a[$i]; }
+```
+
+-   **Notes:** `foreach` is usually fine; do this only when measured.
+
+### 110) Avoid `array_values()` / reindexing unless you need contiguous indexes
+
+-   **Use when:** You just want iteration.
+-   **Why it’s faster:** Reindexing allocates a new array.
+-   **Preferred pattern:**
+
+```php
+foreach ($a as $v) { /* ... */ }
+```
+
+-   **Notes:** If you need a list, consider building it directly.
+
+### 111) Avoid `array_unique()` on big arrays; build set while generating
+
+-   **Use when:** Deduplicating.
+-   **Why it’s faster:** One pass with `isset` avoids hashing twice.
+-   **Preferred pattern:**
+
+```php
+$seen = [];
+foreach ($in as $v) { if (!isset($seen[$v])) { $seen[$v]=true; $out[]=$v; } }
+```
+
+-   **Notes:** Normalize types first.
+
+### 112) Prefer `isset($obj->prop)` and direct property access over magic
+
+-   **Use when:** Hot path object reads.
+-   **Why it’s faster:** Magic methods add dynamic dispatch.
+-   **Preferred pattern:**
+
+```php
+$v = $o->prop;
+```
+
+-   **Notes:** Avoid `__get/__call` in performance-critical code.
+
+### 113) Prefer `final`/non-dynamic dispatch in hot OOP paths
+
+-   **Use when:** Classes are not intended for extension.
+-   **Why it’s faster:** Can reduce complexity and help opcache assumptions.
+-   **Preferred pattern:**
+
+```php
+final class FastThing {}
+```
+
+-   **Notes:** Primarily a design win; measure in hot spots.
+
+### 114) Avoid `Reflection*` and runtime introspection
+
+-   **Use when:** Discovering attributes/methods dynamically.
+-   **Why it’s faster:** Reflection allocates objects and does deep inspection.
+-   **Preferred pattern:**
+
+```php
+// Prefer explicit metadata arrays or generated manifests.
+```
+
+-   **Notes:** Do reflection at build time if possible.
+
+### 115) Avoid `debug_backtrace()` in request paths
+
+-   **Use when:** Logging/tracing.
+-   **Why it’s faster:** Backtraces are expensive and allocate.
+-   **Preferred pattern:**
+
+```php
+if (WP_DEBUG) { /* maybe */ }
+```
+
+-   **Notes:** Never on production hot paths.
+
+### 116) Use `hash_equals()` only for security comparisons
+
+-   **Use when:** Comparing secrets/tokens.
+-   **Why it matters:** Prevents timing attacks (not a speed win).
+-   **Preferred pattern:**
+
+```php
+if (!hash_equals($a, $b)) return;
+```
+
+-   **Notes:** Don’t replace with `===` for secrets.
+
+### 117) Use `mt_rand()` only when cryptographic security is not required
+
+-   **Use when:** Non-security randomization (UI shuffles).
+-   **Why it’s faster:** `random_int()` is secure but slower.
+-   **Preferred pattern:**
+
+```php
+$x = mt_rand(0, 100);
+```
+
+-   **Notes:** For tokens/nonces, always use WordPress APIs.
+
+### 118) Avoid `DateTime` object churn in loops
+
+-   **Use when:** Formatting many timestamps.
+-   **Why it’s faster:** DateTime objects allocate and parse.
+-   **Preferred pattern:**
+
+```php
+// Cache timezone/formatter; avoid object per row when possible.
+```
+
+-   **Notes:** WordPress date helpers can also be heavy; cache outputs if repeated.
+
+### 119) Prefer integer arithmetic and bitmasks for flags
+
+-   **Use when:** Many boolean flags in hot structures.
+-   **Why it’s faster:** Smaller memory footprint and fewer lookups.
+-   **Preferred pattern:**
+
+```php
+$flags |= 4; // set bit
+if ($flags & 4) { /* ... */ }
+```
+
+-   **Notes:** Only use when it doesn’t reduce clarity too much.
+
+### 120) Avoid deep array nesting in hot data structures
+
+-   **Use when:** Storing per-block/per-post computed state.
+-   **Why it’s faster:** Fewer hash table lookups and fewer allocations.
+-   **Preferred pattern:**
+
+```php
+// Flatten keys: "$id|$state" => $value
+```
+
+-   **Notes:** Be consistent about key normalization.
+
+### 121) Prefer `static` functions/closures with no captures in hot callbacks
+
+-   **Use when:** `usort`, callbacks for hooks.
+-   **Why it’s faster:** Avoids capturing external variables.
+-   **Preferred pattern:**
+
+```php
+usort($a, static fn($x,$y)=>$x<=>$y);
+```
+
+-   **Notes:** A simple loop often wins over callback-heavy pipelines.
+
+### 122) Avoid `preg_replace` for simple trims/replacements
+
+-   **Use when:** Regex is only used for basic tasks.
+-   **Why it’s faster:** Regex engine overhead.
+-   **Preferred pattern:**
+
+```php
+$s = trim($s);
+$s = str_replace("	", ' ', $s);
+```
+
+-   **Notes:** Use regex only when pattern logic is essential.
+
+### 123) Prefer `strpos` over `substr` for “contains”
+
+-   **Use when:** Checking whether substring exists.
+-   **Why it’s faster:** `strpos` is optimized search.
+-   **Preferred pattern:**
+
+```php
+if (strpos($s, 'x') !== false) { /* ... */ }
+```
+
+-   **Notes:** Use `str_contains` on PHP 8+ for clarity.
+
+### 124) Prefer `strncmp` for prefix checks on older PHP
+
+-   **Use when:** Need to support older runtimes.
+-   **Why it’s faster:** Compares only the needed bytes.
+-   **Preferred pattern:**
+
+```php
+if (strncmp($s, 'pre', 3) === 0) { /* ... */ }
+```
+
+-   **Notes:** On PHP 8+, use `str_starts_with`.
+
+### 125) Avoid unnecessary `array_filter` with default callback
+
+-   **Use when:** Filtering “truthy” values.
+-   **Why it’s faster:** Default callback still iterates and allocates.
+-   **Preferred pattern:**
+
+```php
+$out = [];
+foreach ($in as $v) { if ($v) $out[] = $v; }
+```
+
+-   **Notes:** Only optimize when large/hot.
+
+### 126) Avoid `array_walk` (callback) in hot code
+
+-   **Use when:** Applying a simple operation.
+-   **Why it’s faster:** Callback overhead per element.
+-   **Preferred pattern:**
+
+```php
+foreach ($a as $k => $v) { $a[$k] = f($v); }
+```
+
+-   **Notes:** Keep f inline if tiny and hot.
+
+### 127) Avoid repeated `wp_json_encode()` for the same payload
+
+-   **Use when:** Returning stable payloads.
+-   **Why it’s faster:** JSON encoding allocates and traverses structures.
+-   **Preferred pattern:**
+
+```php
+static $json;
+$json ??= wp_json_encode($payload);
+```
+
+-   **Notes:** Only if payload truly stable for the request.
+
+### 128) Use `wp_send_json*` only once per request
+
+-   **Use when:** AJAX endpoints.
+-   **Why it’s faster:** Prevents extra output buffering/work.
+-   **Preferred pattern:**
+
+```php
+wp_send_json_success($data);
+```
+
+-   **Notes:** Don’t build `$data` until after nonce/cap checks.
+
+### 129) Avoid `wp_die()` heavy HTML for JSON endpoints
+
+-   **Use when:** REST/AJAX errors.
+-   **Why it’s faster:** Less templating work.
+-   **Preferred pattern:**
+
+```php
+return new WP_Error('bad_request', 'Bad request', ['status'=>400]);
+```
+
+-   **Notes:** Keep error payload minimal.
+
+### 130) Use `register_activation_hook` for one-time expensive setup
+
+-   **Use when:** Building manifests, indexes, default options.
+-   **Why it’s faster:** Moves work off the request path.
+-   **Preferred pattern:**
+
+```php
+register_activation_hook(__FILE__, 'blockera_activate');
+```
+
+-   **Notes:** Activation should still be fast; but it’s better than every request.
+
+### 131) Avoid doing expensive work on `plugins_loaded` unless required
+
+-   **Use when:** Plugin initializes too early.
+-   **Why it’s faster:** Earlier hooks run in more contexts.
+-   **Preferred pattern:**
+
+```php
+add_action('init', 'boot', 20);
+```
+
+-   **Notes:** Prefer the _latest_ hook that still guarantees correctness.
+
+### 132) Use `remove_action/remove_filter` sparingly, but early
+
+-   **Use when:** You must change WP default behaviors.
+-   **Why it’s faster:** Avoids extra hook dispatch later.
+-   **Preferred pattern:**
+
+```php
+remove_filter('the_content', 'wpautop');
+```
+
+-   **Notes:** High risk; ensure behavior parity and compatibility.
+
+### 133) Minimize `wp_enqueue_*` calls (but don’t fear idempotence)
+
+-   **Use when:** Enqueueing inside loops.
+-   **Why it’s faster:** Each call does handle lookups and filters.
+-   **Preferred pattern:**
+
+```php
+// enqueue once per request path
+```
+
+-   **Notes:** WP prevents duplicates, but avoid calling hundreds of times.
+
+### 134) Use stable cache keys (include version + context)
+
+-   **Use when:** Caching derived values or markup.
+-   **Why it’s faster:** Prevents subtle bugs and avoids cache stampedes.
+-   **Preferred pattern:**
+
+```php
+$key = "blockera:v1:$blog_id:$post_id:$locale";
+```
+
+-   **Notes:** Add user role/permissions if output differs.
+
+### 135) Avoid caching huge objects; cache IDs or small scalars
+
+-   **Use when:** Object cache/transients.
+-   **Why it’s faster:** Less serialization + less memory.
+-   **Preferred pattern:**
+
+```php
+set_transient($k, $ids, 300);
+```
+
+-   **Notes:** Rehydrate with batched queries.
+
+### 136) Use `array_chunk` for DB and network batching
+
+-   **Use when:** Building `IN (...)` queries or multiple remote calls.
+-   **Why it’s faster:** Limits SQL size and keeps latency manageable.
+-   **Preferred pattern:**
+
+```php
+foreach (array_chunk($ids, 200) as $chunk) { /* query */ }
+```
+
+-   **Notes:** Tune chunk size based on DB and payload.
+
+### 137) Avoid `serialize()` of massive arrays in hot code
+
+-   **Use when:** Hashing keys or caching.
+-   **Why it’s faster:** Serialization is heavy.
+-   **Preferred pattern:**
+
+```php
+$key = $a . '|' . $b; // use stable primitives
+```
+
+-   **Notes:** For attrs arrays, consider `wp_json_encode` once, then hash.
+
+### 138) Use `md5()` only for cache keys (not security)
+
+-   **Use when:** Creating fixed-length cache keys.
+-   **Why it’s practical:** Fast and compact.
+-   **Preferred pattern:**
+
+```php
+$key = 'blockera:' . md5($raw_key);
+```
+
+-   **Notes:** Don’t use MD5 for password/security features.
+
+### 139) Minimize `wp_kses_allowed_html()` calls
+
+-   **Use when:** Sanitizing with custom allowed tags.
+-   **Why it’s faster:** Building allowed arrays can be expensive.
+-   **Preferred pattern:**
+
+```php
+static $allowed;
+$allowed ??= [ 'a' => ['href'=>true] ];
+```
+
+-   **Notes:** Build allowed arrays once.
+
+### 140) Prefer `wp_parse_args()` only when you need its behavior
+
+-   **Use when:** Merging defaults.
+-   **Why it can be slower:** It handles objects/strings; extra conversions.
+-   **Preferred pattern:**
+
+```php
+$args += $defaults; // for arrays only
+```
+
+-   **Notes:** Only use `+` when you’re sure both are arrays and you want “preserve existing keys”.
+
+### 141) Avoid `wp_list_pluck()` if a single loop can do it without temp arrays
+
+-   **Use when:** Extracting and transforming.
+-   **Why it’s faster:** One loop avoids extra allocations.
+-   **Preferred pattern:**
+
+```php
+$out = [];
+foreach ($rows as $r) { $out[] = $r['ID']; }
+```
+
+-   **Notes:** `wp_list_pluck` is fine for small arrays.
+
+### 142) Prefer `array_column()` over PHP loops when it’s a direct extract
+
+-   **Use when:** No transformation needed.
+-   **Why it’s faster:** C-level implementation.
+-   **Preferred pattern:**
+
+```php
+$ids = array_column($rows, 'ID');
+```
+
+-   **Notes:** For objects, you may still need a loop.
+
+### 143) Avoid creating objects in tight loops
+
+-   **Use when:** Rendering many items.
+-   **Why it’s faster:** Object allocation + GC pressure.
+-   **Preferred pattern:**
+
+```php
+// Use arrays/scalars for temporary data.
+```
+
+-   **Notes:** Use objects when they reduce complexity, but not per-iteration.
+
+### 144) Avoid `new WP_Error` in tight loops (reuse codes/messages)
+
+-   **Use when:** Validating many items.
+-   **Why it’s faster:** Object creation overhead.
+-   **Preferred pattern:**
+
+```php
+// Collect error codes; build WP_Error once at the end if needed.
+```
+
+-   **Notes:** Keep correctness; don’t hide item-level errors.
+
+### 145) Prefer `static` caches for regex patterns and compiled maps
+
+-   **Use when:** Same pattern/map used frequently.
+-   **Why it’s faster:** Avoid rebuilding arrays/strings.
+-   **Preferred pattern:**
+
+```php
+static $re = '/^blockera_/';
+```
+
+-   **Notes:** Keep patterns constant.
+
+### 146) Avoid `wp_cache_flush()`; invalidate targeted keys only
+
+-   **Use when:** Updating plugin data.
+-   **Why it’s faster:** Full flush nukes caches and increases load.
+-   **Preferred pattern:**
+
+```php
+wp_cache_delete($key, 'blockera');
+```
+
+-   **Notes:** Use versioned keys to simplify invalidation.
+
+### 147) Multi-site: minimize `switch_to_blog()` and batch operations
+
+-   **Use when:** Processing across sites.
+-   **Why it’s faster:** Switching changes global state and can be expensive.
+-   **Preferred pattern:**
+
+```php
+// Group work per blog; switch once per batch.
+```
+
+-   **Notes:** Always `restore_current_blog()`.
+
+### 148) Avoid `get_option()` in template tags repeatedly; pass data down
+
+-   **Use when:** Rendering many components.
+-   **Why it’s faster:** Fewer calls and lookups.
+-   **Preferred pattern:**
+
+```php
+$cfg = blockera_get_cfg();
+render_component($cfg, $item);
+```
+
+-   **Notes:** Keep cfg immutable within request.
+
+### 149) Prefer immutable config objects/arrays in hot paths
+
+-   **Use when:** Shared config read many times.
+-   **Why it’s faster:** Avoids copy-on-write writes and accidental mutation.
+-   **Preferred pattern:**
+
+```php
+// Treat $cfg as read-only.
+```
+
+-   **Notes:** If you must mutate, clone once outside loops.
+
+### 150) Always measure: optimize only what’s hot
+
+-   **Use when:** You’re unsure which change matters.
+-   **Why it’s faster:** Time goes to the 1–3 real bottlenecks.
+-   **Preferred pattern:**
+
+```php
+// Profile → change → benchmark → validate.
+```
+
+-   **Notes:** Prefer SPX/Xdebug/Tideways/Blackfire; track peak memory and query counts.
+
+---
+
+## J) Profiling-driven workflow
+
+88. Never “optimize blindly”: identify hot spots using profilers (Xdebug profiler, SPX, Tideways/Blackfire, etc.).
+89. Optimize the **top 1–3 hottest functions** first; small wins elsewhere don’t matter.
+90. Validate with a benchmark harness (micro + macro) and keep before/after numbers.
+91. In WordPress, also measure:
+
+-   **Total DB queries** and the slowest queries.
+-   **Peak memory** for the request.
+-   Impact on **TTFB** (frontend) and **admin page render**.
+
+---
+
+# WordPress-aware rewrite checklist (use on every task)
+
+-   [ ] **Execution frequency:** does this run on every request? If yes, can we gate, delay, or lazy-load?
+-   [ ] **Hook placement:** are we hooking as late and as narrowly as possible (frontend vs admin vs REST vs ajax)?
+-   [ ] **Queries:** did we reduce query count and prevent N+1 meta/term lookups?
+-   [ ] **Caches:** did we prime meta/term caches, add request-level caches, and/or object-cache/transient caches where safe?
+-   [ ] **Autoload:** are large options marked `autoload = no` and only loaded when needed?
+-   [ ] **Rendering:** does HTML/output remain identical? Any user-specific output handled in cache keys?
+-   [ ] **Security:** caps/nonces/escaping preserved; no performance “wins” that weaken security.
+
+# Output format you must follow
+
+When refactoring:
+
+1. **Hot-path summary:** what’s expensive and why.
+2. **Changes:** bullet list.
+3. **Rewritten code:** full function/class or a minimal diff.
+4. **Perf rationale:** how it reduces CPU/memory.
+5. **Risk notes:** edge cases and behavior parity.
+
+---
+
+# Quick checklist for every change
+
+-   [ ] Fewer passes / fewer allocations?
+-   [ ] Reduced function calls inside loops?
+-   [ ] Swapped scans for O(1) lookups?
+-   [ ] Removed unnecessary string/array copies?
+-   [ ] Reduced DB queries / avoided N+1 in WordPress?
+-   [ ] Preserved behavior, security checks, and original intent comments?
+-   [ ] Added a profiling/benchmark note when it’s a meaningful hot path?

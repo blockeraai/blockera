@@ -1,4 +1,5 @@
 {
+	"core": "https://wordpress.org/wordpress-latest.zip",
 	"plugins": [
 		".",
 		"https://downloads.wordpress.org/plugin/blocksy-companion.latest-stable.zip"
@@ -7,9 +8,11 @@
 		"https://downloads.wordpress.org/theme/blocksy.latest-stable.zip"
 	],
 	"config": {
-		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
+		"SCRIPT_DEBUG": false,
+		"WP_DEBUG": false
 	},
 	"lifecycleScripts": {
-		"afterStart": "wp-env run cli wp theme activate blocksy"
+		"afterStart": "wp-env run cli -- wp theme install https://downloads.wordpress.org/theme/blocksy.latest-stable.zip --activate && wp-env run cli -- wp option update blogname 'Blockera Test' && wp-env run cli -- wp user update 1 --display_name='Blockera Author' --user_email='hello@blockera.ai' --user_url='https://blockera.ai' --description='We shape the future of how block editor can change the web!'"
 	}
 }

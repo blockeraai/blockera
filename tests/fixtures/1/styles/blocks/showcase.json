@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+	"version": 3,
+	"title": "Akbar",
+	"slug": "akbar",
+	"blockTypes": ["core/paragraph"],
+	"styles": {
+		"color": {
+			"background": "#eeeeee"
+		},
+		"typography": {
+			"fontSize": "20px",
+			"lineHeight": "1.2"
+		},
+		"blockeraLineHeight": {
+			"value": "1.2"
+		},
+		"blockeraFontSize": {
+			"value": "20px"
+		},
+		"blockeraBackgroundColor": {
+			"value": "#eeeeee"
+		}
+	}
+}

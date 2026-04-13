@@ -13,14 +13,35 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockera/elements/icon'        => [
+				'blockera/elements/item' => [
+					'root' => ':where(li)',
+				],
+				'blockera/elements/icon' => [
 					'root' => '&:before',
 				],
-				'blockera/elements/link'        => [
+				'blockera/elements/link' => [
 					'root' => 'a:not(.wp-element-button)',
 				],
-				'blockera/states/marker'        => [
+				'blockera/states/marker' => [
 					'root' => '&::marker',
+				],
+				'blockera/elements/bold' => [
+					'root' => ':is(strong,b)',
+				],
+				'blockera/elements/italic' => [
+					'root' => ':is(em,i)',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span:not([data-rich-text-placeholder])',
+				],
+				'blockera/elements/mark' => [
+					'root' => ':is(mark,mark[class])',
 				],
 			],
 		),

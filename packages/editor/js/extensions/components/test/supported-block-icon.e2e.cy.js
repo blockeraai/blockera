@@ -2,7 +2,7 @@ import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
 import {
 	addBlockToPost,
 	appendBlocks,
-	getBlockInserter,
+	openBlockInserter,
 } from '@blockera/dev-cypress/js/helpers/editor';
 
 describe('Supported Block Indicator Icon', () => {
@@ -11,11 +11,16 @@ describe('Supported Block Indicator Icon', () => {
 	});
 
 	it('Show supported block icon on block inserter (Paragraph Block)', () => {
-		getBlockInserter().click();
+		openBlockInserter();
+
+		const selector = `.editor-block-list-item-${CSS.escape(
+			`paragraph/paragraph`
+		)}`;
 
 		// should show blockera block icon on paragraph block
-		cy.get('.editor-block-list-item-paragraph').should('be.visible');
-		cy.get('.editor-block-list-item-paragraph').within(() => {
+		cy.get(selector).should('be.visible');
+
+		cy.get(selector).within(() => {
 			cy.get('.blockera-block-icon').should('be.visible');
 		});
 
@@ -27,7 +32,7 @@ describe('Supported Block Indicator Icon', () => {
 			.type('paragraph', { delay: 0 });
 
 		// should show blockera block icon on paragraph block in search panel
-		cy.get('.editor-block-list-item-paragraph').within(() => {
+		cy.get(selector).within(() => {
 			cy.get('.blockera-block-icon').should('be.visible');
 		});
 	});

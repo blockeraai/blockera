@@ -63,8 +63,15 @@ class Utils {
 		$prefix = $args['prefix'] ?? '';
 		$suffix = $args['suffix'] ?? '';
 
-		// Split the selector by commas.
-		$selectors = explode( ',', $selector );
+		$selectors = [ $selector ];
+
+		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
+		// These functions can contain multiple selectors separated by commas, which should not be split.
+		if ( ! preg_match( blockera_regex_pseudo_class_functions_pattern(), $selector, $matches ) ) {
+		
+			// Split the selector by commas.
+			$selectors = explode( ',', $selector );
+		}
 
 		// Initialize an array to store modified selectors.
 		$modifiedSelectors = [];
@@ -148,9 +155,9 @@ class Utils {
 	 */
 	public static function isPluginInstalled( string $plugin_slug ): bool {
 
-		$installed_plugins = get_plugins();
+		$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_slug . '.php';
 
-		return isset( $installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ] );
+		return file_exists( $plugin_file );
 	}
 
 	/**

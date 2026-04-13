@@ -1,0 +1,6 @@
+[
+	"post create --post_title=\"page-1\" --post_type=\"page\"",
+	"post create --post_title=\"page-2\" --post_type=\"page\"",
+	"post create --post_title=\"page-3\" --post_type=\"page\"",
+	"post create --post_title=\"page-4\" --post_type=\"page\""
+]

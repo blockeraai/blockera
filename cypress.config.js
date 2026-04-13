@@ -1,33 +1,36 @@
 const { defineConfig } = require('cypress');
+const fs = require('fs');
+const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 let env = {
 	wpUsername: 'admin',
 	wpPassword: 'password',
 	testURL: 'http://localhost:8888',
 	e2e: {
-		specPattern: ['packages/**/*.e2e.cy.js', 'packages/**/*.visual.cy.js'],
+		specPattern: [
+			'packages/**/*.e2e.cy.js',
+			'tests/**/*.e2e.cy.js',
+			'packages/**/*.visual.cy.js',
+			'tests/**/*.visual.cy.js',
+		],
 		excludeSpecPattern: ['packages/**/*.build.e2e.js'],
 	},
 };
 
 // This is a workaround for localization of the cypress env file.
-try {
-	env = require('./cypress.env.json');
-} catch (error) {
-	/* @debug-ignore */
-	console.log(error);
-}
-
-// This is a workaround for pull request cypress env file.
-try {
-	env = {
-		...env,
-		...require('./.pr-cypress.env.json'),
-	};
-} catch (error) {
-	/* @debug-ignore */
-	console.log(error);
-}
+env = {
+	...env,
+	...(fs.existsSync(path.resolve(__dirname, 'cypress.env.json'))
+		? require('./cypress.env.json')
+		: {}),
+	...(fs.existsSync(path.resolve(__dirname, '.pr-cypress.env.json'))
+		? require('./.pr-cypress.env.json')
+		: {}),
+	...process.env,
+};
 
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
@@ -52,9 +55,10 @@ module.exports = defineConfig({
 	fixturesFolder: 'packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
 	projectId: 'blockera',
+	// runMode: 2 => up to 3 attempts per test (1 run + 2 retries on failure).
 	retries: {
 		openMode: 0,
-		runMode: 0,
+		runMode: 2,
 	},
 	coverage: true,
 	screenshotOnRunFailure: false,
@@ -71,6 +75,6 @@ module.exports = defineConfig({
 		specPattern: 'packages/**/*.cy.js',
 		supportFile: 'packages/dev-cypress/js/support/component.js',
 	},
-	numTestsKeptInMemory: 25,
+	numTestsKeptInMemory: 0,
 	experimentalMemoryManagement: true,
 });

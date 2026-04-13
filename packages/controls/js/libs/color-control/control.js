@@ -33,6 +33,7 @@ export default function ColorControl({
 	label,
 	labelDescription,
 	labelPopoverTitle,
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue,
 	onChange = () => {},
@@ -92,6 +93,7 @@ export default function ColorControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	if (isSetValueAddon()) {

@@ -35,7 +35,18 @@ describe('Footnotes Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.checkBlockCardItems(['normal', 'hover', 'elements/link']);
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/jump-to-link']);
+
+		cy.checkBlockStatesPickerItems([
+			'elements/jump-to-link',
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
 
 		//
 		// 1. Edit Block
@@ -61,9 +72,9 @@ describe('Footnotes Block', () => {
 		);
 
 		//
-		// 1.1. elements/link
+		// 1.1. elements/jump-to-link
 		//
-		setInnerBlock('elements/link');
+		setInnerBlock('elements/jump-to-link');
 
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
@@ -73,7 +84,7 @@ describe('Footnotes Block', () => {
 		cy.setColorControlValue('BG Color', 'cccccc');
 
 		cy.getBlock('core/footnotes').within(() => {
-			cy.get('a').should(
+			cy.get('a:not(.wp-element-button):last-child').should(
 				'have.css',
 				'background-color',
 				'rgb(204, 204, 204)'
@@ -93,7 +104,7 @@ describe('Footnotes Block', () => {
 		);
 
 		cy.get('.blockera-block.wp-block-footnotes').within(() => {
-			cy.get('a').should(
+			cy.get('a:not(.wp-element-button):last-child').should(
 				'have.css',
 				'background-color',
 				'rgb(204, 204, 204)'

@@ -15,9 +15,11 @@ const blockeraClickAnimation: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('On Click Animation', 'blockera'),
+	keywords: ['click', 'animation', 'interaction', 'hover', 'effect'],
 };
 
 export const clickAnimationConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraClickAnimation,
 };

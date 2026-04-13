@@ -25,6 +25,14 @@ export type ColorIndicatorProps = {
 	 * Check recieved value is value addon?
 	 */
 	checkIsValueAddon?: boolean,
+	/**
+	 * Native title (tooltip); contextual keywords set a default explanation unless overridden.
+	 */
+	title?: string,
+	/**
+	 * Accessible label; contextual keywords set a default unless overridden.
+	 */
+	'aria-label'?: string,
 };
 
 export type ColorIndicatorStackProps = {

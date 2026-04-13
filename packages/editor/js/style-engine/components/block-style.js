@@ -10,14 +10,17 @@ import type { MixedElement } from 'react';
  */
 import type { BlockStyleProps } from './types';
 import { StateStyle } from '../';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
+import {
+	useExtensionsStore,
+	getExtensionConfig,
+} from '../../hooks/use-extensions-store';
 
 export const BlockStyle = ({
 	customCss,
+	isGlobalStylesWrapper = false,
 	...props
 }: BlockStyleProps): MixedElement => {
 	const {
-		config,
 		currentBlock,
 		currentState,
 		currentBreakpoint,
@@ -32,9 +35,17 @@ export const BlockStyle = ({
 		return <></>;
 	}
 
+	const config = getExtensionConfig(props.blockName, currentBlock);
+	const shouldPrintCustomCss =
+		typeof customCss === 'string' && customCss.trim().length > 0;
+
 	return (
-		<style>
-			{customCss}
+		<>
+			{shouldPrintCustomCss ? (
+				<style id={props.clientId}>{customCss}</style>
+			) : (
+				<></>
+			)}
 			<StateStyle
 				{...{
 					...props,
@@ -42,10 +53,11 @@ export const BlockStyle = ({
 					currentState,
 					currentBlock,
 					currentBreakpoint,
+					isGlobalStylesWrapper,
 					currentInnerBlockState,
 					styleEngineConfig: props.supports?.blockeraStyleEngine,
 				}}
 			/>
-		</style>
+		</>
 	);
 };

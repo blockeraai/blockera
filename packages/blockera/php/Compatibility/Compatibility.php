@@ -8,6 +8,7 @@
 namespace Blockera\Setup\Compatibility;
 
 use Blockera\Setup\Compatibility\Themes\Blocksy\Blocksy;
+use Blockera\Setup\Compatibility\Plugins\CBT\RestAPIController;
 
 /**
  * A Blockera compatibility class
@@ -22,6 +23,7 @@ class Compatibility {
 	public function __construct() {
 
 		$this->themes_compatibility();
+		$this->plugins_compatibility();
 	}
 
 	/**
@@ -42,6 +44,23 @@ class Compatibility {
 		if (isset($themes[ $theme_name ]) || ( $parent_theme && isset($themes[ $parent_theme_name ]) )) {
 			$theme_class = isset($themes[ $theme_name ]) ? $themes[ $theme_name ] : $themes[ $parent_theme_name ];
 			new $theme_class();
+		}
+	}
+
+	/**
+	 * Plugins compatibility.
+	 *
+	 * @return void
+	 */
+	public function plugins_compatibility() {
+		// Check if create-block-theme plugin is active.
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		// Initialize Create Block Theme compatibility.
+		if ( is_plugin_active( 'create-block-theme/create-block-theme.php' ) ) {
+			new RestAPIController();
 		}
 	}
 }

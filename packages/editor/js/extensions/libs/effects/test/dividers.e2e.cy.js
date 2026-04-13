@@ -123,8 +123,13 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('cecece ');
+					cy.get('[data-cy="color-picker-css-value"]').clear({
+						force: true,
+					});
+					cy.get('[data-cy="color-picker-css-value"]').type(
+						'cecece',
+						{ delay: 0 }
+					);
 				});
 
 			//Check block
@@ -309,8 +314,13 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('cecece ');
+					cy.get('[data-cy="color-picker-css-value"]').clear({
+						force: true,
+					});
+					cy.get('[data-cy="color-picker-css-value"]').type(
+						'cecece',
+						{ delay: 0 }
+					);
 				});
 
 			//Check block

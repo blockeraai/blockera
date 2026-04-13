@@ -18,7 +18,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const QueryPaginationNext: BlockType = {
 	name: 'blockeraQueryPaginationNext',
@@ -28,7 +28,7 @@ export const QueryPaginationNext: BlockType = {
 			name: 'elements/arrow',
 			label: __('Arrow', 'blockera'),
 			description: __('The pagination next arrow element.', 'blockera'),
-			icon: <Icon icon="block-pagination-next-arrow" size="20" />,
+			icon: <Icon icon="block-pagination-next-arrow" iconSize="20" />,
 			settings: {
 				force: true,
 			},

@@ -14,6 +14,7 @@ import {
 	BaseControl,
 	InputControl,
 	useControlContext,
+	getValueAddonRealValue,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { isObject } from '@blockera/utils';
@@ -23,6 +24,76 @@ import { isObject } from '@blockera/utils';
  */
 import { isActiveField } from '../../../api/utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+
+/**
+ * Changeset graph text for blockeraGap: locked → single `gap`; unlocked (`lock === false`) → `rows / columns`.
+ * `lock` undefined is treated as locked (default layout matches single-field mode).
+ */
+function formatGapUnifiedChangesetPreview(resolved: mixed): string {
+	if (resolved === null || resolved === undefined) {
+		return '';
+	}
+
+	if (
+		typeof resolved === 'string' ||
+		typeof resolved === 'number' ||
+		typeof resolved === 'boolean'
+	) {
+		return String(resolved).trim();
+	}
+
+	if (!isObject(resolved)) {
+		const raw = getValueAddonRealValue(resolved);
+
+		if (raw === null || raw === undefined || raw === '') {
+			return '';
+		}
+
+		return String(raw).trim();
+	}
+
+	const o: Object = resolved;
+	const isGapObject =
+		'gap' in o || 'lock' in o || 'rows' in o || 'columns' in o;
+
+	if (!isGapObject) {
+		const raw = getValueAddonRealValue(resolved);
+
+		if (raw === null || raw === undefined || raw === '') {
+			return '';
+		}
+
+		return String(raw).trim();
+	}
+
+	// Only explicit `lock === false` uses row/column pair; otherwise show unified `gap`.
+	if (o.lock !== false) {
+		const raw = getValueAddonRealValue(o.gap);
+
+		if (raw === null || raw === undefined || raw === '') {
+			return '';
+		}
+
+		return String(raw).trim();
+	}
+
+	const rowStr = String(getValueAddonRealValue(o.rows) ?? '').trim();
+	const colStr = String(getValueAddonRealValue(o.columns) ?? '').trim();
+
+	if (!rowStr && !colStr) {
+		return '';
+	}
+
+	if (!rowStr) {
+		return colStr;
+	}
+
+	if (!colStr) {
+		return rowStr;
+	}
+
+	return `${rowStr} / ${colStr}`;
+}
 
 export default function ({
 	gap,
@@ -40,30 +111,34 @@ export default function ({
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	block: TBlockProps,
 }): MixedElement {
-	const { value, attribute, blockName, resetToDefault, getControlPath } =
-		useControlContext({
-			defaultValue,
-			onChange: (newValue) =>
-				handleOnChangeAttributes(
-					attributeId,
-					isObject(newValue)
-						? newValue
-						: {
-								...gap,
-								gap: newValue,
-						  },
-					{}
-				),
-		});
+	const { value, attribute, blockName, resetToDefault } = useControlContext({
+		defaultValue,
+		onChange: (newValue) =>
+			handleOnChangeAttributes(
+				attributeId,
+				isObject(newValue)
+					? newValue
+					: {
+							...gap,
+							gap: newValue,
+						},
+				{}
+			),
+	});
 
 	const labelProps = {
+		...(props.labelProps || {}),
 		value,
 		attribute,
 		blockName,
 		defaultValue,
 		resetToDefault,
 		mode: 'advanced',
-		path: getControlPath(attribute, 'gap'),
+		// Full gap object so preview sees lock / rows / columns (not only unified `gap`).
+		path: props.labelProps?.path ?? attribute,
+		changesetGraphPreviewRender:
+			props.labelProps?.changesetGraphPreviewRender ??
+			formatGapUnifiedChangesetPreview,
 	};
 
 	return (
@@ -86,13 +161,10 @@ export default function ({
 				</>
 			}
 			id={'gap'}
-			columns="1fr 160px"
-			style={{
-				'--gap': '0',
-			}}
+			columns="1fr 2.5fr"
 			{...labelProps}
 		>
-			<Grid gap="10px" gridTemplateColumns="120px 30px">
+			<Grid gap="10px" gridTemplateColumns="1fr 30px">
 				{gap?.lock ? (
 					isActiveField(field) && (
 						<InputControl
@@ -118,7 +190,7 @@ export default function ({
 						/>
 					)
 				) : (
-					<Grid gridTemplateColumns="55px 55px" gap="10px">
+					<Grid gridTemplateColumns="1fr 1fr" gap="8px">
 						<InputControl
 							columns="columns-1"
 							className="control-first label-center small-gap"
@@ -134,21 +206,36 @@ export default function ({
 									</p>
 								</>
 							}
+							labelProps={{
+								changesetGraphPreview: {
+									type: 'string',
+								},
+							}}
 							unitType="essential"
 							min={0}
 							defaultValue={defaultValue.rows}
 							id={'rows'}
 							singularId={'rows'}
-							onChange={(newValue, ref) =>
+							onChange={(newValue, ref) => {
+								const gapResetValue = !gap?.columns
+									? {
+											...newValue,
+											gap: '',
+											lock: true,
+										}
+									: newValue;
+
 								handleOnChangeAttributes(
 									attributeId,
-									{
-										...gap,
-										rows: newValue,
-									},
+									ref?.current?.reset
+										? gapResetValue
+										: {
+												...gap,
+												rows: newValue,
+											},
 									{ ref }
-								)
-							}
+								);
+							}}
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
@@ -170,21 +257,36 @@ export default function ({
 									</p>
 								</>
 							}
+							labelProps={{
+								changesetGraphPreview: {
+									type: 'string',
+								},
+							}}
 							unitType="essential"
 							min={0}
 							defaultValue={defaultValue.columns}
 							id={'columns'}
 							singularId={'columns'}
-							onChange={(newValue, ref) =>
+							onChange={(newValue, ref) => {
+								const gapResetValue = !gap?.rows
+									? {
+											...newValue,
+											gap: '',
+											lock: true,
+										}
+									: newValue;
+
 								handleOnChangeAttributes(
 									attributeId,
-									{
-										...gap,
-										columns: newValue,
-									},
+									ref?.current?.reset
+										? gapResetValue
+										: {
+												...gap,
+												columns: newValue,
+											},
 									{ ref }
-								)
-							}
+								);
+							}}
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
@@ -196,7 +298,6 @@ export default function ({
 					showTooltip={true}
 					tooltipPosition="top"
 					label={__('Custom Row & Column Gap', 'blockera')}
-					size="small"
 					onClick={() => {
 						if (gap?.lock) {
 							handleOnChangeAttributes(
@@ -227,17 +328,22 @@ export default function ({
 							);
 						}
 					}}
+					size="extra-small"
 					style={{
-						color: gap?.lock
-							? 'var(--blockera-controls-color)'
-							: 'var(--blockera-controls-primary-color)',
-						padding: '6px 3px',
+						padding: '4px',
+						width: 'var(--blockera-controls-input-height)',
+						height: 'var(--blockera-controls-input-height)',
 					}}
+					className={
+						!gap?.lock
+							? 'is-toggle-btn is-toggled'
+							: 'is-toggle-btn'
+					}
 				>
 					{gap?.lock ? (
-						<Icon icon="lock" size="18" />
+						<Icon icon="lock" iconSize="22" />
 					) : (
-						<Icon icon="unlock" size="18" />
+						<Icon icon="unlock" iconSize="22" />
 					)}
 				</Button>
 			</Grid>

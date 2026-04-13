@@ -8,7 +8,13 @@ export type PanelBodyControlProps = {
 	/**
 	 * Title of Inspect Element
 	 */
-	title: string,
+	title: string | Node,
+	/**
+	 * No wrapper?
+	 *
+	 * @default false
+	 */
+	noWrapper?: boolean,
 	/**
 	 * Default open or close status for panel body
 	 */
@@ -36,4 +42,10 @@ export type PanelBodyControlProps = {
 	 * Show Blockera powered by branding
 	 */
 	showPoweredBy?: boolean,
+	/**
+	 * Is panel accordion?
+	 *
+	 * @default true
+	 */
+	accordion?: boolean,
 };

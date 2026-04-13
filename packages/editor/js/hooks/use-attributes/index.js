@@ -3,14 +3,13 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { classNames } from '@blockera/classnames';
-import { getSmallHash, mergeObject } from '@blockera/utils';
+import { mergeObject } from '@blockera/utils';
 import { getIconAttributes } from '@blockera/feature-icon';
 
 /**
@@ -30,30 +29,60 @@ import type {
 } from '../../extensions/libs/block-card/block-states/types';
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
+export const getAttributesWithIds = (
+	state: Object,
+	identifier: string,
+	force: boolean = false
+): Object => {
+	const d = new Date();
+
+	if (state[identifier] && !force) {
+		return state;
+	}
+
+	return {
+		...state,
+		[identifier]:
+			'' +
+			d.getMonth() +
+			d.getDate() +
+			d.getHours() +
+			d.getMinutes() +
+			d.getSeconds() +
+			d.getMilliseconds(),
+	};
+};
+
 export const useAttributes = (
-	setAttributes: (attributes: Object) => void,
+	setAttributes: (
+		attributes: Object,
+		{
+			ref: Object,
+			shouldUpdateClassName?: boolean,
+		}
+	) => void,
 	{
 		blockId,
 		clientId,
-		className,
 		innerBlocks,
 		currentBlock,
 		currentState,
 		isNormalState,
 		getAttributes,
+		setChangesets,
 		blockVariations,
 		currentBreakpoint,
 		defaultAttributes,
 		availableAttributes,
 		masterIsNormalState,
 		blockeraInnerBlocks,
+		insideBlockInspector,
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,
 	}: {
 		blockId: string,
 		clientId: string,
-		className: string,
 		innerBlocks: Object,
 		currentState: TStates,
 		blockVariations: Object,
@@ -62,10 +91,12 @@ export const useAttributes = (
 		blockeraInnerBlocks: Object,
 		isNormalState: () => boolean,
 		activeBlockVariation: Object,
+		insideBlockInspector: boolean,
 		currentBreakpoint: TBreakpoint,
 		currentInnerBlockState: TStates,
 		masterIsNormalState: () => boolean,
 		getAttributes: (key?: string) => any,
+		setChangesets: (changes: boolean) => void,
 		currentBlock: string | 'master' | InnerBlockType,
 		getActiveBlockVariation: (name: string, attributes: Object) => boolean,
 	}
@@ -73,205 +104,222 @@ export const useAttributes = (
 	getAttributesWithIds: (state: Object, identifier: string) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }) => {
-	const getAttributesWithIds = (
-		state: Object,
-		identifier: string
-	): Object => {
-		const d = new Date();
+	const handleOnChangeAttributes: THandleOnChangeAttributes = useCallback(
+		(attributeId, newValue, options = {}): void => {
+			const {
+				ref,
+				effectiveItems = {},
+				resetStateAllValues = false,
+				stateReadyToReset = 'normal',
+				shouldUpdateClassName = true,
+				resetInnerBlockAllValues = false,
+				innerBlockReadyToReset = 'master',
+			} = options;
+			const attributes = getAttributes();
+			// attributes => immutable - mean just read-only!
+			// _attributes => mutable - mean readable and writable constant!
+			let _attributes = { ...attributes };
 
-		if (state[identifier]) {
-			return state;
-		}
+			// Handle name attribute separately to avoid issues with block title.
+			if ('name' === attributeId) {
+				if (newValue === '' || newValue === null) {
+					newValue = undefined;
+				}
 
-		return {
-			...state,
-			[identifier]:
-				'' +
-				d.getMonth() +
-				d.getDate() +
-				d.getHours() +
-				d.getMinutes() +
-				d.getSeconds() +
-				d.getMilliseconds(),
-		};
-	};
-	const handleOnChangeAttributes: THandleOnChangeAttributes = (
-		attributeId,
-		newValue,
-		options = {}
-	): void => {
-		const { ref, effectiveItems = {} } = options;
-		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = getAttributes() } = getSelectedBlock() || {};
-
-		// attributes => immutable - mean just read-only!
-		// _attributes => mutable - mean readable and writable constant!
-		let _attributes = { ...attributes };
-
-		// Handle name attribute separately to avoid issues with block title.
-		if ('name' === attributeId) {
-			if (newValue === '' || newValue === null) {
-				newValue = undefined;
-			}
-
-			return setAttributes({
-				..._attributes,
-				metadata: { name: newValue },
-			});
-		}
-
-		// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component, if we supported them.
-		if (
-			'undefined' === typeof _attributes?.blockeraPropsId &&
-			availableAttributes?.blockeraPropsId
-		) {
-			_attributes = mergeObject(
-				attributes,
-				prepareBlockeraDefaultAttributesValues(defaultAttributes)
-			);
-		}
-
-		// Sets "blockeraPropsId" if it is empty.
-		if (!_attributes?.blockeraPropsId) {
-			_attributes = {
-				..._attributes,
-				blockeraPropsId: clientId,
-			};
-		}
-
-		const indexOfBlockeraSelector =
-			attributes?.className?.indexOf('blockera-block');
-
-		// Sets "className" attribute value is existing on block attributes to merge with default value.
-		if (
-			-1 === indexOfBlockeraSelector ||
-			'undefined' === typeof indexOfBlockeraSelector
-		) {
-			_attributes = {
-				..._attributes,
-				className: classNames(className, attributes.className, {
-					'blockera-block': true,
-					[`blockera-block-${getSmallHash(clientId)}`]: true,
-				}),
-			};
-		}
-
-		if (getIconAttributes().includes(attributeId)) {
-			_attributes = applyFilters(
-				'blockera.editor.useAttributes.beforeChangeAttributes',
-				_attributes,
-				attributeId,
-				newValue,
-				options
-			);
-		}
-
-		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;
-		const hasRootAttributes =
-			_attributes.blockeraInnerBlocks &&
-			_attributes.blockeraInnerBlocks[currentBlock];
-
-		// check - is really changed attribute of any block type (master or one of inner blocks)?
-		if (isNormalState()) {
-			// Assume block is inner block and has attributes in normal state.
-			if (
-				isInnerBlock(currentBlock) &&
-				hasRootAttributes &&
-				!isChanged(
+				return setAttributes(
 					{
 						..._attributes,
-						..._attributes.blockeraInnerBlocks[currentBlock]
-							.attributes,
+						metadata: { name: newValue },
 					},
-					attributeId,
-					newValue
-				)
-			) {
-				return;
+					{ ref }
+				);
 			}
 
-			// Assume block is master.
+			// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component, if we supported them.
 			if (
-				!isInnerBlock(currentBlock) &&
-				!isChanged(attributes, attributeId, newValue)
+				'undefined' === typeof _attributes?.blockeraPropsId &&
+				availableAttributes?.blockeraPropsId
 			) {
-				return;
+				_attributes = mergeObject(
+					attributes,
+					prepareBlockeraDefaultAttributesValues(defaultAttributes)
+				);
 			}
-		}
 
-		const {
-			reset,
-			updateNormalState,
-			updateBlockStates,
-			updateInnerBlockStates,
-			updateInnerBlockInsideParentState,
-		}: UseAttributesActions = actions({
+			// Sets "blockeraPropsId" if it is empty.
+			if (!_attributes?.blockeraPropsId) {
+				_attributes = getAttributesWithIds(
+					_attributes,
+					'blockeraPropsId',
+					true
+				);
+			}
+			// Sets "blockeraCompatId" if it is empty.
+			if (!_attributes?.blockeraCompatId) {
+				_attributes = getAttributesWithIds(
+					_attributes,
+					'blockeraCompatId'
+				);
+			}
+
+			if (getIconAttributes().includes(attributeId)) {
+				_attributes = applyFilters(
+					'blockera.editor.useAttributes.beforeChangeAttributes',
+					_attributes,
+					attributeId,
+					newValue,
+					options
+				);
+			}
+
+			const attributeIsBlockStates =
+				'blockeraBlockStates' === attributeId;
+			const hasRootAttributes =
+				_attributes.blockeraInnerBlocks &&
+				_attributes.blockeraInnerBlocks[currentBlock];
+
+			// check - is really changed attribute of any block type (master or one of inner blocks)?
+			if (isNormalState()) {
+				// Assume block is inner block and has attributes in normal state.
+				if (
+					isInnerBlock(currentBlock) &&
+					hasRootAttributes &&
+					!isChanged(
+						{
+							..._attributes,
+							..._attributes.blockeraInnerBlocks[currentBlock]
+								.attributes,
+						},
+						attributeId,
+						newValue
+					)
+				) {
+					return;
+				}
+
+				// Assume block is master.
+				if (
+					!isInnerBlock(currentBlock) &&
+					!isChanged(attributes, attributeId, newValue)
+				) {
+					return;
+				}
+			}
+
+			const {
+				reset,
+				updateNormalState,
+				updateBlockStates,
+				updateInnerBlockStates,
+				updateInnerBlockInsideParentState,
+			}: UseAttributesActions = actions({
+				blockId,
+				clientId,
+				newValue,
+				attributeId,
+				innerBlocks,
+				currentState,
+				currentBlock,
+				effectiveItems,
+				getAttributes,
+				isNormalState,
+				blockVariations,
+				currentBreakpoint,
+				defaultAttributes,
+				stateReadyToReset,
+				blockeraInnerBlocks,
+				resetStateAllValues,
+				activeBlockVariation,
+				insideBlockInspector,
+				currentInnerBlockState,
+				attributeIsBlockStates,
+				innerBlockReadyToReset,
+				getActiveBlockVariation,
+				resetInnerBlockAllValues,
+				ref: { ...ref?.current },
+			});
+
+			// Assume reference current action is 'reset_all_states'
+			if (ref?.current?.reset) {
+				setChangesets(true);
+				return setAttributes(
+					reducer(
+						_attributes,
+						reset('reset_all_states' === ref.current.action)
+					),
+					{ ref }
+				);
+			}
+
+			// Current block (maybe 'master' or any inner blocks) in normal state!
+			// or
+			// attribute is "blockeraBlockStates"
+			// action = UPDATE_NORMAL_STATE
+			if (masterIsNormalState() && isNormalState()) {
+				setChangesets(true);
+				return setAttributes(
+					reducer(_attributes, updateNormalState()),
+					{ shouldUpdateClassName, ref }
+				);
+			}
+
+			// Assume current block is one of inner blocks.
+			if (isInnerBlock(currentBlock)) {
+				// Assume master block isn't in normal state!
+				// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
+				if (!masterIsNormalState()) {
+					return setAttributes(
+						reducer(
+							_attributes,
+							updateInnerBlockInsideParentState()
+						),
+						{ ref }
+					);
+				}
+				// Assume current block isn't in normal state and attributeId isn't "blockeraBlockStates" for prevent cyclic object error!
+				// action = UPDATE_INNER_BLOCK_STATES
+				if (!isNormalState() && !attributeIsBlockStates) {
+					return setAttributes(
+						reducer(_attributes, updateInnerBlockStates()),
+						{ ref }
+					);
+				}
+			}
+
+			// Assume block state is normal and attributeId is equals with "blockeraBlockStates".
+			// action = UPDATE_NORMAL_STATE
+			if (attributeIsBlockStates || isNormalState()) {
+				return setAttributes(
+					reducer(_attributes, updateNormalState()),
+					{ ref }
+				);
+			}
+
+			// handle update attributes in activated state and breakpoint for master block.
+			// action = UPDATE_BLOCK_STATES
+			setAttributes(reducer(_attributes, updateBlockStates()), { ref });
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[
 			blockId,
-			newValue,
-			attributeId,
+			clientId,
+			// className,
 			innerBlocks,
-			currentState,
 			currentBlock,
-			effectiveItems,
-			getAttributes,
+			currentState,
+			setAttributes,
 			isNormalState,
 			blockVariations,
 			currentBreakpoint,
 			defaultAttributes,
-			blockeraInnerBlocks,
+			masterIsNormalState,
+			// blockeraInnerBlocks,
 			activeBlockVariation,
 			currentInnerBlockState,
-			attributeIsBlockStates,
 			getActiveBlockVariation,
-			ref: { ...ref?.current },
-		});
-
-		// Assume reference current action is 'reset_all_states'
-		if (ref?.current?.reset) {
-			return setAttributes(
-				reducer(
-					_attributes,
-					reset('reset_all_states' === ref.current.action)
-				)
-			);
-		}
-
-		// Current block (maybe 'master' or any inner blocks) in normal state!
-		// or
-		// attribute is "blockeraBlockStates"
-		// action = UPDATE_NORMAL_STATE
-		if (masterIsNormalState() && isNormalState()) {
-			return setAttributes(reducer(_attributes, updateNormalState()));
-		}
-
-		// Assume current block is one of inner blocks.
-		if (isInnerBlock(currentBlock)) {
-			// Assume master block isn't in normal state!
-			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
-			if (!masterIsNormalState()) {
-				return setAttributes(
-					reducer(_attributes, updateInnerBlockInsideParentState())
-				);
-			}
-			// Assume current block isn't in normal state and attributeId isn't "blockeraBlockStates" for prevent cyclic object error!
-			// action = UPDATE_INNER_BLOCK_STATES
-			if (!isNormalState() && !attributeIsBlockStates) {
-				return setAttributes(
-					reducer(_attributes, updateInnerBlockStates())
-				);
-			}
-		}
-
-		// Assume block state is normal and attributeId is equals with "blockeraBlockStates".
-		// action = UPDATE_NORMAL_STATE
-		if (attributeIsBlockStates || isNormalState()) {
-			return setAttributes(reducer(_attributes, updateNormalState()));
-		}
-
-		// handle update attributes in activated state and breakpoint for master block.
-		// action = UPDATE_BLOCK_STATES
-		setAttributes(reducer(_attributes, updateBlockStates()));
-	};
+			availableAttributes?.blockeraPropsId,
+		]
+	);
 
 	return {
 		getAttributesWithIds,

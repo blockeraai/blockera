@@ -3,11 +3,21 @@
 /**
  * Blockera dependencies
  */
-import { isObject, isEquals, isEmpty } from '@blockera/utils';
+import {
+	isObject,
+	isEquals,
+	isEmpty,
+	normalizeCssLengthValue,
+} from '@blockera/utils';
 import {
 	getSpacingVAFromVarString,
 	generateAttributeVarStringFromVA,
 } from '@blockera/data';
+
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
 
 const defaultGap = {
 	lock: true,
@@ -135,17 +145,46 @@ export function convertToValue(
 	return newGap;
 }
 
+/**
+ * Normalize raw WP `blockGap` (string or `{ top, left }`) before VA conversion.
+ */
+function normalizeWPBlockGap(blockGap: string | Object): string | Object {
+	if (!isObject(blockGap)) {
+		return normalizeCssLengthValue(blockGap);
+	}
+	const o: Object = blockGap;
+	const out: Object = { ...o };
+	if (o.hasOwnProperty('top')) {
+		out.top = normalizeCssLengthValue(o.top);
+	}
+	if (o.hasOwnProperty('left')) {
+		out.left = normalizeCssLengthValue(o.left);
+	}
+	return out;
+}
+
 export function gapFromWPCompatibility({
 	attributes,
+	editorSelectedBlockEvent,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
+	insideBlockInspector?: boolean,
 }): Object {
-	if (
-		isEquals(attributes?.blockeraGap?.value, defaultGap) &&
-		attributes?.style?.spacing?.blockGap
-	) {
+	// Check block-level style (insideBlockInspector) or global style context
+	// Block inspector: attributes.style.spacing.blockGap
+	// Global styles: attributes.spacing.blockGap
+	const blockGap = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.spacing?.blockGap
+		: attributes?.spacing?.blockGap;
+
+	if (isEquals(attributes?.blockeraGap?.value, defaultGap) && blockGap) {
 		attributes.blockeraGap = {
-			value: convertFromValue(attributes?.style?.spacing?.blockGap),
+			value: convertFromValue(normalizeWPBlockGap(blockGap)),
 		};
 	}
 
@@ -157,20 +196,31 @@ export function gapToWPCompatibility({
 	ref,
 	defaultValue,
 	blockId,
+	editorSelectedBlockEvent,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	defaultValue: Object,
 	blockId: string,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
-		return {
-			style: {
-				spacing: {
-					blockGap: undefined,
-				},
+		const gapData = {
+			spacing: {
+				blockGap: undefined,
 			},
 		};
+
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? {
+					style: gapData,
+				}
+			: gapData;
 	}
 
 	const blockWPGapDataType = getBlockGapWPDataType(blockId);
@@ -178,13 +228,20 @@ export function gapToWPCompatibility({
 	if (blockWPGapDataType) {
 		const spacing = convertToValue(newValue, blockWPGapDataType);
 
-		return {
-			style: {
-				spacing: {
-					blockGap: isEmpty(spacing) ? undefined : spacing,
-				},
+		const gapData = {
+			spacing: {
+				blockGap: isEmpty(spacing) ? undefined : spacing,
 			},
 		};
+
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? {
+					style: gapData,
+				}
+			: gapData;
 	}
 
 	return {};

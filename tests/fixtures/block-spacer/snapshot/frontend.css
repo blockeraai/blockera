@@ -1,0 +1,46 @@
+.blockera-block.blockera-block-1.wp-block-spacer {
+	width: 300px;
+	height: 120px;
+}
+
+& {
+	n background-color: #ffb9b9;
+	n;
+}
+
+nn& .components-resizable-box__container {
+	n background-color: transparent;
+	n;
+}
+
+n .blockera-block.blockera-block-2.wp-block-spacer {
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	height: 300px;
+}
+
+& {
+	n background-color: #bcdd9a;
+	n;
+}
+
+nn& .components-resizable-box__container {
+	n background-color: transparent;
+	n;
+}
+
+n .blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

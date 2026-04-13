@@ -1,0 +1,229 @@
+.blockera-block.blockera-block-1.wp-block-categories {
+	background-color: #c4ffe3;
+	border-radius: 50px;
+	display: flex !important;
+	flex-direction: column;
+	gap: 20px;
+	padding: 40px 40px 40px 40px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item {
+	background-color: #ffcece;
+	padding: 10px 10px 10px 10px;
+	border-radius: 50px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::before {
+	border-radius: 50px;
+	content: "Link Before";
+	background-color: #0000002e;
+	padding: 5px 10px 5px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::after {
+	border-radius: 50px;
+	content: "Link After";
+	padding: 5px 10px 5px 10px;
+	background-color: #00000030;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a {
+	text-decoration: initial;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item:hover {
+	background-color: #ff8f8f;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item::marker {
+	color: #ff0c0c;
+	background-color: #c4ffe3;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item::before {
+	display: inline-block !important;
+	content: "Before";
+	padding: 5px 10px 5px 10px;
+	background-color: #00000033;
+	border-radius: 50px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
+	display: inline-block !important;
+	content: "After";
+	padding: 5px 10px 5px 10px;
+	background-color: #0000003d;
+	border-radius: 50px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-categories {
+		padding: 20px 20px 20px 20px;
+		border-radius: 10px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
+		align-self: flex-end;
+		content: "After";
+		border-radius: 10px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item::before {
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		content: "Before";
+		border-radius: 10px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item:hover {
+		gap: 20px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::after {
+		border-radius: 10px;
+		content: "Link After";
+		align-self: flex-start;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::before {
+		border-radius: 10px;
+		content: "Link Before";
+		align-self: stretch;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item {
+		border-radius: 10px;
+		display: flex !important;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a {
+		display: flex !important;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 10px;
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-categories::before {
+	background-color: #55d99b;
+	padding: 5px 10px 5px 10px;
+	border-radius: 50px;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-categories::before {
+		border-radius: 10px;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-categories::after {
+	padding: 5px 20px 5px 20px;
+	background-color: #2db877;
+	border-radius: 50px;
+	text-align: center;
+	color: #ffffff;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-categories::after {
+		border-radius: 10px;
+		content: "After";
+	}
+
+}
+
+.blockera-block.blockera-block-2.wp-block-categories {
+	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m14.5%206.5-1%201%203.7%203.7H4v1.6h13.2l-3.7%203.7%201%201%205.6-5.5z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+	display: flex !important;
+	flex-direction: column;
+	gap: 16px;
+	font-weight: 700;
+	font-style: normal;
+	color: #0055ff;
+	font-size: 18px;
+}
+
+html:root body :where(.blockera-block.blockera-block-2) li.cat-item {
+	background-color: #ffc6c6;
+	border-radius: 27px;
+	padding: 5px 10px 5px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-2) li.cat-item > a {
+	text-decoration: initial;
+}
+
+.blockera-block.blockera-block-3.wp-block-categories {
+	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m14.5%206.5-1%201%203.7%203.7H4v1.6h13.2l-3.7%203.7%201%201%205.6-5.5z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+	--blockera--icon--gap: 40px;
+	--blockera--icon--size: 30px;
+	--blockera--icon--color: #00b8eb;
+	--blockera--icon--rotate: 90deg;
+	display: flex !important;
+	flex-direction: column;
+	gap: 20px;
+	font-weight: 700;
+	font-style: normal;
+	color: #0055ff;
+	font-size: 18px;
+}
+
+html:root body :where(.blockera-block.blockera-block-3) li.cat-item {
+	background-color: #dbecff;
+	border-radius: 27px;
+	padding: 5px 10px 5px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-3) li.cat-item > a {
+	text-decoration: initial;
+}
+
+.blockera-block-3 {
+	color: #0055ff;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 700;
+}
+
+.blockera-block-2 {
+	color: #0055ff;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 700;
+}
+
+.blockera-block-1 {
+	background-color: #c4ffe3;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 700;
+	border-radius: 50px;
+	padding-top: 40px;
+	padding-right: 40px;
+	padding-bottom: 40px;
+	padding-left: 40px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

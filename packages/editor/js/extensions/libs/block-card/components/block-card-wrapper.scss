@@ -1,13 +1,14 @@
 .blockera-block-card-wrapper {
-
 	&.is-sticky-active {
 		position: sticky;
 		top: 0;
 		z-index: 9999;
-		transition: box-shadow 0.075s ease;
+		transition: box-shadow 0.075s ease, border 0.075s ease;
+		border-top: 1px solid transparent;
 
 		&.is-stuck {
 			box-shadow: 0 1px 0 #cbcbcb, 0 11px 11px -6px rgba(0, 0, 0, 0.16);
+			border-top-color: var(--blockera-panel-tabs-tab-border-color);
 		}
 	}
 }
@@ -16,9 +17,9 @@
 	height: 1px; /* Minimal height so it doesn't affect layout */
 	visibility: hidden; /* Keep it invisible */
 	position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 	pointer-events: none;
 }
 

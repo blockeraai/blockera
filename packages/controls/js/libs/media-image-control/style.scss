@@ -1,6 +1,12 @@
 .blockera-control-media-image {
 	height: 100px;
-	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
+	background: repeating-conic-gradient(
+			#eaeaea 0%,
+			#eaeaea 25%,
+			transparent 0%,
+			transparent 50%
+		)
+		50% center/10px 10px;
 	border-color: var(--blockera-controls-border-color);
 	border-style: solid;
 	border-width: 1px;
@@ -13,9 +19,7 @@
 	gap: 10px;
 
 	&.image-custom {
-
 		&:hover {
-
 			&::before {
 				content: "";
 				display: block;
@@ -105,7 +109,6 @@
 		height: auto;
 		width: auto;
 	}
-
 }
 
 .media-modal {

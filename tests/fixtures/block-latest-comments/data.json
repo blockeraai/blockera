@@ -1,0 +1,29 @@
+{
+	"post": {
+		"post_type": "post",
+		"post_title": "Test Post for Latest Comments",
+		"post_status": "publish"
+	},
+	"comments": [
+		{
+			"comment_author": 1,
+			"comment_content": "This is comment 1 text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is comment 2 text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is comment 3 text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is comment 4 text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is comment 5 text."
+		}
+	]
+}

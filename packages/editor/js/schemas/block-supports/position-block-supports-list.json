@@ -7,7 +7,7 @@
 			"id": "blockeraPosition",
 			"definition": "Position",
 			"css-property": "position",
-			"fallback": ["position"],
+			"fallback": ["position", "layout"],
 			"description": "Support for \"blockeraPosition\" value."
 		},
 		"blockeraZIndex": {
@@ -15,7 +15,7 @@
 			"id": "blockeraZIndex",
 			"definition": "ZIndex",
 			"css-property": "z-index",
-			"fallback": ["z-index"],
+			"fallback": ["z-index", "position", "layout"],
 			"description": "Support for \"blockeraZIndex\" value."
 		}
 	}

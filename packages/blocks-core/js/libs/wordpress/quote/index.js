@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Quote: BlockType = {
 	name: 'blockeraQuote',
@@ -45,6 +45,12 @@ export const Quote: BlockType = {
 		'core/heading-4': sharedInnerBlocks['core/heading-4'],
 		'core/heading-5': sharedInnerBlocks['core/heading-5'],
 		'core/heading-6': sharedInnerBlocks['core/heading-6'],
+		'elements/bold': sharedInnerBlocks['elements/bold'],
+		'elements/italic': sharedInnerBlocks['elements/italic'],
+		'elements/kbd': sharedInnerBlocks['elements/kbd'],
+		'elements/code': sharedInnerBlocks['elements/code'],
+		'elements/span': sharedInnerBlocks['elements/span'],
+		'elements/mark': sharedInnerBlocks['elements/mark'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

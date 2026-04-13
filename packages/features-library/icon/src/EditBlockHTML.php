@@ -62,15 +62,12 @@ class EditBlockHTML implements EditableBlockHTML {
 			return $html;
 		}
 
-		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			$this->setContext('feature');
-			$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
+		// Enqueue the feature assets.
+		$this->enqueueAssets($data['plugin_base_path'], 'feature');
 
+		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
 			return $app->make(IconBlock::class)->render($html, $this, $data);
 		}
-
-		$this->setContext('feature');
-		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
         $blockElement = $this->findBlockElement($data);
 
@@ -78,11 +75,21 @@ class EditBlockHTML implements EditableBlockHTML {
             return $html;
         }
 
-        $original_html           = $blockElement->outerhtml;
-        $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
-        $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+		// Get the root element from the DOM.
+        $rootElement = $this->dom->find('*', 0);
 
-        return str_replace($original_html, $blockElement->outerhtml, $html);
+		// Clean up the block element html before appending anything.
+        $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
+		// Append icon to the block element if it has inner content.
+		$blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+
+		try {
+			// Clean up the block element html after appending icon.
+			return $this->cleanupBlockElementHTML($rootElement->outerhtml);
+		} catch (\Exception $e) {
+			// If traversal fails, return the current element's outer HTML.
+			return $blockElement->outerhtml;
+		}
     }
 
 	/**
@@ -208,10 +215,6 @@ class EditBlockHTML implements EditableBlockHTML {
 
         // Handle icon position and gap.
 		$properties[ 'start' === $iconPosition ? 'margin-right' : 'margin-left' ] = $block['attrs']['blockeraIconGap']['value'] ?? '0.5em';
-
-        // Handle icon color.
-		$properties['fill']  = 'currentColor';
-		$properties['color'] = $block['attrs']['blockeraIconColor']['value'] ?? 'inherit';
 
 		// Handle icon rotate.
 		$rotate = $block['attrs']['blockeraIconRotate']['value'] ?? '';
@@ -403,7 +406,7 @@ class EditBlockHTML implements EditableBlockHTML {
 				if (preg_match('/\bstyle\s*=\s*["\']([^"\']*)["\']/i', $attributes, $styleMatch)) {
 					// Style attribute exists, append new style to existing one.
 					$existingStyle = $styleMatch[1];
-					$updatedStyle  = $existingStyle . '; ' . $newStyle;
+					$updatedStyle  = rtrim($existingStyle, '; ') . '; ' . $newStyle;
                 
 					// Replace the existing style attribute.
 					return preg_replace(

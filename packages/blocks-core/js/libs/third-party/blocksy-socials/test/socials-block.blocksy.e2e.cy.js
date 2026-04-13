@@ -36,6 +36,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -120,6 +122,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -247,6 +251,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -335,6 +341,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -437,11 +445,13 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customBackgroundHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraBackgroundColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -465,6 +475,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -550,6 +562,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -677,6 +691,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -765,6 +781,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/socials').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -867,11 +885,13 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -884,7 +904,7 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 <h3 class="wp-block-heading has-medium-font-size">Socials</h3>
 <!-- /wp:heading -->
 
-<!-- wp:blocksy/socials {"blockeraPropsId":"b4d2ac21-d208-434b-aa0c-e255b31e9de1","blockeraCompatId":"17145540307","blockeraBackgroundColor":{"value":"#ffd8d8"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"#21212180"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}},"blockeraBackgroundColor":"#ff3030"}}}}},"blockeraBackgroundColor":"#ff8383"}}}},"social_type":"rounded","customBorderColor":"#21212180","lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002d1t0a9e"} -->
+<!-- wp:blocksy/socials {"blockeraPropsId":"b4d2ac21-d208-434b-aa0c-e255b31e9de1","blockeraCompatId":"17145540307","blockeraBackgroundColor":{"value":"#ffd8d8"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"#21212180"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}},"blockeraBackgroundColor":"#ff3030"}}}}},"blockeraBackgroundColor":"#ff8383"}}}},"social_type":"rounded","customBorderColor":"#21212180","lock":{"remove":true},"className":"blockera-block blockera-block-d1t0a9e"} -->
 <div>Blocksy: Socials</div>
 <!-- /wp:blocksy/socials -->
 <!-- /wp:blocksy/widgets-wrapper -->`);

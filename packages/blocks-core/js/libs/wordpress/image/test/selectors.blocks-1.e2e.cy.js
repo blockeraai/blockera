@@ -41,7 +41,7 @@ describe('Image Block → Selectors test', () => {
 		// Min Width
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.get('input').type(80);
 		});
 		cy.getBlock('core/image')
@@ -54,7 +54,7 @@ describe('Image Block → Selectors test', () => {
 		// Max Width
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Width');
-		cy.getParentContainer('Max').within(() => {
+		cy.getParentContainer('Max Width').within(() => {
 			cy.get('input').type(120);
 		});
 		cy.getBlock('core/image')
@@ -81,11 +81,9 @@ describe('Image Block → Selectors test', () => {
 		// Min Height
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
-		cy.getParentContainer('Min')
-			.eq(1)
-			.within(() => {
-				cy.get('input').type(80);
-			});
+		cy.getParentContainer('Min Height').within(() => {
+			cy.get('input').type(80);
+		});
 		cy.getBlock('core/image')
 			.first()
 			.within(() => {
@@ -96,11 +94,9 @@ describe('Image Block → Selectors test', () => {
 		// Max Height
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Height');
-		cy.getParentContainer('Max')
-			.eq(1)
-			.within(() => {
-				cy.get('input').type(120);
-			});
+		cy.getParentContainer('Max Height').within(() => {
+			cy.get('input').type(120);
+		});
 		cy.getBlock('core/image')
 			.first()
 			.within(() => {
@@ -110,7 +106,7 @@ describe('Image Block → Selectors test', () => {
 		//
 		// Border
 		//
-		cy.getParentContainer('Border Line').as('borderContainer');
+		cy.getParentContainer('Border').as('borderContainer');
 		cy.get('@borderContainer').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
@@ -123,8 +119,12 @@ describe('Image Block → Selectors test', () => {
 		cy.getByDataTest('popover-body')
 			.first()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
+					delay: 0,
+				});
 			});
 
 		cy.get('@borderContainer').within(() => {
@@ -198,8 +198,12 @@ describe('Image Block → Selectors test', () => {
 		cy.getByDataTest('popover-body')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('c5eef0ab ');
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('c5eef0ab', {
+					delay: 0,
+				});
 			});
 		cy.getBlock('core/image')
 			.first()
@@ -240,8 +244,12 @@ describe('Image Block → Selectors test', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('cccccc ');
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('cccccc', {
+					delay: 0,
+				});
 			});
 
 		cy.getBlock('core/image')

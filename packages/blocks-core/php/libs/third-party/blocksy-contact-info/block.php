@@ -14,7 +14,7 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/text'   => [
-					'root' => '.contact-title, .contact-text, .contact-text a',
+					'root' => ':is(.contact-title, .contact-text, .contact-text a)',
 				],
 				'blockera/elements/titles'   => [
 					'root' => '.contact-title',

@@ -25,6 +25,7 @@ export default function ToggleSelectControl({
 	label = '',
 	labelDescription,
 	labelPopoverTitle,
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange = () => {},
@@ -51,7 +52,11 @@ export default function ToggleSelectControl({
 	});
 
 	function valueCleanup(value: any) {
-		return isUndefined(value) ? '' : value;
+		if (isUndefined(value)) {
+			return '';
+		}
+
+		return value;
 	}
 
 	const handleKeyDown = useCallback(
@@ -100,6 +105,7 @@ export default function ToggleSelectControl({
 				mode: 'advanced',
 				path: getControlPath(attribute, id),
 				style: props?.style || {},
+				...propsForLabelControl,
 			}}
 		>
 			<div
@@ -129,10 +135,10 @@ export default function ToggleSelectControl({
 							{...(isDeselectable
 								? {
 										'aria-pressed': value === item.value,
-								  }
+									}
 								: {
 										'aria-checked': value === item.value,
-								  })}
+									})}
 						>
 							{!isUndefined(item.icon) ? (
 								<span className="toggle-select-option-icon">

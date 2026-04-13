@@ -1,0 +1,386 @@
+#!/usr/bin/env zsh
+
+# -------------------------
+# USAGE:
+#   xdebug-graphs                           → uses current directory, all types
+#   xdebug-graphs /path/to/dir              → uses provided directory, all types
+#   xdebug-graphs --types extra-small,small → uses current directory, specified types
+#   xdebug-graphs /path/to/dir --types extra-small,small → uses provided directory, specified types
+# -------------------------
+
+# Parse arguments
+BASE_DIR="$PWD"
+TYPES_ARG=""
+expect_types=false
+
+for arg in "$@"; do
+  if [[ "$arg" == --types ]]; then
+    expect_types=true
+  elif [[ "$expect_types" == true ]]; then
+    TYPES_ARG="$arg"
+    expect_types=false
+  elif [[ "$arg" != --* ]]; then
+    BASE_DIR="$arg"
+  fi
+done
+
+PATH_FRAGMENT="/wp-content/plugins/blockera"
+NAMESPACE_PREFIX="Blockera\\"
+
+BLOCKERA_COLOR="#0047eb"
+TOP5_COLOR="#004dff"
+TEXT_COLOR="#ffffff"
+
+# Safety check
+if [[ ! -d "$BASE_DIR" ]]; then
+  echo "❌ Directory not found: $BASE_DIR"
+  exit 1
+fi
+
+echo "📊 Using BASE_DIR: $BASE_DIR"
+
+# Define all available types
+ALL_SUFFIXES=(extra-small small medium full)
+ALL_NODE_THS=(5 2 0.25 0.01)
+ALL_EDGE_THS=(3 1 0.10 0.01)
+
+# Filter types if --types argument is provided
+if [[ -n "$TYPES_ARG" ]]; then
+  # Split comma-separated types
+  IFS=',' read -rA REQUESTED_TYPES <<< "$TYPES_ARG"
+  
+  SUFFIXES=()
+  NODE_THS=()
+  EDGE_THS=()
+  
+  for requested_type in "${REQUESTED_TYPES[@]}"; do
+    requested_type=$(echo "$requested_type" | xargs)  # trim whitespace
+    found=false
+    for ((i=1; i<=${#ALL_SUFFIXES[@]}; i++)); do
+      if [[ "${ALL_SUFFIXES[$i]}" == "$requested_type" ]]; then
+        SUFFIXES+=("${ALL_SUFFIXES[$i]}")
+        NODE_THS+=("${ALL_NODE_THS[$i]}")
+        EDGE_THS+=("${ALL_EDGE_THS[$i]}")
+        found=true
+        break
+      fi
+    done
+    if [[ "$found" == false ]]; then
+      echo "⚠️  Warning: Unknown type '$requested_type'. Available types: ${ALL_SUFFIXES[*]}"
+    fi
+  done
+  
+  if [[ ${#SUFFIXES[@]} -eq 0 ]]; then
+    echo "❌ No valid types specified. Available types: ${ALL_SUFFIXES[*]}"
+    exit 1
+  fi
+  
+  echo "📋 Generating types: ${SUFFIXES[*]}"
+else
+  # Use all default types
+  SUFFIXES=("${ALL_SUFFIXES[@]}")
+  NODE_THS=("${ALL_NODE_THS[@]}")
+  EDGE_THS=("${ALL_EDGE_THS[@]}")
+  echo "📋 Generating all types: ${SUFFIXES[*]}"
+fi
+
+for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
+  [[ "$FILE" == *.pdf || "$FILE" == *.svg || "$FILE" == *.png || "$FILE" == *.dot ]] && continue
+
+  for ((i=1; i<=${#SUFFIXES[@]}; i++)); do
+    SUFFIX="${SUFFIXES[$i]}"
+    NODE_T="${NODE_THS[$i]}"
+    EDGE_T="${EDGE_THS[$i]}"
+
+    PDF="${FILE}-${SUFFIX}.pdf"
+    DOT="${FILE}-${SUFFIX}.dot"
+
+    if [[ -f "$PDF" ]]; then
+      echo "✓ Exists: $(basename "$PDF")"
+      continue
+    fi
+
+    echo "→ Generating: $(basename "$PDF")"
+
+    python3 -m gprof2dot -f callgrind \
+      --node-thres "$NODE_T" \
+      --edge-thres "$EDGE_T" \
+      "$FILE" > "$DOT" || continue
+
+    python3 - "$DOT" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$TOP5_COLOR" "$TEXT_COLOR" <<'PY'
+import sys, re
+
+dot_path, path_frag, ns_prefix, color, top5_color, text_color = sys.argv[1:]
+
+node_re = re.compile(r'^(\s*[^ \t\[]+)\s+\[(.*)\];\s*$')
+edge_re = re.compile(r'^(\s*[^ \t\[]+)\s+->\s+([^ \t\[]+)(?:\s+\[(.*)\])?\s*;\s*$')
+attr_text_re = re.compile(r'(label|tooltip)="([^"]*)"')
+
+percent_re = re.compile(r'^\s*\d+(?:\.\d+)?%\s*$')
+self_percent_re = re.compile(r'^\s*\(?\s*\d+(?:\.\d+)?%\s*\)?\s*$')
+calls_re = re.compile(r'^\s*(\d+)\s*([x×])\s*$', re.I)
+
+plugins_strip_re = re.compile(r'.*?/wp-content/plugins/')
+blockera_func_re = re.compile(r'\bblockera_\w+(?:\(\))?', re.I)
+
+def shorten_paths(text):
+    return plugins_strip_re.sub('/', text)
+
+def contains_blockera(text):
+    """Check if text contains blockera-related content"""
+    if not text:
+        return False
+    text = text.replace('\\\\', '\\')
+    if path_frag in text or '/blockera/' in text or ns_prefix in text:
+        return True
+    # Check for WordPress-style functions starting with blockera_
+    if blockera_func_re.search(text):
+        return True
+    return False
+
+def should_highlight(attrs):
+    for _, raw in attr_text_re.findall(attrs):
+        if contains_blockera(raw):
+            return True
+    return False
+
+def ensure(attrs, key, value):
+    # Check if attribute exists
+    pattern = rf'(^|,)\s*{re.escape(key)}\s*="[^"]*"'
+    if re.search(pattern, attrs):
+        # Replace existing value
+        result = re.sub(pattern, rf'\1{key}="{value}"', attrs)
+        # Clean up any double commas
+        result = re.sub(r',\s*,', ',', result)
+        return result
+    # Add new attribute
+    if attrs.strip():
+        return attrs + f', {key}="{value}"'
+    return f'{key}="{value}"'
+
+def force_set_color(attrs, color):
+    """Force set color attribute, removing any existing color"""
+    # Remove any existing color attribute
+    attrs = re.sub(r'(^|,)\s*color\s*="[^"]*"', '', attrs)
+    # Clean up any double commas or leading/trailing commas
+    attrs = re.sub(r',\s*,', ',', attrs)
+    attrs = attrs.strip().strip(',').strip()
+    # Add the new color
+    if attrs:
+        return attrs + f', color="{color}"'
+    return f'color="{color}"'
+
+def rewrite_label(label):
+    lines = label.split('\\n')
+
+    if len(lines) >= 2 and percent_re.match(lines[1]) and not lines[1].startswith("Inc:"):
+        lines[1] = "Inc: " + lines[1].strip()
+
+    if len(lines) >= 3 and self_percent_re.match(lines[2]) and not lines[2].startswith("Self:"):
+        lines[2] = "Self: " + lines[2].replace('(', '').replace(')', '').strip()
+
+    for i, s in enumerate(lines):
+        if s.lstrip().startswith("Calls:"):
+            break
+        if calls_re.match(s):
+            lines[i] = "Calls: " + s.strip()
+            break
+
+    return "\\n".join(lines)
+
+def rewrite_attrs(attrs):
+    def repl(m):
+        key, text = m.groups()
+        text = shorten_paths(text)
+        if key == "label":
+            text = rewrite_label(text)
+        return f'{key}="{text}"'
+    return attr_text_re.sub(repl, attrs)
+
+def extract_include_time(attrs):
+    """Extract include time percentage from label attributes"""
+    for key, raw in attr_text_re.findall(attrs):
+        if key == "label":
+            # Look for "Inc: X%" pattern or just "X%" on second line
+            lines = raw.split('\\n')
+            # Try to match "Inc: X%" format (after rewrite_label)
+            for line in lines:
+                inc_match = re.search(r'Inc:\s*(\d+(?:\.\d+)?)%', line, re.I)
+                if inc_match:
+                    return float(inc_match.group(1))
+            # Try to match just percentage on second line (before rewrite_label)
+            # The second line is typically the include time percentage
+            if len(lines) >= 2:
+                second_line = lines[1].strip()
+                if percent_re.match(second_line):
+                    return float(second_line.rstrip('%'))
+            # Fallback: look for any percentage value in the label
+            for line in lines:
+                percent_match = re.search(r'(\d+(?:\.\d+)?)%', line)
+                if percent_match:
+                    return float(percent_match.group(1))
+    return 0.0
+
+# First pass: identify blockera nodes and collect include times
+blockera_nodes = set()
+blockera_node_times = {}  # node_id -> include_time
+with open(dot_path, 'r', errors='ignore') as f:
+    for line in f:
+        m = node_re.match(line)
+        if m:
+            node_id, attrs = m.groups()
+            node_id_raw = node_id.strip()
+            node_id_clean = node_id_raw.strip('"')
+            if should_highlight(attrs) or contains_blockera(node_id_clean):
+                # Store the exact node_id as it appears (with any quotes)
+                blockera_nodes.add(node_id_raw)
+                # Also store cleaned version for matching
+                blockera_nodes.add(node_id_clean)
+                # Store quoted version if not already quoted
+                if '"' not in node_id_raw:
+                    blockera_nodes.add(f'"{node_id_clean}"')
+                elif node_id_raw.startswith('"') and node_id_raw.endswith('"'):
+                    blockera_nodes.add(node_id_clean)
+                
+                # Extract include time for this node
+                include_time = extract_include_time(attrs)
+                # Store time for all node_id variations
+                blockera_node_times[node_id_raw] = include_time
+                blockera_node_times[node_id_clean] = include_time
+                if '"' not in node_id_raw:
+                    blockera_node_times[f'"{node_id_clean}"'] = include_time
+                elif node_id_raw.startswith('"') and node_id_raw.endswith('"'):
+                    blockera_node_times[node_id_clean] = include_time
+
+# Identify top 5 blockera nodes by include time
+top5_nodes = set()
+if blockera_node_times:
+    # Deduplicate nodes by their cleaned ID (same node might appear with/without quotes)
+    unique_node_times = {}
+    for node_id, include_time in blockera_node_times.items():
+        node_clean = node_id.strip('"')
+        # Keep the maximum include time for each unique node
+        if node_clean not in unique_node_times or include_time > unique_node_times[node_clean]:
+            unique_node_times[node_clean] = include_time
+    
+    # Sort unique nodes by include time (descending) and get top 5
+    sorted_nodes = sorted(unique_node_times.items(), key=lambda x: x[1], reverse=True)
+    top5_items = sorted_nodes[:5]
+    for node_clean, _ in top5_items:
+        # Add all variations for matching
+        top5_nodes.add(node_clean)
+        top5_nodes.add(f'"{node_clean}"')
+
+# Second pass: process nodes and edges
+out = []
+with open(dot_path, 'r', errors='ignore') as f:
+    for line in f:
+        # Check for edge definition
+        edge_m = edge_re.match(line)
+        if edge_m:
+            source_node, target_node, attrs = edge_m.groups()
+            source_raw = source_node.strip()
+            source_clean = source_raw.strip('"')
+            
+            # Check if source is a blockera node (try multiple formats)
+            is_blockera_source = (
+                source_raw in blockera_nodes or 
+                source_clean in blockera_nodes or
+                (source_raw.startswith('"') and source_raw.endswith('"') and source_clean in blockera_nodes) or
+                (not source_raw.startswith('"') and f'"{source_clean}"' in blockera_nodes)
+            )
+            
+            if is_blockera_source:
+                if attrs is None:
+                    attrs = ''
+                
+                # Check if source is a top 5 node
+                is_top5_source = (
+                    source_raw in top5_nodes or
+                    source_clean in top5_nodes or
+                    (source_raw.startswith('"') and source_raw.endswith('"') and source_clean in top5_nodes) or
+                    (not source_raw.startswith('"') and f'"{source_clean}"' in top5_nodes)
+                )
+                
+                edge_color = top5_color if is_top5_source else color
+                
+                # Make edge color 20% transparent (80% opacity = 0xCC in hex)
+                # Convert color from #RRGGBB to #RRGGBBAA format
+                transparent_color = edge_color + 'CC'  # 20% transparent = 80% opacity
+                attrs = force_set_color(attrs, transparent_color)
+                # Set label color to be fully opaque (normal)
+                attrs = ensure(attrs, 'labelfontcolor', edge_color)
+                attrs = ensure(attrs, 'fontcolor', edge_color)
+                attrs = ensure(attrs, 'penwidth', '3')
+                # Remove any existing <b> tags from label first
+                label_pattern = r'label="([^"]*)"'
+                match = re.search(label_pattern, attrs)
+                if match:
+                    label_text = match.group(1)
+                    # Remove all <b> tags
+                    label_text = re.sub(r'</?b>', '', label_text)
+                    label_text = re.sub(r'&lt;/?b&gt;', '', label_text)
+                    attrs = re.sub(label_pattern, f'label="{label_text}"', attrs)
+                # Use font attributes to make label bold
+                attrs = ensure(attrs, 'labelfontweight', 'bold')
+                attrs = ensure(attrs, 'fontweight', 'bold')
+                # Try using a bold font name (PostScript style)
+                attrs = ensure(attrs, 'labelfontname', 'Helvetica-Bold')
+                attrs = ensure(attrs, 'fontname', 'Helvetica-Bold')
+                out.append(f"{source_node} -> {target_node} [{attrs}];\n")
+            else:
+                if attrs:
+                    out.append(f"{source_node} -> {target_node} [{attrs}];\n")
+                else:
+                    out.append(f"{source_node} -> {target_node};\n")
+            continue
+        
+        # Check for node definition
+        node_m = node_re.match(line)
+        if node_m:
+            node_id, attrs = node_m.groups()
+            node_id_clean = node_id.strip().strip('"')
+            
+            # Check both node_id and original attrs for blockera functions (before rewriting)
+            should_hl = should_highlight(attrs) or contains_blockera(node_id_clean)
+            
+            attrs = rewrite_attrs(attrs)
+
+            # Apply highlighting if needed
+            if should_hl:
+                # Check if this is a top 5 node
+                is_top5 = (
+                    node_id.strip() in top5_nodes or
+                    node_id_clean in top5_nodes or
+                    (node_id.strip().startswith('"') and node_id.strip().endswith('"') and node_id_clean in top5_nodes) or
+                    (not node_id.strip().startswith('"') and f'"{node_id_clean}"' in top5_nodes)
+                )
+                
+                node_color = top5_color if is_top5 else color
+                border_color = '#ef0000' if is_top5 else node_color
+                
+                attrs = ensure(attrs, 'shape', 'box')
+                attrs = ensure(attrs, 'style', 'filled')
+                attrs = ensure(attrs, 'fillcolor', node_color)
+                attrs = force_set_color(attrs, border_color)  # Border color - red for top 5, same as fill for others
+                attrs = ensure(attrs, 'fontcolor', text_color)
+                # Border width: 6 for top 5 nodes, 2 for others
+                border_width = '6' if is_top5 else '2'
+                attrs = ensure(attrs, 'penwidth', border_width)
+
+            out.append(f"{node_id} [{attrs}];\n")
+            continue
+        
+        # Not a node or edge, keep as-is
+        out.append(line)
+
+with open(dot_path, 'w') as f:
+    f.writelines(out)
+PY
+
+    dot -Tpdf -o "$PDF" "$DOT"
+    rm -f "$DOT"
+  done
+done
+
+echo "✅ Done"

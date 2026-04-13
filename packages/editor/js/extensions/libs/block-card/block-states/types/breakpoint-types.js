@@ -12,7 +12,7 @@ export type TBreakpoint =
 export type TBreakpointLabel = 'Desktop' | 'Tablet' | 'Mobile';
 
 export type BreakpointTypes = {
-	type: TBreakpoint,
+	type: TBreakpoint | string,
 	/**
 	 * Define if this is the base breakpoint.
 	 */

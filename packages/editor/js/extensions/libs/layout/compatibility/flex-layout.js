@@ -136,6 +136,7 @@ export function flexLayoutToWPCompatibility({
 	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
 		return {
 			layout: {
+				type: undefined,
 				orientation: undefined,
 				verticalAlignment: undefined,
 				justifyContent: undefined,
@@ -169,13 +170,27 @@ export function flexLayoutToWPCompatibility({
 		column: 'vertical',
 	};
 
+	const finalLayout: {
+		orientation?: string,
+		verticalAlignment?: string,
+		justifyContent?: string,
+		type?: string,
+	} = {
+		orientation: directionValues[newValue?.direction] ?? undefined,
+		verticalAlignment: alignItemsValues[newValue?.alignItems] ?? undefined,
+		justifyContent:
+			justifyContentValues[newValue?.justifyContent] ?? undefined,
+	};
+
+	if (
+		finalLayout.orientation ||
+		finalLayout.verticalAlignment ||
+		finalLayout.justifyContent
+	) {
+		finalLayout.type = 'flex';
+	}
+
 	return {
-		layout: {
-			orientation: directionValues[newValue?.direction] ?? undefined,
-			verticalAlignment:
-				alignItemsValues[newValue?.alignItems] ?? undefined,
-			justifyContent:
-				justifyContentValues[newValue?.justifyContent] ?? undefined,
-		},
+		layout: finalLayout,
 	};
 }

@@ -8,13 +8,15 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isUndefined } from '@blockera/utils';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
-import { getBlockEditorSettings } from './index';
+import { generateVariableString, getBlockEditorSettings } from './index';
+import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getFontSizes: () => Array<VariableItem> = memoize(
@@ -69,3 +71,76 @@ export const getFontSizeBy: (field: string, value: any) => ?VariableItem =
 	memoize(function (field: string, value: any): ?VariableItem {
 		return getFontSizes().find((item) => item[field] === value);
 	});
+
+export const getFontSizeVAFromIdString: (value: string) => ValueAddon | string =
+	memoize(function (value: string): ValueAddon | string {
+		const fontSizeVar = getFontSize(value);
+
+		if (fontSizeVar) {
+			return {
+				settings: {
+					...fontSizeVar,
+					type: 'font-size',
+					var: generateVariableString({
+						reference: fontSizeVar?.reference || {
+							type: '',
+						},
+						type: 'font-size',
+						id: fontSizeVar?.id || '',
+					}),
+				},
+				name: fontSizeVar?.name || '',
+				isValueAddon: true,
+				valueType: 'variable',
+			};
+		}
+
+		return value;
+	});
+
+export const getFontSizeVAFromVarString: (
+	value: string
+) => ValueAddon | string = memoize(function (
+	value: string
+): ValueAddon | string {
+	if (isString(value)) {
+		const { id, varString } = parseVarString(value, 'font-size');
+
+		if (id) {
+			const fontSizeVA = getFontSizeVAFromIdString(id);
+
+			if (isObject(fontSizeVA)) {
+				return fontSizeVA;
+			}
+
+			// same value means the variable not found but should be returned as not found
+			if (fontSizeVA === id && varString) {
+				return {
+					settings: {
+						name: id,
+						id: value,
+						value: `var(${varString})`,
+						type: 'font-size',
+						var: varString,
+						fluid: null,
+					},
+					name: id,
+					isValueAddon: true,
+					valueType: 'variable',
+				};
+			}
+		}
+	}
+
+	return value;
+});
+
+export const getFontSizeVAStringFromId = (id: string): ?string => {
+	const variableObject = getFontSize(id);
+
+	if (!variableObject) {
+		return undefined;
+	}
+
+	return `var:preset|font-size|${id}`;
+};

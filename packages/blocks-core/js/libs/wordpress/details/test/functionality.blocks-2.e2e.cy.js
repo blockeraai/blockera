@@ -37,6 +37,19 @@ describe('Details Block', () => {
 			'core/paragraph',
 		]);
 
+		cy.checkBlockStatesPickerItems([
+			'elements/title',
+			'elements/title-icon',
+			'core/paragraph',
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Block
 		//

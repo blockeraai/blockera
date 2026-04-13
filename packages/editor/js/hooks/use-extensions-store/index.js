@@ -8,10 +8,10 @@ import { useSelect, select, dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import type { ExtensionsStoreType } from './ExtensionsStoreType';
 import { isInnerBlock } from '../../extensions/components/utils';
 import { STORE_NAME } from '../../extensions/libs/base/store/constants';
-import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 /**
@@ -46,7 +46,6 @@ export function getExtensionConfig(
 
 export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 	const {
-		config,
 		getBlockExtensionBy,
 		currentBlock = 'master',
 		currentState = 'normal',
@@ -68,7 +67,6 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		return {
 			currentBlock,
 			getBlockExtensionBy,
-			config: getExtensionConfig(name, currentBlock),
 			currentState: getActiveMasterState(clientId, name),
 			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			currentInnerBlockState: getActiveInnerState(clientId, currentBlock),
@@ -80,7 +78,6 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 	);
 
 	return {
-		config,
 		currentState,
 		currentBlock,
 		currentBreakpoint,

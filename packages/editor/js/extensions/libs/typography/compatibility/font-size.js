@@ -4,47 +4,59 @@
  * Blockera dependencies
  */
 import { isValid } from '@blockera/controls';
-import { getFontSizeBy, generateVariableString } from '@blockera/data';
+import {
+	getFontSizeVAFromVarString,
+	getFontSizeVAStringFromId,
+} from '@blockera/data';
+
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
 
 export function fontSizeFromWPCompatibility({
 	attributes,
+	editorSelectedBlockEvent,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if (attributes?.blockeraFontSize?.value === '') {
 		// fontSize attribute in root always is variable
 		// medium → var(--wp--preset--font-size--medium)
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.fontSize !== undefined) {
-			const fontSizeVar = getFontSizeBy('id', attributes?.fontSize);
+		if (attributes?.fontSize || attributes?.typography?.fontSize) {
+			const fontSizeVar = getFontSizeVAFromVarString(
+				runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
+					? `var:preset|font-size|${attributes?.fontSize}`
+					: attributes?.typography?.fontSize
+			);
 
 			if (fontSizeVar) {
 				attributes.blockeraFontSize = {
-					value: {
-						settings: {
-							...fontSizeVar,
-							type: 'font-size',
-							var: generateVariableString({
-								reference: fontSizeVar?.reference || {
-									type: '',
-								},
-								type: 'font-size',
-								id: fontSizeVar?.id || '',
-							}),
-						},
-						name: fontSizeVar?.name,
-						isValueAddon: true,
-						valueType: 'variable',
-					},
+					value: fontSizeVar,
 				};
+
 				return attributes;
 			}
 		}
 
-		// font size is not variable
-		if (attributes?.style?.typography?.fontSize !== undefined) {
+		// Check block-level style (insideBlockInspector) or global style context
+		const fontSize = runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? attributes?.style?.typography?.fontSize
+			: attributes?.typography?.fontSize;
+
+		if (fontSize) {
 			attributes.blockeraFontSize = {
-				value: attributes?.style?.typography?.fontSize,
+				value: fontSize,
 			};
 
 			return attributes;
@@ -57,39 +69,77 @@ export function fontSizeFromWPCompatibility({
 export function fontSizeToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
+	editorSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return {
-			fontSize: undefined,
-			style: {
-				typography: {
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? {
 					fontSize: undefined,
-				},
-			},
-		};
+					style: {
+						typography: {
+							fontSize: undefined,
+						},
+					},
+				}
+			: {
+					typography: {
+						fontSize: undefined,
+					},
+				};
 	}
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return {
-			fontSize: newValue?.settings?.id,
-			style: {
-				typography: {
-					fontSize: undefined,
-				},
-			},
-		};
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? {
+					fontSize: newValue?.settings?.id,
+					style: {
+						typography: {
+							fontSize: undefined,
+						},
+					},
+				}
+			: {
+					typography: {
+						fontSize: getFontSizeVAStringFromId(
+							newValue?.settings?.id
+						),
+					},
+				};
 	}
 
-	return {
-		fontSize: undefined,
-		style: {
-			typography: {
-				fontSize: newValue,
-			},
-		},
-	};
+	// Advanced css functions not supported by core.
+	if (newValue.endsWith('func')) {
+		newValue = undefined;
+	}
+
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? {
+				fontSize: undefined,
+				style: {
+					typography: {
+						fontSize: newValue,
+					},
+				},
+			}
+		: {
+				typography: {
+					fontSize: newValue,
+				},
+			};
 }

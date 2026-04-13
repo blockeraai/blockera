@@ -37,6 +37,7 @@ const SelectControl = ({
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns,
@@ -45,6 +46,7 @@ const SelectControl = ({
 	field = 'select',
 	//
 	className,
+	style = {},
 	...props
 }: TSelectControlProps): MixedElement => {
 	const {
@@ -60,7 +62,9 @@ const SelectControl = ({
 		defaultValue,
 	});
 
-	if (type === 'custom') options = prepareSelectCustomOptions(options);
+	if (type === 'custom') {
+		options = prepareSelectCustomOptions(options);
+	}
 
 	const labelProps = {
 		value,
@@ -75,6 +79,7 @@ const SelectControl = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (
@@ -82,6 +87,7 @@ const SelectControl = ({
 			columns={columns}
 			controlName={field}
 			className={className}
+			style={style}
 			{...labelProps}
 		>
 			{type === 'native' && (

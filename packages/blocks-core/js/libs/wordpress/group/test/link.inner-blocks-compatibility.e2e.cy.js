@@ -2,13 +2,12 @@
  * Blockera dependencies
  */
 import {
+	createPost,
 	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
 	setInnerBlock,
 	setBlockState,
-	addBlockState,
-	createPost,
+	getWPDataObject,
+	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
@@ -34,6 +33,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		// Switch to parent block
 		cy.getByAriaLabel('Select Group').click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera
@@ -186,6 +187,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		// Switch to parent block
 		cy.getByAriaLabel('Select Group').click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera

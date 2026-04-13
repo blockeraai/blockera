@@ -15,7 +15,7 @@ describe('Font Size → Functionality', () => {
 	});
 
 	it('Simple value font size', () => {
-		cy.getParentContainer('Size').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
 				force: true,
@@ -37,11 +37,11 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'font-size', '10px');
+		cy.get('p.blockera-block').should('have.css', 'font-size', '10px');
 	});
 
 	it('Variable value', () => {
-		cy.getParentContainer('Size').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -53,7 +53,7 @@ describe('Font Size → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'font-size: var(--wp--preset--font-size--small)'
+					'font-size: var(--wp--preset--font-size--small, 0.875rem)'
 				);
 		});
 
@@ -87,7 +87,7 @@ describe('Font Size → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'font-size: var(--wp--preset--font-size--small)'
+				'font-size: var(--wp--preset--font-size--small, 0.875rem)'
 			);
 	});
 });

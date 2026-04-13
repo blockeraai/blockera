@@ -12,7 +12,7 @@ import {
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const WooCommerceMiniCartCartButtonBlock: BlockType = {
 	name: 'blockeraWooCommerceMiniCartCartButtonBlock',

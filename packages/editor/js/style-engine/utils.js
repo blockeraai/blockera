@@ -10,7 +10,7 @@ import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/
 /**
  * Internal dependencies
  */
-import CssGenerators from './css-generator';
+import CssGenerator from './css-generator';
 import type {
 	CssRule,
 	StaticStyle,
@@ -81,7 +81,7 @@ export const computedCssDeclarations = (
 					return;
 				}
 
-				const cssGenerator = new CssGenerators(
+				const cssGenerator = new CssGenerator(
 					styleKey,
 					definition,
 					blockProps,
@@ -135,7 +135,7 @@ export const createCssDeclarations = (
 	return getProperties({
 		options,
 		properties: _props,
-	}).join('\n');
+	}).join('');
 };
 
 /**
@@ -150,8 +150,6 @@ export const getProperties = (props: {
 }): Array<string> => {
 	const { properties, options } = props;
 	const _properties: Object = {};
-	const keys = Object.keys(properties);
-	const lastKeyIndex = keys.length - 1;
 
 	for (const property: string in properties) {
 		if (!Object.hasOwnProperty.call(properties, property)) {
@@ -175,14 +173,13 @@ export const getProperties = (props: {
 
 			tempValue = `${property}: ${value}${
 				options.important && !hasImportantFlag ? ' !important' : ''
-			};\n`;
+			};`;
 		} else if (options.important) {
-			tempValue = value.replace(';', ' !important;\n');
+			tempValue = value.replace(';', ' !important;');
 		} else {
 			tempValue = `${property}: ${value}`;
 		}
 
-		tempValue += lastKeyIndex === keys.indexOf(property) ? '\n' : '';
 		_properties[property] = tempValue;
 	}
 
@@ -210,7 +207,7 @@ export function getVars(queries: string): Array<string> {
 /**
  * Replacing variable values on block selector.
  *
- * @param {Object} params the parameters to replace variables (Like: {{BLOCK_ID}}, {{className}}) of block selector.
+ * @param {Object} params the parameters to replace variables (Like: {{UNIQUE_CLASSNAME}}, {{className}}) of block selector.
  * @return {string|string} the block selector with variable values.
  */
 export const replaceVariablesValue = (params: {
@@ -236,12 +233,17 @@ export const replaceVariablesValue = (params: {
 		return '';
 	}
 
-	if (className) {
-		selector = selector.replace(/{{className}}/g, `.${className}`);
+	// Normalizing class name to be used as a css selector ...
+	let _class = className?.replace(/\s/g, '.') || '';
+	if (_class) {
+		_class = `.${_class}`;
+	} else {
+		_class = `#block-${clientId}`;
 	}
-	if (clientId) {
-		selector = selector.replace(/{{BLOCK_ID}}/g, `#block-${clientId}`);
-	}
+
+	selector = selector
+		.replace(/{{UNIQUE_CLASSNAME}}/g, _class)
+		.replace(/{{className}}/g, _class);
 
 	return selector;
 };

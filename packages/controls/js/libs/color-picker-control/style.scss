@@ -1,1 +1,74 @@
-@import "./components/color-pallet.scss";
+@import "./components/color-pallet";
+
+// Wraps ColorPallet + optional locked notice. When unlocked, no layout side effects.
+.blockera-color-picker-sketch-stack {
+	&:not(.blockera-color-picker-sketch-stack--locked) {
+		display: contents;
+	}
+
+	&--locked {
+		position: relative;
+	}
+}
+
+// Absolutely positioned over the sketch, inset 10px from the stack (picker) edges.
+.blockera-color-picker-sketch-notice {
+	position: absolute;
+	inset: 10px;
+	z-index: 2;
+	box-sizing: border-box;
+	margin: 0;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	overflow: auto;
+	pointer-events: none;
+
+	// Keep the notice itself interactive for text selection / future dismiss controls.
+	> * {
+		pointer-events: auto;
+		max-width: 100%;
+	}
+}
+
+.blockera-component-popover.blockera-color-picker-popover {
+	--popover-min-height: 380px;
+}
+
+.blockera-color-picker-css-field {
+	margin-bottom: 12px;
+	display: flex;
+	flex-direction: row;
+
+	&__label {
+		display: flex;
+		font-size: 11px;
+		font-weight: 500;
+		color: var(--blockera-controls-color);
+		width: 110px;
+		align-items: center;
+	}
+
+	&__input {
+		box-sizing: border-box;
+		width: 100%;
+		min-height: calc(var(--blockera-controls-input-height) + 2px);
+		padding: 6px 8px;
+		border: 1px solid var(--blockera-controls-border-color);
+		border-radius: var(--blockera-controls-border-radius) !important;
+		background: var(--blockera-controls-background-color);
+		color: var(--blockera-controls-color);
+		font-size: 13px;
+		line-height: 1.4;
+
+		&:focus {
+			border-color: var(--blockera-controls-border-color-focus);
+			box-shadow: 0 0 0 1px var(--blockera-controls-border-color-focus);
+			outline: none;
+		}
+
+		&::placeholder {
+			color: var(--blockera-controls-placeholder-color);
+		}
+	}
+}

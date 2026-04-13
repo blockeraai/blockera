@@ -31,6 +31,30 @@ describe('Button Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
 
+		cy.checkBlockStatesPickerItems(
+			[
+				'states/hover',
+				'states/focus',
+				'states/focus-within',
+				'states/visited',
+				'states/active',
+				'states/first-child',
+				'states/last-child',
+				'states/only-child',
+				'states/empty',
+				'states/before',
+				'states/after',
+				'elements/bold',
+				'elements/italic',
+				'elements/kbd',
+				'elements/code',
+				'elements/span',
+				'elements/mark',
+				'elements/icon',
+			],
+			true
+		);
+
 		//
 		// 1. Block Styles
 		//
@@ -61,7 +85,7 @@ describe('Button Block', () => {
 		//
 		// 1.2. Border Line
 		//
-		cy.getParentContainer('Border Line').within(() => {
+		cy.getParentContainer('Border').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
 				force: true,
@@ -71,14 +95,18 @@ describe('Button Block', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('37e6d4 ');
+			cy.get('[data-cy="color-picker-css-value"]').clear({ force: true });
+			cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
+				delay: 0,
+			});
 		});
 
-		cy.getParentContainer('Border Line').within(() => {
+		cy.getParentContainer('Border').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
 			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
+
+		cy.wait(10);
 
 		// Check block
 		// Border should be added to inner element and not to button root tag

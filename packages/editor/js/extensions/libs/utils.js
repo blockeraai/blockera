@@ -15,9 +15,9 @@ import type { ControlContextRefCurrent } from '@blockera/controls';
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock, isNormalState } from '../components/utils';
 import type { BlockDetail } from './block-card/block-states/types';
-import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
 
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -44,7 +44,7 @@ export function arrayEquals(a: Array<any>, b: Array<any>): boolean {
  * @return {string} retrieved extension standard identifier.
  */
 export function generateExtensionId(
-	{ blockName, clientId }: TBlockProps,
+	{ blockName, clientId, currentBlockStyleVariation }: TBlockProps,
 	id: string,
 	flag: boolean = true
 ): string {
@@ -56,9 +56,12 @@ export function generateExtensionId(
 	} = select('blockera/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
+	const variation = currentBlockStyleVariation?.name
+		? `-${currentBlockStyleVariation?.name}`
+		: '';
 
 	if (!flag) {
-		return `${blockName}/${id}/${clientId}-${currentBlock}`;
+		return `${blockName}/${id}/${clientId}-${currentBlock}${variation}`;
 	}
 
 	// Assume control inside innerBlock and current innerBlock inside master block!
@@ -66,20 +69,20 @@ export function generateExtensionId(
 		!isNormalState(getActiveMasterState(clientId, currentBlock)) &&
 		isInnerBlock(currentBlock)
 	) {
-		return `${blockName}/${id}/${clientId}-master-${currentBlock}-${getActiveInnerState(
+		return `${blockName}/${id}/${clientId}-master-${currentBlock}${variation}-${getActiveInnerState(
 			clientId,
 			currentBlock
 		)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 	// Assume master block in normal state and current control inside inner block.
 	if (isInnerBlock(currentBlock)) {
-		return `${blockName}/${id}/${clientId}-${currentBlock}-${getActiveInnerState(
+		return `${blockName}/${id}/${clientId}-${currentBlock}${variation}-${getActiveInnerState(
 			clientId,
 			currentBlock
 		)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 
-	return `${blockName}/${id}/${clientId}-${currentBlock}-${getActiveMasterState(
+	return `${blockName}/${id}/${clientId}-${currentBlock}${variation}-${getActiveMasterState(
 		clientId,
 		currentBlock
 	)}-${getExtensionCurrentBlockStateBreakpoint()}`;
@@ -135,6 +138,34 @@ export function isBlockNotOriginalState(blockInfo: BlockDetail): boolean {
  *
  * @return {boolean} true on success, false on otherwise!
  */
-export function isInvalidCompatibilityRun(blockInfo: BlockDetail): boolean {
+export function isInvalidCompatibilityRun(
+	blockInfo: BlockDetail,
+	ref: ControlContextRefCurrent
+): boolean {
+	if (['reset', 'reset_all_states'].includes(ref?.action)) {
+		return false;
+	}
+
 	return isBlockNotOriginalState(blockInfo);
 }
+
+/**
+ * Decide to run inside block inspector or not!
+ *
+ * @param {boolean} insideBlockInspector the flag to indicate app run inside block inspector.
+ * @param {'save-customizations' | 'detach-style'| undefined} event the selected block occurred event.
+ *
+ * @return {boolean} true on success, false otherwise.
+ */
+export const runInsideBlockInspector = (
+	insideBlockInspector: boolean,
+	event?: 'save-customizations' | 'detach-style'
+): boolean => {
+	switch (event) {
+		case 'save-customizations':
+		case 'detach-style':
+			return false;
+		default:
+			return insideBlockInspector;
+	}
+};

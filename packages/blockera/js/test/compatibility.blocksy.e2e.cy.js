@@ -33,7 +33,10 @@ describe('Compatibility with Blocksy Theme', () => {
 		cy.getIframeBody().within(() => {
 			cy.get('#blockera-styles-wrapper')
 				.invoke('text')
-				.should('include', 'color: var(--theme-link-initial-color)');
+				.should(
+					'include',
+					'color: var(--theme-link-initial-color, var(--theme-palette-color-1, #2872fa))'
+				);
 		});
 
 		//Check store
@@ -65,7 +68,10 @@ describe('Compatibility with Blocksy Theme', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', 'color: var(--theme-link-initial-color)');
+			.should(
+				'include',
+				'color: var(--theme-link-initial-color, var(--theme-palette-color-1, #2872fa))'
+			);
 	});
 
 	it('Width Size variables', () => {
@@ -87,7 +93,7 @@ describe('Compatibility with Blocksy Theme', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'width: var(--theme-normal-container-max-width)'
+					'width: var(--theme-normal-container-max-width, 1290px)'
 				);
 		});
 
@@ -121,7 +127,7 @@ describe('Compatibility with Blocksy Theme', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'width: var(--theme-normal-container-max-width)'
+					'width: var(--theme-normal-container-max-width, 1290px)'
 				);
 		});
 	});

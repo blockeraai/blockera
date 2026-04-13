@@ -16,6 +16,34 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 	/**
+	 * Enqueue Blockera canvas-only CSS into the editor iframe.
+	 *
+	 * Uses the core enqueue pipeline (enqueue_block_assets) so styles are loaded
+	 * where WordPress expects (including the editor-canvas iframe), instead of
+	 * injecting CSS via editor settings.
+	 *
+	 * @return void
+	 */
+	public function enqueueCanvasIframeStyles(): void {
+
+		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen || ( method_exists( $screen, 'is_block_editor' ) && ! $screen->is_block_editor() ) ) {
+			return;
+		}
+
+		$handle  = 'blockera-editor-canvas';
+		$src     = blockera_core_config( 'app.root_url' ) . 'packages/editor/js/editor/editor-canvas-style.css';
+		$version = blockera_core_config( 'app.version' );
+
+		wp_register_style( $handle, $src, [], $version );
+		wp_enqueue_style( $handle );
+	}
+
+	/**
 	 * Store the loader identifier.
 	 *
 	 * @return string the loader identifier.
@@ -47,9 +75,9 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 		// Kooler.
 		if (wp_is_block_theme()) {
-			add_action('wp_head', [ $this, 'printBlockeraGeneratedStyles' ]);
+			add_action('wp_head', [ $this, 'printBlockeraGeneratedStyles' ], 9e2);
 		} else {
-			add_action('wp_footer', [ $this, 'printBlockeraGeneratedStyles' ]); 
+			add_action('wp_footer', [ $this, 'printBlockeraGeneratedStyles' ], 9e2); 
 		}
 
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
@@ -81,6 +109,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 				blockera_enqueue_features_editor_styles($base_path, $base_url, $version);
 			} 
         );
+		
+		add_action( 'enqueue_block_assets', [ $this, 'enqueueCanvasIframeStyles' ], 20 );
 	}
 
 	/**
@@ -163,6 +193,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		$features_object            = $this->getPackageObject( 'features-core' );
 
 		$script = 'wp.domReady(() => {
+		' . blockera_editor_inline_script() . '
 		blockeraData.core.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
 		blockeraData.core.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '
@@ -170,7 +201,10 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			' . $features_object . '?.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');
 			' . $features_object . '?.featuresApplyHooks();
 			window.onload = () => {
+				' . $editor_object . '.editor.registerBlockeraGlobalStylesMetaData(window.blockeraGlobalStylesMetaData);
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $breakpoints ) . ');
+				' . $editor_object . '.registerBlockeraStyleVariationBlocks();
+				' . $editor_object . '.registerBlockeraEditorInternalPlugins();
 				' . $editor_object . '.editor.init();
 			};';
 
@@ -286,7 +320,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			'wp-blocks',
 			'var blockeraPluginData = ' . wp_json_encode(
 				[
-					'pluginURI' => blockera_core_config( 'app.root_url' ),
+					'pluginURI'              => blockera_core_config( 'app.root_url' ),
+					'previewHeaderStyleUrl'  => blockera_core_config( 'app.dist_url' ) . 'editor/preview-header.css?ver=' . blockera_core_config( 'app.version' ),
 				]
 			)
 		);

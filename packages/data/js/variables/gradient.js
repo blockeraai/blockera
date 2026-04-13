@@ -15,7 +15,7 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 /**
  * Internal dependencies
  */
-import { generateVariableString } from './utils';
+import { generateVariableString, parseVarString } from './utils';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 
@@ -82,18 +82,37 @@ export const getGradientVAFromVarString: (
 ) => ValueAddon | string = memoize(function (
 	value: string
 ): ValueAddon | string {
-	if (isString(value) && value.startsWith('var:')) {
-		const id = value.split('|')[2];
-		let variable = getLinearGradientVAFromIdString(id);
+	if (isString(value)) {
+		const { id, varString } = parseVarString(value, 'gradient');
 
-		if (isObject(variable)) {
-			return variable;
-		}
+		if (id) {
+			let variable = getLinearGradientVAFromIdString(id);
 
-		variable = getRadialGradientVAFromIdString(id);
+			if (isObject(variable)) {
+				return variable;
+			}
 
-		if (isObject(variable)) {
-			return variable;
+			variable = getRadialGradientVAFromIdString(id);
+
+			if (isObject(variable)) {
+				return variable;
+			}
+
+			// same value means the variable not found but should be returned as not found
+			if (variable === id && varString) {
+				return {
+					settings: {
+						name: id,
+						id: value,
+						value: `var(${varString})`,
+						type: 'linear-gradient',
+						var: varString,
+					},
+					name: id,
+					isValueAddon: true,
+					valueType: 'variable',
+				};
+			}
 		}
 	}
 

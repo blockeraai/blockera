@@ -110,7 +110,7 @@ jobs:
                   cat .env
 
             - name: Start WordPress Environment
-              run: npm run env:start
+              run: bash .github/scripts/retry-wp-env-start.sh
 
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}

@@ -20,7 +20,7 @@ import type { IconProps } from '../types';
 export function BlockeraUIIcon({
 	library = 'ui',
 	icon,
-	iconSize,
+	iconSize = 20,
 	...props
 }: IconProps): MixedElement {
 	if (isString(icon)) {
@@ -36,13 +36,8 @@ export function BlockeraUIIcon({
 	delete props.size;
 
 	if (iconSize) {
-		if (!props?.width) {
-			props.width = iconSize;
-		}
-
-		if (!props?.height) {
-			props.height = iconSize;
-		}
+		props.width = iconSize;
+		props.height = iconSize;
 	}
 
 	return <WordPressIconComponent icon={icon.icon} {...props} />;

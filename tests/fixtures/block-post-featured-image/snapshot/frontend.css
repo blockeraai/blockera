@@ -1,0 +1,107 @@
+.blockera-block.blockera-block-1.wp-block-post-featured-image {
+	background-color: #ffd7d7;
+	transition: all 500ms ease 0ms;
+	width: 300px;
+	aspect-ratio: 9/16;
+	object-fit: cover;
+	padding: 20px 20px 20px 20px;
+}
+
+.blockera-block.blockera-block-1.wp-block-post-featured-image img {
+	border: 3px solid #ff0000;
+	border-radius: 50px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-featured-image {
+		aspect-ratio: 1;
+		width: 200px;
+		display: flex !important;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.blockera-block.blockera-block-1.wp-block-post-featured-image img {
+		border-radius: 10px;
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-post-featured-image img:hover {
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-1.wp-block-post-featured-image::before {
+	font-size: 16px;
+	background-color: #00000038;
+	padding: 10px 10px 10px 10px;
+	border-radius: 50px;
+	display: inline-block !important;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-featured-image::before {
+		border-radius: 10px;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-post-featured-image::after {
+	padding: 10px 10px 10px 10px;
+	border-radius: 50px;
+	background-color: #00000033;
+	display: inline-block !important;
+	font-size: 16px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-featured-image::after {
+		border-radius: 10px;
+		content: "After";
+	}
+
+}
+
+.blockera-block.blockera-block-2.wp-block-post-featured-image {
+	object-fit: cover;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-post-featured-image img {
+		box-shadow: 10px 10px 0 0 #ff8d8dab;
+		border-radius: 10px;
+	}
+
+	.blockera-block.blockera-block-2.wp-block-post-featured-image {
+		margin-top: 20px;
+		position: relative;
+		z-index: 2;
+		opacity: 80%;
+	}
+
+}
+
+.blockera-block-2 :where(.blockera-block-2-child-1) {
+	object-fit: cover;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-1) {
+	border-color: #ff0000;
+	border-radius: 50px;
+	border-width: 3px;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.blockera-block-1 {
+	aspect-ratio: 9/16;
+	width: 300px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}

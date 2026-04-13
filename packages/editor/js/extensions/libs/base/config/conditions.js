@@ -15,9 +15,11 @@ const blockeraConditions: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Conditions', 'blockera'),
+	keywords: ['conditions', 'conditional', 'display', 'show', 'hide'],
 };
 
 export const conditionsConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraConditions,
 };

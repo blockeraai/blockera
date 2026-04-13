@@ -1,0 +1,123 @@
+p.blockera-block.blockera-block-1::before {
+	content: "Before";
+}
+
+p.blockera-block.blockera-block-1::after {
+	content: "After";
+}
+
+p.blockera-block.blockera-block-2 {
+	background-color: #ededed;
+}
+
+p.blockera-block.blockera-block-2::before {
+	color: #ff0000;
+	margin-right: 20px !important;
+	content: "Before";
+}
+
+p.blockera-block.blockera-block-2::after {
+	color: #d500ff;
+	margin-left: 20px !important;
+	content: "After";
+}
+
+p.blockera-block.blockera-block-3 {
+	background-color: #fff1f1;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+	padding: 10px 10px 10px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-3) span:not([data-rich-text-placeholder])::before {
+	display: inline-block !important;
+	content: attr(data-before);
+	padding: 5px 10px 5px 10px;
+	background-color: #0000001f;
+}
+
+html:root body :where(.blockera-block.blockera-block-3) span:not([data-rich-text-placeholder])::after {
+	display: inline-block !important;
+	content: attr(data-after);
+	padding: 5px 10px 5px 10px;
+	background-color: #00000029;
+}
+
+p.blockera-block.blockera-block-4 {
+	background-color: #cafccd;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+	padding: 10px 10px 10px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-4) span:not([data-rich-text-placeholder])::before {
+	display: inline-block !important;
+	content: "Custom "attr(data-before)"";
+	padding: 5px 10px 5px 10px;
+	background-color: #00000024;
+}
+
+html:root body :where(.blockera-block.blockera-block-4) span:not([data-rich-text-placeholder])::after {
+	display: inline-block !important;
+	content: "Custom "attr(data-after)"";
+	background-color: #00000024;
+	padding: 5px 10px 5px 10px;
+}
+
+.blockera-block.blockera-block-5.wp-block-group {
+	background-color: #e2e2e2;
+	padding: 20px 19px 20px 19px;
+}
+
+html:root body :where(.blockera-block.blockera-block-5) :where(p)::before {
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: 10px !important;
+	content: "Number "counter(item)"";
+	display: inline-block !important;
+	height: 30px;
+	background-color: #c2c2c2;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 600;
+	font-style: normal;
+	line-height: 30px;
+	border-radius: 30px;
+}
+
+& {
+	n counter-reset: item;
+	n;
+}
+
+nn& p {
+	n counter-increment: item;
+	n;
+}
+
+n p.blockera-block.blockera-block-6::before {
+	background-color: #ffdcdc;
+	content: "Custom Number: "counter(item)" Here";
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 20px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 2;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

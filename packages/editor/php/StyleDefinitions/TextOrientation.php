@@ -6,40 +6,45 @@ class TextOrientation extends BaseStyleDefinition {
 
 	protected function css( array $setting): array {
 
-        $declaration = [];
-        $cssProperty = $setting['type'];
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'text-orientation' !== $cssProperty) {
-
-            return $declaration;
+		if (! isset($setting['type'])) {
+			return [];
 		}
 
-		switch ($setting[ $cssProperty ]) {
-			case 'style-1':
-				$this->setDeclaration('writing-mode', 'vertical-lr');
-				$this->setDeclaration('text-orientation', 'mixed');
-			    break;
-				
-			case 'style-2':
-				$this->setDeclaration('writing-mode', 'vertical-rl');
-				$this->setDeclaration('text-orientation', 'mixed');
-			    break;
-			case 'style-3':
-				$this->setDeclaration('writing-mode', 'vertical-lr');
-				$this->setDeclaration('text-orientation', 'upright');
-			    break;
-			case 'style-4':
-				$this->setDeclaration('writing-mode', 'vertical-rl');
-				$this->setDeclaration('text-orientation', 'upright');
-			    break;
-			case 'initial':
-				$this->setDeclaration('writing-mode', 'horizontal-tb');
-				$this->setDeclaration('text-orientation', 'mixed');
-			    break;
+		$cssProperty = $setting['type'];
+
+		if ('text-orientation' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
+			return [];
 		}
 
-		$this->setCss($this->declarations);
+		static $lookup = [
+			'style-1' => [
+				'writing-mode'     => 'vertical-lr',
+				'text-orientation' => 'mixed',
+			],
+			'style-2' => [
+				'writing-mode'     => 'vertical-rl',
+				'text-orientation' => 'mixed',
+			],
+			'style-3' => [
+				'writing-mode'     => 'vertical-lr',
+				'text-orientation' => 'upright',
+			],
+			'style-4' => [
+				'writing-mode'     => 'vertical-rl',
+				'text-orientation' => 'upright',
+			],
+			'initial' => [
+				'writing-mode'     => 'horizontal-tb',
+				'text-orientation' => 'mixed',
+			],
+		];
 
-        return $this->css;
-    }
+		$value = $setting[ $cssProperty ];
+
+		if (isset($lookup[ $value ])) {
+			$this->setCss($lookup[ $value ]);
+		}
+
+		return $this->css;
+	}
 }

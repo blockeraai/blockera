@@ -3,8 +3,9 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useInstanceId } from '@wordpress/compose';
 import type { MixedElement } from 'react';
-import { useCallback, useState } from '@wordpress/element';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -18,6 +19,11 @@ import { ColorPallet } from './components';
 import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
 import { Button, Popover, BaseControl, NoticeControl } from '../index';
+import {
+	isColorControllableBySketchPicker,
+	validHex,
+	valueCleanupColorString,
+} from './utils/css-color';
 
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'blockera'),
@@ -29,6 +35,7 @@ export default function ColorPickerControl({
 	//
 	id,
 	label = '',
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange,
@@ -37,6 +44,10 @@ export default function ColorPickerControl({
 	className,
 	children,
 }: ColorPickerControlProps): MixedElement {
+	const valueCleanup = useCallback((newValue: string) => {
+		return valueCleanupColorString(newValue);
+	}, []);
+
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
 			id,
@@ -46,6 +57,40 @@ export default function ColorPickerControl({
 		});
 
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
+	const cssValueInputId = useInstanceId(
+		ColorPickerControl,
+		'blockera-color-picker-css'
+	);
+	// Some color pickers blur the active element on drag; null relatedTarget can close the popover on focus-outside.
+	const focusOutsideSuppressionRef = useRef(false);
+
+	useEffect(() => {
+		if (!isOpen || !isPopover) {
+			return undefined;
+		}
+		const doc = typeof document !== 'undefined' ? document : null;
+		if (!doc) {
+			return undefined;
+		}
+		const onPointerDownCapture = (ev: PointerEvent) => {
+			const t = ev.target;
+			if (t instanceof Element && t.closest('.sketch-picker')) {
+				focusOutsideSuppressionRef.current = true;
+			}
+		};
+		const clearSuppression = () => {
+			focusOutsideSuppressionRef.current = false;
+		};
+		doc.addEventListener('pointerdown', onPointerDownCapture, true);
+		doc.addEventListener('pointerup', clearSuppression, true);
+		doc.addEventListener('pointercancel', clearSuppression, true);
+		return () => {
+			doc.removeEventListener('pointerdown', onPointerDownCapture, true);
+			doc.removeEventListener('pointerup', clearSuppression, true);
+			doc.removeEventListener('pointercancel', clearSuppression, true);
+			focusOutsideSuppressionRef.current = false;
+		};
+	}, [isOpen, isPopover]);
 
 	const eyeDropper: any = window?.EyeDropper ? new window.EyeDropper() : null;
 
@@ -53,7 +98,17 @@ export default function ColorPickerControl({
 		const openPicker = async () => {
 			try {
 				const color = await eyeDropper?.open();
-				setValue(color?.sRGBHex);
+				const raw = color?.sRGBHex;
+				if (typeof raw === 'string' && raw !== '') {
+					const candidate = raw.startsWith('#') ? raw : '#' + raw;
+					if (validHex(candidate)) {
+						setValue(candidate.toLowerCase());
+					} else {
+						setValue(raw);
+					}
+				} else {
+					setValue('');
+				}
 				setIsPopoverHidden(false);
 			} catch (e) {
 				/* @debug-ignore */
@@ -66,15 +121,6 @@ export default function ColorPickerControl({
 		openPicker();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eyeDropper?.open]);
-
-	// make sure always we treat colors as lower case
-	function valueCleanup(value: string) {
-		if (value !== '') {
-			value = value.toLowerCase();
-		}
-
-		return value;
-	}
 
 	let colorPickerLabel = '';
 
@@ -96,19 +142,70 @@ export default function ColorPickerControl({
 	}
 
 	function showEyeDropperNotice() {
-		if (eyeDropper) return null;
+		if (eyeDropper) {
+			return null;
+		}
 
 		return (
 			<div style={{ paddingBottom: '15px' }}>
 				<NoticeControl
 					type="error"
-					icon={<Icon icon="eye-dropper" size="18" />}
+					icon={<Icon icon="eye-dropper" iconSize="18" />}
 				>
 					{colorPickerLabel}
 				</NoticeControl>
 			</div>
 		);
 	}
+
+	const sketchControllable = isColorControllableBySketchPicker(value);
+
+	const sketchStackClassName =
+		'blockera-color-picker-sketch-stack' +
+		(sketchControllable
+			? ''
+			: ' blockera-color-picker-sketch-stack--locked');
+
+	const sketchLockedNotice = !sketchControllable ? (
+		<div
+			className="blockera-color-picker-sketch-notice"
+			data-cy="color-picker-sketch-locked-notice"
+		>
+			<NoticeControl type="warning">
+				{__(
+					'This color cannot be changed with the color picker. Use the color value field with a hex code, rgb(), or a named color to enable the picker.',
+					'blockera'
+				)}
+			</NoticeControl>
+		</div>
+	) : null;
+
+	const colorValueField = (
+		<div className="blockera-color-picker-css-field">
+			<label
+				className="blockera-color-picker-css-field__label"
+				htmlFor={cssValueInputId}
+			>
+				{__('Color value', 'blockera')}
+			</label>
+			<input
+				id={cssValueInputId}
+				type="text"
+				className="blockera-color-picker-css-field__input"
+				data-cy="color-picker-css-value"
+				value={value}
+				onChange={(e) => {
+					setValue(e.target.value);
+				}}
+				autoComplete="off"
+				spellCheck={false}
+				placeholder={__(
+					'#fff, rgb(), currentColor, var(--token)',
+					'blockera'
+				)}
+			/>
+		</div>
+	);
 
 	if (isPopover) {
 		return (
@@ -117,17 +214,23 @@ export default function ColorPickerControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, resetToDefault }}
+				{...{
+					attribute,
+					blockName,
+					resetToDefault,
+				}}
+				{...propsForLabelControl}
 			>
 				{isOpen && (
 					<Popover
 						title={popoverTitle}
 						offset={120}
 						placement={placement}
-						className={`components-palette-edit-popover ${
+						className={`blockera-color-picker-popover ${
 							isPopoverHidden ? 'hidden' : ''
 						}`}
 						onClose={onClose}
+						focusOutsideSuppressionRef={focusOutsideSuppressionRef}
 						titleButtonsRight={
 							<>
 								<Button
@@ -144,7 +247,7 @@ export default function ColorPickerControl({
 									disabled={eyeDropper === null}
 									aria-label={__('Pick Color', 'blockera')}
 								>
-									<Icon icon="eye-dropper" size="18" />
+									<Icon icon="eye-dropper" iconSize="18" />
 								</Button>
 
 								<Button
@@ -163,18 +266,24 @@ export default function ColorPickerControl({
 									)}
 									disabled={!value}
 								>
-									<Icon icon="trash" size="20" />
+									<Icon icon="trash" iconSize="20" />
 								</Button>
 							</>
 						}
 					>
-						<ColorPallet
-							enableAlpha={true}
-							color={value}
-							onChangeComplete={(color: Object) =>
-								setValue(color.hex)
-							}
-						/>
+						{colorValueField}
+
+						<div className={sketchStackClassName}>
+							<ColorPallet
+								disabled={!sketchControllable}
+								enableAlpha={true}
+								color={value}
+								onChangeComplete={(stored: string) =>
+									setValue(stored)
+								}
+							/>
+							{sketchLockedNotice}
+						</div>
 
 						{children}
 
@@ -193,11 +302,17 @@ export default function ColorPickerControl({
 			className={className}
 			{...{ attribute, blockName, resetToDefault }}
 		>
-			<ColorPallet
-				enableAlpha={false}
-				color={value}
-				onChangeComplete={(color: Object) => setValue(color.hex)}
-			/>
+			<div className={sketchStackClassName}>
+				<ColorPallet
+					disabled={!sketchControllable}
+					enableAlpha={false}
+					color={value}
+					onChangeComplete={(stored: string) => setValue(stored)}
+				/>
+				{sketchLockedNotice}
+			</div>
+
+			{colorValueField}
 
 			{children}
 

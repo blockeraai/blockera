@@ -13,7 +13,7 @@ import { SharedBlockExtension } from '@blockera/editor';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const File: BlockType = {
 	name: 'blockeraFile',
@@ -40,5 +40,17 @@ export const File: BlockType = {
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
+	},
+	selectors: {
+		'blockera/states/before': {
+			root: ' .wp-block-file__content-wrapper::before',
+		},
+		'blockera/states/after': {
+			root: ' .wp-block-file__content-wrapper::after',
+		},
+		'blockera/core/button': {
+			margin: ' .wp-block-file__button-richtext-wrapper',
+		},
+		layout: ' .wp-block-file__content-wrapper',
 	},
 };

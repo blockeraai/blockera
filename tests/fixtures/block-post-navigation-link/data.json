@@ -1,0 +1,19 @@
+{
+	"posts": [
+		{
+			"post_type": "post",
+			"post_title": "Post 1 - Previous",
+			"post_status": "publish"
+		},
+		{
+			"post_type": "post",
+			"post_title": "Post 2 - Test Post",
+			"post_status": "publish"
+		},
+		{
+			"post_type": "post",
+			"post_title": "Post 3 - Next",
+			"post_status": "publish"
+		}
+	]
+}

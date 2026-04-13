@@ -18,7 +18,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const TagCloud: BlockType = {
 	name: 'blockeraTagCloud',
@@ -45,8 +45,28 @@ export const TagCloud: BlockType = {
 				visited: sharedBlockStates.visited,
 			},
 		},
+		'elements/tag-link-count': {
+			name: 'elements/tag-link-count',
+			label: __('Tag Counts', 'blockera'),
+			description: __('All tag counts inside tag items.', 'blockera'),
+			icon: <Icon icon="term-count" library="wp" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
+	},
+	selectors: {
+		// in editor the main tag is inside following selector as block is rendering dynamically.
+		layout: ' .wp-block-tag-cloud',
+		// States selectors.
+		'blockera/states/before': {
+			root: ' .wp-block-tag-cloud::before',
+		},
+		'blockera/states/after': {
+			root: ' .wp-block-tag-cloud::after',
+		},
 	},
 };

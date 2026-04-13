@@ -1,0 +1,117 @@
+.blockera-block.blockera-block-1.wp-block-loginout {
+	background-color: #e6d7d7;
+	border-radius: 10px;
+	padding: 30px 30px 30px 30px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) form {
+	background-color: #bea4a4;
+	padding: 10px 10px 10px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) label {
+	color: #ac2626;
+	background-color: #00000029;
+	padding: 5px 5px 5px 5px;
+	display: block !important;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	font-size: 18px;
+	border-radius: 8px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) input {
+	color: #e20404;
+	display: inline-block !important;
+	border: 1px solid #b50000;
+	border-radius: 8px;
+	padding: 8px 12px 8px 12px;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .login-remember label {
+	color: #a62626;
+	background-color: #00000030;
+	display: block !important;
+	border-radius: 5px;
+	padding: 5px 10px 5px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary {
+	color: #4d0000;
+	display: block !important;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	height: 30px;
+	background-color: #dd4b4b;
+	border: 1px solid #00000045;
+	border-radius: 5px;
+	transition: all 500ms ease 0ms;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) {
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) form::before {
+	border-radius: 5px;
+	content: "Container Before";
+	background-color: #00000030;
+	padding: 5px 10px 5px 10px;
+	display: block !important;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) form::after {
+	display: block !important;
+	content: "Container After";
+	padding: 5px 10px 5px 10px;
+	border-radius: 5px;
+	background-color: #00000036;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary:hover {
+	border-radius: 15px;
+	background-color: #c92222;
+}
+
+.blockera-block.blockera-block-1.wp-block-loginout:hover {
+	background-color: #fec0c0;
+}
+
+.blockera-block.blockera-block-1.wp-block-loginout::before {
+	display: block !important;
+	background-color: #00000021;
+	padding: 5px 10px 5px 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-loginout::after {
+	border-radius: 5px;
+	display: block !important;
+	background-color: #00000026;
+	padding: 5px 10px 5px 10px;
+	margin-top: 10px;
+	content: "After";
+}
+
+.blockera-block-1 {
+	background-color: #e6d7d7;
+	border-radius: 10px;
+	padding-top: 30px;
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-left: 30px;
+}

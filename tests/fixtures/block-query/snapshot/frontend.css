@@ -1,0 +1,284 @@
+.blockera-block.blockera-block-1.wp-block-query-total {
+	background-color: #d4d4d4;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+}
+
+.blockera-block.blockera-block-1.wp-block-query-total::before {
+	background-color: #ffbdbd;
+	padding: 5px 5px 5px 5px;
+	border-radius: 10px;
+	display: inline-block !important;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-query-total::after {
+	background-color: #ffadad;
+	border-radius: 10px;
+	padding: 5px 5px 5px 5px;
+	display: inline-block !important;
+	content: "After";
+}
+
+.blockera-block.blockera-block-2.wp-block-post-template {
+	background-color: #e4e4e4;
+}
+
+.blockera-block.blockera-block-2.wp-block-post-template::before {
+	padding: 5px 5px 5px 5px;
+	background-color: #0000003d;
+	display: inline-block !important;
+	border-radius: 10px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2.wp-block-post-template::after {
+	padding: 5px 5px 5px 5px;
+	background-color: #00000030;
+	display: inline-block !important;
+	border-radius: 10px;
+	content: "After";
+}
+
+.blockera-block.blockera-block-3.wp-block-group {
+	background-color: #fff0f0;
+	padding-top: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	margin-bottom: 30px;
+}
+
+.blockera-block.blockera-block-9.wp-block-group {
+	background-color: #f5dcdc;
+	padding-top: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+}
+
+.blockera-block.blockera-block-10.wp-block-query-no-results {
+	background-color: #ffbfbf;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block-10) :is(.wp-block-paragraph, p) {
+	background-color: #ff7a7a;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-10.wp-block-query-no-results {
+		display: flex !important;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+}
+
+.blockera-block.blockera-block-10.wp-block-query-no-results::before {
+	padding: 5px 5px 5px 5px;
+	background-color: #00000045;
+	border-radius: 10px;
+	display: inline-block !important;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-10.wp-block-query-no-results::before {
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-10.wp-block-query-no-results::after {
+	padding: 5px 5px 5px 5px;
+	background-color: #0000003b;
+	border-radius: 10px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-10.wp-block-query-no-results::after {
+		align-self: flex-end;
+		content: "After";
+	}
+
+}
+
+.blockera-block.blockera-block-11.wp-block-post-template {
+	background-color: #c0e8ff;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block-11) .wp-block-heading {
+	background-color: #fe4444;
+	padding: 10px 10px 10px 10px;
+	text-align: center;
+	color: #ffffff;
+	text-transform: uppercase;
+	border-radius: 40px;
+	font-size: 14px;
+}
+
+.blockera-block.blockera-block-12.wp-block-group {
+	background-color: #fff1e4;
+	padding: 10px 10px 10px 10px;
+}
+
+.blockera-block.blockera-block-13.wp-block-post-title {
+	background-color: #ffd2aa;
+	padding: 10px 10px 10px 10px;
+}
+
+.blockera-block.blockera-block-14.wp-block-group {
+	background-color: #ffd2a9;
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	padding: 10px 10px 10px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-14) .wp-block-post-time-to-read {
+	background-color: #ffb672;
+	padding: 10px 10px 10px 10px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-15.wp-block-post-author-name {
+	background-color: #e49851;
+	border-radius: 40px;
+	padding: 10px 10px 10px 10px;
+}
+
+.blockera-block-15 {
+	background-color: #e49851;
+	border-radius: 40px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block-13 {
+	background-color: #ffd2aa;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block-11 {
+	background-color: #c0e8ff;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block-10 {
+	background-color: #ffbfbf;
+}
+
+.blockera-block-2 {
+	background-color: #e4e4e4;
+}
+
+.blockera-block-1 {
+	background-color: #d4d4d4;
+}
+
+.blockera-block.blockera-block-16.wp-block-post-content {
+	background-color: #ffb46e;
+	border-radius: 10px;
+	padding: 10px 10px 10px 10px;
+}
+
+.blockera-block.blockera-block-16.wp-block-post-content::before {
+	padding: 5px 5px 5px 5px;
+	margin-bottom: 20px;
+	display: inline-block !important;
+	background-color: #0000002b;
+	border-radius: 10px;
+	content: "Content Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-16.wp-block-post-content::before {
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		direction: rtl;
+		content: "Content Before";
+	}
+
+}
+
+.blockera-block.blockera-block-16.wp-block-post-content::after {
+	padding: 5px 5px 5px 5px;
+	margin-top: 20px;
+	background-color: #00000042;
+	border-radius: 10px;
+	display: inline-block !important;
+	content: "Content After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-16.wp-block-post-content::after {
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		text-align: center;
+		content: "Content After";
+	}
+
+}
+
+.blockera-block-16 {
+	background-color: #ffb46e;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block-15 {
+	background-color: #e49851;
+	border-radius: 40px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block-13 {
+	background-color: #ffd2aa;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block-11 {
+	background-color: #c0e8ff;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block-10 {
+	background-color: #ffbfbf;
+}
+
+.blockera-block-2 {
+	background-color: #e4e4e4;
+}
+
+.blockera-block-1 {
+	background-color: #d4d4d4;
+}

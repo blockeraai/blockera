@@ -1,11 +1,11 @@
 import {
 	savePage,
+	createPost,
+	appendBlocks,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-	createPost,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 
 describe('Transforms → Functionality', () => {
 	beforeEach(() => {
@@ -19,10 +19,6 @@ describe('Transforms → Functionality', () => {
 			'blockera-repeater-control'
 		).as('transform');
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	context('Transform Feature', () => {
 		it('should update transform, when add value to move + promoter should be appear', () => {
@@ -75,7 +71,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			// promotion popover should not appear
-			cy.get('.blockera-component-promotion-popover').should('exist');
+			cy.get('.blockera-component-upgrade-prompt').should('exist');
 
 			//Check frontend
 			savePage();
@@ -86,9 +82,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					!enabledOptimizeStyleGeneration
-						? 'transform: translate3d(150px, 200px, 100px) !important'
-						: 'transform: translate3d(150px, 200px, 100px)'
+					'transform: translate3d(150px, 200px, 100px)'
 				);
 		});
 
@@ -139,12 +133,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should(
-					'include',
-					!enabledOptimizeStyleGeneration
-						? 'transform: scale3d(130%, 130%, 50%) !important'
-						: 'transform: scale3d(130%, 130%, 50%)'
-				);
+				.should('include', 'transform: scale3d(130%, 130%, 50%)');
 		});
 
 		it('should update transform, when add value to rotate', () => {
@@ -198,9 +187,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					!enabledOptimizeStyleGeneration
-						? 'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg) !important;'
-						: 'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg)'
+					'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg)'
 				);
 		});
 
@@ -249,11 +236,58 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
+				.should('include', 'transform: skew(10deg, 20deg)');
+		});
+
+		it('Multiple transforms + promoter', () => {
+			appendBlocks(`<!-- wp:paragraph {"blockeraPropsId":"9cfe6bc2-aafd-484a-a16c-f4665406decb","blockeraCompatId":"10918511645","blockeraTransform":{"value":{"skew-0":{"isVisible":true,"type":"skew","skew-x":"10deg","skew-y":"20deg","order":0},"move-0":{"isVisible":true,"type":"move","move-x":"150px","move-y":"200px","move-z":"100px","order":1}}},"className":"blockera-block blockera-block\u002d\u002d7dsdgz"} -->
+<p class="blockera-block blockera-block--7dsdgz">This is test paragraph</p>
+<!-- /wp:paragraph -->`);
+
+			cy.getBlock('core/paragraph').click();
+
+			//Check block
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should(
+						'include',
+						'transform: skew(10deg, 20deg) translate3d(150px, 200px, 100px)'
+					);
+			});
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect({
+					'skew-0': {
+						type: 'skew',
+						'skew-x': '10deg',
+						'skew-y': '20deg',
+						isVisible: true,
+						order: 0,
+					},
+					'move-0': {
+						type: 'move',
+						'move-x': '150px',
+						'move-y': '200px',
+						'move-z': '100px',
+						isVisible: true,
+						order: 1,
+					},
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraTransform')
+				);
+			});
+
+			//Check frontEnd
+			savePage();
+			redirectToFrontPage();
+
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
 				.should(
 					'include',
-					!enabledOptimizeStyleGeneration
-						? 'transform: skew(10deg, 20deg) !important'
-						: 'transform: skew(10deg, 20deg)'
+					'transform: skew(10deg, 20deg) translate3d(150px, 200px, 100px)'
 				);
 		});
 	});

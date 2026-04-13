@@ -24,7 +24,7 @@ import {
 	isInnerBlock,
 	isNormalState as _isNormalState,
 } from '../../extensions/components/utils';
-import { useBlockContext } from '../../extensions/hooks/context';
+import { useBlockContext } from '../../extensions/components/block-context';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 import type {
 	CalculatedAdvancedLabelProps,
@@ -35,7 +35,7 @@ import type {
 	TStates,
 	BreakpointTypes,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import unAvailableAttributes from './unavailable-attributes';
 import { useExtensionsStore } from '../use-extensions-store';
 
@@ -49,6 +49,8 @@ export const useAdvancedLabelProps = (
 		isRepeater,
 		defaultValue,
 		isNormalState,
+		blockName,
+		clientId,
 		blockAttributes,
 	}: AdvancedLabelHookProps,
 	delay: number
@@ -67,7 +69,10 @@ export const useAdvancedLabelProps = (
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
-	} = useExtensionsStore();
+	} = useExtensionsStore({
+		clientId,
+		name: blockName,
+	});
 	// Get static blockeraInnerBlocks value to use as fallback.
 	const { blockeraInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {
@@ -408,7 +413,7 @@ export const useAdvancedLabelProps = (
 				)?.filter(
 					([stateType, state]: [
 						TStates | string,
-						Object
+						Object,
 					]): boolean => {
 						const breakpointTypes = Object.keys(state.breakpoints);
 
@@ -461,8 +466,9 @@ export const useAdvancedLabelProps = (
 				breakpoint: BreakpointTypes,
 				stateType: TStates
 			) => {
-				if (isUndefined(breakpoint))
+				if (isUndefined(breakpoint)) {
 					return isChanged && _isNormalState(stateType);
+				}
 
 				const stateValue =
 					currentBreakpoint === baseBreakpoint && isNormalState

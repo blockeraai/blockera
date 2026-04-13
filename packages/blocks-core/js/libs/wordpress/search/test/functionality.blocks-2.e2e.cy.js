@@ -133,6 +133,20 @@ describe('Search Block', () => {
 			cy.get('.components-tools-panel-header')
 				.contains('Settings')
 				.scrollIntoView()
+				.should('be.visible');
+
+			cy.get(
+				'.components-tools-panel .components-tools-panel-item input[type="number"]'
+			)
+				.should('be.exist')
+				.scrollIntoView()
+				.should('not.be.visible');
+
+			cy.get(
+				'.components-tools-panel .components-tools-panel-item .components-toggle-group-control'
+			)
+				.should('be.exist')
+				.scrollIntoView()
 				.should('not.be.visible');
 		});
 

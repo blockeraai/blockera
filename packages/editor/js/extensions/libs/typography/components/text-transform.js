@@ -106,8 +106,7 @@ export const TextTransform = ({
 						</p>
 					</>
 				}
-				columns="columns-1"
-				className="control-first label-center small-gap"
+				columns="1fr 2.5fr"
 				options={[
 					{
 						label: __('Capitalize', 'blockera'),

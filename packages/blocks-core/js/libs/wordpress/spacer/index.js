@@ -13,7 +13,7 @@ import { mergeObjects } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Spacer: BlockType = {
 	name: 'blockeraSpacer',
@@ -23,6 +23,36 @@ export const Spacer: BlockType = {
 	},
 	registerExtensions: (blockName: string): void => {
 		const config = mergeObjects(extensionConfig, {
+			advancedSettingsConfig: {
+				status: false,
+			},
+			spacingConfig: {
+				status: false,
+			},
+			typographyConfig: {
+				status: false,
+			},
+			layoutConfig: {
+				status: false,
+			},
+			positionConfig: {
+				status: false,
+			},
+			mouseConfig: {
+				status: false,
+			},
+			flexChildConfig: {
+				status: false,
+			},
+			backgroundConfig: {
+				status: false,
+			},
+			borderAndShadowConfig: {
+				status: false,
+			},
+			effectsConfig: {
+				status: false,
+			},
 			sizeConfig: {
 				blockeraWidth: {
 					onBreakpoints: ['base'],
@@ -41,6 +71,18 @@ export const Spacer: BlockType = {
 				},
 				blockeraMaxHeight: {
 					onBreakpoints: ['base'],
+				},
+				blockeraOverflow: {
+					status: false,
+				},
+				blockeraRatio: {
+					status: false,
+				},
+				blockeraFit: {
+					status: false,
+				},
+				blockeraBoxSizing: {
+					status: false,
 				},
 			},
 		});

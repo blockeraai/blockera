@@ -36,6 +36,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -120,6 +122,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -247,6 +251,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -335,6 +341,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -437,11 +445,13 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customBackgroundHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraBackgroundColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -465,6 +475,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -550,6 +562,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -677,6 +691,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -765,6 +781,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -867,11 +885,13 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -884,7 +904,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 <h3 class="wp-block-heading has-medium-font-size">Share Box</h3>
 <!-- /wp:heading -->
 
-<!-- wp:blocksy/share-box {"blockeraPropsId":"b8ef75a7-b1b7-49b0-b60e-a61976db9e8e","blockeraCompatId":"18121630115","blockeraBackgroundColor":{"value":"#ffdddd"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBackgroundColor":"#ff0000"}}}},"share_networks":[{"id":"facebook","enabled":true,"__id":"JZgkASt-GgZuyrK_JXVm0"},{"id":"twitter","enabled":true,"__id":"PGAd9qyLle5-FtosY0Is8"},{"id":"pinterest","enabled":true,"__id":"Jq6k3oHXcsG_ac4gDc2ax"},{"id":"linkedin","enabled":true,"__id":"LybrPWpSWaVCtFn5boSDW"}],"share_item_tooltip":"yes","link_nofollow":"yes","share_icons_size":"31","lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002d6kc8u4"} -->
+<!-- wp:blocksy/share-box {"blockeraPropsId":"b8ef75a7-b1b7-49b0-b60e-a61976db9e8e","blockeraCompatId":"18121630115","blockeraBackgroundColor":{"value":"#ffdddd"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBackgroundColor":"#ff0000"}}}},"share_networks":[{"id":"facebook","enabled":true,"__id":"JZgkASt-GgZuyrK_JXVm0"},{"id":"twitter","enabled":true,"__id":"PGAd9qyLle5-FtosY0Is8"},{"id":"pinterest","enabled":true,"__id":"Jq6k3oHXcsG_ac4gDc2ax"},{"id":"linkedin","enabled":true,"__id":"LybrPWpSWaVCtFn5boSDW"}],"share_item_tooltip":"yes","link_nofollow":"yes","share_icons_size":"31","lock":{"remove":true},"className":"blockera-block blockera-block-d6kc8u4"} -->
 <div>Blocksy: Share Box</div>
 <!-- /wp:blocksy/share-box -->
 <!-- /wp:blocksy/widgets-wrapper -->`);

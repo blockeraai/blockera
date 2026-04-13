@@ -22,13 +22,61 @@ export function openInserter() {
 	});
 }
 
-export function setBlockState(state) {
-	cy.getByAriaLabel('Blockera Block State Container')
+export function setBlockState(state, blockType) {
+	if (blockType === 'master-block') {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.first()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.click({ force: true });
+			});
+	} else {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.last()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.click({ force: true });
+			});
+	}
+}
+
+export function resetBlockState(state, blockType) {
+	if (blockType === 'master-block') {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.first()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.parent()
+					.parent()
+					.within(() => {
+						cy.getByAriaLabel('More Options').click({
+							force: true,
+						});
+					});
+			});
+	} else {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.last()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.parent()
+					.parent()
+					.within(() => {
+						cy.getByAriaLabel('More Options').click({
+							force: true,
+						});
+					});
+			});
+	}
+
+	cy.get('.components-popover__content')
 		.last()
 		.within(() => {
-			cy.getByDataCy('group-control-header')
-				.contains(state)
-				.click({ force: true });
+			cy.getByDataTest('reset-button').click({ force: true });
 		});
 }
 

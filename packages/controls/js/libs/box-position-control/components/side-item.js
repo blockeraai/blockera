@@ -26,7 +26,7 @@ import { SideShape } from './side-shape';
 import { SidePopover } from './side-popover';
 import type { ValueAddon } from '../../../value-addons';
 import type { Side, SideProps, SideReturn } from '../types';
-import { fixLabelText } from '../../box-spacing-control/utils';
+import { fixLabelText } from '../utils';
 
 export function SideItem({
 	side,
@@ -147,7 +147,9 @@ export function SideItem({
 		},
 		movement: 'vertical',
 		onEnd: () => {
-			if (!openPopover) setFocusSide('');
+			if (!openPopover) {
+				setFocusSide('');
+			}
 			setLabelClassName('');
 		},
 		threshold: 0,
@@ -181,6 +183,13 @@ export function SideItem({
 		}
 
 		return '';
+	}
+
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
 	}
 
 	return {
@@ -226,7 +235,7 @@ export function SideItem({
 								onDragStart(event);
 								setFocusSide(sideId);
 							},
-					  }
+						}
 					: {})}
 				onMouseEnter={() => {
 					if (!openPopover && !valueAddonControlProps.isOpen) {
@@ -279,6 +288,7 @@ export function SideItem({
 						'side-' + side,
 						labelClassName
 					)}
+					data-test={dataTest}
 					data-cy={'box-position-label-' + side}
 				>
 					<LabelControl

@@ -3,14 +3,23 @@
  * Blockera dependencies
  */
 import { isValid, type ValueAddon } from '@blockera/controls';
-import { getGradientType, getGradientVAFromIdString } from '@blockera/data';
+import { getGradientType, getGradientVAFromVarString } from '@blockera/data';
 import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
+
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
 
 export function backgroundFromWPCompatibility({
 	attributes,
+	editorSelectedBlockEvent,
+	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockId?: string,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
+	insideBlockInspector: boolean,
 }): Object {
 	if (!isEmptyObject(attributes?.blockeraBackground?.value)) {
 		return attributes;
@@ -18,11 +27,20 @@ export function backgroundFromWPCompatibility({
 
 	//
 	// Background Image
-	//
-	if (attributes?.style?.background?.backgroundImage?.url !== undefined) {
+	// Check block-level style (insideBlockInspector) or global style context
+	// Block inspector: attributes.style.background.backgroundImage.*
+	// Global styles: attributes.background.backgroundImage.*
+	const bgImageSource = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.background
+		: attributes?.background;
+
+	if (bgImageSource?.backgroundImage?.url !== undefined) {
 		const bgImage = {
 			type: 'image',
-			image: attributes?.style?.background?.backgroundImage?.url,
+			image: bgImageSource.backgroundImage.url,
 			'image-size': 'custom',
 			'image-size-width': 'auto',
 			'image-size-height': 'auto',
@@ -36,12 +54,11 @@ export function backgroundFromWPCompatibility({
 			order: 0,
 		};
 
-		if (attributes?.style?.background?.backgroundSize) {
-			switch (attributes?.style?.background?.backgroundSize) {
+		if (bgImageSource.backgroundSize) {
+			switch (bgImageSource.backgroundSize) {
 				case 'cover':
 				case 'contain':
-					bgImage['image-size'] =
-						attributes?.style?.background?.backgroundSize;
+					bgImage['image-size'] = bgImageSource.backgroundSize;
 					break;
 
 				case 'auto':
@@ -52,15 +69,13 @@ export function backgroundFromWPCompatibility({
 
 				default:
 					bgImage['image-size'] = 'custom';
-					bgImage['image-size-width'] =
-						attributes?.style?.background?.backgroundSize;
+					bgImage['image-size-width'] = bgImageSource.backgroundSize;
 					break;
 			}
 		}
 
-		if (attributes?.style?.background?.backgroundPosition) {
-			const position =
-				attributes?.style?.background?.backgroundPosition.split(' ');
+		if (bgImageSource.backgroundPosition) {
+			const position = bgImageSource.backgroundPosition.split(' ');
 
 			bgImage['image-position'] = {
 				top: position[0] ?? '',
@@ -68,9 +83,8 @@ export function backgroundFromWPCompatibility({
 			};
 		}
 
-		if (attributes?.style?.background?.backgroundRepeat) {
-			bgImage['image-repeat'] =
-				attributes?.style?.background?.backgroundRepeat;
+		if (bgImageSource.backgroundRepeat) {
+			bgImage['image-repeat'] = bgImageSource.backgroundRepeat;
 		}
 
 		attributes.blockeraBackground = {
@@ -89,15 +103,33 @@ export function backgroundFromWPCompatibility({
 
 	// gradient attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
-	if (attributes?.gradient !== undefined) {
-		gradient = getGradientVAFromIdString(attributes?.gradient);
-
-		if (isValid(gradient)) {
-			gradientType = getGradientType(gradient);
+	if (
+		attributes?.gradient !== undefined ||
+		attributes?.color?.gradient !== undefined
+	) {
+		if (
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
+			gradient = getGradientVAFromVarString(
+				`var:preset|gradient|${attributes?.gradient}`
+			);
+		} else {
+			gradient = getGradientVAFromVarString(attributes?.color?.gradient);
 		}
+
+		gradientType = getGradientType(gradient);
 	}
 	// style.color.background is not variable
-	else if (attributes?.style?.color?.gradient !== undefined) {
+	else if (
+		runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		) &&
+		attributes?.style?.color?.gradient !== undefined
+	) {
 		gradient = attributes?.style?.color?.gradient;
 		gradientType = getGradientType(attributes?.style?.color?.gradient);
 	}
@@ -156,24 +188,47 @@ export function backgroundFromWPCompatibility({
 export function backgroundToWPCompatibility({
 	newValue,
 	ref,
+	editorSelectedBlockEvent,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
+		if (
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
+			return {
+				style: {
+					background: {
+						backgroundImage: undefined,
+						backgroundSize: undefined,
+						backgroundPosition: undefined,
+						backgroundRepeat: undefined,
+					},
+					color: {
+						gradient: undefined,
+					},
+				},
+				gradient: undefined,
+			};
+		}
+
 		return {
-			style: {
-				background: {
-					backgroundImage: undefined,
-					backgroundSize: undefined,
-					backgroundPosition: undefined,
-					backgroundRepeat: undefined,
-				},
-				color: {
-					gradient: undefined,
-				},
+			background: {
+				backgroundImage: undefined,
+				backgroundSize: undefined,
+				backgroundPosition: undefined,
+				backgroundRepeat: undefined,
 			},
-			gradient: undefined,
+			color: {
+				gradient: undefined,
+			},
 		};
 	}
 
@@ -197,37 +252,57 @@ export function backgroundToWPCompatibility({
 					break;
 				}
 
-				result = mergeObject(result, {
-					style: {
-						background: {
-							backgroundImage: {
-								url: item?.image,
-								source: 'file',
-								id: 0,
-								title: 'background image',
-							},
-							backgroundPosition: `${item['image-position'].top} ${item['image-position'].left}`,
-						},
+				const bgImageObj: {
+					backgroundImage: {
+						url: string,
+						source: string,
+						id: number,
+						title: string,
 					},
-				});
+					backgroundPosition: string,
+					backgroundSize?: string,
+					backgroundRepeat?: string,
+				} = {
+					backgroundImage: {
+						url: item?.image,
+						source: 'file',
+						id: 0,
+						title: 'background image',
+					},
+					backgroundPosition: `${item['image-position'].top} ${item['image-position'].left}`,
+				};
 
 				switch (item['image-size']) {
 					case 'cover':
 					case 'contain':
-						result.style.background.backgroundSize =
-							item['image-size'];
+						bgImageObj.backgroundSize = item['image-size'];
 						break;
 
 					default:
-						result.style.background.backgroundSize =
-							item['image-size-width'];
+						bgImageObj.backgroundSize = item['image-size-width'];
 						break;
 				}
 
-				result.style.background.backgroundRepeat =
-					item['image-repeat'] === 'no-repeat'
-						? 'no-repeat'
+				bgImageObj.backgroundRepeat =
+					'no-repeat' === item['image-repeat']
+						? item['image-repeat']
 						: undefined;
+
+				const bgImageData = {
+					background: bgImageObj,
+				};
+
+				result = mergeObject(
+					result,
+					runInsideBlockInspector(
+						insideBlockInspector,
+						editorSelectedBlockEvent
+					)
+						? {
+								style: bgImageData,
+							}
+						: bgImageData
+				);
 
 				processedItems.push(item?.type);
 
@@ -244,9 +319,22 @@ export function backgroundToWPCompatibility({
 					gradient = item[item?.type]?.settings?.id;
 
 					if (gradient !== undefined) {
-						result = mergeObject(result, {
-							gradient,
-						});
+						if (
+							runInsideBlockInspector(
+								insideBlockInspector,
+								editorSelectedBlockEvent
+							)
+						) {
+							result = mergeObject(result, {
+								gradient,
+							});
+						} else {
+							result = mergeObject(result, {
+								color: {
+									gradient: `var:preset|gradient|${gradient}`,
+								},
+							});
+						}
 					} else {
 						break;
 					}
@@ -263,13 +351,23 @@ export function backgroundToWPCompatibility({
 						);
 					}
 
-					result = mergeObject(result, {
-						style: {
-							color: {
-								gradient,
-							},
+					const gradientData = {
+						color: {
+							gradient,
 						},
-					});
+					};
+
+					result = mergeObject(
+						result,
+						runInsideBlockInspector(
+							insideBlockInspector,
+							editorSelectedBlockEvent
+						)
+							? {
+									style: gradientData,
+								}
+							: gradientData
+					);
 				}
 
 				processedItems.push('linear-gradient');

@@ -95,22 +95,27 @@ describe('border-control component testing', () => {
 				name,
 			});
 
-			cy.get('.blockera-control-border-color-wrapper').next().click();
-			cy.get('ul').children('li').last().click();
-
-			cy.get('.blockera-control-border-color-wrapper').next().click();
-			cy.get('ul')
-				.children('li')
+			// @wordpress/components CustomSelectControl (Ariakit) uses listbox/option roles, not ul/li.
+			cy.getByDataTest('border-control-component')
+				.find('[aria-haspopup="listbox"]')
+				.click();
+			cy.get('[role="listbox"]:visible')
+				.find('[role="option"]')
 				.last()
-				.should('have.attr', 'aria-selected')
-				.should('include', 'true');
+				.click();
+
+			cy.getByDataTest('border-control-component')
+				.find('[aria-haspopup="listbox"]')
+				.click();
+			cy.get('[role="listbox"]:visible')
+				.find('[role="option"]')
+				.last()
+				.should('have.attr', 'aria-selected', 'true');
 
 			// Check data provider value!
-			cy.get('.blockera-control-border-color-wrapper')
-				.next()
-				.then(() => {
-					expect('double').to.be.equal(getControlValue(name).style);
-				});
+			cy.getByDataTest('border-control-component').then(() => {
+				expect('double').to.be.equal(getControlValue(name).style);
+			});
 		});
 
 		describe('color picker :', () => {
@@ -127,21 +132,25 @@ describe('border-control component testing', () => {
 
 				cy.getByDataTest('border-control-color').click();
 				cy.contains('Color Picker')
-					.parent()
-					.get('input[maxlength="9"]')
+					.closest('.blockera-component-popover')
+					.find('[data-cy="color-picker-css-value"]')
 					.clear();
 				cy.contains('Color Picker')
-					.parent()
-					.get('input[maxlength="9"]')
-					.type('cccccc');
+					.closest('.blockera-component-popover')
+					.find('[data-cy="color-picker-css-value"]')
+					.type('#cccccc');
 
 				cy.getByDataTest('border-control-color')
 					.should('have.attr', 'style')
-					.should('include', 'cccccc');
+					.should('include', '#cccccc');
 
 				// Check data provider value!
 				cy.getByDataTest('border-control-color').then(() => {
-					expect('#cccccc').to.be.equal(getControlValue(name).color);
+					const raw = getControlValue(name).color;
+					const normalized = raw?.startsWith?.('#')
+						? raw.slice(1)
+						: raw;
+					expect(normalized.toLowerCase()).to.equal('cccccc');
 				});
 			});
 
@@ -163,7 +172,11 @@ describe('border-control component testing', () => {
 
 				//Check data provider value!
 				cy.getByDataTest('border-control-color').then(() => {
-					expect('#cccccc').to.be.equal(getControlValue(name).color);
+					const raw = getControlValue(name).color;
+					const normalized = raw?.startsWith?.('#')
+						? raw.slice(1)
+						: raw;
+					expect(normalized.toLowerCase()).to.equal('cccccc');
 				});
 
 				//Clear color
@@ -294,9 +307,9 @@ describe('border-control component testing', () => {
 						name,
 					});
 
+					// CustomSelectControl renders a trailing VisuallyHidden sibling; `is-focused` is on the select root.
 					cy.getByDataTest('border-control-component')
-						.children()
-						.last()
+						.find('.components-custom-select-control')
 						.should('have.class', 'is-focused');
 				});
 
@@ -314,8 +327,7 @@ describe('border-control component testing', () => {
 					});
 
 					cy.getByDataTest('border-control-component')
-						.children()
-						.last()
+						.find('.components-custom-select-control')
 						.should('have.class', 'is-focused');
 
 					cy.getByDataTest('border-control-component')

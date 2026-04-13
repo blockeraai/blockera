@@ -14,7 +14,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const SocialLinks: BlockType = {
 	name: 'blockeraSocialLinks',
@@ -50,5 +50,10 @@ export const SocialLinks: BlockType = {
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
+	},
+	selectors: {
+		'blockera/elements/item-icons': {
+			root: '.block-editor-block-icon svg',
+		},
 	},
 };

@@ -23,10 +23,10 @@ import { store as extensionStore } from '../store';
  *
  * @property {string}             name          Block extension type's namespaced name.
  * @property {Object}             [attributes]  Block extension attributes.
- * @property {WPComponent}        [Save]        Optional component describing
+ * @property {*}                  [Save]        Optional component describing
  *                                              serialized markup structure of a
  *                                              block extension type.
- * @property {WPComponent}        Edit          Component rendering an element to
+ * @property {*}                  Edit          Component rendering an element to
  *                                              manipulate the attributes of a block
  *                                              in the context of an editor.
  * @property {Object}             [example]     Example provides structured data for

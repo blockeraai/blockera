@@ -66,6 +66,8 @@ const RepeaterItem = ({
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
 		popoverTitleButtonsRight: PopoverTitleButtonsRight,
+		actionButtonsType,
+		actionMenuButtonLabel,
 	} = useContext(RepeaterContext);
 
 	const repeaterItemActionsProps = {
@@ -181,6 +183,8 @@ const RepeaterItem = ({
 						)
 					}
 					popoverClassName={popoverClassName}
+					actionButtonsType={actionButtonsType}
+					actionMenuButtonLabel={actionMenuButtonLabel}
 					className={controlInnerClassNames(
 						'repeater-item-group',
 						item?.__className,
@@ -197,8 +201,9 @@ const RepeaterItem = ({
 									'repeater-group-header'
 								)}
 								onClick={(event) => {
-									if (isOpenPopoverEvent(event))
+									if (isOpenPopoverEvent(event)) {
 										setOpen(!isOpen);
+									}
 									changeRepeaterItem({
 										itemId,
 										value: {

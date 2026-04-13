@@ -24,14 +24,12 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockera/core/image'               => [
-					'root' => '.wp-block-image img',
-				],
 				'blockera/elements/gallery-caption' => [
 					'root' => '> figcaption',
 				],
 				'blockera/elements/image-caption'   => [
-					'root' => 'figure.wp-block-image figcaption',
+					// Double ".wp-block-image" to make sure it has more specificity than the gallery caption.
+					'root' => 'figure.wp-block-image.wp-block-image figcaption.wp-element-caption',
 				],
 			]
 		),

@@ -75,7 +75,7 @@ export function SidePopover({
 								aria-label={__('Remove value', 'blockera')}
 								disabled={!hasValue}
 							>
-								<Icon icon="trash" size="20" />
+								<Icon icon="trash" iconSize="20" />
 							</Button>
 						</>
 					}

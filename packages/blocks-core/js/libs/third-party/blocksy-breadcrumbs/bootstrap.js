@@ -10,7 +10,6 @@ import { addFilter } from '@wordpress/hooks';
  */
 import { mergeObject } from '@blockera/utils';
 import { getBaseBreakpoint } from '@blockera/editor';
-import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
 import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 import type { ControlContextRef } from '@blockera/controls';
 
@@ -33,20 +32,14 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId } = blockDetail;
 
-			if (
-				blockId !== 'blocksy/breadcrumbs' ||
-				isBlockNotOriginalState(blockDetail)
-			) {
+			if (blockId !== 'blocksy/breadcrumbs') {
 				return attributes;
 			}
 
 			//
 			// Text color only on base device and normal state
 			//
-			if (
-				!isBlockNotOriginalState(blockDetail) &&
-				!attributes?.blockeraFontColor?.value
-			) {
+			if (!attributes?.blockeraFontColor?.value) {
 				attributes = colorFromWPCompatibility({
 					attributes,
 					element: 'elements/text',
@@ -92,7 +85,9 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			}
 
 			return attributes;
-		}
+		},
+		// Priority 9 to run before wp text color compatibility filter.
+		9
 	);
 
 	addFilter(

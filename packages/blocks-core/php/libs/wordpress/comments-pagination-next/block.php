@@ -13,6 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'root' => '.wp-block-comments-pagination-next',
 				'blockera/elements/arrow' => [
 					'root' => '.wp-block-comments-pagination-next-arrow',
 				],

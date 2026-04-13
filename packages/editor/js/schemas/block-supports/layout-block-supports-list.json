@@ -7,31 +7,15 @@
 			"id": "blockeraGap",
 			"definition": "Gap",
 			"css-property": "gap",
-			"fallback": ["gap"],
+			"fallback": ["gap", "flex", "layout"],
 			"description": "Support for \"blockeraGap\" value, this is mirror for WordPress block core \"gap\" support"
-		},
-		"blockeraFlexChildSizing": {
-			"status": true,
-			"id": "blockeraFlexChildSizing",
-			"definition": "Flex",
-			"css-property": "flex",
-			"fallback": ["flex"],
-			"description": "Support for \"blockeraFlexChildSizing\" value, this is mirror for WordPress block core \"flex\" support"
-		},
-		"blockeraFlexChildOrder": {
-			"status": true,
-			"id": "blockeraFlexChildOrder",
-			"definition": "Order",
-			"css-property": "order",
-			"fallback": ["order"],
-			"description": "Support for \"blockeraFlexChildOrder\" value, this is mirror for WordPress block core \"order\" support"
 		},
 		"blockeraDisplay": {
 			"status": true,
 			"id": "blockeraDisplay",
 			"definition": "Display",
 			"css-property": "display",
-			"fallback": ["display"],
+			"fallback": ["display", "layout"],
 			"description": "Support for \"blockeraDisplay\" value, this is mirror for WordPress block core \"display\" support"
 		},
 		"blockeraFlexWrap": {
@@ -39,23 +23,15 @@
 			"id": "blockeraFlexWrap",
 			"definition": "FlexWrap",
 			"css-property": "flex-wrap",
-			"fallback": ["flex-wrap"],
+			"fallback": ["flex-wrap", "flex", "layout"],
 			"description": "Support for \"blockeraFlexWrap\" value."
-		},
-		"blockeraFlexChildAlign": {
-			"status": true,
-			"id": "blockeraFlexChildAlign",
-			"definition": "AlignSelf",
-			"css-property": "align-self",
-			"fallback": ["align-self"],
-			"description": "Support for \"blockeraFlexChildAlign\" value."
 		},
 		"blockeraAlignContent": {
 			"status": true,
 			"id": "blockeraAlignContent",
 			"definition": "AlignContent",
 			"css-property": "align-content",
-			"fallback": ["align-content"],
+			"fallback": ["align-content", "flex", "layout"],
 			"description": "Support for \"blockeraAlignContent\" value."
 		},
 		"blockeraFlexLayout": {
@@ -63,8 +39,64 @@
 			"id": "blockeraFlexLayout",
 			"definition": "FlexDirection",
 			"css-property": "flex-direction",
-			"fallback": ["flex-direction"],
+			"fallback": ["flex-direction", "flex", "layout"],
 			"description": "Support for \"blockeraFlexLayout\" value."
+		},
+		"blockeraGridMinimumColumnWidth": {
+			"status": true,
+			"id": "blockeraGridMinimumColumnWidth",
+			"definition": "GridLayout",
+			"css-property": "grid-minimum-column-width",
+			"fallback": ["layout", "grid", "display"],
+			"description": "CSS grid minimum column width (mirrors WordPress layout.minimumColumnWidth)."
+		},
+		"blockeraGridColumnCount": {
+			"status": true,
+			"id": "blockeraGridColumnCount",
+			"definition": "GridLayout",
+			"css-property": "grid-column-count",
+			"fallback": ["layout", "grid", "display"],
+			"description": "CSS grid column count (mirrors WordPress layout.columnCount)."
+		},
+		"blockeraFlexChildAlign": {
+			"status": true,
+			"id": "blockeraFlexChildAlign",
+			"definition": "AlignSelf",
+			"css-property": "align-self",
+			"fallback": ["align-self", "flex-child", "flex", "layout"],
+			"description": "Support for \"blockeraFlexChildAlign\" value."
+		},
+		"blockeraFlexChildSizing": {
+			"status": true,
+			"id": "blockeraFlexChildSizing",
+			"definition": "Flex",
+			"css-property": "flex",
+			"fallback": ["flex-child", "flex", "layout"],
+			"description": "Support for \"blockeraFlexChildSizing\" value, this is mirror for WordPress block core \"flex\" support"
+		},
+		"blockeraFlexChildOrder": {
+			"status": true,
+			"id": "blockeraFlexChildOrder",
+			"definition": "Order",
+			"css-property": "order",
+			"fallback": ["order", "flex-child", "flex", "layout"],
+			"description": "Support for \"blockeraFlexChildOrder\" value, this is mirror for WordPress block core \"order\" support"
+		},
+		"blockeraGridChildColumnSpan": {
+			"status": true,
+			"id": "blockeraGridChildColumnSpan",
+			"definition": "GridChildColumnSpan",
+			"css-property": "grid-column",
+			"fallback": ["grid-column", "grid-child", "grid", "layout"],
+			"description": "Grid child column span (mirrors core style.layout.columnSpan → grid-column: span n)."
+		},
+		"blockeraGridChildRowSpan": {
+			"status": true,
+			"id": "blockeraGridChildRowSpan",
+			"definition": "GridChildRowSpan",
+			"css-property": "grid-row",
+			"fallback": ["grid-row", "grid-child", "grid", "layout"],
+			"description": "Grid child row span (mirrors core style.layout.rowSpan → grid-row: span n)."
 		}
 	}
 }

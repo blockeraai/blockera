@@ -8,17 +8,13 @@ import {
 	setParentBlock,
 	setInnerBlock,
 	redirectToFrontPage,
+	closeBlockInserter,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 
 describe('Column Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:columns -->
@@ -380,8 +376,10 @@ describe('Column Block', () => {
 	});
 
 	it('Make sure that the column uses flex-basis for width', () => {
-		appendBlocks(`<!-- wp:columns -->
-<div class="wp-block-columns"><!-- wp:column -->
+		// Avoid core's max-width:781px stack rule (flex-basis:100%), which breaks
+		// in CI when the editor canvas is narrower than the medium breakpoint.
+		appendBlocks(`<!-- wp:columns {"isStackedOnMobile":false} -->
+<div class="wp-block-columns is-not-stacked-on-mobile"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
 <p>Paragraph in column 1</p>
 <!-- /wp:paragraph --></div>
@@ -393,6 +391,8 @@ describe('Column Block', () => {
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->`);
+
+		closeBlockInserter();
 
 		// Select target block
 		cy.getBlock('core/paragraph').first().click();
@@ -421,7 +421,7 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		const expectedCSS =
-			'.blockera-block.wp-block-column[style*=flex-basis]{flex-grow:0';
+			'.blockera-block.wp-block-column[style*="flex-basis"]{flex-grow:0';
 
 		//Check block
 		cy.get('link[id^="@blockera/blocks-core-styles-"]')
@@ -450,16 +450,17 @@ describe('Column Block', () => {
 			.should('have.css', 'flex-basis', '30%')
 			.should('not.have.css', 'width', '30%');
 
-		if (enabledOptimizeStyleGeneration) {
-			cy.get('style#blockera-inline-css')
-				.invoke('text')
-				.then((styleContent) => {
-					cy.normalizeCSSContent(styleContent).then(
-						(normalizedContent) => {
-							expect(normalizedContent).to.include(expectedCSS);
-						}
-					);
-				});
-		}
+		//Check block
+		cy.get('style[id="blockera-block-column-inline-css"]')
+			.should('exist')
+			.then(($style) => {
+				const styleContent = $style.text();
+
+				cy.normalizeCSSContent(styleContent).then(
+					(normalizedContent) => {
+						expect(normalizedContent).to.include(expectedCSS);
+					}
+				);
+			});
 	});
 });

@@ -5,9 +5,6 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	setInnerBlock,
-	setParentBlock,
-	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -55,6 +52,8 @@ describe('Active Filters Block', () => {
 			cy.customSelect('Clip to Padding');
 		});
 
+		cy.wait(500);
+
 		cy.getBlock('woocommerce/active-filters').should(
 			'have.css',
 			'background-clip',
@@ -66,6 +65,8 @@ describe('Active Filters Block', () => {
 		//
 		savePage();
 		redirectToFrontPage();
+
+		cy.wait(500);
 
 		cy.get('.blockera-block.wp-block-woocommerce-active-filters').should(
 			'have.css',

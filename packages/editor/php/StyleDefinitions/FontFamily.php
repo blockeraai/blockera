@@ -5,19 +5,22 @@ namespace Blockera\Editor\StyleDefinitions;
 class FontFamily extends BaseStyleDefinition {
 
 	protected function css( array $setting): array {
+		if (! isset($setting['type'])) {
+			return [];
+		}
 
-        $declaration = [];
-        $cssProperty = $setting['type'];
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'font-family' !== $cssProperty) {
-
-            return $declaration;
+		$cssProperty = $setting['type'];
+		
+		if ('font-family' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
+			return [];
 		}
 		
-		$this->setDeclaration($cssProperty, 'var(--wp--preset--font-family--' . $setting[ $cssProperty ] . ') !important');
-
+		$value = $setting[ $cssProperty ];
+		
+		$this->declarations[ $cssProperty ] = 'var(--wp--preset--font-family--' . $value . ')';
+		
 		$this->setCss($this->declarations);
-
-        return $this->css;
-    }
+		
+		return $this->css;
+	}
 }

@@ -21,14 +21,13 @@
 		}
 
 		&.is-inactive {
-
-			.blockera-control-group-header > *:not(.blockera-control-action-buttons) {
+			.blockera-control-group-header
+				> *:not(.blockera-control-action-buttons) {
 				opacity: 0.5 !important;
 				user-select: none;
 			}
 
 			.blockera-control-action-buttons {
-
 				.blockera-control-btn-visibility {
 					color: #c70000 !important;
 				}
@@ -41,7 +40,6 @@
 	}
 
 	.blockera-control-group-header {
-
 		.blockera-control-repeater-group-header {
 			display: flex;
 			gap: 8px;
@@ -90,10 +88,9 @@
 					}
 				}
 			}
-
 		}
 
-		.blockera-control-action-buttons {
+		.blockera-control-action-buttons.type-inline {
 			position: absolute;
 			top: 0;
 			bottom: 0;
@@ -110,23 +107,103 @@
 				margin-right: -3px;
 
 				&.blockera-control-btn-visibility {
-
 					&:hover {
-						color: #c70000;
+						color: #e20b0b;
+					}
+				}
+			}
+		}
+
+		.blockera-control-action-buttons.type-menu {
+			display: flex;
+			align-items: center;
+			padding: 0;
+			order: 100;
+			margin: 0 calc(var(--repeater-item-height) * -0.35) 0
+				calc(var(--repeater-item-height) * -0.35);
+			background: transparent;
+		}
+	}
+
+	.blockera-control-group {
+		.blockera-control-action-buttons.type-menu {
+			margin: 0 -8px 0 -10px;
+		}
+
+		&:not(.is-selected-item) {
+			.blockera-control-action-buttons.type-menu {
+				.blockera-control-dropdown-menu {
+					.components-button.components-dropdown-menu__toggle {
+						opacity: 0.5;
+
+						&:hover,
+						&.is-opened {
+							color: var(
+								--blockera-controls-primary-color
+							) !important;
+							opacity: 1 !important;
+						}
+					}
+				}
+			}
+		}
+
+		&.is-selected-item {
+			.blockera-control-action-buttons.type-menu {
+				.blockera-control-dropdown-menu {
+					.components-button.components-dropdown-menu__toggle {
+						opacity: 1;
+
+						&:hover,
+						&.is-opened {
+							color: currentColor !important;
+							opacity: 1 !important;
+						}
 					}
 				}
 			}
 		}
 	}
 
-	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
-	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
+	.blockera-control-repeater-item.is-inactive
+		.blockera-control-group-header
+		.blockera-control-action-buttons.type-menu {
+		.blockera-control-dropdown-menu {
+			.components-button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+		}
+	}
+
+	.blockera-control-group.is-open
+		.blockera-control-action-buttons.type-menu:not(:empty),
+	.blockera-control-group.is-hovered
+		.blockera-control-action-buttons.type-menu:not(:empty),
+	.blockera-control-group-header:hover
+		.blockera-control-action-buttons.type-menu:not(:empty) {
+		.blockera-control-dropdown-menu {
+			.components-button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+		}
+	}
+
+	.blockera-control-group.is-hovered
+		.blockera-control-action-buttons.type-inline:not(:empty),
+	.blockera-control-group-header:hover
+		.blockera-control-action-buttons.type-inline:not(:empty) {
 		opacity: 1;
 		visibility: visible;
 	}
 
-	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values,
-	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
+	.blockera-control-group.is-hovered
+		.blockera-control-action-buttons.type-inline:not(:empty)
+		+ .blockera-control-repeater-group-header
+		.blockera-control-header-values,
+	.blockera-control-group-header:hover
+		.blockera-control-action-buttons.type-inline:not(:empty)
+		+ .blockera-control-repeater-group-header
+		.blockera-control-header-values {
 		opacity: 0;
 		visibility: hidden;
 	}
@@ -135,7 +212,7 @@
 		margin-left: auto;
 		display: flex;
 		flex-direction: row;
-		gap: 10px;
+		gap: 8px;
 		font-size: 12px;
 
 		.blockera-control-btn-add {
@@ -152,7 +229,6 @@
 	}
 
 	.blockera-control-repeater-items-container {
-
 		&:empty {
 			display: none;
 		}
@@ -184,7 +260,6 @@
 		}
 
 		.blockera-control-repeater-header-action-buttons {
-
 			.blockera-control-btn-add {
 				padding: 0 10px 0 3px !important;
 				width: auto;
@@ -216,6 +291,7 @@
 	margin-top: -8px;
 }
 
-.components-panel__body-title + .blockera-control-repeater.design-large:last-child {
+.components-panel__body-title
+	+ .blockera-control-repeater.design-large:last-child {
 	margin-bottom: -5px;
 }

@@ -187,7 +187,7 @@ class AdminAssetsProvider extends AssetsProvider {
 
 		return $this->telemetryInlineScripts() . 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
-				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
+				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( array_keys( blockera_get_available_blocks() ) ) . ';
 				window.blockeraDefaultSettings = ' . wp_json_encode( $blockera_default_settings ) . ';
 				window.blockeraSettings = ' . wp_json_encode( $blockera_settings ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";

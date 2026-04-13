@@ -1,17 +1,14 @@
 {
-	"extends": "@wordpress/stylelint-config",
-	"syntax": "postcss-scss",
 	"customSyntax": "postcss-scss",
+	"extends": ["@wordpress/stylelint-config"],
 	"rules": {
-		"string-quotes": "double",
 		"function-url-quotes": "always",
 		"no-descending-specificity": null,
 		"selector-class-pattern": null,
-		"indentation": null,
 		"color-hex-length": "long",
-		"rule-empty-line-before": "always",
-		"comment-empty-line-before": "never",
-		"value-keyword-case": null
+		"comment-empty-line-before": null,
+		"value-keyword-case": null,
+		"rule-empty-line-before": null
 	},
 	"ignoreFiles": [
 		"coverage/**/*.css",

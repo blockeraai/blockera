@@ -2,6 +2,7 @@
 !.*
 /node_modules/*
 /packages/dev-cypress/*
+/packages/dev-playwright/*
 /packages/freemius-sdk/*
 /.patch/*
 /.storybook/*
@@ -11,7 +12,10 @@ node_modules/*
 vendor/*
 assets/*
 wordpress*
+source-code-block-editor
+source-code-wordpress
 **/test/*
 **/stories/*
 /bin/plugin/**
 /bin/*.js
+tests/**/input.html

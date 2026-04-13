@@ -1,0 +1,13 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "id=\"wp-block-search__input-\\d+\"",
+			"replace": "id=\"wp-block-search__input\""
+		},
+		{
+			"search": "for=\"wp-block-search__input-\\d+\"",
+			"replace": "for=\"wp-block-search__input\""
+		}
+	]
+}

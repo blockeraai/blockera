@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isString, isUndefined } from '@blockera/utils';
+import { isBlockTheme, isString, isUndefined, isObject } from '@blockera/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
@@ -16,6 +16,7 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
  */
 import { STORE_NAME } from '../store';
 import { generateVariableString, getBlockEditorSettings } from './index';
+import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getColors: () => Array<VariableItem> = memoize(
@@ -145,8 +146,32 @@ export const getColorVAFromIdString: (value: string) => ValueAddon | string =
 
 export const getColorVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
-		if (isString(value) && value.startsWith('var:')) {
-			return getColorVAFromIdString(value.split('|')[2]);
+		if (isString(value)) {
+			const { id, varString } = parseVarString(value, 'color');
+
+			if (id) {
+				const colorVA = getColorVAFromIdString(id);
+
+				if (isObject(colorVA)) {
+					return colorVA;
+				}
+
+				// same value means the variable not found but should be returned as not found
+				if (colorVA === id && varString) {
+					return {
+						settings: {
+							name: id,
+							id: value,
+							value: `var(${varString})`,
+							type: 'color',
+							var: varString,
+						},
+						name: id,
+						isValueAddon: true,
+						valueType: 'variable',
+					};
+				}
+			}
 		}
 
 		return value;

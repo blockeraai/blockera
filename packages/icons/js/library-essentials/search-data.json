@@ -46,5 +46,11 @@
 		"title": "Time Border",
 		"library": "essentials",
 		"tags": ["time", "clock", "timer", "stopwatch"]
+	},
+	{
+		"iconName": "thunder",
+		"title": "Thunder",
+		"library": "essentials",
+		"tags": ["thunder", "lightning"]
 	}
 ]

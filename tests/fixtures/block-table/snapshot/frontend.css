@@ -1,0 +1,173 @@
+.blockera-block.blockera-block-1.wp-block-table > table {
+	background-color: #ffe1e1;
+}
+
+.blockera-block.blockera-block-1.wp-block-table {
+	width: 100%;
+	min-width: 100px;
+	max-width: 400px !important;
+}
+
+.blockera-block.blockera-block-1.wp-block-table > table:hover {
+	background-color: #ff3939;
+}
+
+.blockera-block.blockera-block-1.wp-block-table:hover {
+	width: 50%;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table {
+	background-color: #ffd7d7;
+	background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+}
+
+.blockera-block.blockera-block-2.wp-block-table {
+	padding-top: 50px;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption {
+	background-color: #FFC7C7;
+	padding: 5px 10px 5px 10px;
+	border-radius: 50px;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) thead th {
+	background-color: #484848;
+	color: #ffffff;
+	border: 1px solid #ff0000;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) tbody td {
+	background-color: #909090;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) tfoot td {
+	background-color: #a0a0a0;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) :is(strong, b) {
+	background-color: #ff0000;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) :is(em, i) {
+	background-color: #ff8800;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) kbd {
+	background-color: #4ed739;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) code {
+	background-color: #00c8ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) span:not([data-rich-text-placeholder]) {
+	background-color: #6f00ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) :is(mark, mark[class]) {
+	background-color: #0022ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::before {
+	padding: 5px 10px 5px 10px;
+	content: "Before caption";
+	display: inline-block !important;
+	background-color: #00000036;
+	border-radius: 50px;
+}
+
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::after {
+	display: inline-block !important;
+	content: "After Caption";
+	padding: 5px 10px 5px 10px;
+	background-color: #0000003d;
+	border-radius: 50px;
+}
+
+@media screen and (max-width: 478px) {
+	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption {
+		border-radius: 10px;
+		display: flex !important;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 10px;
+		padding: 5px 10px 5px 10px;
+		margin-top: 20px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::before {
+		border-radius: 10px;
+		content: "Before caption";
+	}
+
+	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::after {
+		border-radius: 10px;
+		content: "After Caption";
+	}
+
+}
+
+.blockera-block.blockera-block-2.wp-block-table:hover {
+	padding-top: 100px;
+}
+
+.blockera-block.blockera-block-2.wp-block-table::before {
+	padding: 5px 10px 5px 10px;
+	display: inline-block !important;
+	background-color: #0000002e;
+	border-radius: 50px;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-table::before {
+		border-radius: 10px;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-2.wp-block-table::after {
+	padding: 5px 10px 5px 10px;
+	background-color: #0000003b;
+	display: inline-block !important;
+	border-radius: 50px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-table::after {
+		border-radius: 10px;
+		content: "After";
+	}
+
+}
+
+.blockera-block-2 :where(.blockera-block-2-child-1) {
+	color: #ffcaca;
+}
+
+.blockera-block-2 :where(.blockera-block-2-child-2) {
+	background-color: #ffd7d7;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-1) {
+	background-color: #ffe1e1;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

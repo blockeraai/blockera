@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import equal from 'fast-deep-equal';
 
 /**
@@ -16,7 +15,9 @@ export const arraySortItems = ({
 	toIndex,
 	fromIndex,
 }: Object): Array<any> => {
-	if (fromIndex === toIndex) return args;
+	if (fromIndex === toIndex) {
+		return args;
+	}
 
 	const newArr = args.slice();
 	const item = newArr[fromIndex];
@@ -40,11 +41,12 @@ export const toObject = (arr: Array<any>): Object => {
 	return arr.reduce((acc, cur) => Object.assign(acc, cur), {});
 };
 
-export const isEquals: (a: any, b: any) => boolean = memoize(
-	(a: any, b: any): boolean => {
-		return equal(a, b);
-	}
-);
+export const isEquals: (a: any, b: any) => boolean = (
+	a: any,
+	b: any
+): boolean => {
+	return equal(a, b);
+};
 
 export const indexOf = (arr: Array<any>, q: string): number => {
 	if (isUndefined(arr)) {

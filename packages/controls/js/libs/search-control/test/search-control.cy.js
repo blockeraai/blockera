@@ -127,10 +127,10 @@ describe('search control component testing', () => {
 				value: '',
 			});
 
+			// WP InputControl merges className onto BaseControl's outer wrapper, not
+			// `.components-base-control__field` (see @wordpress/components BaseControl).
 			getSearchInput()
-				.parent()
-				.parent()
-				.parent()
+				.closest('.components-search-control')
 				.should('have.class', 'is-hovered');
 		});
 		it('pass is-focused className', () => {
@@ -140,9 +140,7 @@ describe('search control component testing', () => {
 			});
 
 			getSearchInput()
-				.parent()
-				.parent()
-				.parent()
+				.closest('.components-search-control')
 				.should('have.class', 'is-focused');
 		});
 

@@ -64,7 +64,7 @@ describe('Avatar Block', () => {
 		// Min Width
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.get('input').type(80);
 		});
 		cy.getBlock('core/avatar')
@@ -77,7 +77,7 @@ describe('Avatar Block', () => {
 		// Max Width
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Width');
-		cy.getParentContainer('Max').within(() => {
+		cy.getParentContainer('Max Width').within(() => {
 			cy.get('input').type(120);
 		});
 		cy.getBlock('core/avatar')
@@ -104,11 +104,9 @@ describe('Avatar Block', () => {
 		// Min Height
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
-		cy.getParentContainer('Min')
-			.eq(1)
-			.within(() => {
-				cy.get('input').type(80);
-			});
+		cy.getParentContainer('Min Height').within(() => {
+			cy.get('input').type(80);
+		});
 		cy.getBlock('core/avatar')
 			.first()
 			.within(() => {
@@ -119,11 +117,9 @@ describe('Avatar Block', () => {
 		// Max Height
 		//
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Height');
-		cy.getParentContainer('Max')
-			.eq(1)
-			.within(() => {
-				cy.get('input').type(120);
-			});
+		cy.getParentContainer('Max Height').within(() => {
+			cy.get('input').type(120);
+		});
 		cy.getBlock('core/avatar')
 			.first()
 			.within(() => {
@@ -133,7 +129,7 @@ describe('Avatar Block', () => {
 		//
 		// Border
 		//
-		cy.getParentContainer('Border Line').as('borderContainer');
+		cy.getParentContainer('Border').as('borderContainer');
 		cy.get('@borderContainer').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
@@ -146,8 +142,12 @@ describe('Avatar Block', () => {
 		cy.getByDataTest('popover-body')
 			.first()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
+					delay: 0,
+				});
 			});
 
 		cy.get('@borderContainer').within(() => {
@@ -185,12 +185,14 @@ describe('Avatar Block', () => {
 		cy.get('.block-editor-block-inspector').within(() => {
 			// the range slide for image size should be hidden
 			cy.get(
-				'.components-panel__body .components-range-control .components-base-control__label'
+				'.components-tools-panel .components-range-control .components-base-control__label'
 			).should('not.visible');
-			cy.get('.components-panel__body .components-range-control').should(
+
+			cy.get('.components-tools-panel .components-range-control').should(
 				'not.visible'
 			);
-			cy.get('.components-panel__body .components-toggle-control').should(
+
+			cy.get('.components-tools-panel .components-toggle-control').should(
 				'be.visible'
 			);
 		});

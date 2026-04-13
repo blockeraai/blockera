@@ -1,5 +1,5 @@
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import { getBlockInserter } from '@blockera/dev-cypress/js/helpers/editor';
+import { openBlockInserter } from '@blockera/dev-cypress/js/helpers/editor';
 
 describe('Block Settings tests ...', () => {
 	beforeEach(() => {
@@ -15,9 +15,7 @@ describe('Block Settings tests ...', () => {
 			'blockera-block-icon'
 		);
 
-		getBlockInserter().within(($el) => {
-			$el[0].click();
-		});
+		openBlockInserter();
 
 		cy.getByDataTest('Paragraph Block Icon').should(
 			'have.class',

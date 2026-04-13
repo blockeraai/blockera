@@ -1,5 +1,5 @@
 .wp-block-image.blockera-is-icon-block .wp-block-image__icon {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 }
 
@@ -10,5 +10,7 @@
 	vertical-align: bottom;
 	fill: var(--blockera--icon--color, currentColor);
 	color: var(--blockera--icon--color, inherit);
-	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg))
+		scaleX(var(--blockera--icon--flip-horizontal, 1))
+		scaleY(var(--blockera--icon--flip-vertical, 1));
 }

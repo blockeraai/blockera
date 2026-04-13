@@ -1,10 +1,11 @@
 import {
 	savePage,
+	createPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-	createPost,
 	setBoxPositionSide,
+	openBoxPositionSide,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Box Position → Functionality', () => {
@@ -23,16 +24,16 @@ describe('Box Position → Functionality', () => {
 				cy.customSelect('Relative');
 			});
 
-			cy.getByAriaLabel('Top Position').click();
+			openBoxPositionSide('top');
 			cy.getByAriaLabel('Set 10px').click();
 
-			cy.getByAriaLabel('Right Position').click();
+			openBoxPositionSide('right');
 			cy.getByAriaLabel('Set 60px').click();
 
-			cy.getByAriaLabel('Bottom Position').click();
+			openBoxPositionSide('bottom');
 			cy.getByAriaLabel('Set 30px').click();
 
-			cy.getByAriaLabel('Left Position').click();
+			openBoxPositionSide('left');
 			cy.getByAriaLabel('Set 80px').click();
 
 			//Check block
@@ -61,7 +62,7 @@ describe('Box Position → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.blockera-block').as('element-style');
+			cy.get('p.blockera-block').as('element-style');
 
 			cy.get('@element-style').should('have.css', 'position', 'relative');
 
@@ -555,16 +556,16 @@ describe('Box Position → Functionality', () => {
 			cy.customSelect('Relative');
 		});
 
-		cy.getByAriaLabel('Top Position').click();
+		openBoxPositionSide('top');
 		cy.getByAriaLabel('Set 10px').click();
 
-		cy.getByAriaLabel('Right Position').click();
+		openBoxPositionSide('right');
 		cy.getByAriaLabel('Set 60px').click();
 
-		cy.getByAriaLabel('Bottom Position').click();
+		openBoxPositionSide('bottom');
 		cy.getByAriaLabel('Set 30px').click();
 
-		cy.getByAriaLabel('Left Position').click();
+		openBoxPositionSide('left');
 		cy.getByAriaLabel('Set 80px').click();
 
 		//Check store
@@ -583,7 +584,7 @@ describe('Box Position → Functionality', () => {
 		//
 		// Top Position
 		//
-		cy.getByAriaLabel('Top Position').click();
+		openBoxPositionSide('top');
 		cy.get('.blockera-component-popover.position-edit-popover')
 			.last()
 			.within(() => {
@@ -599,7 +600,7 @@ describe('Box Position → Functionality', () => {
 		//
 		// Right Position
 		//
-		cy.getByAriaLabel('Right Position').click();
+		openBoxPositionSide('right');
 		cy.get('.blockera-component-popover.position-edit-popover')
 			.last()
 			.within(() => {
@@ -615,7 +616,7 @@ describe('Box Position → Functionality', () => {
 		//
 		// Bottom Position
 		//
-		cy.getByAriaLabel('Bottom Position').click();
+		openBoxPositionSide('bottom');
 		cy.get('.blockera-component-popover.position-edit-popover')
 			.last()
 			.within(() => {
@@ -631,7 +632,7 @@ describe('Box Position → Functionality', () => {
 		//
 		// Left Position
 		//
-		cy.getByAriaLabel('Left Position').click();
+		openBoxPositionSide('left');
 		cy.get('.blockera-component-popover.position-edit-popover')
 			.last()
 			.within(() => {

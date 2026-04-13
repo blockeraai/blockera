@@ -49,7 +49,7 @@ export default function AlignmentMatrixBox({
 					key={_value}
 					onClick={() => onChange(_value)}
 					aria-label={sprintf(
-						// translators: it's the aria label for matrix item
+						// translators: %s: Alignment position value (e.g., "top left", "center center")
 						__('%s item', 'blockera'),
 						_value
 					)}

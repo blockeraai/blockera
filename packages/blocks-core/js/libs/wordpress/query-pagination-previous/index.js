@@ -18,7 +18,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const QueryPaginationPrevious: BlockType = {
 	name: 'blockeraQueryPaginationPrevious',
@@ -31,7 +31,7 @@ export const QueryPaginationPrevious: BlockType = {
 				'The pagination previous arrow element.',
 				'blockera'
 			),
-			icon: <Icon icon="block-pagination-previous-arrow" size="20" />,
+			icon: <Icon icon="block-pagination-previous-arrow" iconSize="20" />,
 			settings: {
 				force: true,
 			},

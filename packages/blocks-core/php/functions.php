@@ -24,16 +24,10 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 				continue;
 			}
 
-			$available_blocks = array_merge(
-				$available_blocks,
-				array_map(
-					function ( array $support ): string {
-
-						return $support['name'];
-					},
-					$config['supported']
-				)
-			);
+			// Build associative array with block names as keys for O(1) lookup performance.
+			foreach ( $config['supported'] as $support ) {
+				$available_blocks[ $support['name'] ] = true;
+			}
 		}
 
 		return $available_blocks;
@@ -47,8 +41,16 @@ if ( ! function_exists( 'blockera_get_shared_block_attributes' ) ) {
 	 * @return array the shared block attributes.
 	 */
 	function blockera_get_shared_block_attributes(): array {
+		// Cache the shared block attributes because we don't need to load it again and again.
+		static $cached_attributes = null;
 
-		return blockera_load( 'shared.attributes', __DIR__ );
+		if ( null !== $cached_attributes ) {
+			return $cached_attributes;
+		}
+
+		$cached_attributes = blockera_load( 'shared.attributes', __DIR__ );
+
+		return $cached_attributes;
 	}
 }
 
@@ -89,5 +91,48 @@ if (! function_exists('blockera_enqueue_blocks_editor_styles')) {
 				$version
 			);
 		}
+	}
+}
+
+if (! function_exists('blockera_get_supports')) {
+
+	/**
+	 * Get the supports for the blocks.
+	 * 
+	 * @return array the supports.
+	 */
+	function blockera_get_supports(): array {
+		$attributes = include __DIR__ . '/shared/attributes.php';
+		$excluded   = [
+			'blockeraPropsId' => true,
+			'blockeraCompatId' => true,
+		];
+		$supports   = [];
+		
+		foreach ( array_keys($attributes) as $key ) {
+			if ( ! isset($excluded[ $key ]) ) {
+				$supports[] = $key;
+			}
+		}
+		
+		return $supports;
+	}
+}
+
+if ( ! function_exists('blockera_get_block_library_name')) {
+	/**
+	 * Get the block library name.
+	 * 
+	 * @param string $block_name The block name.
+	 * 
+	 * @return string the block library name.
+	 */
+	function blockera_get_block_library_name( string $block_name): string {
+		$block_libraries = [
+			'core' => 'wordpress',
+			'woocommerce' => 'woocommerce',
+		];
+
+		return $block_libraries[ $block_name ] ?? 'third-party';
 	}
 }

@@ -99,6 +99,16 @@ describe('Columns Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockStatesPickerItems([
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -484,7 +494,7 @@ describe('Columns Block', () => {
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
-				cy.getByAriaLabel('Column').click();
+				cy.getByAriaLabel('flex-direction: column').click();
 			});
 
 		cy.getBlock('core/columns').should(

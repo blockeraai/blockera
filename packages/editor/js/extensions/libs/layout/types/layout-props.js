@@ -6,6 +6,8 @@
 import type { BaseExtensionProps } from '../../types';
 import type { FeatureConfig } from '../../base';
 
+import type { TSpacingDefaultProps } from './spacing-props';
+
 export type TCssProps = {
 	display?: string,
 	'flex-direction'?: string,
@@ -43,6 +45,9 @@ export type TLayoutProps = {
 		},
 		blockeraFlexWrap: { val: string, reverse: boolean },
 		blockeraAlignContent: string,
+		blockeraSpacing: TSpacingDefaultProps,
+		blockeraGridMinimumColumnWidth: { value: string },
+		blockeraGridColumnCount: { value: number | string },
 	},
 	extensionConfig: {
 		blockeraDisplay: FeatureConfig,
@@ -50,6 +55,9 @@ export type TLayoutProps = {
 		blockeraGap: FeatureConfig,
 		blockeraFlexWrap: FeatureConfig,
 		blockeraAlignContent: FeatureConfig,
+		blockeraSpacing: FeatureConfig,
+		blockeraGridMinimumColumnWidth: FeatureConfig,
+		blockeraGridColumnCount: FeatureConfig,
 	},
 	extensionProps: {
 		blockeraDisplay: Object,
@@ -57,5 +65,8 @@ export type TLayoutProps = {
 		blockeraGap: Object,
 		blockeraFlexWrap: Object,
 		blockeraAlignContent: Object,
+		blockeraSpacing: Object,
+		blockeraGridMinimumColumnWidth: Object,
+		blockeraGridColumnCount: Object,
 	},
 };

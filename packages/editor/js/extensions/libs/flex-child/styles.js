@@ -4,6 +4,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue } from '@blockera/controls';
+import { isEmptyObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -99,37 +100,47 @@ export const FlexChildStyles = ({
 					_attributes.blockeraFlexChildBasis
 				);
 
-				properties.flex = `${grow ? grow : 0} ${shrink ? shrink : 0} ${
-					basis ? basis : 'auto'
-				}`;
+				if (grow) {
+					properties['flex-grow'] = grow;
+				}
+
+				if (shrink) {
+					properties['flex-shrink'] = shrink;
+				}
+
+				if (basis) {
+					properties['flex-basis'] = basis;
+				}
 				break;
 		}
 
-		const pickedSelector = getCompatibleBlockCssSelector({
-			...sharedParams,
-			query: 'blockeraFlexChildSizing',
-			support: 'blockeraFlexChildSizing',
-			fallbackSupportId: getBlockSupportFallback(
-				supports,
-				'blockeraFlexChildSizing'
-			),
-		});
+		if (!isEmptyObject(properties)) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFlexChildSizing',
+				support: 'blockeraFlexChildSizing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexChildSizing'
+				),
+			});
 
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraFlexChildSizing: [
-						{
-							...staticDefinitionParams,
-							properties,
-						},
-					],
-				},
-				blockProps,
-				pickedSelector
-			),
-		});
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFlexChildSizing: [
+							{
+								...staticDefinitionParams,
+								properties,
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
 	}
 
 	if (
@@ -188,36 +199,40 @@ export const FlexChildStyles = ({
 					_attributes.blockeraFlexChildOrderCustom
 				);
 
-				if (order) properties.order = order;
+				if (order) {
+					properties.order = order;
+				}
 
 				break;
 		}
 
-		const pickedSelector = getCompatibleBlockCssSelector({
-			...sharedParams,
-			query: 'blockeraFlexChildOrder',
-			support: 'blockeraFlexChildOrder',
-			fallbackSupportId: getBlockSupportFallback(
-				supports,
-				'blockeraFlexChildOrder'
-			),
-		});
+		if (!isEmptyObject(properties)) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFlexChildOrder',
+				support: 'blockeraFlexChildOrder',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexChildOrder'
+				),
+			});
 
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraFlexChildOrder: [
-						{
-							...staticDefinitionParams,
-							properties,
-						},
-					],
-				},
-				blockProps,
-				pickedSelector
-			),
-		});
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFlexChildOrder: [
+							{
+								...staticDefinitionParams,
+								properties,
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
 	}
 
 	return styleGroup;

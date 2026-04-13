@@ -5,22 +5,18 @@
 @import "~@wordpress/base-styles/breakpoints";
 @import "~@wordpress/base-styles/animations";
 @import "~@wordpress/base-styles/z-index";
-@import "~@wordpress/components/src/style";
+@import "~@wordpress/components/build-style/style";
 @import "~@blockera/controls/js/libs/switch/style.scss";
-@import "~@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings/style.scss";
-
+@import "~@blockera/editor/js/editor/header-ui/components/breakpoints/breakpoint-settings/style.scss";
 
 .wp-admin[class*="toplevel_page_blockera-"] {
-
 	#wpbody-content {
 		position: relative;
 	}
 }
 
 #blockera-admin-settings-container {
-
 	.blockera-settings-tabs {
-
 		.blockera-settings-active-panel {
 			flex: auto;
 			width: 80%;
@@ -34,7 +30,6 @@
 			height: 100%;
 
 			.blockera-settings-panel-container {
-
 				.blockera-settings-section {
 					border: var(--card-border);
 					border-radius: var(--card-border-radius);
@@ -72,12 +67,12 @@
 							}
 
 							&.stable-badge,
-							&.pre-release-badge {
+							&.pre-release-badge,
+							&.released-badge {
 								background-color: rgb(201 237 214);
 								color: rgb(14 100 45);
 							}
 						}
-
 					}
 
 					.section-desc {
@@ -89,7 +84,7 @@
 							font-size: 13px;
 							width: max-content;
 							display: inline-flex;
-    						margin: 10px 0 5px 0;
+							margin: 10px 0 5px 0;
 
 							&.alpha-status {
 								background-color: rgb(255 226 226);
@@ -101,6 +96,7 @@
 							}
 
 							&.stable-status,
+							&.released-status,
 							&.pre-release-status {
 								background-color: rgb(201 237 214);
 								color: rgb(14 100 45);
@@ -110,7 +106,6 @@
 				}
 
 				.blockera-settings-general.control-wrapper {
-
 					.blockera-settings-block-visibility.user-roles {
 						display: flex;
 						flex-direction: column;
@@ -127,7 +122,6 @@
 				}
 
 				.blockera-block-category {
-
 					.blockera-block-category-name {
 						display: flex;
 						margin: 0;
@@ -153,7 +147,7 @@
 					gap: 15px;
 					flex-wrap: wrap;
 					resize: horizontal;
-					margin: 0 0 25px 0;
+					margin: 0;
 
 					.blockera-block-category-item {
 						min-width: 0;
@@ -207,8 +201,7 @@
 			height: 260.55px;
 			margin-top: 300px;
 
-
-			>svg {
+			> svg {
 				margin: 0 auto;
 			}
 
@@ -221,7 +214,6 @@
 			}
 
 			ul {
-
 				li {
 					font-size: 12px;
 
@@ -243,19 +235,19 @@
 
 .blockera-dashboard-preview-video-btn {
 	box-sizing: border-box;
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 71, 235, 0.38);
-    box-shadow: 0px 0px 39px rgba(0, 71, 235, 0.38);
-    backdrop-filter: blur(1px);
-    border-radius: 90px;
-    color: var(--blockera-controls-primary-color);
-    z-index: 1;
-    transition: var(--blockera-controls-transition);
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(0, 71, 235, 0.38);
+	box-shadow: 0px 0px 39px rgba(0, 71, 235, 0.38);
+	backdrop-filter: blur(1px);
+	border-radius: 90px;
+	color: var(--blockera-controls-primary-color);
+	z-index: 1;
+	transition: var(--blockera-controls-transition);
 	display: flex;
 	align-items: center;
 	justify-content: center;

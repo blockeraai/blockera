@@ -10,6 +10,22 @@ namespace Blockera\Editor\StyleDefinitions;
 class Border extends BaseStyleDefinition {
 
 	/**
+	 * Static side names array to avoid repeated allocations.
+	 * Using static class property reduces memory allocation on each call.
+	 *
+	 * @var array
+	 */
+	private static array $sides = [ 'top', 'right', 'bottom', 'left' ];
+
+	/**
+	 * Static prefix array to avoid repeated allocations.
+	 * Pre-computed to eliminate array creation overhead in hot path.
+	 *
+	 * @var array
+	 */
+	private static array $prefixes = [ 'border-top', 'border-right', 'border-bottom', 'border-left' ];
+
+	/**
 	 * Collect all css selectors and declarations.
 	 *
 	 * @param array $setting the block setting.
@@ -17,73 +33,58 @@ class Border extends BaseStyleDefinition {
 	 * @return array Retrieve array of collection of css selectors and css declarations.
 	 */
 	protected function css( array $setting ): array {
-
-		$declaration = [];
-		$cssProperty = $setting['type'];
-
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'border' !== $cssProperty ) {
-
-			return $declaration;
+		if ( 'border' !== ( $setting['type'] ?? null ) || ! isset( $setting['border'] ) ) {
+			return [];
 		}
 
-		$value = $setting[ $cssProperty ];
+		$value = $setting['border'];
 
-		if (count($value) < 3) {
+		if ( ! isset( $value['type'] ) ) {
+			return [];
+		}
 
-			if ('' !== $value['all']['width']) {
-				$declaration['border'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['all']['width'],
-						! empty($value['all']['style']) ? $value['all']['style'] : 'solid',
-						! empty($value['all']['color']) ? blockera_get_value_addon_real_value($value['all']['color']) : '',
-					)
-				);
+		$declaration = [];
+
+		if ( 'all' === $value['type'] ) {
+			$all   = &$value['all'];
+			$width = $all['width'] ?? '';
+
+			if ( '' === $width ) {
+				$this->setCss( $declaration );
+				return $this->css;
 			}
+
+			$style = ( '' !== $all['style'] ) ? $all['style'] : 'solid';
+
+			$color = '';
+			if ( isset( $all['color'] ) && '' !== $all['color'] ) {
+				$color = blockera_get_value_addon_real_value( $all['color'] );
+			}
+
+			$declaration['border'] = $width . ' ' . $style . ( '' !== $color ? ' ' . $color : '' );
 		} else {
+			for ( $i = 0; $i < 4; ++$i ) {
+				$side = self::$sides[ $i ];
 
-			if ('' !== $value['top']['width']) {
-				$declaration['border-top'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['top']['width'],
-						! empty($value['top']['style']) ? $value['top']['style'] : 'solid',
-						! empty($value['top']['color']) ? blockera_get_value_addon_real_value($value['top']['color']) : '',
-					)
-				);
-			}
+				if ( ! isset( $value[ $side ]['width'] ) ) {
+					continue;
+				}
 
-			if ('' !== $value['right']['width']) {
-				$declaration['border-right'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['right']['width'],
-						! empty($value['right']['style']) ? $value['right']['style'] : 'solid',
-						! empty($value['right']['color']) ? blockera_get_value_addon_real_value($value['right']['color']) : '',
-					)
-				);
-			}
+				$sideData = &$value[ $side ];
+				$width    = $sideData['width'];
 
-			if ('' !== $value['bottom']['width']) {
-				$declaration['border-bottom'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['bottom']['width'],
-						! empty($value['bottom']['style']) ? $value['bottom']['style'] : 'solid',
-						! empty($value['bottom']['color']) ? blockera_get_value_addon_real_value($value['bottom']['color']) : '',
-					)
-				);
-			}
+				if ( '' === $width ) {
+					continue;
+				}
 
-			if ('' !== $value['left']['width']) {
-				$declaration['border-left'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['left']['width'],
-						! empty($value['left']['style']) ? $value['left']['style'] : 'solid',
-						! empty($value['left']['color']) ? blockera_get_value_addon_real_value($value['left']['color']) : '',
-					)
-				);
+				$style = ( '' !== $sideData['style'] ) ? $sideData['style'] : 'solid';
+
+				$color = '';
+				if ( isset( $sideData['color'] ) && '' !== $sideData['color'] ) {
+					$color = blockera_get_value_addon_real_value( $sideData['color'] );
+				}
+
+				$declaration[ self::$prefixes[ $i ] ] = $width . ' ' . $style . ( '' !== $color ? ' ' . $color : '' );
 			}
 		}
 

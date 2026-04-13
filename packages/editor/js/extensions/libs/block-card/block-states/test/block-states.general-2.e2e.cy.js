@@ -11,15 +11,15 @@ import {
 	createPost,
 	appendBlocks,
 	setDeviceType,
-	addBlockState,
 	reSelectBlock,
 	setBlockState,
 	setInnerBlock,
 	checkBlockCard,
+	resetBlockState,
 	getWPDataObject,
 	getSelectedBlock,
 	getBlockClientId,
-	getBlockInserter,
+	openBlockInserter,
 	checkCurrentState,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -32,6 +32,12 @@ describe('Block State E2E Test', () => {
 	});
 
 	const initialSetting = () => {
+		cy.get('body').then(($body) => {
+			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
+				cy.getByAriaLabel('Hide secondary sidebar').click();
+			}
+		});
+
 		appendBlocks(
 			`<!-- wp:paragraph -->
 			<p>Test</p>
@@ -479,10 +485,13 @@ describe('Block State E2E Test', () => {
 			cy.getByDataTest('popover-body')
 				.last()
 				.within(() => {
-					cy.get('input[maxlength="9"]').clear({
+					cy.get('[data-cy="color-picker-css-value"]').clear({
 						force: true,
 					});
-					cy.get('input[maxlength="9"]').type('000000 ');
+					cy.get('[data-cy="color-picker-css-value"]').type(
+						'000000',
+						{ delay: 0 }
+					);
 				});
 
 			context(
@@ -494,10 +503,15 @@ describe('Block State E2E Test', () => {
 					cy.getByDataTest('popover-body')
 						.last()
 						.within(() => {
-							cy.get('input[maxlength="9"]').clear({
+							cy.get('[data-cy="color-picker-css-value"]').clear({
 								force: true,
 							});
-							cy.get('input[maxlength="9"]').type('cccccc ');
+							cy.get('[data-cy="color-picker-css-value"]').type(
+								'cccccc',
+								{
+									delay: 0,
+								}
+							);
 						});
 
 					// inherit of normal.
@@ -531,6 +545,8 @@ describe('Block State E2E Test', () => {
 
 					// Assert block css when state is "Normal" and breakpoint is "Desktop".
 					getWPDataObject().then((data) => {
+						// Move mouse away to ensure we're not in hover state (flaky in headless)
+						cy.get('body').realMouseMove(0, 0);
 						cy.getIframeBody()
 							.find(`#block-${getBlockClientId(data)}`)
 							.should(
@@ -589,6 +605,8 @@ describe('Block State E2E Test', () => {
 
 					// Set l-desktop viewport
 					cy.viewport(1025, 1200);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
@@ -607,7 +625,8 @@ describe('Block State E2E Test', () => {
 
 					// Set xl-desktop viewport
 					cy.viewport(1441, 1920);
-
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
@@ -687,6 +706,8 @@ describe('Block State E2E Test', () => {
 					setBlockState('Normal');
 					// Assert block css
 					getWPDataObject().then((data) => {
+						// Move mouse away to ensure we're not in hover state (flaky in headless)
+						cy.get('body').realMouseMove(0, 0);
 						cy.getIframeBody()
 							.find(`#block-${getBlockClientId(data)}`)
 							.should(
@@ -819,6 +840,8 @@ describe('Block State E2E Test', () => {
 
 					// Assert in l-desktop viewport
 					cy.viewport(1025, 1440);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-image',
@@ -837,6 +860,8 @@ describe('Block State E2E Test', () => {
 
 					// Set desktop viewport
 					cy.viewport(1441, 1920);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-image',
@@ -855,6 +880,8 @@ describe('Block State E2E Test', () => {
 
 					// set mobile viewport
 					cy.viewport(380, 470);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-image',
@@ -985,8 +1012,9 @@ describe('Block State E2E Test', () => {
 				beforeEach(() => {
 					// unfocus block
 					cy.getIframeBody().find('[aria-label="Add title"]').click();
+
 					// add new block
-					getBlockInserter().click();
+					openBlockInserter();
 
 					cy.get('.block-editor-inserter__panel-content').within(
 						() => {
@@ -1019,6 +1047,31 @@ describe('Block State E2E Test', () => {
 					checkCurrentState('normal');
 				});
 			});
+		});
+	});
+
+	it('should reset master block state all values', () => {
+		appendBlocks(
+			`<!-- wp:latest-comments {"commentsToShow":3,"blockeraPropsId":"61c6adef-45f0-410f-9ea3-fc09ad27d79a","blockeraCompatId":"1023231430362","blockeraBackgroundColor":{"value":"#f5d5d5"},"blockeraBlockStates":{"value":{"hover":{"breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#fabbbb","blockeraInnerBlocks":{"elements/container":{"attributes":{"blockeraBackgroundColor":"#80e869","blockeraBorder":{"type":"all","all":{"width":"2px","style":"","color":"#60af4e"}}}}}}}},"isVisible":true},"after":{"breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#ff8383","blockeraSpacing":{"padding":{"top":"5px","right":"10px","bottom":"5px","left":"10px"}},"blockeraBorderRadius":{"type":"all","all":"60px"},"blockeraTextAlign":"center","blockeraFontSize":"16px","blockeraFontAppearance":{"weight":"1000","style":"normal"},"blockeraDisplay":"block"}},"mobile":{"attributes":{"blockeraDisplay":"inline-block"}}},"isVisible":true,"content":"After"},"before":{"content":"Before","breakpoints":{"desktop":{"attributes":{"blockeraSpacing":{"margin":{"bottom":"20px","left":"20px","right":"30px"},"padding":{"top":"10px","right":"10px","bottom":"10px","left":"10px"}},"blockeraBackgroundColor":"#fc9898","blockeraBorderRadius":{"type":"all","all":"5px"},"blockeraDisplay":"block"}},"mobile":{"attributes":{"blockeraSpacing":{"margin":{"right":"auto","left":"80px"}},"blockeraDisplay":"inline-block"}}},"isVisible":true},"normal":{"breakpoints":{"mobile":{"attributes":{"blockeraInnerBlocks":{"elements/comment-text":{"attributes":{"blockeraFlexLayout":{"direction":"column","alignItems":"center","justifyContent":"center"},"blockeraGap":{"lock":true,"gap":"10px","columns":"","rows":""}}},"elements/date":{"attributes":{"blockeraFlexLayout":{"direction":"column","alignItems":"center","justifyContent":"center"},"blockeraGap":{"lock":true,"gap":"10px","columns":"","rows":""}}},"elements/container":{"attributes":{"blockeraBlockStates":{"after":{"breakpoints":{"mobile":{"attributes":{"blockeraDisplay":"inline-block"}}},"isVisible":true,"content":"After"},"before":{"breakpoints":{"mobile":{"attributes":{"blockeraSpacing":{"margin":{"top":"101px"},"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}}}}},"isVisible":true,"content":"Mobile Content"}}}}}}}},"isVisible":true}}},"blockeraBorder":{"value":{"type":"all","all":{"width":"2px","style":"","color":"#ff8787"}}},"blockeraBorderRadius":{"value":{"type":"all","all":"20px"}},"blockeraTransition":{"value":{"all-0":{"isVisible":true,"type":"all","duration":"500ms","timing":"ease","delay":"0ms","order":0}}},"blockeraInnerBlocks":{"value":{"elements/container":{"attributes":{"blockeraBackgroundColor":"#bfefb4","blockeraSpacing":{"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}},"blockeraBorderRadius":{"type":"all","all":"20px"},"blockeraBorder":{"type":"all","all":{"width":"2px","style":"","color":"#85be79"}},"blockeraTransition":{"all-0":{"isVisible":true,"type":"all","duration":"500ms","timing":"ease","delay":"0ms","order":0}},"blockeraBlockStates":{"before":{"content":"before","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#0000003b","blockeraDisplay":"block","blockeraFontSize":"16px","blockeraSpacing":{"margin":{"bottom":"10px"},"padding":{"top":"10px","right":"10px","bottom":"10px","left":"10px"}},"blockeraBorderRadius":{"type":"all","all":"10px"}}}},"isVisible":true},"after":{"content":"After","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#0000003b","blockeraDisplay":"block","blockeraFontSize":"16px","blockeraSpacing":{"margin":{"top":"10px"},"padding":{"top":"10px","right":"10px","bottom":"10px","left":"10px"}},"blockeraBorderRadius":{"type":"all","all":"10px"}}}},"isVisible":true}}}},"elements/avatar":{"attributes":{"blockeraBorderRadius":{"type":"all","all":"5px"},"blockeraBorder":{"type":"all","all":{"width":"2px","style":"","color":"#0000004d"}},"blockeraWidth":"40px","blockeraHeight":"40px"}},"elements/author":{"attributes":{"blockeraBackgroundColor":"#fca53f","blockeraBlockStates":{"before":{"content":"before","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#d97a0d","blockeraBorderRadius":{"type":"all","all":"10px"},"blockeraSpacing":{"padding":{"top":"5px","right":"5px","bottom":"5px","left":"5px"}}}}},"isVisible":true},"after":{"content":"After","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#c36f0e","blockeraSpacing":{"padding":{"top":"5px","right":"5px","bottom":"5px","left":"5px"}},"blockeraBorderRadius":{"type":"all","all":"10px"}}}},"isVisible":true}},"blockeraDisplay":"flex","blockeraFlexLayout":{"direction":"row","alignItems":"center","justifyContent":"center"},"blockeraGap":{"lock":true,"gap":"20px","columns":"","rows":""}}},"elements/post-title":{"attributes":{"blockeraBackgroundColor":"#3cf3ed","blockeraBlockStates":{"before":{"content":"Before","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#05d2cb"}}},"isVisible":true},"after":{"breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#00a39d"}}},"isVisible":true,"content":"After"}},"blockeraDisplay":"flex","blockeraGap":{"lock":true,"gap":"10px","columns":"","rows":""},"blockeraFlexLayout":{"direction":"row","alignItems":"center","justifyContent":"flex-start"}}},"elements/date":{"attributes":{"blockeraBackgroundColor":"#a9cdff","blockeraBlockStates":{"before":{"content":"Before","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#5da3ff"}}},"isVisible":true},"after":{"content":"After","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#5da3ff"}}},"isVisible":true}},"blockeraDisplay":"flex","blockeraFlexLayout":{"direction":"row","alignItems":"center","justifyContent":"center"},"blockeraGap":{"lock":true,"gap":"40px","columns":"","rows":""},"blockeraSpacing":{"margin":{"top":"20px"}}}},"elements/comment-text":{"attributes":{"blockeraBackgroundColor":"#f36bff","blockeraBlockStates":{"before":{"content":"Before","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#c10bd2"}}},"isVisible":true},"after":{"content":"After","breakpoints":{"desktop":{"attributes":{"blockeraBackgroundColor":"#ab00ba"}}},"isVisible":true}},"blockeraDisplay":"flex","blockeraFlexLayout":{"direction":"row","alignItems":"center","justifyContent":"center"},"blockeraGap":{"lock":true,"gap":"20px","columns":"","rows":""},"blockeraSpacing":{"margin":{"top":"20px"}}}}}},"blockeraSpacing":{"value":{"margin":{"bottom":"20px"},"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}}},"className":"blockera-block blockera-block-1","style":{"spacing":{"margin":{"top":"","right":"30px","bottom":"20px","left":"20px"},"padding":{"top":"10px","right":"10px","bottom":"10px","left":"10px"}},"color":[],"border":{"radius":"20px","color":"#ff8787","width":"2px","style":""},"typography":[]}} /-->`
+		);
+
+		cy.getIframeBody().find('[data-type="core/latest-comments"]').click();
+
+		resetBlockState('Before');
+
+		//Check store
+		getWPDataObject().then((data) => {
+			expect({}).to.be.deep.equal(
+				getSelectedBlock(data, 'blockeraBlockStates').before.breakpoints
+					.desktop.attributes
+			);
+			expect({}).to.be.deep.equal(
+				getSelectedBlock(data, 'blockeraBlockStates').before.breakpoints
+					.mobile.attributes
+			);
+			expect('').to.be.deep.equal(
+				getSelectedBlock(data, 'blockeraBlockStates').before.content
+			);
 		});
 	});
 });

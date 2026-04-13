@@ -1,20 +1,35 @@
 /**
  * External dependencies
  */
-import { Slot, Fill } from '@wordpress/components';
+import { Slot } from '@wordpress/components';
 import { useEffect, memo, useRef } from '@wordpress/element';
+import { select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
  */
 import { prependPortal } from '@blockera/utils';
 
-/**
- * Internal dependencies
- */
-import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
+const Component = ({ clientId, sentinelRef, stickyWrapperRef }) => (
+	<>
+		<div
+			ref={sentinelRef}
+			className="blockera-block-card-sticky-sentinel"
+		></div>
+		<div
+			ref={stickyWrapperRef}
+			className="blockera-block-card-wrapper is-sticky-active"
+		>
+			<Slot name={`blockera-block-card-content-${clientId}`} />
+		</div>
 
-export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
+		<div className="blockera-block-edit-wrapper">
+			<Slot name={`blockera-block-edit-content-${clientId}`} />
+		</div>
+	</>
+);
+
+export const BlockPartials = memo(({ clientId, isActive }) => {
 	const stickyWrapperRef = useRef(null);
 	const sentinelRef = useRef(null);
 
@@ -23,10 +38,21 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 		const stickyWrapper = stickyWrapperRef.current;
 		const sentinel = sentinelRef.current;
 
-		if (!stickyWrapper || !sentinel) return;
+		if (!stickyWrapper || !sentinel) {
+			return;
+		}
 
 		const observer = new IntersectionObserver(
 			([entry]) => {
+				const wrapper = stickyWrapper.closest(
+					'.edit-site-global-styles-sidebar__navigator-provider'
+				);
+
+				// Global styles sidebar wrapper should be styling with position absolute to sticky support while user scrolling.
+				if (wrapper) {
+					wrapper.style.position = 'absolute';
+				}
+
 				// Add `is-stuck-monitoring` to prevent `is-stuck` atr first time
 				if (stickyWrapper.classList.contains('is-stuck-monitoring')) {
 					// Add `is-stuck` only when the sentinel is out of view (element has become sticky)
@@ -50,37 +76,27 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 		return () => observer.disconnect();
 	}, []);
 
+	const { getActiveComplementaryArea } = select('core/interface');
+
+	const activeComplementaryArea =
+		getActiveComplementaryArea('core/edit-site');
+
+	if ('edit-site/global-styles' === activeComplementaryArea) {
+		return (
+			<Component
+				clientId={clientId}
+				sentinelRef={sentinelRef}
+				stickyWrapperRef={stickyWrapperRef}
+			/>
+		);
+	}
+
 	return prependPortal(
-		<>
-			<div
-				ref={sentinelRef}
-				className="blockera-block-card-sticky-sentinel"
-			></div>
-			<div
-				ref={stickyWrapperRef}
-				className="blockera-block-card-wrapper is-sticky-active"
-			>
-				<Slot name={`blockera-block-card-content-${clientId}`} />
-			</div>
-
-			<div className="blockera-block-edit-wrapper">
-				<Slot name={`blockera-block-edit-content-${clientId}`} />
-			</div>
-
-			<Fill
-				key={`${clientId}-card-menu`}
-				name={'blockera-block-card-children'}
-			>
-				<div className={'blockera-dropdown-menu'}>
-					<BlockDropdownAllMenu
-						{...{
-							isActive,
-							setActive,
-						}}
-					/>
-				</div>
-			</Fill>
-		</>,
+		<Component
+			clientId={clientId}
+			sentinelRef={sentinelRef}
+			stickyWrapperRef={stickyWrapperRef}
+		/>,
 		document.querySelector('.block-editor-block-inspector'),
 		{
 			className: isActive ? 'blockera-active-block' : '',

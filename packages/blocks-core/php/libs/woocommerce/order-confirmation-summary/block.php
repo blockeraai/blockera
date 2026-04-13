@@ -20,7 +20,7 @@ return array_merge(
 					'root' => '.wc-block-order-confirmation-summary-list-item__key',
 				],
 				'blockera/elements/item-value'     => [
-					'root' => 'wc-block-order-confirmation-summary-list-item__value',
+					'root' => '.wc-block-order-confirmation-summary-list-item__value',
 				],
 			]
 		),

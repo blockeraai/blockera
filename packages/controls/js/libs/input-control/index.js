@@ -37,6 +37,7 @@ export default function InputControl({
 	id,
 	range = false,
 	label,
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange = () => {},
@@ -113,6 +114,8 @@ export default function InputControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
+		controlFieldId: propsForLabelControl.controlFieldId ?? id,
 	};
 
 	const extractedValue = extractNumberAndUnit(value);
@@ -158,6 +161,7 @@ export default function InputControl({
 				controlName={field}
 				className={className}
 				{...labelProps}
+				{...props}
 			>
 				<div
 					className={controlClassNames(
@@ -169,8 +173,9 @@ export default function InputControl({
 					)}
 				>
 					<ValueAddonControl />
-					{children}
 				</div>
+
+				{children}
 			</BaseControl>
 		);
 	}
@@ -200,14 +205,13 @@ export default function InputControl({
 					drag={drag}
 					arrows={arrows}
 					size={size}
-					children={children}
 					onVariableShortcut={
 						variableTypes && variableTypes.length > 0
 							? () => {
 									valueAddonControlProps.setOpen(
 										'var-picker'
 									);
-							  }
+								}
 							: undefined
 					}
 					onChange={(newValue: ContextUnitInput): void => {
@@ -295,7 +299,6 @@ export default function InputControl({
 							>
 								<ValueAddonPointer />
 							</NumberInput>
-							{children}
 						</div>
 					) : (
 						<div
@@ -318,11 +321,11 @@ export default function InputControl({
 							>
 								<ValueAddonPointer />
 							</OtherInput>
-							{children}
 						</div>
 					)}
 				</>
 			)}
+			{children}
 		</BaseControl>
 	);
 }

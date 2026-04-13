@@ -1,0 +1,6 @@
+// import style from php file to keep only one style for both editor and front end
+@import "../../../../php/libs/wordpress/avatar/style.css";
+
+.blockera-block.wp-block-avatar .components-resizable-box__container {
+	display: inline-block;
+}

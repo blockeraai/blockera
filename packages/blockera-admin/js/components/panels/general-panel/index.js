@@ -20,8 +20,11 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { default as BreakpointsSettings } from '@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings';
-import { getSortedBreakpoints } from '@blockera/editor/js/canvas-editor/components/breakpoints/helpers';
+import {
+	BreakpointsSettings,
+	getSortedBreakpoints,
+} from '@blockera/editor/js/editor/header-ui';
+import type { BreakpointTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 
 /**
  * Internal dependencies
@@ -92,7 +95,7 @@ export const GeneralPanel = (): MixedElement => {
 	// Memoize the sorted breakpoints to prevent re-creation on every render.
 	const sortedBreakpoints = useMemo(() => {
 		return getSortedBreakpoints(generalSettings.breakpoints, {
-			output: 'object',
+			output: 'objects',
 		});
 	}, [generalSettings.breakpoints]);
 
@@ -101,21 +104,23 @@ export const GeneralPanel = (): MixedElement => {
 		return defaultSettings?.general?.breakpoints || {};
 	}, [defaultSettings?.general?.breakpoints]);
 
-	const memoizedCallback = useCallback((newValue) => {
+	const memoizedCallback = useCallback((newValue: Object) => {
 		newValue = getSortedBreakpoints(newValue, {
-			output: 'object',
+			output: 'objects',
 		});
 
 		newValue = Object.fromEntries(
-			Object.entries(newValue).map(([key, breakpoint]) => {
-				return [
-					key,
-					{
-						...breakpoint,
-						...('' === breakpoint.type ? { type: key } : {}),
-					},
-				];
-			})
+			Object.entries((newValue: Object)).map(
+				([key, breakpoint]: [string, BreakpointTypes | Object]) => {
+					return [
+						key,
+						{
+							...breakpoint,
+							...('' === breakpoint.type ? { type: key } : {}),
+						},
+					];
+				}
+			)
 		);
 		const {
 			added: savedAdded,

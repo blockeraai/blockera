@@ -88,8 +88,20 @@ class SettingsController extends RestController {
 			return $this->reset( $default, $reset );
 		}
 
-		// If the optimizeStyleGeneration is set to default value, we need to unset the earlyAccessLab.
-		if (isset($settings['earlyAccessLab']['optimizeStyleGeneration']) && blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) === $settings['earlyAccessLab']['optimizeStyleGeneration']) {
+		/**
+		 * This is for checking the features in lab and remove the value from the settings if default value was saved.
+		 * By doing this users will be attached to the featured status while getting new updates.
+		 * 
+		 * @since 2.0.0
+		 */
+		foreach ( blockera_get_experimental([ 'earlyAccessLab' ]) as $feature => $value ) {
+			if ( isset($settings['earlyAccessLab'][ $feature ]) && $value === $settings['earlyAccessLab'][ $feature ]) {
+				unset($settings['earlyAccessLab'][ $feature ]);
+			}
+		}
+
+		// remove the early access lab from the settings.
+		if ( empty($settings['earlyAccessLab']) ) {
 			unset($settings['earlyAccessLab']);
 		}
 

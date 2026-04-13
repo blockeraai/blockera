@@ -35,13 +35,13 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 					isOpenPopoverEvent(event) && setOpen(!isOpen)
 				}
 				aria-label={sprintf(
-					// translators: it's the aria label for repeater item
+					// translators: %d: The item number (1-based index)
 					__('Item %d', 'blockera'),
 					itemId && itemId + 1
 				)}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<Icon icon="transition" />
+					<Icon icon="transition" iconSize={18} />
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>

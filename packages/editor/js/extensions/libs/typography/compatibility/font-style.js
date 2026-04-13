@@ -2,15 +2,25 @@
 
 export function fontStyleFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	const fontStyle =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.fontStyle
+			: attributes?.typography?.fontStyle;
+
 	if (
 		attributes?.blockeraFontStyle?.value === '' &&
-		attributes?.style?.typography?.fontStyle !== undefined
+		fontStyle !== undefined
 	) {
 		attributes.blockeraFontStyle = {
-			value: attributes?.style?.typography?.fontStyle,
+			value: fontStyle,
 		};
 	}
 
@@ -20,29 +30,45 @@ export function fontStyleFromWPCompatibility({
 export function fontStyleToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if (
 		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['normal', 'italic'].indexOf(newValue) === -1
 	) {
-		return {
-			style: {
-				typography: {
-					fontStyle: undefined,
-				},
-			},
-		};
+		return insideBlockInspector && runSelectedBlockEvent
+			? {
+					style: {
+						typography: {
+							fontStyle: undefined,
+						},
+					},
+				}
+			: {
+					typography: {
+						fontStyle: undefined,
+					},
+				};
 	}
 
-	return {
-		style: {
-			typography: {
-				fontStyle: newValue,
-			},
-		},
-	};
+	return insideBlockInspector && runSelectedBlockEvent
+		? {
+				style: {
+					typography: {
+						fontStyle: newValue,
+					},
+				},
+			}
+		: {
+				typography: {
+					fontStyle: newValue,
+				},
+			};
 }

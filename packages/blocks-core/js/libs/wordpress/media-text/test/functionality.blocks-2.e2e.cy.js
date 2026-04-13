@@ -76,7 +76,7 @@ describe('Media Text Block', () => {
 		cy.getBlock('core/media-text')
 			.first()
 			.within(() => {
-				cy.get('.wp-block-media-text__media > img')
+				cy.get('.wp-block-media-text__media')
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 			});
@@ -112,7 +112,7 @@ describe('Media Text Block', () => {
 
 		cy.get('.blockera-block.wp-block-media-text').within(() => {
 			// image inner block
-			cy.get('.wp-block-media-text__media > img')
+			cy.get('.wp-block-media-text__media')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 		});

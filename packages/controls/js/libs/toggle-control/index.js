@@ -22,6 +22,7 @@ export default function ToggleControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	defaultValue,
@@ -31,6 +32,7 @@ export default function ToggleControl({
 	className,
 	children,
 	labelType = 'advanced',
+	size = 'normal',
 	...props
 }: TToggleControlProps): MixedElement {
 	const {
@@ -59,6 +61,7 @@ export default function ToggleControl({
 		resetToDefault,
 		path: getControlPath(attribute, id),
 		mode: 'self' === labelType ? 'none' : labelType,
+		...propsForLabelControl,
 	};
 
 	return (
@@ -72,7 +75,11 @@ export default function ToggleControl({
 				label={columns ? '' : label}
 				checked={value}
 				onChange={setValue}
-				className={controlClassNames('toggle', className)}
+				className={controlClassNames(
+					'toggle',
+					className,
+					`size-${size}`
+				)}
 				{...props}
 			/>
 			{children}

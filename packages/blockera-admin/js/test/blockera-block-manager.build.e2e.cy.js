@@ -4,7 +4,7 @@ import {
 } from '@blockera/dev-cypress/js/helpers/site-navigation';
 import {
 	appendBlocks,
-	getBlockInserter,
+	openBlockInserter,
 } from '@blockera/dev-cypress/js/helpers/editor';
 import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
@@ -56,11 +56,15 @@ describe('Block Manager Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
 			// open inserter panel
-			getBlockInserter().click();
+			openBlockInserter();
+
+			const selector = `.editor-block-list-item-${CSS.escape(
+				`paragraph/paragraph`
+			)}`;
 
 			// should not show blockera block icon on paragraph block
-			cy.get('.editor-block-list-item-paragraph').should('be.visible');
-			cy.get('.editor-block-list-item-paragraph').within(() => {
+			cy.get(selector).should('be.visible');
+			cy.get(selector).within(() => {
 				cy.get('.blockera-block-icon').should('not.exist');
 			});
 		});
@@ -94,11 +98,15 @@ describe('Block Manager Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background');
 
 			// open inserter panel
-			getBlockInserter().click();
+			openBlockInserter();
+
+			const selector = `.editor-block-list-item-${CSS.escape(
+				`paragraph/paragraph`
+			)}`;
 
 			// should show blockera block icon on paragraph block
-			cy.get('.editor-block-list-item-paragraph').should('be.visible');
-			cy.get('.editor-block-list-item-paragraph').within(() => {
+			cy.get(selector).should('be.visible');
+			cy.get(selector).within(() => {
 				cy.get('.blockera-block-icon').should('be.visible');
 			});
 		});
@@ -124,7 +132,7 @@ describe('Block Manager Settings Testing ...', () => {
 <!-- /wp:details -->
 
 <!-- wp:list -->
-<ul><!-- wp:list-item -->
+<ul class="wp-block-list"><!-- wp:list-item -->
 <li></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->

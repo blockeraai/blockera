@@ -28,7 +28,7 @@ export const UserRoles = ({
 	setHasUpdates,
 	generalSettings,
 	savedGeneralSettings,
-}: BlockVisibilityProps) => {
+}: BlockVisibilityProps): MixedElement => {
 	return (
 		<Flex direction={'column'} className={'blockera-settings-section'}>
 			<h3 className={'blockera-settings-general section-title'}>
@@ -109,26 +109,31 @@ export const UserRoles = ({
 									type: 'nested',
 									name: 'userRoles',
 									value: Object.fromEntries(
-										Object.entries(
+										Object.keys(
 											generalSettings.allowedUserRoles
 										).map(
-											([id, checked]: [
-												string,
-												boolean
-											]): [string, boolean] => {
-												return [id, checked];
+											(id: string): [string, boolean] => {
+												return [
+													id,
+													generalSettings
+														.allowedUserRoles[id],
+												];
 											}
 										)
 									),
 								}}
 							>
-								{Object.entries(
+								{Object.keys(
 									generalSettings.allowedUserRoles
 								).map(
 									(
-										[id, checked]: [string, boolean],
+										id: string,
 										index: number
 									): MixedElement => {
+										const checked: boolean =
+											generalSettings.allowedUserRoles[
+												id
+											];
 										return (
 											<CheckboxControl
 												id={id}

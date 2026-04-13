@@ -8,23 +8,23 @@ class BackgroundClip extends BaseStyleDefinition {
 
     protected function css( array $setting): array {
         
-		$declaration = [];
-		$cssProperty = $setting['type'];
+		$cssProperty = $setting['type'] ?? '';
 
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'background-clip' !== $cssProperty ) {
-
-			return $declaration;
+		if ( 'background-clip' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
+			return [];
 		}
 
-		$this->setDeclaration($cssProperty, $setting[ $cssProperty ]);
-		$this->setDeclaration('-webkit-background-clip', $setting[ $cssProperty ]);
+		$value = $setting[ $cssProperty ];		
+		
+		$declarations                            = &$this->declarations;
+		$declarations[ $cssProperty ]            = $value;
+		$declarations['-webkit-background-clip'] = $value;
 
-		if ('text' === $setting[ $cssProperty ]) {
-
-			$this->setDeclaration('-webkit-text-fill-color', 'transparent');
+		if ( 'text' === $value ) {
+			$declarations['-webkit-text-fill-color'] = 'transparent';
 		}
 
-		$this->setCss($this->declarations);
+		$this->setCss( $declarations );
 
 		return $this->css;
     }

@@ -13,6 +13,19 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// Features selectors.
+				'blockeraBoxSpacing' => '.wp-block-table',
+				'blockeraWidth' => '.wp-block-table',
+				'blockeraMinWidth' => '.wp-block-table',
+				'blockeraMaxWidth' => '.wp-block-table',
+				// States selectors.
+				'blockera/states/before' => [
+					'root' => '.wp-block-table::before',
+				],
+				'blockera/states/after' => [
+					'root' => '.wp-block-table::after',
+				],
+				// Inner blocks selectors.
 				'blockera/elements/caption' => [
 					'root' => '&& .wp-element-caption',
 				],
@@ -24,6 +37,24 @@ return array_merge(
 				],
 				'blockera/elements/footer-cells' => [
 					'root' => 'tfoot td',
+				],
+				'blockera/elements/bold' => [
+					'root' => ':is(strong,b)',
+				],
+				'blockera/elements/italic' => [
+					'root' => ':is(em,i)',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span:not([data-rich-text-placeholder])',
+				],
+				'blockera/elements/mark' => [
+					'root' => ':is(mark,mark[class])',
 				],
 			]
 		),

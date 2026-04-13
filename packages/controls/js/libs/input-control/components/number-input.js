@@ -152,7 +152,7 @@ export function NumberInput({
 	const { onDragStart, onDragEnd } = useDragValue({
 		value: isString(value)
 			? //$FlowFixMe
-			  value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
+				value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
 			: +value,
 		setValue: (newValue) => {
 			setValue(newValue);
@@ -169,7 +169,7 @@ export function NumberInput({
 						onDragStart(event);
 					},
 					onMouseUp: onDragEnd,
-			  }
+				}
 			: {};
 	};
 
@@ -211,18 +211,18 @@ export function NumberInput({
 				{...getDragEvent()}
 			/>
 
-			{arrows && (
-				<InputArrows
-					value={value}
-					setValue={setValue}
-					disabled={disabled}
-					min={min}
-					max={max}
-					size={size}
-				/>
-			)}
-
 			<div className={controlInnerClassNames('input-actions')}>
+				{arrows && (
+					<InputArrows
+						value={value}
+						setValue={setValue}
+						disabled={disabled}
+						min={min}
+						max={max}
+						size={size}
+					/>
+				)}
+
 				{actions}
 			</div>
 

@@ -14,7 +14,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Rss: BlockType = {
 	name: 'blockeraRss',
@@ -68,5 +68,15 @@ export const Rss: BlockType = {
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
+	},
+	selectors: {
+		/**
+		 * Update the root selector in the editor to prevent styles from being applied to both the main block tag and the extra element
+		 * that the core block editor adds inside the block root.
+		 *
+		 * The style should only be applied to the main element (tag with data-block attribute)
+		 * to avoid duplicate styling.
+		 */
+		root: '.wp-block-rss[data-block]',
 	},
 };

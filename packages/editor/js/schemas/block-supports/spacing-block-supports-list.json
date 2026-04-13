@@ -1,13 +1,22 @@
 {
 	"$schema": "../block.supports.schema.json",
 	"title": "spacing",
+	"type": "multiple",
 	"supports": {
-		"blockeraSpacing": {
+		"blockeraPadding": {
 			"status": true,
 			"id": "blockeraSpacing",
-			"definition": "Spacing",
-			"css-property": "spacing",
-			"fallback": ["spacing.margin", "spacing.padding", "spacing"],
+			"definition": "Padding",
+			"css-property": "padding",
+			"fallback": ["padding", "spacing"],
+			"description": "Support for \"blockeraSpacing\" value, this is mirror for WordPress block core \"spacing\" support."
+		},
+		"blockeraMargin": {
+			"status": true,
+			"id": "blockeraSpacing",
+			"definition": "Margin",
+			"css-property": "margin",
+			"fallback": ["margin", "spacing"],
 			"description": "Support for \"blockeraSpacing\" value, this is mirror for WordPress block core \"spacing\" support."
 		}
 	}

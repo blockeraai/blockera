@@ -1,0 +1,109 @@
+// Global styles panel header
+.components-panel__header.interface-complementary-area-header {
+	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+		inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
+	background-color: var(--blockera-panel-tabs-bg-color);
+	border: none;
+	height: var(--blockera-panel-tabs-height) !important;
+}
+
+// Site editor canvas container section (Style Book)
+
+.edit-site-editor-canvas-container__section {
+	border-radius: 0;
+	box-shadow: var(--blockera-iframe-box-shadow);
+}
+
+.edit-site-layout.is-full-canvas .edit-site-editor-canvas-container {
+	padding: 50px;
+}
+
+button.edit-site-editor-canvas-container__close-button {
+	background-color: transparent !important;
+	min-width: calc(var(--blockera-panel-tabs-height) * 0.6) !important;
+	height: calc(var(--blockera-panel-tabs-height) * 0.6) !important;
+}
+
+// Tabs (Panel Header and Tabs)
+
+.edit-site-style-book__tablist-container,
+.block-editor-tabbed-sidebar__tablist-and-close-button,
+.components-panel__header.editor-sidebar__panel-tabs {
+	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+		inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
+	background-color: var(--blockera-panel-tabs-bg-color);
+	border: none;
+	height: var(--blockera-panel-tabs-height) !important;
+
+	button[role="tab"] {
+		height: var(--blockera-panel-tabs-height) !important;
+		background-color: var(--blockera-panel-tabs-tab-bg-color);
+		border: 1px solid var(--blockera-panel-tabs-tab-border-color);
+		border-left: none;
+		transition: var(--blockera-controls-transition);
+
+		&::before {
+			content: "";
+			height: 1px;
+			position: absolute;
+			left: 1px;
+			right: 1px;
+			bottom: 0;
+			background: transparent;
+			transition: var(--blockera-controls-transition);
+		}
+
+		&[data-active-item="true"] {
+			background-color: var(--blockera-panel-tabs-tab-active-bg-color);
+			border-bottom-color: transparent;
+			z-index: 1;
+
+			&::before {
+				background: #ffffff;
+			}
+		}
+
+		&:hover:not([data-active-item="true"]) {
+			background-color: var(--blockera-panel-tabs-bg-color);
+		}
+	}
+
+	[role="tablist"] {
+		margin: 0;
+	}
+
+	[role="tablist"][aria-orientation="horizontal"]::before {
+		bottom: initial;
+		top: 0;
+		height: 0;
+		z-index: 2;
+		border-bottom: var(--blockera-panel-tabs-tab-active-indicator-height)
+			solid var(--blockera-controls-primary-color);
+	}
+
+	.block-editor-tabbed-sidebar__close-button {
+		background-color: transparent;
+	}
+}
+
+.editor-editor-interface {
+	// remove shadow from skeleton header to prevent
+	// the .interface-interface-skeleton__content overlap (causes darker color).
+	.interface-interface-skeleton__header {
+		box-shadow: none;
+	}
+
+	.interface-interface-skeleton__content {
+		border-top: 1px solid #dddddd;
+	}
+
+	.interface-interface-skeleton__secondary-sidebar-blockera,
+	.interface-interface-skeleton__secondary-sidebar,
+	.interface-interface-skeleton__sidebar {
+		border-top: none !important;
+	}
+}
+
+.components-panel__header {
+	height: var(--blockera-panel-tabs-height);
+}

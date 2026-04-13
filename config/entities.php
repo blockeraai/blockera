@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$theme = wp_get_theme();
+$blockera_current_theme = wp_get_theme();
 
 return apply_filters(
 	'blockera/config/entities',
@@ -20,12 +20,12 @@ return apply_filters(
 		],
 		'theme'    => [
 			'name'        => [
-				'raw'      => $theme->template,
-				'rendered' => $theme->get( 'Name' ),
+				'raw'      => $blockera_current_theme->template,
+				'rendered' => $blockera_current_theme->get( 'Name' ),
 			],
-			'version'     => $theme->get( 'Version' ),
-			'block_theme' => $theme->is_block_theme(),
-			'parent'      => $theme->get( 'parent' ),
+			'version'     => $blockera_current_theme->get( 'Version' ),
+			'block_theme' => $blockera_current_theme->is_block_theme(),
+			'parent'      => $blockera_current_theme->get( 'parent' ),
 		],
 		'site'     => [
 			'url' => home_url(),

@@ -14,11 +14,11 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 import sharedInnerBlocks from '../inners/shared';
 
 const imageSelector =
-	'.wp-block-image img,.wp-block-image svg,.wp-block-image .wp-block-image__crop-area,.wp-block-image .components-placeholder,.wp-block-image .block-editor-media-placeholder::before,.wp-block-image .components-resizable-box__container::before';
+	'.wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)';
 
 export const Image: BlockType = {
 	name: 'blockeraImage',
@@ -36,6 +36,15 @@ export const Image: BlockType = {
 				force: true,
 			},
 		},
+		'elements/img-tag': {
+			name: 'elements/img-tag',
+			label: __('Img/SVG Tag', 'blockera'),
+			description: __(
+				'The img or svg tag element inside image block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-image-tag" library="ui" iconSize="20" />,
+		},
 		'elements/link': {
 			...sharedInnerBlocks['elements/link'],
 			label: __('Link', 'blockera'),
@@ -52,26 +61,16 @@ export const Image: BlockType = {
 		},
 	},
 	selectors: {
-		blockeraWidth: {
-			root: imageSelector,
-		},
-		blockeraMinWidth: {
-			root: imageSelector,
-		},
-		blockeraMaxWidth: {
-			root: imageSelector,
-		},
-		blockeraHeight: {
-			root: imageSelector,
-		},
-		blockeraMinHeight: {
-			root: imageSelector,
-		},
-		blockeraMaxHeight: {
-			root: imageSelector,
-		},
+		width: imageSelector,
+		shadow: imageSelector,
+		border: imageSelector,
+		'border-radius': imageSelector,
+		filter: imageSelector,
+		shadow: imageSelector,
 		blockeraRatio: {
 			root: imageSelector,
 		},
+		'object-fit': imageSelector,
+		'box-sizing': imageSelector,
 	},
 };

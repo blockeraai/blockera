@@ -23,7 +23,7 @@ return array_merge(
 					'root' => '.wp-block-post-terms__suffix',
 				],
 				'blockera/elements/link'      => [
-					'root' => 'a:not(.wp-element-button)',
+					'root' => 'a',
 				],
 			]
 		),

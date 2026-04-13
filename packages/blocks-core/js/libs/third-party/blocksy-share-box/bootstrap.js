@@ -160,7 +160,9 @@ export const bootstrapBlocksyShareBox = (): void => {
 			}
 
 			return attributes;
-		}
+		},
+		// Priority 9 to run before wp text color compatibility filter.
+		9
 	);
 
 	addFilter(

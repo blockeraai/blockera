@@ -4,7 +4,7 @@
  * Plugin URI: https://blockera.ai/products/site-builder/
  * Description: Blockera Site Builder is transforming the block editor into a powerful page builder by adding responsive blocks, block states, and more.
  * Requires at least: 6.6
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * Requires PHP: 7.4
  * Requires at least blockera-pro: 1.1.1
  * Author: Blockera AI
@@ -24,22 +24,43 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-// loading autoloader.
-require __DIR__ . '/vendor/autoload.php';
+// the fallback way to load the composer default autoloader.
+if (! is_plugin_active('blockera-pro/blockera-pro.php')) {
+	require_once __DIR__ . '/vendor/autoload.php';
+} else {
+	// the shared autoloader way to load the composer customized autoloader.
+	add_filter(
+        'blockera/autoloader-coordinator/plugins/dependencies',
+        function ( array $plugins): array {
+			$plugins['blockera'] = [
+				'dir' => __DIR__,
+				'priority' => 10,
+				'default' => true,
+			];
 
-// Register into shared autoload coordinator.
-require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
+			return $plugins;
+		}
+    );
 
-// Register into shared autoload coordinator.
-\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
-\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+	// Register into shared autoload coordinator.
+	// This replaces vendor/autoload.php by loading directly from Composer-generated static files.
+	require_once __DIR__ . '/packages/autoloader-coordinator/loader.php';
+
+	// Register into shared autoload coordinator and bootstrap autoloading.
+	\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin();
+	\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+
+	// Invalidate package manifest cache on plugin activation, deactivation, and upgrade.
+	add_action('activated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+	add_action('deactivated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+	add_action('upgrader_process_complete', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+}
 ### END AUTO-GENERATED AUTOLOADER
 
 if (file_exists(__DIR__ . '/.env')) {
-
     // Env Loading ...
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->safeLoad();
+    $blockera_dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $blockera_dotenv->safeLoad();
 }
 
 if (! defined('BLOCKERA_SB_FILE')) {
@@ -70,8 +91,12 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-$env_mode = 'development' === ( $_ENV['APP_MODE'] ?? 'production' );
-$mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $env_mode;
+global $blockera_env_mode, $blockera_mode, $blockera_block_supports;
+
+// Set the blockera environment mode.
+$blockera_env_mode = 'development' === ( isset($_ENV['APP_MODE']) ? sanitize_text_field($_ENV['APP_MODE']) : 'production' );
+// Set the blockera mode.
+$blockera_mode = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $blockera_env_mode;
 
 global $blockera_compat_free_with_pro;
 
@@ -83,7 +108,7 @@ $blockera_compat_free_with_pro = new \Blockera\PluginCompatibility\Compatibility
 		'plugin_path' => BLOCKERA_SB_PATH,
 		'compatible_with_slug' => 'blockera-pro',
 		'transient_key' => 'blockera-compat-redirect',
-		'mode' => $mode ? 'development' : 'production',
+		'mode' => $blockera_mode ? 'development' : 'production',
 	],
 	new Blockera\Utils\Utils()
 );
@@ -97,10 +122,24 @@ add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
  */
 function blockera_load_compatibility_check(): void{
 
-	global $blockera_compat_free_with_pro, $is_compatible_with_pro;
+	global $blockera_compat_free_with_pro, $blockera_is_compatible_with_pro;
 
-	$is_compatible_with_pro = $blockera_compat_free_with_pro->load();
+	$blockera_is_compatible_with_pro = $blockera_compat_free_with_pro->load();
 }
+
+/**
+ * Filter the block supports.
+ *
+ * @hook  'blockera.block.supports'
+ * @since 1.12.2
+ * @param array $block_supports The block supports.
+ * 
+ * @return array The filtered block supports.
+ */
+$blockera_block_supports = apply_filters(
+	'blockera.block.supports',
+	blockera_get_available_block_supports()
+);
 
 // Initialize hooks on Front Controller.
 blockera_load('bootstrap.hooks', __DIR__);
@@ -108,6 +147,8 @@ blockera_load('bootstrap.hooks', __DIR__);
 add_action('init', 'blockera_init', 10);
 
 function blockera_init(): void {
+
+	blockera_load('bootstrap.init', __DIR__);
 
     /**
      * This hook for extendable setup process from internal or third-party developers.
@@ -117,9 +158,9 @@ function blockera_init(): void {
      */
     do_action('blockera/before/setup');
 
-	global $blockera_compat_free_with_pro, $is_compatible_with_pro;
+	global $blockera_compat_free_with_pro, $blockera_is_compatible_with_pro;
 
-	if (! $is_compatible_with_pro) {
+	if (! $blockera_is_compatible_with_pro) {
 		// Add compatibility check hooks.
 		add_action('admin_init', [ $blockera_compat_free_with_pro, 'adminInitialize' ]);
 		add_action('admin_menu', [ $blockera_compat_free_with_pro, 'adminMenus' ]);

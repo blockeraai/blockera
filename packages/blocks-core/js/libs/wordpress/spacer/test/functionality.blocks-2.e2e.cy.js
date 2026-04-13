@@ -27,6 +27,25 @@ describe('Spacer Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 
+		cy.checkBlockSections(
+			[
+				'advanced-settings',
+				'spacing',
+				'typography',
+				'background',
+				'border-and-shadow',
+				'effects',
+				'layout',
+				'position',
+				'mouse',
+				'flex-child',
+			],
+			'not.exist'
+		);
+
+		// activate min width
+		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
+
 		//
 		// 1. Edit Inner Blocks
 		//
@@ -34,21 +53,13 @@ describe('Spacer Block', () => {
 		//
 		// 1.1. Block styles
 		//
-		cy.getBlock('core/spacer').should(
-			'have.css',
-			'background-clip',
-			'border-box'
-		);
+		cy.getBlock('core/spacer').should('have.css', 'min-width', '0px');
 
-		cy.getParentContainer('Clipping').within(() => {
-			cy.customSelect('Clip to Padding');
+		cy.getParentContainer('Min Width').within(() => {
+			cy.get('input').type(10);
 		});
 
-		cy.getBlock('core/spacer').should(
-			'have.css',
-			'background-clip',
-			'padding-box'
-		);
+		cy.getBlock('core/spacer').should('have.css', 'min-width', '10px');
 
 		//
 		// 2. Check settings tab
@@ -71,8 +82,8 @@ describe('Spacer Block', () => {
 
 		cy.get('.blockera-block.wp-block-spacer').should(
 			'have.css',
-			'background-clip',
-			'padding-box'
+			'min-width',
+			'10px'
 		);
 	});
 });

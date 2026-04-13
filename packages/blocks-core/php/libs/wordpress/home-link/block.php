@@ -24,9 +24,11 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// States selectors.
 				'blockera/states/current-menu-item' => [
 					'root' => '&.current-menu-item',
 				], 
+				// Inner blocks selectors.
 				'blockera/elements/link' => [
 					'root' => '.wp-block-navigation-item__content',
 				],
@@ -35,6 +37,24 @@ return array_merge(
 				],
 				'htmlEditable' => [
 					'root' => ' .wp-block-home-link__content',
+				],
+				'blockera/elements/bold' => [
+					'root' => ':is(strong,b)',
+				],
+				'blockera/elements/italic' => [
+					'root' => ':is(em,i)',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span:not([data-rich-text-placeholder])',
+				],
+				'blockera/elements/mark' => [
+					'root' => ':is(mark,mark[class])',
 				],
 			]
 		),

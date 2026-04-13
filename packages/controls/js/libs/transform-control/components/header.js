@@ -1,8 +1,7 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -82,7 +81,7 @@ const RepeaterItemHeader = ({
 			className={controlInnerClassNames('repeater-group-header')}
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
-				// translators: it's the aria label for repeater item
+				// translators: %d: The item number (1-based index)
 				__('Item %d', 'blockera'),
 				itemId + 1
 			)}
@@ -105,4 +104,4 @@ const RepeaterItemHeader = ({
 };
 
 // $FlowFixMe
-export default memo(RepeaterItemHeader);
+export default RepeaterItemHeader;

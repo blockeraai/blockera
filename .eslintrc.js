@@ -53,20 +53,40 @@ module.exports = {
 		'plugin:cypress/recommended',
 		'plugin:ft-flow/recommended',
 	],
-	rules: {
-		'prettier/prettier': [
-			'error',
-			{
-				endOfLine: 'auto',
+	settings: {
+		'import/extensions': ['.js', '.jsx', '.txt', '.html'],
+		'import/resolver': {
+			node: {
+				extensions: [
+					'.ts',
+					'.tsx',
+					'.js',
+					'.jsx',
+					'.json',
+					'.txt',
+					'.html',
+				],
 			},
-		],
+		},
+	},
+	rules: {
+		// Let prettier/prettier auto-discover .prettierrc.js
+		// This ensures ESLint uses the same config as the editor's Prettier extension
+		'prettier/prettier': 'error',
 		'ft-flow/space-after-type-colon': 'off',
 		'@wordpress/i18n-no-collapsible-whitespace': 'off',
 		'import/no-extraneous-dependencies': 'off',
+		'import/no-unresolved': [
+			'error',
+			{
+				ignore: ['\\.txt$', '\\.html$'],
+			},
+		],
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'@wordpress/no-base-control-with-label-without-id': 'off',
 		'jsdoc/check-line-alignment': 'off',
 		'jsdoc/require-param': 'off',
+		'jsdoc/require-param-type': 'off',
 		'jsdoc/check-param-names': 'off',
 		'no-shadow': 'off',
 		'no-console': 'off',
@@ -92,6 +112,12 @@ module.exports = {
 				allowedTextDomain: ['blockera'],
 			},
 		],
+		// Disable import/named to avoid TypeScript resolver issues
+		// TypeScript and Flow handle type checking, so this rule is redundant
+		'import/named': 'off',
+		'import/namespace': 'off',
+		'import/default': 'off',
+		'import/no-named-as-default-member': 'off',
 	},
 	overrides: [
 		{
@@ -107,6 +133,39 @@ module.exports = {
 						),
 					},
 				],
+			},
+		},
+		{
+			files: ['**/*.ts', '**/*.tsx'],
+			parser: '@typescript-eslint/parser',
+			parserOptions: {
+				ecmaVersion: 2021,
+				sourceType: 'module',
+				ecmaFeatures: {
+					jsx: true,
+				},
+			},
+			settings: {
+				'import/resolver': {
+					node: {
+						extensions: [
+							'.ts',
+							'.tsx',
+							'.js',
+							'.jsx',
+							'.json',
+							'.txt',
+							'.html',
+						],
+					},
+				},
+			},
+			rules: {
+				'ft-flow/no-types-missing-file-annotation': 'off',
+				'import/named': 'off',
+				'import/namespace': 'off',
+				'import/default': 'off',
+				'import/no-named-as-default-member': 'off',
 			},
 		},
 	],

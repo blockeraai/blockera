@@ -25,6 +25,8 @@ return array_merge(
 			$args['selectors'] ?? [],
 			(array) array_merge(
 				[
+					'root' => '.wp-block-navigation-submenu:is(li)',
+					// States selectors.
 					'blockera/states/current-menu-item' => [
 						'root' => '&.current-menu-item',
 					],
@@ -34,6 +36,7 @@ return array_merge(
 					'blockera/states/current-menu-ancestor' => [
 						'root' => '&.current-menu-ancestor',
 					],
+					// Inner blocks selectors.
 					'blockera/elements/link'              => [
 						'root' => '> .wp-block-navigation-item__content',
 					],
@@ -41,7 +44,7 @@ return array_merge(
 						'root' => '.wp-block-navigation__submenu-container',
 					],
 					'blockera/elements/submenu-items'     => [
-						'root' => '.wp-block-navigation-item',
+						'root' => ':where(li.wp-block-navigation-item)',
 					],
 					'blockera/elements/submenu-icon'      => [
 						'root' => '.wp-block-navigation__submenu-icon',
@@ -51,6 +54,24 @@ return array_merge(
 					],
 					'htmlEditable' => [
 						'root' => ' a.wp-block-navigation-item__content span.wp-block-navigation-item__label',
+					],
+					'blockera/elements/bold' => [
+						'root' => ':is(strong,b)',
+					],
+					'blockera/elements/italic' => [
+						'root' => ':is(em,i)',
+					],
+					'blockera/elements/kbd' => [
+						'root' => 'kbd',
+					],
+					'blockera/elements/code' => [
+						'root' => 'code',
+					],
+					'blockera/elements/span' => [
+						'root' => 'span:not([data-rich-text-placeholder],.wp-block-navigation-item__label,.wp-block-navigation__submenu-icon)',
+					],
+					'blockera/elements/mark' => [
+						'root' => ':is(mark,mark[class])',
 					],
 				],
 			)

@@ -31,7 +31,7 @@ const statuses = {
 	},
 	saving: {
 		name: 'saving',
-		label: __('Saving...', 'blockera'),
+		label: __('Saving…', 'blockera'),
 	},
 	error: {
 		name: 'error',

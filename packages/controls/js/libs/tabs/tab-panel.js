@@ -4,8 +4,7 @@
  */
 import type { Element } from 'react';
 import { useInstanceId } from '@wordpress/compose';
-import { useState, useEffect } from '@wordpress/element';
-import { NavigableMenu, Button } from '@wordpress/components';
+import { useState, useEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -18,9 +17,8 @@ import {
 /**
  * Internal dependencies
  */
-import { Tooltip } from '../tooltip';
+import TabMenu from './tab-menu';
 import type { TTabPanelProps } from './types';
-import ConditionalWrapper from '../conditional-wrapper';
 
 export default function TabPanel({
 	tabs,
@@ -37,13 +35,14 @@ export default function TabPanel({
 }: TTabPanelProps): Element<any> {
 	const instanceId = useInstanceId(TabPanel, 'tab-panel');
 	const [selected, setSelected] = useState(null);
-	const handleClick = (tabKey: string): void => {
-		setSelected(tabKey);
-		onSelect(tabKey);
-	};
-	const onNavigate = (childIndex: number, child: Object): void => {
-		child.click();
-	};
+
+	const handleClick = useCallback(
+		(tabKey: string): void => {
+			setSelected(tabKey);
+			onSelect(tabKey);
+		},
+		[onSelect]
+	);
 
 	const selectedTab = tabs.find((tab) => tab.name === selected);
 	const selectedId = `${instanceId}-${selectedTab?.name ?? 'none'}`;
@@ -57,65 +56,6 @@ export default function TabPanel({
 		}
 	}, [initialTabName, selected, tabs]);
 
-	const Menu = () => (
-		<NavigableMenu
-			role="tablist"
-			orientation={orientation}
-			onNavigate={onNavigate}
-			className={componentClassNames('tabs__list')}
-		>
-			{heading && (
-				<div className={componentInnerClassNames('tabs__heading')}>
-					{heading}
-				</div>
-			)}
-
-			{tabs.map((tab) => (
-				<ConditionalWrapper
-					key={tab.name}
-					wrapper={(children) => (
-						<Tooltip text={tab.tooltip} key={tab.name}>
-							{children}
-						</Tooltip>
-					)}
-					condition={tab.tooltip !== undefined}
-				>
-					<Button
-						className={componentInnerClassNames(
-							'tabs__list__item',
-							'tab-item-button',
-							tab.className,
-							{
-								[(activeClass: string)]: tab.name === selected,
-							}
-						)}
-						aria-controls={`${instanceId}-${tab.name}-view`}
-						selected={tab.name === selected}
-						key={tab.name}
-						onClick={() => handleClick(tab.name)}
-						data-test={`${tab.name}-tab`}
-					>
-						{tab.icon}
-
-						{tab.title}
-
-						{activeIcon && tab.name === selected && (
-							<span
-								className={componentInnerClassNames(
-									'active-icon'
-								)}
-							>
-								{activeIcon}
-							</span>
-						)}
-					</Button>
-				</ConditionalWrapper>
-			))}
-
-			{injectMenuEnd && <>{injectMenuEnd}</>}
-		</NavigableMenu>
-	);
-
 	return (
 		<div
 			className={componentClassNames(
@@ -124,7 +64,17 @@ export default function TabPanel({
 				className
 			)}
 		>
-			<Menu />
+			<TabMenu
+				tabs={tabs}
+				selected={selected}
+				instanceId={instanceId}
+				orientation={orientation}
+				activeClass={activeClass}
+				activeIcon={activeIcon}
+				injectMenuEnd={injectMenuEnd}
+				heading={heading}
+				onTabClick={handleClick}
+			/>
 			{selectedTab && (
 				<div
 					key={selectedId}

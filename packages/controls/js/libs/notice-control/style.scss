@@ -56,7 +56,9 @@ body {
 	&.blockera-warning {
 		--notice-bg-color: var(--blockera-notice-warning-bg);
 		--notice-primary-color: var(--blockera-notice-warning-primary);
-		--notice-primary-color-dark: var(--blockera-notice-warning-primary-dark);
+		--notice-primary-color-dark: var(
+			--blockera-notice-warning-primary-dark
+		);
 	}
 
 	&.blockera-information {
@@ -74,7 +76,9 @@ body {
 	&.blockera-success {
 		--notice-bg-color: var(--blockera-notice-success-bg);
 		--notice-primary-color: var(--blockera-notice-success-primary);
-		--notice-primary-color-dark: var(--blockera-notice-success-primary-dark);
+		--notice-primary-color-dark: var(
+			--blockera-notice-success-primary-dark
+		);
 	}
 
 	.notice-control-content {
@@ -115,5 +119,4 @@ body {
 			}
 		}
 	}
-
 }

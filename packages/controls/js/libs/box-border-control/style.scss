@@ -1,4 +1,3 @@
-
 .blockera-control-box-border {
 	display: flex;
 	flex-direction: column;
@@ -6,14 +5,20 @@
 
 	.blockera-control-border-header {
 		display: grid;
-		gap: 0;
+		gap: 8px;
 		align-items: center;
 		justify-content: flex-end;
-		grid-template-columns: 1fr 158px;
+		grid-template-columns: 1fr 2.5fr;
 
 		.blockera-control-border {
-			width: 122px !important;
-			max-width: 122px !important;
+			width: 100% !important;
+			width: -moz-available !important;
+			width: -webkit-fill-available !important;
+			width: stretch !important;
+			max-width: 100% !important;
+			max-width: -moz-available !important;
+			max-width: -webkit-fill-available !important;
+			max-width: stretch !important;
 		}
 	}
 
@@ -34,7 +39,7 @@
 	.blockera-control-border-corners-preview {
 		height: 90px;
 		position: relative;
-		width: 158px;
+		width: calc(100% - 104px);
 		margin: 15px auto;
 		overflow: hidden;
 
@@ -47,10 +52,14 @@
 			display: block;
 			content: "";
 
-			border-top: var(--pb-top-width, 1px) var(--pb-top-style, dashed) var(--pb-top-color, #eaeaea);
-			border-right: var(--pb-right-width, 1px) var(--pb-right-style, dashed) var(--pb-right-color, #eaeaea);
-			border-bottom: var(--pb-bottom-width, 1px) var(--pb-bottom-style, dashed) var(--pb-bottom-color, #eaeaea);
-			border-left: var(--pb-left-width, 1px) var(--pb-left-style, dashed) var(--pb-left-color, #eaeaea);
+			border-top: var(--pb-top-width, 1px) var(--pb-top-style, dashed)
+				var(--pb-top-color, #eaeaea);
+			border-right: var(--pb-right-width, 1px)
+				var(--pb-right-style, dashed) var(--pb-right-color, #eaeaea);
+			border-bottom: var(--pb-bottom-width, 1px)
+				var(--pb-bottom-style, dashed) var(--pb-bottom-color, #eaeaea);
+			border-left: var(--pb-left-width, 1px) var(--pb-left-style, dashed)
+				var(--pb-left-color, #eaeaea);
 			z-index: -1;
 		}
 	}
@@ -67,7 +76,7 @@
 
 	.blockera-control-border-corner-right {
 		position: absolute;
-		right: 0;
+		right: 3px;
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;
@@ -87,7 +96,7 @@
 
 	.blockera-control-border-corner-left {
 		position: absolute;
-		left: 0;
+		left: 3px;
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;

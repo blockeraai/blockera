@@ -30,6 +30,7 @@ export default function RangeControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns,
@@ -96,6 +97,7 @@ export default function RangeControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (
@@ -117,7 +119,9 @@ export default function RangeControl({
 						return false;
 					}
 
-					if ('undefined' !== typeof onChange) onChange(newValue);
+					if ('undefined' !== typeof onChange) {
+						onChange(newValue);
+					}
 				}}
 				className={controlClassNames(
 					'range',

@@ -1,0 +1,154 @@
+.blockera-block.blockera-block-1.wp-block-math {
+	background-color: #ffe3e3;
+	border: 2px solid #870000;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) mi {
+	color: #d60000;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) mn {
+	color: #00aa4f;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) mo {
+	color: #00a0b8;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) mfrac {
+	color: #0300b1;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) msup {
+	color: #b500a0;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) msub {
+	color: #ba9b00;
+}
+
+.blockera-block.blockera-block-1.wp-block-math:hover {
+	background-color: #f6b5b5;
+	border: 2px solid #630000;
+}
+
+html:root body :where(.blockera-block.blockera-block-1):hover mi {
+	color: #e20000;
+}
+
+html:root body :where(.blockera-block.blockera-block-1):hover mn {
+	color: #00d765;
+}
+
+html:root body :where(.blockera-block.blockera-block-1):hover mo {
+	color: #00c6e4;
+}
+
+html:root body :where(.blockera-block.blockera-block-1):hover mfrac {
+	color: #0400fa;
+}
+
+html:root body :where(.blockera-block.blockera-block-1):hover msup {
+	color: #ff00e1;
+}
+
+html:root body :where(.blockera-block.blockera-block-1):hover msub {
+	color: #ffd500;
+}
+
+.blockera-block.blockera-block-1.wp-block-math::before {
+	display: block !important;
+	background-color: #00000038;
+	font-size: 16px;
+	font-weight: 600;
+	font-style: normal;
+	padding: 5px 10px 5px 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-math::after {
+	background-color: #00000038;
+	font-size: 16px;
+	font-weight: 600;
+	font-style: normal;
+	padding: 5px 10px 5px 10px;
+	margin-top: 10px;
+	border-radius: 5px;
+	display: block !important;
+	content: "After";
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-1) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-2) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-3) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-4) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-5) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-6) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-7) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-8) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-9) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-10) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-11) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-12) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-13) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-14) {
+	padding-left: 0pt;
+	padding-right: 0pt;
+}

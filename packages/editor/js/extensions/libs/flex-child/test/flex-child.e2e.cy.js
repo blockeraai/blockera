@@ -1,10 +1,9 @@
 import {
-	savePage,
-	getWPDataObject,
-	getSelectedBlock,
-	redirectToFrontPage,
-	appendBlocks,
 	createPost,
+	appendBlocks,
+	setDeviceType,
+	setInnerBlock,
+	setParentBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Flex Child', () => {
@@ -44,7 +43,77 @@ describe('Flex Child', () => {
 		});
 
 		it('should have flex-child block section', () => {
+			// Group block should not have the flex child block section
+			cy.getBlock('core/group').click();
+			cy.getByDataTest('style-tab').click();
+			cy.contains('Flex Child').should('not.exist');
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
+			// Paragraph block should have the flex child block section
+			cy.getBlock('core/paragraph').click();
+			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('exist');
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
+			// Switch to tablet device
+			setDeviceType('Mobile Portrait');
+			cy.getBlock('core/group').click();
+			cy.getParentContainer('Display').within(() => {
+				cy.getByAriaLabel('Block').click();
+			});
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
+			cy.getBlock('core/paragraph').click();
+			cy.getByDataTest('style-tab').click();
+			cy.contains('Flex Child').should('not.exist');
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
+			// Flex child should exist on desktop device
+			setDeviceType('Desktop');
+
+			// Switch blocks multiple times to make sure the flex child block section is not lost
+			cy.getBlock('core/group').click();
+			cy.getBlock('core/paragraph').click();
+			cy.getBlock('core/group').click();
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
+			cy.getBlock('core/paragraph').click();
+			cy.getByDataTest('style-tab').click();
+			cy.contains('Flex Child').should('exist');
+		});
+
+		it('should have flex-child block section', () => {
+			cy.contains('Flex Child').should('exist');
+
+			cy.getParentContainer('Display').within(() => {
+				cy.getByAriaLabel('Flex').click();
+			});
+
+			// Check inner block to make sure it has the flex child block section
+			setInnerBlock('elements/bold');
+			cy.getByDataTest('style-tab').click();
+			cy.contains('Flex Child').should('exist');
+
+			// Switch back to the parent block
+			setParentBlock();
+			cy.getParentContainer('Display').within(() => {
+				cy.getByAriaLabel('Block').click();
+			});
+
+			// Check inner block to make sure it does not have the flex child block section
+			setInnerBlock('elements/bold');
+			cy.getByDataTest('style-tab').click();
+			cy.contains('Flex Child').should('not.exist');
 		});
 	});
 });

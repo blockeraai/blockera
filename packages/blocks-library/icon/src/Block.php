@@ -79,22 +79,18 @@ class Block implements BlockInterface {
 
 		$block = $args['block'] ?? [];
 
-		if (empty($block) || ! str_contains($block['innerHTML'] ?? '', 'blockera-is-icon-block')) {
+		if (empty($block) || ! str_contains($html ?? '', 'blockera-is-icon-block')) {
 			return $html;
 		}
 
-		$dom = $this->app->dom_parser::str_get_html($block['innerHTML']);
+		$dom = $this->app->dom_parser::str_get_html($html);
 
 		if (! $dom) {
 			return $html;
 		}
 
-		$this->setContext('block');
-		$this->enqueueAssets(
-			$this->args['plugin_base_path'],
-			$this->args['plugin_base_url'],
-			$this->args['plugin_version']
-		);
+		// Enqueue the block assets.
+		$this->enqueueAssets($this->args['plugin_base_path'], 'block');
 
 		$value = $block['attrs']['blockeraIcon']['value'] ?? $this->fallback_value;
 

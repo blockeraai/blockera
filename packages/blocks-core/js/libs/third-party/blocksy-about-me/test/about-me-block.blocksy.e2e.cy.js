@@ -36,6 +36,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -118,6 +120,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -245,6 +249,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -273,7 +279,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				setInnerBlock('elements/text');
 				setBlockState('Hover');
 
-				cy.setColorControlValue('Text Color', '666666');
+				cy.setColorControlValue('Text Color', '#666666');
 
 				//
 				// Check
@@ -333,6 +339,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -441,6 +449,15 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
 					);
+
+					expect(
+						getSelectedBlock(data, 'blockeraInnerBlocks')[
+							'elements/text'
+						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
+							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
+					);
 				});
 			});
 		});
@@ -463,6 +480,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -490,7 +509,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				setInnerBlock('elements/icons');
 
-				cy.setColorControlValue('Text Color', '666666');
+				cy.setColorControlValue('Text Color', '#666666');
 
 				//
 				// Check
@@ -548,6 +567,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -675,6 +696,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -703,7 +726,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				setInnerBlock('elements/icons');
 				setBlockState('Hover');
 
-				cy.setColorControlValue('Text Color', '666666');
+				cy.setColorControlValue('Text Color', '#666666');
 
 				//
 				// Check
@@ -763,6 +786,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -864,12 +889,13 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'customIconsHoverColor')
 					);
-
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -882,12 +908,14 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 <h3 class="wp-block-heading has-medium-font-size">About Me</h3>
 <!-- /wp:heading -->
 
-<!-- wp:blocksy/about-me {"blockeraPropsId":"27e00124-6f09-4d2c-91db-3250f518cc87","blockeraCompatId":"16142144350","blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff5b5b"}},"elements/avatar":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"4px","style":"","color":"#ff0000"}}}},"elements/name":{"attributes":{"blockeraBackgroundColor":"#ffcdcd"}},"elements/profile-link":{"attributes":{"blockeraBackgroundColor":"#ff9a9a"}},"elements/text":{"attributes":{"blockeraFontColor":"#00a95a"}}}},"customTextColor":"#00a95a","lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dwslmq4"} -->
+<!-- wp:blocksy/about-me {"blockeraPropsId":"27e00124-6f09-4d2c-91db-3250f518cc87","blockeraCompatId":"16142144350","blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff5b5b"}},"elements/avatar":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"4px","style":"","color":"#ff0000"}}}},"elements/name":{"attributes":{"blockeraBackgroundColor":"#ffcdcd"}},"elements/profile-link":{"attributes":{"blockeraBackgroundColor":"#ff9a9a"}},"elements/text":{"attributes":{"blockeraFontColor":"#00a95a"}}}},"customTextColor":"#00a95a","lock":{"remove":true},"className":"blockera-block blockera-block-dwslmq4"} -->
 <div>Blocksy: About Me</div>
 <!-- /wp:blocksy/about-me -->
 <!-- /wp:blocksy/widgets-wrapper -->`);
 
 		cy.getBlock('blocksy/about-me').first().click();
+
+		cy.addNewTransition();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 

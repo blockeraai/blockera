@@ -1,0 +1,91 @@
+.blockera-block.blockera-block-1.wp-block-verse {
+	background-color: #fadbdb;
+	border: 3px solid #ff9292;
+	border-radius: 50px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
+	background-color: #ff0000;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :is(strong, b) {
+	background-color: #ff8400;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :is(em, i) {
+	background-color: #08ff00;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) kbd {
+	background-color: #00fbff;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) code {
+	background-color: #00aaff;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) span:not([data-rich-text-placeholder]) {
+	background-color: #b269ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
+	background-color: #ff64ff;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-verse {
+		border-radius: 5px;
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-verse:hover {
+	background-color: #ffa1a1;
+}
+
+.blockera-block.blockera-block-1.wp-block-verse::before {
+	padding: 5px 10px 5px 10px;
+	display: inline-block !important;
+	background-color: #0000003d;
+	border-radius: 50px;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-verse::before {
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		margin-bottom: 10px;
+		border-radius: 5px;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-verse::after {
+	padding: 5px 10px 5px 10px;
+	display: inline-block !important;
+	background-color: #0000002e;
+	border-radius: 50px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-verse::after {
+		margin-top: 10px;
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		border-radius: 5px;
+		content: "After";
+	}
+
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-1) {
+	background-color: #dfdfdf;
+}

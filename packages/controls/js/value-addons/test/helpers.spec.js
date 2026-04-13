@@ -71,7 +71,7 @@ describe('Helper Functions', () => {
 								settings: {
 									name: 'Small',
 									id: 'small',
-									value: '13px',
+									value: '13px', // value is changed to "13" in new updates
 									fluid: null,
 									reference: { type: 'preset' },
 									type: 'font-size',
@@ -81,7 +81,24 @@ describe('Helper Functions', () => {
 								isValueAddon: true,
 								valueType: 'variable',
 							})
-						).toBe('var(--wp--preset--font-size--small)');
+						).toBe('var(--wp--preset--font-size--small, 13)');
+
+						expect(
+							getValueAddonRealValue({
+								settings: {
+									name: 'not-found',
+									id: 'not-found',
+									value: '13px',
+									fluid: null,
+									reference: { type: 'preset' },
+									type: 'font-size',
+									var: '--wp--preset--font-size--not-found',
+								},
+								id: 'not-found',
+								isValueAddon: true,
+								valueType: 'variable',
+							})
+						).toBe('var(--wp--preset--font-size--not-found, 13px)');
 					});
 
 					test('font size - not valid variable - it should return value because the variable is not valid', () => {
@@ -100,7 +117,7 @@ describe('Helper Functions', () => {
 								isValueAddon: true,
 								valueType: 'variable',
 							})
-						).toBe('13px');
+						).toBe('var(--wp--preset--font-size--small, 13px)');
 					});
 
 					test('font size - not valid variable & empty value - it should return var for fallback', () => {

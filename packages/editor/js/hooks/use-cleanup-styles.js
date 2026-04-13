@@ -16,21 +16,16 @@ export const useCleanupStyles = (
 	dependencies: Array<any>
 ): Object => {
 	const [inlineStyles, setInlineStyles] = useState([]);
-	const {
-		blockeraSettings: {
-			earlyAccessLab: { optimizeStyleGeneration },
-		},
-	} = window;
 	const optimizeStyleGenerationOnEditor = experimental().get(
 		'earlyAccessLab.optimizeStyleGenerationOnEditor'
 	);
 
 	useEffect(() => {
-		setTimeout(() => {
-			if (!optimizeStyleGeneration || !optimizeStyleGenerationOnEditor) {
-				return;
-			}
+		if (!optimizeStyleGenerationOnEditor) {
+			return;
+		}
 
+		setTimeout(() => {
 			const iframeBody = getIframeTag('body');
 
 			if (!iframeBody) {

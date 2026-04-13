@@ -30,20 +30,23 @@ import { Icon } from '@blockera/icons';
  */
 import { StatesGraph } from './states-graph';
 import { useBlockContext } from '../../extensions';
-import { useAdvancedLabelProps } from '../../hooks';
 import type { AdvancedLabelControlProps } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
+import { useAdvancedLabelProps } from '../../hooks/use-advanced-label-props';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,
 	label,
 	value,
+	getAttributesRef,
+	inGlobalStylesPanel = false,
 	className,
 	ariaLabel,
 	attribute = '',
 	blockName = '',
 	isRepeater,
 	singularId,
+	controlFieldId,
 	labelDescription,
 	defaultValue,
 	labelPopoverTitle,
@@ -51,6 +54,9 @@ export const EditorAdvancedLabelControl = ({
 	resetToDefault,
 	onClick,
 	offset = 35,
+	iconPosition = 'end',
+	changesetGraphPreview,
+	changesetGraphPreviewRender,
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -63,7 +69,14 @@ export const EditorAdvancedLabelControl = ({
 		currentInnerBlockState,
 	} = useBlockContext();
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	let { attributes } = getSelectedBlock() || {};
+	let { attributes } = !inGlobalStylesPanel
+		? getSelectedBlock() || {}
+		: {
+				attributes:
+					'function' === typeof getAttributesRef
+						? getAttributesRef()
+						: {},
+			};
 	attributes = sanitizeBlockAttributes(attributes);
 
 	const { onChange, valueCleanup } = useContext(RepeaterContext) || {};
@@ -72,18 +85,20 @@ export const EditorAdvancedLabelControl = ({
 		isChanged,
 		isInnerBlock,
 		isChangedOnOtherStates,
-		isChangedNormalStateOnBaseBreakpoint,
 		isChangedOnCurrentState,
 		isChangedOnCurrentBreakpointNormal,
+		isChangedNormalStateOnBaseBreakpoint,
 	} = useAdvancedLabelProps(
 		{
 			path,
 			value,
+			blockName,
 			singularId,
 			attribute,
 			isRepeater,
 			defaultValue,
 			isNormalState: isNormalState(),
+			clientId: props?.clientId || '',
 			blockAttributes: getAttributes(),
 		},
 		200
@@ -94,6 +109,8 @@ export const EditorAdvancedLabelControl = ({
 		isChangedNormalStateOnBaseBreakpoint ||
 		isChangedOnOtherStates;
 
+	const previewObjectPickKey = singularId || controlFieldId;
+
 	return (
 		<>
 			{label && (
@@ -102,6 +119,7 @@ export const EditorAdvancedLabelControl = ({
 					ariaLabel={ariaLabel}
 					labelDescription={labelDescription}
 					advancedIsOpen={isOpenModal}
+					iconPosition={iconPosition}
 					className={controlClassNames('label', className, {
 						'changed-in-inner-normal-state':
 							(isInnerBlock &&
@@ -150,7 +168,7 @@ export const EditorAdvancedLabelControl = ({
 									} else {
 										setOpenModal(true);
 									}
-							  }
+								}
 					}
 					style={{
 						cursor: 'pointer',
@@ -160,6 +178,9 @@ export const EditorAdvancedLabelControl = ({
 						isChangedOnCurrentState &&
 						isFunction(resetToDefault)
 							? () => {
+									if ('function' !== typeof resetToDefault) {
+										return;
+									}
 									if (
 										(isNull(path) ||
 											isEmpty(path) ||
@@ -182,7 +203,7 @@ export const EditorAdvancedLabelControl = ({
 											? 'RESET_TO_DEFAULT'
 											: 'RESET_TO_NORMAL',
 									});
-							  }
+								}
 							: null
 					}
 				/>
@@ -225,7 +246,18 @@ export const EditorAdvancedLabelControl = ({
 								onClick={switchBlockState}
 								defaultValue={defaultValue}
 								path={path}
+								inGlobalStylesPanel={inGlobalStylesPanel}
+								attributesRef={
+									'undefined' !== typeof getAttributesRef
+										? getAttributesRef()
+										: {}
+								}
 								isRepeaterItem={!isUndefined(repeaterItem)}
+								changesetGraphPreview={changesetGraphPreview}
+								previewObjectPickKey={previewObjectPickKey}
+								changesetGraphPreviewRender={
+									changesetGraphPreviewRender
+								}
 							/>
 
 							{isFunction(resetToDefault) && (

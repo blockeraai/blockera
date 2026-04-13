@@ -27,6 +27,7 @@ export default function BorderControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = {
 		width: '0px',
@@ -69,6 +70,7 @@ export default function BorderControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (

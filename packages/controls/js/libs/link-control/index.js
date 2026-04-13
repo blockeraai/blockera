@@ -35,6 +35,7 @@ export default function LinkControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	singularId,
 	repeaterItem,
 	columns,
@@ -75,7 +76,7 @@ export default function LinkControl({
 					value.nofollow ||
 					value.label ||
 					value.attributes?.length
-			  )
+				)
 	);
 
 	const labelProps = {
@@ -91,6 +92,7 @@ export default function LinkControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (

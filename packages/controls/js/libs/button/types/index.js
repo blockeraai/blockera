@@ -24,7 +24,7 @@ export type ButtonProps = {
 	/**
 	 * Sets the size of button.
 	 */
-	size?: 'small' | 'medium' | 'large',
+	size?: 'extra-small' | 'small' | 'medium' | 'large',
 	/**
 	 * It is useful for buttons with specified width and allows
 	 * you to align the content to `left` or `right`.

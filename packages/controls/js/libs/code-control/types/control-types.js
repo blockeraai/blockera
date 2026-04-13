@@ -41,8 +41,8 @@ export type CodeControlProps = {
 	 */
 	lang?: 'css' | 'javascript',
 	defaultValue?: string,
-	width?: string,
-	height?: string,
+	width?: number,
+	height?: number,
 	/**
 	 * Enables a placeholder—a piece of example content to show when the editor is empty.
 	 */
@@ -57,4 +57,14 @@ export type CodeControlProps = {
 	 * Description to show after code control
 	 */
 	description?: any,
+	/**
+	 * Type of suggestions to show in the editor
+	 *
+	 * @default 'block'
+	 */
+	suggestionsType?: 'block' | 'site',
+	/**
+	 * Text to show when the editor is loading
+	 */
+	loadingText?: string,
 };

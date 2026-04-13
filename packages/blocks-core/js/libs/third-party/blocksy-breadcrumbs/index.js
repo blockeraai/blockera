@@ -18,7 +18,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const BlocksyBreadcrumbs: BlockType = {
 	name: 'blockeraBlocksyBreadcrumbs',

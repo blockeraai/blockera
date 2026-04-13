@@ -1,3 +1,11 @@
+.blockera-block.wp-block-button[style*="text-decoration"]
+	.wp-block-button__link,
+.blockera-block.wp-block-button.blockera-has-text-decoration
+	.wp-block-button__link {
+	text-decoration: inherit;
+}
+
+/* Icon style */
 .wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link {
 	display: flex;
 	align-items: center;
@@ -8,10 +16,12 @@
 	display: inline-block;
 	position: relative;
 	fill: var(--blockera--icon--color, currentColor);
+	color: var(--blockera--icon--color, inherit);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
-	margin: auto 0;
 	vertical-align: middle;
 	align-self: center;
-	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg))
+		scaleX(var(--blockera--icon--flip-horizontal, 1))
+		scaleY(var(--blockera--icon--flip-vertical, 1));
 }

@@ -21,7 +21,7 @@ describe('Min Width → Functionality', () => {
 		// activate min width
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
 
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.get('input').type(10);
 		});
 
@@ -40,7 +40,7 @@ describe('Min Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'min-width', '10px');
+		cy.get('p.blockera-block').should('have.css', 'min-width', '10px');
 	});
 
 	it('variable value', () => {
@@ -48,7 +48,7 @@ describe('Min Width → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
 
 		// open value addon
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -61,7 +61,7 @@ describe('Min Width → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'min-width: var(--wp--style--global--content-size)'
+					'min-width: var(--wp--style--global--content-size, 645px)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Min Width → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'min-width: var(--wp--style--global--content-size)'
+				'min-width: var(--wp--style--global--content-size, 645px)'
 			);
 	});
 });

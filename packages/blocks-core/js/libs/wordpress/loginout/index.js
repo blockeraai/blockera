@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Loginout: BlockType = {
 	name: 'blockeraLoginout',
@@ -42,6 +42,17 @@ export const Loginout: BlockType = {
 			settings: {
 				force: true,
 			},
+		},
+		'elements/inputs-container': {
+			name: 'elements/inputs-container',
+			label: __('Inputs Container', 'blockera'),
+			description: __(
+				'The login form inputs container element.',
+				'blockera'
+			),
+			icon: (
+				<Icon icon="block-login-form-inputs-container" iconSize="20" />
+			),
 		},
 		'elements/input': {
 			name: 'elements/input',

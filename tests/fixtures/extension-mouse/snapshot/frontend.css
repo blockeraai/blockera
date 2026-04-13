@@ -1,0 +1,30 @@
+p.blockera-block.blockera-block-1 {
+	background-color: #bde1ff;
+	cursor: wait;
+}
+
+p.blockera-block.blockera-block-2 {
+	background-color: #aceab3;
+	user-select: contain;
+}
+
+p.blockera-block.blockera-block-3 {
+	background-color: #efcf9f;
+	pointer-events: none;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 1.6;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}

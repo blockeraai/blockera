@@ -2,24 +2,24 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Editor\StyleDefinitions\Traits\WidthDefinitionTrait;
+
 class MaxWidth extends BaseStyleDefinition {
 
-	protected function css( array $setting): array {
+	use WidthDefinitionTrait;
 
-        $declaration = [];
-        $cssProperty = $setting['type'];
+	/**
+     * Check is important style property value?
+     *
+     * @return bool true on success, false when otherwise.
+     */
+    protected function isImportant(): bool {
 
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'max-width' !== $cssProperty) {
-
-            return $declaration;
-        }
-		
-		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
-
-		$this->setDeclaration( $cssProperty, blockera_get_value_addon_real_value($setting[ $cssProperty ]) . ( $optimizeStyleGeneration ? ' !important' : '' ));
-
-		$this->setCss($this->declarations);
-
-        return $this->css;
+        return true;
     }
+
+	public function getCssProperty(): string {
+
+		return 'max-width';
+	}
 }

@@ -33,21 +33,31 @@ import {
 	gapFromWPCompatibility,
 	gapToWPCompatibility,
 } from './compatibility/gap';
+import {
+	spacingFromWPCompatibility,
+	spacingToWPCompatibility,
+} from './compatibility/spacing';
+import {
+	gridAttrsFromWPCompatibility,
+	gridMinimumColumnWidthToWPCompatibility,
+	gridColumnCountToWPCompatibility,
+} from './compatibility/grid-attrs';
 
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.layoutExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, blockAttributes, activeBlockVariation } =
-				blockDetail;
-
-			if (isBlockNotOriginalState(blockDetail)) {
-				return attributes;
-			}
+			const {
+				blockId,
+				blockAttributes,
+				activeBlockVariation,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
+			} = blockDetail;
 
 			//
 			// Display compatibility
@@ -58,6 +68,10 @@ export const bootstrap = (): void => {
 				defaultValue: blockAttributes.blockeraDisplay.default,
 				//$FlowFixMe
 				activeVariation: activeBlockVariation?.name,
+			});
+
+			attributes = gridAttrsFromWPCompatibility({
+				attributes,
 			});
 
 			//
@@ -96,6 +110,17 @@ export const bootstrap = (): void => {
 			//
 			attributes = gapFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
+			});
+
+			//
+			// Spacing compatibility (padding and margin)
+			//
+			attributes = spacingFromWPCompatibility({
+				attributes,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -127,14 +152,30 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, blockAttributes, activeBlockVariation } =
-				blockDetail;
+			const {
+				blockId,
+				blockAttributes,
+				activeBlockVariation,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
+			} = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
 
 			switch (featureId) {
+				case 'blockeraSpacing':
+					return mergeObject(
+						nextState,
+						spacingToWPCompatibility({
+							newValue,
+							ref,
+							insideBlockInspector,
+							editorSelectedBlockEvent,
+						})
+					);
+
 				case 'blockeraDisplay':
 					return mergeObject(
 						nextState,
@@ -144,7 +185,30 @@ export const bootstrap = (): void => {
 							blockId,
 							//$FlowFixMe
 							activeVariation: activeBlockVariation?.name,
+							getAttributes,
 						})
+					);
+
+				case 'blockeraGridMinimumColumnWidth':
+					return mergeObject(
+						nextState,
+						gridMinimumColumnWidthToWPCompatibility({
+							newValue,
+							blockId,
+							getAttributes,
+						}) ?? {},
+						{ forceUpdated: ['layout'] }
+					);
+
+				case 'blockeraGridColumnCount':
+					return mergeObject(
+						nextState,
+						gridColumnCountToWPCompatibility({
+							newValue,
+							blockId,
+							getAttributes,
+						}) ?? {},
+						{ forceUpdated: ['layout'] }
 					);
 
 				case 'blockeraFlexWrap':
@@ -175,6 +239,8 @@ export const bootstrap = (): void => {
 							ref,
 							defaultValue: blockAttributes?.blockeraGap?.default,
 							blockId,
+							insideBlockInspector,
+							editorSelectedBlockEvent,
 						})
 					);
 			}

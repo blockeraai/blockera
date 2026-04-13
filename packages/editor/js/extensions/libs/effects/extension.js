@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useState } from '@wordpress/element';
+import { useState, useMemo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -15,8 +15,9 @@ import {
 	TransformControl,
 	PanelBodyControl,
 	ControlContextProvider,
+	ChangeIndicator,
 } from '@blockera/controls';
-import { isInteger, hasSameProps } from '@blockera/utils';
+import { isInteger } from '@blockera/utils';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
@@ -27,7 +28,7 @@ import { experimental } from '@blockera/env';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId } from '../utils';
@@ -36,95 +37,184 @@ import { Opacity } from './components/opacity';
 import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
-import { Blending } from './components/blending';
 import { ExtensionSettings } from '../settings';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 
-export const EffectsExtension: ComponentType<TEffectsProps> = memo(
-	({
-		values,
-		block,
-		extensionConfig,
-		handleOnChangeAttributes,
-		extensionProps,
-		setSettings,
-		attributes,
-	}: TEffectsProps): MixedElement => {
-		const { initialOpen, onToggle } = useBlockSection('effectsConfig');
-		const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
-			useState(false);
+export const EffectsExtension: ComponentType<TEffectsProps> = ({
+	values,
+	block,
+	extensionConfig,
+	handleOnChangeAttributes,
+	extensionProps,
+	setSettings,
+	attributes,
+}: TEffectsProps): MixedElement => {
+	const { initialOpen, onToggle } = useBlockSection('effectsConfig');
+	const { activeSearchMode } = useFeatureSearch();
+	const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
+		useState(false);
 
-		const isShowOpacity = isShowField(
-			extensionConfig.blockeraOpacity,
-			values?.blockeraOpacity,
-			attributes.blockeraOpacity.default
-		);
-		const isShowTransform = isShowField(
-			extensionConfig.blockeraTransform,
-			values?.blockeraTransform,
-			attributes.blockeraTransform.default
-		);
-		const isShowTransition = isShowField(
-			extensionConfig.blockeraTransition,
-			values?.blockeraTransition,
-			attributes.blockeraTransition.default
-		);
-		const isShowFilter = isShowField(
-			extensionConfig.blockeraFilter,
-			values?.blockeraFilter,
-			attributes.blockeraFilter.default
-		);
-		const isShowBackdropFilter = isShowField(
-			extensionConfig.blockeraBackdropFilter,
-			values?.blockeraBackdropFilter,
-			attributes.blockeraBackdropFilter.default
-		);
-		const isShowBlendMode = isShowField(
-			extensionConfig.blockeraBlendMode,
-			values?.blockeraBlendMode,
-			attributes.blockeraBlendMode.default
-		);
-
-		let isShowMask = false;
-		if (experimental().get('editor.extensions.effectsExtension.mask'))
-			isShowMask = isShowField(
-				extensionConfig.blockeraMask,
-				values?.blockeraMask,
-				attributes.blockeraMask.default
-			);
-
-		let isShowDivider = false;
-		if (experimental().get('editor.extensions.effectsExtension.divider'))
-			isShowDivider = isShowField(
-				extensionConfig.blockeraDivider,
-				values?.blockeraDivider,
-				attributes.blockeraDivider.default
-			);
-
-		// Extension is not active
+	/**
+	 * Check if any transform settings feature has a value different from default
+	 * Memoized to avoid recalculating on every render
+	 */
+	const hasTransformSettingsChanges = useMemo(() => {
+		// Check blockeraTransformSelfPerspective
 		if (
-			!isShowOpacity &&
-			!isShowTransform &&
-			!isShowTransition &&
-			!isShowFilter &&
-			!isShowMask &&
-			!isShowBackdropFilter &&
-			!isShowDivider &&
-			!isShowBlendMode
+			values?.blockeraTransformSelfPerspective !==
+			attributes.blockeraTransformSelfPerspective?.default
 		) {
-			return <></>;
+			return true;
 		}
 
-		return (
-			<PanelBodyControl
-				onToggle={onToggle}
-				title={__('Effects', 'blockera')}
-				initialOpen={initialOpen}
-				icon={<Icon icon="extension-effects" />}
-				className={extensionClassNames('effects')}
-			>
+		// Check blockeraTransformSelfOrigin (object comparison)
+		const selfOrigin = values?.blockeraTransformSelfOrigin;
+		const selfOriginDefault =
+			attributes.blockeraTransformSelfOrigin?.default || {};
+		if (
+			selfOrigin &&
+			(selfOrigin.top !== selfOriginDefault.top ||
+				selfOrigin.left !== selfOriginDefault.left)
+		) {
+			return true;
+		}
+
+		// Check blockeraBackfaceVisibility
+		if (
+			values?.blockeraBackfaceVisibility !==
+			attributes.blockeraBackfaceVisibility?.default
+		) {
+			return true;
+		}
+
+		// Check blockeraTransformChildPerspective
+		if (
+			values?.blockeraTransformChildPerspective !==
+			attributes.blockeraTransformChildPerspective?.default
+		) {
+			return true;
+		}
+
+		// Check blockeraTransformChildOrigin (object comparison)
+		const childOrigin = values?.blockeraTransformChildOrigin;
+		const childOriginDefault =
+			attributes.blockeraTransformChildOrigin?.default || {};
+		if (
+			childOrigin &&
+			(childOrigin.top !== childOriginDefault.top ||
+				childOrigin.left !== childOriginDefault.left)
+		) {
+			return true;
+		}
+
+		return false;
+	}, [
+		values?.blockeraTransformSelfPerspective,
+		values?.blockeraTransformSelfOrigin,
+		values?.blockeraBackfaceVisibility,
+		values?.blockeraTransformChildPerspective,
+		values?.blockeraTransformChildOrigin,
+		attributes.blockeraTransformSelfPerspective?.default,
+		attributes.blockeraTransformSelfOrigin?.default,
+		attributes.blockeraBackfaceVisibility?.default,
+		attributes.blockeraTransformChildPerspective?.default,
+		attributes.blockeraTransformChildOrigin?.default,
+	]);
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
+	const isShowOpacity = isShowField(
+		extensionConfig.blockeraOpacity,
+		values?.blockeraOpacity,
+		attributes.blockeraOpacity.default
+	);
+	const isShowTransform = isShowField(
+		extensionConfig.blockeraTransform,
+		values?.blockeraTransform,
+		attributes.blockeraTransform.default
+	);
+	const isShowTransition = isShowField(
+		extensionConfig.blockeraTransition,
+		values?.blockeraTransition,
+		attributes.blockeraTransition.default
+	);
+	const isShowFilter = isShowField(
+		extensionConfig.blockeraFilter,
+		values?.blockeraFilter,
+		attributes.blockeraFilter.default
+	);
+	const isShowBackdropFilter = isShowField(
+		extensionConfig.blockeraBackdropFilter,
+		values?.blockeraBackdropFilter,
+		attributes.blockeraBackdropFilter.default
+	);
+
+	let isShowMask = false;
+	if (experimental().get('editor.extensions.effectsExtension.mask')) {
+		isShowMask = isShowField(
+			extensionConfig.blockeraMask,
+			values?.blockeraMask,
+			attributes.blockeraMask.default
+		);
+	}
+
+	let isShowDivider = false;
+	if (experimental().get('editor.extensions.effectsExtension.divider')) {
+		isShowDivider = isShowField(
+			extensionConfig.blockeraDivider,
+			values?.blockeraDivider,
+			attributes.blockeraDivider.default
+		);
+	}
+
+	const isShowSelfPerspective = isShowField(
+		extensionConfig.blockeraTransformSelfPerspective,
+		values?.blockeraTransformSelfPerspective,
+		attributes.blockeraTransformSelfPerspective.default
+	);
+
+	const isShowBackfaceVisibility = isShowField(
+		extensionConfig.blockeraBackfaceVisibility,
+		values?.blockeraBackfaceVisibility,
+		attributes.blockeraBackfaceVisibility.default
+	);
+
+	const isShowChildPerspective = isShowField(
+		extensionConfig.blockeraTransformChildPerspective,
+		values?.blockeraTransformChildPerspective,
+		attributes.blockeraTransformChildPerspective.default
+	);
+
+	// Extension is not active
+	if (
+		!isShowOpacity &&
+		!isShowTransform &&
+		!isShowTransition &&
+		!isShowFilter &&
+		!isShowMask &&
+		!isShowBackdropFilter &&
+		!isShowDivider &&
+		!isShowSelfPerspective &&
+		!isShowBackfaceVisibility &&
+		!isShowChildPerspective
+	) {
+		return <></>;
+	}
+
+	return (
+		<PanelBodyControl
+			onToggle={onToggle}
+			title={__('Effects', 'blockera')}
+			initialOpen={initialOpen}
+			icon={<Icon icon="extension-effects" />}
+			className={extensionClassNames('effects')}
+		>
+			{!activeSearchMode && (
 				<ExtensionSettings
 					buttonLabel={__('More Effect Settings', 'blockera')}
 					features={extensionConfig}
@@ -132,172 +222,181 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						setSettings(newSettings, 'effectsConfig');
 					}}
 				/>
+			)}
 
-				<EditorFeatureWrapper
-					isActive={isShowOpacity}
-					config={extensionConfig.blockeraOpacity}
+			<EditorFeatureWrapper
+				isActive={isShowOpacity}
+				config={extensionConfig.blockeraOpacity}
+			>
+				<Opacity
+					block={block}
+					opacity={values.blockeraOpacity}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraOpacity.default}
+					{...extensionProps.blockeraOpacity}
+				/>
+			</EditorFeatureWrapper>
+
+			<EditorFeatureWrapper
+				isActive={isShowTransform}
+				config={extensionConfig.blockeraTransform}
+			>
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'transform-2d-3d'),
+						value: values.blockeraTransform,
+						attribute: 'blockeraTransform',
+						blockName: block.blockName,
+					}}
+					storeName={'blockera/controls/repeater'}
 				>
-					<Opacity
-						block={block}
-						opacity={values.blockeraOpacity}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraOpacity.default}
-						{...extensionProps.blockeraOpacity}
-					/>
-				</EditorFeatureWrapper>
-
-				<EditorFeatureWrapper
-					isActive={isShowTransform}
-					config={extensionConfig.blockeraTransform}
-				>
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'transform-2d-3d'),
-							value: values.blockeraTransform,
-							attribute: 'blockeraTransform',
-							blockName: block.blockName,
-						}}
-						storeName={'blockera/controls/repeater'}
-					>
-						<BaseControl
-							columns="columns-1"
-							controlName="transform"
-						>
-							{isTransformSettingsVisible && (
-								<TransformSettings
-									setIsTransformSettingsVisible={
-										setIsTransformSettingsVisible
-									}
-									block={block}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-									values={values}
-									attributes={attributes}
-									extensionConfig={extensionConfig}
-								/>
-							)}
-
-							<TransformControl
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraTransform',
-										isInteger(newValue)
-											? `${newValue}%`
-											: newValue,
-										{ ref }
-									)
+					<BaseControl columns="columns-1" controlName="transform">
+						{isTransformSettingsVisible && (
+							<TransformSettings
+								setIsTransformSettingsVisible={
+									setIsTransformSettingsVisible
 								}
-								injectHeaderButtonsStart={
-									<Button
-										showTooltip={true}
-										tooltipPosition="top"
-										label={__(
-											'Transformation Settings',
-											'blockera'
-										)}
-										size="extra-small"
-										className={controlInnerClassNames(
-											'btn-add'
-										)}
-										isFocus={isTransformSettingsVisible}
-										onClick={() =>
-											setIsTransformSettingsVisible(
-												!isTransformSettingsVisible
-											)
-										}
-									>
-										<Icon icon="three-d" iconSize="20" />
-									</Button>
+								block={block}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
 								}
-								defaultValue={
-									attributes.blockeraTransform.default
-								}
-								{...extensionProps.blockeraTransform}
+								values={values}
+								attributes={attributes}
+								extensionConfig={extensionConfig}
 							/>
-						</BaseControl>
-					</ControlContextProvider>
-				</EditorFeatureWrapper>
+						)}
 
-				<EditorFeatureWrapper
-					isActive={isShowTransition}
-					config={extensionConfig.blockeraTransition}
-				>
-					<Transition
-						transition={values.blockeraTransition}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraTransition.default}
-						{...extensionProps.blockeraTransition}
-					/>
-				</EditorFeatureWrapper>
+						<TransformControl
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'blockeraTransform',
+									isInteger(newValue)
+										? `${newValue}%`
+										: newValue,
+									{ ref }
+								)
+							}
+							injectHeaderButtonsStart={
+								<Button
+									showTooltip={true}
+									tooltipPosition="top"
+									label={__(
+										'Transformation Settings',
+										'blockera'
+									)}
+									size="extra-small"
+									className={controlInnerClassNames(
+										'btn-add'
+									)}
+									isFocus={isTransformSettingsVisible}
+									onClick={() =>
+										setIsTransformSettingsVisible(
+											!isTransformSettingsVisible
+										)
+									}
+									style={{
+										position: 'relative',
+									}}
+								>
+									<Icon icon="three-d" iconSize="20" />
+									{hasTransformSettingsChanges && (
+										<ChangeIndicator
+											isChanged={true}
+											isAnimated={true}
+											style={{
+												position: 'absolute',
+												top: '-2px',
+												left: '-2px',
+											}}
+										/>
+									)}
+								</Button>
+							}
+							defaultValue={attributes.blockeraTransform.default}
+							{...extensionProps.blockeraTransform}
+						/>
+					</BaseControl>
+				</ControlContextProvider>
+			</EditorFeatureWrapper>
 
-				<EditorFeatureWrapper
-					isActive={isShowFilter}
-					config={extensionConfig.blockeraFilter}
-				>
-					<Filter
-						filter={values.blockeraFilter}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraFilter.default}
-						{...extensionProps.blockeraFilter}
-					/>
-				</EditorFeatureWrapper>
+			{activeSearchMode && (
+				<TransformSettings
+					setIsTransformSettingsVisible={
+						setIsTransformSettingsVisible
+					}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					values={values}
+					attributes={attributes}
+					extensionConfig={extensionConfig}
+					insidePopover={false}
+				/>
+			)}
 
-				<EditorFeatureWrapper
-					isActive={isShowBackdropFilter}
-					config={extensionConfig.blockeraBackdropFilter}
-				>
-					<BackdropFilter
-						backdropFilter={values.blockeraBackdropFilter}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraBackdropFilter.default}
-						{...extensionProps.blockeraBackdropFilter}
-					/>
-				</EditorFeatureWrapper>
+			<EditorFeatureWrapper
+				isActive={isShowTransition}
+				config={extensionConfig.blockeraTransition}
+			>
+				<Transition
+					transition={values.blockeraTransition}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraTransition.default}
+					{...extensionProps.blockeraTransition}
+				/>
+			</EditorFeatureWrapper>
 
-				<EditorFeatureWrapper
-					isActive={isShowDivider}
-					config={extensionConfig.blockeraDivider}
-				>
-					<Divider
-						divider={values.blockeraDivider}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraDivider.default}
-						{...extensionProps.blockeraDivider}
-					/>
-				</EditorFeatureWrapper>
+			<EditorFeatureWrapper
+				isActive={isShowFilter}
+				config={extensionConfig.blockeraFilter}
+			>
+				<Filter
+					filter={values.blockeraFilter}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraFilter.default}
+					{...extensionProps.blockeraFilter}
+				/>
+			</EditorFeatureWrapper>
 
-				<EditorFeatureWrapper
-					isActive={isShowMask}
-					config={extensionConfig.blockeraMask}
-				>
-					<Mask
-						mask={values.blockeraMask}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraMask.default}
-						{...extensionProps.blockeraMask}
-					/>
-				</EditorFeatureWrapper>
+			<EditorFeatureWrapper
+				isActive={isShowBackdropFilter}
+				config={extensionConfig.blockeraBackdropFilter}
+			>
+				<BackdropFilter
+					backdropFilter={values.blockeraBackdropFilter}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraBackdropFilter.default}
+					{...extensionProps.blockeraBackdropFilter}
+				/>
+			</EditorFeatureWrapper>
 
-				<EditorFeatureWrapper
-					isActive={isShowBlendMode}
-					config={extensionConfig.blockeraBlendMode}
-				>
-					<Blending
-						blendMode={values.blockeraBlendMode}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraBlendMode.default}
-						{...extensionProps.blockeraBlendMode}
-					/>
-				</EditorFeatureWrapper>
-			</PanelBodyControl>
-		);
-	},
-	hasSameProps
-);
+			<EditorFeatureWrapper
+				isActive={isShowDivider}
+				config={extensionConfig.blockeraDivider}
+			>
+				<Divider
+					divider={values.blockeraDivider}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraDivider.default}
+					{...extensionProps.blockeraDivider}
+				/>
+			</EditorFeatureWrapper>
+
+			<EditorFeatureWrapper
+				isActive={isShowMask}
+				config={extensionConfig.blockeraMask}
+			>
+				<Mask
+					mask={values.blockeraMask}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraMask.default}
+					{...extensionProps.blockeraMask}
+				/>
+			</EditorFeatureWrapper>
+		</PanelBodyControl>
+	);
+};

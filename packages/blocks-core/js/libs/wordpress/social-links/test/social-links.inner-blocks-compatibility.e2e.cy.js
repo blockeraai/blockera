@@ -2,12 +2,14 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
 	createPost,
+	selectBlock,
+	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
+	getWPDataObject,
+	getSelectedBlock,
+	openBlockNavigator,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Social Links Block → WP Compatibility', () => {
@@ -27,11 +29,16 @@ describe('Social Links Block → WP Compatibility', () => {
 			`
 		);
 
-		// Select target block
-		cy.getBlock('core/social-link').first().click();
+		// select target block by opening block navigator and selecting the block
+		// because there is a strange behavior in the block navigator that sometimes the block is not selected
 
-		// Switch to parent block
-		cy.getByAriaLabel('Select parent block: Social Icons').click();
+		// Open block navigator
+		openBlockNavigator();
+
+		// Select target block
+		selectBlock('Social Icons');
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera
@@ -83,17 +90,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 		setInnerBlock('elements/item-containers');
 
-		cy.getParentContainer('BG Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('input').as('hexColorInput');
-				cy.get('@hexColorInput').clear();
-				cy.get('@hexColorInput').type('666');
-			});
+		cy.setColorControlValue('BG Color', '666666');
 
 		//
 		// Buttons Icons inner block
@@ -101,17 +98,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		setParentBlock();
 		setInnerBlock('elements/item-icons');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('input').as('hexColorInput');
-				cy.get('@hexColorInput').clear();
-				cy.get('@hexColorInput').type('888');
-			});
+		cy.setColorControlValue('Text Color', '888888');
 
 		//
 		// Buttons Names inner block
@@ -119,17 +106,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		setParentBlock();
 		setInnerBlock('elements/item-names');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('input').as('hexColorInput');
-				cy.get('@hexColorInput').clear();
-				cy.get('@hexColorInput').type('999');
-			});
+		cy.setColorControlValue('Text Color', '999999');
 
 		//
 		// Check
@@ -212,15 +189,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		setParentBlock();
 		setInnerBlock('elements/item-names');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('button[aria-label="Reset Color (Clear)"]').click();
-			});
+		cy.clearColorControlValue('Text Color');
 
 		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'iconColor'));
@@ -271,11 +240,16 @@ describe('Social Links Block → WP Compatibility', () => {
 			`
 		);
 
-		// Select target block
-		cy.getBlock('core/social-link').first().click();
+		// select target block by opening block navigator and selecting the block
+		// because there is a strange behavior in the block navigator that sometimes the block is not selected
 
-		// Switch to parent block
-		cy.getByAriaLabel('Select parent block: Social Icons').click();
+		// Open block navigator
+		openBlockNavigator();
+
+		// Select target block
+		selectBlock('Social Icons');
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera

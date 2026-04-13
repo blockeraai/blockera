@@ -1,0 +1,106 @@
+p.blockera-block.blockera-block--2::before {
+	content: "Simple Overrided";
+}
+
+p.blockera-block.blockera-block--3::before {
+	background-color: #c79c00;
+	color: #f1f1f1;
+	content: "Advanced Overrided";
+}
+
+.blockera-block.blockera-block--1.wp-block-group {
+	background-color: #ffdede;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.blockera-block.blockera-block--1.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 50px !important;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
+	font-weight: 700;
+	font-style: normal;
+	color: #c91205;
+	font-size: 40px;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(p) {
+	color: #c79c00;
+	border-radius: 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(.wp-block-button > .wp-element-button) {
+	background-color: #cc0000;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) .wp-block-buttons.is-layout-constrained > * + * {
+	margin-block-start: 50px !important;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) .wp-block-list {
+	background-color: #ffb266;
+	color: #984700;
+	font-size: 15px;
+	padding: 10px 30px 10px 30px;
+	transition: all 500ms ease 0ms;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) .wp-block-code {
+	background-color: #39d92e;
+	border-radius: 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(p)::before {
+	border-radius: 5px;
+	content: "This is:";
+	padding: 2px 10px 2px 10px;
+	margin-right: 10px !important;
+	background-color: #c79c0042;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(.wp-block-button > .wp-element-button):hover {
+	background-color: #a30000;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(.wp-block-button > .wp-element-button):focus {
+	background-color: #8d0000;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(.wp-block-button > .wp-element-button):active {
+	background-color: #370000;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) .wp-block-buttons {
+	background-color: #db9999;
+	padding: 10px 10px 10px 10px;
+	border-radius: 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) .wp-block-code:hover {
+	background-color: #20b316;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading):hover {
+	color: #006eff;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) ul {
+	border-radius: 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) .wp-block-list:hover {
+	background-color: #e69544;
+	color: #512600;
+}
+
+@media screen and (max-width: 478px) {
+	html:root body :where(.blockera-block.blockera-block--1) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
+		color: #34d200;
+	}
+
+	html:root body :where(.blockera-block.blockera-block--1) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading):hover {
+		color: #1f7c00;
+	}
+
+}

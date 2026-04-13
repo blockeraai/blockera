@@ -1,0 +1,262 @@
+name: Playwright E2E Tests
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    detect_categories:
+        name: Detecting Playwright E2E Test Categories
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        outputs:
+            categories: ${{ steps.set_categories.outputs.categories }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: List test categories
+              id: set_categories
+              run: |
+                  categories=$(node .github/scripts/list-playwright-test-categories.js)
+                  categories_json=$(echo $categories | jq -c '.')
+                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+            - name: Print categories output
+              run: |
+                  echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
+
+    playwright_e2e_tests:
+        name: Test
+        needs: detect_categories
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Install Playwright dependencies
+              run: |
+                  npx playwright install chromium --with-deps
+
+            - name: Install Composer Packages
+              run: composer install --no-dev -o --apcu-autoloader -a
+
+            - name: Create required environment files
+              run: |
+                  # Set the base configuration file
+                  WP_ENV_CONFIG=".github/wp-env-configs/base.json"
+
+                  # Check if a specific configuration exists for the category
+                  if [ -f ".github/wp-env-configs/${{ matrix.category }}.json" ]; then
+                    WP_ENV_CONFIG=".github/wp-env-configs/${{ matrix.category }}.json"
+                  fi
+
+                  # Copy the selected configuration to .wp-env.json
+                  cp "$WP_ENV_CONFIG" .wp-env.json
+                  cat .wp-env.json
+
+                  # Create playwright.env.json file in valid JSON format
+                  cat > playwright.env.json <<EOF
+                  {
+                    "APP_MODE": "production",
+                    "WP_BASE_URL": "http://localhost:8888"
+                  }
+                  EOF
+                  cat playwright.env.json
+
+                  # Create .env file
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Start WordPress Environment
+              run: bash .github/scripts/retry-wp-env-start.sh
+
+            - name: Check WordPress Version
+              run: |
+                  echo "Checking WordPress version..."
+                  WP_VERSION=$(npx wp-env run cli wp core version)
+                  echo "WordPress version: $WP_VERSION"
+
+            - name: Build wp-env app
+              run: npm run build
+
+            - name: Debug Matrix Category
+              run: |
+                  echo "Running category: ${{ matrix.category }}"
+
+            - name: Ensure mu-plugins directory exists for Playwright tests
+              run: |
+                  npx wp-env run cli -- wp eval 'if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); }'
+
+            - name: Verify mu-plugin fixture paths for compatibility tests
+              run: |
+                  # Test that mu-plugin files exist and can be copied (required for tests with activateMuPlugin in beforeEach)
+                  npx wp-env run cli -- wp eval 'foreach (["packages/editor/js/extensions/libs/background/test/global-styles/fixtures/background-color-setup-1.php","packages/blocks-core/js/libs/wordpress/group/test/global-styles/fixtures/link-inner-blocks-simple-color.php"] as $f) { $p = ABSPATH . "wp-content/plugins/blockera/" . $f; if (!file_exists($p)) { echo "Missing: " . $p; exit(1); } } echo "Mu-plugin fixtures OK";'
+
+            - name: Wait for WordPress to be ready
+              run: |
+                  echo "Waiting for WordPress at http://localhost:8888..."
+                  for i in $(seq 1 36); do
+                    if curl -sf -o /dev/null http://localhost:8888; then
+                      echo "WordPress is ready"
+                      break
+                    fi
+                    echo "Attempt $i/36 - WordPress not ready yet, waiting 5s..."
+                    sleep 5
+                  done
+                  curl -sf -o /dev/null http://localhost:8888 || (echo "WordPress failed to become ready" && exit 1)
+
+            - name: Run Playwright E2E Tests
+              run: |
+                  # Determine test pattern based on category
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    # Run tests matching the category pattern
+                    # e.g., tests/e2e/specs/**/*.blocks-1.ply.js
+                    test_patterns=()
+                    
+                    # Check tests/e2e/specs directory for .ply.js files
+                    if find tests/e2e/specs -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("tests/e2e/specs/**/*.${{ matrix.category }}.ply.js")
+                    fi
+                    
+                    # Check tests directory for .ply.js files
+                    if find tests -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("tests/**/*.${{ matrix.category }}.ply.js")
+                    fi
+                    
+                    # Check packages directory for .ply.js files
+                    if find packages -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("packages/**/*.${{ matrix.category }}.ply.js")
+                    fi
+                  else
+                    # Run general tests (files without category in name)
+                    # Find files that match *.ply.js but not *.*.ply.js
+                    # Directly collect file paths instead of using glob patterns
+                    test_files=()
+                    
+                    # Find general files in tests/e2e/specs directory
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
+                    
+                    # Find general files in packages directory
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
+                    
+                    # Find general files in tests directory (excluding tests/e2e/specs to avoid duplicates)
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" ! -path "tests/e2e/specs/*" -print0 2>/dev/null)
+                  fi
+
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    # Expand glob patterns to actual file paths to avoid regex conversion issues
+                    test_files=()
+                    for pattern in "${test_patterns[@]}"; do
+                      # Convert glob pattern to find command
+                      # Replace ** with find's recursive search
+                      if [[ "$pattern" == *"**"* ]]; then
+                        # Extract base directory and filename pattern
+                        # Pattern format: tests/**/*.visual.ply.js
+                        base_dir=$(echo "$pattern" | sed -E 's|/\*\*.*||')
+                        file_pattern=$(echo "$pattern" | sed -E 's|.*\*\*/||')
+                        # Find matching files recursively
+                        while IFS= read -r -d '' file; do
+                          test_files+=("$file")
+                        done < <(find "$base_dir" -type f -name "$file_pattern" -print0 2>/dev/null)
+                      else
+                        # For non-glob patterns, check if file exists
+                        if [ -f "$pattern" ]; then
+                          test_files+=("$pattern")
+                        fi
+                      fi
+                    done
+                  fi
+
+                  if [ ${#test_files[@]} -eq 0 ]; then
+                    echo "No test files found for category: ${{ matrix.category }}"
+                    exit 0
+                  fi
+
+                  echo "Running tests for category: ${{ matrix.category }}"
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    echo "Test patterns: ${test_patterns[*]}"
+                  fi
+                  echo "Found ${#test_files[@]} test file(s)"
+
+                  # Run Playwright tests with actual file paths
+                  test_exit_code=0
+                  # Pass all files at once to Playwright
+                  if ! npx playwright test --config playwright.config.js "${test_files[@]}"; then
+                    test_exit_code=1
+                  fi
+
+                  # If the process exited non-zero, re-check the JSON report: flaky tests (pass after
+                  # retries) must not fail the job. The GitHub reporter also emits ::error:: for flaky
+                  # attempts; the authoritative signal is stats.unexpected and top-level errors.
+                  if [ "$test_exit_code" -ne 0 ] && [ -f artifacts/playwright-e2e-summary.json ]; then
+                    if node -e "
+                      const fs = require('fs');
+                      const r = JSON.parse(fs.readFileSync('artifacts/playwright-e2e-summary.json', 'utf8'));
+                      const unexpected = r.stats && r.stats.unexpected;
+                      const errors = (r.errors && r.errors.length) || 0;
+                      process.exit(unexpected === 0 && errors === 0 ? 0 : 1);
+                    "; then
+                      echo "Playwright exited non-zero but the JSON report shows no unexpected failures; treating run as success."
+                      test_exit_code=0
+                    fi
+                  fi
+
+                  exit $test_exit_code
+
+            - name: Archive debug artifacts (screenshots, traces)
+              uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
+              with:
+                  name: playwright-artifacts--${{ matrix.category }}
+                  path: |
+                      artifacts/test-results
+                      playwright-report
+                  if-no-files-found: ignore
+                  retention-days: 7
+
+            - name: Stop WordPress Environment
+              run: npm run env:stop
+
+    # merge-artifacts:
+    #     name: Merge Artifacts
+    #     if: ${{ !cancelled() }}
+    #     needs: [playwright_e2e_tests]
+    #     runs-on: ubuntu-latest
+    #     permissions: {}
+    #     steps:
+    #         - name: Merge failures artifacts
+    #           uses: actions/upload-artifact/merge@v4
+    #           # Don't fail the job if there aren't any artifacts to merge.
+    #           continue-on-error: true
+    #           with:
+    #               name: playwright-artifacts
+    #               # Retain the merged artifacts in case of a rerun.
+    #               pattern: playwright-artifacts*
+    #               delete-merged: true

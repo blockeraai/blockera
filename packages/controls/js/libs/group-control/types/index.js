@@ -61,6 +61,12 @@ export type GroupControlProps = {
 	 * Injection location for adding item in the end of the buttons (after open/close button)
 	 */
 	injectHeaderButtonsEnd?: string | MixedElement,
+	/**
+	 * Type of action buttons.
+	 *
+	 * @default 'inline'
+	 */
+	actionButtonsType?: 'inline' | 'menu',
 	//
 	children?: string | MixedElement,
 	//

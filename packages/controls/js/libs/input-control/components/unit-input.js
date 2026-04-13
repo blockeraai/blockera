@@ -168,8 +168,12 @@ export function UnitInput({
 	};
 
 	const normalizeDecimalValue = (value: string): string => {
-		if (value === '') return '';
-		if (!value.includes('.')) return value;
+		if (value === '') {
+			return '';
+		}
+		if (!value.includes('.')) {
+			return value;
+		}
 		return value.replace(/\.?0+$/, '');
 	};
 
@@ -398,7 +402,7 @@ export function UnitInput({
 						onDragStart(event);
 					},
 					onMouseUp: onDragEnd,
-			  }
+				}
 			: {};
 	};
 
@@ -535,6 +539,11 @@ export function UnitInput({
 	};
 
 	const handleBlur = () => {
+		// Prevent continuing if no value was typed.
+		if (typedValue === inputValue) {
+			return;
+		}
+
 		// First try to evaluate any complete calculation
 		if (evaluateCalculation(typedValue) || 0 === typedValue) {
 			return;
@@ -774,7 +783,7 @@ export function UnitInput({
 																	'string'
 																		? parseFloat(
 																				newValue
-																		  )
+																			)
 																		: newValue;
 																if (
 																	!isNaN(
@@ -804,7 +813,7 @@ export function UnitInput({
 																	}
 																}
 																return newValue;
-														  }
+															}
 												}
 												min={min}
 												max={max}

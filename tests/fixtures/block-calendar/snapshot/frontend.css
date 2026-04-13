@@ -1,0 +1,109 @@
+.blockera-block.blockera-block-1.wp-block-calendar {
+	background-color: #ececfc;
+	border-radius: 50px;
+	padding: 20px 20px 20px 20px;
+	color: #009602;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) caption {
+	background-color: #cecaff;
+	padding: 10px 10px 10px 10px;
+	border-top-left-radius: 50px;
+	border-top-right-radius: 50px;
+	font-weight: 700;
+	font-style: normal;
+	color: #3826f6;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table thead th {
+	background-color: #c1baff;
+	border: 2px solid #1702ff;
+	color: #ffffff;
+	font-weight: 800;
+	font-style: normal;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody td {
+	border: 2px solid #1702ff;
+	background-color: #ffffff;
+	color: #1702ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody {
+	background-color: #ff9393;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody td:is(.pad, [colspan]) {
+	background-color: #c1baff;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody td:has(a) {
+	background-color: #9589ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a {
+	color: #faf1f1;
+	background-color: #000bdb;
+	margin-top: 10px;
+	display: inline-block !important;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:hover {
+	background-color: #0000c7;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:focus {
+	background-color: #0000af;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:active {
+	background-color: #00067c;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-calendar {
+		border-radius: 10px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) caption {
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-calendar::before {
+	background-color: #aba4ff;
+	color: #1c0adb;
+	padding: 2px 20px 2px 20px;
+	margin-bottom: 20px;
+	display: inline-block !important;
+	border-radius: 50px;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-calendar::before {
+		border-radius: 10px;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-calendar::after {
+	padding: 5px 20px 5px 20px;
+	margin-top: 30px;
+	display: inline-block !important;
+	background-color: #6355ff;
+	color: #ffffff;
+	border-radius: 50px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-calendar::after {
+		border-radius: 10px;
+		content: "After";
+	}
+
+}

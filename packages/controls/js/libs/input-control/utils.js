@@ -13,6 +13,7 @@ const specialUnits = [
 	'auto',
 	'initial',
 	'inherit',
+	'stretch',
 	'fit-content',
 	'max-content',
 	'min-content',
@@ -21,7 +22,36 @@ const specialUnits = [
 	'revert',
 	'content',
 	'none',
+	'func',
+	'normal',
 ];
+
+// Helper function to recursively search for a unit value in nested options
+const findUnitInOptions = (
+	value: string,
+	options: Array<any>
+): Object | null => {
+	if (!isArray(options)) {
+		return null;
+	}
+
+	for (const option of options) {
+		// Check if this option matches the value
+		if (option.value === value) {
+			return option;
+		}
+
+		// Recursively search in nested options
+		if (option.options && Array.isArray(option.options)) {
+			const found = findUnitInOptions(value, option.options);
+			if (found) {
+				return found;
+			}
+		}
+	}
+
+	return null;
+};
 
 // Function to get a unit object based on a specific value
 export const getUnitByValue = (value: string, units: Array<any>): Object => {
@@ -29,22 +59,22 @@ export const getUnitByValue = (value: string, units: Array<any>): Object => {
 		return {};
 	}
 
-	if (isArray(units))
+	if (isArray(units)) {
 		// Check each unit for a matching value
 		for (const unit of units) {
 			if (unit.value === value) {
 				return unit; // Return the unit if the value matches
+			}
 
-				// Check if the unit has options and search within them
-			} else if (unit.options && Array.isArray(unit.options)) {
-				const innerUnit = unit.options.find(
-					(inner) => inner.value === value
-				);
-				if (innerUnit) {
-					return innerUnit; // Return the inner unit if the value matches
+			// Check if the unit has options and search within them recursively
+			if (unit.options && Array.isArray(unit.options)) {
+				const foundUnit = findUnitInOptions(value, unit.options);
+				if (foundUnit) {
+					return foundUnit; // Return the found unit
 				}
 			}
 		}
+	}
 
 	if (value === '') {
 		return {};
@@ -61,6 +91,10 @@ export const getUnitByValue = (value: string, units: Array<any>): Object => {
 
 // Validates the value is with a special CSS units or not
 export function isSpecialUnit(value: string): boolean {
+	// Exclude values ending with 'func' as they are CSS function markers, not special units
+	if (isString(value) && value.endsWith('func')) {
+		return false;
+	}
 	return (
 		isString(value) && specialUnits.some((item) => value?.endsWith(item))
 	);
@@ -276,6 +310,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'normal',
+							label: 'Normal',
+							format: 'text',
+						},
 						{
 							value: 'inherit',
 							label: 'Inherit',
@@ -584,6 +623,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Fill Available Space',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -680,6 +724,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Fill Available Space',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -703,6 +752,36 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 							value: 'func',
 							label: 'CSS Functions and Variables',
 							format: 'text',
+						},
+					],
+				},
+			];
+			break;
+
+		case 'grid-min-width':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'rem',
+							label: 'REM',
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							format: 'number',
 						},
 					],
 				},
@@ -770,6 +849,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'stretch',
+							label: 'Fill Available Space',
+							format: 'number',
+						},
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
@@ -1406,21 +1490,22 @@ export function extractNumberAndUnit(value: Object | string): Object {
 		};
 	}
 
-	// handle special value
-	if (isSpecialUnit(value)) {
-		return {
-			value: '',
-			unit: value,
-			specialUnit: true,
-		};
-	}
-
 	if (isString(value)) {
-		// detect if type is func
+		// detect if type is func - check this BEFORE checking special units
+		// because 'func' is in specialUnits array and would cause false positives
 		if (value.endsWith('func')) {
 			return {
 				value: value.substring(0, value.lastIndexOf('func')),
 				unit: 'func',
+			};
+		}
+
+		// handle special value
+		if (isSpecialUnit(value)) {
+			return {
+				value: '',
+				unit: value,
+				specialUnit: true,
 			};
 		}
 
@@ -1438,6 +1523,17 @@ export function extractNumberAndUnit(value: Object | string): Object {
 				unit,
 			};
 		}
+
+		// Check if the value is a pure number (no unit)
+		// This handles cases like '0', '123', '-5', '12.5'
+		const numberMatch = value.match(/^-?\d+(\.\d+)?$/);
+		if (numberMatch) {
+			return {
+				value: parseFloat(value),
+				unit: 'func',
+				unitSimulated: true,
+			};
+		}
 	}
 
 	// If no match is found, return null or handle the error as needed
@@ -1453,15 +1549,30 @@ export function getFirstUnit(units: Array<any>): Object {
 		return {};
 	}
 
-	if (!isUndefined(units[0])) {
-		if (
-			!isUndefined(units[0].options) &&
-			!isUndefined(units[0].options[0])
-		) {
-			return units[0].options[0];
+	// Iterate through all units to find the first valid one
+	for (const unit of units) {
+		// Skip null, undefined, or non-object values
+		if (isUndefined(unit) || unit === null || typeof unit !== 'object') {
+			continue;
 		}
 
-		return units[0];
+		// If unit has options, check if there's at least one option
+		if (!isUndefined(unit.options) && Array.isArray(unit.options)) {
+			// Skip if options array is empty
+			if (unit.options.length > 0 && !isUndefined(unit.options[0])) {
+				return unit.options[0];
+			}
+			// Continue to next unit if options is empty
+			continue;
+		}
+
+		// If unit has a direct value property, return it
+		if (!isUndefined(unit.value)) {
+			return unit;
+		}
+
+		// If unit doesn't have options or value, skip it
+		continue;
 	}
 
 	return {};

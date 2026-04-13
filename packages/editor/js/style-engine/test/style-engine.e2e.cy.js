@@ -1,20 +1,21 @@
 import {
-	appendBlocks,
-	createPost,
-	getBlockClientId,
-	getWPDataObject,
-	setBlockState,
-	setInnerBlock,
-	setDeviceType,
-	addBlockState,
 	savePage,
+	createPost,
+	appendBlocks,
+	setBlockState,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
+import { setDevice } from './helpers';
 
 describe('Style Engine Testing ...', () => {
 	beforeEach(() => {
 		createPost();
+
+		cy.get('body').then(($body) => {
+			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
+				cy.getByAriaLabel('Hide secondary sidebar').click();
+			}
+		});
 
 		appendBlocks(
 			`<!-- wp:paragraph -->
@@ -25,27 +26,6 @@ describe('Style Engine Testing ...', () => {
 		// Select target block
 		cy.getBlock('core/paragraph').click();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
-
-	function setDevice(device) {
-		if ('desktop' !== device) {
-			if (
-				!Cypress.$('iframe[name="editor-canvas"]')
-					.find('body')
-					.hasClass(`is-${device}-preview`)
-			) {
-				setDeviceType('Desktop');
-				setDeviceType(device);
-
-				return;
-			}
-		}
-
-		setDeviceType('Desktop');
-	}
 
 	describe('Responsive design', () => {
 		it('should generate css for desktop device', () => {
@@ -99,12 +79,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important'
-								: 'transition: all 500ms ease 0ms'
-						);
+						.should('include', 'transition: all 500ms ease 0ms');
 
 					cy.get('p.blockera-block').realHover();
 					cy.get('p.blockera-block')
@@ -116,12 +91,7 @@ describe('Style Engine Testing ...', () => {
 						.realMouseMove(250, 350);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important'
-								: 'transition: all 500ms ease 0ms'
-						);
+						.should('include', 'transition: all 500ms ease 0ms');
 				});
 
 				context('xl-desktop', () => {
@@ -135,12 +105,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important'
-								: 'transition: all 500ms ease 0ms'
-						);
+						.should('include', 'transition: all 500ms ease 0ms');
 
 					cy.get('p.blockera-block').realHover();
 					cy.get('p.blockera-block')
@@ -227,6 +192,8 @@ describe('Style Engine Testing ...', () => {
 			);
 
 			context('checking generated styles on desktop device', () => {
+				// Set xl-desktop viewport
+				cy.viewport(1441, 1920);
 				setDevice('Desktop');
 
 				cy.getBlock('core/paragraph').should(
@@ -268,12 +235,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important;'
-								: 'transition: all 500ms ease 0ms;'
-						);
+						.should('include', 'transition: all 500ms ease 0ms;');
 				});
 
 				context('xl-desktop', () => {
@@ -369,12 +331,12 @@ describe('Style Engine Testing ...', () => {
 					setBlockState('Hover');
 
 					// Set background color.
-					cy.setColorControlValue('BG Color', '#16e2c1');
+					cy.setColorControlValue('BG Color', '#17E317');
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(23, 227, 23)'
 					);
 				});
 
@@ -382,11 +344,10 @@ describe('Style Engine Testing ...', () => {
 					setDevice('Tablet');
 					setBlockState('Normal');
 
-					cy.getBlock('core/paragraph').realHover();
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(227, 23, 139)'
 					);
 				});
 			});
@@ -403,12 +364,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important;'
-								: 'transition: all 500ms ease 0ms;'
-						);
+						.should('include', 'transition: all 500ms ease 0ms;');
 
 					cy.get('p.blockera-block').realHover();
 					cy.get('p.blockera-block')
@@ -452,7 +408,7 @@ describe('Style Engine Testing ...', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(23, 227, 23)'
 					);
 				});
 			});
