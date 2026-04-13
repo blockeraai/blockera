@@ -4,39 +4,8 @@
 import { getValueAddonRealValue, isValid } from '@blockera/controls';
 
 /**
- * Box border value shape for `BoxBorderControl` (in-memory only).
- */
-export type BoxBorderValue = {
-	type: 'all' | 'custom';
-	all?: {
-		width: string;
-		style: string;
-		color: string;
-	};
-	left?: {
-		width: string;
-		style: string;
-		color: string;
-	};
-	right?: {
-		width: string;
-		style: string;
-		color: string;
-	};
-	top?: {
-		width: string;
-		style: string;
-		color: string;
-	};
-	bottom?: {
-		width: string;
-		style: string;
-		color: string;
-	};
-};
-
-/**
  * Persisted `border` on each repeater item / theme.json preset: width, style, color only.
+ * Same shape as `BorderControl` context value.
  */
 export type BorderPresetStoredSide = {
 	width: string;
@@ -54,21 +23,6 @@ export type BorderBoxPreset = {
  * Border box presets: `settings.border.presets.{theme|default|custom}`.
  * `settings.custom` is reserved for CSS custom properties in theme.json — do not store presets there.
  */
-
-function emptySide() {
-	return { width: '', style: '', color: '' };
-}
-
-export function getDefaultBoxBorderValue(): BoxBorderValue {
-	return {
-		type: 'all',
-		all: emptySide(),
-		left: emptySide(),
-		right: emptySide(),
-		top: emptySide(),
-		bottom: emptySide(),
-	};
-}
 
 export function getDefaultStoredBorderSide(): BorderPresetStoredSide {
 	return { width: '', style: '', color: '' };
@@ -125,46 +79,6 @@ export function coerceBorderPresetSide(raw: unknown): BorderPresetStoredSide {
 		return normalizeStoredSide(raw);
 	}
 	return getDefaultStoredBorderSide();
-}
-
-/**
- * Maps `BoxBorderControl` onChange output to persisted repeater / theme.json shape.
- */
-export function boxBorderControlValueToStoredSide(
-	value: BoxBorderValue | Record<string, unknown>
-): BorderPresetStoredSide {
-	const b = value as BoxBorderValue;
-	if (b?.type === 'all' && b.all) {
-		return normalizeStoredSide({
-			width: String(b.all.width ?? ''),
-			style: String(b.all.style ?? ''),
-			color: (b.all.color ?? '') as string | Record<string, unknown>,
-		});
-	}
-	return getDefaultStoredBorderSide();
-}
-
-/**
- * Persisted side → value for `BoxBorderControl` (linked-all UI).
- */
-export function storedSideToBoxBorderValue(raw: unknown): BoxBorderValue {
-	if (!isStoredBorderSide(raw)) {
-		return getDefaultBoxBorderValue();
-	}
-	const side = normalizeStoredSide(raw);
-	const empty = emptySide();
-	return {
-		type: 'all',
-		all: {
-			width: side.width,
-			style: side.style,
-			color: side.color,
-		},
-		top: { ...empty },
-		right: { ...empty },
-		bottom: { ...empty },
-		left: { ...empty },
-	} as BoxBorderValue;
 }
 
 /**
