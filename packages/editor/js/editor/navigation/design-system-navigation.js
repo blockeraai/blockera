@@ -39,7 +39,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<h2>
 				<Flex alignItems="center" justifyContent="flex-start">
 					<Icon icon="extension-typography" iconSize={22} />
-					{__('Design system', 'blockera')}
+					{__('Design System', 'blockera')}
 				</Flex>
 			</h2>
 			<NavItemButton
