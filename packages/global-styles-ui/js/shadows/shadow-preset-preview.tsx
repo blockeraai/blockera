@@ -1,7 +1,12 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import type { CSSProperties } from 'react';
+
+/**
+ * Internal dependencies
+ */
+import { VariablePreview } from '../components/variable-preview';
 
 type Props = {
 	/** Combined CSS `box-shadow` (layers joined with ", ") */
@@ -15,7 +20,7 @@ type Props = {
 	inline?: boolean;
 };
 
-const TILE_BG = 'var(--wp-admin-theme-color, #3858e9)';
+const TILE_BG = 'var(--blockera-controls-primary-color)';
 
 /**
  * Swatch for the preset’s `box-shadow` on a tile. Panel uses full width; `inline` sizes to the swatch only.
@@ -57,9 +62,25 @@ export default function ShadowPresetPreview({
 		/>
 	);
 
+	// Pad so box-shadow (which paints outside the tile) isn’t clipped by flex/header layout.
+	const bleed = inline
+		? Math.max(6, Math.round(Math.max(width, height) * 0.5))
+		: 0;
+
+	const inlineChrome: CSSProperties = {
+		minHeight: 0,
+		marginBottom: 0,
+		border: 'none',
+		background: 'transparent',
+		padding: 0,
+	};
+
+	const panelChrome: CSSProperties = {
+		width: '100%',
+		padding: '24px 0',
+	};
+
 	if (inline) {
-		// Pad so box-shadow (which paints outside the 12×12 tile) isn’t clipped by flex/header layout.
-		const bleed = Math.max(6, Math.round(Math.max(width, height) * 0.5));
 		return (
 			<span
 				style={{
@@ -74,22 +95,16 @@ export default function ShadowPresetPreview({
 					lineHeight: 0,
 				}}
 			>
-				{swatch}
+				<VariablePreview type="shadow" style={inlineChrome}>
+					{swatch}
+				</VariablePreview>
 			</span>
 		);
 	}
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				padding: '12px 0',
-				width: '100%',
-			}}
-		>
+		<VariablePreview type="shadow" style={panelChrome}>
 			{swatch}
-		</div>
+		</VariablePreview>
 	);
 }

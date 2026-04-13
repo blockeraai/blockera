@@ -332,6 +332,7 @@ export { default as SideLockVertical } from './side-lock-vertical.svg';
 export { default as StyleVariations } from './style-variations.svg';
 export { default as StyleVariationsAnimated } from './style-variations-animated';
 export { default as SlashCircle } from './slash-circle.svg';
+export { default as Spacing } from './spacing.svg';
 export { default as Sku } from './sku.svg';
 export { default as Success } from './success.svg';
 export { default as Support } from './support.svg';
