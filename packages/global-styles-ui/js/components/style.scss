@@ -63,6 +63,11 @@
 	overflow: visible;
 }
 
+// Text-shadow extends past glyph bounds; same clipping concern as box-shadow.
+.global-styles-variable-preview.global-styles-text-shadow-preview {
+	overflow: visible;
+}
+
 .blockera-global-styles-subtitle {
 	display: flex;
 	align-items: center;
