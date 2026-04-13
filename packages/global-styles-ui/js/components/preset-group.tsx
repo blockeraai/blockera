@@ -36,6 +36,7 @@ import {
 	applyVariablePickerRepeaterSelection,
 	buildPresetVariablePickerPayload,
 	stripIsSelectedFromRepeaterItems,
+	stripRepeaterPickerUiFields,
 } from './variable-picker-preset-utils';
 
 export type PresetFieldsPropsResolver = (
@@ -231,7 +232,9 @@ const Presets = ({
 			enableCreatingStep={enableCreatingStep}
 			className={classNames(
 				controlClassNames('preset-group', controlName),
-				'blockera-global-styles-preset-repeater'
+				{
+					'blockera-global-styles-preset-repeater': selectable,
+				}
 			)}
 			selectable={selectable}
 			valueCleanup={repeaterValueCleanup}
@@ -319,7 +322,7 @@ export const PresetGroup = ({
 
 	const variablesForRepeater = useMemo(() => {
 		if (!isVariablePicker || typeof pickerCtx.variableType !== 'string') {
-			return variables;
+			return stripRepeaterPickerUiFields(variables) as typeof variables;
 		}
 		return applyVariablePickerRepeaterSelection(variables, {
 			variableType: pickerCtx.variableType,

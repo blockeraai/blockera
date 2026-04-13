@@ -184,3 +184,37 @@ export function stripIsSelectedFromRepeaterItems<
 
 	return next as T;
 }
+
+/**
+ * Removes variable-picker-only row flags so preset repeaters stay in normal edit mode
+ * (e.g. site Design System / global styles). Item spread wins over defaultRepeaterItemValue,
+ * so stray `selectable` on preset data would otherwise keep rows selectable.
+ */
+export function stripRepeaterPickerUiFields(items: unknown): unknown {
+	if (items === null || items === undefined) {
+		return items;
+	}
+
+	const stripRow = (row: unknown): unknown => {
+		if (!row || typeof row !== 'object' || Array.isArray(row)) {
+			return row;
+		}
+		const r = row as Record<string, unknown>;
+		const { isSelected: _is, selectable: _sel, ...rest } = r;
+		return rest;
+	};
+
+	if (Array.isArray(items)) {
+		return items.map(stripRow);
+	}
+
+	if (typeof items === 'object') {
+		const next = { ...(items as Record<string, unknown>) };
+		for (const key of Object.keys(next)) {
+			next[key] = stripRow(next[key]);
+		}
+		return next;
+	}
+
+	return items;
+}
