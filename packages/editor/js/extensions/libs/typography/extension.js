@@ -10,15 +10,12 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	Grid,
-	Flex,
 	MoreFeatures,
 	BaseControl,
 	ColorControl,
 	InputControl,
-	SelectControl,
 	PanelBodyControl,
 	TextShadowControl,
-	ToggleSelectControl,
 	ControlContextProvider,
 	NoticeControl,
 	ConditionalWrapper,
@@ -44,6 +41,11 @@ import {
 	LetterSpacing,
 	TextColumns,
 	TextStroke,
+	TextAlign,
+	TextDirection,
+	TextOrientation,
+	WordBreak,
+	TextWrap,
 } from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
@@ -412,92 +414,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 				isActive={isShowTextAlign}
 				config={extensionConfig.blockeraTextAlign}
 			>
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(block, 'text-align'),
-						value: values.blockeraTextAlign,
-						attribute: 'blockeraTextAlign',
-						blockName: block.blockName,
-					}}
-				>
-					<ToggleSelectControl
-						columns="1fr 2.5fr"
-						label={__('Text Align', 'blockera')}
-						labelDescription={
-							<>
-								<p>
-									{__(
-										'It sets the horizontal alignment of text within the block, offering alignment options like left, right, center, and justify.',
-										'blockera'
-									)}
-								</p>
-							</>
-						}
-						options={[
-							{
-								label: __('Left', 'blockera'),
-								value: 'left',
-								icon: (
-									<Icon
-										icon="text-align-left"
-										iconSize="18"
-									/>
-								),
-							},
-							{
-								label: __('Center', 'blockera'),
-								value: 'center',
-								icon: (
-									<Icon
-										icon="text-align-center"
-										iconSize="18"
-									/>
-								),
-							},
-							{
-								label: __('Right', 'blockera'),
-								value: 'right',
-								icon: (
-									<Icon
-										icon="text-align-right"
-										iconSize="18"
-									/>
-								),
-							},
-							{
-								label: __('Justify', 'blockera'),
-								value: 'justify',
-								icon: (
-									<Icon
-										icon="text-align-justify"
-										iconSize="18"
-									/>
-								),
-							},
-							{
-								label: __('None', 'blockera'),
-								value: 'initial',
-								icon: (
-									<Icon
-										library="wp"
-										icon="close-small"
-										iconSize="18"
-									/>
-								),
-							},
-						]}
-						isDeselectable={true}
-						defaultValue={attributes.blockeraTextAlign.default}
-						onChange={(newValue, ref) =>
-							handleOnChangeAttributes(
-								'blockeraTextAlign',
-								newValue,
-								{ ref }
-							)
-						}
-						{...extensionProps.blockeraTextAlign}
-					/>
-				</ControlContextProvider>
+				<TextAlign
+					block={block}
+					value={values.blockeraTextAlign}
+					defaultValue={attributes.blockeraTextAlign.default}
+					onChange={handleOnChangeAttributes}
+					{...extensionProps.blockeraTextAlign}
+				/>
 			</EditorFeatureWrapper>
 
 			{(isShowAdvanced || activeSearchMode) && (
@@ -587,326 +510,28 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 						isActive={isShowDirection}
 						config={extensionConfig.blockeraDirection}
 					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'direction'),
-								value: values.blockeraDirection,
-								attribute: 'blockeraDirection',
-								blockName: block.blockName,
-							}}
-						>
-							<ToggleSelectControl
-								label={__('Direction', 'blockera')}
-								labelPopoverTitle={__(
-									'Text Direction',
-									'blockera'
-								)}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'It sets the text direction and layout directionality of block.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="direction-ltr"
-												iconSize="18"
-											/>
-											{__(
-												'Left To Right (LTR)',
-												'blockera'
-											)}
-										</h3>
-										<p>
-											{__(
-												'Sets the direction of text from left to right, used for languages written in this manner.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="direction-rtl"
-												iconSize="18"
-											/>
-											{__(
-												'Right To Left (RTL)',
-												'blockera'
-											)}
-										</h3>
-										<p>
-											{__(
-												'Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								columns="1fr 2.5fr"
-								options={[
-									{
-										label: __('Left to Right', 'blockera'),
-										value: 'ltr',
-										icon: (
-											<Icon
-												icon="direction-ltr"
-												iconSize="18"
-											/>
-										),
-									},
-									{
-										label: __('Right to Left', 'blockera'),
-										value: 'rtl',
-										icon: (
-											<Icon
-												icon="direction-rtl"
-												iconSize="18"
-											/>
-										),
-									},
-								]}
-								isDeselectable={true}
-								defaultValue={
-									attributes.blockeraDirection.default
-								}
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraDirection',
-										newValue,
-										{ ref }
-									)
-								}
-								{...extensionProps.blockeraDirection}
-							/>
-						</ControlContextProvider>
+						<TextDirection
+							block={block}
+							value={values.blockeraDirection}
+							defaultValue={attributes.blockeraDirection.default}
+							onChange={handleOnChangeAttributes}
+							{...extensionProps.blockeraDirection}
+						/>
 					</EditorFeatureWrapper>
 
 					<EditorFeatureWrapper
 						isActive={isShowTextOrientation}
 						config={extensionConfig.blockeraTextOrientation}
 					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(
-									block,
-									'text-orientation'
-								),
-								value: values.blockeraTextOrientation,
-								attribute: 'blockeraTextOrientation',
-								blockName: block.blockName,
-							}}
-						>
-							<ToggleSelectControl
-								label={__('Orientation', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'It sets the orientation of characters in vertical text layouts, pivotal for typesetting in languages that use vertical writing modes.',
-												'blockera'
-											)}
-										</p>
-										<Flex gap="10px" direction="column">
-											<h3
-												style={{
-													paddingTop: '5px',
-												}}
-											>
-												<Icon
-													icon="text-orientation-style-1"
-													iconSize="18"
-												/>
-												{__(
-													'Vertical LR Mixed',
-													'blockera'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Text will display vertically from left to right with a mixed orientation.',
-													'blockera'
-												)}
-											</p>
-										</Flex>
-
-										<Flex gap="10px" direction="column">
-											<h3
-												style={{
-													paddingTop: '5px',
-												}}
-											>
-												<Icon
-													icon="text-orientation-style-2"
-													iconSize="18"
-												/>
-												{__(
-													'Vertical RL Mixed',
-													'blockera'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Text will display vertically from right to left with a mixed orientation.',
-													'blockera'
-												)}
-											</p>
-										</Flex>
-
-										<Flex gap="10px" direction="column">
-											<h3
-												style={{
-													paddingTop: '5px',
-												}}
-											>
-												<Icon
-													icon="text-orientation-style-3"
-													iconSize="18"
-												/>
-												{__(
-													'Vertical LR Upright',
-													'blockera'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Text will appear vertically from left to right with an upright orientation.',
-													'blockera'
-												)}
-											</p>
-										</Flex>
-
-										<Flex gap="10px" direction="column">
-											<h3
-												style={{
-													paddingTop: '5px',
-												}}
-											>
-												<Icon
-													icon="text-orientation-style-4"
-													iconSize="18"
-												/>
-												{__(
-													'Vertical RL Upright',
-													'blockera'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Text will appear vertically from right to left with an upright orientation.',
-													'blockera'
-												)}
-											</p>
-										</Flex>
-
-										<Flex gap="10px" direction="column">
-											<h3
-												style={{
-													paddingTop: '2px',
-												}}
-											>
-												<Icon
-													library="wp"
-													icon="close-small"
-													iconSize="18"
-												/>
-												{__(
-													'No text orientation',
-													'blockera'
-												)}
-											</h3>
-											<p>
-												{__(
-													'No text orientation',
-													'blockera'
-												)}
-											</p>
-										</Flex>
-									</>
-								}
-								columns="1fr 2.5fr"
-								options={[
-									{
-										label: __(
-											'Vertical LR Mixed',
-											'blockera'
-										),
-										value: 'style-1',
-										icon: (
-											<Icon
-												icon="text-orientation-style-1"
-												iconSize="16"
-											/>
-										),
-									},
-									{
-										label: __(
-											'Vertical RL Mixed',
-											'blockera'
-										),
-										value: 'style-2',
-										icon: (
-											<Icon
-												icon="text-orientation-style-2"
-												iconSize="16"
-											/>
-										),
-									},
-									{
-										label: __(
-											'Vertical LR Upright',
-											'blockera'
-										),
-										value: 'style-3',
-										icon: (
-											<Icon
-												icon="text-orientation-style-3"
-												iconSize="16"
-											/>
-										),
-									},
-									{
-										label: __(
-											'Vertical RL Upright',
-											'blockera'
-										),
-										value: 'style-4',
-										icon: (
-											<Icon
-												icon="text-orientation-style-4"
-												iconSize="16"
-											/>
-										),
-									},
-									{
-										label: __(
-											'No text orientation',
-											'blockera'
-										),
-										value: 'initial',
-										icon: (
-											<Icon
-												library="wp"
-												icon="close-small"
-												iconSize="18"
-											/>
-										),
-									},
-								]}
-								isDeselectable={true}
-								defaultValue={
-									attributes.blockeraTextOrientation.default
-								}
-								onChange={(newValue, ref) => {
-									handleOnChangeAttributes(
-										'blockeraTextOrientation',
-										newValue,
-										{ ref }
-									);
-								}}
-								{...extensionProps.blockeraTextOrientation}
-							/>
-						</ControlContextProvider>
+						<TextOrientation
+							block={block}
+							value={values.blockeraTextOrientation}
+							defaultValue={
+								attributes.blockeraTextOrientation.default
+							}
+							onChange={handleOnChangeAttributes}
+							{...extensionProps.blockeraTextOrientation}
+						/>
 					</EditorFeatureWrapper>
 
 					{(isShowLetterSpacing ||
@@ -1114,269 +739,26 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 						isActive={isShowTextWrap}
 						config={extensionConfig.blockeraTextWrap}
 					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'text-wrap'),
-								value: values.blockeraTextWrap,
-								attribute: 'blockeraTextWrap',
-								blockName: block.blockName,
-							}}
-						>
-							<SelectControl
-								label={__('Text Wrap', 'blockera')}
-								labelPopoverTitle={__('Text Wrap', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'It controls how text wraps within its container, enhancing both the layout and readability of your content.',
-												'blockera'
-											)}
-										</p>
-										<h3>{__('Pretty Wrap', 'blockera')}</h3>
-										<p>
-											{__(
-												'Optimizes line breaks for a visually pleasing and elegant flow.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											{__('Balance Wrap', 'blockera')}
-										</h3>
-										<p>
-											{__(
-												'Evenly distributes text across lines for a balanced, harmonious layout.',
-												'blockera'
-											)}
-										</p>
-										<h3>{__('No Wrap', 'blockera')}</h3>
-										<p>
-											{__(
-												'Keeps text in a single line without any breaks.',
-												'blockera'
-											)}
-										</p>
-										<h3>{__('Wrap', 'blockera')}</h3>
-										<p>
-											{__(
-												'Applies standard wrapping rules to break text at natural points.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								columns="1fr 2.5fr"
-								options={[
-									{
-										label: __('Default', 'blockera'),
-										value: '',
-									},
-									{
-										label: __('Pretty Wrap', 'blockera'),
-										value: 'pretty',
-									},
-									{
-										label: __('Balance Wrap', 'blockera'),
-										value: 'balance',
-									},
-									{
-										label: __('Wrap', 'blockera'),
-										value: 'wrap',
-									},
-									{
-										label: __('No Wrap', 'blockera'),
-										value: 'nowrap',
-									},
-								]}
-								// type="custom"
-								customMenuPosition="top"
-								//
-								defaultValue={
-									attributes.blockeraTextWrap.default
-								}
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraTextWrap',
-										newValue,
-										{ ref }
-									)
-								}
-								{...extensionProps.blockeraTextWrap}
-							/>
-						</ControlContextProvider>
+						<TextWrap
+							block={block}
+							value={values.blockeraTextWrap}
+							defaultValue={attributes.blockeraTextWrap.default}
+							onChange={handleOnChangeAttributes}
+							{...extensionProps.blockeraTextWrap}
+						/>
 					</EditorFeatureWrapper>
 
 					<EditorFeatureWrapper
 						isActive={isShowWordBreak}
 						config={extensionConfig.blockeraWordBreak}
 					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'word-break'),
-								value: values.blockeraWordBreak,
-								attribute: 'blockeraWordBreak',
-								blockName: block.blockName,
-							}}
-						>
-							<SelectControl
-								label={__('Breaking', 'blockera')}
-								labelPopoverTitle={__(
-									'Word Breaking',
-									'blockera'
-								)}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Word-Break controls how words are broken at the end of a line for influencing text wrapping and layout within containers.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'It is essential for managing text flow, especially in narrow containers or with long words/URLs, ensuring readability and a clean layout in multilingual contexts.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="break-normal"
-												iconSize="18"
-											/>
-											{__('Normal', 'blockera')}
-										</h3>
-										<p>
-											{__(
-												'Follows default line-breaking rules.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="break-all"
-												iconSize="18"
-											/>
-											{__('Break All Words', 'blockera')}
-										</h3>
-										<p>
-											{__(
-												'Allows words to be broken at any character, useful in narrow containers.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="break-normal"
-												iconSize="18"
-											/>
-											{__('Keep All Words', 'blockera')}
-										</h3>
-										<p>
-											{__(
-												'Avoids breaking words, particularly for East Asian scripts.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="break-all"
-												iconSize="18"
-											/>
-											{__('Break Word', 'blockera')}
-										</h3>
-										<p>
-											{__(
-												'Breaks words at appropriate break points, maintaining layout integrity by preventing overflow.',
-												'blockera'
-											)}
-										</p>
-										<h3>
-											<Icon
-												icon="inherit-circle"
-												iconSize="18"
-											/>
-											{__('Inherit', 'blockera')}
-										</h3>
-										<p>
-											{__(
-												'Follows containers line-breaking rules.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								columns="1fr 2.5fr"
-								options={[
-									{
-										label: __('Normal', 'blockera'),
-										value: 'normal',
-										icon: (
-											<Icon
-												icon="break-normal"
-												iconSize="18"
-											/>
-										),
-									},
-									{
-										label: __(
-											'Break All Words',
-											'blockera'
-										),
-										value: 'break-all',
-										icon: (
-											<Icon
-												icon="break-all"
-												iconSize="18"
-											/>
-										),
-									},
-									{
-										label: __('Keep All Words', 'blockera'),
-										value: 'keep-all',
-										icon: (
-											<Icon
-												icon="break-normal"
-												iconSize="18"
-											/>
-										),
-									},
-									{
-										label: __('Break Word', 'blockera'),
-										value: 'break-word',
-										icon: (
-											<Icon
-												icon="break-all"
-												iconSize="18"
-											/>
-										),
-									},
-									{
-										label: __('Inherit', 'blockera'),
-										value: 'inherit',
-										icon: (
-											<Icon
-												icon="inherit-circle"
-												iconSize="18"
-											/>
-										),
-									},
-								]}
-								type="custom"
-								customMenuPosition="top"
-								//
-								defaultValue={
-									attributes.blockeraWordBreak.default
-								}
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraWordBreak',
-										newValue,
-										{ ref }
-									)
-								}
-								{...extensionProps.blockeraWordBreak}
-							/>
-						</ControlContextProvider>
+						<WordBreak
+							block={block}
+							value={values.blockeraWordBreak}
+							defaultValue={attributes.blockeraWordBreak.default}
+							onChange={handleOnChangeAttributes}
+							{...extensionProps.blockeraWordBreak}
+						/>
 					</EditorFeatureWrapper>
 				</ConditionalWrapper>
 			)}
