@@ -22,6 +22,8 @@ if (fs.existsSync(envPath)) {
 
 const config = defineConfig({
 	...baseConfig,
+	// Flaky = failed a run then passed on retry; must not fail CI unless explicitly opted in.
+	failOnFlakyTests: false,
 	// Always write/regenerate Playwright screenshot baselines (toHaveScreenshot).
 	// CLI can still override (e.g. --update-snapshots=none).
 	updateSnapshots: 'all',
@@ -33,6 +35,10 @@ const config = defineConfig({
 				['github'], // GitHub Actions integration
 				['html', { outputFolder: 'playwright-report', open: 'never' }], // HTML report
 				['./packages/dev-playwright/js/config/flaky-tests-report.ts'],
+				[
+					'json',
+					{ outputFile: 'artifacts/playwright-e2e-summary.json' },
+				],
 			]
 		: 'list',
 	webServer: {
