@@ -27,6 +27,7 @@ import { useControlContext } from '../../context';
 import { setValueAddon, useValueAddon } from '../../';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
+import RepeaterPopoverTitleDelete from './components/popover-title-delete';
 import { repeaterOnChange } from './store/reducers/utils';
 import { cleanupRepeater, isEnabledPromote } from './utils';
 
@@ -48,6 +49,7 @@ export default function RepeaterControl(
 		popoverProps,
 		popoverTitle,
 		popoverTitleButtonsRight,
+		showPopoverTitleDelete = false,
 		popoverOffset = 35,
 		addNewButtonLabel,
 		addNewButtonDataTest,
@@ -110,6 +112,13 @@ export default function RepeaterControl(
 		noItemsMessage,
 		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
+
+	let resolvedPopoverTitleButtonsRight = popoverTitleButtonsRight;
+	if (resolvedPopoverTitleButtonsRight === undefined) {
+		resolvedPopoverTitleButtonsRight = showPopoverTitleDelete
+			? RepeaterPopoverTitleDelete
+			: undefined;
+	}
 
 	const { getEntity } = select('blockera/data');
 	const {
@@ -223,7 +232,7 @@ export default function RepeaterControl(
 		popoverProps,
 		popoverTitle: popoverTitle || label || '',
 		popoverOffset,
-		popoverTitleButtonsRight,
+		popoverTitleButtonsRight: resolvedPopoverTitleButtonsRight,
 		actionButtonsType,
 		actionMenuButtonLabel,
 		//

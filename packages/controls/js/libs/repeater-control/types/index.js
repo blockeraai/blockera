@@ -106,6 +106,11 @@ export type RepeaterControlProps = {
 	 */
 	popoverTitleButtonsRight?: string | MixedElement,
 	/**
+	 * When true and `popoverTitleButtonsRight` is omitted, the repeater wires the
+	 * built-in popover delete control next to the close button.
+	 */
+	showPopoverTitleDelete?: boolean,
+	/**
 	 * Specifies the button label for adding new repeater item.
 	 */
 	addNewButtonLabel?: string,

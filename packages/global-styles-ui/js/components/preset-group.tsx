@@ -231,6 +231,7 @@ const Presets = ({
 			valueCleanup={repeaterValueCleanup}
 			onSelectableItemActivate={onSelectableItemActivate}
 			showItemEditButton={showItemEditButton}
+			showPopoverTitleDelete={true}
 			{...props}
 		/>
 	);
