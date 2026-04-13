@@ -3,11 +3,13 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 import { useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
+import { controlInnerClassNames } from '@blockera/classnames';
 import { isUndefined } from '@blockera/utils';
 
 /**
@@ -23,6 +25,7 @@ const MappedItems = (): MixedElement => {
 		repeaterId,
 		defaultRepeaterItemValue,
 		actionButtonsType,
+		shouldRenderRepeaterItem,
 	} = useContext(RepeaterContext);
 
 	// Sorting repeater items based on "order" property value of each item.
@@ -31,6 +34,15 @@ const MappedItems = (): MixedElement => {
 		[items]
 	);
 
+	const visibleRepeaterItems = useMemo(() => {
+		if (typeof shouldRenderRepeaterItem !== 'function') {
+			return sortedRepeaterItems;
+		}
+		return sortedRepeaterItems.filter(([itemId, item]) =>
+			shouldRenderRepeaterItem(String(itemId), item)
+		);
+	}, [sortedRepeaterItems, shouldRenderRepeaterItem]);
+
 	delete defaultRepeaterItemValue?.isOpen;
 
 	const getUniqueId = (itemId: string | number) =>
@@ -38,7 +50,22 @@ const MappedItems = (): MixedElement => {
 			? `${repeaterId}-repeater-item-${itemId}`
 			: `repeater-item-${itemId}`;
 
-	return sortedRepeaterItems.map(([itemId, item]) => (
+	if (
+		visibleRepeaterItems.length === 0 &&
+		sortedRepeaterItems.length > 0 &&
+		typeof shouldRenderRepeaterItem === 'function'
+	) {
+		return (
+			<div
+				className={controlInnerClassNames('repeater-filter-empty')}
+				style={{ opacity: 0.5, fontSize: '12px' }}
+			>
+				{__('No variables match your search.', 'blockera')}
+			</div>
+		);
+	}
+
+	return visibleRepeaterItems.map(([itemId, item]) => (
 		<RepeaterItem
 			{...{
 				item: {

@@ -82,6 +82,10 @@ export type RepeaterControlProps = {
 	 */
 	onSelectableItemActivate?: (itemId: string, item: Object) => void,
 	/**
+	 * When provided, only repeater rows for which this returns true are rendered (e.g. variable picker search).
+	 */
+	shouldRenderRepeaterItem?: (itemId: string, item: Object) => boolean,
+	/**
 	 * When true, selectable rows show an edit control to open item settings (e.g. popover).
 	 */
 	showItemEditButton?: boolean,
