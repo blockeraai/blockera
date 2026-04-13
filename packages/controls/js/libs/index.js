@@ -42,6 +42,10 @@ export {
 export type { LabelControlProps } from './label-control';
 export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';
+export {
+	normalizeSelectControlValue,
+	getSelectedSelectOption,
+} from './select-control/utils';
 export { default as ToggleSelectControl } from './toggle-select-control';
 export { default as RepeaterControl } from './repeater-control';
 export { cleanupRepeaterItem, cleanupRepeater } from './repeater-control/utils';
