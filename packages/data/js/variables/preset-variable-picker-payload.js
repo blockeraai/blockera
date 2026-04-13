@@ -45,13 +45,13 @@ function collectRepeaterLikeItems(
 }
 
 /**
- * Serialized `settings.value` for global-style presets, aligned with
- * {@see getMergedGlobalStylePresetVariables} / custom-global-style-presets mappers.
+ * Normalized `settings.value` for global-style presets (plain objects or strings).
+ * Aligns with {@see getMergedGlobalStylePresetVariables} / custom-global-style-presets mappers.
  */
 export function serializeGlobalStylePresetItemValue(
 	item: { +[string]: mixed },
 	variableType: string
-): string {
+): mixed {
 	switch (variableType) {
 		case 'shadow':
 		case 'text-shadow':
@@ -60,7 +60,7 @@ export function serializeGlobalStylePresetItemValue(
 		case 'filter': {
 			const items = collectRepeaterLikeItems(item, variableType);
 
-			return JSON.stringify({ items });
+			return { items: [...items] };
 		}
 
 		case 'border': {
@@ -73,9 +73,11 @@ export function serializeGlobalStylePresetItemValue(
 				return border;
 			}
 
-			const encoded = JSON.stringify(border);
+			if (typeof border === 'object' && !Array.isArray(border)) {
+				return { ...border };
+			}
 
-			return encoded === undefined ? '{}' : encoded;
+			return {};
 		}
 
 		case 'border-radius': {
@@ -132,13 +134,17 @@ export function buildPresetVariablePickerPayload(
 		id,
 	});
 
+	const value = serializeGlobalStylePresetItemValue(item, variableType);
+
 	return {
-		...item,
 		id,
 		name: String(item.name ?? id),
 		type: variableType,
 		reference,
-		value: serializeGlobalStylePresetItemValue(item, variableType),
+		value,
 		var: varString,
+		...(item.fluid !== undefined && item.fluid !== null
+			? { fluid: item.fluid }
+			: {}),
 	};
 }

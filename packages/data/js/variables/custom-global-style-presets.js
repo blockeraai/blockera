@@ -164,14 +164,19 @@ function mapBorderBoxPresets(
 			continue;
 		}
 
-		const serialized = JSON.stringify(
-			p.border === undefined || p.border === null ? {} : p.border
-		);
+		let borderVal: mixed = {};
+		if (p.border !== undefined && p.border !== null) {
+			if (typeof p.border === 'object' && !Array.isArray(p.border)) {
+				borderVal = { ...p.border };
+			} else {
+				borderVal = p.border;
+			}
+		}
 
 		out.push({
 			name,
 			id: String(p.slug).trim(),
-			value: serialized === undefined ? '{}' : serialized,
+			value: borderVal,
 			reference,
 		});
 	}
@@ -215,9 +220,9 @@ function mapItemsArrayPresets(
 		out.push({
 			name,
 			id: String(p.slug).trim(),
-			value: JSON.stringify({
-				items: rowItems,
-			}),
+			value: {
+				items: Array.isArray(rowItems) ? [...rowItems] : [],
+			},
 			reference,
 		});
 	}

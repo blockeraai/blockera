@@ -66,6 +66,7 @@ export {
 	buildPresetVariablePickerPayload,
 	serializeGlobalStylePresetItemValue,
 } from './preset-variable-picker-payload';
+export { tryParseLegacyJsonObject } from './legacy-json-settings';
 export { getVariable } from './get-variable';
 export {
 	generateVariableString,
