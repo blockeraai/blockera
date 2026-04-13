@@ -4,7 +4,7 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Fragment } from '@wordpress/element';
+import { Fragment, useMemo, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -22,13 +22,16 @@ import {
 	getVariableIcon,
 } from '../../helpers';
 import { isValid } from '../../utils';
-import { Button, Flex, Popover } from '../../../libs';
+import { ControlContextProvider } from '../../../context';
+import { Button, Flex, Popover, SearchControl } from '../../../libs';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
 import {
 	collectCatalogItemsForVariableType,
 	getSupplementalCustomVariableSections,
+	normalizeVariablePickerSearchQuery,
+	variablePickerItemMatchesSearch,
 } from './var-picker-helpers';
 import {
 	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
@@ -53,6 +56,21 @@ export default function ({
 	const variableTypes = controlProps.variableTypes || [];
 	const supplementalSections =
 		getSupplementalCustomVariableSections(controlProps);
+	const [searchQuery, setSearchQuery] = useState('');
+	const searchControlName = useRef(
+		`blockera-var-picker-search-${Math.random().toString(36).slice(2, 11)}`
+	).current;
+	const searchControlContextValue = useMemo(
+		() => ({
+			name: searchControlName,
+			value: searchQuery,
+		}),
+		[searchControlName, searchQuery]
+	);
+	const normalizedSearch = useMemo(
+		() => normalizeVariablePickerSearchQuery(searchQuery),
+		[searchQuery]
+	);
 
 	const variablePickerSections = variableTypes.map((type, index) => {
 		const data = getVariableCategory(type);
@@ -67,6 +85,11 @@ export default function ({
 			data,
 			supplementalSections
 		);
+		const filteredCatalogItems = normalizedSearch
+			? catalogItems.filter((item) =>
+					variablePickerItemMatchesSearch(item, normalizedSearch)
+				)
+			: catalogItems;
 
 		const globalStylesPanel = applyFilters(
 			VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
@@ -98,12 +121,25 @@ export default function ({
 				);
 			}
 
+			if (!filteredCatalogItems.length) {
+				return (
+					<PickerCategory
+						key={`type-${type}-${index}`}
+						title={data.label}
+					>
+						<span style={{ opacity: '0.5', fontSize: '12px' }}>
+							{__('No variables match your search.', 'blockera')}
+						</span>
+					</PickerCategory>
+				);
+			}
+
 			return (
 				<PickerCategory
 					key={`type-${type}-${index}`}
 					title={data.label}
 				>
-					{catalogItems.map((item) => (
+					{filteredCatalogItems.map((item) => (
 						<PickerValueItem
 							key={`${presetType}-${item.id}`}
 							value={controlProps.value}
@@ -152,6 +188,7 @@ export default function ({
 							controlProps,
 							catalogItems,
 							catalogLabel: data.label,
+							searchQuery,
 						}}
 					>
 						<PresetPanel />
@@ -205,6 +242,18 @@ export default function ({
 				data-cy="variable-picker-popover"
 				data-test="variable-picker-popover"
 			>
+				<div
+					className={controlInnerClassNames('var-picker-search')}
+					style={{ marginBottom: '12px' }}
+				>
+					<ControlContextProvider value={searchControlContextValue}>
+						<SearchControl
+							defaultValue=""
+							onChange={setSearchQuery}
+							placeholder={__('Search variables…', 'blockera')}
+						/>
+					</ControlContextProvider>
+				</div>
 				<Flex direction="column" gap="25px">
 					{variablePickerSections}
 				</Flex>
