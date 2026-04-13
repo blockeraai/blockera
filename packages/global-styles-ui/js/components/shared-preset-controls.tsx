@@ -261,7 +261,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				>
 					<InputControl
 						controlAddonTypes={[]}
-						label={__('Name:', 'blockera')}
+						label={__('Name', 'blockera')}
 						onChange={handleNameChange}
 						columns="1fr 3fr"
 					>
