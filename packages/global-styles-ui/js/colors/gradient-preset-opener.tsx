@@ -71,11 +71,6 @@ export function GradientPresetOpener({
 				{variable?.name}
 			</span>
 
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
-			></span>
-
 			{children}
 		</div>
 	);
