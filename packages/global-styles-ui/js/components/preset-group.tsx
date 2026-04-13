@@ -15,8 +15,10 @@ import {
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
 	cleanupRepeater,
+	normalizeVariablePickerSearchQuery,
 	resolveVariablePickerPresetGroupLabel,
 	useVarPickerPresetContext,
+	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
 import { noop, pascalCase, isObject } from '@blockera/utils';
 import {
@@ -91,6 +93,10 @@ type PresetsProps = {
 	onSelectableItemActivate?: (itemId: string, item: Object) => void;
 	showItemEditButton?: boolean;
 	actionButtonAdd?: boolean;
+	shouldRenderRepeaterItem?: (
+		itemId: string,
+		item: Record<string, unknown>
+	) => boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -137,6 +143,7 @@ const Presets = ({
 	valueCleanup: repeaterValueCleanup,
 	onSelectableItemActivate,
 	showItemEditButton = false,
+	shouldRenderRepeaterItem,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -240,6 +247,7 @@ const Presets = ({
 			valueCleanup={repeaterValueCleanup}
 			onSelectableItemActivate={onSelectableItemActivate}
 			showItemEditButton={showItemEditButton}
+			shouldRenderRepeaterItem={shouldRenderRepeaterItem}
 			showPopoverTitleDelete={true}
 			{...props}
 		/>
@@ -337,6 +345,18 @@ export const PresetGroup = ({
 		pickerValue,
 	]);
 
+	const repeaterSearchFilter = useMemo(() => {
+		if (!isVariablePicker) {
+			return undefined;
+		}
+		const q = normalizeVariablePickerSearchQuery(pickerCtx.searchQuery);
+		if (!q) {
+			return undefined;
+		}
+		return (itemId: string, item: Record<string, unknown>) =>
+			variablePickerItemMatchesSearch(item, q);
+	}, [isVariablePicker, pickerCtx.searchQuery]);
+
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}`,
@@ -423,6 +443,7 @@ export const PresetGroup = ({
 						actionButtonAdd={
 							pickerCtx.omitRepeaterSectionLabel ? false : true
 						}
+						shouldRenderRepeaterItem={repeaterSearchFilter}
 					/>
 				</BaseControl>
 			</ControlContextProvider>
