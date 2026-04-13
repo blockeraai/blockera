@@ -33,8 +33,6 @@ import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
 
-const designSystemBackLabel = __('Design System', 'blockera');
-
 export const DesignSystemNavigation = (): MixedElement => {
 	return (
 		<div className={extensionClassNames('navigation-category')}>
@@ -243,43 +241,49 @@ DesignSystemNavigation.Screens = ({
 	<>
 		<NavItemScreen path={`${initPath}spacing`}>
 			<Spacing
-				backLabel={designSystemBackLabel}
+				backLabel={__('Spacing', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
+
 		<NavItemScreen path={`${initPath}borders`}>
 			<Borders
-				backLabel={designSystemBackLabel}
+				backLabel={__('Borders', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
+
 		<NavItemScreen path={`${initPath}border-radius`}>
 			<BorderRadius
-				backLabel={designSystemBackLabel}
+				backLabel={__('Border Radius', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
+
 		<NavItemScreen path={`${initPath}text-shadows`}>
 			<TextShadows
-				backLabel={designSystemBackLabel}
+				backLabel={__('Text Shadows', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
+
 		<NavItemScreen path={`${initPath}transforms`}>
 			<Transforms
-				backLabel={designSystemBackLabel}
+				backLabel={__('2D & 3D Transforms', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
+
 		<NavItemScreen path={`${initPath}transitions`}>
 			<Transitions
-				backLabel={designSystemBackLabel}
+				backLabel={__('Transitions', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
+
 		<NavItemScreen path={`${initPath}filters`}>
 			<Filters
-				backLabel={designSystemBackLabel}
+				backLabel={__('Filters', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 		</NavItemScreen>
