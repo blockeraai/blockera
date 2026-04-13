@@ -8,21 +8,38 @@ import { Fragment } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
- * Internal dependencies
+ * Blockera dependencies
  */
-import { canUnlinkVariable, getVariableCategory } from '../../helpers';
-import { isValid } from '../../utils';
-import { PickerCategory } from '../index';
-import type { ValueAddonControlProps } from '../control/types';
-import { Button, Flex, Popover } from '../../../';
 import { Icon } from '@blockera/icons';
 import { controlInnerClassNames } from '@blockera/classnames';
 
+/**
+ * Internal dependencies
+ */
+import {
+	canUnlinkVariable,
+	getVariableCategory,
+	getVariableIcon,
+} from '../../helpers';
+import { isValid } from '../../utils';
+import { Button, Flex, Popover } from '../../../libs';
+import { PickerCategory, PickerValueItem } from '../index';
+import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
+import {
+	collectCatalogItemsForVariableType,
+	getSupplementalCustomVariableSections,
+} from './var-picker-helpers';
+import {
+	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+	VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
+} from './var-picker-constants';
 
-/** @see packages/editor/js/editor/register-var-picker-global-styles-panels.js */
-export const VAR_PICKER_PRESET_PANEL_FILTER =
-	'blockera.controls.var-picker.resolve-preset-panel';
+export {
+	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+	VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
+	VAR_PICKER_PRESET_PANEL_FILTER,
+} from './var-picker-constants';
 
 export default function ({
 	controlProps,
@@ -34,6 +51,8 @@ export default function ({
 	popoverOffset?: number,
 }): Element<any> {
 	const variableTypes = [...new Set(controlProps.variableTypes || [])].sort();
+	const supplementalSections =
+		getSupplementalCustomVariableSections(controlProps);
 
 	const variablePickerSections = variableTypes.map((type, index) => {
 		const data = getVariableCategory(type);
@@ -43,24 +62,69 @@ export default function ({
 		}
 
 		const presetType = data.type || type;
-		const PresetPanel = applyFilters(
-			VAR_PICKER_PRESET_PANEL_FILTER,
+		const catalogItems = collectCatalogItemsForVariableType(
+			presetType,
+			data,
+			supplementalSections
+		);
+
+		const globalStylesPanel = applyFilters(
+			VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
 			null,
 			presetType
 		);
+		const PresetPanel =
+			globalStylesPanel ||
+			applyFilters(
+				VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+				null,
+				presetType
+			);
 
 		if (!PresetPanel) {
+			if (!catalogItems.length) {
+				return (
+					<PickerCategory
+						key={`type-${type}-${index}`}
+						title={data.label}
+					>
+						<span style={{ opacity: '0.5', fontSize: '12px' }}>
+							{__(
+								'This variable type is not available in this context.',
+								'blockera'
+							)}
+						</span>
+					</PickerCategory>
+				);
+			}
+
 			return (
 				<PickerCategory
 					key={`type-${type}-${index}`}
 					title={data.label}
 				>
-					<span style={{ opacity: '0.5', fontSize: '12px' }}>
-						{__(
-							'This variable type is not available in this context.',
-							'blockera'
-						)}
-					</span>
+					{catalogItems.map((item) => (
+						<PickerValueItem
+							key={`${presetType}-${item.id}`}
+							value={controlProps.value}
+							data={item}
+							onClick={controlProps.handleOnClickVar}
+							name={item.name}
+							type={presetType}
+							valueType="variable"
+							isCurrent={
+								controlProps.value?.settings?.id === item.id
+							}
+							icon={getVariableIcon({
+								type: presetType,
+								value:
+									typeof item.value === 'string'
+										? item.value
+										: undefined,
+							})}
+							status={'active'}
+						/>
+					))}
 				</PickerCategory>
 			);
 		}
@@ -82,6 +146,8 @@ export default function ({
 							active: true,
 							variableType: presetType,
 							controlProps,
+							catalogItems,
+							catalogLabel: data.label,
 						}}
 					>
 						<PresetPanel />
@@ -131,9 +197,14 @@ export default function ({
 				</>
 			}
 		>
-			<Flex direction="column" gap="25px">
-				{variablePickerSections}
-			</Flex>
+			<div
+				data-cy="variable-picker-popover"
+				data-test="variable-picker-popover"
+			>
+				<Flex direction="column" gap="25px">
+					{variablePickerSections}
+				</Flex>
+			</div>
 		</Popover>
 	);
 }

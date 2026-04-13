@@ -21,7 +21,7 @@ import {
 import { getVariableCategory } from '../../helpers';
 import type { VariableCategoryDetail } from '../../types';
 import type { ValueAddonControlProps } from '../control/types';
-import { VAR_PICKER_PRESET_PANEL_FILTER } from './var-picker-constants';
+import { VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER } from './var-picker-constants';
 
 export type ResolvedVariablePickerRow = {|
 	data: DynamicVariableGroup | VariableCategoryDetail,
@@ -59,6 +59,40 @@ export type SupplementalCustomSection = {|
 |};
 
 /**
+ * Merged, de-duplicated catalog rows for one variable type (main store + supplemental).
+ */
+export function collectCatalogItemsForVariableType(
+	type: string,
+	data: VariableCategoryDetail | DynamicVariableGroup,
+	supplementalSections: Array<SupplementalCustomSection>
+): Array<VariableItem> {
+	const mainItems = Array.isArray(data.items)
+		? [...data.items]
+		: Object.values(data.items || {});
+	const extraItems = supplementalSections
+		.filter((s) => s.type === type)
+		.flatMap((s) => s.items);
+	const seenIds: Set<string> = new Set();
+	const catalogItems: Array<VariableItem> = [];
+
+	for (const raw of [...mainItems, ...extraItems]) {
+		// Catalog rows may be VariableItem-shaped objects from merged groups.
+		const item = ((raw: any): ?VariableItem);
+		if (!item || item.id === null || item.id === '') {
+			continue;
+		}
+		const idKey = String(item.id);
+		if (seenIds.has(idKey)) {
+			continue;
+		}
+		seenIds.add(idKey);
+		catalogItems.push(item);
+	}
+
+	return catalogItems;
+}
+
+/**
  * Custom global-style presets not already listed in the merged catalog (per type),
  * only for types that do not use a registered preset panel.
  */
@@ -68,7 +102,13 @@ export function getSupplementalCustomVariableSections(
 	const sections: Array<SupplementalCustomSection> = [];
 
 	for (const type of controlProps.variableTypes) {
-		if (applyFilters(VAR_PICKER_PRESET_PANEL_FILTER, null, type)) {
+		if (
+			applyFilters(
+				VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
+				null,
+				type
+			)
+		) {
 			continue;
 		}
 

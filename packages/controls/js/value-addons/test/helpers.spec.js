@@ -101,6 +101,26 @@ describe('Helper Functions', () => {
 						).toBe('var(--wp--preset--font-size--not-found, 13px)');
 					});
 
+					test('structured settings.value (object) emits var token only, no invalid fallback', () => {
+						expect(
+							getValueAddonRealValue({
+								settings: {
+									name: 'Shadow preset',
+									id: 'shadow-1',
+									value: {
+										items: [{ order: 0, isVisible: true }],
+									},
+									reference: { type: 'preset' },
+									type: 'box-shadow',
+									var: '--wp--preset--shadow--natural',
+								},
+								id: 'shadow-1',
+								isValueAddon: true,
+								valueType: 'variable',
+							})
+						).toBe('var(--wp--preset--shadow--natural)');
+					});
+
 					test('font size - not valid variable - it should return value because the variable is not valid', () => {
 						expect(
 							getValueAddonRealValue({

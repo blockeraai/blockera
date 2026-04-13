@@ -82,6 +82,25 @@ const RepeaterItem = ({
 		isOpenPopoverEvent,
 	};
 
+	let headerVariableSlug: string | void;
+	if (!item?.selectable) {
+		headerVariableSlug = undefined;
+	} else if (
+		item.slug !== null &&
+		item.slug !== undefined &&
+		String(item.slug) !== ''
+	) {
+		headerVariableSlug = String(item.slug);
+	} else if (
+		item.id !== null &&
+		item.id !== undefined &&
+		String(item.id) !== ''
+	) {
+		headerVariableSlug = String(item.id);
+	} else {
+		headerVariableSlug = String(itemId);
+	}
+
 	const styleRef = useRef(null);
 	const [draggingIndex, setDraggingIndex] = useState(null);
 
@@ -187,6 +206,7 @@ const RepeaterItem = ({
 					popoverClassName={popoverClassName}
 					actionButtonsType={actionButtonsType}
 					actionMenuButtonLabel={actionMenuButtonLabel}
+					headerVariableSlug={headerVariableSlug}
 					className={controlInnerClassNames(
 						'repeater-item-group',
 						item?.__className,

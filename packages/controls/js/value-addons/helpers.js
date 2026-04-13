@@ -191,7 +191,7 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 				value?.settings?.id
 			);
 
-			let currentValue = '';
+			let currentValue: mixed = '';
 			let currentVar = '';
 
 			//
@@ -217,6 +217,11 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 			}
 
 			if (currentValue && currentVar) {
+				// Structured preset payloads (objects) are not valid var() fallbacks; emit token only.
+				if (typeof currentValue === 'object' && currentValue !== null) {
+					return `var(${currentVar})`;
+				}
+
 				// If the value already starts with var({$value['settings']['var']}), return it as is
 				if (
 					typeof currentValue === 'string' &&
@@ -225,7 +230,7 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 					return currentValue;
 				}
 
-				return `var(${currentVar}, ${currentValue})`;
+				return `var(${currentVar}, ${String(currentValue)})`;
 			}
 
 			if (currentValue) {

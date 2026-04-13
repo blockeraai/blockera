@@ -5,6 +5,11 @@
 import { createContext, useContext } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import type { VariableItem } from '@blockera/data';
+
+/**
  * Internal dependencies
  */
 import type { ValueAddonControlProps } from '../control/types';
@@ -13,6 +18,12 @@ export type VarPickerPresetContextValue = {
 	active: boolean,
 	variableType: string | null,
 	controlProps: ValueAddonControlProps | null,
+	catalogItems?: Array<VariableItem>,
+	catalogLabel?: string,
+	/**
+	 * When true, catalog fallback repeaters hide edit affordances (no preset popover / pen).
+	 */
+	disablePresetRowEdit?: boolean,
 };
 
 export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> =
@@ -20,6 +31,9 @@ export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> 
 		active: false,
 		variableType: null,
 		controlProps: null,
+		catalogItems: undefined,
+		catalogLabel: undefined,
+		disablePresetRowEdit: undefined,
 	});
 
 export function useVarPickerPresetContext(): VarPickerPresetContextValue {

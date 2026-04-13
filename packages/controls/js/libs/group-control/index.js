@@ -42,6 +42,7 @@ export default function GroupControl({
 	injectHeaderButtonsEnd,
 	actionButtonsType = 'inline',
 	actionMenuButtonLabel = __('More Options', 'blockera'),
+	headerVariableSlug,
 	//
 	children = 'Content...',
 	//
@@ -128,6 +129,9 @@ export default function GroupControl({
 			<div
 				className={controlInnerClassNames('group-header')}
 				data-cy="group-control-header"
+				{...(headerVariableSlug
+					? { 'data-variable-slug': headerVariableSlug }
+					: {})}
 				onClick={handleOnClick}
 			>
 				{(injectHeaderButtonsStart ||
