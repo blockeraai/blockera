@@ -348,7 +348,9 @@ export const PresetGroup = ({
 								? handleSelectableItemActivate
 								: undefined
 						}
-						showItemEditButton={isVariablePicker}
+						showItemEditButton={
+							isVariablePicker && !pickerCtx.disablePresetRowEdit
+						}
 					/>
 				</BaseControl>
 			</ControlContextProvider>

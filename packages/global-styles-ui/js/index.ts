@@ -26,6 +26,7 @@ export { TransitionsPresetContent } from './transitions';
 export { ColorPalettePresetContent } from './colors/color-palette-screen';
 export { LinearGradientsPresetContent } from './colors/linear-gradients-screen';
 export { RadialGradientsPresetContent } from './colors/radial-gradients-screen';
+export { FallbackPresetContent } from './components/fallback-preset-content';
 
 export { colorsPanelHandler } from './colors/colors-panel-handler';
 export { typographyPanelHandler } from './font-sizes/typography-panel-handler';

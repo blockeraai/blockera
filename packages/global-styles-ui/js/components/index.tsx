@@ -12,3 +12,4 @@ export * from './global-styles-panel-description';
 export * from './variable-preview';
 export * from './create-preset-fields-props-resolver';
 export { default as ConfirmResetPresetDialog } from './confirm-reset-preset-dialog';
+export { FallbackPresetContent } from './fallback-preset-content';
