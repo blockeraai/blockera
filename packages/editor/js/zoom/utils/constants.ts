@@ -82,3 +82,9 @@ export const ZOOMED_OUT_CLASS = 'is-zoomed-out';
  * CSS class added to scale container when zoomed.
  */
 export const SCALE_CONTAINER_ZOOMED_CLASS = 'iframe-zoomed';
+
+/**
+ * Marker on the parent-document `<style>` injected by `editorZoomCompatibility`
+ * (see iframeUtils): scales core host-document popovers with Blockera canvas zoom.
+ */
+export const EDITOR_ZOOM_COMPAT_STYLE_ATTR = 'data-blockera-editor-zoom-compat';
