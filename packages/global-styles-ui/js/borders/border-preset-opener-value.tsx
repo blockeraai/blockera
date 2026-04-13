@@ -71,7 +71,7 @@ function BorderColorIndicator({
 		return null;
 	}
 
-	return <ColorIndicator value={color} size={14} />;
+	return <ColorIndicator value={color} size={16} />;
 }
 
 function FlatBorderPresetValue({ side }: { side: BorderPresetStoredSide }) {
@@ -84,7 +84,7 @@ function FlatBorderPresetValue({ side }: { side: BorderPresetStoredSide }) {
 	const hasAny = w || st || c;
 
 	if (!hasAny) {
-		return <span>{__('EMPTY', 'blockera')}</span>;
+		return null;
 	}
 
 	return (
@@ -102,6 +102,7 @@ function FlatBorderPresetValue({ side }: { side: BorderPresetStoredSide }) {
 				</span>
 			) : null}
 			<BorderStyleLine style={st || 'solid'} />
+
 			{hasColor ? (
 				<BorderColorIndicator
 					color={
