@@ -7,12 +7,9 @@ import type { CSSProperties } from 'react';
  * Internal dependencies
  */
 import { VariablePreview } from '../components/variable-preview';
-import { radiusSizeToPreviewCss } from './utils';
+import { radiusPresetSizeToString, radiusSizeToPreviewCss } from './utils';
 
 const PREVIEW_SIZE = 50;
-
-const PREVIEW_GRADIENT =
-	'linear-gradient(145deg, rgba(56, 88, 233, 0.22), rgba(56, 88, 233, 0.08))';
 
 const INNER_BASE: CSSProperties = {
 	display: 'inline-block',
@@ -26,8 +23,9 @@ const INNER_BASE: CSSProperties = {
 const EMPTY_PREVIEW_STYLE: CSSProperties = {
 	...INNER_BASE,
 	borderRadius: 0,
-	border: '1px dashed rgba(120, 120, 120, 0.45)',
-	background: 'rgba(120, 120, 120, 0.06)',
+	background:
+		'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, transparent)',
+	border: '1px solid var(--blockera-controls-primary-color)',
 };
 
 export type BorderRadiusPresetPreviewProps = {
@@ -37,7 +35,8 @@ export type BorderRadiusPresetPreviewProps = {
 export default function BorderRadiusPresetPreview({
 	size,
 }: BorderRadiusPresetPreviewProps) {
-	const raw = String(size ?? '').trim();
+	// Match opener / CSS path: value-addon objects must resolve before emptiness check.
+	const raw = radiusPresetSizeToString(size);
 
 	const inner = !raw ? (
 		<span aria-hidden style={EMPTY_PREVIEW_STYLE} />
@@ -47,8 +46,9 @@ export default function BorderRadiusPresetPreview({
 			style={{
 				...INNER_BASE,
 				borderRadius: radiusSizeToPreviewCss(size),
-				background: PREVIEW_GRADIENT,
-				border: '1px solid rgba(56, 88, 233, 0.35)',
+				background:
+					'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, transparent)',
+				border: '1px solid var(--blockera-controls-primary-color)',
 			}}
 		/>
 	);
