@@ -174,7 +174,7 @@ class BoxShadow extends BaseStyleDefinition {
 	}
 
 	/**
-	 * Sorted box-shadow rows (raw repeater, variable JSON with `declaration`, CSS-string `items`, or row `items`).
+	 * Sorted box-shadow rows (raw repeater, variable payload with `declaration`, CSS-string `items`, or row `items`).
 	 *
 	 * @param array         $value                  Content of $setting['box-shadow']; updated for variable payloads.
 	 * @param callable|null $build_declaration      Builds CSS from sorted row arrays when `items` is a list of rows.
@@ -197,8 +197,10 @@ class BoxShadow extends BaseStyleDefinition {
 		$raw_restore = '';
 		if ( isset( $value['settings']['value'] ) && is_string( $value['settings']['value'] ) ) {
 			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $value['settings']['value'] ) && is_array( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
 		} elseif ( isset( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
-			$raw_restore = wp_json_encode( array( 'items' => $decoded['items'] ) );
+			$raw_restore = array( 'items' => $decoded['items'] );
 		}
 
 		$declaration_string = '';
@@ -244,7 +246,7 @@ class BoxShadow extends BaseStyleDefinition {
 				return array();
 			}
 
-			// Var resolution returned empty: restore JSON so row-by-row fallback still works.
+			// Var resolution returned empty: restore payload so row-by-row fallback still works.
 			$value['settings']['value'] = $raw_restore;
 		}
 

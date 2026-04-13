@@ -93,8 +93,7 @@ class Border extends BaseStyleDefinition {
 			} elseif ( isset( $settings['value'] ) && is_array( $settings['value'] ) ) {
 				$box = $settings['value'];
 			} elseif ( isset( $settings['value'] ) && is_string( $settings['value'] ) && '' !== $settings['value'] ) {
-				$decoded = json_decode( $settings['value'], true );
-				$box     = is_array( $decoded ) ? $decoded : null;
+				$box = static::tryDecodeLegacyVariableJsonObject( $settings['value'] );
 			}
 
 			if ( is_array( $box ) && isset( $box['all'] ) && is_array( $box['all'] ) ) {

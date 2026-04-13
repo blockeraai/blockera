@@ -1,6 +1,7 @@
 /**
  * Blockera dependencies
  */
+import { tryParseLegacyJsonObject } from '@blockera/data';
 import { cloneObject } from '@blockera/utils';
 import { getValueAddonRealValue } from '@blockera/controls';
 
@@ -11,8 +12,8 @@ import { createCssDeclarations } from '../../../../style-engine';
 import { getBlockSupportStyleEngineConfig } from '../../../utils';
 
 /**
- * When a radius field is a variable whose serialized settings mirror box-border
- * (JSON with an `all` length), use that inner string for CSS output.
+ * When a radius field is a variable whose settings mirror box-border shape
+ * (object with `all` length, or legacy JSON with the same shape), use that inner string for CSS output.
  *
  * @param {*} field Border radius field (string, value-addon object, etc.).
  * @return {*} Field suitable for `getValueAddonRealValue` (string or unchanged object).
@@ -27,21 +28,13 @@ function unwrapRadiusVariableField(field) {
 			return raw.all;
 		}
 	}
-	if (typeof raw !== 'string' || !raw.trim().startsWith('{')) {
-		return field;
-	}
-	try {
-		const parsed = JSON.parse(raw);
-		if (
-			parsed &&
-			typeof parsed === 'object' &&
-			typeof parsed.all === 'string' &&
-			(!parsed.type || parsed.type === 'all')
-		) {
-			return parsed.all;
-		}
-	} catch (e) {
-		// Plain preset sizes are non-JSON strings; keep the variable field as-is.
+	const legacy = tryParseLegacyJsonObject(raw);
+	if (
+		legacy &&
+		typeof legacy.all === 'string' &&
+		(!legacy.type || legacy.type === 'all')
+	) {
+		return legacy.all;
 	}
 	return field;
 }

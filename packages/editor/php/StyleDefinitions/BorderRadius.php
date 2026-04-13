@@ -7,7 +7,7 @@ use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 class BorderRadius extends BaseStyleDefinition {
 
 	/**
-	 * When a radius field is a variable with JSON settings (same pattern as border presets),
+	 * When a radius field is a variable with border-preset-shaped settings (array or legacy JSON),
 	 * resolve to the inner `all` length string when present.
 	 *
 	 * @param mixed $field Raw field value from block attributes.
@@ -24,12 +24,8 @@ class BorderRadius extends BaseStyleDefinition {
 		if ( is_array( $raw ) ) {
 			$decoded = $raw;
 		} elseif ( is_string( $raw ) && '' !== $raw ) {
-			$trim = ltrim( $raw );
-			if ( '' === $trim || '{' !== $trim[0] ) {
-				return $field;
-			}
-			$decoded = json_decode( $raw, true );
-			if ( ! is_array( $decoded ) ) {
+			$decoded = static::tryDecodeLegacyVariableJsonObject( $raw );
+			if ( null === $decoded ) {
 				return $field;
 			}
 		} else {

@@ -1,9 +1,12 @@
 // @flow
 
 /**
- * Value-addon variables from the variable store use JSON in `settings.value`.
- * Variables chosen from global preset repeaters (var picker) may expose the same
- * data on `settings.items` / `settings.border` or as a parsed object in `value`.
+ * External dependencies
+ */
+import { tryParseLegacyJsonObject } from '@blockera/data';
+
+/**
+ * Variable preset rows: `settings.items`, object `settings.value`, or legacy JSON string (pre-feat/variables saves).
  */
 
 export function getVariableRepeaterItemsFromSettings(
@@ -26,15 +29,8 @@ export function getVariableRepeaterItemsFromSettings(
 	) {
 		return raw.items;
 	}
-	if (typeof raw === 'string') {
-		try {
-			const parsed = JSON.parse(raw);
-			return Array.isArray(parsed?.items) ? parsed.items : [];
-		} catch (e) {
-			return [];
-		}
-	}
-	return [];
+	const legacy = tryParseLegacyJsonObject(raw);
+	return Array.isArray(legacy?.items) ? legacy.items : [];
 }
 
 export function parseBorderVariablePayloadFromSettings(
@@ -44,15 +40,14 @@ export function parseBorderVariablePayloadFromSettings(
 		return null;
 	}
 	const raw = settings.value;
-	if (typeof raw === 'string' && raw !== '') {
-		try {
-			return JSON.parse(raw);
-		} catch (e) {
-			return null;
-		}
-	}
-	if (raw && typeof raw === 'object') {
+	if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
 		return raw;
+	}
+	if (typeof raw === 'string' && raw !== '') {
+		const legacy = tryParseLegacyJsonObject(raw);
+		if (legacy) {
+			return legacy;
+		}
 	}
 	if (settings.border && typeof settings.border === 'object') {
 		return settings.border;

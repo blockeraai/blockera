@@ -10,6 +10,7 @@ import {
 	BorderRadiusPresetContent,
 	BordersPresetContent,
 	ColorPalettePresetContent,
+	FallbackPresetContent,
 	FiltersPresetContent,
 	FontSizesPresetContent,
 	LinearGradientsPresetContent,
@@ -20,7 +21,10 @@ import {
 	TransformsPresetContent,
 	TransitionsPresetContent,
 } from '@blockera/global-styles-ui';
-import { VAR_PICKER_PRESET_PANEL_FILTER } from '@blockera/controls';
+import {
+	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+	VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
+} from '@blockera/controls';
 
 const PRESET_PANEL_BY_TYPE = {
 	spacing: SpacingPresetContent,
@@ -38,13 +42,19 @@ const PRESET_PANEL_BY_TYPE = {
 };
 
 /**
- * Wires `@blockera/global-styles-ui` preset editors into the block/variable picker
- * in `@blockera/controls`. Implemented with `addFilter` so controls does not import
- * global-styles-ui (that would conflict with webpack externals and script order:
- * controls loads before global-styles-ui, while global-styles-ui depends on controls).
+ * Wires `@blockera/global-styles-ui` into the block variable picker via `addFilter`, so
+ * `@blockera/controls` never imports global-styles-ui (script order / externals).
+ *
+ * Registers the global-styles preset panel hook and the fallback catalog panel hook.
  */
 addFilter(
-	VAR_PICKER_PRESET_PANEL_FILTER,
+	VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
 	'blockera/editor-global-styles-preset-panels',
 	(Panel, variableType) => PRESET_PANEL_BY_TYPE[variableType] || Panel
+);
+
+addFilter(
+	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+	'blockera/editor-global-styles-fallback-preset-panel',
+	(Panel) => Panel || FallbackPresetContent
 );

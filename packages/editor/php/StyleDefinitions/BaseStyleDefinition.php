@@ -724,8 +724,27 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
+	 * Decode legacy JSON object strings saved in variable `settings.value` (pre-structured-array releases).
+	 *
+	 * @param mixed $raw Raw `settings.value`.
+	 * @return array<string, mixed>|null Decoded associative array or null.
+	 */
+	protected static function tryDecodeLegacyVariableJsonObject( $raw ): ?array {
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return null;
+		}
+		$trim = ltrim( $raw );
+		if ( '' === $trim || '{' !== $trim[0] ) {
+			return null;
+		}
+		$decoded = json_decode( $raw, true );
+
+		return is_array( $decoded ) ? $decoded : null;
+	}
+
+	/**
 	 * Decode value-addon variable settings for repeater-style CSS (transition, transform, filter).
-	 * Supports top-level `items` (global preset var picker), JSON string or array in `value`.
+	 * Supports top-level `items` (global preset var picker), structured array in `value`, or legacy JSON string.
 	 *
 	 * @param array $settings Variable payload `settings` array.
 	 * @return array<string, mixed>|null Shape with optional `declaration` and `items`.
@@ -738,18 +757,19 @@ abstract class BaseStyleDefinition {
 		if ( is_array( $raw ) ) {
 			return $raw;
 		}
-		if ( ! is_string( $raw ) || '' === $raw ) {
-			return null;
-		}
-		$decoded = json_decode( $raw, true );
+		if ( is_string( $raw ) && '' !== $raw ) {
+			$decoded = static::tryDecodeLegacyVariableJsonObject( $raw );
 
-		return is_array( $decoded ) ? $decoded : null;
+			return is_array( $decoded ) ? $decoded : null;
+		}
+
+		return null;
 	}
 
 	/**
-	 * Sorted repeater rows from stored value (raw map or `valueType: variable` + JSON).
+	 * Sorted repeater rows from stored value (raw map or `valueType: variable` + structured payload).
 	 *
-	 * Variable branch: `settings.value` may be a JSON string or array; global preset variables from the
+	 * Variable branch: `settings.value` may be a structured array, legacy JSON string, or scalar; global preset variables from the
 	 * picker may use `settings.items` instead. Payload may include `declaration` or `items`. The computed
 	 * CSS string is written to
 	 * `$value['settings']['value']`, then `blockera_get_value_addon_real_value( $value )` runs for the final
@@ -778,8 +798,10 @@ abstract class BaseStyleDefinition {
 		$raw_restore = '';
 		if ( isset( $value['settings']['value'] ) && is_string( $value['settings']['value'] ) ) {
 			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $value['settings']['value'] ) && is_array( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
 		} elseif ( isset( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
-			$raw_restore = wp_json_encode( array( 'items' => $decoded['items'] ) );
+			$raw_restore = array( 'items' => $decoded['items'] );
 		}
 
 		$declaration_string = '';
@@ -822,7 +844,7 @@ abstract class BaseStyleDefinition {
 			return [];
 		}
 
-		// Var resolution returned empty (e.g. missing token): put JSON back so callers can still expand `items` row-by-row.
+		// Var resolution returned empty (e.g. missing token): restore payload so callers can still expand `items` row-by-row.
 		$value['settings']['value'] = $raw_restore;
 		$items                      = $decoded['items'] ?? [];
 		if ( ! is_array( $items ) ) {
