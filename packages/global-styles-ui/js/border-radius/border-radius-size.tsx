@@ -2,14 +2,14 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
+import { useCallback, memo, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
 	Flex,
-	BorderRadiusControl,
+	InputControl,
 	RepeaterContext,
 	useControlContext,
 	ControlContextProvider,
@@ -22,11 +22,6 @@ import BorderRadiusPresetPreview from './border-radius-preset-preview';
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllBorderRadiusSlugs } from '../components/utils';
-import {
-	parseRadiusSizeToControlValue,
-	serializeControlValueToRadiusSize,
-	type BorderRadiusControlValue,
-} from './utils';
 
 export type BorderRadiusDefaultPresetValue = {
 	size: string;
@@ -91,20 +86,14 @@ function BorderRadiusSizeComponent({
 		]
 	);
 
-	const radiusControlValue = useMemo((): BorderRadiusControlValue => {
-		const raw =
-			typeof borderRadiusSize.size === 'number'
-				? String(borderRadiusSize.size)
-				: borderRadiusSize.size;
-		return parseRadiusSizeToControlValue(raw);
-	}, [borderRadiusSize.size]);
+	const radiusInputValue =
+		typeof borderRadiusSize.size === 'number'
+			? String(borderRadiusSize.size)
+			: borderRadiusSize.size;
 
 	const handleRadiusChange = useCallback(
-		(newValue: BorderRadiusControlValue) => {
-			updatePresetViaRepeater(
-				'size',
-				serializeControlValueToRadiusSize(newValue)
-			);
+		(newValue: string | undefined) => {
+			updatePresetViaRepeater('size', newValue ?? '');
 		},
 		[updatePresetViaRepeater]
 	);
@@ -122,15 +111,18 @@ function BorderRadiusSizeComponent({
 		<ControlContextProvider
 			value={{
 				name: `border-radius-size-${slug}`,
-				value: radiusControlValue,
+				value: radiusInputValue,
 				attribute: 'blockeraBorderRadiusSize',
 				blockName: 'global-styles',
 			}}
 		>
-			<BorderRadiusControl
-				withoutValueAddons
-				showLinkedSidesToggle={false}
+			<InputControl
 				label={__('Radius', 'blockera')}
+				controlAddonTypes={[]}
+				columns="1fr 3fr"
+				min={0}
+				unitType="essential"
+				placeholder="0"
 				labelDescription={
 					<>
 						<p>
@@ -141,16 +133,15 @@ function BorderRadiusSizeComponent({
 						</p>
 						<p>
 							{__(
-								'Stored in theme.json as border.radiusSizes (size field). Four values are saved as a CSS shorthand list.',
+								'Stored in theme.json as border.radiusSizes (size field). Use lengths such as px, rem, %, or fluid values like clamp().',
 								'blockera'
 							)}
 						</p>
 					</>
 				}
-				onChange={(newValue: BorderRadiusControlValue) =>
+				onChange={(newValue: string | undefined) =>
 					handleRadiusChange(newValue)
 				}
-				defaultValue={radiusControlValue}
 			/>
 		</ControlContextProvider>
 	);
