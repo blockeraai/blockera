@@ -8,7 +8,6 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -16,30 +15,6 @@ import { Flex } from '@blockera/controls';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpFilterPreset } from './utils';
-import { getFilterPresetAccessibilityDescription } from './utils';
-import FilterPresetPreview from './filter-preset-preview';
-
-function FilterPresetOpenerValue({
-	preset,
-}: {
-	preset: WpFilterPreset | undefined;
-}) {
-	return (
-		<Flex
-			alignItems="center"
-			justifyContent="flex-end"
-			style={{
-				width: 'fit-content',
-				maxWidth: '100%',
-				minWidth: 0,
-				flexShrink: 0,
-				overflow: 'visible',
-			}}
-		>
-			<FilterPresetPreview items={preset?.items ?? []} inline />
-		</Flex>
-	);
-}
 
 export type FilterPresetOpenerProps = {
 	itemId: string;
@@ -58,8 +33,6 @@ export function FilterPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FilterPresetOpenerProps) {
-	const a11y = getFilterPresetAccessibilityDescription(variable);
-
 	return (
 		<div
 			className={classNames(
@@ -84,22 +57,6 @@ export function FilterPresetOpener({
 				data-cy="header-label"
 			>
 				{variable?.name}
-			</span>
-
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
-				style={{
-					display: 'flex',
-					justifyContent: 'flex-end',
-					alignItems: 'center',
-					minWidth: 0,
-					maxWidth: '100%',
-					overflow: 'visible',
-				}}
-				title={a11y || undefined}
-			>
-				<FilterPresetOpenerValue preset={variable} />
 			</span>
 
 			{children}

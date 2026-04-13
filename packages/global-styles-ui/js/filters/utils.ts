@@ -2,8 +2,6 @@
  * theme.json filter preset (settings.filter.presets).
  * Each preset stores `items`: filter rows matching FilterControl repeater fields.
  */
-import { __ } from '@wordpress/i18n';
-
 import { getSortedRepeater } from '@blockera/controls';
 
 export type FilterType =
@@ -200,84 +198,4 @@ export function repeaterRecordToItems(
 ): FilterPresetItem[] {
 	const sorted = getSortedRepeater(repeater);
 	return sorted.map(([, row]) => sanitizeItem(row));
-}
-
-export function getFilterTypeLabel(type: string): string {
-	switch (type) {
-		case 'blur':
-			return __('Blur', 'blockera');
-		case 'drop-shadow':
-			return __('Drop Shadow', 'blockera');
-		case 'brightness':
-			return __('Brightness', 'blockera');
-		case 'contrast':
-			return __('Contrast', 'blockera');
-		case 'hue-rotate':
-			return __('Hue Rotate', 'blockera');
-		case 'saturate':
-			return __('Saturation', 'blockera');
-		case 'grayscale':
-			return __('Grayscale', 'blockera');
-		case 'invert':
-			return __('Invert', 'blockera');
-		case 'sepia':
-			return __('Sepia', 'blockera');
-		default:
-			return type;
-	}
-}
-
-export function formatPresetItemsSummary(
-	items: FilterPresetItem[] | undefined
-): string {
-	if (!items?.length) {
-		return '';
-	}
-	const first = items[0];
-	const rest = items.length > 1 ? ` (+${items.length - 1})` : '';
-
-	switch (first.type) {
-		case 'blur':
-			return `${getFilterTypeLabel('blur')} · ${first.blur ?? '3px'}${rest}`;
-		case 'drop-shadow':
-			return `${getFilterTypeLabel('drop-shadow')} · ${first['drop-shadow-x'] ?? ''} ${first['drop-shadow-y'] ?? ''}${rest}`;
-		case 'brightness':
-			return `${getFilterTypeLabel('brightness')} · ${first.brightness ?? ''}${rest}`;
-		case 'contrast':
-			return `${getFilterTypeLabel('contrast')} · ${first.contrast ?? ''}${rest}`;
-		case 'hue-rotate':
-			return `${getFilterTypeLabel('hue-rotate')} · ${first['hue-rotate'] ?? ''}${rest}`;
-		case 'saturate':
-			return `${getFilterTypeLabel('saturate')} · ${first.saturate ?? ''}${rest}`;
-		case 'grayscale':
-			return `${getFilterTypeLabel('grayscale')} · ${first.grayscale ?? ''}${rest}`;
-		case 'invert':
-			return `${getFilterTypeLabel('invert')} · ${first.invert ?? ''}${rest}`;
-		case 'sepia':
-			return `${getFilterTypeLabel('sepia')} · ${first.sepia ?? ''}${rest}`;
-		default:
-			return rest ? `(${items.length})` : '';
-	}
-}
-
-export function getFilterPresetAccessibilityDescription(
-	preset:
-		| {
-				name?: string;
-				items?: FilterPresetItem[];
-		  }
-		| undefined
-): string {
-	if (!preset) {
-		return '';
-	}
-	const parts: string[] = [];
-	if (preset.name) {
-		parts.push(preset.name);
-	}
-	const summary = formatPresetItemsSummary(preset.items);
-	if (summary) {
-		parts.push(summary);
-	}
-	return parts.join(' — ');
 }

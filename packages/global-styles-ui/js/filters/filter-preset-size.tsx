@@ -8,7 +8,6 @@ import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
-	Flex,
 	BaseControl,
 	FilterControl,
 	RepeaterContext,
@@ -19,7 +18,6 @@ import {
 /**
  * Internal dependencies
  */
-import FilterPresetPreview from './filter-preset-preview';
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllFilterSlugs } from '../components/utils';
@@ -171,19 +169,15 @@ function FilterPresetSizeComponent({
 	);
 
 	return (
-		<Flex direction="column" gap="15px">
-			<FilterPresetPreview items={filterPreset.items} />
-
-			<SharedPresetControls
-				itemId={presetId}
-				variable={filterPreset}
-				name={filterPreset.name}
-				slug={filterPreset.slug}
-				allSlugs={getAllFilterSlugs(presets)}
-			>
-				{filterPresetValueControls}
-			</SharedPresetControls>
-		</Flex>
+		<SharedPresetControls
+			itemId={presetId}
+			variable={filterPreset}
+			name={filterPreset.name}
+			slug={filterPreset.slug}
+			allSlugs={getAllFilterSlugs(presets)}
+		>
+			{filterPresetValueControls}
+		</SharedPresetControls>
 	);
 }
 
