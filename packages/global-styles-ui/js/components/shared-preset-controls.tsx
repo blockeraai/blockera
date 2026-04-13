@@ -295,6 +295,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 														cursor: 'pointer',
 														display: 'flex',
 														alignItems: 'center',
+														marginLeft: '2px',
 													}}
 												>
 													<Icon
