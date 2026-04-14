@@ -27,6 +27,7 @@ const blockeraTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Transforms', 'blockera'),
 	keywords: ['transform', 'rotate', 'scale', 'skew', 'translate'],
 };
@@ -35,9 +36,10 @@ const blockeraTransformSelfPerspective: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Self Perspective', 'blockera'),
-	showInSettings: false,
 	onNative: true,
+	onCompanion: true,
+	showInSettings: false,
+	label: __('Self Perspective', 'blockera'),
 	keywords: ['transform', 'self', 'perspective', '3d'],
 };
 
@@ -45,9 +47,10 @@ const blockeraBackfaceVisibility: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Backface Visibility', 'blockera'),
-	showInSettings: false,
 	onNative: true,
+	onCompanion: true,
+	showInSettings: false,
+	label: __('Backface Visibility', 'blockera'),
 	keywords: ['backface', 'visibility', 'transform', '3d'],
 };
 
@@ -55,9 +58,10 @@ const blockeraTransformChildPerspective: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Child Visibility', 'blockera'),
-	showInSettings: false,
 	onNative: true,
+	onCompanion: true,
+	showInSettings: false,
+	label: __('Child Visibility', 'blockera'),
 	keywords: ['child', 'perspective', 'transform', '3d'],
 };
 
@@ -65,6 +69,7 @@ const blockeraTransition: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Transitions', 'blockera'),
 	keywords: ['transition', 'animation', 'ease', 'duration'],
 };
@@ -73,6 +78,7 @@ const blockeraFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Filters', 'blockera'),
 	keywords: ['filter', 'blur', 'brightness', 'contrast', 'saturate'],
 };
@@ -81,6 +87,7 @@ const blockeraBackdropFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Backdrop Filters', 'blockera'),
 	keywords: ['backdrop', 'filter', 'blur', 'frosted', 'glass'],
 };
@@ -92,8 +99,9 @@ if (experimental().get('editor.extensions.effectsExtension.divider')) {
 		show: true,
 		force: false,
 		status: true,
-		label: __('Shape Dividers', 'blockera'),
 		onStates: false,
+		onCompanion: true,
+		label: __('Shape Dividers', 'blockera'),
 		keywords: ['divider', 'shape', 'separator', 'wave'],
 	};
 }
@@ -105,8 +113,9 @@ if (experimental().get('editor.extensions.effectsExtension.mask')) {
 		show: true,
 		force: false,
 		status: true,
-		label: __('Image Mask', 'blockera'),
 		onStates: false,
+		onCompanion: true,
+		label: __('Image Mask', 'blockera'),
 		keywords: ['mask', 'image', 'clip', 'shape'],
 	};
 }

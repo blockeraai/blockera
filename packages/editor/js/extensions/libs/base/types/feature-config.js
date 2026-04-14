@@ -39,6 +39,10 @@ export type FeatureConfig = {
 	 */
 	onNative?: boolean,
 	/**
+	 * on companion plugin settings?
+	 */
+	onCompanion?: boolean,
+	/**
 	 * on blockera block states?
 	 */
 	onStates?: boolean | Array<string>,
