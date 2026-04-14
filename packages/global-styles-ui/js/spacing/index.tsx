@@ -270,7 +270,6 @@ export function SpacingPresetContent() {
 }
 
 export function Spacing({
-	backLabel,
 	closeCallback,
 }: {
 	backLabel: string;
@@ -284,18 +283,19 @@ export function Spacing({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('Spacing variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
 				gap="8px"
 				className="blockera-spacing-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit spacing scale presets used for margin, padding, and gap.',
+						'Create and edit spacing variables used for margin, padding, and gap.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>
