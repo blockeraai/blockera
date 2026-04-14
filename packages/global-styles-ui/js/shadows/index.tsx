@@ -307,18 +307,25 @@ function Shadows({ screenSelector }: ShadowsProps) {
 				linkTabIndex={-1}
 			/>
 
-			<GlobalStylesPanelDescription>
-				{__(
-					'Create and edit box shadow presets used for elevation and depth.',
-					'blockera'
-				)}
-			</GlobalStylesPanelDescription>
-
 			<Flex
 				direction="column"
-				style={{ padding: '0 16px', width: '100%' }}
+				gap="16px"
+				className="blockera-shadows-presets"
+				style={{ width: '100%', marginTop: '10px' }}
 			>
-				<ShadowsPresetContent />
+				<GlobalStylesPanelDescription>
+					{__(
+						'Create and edit box shadow variables used for elevation and depth.',
+						'blockera'
+					)}
+				</GlobalStylesPanelDescription>
+
+				<Flex
+					direction="column"
+					style={{ padding: '0 16px', width: '100%' }}
+				>
+					<ShadowsPresetContent />
+				</Flex>
 			</Flex>
 		</div>,
 		target

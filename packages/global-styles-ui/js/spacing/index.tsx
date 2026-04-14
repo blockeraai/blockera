@@ -289,7 +289,7 @@ export function Spacing({
 
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-spacing-presets"
 				style={{ width: '100%', marginTop: '10px' }}
 			>
