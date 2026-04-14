@@ -8,13 +8,7 @@ import {
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 } from '@wordpress/components';
-import {
-	createPortal,
-	useCallback,
-	useMemo,
-	memo,
-	useEffect,
-} from '@wordpress/element';
+import { memo, useMemo, useCallback, createPortal } from '@wordpress/element';
 import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 
 /**
@@ -43,6 +37,7 @@ import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
 import { FontSizePresetOpener } from './font-size-preset-opener';
 import { NavItemScreen } from '../navigation/nav-item-screen';
+import { useOverrideNavigator } from '../use-override-navigator';
 
 const onBackFontSizes = () => {
 	const parent = document.querySelector(
@@ -319,21 +314,7 @@ function FontSizesEditorScreenShell() {
 }
 
 function FontSizes({ screenSelector }: { screenSelector: string }) {
-	useEffect(() => {
-		document
-			.querySelector(
-				'button[data-wp-component="Navigator.BackButton"]:first-child'
-			)
-			?.addEventListener(
-				'click',
-				() => {
-					document.body.classList.remove(
-						'is-open-blockera-typography-navigation-override'
-					);
-				},
-				{ once: true }
-			);
-	}, []);
+	useOverrideNavigator({ panel: 'typography' });
 
 	return createPortal(
 		<Navigator initialPath="/">

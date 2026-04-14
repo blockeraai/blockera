@@ -16,6 +16,7 @@ import ColorPaletteScreen from './color-palette-screen';
 import LinearGradientsScreen from './linear-gradients-screen';
 import RadialGradientsScreen from './radial-gradients-screen';
 import { NavItemScreen } from '../navigation/nav-item-screen';
+import { useOverrideNavigator } from '../use-override-navigator';
 
 const onBack = () => {
 	document.body.classList.remove('blockera-cleanup-screen-styles');
@@ -60,6 +61,8 @@ interface ColorsProps {
 }
 
 function Colors({ screenSelector }: ColorsProps) {
+	useOverrideNavigator({ panel: 'colors' });
+
 	return prependPortal(
 		<Navigator initialPath="/">
 			<NavItemScreen path="/">

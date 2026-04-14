@@ -12,6 +12,17 @@
 		& > *:nth-child(2) {
 			display: none;
 		}
+
+		.blockera-block-inspector-controls-wrapper {
+
+			div[data-wp-component="Navigator"] {
+
+				> div:nth-child(2) {
+					display: none;
+					height: 0;
+				}
+			}
+		}
 	}
 
 	.blockera-colors-preset-inspector-active {
