@@ -14,6 +14,7 @@ const blockeraPosition: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
+	onCompanion: true,
 	label: __('Position', 'blockera'),
 	keywords: [
 		'position',
@@ -32,6 +33,7 @@ const blockeraZIndex: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Z-Index', 'blockera'),
 	keywords: ['z-index', 'zindex', 'z index', 'layer', 'stack', 'order'],
 };

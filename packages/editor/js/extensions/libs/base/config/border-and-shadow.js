@@ -14,6 +14,7 @@ const blockeraBoxShadow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	cssGenerators: {},
 	label: __('Box Shadows', 'blockera'),
 	keywords: ['shadow', 'box shadow', 'drop shadow', 'inset', 'outset'],
@@ -23,9 +24,10 @@ const blockeraOutline: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onNative: true,
+	onCompanion: true,
 	cssGenerators: {},
 	label: __('Outline', 'blockera'),
-	onNative: true,
 	keywords: ['outline', 'border', 'stroke'],
 };
 

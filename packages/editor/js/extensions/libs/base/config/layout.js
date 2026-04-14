@@ -38,6 +38,7 @@ const blockeraFlexWrap: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Flex Children Wrap', 'blockera'),
 	keywords: ['flex', 'wrap', 'nowrap', 'children'],
 };

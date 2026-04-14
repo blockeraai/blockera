@@ -22,6 +22,7 @@ const blockeraMinWidth: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Min Width', 'blockera'),
 	keywords: ['min', 'width', 'minimum', 'size'],
 };
@@ -30,6 +31,7 @@ const blockeraMaxWidth: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Max Width', 'blockera'),
 	keywords: ['max', 'width', 'maximum', 'size'],
 };
@@ -46,6 +48,7 @@ const blockeraMinHeight: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Min Height', 'blockera'),
 	keywords: ['min', 'height', 'minimum', 'size'],
 };
@@ -54,6 +57,7 @@ const blockeraMaxHeight: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Max Height', 'blockera'),
 	keywords: ['max', 'height', 'maximum', 'size'],
 };
@@ -62,6 +66,7 @@ const blockeraOverflow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Overflow', 'blockera'),
 	keywords: ['overflow', 'scroll', 'hidden', 'auto'],
 };
@@ -70,6 +75,7 @@ const blockeraRatio: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Aspect Ratio', 'blockera'),
 	keywords: ['aspect', 'ratio', '16:9', '4:3'],
 };
@@ -78,6 +84,7 @@ const blockeraFit: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Media Fit', 'blockera'),
 	keywords: ['fit', 'media', 'object-fit', 'cover', 'contain'],
 };
@@ -86,6 +93,7 @@ const blockeraBoxSizing: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Box Sizing', 'blockera'),
 	keywords: ['box', 'sizing', 'border box', 'content box', 'size'],
 };

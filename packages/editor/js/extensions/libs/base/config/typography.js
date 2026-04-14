@@ -55,6 +55,7 @@ const blockeraTextShadow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Text Shadow', 'blockera'),
 	keywords: ['text', 'shadow', 'drop shadow', 'typography'],
 };
@@ -79,6 +80,7 @@ const blockeraTextTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Text Transform', 'blockera'),
 	keywords: ['text', 'transform', 'uppercase', 'lowercase', 'capitalize'],
 };
@@ -87,6 +89,7 @@ const blockeraTextDecoration: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Text Decoration', 'blockera'),
 	keywords: [
 		'text',
@@ -102,6 +105,7 @@ const blockeraDirection: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Direction', 'blockera'),
 	keywords: ['direction', 'rtl', 'ltr', 'text direction'],
 };
@@ -110,6 +114,7 @@ const blockeraLetterSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Letter Spacing', 'blockera'),
 	keywords: ['letter', 'spacing', 'typography'],
 };
@@ -119,6 +124,7 @@ const blockeraWordSpacing: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
+	onCompanion: true,
 	label: __('Words Spacing', 'blockera'),
 	keywords: ['words', 'spacing', 'typography'],
 };
@@ -128,6 +134,7 @@ const blockeraTextIndent: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
+	onCompanion: true,
 	label: __('Text Indent', 'blockera'),
 	keywords: ['text', 'indent', 'indentation', 'paragraph'],
 };
@@ -136,6 +143,7 @@ const blockeraTextOrientation: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Text Orientation', 'blockera'),
 	keywords: ['text', 'orientation', 'vertical', 'upright'],
 };
@@ -145,6 +153,7 @@ const blockeraTextColumns: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
+	onCompanion: true,
 	label: __('Text Columns', 'blockera'),
 	keywords: ['text', 'columns', 'column'],
 };
@@ -154,6 +163,7 @@ const blockeraTextStroke: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
+	onCompanion: true,
 	label: __('Text Stroke', 'blockera'),
 	keywords: ['text', 'stroke', 'outline', 'typography'],
 };
@@ -163,6 +173,7 @@ const blockeraWordBreak: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
+	onCompanion: true,
 	label: __('Word Break', 'blockera'),
 	keywords: ['word', 'break', 'wrap', 'overflow'],
 };
@@ -172,6 +183,7 @@ const blockeraTextWrap: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
+	onCompanion: true,
 	label: __('Text Wrap', 'blockera'),
 	keywords: [
 		'text',
