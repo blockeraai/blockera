@@ -269,12 +269,7 @@ export function SpacingPresetContent() {
 	);
 }
 
-export function Spacing({
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Spacing({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(
@@ -283,13 +278,13 @@ export function Spacing({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={__('Spacing variables', 'blockera')}
+				backLabel={__('Spacing Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-spacing-presets"
 				style={{ width: '100%', marginTop: '10px' }}
 			>

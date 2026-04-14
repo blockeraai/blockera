@@ -272,7 +272,7 @@ function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 		<VStack spacing={2} className="blockera-color-palette-presets">
 			<ScreenHeader
 				onBack={onBackHandler}
-				title={__('Color variables', 'blockera')}
+				title={__('Color Variables', 'blockera')}
 				description={__(
 					'Create and edit color variables used for text, backgrounds, and borders.',
 					'blockera'

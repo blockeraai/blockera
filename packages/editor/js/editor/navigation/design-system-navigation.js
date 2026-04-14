@@ -240,52 +240,31 @@ DesignSystemNavigation.Screens = ({
 }): MixedElement => (
 	<>
 		<NavItemScreen path={`${initPath}spacing`}>
-			<Spacing
-				backLabel={__('Spacing', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<Spacing closeCallback={closeCallback} />
 		</NavItemScreen>
 
 		<NavItemScreen path={`${initPath}borders`}>
-			<Borders
-				backLabel={__('Borders', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<Borders closeCallback={closeCallback} />
 		</NavItemScreen>
 
 		<NavItemScreen path={`${initPath}border-radius`}>
-			<BorderRadius
-				backLabel={__('Border Radius', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<BorderRadius closeCallback={closeCallback} />
 		</NavItemScreen>
 
 		<NavItemScreen path={`${initPath}text-shadows`}>
-			<TextShadows
-				backLabel={__('Text Shadows', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<TextShadows closeCallback={closeCallback} />
 		</NavItemScreen>
 
 		<NavItemScreen path={`${initPath}transforms`}>
-			<Transforms
-				backLabel={__('2D & 3D Transforms', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<Transforms closeCallback={closeCallback} />
 		</NavItemScreen>
 
 		<NavItemScreen path={`${initPath}transitions`}>
-			<Transitions
-				backLabel={__('Transitions', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<Transitions closeCallback={closeCallback} />
 		</NavItemScreen>
 
 		<NavItemScreen path={`${initPath}filters`}>
-			<Filters
-				backLabel={__('Filters', 'blockera')}
-				closeCallback={closeCallback}
-			/>
+			<Filters closeCallback={closeCallback} />
 		</NavItemScreen>
 	</>
 );

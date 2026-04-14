@@ -124,6 +124,7 @@ function BorderPresetSizeComponent({
 				}
 				onChange={handleBorderChange}
 				defaultValue={getDefaultStoredBorderSide()}
+				customMenuPosition="top"
 			/>
 		</ControlContextProvider>
 	);

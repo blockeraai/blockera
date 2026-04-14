@@ -294,13 +294,7 @@ export function TransformsPresetContent() {
 	);
 }
 
-export function Transforms({
-	backLabel,
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Transforms({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(
@@ -309,18 +303,19 @@ export function Transforms({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('2D & 3D Transforms Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-transforms-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit transform presets used for move, scale, rotate, and skew.',
+						'Create and edit transform variables used for move, scale, rotate, and skew.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>

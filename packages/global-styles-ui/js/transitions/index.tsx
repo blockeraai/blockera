@@ -293,13 +293,7 @@ export function TransitionsPresetContent() {
 	);
 }
 
-export function Transitions({
-	backLabel,
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Transitions({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(
@@ -308,18 +302,19 @@ export function Transitions({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('Transitions Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-transitions-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit transition presets used for duration, timing, and delay on property changes.',
+						'Create and edit transition variables used for duration, timing, and delay on property changes.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>

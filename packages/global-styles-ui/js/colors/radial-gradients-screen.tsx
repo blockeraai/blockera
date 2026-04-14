@@ -30,7 +30,7 @@ function RadialGradientsScreen({ onBackHandler }: RadialGradientsScreenProps) {
 		<VStack spacing={2} className="blockera-radial-gradients-presets">
 			<ScreenHeader
 				onBack={onBackHandler}
-				title={__('Radial gradient variables', 'blockera')}
+				title={__('Radial Gradient Variables', 'blockera')}
 				description={__(
 					'Create and edit radial gradient variables used for fills and backgrounds.',
 					'blockera'

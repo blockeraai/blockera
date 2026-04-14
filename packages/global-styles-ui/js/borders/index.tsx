@@ -278,13 +278,7 @@ export function BordersPresetContent() {
 	);
 }
 
-export function Borders({
-	backLabel,
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Borders({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(
@@ -293,18 +287,19 @@ export function Borders({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('Border Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-borders-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit border presets used for width, style, and color on boxes.',
+						'Create and edit border variables used for width, style, and color on boxes.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>

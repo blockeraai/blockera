@@ -292,13 +292,7 @@ export function FiltersPresetContent() {
 	);
 }
 
-export function Filters({
-	backLabel,
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Filters({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(
@@ -307,18 +301,19 @@ export function Filters({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('Filter Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-filters-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit filter presets used for blur, drop-shadow, and color adjustments.',
+						'Create and edit filter variables used for blur, drop-shadow, and color adjustments.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>

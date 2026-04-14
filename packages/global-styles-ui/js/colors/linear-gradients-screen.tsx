@@ -30,7 +30,7 @@ function LinearGradientsScreen({ onBackHandler }: LinearGradientsScreenProps) {
 		<VStack spacing={2} className="blockera-linear-gradients-presets">
 			<ScreenHeader
 				onBack={onBackHandler}
-				title={__('Linear gradient variables', 'blockera')}
+				title={__('Linear Gradient Variables', 'blockera')}
 				description={__(
 					'Create and edit linear gradient variables used for fills and backgrounds.',
 					'blockera'
