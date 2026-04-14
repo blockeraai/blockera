@@ -17,6 +17,7 @@ import {
 	DropdownMenu,
 	DynamicHtmlFormatter,
 	PoweredBy,
+	getDefaultPoweredByText,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
@@ -46,51 +47,19 @@ export const BlockCardSettings = ({
 		updateBlockSections,
 	} = useBlockSections();
 
-	let text = '';
+	let text: string | MixedElement = '';
 
 	if (poweredBy) {
 		if (isActive) {
-			if (
+			const isBlockeraBlock =
 				blockName.startsWith('blockera/') ||
-				activeBlockVariation.startsWith('blockera/')
-			) {
-				text = sprintf(
-					// translators: %s is the brand name (Required)
-					__('Powered by %s', 'blockera'),
-					'{brand-name}'
-				);
+				activeBlockVariation.startsWith('blockera/');
 
-				// For backward brand name to prevent removing it
-				if (!text.includes('{brand-name}')) {
-					text = 'Powered by {brand-name}';
-				}
-			} else {
-				text = sprintf(
-					// translators: %s is the brand name (Required)
-					__('Empowered by %s', 'blockera'),
-					'{brand-name}'
-				);
-
-				// For backward brand name to prevent removing it
-				if (!text.includes('{brand-name}')) {
-					text = 'Empowered by {brand-name}';
-				}
-			}
-
-			text = DynamicHtmlFormatter({
-				text,
-				replacements: {
-					'brand-name': (
-						<Flex direction="row" alignItems="center" gap="8px">
-							<Icon
-								icon="blockera"
-								library="blockera"
-								iconSize="18"
-							/>
-							Blockera Site Builder
-						</Flex>
-					),
-				},
+			text = getDefaultPoweredByText({
+				type: isBlockeraBlock ? 'powered-by' : 'empowered-by',
+				icon: 'blockera',
+				iconLibrary: 'blockera',
+				iconSize: 18,
 			});
 		} else {
 			text = sprintf(
@@ -315,15 +284,7 @@ export const BlockCardSettings = ({
 				</DropdownMenu>
 			)}
 
-			{isActive && poweredBy && (
-				<PoweredBy
-					tooltipText={
-						<Flex direction="row" alignItems="center" gap="8px">
-							{text}
-						</Flex>
-					}
-				/>
-			)}
+			{isActive && poweredBy && <PoweredBy tooltipText={text} />}
 
 			{!isActive && poweredBy && (
 				<PoweredBy
