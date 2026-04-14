@@ -1,2 +1,2 @@
 // @flow
-export { PoweredBy } from './powered-by';
+export { PoweredBy, getDefaultPoweredByText } from './powered-by';

@@ -39,24 +39,37 @@ type PoweredByProps = {
 const DEFAULT_HREF =
 	'https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link';
 
-function getDefaultPoweredByText({
+export function getDefaultPoweredByText({
+	type = 'powered-by',
 	icon,
 	iconLibrary,
 	iconSize,
 }: {
+	type?: 'powered-by' | 'empowered-by',
 	icon: string,
 	iconLibrary: string,
 	iconSize: number,
 }): MixedElement {
-	let template = sprintf(
-		// translators: %s is the brand name (Required)
-		__('Powered by %s', 'blockera'),
-		'{brand-name}'
-	);
+	let template =
+		type === 'empowered-by'
+			? sprintf(
+					// translators: %s is the brand name (Required)
+					__('Empowered by %s', 'blockera'),
+					'{brand-name}'
+				)
+			: sprintf(
+					// translators: %s is the brand name (Required)
+					__('Powered by %s', 'blockera'),
+					'{brand-name}'
+				);
 
 	// For backward brand name to prevent removing it
 	if (!template.includes('{brand-name}')) {
-		template = 'Powered by {brand-name}';
+		if (type === 'powered-by') {
+			template = 'Powered by {brand-name}';
+		} else {
+			template = 'Empowered by {brand-name}';
+		}
 	}
 
 	return (
