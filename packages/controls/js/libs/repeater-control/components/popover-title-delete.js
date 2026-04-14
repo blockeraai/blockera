@@ -129,6 +129,17 @@ export default function RepeaterPopoverTitleDelete({
 					deleteConfirmWarningText={deleteConfirmWarningText}
 				/>
 			)}
+			{/*
+				Spacer before the delete button is required for reliable clicks.
+
+				The group popover header is a flex row: the title sits next to
+				`.blockera-component-popover-title-buttons`. When this trash `Button` is the first
+				DOM child in that cluster, the title strip (or other header chrome: sticky layer,
+				drag-to-move listeners when enabled, tooltip wrappers) can overlap or win hit-testing
+				for the same screen area, so `onClick` never fires. Inserting an extra flex item
+				before the button changes layout/stacking so pointer events reach the control.
+			*/}
+			<div aria-hidden="true" />
 			<Button
 				size="extra-small"
 				align="center"
