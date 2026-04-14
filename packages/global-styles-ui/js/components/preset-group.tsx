@@ -359,7 +359,7 @@ export const PresetGroup = ({
 
 	const repeaterContextValue = useMemo(
 		() => ({
-			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}`,
+			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`,
 			value: variablesForRepeater,
 			// Variable picker: push `isSelected` / `selectable` into repeater store when the bound value changes.
 			needUpdate: () => isVariablePicker,

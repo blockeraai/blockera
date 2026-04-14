@@ -9,7 +9,6 @@ import { useContext, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { componentInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -131,7 +130,6 @@ export default function RepeaterPopoverTitleDelete({
 				/>
 			)}
 			<Button
-				className={componentInnerClassNames('popover-close')}
 				size="extra-small"
 				align="center"
 				onClick={(event: MouseEvent) => {
