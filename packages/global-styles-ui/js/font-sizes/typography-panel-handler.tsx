@@ -17,7 +17,7 @@ export const typographyPanelHandler = (): void => {
 
 	const wpSidebarSelector = `${screen} .edit-site-global-styles-screen div[data-wp-component="VStack"]`;
 
-	const observer = new IntersectionObserverRenderer(
+	new IntersectionObserverRenderer(
 		screen,
 		() => <FontSizes screenSelector={wpSidebarSelector} />,
 		{
@@ -27,8 +27,4 @@ export const typographyPanelHandler = (): void => {
 			whileNotExistSelectors: ['.blockera-font-size-presets-count'],
 		}
 	);
-
-	setTimeout(() => {
-		observer.destroy();
-	}, 1000);
 };
