@@ -7,14 +7,13 @@ import { Navigator } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
+import { PoweredBy } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { BlockeraBranding } from '../components/blockera-branding';
-
 import './style.scss';
 
 export const NavItemBackButton = ({
@@ -35,7 +34,17 @@ export const NavItemBackButton = ({
 				{backLabel}
 			</Navigator.BackButton>
 
-			{showBranding && <BlockeraBranding />}
+			{showBranding && (
+				<PoweredBy
+					linkTabIndex={-1}
+					style={{
+						position: 'absolute',
+						right: '14px',
+						top: '50%',
+						transform: 'translateY(-50%)',
+					}}
+				/>
+			)}
 		</div>
 	);
 };

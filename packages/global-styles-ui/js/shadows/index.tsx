@@ -7,7 +7,7 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import { Flex, PoweredBy } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -33,7 +33,6 @@ import {
 	type ShadowDefaultPresetValue,
 } from './shadow-preset-size';
 import { sanitizeShadowPresets, type WpShadowPreset } from './utils';
-import { BlockeraBranding } from '../components/blockera-branding';
 
 const shadowPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('shadowPreset');
@@ -299,8 +298,13 @@ function Shadows({ screenSelector }: ShadowsProps) {
 	return createPortal(
 		<div className="blockera-shadows-presets-navigation">
 			{/* We do not have access to the back button here, so we need to add the branding manually. */}
-			<BlockeraBranding
-				style={{ position: 'absolute', right: '14px', top: '15px' }}
+			<PoweredBy
+				style={{
+					position: 'absolute',
+					right: '14px',
+					top: '15px',
+				}}
+				linkTabIndex={-1}
 			/>
 
 			<GlobalStylesPanelDescription>
