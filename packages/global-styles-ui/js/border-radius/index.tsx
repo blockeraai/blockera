@@ -279,10 +279,8 @@ export function BorderRadiusPresetContent() {
 }
 
 export function BorderRadius({
-	backLabel,
 	closeCallback,
 }: {
-	backLabel: string;
 	closeCallback?: () => void;
 }) {
 	return (
@@ -293,18 +291,19 @@ export function BorderRadius({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('Border Radius Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-border-radius-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit border radius scale presets used for rounded corners.',
+						'Create and edit border radius variables used for rounded corners.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>

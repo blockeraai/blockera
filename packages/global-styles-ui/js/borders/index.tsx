@@ -278,12 +278,7 @@ export function BordersPresetContent() {
 	);
 }
 
-export function Borders({
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Borders({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(

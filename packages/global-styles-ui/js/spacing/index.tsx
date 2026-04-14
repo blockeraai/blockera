@@ -269,12 +269,7 @@ export function SpacingPresetContent() {
 	);
 }
 
-export function Spacing({
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function Spacing({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(

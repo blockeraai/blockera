@@ -287,13 +287,7 @@ export function TextShadowsPresetContent() {
 	);
 }
 
-export function TextShadows({
-	backLabel,
-	closeCallback,
-}: {
-	backLabel: string;
-	closeCallback?: () => void;
-}) {
+export function TextShadows({ closeCallback }: { closeCallback?: () => void }) {
 	return (
 		<div
 			className={classNames(
@@ -302,18 +296,19 @@ export function TextShadows({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={backLabel}
+				backLabel={__('Text Shadow Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
+
 			<Flex
 				direction="column"
-				gap="8px"
+				gap="16px"
 				className="blockera-text-shadows-presets"
-				style={{ width: '100%' }}
+				style={{ width: '100%', marginTop: '10px' }}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
-						'Create and edit text shadow presets used for typography depth and glow.',
+						'Create and edit text shadow variables used for typography depth and glow.',
 						'blockera'
 					)}
 				</GlobalStylesPanelDescription>
