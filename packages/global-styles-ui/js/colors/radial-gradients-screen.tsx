@@ -32,7 +32,7 @@ function RadialGradientsScreen({ onBackHandler }: RadialGradientsScreenProps) {
 				onBack={onBackHandler}
 				title={__('Radial gradient variables', 'blockera')}
 				description={__(
-					'Create and edit radial gradient presets used for fills and backgrounds.',
+					'Create and edit radial gradient variables used for fills and backgrounds.',
 					'blockera'
 				)}
 			/>

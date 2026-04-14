@@ -80,7 +80,7 @@ function ColorsNavigationPreviews({ onClick }: ColorsScreenProps) {
 					/>
 
 					<div style={{ flexGrow: 1 }}>
-						{__('Colors', 'blockera')}
+						{__('Color variables', 'blockera')}
 					</div>
 
 					<Icon icon={isRTL() ? chevronLeft : chevronRight} />
@@ -104,7 +104,7 @@ function ColorsNavigationPreviews({ onClick }: ColorsScreenProps) {
 					/>
 
 					<div style={{ flexGrow: 1 }}>
-						{__('Linear gradients', 'blockera')}
+						{__('Linear gradient variables', 'blockera')}
 					</div>
 
 					<Icon icon={isRTL() ? chevronLeft : chevronRight} />
@@ -128,7 +128,7 @@ function ColorsNavigationPreviews({ onClick }: ColorsScreenProps) {
 					/>
 
 					<div style={{ flexGrow: 1 }}>
-						{__('Radial gradients', 'blockera')}
+						{__('Radial gradient variables', 'blockera')}
 					</div>
 
 					<Icon icon={isRTL() ? chevronLeft : chevronRight} />
