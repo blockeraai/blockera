@@ -8,7 +8,13 @@ import {
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 } from '@wordpress/components';
-import { createPortal, useCallback, useMemo, memo } from '@wordpress/element';
+import {
+	createPortal,
+	useCallback,
+	useMemo,
+	memo,
+	useEffect,
+} from '@wordpress/element';
 import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 
 /**
@@ -313,6 +319,22 @@ function FontSizesEditorScreenShell() {
 }
 
 function FontSizes({ screenSelector }: { screenSelector: string }) {
+	useEffect(() => {
+		document
+			.querySelector(
+				'button[data-wp-component="Navigator.BackButton"]:first-child'
+			)
+			?.addEventListener(
+				'click',
+				() => {
+					document.body.classList.remove(
+						'is-open-blockera-typography-navigation-override'
+					);
+				},
+				{ once: true }
+			);
+	}, []);
+
 	return createPortal(
 		<Navigator initialPath="/">
 			<NavItemScreen path="/">

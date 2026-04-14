@@ -1,14 +1,3 @@
-@keyframes blockera-navigator-slide-in {
-	from {
-		transform: translateX(32px);
-		opacity: 0;
-	}
-	to {
-		transform: translateX(0);
-		opacity: 1;
-	}
-}
-
 // ID field: gray while locked (creating or click-to-edit) or disabled; normal when editing.
 .blockera-preset-id-field {
 	position: relative;
