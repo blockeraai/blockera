@@ -23,7 +23,12 @@ export function GlobalStylesPanelDescription({
 			gap="8px"
 			style={{ padding: '0 16px', width: '100%' }}
 		>
-			<p className="global-styles-ui-header__description">{children}</p>
+			<p
+				className="global-styles-ui-header__description"
+				style={{ marginBottom: '0' }}
+			>
+				{children}
+			</p>
 		</Flex>
 	);
 }

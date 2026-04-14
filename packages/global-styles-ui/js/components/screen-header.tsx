@@ -34,7 +34,7 @@ function ScreenHeaderComponent({
 	onBack,
 }: ScreenHeaderProps) {
 	return (
-		<Flex direction="column" gap="8px" style={HEADER_PADDING_STYLE}>
+		<Flex direction="column" gap="20px" style={HEADER_PADDING_STYLE}>
 			<Flex gap="8px" alignItems="stretch">
 				<Navigator.BackButton
 					icon={
