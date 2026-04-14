@@ -162,15 +162,12 @@ const Presets = ({
 
 			return (
 				<UpgradePrompt
-					heading={sprintf(
-						/* translators: %s: Preset group title (e.g. Font Sizes, Spacing) */
-						__('Multiple %s', 'blockera'),
-						title
-					)}
+					type="modal"
+					heading={__('Multiple Custom Variables', 'blockera')}
 					featuresList={[
 						sprintf(
 							/* translators: %s: Preset group title (e.g. Font Sizes, Spacing) */
-							__('Multiple %s', 'blockera'),
+							__('Multiple Custom %s Variables', 'blockera'),
 							title
 						),
 						sprintf(
@@ -178,11 +175,7 @@ const Presets = ({
 							__('Advanced %s Settings', 'blockera'),
 							title
 						),
-						sprintf(
-							/* translators: %s: Preset group title (e.g. Font Sizes, Spacing) */
-							__('Rename ID of %s Variable', 'blockera'),
-							title
-						),
+						__('Change the ID of Variables', 'blockera'),
 						__('Premium Features', 'blockera'),
 					]}
 					isOpen={isOpen}
