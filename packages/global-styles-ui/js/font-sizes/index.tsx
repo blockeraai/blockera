@@ -297,7 +297,7 @@ function FontSizesEditorScreenShell() {
 		<VStack spacing={2} className="blockera-font-size-presets">
 			<ScreenHeader
 				onBack={onBackFontSizes}
-				title={__('Font size variables', 'blockera')}
+				title={__('Font Size Variables', 'blockera')}
 				description={__(
 					'Create and edit font size variables used for typography across the site.',
 					'blockera'

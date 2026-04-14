@@ -292,7 +292,7 @@ export function Borders({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={__('Border variables', 'blockera')}
+				backLabel={__('Border Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 

@@ -283,7 +283,7 @@ export function Spacing({
 			)}
 		>
 			<NavItemBackButton
-				backLabel={__('Spacing variables', 'blockera')}
+				backLabel={__('Spacing Variables', 'blockera')}
 				closeCallback={closeCallback}
 			/>
 
