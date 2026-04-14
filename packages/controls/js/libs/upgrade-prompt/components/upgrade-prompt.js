@@ -95,7 +95,9 @@ export const UpgradePrompt = ({
 	if (type === 'modal') {
 		return (
 			<Modal
-				headerIcon={<Icon icon="lock" iconSize="24" />}
+				headerIcon={
+					<Icon icon="blockera" library="blockera" iconSize={26} />
+				}
 				headerTitle={title}
 				onRequestClose={handleClose}
 				className={componentClassNames('upgrade-prompt')}
