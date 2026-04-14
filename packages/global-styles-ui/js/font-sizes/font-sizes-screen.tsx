@@ -52,7 +52,7 @@ function FontSizesScreen() {
 				>
 					<HStack direction="row">
 						<FlexItem>
-							{__('Font size presets', 'blockera')}
+							{__('Font size variables', 'blockera')}
 						</FlexItem>
 						<Icon icon={isRTL() ? chevronLeft : chevronRight} />
 					</HStack>
