@@ -9,8 +9,7 @@ import { memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
-import { BlockeraBranding } from './blockera-branding';
+import { Flex, PoweredBy } from '@blockera/controls';
 
 /** Matches previous `Spacer` paddingX={4} paddingY={3} (16px / 12px). */
 const HEADER_PADDING_STYLE = { padding: '12px 16px' } as const;
@@ -60,7 +59,7 @@ function ScreenHeaderComponent({
 					>
 						{title}
 
-						{showBranding && <BlockeraBranding />}
+						{showBranding && <PoweredBy linkTabIndex={-1} />}
 					</Flex>
 				</Flex>
 			</Flex>

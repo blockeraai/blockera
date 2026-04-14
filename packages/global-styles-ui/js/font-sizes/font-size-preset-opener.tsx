@@ -43,7 +43,7 @@ export function FontSizePresetOpener({
 			})}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
-				__('Font size preset %d', 'blockera'),
+				__('Font size variable %d', 'blockera'),
 				Number(itemId) + 1
 			)}
 			data-cy="font-size-repeater-item-header"

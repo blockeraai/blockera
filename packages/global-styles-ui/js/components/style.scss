@@ -64,27 +64,6 @@
 	margin-bottom: 0;
 }
 
-// Shared trigger link for BlockeraBranding (subtitle and other screens).
-.blockera-branding__link {
-	display: flex;
-	align-items: center;
-	color: #cac9c9;
-	transition: var(--blockera-controls-transition);
-
-	&:hover {
-		color: #0051e7;
-	}
-
-	svg {
-		fill: currentColor;
-		transition: var(--blockera-controls-transition);
-	}
-}
-
-.blockera-global-styles-subtitle .blockera-branding__link {
-	margin-left: auto;
-}
-
 // Preset repeater + variable picker: selected row (`is-selected-item` on group).
 .blockera-global-styles-preset-repeater.blockera-control-repeater
 	.blockera-control-repeater-item {
@@ -93,7 +72,7 @@
 		border-color: var(--blockera-controls-primary-color);
 
 		&::before {
-			content: '';
+			content: "";
 			position: absolute;
 			inset: 0;
 			border-radius: inherit;
@@ -117,7 +96,6 @@
 			background: transparent !important;
 
 			button {
-
 				&.components-button.blockera-component-button.is-tertiary.no-border:hover {
 					background: transparent !important;
 				}

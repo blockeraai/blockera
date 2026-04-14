@@ -5,7 +5,7 @@ import { __experimentalHeading as Heading } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { BlockeraBranding } from './blockera-branding';
+import { PoweredBy } from '@blockera/controls';
 
 interface SubtitleProps {
 	showBranding?: boolean;
@@ -32,9 +32,7 @@ export function Subtitle({
 		>
 			{children}
 
-			{showBranding && (
-				<BlockeraBranding linkClassName="blockera-global-styles-subtitle-branding-icon" />
-			)}
+			{showBranding && <PoweredBy linkTabIndex={-1} />}
 		</Heading>
 	);
 }

@@ -1,11 +1,3 @@
 .blockera-back-navigation {
 	position: relative;
-
-	/* Absolute position to make sure component tooltip works correctly */
-	.blockera-branding {
-		position: absolute;
-		right: 14px;
-		top: 50%;
-		transform: translateY(-50%);
-	}
 }
