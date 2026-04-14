@@ -110,106 +110,116 @@ const Screens = ({
 		<NavItemScreen path={`${initPath}css`}>
 			<div className="blockera-navigation-panel">
 				<NavItemBackButton
-					backLabel={__('Other', 'blockera')}
+					backLabel={__('Custom CSS', 'blockera')}
 					closeCallback={closeCallback}
 				/>
 			</div>
-			<p className="edit-site-global-styles-header__description">
-				{__(
-					'Add your own CSS to customize the appearance and layout of your site.',
-					'blockera'
-				)}
-				<br />
-				<a
-					className="components-external-link edit-site-global-styles-screen-css-help-link"
-					href="https://developer.wordpress.org/advanced-administration/wordpress/css/"
-					target="_blank"
-					rel="external noreferrer noopener"
+
+			<Flex direction="column" gap="20px">
+				<Flex
+					gap="4px"
+					direction="column"
+					className="edit-site-global-styles-header__description"
+					style={{ marginTop: '10px' }}
 				>
-					<span className="components-external-link__contents">
-						{__('Learn more about CSS', 'blockera')}
-					</span>
+					<p style={{ marginBottom: '0' }}>
+						{__(
+							'Add your own CSS to customize the appearance and layout of your site.',
+							'blockera'
+						)}
+					</p>
 
-					<span
-						className="components-external-link__icon"
-						aria-label={__('(opens in a new tab)', 'blockera')}
+					<a
+						href="https://developer.wordpress.org/advanced-administration/wordpress/css/"
+						target="_blank"
+						rel="external noreferrer noopener"
 					>
-						↗
-					</span>
-				</a>
-			</p>
-
-			<ControlContextProvider
-				value={{
-					name: 'custom-css',
-					value: globalStyles?.css || '',
-				}}
-			>
-				<CodeControl
-					label={__('Additional CSS Code', 'blockera')}
-					labelDescription={
-						<>
-							<p>
-								{__(
-									'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
-									'blockera'
-								)}
-							</p>
-							<p>
-								{__(
-									'Once you input your CSS, the customization is automatically applied to the block.',
-									'blockera'
-								)}
-							</p>
-							<p>
-								{__(
-									'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
-									'blockera'
-								)}
-							</p>
-						</>
-					}
-					onChange={(newValue: string): void => {
-						setGlobalStyles(
-							mergeObject(globalStyles, {
-								css: newValue,
-							})
-						);
-					}}
-					editable={true}
-					defaultValue={''}
-					height={400}
-					suggestionsType="site"
-					placeholder={
-						<>
-							body {'{'}
-							<br />
-							&nbsp;&nbsp;&nbsp;{'/* Your CSS here */'}
-							<br />
-							{'}'}
-						</>
-					}
-					description={
-						<p>
-							<DynamicHtmlFormatter
-								text={sprintf(
-									/* translators: %1$s: CSS selector placeholder for body element, %2$s: CSS selector placeholder for group block */
-									__(
-										'Use %1$s to target the body element or %2$s to target the group block.',
-										'blockera'
-									),
-									'{body}',
-									'{group}'
-								)}
-								replacements={{
-									body: <code>body</code>,
-									group: <code>.wp-block-group</code>,
+						<Flex alignItems="center" gap="4px">
+							{__('Learn more about CSS', 'blockera')}
+							<Icon
+								library={'ui'}
+								icon={'arrow-new-tab'}
+								iconSize={22}
+								style={{
+									fill: 'currentColor',
 								}}
 							/>
-						</p>
-					}
-				/>
-			</ControlContextProvider>
+						</Flex>
+					</a>
+				</Flex>
+
+				<ControlContextProvider
+					value={{
+						name: 'custom-css',
+						value: globalStyles?.css || '',
+					}}
+				>
+					<CodeControl
+						label={__('Additional CSS Code', 'blockera')}
+						labelDescription={
+							<>
+								<p>
+									{__(
+										'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
+										'blockera'
+									)}
+								</p>
+								<p>
+									{__(
+										'Once you input your CSS, the customization is automatically applied to the block.',
+										'blockera'
+									)}
+								</p>
+								<p>
+									{__(
+										'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
+										'blockera'
+									)}
+								</p>
+							</>
+						}
+						onChange={(newValue: string): void => {
+							setGlobalStyles(
+								mergeObject(globalStyles, {
+									css: newValue,
+								})
+							);
+						}}
+						editable={true}
+						defaultValue={''}
+						height={400}
+						suggestionsType="site"
+						placeholder={
+							<>
+								body {'{'}
+								<br />
+								&nbsp;&nbsp;&nbsp;{'/* Your CSS here */'}
+								<br />
+								{'}'}
+							</>
+						}
+						description={
+							<p>
+								<DynamicHtmlFormatter
+									text={sprintf(
+										/* translators: %1$s: CSS selector placeholder for body element, %2$s: CSS selector placeholder for group block */
+										__(
+											'Use %1$s to target the body element or %2$s to target the group block.',
+											'blockera'
+										),
+										'{body}',
+										'{group}'
+									)}
+									replacements={{
+										body: <code>body</code>,
+										group: <code>.wp-block-group</code>,
+									}}
+								/>
+							</p>
+						}
+					/>
+				</ControlContextProvider>
+			</Flex>
 		</NavItemScreen>
 	);
 };

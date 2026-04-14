@@ -11,13 +11,16 @@ import { Navigator } from '@wordpress/components';
  */
 import { Icon } from '@blockera/icons';
 import { extensionClassNames } from '@blockera/classnames';
+import { PoweredBy, getDefaultPoweredByText } from '@blockera/controls';
 
 export const NavItemBackButton = ({
 	backLabel,
 	closeCallback,
+	showBranding = true,
 }: {
 	backLabel: string,
 	closeCallback?: () => void,
+	showBranding?: boolean,
 }): MixedElement => {
 	return (
 		<div className={extensionClassNames('back-navigation')}>
@@ -27,6 +30,23 @@ export const NavItemBackButton = ({
 			>
 				{backLabel}
 			</Navigator.BackButton>
+
+			{showBranding && (
+				<PoweredBy
+					tooltipText={getDefaultPoweredByText({
+						type: 'empowered-by',
+						icon: 'blockera',
+						iconLibrary: 'blockera',
+						iconSize: 18,
+					})}
+					style={{
+						position: 'absolute',
+						right: '14px',
+						top: '15px',
+					}}
+					linkTabIndex={-1}
+				/>
+			)}
 		</div>
 	);
 };
