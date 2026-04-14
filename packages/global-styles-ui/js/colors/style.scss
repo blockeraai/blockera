@@ -5,6 +5,13 @@
 		.edit-site-global-styles-screen {
 			margin: 0 !important;
 		}
+
+		div[data-wp-component="Navigator.Screen"]:first-child:not(.blockera-colors-preset-inspector-active div[data-wp-component="Navigator.Screen"]:first-child) {
+
+			> div:first-child {
+				display: none;
+			}
+		}
 	}
 
 	.edit-site-global-styles-screen > div {

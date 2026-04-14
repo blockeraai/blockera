@@ -26,10 +26,6 @@ const onBack = () => {
 
 	if (parent && parent instanceof HTMLElement) {
 		parent.classList.remove('blockera-colors-preset-inspector-active');
-		const prev = parent?.parentElement?.previousElementSibling;
-		if (prev && prev instanceof HTMLElement) {
-			prev.style.removeProperty('display');
-		}
 	}
 };
 
@@ -38,16 +34,6 @@ const onClick = (event: Event) => {
 	const inspectorWrapper = (event.target as HTMLElement)?.closest(
 		'.blockera-block-inspector-controls-wrapper'
 	);
-
-	if (
-		inspectorWrapper?.parentElement?.parentElement
-			?.previousElementSibling &&
-		inspectorWrapper.parentElement.parentElement
-			.previousElementSibling instanceof HTMLElement
-	) {
-		inspectorWrapper.parentElement.parentElement.previousElementSibling.style.display =
-			'none';
-	}
 
 	if (inspectorWrapper?.parentElement) {
 		inspectorWrapper.parentElement.classList.add(
