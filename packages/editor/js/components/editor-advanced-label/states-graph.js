@@ -16,7 +16,6 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import EditedItem from './edited-item';
 import type { LabelStates } from './types';
-import { getStatesGraph } from './helpers';
 import type {
 	TBreakpoint,
 	TStates,
@@ -26,24 +25,14 @@ import { BreakpointIcon } from '../../editor/header-ui/components/breakpoints/br
 export const StatesGraph = ({
 	onClick,
 	controlId,
-	blockName,
-	defaultValue,
-	path,
-	isRepeaterItem,
-	attributesRef,
-	inGlobalStylesPanel = false,
+	statesGraph,
 	changesetGraphPreview: changesetGraphPreviewFromLabel,
 	previewObjectPickKey,
 	changesetGraphPreviewRender: changesetGraphPreviewRenderFromLabel,
 }: {
-	attributesRef?: Object,
 	controlId: string,
-	blockName: string,
-	defaultValue: any,
+	statesGraph: Array<LabelStates>,
 	onClick: (state: TStates, device: TBreakpoint) => void,
-	path: null | string,
-	inGlobalStylesPanel: boolean,
-	isRepeaterItem: Boolean,
 	changesetGraphPreview?: void | null | Object,
 	previewObjectPickKey?: ?string,
 	changesetGraphPreviewRender?: ?(value: mixed) => mixed,
@@ -53,16 +42,6 @@ export const StatesGraph = ({
 	}
 
 	const renderedBreakpoints: Array<string> = [];
-
-	const statesGraph = getStatesGraph({
-		controlId,
-		blockName,
-		defaultValue,
-		path,
-		attributesRef,
-		isRepeaterItem,
-		inGlobalStylesPanel,
-	});
 
 	if (statesGraph.length === 0) {
 		return <></>;

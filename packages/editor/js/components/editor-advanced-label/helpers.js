@@ -27,7 +27,7 @@ import {
 	type StateGraphItem,
 } from './selector';
 import { getBaseBreakpoint } from '../..';
-import { isInnerBlock, useBlockContext } from '../../extensions';
+import { isInnerBlock } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 
@@ -76,6 +76,8 @@ export const getStatesGraph = ({
 	attributesRef,
 	isRepeaterItem,
 	inGlobalStylesPanel = false,
+	getAttributes,
+	currentBlock,
 }: {
 	controlId: string,
 	blockName: string,
@@ -84,13 +86,14 @@ export const getStatesGraph = ({
 	attributesRef?: Object,
 	isRepeaterItem: Boolean,
 	inGlobalStylesPanel: boolean,
+	getAttributes: () => Object,
+	// From BlockEditContext; widened for Flow (runtime matches isInnerBlock contract).
+	currentBlock: any,
 }): Array<LabelStates> => {
 	const blockStates = controlId
 		? getStatesGraphNodes(attributesRef, inGlobalStylesPanel)
 		: [];
 
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const { getAttributes = () => {}, currentBlock } = useBlockContext();
 	const attributes = sanitizeBlockAttributes(getAttributes());
 
 	const { getBlockType } = select('core/blocks');
@@ -234,4 +237,41 @@ export const getStatesGraph = ({
 			// $FlowFixMe
 			.filter((item: null | StateGraph) => null !== item)
 	);
+};
+
+/**
+ * Count visible changeset rows (matches StatesGraph / EditedItem rows).
+ */
+export const countStatesGraphChangesetRows = (
+	statesGraph: Array<LabelStates>
+): number => {
+	let count = 0;
+
+	for (const state of statesGraph) {
+		if ('undefined' === typeof state?.graph) {
+			continue;
+		}
+
+		if (isEmpty(state.graph.states)) {
+			continue;
+		}
+
+		const renderedStates: Array<string> = [];
+
+		for (const _state of state.graph.states) {
+			const stateType = _state?.type;
+			if ('undefined' === typeof stateType) {
+				continue;
+			}
+
+			if (renderedStates.includes(stateType)) {
+				continue;
+			}
+
+			renderedStates.push(stateType);
+			count++;
+		}
+	}
+
+	return count;
 };
