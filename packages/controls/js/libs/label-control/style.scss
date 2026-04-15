@@ -235,7 +235,7 @@
 	--popover-border-color: #272c31;
 	--popover-header-bg-color: #272c31;
 	--popover-header-color: #ffffff;
-	--popover-header-shadow-color: #00000058;
+	--popover-header-border-color: #272c31;
 
 	.blockera-component-button.blockera-component-button.is-tertiary {
 		color: #a5aab0;
@@ -330,19 +330,18 @@
 	}
 
 	.blockera-control-label-section + .blockera-control-label-section {
-		padding-top: 25px;
+		padding-top: 10px;
 		margin-top: 25px;
-		border-top: 1px solid #282d32;
+		border-top: 1px solid var(--popover-header-border-color);
 	}
 
 	.blockera-control-label-section:last-child {
 		h3.blockera-control-label-section-title {
 			position: sticky;
-			top: 40px;
+			top: calc(var(--popover-padding) * -1);
 			background-color: var(--popover-bg-color);
 			padding: 10px 0 10px 0;
 			z-index: 1;
-			margin: -15px 0 -10px;
 		}
 	}
 
@@ -483,4 +482,8 @@
 			}
 		}
 	}
+}
+
+.blockera-component-popover.blockera-control-label-popover.blockera-control-label-popover--auto-height {
+	--popover-height: auto;
 }
