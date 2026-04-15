@@ -50,6 +50,9 @@ export default function ColorControl({
 	//
 	...props
 }: ColorControlProps): MixedElement {
+	const normalizedVariableTypes =
+		typeof variableTypes === 'string' ? [variableTypes] : variableTypes;
+
 	const {
 		value,
 		setValue,
@@ -78,6 +81,14 @@ export default function ColorControl({
 		variableTypes,
 		onChange: setValue,
 		size,
+		presetInterface:
+			Array.isArray(normalizedVariableTypes) &&
+			normalizedVariableTypes.includes('color')
+				? {
+						variableTypes: normalizedVariableTypes,
+						attribute,
+					}
+				: undefined,
 	});
 
 	const labelProps = {

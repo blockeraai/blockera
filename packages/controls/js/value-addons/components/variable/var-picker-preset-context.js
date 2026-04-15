@@ -26,6 +26,11 @@ export type VarPickerPresetContextValue = {
 	 */
 	spacingPresetPreviewUsage?: string,
 	/**
+	 * When `variableType` is `color`, mirrors `controlProps.pickerProps.colorPresetPreviewUsage`
+	 * (font `color` vs `background-color` preview).
+	 */
+	colorPresetPreviewUsage?: string,
+	/**
 	 * Shared search query for catalog lists and preset repeater rows in the variable picker.
 	 */
 	searchQuery?: string,
@@ -47,6 +52,7 @@ export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> 
 		catalogItems: undefined,
 		catalogLabel: undefined,
 		spacingPresetPreviewUsage: undefined,
+		colorPresetPreviewUsage: undefined,
 		searchQuery: '',
 		disablePresetRowEdit: undefined,
 		omitRepeaterSectionLabel: undefined,

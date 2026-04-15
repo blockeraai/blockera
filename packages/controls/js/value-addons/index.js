@@ -23,6 +23,7 @@ import {
  */
 import { isValid, extractCssVarValue } from './utils';
 import { canUnlinkVariable } from './helpers';
+import { mergePickerPropsWithColorPresetPreview } from './color-preset-preview-inference';
 import { mergePickerPropsWithSpacingPresetPreview } from './spacing-preset-preview-inference';
 import { ValueAddonControl, ValueAddonPointer } from './components';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
@@ -47,8 +48,8 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 
 	const [isOpen, setOpen] = useState('');
 
-	const effectivePickerProps = mergePickerPropsWithSpacingPresetPreview(
-		pickerProps,
+	const effectivePickerProps = mergePickerPropsWithColorPresetPreview(
+		mergePickerPropsWithSpacingPresetPreview(pickerProps, presetInterface),
 		presetInterface
 	);
 
@@ -333,6 +334,10 @@ export {
 	getBlockeraBlockInjectedSlotName,
 	BLOCKERA_BLOCK_INJECTED_SLOT_NAME_FILTER,
 } from './block-injected-slot-name';
+export {
+	inferColorPresetPreviewUsage,
+	mergePickerPropsWithColorPresetPreview,
+} from './color-preset-preview-inference';
 export {
 	inferSpacingPresetPreviewUsage,
 	mergePickerPropsWithSpacingPresetPreview,

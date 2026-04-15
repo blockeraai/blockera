@@ -19,6 +19,8 @@ export type PresetInterface = {
 	unitType?: string,
 	id?: string,
 	singularId?: string | number,
+	/** Block attribute name (e.g. `blockeraFontColor`) for color variable preview context. */
+	attribute?: string,
 };
 
 export type UseValueAddonProps = {
@@ -28,8 +30,8 @@ export type UseValueAddonProps = {
 	pickerProps?: Object,
 	pointerProps?: Object,
 	/**
-	 * When set (e.g. from InputControl for `spacing` variables), merges
-	 * `spacingPresetPreviewUsage` into `pickerProps` for global-styles preset preview.
+	 * When set (e.g. from InputControl / ColorControl), merges
+	 * `spacingPresetPreviewUsage` / `colorPresetPreviewUsage` into `pickerProps` for global-styles preset preview.
 	 */
 	presetInterface?: PresetInterface | null | void,
 	setValue: (newValue: any) => void,

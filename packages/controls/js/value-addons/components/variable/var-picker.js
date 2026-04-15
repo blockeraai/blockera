@@ -194,6 +194,11 @@ export default function ({
 									? controlProps.pickerProps
 											?.spacingPresetPreviewUsage
 									: undefined,
+							colorPresetPreviewUsage:
+								presetType === 'color'
+									? controlProps.pickerProps
+											?.colorPresetPreviewUsage
+									: undefined,
 						}}
 					>
 						<PresetPanel />
