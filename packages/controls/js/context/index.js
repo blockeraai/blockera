@@ -96,3 +96,11 @@ export const ControlContextProvider = ({
 export * from './types';
 export { BaseControlContext } from './base-control-context';
 export { useControlContext, useControlEffect } from './hooks';
+export {
+	PreviewInjectableStylesContext,
+	usePreviewInjectableStyles,
+} from './preview-injectable-styles-context';
+export {
+	BlockInjectedSlotContext,
+	useBlockInjectedSlotClientId,
+} from './block-injected-slot-context';

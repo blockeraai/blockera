@@ -21,6 +21,11 @@ export type VarPickerPresetContextValue = {
 	catalogItems?: Array<VariableItem>,
 	catalogLabel?: string,
 	/**
+	 * When `variableType` is `spacing`, mirrors `controlProps.pickerProps.spacingPresetPreviewUsage`
+	 * so spacing preset row hover preview matches the opening control (width, gap, padding, …).
+	 */
+	spacingPresetPreviewUsage?: string,
+	/**
 	 * Shared search query for catalog lists and preset repeater rows in the variable picker.
 	 */
 	searchQuery?: string,
@@ -41,6 +46,7 @@ export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> 
 		controlProps: null,
 		catalogItems: undefined,
 		catalogLabel: undefined,
+		spacingPresetPreviewUsage: undefined,
 		searchQuery: '',
 		disablePresetRowEdit: undefined,
 		omitRepeaterSectionLabel: undefined,
