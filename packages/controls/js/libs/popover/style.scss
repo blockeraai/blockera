@@ -7,8 +7,8 @@
 	--popover-header-height: 42px;
 	--popover-color: #1e1e1e;
 	--popover-bg-color: #ffffff;
-	--popover-border-color: var(--blockera-controls-primary-color);
-	--popover-border-width: 2px;
+	--popover-border-color: var(--blockera-controls-border-color);
+	--popover-border-width: 1px;
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
 	--popover-header-shadow-color: #00000029;
@@ -17,7 +17,7 @@
 		--blockera-controls-border-color-soft
 	);
 	--popover-padding: 16px;
-	--popover-radius: 3px;
+	--popover-radius: 0;
 	overflow: var(--popover-overflow) !important;
 	background: transparent;
 	color: var(--popover-color);
@@ -26,6 +26,7 @@
 	.components-popover__content {
 		padding: 0;
 		border: var(--popover-border-width) solid var(--popover-border-color);
+		border-top: 2px solid var(--blockera-controls-primary-color);
 		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
 		min-width: var(--popover-width);
 		width: var(--popover-width);
