@@ -142,7 +142,7 @@ class Border extends BaseStyleDefinition {
 	 *
 	 * @param array $border Candidate border payload.
 	 */
-	private static function isFlatPresetBorderSide( array $border ): bool {
+	public static function isFlatPresetBorderSide( array $border ): bool {
 		if ( isset( $border['type'] ) ) {
 			return false;
 		}
@@ -157,7 +157,7 @@ class Border extends BaseStyleDefinition {
 	 *
 	 * @param array $border Normalized border box (e.g. from theme.json sanitization).
 	 */
-	private static function presetBoxToShorthand( array $border ): string {
+	public static function presetBoxToShorthand( array $border ): string {
 		if ( 'all' === ( $border['type'] ?? '' ) && isset( $border['all'] ) && is_array( $border['all'] ) ) {
 			return self::sideToCssShorthand( $border['all'] );
 		}
@@ -178,5 +178,25 @@ class Border extends BaseStyleDefinition {
 		}
 
 		return implode( ' ', $out );
+	}
+
+	/**
+	 * Border preset (theme.json settings.border.presets) to a single CSS border value for global preset variables.
+	 *
+	 * @param array $preset Preset entry (slug, name, border string or border box).
+	 */
+	public static function presetToCssValue( array $preset ): string {
+		if ( isset( $preset['border'] ) && is_string( $preset['border'] ) ) {
+			return $preset['border'];
+		}
+		if ( ! isset( $preset['border'] ) || ! is_array( $preset['border'] ) ) {
+			return '';
+		}
+		$b = $preset['border'];
+		if ( self::isFlatPresetBorderSide( $b ) ) {
+			return self::sideToCssShorthand( $b );
+		}
+
+		return self::presetBoxToShorthand( $b );
 	}
 }

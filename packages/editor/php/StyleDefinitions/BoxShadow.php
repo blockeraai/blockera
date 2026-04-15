@@ -86,7 +86,7 @@ class BoxShadow extends BaseStyleDefinition {
 				}
 				$values = array();
 				foreach ( $filtered as $row ) {
-					$values[] = $self->getBoxShadow( $row );
+					$values[] = $self::getBoxShadow( $row );
 				}
 
 				return implode( ', ', $values );
@@ -125,7 +125,7 @@ class BoxShadow extends BaseStyleDefinition {
 			$shadowCount     = count( $filteredBoxShadows );
 
 			for ( $i = 0; $i < $shadowCount; ++$i ) {
-				$boxShadowValues[] = $this->getBoxShadow( $filteredBoxShadows[ $i ] );
+				$boxShadowValues[] = static::getBoxShadow( $filteredBoxShadows[ $i ] );
 			}
 
 			$this->setDeclaration( $cssProperty, implode( ', ', $boxShadowValues ) );
@@ -154,7 +154,7 @@ class BoxShadow extends BaseStyleDefinition {
 			$shadowCount     = count( $filteredBoxShadows );
 
 			for ( $i = 0; $i < $shadowCount; ++$i ) {
-				$boxShadowValues[] = $this->getBoxShadow( $filteredBoxShadows[ $i ] );
+				$boxShadowValues[] = static::getBoxShadow( $filteredBoxShadows[ $i ] );
 			}
 
 			$this->setDeclaration( $cssProperty, implode( ', ', $boxShadowValues ) );
@@ -296,8 +296,12 @@ class BoxShadow extends BaseStyleDefinition {
 	 *
 	 * @return string the box shadow css property value.
 	 */
-	protected function getBoxShadow( array $setting ): string {
-
+	/**
+	 * One box-shadow repeater row → CSS fragment (used by theme.json preset variables).
+	 *
+	 * @param array $setting Row with type, x, y, blur, spread, color.
+	 */
+	public static function getBoxShadow( array $setting ): string {
 		$type  = isset( $setting['type'] ) ? $setting['type'] : '';
 		$inset = ( 'inner' === $type ) ? 'inset' : '';
 
@@ -307,7 +311,52 @@ class BoxShadow extends BaseStyleDefinition {
 		$spread = ( isset( $setting['spread'] ) && '' !== $setting['spread'] ) ? blockera_get_value_addon_real_value( $setting['spread'] ) : '';
 		$color  = ( isset( $setting['color'] ) && '' !== $setting['color'] ) ? blockera_get_value_addon_real_value( $setting['color'] ) : '';
 
-		return sprintf( '%s %s %s %s %s %s', $inset, $x, $y, $blur, $spread, $color );
+		return trim( sprintf( '%s %s %s %s %s %s', $inset, $x, $y, $blur, $spread, $color ) );
+	}
+
+	/**
+	 * Shadow preset from theme.json (legacy `shadow` string or Blockera `items` rows).
+	 *
+	 * @param array $preset Preset entry.
+	 */
+	public static function presetToCssValue( array $preset ): string {
+		if ( isset( $preset['shadow'] ) && is_string( $preset['shadow'] ) && '' !== trim( $preset['shadow'] ) ) {
+			return $preset['shadow'];
+		}
+		$items = $preset['items'] ?? array();
+		if ( ! is_array( $items ) || array() === $items ) {
+			return '';
+		}
+		$repeater = array();
+		foreach ( $items as $idx => $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$repeater[ (string) $idx ] = array_merge(
+				$row,
+				array(
+					'order'     => isset( $row['order'] ) ? (int) $row['order'] : (int) $idx,
+					'isVisible' => $row['isVisible'] ?? true,
+				)
+			);
+		}
+		$sorted = blockera_get_sorted_repeater( $repeater );
+		$values = array();
+		foreach ( $sorted as $item ) {
+			if ( ! is_array( $item ) || ! isset( $item['type'] ) ) {
+				continue;
+			}
+			if ( ! ( $item['isVisible'] ?? true ) ) {
+				continue;
+			}
+			$type = $item['type'];
+			if ( 'inner' !== $type && 'outer' !== $type ) {
+				continue;
+			}
+			$values[] = static::getBoxShadow( $item );
+		}
+
+		return implode( ', ', array_filter( $values, 'strlen' ) );
 	}
 
 	/**

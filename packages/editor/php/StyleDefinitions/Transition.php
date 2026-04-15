@@ -133,7 +133,7 @@ class Transition extends BaseStyleDefinition implements Repeater {
 	 * @param array $row Repeater row.
 	 * @param bool  $default_type_all When true, missing/empty `type` becomes `all` (presets); when false, empty type yields ''.
 	 */
-	protected static function transitionRowToCssValue( array $row, bool $default_type_all = false ): string {
+	public static function transitionRowToCssValue( array $row, bool $default_type_all = false ): string {
 		$type = $row['type'] ?? '';
 		if ( ! is_string( $type ) || '' === $type ) {
 			if ( ! $default_type_all ) {

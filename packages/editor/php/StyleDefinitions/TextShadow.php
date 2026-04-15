@@ -194,7 +194,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	/**
 	 * @param array $setting One text-shadow layer (repeater row).
 	 */
-	protected static function textShadowRowToCssValue( array $setting ): string {
+	public static function textShadowRowToCssValue( array $setting ): string {
 		$x     = isset( $setting['x'] ) && '' !== $setting['x'] ? blockera_get_value_addon_real_value( $setting['x'] ) : '';
 		$y     = isset( $setting['y'] ) && '' !== $setting['y'] ? blockera_get_value_addon_real_value( $setting['y'] ) : '';
 		$blur  = isset( $setting['blur'] ) && '' !== $setting['blur'] ? blockera_get_value_addon_real_value( $setting['blur'] ) : '';

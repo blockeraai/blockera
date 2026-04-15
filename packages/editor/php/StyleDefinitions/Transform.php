@@ -113,7 +113,7 @@ class Transform extends BaseStyleDefinition implements Repeater {
 	/**
 	 * @param array $row Single transform repeater row.
 	 */
-	protected static function transformRowToCssValue( array $row ): string {
+	public static function transformRowToCssValue( array $row ): string {
 		$type = isset( $row['type'] ) ? (string) $row['type'] : '';
 		$one  = '';
 

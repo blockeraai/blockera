@@ -3,12 +3,6 @@
 namespace Blockera\Setup\Compatibility;
 
 use Blockera\Setup\Blockera;
-use Blockera\Editor\StyleDefinitions\Border;
-use Blockera\Editor\StyleDefinitions\BoxShadow;
-use Blockera\Editor\StyleDefinitions\Filter;
-use Blockera\Editor\StyleDefinitions\TextShadow;
-use Blockera\Editor\StyleDefinitions\Transform;
-use Blockera\Editor\StyleDefinitions\Transition;
 use Blockera\Editor\StyleEngine;
 
 class JSON extends \WP_Theme_JSON {
@@ -21,6 +15,200 @@ class JSON extends \WP_Theme_JSON {
 	private static array $supports;
 
 	/**
+	 * Extra settings paths allowed in theme.json sanitization (global-styles-ui preset groups).
+	 *
+	 * @var array<string, mixed>
+	 */
+	private const BLOCKERA_VALID_SETTINGS_EXTENSION = array(
+		'dimensions' => array(
+			'dimensionSizes' => null,
+		),
+		'border'     => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'transition' => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'transform'  => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'filter'     => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'textShadow' => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+	);
+
+	/**
+	 * Preset metadata: core (WP_Theme_JSON) plus paths aligned with packages/global-styles-ui (see theme-json-preset-data.ts).
+	 * CSS values for Blockera-specific presets are resolved via {@see StyleEngine} callbacks, not in this class.
+	 *
+	 * @var array<int, array<string, mixed>>
+	 */
+	const PRESETS_METADATA = array(
+		array(
+			'path'              => array( 'dimensions', 'aspectRatios' ),
+			'prevent_override'  => array( 'dimensions', 'defaultAspectRatios' ),
+			'use_default_names' => false,
+			'value_key'         => 'ratio',
+			'css_vars'          => '--wp--preset--aspect-ratio--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'aspect-ratio' ),
+		),
+		array(
+			'path'              => array( 'color', 'palette' ),
+			'prevent_override'  => array( 'color', 'defaultPalette' ),
+			'use_default_names' => false,
+			'value_key'         => 'color',
+			'css_vars'          => '--wp--preset--color--$slug',
+			'classes'           => array(
+				'.has-$slug-color'            => 'color',
+				'.has-$slug-background-color' => 'background-color',
+				'.has-$slug-border-color'     => 'border-color',
+			),
+			'properties'        => array( 'color', 'background-color', 'border-color' ),
+		),
+		array(
+			'path'              => array( 'color', 'gradients' ),
+			'prevent_override'  => array( 'color', 'defaultGradients' ),
+			'use_default_names' => false,
+			'value_key'         => 'gradient',
+			'css_vars'          => '--wp--preset--gradient--$slug',
+			'classes'           => array( '.has-$slug-gradient-background' => 'background' ),
+			'properties'        => array( 'background' ),
+		),
+		array(
+			'path'              => array( 'color', 'duotone' ),
+			'prevent_override'  => array( 'color', 'defaultDuotone' ),
+			'use_default_names' => false,
+			'value_func'        => null,
+			'css_vars'          => null,
+			'classes'           => array(),
+			'properties'        => array( 'filter' ),
+		),
+		array(
+			'path'              => array( 'typography', 'fontSizes' ),
+			'prevent_override'  => array( 'typography', 'defaultFontSizes' ),
+			'use_default_names' => true,
+			'value_func'        => 'wp_get_typography_font_size_value',
+			'css_vars'          => '--wp--preset--font-size--$slug',
+			'classes'           => array( '.has-$slug-font-size' => 'font-size' ),
+			'properties'        => array( 'font-size' ),
+		),
+		array(
+			'path'              => array( 'typography', 'fontFamilies' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_key'         => 'fontFamily',
+			'css_vars'          => '--wp--preset--font-family--$slug',
+			'classes'           => array( '.has-$slug-font-family' => 'font-family' ),
+			'properties'        => array( 'font-family' ),
+		),
+		array(
+			'path'              => array( 'spacing', 'spacingSizes' ),
+			'prevent_override'  => array( 'spacing', 'defaultSpacingSizes' ),
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--spacing--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'padding', 'margin' ),
+		),
+		array(
+			'path'              => array( 'shadow', 'presets' ),
+			'prevent_override'  => array( 'shadow', 'defaultPresets' ),
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'shadowPresetValue' ),
+			'css_vars'          => '--wp--preset--shadow--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'box-shadow' ),
+		),
+		array(
+			'path'              => array( 'border', 'radiusSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--border-radius--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'border-radius' ),
+		),
+		array(
+			'path'              => array( 'dimensions', 'dimensionSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--dimension--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'min-height' ),
+		),
+		array(
+			'path'              => array( 'border', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'borderPresetValue' ),
+			'css_vars'          => '--wp--preset--border--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'border' ),
+		),
+		array(
+			'path'              => array( 'transition', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'transitionPresetValue' ),
+			'css_vars'          => '--wp--preset--transition--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'transition' ),
+		),
+		array(
+			'path'              => array( 'transform', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'transformPresetValue' ),
+			'css_vars'          => '--wp--preset--transform--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'transform' ),
+		),
+		array(
+			'path'              => array( 'filter', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'filterPresetValue' ),
+			'css_vars'          => '--wp--preset--filter--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'filter' ),
+		),
+		array(
+			'path'              => array( 'textShadow', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'textShadowPresetValue' ),
+			'css_vars'          => '--wp--preset--text-shadow--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'text-shadow' ),
+		),
+	);
+
+	/**
+	 * Merged valid settings schema for sanitization (core + Blockera global-styles-ui preset groups).
+	 *
+	 * @return array<string, mixed>
+	 */
+	protected static function get_valid_settings_schema(): array {
+		static $schema = null;
+		if ( null !== $schema ) {
+			return $schema;
+		}
+		$schema = array_replace_recursive( \WP_Theme_JSON::VALID_SETTINGS, self::BLOCKERA_VALID_SETTINGS_EXTENSION );
+
+		return $schema;
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array  $data The data to construct the JSON with.
@@ -31,7 +219,7 @@ class JSON extends \WP_Theme_JSON {
 
 		global $blockera_block_supports;
 
-		$this->setSupports($blockera_block_supports);
+		$this->set_supports($blockera_block_supports);
 	}
 
 	/**
@@ -40,7 +228,7 @@ class JSON extends \WP_Theme_JSON {
 	 * @param array $supports Features support list.
 	 * @return void
 	 */
-	public function setSupports( array $supports): void {
+	public function set_supports( array $supports): void {
 		self::$supports = $supports;
 	}
 
@@ -111,8 +299,6 @@ class JSON extends \WP_Theme_JSON {
         $schema_styles_blocks   = array();
         $schema_settings_blocks = array();
 
-        $settings_schema = static::extend_valid_settings_schema(static::VALID_SETTINGS);
-
         /*
          * Generate a schema for blocks.
          * - Block styles can contain `elements` & `variations` definitions.
@@ -124,7 +310,7 @@ class JSON extends \WP_Theme_JSON {
          * inner `blocks`, the overall schema will be generated in multiple passes.
          */
         foreach ($valid_block_names as $block) {
-            $schema_settings_blocks[ $block ]           = $settings_schema;
+            $schema_settings_blocks[ $block ]           = static::get_valid_settings_schema();
             $schema_styles_blocks[ $block ]             = $styles_non_top_level;
             $schema_styles_blocks[ $block ]['elements'] = $schema_styles_elements;
         }
@@ -162,7 +348,7 @@ class JSON extends \WP_Theme_JSON {
         $schema['styles']                                 = $styles_non_top_level;
         $schema['styles']['blocks']                       = $schema_styles_blocks;
         $schema['styles']['elements']                     = $schema_styles_elements;
-        $schema['settings']                               = $settings_schema;
+        $schema['settings']                               = static::get_valid_settings_schema();
         $schema['settings']['blocks']                     = $schema_settings_blocks;
         $schema['settings']['typography']['fontFamilies'] = static::schema_in_root_and_per_origin(static::FONT_FAMILY_SCHEMA);
 
@@ -186,524 +372,7 @@ class JSON extends \WP_Theme_JSON {
             }
         }
 
-        if (
-            isset($output['settings']['border']['presets']) &&
-            is_array($output['settings']['border']['presets'])
-        ) {
-            $output['settings']['border']['presets'] = static::sanitize_blockera_border_presets(
-                $output['settings']['border']['presets']
-            );
-        }
-
         return $output;
-    }
-
-	/**
-	 * Preset metadata for Blockera global-styles-ui groups (aligned with {@see static::extend_valid_settings_schema}
-	 * and `var:preset|…` / `--wp--preset--…` in the editor).
-	 *
-	 * @return array<int, array<string, mixed>>
-	 */
-	protected static function get_blockera_presets_metadata(): array {
-		static $metadata = null;
-
-		if ( null !== $metadata ) {
-			return $metadata;
-		}
-
-		$metadata = array(
-			array(
-				'path'              => array( 'transition', 'presets' ),
-				'prevent_override'  => array( 'transition', 'defaultPresets' ),
-				'use_default_names' => false,
-				'css_vars'          => '--wp--preset--transition--$slug',
-				'value_func'        => static function ( $preset, $settings ) {
-					return static::compute_blockera_transition_preset_css_value( $preset );
-				},
-			),
-			array(
-				'path'              => array( 'transform', 'presets' ),
-				'prevent_override'  => array( 'transform', 'defaultPresets' ),
-				'use_default_names' => false,
-				'css_vars'          => '--wp--preset--transform--$slug',
-				'value_func'        => static function ( $preset, $settings ) {
-					return static::compute_blockera_transform_preset_css_value( $preset );
-				},
-			),
-			array(
-				'path'              => array( 'filter', 'presets' ),
-				'prevent_override'  => array( 'filter', 'defaultPresets' ),
-				'use_default_names' => false,
-				'css_vars'          => '--wp--preset--filter--$slug',
-				'value_func'        => static function ( $preset, $settings ) {
-					return static::compute_blockera_filter_preset_css_value( $preset );
-				},
-			),
-			array(
-				'path'              => array( 'textShadow', 'presets' ),
-				'prevent_override'  => array( 'textShadow', 'defaultPresets' ),
-				'use_default_names' => false,
-				'css_vars'          => '--wp--preset--text-shadow--$slug',
-				'value_func'        => static function ( $preset, $settings ) {
-					return static::compute_blockera_text_shadow_preset_css_value( $preset );
-				},
-			),
-			array(
-				'path'              => array( 'shadow', 'presets' ),
-				'prevent_override'  => array( 'shadow', 'defaultPresets' ),
-				'use_default_names' => false,
-				'css_vars'          => '--wp--preset--shadow--$slug',
-				'value_func'        => static function ( $preset, $settings ) {
-					return static::compute_blockera_box_shadow_preset_css_value( $preset );
-				},
-			),
-			array(
-				'path'              => array( 'border', 'presets' ),
-				'prevent_override'  => false,
-				'use_default_names' => false,
-				'css_vars'          => '--wp--preset--border--$slug',
-				'value_func'        => static function ( $preset, $settings ) {
-					return static::compute_blockera_border_preset_css_value( $preset );
-				},
-			),
-		);
-
-		return $metadata;
-	}
-
-	/**
-	 * Preset CSS for `--wp--preset--transition--*`. Runs at global stylesheet build (cached).
-	 *
-	 * @param array $preset Preset from theme.json (slug, name, items).
-	 */
-	public static function compute_blockera_transition_preset_css_value( $preset ): string {
-		if ( ! is_array( $preset ) || empty( $preset['items'] ) || ! is_array( $preset['items'] ) ) {
-			return '';
-		}
-
-		return ( new Transition( [] ) )->getPresetCssDeclarationValue(
-			array(
-				'type'                   => 'transition',
-				'transition'             => $preset['items'],
-				'_blockeraGlobalPreset'  => true,
-			),
-			'transition'
-		);
-	}
-
-	/**
-	 * Preset CSS for `--wp--preset--transform--*`. Runs at global stylesheet build (cached).
-	 *
-	 * @param array $preset Preset from theme.json (slug, name, items).
-	 */
-	public static function compute_blockera_transform_preset_css_value( $preset ): string {
-		if ( ! is_array( $preset ) || empty( $preset['items'] ) || ! is_array( $preset['items'] ) ) {
-			return '';
-		}
-
-		return ( new Transform( [] ) )->getPresetCssDeclarationValue(
-			array(
-				'type'                   => 'transform',
-				'transform'              => $preset['items'],
-				'_blockeraGlobalPreset'  => true,
-			),
-			'transform'
-		);
-	}
-
-	/**
-	 * Preset CSS for `--wp--preset--filter--*`. Runs at global stylesheet build (cached).
-	 *
-	 * @param array $preset Preset from theme.json (slug, name, items).
-	 */
-	public static function compute_blockera_filter_preset_css_value( $preset ): string {
-		if ( ! is_array( $preset ) || empty( $preset['items'] ) || ! is_array( $preset['items'] ) ) {
-			return '';
-		}
-
-		return ( new Filter( [] ) )->getPresetCssDeclarationValue(
-			array(
-				'type'    => 'filter',
-				'filter'  => $preset['items'],
-			),
-			'filter'
-		);
-	}
-
-	/**
-	 * Preset CSS for `--wp--preset--text-shadow--*`. Runs at global stylesheet build (cached).
-	 *
-	 * @param array $preset Preset from theme.json (slug, name, items).
-	 */
-	public static function compute_blockera_text_shadow_preset_css_value( $preset ): string {
-		if ( ! is_array( $preset ) || empty( $preset['items'] ) || ! is_array( $preset['items'] ) ) {
-			return '';
-		}
-
-		return ( new TextShadow( [] ) )->getPresetCssDeclarationValue(
-			array(
-				'type'                   => 'text-shadow',
-				'text-shadow'            => $preset['items'],
-				'_blockeraGlobalPreset'  => true,
-			),
-			'text-shadow'
-		);
-	}
-
-	/**
-	 * Preset CSS for `--wp--preset--shadow--*`. Runs at global stylesheet build (cached).
-	 *
-	 * Blockera global-styles shadow presets use `items` (repeater). Core presets use the `shadow` string only;
-	 * those are already emitted by {@see \WP_Theme_JSON::compute_preset_vars}; this returns '' for shadow-only presets
-	 * to avoid duplicate custom properties.
-	 *
-	 * @param array $preset Preset from theme.json (slug, name, items).
-	 */
-	public static function compute_blockera_box_shadow_preset_css_value( $preset ): string {
-		if ( ! is_array( $preset ) || empty( $preset['items'] ) || ! is_array( $preset['items'] ) ) {
-			return '';
-		}
-
-		return ( new BoxShadow( [] ) )->getPresetCssDeclarationValue(
-			array(
-				'type'                   => 'box-shadow',
-				'box-shadow'             => $preset['items'],
-				'_blockeraGlobalPreset'  => true,
-			),
-			'box-shadow'
-		);
-	}
-
-	/**
-	 * Preset CSS for `--wp--preset--border--*`. Runs at global stylesheet build (cached).
-	 *
-	 * @param array $preset Preset from theme.json (slug, name, border box).
-	 */
-	public static function compute_blockera_border_preset_css_value( $preset ): string {
-		if ( ! is_array( $preset ) || empty( $preset['border'] ) || ! is_array( $preset['border'] ) ) {
-			return '';
-		}
-
-		return ( new Border( [] ) )->getPresetCssDeclarationValue(
-			array(
-				'type'                   => 'border',
-				'border'                 => static::sanitize_box_border_value( $preset['border'] ),
-				'_blockeraGlobalPreset'  => true,
-			),
-			'border'
-		);
-	}
-
-	/**
-	 * Appends CSS custom properties for Blockera preset groups (global-styles-ui) after core presets.
-	 *
-	 * @param array    $settings Settings subtree for a setting node.
-	 * @param string[] $origins  Origins to include.
-	 * @return array<int, array{name: string, value: string}>
-	 */
-	protected static function compute_preset_vars( $settings, $origins ) {
-		$declarations = parent::compute_preset_vars( $settings, $origins );
-
-		foreach ( static::get_blockera_presets_metadata() as $preset_metadata ) {
-			if ( empty( $preset_metadata['css_vars'] ) ) {
-				continue;
-			}
-			$values_by_slug = static::get_settings_values_by_slug( $settings, $preset_metadata, $origins );
-			foreach ( $values_by_slug as $slug => $value ) {
-				if ( '' === $value || ! is_string( $value ) ) {
-					continue;
-				}
-				$declarations[] = array(
-					'name'  => static::replace_slug_in_string( $preset_metadata['css_vars'], $slug ),
-					'value' => $value,
-				);
-			}
-		}
-
-		return $declarations;
-	}
-
-	/**
-	 * Includes Blockera preset paths so default slug lists match {@see static::get_blockera_presets_metadata()}.
-	 *
-	 * @param array $data      A theme.json like structure.
-	 * @param array $node_path The path to inspect.
-	 * @return array
-	 */
-	protected static function get_default_slugs( $data, $node_path ) {
-		$slugs = parent::get_default_slugs( $data, $node_path );
-
-		foreach ( static::get_blockera_presets_metadata() as $preset_metadata ) {
-			$path = $node_path;
-			foreach ( $preset_metadata['path'] as $leaf ) {
-				$path[] = $leaf;
-			}
-			$path[] = 'default';
-
-			$preset = _wp_array_get( $data, $path, null );
-			if ( ! isset( $preset ) ) {
-				continue;
-			}
-
-			$slugs_for_preset = array();
-			foreach ( $preset as $item ) {
-				if ( isset( $item['slug'] ) ) {
-					$slugs_for_preset[] = $item['slug'];
-				}
-			}
-
-			_wp_array_set( $slugs, $preset_metadata['path'], $slugs_for_preset );
-		}
-
-		return $slugs;
-	}
-
-	/**
-	 * Merges incoming data, then applies per-origin preset replacement for Blockera global-styles preset groups
-	 * (same behavior as core {@see \WP_Theme_JSON::merge()} for {@see \WP_Theme_JSON::PRESETS_METADATA}).
-	 *
-	 * @param \WP_Theme_JSON $incoming Data to merge.
-	 */
-	public function merge( $incoming ) {
-		$incoming_data = $incoming->get_raw_data();
-		parent::merge( $incoming );
-		$this->merge_blockera_preset_nodes_from_incoming( $incoming_data );
-	}
-
-	/**
-	 * @param array $incoming_data Raw data from the incoming layer (theme, user, etc.).
-	 */
-	protected function merge_blockera_preset_nodes_from_incoming( array $incoming_data ) {
-		$nodes        = static::get_setting_nodes( $incoming_data );
-		$slugs_global = static::get_default_slugs( $this->theme_json, array( 'settings' ) );
-
-		foreach ( $nodes as $node ) {
-			foreach ( static::get_blockera_presets_metadata() as $preset_metadata ) {
-				$prevent_override = $preset_metadata['prevent_override'];
-				if ( is_array( $prevent_override ) ) {
-					$global_path      = array_merge( array( 'settings' ), $prevent_override );
-					$global_value     = _wp_array_get( $this->theme_json, $global_path, null );
-					$node_level_path  = array_merge( $node['path'], $prevent_override );
-					$prevent_override = _wp_array_get( $this->theme_json, $node_level_path, $global_value );
-				}
-
-				foreach ( static::VALID_ORIGINS as $origin ) {
-					$base_path = $node['path'];
-					foreach ( $preset_metadata['path'] as $leaf ) {
-						$base_path[] = $leaf;
-					}
-
-					$path   = $base_path;
-					$path[] = $origin;
-
-					$content = _wp_array_get( $incoming_data, $path, null );
-					if ( ! isset( $content ) ) {
-						continue;
-					}
-
-					if ( 'theme' === $origin && ! empty( $preset_metadata['use_default_names'] ) ) {
-						foreach ( $content as $key => $item ) {
-							if ( ! isset( $item['name'] ) ) {
-								$name = static::get_name_from_defaults( $item['slug'], $base_path );
-								if ( null !== $name ) {
-									$content[ $key ]['name'] = $name;
-								}
-							}
-						}
-					}
-
-					if ( 'theme' === $origin && $prevent_override ) {
-						$slugs_node    = static::get_default_slugs( $this->theme_json, $node['path'] );
-						$preset_global = _wp_array_get( $slugs_global, $preset_metadata['path'], array() );
-						$preset_node   = _wp_array_get( $slugs_node, $preset_metadata['path'], array() );
-						$preset_slugs  = array_merge_recursive( $preset_global, $preset_node );
-
-						$content = static::filter_slugs( $content, $preset_slugs );
-					}
-
-					_wp_array_set( $this->theme_json, $path, $content );
-				}
-			}
-		}
-	}
-
-    /**
-     * Adds Blockera-only keys to the core {@see \WP_Theme_JSON::VALID_SETTINGS} schema (e.g. box border presets,
-     * transition / transform / filter / text-shadow preset groups aligned with global styles UI).
-     * `settings.shadow` is already defined by core; Blockera appends `items`-based preset CSS via {@see static::get_blockera_presets_metadata()}.
-     *
-     * @param array $settings_schema Core valid settings tree.
-     * @return array
-     */
-    protected static function extend_valid_settings_schema( array $settings_schema ): array {
-        if (isset($settings_schema['border']) && is_array($settings_schema['border'])) {
-            $settings_schema['border'] = array_merge(
-                $settings_schema['border'],
-                array(
-                    'presets' => null,
-                )
-            );
-        }
-
-        /*
-         * Same shape as core `settings.shadow`: presets (per-origin arrays) + defaultPresets flag.
-         * Keys match editor `useGlobalSetting()` paths (camelCase for textShadow).
-         */
-        $blockera_preset_setting_groups = array(
-            'transition' => array(
-                'presets'        => null,
-                'defaultPresets' => null,
-            ),
-            'transform'  => array(
-                'presets'        => null,
-                'defaultPresets' => null,
-            ),
-            'filter'     => array(
-                'presets'        => null,
-                'defaultPresets' => null,
-            ),
-            'textShadow' => array(
-                'presets'        => null,
-                'defaultPresets' => null,
-            ),
-        );
-
-        foreach ($blockera_preset_setting_groups as $key => $shape) {
-            if (isset($settings_schema[ $key ]) && is_array($settings_schema[ $key ])) {
-                $settings_schema[ $key ] = array_merge($settings_schema[ $key ], $shape);
-            } else {
-                $settings_schema[ $key ] = $shape;
-            }
-        }
-
-        return $settings_schema;
-    }
-
-    /**
-     * Keeps settings.border.presets aligned with the editor shape (slug, name, border box).
-     *
-     * @param array $presets Presets tree with theme, default, and custom origins.
-     * @return array Sanitized presets.
-     */
-    protected static function sanitize_blockera_border_presets( array $presets ): array {
-        $out = array();
-
-        foreach (array( 'theme', 'default', 'custom' ) as $origin) {
-            if (! isset($presets[ $origin ]) || ! is_array($presets[ $origin ])) {
-                continue;
-            }
-            $out[ $origin ] = array();
-            foreach ($presets[ $origin ] as $item) {
-                $clean = static::sanitize_border_preset_item($item);
-                if (null !== $clean) {
-                    $out[ $origin ][] = $clean;
-                }
-            }
-        }
-
-        return $out;
-    }
-
-    /**
-     * @param mixed $item Single preset entry.
-     * @return array|null Preset array or null if invalid.
-     */
-    protected static function sanitize_border_preset_item( $item ): ?array {
-        if (! is_array($item)) {
-            return null;
-        }
-        if (
-            ! isset($item['slug'], $item['name']) ||
-            ! is_string($item['slug']) ||
-            ! is_string($item['name'])
-        ) {
-            return null;
-        }
-
-        return array(
-            'slug'   => $item['slug'],
-            'name'   => $item['name'],
-            'border' => static::sanitize_box_border_value($item['border'] ?? null),
-        );
-    }
-
-    /**
-     * @param mixed $border Border value from theme.json / editor.
-     * @return array{width: string, style: string, color: string|array} Flat triple (BorderPresetStoredSide / coerceBorderPresetSide).
-     */
-    protected static function sanitize_box_border_value( $border ): array {
-        if (! is_array($border)) {
-            return static::empty_border_side();
-        }
-
-        $has_legacy_type = isset($border['type']) && in_array($border['type'], array( 'all', 'custom' ), true);
-
-        if (! $has_legacy_type && static::is_flat_stored_border_side_candidate($border)) {
-            return static::normalize_border_side($border);
-        }
-
-        if (isset($border['type']) && 'all' === $border['type']) {
-            if (isset($border['all']) && is_array($border['all'])) {
-                return static::normalize_border_side($border['all']);
-            }
-
-            return static::empty_border_side();
-        }
-
-        if (isset($border['type']) && 'custom' === $border['type']) {
-            foreach (array( 'top', 'right', 'bottom', 'left' ) as $edge) {
-                if (empty($border[ $edge ]) || ! is_array($border[ $edge ])) {
-                    continue;
-                }
-                $side = static::normalize_border_side($border[ $edge ]);
-                if ('' !== $side['width']) {
-                    return $side;
-                }
-            }
-
-            return static::empty_border_side();
-        }
-
-        return static::empty_border_side();
-    }
-
-    /**
-     * True when $border looks like persisted `{ width, style, color? }` (no legacy `type`: all|custom).
-     *
-     * @param array $border Raw border array.
-     */
-    protected static function is_flat_stored_border_side_candidate( array $border ): bool {
-        return isset($border['width'], $border['style'])
-            && is_string($border['width'])
-            && is_string($border['style']);
-    }
-
-    /**
-     * @return array{width: string, style: string, color: string|array}
-     */
-    protected static function empty_border_side(): array {
-        return array(
-            'width' => '',
-            'style' => '',
-            'color' => '',
-        );
-    }
-
-    /**
-     * @param array $side Raw side object.
-     * @return array{width: string, style: string, color: string|array}
-     */
-    protected static function normalize_border_side( array $side ): array {
-        $width  = isset($side['width']) && is_string($side['width']) ? $side['width'] : '';
-        $style  = isset($side['style']) && is_string($side['style']) ? $side['style'] : '';
-        $color  = $side['color'] ?? '';
-        $colorN = is_string($color) || is_array($color) ? $color : '';
-
-        return array(
-            'width' => $width,
-            'style' => $style,
-            'color' => $colorN,
-        );
     }
 
 	/**

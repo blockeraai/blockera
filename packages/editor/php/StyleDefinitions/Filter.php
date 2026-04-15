@@ -85,7 +85,7 @@ class Filter extends BaseStyleDefinition implements Repeater {
 	/**
 	 * @param array $row Single filter repeater row (`type` must be set).
 	 */
-	protected static function filterRowToCssValue( array $row ): string {
+	public static function filterRowToCssValue( array $row ): string {
 		$filter_type = $row['type'];
 		$chunk       = '';
 
