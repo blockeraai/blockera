@@ -37,9 +37,15 @@ export function BoxShadowGenerator(id, props, options) {
 	let boxShadowValue = boxShadowAttr;
 
 	if ('variable' === boxShadowValue?.valueType) {
-		const rows = getVariableRepeaterItemsFromSettings(
+		let rows = getVariableRepeaterItemsFromSettings(
 			boxShadowValue?.settings
 		);
+
+		if (typeof rows === 'string' && rows.trim() !== '') {
+			rows = Object.values(parseCssBoxShadowToRepeaterValue(rows));
+		} else if (!Array.isArray(rows)) {
+			rows = [];
+		}
 
 		if (!rows.length) {
 			boxShadowValue = attributes?.blockeraBoxShadow;
@@ -49,7 +55,9 @@ export function BoxShadowGenerator(id, props, options) {
 
 		if (!Array.isArray(boxShadowValue)) {
 			boxShadowValue = Object.values(
-				parseCssBoxShadowToRepeaterValue(boxShadowValue)
+				parseCssBoxShadowToRepeaterValue(
+					typeof boxShadowValue === 'string' ? boxShadowValue : ''
+				)
 			);
 		}
 

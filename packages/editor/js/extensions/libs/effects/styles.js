@@ -19,6 +19,7 @@ import {
 	TransitionGenerator,
 	MaskGenerator,
 } from './css-generators';
+import { joinTransformCssFromRepeaterMap } from './transform-repeater-to-css';
 import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
@@ -149,61 +150,23 @@ export const EffectsStyles = ({
 			let transformValue = transformAttr;
 
 			if ('variable' === transformValue?.valueType) {
-				const items = getVariableRepeaterItemsFromSettings(
+				const rawItems = getVariableRepeaterItemsFromSettings(
 					transformValue?.settings
 				);
+				// $FlowFixMe[incompatible-type] repeater rows from variable settings (string only for shadow presets).
+				const items: Array<any> = Array.isArray(rawItems)
+					? rawItems
+					: [];
 				transformValue = items.map((t, i) => [`${t.type}-${i}`, t]);
 			} else {
 				transformValue = getSortedRepeater(transformValue);
 			}
 
-			transformValue?.map(([, item]) => {
-				if (!item.isVisible) {
-					return null;
-				}
-
-				switch (item.type) {
-					case 'move':
-						properties.transform.push(
-							`translate3d(${getValueAddonRealValue(
-								item['move-x']
-							)}, ${getValueAddonRealValue(
-								item['move-y']
-							)}, ${getValueAddonRealValue(item['move-z'])})`
-						);
-						break;
-
-					case 'scale':
-						properties.transform.push(
-							`scale3d(${getValueAddonRealValue(
-								item.scale
-							)}, ${getValueAddonRealValue(item.scale)}, 50%)`
-						);
-						break;
-
-					case 'rotate':
-						properties.transform.push(
-							`rotateX(${getValueAddonRealValue(
-								item['rotate-x']
-							)}) rotateY(${getValueAddonRealValue(
-								item['rotate-y']
-							)}) rotateZ(${getValueAddonRealValue(
-								item['rotate-z']
-							)})`
-						);
-						break;
-
-					case 'skew':
-						properties.transform.push(
-							`skew(${getValueAddonRealValue(
-								item['skew-x']
-							)}, ${getValueAddonRealValue(item['skew-y'])})`
-						);
-						break;
-				}
-
-				return null;
-			});
+			const joinTransformCss =
+				joinTransformCssFromRepeaterMap(transformValue);
+			if (joinTransformCss) {
+				properties.transform.push(joinTransformCss);
+			}
 
 			if (blockProps.attributes.blockeraTransformSelfPerspective) {
 				properties.transformSelfPerspective = `perspective(${getValueAddonRealValue(

@@ -8,6 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
+import { getBlockeraBlockInjectedSlotName } from '@blockera/controls';
 import { prependPortal } from '@blockera/utils';
 
 const Component = ({ clientId, sentinelRef, stickyWrapperRef }) => (
@@ -25,6 +26,10 @@ const Component = ({ clientId, sentinelRef, stickyWrapperRef }) => (
 
 		<div className="blockera-block-edit-wrapper">
 			<Slot name={`blockera-block-edit-content-${clientId}`} />
+		</div>
+
+		<div className="blockera-block-injected-slot-host" aria-hidden="true">
+			<Slot name={getBlockeraBlockInjectedSlotName(clientId)} />
 		</div>
 	</>
 );

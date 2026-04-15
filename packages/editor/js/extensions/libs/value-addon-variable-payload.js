@@ -11,12 +11,16 @@ import { tryParseLegacyJsonObject } from '@blockera/data';
 
 export function getVariableRepeaterItemsFromSettings(
 	settings: ?Object
-): Array<mixed> {
+): Array<mixed> | string {
 	if (!settings || typeof settings !== 'object') {
 		return [];
 	}
 	if (Array.isArray(settings.items)) {
 		return settings.items;
+	}
+	// Global style presets: `{ items: "<css>" }` (box-shadow / text-shadow theme.json shape).
+	if (typeof settings.items === 'string' && settings.items.trim() !== '') {
+		return settings.items.trim();
 	}
 	const raw = settings.value;
 	if (raw === null || raw === undefined || raw === '') {
@@ -25,12 +29,20 @@ export function getVariableRepeaterItemsFromSettings(
 	if (
 		typeof raw === 'object' &&
 		!Array.isArray(raw) &&
-		Array.isArray(raw.items)
+		raw.items !== undefined
 	) {
-		return raw.items;
+		if (Array.isArray(raw.items)) {
+			return raw.items;
+		}
+		if (typeof raw.items === 'string' && raw.items.trim() !== '') {
+			return raw.items.trim();
+		}
 	}
 	const legacy = tryParseLegacyJsonObject(raw);
-	return Array.isArray(legacy?.items) ? legacy.items : [];
+	if (Array.isArray(legacy?.items)) {
+		return legacy.items;
+	}
+	return [];
 }
 
 export function parseBorderVariablePayloadFromSettings(

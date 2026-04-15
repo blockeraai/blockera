@@ -39,10 +39,11 @@ export function FilterGenerator(id, props, options) {
 	let filterValue = filterAttr;
 
 	if ('variable' === filterValue?.valueType) {
-		filterValue = getVariableRepeaterItemsFromSettings(
+		const rawFilter = getVariableRepeaterItemsFromSettings(
 			filterValue?.settings
 		);
-		filterValue = filterValue.map((f, i) => [`${f.type}-${i}`, f]);
+		const filterRows = Array.isArray(rawFilter) ? rawFilter : [];
+		filterValue = filterRows.map((f, i) => [`${f.type}-${i}`, f]);
 	} else {
 		filterValue = getSortedRepeater(filterValue);
 	}
