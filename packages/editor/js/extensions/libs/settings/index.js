@@ -74,7 +74,6 @@ export const ExtensionSettings = ({
 					className={'extension-settings'}
 					onClose={() => setIsOpen(false)}
 					focusOnMount={true}
-					style={{ '--popover-height': 'auto' }}
 				>
 					<div className={'settings-category'}>
 						<span className={'settings-category__title'}>
