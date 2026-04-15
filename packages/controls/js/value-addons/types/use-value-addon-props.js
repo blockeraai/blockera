@@ -30,8 +30,9 @@ export type UseValueAddonProps = {
 	pickerProps?: Object,
 	pointerProps?: Object,
 	/**
-	 * When set (e.g. from InputControl / ColorControl), merges
-	 * `spacingPresetPreviewUsage` / `colorPresetPreviewUsage` into `pickerProps` for global-styles preset preview.
+	 * When set (e.g. from InputControl / ColorControl), `presetInterface` is merged into `pickerProps`
+	 * for global-styles preset preview via the implementation registered from `@blockera/editor`
+	 * (`mergePickerPropsWithPresetPreviewInference`).
 	 */
 	presetInterface?: PresetInterface | null | void,
 	setValue: (newValue: any) => void,
