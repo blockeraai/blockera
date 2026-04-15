@@ -204,6 +204,7 @@ export const ObjectFit: ComponentType<Object> = ({
 					alignmentMatrixLabel={__('Position', 'blockera')}
 					size="small"
 					defaultValue={fitPositionDefaultValue}
+					popoverTitle={__('Media Fit Position', 'blockera')}
 					onChange={({ top, left }, ref) => {
 						handleOnChangeAttributes(
 							'blockeraFitPosition',
