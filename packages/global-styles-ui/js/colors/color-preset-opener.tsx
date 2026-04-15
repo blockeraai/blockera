@@ -8,15 +8,19 @@ import { useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/controls';
+import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesColorPresetPreviewCss } from '../preset-preview/injected-helpers';
+import {
+	getGlobalStylesColorPresetPreviewCss,
+	type ColorPresetPreviewUsage,
+} from '../preset-preview/injected-helpers';
 import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types';
+import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
 
 export type ColorPresetOpenerProps = {
 	itemId: string;
@@ -25,7 +29,26 @@ export type ColorPresetOpenerProps = {
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & { color?: string; type?: string };
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
+	/** Lower priority than variable-picker context and ColorPresetPreviewUsageProvider. */
+	previewUsage?: ColorPresetPreviewUsage;
 };
+
+function resolveColorPresetPreviewUsage(
+	pickerCtx: ReturnType<typeof useVarPickerPresetContext>,
+	fromProvider: ColorPresetPreviewUsage | undefined,
+	propUsage: ColorPresetPreviewUsage | undefined
+): ColorPresetPreviewUsage {
+	const fromPicker = pickerCtx.colorPresetPreviewUsage;
+	if (
+		pickerCtx.active &&
+		pickerCtx.variableType === 'color' &&
+		(fromPicker === 'color' || fromPicker === 'background')
+	) {
+		return fromPicker;
+	}
+
+	return fromProvider ?? propUsage ?? 'background';
+}
 
 export function ColorPresetOpener({
 	itemId,
@@ -34,14 +57,26 @@ export function ColorPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	previewUsage: previewUsageProp,
 }: ColorPresetOpenerProps) {
+	const pickerCtx = useVarPickerPresetContext();
+	const fromProvider = useColorPresetPreviewUsageFromProvider();
+	const previewUsage = resolveColorPresetPreviewUsage(
+		pickerCtx,
+		fromProvider,
+		previewUsageProp
+	);
+
 	const getPreviewDeclarations = useCallback(
 		() =>
-			getGlobalStylesColorPresetPreviewCss({
-				color: variable?.color,
-				type: variable?.type,
-			}),
-		[variable?.color, variable?.type]
+			getGlobalStylesColorPresetPreviewCss(
+				{
+					color: variable?.color,
+					type: variable?.type,
+				},
+				previewUsage
+			),
+		[variable?.color, variable?.type, previewUsage]
 	);
 
 	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);

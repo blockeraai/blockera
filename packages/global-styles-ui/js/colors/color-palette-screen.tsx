@@ -33,7 +33,11 @@ import {
 import { useGetColors } from './use-get-colors';
 import { convertRepeaterValueToColors } from './utils';
 import { ColorPresetOpener } from './color-preset-opener';
+import { ColorPresetPreviewUsageProvider } from './color-preset-preview-context';
 import { ColorPresetFields } from './color-preset-fields';
+import type { ColorPresetPreviewUsage } from '../preset-preview/injected-helpers';
+
+export { ColorPresetPreviewUsageProvider } from './color-preset-preview-context';
 
 interface ColorPaletteScreenProps {
 	onBackHandler: () => void;
@@ -167,7 +171,12 @@ function ColorGroupComponent({
 
 const ColorGroup = memo(ColorGroupComponent);
 
-export function ColorPalettePresetContent() {
+export function ColorPalettePresetContent({
+	previewUsage,
+}: {
+	/** When the palette editor is embedded, sets row hover preview (font `color` vs `background-color`). */
+	previewUsage?: ColorPresetPreviewUsage;
+} = {}) {
 	const {
 		themeColors,
 		customColors,
@@ -235,35 +244,40 @@ export function ColorPalettePresetContent() {
 	);
 
 	return (
-		<VStack spacing={8} className="global-styles-ui-color-palette-panel">
-			{showThemeOriginGroup && (
-				<ColorGroup
-					origin="theme"
-					label={__('Theme', 'blockera')}
-					colors={safeThemeColors}
-					setThemeColors={setThemeColors}
-					handleResetColors={themeResetHandler}
-				/>
-			)}
+		<ColorPresetPreviewUsageProvider value={previewUsage}>
+			<VStack
+				spacing={8}
+				className="global-styles-ui-color-palette-panel"
+			>
+				{showThemeOriginGroup && (
+					<ColorGroup
+						origin="theme"
+						label={__('Theme', 'blockera')}
+						colors={safeThemeColors}
+						setThemeColors={setThemeColors}
+						handleResetColors={themeResetHandler}
+					/>
+				)}
 
-			{showDefaultOriginGroup && (
-				<ColorGroup
-					origin="default"
-					label={__('Default', 'blockera')}
-					colors={safeDefaultColors}
-					setDefaultColors={setDefaultColors}
-					handleResetColors={defaultResetHandler}
-				/>
-			)}
+				{showDefaultOriginGroup && (
+					<ColorGroup
+						origin="default"
+						label={__('Default', 'blockera')}
+						colors={safeDefaultColors}
+						setDefaultColors={setDefaultColors}
+						handleResetColors={defaultResetHandler}
+					/>
+				)}
 
-			<ColorGroup
-				origin="custom"
-				label={__('Custom', 'blockera')}
-				colors={customColors}
-				setCustomColors={setCustomColors}
-				handleResetColors={customResetHandler}
-			/>
-		</VStack>
+				<ColorGroup
+					origin="custom"
+					label={__('Custom', 'blockera')}
+					colors={customColors}
+					setCustomColors={setCustomColors}
+					handleResetColors={customResetHandler}
+				/>
+			</VStack>
+		</ColorPresetPreviewUsageProvider>
 	);
 }
 

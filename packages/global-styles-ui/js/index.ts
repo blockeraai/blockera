@@ -2,6 +2,7 @@ export {
 	registerPresetPreviewCssHelpers,
 	type PresetPreviewCssHelpers,
 	type SpacingSizePresetUsage,
+	type ColorPresetPreviewUsage,
 } from './preset-preview/injected-helpers';
 export {
 	mergeBaseAndUserConfigs,
@@ -28,7 +29,10 @@ export { ShadowsPresetContent } from './shadows';
 export { TextShadowsPresetContent } from './text-shadows';
 export { TransformsPresetContent } from './transforms';
 export { TransitionsPresetContent } from './transitions';
-export { ColorPalettePresetContent } from './colors/color-palette-screen';
+export {
+	ColorPalettePresetContent,
+	ColorPresetPreviewUsageProvider,
+} from './colors/color-palette-screen';
 export { LinearGradientsPresetContent } from './colors/linear-gradients-screen';
 export { RadialGradientsPresetContent } from './colors/radial-gradients-screen';
 export { FallbackPresetContent } from './components/fallback-preset-content';

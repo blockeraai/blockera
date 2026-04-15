@@ -12,6 +12,9 @@ export type SpacingSizePresetUsage =
 	| 'width'
 	| 'height';
 
+/** Font `color` vs `background-color` (or gradient `background`) for color preset row preview. */
+export type ColorPresetPreviewUsage = 'color' | 'background';
+
 export type PresetPreviewCssHelpers = {
 	getGlobalStylesShadowPresetPreviewCss: (
 		preset: Record<string, unknown>
@@ -31,10 +34,13 @@ export type PresetPreviewCssHelpers = {
 	getGlobalStylesFontSizePresetPreviewCss: (
 		size: string | null | undefined
 	) => string;
-	getGlobalStylesColorPresetPreviewCss: (variable: {
-		color?: string;
-		type?: string;
-	}) => string;
+	getGlobalStylesColorPresetPreviewCss: (
+		variable: {
+			color?: string;
+			type?: string;
+		},
+		usage?: ColorPresetPreviewUsage
+	) => string;
 	getGlobalStylesGradientPresetPreviewCss: (
 		gradient: string | null | undefined
 	) => string;
@@ -107,11 +113,16 @@ export function getGlobalStylesFontSizePresetPreviewCss(
 	return injected?.getGlobalStylesFontSizePresetPreviewCss?.(size) ?? '';
 }
 
-export function getGlobalStylesColorPresetPreviewCss(variable: {
-	color?: string;
-	type?: string;
-}): string {
-	return injected?.getGlobalStylesColorPresetPreviewCss?.(variable) ?? '';
+export function getGlobalStylesColorPresetPreviewCss(
+	variable: {
+		color?: string;
+		type?: string;
+	},
+	usage?: ColorPresetPreviewUsage
+): string {
+	return (
+		injected?.getGlobalStylesColorPresetPreviewCss?.(variable, usage) ?? ''
+	);
 }
 
 export function getGlobalStylesGradientPresetPreviewCss(
