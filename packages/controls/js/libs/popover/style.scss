@@ -1,6 +1,6 @@
 .blockera-component-popover {
 	position: relative;
-	--popover-overflow: visible;
+	--popover-overflow: auto;
 	--popover-min-height: auto;
 	--popover-height: 430px;
 	--popover-width: 282px;
@@ -11,14 +11,15 @@
 	--popover-border-width: 1px;
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
-	--popover-header-shadow-color: #00000029;
+	--popover-header-border-color: var(
+		--blockera-controls-border-color-extra-soft
+	);
 	--popover-header-btn-color: #1e1e1e;
 	--popover-header-btn-border-color: var(
 		--blockera-controls-border-color-soft
 	);
-	--popover-padding: 16px;
+	--popover-padding: 18px;
 	--popover-radius: 0;
-	overflow: var(--popover-overflow) !important;
 	background: transparent;
 	color: var(--popover-color);
 	border-radius: none;
@@ -33,14 +34,15 @@
 		position: relative;
 		min-height: auto;
 		height: auto;
-		overflow: auto !important;
+		/* Clip to border-radius; body handles scroll via --popover-overflow */
+		overflow: hidden !important;
 		background-color: var(--popover-bg-color);
 		border-radius: var(--popover-radius);
 	}
 
 	.blockera-component-popover-header {
 		padding: 0 var(--popover-padding);
-		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
+		border-bottom: 1px solid var(--popover-header-border-color);
 		position: sticky;
 		top: 0;
 		left: 0;
@@ -55,7 +57,6 @@
 		color: var(--popover-header-color);
 		font-size: 13px;
 		z-index: 6;
-		border-radius: var(--popover-radius) var(--popover-radius) 0 0;
 
 		svg {
 			fill: currentColor;
@@ -101,7 +102,7 @@
 		position: relative;
 
 		& > :last-child {
-			padding-bottom: var(--popover-padding);
+			padding-bottom: calc(var(--popover-padding) * 1.33);
 		}
 
 		.blockera-component-breakpoint-icon {
@@ -115,12 +116,13 @@
 	--popover-border-width: 1px;
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
-	--popover-header-shadow-color: #00000029;
+	--popover-header-border-color: var(
+		--blockera-controls-border-color-extra-soft
+	);
 	--popover-header-btn-color: #1e1e1e;
 	--popover-header-btn-border-color: var(
 		--blockera-controls-border-color-soft
 	);
-	overflow: var(--popover-overflow) !important;
 	background-color: var(--popover-bg-color);
 	color: var(--popover-color);
 	border: none;
