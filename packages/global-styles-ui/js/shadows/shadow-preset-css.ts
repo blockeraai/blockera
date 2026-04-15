@@ -18,6 +18,12 @@ function getShadowPresetCssValue(preset: Record<string, unknown>): string {
 	if (!preset || typeof preset !== 'object') {
 		return '';
 	}
+	if (preset.shadow && typeof preset.shadow === 'string') {
+		const css = String(preset.shadow).trim();
+		if (css) {
+			return css;
+		}
+	}
 	if (Array.isArray(preset.items) && preset.items.length) {
 		const first = preset.items[0];
 		if (first && typeof first === 'object' && !Array.isArray(first)) {
@@ -32,9 +38,6 @@ function getShadowPresetCssValue(preset: Record<string, unknown>): string {
 		if (layers.length) {
 			return layers.join(', ');
 		}
-	}
-	if (preset.shadow && typeof preset.shadow === 'string') {
-		return String(preset.shadow).trim();
 	}
 	return '';
 }

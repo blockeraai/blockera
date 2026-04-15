@@ -43,8 +43,14 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		* It was judged not enough, hence this approach.
 		* @see https://github.com/WordPress/gutenberg/pull/45372
 		*/
+
+		/*
+		 * Do not use core's {@see wp_get_global_stylesheet} cache key: core builds from
+		 * {@see WP_Theme_JSON_Resolver}; this function uses {@see JSONResolver} + {@see JSON}
+		 * and would otherwise return the wrong stylesheet when the cache was primed by core first.
+		 */
 		$cache_group = 'theme_json';
-		$cache_key   = 'wp_get_global_stylesheet';
+		$cache_key   = 'blockera_wp_get_global_stylesheet';
 		if ( $can_use_cached ) {
 			$cached = wp_cache_get( $cache_key, $cache_group );
 			if ( $cached ) {
@@ -522,8 +528,14 @@ if (! function_exists('blockera_get_global_settings')) {
 		* It was judged not enough, hence this approach.
 		* See https://github.com/WordPress/gutenberg/pull/45372
 		*/
+
+		/*
+		 * Must not share the cache key with {@see wp_get_global_settings()}: core resolves
+		 * {@see WP_Theme_JSON_Resolver} + {@see WP_Theme_JSON} (sanitization strips Blockera preset groups),
+		 * while this uses {@see JSONResolver} + {@see JSON}. Same key would cache the wrong tree for whichever runs first.
+		 */
 		$cache_group = 'theme_json';
-		$cache_key   = 'wp_get_global_settings_' . $origin;
+		$cache_key   = 'blockera_get_global_settings_' . $origin;
 
 		/*
 		* Ignore cache when the development mode is set to 'theme', so it doesn't interfere with the theme
@@ -544,5 +556,132 @@ if (! function_exists('blockera_get_global_settings')) {
 		}
 
 		return _wp_array_get( $settings, $path, $settings );
+	}
+}
+
+if (! function_exists('blockera_get_sorted_global_preset_items')) {
+	/**
+	 * Sorted `items` arrays from global style presets (theme.json) for CSS variable generation.
+	 *
+	 * @param array $preset Preset object with optional `items` list.
+	 * @return array<int, array<string, mixed>>
+	 */
+	function blockera_get_sorted_global_preset_items( array $preset ): array {
+		$items = $preset['items'] ?? array();
+		if ( ! is_array( $items ) || array() === $items ) {
+			return array();
+		}
+		$repeater = array();
+		foreach ( $items as $idx => $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$repeater[ (string) $idx ] = array_merge(
+				$row,
+				array(
+					'order'     => isset( $row['order'] ) ? (int) $row['order'] : (int) $idx,
+					'isVisible' => $row['isVisible'] ?? true,
+				)
+			);
+		}
+
+		return blockera_get_sorted_repeater( $repeater );
+	}
+}
+
+if (! function_exists('blockera_enqueue_global_styles_css_custom_properties')) {
+	/**
+	 * Enqueues the CSS Custom Properties coming from theme.json (editor).
+	 *
+	 * Must call {@see wp_register_style()} before {@see wp_add_inline_style()}: inline data is
+	 * stored on the registered handle; see WP_Dependencies::add_data() and
+	 * wp-includes/script-loader.php wp_enqueue_global_styles_css_custom_properties().
+	 */
+	function blockera_enqueue_global_styles_css_custom_properties() {
+		wp_register_style( 'global-styles-css-custom-properties', false );
+		wp_add_inline_style( 'global-styles-css-custom-properties', blockera_get_global_stylesheet( array( 'variables' ) ) );
+		wp_enqueue_style( 'global-styles-css-custom-properties' );
+	}
+}
+
+if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) {
+	/**
+	 * Merges Blockera extended global settings into the block editor's __experimentalFeatures.
+	 *
+	 * Core {@see wp_get_global_settings()} uses {@see WP_Theme_JSON_Resolver} and {@see WP_Theme_JSON},
+	 * whose sanitization drops Blockera-only preset groups (transition, transform, filter, textShadow,
+	 * extended border/shadow/dimensions, and block-level entries). The editor still needs those presets
+	 * for variable pickers and UI parity with {@see blockera_get_global_stylesheet()}.
+	 *
+	 * Runs late so prior filters see a stable base; we only add/overlay data from {@see blockera_get_global_settings()}.
+	 *
+	 * @param array $editor_settings Block editor settings.
+	 * @return array
+	 */
+	function blockera_merge_block_editor_experimental_features( $editor_settings ) {
+		if ( ! isset( $editor_settings['__experimentalFeatures'] ) || ! is_array( $editor_settings['__experimentalFeatures'] ) ) {
+			return $editor_settings;
+		}
+
+		$bf = blockera_get_global_settings();
+		if ( ! is_array( $bf ) ) {
+			return $editor_settings;
+		}
+
+		$cur = &$editor_settings['__experimentalFeatures'];
+
+		$blockera_only_top = array( 'transition', 'transform', 'filter', 'textShadow' );
+		foreach ( $blockera_only_top as $key ) {
+			if ( isset( $bf[ $key ] ) ) {
+				$cur[ $key ] = $bf[ $key ];
+			}
+		}
+
+		foreach ( array( 'shadow', 'border', 'dimensions' ) as $key ) {
+			if ( isset( $bf[ $key ] ) && is_array( $bf[ $key ] ) ) {
+				$cur[ $key ] = array_replace_recursive( (array) ( $cur[ $key ] ?? array() ), $bf[ $key ] );
+			}
+		}
+
+		if ( isset( $bf['blocks'] ) && is_array( $bf['blocks'] ) ) {
+			$cur['blocks'] = array_replace_recursive( (array) ( $cur['blocks'] ?? array() ), $bf['blocks'] );
+		}
+
+		return $editor_settings;
+	}
+}
+
+if ( ! function_exists( 'blockera_append_global_styles_variables_to_resolved_iframe_assets' ) ) {
+	/**
+	 * Injects preset CSS custom properties into the block editor canvas iframe.
+	 *
+	 * The iframe HTML is built from {@see _wp_get_iframed_editor_assets()} (enqueue_block_assets +
+	 * block library styles only). Styles registered on {@see enqueue_block_editor_assets} — including
+	 * {@see blockera_enqueue_global_styles_css_custom_properties()} — load in the admin document only.
+	 * Gutenberg's JS {@see useGlobalStylesOutput} also only declares variables for core {@see PRESET_METADATA}
+	 * paths, so Blockera-only presets never appear as CSS variables inside the iframe unless
+	 * we append the same rules WordPress would generate from theme.json here.
+	 *
+	 * @param array $editor_settings Block editor settings.
+	 * @return array
+	 */
+	function blockera_append_global_styles_variables_to_resolved_iframe_assets( $editor_settings ) {
+		if ( ! isset( $editor_settings['__unstableResolvedAssets'] ) || ! is_array( $editor_settings['__unstableResolvedAssets'] ) ) {
+			return $editor_settings;
+		}
+
+		$css = blockera_get_global_stylesheet( array( 'variables' ) );
+		if ( '' === $css ) {
+			return $editor_settings;
+		}
+
+		$styles = $editor_settings['__unstableResolvedAssets']['styles'] ?? '';
+		if ( false === $styles ) {
+			$styles = '';
+		}
+
+		$editor_settings['__unstableResolvedAssets']['styles'] = $styles . '<style id="blockera-global-styles-variables-inline-css">' . $css . '</style>';
+
+		return $editor_settings;
 	}
 }

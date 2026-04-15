@@ -9,6 +9,7 @@ export * from './shared-preset-controls';
 export * from './icon-with-current-color';
 export * from './global-styles-panel-description';
 export * from './variable-preview';
+export * from './preset-row-preview-inject';
 export * from './create-preset-fields-props-resolver';
 export { default as ConfirmResetPresetDialog } from './confirm-reset-preset-dialog';
 export { FallbackPresetContent } from './fallback-preset-content';

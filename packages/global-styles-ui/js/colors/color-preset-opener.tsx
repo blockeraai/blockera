@@ -3,16 +3,18 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { ColorIndicator } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesColorPresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types';
 
@@ -33,6 +35,17 @@ export function ColorPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: ColorPresetOpenerProps) {
+	const getPreviewDeclarations = useCallback(
+		() =>
+			getGlobalStylesColorPresetPreviewCss({
+				color: variable?.color,
+				type: variable?.type,
+			}),
+		[variable?.color, variable?.type]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
@@ -42,6 +55,8 @@ export function ColorPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				/* translators: %d: The item number (1-based index) */
 				__('Color preset %d', 'blockera'),

@@ -38,18 +38,23 @@ export function TextShadowGenerator(id, props, options) {
 	let textShadowValue = textShadowAttr;
 
 	if ('variable' === textShadowValue?.valueType) {
-		const rawItems = getVariableRepeaterItemsFromSettings(
+		let rawItems = getVariableRepeaterItemsFromSettings(
 			textShadowValue?.settings
 		);
+
+		if (typeof rawItems === 'string' && rawItems.trim() !== '') {
+			rawItems = Object.values(
+				parseCssTextShadowToRepeaterValue(rawItems)
+			);
+		} else if (!Array.isArray(rawItems)) {
+			rawItems = [];
+		}
 
 		if (!rawItems.length) {
 			return '';
 		}
 
-		let rows = rawItems;
-		if (!Array.isArray(rows)) {
-			rows = Object.values(parseCssTextShadowToRepeaterValue(rows));
-		}
+		const rows = rawItems;
 
 		textShadowValue = rows.map((item, i) => [
 			String(i),

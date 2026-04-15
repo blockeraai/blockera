@@ -189,6 +189,11 @@ export default function ({
 							catalogItems,
 							catalogLabel: data.label,
 							searchQuery,
+							spacingPresetPreviewUsage:
+								presetType === 'spacing'
+									? controlProps.pickerProps
+											?.spacingPresetPreviewUsage
+									: undefined,
 						}}
 					>
 						<PresetPanel />

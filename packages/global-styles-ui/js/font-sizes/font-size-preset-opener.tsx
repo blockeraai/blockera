@@ -3,15 +3,17 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesFontSizePresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 
@@ -32,6 +34,13 @@ export function FontSizePresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FontSizePresetOpenerProps) {
+	const getPreviewDeclarations = useCallback(
+		() => getGlobalStylesFontSizePresetPreviewCss(variable?.size),
+		[variable?.size]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
@@ -41,6 +50,8 @@ export function FontSizePresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Font size variable %d', 'blockera'),

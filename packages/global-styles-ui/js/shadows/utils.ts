@@ -1,7 +1,8 @@
 /**
  * WordPress theme.json shadow preset (settings.shadow.presets).
- * Each preset stores `items`: rows matching BoxShadowControl / RepeaterControl
- * (type, x, y, blur, spread, color, isVisible) — same shape as block box shadow.
+ * Canonical shape matches core: `{ slug, name, shadow }` where `shadow` is the
+ * CSS `box-shadow` value. Legacy presets may use `items` (repeater rows) or a
+ * string `shadow`; both are read and normalized to CSS for the UI.
  */
 import { getSortedRepeater } from '@blockera/controls';
 import {
@@ -22,7 +23,7 @@ export type ShadowPresetItem = {
 export type WpShadowPreset = {
 	slug: string;
 	name: string;
-	items: ShadowPresetItem[];
+	shadow: string;
 };
 
 /** Matches `defaultRepeaterItemValue` in `packages/controls/js/libs/box-shadow-control/index.js`. */
@@ -57,7 +58,9 @@ function itemsFromLegacyCss(css: string): ShadowPresetItem[] {
 	return repeaterRecordToShadowItems(record);
 }
 
-function shadowItemsFromRaw(p: Record<string, unknown>): ShadowPresetItem[] {
+export function shadowItemsFromRaw(
+	p: Record<string, unknown>
+): ShadowPresetItem[] {
 	if (Array.isArray(p.items) && p.items.length) {
 		const first = p.items[0];
 		if (
@@ -136,6 +139,20 @@ export function shadowPresetItemsToCss(
 	return formatControlItemsToCssBoxShadow(items);
 }
 
+/**
+ * Resolved CSS for a preset (prefers stored `shadow` string, else layers from `items` / legacy).
+ */
+export function shadowCssFromPreset(
+	preset: Record<string, unknown> | WpShadowPreset
+): string {
+	const p = preset as Record<string, unknown>;
+	const direct = String(p.shadow ?? '').trim();
+	if (direct) {
+		return direct;
+	}
+	return shadowPresetItemsToCss(shadowItemsFromRaw(p));
+}
+
 export function sanitizeShadowPresets(raw: unknown): WpShadowPreset[] {
 	if (!Array.isArray(raw)) {
 		return [];
@@ -145,12 +162,16 @@ export function sanitizeShadowPresets(raw: unknown): WpShadowPreset[] {
 			(p): p is Record<string, unknown> =>
 				p !== null && typeof p === 'object'
 		)
-		.map((p) => ({
-			slug: String(p.slug ?? '').trim(),
-			name: String(p.name ?? '').trim(),
-			items: shadowItemsFromRaw(p),
-		}))
-		.filter((p) => p.slug && p.name);
+		.map((p) => {
+			const slug = String(p.slug ?? '').trim();
+			const name = String(p.name ?? '').trim();
+			if (!slug || !name) {
+				return null;
+			}
+			const shadow = shadowCssFromPreset(p);
+			return { slug, name, shadow };
+		})
+		.filter((p): p is WpShadowPreset => p !== null);
 }
 
 export function truncateShadowCssForHeader(css: string, maxLen = 40): string {
@@ -174,7 +195,9 @@ export function getShadowPresetAccessibilityDescription(
 	if (preset.name) {
 		parts.push(preset.name);
 	}
-	const css = shadowPresetItemsToCss(preset.items);
+	const css = shadowCssFromPreset(
+		preset as unknown as Record<string, unknown>
+	);
 	if (css) {
 		parts.push(css);
 	}

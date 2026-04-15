@@ -3,18 +3,20 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesFilterPresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
-import type { WpFilterPreset } from './utils';
+import { itemsToRepeaterRecord, type WpFilterPreset } from './utils';
 
 export type FilterPresetOpenerProps = {
 	itemId: string;
@@ -33,6 +35,16 @@ export function FilterPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FilterPresetOpenerProps) {
+	const getPreviewDeclarations = useCallback(
+		() =>
+			getGlobalStylesFilterPresetPreviewCss(
+				itemsToRepeaterRecord(variable.items || [])
+			),
+		[variable.items]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={classNames(
@@ -45,6 +57,8 @@ export function FilterPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Filter preset %d', 'blockera'),

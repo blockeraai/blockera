@@ -25,14 +25,15 @@ import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllShadowSlugs } from '../components/utils';
 import {
 	repeaterRecordToShadowItems,
+	shadowCssFromPreset,
+	shadowItemsFromRaw,
 	shadowItemsToRepeaterRecord,
 	shadowPresetItemsToCss,
-	type ShadowPresetItem,
 	type WpShadowPreset,
 } from './utils';
 
 export type ShadowDefaultPresetValue = {
-	items: ShadowPresetItem[];
+	shadow: string;
 	isVisible: boolean;
 	deletable: boolean;
 	cloneable: boolean;
@@ -75,14 +76,15 @@ function ShadowPresetSizeComponent({
 		itemIdGenerator?: (itemId: string | number) => string;
 	};
 
-	const repeaterItems = useMemo(
-		() => shadowItemsToRepeaterRecord(shadowPreset.items || []),
-		[shadowPreset.items]
-	);
+	const repeaterItems = useMemo(() => {
+		const raw = shadowPreset as unknown as Record<string, unknown>;
+		return shadowItemsToRepeaterRecord(shadowItemsFromRaw(raw));
+	}, [shadowPreset]);
 
 	const handleBoxShadowChange = useCallback(
 		(newValue: Record<string, Record<string, unknown>>) => {
 			const items = repeaterRecordToShadowItems(newValue);
+			const shadow = shadowPresetItemsToCss(items);
 			// Defer: BoxShadow onChange runs synchronously from the inner repeater reducer;
 			// updating the preset list in the same tick hits Redux error #3 (getState during reducer).
 			queueMicrotask(() => {
@@ -92,7 +94,7 @@ function ShadowPresetSizeComponent({
 					controlId,
 					repeaterId,
 					itemId: presetId,
-					value: { ...shadowPreset, items },
+					value: { ...shadowPreset, shadow },
 				});
 			});
 		},
@@ -149,7 +151,7 @@ function ShadowPresetSizeComponent({
 							</p>
 							<p>
 								{__(
-									'Stored in theme.json as settings.shadow.presets (items array per preset).',
+									'Stored in theme.json as settings.shadow.presets (slug, name, and shadow CSS per preset).',
 									'blockera'
 								)}
 							</p>
@@ -165,7 +167,9 @@ function ShadowPresetSizeComponent({
 	return (
 		<Flex direction="column" gap="15px">
 			<ShadowPresetPreview
-				shadow={shadowPresetItemsToCss(shadowPreset.items)}
+				shadow={shadowCssFromPreset(
+					shadowPreset as unknown as Record<string, unknown>
+				)}
 			/>
 
 			<SharedPresetControls

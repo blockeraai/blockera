@@ -3,17 +3,24 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-
+import { useVarPickerPresetContext } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import {
+	getGlobalStylesSpacingSizePresetPreviewCss,
+	type SpacingSizePresetUsage,
+} from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
+import { useSpacingPresetPreviewUsageFromProvider } from './spacing-preset-preview-context';
 
 export type SpacingPresetOpenerProps = {
 	itemId: string;
@@ -22,7 +29,28 @@ export type SpacingPresetOpenerProps = {
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & { size: string };
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
+	/**
+	 * Explicit preview mode (e.g. embedded preset list). Lower priority than variable-picker
+	 * context and SpacingPresetPreviewUsageProvider.
+	 */
+	previewUsage?: SpacingSizePresetUsage;
 };
+
+function resolveSpacingPresetPreviewUsage(
+	pickerCtx: ReturnType<typeof useVarPickerPresetContext>,
+	fromProvider: SpacingSizePresetUsage | undefined,
+	propUsage: SpacingSizePresetUsage | undefined
+): SpacingSizePresetUsage {
+	if (
+		pickerCtx.active &&
+		pickerCtx.variableType === 'spacing' &&
+		pickerCtx.spacingPresetPreviewUsage
+	) {
+		return pickerCtx.spacingPresetPreviewUsage;
+	}
+
+	return fromProvider ?? propUsage ?? 'padding';
+}
 
 export function SpacingPresetOpener({
 	itemId,
@@ -31,7 +59,27 @@ export function SpacingPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	previewUsage: previewUsageProp,
 }: SpacingPresetOpenerProps) {
+	const pickerCtx = useVarPickerPresetContext();
+	const fromProvider = useSpacingPresetPreviewUsageFromProvider();
+	const previewUsage = resolveSpacingPresetPreviewUsage(
+		pickerCtx,
+		fromProvider,
+		previewUsageProp
+	);
+
+	const getPreviewDeclarations = useCallback(
+		() =>
+			getGlobalStylesSpacingSizePresetPreviewCss(
+				variable?.size,
+				previewUsage
+			),
+		[variable?.size, previewUsage]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
@@ -41,6 +89,8 @@ export function SpacingPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Spacing size preset %d', 'blockera'),

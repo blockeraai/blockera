@@ -21,11 +21,14 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $cached_theme_support_data = null;
 
 	/**
-	 * Store the default WordPress provided data for users.
+	 * Fingerprint of {@see \WP_Theme_JSON::get_settings()} for core, blocks, and theme when user data was cached.
 	 *
-	 * @var \WP_Theme_JSON_Data $default_user_data the provided default user data by WordPress.
+	 * Ensures we do not reuse {@see static::$user} after lower origins change within the same request
+	 * (e.g. theme loaded after the first {@see get_user_data()} call, or filters altering origin settings).
+	 *
+	 * @var string|null
 	 */
-	public static \WP_Theme_JSON_Data $default_user_data;
+	private static $user_cache_origins_settings_signature = null;
 
 	/**
 	 * Store the default WordPress provided data from theme.
@@ -205,10 +208,20 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return array
 	 */
 	public static function get_user_data() {
-		if ( null !== static::$user && static::has_same_registered_blocks( 'user' ) && ! static::is_testing_environment() ) {
-			if (1 !== count(static::$user->get_data())) {
-				return static::$default_user_data ?? static::$user;
-			}
+		/*
+		 * Match wp-includes/class-wp-theme-json-resolver.php::get_user_data():
+		 * reuse cache when populated and the registered block set has not changed.
+		 * Also require the same merged `settings` from core, blocks, and theme as when the user cache
+		 * was stored — otherwise `blockera_theme_json_data_user` and related work can be stale.
+		 * Blockera also bypasses the cache while BLOCKERA_DEVELOPMENT is enabled (see is_testing_environment()).
+		 */
+		if (
+			null !== static::$user
+			&& static::has_same_registered_blocks( 'user' )
+			&& ! static::is_testing_environment()
+			&& static::user_cache_matches_origins_settings()
+		) {
+			return static::$user;
 		}
 
 		$config   = array();
@@ -271,7 +284,44 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			static::$user = new JSON( $config, 'custom' );
 		}
 
+		static::$user_cache_origins_settings_signature = static::get_origins_settings_signature_for_user_cache();
+
 		return static::$user;
+	}
+
+	/**
+	 * Hashes `settings` from core, blocks, and theme origins for user cache validation.
+	 *
+	 * @return string
+	 */
+	private static function get_origins_settings_signature_for_user_cache(): string {
+		$parts = array();
+		if ( null !== static::$core ) {
+			$parts['core'] = static::$core->get_settings();
+		}
+		if ( null !== static::$blocks ) {
+			$parts['blocks'] = static::$blocks->get_settings();
+		}
+		if ( null !== static::$theme ) {
+			$parts['theme'] = static::$theme->get_settings();
+		}
+		$encoded = wp_json_encode( $parts );
+		return is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+	}
+
+	/**
+	 * Whether the cached user data still matches lower-origin theme.json settings.
+	 *
+	 * @return bool
+	 */
+	private static function user_cache_matches_origins_settings(): bool {
+		if ( null === static::$user_cache_origins_settings_signature ) {
+			return false;
+		}
+		return hash_equals(
+			static::$user_cache_origins_settings_signature,
+			static::get_origins_settings_signature_for_user_cache()
+		);
 	}
 
 	/**
@@ -931,6 +981,8 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	public static function clean_cached_data(): void {
 		parent::clean_cached_data();
+
+		static::$user_cache_origins_settings_signature = null;
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();

@@ -23,7 +23,11 @@ import {
 /**
  * Blockera dependencies
  */
-import { BaseControlContext } from '@blockera/controls';
+import {
+	BaseControlContext,
+	BlockInjectedSlotContext,
+	PreviewInjectableStylesContext,
+} from '@blockera/controls';
 import { useBlockFeatures } from '@blockera/features-core';
 import { isEquals, cloneObject, mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
@@ -134,6 +138,7 @@ export const BlockBase: ComponentType<any> = (
 	} = _props;
 
 	const [notice, setNotice] = useState(null);
+	const [extraPreviewCss, setExtraPreviewCss] = useState('');
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	const [currentTab, setCurrentTab] = useState(
@@ -684,6 +689,17 @@ export const BlockBase: ComponentType<any> = (
 
 	const inlineStyles = useCleanupStyles({ clientId }, [name, attributes]);
 
+	const previewInjectableStylesValue = useMemo(
+		() =>
+			insideBlockInspector
+				? {
+						extraPreviewCss,
+						setExtraPreviewCss,
+					}
+				: null,
+		[insideBlockInspector, extraPreviewCss]
+	);
+
 	const availableStates =
 		additional?.availableBlockStates || generalBlockStates;
 	const availableInnerStates = useMemo(() => {
@@ -768,179 +784,194 @@ export const BlockBase: ComponentType<any> = (
 				getBlockType: () => select('core/blocks').getBlockType(name),
 			}}
 		>
-			{/*<StrictMode>*/}
-			{insideBlockInspector && (
-				<InspectorControls>
-					<SideEffect
-						{...{
-							activeBlockVariation:
-								activeBlockVariation?.name || '',
-							blockName: name,
-							currentBlock,
-							currentTab,
-							currentState: isInnerBlock(currentBlock)
-								? currentInnerBlockState
-								: currentState,
-							isActive,
-						}}
-					/>
-					<SlotFillProvider>
-						<BlockPartials clientId={clientId} />
-						<BlockFillPartials
-							{...{
-								notice,
-								clientId,
-								isActive,
-								setActive,
-								currentState,
-								currentBlock,
-								availableStates,
-								currentInnerBlock,
-								currentBreakpoint,
-								BlockEditComponent,
-								blockeraInnerBlocks,
-								availableInnerStates,
-								insideBlockInspector,
-								currentInnerBlockState,
-								blockStyleVariationsProps: isSelected
-									? blockStyleVariationsProps
-									: {},
-								updateBlockEditorSettings,
-								blockProps: {
-									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "blockera" in overriding process.
-									name,
+			<BlockInjectedSlotContext.Provider value={clientId}>
+				<PreviewInjectableStylesContext.Provider
+					value={previewInjectableStylesValue}
+				>
+					{/*<StrictMode>*/}
+					{insideBlockInspector && (
+						<InspectorControls>
+							<SideEffect
+								{...{
 									activeBlockVariation:
 										activeBlockVariation?.name || '',
-									clientId,
-									supports,
-									className,
-									attributes: sanitizedAttributes,
-									setAttributes,
-									defaultAttributes,
-									currentAttributes,
+									blockName: name,
+									currentBlock,
 									currentTab,
-									currentBlock,
-									currentState,
-									setCurrentTab,
-									currentBreakpoint,
-									blockeraInnerBlocks,
-									currentInnerBlockState,
-									handleOnChangeAttributes,
-									additional,
-									currentStateAttributes: currentAttributes,
-									...props,
-								},
-							}}
-						/>
-					</SlotFillProvider>
-				</InspectorControls>
-			)}
-
-			{!insideBlockInspector && (
-				<GlobalStylesPanelBaseControlConfigContext.Provider
-					value={{
-						name,
-						clientId,
-						getAttributesRef: getAttributes,
-					}}
-				>
-					<BaseControlContext.Provider
-						value={{
-							components: GLOBAL_STYLES_BASE_CONTROL_COMPONENTS,
-						}}
-					>
-						<SlotFillProvider>
-							<BlockPartials clientId={clientId} />
-							<BlockFillPartials
-								{...{
-									notice,
-									clientId,
+									currentState: isInnerBlock(currentBlock)
+										? currentInnerBlockState
+										: currentState,
 									isActive,
-									setActive,
-									currentState,
-									currentBlock,
-									availableStates,
-									currentInnerBlock,
-									currentBreakpoint,
-									BlockEditComponent,
-									blockeraInnerBlocks,
-									availableInnerStates,
-									insideBlockInspector,
-									currentInnerBlockState,
-									updateBlockEditorSettings,
-									blockStyleVariationsProps,
-									blockProps: {
-										// Sending props like exactly "edit" function props of WordPress Block.
-										// Because needs total block props in outside overriding component like "blockera" in overriding process.
-										name,
-										activeBlockVariation:
-											activeBlockVariation?.name || '',
+								}}
+							/>
+							<SlotFillProvider>
+								<BlockPartials clientId={clientId} />
+								<BlockFillPartials
+									{...{
+										notice,
 										clientId,
-										supports,
-										className,
-										attributes: sanitizedAttributes,
-										setAttributes,
-										defaultAttributes,
-										currentAttributes,
-										currentTab,
-										currentBlock,
+										isActive,
+										setActive,
 										currentState,
-										setCurrentTab,
+										currentBlock,
+										availableStates,
+										currentInnerBlock,
 										currentBreakpoint,
+										BlockEditComponent,
 										blockeraInnerBlocks,
+										availableInnerStates,
+										insideBlockInspector,
 										currentInnerBlockState,
-										handleOnChangeAttributes,
-										additional,
-										currentStateAttributes:
+										blockStyleVariationsProps: isSelected
+											? blockStyleVariationsProps
+											: {},
+										updateBlockEditorSettings,
+										blockProps: {
+											// Sending props like exactly "edit" function props of WordPress Block.
+											// Because needs total block props in outside overriding component like "blockera" in overriding process.
+											name,
+											activeBlockVariation:
+												activeBlockVariation?.name ||
+												'',
+											clientId,
+											supports,
+											className,
+											attributes: sanitizedAttributes,
+											setAttributes,
+											defaultAttributes,
 											currentAttributes,
-										...props,
-									},
+											currentTab,
+											currentBlock,
+											currentState,
+											setCurrentTab,
+											currentBreakpoint,
+											blockeraInnerBlocks,
+											currentInnerBlockState,
+											handleOnChangeAttributes,
+											additional,
+											currentStateAttributes:
+												currentAttributes,
+											...props,
+										},
+									}}
+								/>
+							</SlotFillProvider>
+						</InspectorControls>
+					)}
+
+					{!insideBlockInspector && (
+						<GlobalStylesPanelBaseControlConfigContext.Provider
+							value={{
+								name,
+								clientId,
+								getAttributesRef: getAttributes,
+							}}
+						>
+							<BaseControlContext.Provider
+								value={{
+									components:
+										GLOBAL_STYLES_BASE_CONTROL_COMPONENTS,
 								}}
+							>
+								<SlotFillProvider>
+									<BlockPartials clientId={clientId} />
+									<BlockFillPartials
+										{...{
+											notice,
+											clientId,
+											isActive,
+											setActive,
+											currentState,
+											currentBlock,
+											availableStates,
+											currentInnerBlock,
+											currentBreakpoint,
+											BlockEditComponent,
+											blockeraInnerBlocks,
+											availableInnerStates,
+											insideBlockInspector,
+											currentInnerBlockState,
+											updateBlockEditorSettings,
+											blockStyleVariationsProps,
+											blockProps: {
+												// Sending props like exactly "edit" function props of WordPress Block.
+												// Because needs total block props in outside overriding component like "blockera" in overriding process.
+												name,
+												activeBlockVariation:
+													activeBlockVariation?.name ||
+													'',
+												clientId,
+												supports,
+												className,
+												attributes: sanitizedAttributes,
+												setAttributes,
+												defaultAttributes,
+												currentAttributes,
+												currentTab,
+												currentBlock,
+												currentState,
+												setCurrentTab,
+												currentBreakpoint,
+												blockeraInnerBlocks,
+												currentInnerBlockState,
+												handleOnChangeAttributes,
+												additional,
+												currentStateAttributes:
+													currentAttributes,
+												...props,
+											},
+										}}
+									/>
+								</SlotFillProvider>
+							</BaseControlContext.Provider>
+						</GlobalStylesPanelBaseControlConfigContext.Provider>
+					)}
+
+					{insideBlockInspector && (
+						<>
+							<ErrorBoundary
+								fallbackRender={({ error }): MixedElement => (
+									<ErrorBoundaryFallback
+										{...{
+											error,
+											notice,
+											clientId,
+											setNotice,
+											from: 'style-wrapper',
+											props: blockStyleProps,
+											isReportingErrorCompleted,
+											setIsReportingErrorCompleted,
+											fallbackComponent: BlockStyle,
+										}}
+									/>
+								)}
+							>
+								<StylesWrapper clientId={clientId}>
+									<Fill
+										name={
+											'blockera-styles-wrapper-' +
+											clientId
+										}
+									>
+										<BlockStyle {...blockStyleProps} />
+									</Fill>
+								</StylesWrapper>
+							</ErrorBoundary>
+							{/*</StrictMode>*/}
+
+							<ContextualToolbarComponents />
+
+							<BlockFeaturesInlineStyles
+								clientId={clientId}
+								className={className}
+								currentAttributes={currentAttributes}
 							/>
-						</SlotFillProvider>
-					</BaseControlContext.Provider>
-				</GlobalStylesPanelBaseControlConfigContext.Provider>
-			)}
 
-			{insideBlockInspector && (
-				<>
-					<ErrorBoundary
-						fallbackRender={({ error }): MixedElement => (
-							<ErrorBoundaryFallback
-								{...{
-									error,
-									notice,
-									clientId,
-									setNotice,
-									from: 'style-wrapper',
-									props: blockStyleProps,
-									isReportingErrorCompleted,
-									setIsReportingErrorCompleted,
-									fallbackComponent: BlockStyle,
-								}}
-							/>
-						)}
-					>
-						<StylesWrapper clientId={clientId}>
-							<Fill name={'blockera-styles-wrapper-' + clientId}>
-								<BlockStyle {...blockStyleProps} />
-							</Fill>
-						</StylesWrapper>
-					</ErrorBoundary>
-					{/*</StrictMode>*/}
-
-					<ContextualToolbarComponents />
-
-					<BlockFeaturesInlineStyles
-						clientId={clientId}
-						className={className}
-						currentAttributes={currentAttributes}
-					/>
-
-					{children}
-				</>
-			)}
+							{children}
+						</>
+					)}
+				</PreviewInjectableStylesContext.Provider>
+			</BlockInjectedSlotContext.Provider>
 		</BlockEditContextProvider>
 	);
 };

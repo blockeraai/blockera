@@ -33,9 +33,10 @@ export function TransitionGenerator(id, props, options) {
 	let transitionValue = transitionAttr;
 
 	if ('variable' === transitionValue?.valueType) {
-		const items = getVariableRepeaterItemsFromSettings(
+		const rawItems = getVariableRepeaterItemsFromSettings(
 			transitionValue?.settings
 		);
+		const items = Array.isArray(rawItems) ? rawItems : [];
 		transitionValue = items.map((t, i) => [`${t.type}-${i}`, t]);
 	} else {
 		transitionValue = getSortedRepeater(transitionValue);

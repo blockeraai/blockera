@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -13,6 +14,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { usePresetRowPreviewInject } from './preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from './preset-repeater-header-click';
 import type { VariableType } from './types';
 
@@ -41,6 +43,18 @@ export function FallbackPresetOpener({
 	const { variableType } = useVarPickerPresetContext();
 	const type = variableType || '';
 
+	const getPreviewDeclarations = useCallback((): string => {
+		if (
+			typeof variable?.value === 'string' &&
+			variable.value.includes(':')
+		) {
+			return variable.value.trim();
+		}
+		return '';
+	}, [variable?.value]);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
@@ -50,6 +64,8 @@ export function FallbackPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				/* translators: %s: variable preset display name */
 				__('Variable preset: %s', 'blockera'),

@@ -85,6 +85,9 @@ export default function InputControl({
 		isValidValue = validator(value);
 	}
 
+	const normalizedVariableTypes =
+		typeof variableTypes === 'string' ? [variableTypes] : variableTypes;
+
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
@@ -99,6 +102,16 @@ export default function InputControl({
 		variableTypes,
 		onChange: setValue,
 		size,
+		presetInterface:
+			Array.isArray(normalizedVariableTypes) &&
+			normalizedVariableTypes.includes('spacing')
+				? {
+						variableTypes: normalizedVariableTypes,
+						unitType,
+						id,
+						singularId,
+					}
+				: undefined,
 	});
 
 	const labelProps = {
@@ -207,12 +220,12 @@ export default function InputControl({
 					size={size}
 					onVariableShortcut={
 						variableTypes && variableTypes.length > 0
-							? () => {
+							? (): void => {
 									valueAddonControlProps.setOpen(
 										'var-picker'
 									);
 								}
-							: undefined
+							: (): void => {}
 					}
 					onChange={(newValue: ContextUnitInput): void => {
 						const { inputValue, unitValue } = newValue;

@@ -24,6 +24,7 @@ import GlobalStyles, {
 	registration as globalStylesRegistration,
 } from './global-styles';
 import './register-var-picker-global-styles-panels';
+import './register-global-styles-preset-preview-helpers';
 
 export const getSetupHeaderRequirements = () => {
 	const allowedUsers = applyFilters(

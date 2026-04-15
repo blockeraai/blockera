@@ -21,7 +21,7 @@ export function useGlobalSetting(
 	propertyPath: string,
 	blockName: string,
 	source = 'all'
-): [unknown, (newValue: Record<string, unknown>) => void] {
+): [unknown, (newValue: unknown) => void] {
 	const { setUserConfig, ...configs } = useGlobalStylesContext();
 	const appendedBlockPath = blockName ? '.blocks.' + blockName : '';
 	const appendedPropertyPath = propertyPath ? '.' + propertyPath : '';
@@ -51,7 +51,7 @@ export function useGlobalSetting(
 		);
 	}, [configs, sourceKey, globalPath, propertyPath, contextualPath]);
 
-	const setSetting = (newValue: Record<string, unknown>): void => {
+	const setSetting = (newValue: unknown): void => {
 		setUserConfig((currentConfig: Record<string, unknown>) =>
 			setImmutably(currentConfig, contextualPath.split('.'), newValue)
 		);

@@ -3,16 +3,18 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { ColorIndicator } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesGradientPresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types';
 
@@ -33,6 +35,13 @@ export function GradientPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: GradientPresetOpenerProps) {
+	const getPreviewDeclarations = useCallback(
+		() => getGlobalStylesGradientPresetPreviewCss(variable?.gradient),
+		[variable?.gradient]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
@@ -42,6 +51,8 @@ export function GradientPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				/* translators: %d: The item number (1-based index) */
 				__('Gradient preset %d', 'blockera'),

@@ -33,7 +33,12 @@ import {
 	TextShadowPresetSize,
 	type TextShadowDefaultPresetValue,
 } from './text-shadow-preset-size';
-import { sanitizeTextShadowPresets, type WpTextShadowPreset } from './utils';
+import {
+	DEFAULT_TEXT_SHADOW_ITEM,
+	sanitizeTextShadowPresets,
+	textShadowPresetItemsToCss,
+	type WpTextShadowPreset,
+} from './utils';
 import { NavItemBackButton } from '../navigation/nav-item-back-button';
 
 import './style.scss';
@@ -67,15 +72,9 @@ function TextShadowPresetGroupComponent({
 	const defaultPresetValue = useMemo((): TextShadowDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
-			items: [
-				{
-					x: '1px',
-					y: '1px',
-					blur: '1px',
-					color: '#000000ab',
-					isVisible: true,
-				},
-			],
+			shadow: textShadowPresetItemsToCss([
+				{ ...DEFAULT_TEXT_SHADOW_ITEM },
+			]),
 			slug: `text-shadow-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
@@ -127,13 +126,13 @@ function TextShadowPresetGroupComponent({
 const TextShadowPresetGroup = memo(TextShadowPresetGroupComponent);
 
 /**
- * Reads/writes `settings.textShadow` in user theme.json — same layout as `settings.shadow`
- * (presets per origin, optional defaultPresets), with each preset’s `items` array storing
- * text-shadow rows (x, y, blur, color) like TextShadowControl.
+ * Reads/writes `settings.textShadow` in user theme.json — presets per origin (optional defaultPresets),
+ * each preset `{ slug, name, shadow }` with CSS `text-shadow` (same value pattern as core shadow presets).
  */
 export function TextShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		'textShadow.presets.theme'
+		'textShadow.presets.theme',
+		''
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
@@ -142,7 +141,8 @@ export function TextShadowsPresetContent() {
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		'textShadow.presets.default'
+		'textShadow.presets.default',
+		''
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
@@ -152,11 +152,13 @@ export function TextShadowsPresetContent() {
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		'textShadow.presets.custom'
+		'textShadow.presets.custom',
+		''
 	);
 
 	const [defaultTextShadowPresetsEnabled = true] = useGlobalSetting(
-		'textShadow.defaultPresets'
+		'textShadow.defaultPresets',
+		''
 	);
 
 	const themePresets = useMemo(

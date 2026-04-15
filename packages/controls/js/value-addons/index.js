@@ -23,6 +23,7 @@ import {
  */
 import { isValid, extractCssVarValue } from './utils';
 import { canUnlinkVariable } from './helpers';
+import { mergePickerPropsWithSpacingPresetPreview } from './spacing-preset-preview-inference';
 import { ValueAddonControl, ValueAddonPointer } from './components';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
 import type { ValueAddonControlProps } from './components/control/types';
@@ -30,25 +31,33 @@ import type { ValueAddonControlProps } from './components/control/types';
 export * from './types';
 export type { ValueAddonControlProps } from './components/control/types';
 
-export const useValueAddon = ({
-	value,
-	setValue,
-	onChange,
-	types = [],
-	size = 'normal',
-	pickerProps = {},
-	pointerProps = {},
-	variableTypes = [],
-	dynamicValueTypes = [],
-}: UseValueAddonProps): ValueAddonProps => {
+export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
+	const {
+		value: inputValue,
+		setValue,
+		onChange,
+		types = [],
+		size = 'normal',
+		pickerProps = {},
+		pointerProps = {},
+		variableTypes = [],
+		dynamicValueTypes = [],
+	} = props;
+	const presetInterface = props.presetInterface;
+
 	const [isOpen, setOpen] = useState('');
+
+	const effectivePickerProps = mergePickerPropsWithSpacingPresetPreview(
+		pickerProps,
+		presetInterface
+	);
 
 	const controlPropsRef = useRef<?ValueAddonControlProps>(null);
 	const pointerPropsRef = useRef<Object>(pointerProps);
-	const pickerPropsRef = useRef<Object>(pickerProps);
+	const pickerPropsRef = useRef<Object>(effectivePickerProps);
 
 	pointerPropsRef.current = pointerProps;
-	pickerPropsRef.current = pickerProps;
+	pickerPropsRef.current = effectivePickerProps;
 
 	const StableValueAddonPointer = useMemo(() => {
 		function BoundValueAddonPointer(outerProps?: Object): MixedElement {
@@ -91,13 +100,13 @@ export const useValueAddon = ({
 		return BoundValueAddonControl;
 	}, []);
 
-	value = useMemo(() => {
-		return isObject(value)
+	const value = useMemo(() => {
+		return isObject(inputValue)
 			? {
-					isValueAddon: value?.isValueAddon || false,
-					valueType: value?.valueType || '',
-					id: value?.id || '',
-					settings: value.settings || {},
+					isValueAddon: inputValue?.isValueAddon || false,
+					valueType: inputValue?.valueType || '',
+					id: inputValue?.id || '',
+					settings: inputValue.settings || {},
 				}
 			: {
 					isValueAddon: false,
@@ -105,7 +114,7 @@ export const useValueAddon = ({
 					id: '',
 					settings: {},
 				};
-	}, [value]);
+	}, [inputValue]);
 
 	// type is empty
 	if (isUndefined(types) || !types.length) {
@@ -253,7 +262,7 @@ export const useValueAddon = ({
 		setOpen,
 		size,
 		pointerProps,
-		pickerProps,
+		pickerProps: effectivePickerProps,
 		isDeletedVar: false,
 		isDeletedDV: false,
 	};
@@ -316,3 +325,15 @@ export {
 	variablePickerItemMatchesSearch,
 	ValueAddonDisplay,
 } from './components';
+export {
+	BlockBaseInjectedSlotFill,
+	BlockBaseInjectedStyleTagFill,
+} from './components/block-base-injected-slot-fill';
+export {
+	getBlockeraBlockInjectedSlotName,
+	BLOCKERA_BLOCK_INJECTED_SLOT_NAME_FILTER,
+} from './block-injected-slot-name';
+export {
+	inferSpacingPresetPreviewUsage,
+	mergePickerPropsWithSpacingPresetPreview,
+} from './spacing-preset-preview-inference';
