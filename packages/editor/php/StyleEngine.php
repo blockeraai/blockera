@@ -1058,6 +1058,10 @@ final class StyleEngine {
 	public static function textShadowPresetValue( array $preset, array $settings = array() ): string {
 		unset( $settings );
 
+		if ( isset( $preset['shadow'] ) && is_string( $preset['shadow'] ) && '' !== trim( $preset['shadow'] ) ) {
+			return trim( $preset['shadow'] );
+		}
+
 		$parts = array();
 		foreach ( blockera_get_sorted_global_preset_items( $preset ) as $row ) {
 			if ( ! ( $row['isVisible'] ?? true ) ) {
