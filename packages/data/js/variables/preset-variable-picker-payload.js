@@ -22,12 +22,41 @@ export function referenceFromPresetOrigin(
 	return { type: 'preset' };
 }
 
+/**
+ * Repeater rows for variable payload, or a single CSS string when theme.json stores `shadow` only.
+ */
 function collectRepeaterLikeItems(
 	item: { +[string]: mixed },
 	variableType: string
-): Array<mixed> {
+): Array<mixed> | string {
 	if (Array.isArray(item.items)) {
 		return [...item.items];
+	}
+
+	const nestedVal =
+		item.value &&
+		typeof item.value === 'object' &&
+		!Array.isArray(item.value)
+			? item.value
+			: null;
+	if (nestedVal && Array.isArray(nestedVal.items)) {
+		return [...nestedVal.items];
+	}
+	if (
+		nestedVal &&
+		typeof nestedVal.items === 'string' &&
+		String(nestedVal.items).trim() !== ''
+	) {
+		return String(nestedVal.items).trim();
+	}
+
+	// Canonical theme.json: CSS on `shadow` (box-shadow / text-shadow presets).
+	const rawShadow = item.shadow;
+	if (typeof rawShadow === 'string') {
+		const t = rawShadow.trim();
+		if (t !== '') {
+			return t;
+		}
 	}
 
 	if (Array.isArray(item.shadow)) {
@@ -38,6 +67,9 @@ function collectRepeaterLikeItems(
 		const byType = item[variableType];
 		if (Array.isArray(byType)) {
 			return [...byType];
+		}
+		if (typeof byType === 'string' && byType.trim() !== '') {
+			return byType.trim();
 		}
 	}
 
@@ -54,13 +86,24 @@ export function serializeGlobalStylePresetItemValue(
 ): mixed {
 	switch (variableType) {
 		case 'shadow':
-		case 'text-shadow':
+		case 'text-shadow': {
+			const collected = collectRepeaterLikeItems(item, variableType);
+
+			if (typeof collected === 'string') {
+				return { items: collected };
+			}
+
+			return { items: [...collected] };
+		}
+
 		case 'transition':
 		case 'transform':
 		case 'filter': {
 			const items = collectRepeaterLikeItems(item, variableType);
 
-			return { items: [...items] };
+			return {
+				items: Array.isArray(items) ? [...items] : [],
+			};
 		}
 
 		case 'border': {

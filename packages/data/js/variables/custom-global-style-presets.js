@@ -127,15 +127,16 @@ function mapBorderRadiusPresets(
 		return [];
 	}
 
-	return items
+	const mapped: Array<VariableItem> = items
 		.filter((p) => p && typeof p.slug === 'string' && p.slug.trim())
 		.map((p) => ({
 			name: String(p.name ?? p.slug).trim(),
 			id: String(p.slug).trim(),
 			value: String(p.size ?? '').trim(),
 			reference,
-		}))
-		.filter((p) => p.name && p.value !== '');
+		}));
+
+	return mapped.filter((row) => row.name !== '' && row.value !== '');
 }
 
 function mapBorderBoxPresets(
@@ -217,12 +218,21 @@ function mapItemsArrayPresets(
 					p?.[key] || p.items || []
 				: p.items || [];
 
+		// WordPress / Blockera theme.json: `shadow` is the CSS string (box-shadow or text-shadow).
+		// Legacy presets used repeater `items` arrays only.
+		let valuePayload: { items: mixed };
+		if (typeof rowItems === 'string' && String(rowItems).trim() !== '') {
+			valuePayload = { items: String(rowItems).trim() };
+		} else if (Array.isArray(rowItems)) {
+			valuePayload = { items: [...rowItems] };
+		} else {
+			valuePayload = { items: [] };
+		}
+
 		out.push({
 			name,
 			id: String(p.slug).trim(),
-			value: {
-				items: Array.isArray(rowItems) ? [...rowItems] : [],
-			},
+			value: valuePayload,
 			reference,
 		});
 	}
