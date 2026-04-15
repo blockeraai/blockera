@@ -1,6 +1,7 @@
 /**
- * WordPress theme.json text shadow preset (settings.textShadow.presets).
- * Each preset stores `items`: rows matching TextShadowControl (x, y, blur, color, isVisible).
+ * Blockera theme.json text shadow preset (settings.textShadow.presets).
+ * Stored like core shadow presets: `{ slug, name, shadow }` with CSS `text-shadow`.
+ * Legacy presets may use `items` repeater rows; both are accepted when reading.
  */
 import {
 	getSortedRepeater,
@@ -19,7 +20,7 @@ export type TextShadowPresetItem = {
 export type WpTextShadowPreset = {
 	slug: string;
 	name: string;
-	items: TextShadowPresetItem[];
+	shadow: string;
 };
 
 /** Matches `defaultRepeaterItemValue` in `packages/controls/js/libs/text-shadow-control/index.js`. */
@@ -51,7 +52,7 @@ function itemsFromLegacyCss(css: string): TextShadowPresetItem[] {
 	return repeaterRecordToTextShadowItems(record);
 }
 
-function textShadowItemsFromRaw(
+export function textShadowItemsFromRaw(
 	p: Record<string, unknown>
 ): TextShadowPresetItem[] {
 	if (Array.isArray(p.items) && p.items.length) {
@@ -125,6 +126,20 @@ export function textShadowPresetItemsToCss(
 	return formatRepeaterItemsToCssTextShadow(items);
 }
 
+/**
+ * Resolved CSS for a preset (prefers stored `shadow` string, else layers from `items` / legacy).
+ */
+export function textShadowCssFromPreset(
+	preset: Record<string, unknown> | WpTextShadowPreset
+): string {
+	const p = preset as Record<string, unknown>;
+	const direct = String(p.shadow ?? '').trim();
+	if (direct) {
+		return direct;
+	}
+	return textShadowPresetItemsToCss(textShadowItemsFromRaw(p));
+}
+
 export function sanitizeTextShadowPresets(raw: unknown): WpTextShadowPreset[] {
 	if (!Array.isArray(raw)) {
 		return [];
@@ -134,12 +149,16 @@ export function sanitizeTextShadowPresets(raw: unknown): WpTextShadowPreset[] {
 			(p): p is Record<string, unknown> =>
 				p !== null && typeof p === 'object'
 		)
-		.map((p) => ({
-			slug: String(p.slug ?? '').trim(),
-			name: String(p.name ?? '').trim(),
-			items: textShadowItemsFromRaw(p),
-		}))
-		.filter((p) => p.slug && p.name);
+		.map((p) => {
+			const slug = String(p.slug ?? '').trim();
+			const name = String(p.name ?? '').trim();
+			if (!slug || !name) {
+				return null;
+			}
+			const shadow = textShadowCssFromPreset(p);
+			return { slug, name, shadow };
+		})
+		.filter((p): p is WpTextShadowPreset => p !== null);
 }
 
 export function truncateTextShadowCssForHeader(
@@ -166,7 +185,9 @@ export function getTextShadowPresetAccessibilityDescription(
 	if (preset.name) {
 		parts.push(preset.name);
 	}
-	const css = textShadowPresetItemsToCss(preset.items);
+	const css = textShadowCssFromPreset(
+		preset as unknown as Record<string, unknown>
+	);
 	if (css) {
 		parts.push(css);
 	}

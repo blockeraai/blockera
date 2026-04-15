@@ -3,22 +3,24 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { Flex } from '@blockera/controls';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesTextShadowCssPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTextShadowPreset } from './utils';
 import {
 	getTextShadowPresetAccessibilityDescription,
-	textShadowPresetItemsToCss,
+	textShadowCssFromPreset,
 } from './utils';
 import TextShadowPresetPreview from './text-shadow-preset-preview';
 
@@ -40,7 +42,13 @@ function TextShadowPresetOpenerValue({
 			}}
 		>
 			<TextShadowPresetPreview
-				shadow={textShadowPresetItemsToCss(preset?.items ?? [])}
+				shadow={
+					preset
+						? textShadowCssFromPreset(
+								preset as unknown as Record<string, unknown>
+							)
+						: ''
+				}
 				inline
 				size={12}
 			/>
@@ -67,6 +75,18 @@ export function TextShadowPresetOpener({
 }: TextShadowPresetOpenerProps) {
 	const a11y = getTextShadowPresetAccessibilityDescription(variable);
 
+	const getPreviewDeclarations = useCallback(
+		() =>
+			getGlobalStylesTextShadowCssPreviewCss(
+				textShadowCssFromPreset(
+					variable as unknown as Record<string, unknown>
+				)
+			),
+		[variable]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={classNames(
@@ -79,6 +99,8 @@ export function TextShadowPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Text shadow preset %d', 'blockera'),

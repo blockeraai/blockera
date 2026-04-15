@@ -3,15 +3,17 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesBorderRadiusPresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import { radiusPresetSizeToString } from './utils';
@@ -36,6 +38,13 @@ export function BorderRadiusPresetOpener({
 	const summary = radiusPresetSizeToString(variable?.size);
 	const display = summary || __('EMPTY', 'blockera');
 
+	const getPreviewDeclarations = useCallback(
+		() => getGlobalStylesBorderRadiusPresetPreviewCss(variable?.size),
+		[variable?.size]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
@@ -45,6 +54,8 @@ export function BorderRadiusPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Border radius preset %d', 'blockera'),

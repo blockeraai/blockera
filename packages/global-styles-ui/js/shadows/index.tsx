@@ -32,7 +32,12 @@ import {
 	ShadowPresetSize,
 	type ShadowDefaultPresetValue,
 } from './shadow-preset-size';
-import { sanitizeShadowPresets, type WpShadowPreset } from './utils';
+import {
+	DEFAULT_SHADOW_ITEM,
+	sanitizeShadowPresets,
+	shadowPresetItemsToCss,
+	type WpShadowPreset,
+} from './utils';
 
 const shadowPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('shadowPreset');
@@ -63,17 +68,7 @@ function ShadowPresetGroupComponent({
 	const defaultPresetValue = useMemo((): ShadowDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
-			items: [
-				{
-					type: 'outer',
-					x: '10px',
-					y: '10px',
-					blur: '10px',
-					spread: '0px',
-					color: '#000000ab',
-					isVisible: true,
-				},
-			],
+			shadow: shadowPresetItemsToCss([{ ...DEFAULT_SHADOW_ITEM }]),
 			isVisible: true,
 			slug: `shadow-${index}`,
 			deletable: !!('custom' === origin),
@@ -126,12 +121,13 @@ function ShadowPresetGroupComponent({
 const ShadowPresetGroup = memo(ShadowPresetGroupComponent);
 
 /**
- * Reads/writes `settings.shadow` in user theme.json — presets per origin with each preset’s `items`
- * array storing box-shadow layers (strings), aligned with transition presets and Transition.php variable JSON.
+ * Reads/writes `settings.shadow` in user theme.json — presets per origin using the core shape
+ * `{ slug, name, shadow }` (CSS `box-shadow` value).
  */
 export function ShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		'shadow.presets.theme'
+		'shadow.presets.theme',
+		''
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
@@ -140,7 +136,8 @@ export function ShadowsPresetContent() {
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		'shadow.presets.default'
+		'shadow.presets.default',
+		''
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
@@ -150,11 +147,13 @@ export function ShadowsPresetContent() {
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		'shadow.presets.custom'
+		'shadow.presets.custom',
+		''
 	);
 
 	const [defaultShadowPresetsEnabled = true] = useGlobalSetting(
-		'shadow.defaultPresets'
+		'shadow.defaultPresets',
+		''
 	);
 
 	const themePresets = useMemo(

@@ -29,10 +29,13 @@ import {
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
 import { SpacingPresetOpener } from './spacing-preset-opener';
+import { SpacingPresetPreviewUsageProvider } from './spacing-preset-preview-context';
 import { SpacingSize, type SpacingDefaultPresetValue } from './spacing-size';
 import { NavItemBackButton } from '../navigation/nav-item-back-button';
+import type { SpacingSizePresetUsage } from '../preset-preview/injected-helpers';
 
 export type { SpacingDefaultPresetValue };
+export type { SpacingSizePresetUsage } from '../preset-preview/injected-helpers';
 
 type SpacingSizePreset = {
 	slug: string;
@@ -120,9 +123,15 @@ function SpacingSizeGroupComponent({
 
 const SpacingSizeGroup = memo(SpacingSizeGroupComponent);
 
-export function SpacingPresetContent() {
+export function SpacingPresetContent({
+	previewUsage,
+}: {
+	/** When this screen is embedded (e.g. design system), sets row hover preview mode. */
+	previewUsage?: SpacingSizePresetUsage;
+} = {}) {
 	const [themeSpacingSizes, setThemeSpacingSizes] = useGlobalSetting(
-		'spacing.spacingSizes.theme'
+		'spacing.spacingSizes.theme',
+		''
 	);
 
 	const [baseThemeSpacingSizes] = useGlobalSetting(
@@ -131,7 +140,8 @@ export function SpacingPresetContent() {
 		'base'
 	);
 	const [defaultSpacingSizes, setDefaultSpacingSizes] = useGlobalSetting(
-		'spacing.spacingSizes.default'
+		'spacing.spacingSizes.default',
+		''
 	);
 
 	const [baseDefaultSpacingSizes] = useGlobalSetting(
@@ -141,11 +151,13 @@ export function SpacingPresetContent() {
 	);
 
 	const [customSpacingSizes = [], setCustomSpacingSizes] = useGlobalSetting(
-		'spacing.spacingSizes.custom'
+		'spacing.spacingSizes.custom',
+		''
 	);
 
 	const [defaultSpacingSizesEnabled] = useGlobalSetting(
-		'spacing.defaultSpacingSizes'
+		'spacing.defaultSpacingSizes',
+		''
 	);
 
 	const convertRepeaterValueToArray = useCallback(
@@ -197,7 +209,7 @@ export function SpacingPresetContent() {
 	}, [setCustomSpacingSizes]);
 
 	const themeResetHandler = useMemo(() => {
-		if (!themeSpacingSizes?.length) {
+		if (!Array.isArray(themeSpacingSizes) || themeSpacingSizes.length < 1) {
 			return undefined;
 		}
 		const base = baseThemeSpacingSizes ?? [];
@@ -208,7 +220,10 @@ export function SpacingPresetContent() {
 	}, [themeSpacingSizes, baseThemeSpacingSizes, resetThemeToBase]);
 
 	const defaultResetHandler = useMemo(() => {
-		if (!defaultSpacingSizes?.length) {
+		if (
+			!Array.isArray(defaultSpacingSizes) ||
+			defaultSpacingSizes.length < 1
+		) {
 			return undefined;
 		}
 		const base = baseDefaultSpacingSizes ?? [];
@@ -219,8 +234,11 @@ export function SpacingPresetContent() {
 	}, [defaultSpacingSizes, baseDefaultSpacingSizes, resetDefaultToBase]);
 
 	const customResetHandler = useMemo(
-		() => (customSpacingSizes.length > 0 ? clearCustomSizes : undefined),
-		[customSpacingSizes.length, clearCustomSizes]
+		() =>
+			Array.isArray(customSpacingSizes) && customSpacingSizes.length > 0
+				? clearCustomSizes
+				: undefined,
+		[customSpacingSizes, clearCustomSizes]
 	);
 
 	const themeSizes = (themeSpacingSizes ?? []) as SpacingSizePreset[];
@@ -237,39 +255,47 @@ export function SpacingPresetContent() {
 	);
 
 	return (
-		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{showThemeOriginGroup && (
-				<SpacingSizeGroup
-					origin="theme"
-					label={__('Theme', 'blockera')}
-					sizes={themeSizes}
-					handleUpdateSizes={handleUpdateThemeSizes}
-					handleResetSpacingSizes={themeResetHandler}
-				/>
-			)}
+		<SpacingPresetPreviewUsageProvider value={previewUsage}>
+			<Flex direction="column" gap="32px" style={{ width: '100%' }}>
+				{showThemeOriginGroup && (
+					<SpacingSizeGroup
+						origin="theme"
+						label={__('Theme', 'blockera')}
+						sizes={themeSizes}
+						handleUpdateSizes={handleUpdateThemeSizes}
+						handleResetSpacingSizes={themeResetHandler}
+					/>
+				)}
 
-			{showDefaultOriginGroup && (
-				<SpacingSizeGroup
-					origin="default"
-					label={__('Default', 'blockera')}
-					sizes={defaultSizes}
-					handleUpdateSizes={handleUpdateDefaultSizes}
-					handleResetSpacingSizes={defaultResetHandler}
-				/>
-			)}
+				{showDefaultOriginGroup && (
+					<SpacingSizeGroup
+						origin="default"
+						label={__('Default', 'blockera')}
+						sizes={defaultSizes}
+						handleUpdateSizes={handleUpdateDefaultSizes}
+						handleResetSpacingSizes={defaultResetHandler}
+					/>
+				)}
 
-			<SpacingSizeGroup
-				origin="custom"
-				label={__('Custom', 'blockera')}
-				sizes={customSpacingSizes as SpacingSizePreset[]}
-				handleUpdateSizes={handleUpdateCustomSizes}
-				handleResetSpacingSizes={customResetHandler}
-			/>
-		</Flex>
+				<SpacingSizeGroup
+					origin="custom"
+					label={__('Custom', 'blockera')}
+					sizes={customSpacingSizes as SpacingSizePreset[]}
+					handleUpdateSizes={handleUpdateCustomSizes}
+					handleResetSpacingSizes={customResetHandler}
+				/>
+			</Flex>
+		</SpacingPresetPreviewUsageProvider>
 	);
 }
 
-export function Spacing({ closeCallback }: { closeCallback?: () => void }) {
+export function Spacing({
+	closeCallback,
+	previewUsage,
+}: {
+	closeCallback?: () => void;
+	previewUsage?: SpacingSizePresetUsage;
+}) {
 	return (
 		<div
 			className={classNames(
@@ -299,11 +325,13 @@ export function Spacing({ closeCallback }: { closeCallback?: () => void }) {
 					direction="column"
 					style={{ padding: '0 16px', width: '100%' }}
 				>
-					<SpacingPresetContent />
+					<SpacingPresetContent previewUsage={previewUsage} />
 				</Flex>
 			</Flex>
 		</div>
 	);
 }
+
+export { SpacingPresetPreviewUsageProvider };
 
 export default Spacing;

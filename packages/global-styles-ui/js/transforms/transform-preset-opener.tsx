@@ -3,18 +3,20 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesTransformPresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
-import type { WpTransformPreset } from './utils';
+import { itemsToRepeaterRecord, type WpTransformPreset } from './utils';
 
 export type TransformPresetOpenerProps = {
 	itemId: string;
@@ -33,6 +35,16 @@ export function TransformPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: TransformPresetOpenerProps) {
+	const getPreviewDeclarations = useCallback(
+		() =>
+			getGlobalStylesTransformPresetPreviewCss(
+				itemsToRepeaterRecord(variable.items || [])
+			),
+		[variable.items]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={classNames(
@@ -45,6 +57,8 @@ export function TransformPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Transform preset %d', 'blockera'),

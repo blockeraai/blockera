@@ -25,14 +25,15 @@ import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllTextShadowSlugs } from '../components/utils';
 import {
 	repeaterRecordToTextShadowItems,
+	textShadowCssFromPreset,
+	textShadowItemsFromRaw,
 	textShadowItemsToRepeaterRecord,
 	textShadowPresetItemsToCss,
-	type TextShadowPresetItem,
 	type WpTextShadowPreset,
 } from './utils';
 
 export type TextShadowDefaultPresetValue = {
-	items: TextShadowPresetItem[];
+	shadow: string;
 	deletable: boolean;
 	cloneable: boolean;
 	visibilitySupport: boolean;
@@ -78,14 +79,15 @@ function TextShadowPresetSizeComponent({
 		itemIdGenerator?: (itemId: string | number) => string;
 	};
 
-	const repeaterItems = useMemo(
-		() => textShadowItemsToRepeaterRecord(textShadowPreset.items || []),
-		[textShadowPreset.items]
-	);
+	const repeaterItems = useMemo(() => {
+		const raw = textShadowPreset as unknown as Record<string, unknown>;
+		return textShadowItemsToRepeaterRecord(textShadowItemsFromRaw(raw));
+	}, [textShadowPreset]);
 
 	const handleTextShadowChange = useCallback(
 		(newValue: Record<string, Record<string, unknown>>) => {
 			const items = repeaterRecordToTextShadowItems(newValue);
+			const shadow = textShadowPresetItemsToCss(items);
 			queueMicrotask(() => {
 				changeRepeaterItem({
 					onChange,
@@ -93,7 +95,7 @@ function TextShadowPresetSizeComponent({
 					controlId,
 					repeaterId,
 					itemId: presetId,
-					value: { ...textShadowPreset, items },
+					value: { ...textShadowPreset, shadow },
 				});
 			});
 		},
@@ -148,7 +150,7 @@ function TextShadowPresetSizeComponent({
 							</p>
 							<p>
 								{__(
-									'Stored in theme.json as settings.textShadow.presets (items array per preset).',
+									'Stored in theme.json as settings.textShadow.presets (slug, name, and shadow CSS per preset).',
 									'blockera'
 								)}
 							</p>
@@ -164,7 +166,9 @@ function TextShadowPresetSizeComponent({
 	return (
 		<Flex direction="column" gap="15px">
 			<TextShadowPresetPreview
-				shadow={textShadowPresetItemsToCss(textShadowPreset.items)}
+				shadow={textShadowCssFromPreset(
+					textShadowPreset as unknown as Record<string, unknown>
+				)}
 			/>
 
 			<SharedPresetControls

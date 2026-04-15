@@ -3,22 +3,24 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { Flex } from '@blockera/controls';
-
 /**
  * Internal dependencies
  */
+import { getGlobalStylesShadowPresetPreviewCss } from '../preset-preview/injected-helpers';
+import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpShadowPreset } from './utils';
 import {
 	getShadowPresetAccessibilityDescription,
-	shadowPresetItemsToCss,
+	shadowCssFromPreset,
 } from './utils';
 import ShadowPresetPreview from './shadow-preset-preview';
 
@@ -40,7 +42,13 @@ function ShadowPresetOpenerValue({
 			}}
 		>
 			<ShadowPresetPreview
-				shadow={shadowPresetItemsToCss(preset?.items ?? [])}
+				shadow={
+					preset
+						? shadowCssFromPreset(
+								preset as unknown as Record<string, unknown>
+							)
+						: ''
+				}
 				inline
 				width={10}
 				height={10}
@@ -69,6 +77,16 @@ export function ShadowPresetOpener({
 }: ShadowPresetOpenerProps) {
 	const a11y = getShadowPresetAccessibilityDescription(variable);
 
+	const getPreviewDeclarations = useCallback(
+		() =>
+			getGlobalStylesShadowPresetPreviewCss(
+				variable as unknown as Record<string, unknown>
+			),
+		[variable]
+	);
+
+	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+
 	return (
 		<div
 			className={classNames(
@@ -81,6 +99,8 @@ export function ShadowPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 			})}
+			onMouseEnter={previewHandlers.onMouseEnter}
+			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Shadow preset %d', 'blockera'),
