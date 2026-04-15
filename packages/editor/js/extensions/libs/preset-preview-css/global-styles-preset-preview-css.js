@@ -327,12 +327,16 @@ export function getGlobalStylesFontSizePresetPreviewCss(
 
 /**
  * @param {{ color?: string, type?: string }} variable Color / gradient preset row.
+ * @param {'color' | 'background'} [usage='background'] `color` = font color; `background` = background-color (or gradient fill).
  * @return {string} CSS declarations for color or gradient preview, or empty.
  */
-export function getGlobalStylesColorPresetPreviewCss(variable: {
-	color?: string,
-	type?: string,
-}): string {
+export function getGlobalStylesColorPresetPreviewCss(
+	variable: {
+		color?: string,
+		type?: string,
+	},
+	usage?: 'color' | 'background'
+): string {
 	const c = getValueAddonRealValue((variable?.color: any));
 	const color = c !== undefined && c !== null ? String(c).trim() : '';
 	if (!color) {
@@ -340,15 +344,27 @@ export function getGlobalStylesColorPresetPreviewCss(variable: {
 	}
 
 	const type = variable?.type ?? '';
-	if (
+	const isGradient =
 		type === 'linear-gradient' ||
 		type === 'radial-gradient' ||
-		color.includes('gradient(')
-	) {
+		color.includes('gradient(');
+
+	if (isGradient) {
 		return createCssDeclarations({
 			options: PREVIEW_OPTIONS,
 			properties: {
 				background: color,
+			},
+		});
+	}
+
+	const kind = usage ?? 'background';
+
+	if (kind === 'color') {
+		return createCssDeclarations({
+			options: PREVIEW_OPTIONS,
+			properties: {
+				color,
 			},
 		});
 	}
