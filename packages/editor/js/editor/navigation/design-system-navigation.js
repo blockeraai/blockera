@@ -121,7 +121,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 						<Icon icon="wp-shadows" iconSize={22} />
 					</Flex>
 				}
-				label={__('Shadows', 'blockera')}
+				label={__('Box Shadows', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
