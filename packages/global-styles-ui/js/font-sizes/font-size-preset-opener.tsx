@@ -12,8 +12,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesFontSizePresetPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesFontSizePresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 
@@ -34,12 +37,17 @@ export function FontSizePresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FontSizePresetOpenerProps) {
-	const getPreviewDeclarations = useCallback(
-		() => getGlobalStylesFontSizePresetPreviewCss(variable?.size),
-		[variable?.size]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesFontSizePresetPreviewAttributes(
+			variable?.size
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable?.size]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

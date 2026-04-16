@@ -14,10 +14,14 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	getGlobalStylesColorPresetPreviewCss,
+	getGlobalStylesColorGradientPresetPreviewDeclarations,
+	getGlobalStylesColorPresetPreviewAttributes,
 	type ColorPresetPreviewUsage,
 } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types';
 import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
@@ -67,19 +71,43 @@ export function ColorPresetOpener({
 		previewUsageProp
 	);
 
-	const getPreviewDeclarations = useCallback(
-		() =>
-			getGlobalStylesColorPresetPreviewCss(
-				{
-					color: variable?.color,
-					type: variable?.type,
-				},
-				previewUsage
-			),
-		[variable?.color, variable?.type, previewUsage]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const color = variable?.color;
+		const type = variable?.type ?? '';
+		const isGradient =
+			type === 'linear-gradient' ||
+			type === 'radial-gradient' ||
+			(typeof color === 'string' && color.includes('gradient('));
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+		if (isGradient) {
+			const declarations =
+				getGlobalStylesColorGradientPresetPreviewDeclarations(
+					{
+						color: variable?.color,
+						type: variable?.type,
+					},
+					previewUsage
+				);
+			if (!declarations) {
+				return null;
+			}
+			return { kind: 'declarations', declarations };
+		}
+
+		const patch = getGlobalStylesColorPresetPreviewAttributes(
+			{
+				color: variable?.color,
+				type: variable?.type,
+			},
+			previewUsage
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable?.color, variable?.type, previewUsage]);
+
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

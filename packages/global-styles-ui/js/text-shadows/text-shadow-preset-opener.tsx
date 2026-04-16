@@ -13,8 +13,11 @@ import { Flex } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesTextShadowCssPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesTextShadowPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTextShadowPreset } from './utils';
@@ -75,17 +78,19 @@ export function TextShadowPresetOpener({
 }: TextShadowPresetOpenerProps) {
 	const a11y = getTextShadowPresetAccessibilityDescription(variable);
 
-	const getPreviewDeclarations = useCallback(
-		() =>
-			getGlobalStylesTextShadowCssPreviewCss(
-				textShadowCssFromPreset(
-					variable as unknown as Record<string, unknown>
-				)
-			),
-		[variable]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesTextShadowPreviewAttributes(
+			textShadowCssFromPreset(
+				variable as unknown as Record<string, unknown>
+			)
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

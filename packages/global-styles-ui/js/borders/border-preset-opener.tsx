@@ -12,8 +12,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesBorderPresetPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesBorderPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { BorderBoxPreset } from './utils';
@@ -41,12 +44,17 @@ export function BorderPresetOpener({
 		variable?.border
 	);
 
-	const getPreviewDeclarations = useCallback(
-		() => getGlobalStylesBorderPresetPreviewCss(variable?.border),
-		[variable?.border]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesBorderPresetPreviewAttributes(
+			variable?.border
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable?.border]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

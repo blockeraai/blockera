@@ -12,8 +12,11 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesFilterPresetPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesFilterPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import { itemsToRepeaterRecord, type WpFilterPreset } from './utils';
@@ -35,15 +38,17 @@ export function FilterPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FilterPresetOpenerProps) {
-	const getPreviewDeclarations = useCallback(
-		() =>
-			getGlobalStylesFilterPresetPreviewCss(
-				itemsToRepeaterRecord(variable.items || [])
-			),
-		[variable.items]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesFilterPresetPreviewAttributes(
+			itemsToRepeaterRecord(variable.items || [])
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable.items]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

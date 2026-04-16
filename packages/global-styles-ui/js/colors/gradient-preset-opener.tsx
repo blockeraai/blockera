@@ -13,8 +13,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesGradientPresetPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesGradientPresetPreviewDeclarations } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types';
 
@@ -35,12 +38,17 @@ export function GradientPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: GradientPresetOpenerProps) {
-	const getPreviewDeclarations = useCallback(
-		() => getGlobalStylesGradientPresetPreviewCss(variable?.gradient),
-		[variable?.gradient]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const declarations = getGlobalStylesGradientPresetPreviewDeclarations(
+			variable?.gradient
+		);
+		if (!declarations) {
+			return null;
+		}
+		return { kind: 'declarations', declarations };
+	}, [variable?.gradient]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

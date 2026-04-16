@@ -14,7 +14,10 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { usePresetRowPreviewInject } from './preset-row-preview-inject';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from './preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from './preset-repeater-header-click';
 import type { VariableType } from './types';
 
@@ -43,17 +46,20 @@ export function FallbackPresetOpener({
 	const { variableType } = useVarPickerPresetContext();
 	const type = variableType || '';
 
-	const getPreviewDeclarations = useCallback((): string => {
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		if (
 			typeof variable?.value === 'string' &&
 			variable.value.includes(':')
 		) {
-			return variable.value.trim();
+			return {
+				kind: 'declarations',
+				declarations: variable.value.trim(),
+			};
 		}
-		return '';
+		return null;
 	}, [variable?.value]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

@@ -14,10 +14,13 @@ import { useVarPickerPresetContext } from '@blockera/controls';
  * Internal dependencies
  */
 import {
-	getGlobalStylesSpacingSizePresetPreviewCss,
+	getGlobalStylesSpacingSizePresetPreviewAttributes,
 	type SpacingSizePresetUsage,
 } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import { useSpacingPresetPreviewUsageFromProvider } from './spacing-preset-preview-context';
@@ -69,16 +72,18 @@ export function SpacingPresetOpener({
 		previewUsageProp
 	);
 
-	const getPreviewDeclarations = useCallback(
-		() =>
-			getGlobalStylesSpacingSizePresetPreviewCss(
-				variable?.size,
-				previewUsage
-			),
-		[variable?.size, previewUsage]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesSpacingSizePresetPreviewAttributes(
+			variable?.size,
+			previewUsage
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable?.size, previewUsage]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

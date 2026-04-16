@@ -12,8 +12,11 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesTransitionPresetPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesTransitionPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import { itemsToRepeaterRecord, type WpTransitionPreset } from './utils';
@@ -35,15 +38,17 @@ export function TransitionPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: TransitionPresetOpenerProps) {
-	const getPreviewDeclarations = useCallback(
-		() =>
-			getGlobalStylesTransitionPresetPreviewCss(
-				itemsToRepeaterRecord(variable.items || [])
-			),
-		[variable.items]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesTransitionPresetPreviewAttributes(
+			itemsToRepeaterRecord(variable.items || [])
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable.items]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div

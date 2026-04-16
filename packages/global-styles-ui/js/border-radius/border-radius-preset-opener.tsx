@@ -12,8 +12,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getGlobalStylesBorderRadiusPresetPreviewCss } from '../preset-preview/injected-helpers';
-import { usePresetRowPreviewInject } from '../components/preset-row-preview-inject';
+import { getGlobalStylesBorderRadiusPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type PresetCanvasPreviewPayload,
+	usePresetRowCanvasPreview,
+} from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import { radiusPresetSizeToString } from './utils';
@@ -38,12 +41,17 @@ export function BorderRadiusPresetOpener({
 	const summary = radiusPresetSizeToString(variable?.size);
 	const display = summary || __('EMPTY', 'blockera');
 
-	const getPreviewDeclarations = useCallback(
-		() => getGlobalStylesBorderRadiusPresetPreviewCss(variable?.size),
-		[variable?.size]
-	);
+	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
+		const patch = getGlobalStylesBorderRadiusPresetPreviewAttributes(
+			variable?.size
+		);
+		if (!patch || !Object.keys(patch).length) {
+			return null;
+		}
+		return { kind: 'attributes', patch };
+	}, [variable?.size]);
 
-	const previewHandlers = usePresetRowPreviewInject(getPreviewDeclarations);
+	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 
 	return (
 		<div
