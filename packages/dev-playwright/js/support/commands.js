@@ -977,7 +977,7 @@ async function openSettingsPanel(page) {
  * @return {Promise<void>}
  */
 async function addNewTransition(page) {
-	const container = await getParentContainer(page, 'Transitions');
+	const container = await getParentContainer(page, 'Transitions Timing');
 	await container.locator('[aria-label="Add New Transition"]').click();
 }
 /**

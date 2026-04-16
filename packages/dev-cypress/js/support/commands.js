@@ -168,8 +168,15 @@ export const registerCommands = () => {
 	Cypress.Commands.add(
 		'getParentContainer',
 		(ariaLabel, parentsDataCy = 'base-control') => {
+			// Backward compatible: some labels changed over time (e.g. Transitions → Transitions Timing)
+			// Accept either a single string or an array of possible aria-label values.
+			const labels = Array.isArray(ariaLabel) ? ariaLabel : [ariaLabel];
+			const selector = labels
+				.map((label) => `[aria-label="${label}"]`)
+				.join(',');
+
 			return cy
-				.get(`[aria-label="${ariaLabel}"]`, { timeout: 20000 })
+				.get(selector, { timeout: 20000 })
 				.closest(`[data-cy=${parentsDataCy}]`);
 		}
 	);
@@ -981,7 +988,9 @@ export const registerCommands = () => {
 	});
 
 	Cypress.Commands.add('addNewTransition', () => {
-		cy.getParentContainer('Transitions').as('transition');
+		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
+			'transition'
+		);
 
 		cy.get('@transition').within(() => {
 			cy.getByAriaLabel('Add New Transition').click();
@@ -989,7 +998,9 @@ export const registerCommands = () => {
 	});
 
 	Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
-		cy.getParentContainer('Transitions').as('transition');
+		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
+			'transition'
+		);
 		cy.get('@transition').within(() => {
 			cy.getByDataCy('group-control-header').click();
 		});

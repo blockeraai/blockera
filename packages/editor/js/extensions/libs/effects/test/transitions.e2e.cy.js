@@ -18,7 +18,7 @@ describe('Transitions → Functionality', () => {
 		});
 		cy.getByDataTest('style-tab').click();
 
-		cy.getParentContainer('Transitions').as('transition');
+		cy.getParentContainer('Transitions Timing').as('transition');
 
 		cy.get('@transition').within(() => {
 			cy.getByAriaLabel('Add New Transition').click();
