@@ -91,7 +91,7 @@ export default function TransformControl({
 				'popover-transform-control'
 			)}
 			popoverTitle={popoverTitle || __('2D & 3D Transforms', 'blockera')}
-			label={label || __('2D & 3D Transforms', 'blockera')}
+			label={label || __('Transforms', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transform', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
