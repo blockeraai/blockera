@@ -47,7 +47,7 @@ export default function TransitionControl({
 			popoverClassName={componentInnerClassNames(
 				'popover-transition-control'
 			)}
-			label={label || __('Transitions', 'blockera')}
+			label={label || __('Transitions Timing', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transition', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}

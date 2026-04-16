@@ -196,7 +196,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 						<Icon icon="transition" iconSize={18} />
 					</Flex>
 				}
-				label={__('Transitions', 'blockera')}
+				label={__('Transitions Timing', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
