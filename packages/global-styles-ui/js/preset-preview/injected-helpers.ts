@@ -1,10 +1,13 @@
 /**
- * Preset row → canvas preview CSS is implemented in `@blockera/editor` (generators + value-addons).
- * The global-styles-ui script loads before editor assets; implementations are registered at runtime
- * via {@link registerPresetPreviewCssHelpers} (called from the editor bootstrap).
+ * Preset row → canvas preview is implemented in `@blockera/editor`:
+ * - Attribute patches feed the block style engine via PresetCanvasPreviewContext.
+ * - Gradient rows use declaration strings injected on the canvas until fully mapped to attributes.
+ *
+ * The global-styles-ui script may load before editor assets; implementations are registered at runtime
+ * via registerGlobalStylesPresetPreviewHelpers.
  */
 
-/** Matches editor `getGlobalStylesSpacingSizePresetPreviewCss` — spacing token used as width/height/padding/margin/gap. */
+/** Matches editor spacing preset preview — spacing token used as width/height/padding/margin/gap. */
 export type SpacingSizePresetUsage =
 	| 'padding'
 	| 'margin'
@@ -12,108 +15,179 @@ export type SpacingSizePresetUsage =
 	| 'width'
 	| 'height';
 
-/** Font `color` vs `background-color` (or gradient `background`) for color preset row preview. */
+/** Font `color` vs `background-color` for color preset row preview. */
 export type ColorPresetPreviewUsage = 'color' | 'background';
 
-export type PresetPreviewCssHelpers = {
-	getGlobalStylesShadowPresetPreviewCss: (
+export type GlobalStylesPresetPreviewHelpers = {
+	getGlobalStylesShadowPresetPreviewAttributes: (
 		preset: Record<string, unknown>
-	) => string;
-	getGlobalStylesTextShadowCssPreviewCss: (css: string) => string;
-	getGlobalStylesTransitionPresetPreviewCss: (repeater: object) => string;
-	getGlobalStylesFilterPresetPreviewCss: (repeater: object) => string;
-	getGlobalStylesTransformPresetPreviewCss: (repeater: object) => string;
-	getGlobalStylesBorderPresetPreviewCss: (border: object) => string;
-	getGlobalStylesBorderRadiusPresetPreviewCss: (
+	) => Record<string, unknown>;
+	getGlobalStylesTextShadowPreviewAttributes: (
+		css: string
+	) => Record<string, unknown>;
+	getGlobalStylesTransitionPresetPreviewAttributes: (
+		repeater: object
+	) => Record<string, unknown>;
+	getGlobalStylesFilterPresetPreviewAttributes: (
+		repeater: object
+	) => Record<string, unknown>;
+	getGlobalStylesTransformPresetPreviewAttributes: (
+		repeater: object
+	) => Record<string, unknown>;
+	getGlobalStylesBorderPresetPreviewAttributes: (
+		border: object
+	) => Record<string, unknown>;
+	getGlobalStylesBorderRadiusPresetPreviewAttributes: (
 		size: string | number | null | undefined
-	) => string;
-	getGlobalStylesSpacingSizePresetPreviewCss: (
+	) => Record<string, unknown>;
+	getGlobalStylesSpacingSizePresetPreviewAttributes: (
 		size: string | null | undefined,
 		usage?: SpacingSizePresetUsage
-	) => string;
-	getGlobalStylesFontSizePresetPreviewCss: (
+	) => Record<string, unknown>;
+	getGlobalStylesFontSizePresetPreviewAttributes: (
 		size: string | null | undefined
+	) => Record<string, unknown>;
+	getGlobalStylesColorPresetPreviewAttributes: (
+		variable: {
+			color?: string;
+			type?: string;
+		},
+		usage?: ColorPresetPreviewUsage
+	) => Record<string, unknown>;
+	getGlobalStylesGradientPresetPreviewDeclarations: (
+		gradient: string | null | undefined
 	) => string;
-	getGlobalStylesColorPresetPreviewCss: (
+	getGlobalStylesColorGradientPresetPreviewDeclarations: (
 		variable: {
 			color?: string;
 			type?: string;
 		},
 		usage?: ColorPresetPreviewUsage
 	) => string;
-	getGlobalStylesGradientPresetPreviewCss: (
-		gradient: string | null | undefined
-	) => string;
 };
 
-let injected: PresetPreviewCssHelpers | null = null;
+let injected: GlobalStylesPresetPreviewHelpers | null = null;
 
 /**
- * Called once when `@blockera/editor` loads; wires real CSS generator–backed implementations.
+ * Called once when `@blockera/editor` loads; wires attribute + canvas declaration implementations.
  */
-export function registerPresetPreviewCssHelpers(
-	helpers: PresetPreviewCssHelpers
+export function registerGlobalStylesPresetPreviewHelpers(
+	helpers: GlobalStylesPresetPreviewHelpers
 ): void {
 	injected = helpers;
 }
 
-export function getGlobalStylesShadowPresetPreviewCss(
+/** @deprecated Use {@link registerGlobalStylesPresetPreviewHelpers}. */
+export function registerPresetPreviewCssHelpers(
+	helpers: GlobalStylesPresetPreviewHelpers
+): void {
+	registerGlobalStylesPresetPreviewHelpers(helpers);
+}
+
+export function getGlobalStylesShadowPresetPreviewAttributes(
 	preset: Record<string, unknown>
-): string {
-	return injected?.getGlobalStylesShadowPresetPreviewCss?.(preset) ?? '';
-}
-
-export function getGlobalStylesTextShadowCssPreviewCss(css: string): string {
-	return injected?.getGlobalStylesTextShadowCssPreviewCss?.(css) ?? '';
-}
-
-export function getGlobalStylesTransitionPresetPreviewCss(
-	repeater: object
-): string {
+): Record<string, unknown> {
 	return (
-		injected?.getGlobalStylesTransitionPresetPreviewCss?.(repeater) ?? ''
+		injected?.getGlobalStylesShadowPresetPreviewAttributes?.(preset) ?? {}
 	);
 }
 
-export function getGlobalStylesFilterPresetPreviewCss(
+export function getGlobalStylesTextShadowPreviewAttributes(
+	css: string
+): Record<string, unknown> {
+	return injected?.getGlobalStylesTextShadowPreviewAttributes?.(css) ?? {};
+}
+
+export function getGlobalStylesTransitionPresetPreviewAttributes(
 	repeater: object
-): string {
-	return injected?.getGlobalStylesFilterPresetPreviewCss?.(repeater) ?? '';
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesTransitionPresetPreviewAttributes?.(
+			repeater
+		) ?? {}
+	);
 }
 
-export function getGlobalStylesTransformPresetPreviewCss(
+export function getGlobalStylesFilterPresetPreviewAttributes(
 	repeater: object
-): string {
-	return injected?.getGlobalStylesTransformPresetPreviewCss?.(repeater) ?? '';
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesFilterPresetPreviewAttributes?.(repeater) ?? {}
+	);
 }
 
-export function getGlobalStylesBorderPresetPreviewCss(border: object): string {
-	return injected?.getGlobalStylesBorderPresetPreviewCss?.(border) ?? '';
+export function getGlobalStylesTransformPresetPreviewAttributes(
+	repeater: object
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesTransformPresetPreviewAttributes?.(repeater) ??
+		{}
+	);
 }
 
-export function getGlobalStylesBorderRadiusPresetPreviewCss(
+export function getGlobalStylesBorderPresetPreviewAttributes(
+	border: object
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesBorderPresetPreviewAttributes?.(border) ?? {}
+	);
+}
+
+export function getGlobalStylesBorderRadiusPresetPreviewAttributes(
 	size: string | number | null | undefined
-): string {
-	return injected?.getGlobalStylesBorderRadiusPresetPreviewCss?.(size) ?? '';
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesBorderRadiusPresetPreviewAttributes?.(size) ??
+		{}
+	);
 }
 
-export function getGlobalStylesSpacingSizePresetPreviewCss(
+export function getGlobalStylesSpacingSizePresetPreviewAttributes(
 	size: string | null | undefined,
 	usage?: SpacingSizePresetUsage
-): string {
+): Record<string, unknown> {
 	return (
-		injected?.getGlobalStylesSpacingSizePresetPreviewCss?.(size, usage) ??
-		''
+		injected?.getGlobalStylesSpacingSizePresetPreviewAttributes?.(
+			size,
+			usage
+		) ?? {}
 	);
 }
 
-export function getGlobalStylesFontSizePresetPreviewCss(
+export function getGlobalStylesFontSizePresetPreviewAttributes(
 	size: string | null | undefined
-): string {
-	return injected?.getGlobalStylesFontSizePresetPreviewCss?.(size) ?? '';
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesFontSizePresetPreviewAttributes?.(size) ?? {}
+	);
 }
 
-export function getGlobalStylesColorPresetPreviewCss(
+export function getGlobalStylesColorPresetPreviewAttributes(
+	variable: {
+		color?: string;
+		type?: string;
+	},
+	usage?: ColorPresetPreviewUsage
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesColorPresetPreviewAttributes?.(
+			variable,
+			usage
+		) ?? {}
+	);
+}
+
+export function getGlobalStylesGradientPresetPreviewDeclarations(
+	gradient: string | null | undefined
+): string {
+	return (
+		injected?.getGlobalStylesGradientPresetPreviewDeclarations?.(
+			gradient
+		) ?? ''
+	);
+}
+
+export function getGlobalStylesColorGradientPresetPreviewDeclarations(
 	variable: {
 		color?: string;
 		type?: string;
@@ -121,12 +195,12 @@ export function getGlobalStylesColorPresetPreviewCss(
 	usage?: ColorPresetPreviewUsage
 ): string {
 	return (
-		injected?.getGlobalStylesColorPresetPreviewCss?.(variable, usage) ?? ''
+		injected?.getGlobalStylesColorGradientPresetPreviewDeclarations?.(
+			variable,
+			usage
+		) ?? ''
 	);
 }
 
-export function getGlobalStylesGradientPresetPreviewCss(
-	gradient: string | null | undefined
-): string {
-	return injected?.getGlobalStylesGradientPresetPreviewCss?.(gradient) ?? '';
-}
+/** @deprecated Use {@link GlobalStylesPresetPreviewHelpers}. */
+export type PresetPreviewCssHelpers = GlobalStylesPresetPreviewHelpers;

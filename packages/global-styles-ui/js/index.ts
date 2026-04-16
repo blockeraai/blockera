@@ -1,5 +1,7 @@
 export {
+	registerGlobalStylesPresetPreviewHelpers,
 	registerPresetPreviewCssHelpers,
+	type GlobalStylesPresetPreviewHelpers,
 	type PresetPreviewCssHelpers,
 	type SpacingSizePresetUsage,
 	type ColorPresetPreviewUsage,
