@@ -8,6 +8,7 @@ import { useCallback } from '@wordpress/element';
  */
 import {
 	useBlockInjectedSlotClientId,
+	usePresetCanvasPreview,
 	usePreviewInjectableStyles,
 } from '@blockera/controls';
 
@@ -28,34 +29,63 @@ export function buildPresetRowBlockCanvasCss(
 	return `${target} { ${d} }`;
 }
 
+export type PresetCanvasPreviewPayload =
+	| {
+			kind: 'attributes';
+			patch: Record<string, unknown>;
+	  }
+	| {
+			/** CSS declarations only (no `{}`), e.g. `box-shadow: 0 1px red !important` */
+			kind: 'declarations';
+			declarations: string;
+	  };
+
 /**
- * Wires repeater row hover to {@link usePreviewInjectableStyles} (block inspector → BlockStyle).
- *
- * @param getDeclarations CSS declarations only (no `{}`), e.g. `box-shadow: 0 1px red !important`
+ * Wires repeater row hover to canvas preview: attribute patch → second BlockStyle, or
+ * declaration string → PreviewInjectableStylesContext (gradients / fallback raw CSS).
  */
-export function usePresetRowPreviewInject(getDeclarations: () => string): {
+export function usePresetRowCanvasPreview(
+	getPayload: () => PresetCanvasPreviewPayload | null
+): {
 	onMouseEnter: () => void;
 	onMouseLeave: () => void;
 } {
+	const presetCanvas = usePresetCanvasPreview();
 	const previewInjectable = usePreviewInjectableStyles();
 	const blockClientId = useBlockInjectedSlotClientId();
 
 	const handlePointerEnter = useCallback(() => {
-		if (!previewInjectable) {
+		const payload = getPayload();
+		if (!payload) {
+			presetCanvas?.setPreviewAttributePatch(null);
+			previewInjectable?.setExtraPreviewCss('');
 			return;
 		}
-		const css = buildPresetRowBlockCanvasCss(
-			blockClientId,
-			getDeclarations()
-		);
-		if (css) {
-			previewInjectable.setExtraPreviewCss(css);
+
+		if (payload.kind === 'attributes') {
+			previewInjectable?.setExtraPreviewCss('');
+			const patch = payload.patch || {};
+			const keys = Object.keys(patch);
+			presetCanvas?.setPreviewAttributePatch(keys.length ? patch : null);
+			return;
 		}
-	}, [previewInjectable, blockClientId, getDeclarations]);
+
+		presetCanvas?.setPreviewAttributePatch(null);
+		const d = payload.declarations?.trim() ?? '';
+		if (!d) {
+			previewInjectable?.setExtraPreviewCss('');
+			return;
+		}
+		const css = buildPresetRowBlockCanvasCss(blockClientId, d);
+		if (css) {
+			previewInjectable?.setExtraPreviewCss(css);
+		}
+	}, [presetCanvas, previewInjectable, blockClientId, getPayload]);
 
 	const handlePointerLeave = useCallback(() => {
+		presetCanvas?.setPreviewAttributePatch(null);
 		previewInjectable?.setExtraPreviewCss('');
-	}, [previewInjectable]);
+	}, [presetCanvas, previewInjectable]);
 
 	return {
 		onMouseEnter: handlePointerEnter,
