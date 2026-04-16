@@ -62,6 +62,17 @@ export function usePresetRowCanvasPreview(
 			return;
 		}
 
+		let willShowPreview = false;
+		if (payload.kind === 'attributes') {
+			willShowPreview = Object.keys(payload.patch || {}).length > 0;
+		} else {
+			willShowPreview = (payload.declarations?.trim() ?? '').length > 0;
+		}
+
+		if (willShowPreview) {
+			presetCanvas?.primePresetHover?.();
+		}
+
 		if (payload.kind === 'attributes') {
 			previewInjectable?.setExtraPreviewCss('');
 			const patch = payload.patch || {};

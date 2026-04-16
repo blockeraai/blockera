@@ -54,6 +54,7 @@ import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
+import { getAttributesWithIds } from '../../hooks/use-attributes';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { isVirtualBlock } from '../libs/block-card/inner-blocks/utils';
 import {
@@ -735,11 +736,47 @@ export const BlockBase: ComponentType<any> = (
 
 	const activeDeviceType = getDeviceType();
 
+	const primePresetHover = useCallback(() => {
+		const hasBlockeraPropsId = Boolean(blockAttributes?.blockeraPropsId);
+		const classNameEmpty =
+			!blockAttributes?.className ||
+			String(blockAttributes.className).trim() === '';
+
+		if (hasBlockeraPropsId && !classNameEmpty) {
+			return;
+		}
+
+		const partial: Object = {};
+
+		if (!hasBlockeraPropsId) {
+			const withId = getAttributesWithIds(
+				cloneObject(blockAttributes),
+				'blockeraPropsId',
+				false
+			);
+			if (withId.blockeraPropsId) {
+				partial.blockeraPropsId = withId.blockeraPropsId;
+			}
+		}
+
+		if (classNameEmpty && uniqueClassName) {
+			partial.className = classNames('blockera-block', {
+				[uniqueClassName]: true,
+			});
+			registerClassName(clientId, uniqueClassName);
+		}
+
+		if (Object.keys(partial).length) {
+			setBlockAttributes(partial);
+		}
+	}, [blockAttributes, setBlockAttributes, uniqueClassName, clientId]);
+
 	const presetCanvasPreviewValue = useMemo(
 		() => ({
 			setPreviewAttributePatch: setPresetPreviewAttributePatch,
+			primePresetHover,
 		}),
-		[]
+		[primePresetHover]
 	);
 
 	const blockStyleProps = useMemo(() => {
