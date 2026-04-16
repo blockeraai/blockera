@@ -28,6 +28,6 @@ export { registerInnerBlockExtensionsSupports } from './block-card/inner-blocks'
 
 export { blockeraExtensionsBootstrap } from './bootstrap';
 export * from './block-card/block-states';
-export * from './preset-preview-css';
+export * from './preset-preview-attributes';
 export * from './preset-preview-inference';
 export { joinTransformCssFromRepeaterMap } from './effects/transform-repeater-to-css';
