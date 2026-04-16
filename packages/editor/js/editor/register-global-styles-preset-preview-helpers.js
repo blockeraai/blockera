@@ -2,48 +2,53 @@
 
 /**
  * Wires `@blockera/editor` into global-styles / value-addon preset preview:
- * - CSS generators → `@blockera/global-styles-ui` (injected helpers; global-styles-ui may load before editor).
+ * - Attribute patches → style engine (`StateStyle`) via PresetCanvasPreviewContext.
+ * - Gradient / legacy declaration strings → canvas CSS inject.
  * - Picker prop inference (`colorPresetPreviewUsage` / `spacingPresetPreviewUsage`) → `@blockera/controls` registry consumed by `useValueAddon`.
  */
 
 /**
+ * External dependencies
+ */
+import { addFilter } from '@wordpress/hooks';
+
+/**
  * Blockera dependencies
  */
-import { registerPresetPreviewCssHelpers } from '@blockera/global-styles-ui';
-import { registerValueAddonPresetPreviewPickerMerge } from '@blockera/controls/js/value-addons/preset-preview-picker-props-registry';
+import { registerGlobalStylesPresetPreviewHelpers } from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
  */
 import { mergePickerPropsWithPresetPreviewInference } from '../extensions/libs/preset-preview-inference';
 import {
-	getGlobalStylesBorderPresetPreviewCss,
-	getGlobalStylesBorderRadiusPresetPreviewCss,
-	getGlobalStylesColorPresetPreviewCss,
-	getGlobalStylesFilterPresetPreviewCss,
-	getGlobalStylesFontSizePresetPreviewCss,
-	getGlobalStylesGradientPresetPreviewCss,
-	getGlobalStylesShadowPresetPreviewCss,
-	getGlobalStylesSpacingSizePresetPreviewCss,
-	getGlobalStylesTextShadowCssPreviewCss,
-	getGlobalStylesTransformPresetPreviewCss,
-	getGlobalStylesTransitionPresetPreviewCss,
-} from '../extensions/libs/preset-preview-css/global-styles-preset-preview-css';
+	getGlobalStylesBorderPresetPreviewAttributes,
+	getGlobalStylesBorderRadiusPresetPreviewAttributes,
+	getGlobalStylesColorPresetPreviewAttributes,
+	getGlobalStylesFilterPresetPreviewAttributes,
+	getGlobalStylesFontSizePresetPreviewAttributes,
+	getGlobalStylesShadowPresetPreviewAttributes,
+	getGlobalStylesSpacingSizePresetPreviewAttributes,
+	getGlobalStylesTextShadowPreviewAttributes,
+	getGlobalStylesTransformPresetPreviewAttributes,
+	getGlobalStylesTransitionPresetPreviewAttributes,
+} from '../extensions/libs/preset-preview-attributes/global-styles-preset-preview-attributes';
 
-registerValueAddonPresetPreviewPickerMerge(
-	mergePickerPropsWithPresetPreviewInference
+addFilter(
+	'blockera.controls.var-picker.merge-picker-props-with-preset-preview',
+	'blockera.editor.register-global-styles-preset-preview-helpers',
+	() => mergePickerPropsWithPresetPreviewInference
 );
 
-registerPresetPreviewCssHelpers({
-	getGlobalStylesShadowPresetPreviewCss,
-	getGlobalStylesTextShadowCssPreviewCss,
-	getGlobalStylesTransitionPresetPreviewCss,
-	getGlobalStylesFilterPresetPreviewCss,
-	getGlobalStylesTransformPresetPreviewCss,
-	getGlobalStylesBorderPresetPreviewCss,
-	getGlobalStylesBorderRadiusPresetPreviewCss,
-	getGlobalStylesSpacingSizePresetPreviewCss,
-	getGlobalStylesFontSizePresetPreviewCss,
-	getGlobalStylesColorPresetPreviewCss,
-	getGlobalStylesGradientPresetPreviewCss,
+registerGlobalStylesPresetPreviewHelpers({
+	getGlobalStylesShadowPresetPreviewAttributes,
+	getGlobalStylesTextShadowPreviewAttributes,
+	getGlobalStylesTransitionPresetPreviewAttributes,
+	getGlobalStylesFilterPresetPreviewAttributes,
+	getGlobalStylesTransformPresetPreviewAttributes,
+	getGlobalStylesBorderPresetPreviewAttributes,
+	getGlobalStylesBorderRadiusPresetPreviewAttributes,
+	getGlobalStylesSpacingSizePresetPreviewAttributes,
+	getGlobalStylesFontSizePresetPreviewAttributes,
+	getGlobalStylesColorPresetPreviewAttributes,
 });
