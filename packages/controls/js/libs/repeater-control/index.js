@@ -21,7 +21,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies.
  */
-import { BaseControl, Button, Grid } from '../';
+import { Button, Grid } from '../';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { setValueAddon, useValueAddon } from '../../';
@@ -78,10 +78,8 @@ export default function RepeaterControl(
 		//
 		label,
 		children,
-		columns = '',
 		singularId,
 		repeaterItem,
-		labelProps: propsForLabelControl = {},
 		controlAddonTypes,
 		variableTypes,
 		dynamicValueTypes,
@@ -181,45 +179,65 @@ export default function RepeaterControl(
 		size: 'extra-small',
 	});
 
-	const valueAddonLabelProps = {
-		value: repeaterItems,
-		singularId,
-		attribute,
-		blockName,
-		label,
-		labelDescription,
-		labelPopoverTitle,
-		repeaterItem,
-		defaultValue: isFunction(valueCleanup)
-			? valueCleanup(defaultValue)
-			: defaultValue,
-		resetToDefault,
-		mode: 'advanced',
-		path: getControlPath(attribute, repeaterId),
-		isRepeater: true,
-		...propsForLabelControl,
-	};
-
 	if (isSetValueAddon()) {
 		return (
-			<BaseControl
-				columns={Boolean(columns) ? columns : 'columns-2'}
-				controlName="repeater"
-				className={className}
-				{...valueAddonLabelProps}
+			<div
+				className={controlClassNames(
+					'repeater',
+					'design-' + design,
+					className
+				)}
+				data-cy="blockera-repeater-control"
 			>
-				<div
-					className={controlClassNames(
-						'repeater',
-						'repeater-value-addon',
-						className,
-						valueAddonClassNames
+				<div className={controlInnerClassNames('header')}>
+					{label && (
+						<LabelControlContainer height="30px">
+							{!withoutAdvancedLabel ? (
+								<LabelControl
+									label={label}
+									labelPopoverTitle={labelPopoverTitle}
+									labelDescription={labelDescription}
+									value={repeaterItems}
+									mode={'advanced'}
+									isRepeater={true}
+									blockName={blockName}
+									attribute={attribute}
+									resetToDefault={resetToDefault}
+									defaultValue={
+										isFunction(valueCleanup)
+											? valueCleanup(defaultValue)
+											: defaultValue
+									}
+								/>
+							) : (
+								<LabelControl label={label} mode={'simple'} />
+							)}
+						</LabelControlContainer>
 					)}
-					data-cy="blockera-repeater-control-value-addon"
-				>
-					<ValueAddonControl />
+
+					<div
+						className={controlInnerClassNames(
+							'repeater-header-action-buttons'
+						)}
+					>
+						{injectHeaderButtonsStart}
+
+						<div
+							className={controlClassNames(
+								'repeater',
+								'repeater-value-addon',
+								className,
+								valueAddonClassNames
+							)}
+							data-cy="blockera-repeater-control-value-addon"
+						>
+							<ValueAddonControl />
+						</div>
+
+						{injectHeaderButtonsEnd}
+					</div>
 				</div>
-			</BaseControl>
+			</div>
 		);
 	}
 
@@ -295,7 +313,7 @@ export default function RepeaterControl(
 
 		const itemsCount = Object.keys(repeaterItems || {}).length;
 
-		const newItemWithCreatingStep = (value) =>
+		const newItemWithCreatingStep = (value: any): any =>
 			enableCreatingStep ? { ...value, creatingStep: true } : value;
 
 		const callback = (value?: Object): void => {
@@ -522,7 +540,7 @@ export default function RepeaterControl(
 						{icon}
 
 						{label && (
-							<LabelControlContainer height="26px">
+							<LabelControlContainer height="30px">
 								{!withoutAdvancedLabel ? (
 									<LabelControl
 										label={label}
