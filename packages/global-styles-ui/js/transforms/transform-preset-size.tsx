@@ -145,7 +145,7 @@ function TransformPresetSizeComponent({
 					key={slug}
 					withoutValueAddons
 					id={`transform-preset-${slug}`}
-					label={__('2D & 3D Transforms', 'blockera')}
+					label={__('Transforms', 'blockera')}
 					labelDescription={
 						<>
 							<p>

@@ -181,7 +181,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 						<Icon icon="transform-move" iconSize={18} />
 					</Flex>
 				}
-				label={__('2D & 3D Transforms', 'blockera')}
+				label={__('Transforms', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
