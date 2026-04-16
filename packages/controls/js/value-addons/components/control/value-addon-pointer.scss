@@ -18,7 +18,6 @@ body {
 	top: -14px;
 	left: -14px;
 	z-index: 12;
-	width: 100px;
 	pointer-events: none;
 	direction: revert;
 	text-align: left;
@@ -42,7 +41,7 @@ body {
 		box-sizing: content-box;
 		cursor: pointer;
 		transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
-		transform: scale(0.35);
+		transform: scale(0.4);
 		order: 10;
 		display: inline-flex;
 		justify-content: center;
@@ -152,6 +151,13 @@ body {
 	}
 }
 
+.blockera-control.blockera-control-repeater-add-item-trigger
+	.blockera-control.blockera-control-value-addon-pointers {
+	left: initial;
+	right: 10px;
+	top: -14px;
+}
+
 @keyframes dv-pointer-shaking-1 {
 	0% {
 		transform: translateY(0);
@@ -242,6 +248,10 @@ body {
 	&.blockera-value-addon-support-variable {
 		position: relative;
 		z-index: 11;
+
+		&:has(.active-value-addon) {
+			flex-grow: 1;
+		}
 
 		&:hover {
 			&
