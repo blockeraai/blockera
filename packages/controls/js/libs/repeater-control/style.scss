@@ -7,9 +7,10 @@
 
 	& > .blockera-control-header {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
+		gap: var(--gap);
 		min-height: var(--repeater-item-height);
-		justify-content: center;
+		justify-content: space-between;
 	}
 
 	.blockera-control-repeater-item {
@@ -216,11 +217,16 @@
 	}
 
 	.blockera-control-repeater-header-action-buttons {
-		margin-left: auto;
 		display: flex;
+		justify-content: flex-end;
 		flex-direction: row;
-		gap: 8px;
+		flex-grow: 1;
+		gap: var(--gap);
 		font-size: 12px;
+		align-self: stretch;
+		align-items: center;
+		max-width: 71.43%;
+		max-width: 53%;
 
 		.blockera-control-btn-add {
 			padding: 0 !important;
@@ -233,6 +239,11 @@
 				pointer-events: none;
 			}
 		}
+	}
+
+	&.blockera-control-transform
+		.blockera-control-repeater-header-action-buttons {
+		max-width: 66%;
 	}
 
 	.blockera-control-repeater-items-container {
