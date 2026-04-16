@@ -126,6 +126,7 @@ export default function ({
 							'open-value-addon type-variable',
 						controlProps.isOpen.startsWith('dv-') &&
 							'open-value-addon type-dynamic-value',
+						controlProps.isActive && 'active-value-addon',
 						classNames
 					)}
 					onClick={(event) => {

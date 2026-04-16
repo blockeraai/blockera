@@ -265,6 +265,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		pickerProps: effectivePickerProps,
 		isDeletedVar: false,
 		isDeletedDV: false,
+		isActive: isValid(value),
 	};
 
 	/**

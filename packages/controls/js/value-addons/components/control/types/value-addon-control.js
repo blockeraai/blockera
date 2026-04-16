@@ -39,4 +39,8 @@ export type ValueAddonControlProps = {
 	 * Dynamic value is deleted or not
 	 */
 	isDeletedDV: boolean,
+	/**
+	 * Value is active or not
+	 */
+	isActive: boolean,
 };
