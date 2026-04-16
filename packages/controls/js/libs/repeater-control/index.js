@@ -203,7 +203,7 @@ export default function RepeaterControl(
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
-				columns={columns}
+				columns={Boolean(columns) ? columns : 'columns-2'}
 				controlName="repeater"
 				className={className}
 				{...valueAddonLabelProps}
