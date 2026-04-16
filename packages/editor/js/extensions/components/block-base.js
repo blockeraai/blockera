@@ -54,7 +54,6 @@ import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
-import { getAttributesWithIds } from '../../hooks/use-attributes';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { isVirtualBlock } from '../libs/block-card/inner-blocks/utils';
 import {
@@ -748,17 +747,17 @@ export const BlockBase: ComponentType<any> = (
 			presetPreviewAttributePatch &&
 			Object.keys(presetPreviewAttributePatch).length > 0;
 
-		const clonedPatch = cloneObject(presetPreviewAttributePatch || {});
-		const patchAttributes = mergeObject(
-			clonedPatch,
-			getAttributesWithIds(clonedPatch, 'blockeraPropsId', true)
-		);
-
 		const mergedAttributes = hasPresetPreviewPatch
-			? mergeObject(cloneObject(sanitizedAttributes), patchAttributes)
+			? mergeObject(
+					cloneObject(sanitizedAttributes),
+					presetPreviewAttributePatch
+				)
 			: sanitizedAttributes;
 		const mergedCurrentAttributes = hasPresetPreviewPatch
-			? mergeObject(cloneObject(currentAttributes), patchAttributes)
+			? mergeObject(
+					cloneObject(currentAttributes),
+					presetPreviewAttributePatch
+				)
 			: currentAttributes;
 
 		return {
