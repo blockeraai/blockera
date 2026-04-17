@@ -68,8 +68,7 @@ export default function ValueAddonDisplay({
 			icon = getVariableIcon({
 				type: value?.settings?.type,
 				value: value?.settings?.value,
-				iconSize: '16',
-				colorIndicatorSize: 12,
+				iconSize: 'small',
 			});
 		}
 	} else if (value.valueType === 'dynamic-value') {

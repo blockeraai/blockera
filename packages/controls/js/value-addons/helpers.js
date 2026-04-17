@@ -249,20 +249,63 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 	return value;
 }
 
+export type VariableIconSize = 'small' | 'normal' | 'large';
+
+// Per tier: `default` px for all types; other keys match `getVariableIcon` `type`.
+export type VariableIconSizeTierConfig = {
+	default: number,
+	[string]: number,
+};
+
+const VARIABLE_ICON_SIZE_PX: {
+	[VariableIconSize]: VariableIconSizeTierConfig,
+} = {
+	small: { default: 16, color: 12 },
+	normal: {
+		default: 20,
+		border: 14,
+		transform: 16,
+		transition: 16,
+		'border-radius': 14,
+		color: 16,
+	},
+	large: { default: 24, border: 22 },
+};
+
+function resolveVariableIconSizePx(
+	variableType: string,
+	iconSize?: VariableIconSize
+): number {
+	const tier: VariableIconSize =
+		iconSize === 'small' || iconSize === 'normal' || iconSize === 'large'
+			? iconSize
+			: 'normal';
+
+	const tierConfig = VARIABLE_ICON_SIZE_PX[tier];
+	const override = tierConfig[variableType];
+
+	if (typeof override === 'number') {
+		return override;
+	}
+
+	return tierConfig.default;
+}
+
 export function getVariableIcon({
 	type,
 	value,
-	iconSize = '20',
-	colorIndicatorSize = 16,
+	iconSize = 'normal',
 }: {
 	type: string,
 	value?: string,
-	iconSize?: string,
-	colorIndicatorSize?: number,
+	iconSize?: VariableIconSize,
 }): MixedElement {
+	const sizePx = resolveVariableIconSizePx(type, iconSize);
+	const iconSizeProp = String(sizePx);
+
 	switch (type) {
 		case 'font-size':
-			return <Icon icon="variable-font-size" iconSize={iconSize} />;
+			return <Icon icon="variable-font-size" iconSize={iconSizeProp} />;
 
 		case 'radial-gradient':
 		case 'linear-gradient':
@@ -270,33 +313,39 @@ export function getVariableIcon({
 				<ColorIndicator
 					type="gradient"
 					value={value !== '' ? value : ''}
-					size={colorIndicatorSize}
+					size={sizePx}
 				/>
 			);
 
 		case 'color':
-			return (
-				<ColorIndicator
-					type="color"
-					value={value}
-					size={colorIndicatorSize}
-				/>
-			);
+			return <ColorIndicator type="color" value={value} size={sizePx} />;
 
 		case 'spacing':
-			return <Icon icon="variable-spacing" iconSize={iconSize} />;
+			return <Icon icon="variable-spacing" iconSize={iconSizeProp} />;
 
 		case 'width-size':
-			return <Icon icon="variable-width-size" iconSize={iconSize} />;
+			return <Icon icon="variable-width-size" iconSize={iconSizeProp} />;
+
+		case 'border':
+			return <Icon icon="border" iconSize={iconSizeProp} />;
+
+		case 'border-radius':
+			return <Icon icon="border-radius" iconSize={iconSizeProp} />;
+
+		case 'text-shadow':
+			return <Icon icon="text-shadow" iconSize={iconSizeProp} />;
 
 		case 'shadow':
-		case 'text-shadow':
-		case 'border-radius':
-		case 'border':
-		case 'transition':
+			return <Icon icon="wp-shadows" iconSize={iconSizeProp} />;
+
 		case 'transform':
+			return <Icon icon="transform-move" iconSize={iconSizeProp} />;
+
 		case 'filter':
-			return <Icon icon="variable-spacing" iconSize={iconSize} />;
+			return <Icon icon="variable-filter" iconSize={iconSizeProp} />;
+
+		case 'transition':
+			return <Icon icon="transition" iconSize={iconSizeProp} />;
 	}
 
 	return <></>;
