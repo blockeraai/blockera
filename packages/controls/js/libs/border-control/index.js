@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { controlClassNames } from '@blockera/classnames';
+import { controlClassNames, classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -100,10 +100,14 @@ export default function BorderControl({
 				label=""
 				columns={columns}
 				controlName={field}
-				className={`${className || ''} ${valueAddonClassNames}`}
+				className={className}
 			>
 				<div
-					className={controlClassNames('border', className)}
+					className={controlClassNames(
+						'border',
+						className,
+						valueAddonClassNames
+					)}
 					style={{
 						...style,
 						display: 'block',
@@ -121,7 +125,7 @@ export default function BorderControl({
 			label={label}
 			columns={columns}
 			controlName={field}
-			className={className}
+			className={classNames(className, valueAddonClassNames)}
 			{...labelProps}
 		>
 			<div
