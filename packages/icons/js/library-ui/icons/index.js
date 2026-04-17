@@ -365,6 +365,7 @@ export { default as Tutorials } from './tutorials.svg';
 export { default as Undo } from './undo.svg';
 export { default as Unlink } from './unlink.svg';
 export { default as Unlock } from './unlock.svg';
+export { default as VariableFilter } from './variable-filter.svg';
 export { default as VariableFontSize } from './variable-font-size.svg';
 export { default as VariableSpacing } from './variable-spacing.svg';
 export { default as VariableWidthSize } from './variable-width-size.svg';
