@@ -208,7 +208,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 						justifyContent="center"
 						style={{ width: '22px', height: '22px' }}
 					>
-						<Icon icon="extension-effects" iconSize={20} />
+						<Icon icon="variable-filter" iconSize={20} />
 					</Flex>
 				}
 				label={__('Filters', 'blockera')}
