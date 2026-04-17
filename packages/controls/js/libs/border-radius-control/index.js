@@ -153,7 +153,7 @@ export default function BorderRadiusControl({
 								}}
 								defaultValue={defaultValue?.all ?? ''}
 								placeholder="0"
-								size="small"
+								size="extra-small"
 								data-test="border-radius-input-all"
 							/>
 						) : (
