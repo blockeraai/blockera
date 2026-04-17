@@ -241,6 +241,11 @@
 		}
 	}
 
+	&.blockera-control-box-shadow
+		.blockera-control-repeater-header-action-buttons {
+		max-width: 64.5%;
+	}
+
 	&.blockera-control-transform
 		.blockera-control-repeater-header-action-buttons {
 		max-width: 66%;
