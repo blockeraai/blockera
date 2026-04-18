@@ -334,7 +334,4 @@ export {
 	getBlockeraBlockInjectedSlotName,
 	BLOCKERA_BLOCK_INJECTED_SLOT_NAME_FILTER,
 } from './block-injected-slot-name';
-export {
-	registerValueAddonPresetPreviewPickerMerge,
-	applyRegisteredPresetPreviewPickerMerge,
-} from './preset-preview-picker-props-registry';
+export { applyRegisteredPresetPreviewPickerMerge } from './preset-preview-picker-props-registry';
