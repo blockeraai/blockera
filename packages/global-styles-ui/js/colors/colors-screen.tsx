@@ -66,7 +66,11 @@ function ColorsNavigationPreviews({ onClick }: ColorsScreenProps) {
 
 	return (
 		<ItemGroup isBordered isSeparated>
-			<NavigationButtonAsItem path="/colors/palette" onClick={onClick}>
+			<NavigationButtonAsItem
+				path="/colors/palette"
+				onClick={onClick}
+				data-test="global-styles-nav-colors-palette"
+			>
 				<Flex
 					direction="row"
 					alignItems="center"

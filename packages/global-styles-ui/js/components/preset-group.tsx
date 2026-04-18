@@ -224,6 +224,7 @@ const Presets = ({
 				__('Add New %s', 'blockera'),
 				title
 			)}
+			addNewButtonDataTest={`global-styles-preset-add-${controlName}`}
 			shouldConfirmDeleteModal={true}
 			deleteConfirmWarningText={deleteConfirmWarningText}
 			repeaterItemChildren={FieldsComponent}

@@ -25,6 +25,8 @@ interface ScreenHeaderProps {
 	description?: string | React.ReactElement;
 	onBack?: () => void;
 	showBranding?: boolean;
+	/** Renders as `data-test` on the root flex for e2e. */
+	dataTest?: string;
 }
 
 function ScreenHeaderComponent({
@@ -32,9 +34,15 @@ function ScreenHeaderComponent({
 	description,
 	showBranding = true,
 	onBack,
+	dataTest,
 }: ScreenHeaderProps) {
 	return (
-		<Flex direction="column" gap="20px" style={HEADER_PADDING_STYLE}>
+		<Flex
+			direction="column"
+			gap="20px"
+			style={HEADER_PADDING_STYLE}
+			{...(dataTest ? { 'data-test': dataTest } : {})}
+		>
 			<Flex gap="8px" alignItems="stretch">
 				<Navigator.BackButton
 					icon={

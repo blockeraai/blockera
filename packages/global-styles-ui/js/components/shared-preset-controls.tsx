@@ -264,6 +264,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 						label={__('Name', 'blockera')}
 						onChange={handleNameChange}
 						columns="1fr 3fr"
+						data-test="global-styles-preset-name-field"
 					>
 						<ControlContextProvider
 							value={{
