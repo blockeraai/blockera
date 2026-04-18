@@ -207,7 +207,8 @@ export function openGlobalStylesSpacingScreen({ reset } = { reset: true }) {
 export function openGlobalStylesShadowsScreen({ reset } = { reset: true }) {
 	openSiteEditorGlobalStylesBase({ reset });
 
-	cy.get('#shadows-panel', { timeout: 20000 })
+	cy.get('button[id="/shadows"]')
+		.eq(1)
 		.should('exist')
 		.click({ force: true });
 
