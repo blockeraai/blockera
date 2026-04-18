@@ -32,14 +32,12 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 				.should('be.visible');
 		});
 
-		cy.getByDataTest('global-styles-preset-name-field').within(() => {
-			// eslint-disable-next-line cypress/unsafe-to-chain-command -- single input in preset name field
-			cy.get('input')
-				.first()
-				.should('be.visible')
-				.clear({ force: true })
-				.type(presetName, { delay: 0, force: true });
-		});
+		// eslint-disable-next-line cypress/unsafe-to-chain-command -- single input in preset name field
+		cy.getByDataTest('global-styles-preset-name-field')
+			.first()
+			.should('be.visible')
+			.clear({ force: true })
+			.type(presetName, { delay: 0, force: true });
 
 		cy.realPress('Escape');
 
@@ -56,7 +54,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		cy.getBlock('default').type('Variable color paragraph.', { delay: 0 });
 		cy.getByDataTest('style-tab').click();
 
-		cy.getByDataTest('editor-control-blockera-font-color').within(() => {
+		cy.getParentContainer('Text Color').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -138,7 +136,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		});
 		cy.getByDataTest('style-tab').click();
 
-		cy.getByDataTest('editor-control-blockera-font-color').within(() => {
+		cy.getParentContainer('Text Color').within(() => {
 			cy.openValueAddon();
 		});
 
