@@ -84,8 +84,10 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 			.filter(':visible')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Radius').clear({ force: true });
-				cy.getByAriaLabel('Radius').type('12px', {
+				cy.getByDataTest('border-radius-size-input').clear({
+					force: true,
+				});
+				cy.getByDataTest('border-radius-size-input').type('12px', {
 					delay: 0,
 					force: true,
 				});
