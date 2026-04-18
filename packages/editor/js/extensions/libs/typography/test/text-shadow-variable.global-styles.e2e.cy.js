@@ -118,7 +118,7 @@ describe('Global Styles text-shadow preset → value addon (Text Shadows)', () =
 		cy.get('.blockera-block').should(
 			'have.css',
 			'text-shadow',
-			'0px 0px 8px'
+			'rgba(0, 0, 0, 0.67) 1px 1px 8px'
 		);
 	});
 });
