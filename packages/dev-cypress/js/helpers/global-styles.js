@@ -1,14 +1,15 @@
 /**
- * Site editor helpers for Blockera global styles → color variable presets.
+ * Site editor helpers for Blockera global styles → design-system preset screens (colors, spacing, shadows, …).
  *
  * Entity access mirrors `packages/global-styles-ui/js/context/global-styles-provider.ts`:
  * `store` from `@wordpress/core-data` (`wp.coreData.store`), `__experimentalGetCurrentGlobalStylesId`,
  * `canUser( 'update', { kind: 'root', name: 'globalStyles', id } )`, and `editEntityRecord` for the same entity.
  */
-import { closeWelcomeGuide } from './editor';
+import { closeWelcomeGuide, getSelectedBlock, getWPDataObject } from './editor';
 import { openSiteEditor } from './site-navigation';
 
 const COLORS_OVERRIDE_CLASS = 'is-open-blockera-colors-navigation-override';
+const SHADOWS_OVERRIDE_CLASS = 'is-open-blockera-shadows-navigation-override';
 
 /** Matches `global-styles-provider` entity tuple. */
 const GLOBAL_STYLES_KIND = 'root';
@@ -144,4 +145,220 @@ export function openGlobalStylesColorPaletteScreen(
 	cy.getByDataTest('global-styles-color-palette-screen', {
 		timeout: 20000,
 	}).should('be.visible');
+}
+
+/**
+ * Shared Site Editor + Global Styles open; does not navigate into a design-system panel.
+ *
+ * @param {{ reset?: boolean }} options
+ * @return {Cypress.Chainable} The global styles sidebar screen.
+ */
+function openSiteEditorGlobalStylesBase({ reset } = { reset: true }) {
+	openSiteEditor();
+
+	if (reset) {
+		resetGlobalStylesEntityRecord();
+	}
+
+	cy.openGlobalStylesPanel();
+
+	closeWelcomeGuide();
+
+	return cy
+		.get('.edit-site-global-styles-sidebar__navigator-screen', {
+			timeout: 20000,
+		})
+		.should('exist');
+}
+
+/**
+ * Clicks a Blockera Design System nav button (`#spacing-panel`, `#borders-panel`, …) and waits for the preset shell.
+ *
+ * @param {{ panelButtonId: string, waitSelector: string, reset?: boolean }} options
+ * @return {Cypress.Chainable} The global styles sidebar screen.
+ */
+export function openGlobalStylesDesignSystemPresetScreen({
+	panelButtonId,
+	waitSelector,
+	reset = true,
+}) {
+	openSiteEditorGlobalStylesBase({ reset });
+
+	cy.get(`button[id="/${panelButtonId}"]`, { timeout: 20000 })
+		.should('exist')
+		.click({ force: true });
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	return cy.get(waitSelector, { timeout: 20000 }).should('be.visible');
+}
+
+/** Spacing variables (`settings.spacing.spacingSizes.custom`). */
+export function openGlobalStylesSpacingScreen({ reset } = { reset: true }) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'spacing',
+		waitSelector: '.blockera-spacing-presets',
+		reset,
+	});
+}
+
+/** Box shadow presets (`settings.shadow.presets.custom`). Clicks WP `/shadows` via Blockera handler. */
+export function openGlobalStylesShadowsScreen({ reset } = { reset: true }) {
+	openSiteEditorGlobalStylesBase({ reset });
+
+	cy.get('#shadows-panel', { timeout: 20000 })
+		.should('exist')
+		.click({ force: true });
+
+	cy.get('body').should('have.class', SHADOWS_OVERRIDE_CLASS);
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	return cy
+		.get('.blockera-shadows-presets', { timeout: 20000 })
+		.should('be.visible');
+}
+
+/** Border box presets (`settings.border.presets.custom`). */
+export function openGlobalStylesBordersScreen({ reset } = { reset: true }) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'borders',
+		waitSelector: '.blockera-borders-presets',
+		reset,
+	});
+}
+
+/** Border radius presets (`settings.border.radiusSizes.custom`). */
+export function openGlobalStylesBorderRadiusScreen(
+	{ reset } = { reset: true }
+) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'border-radius',
+		waitSelector: '.blockera-border-radius-presets',
+		reset,
+	});
+}
+
+/** Text shadow presets (`settings.textShadow.presets.custom`). */
+export function openGlobalStylesTextShadowsScreen({ reset } = { reset: true }) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'text-shadows',
+		waitSelector: '.blockera-text-shadows-presets',
+		reset,
+	});
+}
+
+/** Transform presets (`settings.transform.presets.custom`). */
+export function openGlobalStylesTransformsScreen({ reset } = { reset: true }) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'transforms',
+		waitSelector: '.blockera-transforms-presets',
+		reset,
+	});
+}
+
+/** Transition presets (`settings.transition.presets.custom`). */
+export function openGlobalStylesTransitionsScreen({ reset } = { reset: true }) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'transitions',
+		waitSelector: '.blockera-transitions-presets',
+		reset,
+	});
+}
+
+/** Filter presets (`settings.filter.presets.custom`). */
+export function openGlobalStylesFiltersScreen({ reset } = { reset: true }) {
+	return openGlobalStylesDesignSystemPresetScreen({
+		panelButtonId: 'filters',
+		waitSelector: '.blockera-filters-presets',
+		reset,
+	});
+}
+
+/**
+ * Adds a custom preset row, sets the display name (slug follows SharedPresetControls), closes the popover.
+ *
+ * @param {{ addDataTest: string, presetName: string }} options - Options for adding and naming the custom preset.
+ */
+export function nameNewGlobalStylesCustomPreset({ addDataTest, presetName }) {
+	cy.addNewGlobalStylesCustomPresetByDataTest(addDataTest);
+
+	cy.getParentContainer('Custom Variables').within(() => {
+		cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
+			.last()
+			.should('be.visible');
+	});
+
+	// eslint-disable-next-line cypress/unsafe-to-chain-command
+	cy.getByDataTest('global-styles-preset-name-field')
+		.first()
+		.should('be.visible')
+		.clear({ force: true })
+		.type(presetName, { delay: 0, force: true });
+
+	cy.realPress('Escape');
+}
+
+/**
+ * Border custom preset: open the last row and set “all” width so `--wp--preset--border--*` has a non-empty fallback.
+ *
+ */
+export function setGlobalStylesCustomBorderPresetMinWidth(widthPx = '2') {
+	cy.getByDataCy('border-preset-repeater-item-header')
+		.last()
+		.click({ force: true });
+
+	cy.get('.components-popover', { timeout: 15000 }).should('be.visible');
+
+	cy.get('.components-popover')
+		.filter(':visible')
+		.last()
+		.within(() => {
+			cy.getByDataTest('border-control-width').clear({ force: true });
+			cy.getByDataTest('border-control-width').type(widthPx, {
+				delay: 0,
+				force: true,
+			});
+		});
+
+	cy.realPress('Escape');
+}
+
+/**
+ * Opens the variable picker from a repeater header (shadow, text-shadow, transform, transition, filter).
+ *
+ * @param {string|string[]} getParentLabel — `getParentContainer` label(s).
+ * @param {string} [parentsDataCy='base-control'] — Closest parent `data-cy` (e.g. `'blockera-repeater-control'` for Transforms).
+ * @return {Cypress.Chainable} Chainable Cypress query for the variable picker popover.
+ */
+export function openRepeaterHeaderVariablePicker(
+	getParentLabel,
+	parentsDataCy = 'base-control'
+) {
+	cy.getParentContainer(getParentLabel, parentsDataCy).within(() => {
+		cy.getByDataCy('blockera-repeater-control')
+			.first()
+			.within(() => {
+				cy.getByDataCy('value-addon-btn-open').click({ force: true });
+			});
+	});
+
+	return cy
+		.getByDataTest('variable-picker-popover', { timeout: 15000 })
+		.should('be.visible');
+}
+
+/**
+ * Asserts serialized selected-block data references a global preset CSS variable (nested shapes).
+ *
+ * @param {string} attributeKey Blockera attribute name (e.g. `blockeraSpacing`).
+ * @param {string} varNeedle Substring such as `--wp--preset--spacing--e2e-spacing`.
+ */
+export function expectBlockAttrIncludesPresetVar(attributeKey, varNeedle) {
+	getWPDataObject().then((data) => {
+		const raw = JSON.stringify(getSelectedBlock(data, attributeKey));
+		expect(raw, attributeKey).to.include(varNeedle);
+	});
 }

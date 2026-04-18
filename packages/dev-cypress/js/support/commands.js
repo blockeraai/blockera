@@ -1012,6 +1012,19 @@ export const registerCommands = () => {
 		});
 	});
 
+	/**
+	 * Global Styles → any custom preset repeater: click add via `data-test` on PresetGroup
+	 * (`global-styles-preset-add-${controlName}`).
+	 */
+	Cypress.Commands.add(
+		'addNewGlobalStylesCustomPresetByDataTest',
+		(dataTest) => {
+			cy.getParentContainer('Custom Variables').within(() => {
+				cy.getByDataTest(dataTest).click({ force: true });
+			});
+		}
+	);
+
 	Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
 		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
 			'transition'
