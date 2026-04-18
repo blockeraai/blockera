@@ -137,6 +137,14 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 							data-test="popover-header"
 							ref={headerRef}
 						>
+							{/*
+								Hidden flex item before the left title-button group. The header row is flex;
+								when these controls would be the first flex child, overlapping header layers
+								(title text, sticky chrome, drag surface, tooltips) can win hit-testing so
+								clicks miss the buttons. This spacer sits earlier in the flex order so pointer
+								events reach the controls reliably.
+							*/}
+							<div aria-hidden="true" />
 							{titleButtonsLeft && (
 								<div
 									className={componentInnerClassNames(
@@ -157,6 +165,13 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 										'title-right-buttons'
 									)}
 								>
+									{/*
+										Hidden flex item before the right-side actions (and close control).
+										Same issue as the left cluster: if the close button or first right control
+										is the first DOM node here, sibling layers can overlap it and swallow clicks.
+										This spacer preserves a consistent hit target for those controls.
+									*/}
+									<div aria-hidden="true" />
 									{titleButtonsRight && (
 										<>{titleButtonsRight}</>
 									)}
@@ -187,6 +202,13 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 						className={componentInnerClassNames('popover-body')}
 						data-test="popover-body"
 					>
+						{/*
+							Hidden flex item before the popover body content. The body is a flex column; when
+							the first real child would be the top flex item, overlapping stacking or sibling
+							chrome can steal pointer events from that child. The spacer shifts layout so clicks
+							hit the interactive content below as intended.
+						*/}
+						<div aria-hidden="true" />
 						{children}
 					</div>
 				</WPPopover>
