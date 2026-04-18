@@ -220,8 +220,8 @@ export const registerCommands = () => {
 	});
 
 	// Open Value Addon Popover
-	Cypress.Commands.add('openValueAddon', () => {
-		cy.getByDataCy('value-addon-btn-open').click({
+	Cypress.Commands.add('openValueAddon', (eq = 0) => {
+		cy.getByDataCy('value-addon-btn-open').eq(eq).click({
 			force: true,
 		});
 	});
