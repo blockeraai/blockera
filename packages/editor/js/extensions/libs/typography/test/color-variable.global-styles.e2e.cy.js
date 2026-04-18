@@ -13,7 +13,8 @@ import {
 
 describe('Global Styles color preset → value addon (paragraph Text Color)', () => {
 	const presetName = 'E2E Color';
-	const expectedSlug = 'e2e-color';
+	/** Matches `normalizeVariablePresetSlug` for the preset display name. */
+	const expectedSlug = 'e-2-e-color';
 	/** Default swatch for new custom presets in Global Styles (see color palette screen). */
 	const presetDefaultHex = '#000000';
 
