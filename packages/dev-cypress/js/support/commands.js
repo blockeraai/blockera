@@ -997,6 +997,21 @@ export const registerCommands = () => {
 		});
 	});
 
+	/**
+	 * Global Styles → Color variables: add a row in the custom color preset repeater
+	 * (`getOriginVariablesLabel( 'custom' )` + PresetGroup title → aria labels).
+	 * Same pattern as `addNewTransition`: `getParentContainer`, then add via aria-label.
+	 */
+	Cypress.Commands.add('addNewGlobalStylesCustomColorPreset', () => {
+		cy.getParentContainer('Custom Variables').as(
+			'globalStylesCustomColorPresetGroup'
+		);
+
+		cy.get('@globalStylesCustomColorPresetGroup').within(() => {
+			cy.getByAriaLabel('Add New Color').click({ force: true });
+		});
+	});
+
 	Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
 		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
 			'transition'
