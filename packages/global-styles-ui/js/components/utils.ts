@@ -66,6 +66,14 @@ export function areGlobalStylesEqual(
  */
 const SLUG_REGEX = /^[a-z0-9-]+$/;
 
+/**
+ * Normalize a variable preset ID/slug: kebab-case with hyphens between adjacent
+ * letters and digits (e.g. `heading2` → `heading-2`, `12px` → `12-px`).
+ */
+export function normalizeVariablePresetSlug(slug: string): string {
+	return kebabCase(slug.toLowerCase().trim(), { separateNumbers: true });
+}
+
 export function isSlugValid(
 	slug: string,
 	existingSlugs: string[],
@@ -74,7 +82,7 @@ export function isSlugValid(
 	if (!slug.trim()) {
 		return false;
 	}
-	const normalized = kebabCase(slug.toLowerCase().trim());
+	const normalized = normalizeVariablePresetSlug(slug);
 
 	if (!SLUG_REGEX.test(normalized)) {
 		return false;
@@ -82,7 +90,9 @@ export function isSlugValid(
 
 	const otherSlugs = existingSlugs.filter((s) => s !== currentSlug);
 
-	return !otherSlugs.includes(normalized);
+	return !otherSlugs.some(
+		(s) => normalizeVariablePresetSlug(s) === normalized
+	);
 }
 
 /**

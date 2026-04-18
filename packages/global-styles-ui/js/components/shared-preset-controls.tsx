@@ -18,7 +18,6 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
-import { kebabCase } from '@blockera/utils';
 import {
 	Flex,
 	Button,
@@ -34,7 +33,7 @@ import {
 /**
  * Internal dependencies
  */
-import { isSlugValid } from './utils';
+import { isSlugValid, normalizeVariablePresetSlug } from './utils';
 import type { VariableType } from './types';
 
 export interface SharedPresetControlsProps<
@@ -121,11 +120,12 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const slugError =
 		displayedSlug && !slugIsValid
 			? (() => {
-					const normalized = kebabCase(
-						displayedSlug.toLowerCase().trim()
-					);
+					const normalized =
+						normalizeVariablePresetSlug(displayedSlug);
 					const otherSlugs = allSlugs.filter((s) => s !== slug);
-					return otherSlugs.includes(normalized)
+					return otherSlugs.some(
+						(s) => normalizeVariablePresetSlug(s) === normalized
+					)
 						? __(
 								'This ID is already used by another font size preset.',
 								'blockera'
@@ -169,7 +169,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			return;
 		}
 
-		const newSlug = kebabCase(displayedSlug.toLowerCase().trim());
+		const newSlug = normalizeVariablePresetSlug(displayedSlug);
 		changeRepeaterItem({
 			onChange,
 			valueCleanup,
@@ -189,7 +189,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const handleNameChange = useCallback(
 		(newValue: string) => {
 			if (variable.creatingStep) {
-				const derivedSlug = kebabCase(newValue.toLowerCase().trim());
+				const derivedSlug = normalizeVariablePresetSlug(newValue);
 				changeRepeaterItem({
 					onChange,
 					valueCleanup,
@@ -229,7 +229,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const handleIdChange = useCallback((newValue: string) => {
-		setVariableSlug(kebabCase(newValue.toLowerCase().trim()));
+		setVariableSlug(normalizeVariablePresetSlug(newValue));
 		setHasUserEditedSinceUnlock(true);
 	}, []);
 
