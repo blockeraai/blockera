@@ -79,8 +79,8 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 			.filter(':visible')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Size').clear({ force: true });
-				cy.getByAriaLabel('Size').type('33px', {
+				cy.getByDataTest('spacing-size-input').clear({ force: true });
+				cy.getByDataTest('spacing-size-input').type('33px', {
 					delay: 0,
 					force: true,
 				});
@@ -102,7 +102,10 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', expectedDecl);
+			.should(
+				'include',
+				`margin-top: var(--wp--preset--spacing--${slug})`
+			);
 
 		cy.get('.blockera-block').should('have.css', 'margin-top', '33px');
 	});
