@@ -82,8 +82,8 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 		cy.get('.blockera-component-popover')
 			.eq(1)
 			.within(() => {
-				cy.getByAriaLabel('Blur').clear({ force: true });
-				cy.getByAriaLabel('Blur').type('9', {
+				cy.getByDataTest('filter-blur-input').clear({ force: true });
+				cy.getByDataTest('filter-blur-input').type('9', {
 					delay: 0,
 					force: true,
 				});
