@@ -129,6 +129,7 @@ export default function RepeaterPopoverTitleDelete({
 					deleteConfirmWarningText={deleteConfirmWarningText}
 				/>
 			)}
+			<div />
 			<Button
 				size="extra-small"
 				align="center"
