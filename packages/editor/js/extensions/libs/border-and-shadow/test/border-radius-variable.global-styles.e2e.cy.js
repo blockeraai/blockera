@@ -112,7 +112,7 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 			.invoke('text')
 			.should(
 				'include',
-				`border-radius: var(--wp--preset--border-radius--${slug})`
+				`border-radius: var(--wp--preset--border-radius--${slug}, 4px)`
 			);
 
 		cy.get('.blockera-block').should('have.css', 'border-radius', '12px');
