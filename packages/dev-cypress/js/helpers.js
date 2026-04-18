@@ -9,3 +9,4 @@ export * from './helpers/controls';
 export * from './helpers/other';
 export * from './helpers/admin';
 export * from './helpers/create-term';
+export * from './helpers/global-styles';
