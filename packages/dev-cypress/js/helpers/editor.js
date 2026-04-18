@@ -151,6 +151,41 @@ export function getBlockeraEntity(data, field) {
 	return data.select('blockera/data').getEntity('blockera')[field];
 }
 
+/**
+ * Persist all dirty entity records (e.g. global styles) from the site or post editor.
+ * Mirrors the multi-entity save flow used when clicking Save in the editor UI.
+ *
+ * @return {Cypress.Chainable} Resolves when WordPress `saveEditedEntityRecord` calls complete.
+ */
+export function saveSiteEditorDirtyEntities() {
+	return cy.window().then((win) => {
+		const select = win.wp.data.select('core');
+		const dispatch = win.wp.data.dispatch('core');
+		const getDirty = select.__experimentalGetDirtyEntityRecords;
+
+		if (typeof getDirty !== 'function') {
+			throw new Error(
+				'wp.data.select("core").__experimentalGetDirtyEntityRecords is not available'
+			);
+		}
+
+		const dirtyRecords = getDirty() || [];
+		const entitiesToSave = dirtyRecords.filter(
+			(record) => !(record.kind === 'root' && record.name === 'site')
+		);
+
+		return Promise.all(
+			entitiesToSave.map((record) =>
+				dispatch.saveEditedEntityRecord(
+					record.kind,
+					record.name,
+					record.key
+				)
+			)
+		);
+	});
+}
+
 export function getBlockClientId(data) {
 	return data.select('core/block-editor').getSelectedBlock().clientId;
 }
