@@ -115,6 +115,7 @@ export default function ({
 							icon="variable"
 							iconSize="16"
 							data-cy="value-addon-btn-open"
+							data-test="value-addon-btn-open"
 							className={controlInnerClassNames(
 								'var-pointer-icon'
 							)}

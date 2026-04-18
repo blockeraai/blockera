@@ -126,6 +126,7 @@ export default function ({
 					}
 				}}
 				data-cy={'va-item-' + data.id}
+				data-test={'value-addon-picker-item-' + String(data.id)}
 				data-variable-slug={String(data.id)}
 				{...props}
 			>
