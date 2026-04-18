@@ -110,7 +110,7 @@ describe('Global Styles box-shadow preset → value addon (Box Shadows)', () => 
 		cy.get('.blockera-block').should(
 			'have.css',
 			'box-shadow',
-			'22px 0px 0px'
+			'rgba(0, 0, 0, 0.67) 22px 10px 10px 0px'
 		);
 	});
 });
