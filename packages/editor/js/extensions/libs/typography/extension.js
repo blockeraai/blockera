@@ -367,7 +367,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 						blockName: block.blockName,
 					}}
 				>
-					<BaseControl columns="columns-1">
+					<BaseControl
+						columns="columns-1"
+						data-test="editor-control-blockera-font-color"
+					>
 						<ColorControl
 							label={__('Text Color', 'blockera')}
 							labelDescription={
