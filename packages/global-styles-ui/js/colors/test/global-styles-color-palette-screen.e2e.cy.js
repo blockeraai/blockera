@@ -3,9 +3,6 @@
  */
 import { openGlobalStylesColorPaletteScreen } from '@blockera/dev-cypress/js/helpers';
 
-const CUSTOM_COLOR_GROUP =
-	'.global-styles-ui-color-palette-panel .blockera-control-preset-group.color-presets-custom';
-
 describe('Global Styles UI → Color variables screen', () => {
 	it('opens the Blockera color palette screen using data-test hooks', () => {
 		openGlobalStylesColorPaletteScreen();
@@ -17,39 +14,50 @@ describe('Global Styles UI → Color variables screen', () => {
 		cy.get('.global-styles-ui-color-palette-panel').should('exist');
 	});
 
-	it('free tier: custom origin allows exactly one variable; add is then disabled', () => {
+	it('free tier: cannot add a second custom color; second add opens premium modal; add stays enabled', () => {
 		openGlobalStylesColorPaletteScreen();
 
-		cy.getByDataTest(
-			'global-styles-preset-add-color-presets-custom'
-		).should('not.be.disabled');
-
-		cy.getByDataTest('global-styles-preset-add-color-presets-custom').click(
-			{
-				force: true,
-			}
-		);
+		cy.addNewGlobalStylesCustomColorPreset();
 
 		const unique = `${Date.now()}`;
-		cy.getByDataTest('global-styles-preset-name-field')
-			.find('input')
-			.first()
-			.should('be.visible')
-			.clear({ force: true });
-
-		cy.getByDataTest('global-styles-preset-name-field')
-			.find('input')
-			.first()
-			.type(`e2e free cap ${unique}`, { delay: 0, force: true });
+		cy.getByDataTest('global-styles-preset-name-field').within(() => {
+			// eslint-disable-next-line cypress/unsafe-to-chain-command -- single input in preset name field
+			cy.get('input')
+				.first()
+				.should('be.visible')
+				.clear({ force: true })
+				.type(`e2e free cap ${unique}`, { delay: 0, force: true });
+		});
 
 		cy.realPress('Escape');
 
-		cy.get(`${CUSTOM_COLOR_GROUP} [data-cy="repeater-item"]`, {
-			timeout: 15000,
-		}).should('have.length', 1);
+		cy.getParentContainer('Custom Variables').within(() => {
+			cy.getByDataCy('repeater-item', { timeout: 15000 }).should(
+				'have.length',
+				1
+			);
+		});
 
-		cy.getByDataTest(
-			'global-styles-preset-add-color-presets-custom'
-		).should('be.disabled');
+		cy.addNewGlobalStylesCustomColorPreset();
+
+		cy.get('[role="dialog"]', { timeout: 15000 })
+			.should('be.visible')
+			.and('contain', 'Premium Feature')
+			.within(() => {
+				cy.contains('h3', 'Multiple Custom Variables').should(
+					'be.visible'
+				);
+			});
+
+		cy.realPress('Escape');
+
+		cy.get('[role="dialog"]').should('not.exist');
+
+		cy.getParentContainer('Custom Variables').within(() => {
+			cy.getByDataCy('repeater-item').should('have.length', 1);
+			cy.getByDataTest(
+				'global-styles-preset-add-color-presets-custom'
+			).should('not.be.disabled');
+		});
 	});
 });
