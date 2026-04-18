@@ -105,6 +105,7 @@ function SpacingSizeComponent({
 			}}
 		>
 			<InputControl
+				data-test="spacing-size-input"
 				label={__('Size', 'blockera')}
 				controlAddonTypes={[]}
 				labelDescription={
