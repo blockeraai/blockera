@@ -73,6 +73,7 @@ function SpacingSizeGroupComponent({
 		VariableType => {
 		return {
 			size: '20px',
+			isVisible: true,
 			slug: `spacing-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
@@ -171,6 +172,7 @@ export function SpacingPresetContent({
 				slug: value.slug,
 				name: value.name,
 				size: value.size,
+				isVisible: value.isVisible,
 			})),
 		[]
 	);

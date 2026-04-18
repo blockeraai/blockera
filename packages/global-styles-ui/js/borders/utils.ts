@@ -16,6 +16,7 @@ export type BorderPresetStoredSide = {
 export type BorderBoxPreset = {
 	slug: string;
 	name: string;
+	isVisible: boolean;
 	border: BorderPresetStoredSide;
 };
 
@@ -100,6 +101,7 @@ export function sanitizeBorderBoxPresets(presets: unknown): BorderBoxPreset[] {
 		out.push({
 			slug: o.slug,
 			name: o.name,
+			isVisible: o.isVisible,
 			border: coerceBorderPresetSide(o.border),
 		});
 	}

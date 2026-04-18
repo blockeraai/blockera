@@ -24,6 +24,7 @@ export type WpShadowPreset = {
 	slug: string;
 	name: string;
 	shadow: string;
+	isVisible: boolean;
 };
 
 /** Matches `defaultRepeaterItemValue` in `packages/controls/js/libs/box-shadow-control/index.js`. */
@@ -169,7 +170,12 @@ export function sanitizeShadowPresets(raw: unknown): WpShadowPreset[] {
 				return null;
 			}
 			const shadow = shadowCssFromPreset(p);
-			return { slug, name, shadow };
+			return {
+				slug,
+				name,
+				shadow,
+				isVisible: Boolean(p.isVisible ?? true),
+			};
 		})
 		.filter((p): p is WpShadowPreset => p !== null);
 }

@@ -61,6 +61,7 @@ interface FontSizeGroupProps {
 
 export type DefaultPresetValue = {
 	size: string;
+	isVisible: boolean;
 	deletable: boolean;
 	cloneable: boolean;
 	visibilitySupport: boolean;
@@ -92,6 +93,7 @@ function FontSizeGroupComponent({
 		return {
 			size: '16px',
 			fluid: false,
+			isVisible: true,
 			slug: `font-size-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
@@ -182,6 +184,7 @@ export function FontSizesPresetContent() {
 				name: value.name,
 				size: value.size,
 				fluid: value.fluid,
+				isVisible: value.isVisible,
 			})),
 		[]
 	);

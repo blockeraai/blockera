@@ -20,6 +20,7 @@ export function convertRepeaterValueToColors(newValue: object): Color[] {
 		slug: v.slug,
 		name: v.name,
 		color: v.color || '',
+		isVisible: v.isVisible,
 	}));
 }
 

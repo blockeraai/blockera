@@ -21,6 +21,7 @@ export type WpTextShadowPreset = {
 	slug: string;
 	name: string;
 	shadow: string;
+	isVisible: boolean;
 };
 
 /** Matches `defaultRepeaterItemValue` in `packages/controls/js/libs/text-shadow-control/index.js`. */
@@ -156,7 +157,12 @@ export function sanitizeTextShadowPresets(raw: unknown): WpTextShadowPreset[] {
 				return null;
 			}
 			const shadow = textShadowCssFromPreset(p);
-			return { slug, name, shadow };
+			return {
+				slug,
+				name,
+				shadow,
+				isVisible: Boolean(p.isVisible ?? true),
+			};
 		})
 		.filter((p): p is WpTextShadowPreset => p !== null);
 }

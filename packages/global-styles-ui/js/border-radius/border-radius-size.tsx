@@ -27,6 +27,7 @@ export type BorderRadiusDefaultPresetValue = {
 	size: string;
 	deletable: boolean;
 	cloneable: boolean;
+	isVisible: boolean;
 	visibilitySupport: boolean;
 };
 

@@ -164,6 +164,7 @@ export function sanitizeFilterPresets(raw: unknown): WpFilterPreset[] {
 				slug: String(p.slug ?? '').trim(),
 				name: String(p.name ?? '').trim(),
 				items,
+				isVisible: Boolean(p.isVisible ?? true),
 			};
 		})
 		.filter((p) => p.slug && p.name);

@@ -108,6 +108,7 @@ function ColorGroupComponent({
 
 	const defaultPresetValue = useMemo(
 		() => ({
+			isVisible: true,
 			color: '#000000',
 			slug: `custom-${index}`,
 			deletable: origin === 'custom',

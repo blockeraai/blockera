@@ -68,6 +68,7 @@ function BorderRadiusSizeGroupComponent({
 		VariableType => {
 		return {
 			size: '4px',
+			isVisible: true,
 			slug: `border-radius-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
@@ -169,6 +170,7 @@ export function BorderRadiusPresetContent() {
 					slug: value.slug,
 					name: value.name,
 					size: value.size,
+					isVisible: value.isVisible,
 				}))
 			),
 		[]

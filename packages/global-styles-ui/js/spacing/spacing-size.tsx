@@ -25,6 +25,7 @@ import { getAllVariableSlugs as getAllSpacingSlugs } from '../components/utils';
 
 export type SpacingDefaultPresetValue = {
 	size: string;
+	isVisible: boolean;
 	deletable: boolean;
 	cloneable: boolean;
 	visibilitySupport: boolean;

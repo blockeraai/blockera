@@ -72,6 +72,7 @@ function TextShadowPresetGroupComponent({
 	const defaultPresetValue = useMemo((): TextShadowDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
+			isVisible: true,
 			shadow: textShadowPresetItemsToCss([
 				{ ...DEFAULT_TEXT_SHADOW_ITEM },
 			]),

@@ -182,6 +182,7 @@ export function FiltersPresetContent() {
 					slug: value.slug,
 					name: value.name,
 					items: value.items,
+					isVisible: value.isVisible,
 				}))
 			),
 		[]

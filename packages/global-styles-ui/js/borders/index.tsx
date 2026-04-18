@@ -69,10 +69,11 @@ function BorderPresetGroupComponent({
 	const defaultPresetValue = useMemo((): BorderBoxDefaultPresetValue &
 		VariableType => {
 		return {
-			border: getDefaultStoredBorderSide(),
+			isVisible: true,
 			slug: `border-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
+			border: getDefaultStoredBorderSide(),
 			visibilitySupport: !!('custom' === origin),
 			/* translators: %d: border preset index */
 			name: sprintf(__('Border %d', 'blockera'), index) as string,
@@ -169,6 +170,7 @@ export function BordersPresetContent() {
 					slug: value.slug,
 					name: value.name,
 					border: value.border,
+					isVisible: value.isVisible,
 				}))
 			),
 		[]

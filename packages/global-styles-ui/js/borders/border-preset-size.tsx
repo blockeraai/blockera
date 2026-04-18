@@ -29,6 +29,7 @@ export type BorderBoxDefaultPresetValue = VariableType & {
 	border: BorderPresetStoredSide;
 	deletable: boolean;
 	cloneable: boolean;
+	isVisible: boolean;
 	visibilitySupport: boolean;
 };
 

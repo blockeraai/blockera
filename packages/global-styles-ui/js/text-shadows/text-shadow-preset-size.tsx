@@ -36,6 +36,7 @@ export type TextShadowDefaultPresetValue = {
 	shadow: string;
 	deletable: boolean;
 	cloneable: boolean;
+	isVisible: boolean;
 	visibilitySupport: boolean;
 };
 
