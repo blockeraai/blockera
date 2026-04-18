@@ -118,6 +118,7 @@ function BorderRadiusSizeComponent({
 			}}
 		>
 			<InputControl
+				data-test="border-radius-size-input"
 				label={__('Radius', 'blockera')}
 				controlAddonTypes={[]}
 				columns="1fr 3fr"
