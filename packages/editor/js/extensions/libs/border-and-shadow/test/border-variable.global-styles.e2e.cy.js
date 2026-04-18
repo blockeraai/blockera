@@ -33,7 +33,7 @@ describe('Global Styles border preset → value addon (Border)', () => {
 		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Border').within(() => {
-			cy.openValueAddon();
+			cy.openValueAddon(1);
 		});
 
 		cy.selectValueAddonItem(slug);
@@ -66,7 +66,7 @@ describe('Global Styles border preset → value addon (Border)', () => {
 		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Border').within(() => {
-			cy.openValueAddon();
+			cy.openValueAddon(1);
 		});
 		cy.selectValueAddonItem(slug);
 
