@@ -30,7 +30,7 @@ export function shouldShowDefaultPresetGroup(
 	defaultItemCount: number
 ): boolean {
 	return (
-		defaultLayerEnabled && !(themeItemCount === 0 && defaultItemCount === 0)
+		defaultLayerEnabled && !(0 === themeItemCount && 0 === defaultItemCount)
 	);
 }
 
@@ -40,7 +40,7 @@ export function shouldShowThemePresetGroup(
 	defaultItemCount: number
 ): boolean {
 	return !(
-		themeItemCount === 0 &&
+		0 === themeItemCount &&
 		defaultLayerEnabled &&
 		defaultItemCount > 0
 	);
