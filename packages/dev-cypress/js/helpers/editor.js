@@ -98,7 +98,7 @@ export function getSelectedBlockStyle(data, name, variation = 'default') {
  * @param {*} prop the property of record. like style, settings, etc.
  * @param {*} innerField the inner property name in record[prop] object.
  *
- * @returns anythings.
+ * @return anythings.
  */
 export function getEditedGlobalStylesRecord(data, prop, innerField) {
 	const { __experimentalGetCurrentGlobalStylesId } = data.select('core');
@@ -291,8 +291,9 @@ export function addBlockToPost(
 	 * Instead of intercepting we can await known dom elements that appear only when search results are present.
 	 * This should correct a race condition in CI.
 	 */
-	if (!blockInserterSelector)
+	if (!blockInserterSelector) {
 		cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
+	}
 
 	let targetClassName = '';
 
@@ -699,7 +700,7 @@ export function closeWelcomeGuide() {
  *
  * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
  * @param {string} [targetName] Optional target filename. If not provided, generates from path.
- * @returns {Cypress.Chainable} Cypress chainable.
+ * @return {Cypress.Chainable} Cypress chainable.
  */
 export function activateMuPlugin(muPluginPath, targetName = null) {
 	// Generate target filename if not provided
@@ -712,7 +713,7 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
 
 	// Build PHP code to copy mu-plugin to mu-plugins directory
 	// Use wp eval to execute PHP code directly without creating temp files
-	const phpCode = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/blockera/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($sourceFile)) { $content = file_get_contents($sourceFile); file_put_contents($targetFile, $content); }`;
+	const phpCode = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $rel = '${muPluginPath}'; $sourceFile = null; if (defined('BLOCKERA_SB_PATH')) { $try = rtrim(BLOCKERA_SB_PATH, '/') . '/' . $rel; if (is_file($try)) { $sourceFile = $try; } } if (!$sourceFile) { $try = rtrim(WP_PLUGIN_DIR, '/') . '/blockera/' . $rel; if (is_file($try)) { $sourceFile = $try; } } if (!$sourceFile && is_dir(WP_PLUGIN_DIR)) { foreach ((glob(rtrim(WP_PLUGIN_DIR, '/') . '/*', GLOB_ONLYDIR) ?: []) as $dir) { $try = rtrim($dir, '/') . '/' . $rel; if (is_file($try)) { $sourceFile = $try; break; } } } $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if ($sourceFile && is_file($sourceFile)) { file_put_contents($targetFile, file_get_contents($sourceFile)); }`;
 
 	// Escape single quotes for shell: ' becomes '\''
 	// Use single quotes in shell command to preserve $ signs in PHP
@@ -733,7 +734,7 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
  *
  * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
  * @param {string} [targetName] Optional target filename. If not provided, generates from path (must match activateMuPlugin).
- * @returns {Cypress.Chainable} Cypress chainable.
+ * @return {Cypress.Chainable} Cypress chainable.
  */
 export function deactivateMuPlugin(muPluginPath, targetName = null) {
 	// Generate target filename if not provided (must match activateMuPlugin logic)
