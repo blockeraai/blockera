@@ -737,6 +737,10 @@ export const BlockBase: ComponentType<any> = (
 	const activeDeviceType = getDeviceType();
 
 	const primePresetHover = useCallback(() => {
+		if (false === insideBlockInspector) {
+			return;
+		}
+
 		const hasBlockeraPropsId = Boolean(blockAttributes?.blockeraPropsId);
 		const classNameEmpty =
 			!blockAttributes?.className ||
