@@ -29,7 +29,6 @@ describe('Global Styles UI → font size presets (theme.json + UI)', () => {
 			'contain',
 			'E2E Theme Font Size'
 		);
-
 		cy.contains(
 			'.blockera-font-size-presets [data-cy="font-size-repeater-item-header"]',
 			'E2E Theme Font Size'
@@ -39,8 +38,8 @@ describe('Global Styles UI → font size presets (theme.json + UI)', () => {
 			.filter(':visible')
 			.last()
 			.within(() => {
-				cy.get('input[type="text"]').first().clear({ force: true });
-				cy.get('input[type="text"]').first().type('26', {
+				cy.get('input[type="text"]').eq(2).clear({ force: true });
+				cy.get('input[type="text"]').eq(2).type('26', {
 					delay: 0,
 					force: true,
 				});
@@ -82,9 +81,7 @@ describe('Global Styles UI → font size presets (theme.json + UI)', () => {
 			.filter(':visible')
 			.last()
 			.within(() => {
-				cy.get('input[type="text"]')
-					.first()
-					.should('have.value', '26px');
+				cy.get('input[type="text"]').eq(2).should('have.value', '26');
 			});
 	});
 });
