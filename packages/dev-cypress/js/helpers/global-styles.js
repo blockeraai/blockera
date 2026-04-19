@@ -10,6 +10,8 @@ import { openSiteEditor } from './site-navigation';
 
 const COLORS_OVERRIDE_CLASS = 'is-open-blockera-colors-navigation-override';
 const SHADOWS_OVERRIDE_CLASS = 'is-open-blockera-shadows-navigation-override';
+const TYPOGRAPHY_OVERRIDE_CLASS =
+	'is-open-blockera-typography-navigation-override';
 
 /** Matches `global-styles-provider` entity tuple. */
 const GLOBAL_STYLES_KIND = 'root';
@@ -108,6 +110,57 @@ export function resetGlobalStylesEntityRecord() {
 			styles: {},
 			settings: {},
 		});
+	});
+}
+
+/**
+ * Reads `settings` from the theme base global styles config (merged theme.json layer).
+ * Dot path example: `spacing.spacingSizes.theme`.
+ *
+ * @param {string} dotPath
+ * @return {Cypress.Chainable<unknown>}
+ */
+export function getThemeBaseGlobalStylesSetting(dotPath) {
+	return cy.window().then((win) => {
+		const select = win.wp.data.select('core');
+		const base = select.__experimentalGetCurrentThemeBaseGlobalStyles?.();
+		let cur = base?.settings;
+		for (const key of dotPath.split('.')) {
+			if (cur == null) {
+				return undefined;
+			}
+			cur = cur[key];
+		}
+		return cur;
+	});
+}
+
+/**
+ * Reads `settings` from the edited global styles entity (user / Site Editor layer).
+ *
+ * @param {string} dotPath
+ * @return {Cypress.Chainable<unknown>}
+ */
+export function getEditedGlobalStylesSetting(dotPath) {
+	return cy.window().then((win) => {
+		const select = win.wp.data.select('core');
+		const id =
+			typeof select.__experimentalGetCurrentGlobalStylesId === 'function'
+				? select.__experimentalGetCurrentGlobalStylesId()
+				: select.getCurrentGlobalStylesId?.();
+		const record = select.getEditedEntityRecord(
+			GLOBAL_STYLES_KIND,
+			GLOBAL_STYLES_NAME,
+			id
+		);
+		let cur = record?.settings;
+		for (const key of dotPath.split('.')) {
+			if (cur == null) {
+				return undefined;
+			}
+			cur = cur[key];
+		}
+		return cur;
 	});
 }
 
@@ -276,6 +329,112 @@ export function openGlobalStylesFiltersScreen({ reset } = { reset: true }) {
 		waitSelector: '.blockera-filters-presets',
 		reset,
 	});
+}
+
+/**
+ * Typography → Font size variables (design-system font size presets).
+ *
+ * @param {{ reset?: boolean }} options
+ */
+export function openGlobalStylesFontSizesVariablesScreen(
+	{ reset } = { reset: true }
+) {
+	openSiteEditorGlobalStylesBase({ reset });
+
+	cy.get('button[id="/typography"]', { timeout: 20000 })
+		.eq(1)
+		.should('be.visible')
+		.click({ force: true });
+
+	cy.get('body').should('have.class', TYPOGRAPHY_OVERRIDE_CLASS);
+
+	cy.get('.blockera-font-size-presets-count', { timeout: 20000 }).should(
+		'exist'
+	);
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	cy.contains(
+		'.blockera-font-size-presets-count button',
+		'Font size variables'
+	)
+		.should('be.visible')
+		.click({ force: true });
+
+	return cy
+		.get('.blockera-font-size-presets', { timeout: 20000 })
+		.should('be.visible');
+}
+
+/**
+ * Colors → Linear gradient variables screen.
+ *
+ * @param {{ reset?: boolean }} options
+ */
+export function openGlobalStylesLinearGradientsScreen(
+	{ reset } = { reset: true }
+) {
+	openSiteEditorGlobalStylesBase({ reset });
+
+	cy.get('button[id="/colors"]').eq(1).should('exist').click({ force: true });
+
+	cy.get('body').should('have.class', COLORS_OVERRIDE_CLASS);
+
+	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+		timeout: 20000,
+	}).should('exist');
+
+	cy.get('.blockera-colors-presets-count').should('exist');
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	cy.contains(
+		'.blockera-colors-presets-count button',
+		'Linear gradient variables'
+	)
+		.should('be.visible')
+		.click({ force: true });
+
+	return cy
+		.get('.blockera-linear-gradients-presets', { timeout: 20000 })
+		.should('be.visible');
+}
+
+/**
+ * Colors → Radial gradient variables screen.
+ *
+ * @param {{ reset?: boolean }} options
+ */
+export function openGlobalStylesRadialGradientsScreen(
+	{ reset } = { reset: true }
+) {
+	openSiteEditorGlobalStylesBase({ reset });
+
+	cy.get('button[id="/colors"]').eq(1).should('exist').click({ force: true });
+
+	cy.get('body').should('have.class', COLORS_OVERRIDE_CLASS);
+
+	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+		timeout: 20000,
+	}).should('exist');
+
+	cy.get('.blockera-colors-presets-count').should('exist');
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	cy.contains(
+		'.blockera-colors-presets-count button',
+		'Radial gradient variables'
+	)
+		.should('be.visible')
+		.click({ force: true });
+
+	return cy
+		.get('.blockera-radial-gradients-presets', { timeout: 20000 })
+		.should('be.visible');
 }
 
 /**
