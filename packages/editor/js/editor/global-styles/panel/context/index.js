@@ -18,7 +18,8 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isEquals, mergeObject } from '@blockera/utils';
+import { isEmpty, isEquals, mergeObject, setImmutably } from '@blockera/utils';
+import { useGlobalStylesContext } from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
@@ -127,6 +128,32 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 	}
 
 	return cleanStyles;
+};
+
+/**
+ * Block types that share a style variation (see styleVariationBlocks in the editor store).
+ * Always includes the block currently being edited in the global styles panel.
+ *
+ * @param {Function} getStyleVariationBlocks store selector bound to variation name.
+ * @param {string} variationName
+ * @param {string} currentBlockName
+ * @return {Array<string>} Distinct block names that use this variation, including the current block.
+ */
+const getBlockTypesForStyleVariation = (
+	getStyleVariationBlocks: (string) => mixed,
+	variationName: string,
+	currentBlockName: string
+): Array<string> => {
+	const registered = getStyleVariationBlocks(variationName);
+	const list: Array<string> = [];
+	if (Array.isArray(registered)) {
+		for (const item of registered) {
+			if (typeof item === 'string') {
+				list.push(item);
+			}
+		}
+	}
+	return [...new Set([...list, currentBlockName])];
 };
 
 /**
@@ -250,6 +277,8 @@ export const GlobalStylesPanelContextProvider = ({
 		}
 	);
 
+	const { setUserConfig } = useGlobalStylesContext();
+
 	const getStyle = useCallback(
 		() => ({
 			...defaultStylesValue,
@@ -281,21 +310,82 @@ export const GlobalStylesPanelContextProvider = ({
 
 	const handleOnChangeStyle = useCallback(
 		(newStyle: Object) => {
-			setStyle(getNormalizedStyle(newStyle, defaultStyles));
+			const normalized = getNormalizedStyle(newStyle, defaultStyles);
+
+			if (
+				currentBlockStyleVariation &&
+				!currentBlockStyleVariation.isDefault &&
+				currentBlockStyleVariation.name
+			) {
+				const variationName = currentBlockStyleVariation.name;
+				const targetBlocks = getBlockTypesForStyleVariation(
+					getStyleVariationBlocks,
+					variationName,
+					name
+				);
+
+				if (targetBlocks.length > 1) {
+					setUserConfig((currentConfig: Object) => {
+						return targetBlocks.reduce(
+							(acc: Object, blockName: string) =>
+								setImmutably(
+									acc,
+									`styles.blocks.${blockName}.variations.${variationName}`.split(
+										'.'
+									),
+									normalized
+								),
+							currentConfig
+						);
+					});
+					return;
+				}
+			}
+
+			setStyle(normalized);
 		},
-		[setStyle, defaultStyles]
+		[
+			setStyle,
+			setUserConfig,
+			defaultStyles,
+			currentBlockStyleVariation,
+			getStyleVariationBlocks,
+			name,
+		]
 	);
 	const handleOnChangeStyleInLocalState = useCallback(
 		(newStyle: Object): void => {
-			setBlockStyles(
-				name,
-				currentBlockStyleVariation?.isDefault
-					? 'default'
-					: currentBlockStyleVariation?.name || 'default',
-				getNormalizedStyle(newStyle, defaultStyles)
-			);
+			const normalized = getNormalizedStyle(newStyle, defaultStyles);
+			const variationArg = currentBlockStyleVariation?.isDefault
+				? 'default'
+				: currentBlockStyleVariation?.name || 'default';
+
+			if (
+				!currentBlockStyleVariation?.isDefault &&
+				variationArg !== 'default'
+			) {
+				const targetBlocks = getBlockTypesForStyleVariation(
+					getStyleVariationBlocks,
+					variationArg,
+					name
+				);
+
+				for (const blockName of targetBlocks) {
+					setBlockStyles(blockName, variationArg, normalized);
+				}
+
+				return;
+			}
+
+			setBlockStyles(name, variationArg, normalized);
 		},
-		[name, setBlockStyles, currentBlockStyleVariation, defaultStyles]
+		[
+			name,
+			setBlockStyles,
+			currentBlockStyleVariation,
+			defaultStyles,
+			getStyleVariationBlocks,
+		]
 	);
 
 	const memoizedBlockBaseProps = useMemo(
