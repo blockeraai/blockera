@@ -2,33 +2,9 @@
  * External dependencies
  */
 import {
-	openSiteEditor,
-	closeWelcomeGuide,
+	openGlobalStylesTypographyFlow,
+	TYPOGRAPHY_OVERRIDE_CLASS,
 } from '@blockera/dev-cypress/js/helpers';
-
-const TYPOGRAPHY_OVERRIDE_CLASS =
-	'is-open-blockera-typography-navigation-override';
-
-function openGlobalStylesTypographyFlow() {
-	openSiteEditor();
-
-	cy.openGlobalStylesPanel();
-
-	closeWelcomeGuide();
-
-	cy.get('button[id="/typography"]')
-		.eq(1)
-		.should('be.visible')
-		.click({ force: true });
-
-	cy.get('body').should('have.class', TYPOGRAPHY_OVERRIDE_CLASS);
-
-	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
-		timeout: 20000,
-	}).should('exist');
-
-	cy.get('.blockera-font-size-presets-count').should('exist');
-}
 
 describe('Global Styles → Typography panel (DOM + observer)', () => {
 	it('adds typography override class and mounts font sizes entry after typography handler runs', () => {
