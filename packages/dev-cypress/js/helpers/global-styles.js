@@ -10,7 +10,9 @@ import { openSiteEditor } from './site-navigation';
 
 const COLORS_OVERRIDE_CLASS = 'is-open-blockera-colors-navigation-override';
 const SHADOWS_OVERRIDE_CLASS = 'is-open-blockera-shadows-navigation-override';
-const TYPOGRAPHY_OVERRIDE_CLASS =
+
+/** Body class while Blockera typography global-styles override is active (exported for Cypress assertions). */
+export const TYPOGRAPHY_OVERRIDE_CLASS =
 	'is-open-blockera-typography-navigation-override';
 
 /** Matches `global-styles-provider` entity tuple. */
@@ -332,13 +334,11 @@ export function openGlobalStylesFiltersScreen({ reset } = { reset: true }) {
 }
 
 /**
- * Typography → Font size variables (design-system font size presets).
+ * Global Styles → Typography list (font size presets entry + Blockera typography override).
  *
- * @param {{ reset?: boolean }} options
+ * @param {{ reset?: boolean }} options Pass `reset: true` to discard in-memory global styles edits before navigation (default false matches legacy typography panel specs).
  */
-export function openGlobalStylesFontSizesVariablesScreen(
-	{ reset } = { reset: true }
-) {
+export function openGlobalStylesTypographyFlow({ reset } = { reset: false }) {
 	openSiteEditorGlobalStylesBase({ reset });
 
 	cy.get('button[id="/typography"]', { timeout: 20000 })
@@ -348,9 +348,24 @@ export function openGlobalStylesFontSizesVariablesScreen(
 
 	cy.get('body').should('have.class', TYPOGRAPHY_OVERRIDE_CLASS);
 
+	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+		timeout: 20000,
+	}).should('exist');
+
 	cy.get('.blockera-font-size-presets-count', { timeout: 20000 }).should(
 		'exist'
 	);
+}
+
+/**
+ * Typography → Font size variables (design-system font size presets).
+ *
+ * @param {{ reset?: boolean }} options
+ */
+export function openGlobalStylesFontSizesVariablesScreen(
+	{ reset } = { reset: true }
+) {
+	openGlobalStylesTypographyFlow({ reset });
 
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
@@ -359,7 +374,8 @@ export function openGlobalStylesFontSizesVariablesScreen(
 		'.blockera-font-size-presets-count button',
 		'Font size variables'
 	)
-		.should('be.visible')
+		.scrollIntoView()
+		.should('exist')
 		.click({ force: true });
 
 	return cy
