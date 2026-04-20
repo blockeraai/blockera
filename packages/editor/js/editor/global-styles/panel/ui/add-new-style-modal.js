@@ -310,6 +310,32 @@ export const AddNewStyleModal = ({
 			headerTitle={__('Add new style variation', 'blockera')}
 			isDismissible={true}
 			onRequestClose={() => setIsOpen(false)}
+			actions={
+				<>
+					<Button
+						data-test="cancel-add-style-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsOpen(false);
+							setStyleName('');
+							setStyleID('');
+							setIsIdManuallyEdited(false);
+							setDuplicateIdError('');
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="add-style-button"
+						disabled={isAddDisabled}
+						variant="primary"
+						onClick={handleAdd}
+					>
+						{__('Add', 'blockera')}
+					</Button>
+				</>
+			}
 		>
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={25}>
@@ -410,31 +436,6 @@ export const AddNewStyleModal = ({
 						{duplicateIdError}
 					</NoticeControl>
 				)}
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="add-style-button"
-						disabled={isAddDisabled}
-						variant="primary"
-						onClick={handleAdd}
-					>
-						{__('Add', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="cancel-add-style-button"
-						variant="tertiary"
-						onClick={() => {
-							setIsOpen(false);
-							setStyleName('');
-							setStyleID('');
-							setIsIdManuallyEdited(false);
-							setDuplicateIdError('');
-						}}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
-				</Flex>
 			</Flex>
 		</Modal>
 	);
