@@ -1,4 +1,6 @@
 .blockera-component.blockera-component-modal {
+	--modal-gap: 32px;
+
 	.components-modal__header {
 		height: auto;
 
@@ -37,7 +39,19 @@
 	.components-modal__content {
 		margin-top: 0;
 		overflow: auto;
-		padding: 32px 32px 32px;
+		padding: var(--modal-gap);
+	}
+
+	.blockera-component-modal__actions {
+		flex-direction: row;
+		justify-content: flex-end;
+		gap: 8px;
+		padding: calc(var(--modal-gap) - 10px) var(--modal-gap)
+			calc(var(--modal-gap) - 10px);
+		margin: var(--modal-gap) calc(var(--modal-gap) * -1)
+			calc(var(--modal-gap) * -1);
+		border-top: 1px solid #eeeeee;
+		background: #ffffff;
 	}
 
 	&.blockera-component-delete-modal {
