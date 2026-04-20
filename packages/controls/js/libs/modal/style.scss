@@ -39,6 +39,11 @@
 		overflow: auto;
 		padding: 32px 32px 32px;
 	}
+
+	&.blockera-component-delete-modal {
+		--blockera-controls-primary-color: #e20b0b;
+		--blockera-controls-primary-color-darker-20: #b30808;
+	}
 }
 
 .components-modal__screen-overlay {
