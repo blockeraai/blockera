@@ -293,7 +293,9 @@ const RepeaterItem = ({
 										return;
 									}
 
-									customHeaderOnClick(e);
+									if (isFunction(customHeaderOnClick)) {
+										customHeaderOnClick(e);
+									}
 								}}
 							>
 								<RepeaterItemHeader
