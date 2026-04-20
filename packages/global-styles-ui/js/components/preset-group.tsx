@@ -199,10 +199,18 @@ const Presets = ({
 		[origin, PresetFields, presetFieldsPropsResolver]
 	);
 
-	const deleteConfirmWarningText = useMemo(
-		() => getPresetDeleteConfirmWarningText(origin, title),
-		[origin, title]
-	);
+	const confirmDeleteModalProps = useMemo(() => {
+		const deleteVariable = __('Delete variable', 'blockera');
+		return {
+			deleteButtonLabel: deleteVariable,
+			warningText: getPresetDeleteConfirmWarningText(origin, title),
+			errorNoticeText: __('This action cannot be undone.', 'blockera'),
+			confirmCheckboxLabel: __(
+				'I understand this action cannot be undone.',
+				'blockera'
+			),
+		};
+	}, [origin, title]);
 
 	return (
 		<RepeaterControl
@@ -226,7 +234,7 @@ const Presets = ({
 			)}
 			addNewButtonDataTest={`global-styles-preset-add-${controlName}`}
 			shouldConfirmDeleteModal={true}
-			deleteConfirmWarningText={deleteConfirmWarningText}
+			confirmDeleteModalProps={confirmDeleteModalProps}
 			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}
 			defaultRepeaterItemValue={defaultPresetValue}
