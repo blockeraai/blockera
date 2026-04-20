@@ -117,11 +117,7 @@ const PresetFieldsComponent = ({
 		[item, itemId, origin, presetFieldsPropsResolver]
 	);
 
-	return (
-		<PresetStateContainer activeColor="#1ca120">
-			<PresetFields {..._props} />
-		</PresetStateContainer>
-	);
+	return <PresetFields {..._props} />;
 };
 
 const Presets = ({
