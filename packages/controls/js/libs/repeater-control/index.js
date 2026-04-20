@@ -28,6 +28,7 @@ import { setValueAddon, useValueAddon } from '../../';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 import RepeaterPopoverTitleDelete from './components/popover-title-delete';
+import { BLOCKERA_REPEATER_PROMO_DATA_CY } from './data-cy';
 import { repeaterOnChange } from './store/reducers/utils';
 import { cleanupRepeater, isEnabledPromote } from './utils';
 
@@ -715,12 +716,17 @@ export default function RepeaterControl(
 			</div>
 			{!disableProHints &&
 				count >= 1 &&
-				isEnabledPromote(PromoComponent, repeaterItems) &&
-				PromoComponent({
-					isOpen: count >= 1,
-					items: repeaterItems,
-					onClose: () => setCount(0),
-				})}
+				isEnabledPromote(PromoComponent, repeaterItems) && (
+					<div data-cy={BLOCKERA_REPEATER_PROMO_DATA_CY}>
+						{PromoComponent({
+							isOpen: count >= 1,
+							items: repeaterItems,
+							onClose: () => setCount(0),
+						})}
+					</div>
+				)}
 		</RepeaterContextProvider>
 	);
 }
+
+export { BLOCKERA_REPEATER_PROMO_DATA_CY } from './data-cy';
