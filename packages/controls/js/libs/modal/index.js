@@ -17,10 +17,12 @@ import {
 /**
  * Internal dependencies
  */
+import Flex from '../flex';
 import type { ModalProps } from './type';
 
 export default function Modal({
 	children,
+	actions,
 	headerIcon,
 	headerTitle,
 	className,
@@ -54,6 +56,11 @@ export default function Modal({
 			{...props}
 		>
 			{children}
+			{actions !== undefined && actions !== null && actions !== false && (
+				<Flex className={componentInnerClassNames('modal__actions')}>
+					{actions}
+				</Flex>
+			)}
 		</WPModal>
 	);
 }
