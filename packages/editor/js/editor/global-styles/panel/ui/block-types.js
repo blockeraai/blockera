@@ -478,57 +478,20 @@ export const BlockTypes = ({
 					gap="12px"
 					style={{ width: '100%' }}
 				>
+					<Button
+						data-test="cancel-usage-for-multiple-blocks-button"
+						variant="tertiary"
+						onClick={() => setIsOpenUsageForMultipleBlocks(false)}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
 					<Flex
+						justifyContent="flex-end"
 						alignItems="center"
 						gap="16px"
 						style={{ flexWrap: 'wrap', minWidth: 0 }}
 					>
-						{!isSaving && (
-							<Button
-								data-test="save-usage-for-multiple-blocks-button"
-								disabled={
-									!isModified &&
-									isEquals(blocksState, initBlocksState)
-								}
-								variant="primary"
-								onClick={() => {
-									setIsSaving(true);
-									setTimeout(() => {
-										handleOnSave();
-										// Clear action state.
-										setAction(null);
-										setIsOpenUsageForMultipleBlocks(false);
-									}, 10);
-								}}
-							>
-								{__('Save', 'blockera')}
-							</Button>
-						)}
-						{isSaving && (
-							<Button variant="primary">
-								<Animate type="loading">
-									{({ className: animateClassName }) => (
-										<Flex
-											className={classNames(
-												'message',
-												animateClassName
-											)}
-											direction="row"
-											gap={5}
-											alignItems="center"
-											style={{
-												fontSize: '14px',
-												marginRight: '5px',
-											}}
-										>
-											<Icon icon={'cloud'} library="wp" />
-
-											{__('Saving…', 'blockera')}
-										</Flex>
-									)}
-								</Animate>
-							</Button>
-						)}
 						{isFreeBlockLimit && (
 							<span
 								className={classNames(
@@ -556,15 +519,55 @@ export const BlockTypes = ({
 								)}
 							</span>
 						)}
-					</Flex>
 
-					<Button
-						data-test="cancel-usage-for-multiple-blocks-button"
-						variant="tertiary"
-						onClick={() => setIsOpenUsageForMultipleBlocks(false)}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
+						{isSaving && (
+							<Button variant="primary">
+								<Animate type="loading">
+									{({ className: animateClassName }) => (
+										<Flex
+											className={classNames(
+												'message',
+												animateClassName
+											)}
+											direction="row"
+											gap={5}
+											alignItems="center"
+											style={{
+												fontSize: '14px',
+												marginRight: '5px',
+											}}
+										>
+											<Icon icon={'cloud'} library="wp" />
+
+											{__('Saving…', 'blockera')}
+										</Flex>
+									)}
+								</Animate>
+							</Button>
+						)}
+
+						{!isSaving && (
+							<Button
+								data-test="save-usage-for-multiple-blocks-button"
+								disabled={
+									!isModified &&
+									isEquals(blocksState, initBlocksState)
+								}
+								variant="primary"
+								onClick={() => {
+									setIsSaving(true);
+									setTimeout(() => {
+										handleOnSave();
+										// Clear action state.
+										setAction(null);
+										setIsOpenUsageForMultipleBlocks(false);
+									}, 10);
+								}}
+							>
+								{__('Save', 'blockera')}
+							</Button>
+						)}
+					</Flex>
 				</Flex>
 			</Fill>
 			<Fill name="usage-for-multiple-blocks-actions">

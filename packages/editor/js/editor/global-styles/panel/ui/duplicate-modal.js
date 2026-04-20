@@ -182,8 +182,8 @@ export const DuplicateModal = ({
 			}
 		>
 			<Flex direction="column" gap={40}>
-				<Flex direction="column" gap={25}>
-					<p style={{ margin: '0', color: '#707070' }}>
+				<Flex direction="column" gap={15}>
+					<p style={{ margin: '0', color: '#1e1e1e' }}>
 						{__(
 							'Create a copy of this style variation with a new name and ID.',
 							'blockera'

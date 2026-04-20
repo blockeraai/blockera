@@ -53,13 +53,13 @@ export const SearchBlockTypes = ({
 				gap={'20px'}
 				className={classNames('search-block-types')}
 			>
-				<p style={{ margin: '0', color: '#707070' }}>
+				<p style={{ margin: '0', color: '#1e1e1e' }}>
 					{__(
 						'Select the blocks that should use this style variation.',
 						'blockera'
 					)}
 				</p>
-				<p style={{ margin: '0', color: '#707070' }}>
+				<p style={{ margin: '0', color: '#1e1e1e' }}>
 					{sprintf(
 						/* translators: %1$s: The style name. */
 						__(
