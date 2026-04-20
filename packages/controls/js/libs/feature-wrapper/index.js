@@ -246,6 +246,23 @@ export function FeatureWrapper({
 					}
 					headerTitle={__('Install Companion Plugin', 'blockera')}
 					onRequestClose={() => setIsCompanionModalOpen(false)}
+					actions={
+						<>
+							<Button
+								variant="tertiary"
+								onClick={() => setIsCompanionModalOpen(false)}
+							>
+								{__('Close', 'blockera')}
+							</Button>
+
+							<Button variant="primary">
+								{__('Install', 'blockera')}
+							</Button>
+						</>
+					}
+					className={componentInnerClassNames(
+						'feature-wrapper-companion-modal'
+					)}
 				>
 					<p>
 						{__(
@@ -253,18 +270,6 @@ export function FeatureWrapper({
 							'blockera'
 						)}
 					</p>
-
-					<div style={{ display: 'flex', gap: 8 }}>
-						<Button variant="primary">
-							{__('Install', 'blockera')}
-						</Button>
-						<Button
-							variant="tertiary"
-							onClick={() => setIsCompanionModalOpen(false)}
-						>
-							{__('Close', 'blockera')}
-						</Button>
-					</div>
 				</Modal>
 			) : null}
 
