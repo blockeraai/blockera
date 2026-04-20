@@ -12,6 +12,26 @@
 		& + * {
 			margin-top: 40px;
 		}
+
+		.blockera-component-modal__header-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 34px;
+			height: 34px;
+			background: color-mix(
+				in srgb,
+				var(--blockera-controls-primary-color) 10%,
+				transparent
+			);
+			border-radius: 50%;
+
+			svg {
+				fill: var(--blockera-controls-primary-color);
+				width: 26px;
+				height: 26px;
+			}
+		}
 	}
 
 	.components-modal__content {

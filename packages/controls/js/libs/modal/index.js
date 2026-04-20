@@ -9,7 +9,10 @@ import { Modal as WPModal } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { componentClassNames } from '@blockera/classnames';
+import {
+	componentClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -30,7 +33,16 @@ export default function Modal({
 			title={
 				headerTitle ? (
 					<>
-						{headerIcon}
+						{headerIcon && (
+							<span
+								className={componentInnerClassNames(
+									'modal__header-icon'
+								)}
+							>
+								{headerIcon}
+							</span>
+						)}
+
 						{headerTitle}
 					</>
 				) : null
