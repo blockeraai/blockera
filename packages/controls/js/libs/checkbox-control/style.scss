@@ -1,6 +1,6 @@
 .blockera-control.blockera-control-checkbox {
 	margin: 0 !important;
-	font-size: 12px;
+	font-size: 13px;
 	display: flex;
 	align-items: center;
 	--wp-components-color-accent: var(--blockera-controls-primary-color);
@@ -23,7 +23,7 @@
 
 	&.is-bold {
 		.components-checkbox-control__label {
-			font-weight: 600;
+			font-weight: 500;
 		}
 	}
 }
