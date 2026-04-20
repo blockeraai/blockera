@@ -40,9 +40,10 @@ describe('Global Styles UI → radial gradient presets (theme.json + UI)', () =>
 			.last()
 			.within(() => {
 				cy.getByDataTest('global-styles-preset-name-field')
-					.find('input')
 					.first()
-					.clear({ force: true })
+					.clear({ force: true });
+				cy.getByDataTest('global-styles-preset-name-field')
+					.first()
 					.type('E2E Radial Edited', { delay: 0, force: true });
 			});
 
@@ -79,7 +80,6 @@ describe('Global Styles UI → radial gradient presets (theme.json + UI)', () =>
 			.last()
 			.within(() => {
 				cy.getByDataTest('global-styles-preset-name-field')
-					.find('input')
 					.first()
 					.should('have.value', 'E2E Radial Edited');
 			});

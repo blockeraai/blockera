@@ -80,7 +80,6 @@ describe('Global Styles UI → linear gradient presets (theme.json + UI)', () =>
 			.last()
 			.within(() => {
 				cy.getByDataTest('global-styles-preset-name-field')
-					.find('input')
 					.first()
 					.should('have.value', 'E2E Linear Edited');
 			});
