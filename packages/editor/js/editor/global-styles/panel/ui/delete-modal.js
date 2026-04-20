@@ -37,7 +37,7 @@ export const DeleteModal = ({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('delete-modal')}
 			headerIcon={<Icon icon="trash" iconSize="34" />}
 			headerTitle={__('Delete style variation', 'blockera')}
 			isDismissible={true}
