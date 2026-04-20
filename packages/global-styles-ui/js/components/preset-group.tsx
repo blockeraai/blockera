@@ -252,6 +252,7 @@ const Presets = ({
 			showPopoverTitleDelete={canEditGlobalStyles}
 			actionButtonDelete={canEditGlobalStyles}
 			actionButtonClone={canEditGlobalStyles}
+			enablePromoCountOnRepeaterItemHeader={'custom' === origin}
 			{...props}
 		/>
 	);

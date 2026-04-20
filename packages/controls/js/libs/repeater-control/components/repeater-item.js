@@ -70,7 +70,30 @@ const RepeaterItem = ({
 		actionMenuButtonLabel,
 		onSelectableItemActivate,
 		showItemEditButton,
+		setCount,
+		customProps,
+		enablePromoCountOnRepeaterItemHeader,
 	} = useContext(RepeaterContext);
+
+	const { onClick: customHeaderOnClick, ...restCustomProps } =
+		customProps || {};
+
+	const bumpPromoInteractionCount = (itemId: string): boolean => {
+		if (enablePromoCountOnRepeaterItemHeader === false) {
+			return false;
+		}
+
+		if (
+			isEnabledPromote(PromoComponent, items) &&
+			Object.keys(items).indexOf(itemId) > 0
+		) {
+			setCount((c) => c + 1);
+
+			return true;
+		}
+
+		return false;
+	};
 
 	const repeaterItemActionsProps = {
 		item,
@@ -223,6 +246,11 @@ const RepeaterItem = ({
 									'repeater-group-header'
 								)}
 								onClick={(event) => {
+									if (bumpPromoInteractionCount(itemId)) {
+										event.stopPropagation();
+										return;
+									}
+
 									if (isOpenPopoverEvent(event)) {
 										setOpen(!isOpen);
 									}
@@ -254,7 +282,26 @@ const RepeaterItem = ({
 								)}
 							</div>
 						) : (
-							<RepeaterItemHeader {...repeaterItemActionsProps} />
+							<div
+								className={controlInnerClassNames(
+									'repeater-item-header-holder'
+								)}
+								style={{ width: '100%' }}
+								onClickCapture={(e) => {
+									if (bumpPromoInteractionCount(itemId)) {
+										e.stopPropagation();
+										return;
+									}
+
+									customHeaderOnClick(e);
+								}}
+							>
+								<RepeaterItemHeader
+									{...repeaterItemActionsProps}
+									{...restCustomProps}
+									onClick={customHeaderOnClick}
+								/>
+							</div>
 						)
 					}
 					headerOpenIcon={

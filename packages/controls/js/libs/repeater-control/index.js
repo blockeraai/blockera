@@ -109,6 +109,7 @@ export default function RepeaterControl(
 		enableCreatingStep = false,
 		showNoItemsMessage = false,
 		noItemsMessage,
+		enablePromoCountOnRepeaterItemHeader = true,
 		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
@@ -294,6 +295,7 @@ export default function RepeaterControl(
 		//
 		customProps,
 		isNativeSupport,
+		enablePromoCountOnRepeaterItemHeader,
 	};
 
 	const addNewButtonOnClick = () => {
