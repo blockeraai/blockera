@@ -40,6 +40,7 @@ import {
 	stripIsSelectedFromRepeaterItems,
 	stripRepeaterPickerUiFields,
 } from './variable-picker-preset-utils';
+import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
 
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
@@ -97,6 +98,7 @@ type PresetsProps = {
 		itemId: string,
 		item: Record<string, unknown>
 	) => boolean;
+	canEditGlobalStyles: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -144,6 +146,7 @@ const Presets = ({
 	onSelectableItemActivate,
 	showItemEditButton = false,
 	shouldRenderRepeaterItem,
+	canEditGlobalStyles,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -250,7 +253,9 @@ const Presets = ({
 			onSelectableItemActivate={onSelectableItemActivate}
 			showItemEditButton={showItemEditButton}
 			shouldRenderRepeaterItem={shouldRenderRepeaterItem}
-			showPopoverTitleDelete={true}
+			showPopoverTitleDelete={canEditGlobalStyles}
+			actionButtonDelete={canEditGlobalStyles}
+			actionButtonClone={canEditGlobalStyles}
 			{...props}
 		/>
 	);
@@ -270,6 +275,7 @@ export const PresetGroup = ({
 	enableCreatingStep = true,
 }: PresetGroupPropsType) => {
 	const pickerCtx = useVarPickerPresetContext();
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
 
@@ -423,7 +429,10 @@ export const PresetGroup = ({
 						controlName={controlName}
 						PresetFields={PresetFields}
 						popoverTitle={__('Edit Variable', 'blockera')}
-						canAddNewItem={'custom' === origin}
+						canAddNewItem={
+							'custom' === origin && canEditGlobalStyles
+						}
+						canEditGlobalStyles={canEditGlobalStyles}
 						repeaterItemHeader={repeaterItemHeader}
 						defaultPresetValue={defaultPresetValue}
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
@@ -440,7 +449,9 @@ export const PresetGroup = ({
 								: undefined
 						}
 						showItemEditButton={
-							isVariablePicker && !pickerCtx.disablePresetRowEdit
+							isVariablePicker &&
+							!pickerCtx.disablePresetRowEdit &&
+							canEditGlobalStyles
 						}
 						actionButtonAdd={
 							pickerCtx.omitRepeaterSectionLabel ? false : true
