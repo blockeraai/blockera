@@ -212,6 +212,13 @@ export type RepeaterControlProps = {
 	 */
 	injectHeaderButtonsEnd?: MixedElement | null | string,
 	/**
+	 * When true, promotional repeater state (`count`) increments on repeater item header
+	 * clicks (including custom `repeaterItemHeader`), when promo conditions apply.
+	 *
+	 * @default true
+	 */
+	enablePromoCountOnRepeaterItemHeader?: boolean,
+	/**
 	 * Header component for each repeater item
 	 */
 	repeaterItemHeader?: MixedElement | any,

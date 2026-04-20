@@ -121,6 +121,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 							/>
 						);
 					}}
+					enablePromoCountOnRepeaterItemHeader={false}
 				>
 					{children}
 				</RepeaterControl>

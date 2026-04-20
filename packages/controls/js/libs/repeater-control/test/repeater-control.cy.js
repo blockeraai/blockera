@@ -10,11 +10,13 @@ import '@4tw/cypress-drag-drop';
 /**
  * Internal dependencies
  */
+import { BLOCKERA_REPEATER_PROMO_DATA_CY } from '../data-cy';
 import { STORE_NAME } from '../store';
 import RepeaterControl from '../index';
 import { RepeaterContext } from '../context';
 import { useControlContext } from '../../../context';
 import { getControlValue } from '../../../store/selectors';
+import { isFunction } from '@blockera/utils';
 import { default as InputControl } from '../../input-control';
 import { default as ToggleSelectControl } from '../../toggle-select-control';
 import AccordionCustomOpenIcon from './icons/accordion-custom-open-icon';
@@ -1311,6 +1313,183 @@ describe('repeater control component testing', () => {
 				'custom-class'
 			);
 		});
+
+		describe('enablePromoCountOnRepeaterItemHeader', () => {
+			const twoItemValue = {
+				0: { isVisible: true, isOpen: false },
+				1: { isVisible: true, isOpen: false },
+			};
+
+			function PromoWidgetStub() {
+				return <span>Promo</span>;
+			}
+
+			function TestCustomRepeaterItemHeader({
+				itemId,
+				isOpen,
+				setOpen,
+				isOpenPopoverEvent,
+				onClick,
+			}) {
+				return (
+					<div
+						data-cy="custom-repeater-header"
+						onClick={(event) => {
+							if (isFunction(onClick)) {
+								onClick(event);
+							}
+
+							if (isOpenPopoverEvent(event)) {
+								setOpen(!isOpen);
+							}
+						}}
+					>
+						{__('Custom header', 'blockera')} {String(itemId)}
+					</div>
+				);
+			}
+
+			it('should keep second item closed when promo is active and header promo count is enabled (default)', () => {
+				const name = nanoid();
+
+				cy.withDataProvider({
+					component: (
+						<RepeaterControl
+							id="repeater-header-promo-default"
+							label="Items"
+							PromoComponent={PromoWidgetStub}
+							repeaterItemChildren={RepeaterItemChildren}
+						/>
+					),
+					value: twoItemValue,
+					store: STORE_NAME,
+					name,
+				});
+
+				cy.getByDataCy('repeater-item')
+					.eq(1)
+					.find('[data-cy="group-control-header"]')
+					.click();
+
+				cy.getByDataCy(BLOCKERA_REPEATER_PROMO_DATA_CY).should('exist');
+
+				cy.then(() => {
+					const value = getControlValue(name, STORE_NAME);
+					expect(value['1']?.isOpen).to.not.equal(true);
+				});
+			});
+
+			it('should open second item when header promo count is disabled', () => {
+				const name = nanoid();
+
+				cy.withDataProvider({
+					component: (
+						<RepeaterControl
+							id="repeater-header-promo-disabled"
+							label="Items"
+							PromoComponent={PromoWidgetStub}
+							repeaterItemChildren={RepeaterItemChildren}
+							enablePromoCountOnRepeaterItemHeader={false}
+						/>
+					),
+					value: twoItemValue,
+					store: STORE_NAME,
+					name,
+				});
+
+				cy.getByDataCy('repeater-item')
+					.eq(1)
+					.find('[data-cy="group-control-header"]')
+					.click();
+
+				cy.then(() => {
+					const value = getControlValue(name, STORE_NAME);
+					expect(value['1']?.isOpen).to.equal(true);
+				});
+			});
+
+			it('should open first item when promo is active (header promo count only applies from second item)', () => {
+				const name = nanoid();
+
+				cy.withDataProvider({
+					component: (
+						<RepeaterControl
+							id="repeater-header-promo-first"
+							label="Items"
+							PromoComponent={PromoWidgetStub}
+							repeaterItemChildren={RepeaterItemChildren}
+						/>
+					),
+					value: twoItemValue,
+					store: STORE_NAME,
+					name,
+				});
+
+				cy.getByDataCy('repeater-item')
+					.eq(0)
+					.find('[data-cy="group-control-header"]')
+					.click();
+
+				cy.then(() => {
+					const value = getControlValue(name, STORE_NAME);
+					expect(value['0']?.isOpen).to.equal(true);
+				});
+			});
+
+			it('should open second item when promo is not rendered', () => {
+				const name = nanoid();
+
+				cy.withDataProvider({
+					component: (
+						<RepeaterControl
+							id="repeater-no-promo"
+							label="Items"
+							repeaterItemChildren={RepeaterItemChildren}
+						/>
+					),
+					value: twoItemValue,
+					store: STORE_NAME,
+					name,
+				});
+
+				cy.getByDataCy('repeater-item')
+					.eq(1)
+					.find('[data-cy="group-control-header"]')
+					.click();
+
+				cy.then(() => {
+					const value = getControlValue(name, STORE_NAME);
+					expect(value['1']?.isOpen).to.equal(true);
+				});
+			});
+
+			it('should invoke customProps onClick on custom repeater item header', () => {
+				const name = nanoid();
+				const headerClickSpy = cy.stub().as('headerClickSpy');
+
+				cy.withDataProvider({
+					component: (
+						<RepeaterControl
+							id="repeater-custom-header-onclick"
+							label="Items"
+							repeaterItemChildren={RepeaterFilledItemChildren}
+							repeaterItemHeader={TestCustomRepeaterItemHeader}
+							customProps={{ onClick: headerClickSpy }}
+							popoverTitle="Popover Title"
+						/>
+					),
+					value: {
+						0: { name: 'a', isVisible: true, isOpen: false },
+					},
+					store: STORE_NAME,
+					name,
+				});
+
+				cy.getByDataCy('custom-repeater-header').click();
+
+				cy.get('@headerClickSpy').should('have.been.called');
+			});
+		});
 	});
 
 	describe('accordion', () => {
@@ -1541,11 +1720,7 @@ describe('repeater control component testing', () => {
 						{...{
 							id: 'test-control',
 							isSupportInserter: true,
-							InserterComponent: (props: {
-								insertArgs: Object,
-								callback: () => void,
-								PlusButton: ComponentType<any>,
-							}) => {
+							InserterComponent: (props) => {
 								const { PlusButton } = props;
 
 								return <PlusButton />;
