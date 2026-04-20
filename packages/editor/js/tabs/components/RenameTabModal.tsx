@@ -84,14 +84,46 @@ export default function RenameTabModal({
 
 	return (
 		<Modal
-			headerTitle={
-				<>
-					<Icon icon="pencil" library="wp" />
-					{__('Rename Tab', 'blockera')}
-				</>
-			}
+			headerIcon={<Icon icon="pencil" library="wp" />}
+			headerTitle={__('Rename Tab', 'blockera')}
 			onRequestClose={handleClose}
 			className="blockera-tabs-rename-modal"
+			actions={
+				<div className="blockera-tabs-rename-modal-actions">
+					{tab.customTitle && (
+						<Button
+							variant="secondary"
+							isDestructive
+							onClick={handleRemoveRename}
+							style={{ marginRight: 'auto' }}
+							{...testId(
+								WORKSPACE_TABS_TEST_ID.renameModalRemoveRename
+							)}
+						>
+							{__('Remove rename', 'blockera')}
+						</Button>
+					)}
+
+					<div className="blockera-tabs-rename-modal-actions-right">
+						<Button
+							variant="secondary"
+							onClick={handleClose}
+							{...testId(
+								WORKSPACE_TABS_TEST_ID.renameModalCancel
+							)}
+						>
+							{__('Cancel', 'blockera')}
+						</Button>
+						<Button
+							variant="primary"
+							onClick={handleSave}
+							{...testId(WORKSPACE_TABS_TEST_ID.renameModalSave)}
+						>
+							{__('Save', 'blockera')}
+						</Button>
+					</div>
+				</div>
+			}
 		>
 			<div
 				className="blockera-tabs-rename-modal-content"
@@ -108,39 +140,6 @@ export default function RenameTabModal({
 					)}
 					{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
 				/>
-			</div>
-
-			<div className="blockera-tabs-rename-modal-actions">
-				{tab.customTitle && (
-					<Button
-						variant="secondary"
-						isDestructive
-						onClick={handleRemoveRename}
-						style={{ marginRight: 'auto' }}
-						{...testId(
-							WORKSPACE_TABS_TEST_ID.renameModalRemoveRename
-						)}
-					>
-						{__('Remove rename', 'blockera')}
-					</Button>
-				)}
-
-				<div className="blockera-tabs-rename-modal-actions-right">
-					<Button
-						variant="secondary"
-						onClick={handleClose}
-						{...testId(WORKSPACE_TABS_TEST_ID.renameModalCancel)}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
-					<Button
-						variant="primary"
-						onClick={handleSave}
-						{...testId(WORKSPACE_TABS_TEST_ID.renameModalSave)}
-					>
-						{__('Save', 'blockera')}
-					</Button>
-				</div>
 			</div>
 		</Modal>
 	);
