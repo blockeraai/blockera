@@ -16,7 +16,6 @@ import {
 	Button,
 	NoticeControl,
 	CheckboxControl,
-	DynamicHtmlFormatter,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
@@ -24,12 +23,10 @@ import { componentInnerClassNames } from '@blockera/classnames';
 
 export const DeleteModal = ({
 	style,
-	buttonText,
 	handleOnDelete,
 	setIsOpenDeleteModal,
 }: {
 	style: Object,
-	buttonText: string,
 	handleOnDelete: (style: Object) => void,
 	setIsOpenDeleteModal: (isOpen: boolean) => void,
 }): MixedElement => {
@@ -39,7 +36,15 @@ export const DeleteModal = ({
 		<Modal
 			className={componentInnerClassNames('delete-modal')}
 			headerIcon={<Icon icon="trash" iconSize="34" />}
-			headerTitle={__('Delete style variation', 'blockera')}
+			headerTitle={
+				style.label
+					? sprintf(
+							/* translators: %s: The style variation label. */
+							__('Delete "%s"?', 'blockera'),
+							style.label
+						)
+					: __('Delete style variation', 'blockera')
+			}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDeleteModal(false)}
 			actions={
@@ -65,32 +70,16 @@ export const DeleteModal = ({
 							setIsOpenDeleteModal(false);
 						}}
 					>
-						{__('Delete', 'blockera')}
+						{__('Delete style variation', 'blockera')}
 					</Button>
 				</>
 			}
 		>
-			<Flex direction="column" gap={40}>
+			<Flex direction="column" gap={30}>
 				<Flex direction="column" gap={15}>
 					<p style={{ margin: '0', color: '#1e1e1e' }}>
-						<DynamicHtmlFormatter
-							text={sprintf(
-								/* translators: %s: The style variation name. */
-								__(
-									'Are you sure you want to delete %s?',
-									'blockera'
-								),
-								'{item}'
-							)}
-							replacements={{
-								item: <strong>{buttonText}</strong>,
-							}}
-						/>
-					</p>
-
-					<p style={{ margin: '0', color: '#707070' }}>
 						{__(
-							'This will permanently delete the style and all connections to blocks using it. Those blocks will lose their styles and revert to defaults.',
+							'The style variation will be permanently removed from your site. Any blocks using it will lose their styling and revert to their default appearance.',
 							'blockera'
 						)}
 					</p>
@@ -102,10 +91,7 @@ export const DeleteModal = ({
 					direction="column"
 				>
 					<NoticeControl type={'error'}>
-						{__(
-							'Deleting this style variation cannot be undone. Blocks using the style variation will lose their styles unless updated manually.',
-							'blockera'
-						)}
+						{__('This action cannot be undone.', 'blockera')}
 					</NoticeControl>
 
 					<ControlContextProvider

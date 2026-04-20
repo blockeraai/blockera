@@ -77,7 +77,6 @@ export const StyleItemMenu = (): MixedElement => {
 			{isOpenDeleteModal && (
 				<DeleteModal
 					style={style}
-					buttonText={buttonText}
 					handleOnDelete={handleOnDelete}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
 				/>
