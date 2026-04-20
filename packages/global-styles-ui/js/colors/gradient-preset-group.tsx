@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useMemo } from '@wordpress/element';
 import type { Gradient } from '@wordpress/global-styles-engine';
 
 /**
@@ -96,43 +96,53 @@ export function GradientPresetGroup({
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, gradientKindPhrase);
 
-	const index = getNewIndexFromPresets(
-		gradients.map((g) => ({ slug: g.slug })),
-		`custom-`
+	const index = useMemo(
+		() =>
+			getNewIndexFromPresets(
+				gradients.map((g) => ({ slug: g.slug })),
+				`custom-`
+			),
+		[gradients]
 	);
 
-	const defaultPresetValue = {
-		isVisible: true,
-		gradient: isLinear
-			? 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)'
-			: 'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-		slug: `custom-${index}`,
-		deletable: origin === 'custom',
-		cloneable: origin === 'custom',
-		visibilitySupport: origin === 'custom',
-		name: (isLinear
-			? sprintf(
-					/* translators: %d: gradient index */
-					__('Linear Gradient %d', 'blockera'),
-					index
-				)
-			: sprintf(
-					/* translators: %d: gradient index */
-					__('Radial Gradient %d', 'blockera'),
-					index
-				)) as string,
-	};
+	const defaultPresetValue = useMemo(
+		() => ({
+			isVisible: true,
+			gradient: isLinear
+				? 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)'
+				: 'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
+			slug: `custom-${index}`,
+			deletable: origin === 'custom',
+			cloneable: origin === 'custom',
+			visibilitySupport: origin === 'custom',
+			name: (isLinear
+				? sprintf(
+						/* translators: %d: gradient index */
+						__('Linear Gradient %d', 'blockera'),
+						index
+					)
+				: sprintf(
+						/* translators: %d: gradient index */
+						__('Radial Gradient %d', 'blockera'),
+						index
+					)) as string,
+		}),
+		[index, origin, isLinear]
+	);
 
-	const presetFieldsPropsResolver = (
-		item: VariableType,
-		itemId: string | number,
-		originArg: string | string[]
-	) => ({
-		gradientItem: item,
-		origin: originArg,
-		presetId: itemId,
-		gradientType: gradientType as 'linear-gradient' | 'radial-gradient',
-	});
+	const presetFieldsPropsResolver = useCallback(
+		(
+			item: VariableType,
+			itemId: string | number,
+			originArg: string | string[]
+		) => ({
+			gradientItem: item,
+			origin: originArg,
+			presetId: itemId,
+			gradientType: gradientType as 'linear-gradient' | 'radial-gradient',
+		}),
+		[gradientType]
+	);
 
 	const handleUpdate = useCallback(
 		(newValue: object) => {
