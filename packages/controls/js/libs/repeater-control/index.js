@@ -109,8 +109,9 @@ export default function RepeaterControl(
 		enableCreatingStep = false,
 		showNoItemsMessage = false,
 		noItemsMessage,
+		customProps = {},
 		enablePromoCountOnRepeaterItemHeader = true,
-		...customProps
+		...additionalPropsForRepeaterContext
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
 	let resolvedPopoverTitleButtonsRight = popoverTitleButtonsRight;
@@ -293,7 +294,10 @@ export default function RepeaterControl(
 		enableCreatingStep,
 		repeaterItems, // value
 		//
-		customProps,
+		customProps: {
+			...additionalPropsForRepeaterContext,
+			...customProps,
+		},
 		isNativeSupport,
 		enablePromoCountOnRepeaterItemHeader,
 	};
