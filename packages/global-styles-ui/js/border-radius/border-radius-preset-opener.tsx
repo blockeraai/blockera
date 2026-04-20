@@ -18,6 +18,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { radiusPresetSizeToString } from './utils';
 
@@ -38,6 +39,7 @@ export function BorderRadiusPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: BorderRadiusPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const summary = radiusPresetSizeToString(variable?.size);
 	const display = summary || __('EMPTY', 'blockera');
 
@@ -61,6 +63,7 @@ export function BorderRadiusPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

@@ -19,7 +19,7 @@ import {
  * Internal dependencies
  */
 import SpacingSizePreview from './spacing-size-preview';
-import { SharedPresetControls } from '../components';
+import { SharedPresetControls, useCanEditGlobalStyles } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllSpacingSlugs } from '../components/utils';
 
@@ -41,6 +41,7 @@ function SpacingSizeComponent({
 	spacingSize: VariableType & SpacingDefaultPresetValue;
 }) {
 	const { slug } = spacingSize;
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 
 	const {
 		controlInfo: { name: controlId },
@@ -107,6 +108,7 @@ function SpacingSizeComponent({
 			<InputControl
 				data-test="spacing-size-input"
 				label={__('Size', 'blockera')}
+				readOnly={!canEditGlobalStyles}
 				controlAddonTypes={[]}
 				labelDescription={
 					<>

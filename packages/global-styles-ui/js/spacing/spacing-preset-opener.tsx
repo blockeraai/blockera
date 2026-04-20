@@ -22,6 +22,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { useSpacingPresetPreviewUsageFromProvider } from './spacing-preset-preview-context';
 
@@ -64,6 +65,7 @@ export function SpacingPresetOpener({
 	isOpenPopoverEvent,
 	previewUsage: previewUsageProp,
 }: SpacingPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const pickerCtx = useVarPickerPresetContext();
 	const fromProvider = useSpacingPresetPreviewUsageFromProvider();
 	const previewUsage = resolveSpacingPresetPreviewUsage(
@@ -93,6 +95,7 @@ export function SpacingPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

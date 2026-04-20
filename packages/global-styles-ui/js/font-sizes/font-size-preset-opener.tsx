@@ -18,6 +18,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 
 export type FontSizePresetOpenerProps = {
@@ -37,6 +38,7 @@ export function FontSizePresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FontSizePresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesFontSizePresetPreviewAttributes(
 			variable?.size
@@ -57,6 +59,7 @@ export function FontSizePresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

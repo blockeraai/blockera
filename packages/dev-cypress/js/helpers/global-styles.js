@@ -5,7 +5,13 @@
  * `store` from `@wordpress/core-data` (`wp.coreData.store`), `__experimentalGetCurrentGlobalStylesId`,
  * `canUser( 'update', { kind: 'root', name: 'globalStyles', id } )`, and `editEntityRecord` for the same entity.
  */
-import { closeWelcomeGuide, getSelectedBlock, getWPDataObject } from './editor';
+import {
+	activateMuPlugin,
+	closeWelcomeGuide,
+	deactivateMuPlugin,
+	getSelectedBlock,
+	getWPDataObject,
+} from './editor';
 import { openSiteEditor } from './site-navigation';
 
 const COLORS_OVERRIDE_CLASS = 'is-open-blockera-colors-navigation-override';
@@ -537,4 +543,28 @@ export function expectBlockAttrIncludesPresetVar(attributeKey, varNeedle) {
 		const raw = JSON.stringify(getSelectedBlock(data, attributeKey));
 		expect(raw, attributeKey).to.include(varNeedle);
 	});
+}
+
+/** Relative to plugin root; copied to mu-plugins by {@link activateMuPlugin}. */
+export const E2E_GLOBAL_STYLES_READ_ONLY_MU =
+	'packages/global-styles-ui/js/test/fixtures/e2e-global-styles-read-only.php';
+
+export const E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME =
+	'blockera-test-e2e-global-styles-read-only.php';
+
+/**
+ * Activates the read-only global styles MU plugin (no edit/delete `wp_global_styles`; REST writes 403).
+ */
+export function activateGlobalStylesReadOnlyE2eFixture() {
+	return activateMuPlugin(
+		E2E_GLOBAL_STYLES_READ_ONLY_MU,
+		E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME
+	);
+}
+
+export function deactivateGlobalStylesReadOnlyE2eFixture() {
+	return deactivateMuPlugin(
+		E2E_GLOBAL_STYLES_READ_ONLY_MU,
+		E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME
+	);
 }

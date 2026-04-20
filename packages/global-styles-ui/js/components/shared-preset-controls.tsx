@@ -35,6 +35,7 @@ import {
  */
 import { isSlugValid, normalizeVariablePresetSlug } from './utils';
 import type { VariableType } from './types';
+import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
 
 export interface SharedPresetControlsProps<
 	T extends VariableType = VariableType,
@@ -55,6 +56,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	allSlugs,
 	children,
 }: SharedPresetControlsProps<T>) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const presetLocked = !canEditGlobalStyles;
+
 	const isCreating = variable.creatingStep === true;
 
 	// ID field: locked while creating or until user clicks/focuses ID (then editable buffer).
@@ -117,6 +121,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const showMutedIdStyle = idFieldLocked;
 	// After creatingStep: locked ID uses read-only (not disabled) so click/focus can unlock; while creating, disabled blocks edits.
 	const idClickToEdit = !isIdEditable;
+	const allowIdUnlock = !presetLocked;
 	const slugError =
 		displayedSlug && !slugIsValid
 			? (() => {
@@ -139,20 +144,26 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const canSaveNameSlug = slugChanged && isConfirmedSlugChange && slugIsValid;
 
 	const unlockIdField = useCallback(() => {
+		if (presetLocked) {
+			return;
+		}
 		focusIdInputAfterUnlockRef.current = true;
 		setVariableSlug(slug);
 		setHasUserEditedSinceUnlock(false);
 		setIsIdEditable(true);
-	}, [slug]);
+	}, [slug, presetLocked]);
 
 	const handleLockedIdKeyDown = useCallback(
 		(event: KeyboardEvent<HTMLInputElement>) => {
+			if (!allowIdUnlock) {
+				return;
+			}
 			if (event.key === 'Enter' || event.key === ' ') {
 				event.preventDefault();
 				unlockIdField();
 			}
 		},
-		[unlockIdField]
+		[unlockIdField, allowIdUnlock]
 	);
 
 	const handleIdUndoClick = () => setVariableSlug(slug);
@@ -188,6 +199,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	const handleNameChange = useCallback(
 		(newValue: string) => {
+			if (presetLocked) {
+				return;
+			}
 			if (variable.creatingStep) {
 				const derivedSlug = normalizeVariablePresetSlug(newValue);
 				changeRepeaterItem({
@@ -218,6 +232,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			});
 		},
 		[
+			presetLocked,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
@@ -262,6 +277,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					<InputControl
 						controlAddonTypes={[]}
 						label={__('Name', 'blockera')}
+						readOnly={presetLocked}
 						onChange={handleNameChange}
 						columns="1fr 3fr"
 						data-test="global-styles-preset-name-field"
@@ -313,17 +329,17 @@ function SharedPresetControlsComponent<T extends VariableType>({
 									controlAddonTypes={[]}
 									readOnly={idClickToEdit}
 									onClick={
-										idClickToEdit
+										idClickToEdit && allowIdUnlock
 											? unlockIdField
 											: undefined
 									}
 									onFocus={
-										idClickToEdit
+										idClickToEdit && allowIdUnlock
 											? unlockIdField
 											: undefined
 									}
 									onKeyDown={
-										idClickToEdit
+										idClickToEdit && allowIdUnlock
 											? handleLockedIdKeyDown
 											: undefined
 									}
@@ -363,7 +379,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 										</Button>
 									)}
 
-									{idClickToEdit && (
+									{idClickToEdit && allowIdUnlock && (
 										<Button
 											onClick={unlockIdField}
 											variant="tertiary"

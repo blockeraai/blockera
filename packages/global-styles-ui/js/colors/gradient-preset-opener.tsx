@@ -19,6 +19,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types';
 
 export type GradientPresetOpenerProps = {
@@ -38,6 +39,7 @@ export function GradientPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: GradientPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const declarations = getGlobalStylesGradientPresetPreviewDeclarations(
 			variable?.gradient
@@ -58,6 +60,7 @@ export function GradientPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

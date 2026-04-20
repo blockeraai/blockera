@@ -38,80 +38,81 @@ function useGlobalStylesUserConfig(): [
 	(
 		callback: (config: Record<string, unknown>) => Record<string, unknown>
 	) => void,
+	boolean,
 ] {
-	const { globalStylesId, isReady, settings, styles, _links } = useSelect(
-		(selectStore) => {
-			const {
-				getEntityRecord,
-				getEditedEntityRecord,
-				hasFinishedResolution,
-				canUser,
-			} = selectStore(coreStore);
-			const _globalStylesId =
-				selectStore(coreStore).__experimentalGetCurrentGlobalStylesId();
+	const {
+		globalStylesId,
+		isReady,
+		settings,
+		styles,
+		_links,
+		canEditGlobalStyles,
+	} = useSelect((selectStore) => {
+		const {
+			getEntityRecord,
+			getEditedEntityRecord,
+			hasFinishedResolution,
+			canUser,
+		} = selectStore(coreStore);
+		const _globalStylesId =
+			selectStore(coreStore).__experimentalGetCurrentGlobalStylesId();
 
-			let record: Record<string, unknown> | undefined;
+		let record: Record<string, unknown> | undefined;
 
-			const userCanEditGlobalStyles = _globalStylesId
-				? canUser('update', {
-						kind: 'root',
-						name: 'globalStyles',
-						id: _globalStylesId,
-					})
-				: null;
+		const userCanEditGlobalStyles = _globalStylesId
+			? canUser('update', {
+					kind: 'root',
+					name: 'globalStyles',
+					id: _globalStylesId,
+				})
+			: null;
 
-			if (
-				_globalStylesId &&
-				typeof userCanEditGlobalStyles === 'boolean'
-			) {
-				if (userCanEditGlobalStyles) {
-					record = getEditedEntityRecord(
-						'root',
-						'globalStyles',
-						_globalStylesId
-					) as Record<string, unknown> | undefined;
-				} else {
-					record = getEntityRecord(
-						'root',
-						'globalStyles',
-						_globalStylesId,
-						{ context: 'view' }
-					) as Record<string, unknown> | undefined;
-				}
+		if (_globalStylesId && typeof userCanEditGlobalStyles === 'boolean') {
+			if (userCanEditGlobalStyles) {
+				record = getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					_globalStylesId
+				) as Record<string, unknown> | undefined;
+			} else {
+				record = getEntityRecord(
+					'root',
+					'globalStyles',
+					_globalStylesId,
+					{ context: 'view' }
+				) as Record<string, unknown> | undefined;
 			}
+		}
 
-			let hasResolved = false;
-			if (
-				hasFinishedResolution('__experimentalGetCurrentGlobalStylesId')
-			) {
-				if (_globalStylesId) {
-					hasResolved = userCanEditGlobalStyles
-						? hasFinishedResolution('getEditedEntityRecord', [
-								'root',
-								'globalStyles',
-								_globalStylesId,
-							])
-						: hasFinishedResolution('getEntityRecord', [
-								'root',
-								'globalStyles',
-								_globalStylesId,
-								{ context: 'view' },
-							]);
-				} else {
-					hasResolved = true;
-				}
+		let hasResolved = false;
+		if (hasFinishedResolution('__experimentalGetCurrentGlobalStylesId')) {
+			if (_globalStylesId) {
+				hasResolved = userCanEditGlobalStyles
+					? hasFinishedResolution('getEditedEntityRecord', [
+							'root',
+							'globalStyles',
+							_globalStylesId,
+						])
+					: hasFinishedResolution('getEntityRecord', [
+							'root',
+							'globalStyles',
+							_globalStylesId,
+							{ context: 'view' },
+						]);
+			} else {
+				hasResolved = true;
 			}
+		}
 
-			return {
-				globalStylesId: _globalStylesId,
-				isReady: hasResolved,
-				settings: record?.settings,
-				styles: record?.styles,
-				_links: record?._links,
-			};
-		},
-		[]
-	);
+		return {
+			globalStylesId: _globalStylesId,
+			isReady: hasResolved,
+			settings: record?.settings,
+			styles: record?.styles,
+			_links: record?._links,
+			canEditGlobalStyles: userCanEditGlobalStyles === true,
+		};
+	}, []);
 
 	const { getEditedEntityRecord } = useSelect(coreStore);
 	const { editEntityRecord } = useDispatch(coreStore);
@@ -132,7 +133,7 @@ function useGlobalStylesUserConfig(): [
 				| Record<string, unknown>,
 			options: Record<string, unknown> = {}
 		) => {
-			if (!globalStylesId) {
+			if (!globalStylesId || !canEditGlobalStyles) {
 				return;
 			}
 
@@ -177,10 +178,15 @@ function useGlobalStylesUserConfig(): [
 				options
 			);
 		},
-		[globalStylesId, editEntityRecord, getEditedEntityRecord]
+		[
+			globalStylesId,
+			canEditGlobalStyles,
+			editEntityRecord,
+			getEditedEntityRecord,
+		]
 	);
 
-	return [isReady, config, setConfig];
+	return [isReady, config, setConfig, canEditGlobalStyles];
 }
 
 function useGlobalStylesBaseConfig(): [boolean, Record<string, unknown>] {
@@ -207,7 +213,7 @@ export function useGlobalStylesContext({
 	single: returnSingleSlice = false,
 	from = 'merged',
 }: UseGlobalStylesContextOptions = {}): Record<string, unknown> {
-	const [isUserConfigReady, userConfig, setUserConfig] =
+	const [isUserConfigReady, userConfig, setUserConfig, canEditGlobalStyles] =
 		useGlobalStylesUserConfig();
 	const [isBaseConfigReady, baseConfig] = useGlobalStylesBaseConfig();
 
@@ -243,6 +249,7 @@ export function useGlobalStylesContext({
 			base: baseConfig,
 			merged: mergedConfig,
 			isReady: isUserConfigReady && isBaseConfigReady,
+			canEditGlobalStyles,
 		};
 	}, [
 		path,
@@ -253,6 +260,7 @@ export function useGlobalStylesContext({
 		setUserConfig,
 		isUserConfigReady,
 		isBaseConfigReady,
+		canEditGlobalStyles,
 	]);
 
 	return returnSingleSlice

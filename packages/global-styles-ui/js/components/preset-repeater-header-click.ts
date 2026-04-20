@@ -12,6 +12,11 @@ export type GetPresetRepeaterHeaderOnClickArgs = {
 	readonly isOpen: boolean;
 	readonly setOpen: (open: boolean) => boolean;
 	readonly isOpenPopoverEvent: (event: MouseEvent) => boolean;
+	/**
+	 * When false, the header does not open the edit popover (user cannot edit global styles).
+	 * Variable-picker rows with `selectable` still delegate selection to GroupControl first.
+	 */
+	readonly allowEditPopover?: boolean;
 };
 
 /**
@@ -22,9 +27,13 @@ export function getPresetRepeaterHeaderOnClick({
 	isOpen,
 	setOpen,
 	isOpenPopoverEvent,
+	allowEditPopover = true,
 }: GetPresetRepeaterHeaderOnClickArgs): (event: MouseEvent) => void {
 	return (event: MouseEvent) => {
 		if (item?.selectable) {
+			return;
+		}
+		if (allowEditPopover === false) {
 			return;
 		}
 		if (isOpenPopoverEvent(event)) {
