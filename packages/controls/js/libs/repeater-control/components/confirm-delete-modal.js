@@ -89,6 +89,31 @@ function ConfirmDeleteModal({
 			headerTitle={headerTitle}
 			isDismissible={true}
 			onRequestClose={handleRequestClose}
+			actions={
+				<>
+					<Button
+						data-test="confirm-delete-modal-cancel-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsConfirmedDelete(false);
+							onClose();
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="confirm-delete-modal-delete-button"
+						disabled={!isConfirmedDelete}
+						variant="primary"
+						onClick={() => {
+							handleRemoveItem(item);
+						}}
+					>
+						{deleteButtonLabel}
+					</Button>
+				</>
+			}
 		>
 			<Flex direction="column" gap={30}>
 				<Flex direction="column" gap={15}>
@@ -117,33 +142,8 @@ function ConfirmDeleteModal({
 							onChange={(newValue: boolean) =>
 								setIsConfirmedDelete(newValue)
 							}
-							isBold={true}
 						/>
 					</ControlContextProvider>
-				</Flex>
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="confirm-delete-modal-cancel-button"
-						variant="tertiary"
-						onClick={() => {
-							setIsConfirmedDelete(false);
-							onClose();
-						}}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="confirm-delete-modal-delete-button"
-						disabled={!isConfirmedDelete}
-						variant="primary"
-						onClick={() => {
-							handleRemoveItem(item);
-						}}
-					>
-						{deleteButtonLabel}
-					</Button>
 				</Flex>
 			</Flex>
 		</Modal>
