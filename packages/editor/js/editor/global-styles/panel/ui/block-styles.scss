@@ -270,10 +270,6 @@
 		--blockera-controls-variations-color-darker-20
 	);
 
-	.components-modal__header {
-		background-color: #ffffff;
-	}
-
 	.components-modal__content {
 		width: 470px;
 
@@ -311,22 +307,6 @@
 				&:not(.is-row-clickable) {
 					cursor: default;
 				}
-			}
-		}
-	}
-
-	h1 {
-		display: flex;
-		align-items: center;
-		flex-direction: row !important;
-		color: var(--blockera-controls-primary-color);
-		font-size: 30px;
-
-		svg {
-			fill: currentColor;
-
-			path {
-				fill: currentColor;
 			}
 		}
 	}
