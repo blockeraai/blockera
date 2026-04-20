@@ -193,10 +193,16 @@ export type RepeaterControlProps = {
 	 */
 	shouldConfirmDeleteModal?: boolean,
 	/**
-	 * When `shouldConfirmDeleteModal` is true, extra warning copy shown above the confirmation checkbox.
-	 * If omitted, the modal uses a generic fallback string.
+	 * When `shouldConfirmDeleteModal` is true, optional copy for the confirmation modal (header, grey warning, error notice, checkbox, primary button).
+	 * Omitted keys fall back to the generic “item” strings in `ConfirmDeleteModal`.
 	 */
-	deleteConfirmWarningText?: string,
+	confirmDeleteModalProps?: $ReadOnly<{
+		headerTitle?: string,
+		warningText?: string,
+		errorNoticeText?: string,
+		confirmCheckboxLabel?: string,
+		deleteButtonLabel?: string,
+	}>,
 	/**
 	 * A placeholder that you can use inject items at the beginning of header buttons.
 	 */

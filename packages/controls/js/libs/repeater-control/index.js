@@ -74,7 +74,7 @@ export default function RepeaterControl(
 		isSupportInserter = false,
 		disableRegenerateId = true,
 		shouldConfirmDeleteModal = false,
-		deleteConfirmWarningText,
+		confirmDeleteModalProps,
 		//
 		label,
 		children,
@@ -272,7 +272,7 @@ export default function RepeaterControl(
 		actionButtonReset,
 		disableRegenerateId,
 		shouldConfirmDeleteModal,
-		deleteConfirmWarningText,
+		confirmDeleteModalProps,
 		//
 		onChange,
 		onDelete,

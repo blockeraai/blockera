@@ -49,7 +49,7 @@ export default function RepeaterPopoverTitleDelete({
 		disableRegenerateId,
 		setDisableAddNewItem,
 		shouldConfirmDeleteModal,
-		deleteConfirmWarningText,
+		confirmDeleteModalProps,
 	} = useContext(RepeaterContext);
 
 	const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
@@ -126,7 +126,7 @@ export default function RepeaterPopoverTitleDelete({
 					item={item}
 					handleRemoveItem={deleteFunction}
 					onClose={() => setIsConfirmDeleteModalOpen(false)}
-					deleteConfirmWarningText={deleteConfirmWarningText}
+					confirmDeleteModalProps={confirmDeleteModalProps}
 				/>
 			)}
 			<Button

@@ -16,21 +16,22 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import {
-	Modal,
-	Flex,
-	Button,
-	NoticeControl,
-	CheckboxControl,
-	DynamicHtmlFormatter,
-} from '../../';
+import { Modal, Flex, Button, NoticeControl, CheckboxControl } from '../../';
 import { ControlContextProvider } from '../../../context';
+
+type ConfirmDeleteModalCopyProps = $ReadOnly<{
+	headerTitle?: string,
+	warningText?: string,
+	errorNoticeText?: string,
+	confirmCheckboxLabel?: string,
+	deleteButtonLabel?: string,
+}>;
 
 type ConfirmDeleteModalProps = {
 	item: Object,
 	handleRemoveItem: (item: Object) => void,
 	onClose: () => void,
-	deleteConfirmWarningText?: string,
+	confirmDeleteModalProps?: ConfirmDeleteModalCopyProps,
 };
 
 const DEFAULT_DELETE_WARNING = __(
@@ -38,16 +39,43 @@ const DEFAULT_DELETE_WARNING = __(
 	'blockera'
 );
 
+const DEFAULT_ERROR_NOTICE = __(
+	'Deleting this item cannot be undone. Related settings or content that still reference it may be affected.',
+	'blockera'
+);
+
+const DEFAULT_CHECKBOX_LABEL = __(
+	'I understand and want to delete this item.',
+	'blockera'
+);
+
 function ConfirmDeleteModal({
 	item,
 	handleRemoveItem,
 	onClose,
-	deleteConfirmWarningText,
+	confirmDeleteModalProps,
 }: ConfirmDeleteModalProps): MixedElement {
 	const [isConfirmedDelete, setIsConfirmedDelete] = useState(false);
 
 	const itemLabel = item?.label || item?.name || '';
-	const warningText = deleteConfirmWarningText ?? DEFAULT_DELETE_WARNING;
+	const itemLabelTrimmed = String(itemLabel).trim();
+	const warningText =
+		confirmDeleteModalProps?.warningText ?? DEFAULT_DELETE_WARNING;
+	const headerTitle =
+		confirmDeleteModalProps?.headerTitle ??
+		(itemLabelTrimmed
+			? sprintf(
+					/* translators: %s: Repeater item label or name. */
+					__('Delete "%s"?', 'blockera'),
+					itemLabelTrimmed
+				)
+			: __('Delete item', 'blockera'));
+	const errorNoticeText =
+		confirmDeleteModalProps?.errorNoticeText ?? DEFAULT_ERROR_NOTICE;
+	const confirmCheckboxLabel =
+		confirmDeleteModalProps?.confirmCheckboxLabel ?? DEFAULT_CHECKBOX_LABEL;
+	const deleteButtonLabel =
+		confirmDeleteModalProps?.deleteButtonLabel ?? __('Delete', 'blockera');
 
 	const handleRequestClose = () => {
 		setIsConfirmedDelete(false);
@@ -56,31 +84,15 @@ function ConfirmDeleteModal({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('delete-modal')}
 			headerIcon={<Icon icon="trash" iconSize="34" />}
-			headerTitle={__('Delete item', 'blockera')}
+			headerTitle={headerTitle}
 			isDismissible={true}
 			onRequestClose={handleRequestClose}
 		>
-			<Flex direction="column" gap={40}>
+			<Flex direction="column" gap={30}>
 				<Flex direction="column" gap={15}>
 					<p style={{ margin: '0', color: '#1e1e1e' }}>
-						<DynamicHtmlFormatter
-							text={sprintf(
-								/* translators: %s: Item label placeholder wrapped by formatter. */
-								__(
-									'Are you sure you want to delete %s?',
-									'blockera'
-								),
-								'{item}'
-							)}
-							replacements={{
-								item: <strong>{itemLabel}</strong>,
-							}}
-						/>
-					</p>
-
-					<p style={{ margin: '0', color: '#707070' }}>
 						{warningText}
 					</p>
 				</Flex>
@@ -91,10 +103,7 @@ function ConfirmDeleteModal({
 					direction="column"
 				>
 					<NoticeControl type={'error'}>
-						{__(
-							'Deleting this item cannot be undone. Related settings or content that still reference it may be affected.',
-							'blockera'
-						)}
+						{errorNoticeText}
 					</NoticeControl>
 
 					<ControlContextProvider
@@ -104,10 +113,7 @@ function ConfirmDeleteModal({
 						}}
 					>
 						<CheckboxControl
-							checkboxLabel={__(
-								'I understand and want to delete this item.',
-								'blockera'
-							)}
+							checkboxLabel={confirmCheckboxLabel}
 							onChange={(newValue: boolean) =>
 								setIsConfirmedDelete(newValue)
 							}
@@ -118,17 +124,6 @@ function ConfirmDeleteModal({
 
 				<Flex justifyContent="space-between">
 					<Button
-						data-test="confirm-delete-modal-delete-button"
-						disabled={!isConfirmedDelete}
-						variant="primary"
-						onClick={() => {
-							handleRemoveItem(item);
-						}}
-					>
-						{__('Delete', 'blockera')}
-					</Button>
-
-					<Button
 						data-test="confirm-delete-modal-cancel-button"
 						variant="tertiary"
 						onClick={() => {
@@ -137,6 +132,17 @@ function ConfirmDeleteModal({
 						}}
 					>
 						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="confirm-delete-modal-delete-button"
+						disabled={!isConfirmedDelete}
+						variant="primary"
+						onClick={() => {
+							handleRemoveItem(item);
+						}}
+					>
+						{deleteButtonLabel}
 					</Button>
 				</Flex>
 			</Flex>

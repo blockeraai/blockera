@@ -54,7 +54,7 @@ export default function RepeaterItemActions({
 		setDisableAddNewItem,
 		actionButtonVisibility,
 		shouldConfirmDeleteModal,
-		deleteConfirmWarningText,
+		confirmDeleteModalProps,
 	} = useContext(RepeaterContext);
 
 	const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
@@ -267,7 +267,7 @@ export default function RepeaterItemActions({
 					item={item}
 					handleRemoveItem={deleteFunction}
 					onClose={() => setIsConfirmDeleteModalOpen(false)}
-					deleteConfirmWarningText={deleteConfirmWarningText}
+					confirmDeleteModalProps={confirmDeleteModalProps}
 				/>
 			)}
 			{showVisibility && (
