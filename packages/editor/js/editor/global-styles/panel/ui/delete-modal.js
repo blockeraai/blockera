@@ -42,6 +42,33 @@ export const DeleteModal = ({
 			headerTitle={__('Delete style variation', 'blockera')}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDeleteModal(false)}
+			actions={
+				<>
+					<Button
+						data-test="cancel-delete-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsOpenDeleteModal(false);
+							setIsConfirmedDelete(false);
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="delete-button"
+						disabled={!isConfirmedDelete}
+						variant="primary"
+						onClick={() => {
+							handleOnDelete(style.name);
+
+							setIsOpenDeleteModal(false);
+						}}
+					>
+						{__('Delete', 'blockera')}
+					</Button>
+				</>
+			}
 		>
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={15}>
@@ -98,32 +125,6 @@ export const DeleteModal = ({
 							isBold={true}
 						/>
 					</ControlContextProvider>
-				</Flex>
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="delete-button"
-						disabled={!isConfirmedDelete}
-						variant="primary"
-						onClick={() => {
-							handleOnDelete(style.name);
-
-							setIsOpenDeleteModal(false);
-						}}
-					>
-						{__('Delete', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="cancel-delete-button"
-						variant="tertiary"
-						onClick={() => {
-							setIsOpenDeleteModal(false);
-							setIsConfirmedDelete(false);
-						}}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
 				</Flex>
 			</Flex>
 		</Modal>
