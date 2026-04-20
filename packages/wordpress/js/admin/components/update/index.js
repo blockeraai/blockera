@@ -203,6 +203,53 @@ export const Update = ({
 					headerTitle={__('Reset Settings', 'blockera')}
 					size="small"
 					onRequestClose={() => setResetModalOpen(false)}
+					actions={
+						<Flex
+							direction={'row'}
+							justifyContent={'space-between'}
+							style={{ width: '100%' }}
+						>
+							{'resetting' === status.name ? (
+								<Spinner />
+							) : (
+								<>
+									<span></span>
+								</>
+							)}
+
+							<Flex
+								direction={'row'}
+								justifyContent={'space-between'}
+							>
+								<Button
+									data-test={'cancel-reset-action'}
+									isTertiary
+									variant={'tertiary'}
+									onClick={() => setResetModalOpen(false)}
+								>
+									{__('Cancel', 'blockera')}
+								</Button>
+
+								<Button
+									data-test={'reset-all-settings'}
+									isSecondary
+									variant={'secondary'}
+									onClick={() => onUpdate('reset-all')}
+								>
+									{__('Reset All', 'blockera')}
+								</Button>
+
+								<Button
+									data-test={'reset-current-tab-settings'}
+									isPrimary
+									variant={'primary'}
+									onClick={() => onUpdate('reset')}
+								>
+									{__('Reset', 'blockera')}
+								</Button>
+							</Flex>
+						</Flex>
+					}
 				>
 					<p>
 						{__(
@@ -217,48 +264,6 @@ export const Update = ({
 							'blockera'
 						)}
 					</p>
-
-					<Flex
-						direction={'row'}
-						justifyContent={'space-between'}
-						style={{ marginTop: '40px' }}
-					>
-						<Flex
-							direction={'row'}
-							justifyContent={'space-between'}
-						>
-							<Button
-								data-test={'reset-current-tab-settings'}
-								isPrimary
-								variant={'primary'}
-								onClick={() => onUpdate('reset')}
-							>
-								{__('Reset', 'blockera')}
-							</Button>
-							<Button
-								data-test={'reset-all-settings'}
-								isSecondary
-								variant={'secondary'}
-								onClick={() => onUpdate('reset-all')}
-							>
-								{__('Reset All', 'blockera')}
-							</Button>
-							{'resetting' === status.name && <Spinner />}
-						</Flex>
-						<Flex
-							direction={'row'}
-							justifyContent={'space-between'}
-						>
-							<Button
-								data-test={'cancel-reset-action'}
-								isTertiary
-								variant={'tertiary'}
-								onClick={() => setResetModalOpen(false)}
-							>
-								{__('Cancel', 'blockera')}
-							</Button>
-						</Flex>
-					</Flex>
 
 					{'error' === status.name && (
 						<div

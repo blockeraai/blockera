@@ -34,34 +34,43 @@ export const OptInModal = (): MixedElement => {
 	};
 
 	return (
-		<Modal size={'medium'} isDismissible={false}>
-			<Flex direction="column" gap={25}>
-				<Flex direction="column" gap={15}>
-					<Icon
-						icon={'blockera'}
-						library={'blockera'}
-						iconSize={36}
+		<Modal
+			size={'medium'}
+			headerIcon={
+				<Icon icon="blockera" library="blockera" iconSize={36} />
+			}
+			headerTitle={__('Hello 👋', 'blockera')}
+			isDismissible={false}
+			actions={
+				<>
+					<Button
+						data-test="skip-and-continue"
+						variant={'tertiary-on-hover'}
+						onClick={() => allowAndContinue('SKIP')}
 						style={{
-							fill: 'var(--blockera-controls-primary-color)',
-						}}
-					/>
-
-					<p
-						style={{
-							margin: 0,
-							fontSize: 24,
-							fontWeight: 600,
-							color: '#1d2327',
+							color: '#959595',
 						}}
 					>
-						{__('Hello 👋', 'blockera')}
-					</p>
+						{__('Skip', 'blockera')}
+					</Button>
 
+					<Button
+						data-test="allow-and-continue"
+						variant={'primary'}
+						onClick={() => allowAndContinue('ALLOW')}
+					>
+						{__('Allow & Continue', 'blockera')}
+					</Button>
+				</>
+			}
+		>
+			<Flex direction="column" gap={25}>
+				<Flex direction="column" gap={15}>
 					<h1
 						data-test="thank-you-heading"
 						style={{
 							fontSize: '22px',
-							margin: '0',
+							margin: '20px 0 0 0',
 							color: '#1d2327',
 						}}
 					>
@@ -101,27 +110,6 @@ export const OptInModal = (): MixedElement => {
 							{__('Privacy Policy', 'blockera')}
 						</a>
 					</Flex>
-				</Flex>
-
-				<Flex direction={'row'} justifyContent={'space-between'}>
-					<Button
-						data-test="allow-and-continue"
-						variant={'primary'}
-						onClick={() => allowAndContinue('ALLOW')}
-					>
-						{__('Allow & Continue', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="skip-and-continue"
-						variant={'tertiary-on-hover'}
-						onClick={() => allowAndContinue('SKIP')}
-						style={{
-							color: '#959595',
-						}}
-					>
-						{__('Skip', 'blockera')}
-					</Button>
 				</Flex>
 			</Flex>
 		</Modal>
