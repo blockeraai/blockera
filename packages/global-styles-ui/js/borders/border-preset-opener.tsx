@@ -18,6 +18,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import type { BorderBoxPreset } from './utils';
 import { getBorderPresetAccessibilityDescription } from './utils';
@@ -40,6 +41,7 @@ export function BorderPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: BorderPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const a11ySummary = getBorderPresetAccessibilityDescription(
 		variable?.border
 	);
@@ -64,6 +66,7 @@ export function BorderPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

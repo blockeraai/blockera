@@ -18,6 +18,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { itemsToRepeaterRecord, type WpFilterPreset } from './utils';
 
@@ -38,6 +39,7 @@ export function FilterPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FilterPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesFilterPresetPreviewAttributes(
 			itemsToRepeaterRecord(variable.items || [])
@@ -61,6 +63,7 @@ export function FilterPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

@@ -19,6 +19,7 @@ import {
 	usePresetRowCanvasPreview,
 } from './preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from './preset-repeater-header-click';
+import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
 import type { VariableType } from './types';
 
 export type FallbackCatalogRow = VariableType & {
@@ -43,6 +44,7 @@ export function FallbackPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: FallbackPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const { variableType } = useVarPickerPresetContext();
 	const type = variableType || '';
 
@@ -69,6 +71,7 @@ export function FallbackPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

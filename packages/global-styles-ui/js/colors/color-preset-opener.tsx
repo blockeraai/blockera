@@ -23,6 +23,7 @@ import {
 	usePresetRowCanvasPreview,
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types';
 import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
 
@@ -63,6 +64,7 @@ export function ColorPresetOpener({
 	isOpenPopoverEvent,
 	previewUsage: previewUsageProp,
 }: ColorPresetOpenerProps) {
+	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const pickerCtx = useVarPickerPresetContext();
 	const fromProvider = useColorPresetPreviewUsageFromProvider();
 	const previewUsage = resolveColorPresetPreviewUsage(
@@ -117,6 +119,7 @@ export function ColorPresetOpener({
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
+				allowEditPopover: canEditGlobalStyles,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}
