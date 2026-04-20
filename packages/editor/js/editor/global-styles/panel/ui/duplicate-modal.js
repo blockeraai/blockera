@@ -145,6 +145,41 @@ export const DuplicateModal = ({
 			headerTitle={__('Duplicate style variation', 'blockera')}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDuplicateModal(false)}
+			actions={
+				<>
+					<Button
+						data-test="cancel-duplicate-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsOpenDuplicateModal(false);
+							setIsConfirmedChangeID(false);
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="save-duplicate-button"
+						disabled={
+							!styleName.trim() ||
+							!styleID.trim() ||
+							!!duplicateIdError
+						}
+						variant="primary"
+						onClick={() => {
+							handleOnDuplicate(style, {
+								label: styleName,
+								name: styleID,
+							});
+
+							setIsOpenDuplicateModal(false);
+							setIsConfirmedChangeID(false);
+						}}
+					>
+						{__('Duplicate', 'blockera')}
+					</Button>
+				</>
+			}
 		>
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={25}>
@@ -235,40 +270,6 @@ export const DuplicateModal = ({
 						{duplicateIdError}
 					</NoticeControl>
 				)}
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="save-duplicate-button"
-						disabled={
-							!styleName.trim() ||
-							!styleID.trim() ||
-							!!duplicateIdError
-						}
-						variant="primary"
-						onClick={() => {
-							handleOnDuplicate(style, {
-								label: styleName,
-								name: styleID,
-							});
-
-							setIsOpenDuplicateModal(false);
-							setIsConfirmedChangeID(false);
-						}}
-					>
-						{__('Duplicate', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="cancel-duplicate-button"
-						variant="tertiary"
-						onClick={() => {
-							setIsOpenDuplicateModal(false);
-							setIsConfirmedChangeID(false);
-						}}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
-				</Flex>
 			</Flex>
 		</Modal>
 	);
