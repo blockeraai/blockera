@@ -98,14 +98,15 @@ export function GradientPresetGroup({
 
 	const index = getNewIndexFromPresets(
 		gradients.map((g) => ({ slug: g.slug })),
-		`custom-${slugKind}-`
+		`custom-`
 	);
 
 	const defaultPresetValue = {
+		isVisible: true,
 		gradient: isLinear
 			? 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)'
 			: 'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-		slug: `custom-${slugKind}-${index}`,
+		slug: `custom-${index}`,
 		deletable: origin === 'custom',
 		cloneable: origin === 'custom',
 		visibilitySupport: origin === 'custom',

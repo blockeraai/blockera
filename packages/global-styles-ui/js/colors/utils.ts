@@ -9,6 +9,7 @@ export function convertRepeaterValueToGradients(newValue: object): Gradient[] {
 	).map((v) => ({
 		slug: v.slug,
 		name: v.name,
+		isVisible: v.isVisible,
 		gradient: v.gradient || '',
 	}));
 }
