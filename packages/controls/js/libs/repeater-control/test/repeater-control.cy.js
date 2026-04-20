@@ -1314,7 +1314,7 @@ describe('repeater control component testing', () => {
 			);
 		});
 
-		describe.only('enablePromoCountOnRepeaterItemHeader', () => {
+		describe('enablePromoCountOnRepeaterItemHeader', () => {
 			const twoItemValue = {
 				0: { isVisible: true, isOpen: false },
 				1: { isVisible: true, isOpen: false },
