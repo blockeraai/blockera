@@ -92,7 +92,7 @@ describe('Global Styles UI → transform presets (theme.json + UI)', () => {
 		cy.get('.blockera-component-popover')
 			.eq(1)
 			.within(() => {
-				cy.getByAriaLabel('Move-X').should('have.value', '12px');
+				cy.getByAriaLabel('Move-X').should('have.value', '12');
 			});
 	});
 });

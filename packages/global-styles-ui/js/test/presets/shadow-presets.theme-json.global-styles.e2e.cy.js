@@ -94,7 +94,7 @@ describe('Global Styles UI → box shadow presets (theme.json + UI)', () => {
 			.within(() => {
 				cy.getByDataTest('box-shadow-x-input').should(
 					'have.value',
-					'22px'
+					'22'
 				);
 			});
 	});

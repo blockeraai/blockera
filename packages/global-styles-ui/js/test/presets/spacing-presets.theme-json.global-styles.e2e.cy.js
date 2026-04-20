@@ -84,7 +84,7 @@ describe('Global Styles UI → spacing presets (theme.json + UI)', () => {
 			.within(() => {
 				cy.getByDataTest('spacing-size-input').should(
 					'have.value',
-					'24px'
+					'24'
 				);
 			});
 	});
