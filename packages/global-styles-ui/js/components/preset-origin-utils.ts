@@ -107,7 +107,7 @@ export function getPresetDeleteConfirmWarningText(
 		return sprintf(
 			/* translators: %s: Preset group title, e.g. “Font Size” or “Spacing”. */
 			__(
-				'This removes the %s preset from your site’s custom global styles. Saved content that still references it may look different after you save.',
+				'The %s variable will be permanently removed from your site. Any blocks or pages using it will fall back to their default style and need to be updated manually.',
 				'blockera'
 			),
 			presetTitle.toLowerCase()
@@ -115,16 +115,24 @@ export function getPresetDeleteConfirmWarningText(
 	}
 
 	if (layer === 'theme') {
-		return __(
-			'This preset is supplied by your theme. Deleting it changes your theme’s style definitions and may affect your site’s appearance.',
-			'blockera'
+		return sprintf(
+			/* translators: %s: Preset group title, e.g. “Font Size” or “Spacing”. */
+			__(
+				'The %s variable is part of your theme’s default styles. Deleting it will reset it to the theme’s default value and may affect your site’s appearance.',
+				'blockera'
+			),
+			presetTitle.toLowerCase()
 		);
 	}
 
 	if (layer === 'default') {
-		return __(
-			'This preset is part of the default WordPress set. Deleting it may affect your site’s appearance.',
-			'blockera'
+		return sprintf(
+			/* translators: %s: Preset group title, e.g. “Font Size” or “Spacing”. */
+			__(
+				'The %s variable is part of the default WordPress set. Deleting it will reset it to the default WordPress value and may affect your site’s appearance.',
+				'blockera'
+			),
+			presetTitle.toLowerCase()
 		);
 	}
 
