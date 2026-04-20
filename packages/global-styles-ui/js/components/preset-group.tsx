@@ -206,7 +206,7 @@ const Presets = ({
 			warningText: getPresetDeleteConfirmWarningText(origin, title),
 			errorNoticeText: __('This action cannot be undone.', 'blockera'),
 			confirmCheckboxLabel: __(
-				'I understand this action cannot be undone.',
+				'I understand and want to delete this variable.',
 				'blockera'
 			),
 		};
