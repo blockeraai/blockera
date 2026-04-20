@@ -51,6 +51,40 @@ export const RenameModal = ({
 			headerTitle={__('Rename style variation', 'blockera')}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenRenameModal(false)}
+			actions={
+				<>
+					<Button
+						data-test="cancel-rename-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsOpenRenameModal(false);
+							setIsConfirmedChangeID(false);
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="save-rename-button"
+						disabled={
+							styleID === style.name
+								? styleName === buttonText
+								: !isConfirmedChangeID
+						}
+						variant="primary"
+						onClick={() => {
+							handleOnRename(
+								{ label: styleName, name: styleID },
+								style
+							);
+
+							setIsOpenRenameModal(false);
+						}}
+					>
+						{__('Save', 'blockera')}
+					</Button>
+				</>
+			}
 		>
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={25}>
@@ -167,39 +201,6 @@ export const RenameModal = ({
 						</ControlContextProvider>
 					</Flex>
 				)}
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="save-rename-button"
-						disabled={
-							styleID === style.name
-								? styleName === buttonText
-								: !isConfirmedChangeID
-						}
-						variant="primary"
-						onClick={() => {
-							handleOnRename(
-								{ label: styleName, name: styleID },
-								style
-							);
-
-							setIsOpenRenameModal(false);
-						}}
-					>
-						{__('Save', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="cancel-rename-button"
-						variant="tertiary"
-						onClick={() => {
-							setIsOpenRenameModal(false);
-							setIsConfirmedChangeID(false);
-						}}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
-				</Flex>
 			</Flex>
 		</Modal>
 	);
