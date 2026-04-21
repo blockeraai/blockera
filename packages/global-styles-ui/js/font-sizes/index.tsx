@@ -297,7 +297,11 @@ export function FontSizesPresetContent() {
 
 function FontSizesEditorScreenShell() {
 	return (
-		<VStack spacing={2} className="blockera-font-size-presets">
+		<VStack
+			spacing={2}
+			className="blockera-font-size-presets"
+			style={{ paddingBottom: '10px' }}
+		>
 			<ScreenHeader
 				onBack={onBackFontSizes}
 				title={__('Font Size Variables', 'blockera')}
