@@ -474,7 +474,10 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			)}
 
 			{slugChanged && (
-				<Flex className="blockera-preset-naming-save-actions">
+				<Flex
+					className="blockera-preset-naming-save-actions"
+					justifyContent="flex-end"
+				>
 					<Button
 						size="small"
 						variant="tertiary"
