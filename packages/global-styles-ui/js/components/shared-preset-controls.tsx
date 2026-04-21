@@ -2,7 +2,7 @@
  * External dependencies
  */
 import type { KeyboardEvent, ReactNode } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	memo,
 	useState,
@@ -17,13 +17,14 @@ import {
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { classNames } from '@blockera/classnames';
+import { classNames, componentInnerClassNames } from '@blockera/classnames';
 import {
 	Flex,
 	Button,
 	InputControl,
 	NoticeControl,
 	CheckboxControl,
+	DynamicHtmlFormatter,
 	RepeaterContext,
 	useControlContext,
 	ControlContextProvider,
@@ -366,17 +367,18 @@ function SharedPresetControlsComponent<T extends VariableType>({
 												position: 'absolute',
 												right: '4px',
 												top: '4px',
-												padding: '2px 6px 2px 4px',
+												padding: '2px',
 												'--blockera-controls-input-height':
 													'22px',
 												gap: '2px',
 												fontSize: '11px',
 												textTransform: 'uppercase',
 												fontWeight: '500',
+												minWidth: '24px',
 											}}
-										>
-											{__('Undo', 'blockera')}
-										</Button>
+											tooltip={__('Undo', 'blockera')}
+											showTooltip={true}
+										></Button>
 									)}
 
 									{idClickToEdit && allowIdUnlock && (
@@ -419,18 +421,40 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				</Flex>
 			) : null}
 
-			{slugError && (
-				<NoticeControl type="error">{slugError}</NoticeControl>
-			)}
-
 			{slugChanged && (
-				<Flex gap={15} direction="column">
+				<Flex
+					gap={15}
+					className={componentInnerClassNames('consent-wrapper')}
+					direction="column"
+				>
+					{slugError && (
+						<NoticeControl type="error">{slugError}</NoticeControl>
+					)}
+
 					<NoticeControl type="warning">
-						{__(
-							'Changing the variable ID will break existing connections. Blocks using the old ID will lose their variable unless updated manually.',
-							'blockera'
-						)}
+						<p style={{ fontWeight: '500' }}>
+							{__('ID changed', 'blockera')}
+						</p>
+
+						<p>
+							<DynamicHtmlFormatter
+								text={sprintf(
+									/* translators: %1$s: Old preset reference snippet. %2$s: New preset reference snippet. */
+									__(
+										'Blocks currently use %1$s. After saving, update them to use %2$s manually.',
+										'blockera'
+									),
+									'{old}',
+									'{new}'
+								)}
+								replacements={{
+									old: <code>{slug}</code>,
+									new: <code>{displayedSlug}</code>,
+								}}
+							/>
+						</p>
 					</NoticeControl>
+
 					<ControlContextProvider
 						value={{
 							name: `confirm-change-preset-slug-${slug}`,
@@ -439,7 +463,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					>
 						<CheckboxControl
 							checkboxLabel={__(
-								'I accept that blocks using the old ID will lose their variables.',
+								'I understand that blocks using the old ID will lose their variables.',
 								'blockera'
 							)}
 							onChange={handleConfirmSlugChange}
