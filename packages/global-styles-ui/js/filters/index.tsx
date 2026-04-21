@@ -310,7 +310,11 @@ export function Filters({ closeCallback }: { closeCallback?: () => void }) {
 				direction="column"
 				gap="16px"
 				className="blockera-filters-presets"
-				style={{ width: '100%', marginTop: '10px' }}
+				style={{
+					width: '100%',
+					marginTop: '10px',
+					paddingBottom: '10px',
+				}}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
