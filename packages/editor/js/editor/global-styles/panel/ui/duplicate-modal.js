@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState, useEffect, useCallback } from '@wordpress/element';
 
@@ -92,7 +92,7 @@ export const DuplicateModal = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [style, blockStyles]);
 
-	// Check for duplicate ID
+	// Check for duplicate ID (same behavior as add-new-style-modal)
 	const checkDuplicateId = useCallback(
 		(id: string) => {
 			if (!id) {
@@ -100,13 +100,21 @@ export const DuplicateModal = ({
 				return;
 			}
 
-			const isDuplicate = blockStyles.some((s) => s.name === id);
-			if (isDuplicate) {
+			const blockLabel =
+				blockStyles.find((s) => s.name === id)?.label || null;
+
+			if (blockLabel !== null) {
 				setDuplicateIdError(
-					__(
-						'This ID already exists. Please choose a different ID.',
-						'blockera'
-					)
+					<>
+						<p style={{ fontWeight: '500' }}>
+							{sprintf(
+								/* translators: %s: The block name. */
+								__('Already in use by "%s".', 'blockera'),
+								blockLabel
+							)}
+						</p>
+						<p>{__('Try a different ID.', 'blockera')}</p>
+					</>
 				);
 			} else {
 				setDuplicateIdError('');
@@ -142,7 +150,15 @@ export const DuplicateModal = ({
 		<Modal
 			className={componentInnerClassNames('style-variation-modal')}
 			headerIcon={<Icon icon="duplicate" iconSize="34" />}
-			headerTitle={__('Duplicate style variation', 'blockera')}
+			headerTitle={
+				style.label
+					? sprintf(
+							/* translators: %s: The style variation label. */
+							__('Duplicate "%s"', 'blockera'),
+							style.label
+						)
+					: __('Duplicate style variation', 'blockera')
+			}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDuplicateModal(false)}
 			actions={
@@ -167,6 +183,10 @@ export const DuplicateModal = ({
 						}
 						variant="primary"
 						onClick={() => {
+							if (duplicateIdError) {
+								return;
+							}
+
 							handleOnDuplicate(style, {
 								label: styleName,
 								name: styleID,
@@ -182,10 +202,10 @@ export const DuplicateModal = ({
 			}
 		>
 			<Flex direction="column" gap={40}>
-				<Flex direction="column" gap={15}>
-					<p style={{ margin: '0', color: '#1e1e1e' }}>
+				<Flex direction="column" gap={25}>
+					<p style={{ margin: '0', color: '#707070' }}>
 						{__(
-							'Create a copy of this style variation with a new name and ID.',
+							"A copy will be created with a new name and ID. Choose the ID carefully — it will be used in your site's code and cannot be changed without breaking the styles on affected blocks.",
 							'blockera'
 						)}
 					</p>
@@ -216,16 +236,21 @@ export const DuplicateModal = ({
 								columns="1fr 3fr"
 								style={{ position: 'relative' }}
 							>
+								{duplicateIdError && (
+									<NoticeControl type={'error'}>
+										{duplicateIdError}
+									</NoticeControl>
+								)}
+
 								<p
 									style={{
-										margin: '5px 0 0',
+										margin: '0',
 										color: '#707070',
-										'font-style': 'italic',
-										'font-size': '13px',
+										'font-size': '12px',
 									}}
 								>
 									{__(
-										'Use a–z, 0–9, and hyphens only.',
+										'Lowercase letters, numbers, and hyphens only. Used as the CSS class name.',
 										'blockera'
 									)}
 								</p>
@@ -264,12 +289,6 @@ export const DuplicateModal = ({
 						</ControlContextProvider>
 					</Flex>
 				</Flex>
-
-				{duplicateIdError && (
-					<NoticeControl type={'warning'}>
-						{duplicateIdError}
-					</NoticeControl>
-				)}
 			</Flex>
 		</Modal>
 	);
