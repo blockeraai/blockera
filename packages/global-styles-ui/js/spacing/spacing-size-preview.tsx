@@ -11,8 +11,9 @@ import { VariablePreview } from '../components/variable-preview';
 const PREVIEW_BAR_HEIGHT_PX = 40;
 const MEASURE_ROW_HEIGHT_PX = 8;
 const ARROW_TIP_PX = 5;
-
 const measureColor = 'var(--blockera-controls-primary-color)';
+
+const centerBarStripeLight = `color-mix(in srgb, var(--blockera-controls-primary-color) 12%, #ffffff)`;
 
 interface SpacingSizePreviewProps {
 	size: string | undefined;
@@ -81,7 +82,7 @@ export default function SpacingSizePreview({ size }: SpacingSizePreviewProps) {
 		flex: '1 1 0',
 		minWidth: 0,
 		backgroundColor:
-			'var(--blockera-controls-border-color-extra-soft, #dcdcde)',
+			'color-mix(in srgb, var(--blockera-controls-primary-color) 6%, #ffffff)',
 		height: PREVIEW_BAR_HEIGHT_PX + 'px',
 	};
 
@@ -97,9 +98,13 @@ export default function SpacingSizePreview({ size }: SpacingSizePreviewProps) {
 
 	const centerBarStyle: CSSProperties = {
 		width: '100%',
-		backgroundColor: 'var(--blockera-controls-primary-color)',
 		height: PREVIEW_BAR_HEIGHT_PX + 'px',
 		flexShrink: 0,
+		backgroundColor: centerBarStripeLight,
+		backgroundImage: `linear-gradient(45deg, ${centerBarStripeLight} 33.33%, ${measureColor} 33.33%, ${measureColor} 50%, ${centerBarStripeLight} 50%, ${centerBarStripeLight} 83.33%, ${measureColor} 83.33%, ${measureColor} 100%)`,
+		backgroundSize: '6px 6px',
+		borderLeft: `1px solid var(--blockera-controls-primary-color)`,
+		borderRight: `1px solid var(--blockera-controls-primary-color)`,
 	};
 
 	return (
