@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from '@wordpress/element';
 import { TextControl, Button } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -85,7 +85,15 @@ export default function RenameTabModal({
 	return (
 		<Modal
 			headerIcon={<Icon icon="pencil" library="wp" />}
-			headerTitle={__('Rename Tab', 'blockera')}
+			headerTitle={
+				<>
+					{sprintf(
+						/* translators: %s: The tab title shown in the editor. */
+						__('Rename "%s"', 'blockera'),
+						tab.title
+					)}
+				</>
+			}
 			onRequestClose={handleClose}
 			className="blockera-tabs-rename-modal"
 			actions={
