@@ -278,11 +278,10 @@ class AppServiceProvider extends ServiceProvider {
 		 */
 		$blockera = $this->app;
 
-		// Clear the generated css and processed html at the start of content rendering.
+		// Clear the generated css at the start of content rendering.
 		// Clear the classnames registry at the start of content rendering.
 		// This ensures each page/post render starts with a clean state.
 		Render::resetGeneratedCSS();
-		Render::resetProcessedHTML();
 		Render::clearClassnamesRegistry();
 
 		// Register Query Loop context hooks.
@@ -391,7 +390,6 @@ class AppServiceProvider extends ServiceProvider {
 		blockera_add_inline_css(implode(PHP_EOL, $css));
 
 		$render_instance->resetGeneratedCSS();
-		$render_instance->resetProcessedHTML();
 		$render_instance->clearClassnamesRegistry();
 	}
 
