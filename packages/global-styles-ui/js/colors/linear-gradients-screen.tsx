@@ -27,7 +27,11 @@ export function LinearGradientsPresetContent() {
 
 function LinearGradientsScreen({ onBackHandler }: LinearGradientsScreenProps) {
 	return (
-		<VStack spacing={2} className="blockera-linear-gradients-presets">
+		<VStack
+			spacing={2}
+			className="blockera-linear-gradients-presets"
+			style={{ paddingBottom: '10px' }}
+		>
 			<ScreenHeader
 				onBack={onBackHandler}
 				title={__('Linear Gradient Variables', 'blockera')}
