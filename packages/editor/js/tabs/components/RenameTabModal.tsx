@@ -114,7 +114,7 @@ export default function RenameTabModal({
 
 					<div className="blockera-tabs-rename-modal-actions-right">
 						<Button
-							variant="secondary"
+							variant="tertiary"
 							onClick={handleClose}
 							{...testId(
 								WORKSPACE_TABS_TEST_ID.renameModalCancel
