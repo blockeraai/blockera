@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
@@ -116,13 +116,21 @@ export const AddNewStyleModal = ({
 				return;
 			}
 
-			const isDuplicate = blockStyles.some((style) => style.name === id);
-			if (isDuplicate) {
+			const blockLabel =
+				blockStyles.find((style) => style.name === id)?.label || null;
+
+			if (blockLabel !== null) {
 				setDuplicateIdError(
-					__(
-						'This ID already exists. Please choose a different ID.',
-						'blockera'
-					)
+					<>
+						<p style={{ fontWeight: '500' }}>
+							{sprintf(
+								/* translators: %s: The block name. */
+								__('Already in use by "%s".', 'blockera'),
+								blockLabel
+							)}
+						</p>
+						<p>{__('Try a different ID.', 'blockera')}</p>
+					</>
 				);
 			} else {
 				setDuplicateIdError('');
@@ -341,7 +349,7 @@ export const AddNewStyleModal = ({
 				<Flex direction="column" gap={25}>
 					<p style={{ margin: '0', color: '#707070' }}>
 						{__(
-							'Create a new style variation by providing a name and ID.',
+							"Create a new style variation by providing a name and ID. Choose the ID carefully — it's used as the CSS class name and can't be changed later without breaking blocks that use this style.",
 							'blockera'
 						)}
 					</p>
@@ -372,16 +380,21 @@ export const AddNewStyleModal = ({
 								columns="1fr 3fr"
 								style={{ position: 'relative' }}
 							>
+								{duplicateIdError && (
+									<NoticeControl type={'error'}>
+										{duplicateIdError}
+									</NoticeControl>
+								)}
+
 								<p
 									style={{
-										margin: '5px 0 0',
+										margin: '0',
 										color: '#707070',
-										'font-style': 'italic',
-										'font-size': '13px',
+										'font-size': '12px',
 									}}
 								>
 									{__(
-										'Use a–z, 0–9, and hyphens only.',
+										'Lowercase letters, numbers, and hyphens only. Used as the CSS class name.',
 										'blockera'
 									)}
 								</p>
@@ -430,12 +443,6 @@ export const AddNewStyleModal = ({
 						</ControlContextProvider>
 					</Flex>
 				</Flex>
-
-				{duplicateIdError && (
-					<NoticeControl type={'error'}>
-						{duplicateIdError}
-					</NoticeControl>
-				)}
 			</Flex>
 		</Modal>
 	);
