@@ -27,7 +27,11 @@ export function RadialGradientsPresetContent() {
 
 function RadialGradientsScreen({ onBackHandler }: RadialGradientsScreenProps) {
 	return (
-		<VStack spacing={2} className="blockera-radial-gradients-presets">
+		<VStack
+			spacing={2}
+			className="blockera-radial-gradients-presets"
+			style={{ paddingBottom: '10px' }}
+		>
 			<ScreenHeader
 				onBack={onBackHandler}
 				title={__('Radial Gradient Variables', 'blockera')}
