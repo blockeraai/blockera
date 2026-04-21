@@ -68,6 +68,7 @@ export const StyleItemMenu = (): MixedElement => {
 				<RenameModal
 					style={style}
 					buttonText={buttonText}
+					blockStyles={blockStyles}
 					handleOnRename={handleOnRename}
 					isConfirmedChangeID={isConfirmedChangeID}
 					setIsOpenRenameModal={setIsOpenRenameModal}
