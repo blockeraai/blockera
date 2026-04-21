@@ -170,6 +170,11 @@ class QueryLoopContext {
 		add_filter(
 			'pre_render_block',
 			function ( $pre_render, array $parsed_block, ?\WP_Block $parent_block = null ) {
+				// Only record DOM order when no earlier filter short-circuited; otherwise render_block will not run for this block.
+				if ( null === $pre_render ) {
+					Render::registerBlockDomOrderSlot( $parsed_block );
+				}
+
 				$block_name = $parsed_block['blockName'] ?? null;
 
 				// Early return if not a query loop block and stack is empty (performance optimization).
