@@ -310,7 +310,11 @@ function Shadows({ screenSelector }: ShadowsProps) {
 				direction="column"
 				gap="16px"
 				className="blockera-shadows-presets"
-				style={{ width: '100%', marginTop: '10px' }}
+				style={{
+					width: '100%',
+					marginTop: '10px',
+					paddingBottom: '10px',
+				}}
 			>
 				<GlobalStylesPanelDescription>
 					{__(
