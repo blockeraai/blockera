@@ -284,7 +284,11 @@ export function ColorPalettePresetContent({
 
 function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 	return (
-		<VStack spacing={2} className="blockera-color-palette-presets">
+		<VStack
+			spacing={2}
+			className="blockera-color-palette-presets"
+			style={{ paddingBottom: '10px' }}
+		>
 			<ScreenHeader
 				onBack={onBackHandler}
 				dataTest="global-styles-color-palette-screen"
