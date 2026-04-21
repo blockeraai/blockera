@@ -2,13 +2,18 @@
  * WordPress dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-import { TextControl, Button } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { Modal } from '@blockera/controls';
+import {
+	Button,
+	ControlContextProvider,
+	Flex,
+	InputControl,
+	Modal,
+} from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -137,17 +142,42 @@ export default function RenameTabModal({
 				className="blockera-tabs-rename-modal-content"
 				{...testId(WORKSPACE_TABS_TEST_ID.renameModal)}
 			>
-				<TextControl
-					label={__('Custom Tab Name', 'blockera')}
-					value={customTitle}
-					onChange={setCustomTitle}
-					placeholder={actualTitle}
-					help={__(
-						'Leave empty to use the post title. This only changes the tab label and the post/page title won’t be changed.',
-						'blockera'
-					)}
-					{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
-				/>
+				<Flex direction="column" gap={20}>
+					<p style={{ margin: 0, color: '#707070' }}>
+						{__(
+							"The tab label only appears in the Blockera editor. Your post or page title won't change.",
+							'blockera'
+						)}
+					</p>
+
+					<ControlContextProvider
+						value={{
+							name: `workspace-tab-rename-${tab.type}-${tab.id}`,
+							value: customTitle,
+						}}
+					>
+						<InputControl
+							label={__('Custom Tab Name', 'blockera')}
+							onChange={setCustomTitle}
+							placeholder={actualTitle}
+							columns="1fr 3fr"
+							{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
+						>
+							<p
+								style={{
+									margin: 0,
+									color: '#707070',
+									fontSize: '12px',
+								}}
+							>
+								{__(
+									'Leave empty to use the post title.',
+									'blockera'
+								)}
+							</p>
+						</InputControl>
+					</ControlContextProvider>
+				</Flex>
 			</div>
 		</Modal>
 	);
