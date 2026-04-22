@@ -1,10 +1,10 @@
 .blockera-component-popover.blockera-component-upgrade-prompt {
 	--blockera-controls-primary-color: #0047eb;
 	--blockera-controls-primary-color-darker-20: #003ecd;
-	--popover-height: auto;
 
 	.blockera-component-popover-body {
 		text-align: center;
+		padding-bottom: var(--popover-padding);
 	}
 
 	.blockera-component-popover-header {

@@ -40,7 +40,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				className,
 				placement = 'bottom-start',
 				resize: _resize = true,
-				shift: _shift = true,
+				shift: _shift = false,
 				flip: _flip = true,
 				animate = true,
 				closeButton = true,

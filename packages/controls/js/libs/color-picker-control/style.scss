@@ -32,7 +32,9 @@
 }
 
 .blockera-component-popover.blockera-color-picker-popover {
-	--popover-min-height: 380px;
+	.components-popover__content {
+		padding-bottom: var(--popover-padding);
+	}
 }
 
 .blockera-color-picker-css-field {

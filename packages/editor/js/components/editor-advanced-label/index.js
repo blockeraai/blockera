@@ -12,7 +12,6 @@ import { useState, useContext } from '@wordpress/element';
  * Blockera Dependencies
  */
 import {
-	classNames,
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
@@ -245,11 +244,7 @@ export const EditorAdvancedLabelControl = ({
 					}
 					onClose={() => setOpenModal(false)}
 					placement={'left-start'}
-					className={classNames(
-						controlInnerClassNames('label-popover'),
-						!isChangedValue &&
-							controlInnerClassNames('label-popover--auto-height')
-					)}
+					className={controlInnerClassNames('label-popover')}
 				>
 					{isChangedValue && (
 						<div

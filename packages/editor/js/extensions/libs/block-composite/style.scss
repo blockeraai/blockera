@@ -1,6 +1,5 @@
 .components-popover.blockera-component-popover.blockera-states-picker-popover {
 	--popover-width: calc(var(--blockera-primary-sidebar-width, 280px) - 42px);
-	--popover-height: auto;
 
 	.components-popover__content {
 		border-radius: var(--popover-radius);

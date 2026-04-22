@@ -86,18 +86,6 @@
 	}
 }
 
-.blockera-control-breakpoints-popover.blockera-component-popover {
-	--popover-height: auto !important;
-}
-
-.blockera-control-breakpoints-edit-popover.blockera-component-popover {
-	--popover-height: auto;
-
-	.components-popover__content {
-		overflow: visible !important;
-	}
-}
-
 .components-panel__header.interface-complementary-area-header {
 	.edit-site-global-styles-sidebar__header-title {
 		background: #ffffff;
