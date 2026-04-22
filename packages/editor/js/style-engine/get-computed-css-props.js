@@ -358,9 +358,11 @@ export const getComputedCssProps = ({
 							{},
 						attributes: {
 							...defaultAttributes,
-							...(params?.attributes?.blockeraInnerBlocks?.[
-								blockType
-							]?.attributes || {}),
+							...(getBaseBreakpoint() === device
+								? params?.attributes?.blockeraInnerBlocks?.[
+										blockType
+									]?.attributes || {}
+								: {}),
 							...attributes,
 							className: params?.attributes?.className || '',
 						},
