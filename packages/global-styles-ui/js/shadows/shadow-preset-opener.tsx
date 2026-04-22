@@ -56,7 +56,7 @@ function ShadowPresetOpenerValue({
 				inline
 				width={10}
 				height={10}
-				borderRadius={0}
+				borderRadius={2}
 			/>
 		</Flex>
 	);
