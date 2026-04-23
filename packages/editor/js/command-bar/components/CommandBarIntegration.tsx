@@ -18,7 +18,7 @@ import { useCommandBarIntegration } from '../hooks/useCommandBarIntegration';
 import { useAddTabCommandBar } from '../hooks/useAddTabCommandBar';
 import { useCreateEntityCommands } from '../hooks/useCreateEntityCommands';
 import { useOpenTabsCommands } from '../hooks/useOpenTabsCommands';
-import type { Tab } from '../../tabs/types';
+import type { DocumentInaccessibleInfo, Tab } from '../../tabs/types';
 
 /**
  * Props for CommandBarIntegration component.
@@ -47,12 +47,7 @@ export interface CommandBarIntegrationProps {
 	/**
 	 * When a tab target cannot be loaded (deleted, private, no cap), after workspace cleanup.
 	 */
-	onDocumentInaccessible?: (info: {
-		key: string;
-		type: string;
-		id: string | number;
-		title: string;
-	}) => void;
+	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
 	/** Render prop that receives openAddTabCommandBar. */
 	children: (props: { openAddTabCommandBar: () => void }) => ReactNode;
 }

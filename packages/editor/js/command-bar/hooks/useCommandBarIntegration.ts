@@ -18,7 +18,7 @@ import type {
 	TabActions,
 } from '../utils/wrapCommandLoaderHook';
 import { isEditorPage } from '../../utils/isEditorPage';
-import type { Tab } from '../../tabs/types';
+import type { DocumentInaccessibleInfo, Tab } from '../../tabs/types';
 
 // Max time to wait for loaders to register (ms)
 const LOADER_WAIT_TIMEOUT = 5000;
@@ -65,12 +65,7 @@ export interface UseCommandBarIntegrationParams {
 	/** Current tabs array. */
 	tabs: Tab[];
 	/** Optional handler when a document cannot be opened from the command bar. */
-	onDocumentInaccessible?: (info: {
-		key: string;
-		type: string;
-		id: string | number;
-		title: string;
-	}) => void;
+	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
 }
 
 /**
