@@ -190,6 +190,18 @@ class TabLocking {
 			'name' => $user ? $user->display_name : __( 'Another user', 'blockera' ),
 		);
 
+		if ( $user && ! empty( $user->user_email ) ) {
+			$user_data['email'] = $user->user_email;
+		}
+
+		if ( $user && ! empty( $user->roles ) ) {
+			$role_key = reset( $user->roles );
+			$wp_roles = wp_roles();
+			if ( $role_key && isset( $wp_roles->roles[ $role_key ]['name'] ) ) {
+				$user_data['role'] = translate_user_role( $wp_roles->roles[ $role_key ]['name'] );
+			}
+		}
+
 		// Include avatar if avatars are enabled in WordPress settings.
 		if ( get_option( 'show_avatars' ) && $user ) {
 			$user_data['avatar'] = get_avatar_url( $user_id, array( 'size' => 64 ) );
