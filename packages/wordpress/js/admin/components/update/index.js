@@ -199,6 +199,7 @@ export const Update = ({
 
 			{resetModalOpen && (
 				<Modal
+					headerIcon={<Icon icon={'undo'} />}
 					className="blockera-settings-reset-modal"
 					headerTitle={__('Reset Settings', 'blockera')}
 					size="small"
