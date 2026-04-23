@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import type { Tab } from '../types';
+import type { DocumentInaccessibleInfo, Tab } from '../types';
 
 /**
  * Parameters for openOrFocusTab function.
@@ -35,12 +35,7 @@ export interface OpenOrFocusTabParams {
 	 * Called when the document cannot be loaded (optional).
 	 * Receives a minimal tab descriptor for labeling; parent may purge workspace state.
 	 */
-	onDocumentInaccessible?: (info: {
-		key: string;
-		type: string;
-		id: string | number;
-		title: string;
-	}) => void;
+	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
 }
 
 /**
@@ -60,12 +55,13 @@ export async function openOrFocusTab({
 }: OpenOrFocusTabParams): Promise<boolean> {
 	const key = `${postType}-${postId}`;
 
-	const notifyInaccessible = (title: string): void => {
+	const notifyInaccessible = (title: string, slug?: string | null): void => {
 		onDocumentInaccessible?.({
 			key,
 			type: postType,
 			id: postId,
 			title,
+			slug: slug ?? null,
 		});
 	};
 
@@ -80,7 +76,7 @@ export async function openOrFocusTab({
 				: existingTab.title;
 		const ok = await switchDocument(postType, postId);
 		if (!ok) {
-			notifyInaccessible(displayTitle);
+			notifyInaccessible(displayTitle, existingTab.slug);
 		}
 		return ok;
 	}
@@ -88,7 +84,7 @@ export async function openOrFocusTab({
 	// Tab doesn't exist, create it and activate
 	const record = await prefetchEntity(postType, postId);
 	if (!record) {
-		notifyInaccessible(`${postType} #${String(postId)}`);
+		notifyInaccessible(`${postType} #${String(postId)}`, null);
 		return false;
 	}
 
@@ -99,7 +95,7 @@ export async function openOrFocusTab({
 
 	const ok = await switchDocument(postType, postId);
 	if (!ok) {
-		notifyInaccessible(`${postType} #${String(postId)}`);
+		notifyInaccessible(`${postType} #${String(postId)}`, null);
 	}
 	return ok;
 }
