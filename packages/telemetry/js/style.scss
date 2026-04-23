@@ -8,26 +8,31 @@
 	}
 }
 
-.components-modal__content {
-	--blockera-debug-border-color: #b2b2b2;
-	width: 550px;
+.blockera-bug-reporting-modal {
+	--blockera-controls-primary-color: #00a20b;
+	--blockera-controls-primary-color-darker-20: #008f0a;
 
-	.blockera-component-code-block {
-		background-color: #f5f5f5;
-		cursor: pointer;
-		height: 200px;
-		overflow: scroll;
-		border-radius: 4px;
-		padding: 10px;
-		border: solid 1px var(--blockera-debug-border-color);
-	}
+	.components-modal__content {
+		--blockera-debug-border-color: #b2b2b2;
+		width: 550px;
 
-	.blockera-component-manually-report-step {
-		color: #222222;
-		font-weight: 600;
+		.blockera-component-code-block {
+			background-color: #f5f5f5;
+			cursor: pointer;
+			height: 200px;
+			overflow: scroll;
+			border-radius: 4px;
+			padding: 10px;
+			border: solid 1px var(--blockera-debug-border-color);
+		}
 
-		a {
-			color: #cc3333;
+		.blockera-component-manually-report-step {
+			color: #222222;
+			font-weight: 600;
+
+			a {
+				color: #cc3333;
+			}
 		}
 	}
 }
