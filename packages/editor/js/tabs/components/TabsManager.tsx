@@ -45,7 +45,11 @@ import {
 } from '../utils/tabActions';
 import { hasLocalAutosave } from '../utils/hasLocalAutosave';
 import { buildTabSwitchCandidates } from '../utils/buildTabSwitchCandidates';
-import type { Tab, RecentlyClosedTab } from '../types';
+import type {
+	DocumentInaccessibleInfo,
+	RecentlyClosedTab,
+	Tab,
+} from '../types';
 
 /**
  * Close action type.
@@ -146,9 +150,8 @@ export default function TabsManager(): React.ReactElement | null {
 	const [showLockedModal, setShowLockedModal] = useState(false);
 	const [lockedTabKey, setLockedTabKey] = useState<string | null>(null);
 
-	const [unavailableDocumentTitle, setUnavailableDocumentTitle] = useState<
-		string | null
-	>(null);
+	const [unavailableDocument, setUnavailableDocument] =
+		useState<DocumentInaccessibleInfo | null>(null);
 
 	/*
 	 * Autosave Backup Detection State
@@ -448,12 +451,7 @@ export default function TabsManager(): React.ReactElement | null {
 	 * dependency-free (empty `[]`) while still calling current cleanup + modal logic.
 	 */
 	const handleDocumentInaccessibleRef = useRef<
-		(info: {
-			key: string;
-			type: string;
-			id: string | number;
-			title: string;
-		}) => void
+		(info: DocumentInaccessibleInfo) => void
 	>(() => {});
 
 	// Track if we're in the middle of a manual tab switch to prevent duplicate state updates
@@ -577,6 +575,7 @@ export default function TabsManager(): React.ReactElement | null {
 									type: revertTab.type,
 									id: revertTab.id,
 									title: revertTab.title,
+									slug: revertTab.slug,
 								});
 							}
 						}
@@ -640,6 +639,7 @@ export default function TabsManager(): React.ReactElement | null {
 							type: tab.type,
 							id: tab.id,
 							title,
+							slug: tab.slug,
 						});
 					}
 				});
@@ -699,17 +699,15 @@ export default function TabsManager(): React.ReactElement | null {
 	);
 
 	const handleDocumentInaccessible = useCallback(
-		(info: {
-			key: string;
-			type: string;
-			id: string | number;
-			title: string;
-		}) => {
+		(info: DocumentInaccessibleInfo) => {
 			removeTab(info.key);
 			removeClosedTab(info.key);
 			clearLockState(info.key);
 			clearEntityEdits(info.type, info.id);
-			setUnavailableDocumentTitle(info.title);
+			setUnavailableDocument({
+				...info,
+				slug: info.slug ?? null,
+			});
 		},
 		[removeTab, removeClosedTab, clearLockState, clearEntityEdits]
 	);
@@ -1118,7 +1116,13 @@ export default function TabsManager(): React.ReactElement | null {
 			const record = await prefetchEntity(tab.type, tab.id);
 			if (!record) {
 				removeClosedTab(tab.key);
-				setUnavailableDocumentTitle(getTabTitle(tab));
+				setUnavailableDocument({
+					key: tab.key,
+					type: tab.type,
+					id: tab.id,
+					title: getTabTitle(tab),
+					slug: tab.slug,
+				});
 				return;
 			}
 
@@ -1140,6 +1144,7 @@ export default function TabsManager(): React.ReactElement | null {
 					type: tab.type,
 					id: tab.id,
 					title: getTabTitle(tab),
+					slug: tab.slug,
 				});
 				return;
 			}
@@ -1306,8 +1311,8 @@ export default function TabsManager(): React.ReactElement | null {
 		setCloseActionTargetKey(null);
 	}, []);
 
-	// Handler for Review tab action
-	const handleReviewTab = useCallback(
+	// Handler for Open tab action (switch document from close-confirm list)
+	const handleOpenTabFromCloseConfirm = useCallback(
 		(tab: Tab): void => {
 			void switchDocument(tab.type, tab.id).then((ok) => {
 				if (ok) {
@@ -1326,6 +1331,7 @@ export default function TabsManager(): React.ReactElement | null {
 						tab.customTitle !== ''
 							? tab.customTitle
 							: tab.title,
+					slug: tab.slug,
 				});
 			});
 		},
@@ -1473,7 +1479,7 @@ export default function TabsManager(): React.ReactElement | null {
 								onCloseWithoutSaving={handleCloseWithoutSaving}
 								tabs={pendingCloseTabs}
 								getTabTitle={getTabTitle}
-								onReviewTab={handleReviewTab}
+								onOpenTab={handleOpenTabFromCloseConfirm}
 								activeTabKey={activeTabKey}
 								isSaving={isSavingTab}
 							/>
@@ -1494,6 +1500,19 @@ export default function TabsManager(): React.ReactElement | null {
 
 							<TabLockedModal
 								isOpen={showLockedModal}
+								documentTitle={
+									lockedTabKey
+										? (() => {
+												const lockedTab = tabs.find(
+													(t) =>
+														t.key === lockedTabKey
+												);
+												return lockedTab
+													? getTabTitle(lockedTab)
+													: '';
+											})()
+										: ''
+								}
 								lockUser={
 									lockedTabKey
 										? getLockUser(lockedTabKey)
@@ -1504,10 +1523,12 @@ export default function TabsManager(): React.ReactElement | null {
 							/>
 
 							<TabUnavailableModal
-								isOpen={unavailableDocumentTitle !== null}
-								documentLabel={unavailableDocumentTitle ?? ''}
+								isOpen={unavailableDocument !== null}
+								documentLabel={unavailableDocument?.title ?? ''}
+								documentType={unavailableDocument?.type ?? ''}
+								documentSlug={unavailableDocument?.slug ?? null}
 								onConfirm={() => {
-									setUnavailableDocumentTitle(null);
+									setUnavailableDocument(null);
 								}}
 							/>
 						</>,
