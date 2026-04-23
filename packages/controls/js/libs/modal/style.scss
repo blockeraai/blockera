@@ -1,37 +1,55 @@
 .blockera-component.blockera-component-modal {
-	--modal-gap: 32px;
+	--modal-gap: 24px;
+	--modal-header-height: 60px;
+	--modal-line-color: #e5e8ed;
 
 	.components-modal__header {
-		height: auto;
+		border-bottom: 1px solid var(--modal-line-color);
+		height: var(--modal-header-height);
+		padding: calc(var(--modal-gap) - 10px) var(--modal-gap);
 
 		.components-modal__header-heading {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			gap: 10px;
+			font-size: 1.1rem;
 		}
 
 		& + * {
-			margin-top: 40px;
+			margin-top: var(--modal-header-height);
 		}
 
 		.blockera-component-modal__header-icon {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 34px;
-			height: 34px;
+			width: 30px;
+			height: 30px;
 			background: color-mix(
 				in srgb,
 				var(--blockera-controls-primary-color) 10%,
 				transparent
 			);
 			border-radius: 50%;
+			position: relative;
 
-			svg {
+			svg:first-child {
 				fill: var(--blockera-controls-primary-color);
-				width: 26px;
-				height: 26px;
+				width: 24px;
+				height: 24px;
+			}
+
+			svg:nth-child(2) {
+				position: absolute;
+				bottom: -4px;
+				right: -4px;
+				width: 14px;
+				height: 14px;
+				fill: #ffffff;
+				background-color: var(--blockera-controls-primary-color);
+				border-radius: 50%;
+				outline: 2px solid #ffffff;
 			}
 		}
 	}
@@ -50,7 +68,7 @@
 			calc(var(--modal-gap) - 10px);
 		margin: var(--modal-gap) calc(var(--modal-gap) * -1)
 			calc(var(--modal-gap) * -1);
-		border-top: 1px solid #eeeeee;
+		border-top: 1px solid var(--modal-line-color);
 		background: #ffffff;
 	}
 
