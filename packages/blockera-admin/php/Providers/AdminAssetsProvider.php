@@ -232,12 +232,8 @@ class AdminAssetsProvider extends AssetsProvider {
 		$filesystem   = blockera_get_filesystem();
 		$version      = str_replace('.', '_', json_decode($filesystem->get_contents($package_file))->version);
 
-		return 'window.blockeraTermsOfServicesLink = "' . blockera_core_config( 'telemetry.terms_of_services_link' ) . '";
-				window.blockeraTelemetryIsOff = "' . ! blockera_telemetry_opt_in_is_off( 'blockera' ) . '";
+		return 'window.blockeraTelemetryIsOff = "' . ! blockera_telemetry_opt_in_is_off( 'blockera' ) . '";
 				window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'telemetry.options.opt_in_status' ), null ) . '";
-				window.blockeraPrivacyAndPolicyLink = "' . blockera_core_config( 'telemetry.privacy_and_policy_link' ) . '";
-				window.blockeraPermissionsLink = "' . blockera_core_config( 'telemetry.permissions_link' ) . '";
-				window.blockeraOptInDescription = "' . blockera_core_config( 'telemetry.opt_in_description' ) . '";
 				blockeraTelemetry_' . $version . '?.initializeTelemetryOptInSystem();';
 	}
 
