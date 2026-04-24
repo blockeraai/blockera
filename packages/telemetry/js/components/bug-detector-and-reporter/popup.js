@@ -280,6 +280,8 @@ export const Popup = ({
 							isLoading: true,
 						});
 						sender('ALLOW', {
+							shareUsageData: true,
+							emailUpdates: true,
 							handleResponse: (response) => {
 								window.blockeraOptInStatus = response.success
 									? 'ALLOW'
