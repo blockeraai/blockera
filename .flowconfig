@@ -17,6 +17,10 @@ react.runtime=automatic
 module.name_mapper='^@blockera/global-styles-ui$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper.extension='ts' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper.extension='tsx' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
+module.name_mapper.extension='png' -> '<PROJECT_ROOT>/flow/WebpackAsset.js.flow'
+module.name_mapper.extension='jpg' -> '<PROJECT_ROOT>/flow/WebpackAsset.js.flow'
+module.name_mapper.extension='jpeg' -> '<PROJECT_ROOT>/flow/WebpackAsset.js.flow'
+module.name_mapper.extension='webp' -> '<PROJECT_ROOT>/flow/WebpackAsset.js.flow'
 
 
 [strict]
