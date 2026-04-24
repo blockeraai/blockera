@@ -1,14 +1,11 @@
 .blockera-control.blockera-control-checkbox {
+	--wp-components-color-accent: var(--blockera-controls-primary-color);
+	--wp-admin-theme-color: var(--blockera-controls-primary-color);
 	margin: 0 !important;
 	font-size: 13px;
 	display: flex;
-	align-items: center;
-	--wp-components-color-accent: var(--blockera-controls-primary-color);
-	--wp-admin-theme-color: var(--blockera-controls-primary-color);
-
-	.components-checkbox-control__input-container {
-		margin-right: 10px;
-	}
+	align-items: flex-start;
+	flex-direction: column;
 
 	.components-checkbox-control__label {
 		display: inline-flex;
@@ -25,5 +22,12 @@
 		.components-checkbox-control__label {
 			font-weight: 500;
 		}
+	}
+
+	.components-base-control__help {
+		margin-top: 4px;
+		margin-bottom: 0;
+		font-size: 12px;
+		color: #919191;
 	}
 }

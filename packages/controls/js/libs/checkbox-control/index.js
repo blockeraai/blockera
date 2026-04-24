@@ -19,6 +19,7 @@ import type { CheckboxControlProps } from './types';
 
 export default function CheckboxControl({
 	checkboxLabel,
+	description,
 	//
 	id,
 	label,
@@ -79,6 +80,7 @@ export default function CheckboxControl({
 				checked={value}
 				onChange={setValue}
 				label={checkboxLabel}
+				help={description}
 				{...props}
 				aria-checked={value}
 			/>
