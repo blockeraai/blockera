@@ -106,3 +106,4 @@ wordpress-develop
 
 # playwright environment variables
 playwright-env.json
+/images
