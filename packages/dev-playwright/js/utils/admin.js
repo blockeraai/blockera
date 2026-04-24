@@ -12,28 +12,33 @@ const { expect } = require('@playwright/test');
  * @return {Promise<void>}
  */
 async function resetPanelSettings(page, all = true) {
-	await page.locator('[data-testid="reset-settings"]').click({ force: true });
+	await page.locator('[data-test="reset-settings"]').click({ force: true });
 
 	await page.waitForSelector('.blockera-component-modal', {
 		state: 'visible',
 	});
 
 	if (all) {
-		await page.locator('[data-testid="reset-all-settings"]').click({
+		await page.locator('[data-test="reset-modal-open-all"]').click({
+			force: true,
+		});
+		const confirmInput = page.locator(
+			'[data-test="reset-all-confirm-input"] input'
+		);
+		await confirmInput.waitFor({ state: 'visible' });
+		await confirmInput.fill('reset');
+		await page.locator('[data-test="reset-all-settings"]').click({
 			force: true,
 		});
 	} else {
-		await page
-			.locator('[data-testid="reset-current-tab-settings"]')
-			.click({ force: true });
+		await page.locator('[data-test="reset-current-tab-settings"]').click({
+			force: true,
+		});
 	}
 
-	await page.waitForTimeout(2000);
-
-	// Reset should not return error
-	await expect(
-		page.locator('.blockera-component-modal .message.update-failed')
-	).not.toBeVisible();
+	await expect(page.locator('.blockera-component-modal')).not.toBeVisible({
+		timeout: 15000,
+	});
 }
 
 module.exports = {
