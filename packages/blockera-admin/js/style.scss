@@ -8,6 +8,7 @@
 @import "~@wordpress/components/build-style/style";
 @import "~@blockera/controls/js/libs/switch/style.scss";
 @import "~@blockera/editor/js/editor/header-ui/components/breakpoints/breakpoint-settings/style.scss";
+@import "../../wordpress/js/admin/components/update/style.scss";
 
 .wp-admin[class*="toplevel_page_blockera-"] {
 	#wpbody-content {
