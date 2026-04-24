@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
@@ -12,106 +12,396 @@ import { useState } from '@wordpress/element';
  */
 import { classNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
-import { Modal, Flex, Button } from '@blockera/controls';
+import {
+	Modal,
+	Flex,
+	Button,
+	DynamicHtmlFormatter,
+	CheckboxControl,
+	ControlContextProvider,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
+import teamAvatarAliaUrl from './images/team-alia.png';
+import teamAvatarAlibUrl from './images/team-alib.png';
+import teamAvatarRezaUrl from './images/team-reza.png';
+import teamAvatarHakanUrl from './images/team-hakan.png';
+import teamAvatarElaUrl from './images/team-ela.png';
 import { sender } from './sender';
 
 export const OptInModal = (): MixedElement => {
 	const [isOpen, setOpen] = useState(true);
+	const [shareUsageData, setShareUsageData] = useState(true);
+	const [emailUpdates, setEmailUpdates] = useState(true);
 	const closeModal = () => setOpen(false);
 
 	if (!isOpen || ['ALLOW', 'SKIP'].includes(window.blockeraOptInStatus)) {
 		return <></>;
 	}
 
-	const allowAndContinue = (prompt: 'ALLOW' | 'SKIP') => {
-		sender(prompt);
-
+	const dismissAsSkip = () => {
+		sender('SKIP');
 		closeModal();
 	};
 
+	const savePreferences = () => {
+		sender('ALLOW', {
+			shareUsageData,
+			emailUpdates,
+		});
+		closeModal();
+	};
+
+	const leadGreeting = sprintf(
+		// translators: %s is a wave emoji (visual greeting).
+		__('Hey %s Thanks for installing Blockera.', 'blockera'),
+		String.fromCharCode(0xd83d, 0xdc4b)
+	);
+
 	return (
 		<Modal
-			size={'medium'}
-			headerIcon={
-				<Icon icon="blockera" library="blockera" iconSize={36} />
-			}
-			headerTitle={__('Hello 👋', 'blockera')}
-			isDismissible={false}
+			className={classNames('blockera-opt-in-modal')}
+			size={'large'}
+			headerIcon={<Icon icon={'comment'} library={'wp'} size={22} />}
+			headerTitle={__('A quick note from Blockera team', 'blockera')}
+			isDismissible={true}
+			onRequestClose={dismissAsSkip}
 			actions={
-				<>
-					<Button
-						data-test="skip-and-continue"
-						variant={'tertiary-on-hover'}
-						onClick={() => allowAndContinue('SKIP')}
-						style={{
-							color: '#959595',
-						}}
-					>
-						{__('Skip', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="allow-and-continue"
-						variant={'primary'}
-						onClick={() => allowAndContinue('ALLOW')}
-					>
-						{__('Allow & Continue', 'blockera')}
-					</Button>
-				</>
-			}
-		>
-			<Flex direction="column" gap={25}>
-				<Flex direction="column" gap={15}>
-					<h1
-						data-test="thank-you-heading"
-						style={{
-							fontSize: '22px',
-							margin: '20px 0 0 0',
-							color: '#1d2327',
-						}}
-					>
-						{__('Thank you for choosing Blockera!', 'blockera')}
-					</h1>
-				</Flex>
-
 				<Flex
-					direction={'column'}
-					gap="10px"
-					justifyContent={'space-between'}
+					direction="row"
+					alignItems="center"
+					justifyContent="space-between"
+					style={{ width: '100%' }}
 				>
-					<p
-						style={{
-							color: '#707070',
-							margin: 0,
-							fontSize: 14,
-						}}
-					>
-						{window.blockeraOptInDescription}
-					</p>
-
 					<Flex
 						direction="row"
-						gap="15px"
-						className={classNames('blockera-opt-in-text')}
+						alignItems="center"
+						gap={8}
+						className="blockera-opt-in-modal__footer-profile"
 					>
-						<a href={window.blockeraTermsOfServicesLink}>
-							{__('Terms of service', 'blockera')}
-						</a>
+						<span
+							aria-hidden="true"
+							style={{
+								display: 'inline-flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								width: '36px',
+								height: '36px',
+								borderRadius: '50%',
+								background:
+									'color-mix(in srgb, var(--blockera-controls-primary-color) 12%, #fff)',
+								overflow: 'hidden',
+							}}
+						>
+							<Icon
+								icon="blockera"
+								library="blockera"
+								iconSize={24}
+								style={{
+									fill: 'var(--blockera-controls-primary-color)',
+								}}
+							/>
+						</span>
 
-						<a href={window.blockeraPermissionsLink}>
-							{__('Permissions', 'blockera')}
-						</a>
+						<Flex direction="column" gap={0}>
+							<strong
+								style={{
+									fontSize: '14px',
+									fontWeight: 600,
+									color: '#1d2327',
+								}}
+							>
+								{__('The Blockera team', 'blockera')}
+							</strong>
+							<span
+								style={{
+									fontSize: '12px',
+									color: '#757575',
+								}}
+							>
+								{__('Thanks for building with us', 'blockera')}
+							</span>
+						</Flex>
+					</Flex>
+					<Flex direction="row" gap={8}>
+						<Button
+							data-test="maybe-later"
+							variant={'tertiary'}
+							onClick={dismissAsSkip}
+						>
+							{__('Maybe later', 'blockera')}
+						</Button>
 
-						<a href={window.blockeraPrivacyAndPolicyLink}>
-							{__('Privacy Policy', 'blockera')}
-						</a>
+						<Button
+							data-test="save-preferences"
+							variant={'primary'}
+							onClick={savePreferences}
+						>
+							{__('Save preferences', 'blockera')}
+						</Button>
 					</Flex>
 				</Flex>
-			</Flex>
+			}
+		>
+			<div data-test="opt-in-modal-content">
+				<Flex direction="column" gap={20}>
+					<Flex
+						direction="column"
+						gap={12}
+						style={{
+							flexDirection: 'column',
+							gap: '12px',
+							background: '#f8f8f9',
+							border: '1px solid #dadade',
+							borderRadius: '5px',
+							padding: '20px 22px',
+							margin: '0',
+							position: 'relative',
+						}}
+					>
+						<p
+							className="blockera-opt-in-modal__lead"
+							data-test="opt-in-modal-lead"
+							style={{
+								margin: 0,
+								fontSize: '16px',
+								fontWeight: 600,
+							}}
+						>
+							{leadGreeting}
+						</p>
+						<p className="blockera-opt-in-modal__body">
+							{DynamicHtmlFormatter({
+								text: sprintf(
+									// translators: %s is wrapped emphasis (bold phrase): "supercharging the WordPress block editor".
+									__(
+										"We're focused on %s so building sites feels like it should — fast, flexible, and honestly, a bit more fun.",
+										'blockera'
+									),
+									'{supercharge}'
+								),
+								replacements: {
+									supercharge: (
+										<b>
+											{__(
+												'supercharging the WordPress block editor',
+												'blockera'
+											)}
+										</b>
+									),
+								},
+							})}
+						</p>
+						<p className="blockera-opt-in-modal__body">
+							{__(
+								'Installs like yours are why we do this. Seriously, thank you.',
+								'blockera'
+							)}
+						</p>
+						<div
+							className="blockera-opt-in-modal__team-row"
+							aria-hidden="true"
+						>
+							<span className="blockera-opt-in-modal__team-dots">
+								<span
+									className={classNames(
+										'blockera-opt-in-modal__team-dot',
+										'blockera-opt-in-modal__team-dot--image'
+									)}
+								>
+									<img
+										src={teamAvatarAliaUrl}
+										alt=""
+										width={28}
+										height={28}
+										decoding="async"
+										loading="lazy"
+									/>
+								</span>
+								<span
+									className={classNames(
+										'blockera-opt-in-modal__team-dot',
+										'blockera-opt-in-modal__team-dot--image'
+									)}
+								>
+									<img
+										src={teamAvatarRezaUrl}
+										alt=""
+										width={28}
+										height={28}
+										decoding="async"
+										loading="lazy"
+									/>
+								</span>
+								<span
+									className={classNames(
+										'blockera-opt-in-modal__team-dot',
+										'blockera-opt-in-modal__team-dot--image'
+									)}
+								>
+									<img
+										src={teamAvatarHakanUrl}
+										alt=""
+										width={28}
+										height={28}
+										decoding="async"
+										loading="lazy"
+									/>
+								</span>
+								<span
+									className={classNames(
+										'blockera-opt-in-modal__team-dot',
+										'blockera-opt-in-modal__team-dot--image'
+									)}
+								>
+									<img
+										src={teamAvatarAlibUrl}
+										alt=""
+										width={28}
+										height={28}
+										decoding="async"
+										loading="lazy"
+									/>
+								</span>
+								<span
+									className={classNames(
+										'blockera-opt-in-modal__team-dot',
+										'blockera-opt-in-modal__team-dot--image'
+									)}
+								>
+									<img
+										src={teamAvatarElaUrl}
+										alt=""
+										width={28}
+										height={28}
+										decoding="async"
+										loading="lazy"
+									/>
+								</span>
+							</span>
+							<span className="blockera-opt-in-modal__signoff">
+								{__('— The Blockera team,', 'blockera')}{' '}
+								<em>{__('with gratitude', 'blockera')}</em>
+							</span>
+						</div>
+					</Flex>
+
+					<Flex direction="column" gap={15}>
+						<p
+							style={{
+								margin: '0',
+								fontSize: '13px',
+								lineHeight: '1.5',
+								color: '#50575e',
+							}}
+						>
+							{__(
+								'Two quick opt-ins below help us move faster. Skip either and nothing changes about how Blockera works for you.',
+								'blockera'
+							)}
+						</p>
+
+						<Flex direction="column" gap={8}>
+							<Flex
+								direction="column"
+								gap={16}
+								style={{
+									borderRadius: '5px',
+									padding: '20px 22px 18px',
+									background: '#ffffff',
+									border: '1px solid rgb(228 228 229)',
+								}}
+							>
+								<ControlContextProvider
+									value={{
+										name: 'blockera-telemetry-opt-in-email-updates',
+										value: emailUpdates,
+									}}
+								>
+									<CheckboxControl
+										className="blockera-opt-in-modal__checkbox"
+										data-test="opt-in-email-updates"
+										checkboxLabel={__(
+											'Email me about important updates',
+											'blockera'
+										)}
+										description={__(
+											'Security fixes and big releases. Nothing more.',
+											'blockera'
+										)}
+										isBold={true}
+										onChange={setEmailUpdates}
+									/>
+								</ControlContextProvider>
+
+								<ControlContextProvider
+									value={{
+										name: 'blockera-telemetry-opt-in-share-usage',
+										value: shareUsageData,
+									}}
+								>
+									<CheckboxControl
+										className="blockera-opt-in-modal__checkbox"
+										data-test="opt-in-share-usage"
+										checkboxLabel={__(
+											'Share anonymous usage data',
+											'blockera'
+										)}
+										description={__(
+											'Helps us catch bugs and decide what to build next.',
+											'blockera'
+										)}
+										isBold={true}
+										onChange={setShareUsageData}
+									/>
+								</ControlContextProvider>
+							</Flex>
+
+							<p className="blockera-opt-in-modal__links">
+								{DynamicHtmlFormatter({
+									text: sprintf(
+										// translators: %1$s: privacy policy link placeholder ("privacy policy"), %2$s: telemetry details link placeholder ("see what's collected")
+										__(
+											'Read our %1$s or %2$s.',
+											'blockera'
+										),
+										'{privacy}',
+										'{permissions}'
+									),
+									replacements: {
+										privacy: (
+											<a
+												href={
+													window.blockeraPrivacyAndPolicyLink
+												}
+											>
+												{__(
+													'privacy policy',
+													'blockera'
+												)}
+											</a>
+										),
+										permissions: (
+											<a
+												href={
+													window.blockeraPermissionsLink
+												}
+											>
+												{__(
+													"see what's collected",
+													'blockera'
+												)}
+											</a>
+										),
+									},
+								})}
+							</p>
+						</Flex>
+					</Flex>
+				</Flex>
+			</div>
 		</Modal>
 	);
 };
