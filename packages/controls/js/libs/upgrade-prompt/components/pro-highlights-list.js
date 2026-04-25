@@ -50,7 +50,7 @@ export function ProHighlightsList({
 					direction="row"
 					alignItems="center"
 					justifyContent="space-between"
-					gap="12px"
+					gap="10px"
 				>
 					<div
 						className={componentInnerClassNames(
