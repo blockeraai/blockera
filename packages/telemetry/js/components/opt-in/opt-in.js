@@ -16,8 +16,8 @@ import {
 	Modal,
 	Flex,
 	Button,
-	DynamicHtmlFormatter,
 	CheckboxControl,
+	DynamicHtmlFormatter,
 	ControlContextProvider,
 } from '@blockera/controls';
 
@@ -29,6 +29,8 @@ import teamAvatarAlibUrl from './images/team-alib.png';
 import teamAvatarRezaUrl from './images/team-reza.png';
 import teamAvatarHakanUrl from './images/team-hakan.png';
 import teamAvatarElaUrl from './images/team-ela.png';
+import IconHi from './icons/hi.svg';
+
 import { sender } from './sender';
 
 export const OptInModal = (): MixedElement => {
@@ -54,10 +56,27 @@ export const OptInModal = (): MixedElement => {
 		closeModal();
 	};
 
-	const leadGreeting = sprintf(
-		// translators: %s is a wave emoji (visual greeting).
-		__('Hey %s Thanks for installing Blockera.', 'blockera'),
-		String.fromCharCode(0xd83d, 0xdc4b)
+	let leadGreetingText = sprintf(
+		// translators: %1$s is a wave icon, %2$s is the plugin name.
+		__('Hey %1$s Thanks for installing %2$s.', 'blockera'),
+		'{wave}',
+		'{brand-name}'
+	);
+
+	if (!leadGreetingText.includes('{brand-name}')) {
+		leadGreetingText = __(
+			'Hey {wave} Thanks for installing {brand-name}.',
+			'blockera'
+		);
+	}
+	const leadGreeting = (
+		<DynamicHtmlFormatter
+			text={leadGreetingText}
+			replacements={{
+				wave: <IconHi />,
+				'brand-name': <>{__('Blockera', 'blockera')}</>,
+			}}
+		/>
 	);
 
 	return (
@@ -168,6 +187,9 @@ export const OptInModal = (): MixedElement => {
 								margin: 0,
 								fontSize: '16px',
 								fontWeight: 600,
+								display: 'flex',
+								alignItems: 'center',
+								gap: '5px',
 							}}
 						>
 							{leadGreeting}
