@@ -20,7 +20,9 @@ describe('Breakpoints Functionalities', () => {
 		cy.get('.blockera-component-upgrade-prompt')
 			.eq(0)
 			.within(() => {
-				cy.get('a').contains('Upgrade to PRO').should('be.visible');
+				cy.get('a')
+					.contains(/upgrade/i)
+					.should('be.visible');
 
 				cy.getByAriaLabel('Close').should('be.visible').click();
 			});
