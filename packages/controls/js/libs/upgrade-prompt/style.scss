@@ -1,3 +1,4 @@
+.blockera-component.blockera-component-promoter,
 .blockera-component-popover.blockera-component-upgrade-prompt,
 .blockera-component.blockera-component-modal.blockera-component-upgrade-prompt {
 	--blockera-upgrade-primary: #0052ff;
@@ -192,7 +193,7 @@
 		gap: 12px;
 		font-size: 13px;
 		padding: 8px 10px;
-		border: 1px dashed #e6e9f0;
+		border: 1px solid #e6e9f0;
 		border-radius: 5px;
 	}
 
@@ -249,6 +250,20 @@
 		font-size: 12px;
 		color: #abb3bd;
 		text-align: center;
+	}
+
+	&.design-minimal {
+		gap: 10px !important;
+
+		.blockera-component-upgrade-prompt-content__heading {
+			font-size: 18px;
+			line-height: 1.1;
+		}
+
+		.blockera-component.blockera-component-upgrade-prompt-highlights,
+		.blockera-component-upgrade-prompt-content__hints {
+			display: none;
+		}
 	}
 }
 
@@ -342,8 +357,7 @@
 .blockera-component.blockera-component-upgrade-prompt-highlights {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
-	margin-top: 4px;
+	gap: 6px;
 
 	.blockera-component-upgrade-prompt-highlights__heading {
 		color: var(--blockera-upgrade-primary);
@@ -355,8 +369,7 @@
 }
 
 .blockera-component-upgrade-prompt-highlights__row {
-	width: 100%;
-	padding: 8px 10px;
+	padding: 6px 10px 6px 6px;
 	border: 1px solid #e6e9f0;
 	border-radius: 5px;
 }
@@ -387,7 +400,7 @@
 
 .blockera-component-upgrade-prompt-highlights__title {
 	font-size: 13px;
-	font-weight: 600;
+	font-weight: 500;
 	color: #0f172a;
 }
 

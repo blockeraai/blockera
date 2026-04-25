@@ -47,7 +47,7 @@ export function UpgradePromptContent({
 	buttonURL?: string,
 	buttonText?: string,
 	buttonTarget?: string,
-	design?: 'light' | 'dark',
+	design?: 'light' | 'dark' | 'minimal',
 }): MixedElement {
 	const ctaHref = buttonURL ?? SITE_EDITOR_DEFAULT_UPGRADE_URL;
 	const ctaLabel = buttonText ?? __('Upgrade with 15% off', 'blockera');
