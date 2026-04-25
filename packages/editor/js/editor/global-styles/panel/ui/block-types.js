@@ -681,17 +681,34 @@ export const BlockTypes = ({
 				<UpgradePrompt
 					type="modal"
 					data-test="usage-for-multiple-blocks-upgrade-prompt"
-					heading={__('Use this style on more blocks', 'blockera')}
-					description={__(
-						'The free plan limits how many block types can use each global style variation. Upgrade to apply your design to every block you need.',
-						'blockera'
-					)}
-					featuresList={[
-						__('Unlimited blocks per style variation', 'blockera'),
-						__('All registered block types', 'blockera'),
-						__('Advanced global styles', 'blockera'),
-						__('Premium design tools', 'blockera'),
-					]}
+					lockedFeature={{
+						icon: (
+							<Icon icon="category" library="wp" iconSize={24} />
+						),
+						title: __(
+							'Share Style Variation for Multiple Blocks',
+							'blockera'
+						),
+						description: (
+							<Flex direction="column" gap="6px">
+								{__(
+									'Share a single style variation on as many blocks as you need',
+									'blockera'
+								)}
+								<Flex direction="row" gap="6px">
+									<span className="blockera-free-plan-hint">
+										{__('Free: Only 2 blocks', 'blockera')}
+									</span>
+									<span className="blockera-pro-plan-hint">
+										{__(
+											'Pro: Unlimited blocks',
+											'blockera'
+										)}
+									</span>
+								</Flex>
+							</Flex>
+						),
+					}}
 					isOpen={isUpgradePromptOpen}
 					onClose={() => setIsUpgradePromptOpen(false)}
 					buttonURL={UPGRADE_PRO_URL}

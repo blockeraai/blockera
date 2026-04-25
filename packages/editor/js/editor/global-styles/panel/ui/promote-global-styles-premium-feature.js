@@ -9,7 +9,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { UpgradePrompt } from '@blockera/controls';
+import { UpgradePrompt, Flex } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 export const PromoteGlobalStylesPremiumFeature = ({
 	items,
@@ -27,14 +28,27 @@ export const PromoteGlobalStylesPremiumFeature = ({
 	return (
 		<UpgradePrompt
 			type="modal"
-			heading={__('Advanced Global Styles', 'blockera')}
 			data-test={'promote-global-styles-premium-feature'}
-			featuresList={[
-				__('Multiple styles', 'blockera'),
-				__('All styles', 'blockera'),
-				__('Advanced features', 'blockera'),
-				__('Premium styles', 'blockera'),
-			]}
+			lockedFeature={{
+				icon: <Icon icon="style-variations" iconSize={22} />,
+				title: __('Unlimited Style Variations', 'blockera'),
+				description: (
+					<Flex direction="column" gap="6px">
+						{__(
+							'Create unlimited custom global style variations',
+							'blockera'
+						)}
+						<Flex direction="row" gap="6px">
+							<span className="blockera-free-plan-hint">
+								{__('Free: Only 1', 'blockera')}
+							</span>
+							<span className="blockera-pro-plan-hint">
+								{__('Pro: Unlimited', 'blockera')}
+							</span>
+						</Flex>
+					</Flex>
+				),
+			}}
 			isOpen={isOpen}
 			onClose={onClose}
 		/>

@@ -106,16 +106,16 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 
 						return (
 							<UpgradePrompt
-								heading={__(
-									'Advanced Block States',
-									'blockera'
-								)}
-								featuresList={[
-									__('Multiple states', 'blockera'),
-									__('All block states', 'blockera'),
-									__('Advanced features', 'blockera'),
-									__('Premium blocks', 'blockera'),
-								]}
+								lockedFeature={{
+									title: __(
+										'Advanced Block States',
+										'blockera'
+									),
+									description: __(
+										'Style hover, focus, and custom states beyond the Free cap.',
+										'blockera'
+									),
+								}}
 								isOpen={isOpen}
 								onClose={onClose}
 							/>

@@ -9,6 +9,7 @@ import { useCallback, useMemo } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	RepeaterControl,
 	UpgradePrompt,
@@ -27,6 +28,7 @@ import {
 	componentInnerClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -162,21 +164,34 @@ const Presets = ({
 			return (
 				<UpgradePrompt
 					type="modal"
-					heading={__('Multiple Custom Variables', 'blockera')}
-					featuresList={[
-						sprintf(
+					lockedFeature={{
+						icon: <Icon icon="layers" iconSize={26} />,
+						title: sprintf(
 							/* translators: %s: Preset group title (e.g. Font Sizes, Spacing) */
-							__('Multiple Custom %s Variables', 'blockera'),
+							__('Unlimited Custom %s Variables', 'blockera'),
 							title
 						),
-						sprintf(
-							/* translators: %s: Preset group title (e.g. Font Sizes, Spacing) */
-							__('Advanced %s Settings', 'blockera'),
-							title
+						description: (
+							<Flex direction="column" gap="6px">
+								{__(
+									'Add as many variables as your design system needs',
+									'blockera'
+								)}
+
+								<Flex direction="row" gap="6px">
+									<span className="blockera-free-plan-hint">
+										{__('Free: 1 variable', 'blockera')}
+									</span>
+									<span className="blockera-pro-plan-hint">
+										{__(
+											'Pro: Unlimited variables',
+											'blockera'
+										)}
+									</span>
+								</Flex>
+							</Flex>
 						),
-						__('Change the ID of Variables', 'blockera'),
-						__('Premium Features', 'blockera'),
-					]}
+					}}
 					isOpen={isOpen}
 					onClose={_onClose ? _onClose : noop}
 				/>
