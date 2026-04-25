@@ -13,9 +13,7 @@ import { loginToSite, goTo } from '../helpers';
 registerCommands();
 
 beforeEach(function () {
-	// run these tests as if in a desktop
-	// browser with a 720p monitor
-	cy.viewport(1280, 720);
+	cy.viewport(1280, 900);
 
 	if (!Cypress.env('isLogin')) {
 		cy.login();

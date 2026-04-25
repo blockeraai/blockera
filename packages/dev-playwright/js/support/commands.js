@@ -11,8 +11,7 @@ const { getIframeBody } = require('../utils/editor');
 const { loginToSite, goTo } = require('../utils/site-navigation');
 
 test.beforeEach(async ({ page }) => {
-	// Run these tests as if in a desktop browser with a 720p monitor
-	await page.setViewportSize({ width: 1280, height: 720 });
+	await page.setViewportSize({ width: 1280, height: 900 });
 
 	// Login if not already logged in
 	// Note: In Playwright, authentication is typically handled via storageState

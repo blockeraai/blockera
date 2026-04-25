@@ -84,6 +84,10 @@ module.exports = {
 				use: ['@svgr/webpack'],
 			},
 			{
+				test: /\.(png|jpe?g|gif|webp|avif)$/i,
+				type: 'asset/resource',
+			},
+			{
 				test: /\.(txt|html)$/,
 				exclude:
 					/(public\/index\.html|support\/component-index\.html)$/,
