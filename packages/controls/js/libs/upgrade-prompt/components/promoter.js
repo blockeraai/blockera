@@ -29,6 +29,7 @@ import { getUpgradePromptProductChrome } from '../products';
 import { UpgradePromptContent } from './upgrade-prompt-content';
 
 export const Promoter = ({
+	showTopbar = true,
 	product = 'blockera-site-editor',
 	design = 'light',
 	lockedFeature,
@@ -47,7 +48,7 @@ export const Promoter = ({
 	...props
 }: {
 	product?: UpgradePromptProductId,
-	design?: 'light' | 'dark',
+	design?: 'light' | 'dark' | 'minimal',
 	lockedFeature?: ?LockedFeatureSpec,
 	proHighlights?: Array<ProHighlightSpec>,
 	heading?: string,
@@ -58,6 +59,7 @@ export const Promoter = ({
 	buttonText?: string,
 	buttonTarget?: string,
 	style?: Object,
+	showTopbar?: boolean,
 }): MixedElement => {
 	const { OfferPill } = getUpgradePromptProductChrome(product);
 
@@ -85,40 +87,43 @@ export const Promoter = ({
 			style={style}
 			{...props}
 		>
-			<div
-				className={componentInnerClassNames(
-					'upgrade-prompt-promoter-card__topbar'
-				)}
-			>
-				{showcase ? (
-					<UpgradePromptChromeLeft
-						featureLockedLabel={showcase.title}
-					/>
-				) : (
-					<div
-						className={componentInnerClassNames(
-							'upgrade-prompt-promoter-card__brand'
-						)}
-					>
-						<span
+			{showTopbar && (
+				<div
+					className={componentInnerClassNames(
+						'upgrade-prompt-promoter-card__topbar'
+					)}
+				>
+					{showcase ? (
+						<UpgradePromptChromeLeft
+							featureLockedLabel={showcase.title}
+						/>
+					) : (
+						<div
 							className={componentInnerClassNames(
-								'upgrade-prompt-chrome__pro-badge'
+								'upgrade-prompt-promoter-card__brand'
 							)}
 						>
-							PRO
-						</span>
-						<span
-							className={componentInnerClassNames(
-								'upgrade-prompt-promoter-card__brand-text'
-							)}
-						>
-							{heading ||
-								__('Upgrade to Blockera Pro', 'blockera')}
-						</span>
-					</div>
-				)}
-				<OfferPill />
-			</div>
+							<span
+								className={componentInnerClassNames(
+									'upgrade-prompt-chrome__pro-badge'
+								)}
+							>
+								PRO
+							</span>
+							<span
+								className={componentInnerClassNames(
+									'upgrade-prompt-promoter-card__brand-text'
+								)}
+							>
+								{heading ||
+									__('Upgrade to Blockera Pro', 'blockera')}
+							</span>
+						</div>
+					)}
+					<OfferPill />
+				</div>
+			)}
+
 			<div
 				className={componentInnerClassNames(
 					'upgrade-prompt-promoter-card__body'
