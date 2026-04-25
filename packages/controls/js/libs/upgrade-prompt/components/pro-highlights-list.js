@@ -78,13 +78,16 @@ export function ProHighlightsList({
 						>
 							{item.title}
 						</div>
-						<div
-							className={componentInnerClassNames(
-								'upgrade-prompt-highlights__desc'
-							)}
-						>
-							{item.description}
-						</div>
+
+						{item.description && (
+							<div
+								className={componentInnerClassNames(
+									'upgrade-prompt-highlights__desc'
+								)}
+							>
+								{item.description}
+							</div>
+						)}
 					</div>
 					<div
 						className={componentInnerClassNames(

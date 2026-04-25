@@ -13,5 +13,5 @@ export type LockedFeatureSpec = {|
 export type ProHighlightSpec = {|
 	icon?: MixedElement,
 	title: string,
-	description: string,
+	description?: string,
 |};

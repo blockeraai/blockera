@@ -32,34 +32,18 @@ export function getSiteEditorDefaultProHighlights(): Array<ProHighlightSpec> {
 		{
 			icon: <IconResponsiveBreakpoints />,
 			title: __('7+ Responsive breakpoints', 'blockera'),
-			description: __(
-				'Design pixel-perfect layouts at every screen size',
-				'blockera'
-			),
 		},
 		{
 			icon: <IconBlockStates />,
 			title: __('Block states (Hover, focus…)', 'blockera'),
-			description: __(
-				'Style every interaction state separately',
-				'blockera'
-			),
 		},
 		{
 			icon: <IconPatterns />,
 			title: __('200+ Pattern library', 'blockera'),
-			description: __(
-				'Production-ready patterns you can drop in',
-				'blockera'
-			),
 		},
 		{
 			icon: <IconAnimations />,
 			title: __('40+ Animations', 'blockera'),
-			description: __(
-				'Entrance, hover, scroll triggers animations',
-				'blockera'
-			),
 		},
 	];
 }
