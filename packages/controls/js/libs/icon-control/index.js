@@ -22,7 +22,7 @@ import { isString, isEmpty, isUndefined, useLateEffect } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { UpgradePrompt, Flex } from '../';
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
@@ -252,14 +252,41 @@ function IconControl({
 				>
 					{isOpenPromotion && (
 						<UpgradePrompt
-							heading={__('Custom SVG Icons', 'blockera')}
-							featuresList={[
-								__('Upload custom SVG icons', 'blockera'),
-								__('Unlimited icon uploads', 'blockera'),
-								__('Unlock all icon libraries', 'blockera'),
-							]}
+							lockedFeature={{
+								icon: (
+									<Icon
+										icon="upload"
+										library="wp"
+										iconSize={22}
+									/>
+								),
+								title: __('Custom SVG Icons', 'blockera'),
+								description: (
+									<Flex direction="column" gap="6px">
+										{__(
+											'Upload unlimited custom SVG icons',
+											'blockera'
+										)}
+										<Flex direction="column" gap="6px">
+											<span className="blockera-free-plan-hint">
+												{__(
+													'Free: No uploads allowed',
+													'blockera'
+												)}
+											</span>
+											<span className="blockera-pro-plan-hint">
+												{__(
+													'Pro: Upload unlimited custom icons',
+													'blockera'
+												)}
+											</span>
+										</Flex>
+									</Flex>
+								),
+							}}
 							isOpen={isOpenPromotion}
 							onClose={() => setIsOpenPromotion(false)}
+							type="modal"
 						/>
 					)}
 
