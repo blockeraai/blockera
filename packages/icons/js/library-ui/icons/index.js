@@ -238,6 +238,7 @@ export { default as JustifyContentEnd } from './justify-content-end.svg';
 export { default as JustifyContentSpaceAround } from './justify-content-space-around.svg';
 export { default as JustifyContentSpaceBetween } from './justify-content-space-between.svg';
 export { default as JustifyContentStart } from './justify-content-start.svg';
+export { default as Layers } from './layers.svg';
 export { default as LinearGradientRepeat } from './linear-gradient-repeat.svg';
 export { default as LinearGradientNoRepeat } from './linear-gradient-no-repeat.svg';
 export { default as Lock } from './lock.svg';
