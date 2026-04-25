@@ -175,11 +175,11 @@ export default function ({
 					className={controlInnerClassNames(
 						'var-picker-preset-panel'
 					)}
-					style={{
-						maxHeight: 'min(70vh, 520px)',
-						overflow: 'auto',
-						width: '100%',
-					}}
+					style={
+						{
+							// width: '100%',
+						}
+					}
 				>
 					<VarPickerPresetContext.Provider
 						value={{
