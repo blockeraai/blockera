@@ -434,7 +434,11 @@ function blockera_test_activate_mu_plugin( string $design_name): void {
 	$content = file_get_contents($mu_plugin_file);
 	if ($content !== false) {
 		file_put_contents($target_file, $content);
-		
+
+		// The copied file lives under WPMU_PLUGIN_DIR, so dirname( __FILE__ ) inside it is not the fixture folder.
+		// Expose the real fixture directory for mu-plugins that ship static assets (e.g. feed.xml).
+		$GLOBALS['blockera_test_mu_plugin_fixture_dir'] = $fixtures_path . $design_name;
+
 		// Include the mu-plugin file immediately so it executes in the current request
 		// WordPress mu-plugins are loaded early in bootstrap, so we need to manually include it
 		require_once $target_file;
@@ -456,6 +460,8 @@ function blockera_test_deactivate_mu_plugin( string $design_name): void {
 	if (file_exists($target_file)) {
 		unlink($target_file);
 	}
+
+	unset($GLOBALS['blockera_test_mu_plugin_fixture_dir']);
 }
 
 /**

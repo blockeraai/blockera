@@ -23,9 +23,16 @@ function blockera_intercept_rss_feed_request( $preempt, $args, $url ) {
 		return $preempt;
 	}
 
-	// Get the path to the static feed file.
-	$fixtures_path = dirname( __FILE__ );
-	$feed_file     = $fixtures_path . '/feed.xml';
+	// When PHPUnit copies this file into WPMU_PLUGIN_DIR, __FILE__ points at mu-plugins/, not
+	// tests/fixtures/{design}/ — helpers sets $GLOBALS['blockera_test_mu_plugin_fixture_dir'] before require.
+	$fixture_dir = '';
+	if ( isset( $GLOBALS['blockera_test_mu_plugin_fixture_dir'] ) && is_string( $GLOBALS['blockera_test_mu_plugin_fixture_dir'] ) && $GLOBALS['blockera_test_mu_plugin_fixture_dir'] !== '' ) {
+		$fixture_dir = $GLOBALS['blockera_test_mu_plugin_fixture_dir'];
+	}
+	if ( $fixture_dir === '' ) {
+		$fixture_dir = dirname( __FILE__ );
+	}
+	$feed_file = $fixture_dir . '/feed.xml';
 
 	// Check if the static feed file exists.
 	if ( ! file_exists( $feed_file ) ) {
