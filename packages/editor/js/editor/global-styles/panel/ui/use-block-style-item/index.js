@@ -449,7 +449,7 @@ export const useBlockStyleItem = ({
 
 			const blockTypesToRegister = getBlockTypesForStyleFromStore(
 				blockName,
-				duplicateStyle.name
+				currentStyle.name
 			);
 
 			registerStyleForBlockTypes(blockTypesToRegister, duplicateStyle);
