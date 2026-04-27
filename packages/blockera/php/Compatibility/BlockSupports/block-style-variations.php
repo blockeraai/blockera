@@ -103,11 +103,32 @@ if (! function_exists('blockera_render_block_style_variation_support_styles')) {
 	 * @return array The parsed block with block style variation classname added.
 	 */
 	function blockera_render_block_style_variation_support_styles( $parsed_block ) {
-		$classes    = $parsed_block['attrs']['className'] ?? null;
-		$variations = blockera_get_block_style_variation_name_from_class( $classes );
+		$classes = $parsed_block['attrs']['className'] ?? null;
+		$raw     = blockera_get_block_style_variation_name_from_class( $classes );
 
-		if ( ! $variations ) {
+		if ( ! $raw ) {
 			return $parsed_block;
+		}
+
+		// Theme slugs only: generated instance classes look like "slug--123" from wp_unique_id (see below).
+		$variations = array_values(
+			array_filter(
+				$raw,
+				static function ( $slug ) {
+					return ! preg_match( '/--\d+$/', $slug );
+				}
+			)
+		);
+
+		if ( empty( $variations ) ) {
+			return $parsed_block;
+		}
+
+		// Idempotent when render_block_data runs more than once for the same block (e.g. navigation's first inner pass + ref/fallback pass).
+		foreach ( $variations as $slug ) {
+			if ( preg_match( '/\bis-style-' . preg_quote( $slug, '/' ) . '--\d+\b/', (string) $classes ) ) {
+				return $parsed_block;
+			}
 		}
 
 		$tree       = JSONResolver::get_merged_data();
@@ -251,5 +272,110 @@ if (! function_exists('blockera_get_block_style_variation_name_from_class')) {
 		}
 
 		return $matches[1] ?? null;
+	}
+}
+
+if ( ! function_exists( 'blockera_apply_render_block_data_to_wp_block_subtree' ) ) {
+	/**
+	 * Applies {@see 'render_block_data'} to a block and all descendants, depth-first.
+	 *
+	 * WordPress only runs that filter in {@see render_block()} and in the parent {@see WP_Block::render()}
+	 * loop over inners. Some core blocks (e.g. `core/navigation`, `core/navigation-link`, `core/navigation-submenu`)
+	 * call `$inner->render()` directly without the usual pass. Nested blocks (e.g. `core/page-list` inside a
+	 * submenu) then miss style variations unless this path runs. Blocks that re-enter {@see WP_Block::render()}
+	 * and run the same filter again on a child are expected to be safe for Block style variation processing
+	 * (see idempotency in blockera_render_block_style_variation_support_styles).
+	 *
+	 * @param \WP_Block      $block        Block node.
+	 * @param \WP_Block|null $parent_block Parent, for filters that use the third argument.
+	 */
+	function blockera_apply_render_block_data_to_wp_block_subtree( WP_Block $block, $parent_block = null ) {
+		$source         = $block->parsed_block;
+		$filtered_block = apply_filters( 'render_block_data', $source, $source, $parent_block );
+
+		$block->parsed_block = $filtered_block;
+		$block->refresh_parsed_block_dependents();
+
+		if ( empty( $block->inner_blocks ) ) {
+			return;
+		}
+
+		foreach ( $block->inner_blocks as $child ) {
+			if ( $child instanceof WP_Block ) {
+				blockera_apply_render_block_data_to_wp_block_subtree( $child, $block );
+			}
+		}
+	}
+}
+
+if ( ! function_exists( 'blockera_apply_render_block_data_to_inner_block_list' ) ) {
+	/**
+	 * Runs {@see blockera_apply_render_block_data_to_wp_block_subtree()} for each top-level block in a list.
+	 *
+	 * Use from any integration that loads or replaces a {@see \WP_Block_List} and then renders with
+	 * {@see WP_Block::render()} without going through {@see render_block()}. That matches WordPress core’s
+	 * `block_core_navigation_render_inner_blocks` pattern; this helper is the generic Blockera hook point for
+	 * the same (plugins can call it from their own `apply_filters` for custom inner block lists).
+	 *
+	 * @param \Traversable|array $inner_blocks Iterable of {@see \WP_Block} instances.
+	 * @param \WP_Block|null     $parent_block Optional parent of this list.
+	 * @return \Traversable|array
+	 */
+	function blockera_apply_render_block_data_to_inner_block_list( $inner_blocks, $parent_block = null ) {
+		foreach ( $inner_blocks as $block ) {
+			if ( $block instanceof WP_Block ) {
+				blockera_apply_render_block_data_to_wp_block_subtree( $block, $parent_block );
+			}
+		}
+
+		return $inner_blocks;
+	}
+}
+
+if ( ! function_exists( 'blockera_apply_render_block_data_to_parsed_block_subtree' ) ) {
+	/**
+	 * Applies {@see 'render_block_data'} to every node in a parsed block *array* tree.
+	 *
+	 * Use when code builds {@see \WP_Block} from a parsed array and calls `->render()` without
+	 * {@see render_block()} (e.g. custom loop blocks). The optional `$parent_block` is passed to filters;
+	 * for deep trees without a real parent instance, `null` is common.
+	 *
+	 * @param array          $parsed_block Unmodified parsed block (will be replaced by filter output).
+	 * @param \WP_Block|null $parent_block  Parent for filters.
+	 * @return array
+	 */
+	function blockera_apply_render_block_data_to_parsed_block_subtree( array $parsed_block, $parent_block = null ) {
+		$source       = $parsed_block;
+		$parsed_block = apply_filters( 'render_block_data', $parsed_block, $source, $parent_block );
+
+		if ( ! empty( $parsed_block['innerBlocks'] ) && is_array( $parsed_block['innerBlocks'] ) ) {
+			foreach ( $parsed_block['innerBlocks'] as $i => $inner ) {
+				if ( is_array( $inner ) && ! empty( $inner['blockName'] ) ) {
+					$parsed_block['innerBlocks'][ $i ] = blockera_apply_render_block_data_to_parsed_block_subtree( $inner, $parent_block );
+				}
+			}
+		}
+
+		return $parsed_block;
+	}
+}
+
+if ( ! function_exists( 'blockera_navigation_inner_blocks_apply_render_block_data' ) ) {
+	/**
+	 * Ensures block style variation (and other) render_block_data filters run for Navigation inner blocks.
+	 *
+	 * When a Navigation block loads inner blocks from a linked `wp_navigation` post or from the core
+	 * fallback, those blocks are rendered via {@see WP_Block::render()} without the parent loop that
+	 * runs {@see 'render_block_data'} first. Nested items (e.g. `core/page-list` under
+	 * `core/navigation-submenu` / `core/navigation-link`) also need the subtree pass because those
+	 * submenus render inners with manual `->render()` calls. Delegates to
+	 * {@see blockera_apply_render_block_data_to_inner_block_list()}.
+	 *
+	 * @param \WP_Block_List $inner_blocks Inner blocks returned for the Navigation block.
+	 *
+	 * @return \WP_Block_List
+	 */
+	function blockera_navigation_inner_blocks_apply_render_block_data( $inner_blocks ) {
+		return blockera_apply_render_block_data_to_inner_block_list( $inner_blocks, null );
 	}
 }

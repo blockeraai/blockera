@@ -58,6 +58,8 @@ function blockera_after_setup_theme() {
 	add_filter( 'render_block', array( BlockeraDuotone::class, 'render_duotone_support' ), 10, 3 );
 	add_action( 'init', 'blockera_register_block_core_template_part' );
 	add_filter( 'render_block_data', 'blockera_render_block_style_variation_support_styles', 10, 2 );
+	// Replaced wp_navigation / fallback / nested submenu inners: full subtree; extensions may reuse blockera_apply_render_block_data_to_inner_block_list() the same way.
+	add_filter( 'block_core_navigation_render_inner_blocks', 'blockera_navigation_inner_blocks_apply_render_block_data', 5 );
 	add_filter( 'render_block', 'blockera_render_layout_support_flag', 10, 2 );
 	add_filter('_get_block_templates_files', 'blockera_get_block_templates', PHP_INT_MAX, 3);
 
