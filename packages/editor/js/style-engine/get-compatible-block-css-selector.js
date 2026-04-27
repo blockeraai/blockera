@@ -262,7 +262,7 @@ export const getNormalizedSelector = (
 		const masterStateType = getMasterState();
 
 		// If selector contains root selector, set root selector to empty string to avoid duplicate selectors.
-		if (-1 !== selector.indexOf(rootSelector)) {
+		if (-1 !== selector.indexOf(rootSelector) && !fromInnerBlock) {
 			rootSelector = '';
 		}
 
