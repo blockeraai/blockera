@@ -20,6 +20,7 @@ import SecondarySidebarInjector from './secondary-sidebar';
 import FooterToolbarInjector from './footer-toolbar';
 import GlobalStylesActionsForBlocks from './global-styles-actions-for-blocks';
 import AdditionalCssContextmenuObserver from './additional-css-contextmenu-observer';
+import AIExperimentalTools from './ai-experimental-tools';
 import GlobalStyles, {
 	registration as globalStylesRegistration,
 } from './global-styles';
@@ -154,6 +155,11 @@ const editorPlugins = [
 	{
 		name: 'blockera-blocks-ui',
 		render: BlocksUI,
+		icon: null,
+	},
+	{
+		name: 'blockera-ai-experimental-tools',
+		render: AIExperimentalTools,
 		icon: null,
 	},
 ];
