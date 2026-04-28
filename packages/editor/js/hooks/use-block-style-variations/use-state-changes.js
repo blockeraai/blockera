@@ -97,7 +97,8 @@ export const useStateChanges = ({
 			return;
 		}
 		setChangesets(initializedValue);
-	}, [initializedValue, hasChangesets]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- Only need to run when initializedValue changes.
+	}, [initializedValue]);
 
 	return {
 		hasChangesets,

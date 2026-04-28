@@ -15,6 +15,10 @@ import { isEmpty, isUndefined, union } from '@blockera/utils';
  * Internal dependencies
  */
 import { replaceVariablesValue } from './utils';
+import {
+	getSelectorWithRootBody,
+	getExtractedSelectorFromRootBody,
+} from './root-body-selector-helpers';
 import type { NormalizedSelectorProps } from './types';
 import { getBlockCSSSelector } from './get-block-css-selector';
 import { isInnerBlock, isNormalState } from '../extensions/components/utils';
@@ -262,7 +266,7 @@ export const getNormalizedSelector = (
 		const masterStateType = getMasterState();
 
 		// If selector contains root selector, set root selector to empty string to avoid duplicate selectors.
-		if (-1 !== selector.indexOf(rootSelector)) {
+		if (-1 !== selector.indexOf(rootSelector) && !fromInnerBlock) {
 			rootSelector = '';
 		}
 
@@ -456,16 +460,7 @@ export const getNormalizedSelector = (
 		.join(', ');
 };
 
-export const getSelectorWithRootBody = (
-	selector: string,
-	withHTML: boolean = true
-): string => {
-	return `${withHTML ? 'html:root' : ':root'} body :where(${selector})`;
-};
-
-export const getExtractedSelectorFromRootBody = (selector: string): string => {
-	return selector.replace(/^html:root body :where\((.*)\)$/, '$1');
-};
+export { getSelectorWithRootBody, getExtractedSelectorFromRootBody };
 
 export const getCompatibleBlockCssSelector = ({
 	state,

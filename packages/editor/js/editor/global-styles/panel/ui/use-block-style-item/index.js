@@ -5,10 +5,9 @@
  */
 import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
-import { useEntityProp, store as coreStore } from '@wordpress/core-data';
+import { useEntityProp } from '@wordpress/core-data';
 import { useCallback, useState } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
-import { store as editorStore } from '@wordpress/editor';
 import {
 	unregisterBlockStyle,
 	registerBlockStyle,
@@ -449,7 +448,7 @@ export const useBlockStyleItem = ({
 
 			const blockTypesToRegister = getBlockTypesForStyleFromStore(
 				blockName,
-				duplicateStyle.name
+				currentStyle.name
 			);
 
 			registerStyleForBlockTypes(blockTypesToRegister, duplicateStyle);
@@ -662,8 +661,16 @@ export const useBlockStyleItem = ({
 	): void => {
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
+		const attributes = selectedBlock.attributes;
 
-		let styleAttributes = selectedBlock.attributes;
+		let styleAttributes = applyFilters(
+			'blockera.blockEdit.attributes',
+			mergeObject(
+				{ ...attributes },
+				prepareBlockeraDefaultAttributesValues(_defaultStyles)
+			),
+			args
+		);
 
 		const ignoredAttributes: Array<string> = [];
 
@@ -752,12 +759,14 @@ export const useBlockStyleItem = ({
 		if (isRootStyle(currentStyle)) {
 			_globalStyles = mergeObject(_globalStyles, {
 				blocks: {
+					..._globalStyles?.blocks,
 					[blockName]: currentStyleValue,
 				},
 			});
 		} else {
 			_globalStyles = mergeObject(_globalStyles, {
 				blocks: {
+					..._globalStyles?.blocks,
 					[blockName]: {
 						variations: {
 							[currentStyle.name]: currentStyleValue,
@@ -791,10 +800,6 @@ export const useBlockStyleItem = ({
 		});
 
 		setCurrentActiveStyle(currentStyle, 'save-customizations');
-
-		setTimeout(async () => {
-			await saveAllDirtyEntities();
-		}, 1000);
 	};
 
 	/** @see ./handleOnDetachStyle.md for Cursor IDE instructions */
@@ -863,46 +868,4 @@ export const useBlockStyleItem = ({
 		handleOnSaveUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	};
-};
-
-/**
- * Save all dirty entities (global styles, current post, etc.) to persist to database.
- * Uses saveEditedEntityRecord - works in both site editor and post editor.
- * Uses savePost - works in post editor.
- * Saves in sequence, so the post is saved after all other entities are saved.
- *
- * @return {Promise<void>}
- */
-const saveAllDirtyEntities = async (): Promise<void> => {
-	// Save all dirty entities (global styles, current post, etc.) to persist to database.
-	try {
-		const { savePost } = dispatch(editorStore);
-		const { saveEditedEntityRecord } = dispatch(coreStore);
-		const dirtyRecords =
-			select(coreStore).__experimentalGetDirtyEntityRecords?.() || [];
-
-		const entitiesToSave = dirtyRecords.filter(
-			(record) => !(record.kind === 'root' && record.name === 'site')
-		);
-
-		if (entitiesToSave.length > 0) {
-			await Promise.all(
-				entitiesToSave.map((record, index): Promise<void> => {
-					let promiseResponse = saveEditedEntityRecord(
-						record.kind,
-						record.name,
-						record.key
-					);
-
-					if (index === entitiesToSave.length - 1) {
-						promiseResponse = savePost();
-					}
-
-					return promiseResponse;
-				})
-			);
-		}
-	} catch {
-		// Error saving - WordPress will show error notification
-	}
 };

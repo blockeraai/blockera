@@ -711,14 +711,14 @@ export const StyleItem = ({
 								className="context-menu-trigger style-item-context-menu-anchor"
 								data-test={`open-${style.name}-contextmenu`}
 								data-anchor="style-item-context-menu"
+								onClick={() => {
+									setIsOpenBlockCardContextMenu(false);
+									setIsOpenContextMenu(true);
+								}}
 							>
 								<Icon
 									icon="more-vertical"
 									iconSize="20"
-									onClick={() => {
-										setIsOpenBlockCardContextMenu(false);
-										setIsOpenContextMenu(true);
-									}}
 									style={{
 										opacity: '0.4',
 									}}
@@ -891,15 +891,12 @@ export const StyleItem = ({
 							className="context-menu-trigger block-card-context-menu-anchor"
 							data-test={`open-${style.name}-block-card-contextmenu`}
 							data-anchor="block-card-context-menu"
+							onClick={() => {
+								setIsOpenContextMenu(false);
+								setIsOpenBlockCardContextMenu(true);
+							}}
 						>
-							<Icon
-								iconSize="20"
-								icon="more-vertical"
-								onClick={() => {
-									setIsOpenContextMenu(false);
-									setIsOpenBlockCardContextMenu(true);
-								}}
-							/>
+							<Icon iconSize="20" icon="more-vertical" />
 						</span>
 
 						<StyleItemMenuContextProvider

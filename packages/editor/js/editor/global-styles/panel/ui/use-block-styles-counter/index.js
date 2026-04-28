@@ -30,12 +30,12 @@ export const useBlockStylesCounter = ({
 			isBlockeraCreatedStyle(variation, baseConfig, blockName)
 	).length;
 
-	const userVariationsCount = Object.keys(
-		userConfig?.styles?.blocks?.[blockName]?.variations || {}
-	).length;
-	const baseVariationsCount = Object.keys(
-		baseConfig?.styles?.blocks?.[blockName]?.variations || {}
-	).length;
+	const userVariations =
+		userConfig?.styles?.blocks?.[blockName]?.variations || {};
+	const userVariationsCount = Object.keys(userVariations).length;
+	const baseVariations =
+		baseConfig?.styles?.blocks?.[blockName]?.variations || {};
+	const baseVariationsCount = Object.keys(baseVariations).length;
 
 	let diffVariationsCount = 0;
 
@@ -49,8 +49,14 @@ export const useBlockStylesCounter = ({
 			}
 			break;
 		default:
+			const userKeys = Object.keys(userVariations);
+			const setBase = new Set(Object.keys(baseVariations));
+			const diff = userKeys.filter((x) => !setBase.has(x));
+			const hasDiff = diff.length > 0;
 			if (userVariationsCount >= baseVariationsCount) {
 				diffVariationsCount = userVariationsCount - baseVariationsCount;
+			} else if (hasDiff) {
+				diffVariationsCount = diff.length;
 			} else if (metaDataBlockVariationsCount > baseVariationsCount) {
 				diffVariationsCount =
 					metaDataBlockVariationsCount - baseVariationsCount;
