@@ -100,7 +100,6 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 							id="breakpoints"
 							mode={'accordion'}
 							disableRegenerateId={false}
-							isNativeSupport={true}
 							popoverTitle={(itemId, item) => {
 								if (getBaseBreakpoint() === itemId) {
 									return item.label;

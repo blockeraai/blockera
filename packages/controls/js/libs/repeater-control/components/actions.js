@@ -28,6 +28,7 @@ export default function RepeaterItemActions({
 	itemId,
 	isVisible,
 	setVisibility,
+	interactionGuard,
 	onOpenItemSettings,
 	showItemEditButton = false,
 }: RepeaterItemActionsProps): MixedElement | null {
@@ -460,6 +461,8 @@ export default function RepeaterItemActions({
 					)}
 				</>
 			)}
+
+			{interactionGuard}
 
 			{showDelete && (
 				<>

@@ -61,7 +61,6 @@ export default function RepeaterControl(
 		onSelectableItemActivate,
 		shouldRenderRepeaterItem,
 		showItemEditButton = false,
-		isNativeSupport = false,
 		actionButtonAdd = true,
 		actionButtonVisibility = true,
 		actionButtonDelete = true,
@@ -299,7 +298,6 @@ export default function RepeaterControl(
 			...additionalPropsForRepeaterContext,
 			...customProps,
 		},
-		isNativeSupport,
 		enablePromoCountOnRepeaterItemHeader,
 	};
 

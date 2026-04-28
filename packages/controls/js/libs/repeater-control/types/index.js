@@ -21,6 +21,7 @@ export type RepeaterItemActionsProps = {
 	setVisibility: (state: boolean) => void,
 	onOpenItemSettings?: () => void,
 	showItemEditButton?: boolean,
+	interactionGuard?: MixedElement,
 };
 
 type ID = string | number;
@@ -69,10 +70,6 @@ export type RepeaterControlProps = {
 	 * @default true
 	 */
 	mode?: GroupControlMode,
-	/**
-	 * Specifies that repeater item should use native or not.
-	 */
-	isNativeSupport?: boolean,
 	/**
 	 * Flag for support selectable repeater items or not.
 	 */

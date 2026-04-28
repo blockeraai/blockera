@@ -22,11 +22,12 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import RepeaterItemActions from './actions';
+import { RepeaterProItemInteractionGuard } from './repeater-pro-item-interaction-guard';
 import { RepeaterContext } from '../context';
-import { FeatureWrapper } from '../../feature-wrapper';
 import {
 	getArialLabelSuffix,
 	isEnabledPromote,
+	isFirstRepeaterItem,
 	isOpenPopoverEvent,
 } from '../utils';
 import GroupControl from '../../group-control';
@@ -59,7 +60,6 @@ const RepeaterItem = ({
 		popoverTitle,
 		popoverOffset,
 		PromoComponent,
-		isNativeSupport,
 		popoverClassName,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
@@ -83,10 +83,21 @@ const RepeaterItem = ({
 			return false;
 		}
 
-		if (
+		let shouldBump = false;
+
+		if (true === item?.native) {
+			if (isEnabledPromote(PromoComponent, items)) {
+				shouldBump = true;
+			}
+		} else if (
+			!item.hasOwnProperty('native') &&
 			isEnabledPromote(PromoComponent, items) &&
-			Object.keys(items).indexOf(itemId) > 0
+			!isFirstRepeaterItem(itemId, items)
 		) {
+			shouldBump = true;
+		}
+
+		if (shouldBump) {
 			setCount((c) => c + 1);
 
 			return true;
@@ -182,141 +193,183 @@ const RepeaterItem = ({
 	}
 
 	return (
-		<FeatureWrapper
-			type={item?.native && isNativeSupport ? 'native' : 'none'}
+		<div
+			className={controlInnerClassNames(
+				'repeater-item',
+				isVisible ? ' is-active' : ' is-inactive',
+				{
+					draggable: !isOpen,
+					'is-native':
+						true === item?.native ||
+						(enablePromoCountOnRepeaterItemHeader &&
+							!isFirstRepeaterItem(itemId, items) &&
+							false !== item?.native),
+				}
+			)}
+			draggable={!isOpen}
+			onDragOver={handleDragOver}
+			onDragEnter={handleDragEnter}
+			onDragLeave={handleDragLeave}
+			onDrop={(e) => handleDrop(e, itemId)}
+			onDragStart={(e) => handleDragStart(e, itemId)}
+			data-cy="repeater-item"
+			style={styleRef.current}
+			data-id={itemId}
+			data-test={itemId}
 		>
-			<div
+			{'accordion' === mode && (
+				<RepeaterProItemInteractionGuard
+					item={item}
+					items={items}
+					itemId={itemId}
+					actionButtonsType={actionButtonsType}
+					onBlockedPointerInteraction={() => {
+						bumpPromoInteractionCount(itemId);
+					}}
+					enablePromoCountOnRepeaterItemHeader={
+						enablePromoCountOnRepeaterItemHeader
+					}
+				/>
+			)}
+			<GroupControl
+				mode={
+					isFunction(RepeaterItemChildren?.getMode)
+						? RepeaterItemChildren.getMode(item, itemId)
+						: mode
+				}
+				toggleOpenBorder={true}
+				design={design}
+				popoverProps={popoverProps}
+				popoverTitle={
+					'function' === typeof popoverTitle
+						? popoverTitle(itemId, item)
+						: popoverTitle
+				}
+				popoverOffset={popoverOffset}
+				popoverTitleButtonsRight={
+					PopoverTitleButtonsRight && (
+						<PopoverTitleButtonsRight
+							{...repeaterItemActionsProps}
+						/>
+					)
+				}
+				popoverClassName={popoverClassName}
+				actionButtonsType={actionButtonsType}
+				actionMenuButtonLabel={actionMenuButtonLabel}
+				headerVariableSlug={headerVariableSlug}
 				className={controlInnerClassNames(
-					'repeater-item',
-					isVisible ? ' is-active' : ' is-inactive',
+					'repeater-item-group',
+					item?.__className,
 					{
-						draggable: !isOpen,
+						'is-selected-item': item?.selectable
+							? item.isSelected
+							: false,
 					}
 				)}
-				draggable={!isOpen}
-				onDragOver={handleDragOver}
-				onDragEnter={handleDragEnter}
-				onDragLeave={handleDragLeave}
-				onDrop={(e) => handleDrop(e, itemId)}
-				onDragStart={(e) => handleDragStart(e, itemId)}
-				data-cy="repeater-item"
-				style={styleRef.current}
-				data-id={itemId}
-				data-test={itemId}
-			>
-				<GroupControl
-					mode={
-						isFunction(RepeaterItemChildren?.getMode)
-							? RepeaterItemChildren.getMode(item, itemId)
-							: mode
-					}
-					toggleOpenBorder={true}
-					design={design}
-					popoverProps={popoverProps}
-					popoverTitle={
-						'function' === typeof popoverTitle
-							? popoverTitle(itemId, item)
-							: popoverTitle
-					}
-					popoverOffset={popoverOffset}
-					popoverTitleButtonsRight={
-						PopoverTitleButtonsRight && (
-							<PopoverTitleButtonsRight
+				header={
+					!RepeaterItemHeader ? (
+						<div
+							className={controlInnerClassNames(
+								'repeater-group-header'
+							)}
+							onClick={(event) => {
+								if (bumpPromoInteractionCount(itemId)) {
+									event.stopPropagation();
+									return;
+								}
+
+								if (isOpenPopoverEvent(event)) {
+									setOpen(!isOpen);
+								}
+
+								const nextOpen = !isOpen;
+								changeRepeaterItem({
+									itemId,
+									value: {
+										...item,
+										isOpen: nextOpen,
+										...(item.creatingStep && !nextOpen
+											? { creatingStep: false }
+											: {}),
+									},
+									controlId,
+									repeaterId,
+								});
+							}}
+							aria-label={sprintf(
+								// translators: %s is the repeater item id. It's the aria label for repeater item
+								__('Item %s', 'blockera'),
+								getArialLabelSuffix(itemId)
+							)}
+						>
+							{sprintf(
+								// translators: %s is the repeater item id. It's the repeater item name
+								__('Item %s', 'blockera'),
+								getArialLabelSuffix(itemId)
+							)}
+						</div>
+					) : (
+						<div
+							className={controlInnerClassNames(
+								'repeater-item-header-holder'
+							)}
+							style={{ width: '100%' }}
+							onClickCapture={(e) => {
+								if (bumpPromoInteractionCount(itemId)) {
+									e.stopPropagation();
+									return;
+								}
+
+								if (isFunction(customHeaderOnClick)) {
+									customHeaderOnClick(e);
+								}
+							}}
+						>
+							<RepeaterItemHeader
 								{...repeaterItemActionsProps}
+								{...restCustomProps}
+								onClick={customHeaderOnClick}
 							/>
-						)
-					}
-					popoverClassName={popoverClassName}
-					actionButtonsType={actionButtonsType}
-					actionMenuButtonLabel={actionMenuButtonLabel}
-					headerVariableSlug={headerVariableSlug}
-					className={controlInnerClassNames(
-						'repeater-item-group',
-						item?.__className,
-						{
-							'is-selected-item': item?.selectable
-								? item.isSelected
-								: false,
-						}
-					)}
-					header={
-						!RepeaterItemHeader ? (
-							<div
-								className={controlInnerClassNames(
-									'repeater-group-header'
-								)}
-								onClick={(event) => {
-									if (bumpPromoInteractionCount(itemId)) {
-										event.stopPropagation();
-										return;
+						</div>
+					)
+				}
+				headerOpenIcon={
+					RepeaterItemOpener && (
+						<RepeaterItemOpener {...repeaterItemActionsProps} />
+					)
+				}
+				headerOpenButton={
+					RepeaterItemOpener?.hasButton
+						? RepeaterItemOpener.hasButton(item, itemId)
+						: false
+				}
+				injectHeaderButtonsStart={
+					'popover' === mode ? (
+						<RepeaterItemActions
+							item={repeaterItemActionsProps.item}
+							itemId={repeaterItemActionsProps.itemId}
+							isVisible={repeaterItemActionsProps.isVisible}
+							setVisibility={
+								repeaterItemActionsProps.setVisibility
+							}
+							onOpenItemSettings={() => setOpen(true)}
+							showItemEditButton={showItemEditButton}
+							interactionGuard={
+								<RepeaterProItemInteractionGuard
+									item={item}
+									items={items}
+									itemId={itemId}
+									actionButtonsType={actionButtonsType}
+									onBlockedPointerInteraction={() => {
+										bumpPromoInteractionCount(itemId);
+									}}
+									enablePromoCountOnRepeaterItemHeader={
+										enablePromoCountOnRepeaterItemHeader
 									}
-
-									if (isOpenPopoverEvent(event)) {
-										setOpen(!isOpen);
-									}
-
-									const nextOpen = !isOpen;
-									changeRepeaterItem({
-										itemId,
-										value: {
-											...item,
-											isOpen: nextOpen,
-											...(item.creatingStep && !nextOpen
-												? { creatingStep: false }
-												: {}),
-										},
-										controlId,
-										repeaterId,
-									});
-								}}
-								aria-label={sprintf(
-									// translators: %s is the repeater item id. It's the aria label for repeater item
-									__('Item %s', 'blockera'),
-									getArialLabelSuffix(itemId)
-								)}
-							>
-								{sprintf(
-									// translators: %s is the repeater item id. It's the repeater item name
-									__('Item %s', 'blockera'),
-									getArialLabelSuffix(itemId)
-								)}
-							</div>
-						) : (
-							<div
-								className={controlInnerClassNames(
-									'repeater-item-header-holder'
-								)}
-								style={{ width: '100%' }}
-								onClickCapture={(e) => {
-									if (bumpPromoInteractionCount(itemId)) {
-										e.stopPropagation();
-										return;
-									}
-
-									if (isFunction(customHeaderOnClick)) {
-										customHeaderOnClick(e);
-									}
-								}}
-							>
-								<RepeaterItemHeader
-									{...repeaterItemActionsProps}
-									{...restCustomProps}
-									onClick={customHeaderOnClick}
 								/>
-							</div>
-						)
-					}
-					headerOpenIcon={
-						RepeaterItemOpener && (
-							<RepeaterItemOpener {...repeaterItemActionsProps} />
-						)
-					}
-					headerOpenButton={
-						RepeaterItemOpener?.hasButton
-							? RepeaterItemOpener.hasButton(item, itemId)
-							: false
-					}
-					injectHeaderButtonsStart={
+							}
+						/>
+					) : (
 						<RepeaterItemActions
 							item={repeaterItemActionsProps.item}
 							itemId={repeaterItemActionsProps.itemId}
@@ -327,33 +380,19 @@ const RepeaterItem = ({
 							onOpenItemSettings={() => setOpen(true)}
 							showItemEditButton={showItemEditButton}
 						/>
-					}
-					children={<RepeaterItemChildren {...{ item, itemId }} />}
-					isOpen={isOpen}
-					onClose={() => {
-						setOpen(false);
+					)
+				}
+				children={<RepeaterItemChildren {...{ item, itemId }} />}
+				isOpen={isOpen}
+				onClose={() => {
+					setOpen(false);
 
-						if (isEnabledPromote(PromoComponent, items)) {
-							changeRepeaterItem({
-								itemId,
-								value: {
-									...item,
-									isOpen: false,
-									...(item.creatingStep
-										? { creatingStep: false }
-										: {}),
-								},
-								controlId,
-								repeaterId,
-							});
-							return;
-						}
-
+					if (isEnabledPromote(PromoComponent, items)) {
 						changeRepeaterItem({
 							itemId,
 							value: {
 								...item,
-								isOpen: !isOpen,
+								isOpen: false,
 								...(item.creatingStep
 									? { creatingStep: false }
 									: {}),
@@ -361,57 +400,66 @@ const RepeaterItem = ({
 							controlId,
 							repeaterId,
 						});
-					}}
-					onClick={(): void | boolean => {
-						if (item?.selectable) {
-							const newItems: { [key: string]: any } = {};
+						return;
+					}
 
-							Object.entries(items).forEach(
-								([_itemId, _item]: [string, any]): void => {
-									if (_itemId === itemId) {
-										newItems[_itemId] = {
-											..._item,
-											isSelected: true,
-										};
+					changeRepeaterItem({
+						itemId,
+						value: {
+							...item,
+							isOpen: !isOpen,
+							...(item.creatingStep
+								? { creatingStep: false }
+								: {}),
+						},
+						controlId,
+						repeaterId,
+					});
+				}}
+				onClick={(): void | boolean => {
+					if (item?.selectable) {
+						const newItems: { [key: string]: any } = {};
 
-										return;
-									}
-
+						Object.entries(items).forEach(
+							([_itemId, _item]: [string, any]): void => {
+								if (_itemId === itemId) {
 									newItems[_itemId] = {
 										..._item,
-										isSelected: false,
+										isSelected: true,
 									};
+
+									return;
 								}
-							);
 
-							modifyControlValue({
-								controlId,
-								value: newItems,
-							});
-
-							onChange({
-								modifyControlValue,
-								controlId,
-								value: newItems,
-							});
-
-							if (
-								'function' === typeof onSelectableItemActivate
-							) {
-								onSelectableItemActivate(
-									itemId,
-									newItems[itemId]
-								);
+								newItems[_itemId] = {
+									..._item,
+									isSelected: false,
+								};
 							}
+						);
 
-							return;
+						modifyControlValue({
+							controlId,
+							value: newItems,
+						});
+
+						onChange({
+							modifyControlValue,
+							controlId,
+							value: newItems,
+						});
+
+						if ('function' === typeof onSelectableItemActivate) {
+							onSelectableItemActivate(itemId, newItems[itemId]);
 						}
 
-						return true;
-					}}
-				/>
-			</div>
-		</FeatureWrapper>
+						return;
+					}
+
+					return true;
+				}}
+			/>
+		</div>
 	);
 };
 
