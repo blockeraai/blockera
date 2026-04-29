@@ -107,3 +107,6 @@ wordpress-develop
 # playwright environment variables
 playwright-env.json
 /images
+
+# Local-only experimental overrides
+local.experimental.config.json
