@@ -16,6 +16,7 @@ import { createBlock } from '@wordpress/blocks';
  * Blockera dependencies
  */
 import { Button, Modal, NoticeControl, Tabs } from '@blockera/controls';
+import { componentInnerClassNames } from '@blockera/classnames';
 import { useGlobalStylesContext } from '@blockera/global-styles-ui';
 import { experimental } from '@blockera/env';
 
@@ -256,6 +257,9 @@ export default function AIExperimentalTools(): JSX.Element {
 
 			{isOpen ? (
 				<Modal
+					className={componentInnerClassNames(
+						'ai-experimental-tools-modal'
+					)}
 					headerIcon={<IconAI />}
 					headerTitle={__(
 						'Blockera AI Experimental Tools',
