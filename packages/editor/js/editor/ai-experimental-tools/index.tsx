@@ -25,6 +25,7 @@ import { experimental } from '@blockera/env';
  */
 import IconAI from './icons/ai.svg';
 import { buildSiteTokensJson } from './site-tokens-exporter';
+import './style.scss';
 
 type JsonLike =
 	| null
