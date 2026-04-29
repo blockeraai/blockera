@@ -18,6 +18,6 @@
 		"optimizeStyleGenerationOnEditorStatus": "alpha"
 	},
 	"ai": {
-		"experimentalTools": true
+		"experimentalTools": false
 	}
 }
