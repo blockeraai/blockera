@@ -25,6 +25,7 @@ import { experimental } from '@blockera/env';
  */
 import IconAI from './icons/ai.svg';
 import { buildSiteTokensJson } from './site-tokens-exporter';
+import { buildSiteBreakpointsJson } from './site-breakpoints-exporter';
 import './style.scss';
 
 type JsonLike =
@@ -46,6 +47,7 @@ type JsonBlockInput = {
 
 const TAB_IMPORT_JSON = 'import-json';
 const TAB_SITE_TOKENS = 'site-tokens';
+const TAB_SITE_BREAKPOINTS = 'site-breakpoints';
 
 function isObject(value: unknown): value is Record<string, unknown> {
 	return !!value && typeof value === 'object' && !Array.isArray(value);
@@ -100,6 +102,7 @@ export default function AIExperimentalTools(): JSX.Element {
 
 	// Site tokens tab state
 	const [tokensCopied, setTokensCopied] = useState<boolean>(false);
+	const [breakpointsCopied, setBreakpointsCopied] = useState<boolean>(false);
 
 	// Subscribe to merged global styles (theme + user) so the exported tokens
 	// stay in sync as the user edits palettes / spacing / blockGap. We always
@@ -123,6 +126,10 @@ export default function AIExperimentalTools(): JSX.Element {
 			selectStore('core/block-editor') as any
 		)?.getSettings?.();
 		return editorSettings?.__experimentalFeatures || null;
+	}, []);
+	const breakpoints = useSelect((selectStore) => {
+		const editorStore: any = selectStore('blockera/editor');
+		return editorStore?.getBreakpoints?.() || null;
 	}, []);
 
 	const placeholder = useMemo(
@@ -175,6 +182,28 @@ export default function AIExperimentalTools(): JSX.Element {
 			);
 		}
 	}, [isOpen, tab, features, blockGap]);
+
+	const siteBreakpointsJson = useMemo(() => {
+		if (!isOpen || tab !== TAB_SITE_BREAKPOINTS) {
+			return '';
+		}
+		try {
+			const exported = buildSiteBreakpointsJson(
+				breakpoints as Record<string, any> | null
+			);
+			return JSON.stringify(exported, null, 2);
+		} catch (e: any) {
+			return JSON.stringify(
+				{
+					error:
+						e?.message ||
+						'Failed to build site breakpoints from the current site.',
+				},
+				null,
+				2
+			);
+		}
+	}, [isOpen, tab, breakpoints]);
 
 	const onImport = useCallback(() => {
 		setIsImporting(true);
@@ -236,6 +265,34 @@ export default function AIExperimentalTools(): JSX.Element {
 		}
 	}, [siteTokensJson]);
 
+	const onCopySiteBreakpoints = useCallback(async () => {
+		setError('');
+		setBreakpointsCopied(false);
+		if (!siteBreakpointsJson) {
+			setError(__('Nothing to copy yet.', 'blockera'));
+			return;
+		}
+		try {
+			if (
+				typeof navigator !== 'undefined' &&
+				navigator.clipboard?.writeText
+			) {
+				await navigator.clipboard.writeText(siteBreakpointsJson);
+				setBreakpointsCopied(true);
+				return;
+			}
+			throw new Error(
+				__('Clipboard API is not available.', 'blockera') as string
+			);
+		} catch (e: any) {
+			setError(
+				e?.message
+					? String(e.message)
+					: __('Failed to copy to clipboard.', 'blockera')
+			);
+		}
+	}, [siteBreakpointsJson]);
+
 	// Experimental gate: AI -> Experimental Tools.
 	if (!isEnabled) {
 		return <></>;
@@ -278,6 +335,7 @@ export default function AIExperimentalTools(): JSX.Element {
 							// leak into the new one.
 							setError('');
 							setTokensCopied(false);
+							setBreakpointsCopied(false);
 							setTab(next);
 						}}
 						tabs={[
@@ -288,6 +346,10 @@ export default function AIExperimentalTools(): JSX.Element {
 							{
 								name: TAB_SITE_TOKENS,
 								title: __('Site tokens JSON', 'blockera'),
+							},
+							{
+								name: TAB_SITE_BREAKPOINTS,
+								title: __('Breakpoints JSON', 'blockera'),
 							},
 						]}
 						getPanel={(selectedTab) => {
@@ -346,20 +408,6 @@ export default function AIExperimentalTools(): JSX.Element {
 												{error}
 											</NoticeControl>
 										) : null}
-										{tokensCopied ? (
-											<NoticeControl
-												type="success"
-												isDismissible
-												onDismiss={() =>
-													setTokensCopied(false)
-												}
-											>
-												{__(
-													'Site tokens JSON copied to clipboard.',
-													'blockera'
-												)}
-											</NoticeControl>
-										) : null}
 										<TextareaControl
 											label={__(
 												'Site tokens (site-tokens.json)',
@@ -383,6 +431,73 @@ export default function AIExperimentalTools(): JSX.Element {
 										>
 											{__('Copy JSON', 'blockera')}
 										</Button>
+										{tokensCopied ? (
+											<NoticeControl
+												type="success"
+												isDismissible
+												onDismiss={() =>
+													setTokensCopied(false)
+												}
+											>
+												{__(
+													'Site tokens JSON copied to clipboard.',
+													'blockera'
+												)}
+											</NoticeControl>
+										) : null}
+									</PanelBody>
+								);
+							}
+
+							if (selectedTab?.name === TAB_SITE_BREAKPOINTS) {
+								return (
+									<PanelBody>
+										{error ? (
+											<NoticeControl
+												type="error"
+												isDismissible
+												onDismiss={() => setError('')}
+											>
+												{error}
+											</NoticeControl>
+										) : null}
+										<TextareaControl
+											label={__(
+												'Breakpoints (breakpoints.json)',
+												'blockera'
+											)}
+											help={__(
+												'Auto-generated from the current active Blockera breakpoints. Copy this JSON into the Blockera AI generator project as breakpoints.json.',
+												'blockera'
+											)}
+											value={siteBreakpointsJson}
+											onChange={() => {
+												// Read-only: ignore edits.
+											}}
+											rows={16}
+											readOnly
+										/>
+										<Button
+											variant="primary"
+											onClick={onCopySiteBreakpoints}
+											disabled={!siteBreakpointsJson}
+										>
+											{__('Copy JSON', 'blockera')}
+										</Button>
+										{breakpointsCopied ? (
+											<NoticeControl
+												type="success"
+												isDismissible
+												onDismiss={() =>
+													setBreakpointsCopied(false)
+												}
+											>
+												{__(
+													'Breakpoints JSON copied to clipboard.',
+													'blockera'
+												)}
+											</NoticeControl>
+										) : null}
 									</PanelBody>
 								);
 							}
