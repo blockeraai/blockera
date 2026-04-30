@@ -107,3 +107,7 @@ wordpress-develop
 # playwright environment variables
 playwright-env.json
 /images
+
+
+# Docs temporary for ai assistant
+docs-temp-ai/
