@@ -53,7 +53,16 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		currentBreakpoint = getBaseBreakpoint(),
 	} = useSelect((select) => {
 		const { getSelectedBlock } = select('core/block-editor');
-		const { name, clientId } = getSelectedBlock() || props || {};
+		const selected = getSelectedBlock();
+		// Prefer the block instance passed into this hook (e.g. BlockStyle,
+		// feature wrappers). Using only getSelectedBlock() breaks canvas CSS when
+		// another block stays selected — common after programmatic insert (AI/JSON).
+		const { name, clientId } =
+			typeof props?.clientId === 'string' &&
+			props.clientId !== '' &&
+			typeof props?.name === 'string'
+				? { name: props.name, clientId: props.clientId }
+				: selected || props || {};
 		const {
 			getBlockExtensionBy,
 			getActiveInnerState,
