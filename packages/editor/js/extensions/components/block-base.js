@@ -83,8 +83,6 @@ import {
 	BLOCKERA_BLOCK_REGEX,
 } from './registered-classnames';
 
-const BLOCKERA_DELAY_EXPECTED_TIME = 1000;
-
 const GlobalStylesPanelBaseControlConfigContext: Object = createContext({
 	name: '',
 	clientId: '',
@@ -505,39 +503,52 @@ export const BlockBase: ComponentType<any> = (
 		// to determine which ones might alter the original `attributes` object reference directly.
 		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
 		// are properly managed or avoided (consider use of cloneObject as needed).
-		const clonedAttributes = cloneObject(attributes);
+		// Compare to `blockAttributes` (store), not local `attributes` (pending ?? compatible):
+		// after insert, local derived state can already include `blockera-block` while the store
+		// does not — isEquals(compatible, attributes) stays true and we never flushed to the editor.
+		const clonedCompatible = cloneObject(compatibleAttributes);
 
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
-			!isEquals(compatibleAttributes, attributes) &&
+			!isEquals(compatibleAttributes, blockAttributes) &&
 			false === insideBlockInspector
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
-			handleOnChangeStyleInLocalState(clonedAttributes);
+			handleOnChangeStyleInLocalState(clonedCompatible);
 		}
 
 		// If inside the block inspector, update the parent state immediately.
 		if (insideBlockInspector) {
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
-			if (!isEquals(compatibleAttributes, attributes)) {
-				setBlockAttributes(clonedAttributes);
+			if (!isEquals(compatibleAttributes, blockAttributes)) {
+				setBlockAttributes(clonedCompatible);
 			}
 
 			return;
 		}
 
-		const timeoutId = setTimeout(() => {
-			// Compare the block attributes with the attributes and the attributes ref.
-			// If they are not equal, set the attributes to the block attributes.
-			if (!isEquals(compatibleAttributes, attributes)) {
-				setBlockAttributes(clonedAttributes);
-			}
-		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
+		// Canvas: sync compatible attributes (unique `blockera-block` class, migrations, etc.)
+		// to the block store on the next animation frame. A 1s setTimeout here previously
+		// left programmatically inserted blocks (AI/JSON) without matching styles until the
+		// user edited a control or the delay elapsed.
+		let innerRafId;
+		const outerRafId = requestAnimationFrame(() => {
+			innerRafId = requestAnimationFrame(() => {
+				if (!isEquals(compatibleAttributes, blockAttributes)) {
+					setBlockAttributes(clonedCompatible);
+				}
+			});
+		});
 
-		return () => clearTimeout(timeoutId);
+		return () => {
+			cancelAnimationFrame(outerRafId);
+			if (innerRafId !== undefined) {
+				cancelAnimationFrame(innerRafId);
+			}
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [attributes]);
+	}, [attributes, blockAttributes, compatibleAttributes]);
 
 	// When derived value (compatibleAttributes) changes, clear pending overlay.
 	// This adopts the single source of truth and prevents bidirectional sync.
@@ -773,7 +784,13 @@ export const BlockBase: ComponentType<any> = (
 		if (Object.keys(partial).length) {
 			setBlockAttributes(partial);
 		}
-	}, [blockAttributes, setBlockAttributes, uniqueClassName, clientId]);
+	}, [
+		blockAttributes,
+		setBlockAttributes,
+		uniqueClassName,
+		clientId,
+		insideBlockInspector,
+	]);
 
 	const presetCanvasPreviewValue = useMemo(
 		() => ({

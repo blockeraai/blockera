@@ -7,6 +7,7 @@
 		border-bottom: 1px solid var(--modal-line-color);
 		height: var(--modal-header-height);
 		padding: calc(var(--modal-gap) - 10px) var(--modal-gap);
+		background-color: #ffffff;
 
 		.components-modal__header-heading {
 			display: flex;
@@ -76,6 +77,10 @@
 		--blockera-controls-primary-color: #e20b0b;
 		--blockera-controls-primary-color-darker-20: #b30808;
 		max-width: 450px;
+	}
+
+	&.blockera-component-ai-experimental-tools-modal {
+		max-width: 600px;
 	}
 }
 

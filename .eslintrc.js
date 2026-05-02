@@ -79,7 +79,11 @@ module.exports = {
 		'import/no-unresolved': [
 			'error',
 			{
-				ignore: ['\\.txt$', '\\.html$'],
+				ignore: [
+					'\\.txt$',
+					'\\.html$',
+					'^@blockera/experimental-config$',
+				],
 			},
 		],
 		'@wordpress/no-unsafe-wp-apis': 'off',

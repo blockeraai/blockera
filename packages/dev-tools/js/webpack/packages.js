@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const fs = require('fs');
 const { join, resolve } = require('path');
 
 /**
@@ -70,6 +71,20 @@ const scssLoaders = ({ isLazy }) => [
 
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production';
+	const pluginRoot = resolve(__dirname, '..', '..', '..', '..');
+
+	const experimentalConfigDefaultPath = resolve(
+		pluginRoot,
+		'experimental.config.json'
+	);
+	const experimentalConfigLocalPath = resolve(
+		pluginRoot,
+		'local.experimental.config.json'
+	);
+	const experimentalConfigResolvedPath =
+		!isProduction && fs.existsSync(experimentalConfigLocalPath)
+			? experimentalConfigLocalPath
+			: experimentalConfigDefaultPath;
 
 	return {
 		mode: argv.mode,
@@ -144,6 +159,10 @@ module.exports = (env, argv) => {
 		].filter(Boolean),
 		resolve: {
 			...defaultConfig.resolve,
+			alias: {
+				...(defaultConfig.resolve?.alias || {}),
+				'@blockera/experimental-config': experimentalConfigResolvedPath,
+			},
 			extensions: [
 				'.tsx',
 				'.ts',

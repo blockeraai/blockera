@@ -10,8 +10,20 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+$experimental_config_file = BLOCKERA_SB_PATH . 'experimental.config.json';
+
+### BEGIN DEV-ONLY LOCAL EXPERIMENTAL CONFIG
+if ( defined( 'BLOCKERA_SB_MODE' ) && 'development' === BLOCKERA_SB_MODE ) {
+	$local_experimental_config_file = BLOCKERA_SB_PATH . 'local.experimental.config.json';
+
+	if ( is_readable( $local_experimental_config_file ) ) {
+		$experimental_config_file = $local_experimental_config_file;
+	}
+}
+### END DEV-ONLY LOCAL EXPERIMENTAL CONFIG
+
 ob_start();
-include BLOCKERA_SB_PATH . 'experimental.config.json';
+include $experimental_config_file;
 
 return [
 	'std' => [
