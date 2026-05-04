@@ -10,11 +10,7 @@ import type { Color } from '@wordpress/global-styles-engine';
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-import {
-	Flex,
-	ColorIndicator,
-	useVarPickerPresetContext,
-} from '@blockera/controls';
+import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
 /**
  * Internal dependencies
  */
@@ -30,6 +26,10 @@ import {
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types';
+import {
+	PresetVariableVariationsHeader,
+	getPresetVariableVariationsDerivedState,
+} from '../components/preset-variable-variations-header';
 import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
 import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
 import { filterVariationsByBase } from './color-palette-variations-utils';
@@ -146,18 +146,43 @@ export function ColorPresetOpener({
 		[baseSlug, colorItem.name, colorItem.color]
 	);
 
-	const showShadeStack = !isShadeRow && shadeVariationCount > 0;
+	const { isVariableVariationsPickerHeader } = useMemo(
+		() =>
+			getPresetVariableVariationsDerivedState({
+				isVariationChildRow: isShadeRow,
+				variationCount: shadeVariationCount,
+				isVariablePickerActive: true === pickerCtx.active,
+			}),
+		[isShadeRow, shadeVariationCount, pickerCtx.active]
+	);
 	const showHexValue = shadeVariationCount === 0 && colorItem?.color;
-	const isVariablePickerShadeHeader =
-		true === pickerCtx.active && showShadeStack;
+
+	const headerIcon = useMemo(
+		() =>
+			colorItem?.color ? (
+				<ColorIndicator
+					type={
+						colorItem.type === 'linear-gradient' ||
+						colorItem.type === 'radial-gradient'
+							? 'gradient'
+							: 'color'
+					}
+					value={colorItem.color}
+					size={18}
+				/>
+			) : (
+				<ColorIndicator type="color" value="none" size={18} />
+			),
+		[colorItem?.color, colorItem?.type]
+	);
 
 	return (
 		<div
 			className={classNames(
 				controlInnerClassNames('repeater-group-header'),
 				{
-					'is-variable-variations-picker-header':
-						isVariablePickerShadeHeader,
+					'is-preset-variable-variations-picker-header':
+						isVariableVariationsPickerHeader,
 				}
 			)}
 			onClick={getPresetRepeaterHeaderOnClick({
@@ -176,147 +201,23 @@ export function ColorPresetOpener({
 			)}
 			data-cy="color-repeater-item-header"
 		>
-			{showShadeStack ? (
-				<>
-					{!pickerCtx.active && (
-						<>
-							{!variationsAccordionOpen && (
-								<ColorPresetShadeStackHeader
-									baseSlug={baseSlug}
-									mainPreset={mainPresetForStack}
-								/>
-							)}
-							{variationsAccordionOpen && (
-								<span
-									className={controlInnerClassNames(
-										'header-icon'
-									)}
-									data-cy="header-icon"
-								>
-									{colorItem?.color ? (
-										<ColorIndicator
-											type={
-												colorItem.type ===
-													'linear-gradient' ||
-												colorItem.type ===
-													'radial-gradient'
-													? 'gradient'
-													: 'color'
-											}
-											value={colorItem.color}
-											size={18}
-										/>
-									) : (
-										<ColorIndicator
-											type="color"
-											value="none"
-											size={18}
-										/>
-									)}
-								</span>
-							)}
-							<span
-								className={controlInnerClassNames(
-									'header-label'
-								)}
-								data-cy="header-label"
-							>
-								{colorItem?.name}
-							</span>
-						</>
-					)}
-					{true === pickerCtx.active && (
-						<Flex
-							direction={
-								variationsAccordionOpen ? 'row' : 'column'
-							}
-						>
-							{variationsAccordionOpen && (
-								<span
-									className={controlInnerClassNames(
-										'header-icon'
-									)}
-									data-cy="header-icon"
-								>
-									{colorItem?.color ? (
-										<ColorIndicator
-											type={
-												colorItem.type ===
-													'linear-gradient' ||
-												colorItem.type ===
-													'radial-gradient'
-													? 'gradient'
-													: 'color'
-											}
-											value={colorItem.color}
-											size={18}
-										/>
-									) : (
-										<ColorIndicator
-											type="color"
-											value="none"
-											size={18}
-										/>
-									)}
-								</span>
-							)}
-							<span
-								className={controlInnerClassNames(
-									'header-label'
-								)}
-								data-cy="header-label"
-							>
-								{colorItem?.name}
-							</span>
-							{!variationsAccordionOpen && (
-								<Flex
-									gap={2}
-									className={classNames(
-										'variable-variations'
-									)}
-								>
-									<ColorShadesRepeaterItem
-										item={colorItem}
-										itemId={itemId}
-									/>
-								</Flex>
-							)}
-						</Flex>
-					)}
-				</>
-			) : (
-				<>
-					<span
-						className={controlInnerClassNames('header-icon')}
-						data-cy="header-icon"
-					>
-						{colorItem?.color ? (
-							<ColorIndicator
-								type={
-									colorItem.type === 'linear-gradient' ||
-									colorItem.type === 'radial-gradient'
-										? 'gradient'
-										: 'color'
-								}
-								value={colorItem.color}
-								size={18}
-							/>
-						) : (
-							<ColorIndicator
-								type="color"
-								value="none"
-								size={18}
-							/>
-						)}
-					</span>
-					<span
-						className={controlInnerClassNames('header-label')}
-						data-cy="header-label"
-					>
-						{colorItem?.name}
-					</span>
-				</>
-			)}
+			<PresetVariableVariationsHeader
+				isVariationChildRow={isShadeRow}
+				variationCount={shadeVariationCount}
+				variationsAccordionOpen={variationsAccordionOpen}
+				isVariablePickerActive={true === pickerCtx.active}
+				collapsedVariationStack={
+					<ColorPresetShadeStackHeader
+						baseSlug={baseSlug}
+						mainPreset={mainPresetForStack}
+					/>
+				}
+				variablePickerVariationStrip={
+					<ColorShadesRepeaterItem item={colorItem} itemId={itemId} />
+				}
+				icon={headerIcon}
+				label={colorItem?.name}
+			/>
 
 			{showHexValue ? (
 				<span

@@ -108,13 +108,13 @@
 	}
 }
 
-.blockera-component-variable-variations-wrapper {
+.blockera-component-preset-variable-variations-wrapper {
 	border: 1px solid var(--blockera-controls-border-color-extra-soft);
 	padding: 10px 2px;
 	border-radius: 2px;
 }
 
-.blockera-component.blockera-component-flex.variable-variations {
+.blockera-component.blockera-component-flex.blockera-component-preset-variable-variations-strip {
 	width: 93% !important;
 
 	.blockera-control-group-header {
@@ -126,7 +126,7 @@
 // `--repeater-item-height` header height from repeater-control without breaking nested items.
 .blockera-global-styles-preset-repeater.blockera-control-repeater
 	.blockera-control-repeater-item
-	.blockera-control-repeater-group-header.is-variable-variations-picker-header {
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header {
 		height: auto;
 		min-height: calc(var(--repeater-item-height) - 2px);
 		align-items: flex-start;
@@ -140,7 +140,7 @@
 
 	// Nested shade rows: stretch + min-width 0 so the picker header cannot grow past the popover.
 	// Column axis comes from Flex `direction="column"` (inline style wins over CSS).
-	.blockera-component-flex.variable-variations {
+	.blockera-component-flex.blockera-component-preset-variable-variations-strip {
 		box-sizing: border-box;
 		align-items: stretch;
 		align-self: stretch;
@@ -167,7 +167,7 @@
 
 // Same context: avoid stacked borders around the parent row and nested shade repeater groups.
 .blockera-global-styles-preset-repeater.blockera-control-repeater
-	.blockera-control-repeater-group-header.is-variable-variations-picker-header
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header
 	.blockera-control-group {
 	border: none;
 	box-shadow: none;
