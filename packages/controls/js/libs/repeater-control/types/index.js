@@ -228,6 +228,10 @@ export type RepeaterControlProps = {
 	 */
 	repeaterItemChildren?: MixedElement | any,
 	/**
+	 * Optional content rendered below the item body inside a column Flex (e.g. breakpoint/state variations).
+	 */
+	repeaterItemVariations?: MixedElement | any,
+	/**
 	 * It sets the default value of repeater. Please note for defining the value of repeater items you have to use `defaultRepeaterItemValue`
 	 */
 	defaultValue?: Array<Object> | [],
@@ -298,6 +302,13 @@ export type TRepeaterDefaultStateProps = {
 export type RepeaterItemProps = {
 	item: Object,
 	itemId: string,
+	/**
+	 * When false, skips the Details accordion and renders the main row without variations
+	 * even if `repeaterItemVariations` is set on context.
+	 *
+	 * @default true
+	 */
+	showVariations?: boolean,
 };
 
 export type CleanupRepeaterArgs = {

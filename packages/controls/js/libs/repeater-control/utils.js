@@ -96,6 +96,7 @@ export function cleanupRepeaterItem(item: Object): Object {
 	delete item?.display;
 	delete item?.cloneable;
 	delete item?.deletable;
+	delete item?.hasVariations;
 
 	if (!item?.selectable) {
 		delete item?.isSelected;

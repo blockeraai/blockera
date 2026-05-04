@@ -47,7 +47,11 @@ export {
 	getSelectedSelectOption,
 } from './select-control/utils';
 export { default as ToggleSelectControl } from './toggle-select-control';
-export { default as RepeaterControl } from './repeater-control';
+export {
+	default as RepeaterControl,
+	RepeaterItem,
+	RepeaterItemVariationsPane,
+} from './repeater-control';
 export { cleanupRepeaterItem, cleanupRepeater } from './repeater-control/utils';
 export * from './repeater-control/types';
 export * from './repeater-control/helpers';

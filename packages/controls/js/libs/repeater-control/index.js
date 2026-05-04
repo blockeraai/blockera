@@ -91,6 +91,7 @@ export default function RepeaterControl(
 		repeaterItemHeader,
 		InserterComponent,
 		repeaterItemChildren,
+		repeaterItemVariations,
 		getDynamicDefaultRepeaterItem,
 		itemColumns = 1,
 		//
@@ -289,6 +290,7 @@ export default function RepeaterControl(
 		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,
+		repeaterItemVariations,
 		//
 		defaultRepeaterItemValue,
 		enableCreatingStep,
@@ -728,3 +730,7 @@ export default function RepeaterControl(
 }
 
 export { BLOCKERA_REPEATER_PROMO_DATA_CY } from './data-cy';
+export {
+	default as RepeaterItem,
+	RepeaterItemVariationsPane,
+} from './components/repeater-item';
