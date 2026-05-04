@@ -27,6 +27,7 @@ import {
 export default function ColorControl({
 	type = 'normal',
 	noBorder,
+	showButtonLabel = true,
 	contentAlign = 'left',
 	//
 	id,
@@ -129,9 +130,9 @@ export default function ColorControl({
 		);
 	}
 
-	let buttonLabel: MixedElement;
+	let buttonLabel: MixedElement | void;
 
-	if (type === 'normal') {
+	if (type === 'normal' && showButtonLabel) {
 		buttonLabel = value ? (
 			<span className="color-label" data-cy="color-label">
 				{value}
