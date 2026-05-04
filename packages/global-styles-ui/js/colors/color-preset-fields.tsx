@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { ToggleControl } from '@wordpress/components';
 import {
 	useCallback,
 	memo,
@@ -27,13 +26,17 @@ import {
 	RepeaterContext,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { componentInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import {
 	SharedPresetControls,
+	VariableVariationsFieldsConsentSlot,
+	VariableVariationsFieldsEditorSlot,
+	VariableVariationsFieldsSection,
+	VariableVariationsFieldsSlotProvider,
+	VariableVariationsFieldsToggleSlot,
 	getAllVariableSlugs as getAllColorSlugs,
 } from '../components';
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
@@ -563,50 +566,35 @@ function ColorPresetFieldsComponent({
 					</Flex>
 				</Flex>
 
-				<Flex direction="column" gap={12}>
+				<VariableVariationsFieldsSection>
 					{!isShadeRow ? (
 						<>
-							<div
-								className={componentInnerClassNames(
-									'variable-variations-wrapper'
-								)}
-							>
-								<Flex
-									direction="row"
-									alignItems="center"
-									gap={12}
-									style={{ width: '100%', flexWrap: 'wrap' }}
-								>
-									<ToggleControl
-										label={__(
-											'Enable Color Shades',
-											'blockera'
-										)}
-										checked={displayToggleChecked}
-										disabled={
-											presetLocked || shadeConsentOpen
-										}
-										onChange={handleToggleChange}
-									/>
-									{showPreviewStack ? (
-										<ColorIndicatorStack
-											value={stackValueFromShades(
-												previewShadesMap
-											)}
-											size={18}
-											maxItems={COLOR_SHADE_STEPS.length}
-										/>
-									) : null}
-								</Flex>
+							<VariableVariationsFieldsSlotProvider>
+								<VariableVariationsFieldsToggleSlot
+									label={__(
+										'Enable Color Shades',
+										'blockera'
+									)}
+									checked={displayToggleChecked}
+									disabled={presetLocked || shadeConsentOpen}
+									onChange={handleToggleChange}
+									trailing={
+										showPreviewStack ? (
+											<ColorIndicatorStack
+												value={stackValueFromShades(
+													previewShadesMap
+												)}
+												size={18}
+												maxItems={
+													COLOR_SHADE_STEPS.length
+												}
+											/>
+										) : null
+									}
+								/>
 
 								{showEditableShadeSteps ? (
-									<Flex
-										gap={2}
-										justifyContent="space-between"
-										style={{
-											width: '100%',
-										}}
-									>
+									<VariableVariationsFieldsEditorSlot>
 										{COLOR_SHADE_STEPS.map((step) => {
 											const stepStr = String(step);
 											const hex = stackMap[stepStr] ?? '';
@@ -658,18 +646,12 @@ function ColorPresetFieldsComponent({
 												</Flex>
 											);
 										})}
-									</Flex>
+									</VariableVariationsFieldsEditorSlot>
 								) : null}
-							</div>
+							</VariableVariationsFieldsSlotProvider>
 
 							{shadeConsentOpen ? (
-								<Flex
-									gap={15}
-									className={componentInnerClassNames(
-										'consent-wrapper'
-									)}
-									direction="column"
-								>
+								<VariableVariationsFieldsConsentSlot>
 									<NoticeControl type="warning">
 										<p style={{ fontWeight: 500 }}>
 											{__(
@@ -727,11 +709,11 @@ function ColorPresetFieldsComponent({
 											{__('Save', 'blockera')}
 										</Button>
 									</Flex>
-								</Flex>
+								</VariableVariationsFieldsConsentSlot>
 							) : null}
 						</>
 					) : null}
-				</Flex>
+				</VariableVariationsFieldsSection>
 			</Flex>
 		</SharedPresetControls>
 	);
