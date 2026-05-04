@@ -3,13 +3,18 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useMemo } from '@wordpress/element';
+import type { Color } from '@wordpress/global-styles-engine';
 
 /**
  * Blockera dependencies
  */
-import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
+import {
+	Flex,
+	ColorIndicator,
+	useVarPickerPresetContext,
+} from '@blockera/controls';
 /**
  * Internal dependencies
  */
@@ -26,16 +31,24 @@ import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-he
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types';
 import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
+import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { filterVariationsByBase } from './color-palette-variations-utils';
+import {
+	ColorPresetShadeStackHeader,
+	ColorShadesRepeaterItem,
+} from './color-shades-repeater-item';
+import { isShadePaletteColor } from './utils';
 
 export type ColorPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
 	setOpen: (isOpen: boolean) => boolean;
-	item: VariableType & { color?: string; type?: string };
-	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 	/** Lower priority than variable-picker context and ColorPresetPreviewUsageProvider. */
 	previewUsage?: ColorPresetPreviewUsage;
+	item: VariableType & { color?: string; type?: string };
+	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
+	variationsAccordionOpen: boolean;
 };
 
 function resolveColorPresetPreviewUsage(
@@ -60,8 +73,9 @@ export function ColorPresetOpener({
 	isOpen,
 	setOpen,
 	children,
-	item: variable,
+	item: colorItem,
 	isOpenPopoverEvent,
+	variationsAccordionOpen,
 	previewUsage: previewUsageProp,
 }: ColorPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
@@ -74,8 +88,8 @@ export function ColorPresetOpener({
 	);
 
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
-		const color = variable?.color;
-		const type = variable?.type ?? '';
+		const color = colorItem?.color;
+		const type = colorItem?.type ?? '';
 		const isGradient =
 			type === 'linear-gradient' ||
 			type === 'radial-gradient' ||
@@ -85,8 +99,8 @@ export function ColorPresetOpener({
 			const declarations =
 				getGlobalStylesColorGradientPresetPreviewDeclarations(
 					{
-						color: variable?.color,
-						type: variable?.type,
+						color: colorItem?.color,
+						type: colorItem?.type,
 					},
 					previewUsage
 				);
@@ -98,8 +112,8 @@ export function ColorPresetOpener({
 
 		const patch = getGlobalStylesColorPresetPreviewAttributes(
 			{
-				color: variable?.color,
-				type: variable?.type,
+				color: colorItem?.color,
+				type: colorItem?.type,
 			},
 			previewUsage
 		);
@@ -107,15 +121,47 @@ export function ColorPresetOpener({
 			return null;
 		}
 		return { kind: 'attributes', patch };
-	}, [variable?.color, variable?.type, previewUsage]);
+	}, [colorItem?.color, colorItem?.type, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
+	const { fullPalette } = useColorPaletteVariationsStorage();
+
+	const baseSlug = String(colorItem.slug ?? '');
+	const isShadeRow = isShadePaletteColor(
+		colorItem as Color & Record<string, unknown>
+	);
+	const shadeVariationCount = useMemo(() => {
+		if (isShadeRow) {
+			return 0;
+		}
+		return filterVariationsByBase(fullPalette, baseSlug).length;
+	}, [isShadeRow, fullPalette, baseSlug]);
+
+	const mainPresetForStack = useMemo(
+		() => ({
+			slug: baseSlug,
+			name: String(colorItem.name ?? ''),
+			color: colorItem.color,
+		}),
+		[baseSlug, colorItem.name, colorItem.color]
+	);
+
+	const showShadeStack = !isShadeRow && shadeVariationCount > 0;
+	const showHexValue = shadeVariationCount === 0 && colorItem?.color;
+	const isVariablePickerShadeHeader =
+		true === pickerCtx.active && showShadeStack;
 
 	return (
 		<div
-			className={controlInnerClassNames('repeater-group-header')}
+			className={classNames(
+				controlInnerClassNames('repeater-group-header'),
+				{
+					'is-variable-variations-picker-header':
+						isVariablePickerShadeHeader,
+				}
+			)}
 			onClick={getPresetRepeaterHeaderOnClick({
-				item: variable,
+				item: colorItem,
 				isOpen,
 				setOpen,
 				isOpenPopoverEvent,
@@ -130,50 +176,167 @@ export function ColorPresetOpener({
 			)}
 			data-cy="color-repeater-item-header"
 		>
-			<span
-				className={controlInnerClassNames('header-icon')}
-				data-cy="header-icon"
-			>
-				{variable?.color ? (
-					<ColorIndicator
-						type={
-							variable.type === 'linear-gradient' ||
-							variable.type === 'radial-gradient'
-								? 'gradient'
-								: 'color'
-						}
-						value={variable.color}
-						size={18}
-					/>
-				) : (
-					<ColorIndicator type="color" value="none" size={18} />
-				)}
-			</span>
+			{showShadeStack ? (
+				<>
+					{!pickerCtx.active && (
+						<>
+							{!variationsAccordionOpen && (
+								<ColorPresetShadeStackHeader
+									baseSlug={baseSlug}
+									mainPreset={mainPresetForStack}
+								/>
+							)}
+							{variationsAccordionOpen && (
+								<span
+									className={controlInnerClassNames(
+										'header-icon'
+									)}
+									data-cy="header-icon"
+								>
+									{colorItem?.color ? (
+										<ColorIndicator
+											type={
+												colorItem.type ===
+													'linear-gradient' ||
+												colorItem.type ===
+													'radial-gradient'
+													? 'gradient'
+													: 'color'
+											}
+											value={colorItem.color}
+											size={18}
+										/>
+									) : (
+										<ColorIndicator
+											type="color"
+											value="none"
+											size={18}
+										/>
+									)}
+								</span>
+							)}
+							<span
+								className={controlInnerClassNames(
+									'header-label'
+								)}
+								data-cy="header-label"
+							>
+								{colorItem?.name}
+							</span>
+						</>
+					)}
+					{true === pickerCtx.active && (
+						<Flex
+							direction={
+								variationsAccordionOpen ? 'row' : 'column'
+							}
+						>
+							{variationsAccordionOpen && (
+								<span
+									className={controlInnerClassNames(
+										'header-icon'
+									)}
+									data-cy="header-icon"
+								>
+									{colorItem?.color ? (
+										<ColorIndicator
+											type={
+												colorItem.type ===
+													'linear-gradient' ||
+												colorItem.type ===
+													'radial-gradient'
+													? 'gradient'
+													: 'color'
+											}
+											value={colorItem.color}
+											size={18}
+										/>
+									) : (
+										<ColorIndicator
+											type="color"
+											value="none"
+											size={18}
+										/>
+									)}
+								</span>
+							)}
+							<span
+								className={controlInnerClassNames(
+									'header-label'
+								)}
+								data-cy="header-label"
+							>
+								{colorItem?.name}
+							</span>
+							{!variationsAccordionOpen && (
+								<Flex
+									gap={2}
+									className={classNames(
+										'variable-variations'
+									)}
+								>
+									<ColorShadesRepeaterItem
+										item={colorItem}
+										itemId={itemId}
+									/>
+								</Flex>
+							)}
+						</Flex>
+					)}
+				</>
+			) : (
+				<>
+					<span
+						className={controlInnerClassNames('header-icon')}
+						data-cy="header-icon"
+					>
+						{colorItem?.color ? (
+							<ColorIndicator
+								type={
+									colorItem.type === 'linear-gradient' ||
+									colorItem.type === 'radial-gradient'
+										? 'gradient'
+										: 'color'
+								}
+								value={colorItem.color}
+								size={18}
+							/>
+						) : (
+							<ColorIndicator
+								type="color"
+								value="none"
+								size={18}
+							/>
+						)}
+					</span>
+					<span
+						className={controlInnerClassNames('header-label')}
+						data-cy="header-label"
+					>
+						{colorItem?.name}
+					</span>
+				</>
+			)}
 
-			<span
-				className={controlInnerClassNames('header-label')}
-				data-cy="header-label"
-			>
-				{variable?.name}
-			</span>
-
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
-			>
+			{showHexValue ? (
 				<span
-					style={{
-						overflow: 'hidden',
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap',
-						maxWidth: '110px',
-						textTransform: 'lowercase',
-						opacity: 0.5,
-					}}
+					className={controlInnerClassNames('header-values')}
+					data-cy="header-values"
 				>
-					{variable?.color}
+					<span
+						style={{
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap',
+							maxWidth: '110px',
+							textTransform: 'lowercase',
+							opacity: 0.5,
+						}}
+					>
+						{colorItem?.color}
+					</span>
 				</span>
-			</span>
+			) : null}
 
 			{children}
 		</div>

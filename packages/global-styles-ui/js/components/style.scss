@@ -1,4 +1,4 @@
-// ID field: gray while locked (creating or click-to-edit) or disabled; normal when editing.
+// ID field: gray while locked (creating or click-to-edit) or disabled;IDfield normal when editing.
 .blockera-preset-id-field {
 	position: relative;
 
@@ -105,5 +105,90 @@
 				background: transparent !important;
 			}
 		}
+	}
+}
+
+.blockera-component-variable-variations-wrapper {
+	border: 1px solid var(--blockera-controls-border-color-extra-soft);
+	padding: 10px 2px;
+	border-radius: 2px;
+}
+
+.blockera-component.blockera-component-flex.variable-variations {
+	width: 93% !important;
+
+	.blockera-control-group-header {
+		padding: 0;
+	}
+}
+
+// Variable picker: color preset header embeds nested shade repeater rows — override fixed
+// `--repeater-item-height` header height from repeater-control without breaking nested items.
+.blockera-global-styles-preset-repeater.blockera-control-repeater
+	.blockera-control-repeater-item
+	.blockera-control-repeater-group-header.is-variable-variations-picker-header {
+		height: auto;
+		min-height: calc(var(--repeater-item-height) - 2px);
+		align-items: flex-start;
+
+	> .blockera-component-flex {
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	// Nested shade rows: stretch + min-width 0 so the picker header cannot grow past the popover.
+	// Column axis comes from Flex `direction="column"` (inline style wins over CSS).
+	.blockera-component-flex.variable-variations {
+		box-sizing: border-box;
+		align-items: stretch;
+		align-self: stretch;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		padding: 0 0 10px 0;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		white-space: nowrap;
+
+		> .blockera-control-repeater-item {
+			min-width: 0;
+			max-width: 100%;
+
+			.blockera-control-action-buttons {
+				background: transparent !important;
+				visibility: hidden;
+				opacity: 0;
+			}
+		}
+	}
+}
+
+// Same context: avoid stacked borders around the parent row and nested shade repeater groups.
+.blockera-global-styles-preset-repeater.blockera-control-repeater
+	.blockera-control-repeater-group-header.is-variable-variations-picker-header
+	.blockera-control-group {
+	border: none;
+	box-shadow: none;
+	&.is-hovered,
+	&:hover {
+		border: none;
+		box-shadow: none;
+	}
+
+	&.is-open {
+		border: none;
+		box-shadow: none;
+	}
+
+	.blockera-control-repeater-group-header {
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.blockera-control-header-values, 
+		.blockera-control-btn-edit-item {
+		display: none;
 	}
 }

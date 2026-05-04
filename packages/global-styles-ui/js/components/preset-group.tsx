@@ -74,6 +74,13 @@ export type PresetGroupPropsType = {
 	 * @default true
 	 */
 	enableCreatingStep?: boolean;
+	/**
+	 * Optional component passed through to RepeaterControl; receives `item` and `itemId` per row.
+	 */
+	repeaterItemVariations?: React.ComponentType<{
+		item: VariableType | Record<string, unknown>;
+		itemId: string;
+	}>;
 };
 
 type PresetsProps = {
@@ -101,6 +108,7 @@ type PresetsProps = {
 		item: Record<string, unknown>
 	) => boolean;
 	canEditGlobalStyles: boolean;
+	repeaterItemVariations?: PresetGroupPropsType['repeaterItemVariations'];
 };
 
 const PresetFieldsComponent = ({
@@ -145,6 +153,7 @@ const Presets = ({
 	showItemEditButton = false,
 	shouldRenderRepeaterItem,
 	canEditGlobalStyles,
+	repeaterItemVariations,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -251,6 +260,7 @@ const Presets = ({
 			confirmDeleteModalProps={confirmDeleteModalProps}
 			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemVariations={repeaterItemVariations}
 			defaultRepeaterItemValue={defaultPresetValue}
 			enableCreatingStep={enableCreatingStep}
 			className={classNames(
@@ -285,6 +295,7 @@ export const PresetGroup = ({
 	defaultPresetValue,
 	presetFieldsPropsResolver,
 	enableCreatingStep = true,
+	repeaterItemVariations,
 }: PresetGroupPropsType) => {
 	const pickerCtx = useVarPickerPresetContext();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
@@ -294,6 +305,7 @@ export const PresetGroup = ({
 	const cleanRepeaterForPersist = useCallback(
 		(raw: Object) => {
 			const cleaned = cleanupRepeater(raw as Record<string, unknown>);
+			delete cleaned?.renderRepeaterItem;
 			if (!isVariablePicker) {
 				return cleaned;
 			}
@@ -381,8 +393,6 @@ export const PresetGroup = ({
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`,
 			value: variablesForRepeater,
-			// Variable picker: push `isSelected` / `selectable` into repeater store when the bound value changes.
-			needUpdate: () => isVariablePicker,
 		}),
 		[origin, title, variablesForRepeater, isVariablePicker]
 	);
@@ -450,11 +460,7 @@ export const PresetGroup = ({
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
 						enableCreatingStep={enableCreatingStep}
 						selectable={isVariablePicker}
-						valueCleanup={
-							isVariablePicker
-								? cleanRepeaterForPersist
-								: undefined
-						}
+						valueCleanup={cleanRepeaterForPersist}
 						onSelectableItemActivate={
 							isVariablePicker
 								? handleSelectableItemActivate
@@ -469,6 +475,7 @@ export const PresetGroup = ({
 							pickerCtx.omitRepeaterSectionLabel ? false : true
 						}
 						shouldRenderRepeaterItem={repeaterSearchFilter}
+						repeaterItemVariations={repeaterItemVariations}
 					/>
 				</BaseControl>
 			</ControlContextProvider>

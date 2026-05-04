@@ -23,52 +23,68 @@ export interface UseGetColorsParams {
 }
 
 export const useGetColors = (): UseGetColorsParams => {
-	const [themeColors, setThemeColors] = useGlobalSetting<Color[] | undefined>(
-		'color.palette.theme'
+	const [themeColors, setThemeColors] = useGlobalSetting(
+		'color.palette.theme',
+		''
 	);
-	const [baseThemeColors] = useGlobalSetting<Color[] | undefined>(
+	const [baseThemeColors] = useGlobalSetting(
 		'color.palette.theme',
 		'',
 		'base'
 	);
-	const [defaultColors, setDefaultColors] = useGlobalSetting<
-		Color[] | undefined
-	>('color.palette.default');
-	const [baseDefaultColors] = useGlobalSetting<Color[] | undefined>(
+	const [defaultColors, setDefaultColors] = useGlobalSetting(
+		'color.palette.default',
+		''
+	);
+	const [baseDefaultColors] = useGlobalSetting(
 		'color.palette.default',
 		'',
 		'base'
 	);
-	const [customColors = [], setCustomColors] = useGlobalSetting<
-		Color[] | undefined
-	>('color.palette.custom');
-	const [defaultPaletteEnabled = true] = useGlobalSetting<boolean>(
-		'color.defaultPalette'
+	const [customColorsUntyped, setCustomColors] = useGlobalSetting(
+		'color.palette.custom',
+		''
+	);
+	const [defaultPaletteEnabled] = useGlobalSetting(
+		'color.defaultPalette',
+		''
 	);
 
-	const safeThemeColors = useMemo(() => themeColors || [], [themeColors]);
-	const safeCustomColors = useMemo(() => customColors || [], [customColors]);
+	const safeThemeColors = useMemo(
+		() => (Array.isArray(themeColors) ? themeColors : []) as Color[],
+		[themeColors]
+	);
+	const customColors = useMemo(
+		() =>
+			(Array.isArray(customColorsUntyped)
+				? customColorsUntyped
+				: []) as Color[],
+		[customColorsUntyped]
+	);
 	const safeDefaultColors = useMemo(
-		() => defaultColors || [],
+		() => (Array.isArray(defaultColors) ? defaultColors : []) as Color[],
 		[defaultColors]
 	);
 	const safeDefaultPaletteEnabled = useMemo(
-		() => defaultPaletteEnabled ?? true,
+		() =>
+			typeof defaultPaletteEnabled === 'boolean'
+				? defaultPaletteEnabled
+				: true,
 		[defaultPaletteEnabled]
 	);
 
 	const colors = useMemo(
 		() =>
 			[
-				...safeCustomColors,
+				...customColors,
 				...safeThemeColors,
-				...(safeDefaultColors && safeDefaultPaletteEnabled
+				...(safeDefaultColors.length && safeDefaultPaletteEnabled
 					? safeDefaultColors
 					: []),
 			].map((color) => color.color),
 		[
 			safeThemeColors,
-			safeCustomColors,
+			customColors,
 			safeDefaultColors,
 			safeDefaultPaletteEnabled,
 		]
@@ -76,14 +92,14 @@ export const useGetColors = (): UseGetColorsParams => {
 
 	return {
 		colors,
-		themeColors,
+		themeColors: themeColors as Color[] | undefined,
 		customColors,
-		defaultColors,
-		setThemeColors,
-		setCustomColors,
-		baseThemeColors,
-		setDefaultColors,
-		baseDefaultColors,
-		defaultPaletteEnabled,
+		defaultColors: defaultColors as Color[] | undefined,
+		setThemeColors: (rows) => setThemeColors(rows),
+		setCustomColors: (rows) => setCustomColors(rows),
+		baseThemeColors: baseThemeColors as Color[] | undefined,
+		setDefaultColors: (rows) => setDefaultColors(rows),
+		baseDefaultColors: baseDefaultColors as Color[] | undefined,
+		defaultPaletteEnabled: safeDefaultPaletteEnabled,
 	};
 };
