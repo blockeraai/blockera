@@ -57,15 +57,8 @@ export type PresetGroupPropsType = {
 	variables: VariablesType;
 	origin: string | string[];
 	PresetFields: React.ElementType;
-	repeaterItemHeader: React.ComponentType<{
-		itemId: string;
-		isOpen: boolean;
-		item: VariableType | any;
-		children?: React.ReactNode;
-		setOpen: (isOpen: boolean) => boolean;
-		isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
-	}>;
 	onChange: (newValue: Object) => void;
+	repeaterItemHeader: React.ElementType;
 	defaultPresetValue: VariableType | any;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
 	/**
