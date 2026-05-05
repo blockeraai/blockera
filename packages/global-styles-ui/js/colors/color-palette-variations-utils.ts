@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { __, sprintf } from '@wordpress/i18n';
 import type { Color } from '@wordpress/global-styles-engine';
 
 /**
@@ -23,6 +24,21 @@ export function shadeVariationSlug(
 	step: number | string
 ): string {
 	return `${baseSlug}-shade-${step}`;
+}
+
+/**
+ * Human-readable label for a shade step (50–950), relative to the parent preset name.
+ */
+export function formatShadePresetName(
+	parentPresetName: string,
+	step: number | string
+): string {
+	return sprintf(
+		/* translators: 1: parent color preset name, 2: shade step number (e.g. 600). */
+		__('%1$s - Shade %2$s', 'blockera'),
+		parentPresetName,
+		String(step)
+	);
 }
 
 export function filterVariationsByBase(
@@ -96,7 +112,10 @@ export function getDisplayShadeRamp(
 		}
 		const row = storedByStep.get(stepStr);
 		if (row) {
-			return row;
+			return {
+				...row,
+				name: stepStr,
+			};
 		}
 		return {
 			...colorPaletteRowFromRepeaterFields({
@@ -126,7 +145,7 @@ export function buildVariationPresetsForBase(
 		return {
 			...colorPaletteRowFromRepeaterFields({
 				slug: shadeVariationSlug(parentSlug, step),
-				name: stepStr,
+				name: formatShadePresetName(preset.name, stepStr),
 				color: hex,
 				isVisible: true,
 			}),

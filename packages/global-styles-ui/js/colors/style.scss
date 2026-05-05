@@ -39,3 +39,91 @@
 		}
 	}
 }
+
+/* Shade ramp chromeless controls (color-preset-fields) */
+.blockera-component-global-styles-color-shade-swatch {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	.blockera-component-base-breakpoint-icon {
+		position: absolute;
+		left: -2px;
+		top: 2px;
+		z-index: 2;
+		pointer-events: none;
+		stroke-width: 5px;
+		stroke: #f0f0f0;
+		paint-order: stroke;
+	}
+
+	.blockera-component-color-shade-edited-indicator {
+		position: absolute;
+		right: 1px;
+		top: 5px;
+		z-index: 2;
+		pointer-events: none;
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: #00a32a;
+		box-shadow: 0 0 0 1.5px #ffffff;
+	}
+}
+
+.is-preset-variable-variations-picker-header {
+
+	/* Shade ramp chromeless controls (color-preset-fields) */
+	.blockera-component-global-styles-color-shade-swatch {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -5px;
+			top: -3px;
+		}
+
+		.blockera-component-color-shade-edited-indicator {
+			right: -2px;
+			top: 0;
+		}
+	}
+}
+
+/* Overlapped mini swatches (stack header + opener strip) — matches ColorIndicator stack spacing */
+.blockera-component-global-styles-color-shade-indicator-stack {
+	display: flex;
+	align-items: center;
+	--stack-space: -5px;
+
+	.blockera-component-global-styles-color-shade-swatch:not(:first-child) {
+		margin-left: var(--stack-space);
+	}
+
+	.blockera-component-color-indicator {
+		box-shadow:
+			inset 0 0 0 1px rgba(0, 0, 0, 0.25),
+			0 0 0 2px #ffffff;
+	}
+}
+
+.blockera-component-global-styles-color-shade-swatch--indicator-stack {
+	.blockera-component-base-breakpoint-icon {
+		left: -2px;
+		top: -1px;
+	}
+
+	.blockera-component-color-shade-edited-indicator {
+		right: -1px;
+		top: 0;
+		width: 4px;
+		height: 4px;
+		box-shadow: 0 0 0 1px #ffffff;
+	}
+}
+
+.blockera-component-global-styles-color-shade-swatch--preset-header-icon {
+	.blockera-component-base-breakpoint-icon {
+		left: -2px;
+		top: -2px;
+	}
+}

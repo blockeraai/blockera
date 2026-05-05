@@ -9,8 +9,15 @@ import type { Color } from '@wordpress/global-styles-engine';
 /**
  * Blockera dependencies
  */
-import { classNames, controlInnerClassNames } from '@blockera/classnames';
+import {
+	classNames,
+	componentClassNames,
+	componentInnerClassNames,
+	controlInnerClassNames,
+} from '@blockera/classnames';
 import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
+
 /**
  * Internal dependencies
  */
@@ -37,7 +44,16 @@ import {
 	ColorPresetShadeStackHeader,
 	ColorShadesRepeaterItem,
 } from './color-shades-repeater-item';
-import { isShadePaletteColor } from './utils';
+import {
+	COLOR_SHADE_ANCHOR_STEP,
+	generateColorShades,
+} from './color-shades-generator';
+import {
+	isShadePaletteColor,
+	parsePaletteShadeSlug,
+	shadeHexDiffersFromBaseline,
+} from './utils';
+import './style.scss';
 
 export type ColorPresetOpenerProps = {
 	itemId: string;
@@ -46,7 +62,12 @@ export type ColorPresetOpenerProps = {
 	setOpen: (isOpen: boolean) => boolean;
 	/** Lower priority than variable-picker context and ColorPresetPreviewUsageProvider. */
 	previewUsage?: ColorPresetPreviewUsage;
-	item: VariableType & { color?: string; type?: string };
+	item: VariableType & {
+		color?: string;
+		type?: string;
+		/** Parent preset slug when this row is a shade variation (variable picker strip). */
+		baseSlug?: string;
+	};
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 	variationsAccordionOpen: boolean;
 };
@@ -157,24 +178,105 @@ export function ColorPresetOpener({
 	);
 	const showHexValue = shadeVariationCount === 0 && colorItem?.color;
 
-	const headerIcon = useMemo(
-		() =>
-			colorItem?.color ? (
-				<ColorIndicator
-					type={
-						colorItem.type === 'linear-gradient' ||
-						colorItem.type === 'radial-gradient'
-							? 'gradient'
-							: 'color'
-					}
-					value={colorItem.color}
-					size={18}
-				/>
-			) : (
-				<ColorIndicator type="color" value="none" size={18} />
-			),
-		[colorItem?.color, colorItem?.type]
+	const shadeSlugParsed = parsePaletteShadeSlug(String(colorItem.slug ?? ''));
+	const parentBaseProp = String(
+		(colorItem as { baseSlug?: string }).baseSlug ?? ''
 	);
+	const slugForMainLookup = isShadeRow
+		? parentBaseProp || String(shadeSlugParsed?.baseSlug ?? '') || baseSlug
+		: baseSlug;
+
+	const mainPresetHexForRamp = useMemo(() => {
+		const main = fullPalette.find(
+			(c) =>
+				!isShadePaletteColor(c as Color & Record<string, unknown>) &&
+				String(c.slug ?? '') === slugForMainLookup
+		);
+		return String(main?.color ?? colorItem.color ?? '#000000');
+	}, [fullPalette, slugForMainLookup, colorItem.color]);
+
+	const baselineHexByStep = useMemo(
+		() => generateColorShades(mainPresetHexForRamp),
+		[mainPresetHexForRamp]
+	);
+
+	const shadeStepNum: number | null =
+		shadeSlugParsed !== null ? Number(shadeSlugParsed.shadeStep) : null;
+
+	const headerIcon = useMemo(() => {
+		const isGradient =
+			colorItem.type === 'linear-gradient' ||
+			colorItem.type === 'radial-gradient' ||
+			(typeof colorItem.color === 'string' &&
+				colorItem.color.includes('gradient('));
+
+		const core = colorItem?.color ? (
+			<ColorIndicator
+				type={isGradient ? 'gradient' : 'color'}
+				value={colorItem.color}
+				size={18}
+			/>
+		) : (
+			<ColorIndicator type="color" value="none" size={18} />
+		);
+
+		const showBaseShadeBadge =
+			Boolean(colorItem?.color) &&
+			!isGradient &&
+			((isShadeRow && shadeStepNum === COLOR_SHADE_ANCHOR_STEP) ||
+				(!isShadeRow && shadeVariationCount > 0));
+
+		const showEditedShadeBadge =
+			Boolean(colorItem?.color) &&
+			!isGradient &&
+			isShadeRow &&
+			shadeStepNum !== null &&
+			shadeStepNum !== COLOR_SHADE_ANCHOR_STEP &&
+			shadeHexDiffersFromBaseline(
+				colorItem.color ?? '',
+				baselineHexByStep[String(shadeStepNum)]
+			);
+
+		if (!showBaseShadeBadge && !showEditedShadeBadge) {
+			return core;
+		}
+
+		return (
+			<span
+				className={componentClassNames(
+					'global-styles-color-shade-swatch',
+					'global-styles-color-shade-swatch--preset-header-icon'
+				)}
+			>
+				{showBaseShadeBadge ? (
+					<Icon
+						icon="asterisk"
+						iconSize="12"
+						className={componentInnerClassNames(
+							'base-breakpoint-icon'
+						)}
+						aria-hidden
+					/>
+				) : null}
+				{showEditedShadeBadge ? (
+					<span
+						className={componentInnerClassNames(
+							'color-shade-edited-indicator'
+						)}
+						aria-hidden
+					/>
+				) : null}
+				{core}
+			</span>
+		);
+	}, [
+		colorItem?.color,
+		colorItem?.type,
+		isShadeRow,
+		shadeVariationCount,
+		shadeStepNum,
+		baselineHexByStep,
+	]);
 
 	return (
 		<div
@@ -213,7 +315,11 @@ export function ColorPresetOpener({
 					/>
 				}
 				variablePickerVariationStrip={
-					<ColorShadesRepeaterItem item={colorItem} itemId={itemId} />
+					<ColorShadesRepeaterItem
+						usageType="manual"
+						item={colorItem}
+						itemId={itemId}
+					/>
 				}
 				icon={headerIcon}
 				label={colorItem?.name}

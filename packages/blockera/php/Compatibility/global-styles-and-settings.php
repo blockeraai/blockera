@@ -610,8 +610,9 @@ if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) 
 	 *
 	 * Core {@see wp_get_global_settings()} uses {@see WP_Theme_JSON_Resolver} and {@see WP_Theme_JSON},
 	 * whose sanitization drops Blockera-only preset groups (transition, transform, filter, textShadow,
-	 * extended border/shadow/dimensions, and block-level entries). The editor still needs those presets
-	 * for variable pickers and UI parity with {@see blockera_get_global_stylesheet()}.
+	 * extended border/shadow/dimensions, and block-level entries), and (on older core schemas) theme.json
+	 * color `groups` / `categories` under `settings`. The editor still needs those
+	 * for variable pickers, color UI, and parity with {@see blockera_get_global_stylesheet()}.
 	 *
 	 * Runs late so prior filters see a stable base; we only add/overlay data from {@see blockera_get_global_settings()}.
 	 *
@@ -640,6 +641,15 @@ if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) 
 		foreach ( array( 'shadow', 'border', 'dimensions' ) as $key ) {
 			if ( isset( $bf[ $key ] ) && is_array( $bf[ $key ] ) ) {
 				$cur[ $key ] = array_replace_recursive( (array) ( $cur[ $key ] ?? array() ), $bf[ $key ] );
+			}
+		}
+
+		if ( isset( $bf['color'] ) && is_array( $bf['color'] ) ) {
+			$cur['color'] = (array) ( $cur['color'] ?? array() );
+			foreach ( array( 'groups', 'categories' ) as $color_meta_key ) {
+				if ( array_key_exists( $color_meta_key, $bf['color'] ) ) {
+					$cur['color'][ $color_meta_key ] = $bf['color'][ $color_meta_key ];
+				}
 			}
 		}
 
