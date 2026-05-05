@@ -1,5 +1,6 @@
-.blockera-extension-style-variations {
-	padding: 0;
+.blockera-extension-style-variations.blockera-control.blockera-control-panel-body:last-child {
+	border-bottom: 1px solid #e0e0e0;
+	padding-bottom: 16px;
 }
 
 .blockera-component-block-style-variations {
@@ -171,14 +172,6 @@
 		box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
 	}
 
-	&.is-active {
-		--blockera-controls-border-color: var(
-			--blockera-controls-primary-color
-		);
-		background-color: var(--blockera-controls-primary-color) !important;
-		color: #ffffff;
-	}
-
 	svg {
 		transition: var(--blockera-controls-transition);
 		fill: currentColor;
@@ -186,13 +179,6 @@
 
 	span.context-menu-trigger {
 		display: inline-flex;
-	}
-
-	&.is-active,
-	&:hover {
-		svg {
-			opacity: 1 !important;
-		}
 	}
 
 	& > span:empty {
@@ -205,6 +191,51 @@
 		white-space: normal;
 		word-break: break-all;
 		width: 100%;
+	}
+
+	.blockera-style-item-main-variation-badge {
+		color: #1e1e1e;
+		font-size: 10px;
+		font-weight: 600;
+		border: 1px solid #c4c4c4;
+		border-radius: 3px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		gap: 0;
+		padding: 0 3px 0 0;
+		height: 18px;
+
+		svg {
+			opacity: 0.4 !important;
+		}
+	}
+
+	&.is-active {
+		--blockera-controls-border-color: var(
+			--blockera-controls-primary-color
+		);
+		background-color: var(--blockera-controls-primary-color) !important;
+		color: #ffffff;
+
+		.blockera-style-item-main-variation-badge {
+			border-color: #ffffff9c;
+			color: #ffffff;
+
+			svg {
+				opacity: 0.8 !important;
+			}
+		}
+	}
+
+	&.is-active,
+	&:hover {
+		:not(.blockera-style-item-main-variation-badge) {
+			& > svg {
+				opacity: 1 !important;
+			}
+		}
 	}
 
 	&.is-active,

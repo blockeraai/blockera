@@ -630,18 +630,30 @@ export const StyleItem = ({
 					>
 						{defaultStyle && style.isDefault && (
 							<Tooltip
-								text={__(
-									'Default style variation used globally for all blocks',
-									'blockera'
-								)}
+								text={
+									<>
+										<h5>
+											{__(
+												'The Main style variation',
+												'blockera'
+											)}
+										</h5>
+										<p>
+											{__(
+												'Used by default when no variation is selected. Other variations styles inherit from it.',
+												'blockera'
+											)}
+										</p>
+									</>
+								}
+								style={{
+									'--tooltip-width': '300px',
+								}}
 							>
-								<Icon
-									icon="asterisk"
-									iconSize="16"
-									style={{
-										opacity: '0.4',
-									}}
-								/>
+								<span className="blockera-style-item-main-variation-badge">
+									<Icon icon="asterisk" iconSize="16" />
+									{__('Main', 'blockera')}
+								</span>
 							</Tooltip>
 						)}
 
