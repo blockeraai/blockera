@@ -16,7 +16,7 @@ class JSON extends \WP_Theme_JSON {
 
 	/**
 	 * Extra settings paths allowed in theme.json sanitization (global-styles-ui preset groups).
-	 * Includes {@see https://schemas.wp.org/trunk/theme.json} color.groups / color.categories (e.g. Twenty Twenty-Five).
+	 * Includes {@see https://schemas.wp.org/trunk/theme.json} color.groups / color.categories (e.g. Blockera-One).
 	 *
 	 * @var array<string, mixed>
 	 */
