@@ -25,7 +25,6 @@ import { noop, pascalCase, isObject } from '@blockera/utils';
 import {
 	classNames,
 	controlClassNames,
-	componentInnerClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
@@ -239,7 +238,7 @@ const Presets = ({
 				__('No %s variable.', 'blockera'),
 				pascalCase(origin)
 			)}
-			popoverClassName={componentInnerClassNames('popover-variables')}
+			popoverClassName={controlInnerClassNames('popover-variables')}
 			popoverTitle={popoverTitle}
 			PromoComponent={renderPromo}
 			canAddNewItem={canAddNewItem}
