@@ -23,10 +23,13 @@
 			.components-panel__icon {
 				margin: 0;
 				display: inline-flex;
+				--icon-size: 22px;
 
 				svg {
 					color: var(--blockera-controls-primary-color);
 					fill: currentcolor;
+					width: var(--icon-size);
+					height: var(--icon-size);
 				}
 			}
 		}
