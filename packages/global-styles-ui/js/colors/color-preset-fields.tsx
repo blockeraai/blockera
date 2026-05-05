@@ -16,6 +16,10 @@ import type { Color } from '@wordpress/global-styles-engine';
  * Blockera dependencies
  */
 import {
+	componentClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
+import {
 	Button,
 	CheckboxControl,
 	ColorControl,
@@ -59,7 +63,9 @@ import {
 	isShadePaletteColor,
 	parsePaletteShadeSlug,
 	findRepeaterItemIdBySlug,
+	shadeHexDiffersFromBaseline,
 } from './utils';
+import './style.scss';
 
 const GLOBAL_STYLES_COLOR_CONTEXT = {
 	attribute: 'blockeraColor',
@@ -128,11 +134,14 @@ function resolvePresetBaseHex(
 
 function GlobalStylesShadeStepColumn({
 	name,
+	step,
 	hex,
 	stepLabel,
 	colorControlProps,
+	baselineHexByStep,
 }: {
 	name: string;
+	step: number;
 	hex: string;
 	stepLabel: string;
 	colorControlProps: {
@@ -140,7 +149,18 @@ function GlobalStylesShadeStepColumn({
 		disabled?: boolean;
 		onChange: (value: string | undefined) => void;
 	};
+	baselineHexByStep?: Record<string, string>;
 }) {
+	const stepStr = String(step);
+	const isBaseAnchorStep = step === COLOR_SHADE_ANCHOR_STEP;
+	const baselineHex =
+		baselineHexByStep !== undefined
+			? baselineHexByStep[stepStr]
+			: undefined;
+	const showEditedMarker =
+		baselineHexByStep !== undefined &&
+		shadeHexDiffersFromBaseline(hex, baselineHex);
+
 	return (
 		<Flex
 			direction="column"
@@ -148,18 +168,42 @@ function GlobalStylesShadeStepColumn({
 			gap={0}
 			style={SHADE_STEP_COLUMN_STYLE}
 		>
-			<ControlContextProvider
-				value={{
-					name,
-					value: hex,
-					...GLOBAL_STYLES_COLOR_CONTEXT,
-				}}
+			<div
+				className={componentClassNames(
+					'global-styles-color-shade-swatch'
+				)}
 			>
-				<ColorControl
-					{...chromelessColorFieldProps}
-					{...colorControlProps}
-				/>
-			</ControlContextProvider>
+				{isBaseAnchorStep ? (
+					<Icon
+						icon="asterisk"
+						iconSize="14"
+						className={componentInnerClassNames(
+							'base-breakpoint-icon'
+						)}
+						aria-hidden
+					/>
+				) : null}
+				{showEditedMarker ? (
+					<span
+						className={componentInnerClassNames(
+							'color-shade-edited-indicator'
+						)}
+						aria-hidden
+					/>
+				) : null}
+				<ControlContextProvider
+					value={{
+						name,
+						value: hex,
+						...GLOBAL_STYLES_COLOR_CONTEXT,
+					}}
+				>
+					<ColorControl
+						{...chromelessColorFieldProps}
+						{...colorControlProps}
+					/>
+				</ControlContextProvider>
+			</div>
 			<span style={SHADE_STEP_LABEL_STYLE}>{stepLabel}</span>
 		</Flex>
 	);
@@ -173,12 +217,15 @@ function GlobalStylesChromelessShadeRampRow({
 	mode,
 	disabledByLock,
 	onStepChange,
+	baselineHexLookup,
 }: {
 	baseSlug: string;
 	hexLookup: Record<string, string>;
 	mode: 'preview' | 'edit';
 	disabledByLock?: boolean;
 	onStepChange?: (step: number, value: string | undefined) => void;
+	/** Ramp from {@link generateColorShades}; when set (edit mode), custom shades show an edited marker. */
+	baselineHexLookup?: Record<string, string>;
 }) {
 	return (
 		<>
@@ -201,13 +248,18 @@ function GlobalStylesChromelessShadeRampRow({
 									onStepChange?.(step, v),
 								disabled: Boolean(disabledByLock),
 							};
+				const baselineHexByStep =
+					mode === 'edit' ? baselineHexLookup : undefined;
+
 				return (
 					<GlobalStylesShadeStepColumn
 						key={`${mode}-shade-ramp-${baseSlug}-${stepStr}`}
 						name={controlName}
+						step={step}
 						hex={hex}
 						stepLabel={stepStr}
 						colorControlProps={colorControlProps}
+						baselineHexByStep={baselineHexByStep}
 					/>
 				);
 			})}
@@ -657,6 +709,17 @@ function ColorPresetFieldsComponent({
 		]
 	);
 
+	const shadeEditedBaselineLookup = useMemo(():
+		| Record<string, string>
+		| undefined => {
+		if (!origin || !slug || isShadeRow || !shadesSaved) {
+			return undefined;
+		}
+		return generateColorShades(
+			resolvePresetBaseHex(displayRampMain, colorItem)
+		);
+	}, [origin, slug, isShadeRow, shadesSaved, displayRampMain, colorItem]);
+
 	if (!origin || !slug) {
 		return null;
 	}
@@ -751,6 +814,9 @@ function ColorPresetFieldsComponent({
 																	step,
 																	v
 																)
+															}
+															baselineHexLookup={
+																shadeEditedBaselineLookup
 															}
 														/>
 													</VariableVariationsFieldsEditorSlot>
