@@ -238,7 +238,8 @@
 	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 	
 	&:has(.is-preset-variable-variations-picker-header),
-	&:has(.blockera-component-preset-variable-variations-wrapper) {
+	&:has(.blockera-component-preset-variable-variations-wrapper),
+	&:has(input[type="search"]) {
 
 		.components-popover__content {
 			width: 340px;
