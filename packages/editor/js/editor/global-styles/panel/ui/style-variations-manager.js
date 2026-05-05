@@ -76,7 +76,7 @@ export const StyleVariationsManager = (): MixedElement => {
 
 				<AddNewStyleButton
 					design="with-label"
-					label={__('Add New', 'blockera')}
+					label={__('Add New Style', 'blockera')}
 				/>
 			</div>
 		</PanelBodyControl>
