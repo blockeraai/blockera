@@ -1,4 +1,4 @@
-// ID field: gray while locked (creating or click-to-edit) or disabled;IDfield normal when editing.
+// ID field: gray while locked (creating or click-to-edit) or disabled; normal when editing.
 .blockera-preset-id-field {
 	position: relative;
 
@@ -25,10 +25,6 @@
 			cursor: not-allowed;
 		}
 	}
-}
-
-.blockera-component-popover.blockera-component-popover-variables {
-	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 }
 
 // Variable preview
@@ -110,15 +106,60 @@
 
 .blockera-component-preset-variable-variations-wrapper {
 	border: 1px solid var(--blockera-controls-border-color-extra-soft);
-	padding: 10px 2px;
+	padding: 10px;
 	border-radius: 2px;
 }
 
 .blockera-component.blockera-component-flex.blockera-component-preset-variable-variations-strip {
-	width: 93% !important;
 
 	.blockera-control-group-header {
-		padding: 0;
+		padding: 0 calc(var(--repeater-gap) * 0.11) !important;
+	}
+}
+
+.blockera-control-group.mode-accordion {
+
+	&.is-close.blockera-control-repeater-item-variations-group {
+
+		> .blockera-control-group-header {
+			padding: calc(var(--repeater-item-height) * 0.4);
+		}
+
+		.blockera-control-group-header:has(.is-preset-variable-variations-picker-header) {
+		
+			.blockera-control-action-buttons.type-inline {
+				align-items: end;
+				height: 35% !important;
+
+				.blockera-component-button {
+					width: 20px;
+					height: 20px;
+				}
+
+				.blockera-control-btn-edit-item {
+					visibility: hidden;
+					opacity: 0;
+				}
+			}
+		}
+	}
+
+	&.is-open.blockera-control-repeater-item-variations-group {
+
+		> .blockera-control-group-header {
+			padding-top: calc(var(--repeater-item-height) * 0.4);
+		}
+
+		.blockera-control-group-header:has(.is-preset-variable-variations-picker-header) {
+		
+			.blockera-control-action-buttons.type-inline {
+
+				.blockera-control-btn-edit-item {
+					visibility: hidden;
+					opacity: 0;
+				}
+			}
+		}
 	}
 }
 
@@ -190,5 +231,17 @@
 	.blockera-control-header-values, 
 		.blockera-control-btn-edit-item {
 		display: none;
+	}
+}
+
+.blockera-component-popover.blockera-control-popover-variables {
+	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+	
+	&:has(.is-preset-variable-variations-picker-header),
+	&:has(.blockera-component-preset-variable-variations-wrapper) {
+
+		.components-popover__content {
+			width: 340px;
+		}
 	}
 }
