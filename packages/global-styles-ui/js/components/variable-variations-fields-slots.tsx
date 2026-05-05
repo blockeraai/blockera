@@ -56,7 +56,7 @@ export function VariableVariationsFieldsToggleSlot({
 		<Flex
 			direction="row"
 			alignItems="center"
-			gap={12}
+			gap={0}
 			style={{ width: '100%', flexWrap: 'wrap' }}
 		>
 			<ToggleControl
@@ -72,6 +72,7 @@ export function VariableVariationsFieldsToggleSlot({
 
 export type VariableVariationsFieldsEditorSlotProps = {
 	children: ReactNode;
+	style?: object;
 };
 
 /**
@@ -79,6 +80,7 @@ export type VariableVariationsFieldsEditorSlotProps = {
  */
 export function VariableVariationsFieldsEditorSlot({
 	children,
+	style = {},
 }: VariableVariationsFieldsEditorSlotProps) {
 	return (
 		<Flex
@@ -86,6 +88,7 @@ export function VariableVariationsFieldsEditorSlot({
 			justifyContent="space-between"
 			style={{
 				width: '100%',
+				...style,
 			}}
 		>
 			{children}

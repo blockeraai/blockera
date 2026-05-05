@@ -116,20 +116,21 @@ export function PresetVariableVariationsHeader({
 			)}
 			{true === isVariablePickerActive && (
 				<Flex direction={variationsAccordionOpen ? 'row' : 'column'}>
-					{variationsAccordionOpen && (
+					<Flex gap={8}>
 						<span
 							className={controlInnerClassNames('header-icon')}
 							data-cy="header-icon"
 						>
 							{icon}
 						</span>
-					)}
-					<span
-						className={controlInnerClassNames('header-label')}
-						data-cy="header-label"
-					>
-						{label}
-					</span>
+
+						<span
+							className={controlInnerClassNames('header-label')}
+							data-cy="header-label"
+						>
+							{label}
+						</span>
+					</Flex>
 					{!variationsAccordionOpen && (
 						<Flex
 							gap={2}
