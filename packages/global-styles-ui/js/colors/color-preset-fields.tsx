@@ -9,6 +9,7 @@ import {
 	useMemo,
 	useState,
 } from '@wordpress/element';
+import type { CSSProperties } from 'react';
 import type { Color } from '@wordpress/global-styles-engine';
 
 /**
@@ -18,7 +19,6 @@ import {
 	Button,
 	CheckboxControl,
 	ColorControl,
-	ColorIndicatorStack,
 	ControlContextProvider,
 	Flex,
 	NoticeControl,
@@ -46,7 +46,6 @@ import {
 	getDisplayShadeRamp,
 	rebuildVariationsFromMainColor,
 	shadeVariationSlug,
-	stackValueFromShades,
 	variationsToStackMap,
 } from './color-palette-variations-utils';
 import {
@@ -61,6 +60,160 @@ import {
 	parsePaletteShadeSlug,
 	findRepeaterItemIdBySlug,
 } from './utils';
+
+const GLOBAL_STYLES_COLOR_CONTEXT = {
+	attribute: 'blockeraColor',
+	blockName: 'global-styles',
+} as const;
+
+const FIELD_LABEL_CAPTION_STYLE: CSSProperties = {
+	flex: '0 0 auto',
+	minWidth: 72,
+	fontSize: 11,
+	fontWeight: 500,
+	textTransform: 'uppercase',
+	color: 'var(--blockera-controls-label-color, #1e1e1e)',
+};
+
+const SHADE_STEP_COLUMN_STYLE: CSSProperties = {
+	minWidth: 0,
+	textAlign: 'center',
+};
+
+const SHADE_STEP_LABEL_STYLE: CSSProperties = {
+	flex: '0 0 auto',
+	minWidth: 40,
+	fontSize: 11,
+	fontWeight: 500,
+	color: 'var(--blockera-controls-label-color, #1e1e1e)',
+};
+
+const chromelessColorFieldProps = {
+	label: '',
+	columns: '',
+	noBorder: true,
+	field: 'color',
+	showButtonLabel: false,
+	type: 'minimal' as const,
+	contentAlign: 'left' as const,
+};
+
+function findMainColorPresetByBaseSlug(
+	fullPalette: Color[],
+	baseSlug: string
+): Color | undefined {
+	return fullPalette.find(
+		(c) =>
+			!isShadePaletteColor(c as Color & Record<string, unknown>) &&
+			String(c.slug ?? '') === baseSlug
+	);
+}
+
+function filterOutShadeVariationsForBase(
+	fullPalette: Color[],
+	baseSlug: string
+): Color[] {
+	return fullPalette.filter((c) => {
+		const p = parsePaletteShadeSlug(String(c.slug ?? ''));
+		return !p || p.baseSlug !== baseSlug;
+	});
+}
+
+function resolvePresetBaseHex(
+	displayRampMain: { color?: string },
+	colorItem: { color?: string }
+): string {
+	return displayRampMain.color || colorItem.color || '#000000';
+}
+
+function GlobalStylesShadeStepColumn({
+	name,
+	hex,
+	stepLabel,
+	colorControlProps,
+}: {
+	name: string;
+	hex: string;
+	stepLabel: string;
+	colorControlProps: {
+		size?: 'small' | 'normal' | 'input' | 'extra-small';
+		disabled?: boolean;
+		onChange: (value: string | undefined) => void;
+	};
+}) {
+	return (
+		<Flex
+			direction="column"
+			alignItems="anchor-center"
+			gap={0}
+			style={SHADE_STEP_COLUMN_STYLE}
+		>
+			<ControlContextProvider
+				value={{
+					name,
+					value: hex,
+					...GLOBAL_STYLES_COLOR_CONTEXT,
+				}}
+			>
+				<ColorControl
+					{...chromelessColorFieldProps}
+					{...colorControlProps}
+				/>
+			</ControlContextProvider>
+			<span style={SHADE_STEP_LABEL_STYLE}>{stepLabel}</span>
+		</Flex>
+	);
+}
+
+const noopGlobalStylesColor: (value?: string | undefined) => void = () => {};
+
+function GlobalStylesChromelessShadeRampRow({
+	baseSlug,
+	hexLookup,
+	mode,
+	disabledByLock,
+	onStepChange,
+}: {
+	baseSlug: string;
+	hexLookup: Record<string, string>;
+	mode: 'preview' | 'edit';
+	disabledByLock?: boolean;
+	onStepChange?: (step: number, value: string | undefined) => void;
+}) {
+	return (
+		<>
+			{COLOR_SHADE_STEPS.map((step) => {
+				const stepStr = String(step);
+				const hex = hexLookup[stepStr] ?? '';
+				const controlName =
+					mode === 'preview'
+						? `preview-shade-${baseSlug}-${stepStr}`
+						: `shade-color-${baseSlug}-${stepStr}`;
+				const colorControlProps =
+					mode === 'preview'
+						? {
+								size: 'small' as const,
+								disabled: true,
+								onChange: noopGlobalStylesColor,
+							}
+						: {
+								onChange: (v: string | undefined) =>
+									onStepChange?.(step, v),
+								disabled: Boolean(disabledByLock),
+							};
+				return (
+					<GlobalStylesShadeStepColumn
+						key={`${mode}-shade-ramp-${baseSlug}-${stepStr}`}
+						name={controlName}
+						hex={hex}
+						stepLabel={stepStr}
+						colorControlProps={colorControlProps}
+					/>
+				);
+			})}
+		</>
+	);
+}
 
 function resolveRepeaterItemIdForColorUpdates(
 	colorItem: VariableType & { color?: string },
@@ -91,21 +244,35 @@ function resolveRepeaterItemIdForColorUpdates(
 	return bySlug ?? presetId;
 }
 
+function GlobalStylesMainColorControl({
+	controlName,
+	value,
+	disabled,
+	onChange,
+}: {
+	controlName: string;
+	value?: string;
+	disabled?: boolean;
+	onChange: (next: string | undefined) => void;
+}) {
+	return (
+		<ControlContextProvider
+			value={{
+				name: controlName,
+				value,
+				...GLOBAL_STYLES_COLOR_CONTEXT,
+			}}
+		>
+			<ColorControl onChange={onChange} disabled={disabled} />
+		</ControlContextProvider>
+	);
+}
+
 interface ColorPresetFieldsProps {
 	origin: string | string[];
 	presetId: string | number;
 	colorItem: VariableType & { color?: string; baseSlug?: string };
 }
-
-const chromelessColorFieldProps = {
-	label: '',
-	columns: '',
-	noBorder: true,
-	field: 'color',
-	showButtonLabel: false,
-	type: 'minimal' as const,
-	contentAlign: 'left' as const,
-};
 
 function ColorPresetFieldsComponent({
 	origin,
@@ -138,12 +305,8 @@ function ColorPresetFieldsComponent({
 			return null;
 		}
 		return (
-			fullPalette.find(
-				(c) =>
-					!isShadePaletteColor(
-						c as Color & Record<string, unknown>
-					) && String(c.slug ?? '') === effectiveBaseSlug
-			) ?? null
+			findMainColorPresetByBaseSlug(fullPalette, effectiveBaseSlug) ??
+			null
 		);
 	}, [isAnchorShadeRow, fullPalette, effectiveBaseSlug]);
 
@@ -163,10 +326,9 @@ function ColorPresetFieldsComponent({
 				color: colorItem.color,
 			};
 		}
-		const main = fullPalette.find(
-			(c) =>
-				!isShadePaletteColor(c as Color & Record<string, unknown>) &&
-				String(c.slug ?? '') === effectiveBaseSlug
+		const main = findMainColorPresetByBaseSlug(
+			fullPalette,
+			effectiveBaseSlug
 		);
 		return {
 			slug: effectiveBaseSlug,
@@ -236,9 +398,9 @@ function ColorPresetFieldsComponent({
 		if (shadesSaved || isShadeRow) {
 			return null;
 		}
-		const base = displayRampMain.color || colorItem.color || '#000000';
+		const base = resolvePresetBaseHex(displayRampMain, colorItem);
 		return generateColorShades(base);
-	}, [shadesSaved, isShadeRow, displayRampMain.color, colorItem.color]);
+	}, [shadesSaved, isShadeRow, colorItem, displayRampMain]);
 
 	const {
 		controlInfo: { name: controlId },
@@ -273,13 +435,12 @@ function ColorPresetFieldsComponent({
 
 	const applyShadeToggle = useCallback(
 		(enabled: boolean) => {
-			const withoutBaseShades = fullPalette.filter((c) => {
-				const p = parsePaletteShadeSlug(String(c.slug ?? ''));
-				return !p || p.baseSlug !== effectiveBaseSlug;
-			});
+			const withoutBaseShades = filterOutShadeVariationsForBase(
+				fullPalette,
+				effectiveBaseSlug
+			);
 			if (enabled) {
-				const base =
-					displayRampMain.color || colorItem.color || '#000000';
+				const base = resolvePresetBaseHex(displayRampMain, colorItem);
 				const shades = generateColorShades(base);
 				const rows = buildVariationPresetsForBase(
 					{
@@ -302,10 +463,8 @@ function ColorPresetFieldsComponent({
 			fullPalette,
 			setFullPalette,
 			effectiveBaseSlug,
-			colorItem.color,
-			colorItem.name,
-			displayRampMain.color,
-			displayRampMain.name,
+			colorItem,
+			displayRampMain,
 			valueCleanup,
 		]
 	);
@@ -367,11 +526,9 @@ function ColorPresetFieldsComponent({
 				String(anchorParsed.shadeStep) ===
 					String(COLOR_SHADE_ANCHOR_STEP)
 			) {
-				const mainRow = fullPalette.find(
-					(c) =>
-						!isShadePaletteColor(
-							c as Color & Record<string, unknown>
-						) && String(c.slug ?? '') === anchorParsed.baseSlug
+				const mainRow = findMainColorPresetByBaseSlug(
+					fullPalette,
+					anchorParsed.baseSlug
 				);
 				if (mainRow) {
 					valueToPersist = {
@@ -414,11 +571,9 @@ function ColorPresetFieldsComponent({
 				return;
 			}
 
-			const mainMeta = fullPalette.find(
-				(c) =>
-					!isShadePaletteColor(
-						c as Color & Record<string, unknown>
-					) && String(c.slug ?? '') === effectiveBaseSlug
+			const mainMeta = findMainColorPresetByBaseSlug(
+				fullPalette,
+				effectiveBaseSlug
 			);
 			const presetName = String(mainMeta?.name ?? colorItem.name);
 
@@ -426,10 +581,10 @@ function ColorPresetFieldsComponent({
 				{ slug: effectiveBaseSlug, name: presetName },
 				newValue
 			);
-			const withoutShades = fullPalette.filter((c) => {
-				const p = parsePaletteShadeSlug(String(c.slug ?? ''));
-				return !p || p.baseSlug !== effectiveBaseSlug;
-			});
+			const withoutShades = filterOutShadeVariationsForBase(
+				fullPalette,
+				effectiveBaseSlug
+			);
 			const withUpdatedMain = withoutShades.map((c) =>
 				String(c.slug ?? '') === effectiveBaseSlug
 					? ({ ...c, color: newValue } as Color)
@@ -530,16 +685,7 @@ function ColorPresetFieldsComponent({
 					gap={12}
 					style={{ width: '100%' }}
 				>
-					<span
-						style={{
-							flex: '0 0 auto',
-							minWidth: 72,
-							fontSize: 11,
-							fontWeight: 500,
-							textTransform: 'uppercase',
-							color: 'var(--blockera-controls-label-color, #1e1e1e)',
-						}}
-					>
+					<span style={FIELD_LABEL_CAPTION_STYLE}>
 						{__('Color', 'blockera')}
 					</span>
 					<Flex
@@ -548,21 +694,16 @@ function ColorPresetFieldsComponent({
 						gap={8}
 						style={{ flex: 1, minWidth: 0 }}
 					>
-						<ControlContextProvider
-							value={{
-								name: `color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`,
-								value: isAnchorShadeRow
+						<GlobalStylesMainColorControl
+							controlName={`color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`}
+							value={
+								isAnchorShadeRow
 									? (displayRampMain.color ?? colorItem.color)
-									: colorItem.color,
-								attribute: 'blockeraColor',
-								blockName: 'global-styles',
-							}}
-						>
-							<ColorControl
-								onChange={handleValueChange}
-								disabled={presetLocked}
-							/>
-						</ControlContextProvider>
+									: colorItem.color
+							}
+							onChange={handleValueChange}
+							disabled={presetLocked}
+						/>
 					</Flex>
 				</Flex>
 
@@ -579,75 +720,45 @@ function ColorPresetFieldsComponent({
 									disabled={presetLocked || shadeConsentOpen}
 									onChange={handleToggleChange}
 									trailing={
-										showPreviewStack ? (
-											<ColorIndicatorStack
-												value={stackValueFromShades(
-													previewShadesMap
-												)}
-												size={18}
-												maxItems={
-													COLOR_SHADE_STEPS.length
-												}
-											/>
-										) : null
-									}
-								/>
-
-								{showEditableShadeSteps ? (
-									<VariableVariationsFieldsEditorSlot>
-										{COLOR_SHADE_STEPS.map((step) => {
-											const stepStr = String(step);
-											const hex = stackMap[stepStr] ?? '';
-											return (
-												<Flex
-													key={`shade-editor-${effectiveBaseSlug}-${stepStr}`}
-													direction="column"
-													alignItems="anchor-center"
-													gap={0}
-													style={{
-														minWidth: 0,
-														textAlign: 'center',
-													}}
-												>
-													<ControlContextProvider
-														value={{
-															name: `shade-color-${effectiveBaseSlug}-${stepStr}`,
-															value: hex,
-															attribute:
-																'blockeraColor',
-															blockName:
-																'global-styles',
-														}}
-													>
-														<ColorControl
-															{...chromelessColorFieldProps}
-															onChange={(v) =>
+										showPreviewStack && previewShadesMap ? (
+											<VariableVariationsFieldsEditorSlot
+												style={{ opacity: 0.5 }}
+											>
+												<GlobalStylesChromelessShadeRampRow
+													baseSlug={effectiveBaseSlug}
+													hexLookup={previewShadesMap}
+													mode="preview"
+												/>
+											</VariableVariationsFieldsEditorSlot>
+										) : (
+											<>
+												{showEditableShadeSteps ? (
+													<VariableVariationsFieldsEditorSlot>
+														<GlobalStylesChromelessShadeRampRow
+															baseSlug={
+																effectiveBaseSlug
+															}
+															hexLookup={stackMap}
+															mode="edit"
+															disabledByLock={
+																presetLocked
+															}
+															onStepChange={(
+																step,
+																v
+															) =>
 																updateShadeStepColor(
 																	step,
 																	v
 																)
 															}
-															disabled={
-																presetLocked
-															}
 														/>
-													</ControlContextProvider>
-													<span
-														style={{
-															flex: '0 0 auto',
-															minWidth: 40,
-															fontSize: 11,
-															fontWeight: 500,
-															color: 'var(--blockera-controls-label-color, #1e1e1e)',
-														}}
-													>
-														{stepStr}
-													</span>
-												</Flex>
-											);
-										})}
-									</VariableVariationsFieldsEditorSlot>
-								) : null}
+													</VariableVariationsFieldsEditorSlot>
+												) : null}
+											</>
+										)
+									}
+								/>
 							</VariableVariationsFieldsSlotProvider>
 
 							{shadeConsentOpen ? (
