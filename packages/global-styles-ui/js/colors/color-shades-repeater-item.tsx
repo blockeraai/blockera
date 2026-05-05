@@ -28,6 +28,7 @@ import {
 	getDisplayShadeRamp,
 	stackValueFromShades,
 	variationsToStackMap,
+	formatShadePresetName,
 } from './color-palette-variations-utils';
 import {
 	COLOR_SHADE_ANCHOR_STEP,
@@ -195,13 +196,16 @@ export const ColorPresetShadeStackHeader = memo(
 	ColorPresetShadeStackHeaderComponent
 );
 
+export type ColorShadesRepeaterItemComponentProps = {
+	itemId: string;
+	usageType?: 'auto' | 'manual';
+	item: VariableType | Record<string, unknown>;
+};
 function ColorShadesRepeaterItemComponent({
 	item,
+	usageType = 'auto',
 	itemId: parentRepeaterItemId,
-}: {
-	item: VariableType | Record<string, unknown>;
-	itemId: string;
-}) {
+}: ColorShadesRepeaterItemComponentProps) {
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<
 			string,
@@ -260,6 +264,14 @@ function ColorShadesRepeaterItemComponent({
 			...variation,
 			baseSlug: parentSlug,
 			renderRepeaterItem: true,
+			...('auto' === usageType
+				? {
+						name: formatShadePresetName(
+							mainPreset.name,
+							variation.name
+						),
+					}
+				: {}),
 		};
 		const rowItem = { ...merged };
 		if (storeRow && typeof storeRow === 'object') {
@@ -288,7 +300,5 @@ function ColorShadesRepeaterItemComponent({
 	});
 }
 
-export const ColorShadesRepeaterItem: ComponentType<{
-	item: VariableType | Record<string, unknown>;
-	itemId: string;
-}> = memo(ColorShadesRepeaterItemComponent);
+export const ColorShadesRepeaterItem: ComponentType<ColorShadesRepeaterItemComponentProps> =
+	memo(ColorShadesRepeaterItemComponent);

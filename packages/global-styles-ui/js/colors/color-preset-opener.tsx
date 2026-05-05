@@ -315,7 +315,11 @@ export function ColorPresetOpener({
 					/>
 				}
 				variablePickerVariationStrip={
-					<ColorShadesRepeaterItem item={colorItem} itemId={itemId} />
+					<ColorShadesRepeaterItem
+						usageType="manual"
+						item={colorItem}
+						itemId={itemId}
+					/>
 				}
 				icon={headerIcon}
 				label={colorItem?.name}
