@@ -144,3 +144,33 @@ export function filterRadialGradients(
 		(g?.gradient || '').startsWith('radial-gradient')
 	);
 }
+
+/** Normalize hex strings for ramp vs baseline comparisons. */
+export function normalizeHexForCompare(value: string | undefined): string {
+	if (!value || typeof value !== 'string') {
+		return '';
+	}
+	let hex = value.replace(/\s/g, '').replace(/^#/, '');
+	if (hex.length === 3) {
+		hex = hex
+			.split('')
+			.map((char) => char + char)
+			.join('');
+	}
+	if (hex.length === 6) {
+		return hex.toUpperCase();
+	}
+	return value.trim().replace(/^#/, '').toUpperCase();
+}
+
+export function shadeHexDiffersFromBaseline(
+	current: string,
+	expected: string | undefined
+): boolean {
+	if (!expected) {
+		return false;
+	}
+	const a = normalizeHexForCompare(current);
+	const b = normalizeHexForCompare(expected);
+	return Boolean(a && b && a !== b);
+}
