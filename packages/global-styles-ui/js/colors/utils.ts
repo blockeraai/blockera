@@ -95,32 +95,115 @@ export function convertRepeaterValueToGradients(newValue: object): Gradient[] {
 
 /**
  * One palette row as persisted from the repeater (see convertRepeaterValueToColors).
+ * Preserves `theme.json` **meta** (taxonomy, descriptions, etc.) so repeater round-trips do not drop it.
  */
-export function colorPaletteRowFromRepeaterFields(v: {
-	slug: string;
-	name: string;
-	color?: string;
-	isVisible?: boolean;
-}): Color {
-	return {
-		slug: v.slug,
-		name: v.name,
-		color: v.color || '',
-		isVisible: v.isVisible,
-	} as Color;
+export function colorPaletteRowFromRepeaterFields(
+	v: Record<string, unknown>
+): Color & Record<string, unknown> {
+	const slug = String(v.slug ?? '');
+	const name = String(v.name ?? '');
+	let colorValue = '';
+	if (typeof v.color === 'string') {
+		colorValue = v.color;
+	} else if (v.color !== undefined && v.color !== null && v.color !== '') {
+		colorValue = String(v.color);
+	}
+	const row: Color & Record<string, unknown> = {
+		slug,
+		name,
+		color: colorValue,
+	};
+	if (typeof v.isVisible === 'boolean') {
+		row.isVisible = v.isVisible;
+	}
+	if (
+		'meta' in v &&
+		v.meta !== null &&
+		v.meta !== undefined &&
+		typeof v.meta === 'object' &&
+		!Array.isArray(v.meta)
+	) {
+		row.meta = { ...(v.meta as Record<string, unknown>) };
+	}
+	return row as Color;
 }
 
-export function convertRepeaterValueToColors(newValue: object): Color[] {
+/**
+ * When the controls repeater omits or clears `meta`, keep the previous palette row's meta for that slug.
+ */
+export function inheritPaletteMetaFromPrevious<C extends Color>(
+	previousRow: C | undefined,
+	incomingRow: C
+): C {
+	if (!previousRow) {
+		return incomingRow;
+	}
+	const prev = previousRow as Record<string, unknown>;
+	const next = incomingRow as Record<string, unknown>;
+	const nextMeta = next.meta;
+	const nextHasMetaObject =
+		nextMeta !== null &&
+		nextMeta !== undefined &&
+		typeof nextMeta === 'object' &&
+		!Array.isArray(nextMeta);
+	if (nextHasMetaObject) {
+		return incomingRow;
+	}
+	const prevMeta = prev.meta;
+	if (
+		prevMeta !== null &&
+		prevMeta !== undefined &&
+		typeof prevMeta === 'object' &&
+		!Array.isArray(prevMeta)
+	) {
+		return { ...incomingRow, meta: prevMeta } as C;
+	}
+	return incomingRow;
+}
+
+/** Carries over shade rows when the repeater omits them but the parent base still exists. */
+export function mergeColorPaletteWithKeptShades<C extends Color>(
+	previousPalette: C[],
+	nextMain: C[]
+): C[] {
+	const slugSet = new Set(nextMain.map((c) => String(c.slug ?? '')));
+	const keptShades = previousPalette.filter((c) => {
+		if (!isShadePaletteColor(c as Color & Record<string, unknown>)) {
+			return false;
+		}
+		const p = parsePaletteShadeSlug(String(c.slug ?? ''));
+		if (p === null || !slugSet.has(p.baseSlug)) {
+			return false;
+		}
+		return !slugSet.has(String(c.slug ?? ''));
+	});
+	return stripRedundantPaletteShadeBase([...nextMain, ...keptShades]);
+}
+
+export function convertRepeaterValueToColors(
+	newValue: object,
+	previousPalette?: Color[]
+): Color[] {
+	const prevBySlug = previousPalette?.length
+		? new Map(
+				previousPalette.map((c) => [String((c as Color).slug ?? ''), c])
+			)
+		: undefined;
+
 	return Object.values(
 		newValue as Record<string, Color & Record<string, unknown>>
-	).map((v) =>
-		colorPaletteRowFromRepeaterFields({
-			slug: v.slug,
-			name: v.name,
-			color: v.color,
-			isVisible: v.isVisible as boolean | undefined,
-		})
-	);
+	).map((v) => {
+		const row = colorPaletteRowFromRepeaterFields(
+			v as Record<string, unknown>
+		) as Color;
+		if (!prevBySlug) {
+			return row;
+		}
+		return inheritPaletteMetaFromPrevious(
+			prevBySlug.get(String(row.slug ?? '')),
+			row
+		);
+	});
 }
 
 export function filterLinearGradients(

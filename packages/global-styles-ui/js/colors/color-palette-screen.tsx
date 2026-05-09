@@ -9,6 +9,7 @@ import {
 import { __, sprintf } from '@wordpress/i18n';
 import type { Color } from '@wordpress/global-styles-engine';
 import { useCallback, useMemo, memo } from '@wordpress/element';
+import type { ElementType } from 'react';
 
 /**
  * Blockera dependencies
@@ -33,16 +34,22 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
+	ColorPresetTaxonomySection,
+	buildTaxonomyTree,
+	mergeSimpleRepeaterIntoFullPalette,
+	partitionPresetsForTaxonomyUi,
+	usePresetTaxonomyDeclarations,
 } from '../components';
 import { useGetColors } from './use-get-colors';
 import {
 	convertRepeaterValueToColors,
 	filterMainPaletteColors,
 	isShadePaletteColor,
-	parsePaletteShadeSlug,
+	mergeColorPaletteWithKeptShades,
 	stripRedundantPaletteShadeBase,
 } from './utils';
 import { ColorPresetOpener } from './color-preset-opener';
+import { ColorTaxonomyCategoryClosedPreview } from './color-taxonomy-category-closed-preview';
 import { ColorPresetPreviewUsageProvider } from './color-preset-preview-context';
 import { ColorPresetFields } from './color-preset-fields';
 import { ColorShadesRepeaterItem } from './color-shades-repeater-item';
@@ -56,29 +63,6 @@ import { filterVariationsByBase } from './color-palette-variations-utils';
 export type { DefaultColorPresetValue } from './color-palette-variation-types';
 
 export { ColorPresetPreviewUsageProvider } from './color-preset-preview-context';
-
-/**
- * When the repeater payload omits shade rows (e.g. hidden items), carry over shade presets from the
- * previous palette whose parent base is still present. Not used for {@link ColorPaletteVariationsContextValue#setFullPalette},
- * which already passes the authoritative full palette.
- */
-function mergeColorPaletteWithKeptShades(
-	previousPalette: Color[],
-	nextMain: Color[]
-): Color[] {
-	const slugSet = new Set(nextMain.map((c) => String(c.slug ?? '')));
-	const keptShades = previousPalette.filter((c) => {
-		if (!isShadePaletteColor(c as Color & Record<string, unknown>)) {
-			return false;
-		}
-		const p = parsePaletteShadeSlug(String(c.slug ?? ''));
-		if (p === null || !slugSet.has(p.baseSlug)) {
-			return false;
-		}
-		return !slugSet.has(String(c.slug ?? ''));
-	});
-	return stripRedundantPaletteShadeBase([...nextMain, ...keptShades]);
-}
 
 interface ColorPaletteScreenProps {
 	onBackHandler: () => void;
@@ -109,26 +93,94 @@ function ColorGroupComponent({
 		usePresetResetDialogState();
 	const pickerCtx = useVarPickerPresetContext();
 
-	const mainColors = useMemo(() => {
-		const flattenForColorPickerSearch =
+	const controlName = `color-presets-${origin}`;
+
+	const taxonomyDeclarations = usePresetTaxonomyDeclarations('color');
+
+	const flattenForColorPickerSearch = useMemo(
+		() =>
 			pickerCtx.active === true &&
 			pickerCtx.variableType === 'color' &&
-			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '';
-		return colors.map((c) => ({
-			...c,
-			renderRepeaterItem: flattenForColorPickerSearch
+			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
+		[pickerCtx.active, pickerCtx.searchQuery, pickerCtx.variableType]
+	);
+
+	const partition = useMemo(
+		() =>
+			partitionPresetsForTaxonomyUi(
+				colors as Array<Color & Record<string, unknown>>,
+				taxonomyDeclarations
+			),
+		[colors, taxonomyDeclarations]
+	);
+
+	const showTaxonomyUi =
+		origin === 'theme' &&
+		!flattenForColorPickerSearch &&
+		taxonomyDeclarations.groups.length > 0 &&
+		partition.taxonomyPresets.length > 0;
+
+	const taxonomyTree = useMemo(
+		() =>
+			buildTaxonomyTree(partition.taxonomyPresets, taxonomyDeclarations),
+		[partition.taxonomyPresets, taxonomyDeclarations]
+	);
+
+	const simpleSlugSet = useMemo(
+		() => new Set(partition.simplePresets.map((p) => String(p.slug ?? ''))),
+		[partition.simplePresets]
+	);
+
+	const mainColors = useMemo(() => {
+		return colors.map((c) => {
+			const slug = String(c.slug ?? '');
+			const baseRepeater = flattenForColorPickerSearch
 				? true
-				: !isShadePaletteColor(c as Color & Record<string, unknown>),
-			hasVariations: flattenForColorPickerSearch
-				? false
-				: filterVariationsByBase(colors, c.slug).length > 0,
-		}));
+				: !isShadePaletteColor(c as Color & Record<string, unknown>);
+			let renderRepeaterItem = baseRepeater;
+			if (showTaxonomyUi) {
+				if (partition.taxonomySlugSet.has(slug)) {
+					renderRepeaterItem = false;
+				} else {
+					renderRepeaterItem =
+						simpleSlugSet.has(slug) && baseRepeater;
+				}
+			}
+			return {
+				...c,
+				renderRepeaterItem,
+				hasVariations: flattenForColorPickerSearch
+					? false
+					: filterVariationsByBase(colors, c.slug).length > 0,
+			};
+		});
 	}, [
 		colors,
-		pickerCtx.active,
-		pickerCtx.searchQuery,
-		pickerCtx.variableType,
+		flattenForColorPickerSearch,
+		partition.taxonomySlugSet,
+		showTaxonomyUi,
+		simpleSlugSet,
 	]);
+
+	const taxonomyBridgeMainColors = useMemo(() => {
+		if (!showTaxonomyUi) {
+			return [];
+		}
+		return mainColors.filter((c) =>
+			partition.taxonomySlugSet.has(String(c.slug ?? ''))
+		);
+	}, [mainColors, partition.taxonomySlugSet, showTaxonomyUi]);
+
+	const taxonomyRepeaterDefaults = useMemo(
+		() => ({
+			isVisible: true,
+			renderRepeaterItem: true,
+			deletable: false,
+			cloneable: false,
+			visibilitySupport: false,
+		}),
+		[]
+	);
 
 	const setFullPalette = useCallback(
 		(next: Color[]) => {
@@ -146,8 +198,15 @@ function ColorGroupComponent({
 
 	const onChange = useCallback(
 		(newValue: Object) => {
-			const nextMain = convertRepeaterValueToColors(newValue);
-			const merged = mergeColorPaletteWithKeptShades(colors, nextMain);
+			const nextMain = convertRepeaterValueToColors(newValue, colors);
+			const mergedFlat = showTaxonomyUi
+				? mergeSimpleRepeaterIntoFullPalette(
+						colors,
+						nextMain,
+						partition.taxonomySlugSet
+					)
+				: nextMain;
+			const merged = mergeColorPaletteWithKeptShades(colors, mergedFlat);
 			if ('theme' === origin) {
 				setThemeColors?.(merged);
 			} else if ('default' === origin) {
@@ -156,7 +215,15 @@ function ColorGroupComponent({
 				setCustomColors?.(merged);
 			}
 		},
-		[colors, origin, setThemeColors, setDefaultColors, setCustomColors]
+		[
+			colors,
+			origin,
+			partition.taxonomySlugSet,
+			setThemeColors,
+			setDefaultColors,
+			setCustomColors,
+			showTaxonomyUi,
+		]
 	);
 
 	const { dialogText: resetDialogText, confirmButtonText } =
@@ -169,6 +236,13 @@ function ColorGroupComponent({
 				'custom-'
 			),
 		[mainColors]
+	);
+
+	const renderTaxonomyCategoryClosedPreview = useCallback(
+		(presets: Array<Color & Record<string, unknown>>) => (
+			<ColorTaxonomyCategoryClosedPreview presets={presets} />
+		),
+		[]
 	);
 
 	const defaultPresetValue = useMemo(
@@ -188,8 +262,6 @@ function ColorGroupComponent({
 		}),
 		[index, origin]
 	);
-
-	const controlName = `color-presets-${origin}`;
 
 	const variationsContextValue = useMemo(
 		(): ColorPaletteVariationsContextValue => ({
@@ -214,6 +286,31 @@ function ColorGroupComponent({
 			<ColorPaletteVariationsContext.Provider
 				value={variationsContextValue}
 			>
+				{showTaxonomyUi && taxonomyTree.length > 0 ? (
+					<ColorPresetTaxonomySection
+						controlName={controlName}
+						mainColors={
+							taxonomyBridgeMainColors as Array<
+								Color & Record<string, unknown>
+							>
+						}
+						colorsForShadeMerge={colors}
+						tree={taxonomyTree}
+						origin={origin}
+						defaultRepeaterItemShape={taxonomyRepeaterDefaults}
+						PresetFields={ColorPresetFields}
+						repeaterItemHeader={
+							ColorPresetOpener as unknown as ElementType
+						}
+						presetFieldsPropsResolver={
+							colorPresetFieldsPropsResolver
+						}
+						onPersistPalette={setFullPalette}
+						renderTaxonomyCategoryClosedPreview={
+							renderTaxonomyCategoryClosedPreview
+						}
+					/>
+				) : null}
 				<PresetGroup
 					origin={origin}
 					variables={mainColors}
@@ -228,6 +325,11 @@ function ColorGroupComponent({
 						!pickerCtx.active ? null : ColorShadesRepeaterItem
 					}
 					presetFieldsPropsResolver={colorPresetFieldsPropsResolver}
+					suppressThemeRepeaterWhenTaxonomyBasePopulated={
+						showTaxonomyUi &&
+						taxonomyTree.length > 0 &&
+						partition.simplePresets.length === 0
+					}
 				/>
 			</ColorPaletteVariationsContext.Provider>
 		</>

@@ -12,41 +12,41 @@ import type { Color } from '@wordpress/global-styles-engine';
 import {
 	classNames,
 	componentClassNames,
-	componentInnerClassNames,
 	controlInnerClassNames,
+	componentInnerClassNames,
 } from '@blockera/classnames';
-import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import {
-	getGlobalStylesColorGradientPresetPreviewDeclarations,
-	getGlobalStylesColorPresetPreviewAttributes,
 	type ColorPresetPreviewUsage,
+	getGlobalStylesColorPresetPreviewAttributes,
+	getGlobalStylesColorGradientPresetPreviewDeclarations,
 } from '../preset-preview/injected-helpers';
 import {
-	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
+	type PresetCanvasPreviewPayload,
 } from '../components/preset-row-preview-inject';
-import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
-import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types';
+import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
+import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import {
 	PresetVariableVariationsHeader,
 	getPresetVariableVariationsDerivedState,
 } from '../components/preset-variable-variations-header';
+import { filterVariationsByBase } from './color-palette-variations-utils';
 import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
 import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
-import { filterVariationsByBase } from './color-palette-variations-utils';
 import {
-	ColorPresetShadeStackHeader,
 	ColorShadesRepeaterItem,
+	ColorPresetShadeStackHeader,
 } from './color-shades-repeater-item';
 import {
-	COLOR_SHADE_ANCHOR_STEP,
 	generateColorShades,
+	COLOR_SHADE_ANCHOR_STEP,
 } from './color-shades-generator';
 import {
 	isShadePaletteColor,
@@ -59,6 +59,7 @@ export type ColorPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	/** Lower priority than variable-picker context and ColorPresetPreviewUsageProvider. */
 	previewUsage?: ColorPresetPreviewUsage;
@@ -97,6 +98,7 @@ export function ColorPresetOpener({
 	item: colorItem,
 	isOpenPopoverEvent,
 	variationsAccordionOpen,
+	contextType = 'repeater',
 	previewUsage: previewUsageProp,
 }: ColorPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
@@ -278,6 +280,47 @@ export function ColorPresetOpener({
 		baselineHexByStep,
 	]);
 
+	let trailingHeaderValues: React.ReactNode = null;
+	if (contextType === 'taxonomy') {
+		if (headerIcon || shadeVariationCount > 0) {
+			trailingHeaderValues = (
+				<span
+					className={controlInnerClassNames('header-values')}
+					data-cy="header-values"
+				>
+					{shadeVariationCount > 0 ? (
+						<ColorPresetShadeStackHeader
+							baseSlug={baseSlug}
+							mainPreset={mainPresetForStack}
+						/>
+					) : (
+						headerIcon
+					)}
+				</span>
+			);
+		}
+	} else if (showHexValue) {
+		trailingHeaderValues = (
+			<span
+				className={controlInnerClassNames('header-values')}
+				data-cy="header-values"
+			>
+				<span
+					style={{
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						maxWidth: '110px',
+						textTransform: 'lowercase',
+						opacity: 0.5,
+					}}
+				>
+					{colorItem?.color}
+				</span>
+			</span>
+		);
+	}
+
 	return (
 		<div
 			className={classNames(
@@ -309,10 +352,12 @@ export function ColorPresetOpener({
 				variationsAccordionOpen={variationsAccordionOpen}
 				isVariablePickerActive={true === pickerCtx.active}
 				collapsedVariationStack={
-					<ColorPresetShadeStackHeader
-						baseSlug={baseSlug}
-						mainPreset={mainPresetForStack}
-					/>
+					contextType === 'taxonomy' ? null : (
+						<ColorPresetShadeStackHeader
+							baseSlug={baseSlug}
+							mainPreset={mainPresetForStack}
+						/>
+					)
 				}
 				variablePickerVariationStrip={
 					<ColorShadesRepeaterItem
@@ -321,29 +366,11 @@ export function ColorPresetOpener({
 						itemId={itemId}
 					/>
 				}
-				icon={headerIcon}
+				icon={contextType === 'taxonomy' ? null : headerIcon}
 				label={colorItem?.name}
 			/>
 
-			{showHexValue ? (
-				<span
-					className={controlInnerClassNames('header-values')}
-					data-cy="header-values"
-				>
-					<span
-						style={{
-							overflow: 'hidden',
-							textOverflow: 'ellipsis',
-							whiteSpace: 'nowrap',
-							maxWidth: '110px',
-							textTransform: 'lowercase',
-							opacity: 0.5,
-						}}
-					>
-						{colorItem?.color}
-					</span>
-				</span>
-			) : null}
+			{trailingHeaderValues}
 
 			{children}
 		</div>

@@ -13,8 +13,8 @@ import {
 } from '@blockera/classnames';
 
 export type PresetVariableVariationsHeaderProps = {
-	/** Single swatch / icon (accordion expanded or non-stack rows). */
-	icon: ReactNode;
+	/** Single swatch / icon (accordion expanded or non-stack rows). Omit or pass null to hide (no wrapper). */
+	icon?: ReactNode | null;
 	/** The label for the header. */
 	label: ReactNode;
 	/**
@@ -73,16 +73,20 @@ export function PresetVariableVariationsHeader({
 	variablePickerVariationStrip,
 }: PresetVariableVariationsHeaderProps) {
 	const showVariationStack = !isVariationChildRow && variationCount > 0;
+	const headerIcon =
+		icon !== undefined && icon !== null ? (
+			<span
+				className={controlInnerClassNames('header-icon')}
+				data-cy="header-icon"
+			>
+				{icon}
+			</span>
+		) : null;
 
 	if (!showVariationStack) {
 		return (
 			<>
-				<span
-					className={controlInnerClassNames('header-icon')}
-					data-cy="header-icon"
-				>
-					{icon}
-				</span>
+				{headerIcon}
 				<span
 					className={controlInnerClassNames('header-label')}
 					data-cy="header-label"
@@ -98,14 +102,7 @@ export function PresetVariableVariationsHeader({
 			{!isVariablePickerActive && (
 				<>
 					{!variationsAccordionOpen && collapsedVariationStack}
-					{variationsAccordionOpen && (
-						<span
-							className={controlInnerClassNames('header-icon')}
-							data-cy="header-icon"
-						>
-							{icon}
-						</span>
-					)}
+					{variationsAccordionOpen ? headerIcon : null}
 					<span
 						className={controlInnerClassNames('header-label')}
 						data-cy="header-label"
@@ -117,12 +114,7 @@ export function PresetVariableVariationsHeader({
 			{true === isVariablePickerActive && (
 				<Flex direction={variationsAccordionOpen ? 'row' : 'column'}>
 					<Flex gap={8}>
-						<span
-							className={controlInnerClassNames('header-icon')}
-							data-cy="header-icon"
-						>
-							{icon}
-						</span>
+						{headerIcon}
 
 						<span
 							className={controlInnerClassNames('header-label')}

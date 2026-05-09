@@ -28,6 +28,8 @@ import {
 	NoticeControl,
 	useControlContext,
 	RepeaterContext,
+	BaseControl,
+	useVarPickerPresetContext,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
@@ -71,15 +73,6 @@ const GLOBAL_STYLES_COLOR_CONTEXT = {
 	attribute: 'blockeraColor',
 	blockName: 'global-styles',
 } as const;
-
-const FIELD_LABEL_CAPTION_STYLE: CSSProperties = {
-	flex: '0 0 auto',
-	minWidth: 72,
-	fontSize: 11,
-	fontWeight: 500,
-	textTransform: 'uppercase',
-	color: 'var(--blockera-controls-label-color, #1e1e1e)',
-};
 
 const SHADE_STEP_COLUMN_STYLE: CSSProperties = {
 	minWidth: 0,
@@ -307,6 +300,8 @@ function GlobalStylesMainColorControl({
 	disabled?: boolean;
 	onChange: (next: string | undefined) => void;
 }) {
+	const pickerCtx = useVarPickerPresetContext();
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -315,7 +310,12 @@ function GlobalStylesMainColorControl({
 				...GLOBAL_STYLES_COLOR_CONTEXT,
 			}}
 		>
-			<ColorControl onChange={onChange} disabled={disabled} />
+			<ColorControl
+				onChange={onChange}
+				disabled={disabled}
+				variableTypes={pickerCtx.active ? [] : ['color']}
+				controlAddonTypes={pickerCtx.active ? [] : ['variable']}
+			/>
 		</ControlContextProvider>
 	);
 }
@@ -748,25 +748,29 @@ function ColorPresetFieldsComponent({
 					gap={12}
 					style={{ width: '100%' }}
 				>
-					<span style={FIELD_LABEL_CAPTION_STYLE}>
-						{__('Color', 'blockera')}
-					</span>
 					<Flex
 						direction="row"
 						alignItems="center"
 						gap={8}
 						style={{ flex: 1, minWidth: 0 }}
 					>
-						<GlobalStylesMainColorControl
+						<BaseControl
+							columns="1fr 3fr"
+							label={__('Color', 'blockera')}
 							controlName={`color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`}
-							value={
-								isAnchorShadeRow
-									? (displayRampMain.color ?? colorItem.color)
-									: colorItem.color
-							}
-							onChange={handleValueChange}
-							disabled={presetLocked}
-						/>
+						>
+							<GlobalStylesMainColorControl
+								controlName={`color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`}
+								value={
+									isAnchorShadeRow
+										? (displayRampMain.color ??
+											colorItem.color)
+										: colorItem.color
+								}
+								onChange={handleValueChange}
+								disabled={presetLocked}
+							/>
+						</BaseControl>
 					</Flex>
 				</Flex>
 

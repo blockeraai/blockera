@@ -73,6 +73,10 @@ export type PresetGroupPropsType = {
 		item: VariableType | Record<string, unknown>;
 		itemId: string;
 	}>;
+	/**
+	 * When true with `origin === 'theme'`, the repeater is omitted (e.g. theme colors fully handled by taxonomy UI).
+	 */
+	suppressThemeRepeaterWhenTaxonomyBasePopulated?: boolean;
 };
 
 type PresetsProps = {
@@ -288,6 +292,7 @@ export const PresetGroup = ({
 	presetFieldsPropsResolver,
 	enableCreatingStep = true,
 	repeaterItemVariations,
+	suppressThemeRepeaterWhenTaxonomyBasePopulated = false,
 }: PresetGroupPropsType) => {
 	const pickerCtx = useVarPickerPresetContext();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
@@ -425,6 +430,10 @@ export const PresetGroup = ({
 		labelForVariablePicker,
 		pickerCtx.omitRepeaterSectionLabel,
 	]);
+
+	if (origin === 'theme' && suppressThemeRepeaterWhenTaxonomyBasePopulated) {
+		return null;
+	}
 
 	return (
 		<PresetStateContainer activeColor="#1ca120">
