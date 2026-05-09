@@ -12,8 +12,8 @@ import { BaseControl, ControlContextProvider } from '@blockera/controls';
  * Internal dependencies
  */
 import { PresetStateContainer } from '../preset-state-container';
-import { TaxonomyRepeaterBridgeInner } from '../preset-taxonomy-ui';
-import '../preset-taxonomy-ui/style.scss';
+import { TaxonomyRepeaterBridgeInner } from './taxonomy-repeater-bridge-inner';
+import './style.scss';
 
 export type PresetTaxonomySectionRepeaterContextValue = {
 	name: string;

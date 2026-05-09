@@ -15,11 +15,9 @@ import { controlClassNames } from '@blockera/classnames';
  */
 import type { PresetFieldsPropsResolver } from '../preset-group';
 import type { TaxonomyGroupBranch } from '../preset-taxonomy/types';
-import {
-	TaxonomyCategoryAccordion,
-	TaxonomyGroupHeader,
-} from '../preset-taxonomy-ui';
 import { usePresetVariationsStorage } from '../../context/preset-variations-context';
+import { TaxonomyCategoryAccordion } from './taxonomy-category-accordion';
+import { TaxonomyGroupHeader } from './taxonomy-group-header';
 import { PresetTaxonomyPopoverRow } from './preset-taxonomy-popover-row';
 import { findRepeaterItemIdBySlug } from './preset-taxonomy-utils';
 

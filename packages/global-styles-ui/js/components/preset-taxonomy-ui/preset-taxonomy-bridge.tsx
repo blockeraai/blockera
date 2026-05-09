@@ -14,8 +14,8 @@ import { cleanupRepeater } from '@blockera/controls';
  */
 import type { PresetFieldsPropsResolver } from '../preset-group';
 import type { TaxonomyGroupBranch } from '../preset-taxonomy/types';
-import { PresetTaxonomySection } from './preset-taxonomy-section';
 import { PresetTaxonomyBody } from './preset-taxonomy-body';
+import { PresetTaxonomySection } from './preset-taxonomy-section';
 
 export type PresetTaxonomyBridgeProps<TItem extends Record<string, unknown>> = {
 	controlName: string;

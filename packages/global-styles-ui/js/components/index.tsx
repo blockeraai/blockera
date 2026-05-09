@@ -29,8 +29,13 @@ export {
 	PresetTaxonomyBridge,
 	type PresetTaxonomyBridgeProps,
 	findRepeaterItemIdBySlug,
-} from './shared-preset-taxonomy';
-export {
 	TaxonomyGroupHeader,
+	type TaxonomyGroupHeaderProps,
+	PresetTaxonomyPresetFields,
+	type PresetTaxonomyPresetFieldsProps,
+	TaxonomyCategoryAccordion,
+	type TaxonomyCategoryAccordionProps,
 	isTaxonomyPopoverOpenEvent,
+	TaxonomyRepeaterBridgeInner,
+	type TaxonomyRepeaterBridgeInnerProps,
 } from './preset-taxonomy-ui';

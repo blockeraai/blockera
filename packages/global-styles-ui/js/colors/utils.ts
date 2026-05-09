@@ -64,7 +64,7 @@ export function filterMainPaletteColors<C extends Color>(colors: C[]): C[] {
 	);
 }
 
-export { findRepeaterItemIdBySlug } from '../components/shared-preset-taxonomy/preset-taxonomy-utils';
+export { findRepeaterItemIdBySlug } from '../components/preset-taxonomy-ui/preset-taxonomy-utils';
 
 export function convertRepeaterValueToGradients(newValue: object): Gradient[] {
 	return Object.values(

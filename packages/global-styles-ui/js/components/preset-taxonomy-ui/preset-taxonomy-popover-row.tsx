@@ -16,10 +16,8 @@ import { GroupControl, RepeaterContext } from '@blockera/controls';
  */
 import type { PresetFieldsPropsResolver } from '../preset-group';
 import type { VariableType } from '../types';
-import {
-	isTaxonomyPopoverOpenEvent,
-	PresetTaxonomyPresetFields,
-} from '../preset-taxonomy-ui';
+import { isTaxonomyPopoverOpenEvent } from './is-taxonomy-popover-open-event';
+import { PresetTaxonomyPresetFields } from './taxonomy-preset-fields';
 
 export type PresetTaxonomyPopoverRowProps = {
 	item: Record<string, unknown>;
