@@ -77,5 +77,23 @@ export {
 } from './utils';
 export type { GetValueAddonFromVarStringOptions } from './utils';
 
+export {
+	THEME_JSON_PRESET_METADATA_BASE,
+	getValueFromObjectPath,
+	findInPresetsBy,
+	getValueFromVariable,
+	wrapExperimentalFeaturesRaw,
+	getWpMergedExperimentalFeaturesWrapped,
+	parseThemeJsonVariableToken,
+	isThemeJsonVariableResolutionCandidateString,
+	isThemeJsonVariableDefinedInMergedFeatures,
+	isThemeJsonVariableDefinedInWpEditor,
+	resolveThemeJsonVariableStringFromWpEditor,
+} from './theme-json-variable-resolution';
+export type {
+	ThemeJsonPresetResolutionRow,
+	ParsedThemeJsonVariableToken,
+} from './theme-json-variable-resolution';
+
 export * from './types';
 export * from './store/types';
