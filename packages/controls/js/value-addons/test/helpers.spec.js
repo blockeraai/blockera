@@ -6,7 +6,11 @@ import {
 	getDynamicValueCategory,
 	getDynamicValueIcon,
 } from '../helpers';
-import { isValid, extractCssVarValue } from '../utils';
+import {
+	isValid,
+	extractCssVarValue,
+	isLikelyThemeJsonPlainPresetSlugString,
+} from '../utils';
 import { generateVariableString } from '@blockera/data';
 import { __ } from '@wordpress/i18n';
 
@@ -667,6 +671,36 @@ describe('Helper Functions', () => {
 					extractCssVarValue('var(--spacing, calc(2 * 16px))')
 				).toBe('calc(2 * 16px)');
 			});
+		});
+	});
+
+	describe('isLikelyThemeJsonPlainPresetSlugString', () => {
+		test('accepts typical theme preset slugs', () => {
+			expect(isLikelyThemeJsonPlainPresetSlugString('primary')).toBe(
+				true
+			);
+			expect(isLikelyThemeJsonPlainPresetSlugString('vivid-purple')).toBe(
+				true
+			);
+			expect(isLikelyThemeJsonPlainPresetSlugString('custom_slug')).toBe(
+				true
+			);
+		});
+
+		test('rejects raw css-like strings', () => {
+			expect(isLikelyThemeJsonPlainPresetSlugString('#fff')).toBe(false);
+			expect(isLikelyThemeJsonPlainPresetSlugString('12px')).toBe(false);
+			expect(isLikelyThemeJsonPlainPresetSlugString('rgb(0,0,0)')).toBe(
+				false
+			);
+			expect(isLikelyThemeJsonPlainPresetSlugString('var(--x)')).toBe(
+				false
+			);
+		});
+
+		test('rejects empty or untrimmed input', () => {
+			expect(isLikelyThemeJsonPlainPresetSlugString('')).toBe(false);
+			expect(isLikelyThemeJsonPlainPresetSlugString(' slug')).toBe(false);
 		});
 	});
 });

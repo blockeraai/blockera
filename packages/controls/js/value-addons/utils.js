@@ -10,6 +10,30 @@ export function isValid(value: ValueAddon | string): boolean {
 	return !!value?.isValueAddon;
 }
 
+/**
+ * Whether `s` looks like a theme.json preset **slug** (not raw CSS).
+ * Used to avoid treating arbitrary stored strings (e.g. hex colors) as orphan presets.
+ */
+export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
+	if (typeof s !== 'string' || s === '') {
+		return false;
+	}
+	if (s.trim() !== s) {
+		return false;
+	}
+	if (s.startsWith('#')) {
+		return false;
+	}
+	if (s.includes('var(') || s.includes('(')) {
+		return false;
+	}
+	if (/\s/.test(s)) {
+		return false;
+	}
+	// Slugs start with a letter so values like `12px` / `500` are not treated as presets.
+	return /^[a-z][a-z0-9_-]*(?:-[a-z0-9_-]+)*$/i.test(s);
+}
+
 /** Non-empty `ValueAddonControlProps.themeJsonPlainPresetSlug` (merged theme.json preset slug). */
 export function hasThemeJsonPlainPresetSlug(
 	themeJsonPlainPresetSlug: mixed
