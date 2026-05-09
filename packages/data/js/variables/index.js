@@ -88,11 +88,18 @@ export {
 	isThemeJsonVariableResolutionCandidateString,
 	isThemeJsonVariableDefinedInMergedFeatures,
 	isThemeJsonVariableDefinedInWpEditor,
+	inferPresetCssVarInfixForPaintVariablePickerType,
+	normalizeThemeJsonPresetLeafForScalarUi,
+	resolvePlainThemeJsonPresetSlugResolutionFromWpEditor,
+	resolvePlainThemeJsonPresetSlugValueFromWpEditor,
+	resolveThemeJsonPaintPresetStringFromWpEditor,
 	resolveThemeJsonVariableStringFromWpEditor,
 } from './theme-json-variable-resolution';
 export type {
 	ThemeJsonPresetResolutionRow,
 	ParsedThemeJsonVariableToken,
+	PlainThemeJsonPresetSlugResolution,
+	ResolveThemeJsonPaintPresetStringFromWpEditorOptions,
 } from './theme-json-variable-resolution';
 
 export * from './types';

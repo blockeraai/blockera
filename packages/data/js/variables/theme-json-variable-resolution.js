@@ -41,6 +41,13 @@ export type ParsedThemeJsonVariableToken =
 	| {| kind: 'preset', cssVarInfix: string, slug: string |}
 	| {| kind: 'custom', path: Array<string> |};
 
+/** Result of resolving a plain preset slug against merged theme.json preset rows. */
+export type PlainThemeJsonPresetSlugResolution = {|
+	cssVarInfix: string,
+	valueKey: string,
+	leaf: mixed,
+|};
+
 /**
  * Parses a theme.json **preset** (`var:preset|…` / `var(--wp--preset--…)`) or **custom**
  * (`var:custom|…` / `var(--wp--custom--…)`) token. Other `var:` shapes return null.
@@ -418,6 +425,249 @@ export function isThemeJsonVariableDefinedInWpEditor(
 		blockName,
 		presetCssVarInfix
 	);
+}
+
+/**
+ * Turns a resolved preset **leaf** (after {@link getValueFromVariable}) into a scalar string for UI
+ * (swatches, labels). Recognizes shapes implied by {@link THEME_JSON_PRESET_METADATA_BASE} buckets.
+ *
+ * @param cssVarInfix Preset bucket key (`color`, `gradient`, `font-size`, …).
+ * @param leaf Resolved value — string, preset-shaped object, or nested ref output.
+ * @return {string} Best-effort display string; empty when unknown / non-scalar.
+ */
+export function normalizeThemeJsonPresetLeafForScalarUi(
+	cssVarInfix: string,
+	leaf: mixed
+): string {
+	if (typeof leaf === 'string') {
+		return leaf;
+	}
+	if (leaf === null || leaf === undefined) {
+		return '';
+	}
+	if (typeof leaf !== 'object') {
+		return String(leaf);
+	}
+	if (Array.isArray(leaf)) {
+		if (cssVarInfix === 'duotone') {
+			const parts = leaf.filter((c: mixed) => typeof c === 'string');
+			return parts.join(', ');
+		}
+		return '';
+	}
+
+	const o: JsonObject = (leaf: any);
+
+	switch (cssVarInfix) {
+		case 'color':
+			return typeof o.color === 'string' ? o.color : '';
+		case 'gradient':
+			return typeof o.gradient === 'string' ? o.gradient : '';
+		case 'duotone':
+			if (Array.isArray(o.colors)) {
+				const colors = ((o.colors: any): mixed[]).filter(
+					(c) => typeof c === 'string'
+				);
+				return colors.join(', ');
+			}
+			return '';
+		case 'font-size':
+		case 'spacing':
+		case 'border-radius':
+		case 'dimension':
+			return typeof o.size === 'string' ? o.size : '';
+		case 'font-family':
+			return typeof o.fontFamily === 'string' ? o.fontFamily : '';
+		case 'shadow':
+			return typeof o.shadow === 'string' ? o.shadow : '';
+		default:
+			if (typeof o.color === 'string') {
+				return o.color;
+			}
+			if (typeof o.gradient === 'string') {
+				return o.gradient;
+			}
+			if (typeof o.size === 'string') {
+				return o.size;
+			}
+			if (typeof o.fontFamily === 'string') {
+				return o.fontFamily;
+			}
+			return '';
+	}
+}
+
+/**
+ * Locate a plain preset slug in merged editor features and return bucket metadata plus resolved leaf.
+ *
+ * @return {?PlainThemeJsonPresetSlugResolution} Match info, or null when not found.
+ */
+export function resolvePlainThemeJsonPresetSlugResolutionFromWpEditor(
+	slug: string,
+	blockName: string = '',
+	presetCssVarInfix?: string
+): PlainThemeJsonPresetSlugResolution | null {
+	const wrapped = getWpMergedExperimentalFeaturesWrapped();
+	if (!wrapped || typeof slug !== 'string' || slug === '') {
+		return null;
+	}
+	const settings = wrapped.settings;
+	if (!settings || typeof settings !== 'object') {
+		return null;
+	}
+	const settingsObj = (settings: JsonObject);
+
+	const rows = presetCssVarInfix
+		? THEME_JSON_PRESET_METADATA_BASE.filter(
+				(row) => row.cssVarInfix === presetCssVarInfix
+			)
+		: [...THEME_JSON_PRESET_METADATA_BASE];
+
+	for (const metadata of rows) {
+		const presetObject = findInPresetsBy(
+			settingsObj,
+			blockName,
+			[...metadata.path],
+			'slug',
+			slug
+		);
+		if (
+			presetObject &&
+			typeof presetObject === 'object' &&
+			presetObject !== null
+		) {
+			const raw = (presetObject: JsonObject)[metadata.valueKey];
+			const leaf = getValueFromVariable(wrapped, blockName, raw);
+			return {
+				cssVarInfix: metadata.cssVarInfix,
+				valueKey: metadata.valueKey,
+				leaf,
+			};
+		}
+	}
+	return null;
+}
+
+/**
+ * Resolve a **plain preset slug** string (snake_case attribute value, no `var:` wrapper) to the
+ * preset’s resolved paint/value via merged `core/block-editor` features — same lookup paths as
+ * `var:preset|{infix}|{slug}` resolution.
+ *
+ * When `presetCssVarInfix` is set (e.g. `'color'`), only that preset bucket is searched; otherwise
+ * metadata rows are tried in declaration order.
+ *
+ * @return {*} Resolved leaf (often a CSS color or gradient string), or empty string when not found.
+ */
+export function resolvePlainThemeJsonPresetSlugValueFromWpEditor(
+	slug: string,
+	blockName: string = '',
+	presetCssVarInfix?: string
+): mixed {
+	const hit = resolvePlainThemeJsonPresetSlugResolutionFromWpEditor(
+		slug,
+		blockName,
+		presetCssVarInfix
+	);
+	if (!hit) {
+		return '';
+	}
+	return hit.leaf;
+}
+
+export type ResolveThemeJsonPaintPresetStringFromWpEditorOptions = {|
+	+value?: string,
+	+presetSlug?: string,
+	+blockName?: string,
+	+presetCssVarInfix?: string,
+	+variablePickerType?: string,
+	+expandPlainPresetSlugInValue?: boolean,
+|};
+
+/**
+ * Preset bucket hint for color / gradient variable-picker categories (narrows slug lookup).
+ */
+export function inferPresetCssVarInfixForPaintVariablePickerType(
+	type?: string
+): string | void {
+	switch (type) {
+		case 'color':
+			return 'color';
+		case 'linear-gradient':
+		case 'radial-gradient':
+			return 'gradient';
+		default:
+			return undefined;
+	}
+}
+
+/**
+ * Resolves theme.json color or gradient preset values for UI paint (swatches, icons): `var:preset|…`,
+ * `var(--wp--preset--…)`, plain preset slugs, and slug fallback when `value` is empty.
+ */
+export function resolveThemeJsonPaintPresetStringFromWpEditor(
+	options: ResolveThemeJsonPaintPresetStringFromWpEditorOptions
+): string {
+	const {
+		value,
+		presetSlug,
+		blockName: blockNameOpt,
+		presetCssVarInfix,
+		variablePickerType,
+		expandPlainPresetSlugInValue,
+	} = options;
+	const blockName = typeof blockNameOpt === 'string' ? blockNameOpt : '';
+
+	let visual = typeof value === 'string' && value !== '' ? value : '';
+
+	const explicitInfix =
+		typeof presetCssVarInfix === 'string' && presetCssVarInfix !== ''
+			? presetCssVarInfix
+			: undefined;
+	const bucketHint =
+		explicitInfix ??
+		inferPresetCssVarInfixForPaintVariablePickerType(variablePickerType);
+
+	if (!visual && typeof presetSlug === 'string' && presetSlug !== '') {
+		const hit = resolvePlainThemeJsonPresetSlugResolutionFromWpEditor(
+			presetSlug,
+			blockName,
+			bucketHint
+		);
+		if (hit) {
+			visual = normalizeThemeJsonPresetLeafForScalarUi(
+				hit.cssVarInfix,
+				hit.leaf
+			);
+		}
+	}
+
+	const expandSlug =
+		expandPlainPresetSlugInValue !== false &&
+		visual &&
+		typeof visual === 'string' &&
+		!isThemeJsonVariableResolutionCandidateString(visual) &&
+		isThemeJsonVariableDefinedInWpEditor(visual, blockName);
+	if (expandSlug) {
+		const hit = resolvePlainThemeJsonPresetSlugResolutionFromWpEditor(
+			visual,
+			blockName
+		);
+		if (hit) {
+			const normalized = normalizeThemeJsonPresetLeafForScalarUi(
+				hit.cssVarInfix,
+				hit.leaf
+			);
+			if (normalized !== '') {
+				visual = normalized;
+			}
+		}
+	}
+
+	if (visual && isThemeJsonVariableResolutionCandidateString(visual)) {
+		return resolveThemeJsonVariableStringFromWpEditor(visual, blockName);
+	}
+
+	return typeof visual === 'string' ? visual : '';
 }
 
 /**
