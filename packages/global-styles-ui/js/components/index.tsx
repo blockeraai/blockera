@@ -17,3 +17,9 @@ export * from './global-styles-panel-description';
 export { FallbackPresetContent } from './fallback-preset-content';
 export { default as ConfirmResetPresetDialog } from './confirm-reset-preset-dialog';
 export { createPresetFieldsPropsResolver } from './create-preset-fields-props-resolver';
+export * from './preset-taxonomy';
+export { ColorPresetTaxonomySection } from '../colors/color-preset-taxonomy-section';
+export {
+	TaxonomyGroupHeader,
+	isTaxonomyPopoverOpenEvent,
+} from './preset-taxonomy-ui/basic';

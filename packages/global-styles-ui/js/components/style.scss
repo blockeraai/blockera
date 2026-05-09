@@ -119,7 +119,7 @@
 
 .blockera-control-group.mode-accordion {
 
-	&.is-close.blockera-control-repeater-item-variations-group {
+	&.is-close.blockera-control-repeater-item-variations-group:not(.blockera-preset-taxonomy-accordion) {
 
 		> .blockera-control-group-header {
 			padding: calc(var(--repeater-item-height) * 0.4);
@@ -144,7 +144,7 @@
 		}
 	}
 
-	&.is-open.blockera-control-repeater-item-variations-group {
+	&.is-open.blockera-control-repeater-item-variations-group:not(.blockera-preset-taxonomy-accordion) {
 
 		> .blockera-control-group-header {
 			padding-top: calc(var(--repeater-item-height) * 0.4);
