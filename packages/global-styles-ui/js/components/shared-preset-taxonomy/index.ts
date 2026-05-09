@@ -7,3 +7,4 @@ export {
 	PresetTaxonomyPopoverRow,
 	type PresetTaxonomyPopoverRowProps,
 } from './preset-taxonomy-popover-row';
+export { findRepeaterItemIdBySlug } from './preset-taxonomy-utils';

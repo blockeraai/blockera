@@ -4,7 +4,6 @@
 import type { ElementType } from 'react';
 import { memo, useContext, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import type { Color } from '@wordpress/global-styles-engine';
 
 /**
  * Blockera dependencies
@@ -23,7 +22,7 @@ import {
 } from '../preset-taxonomy-ui';
 
 export type PresetTaxonomyPopoverRowProps = {
-	item: Color & Record<string, unknown>;
+	item: Record<string, unknown>;
 	itemId: string | number;
 	origin: string;
 	PresetFields: ElementType;
