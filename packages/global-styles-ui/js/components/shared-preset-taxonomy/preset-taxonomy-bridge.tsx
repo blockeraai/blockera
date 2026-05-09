@@ -3,7 +3,6 @@
  */
 import type { ElementType, ReactNode } from 'react';
 import { useCallback, useMemo } from '@wordpress/element';
-import type { Color } from '@wordpress/global-styles-engine';
 
 /**
  * Blockera dependencies
@@ -13,45 +12,49 @@ import { cleanupRepeater } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import type { PresetFieldsPropsResolver } from '../components/preset-group';
-import type { TaxonomyGroupBranch } from '../components/preset-taxonomy/types';
-import { PresetTaxonomySection } from '../components/shared-preset-taxonomy';
-import {
-	convertRepeaterValueToColors,
-	mergeColorPaletteWithKeptShades,
-} from './utils';
-import { ColorPresetTaxonomyBody } from './color-preset-taxonomy-body';
+import type { PresetFieldsPropsResolver } from '../preset-group';
+import type { TaxonomyGroupBranch } from '../preset-taxonomy/types';
+import { PresetTaxonomySection } from './preset-taxonomy-section';
+import { PresetTaxonomyBody } from './preset-taxonomy-body';
 
-export type ColorPresetTaxonomyBridgeProps = {
+export type PresetTaxonomyBridgeProps<TItem extends Record<string, unknown>> = {
 	controlName: string;
-	mainColors: Array<Color & Record<string, unknown>>;
-	colorsForShadeMerge: Color[];
-	tree: TaxonomyGroupBranch<Color & Record<string, unknown>>[];
+	mainRepeaterValue: TItem[];
+	/** Baseline rows merged with repeater output (e.g. theme shades kept outside taxonomy slice). */
+	baselineItems: TItem[];
+	mergeRepeaterPayloadIntoPersisted: (
+		payload: object,
+		baselineItems: TItem[]
+	) => TItem[];
+	onPersistItems: (items: TItem[]) => void;
+	tree: TaxonomyGroupBranch<TItem>[];
 	origin: string;
 	defaultRepeaterItemShape: Record<string, unknown>;
 	PresetFields: ElementType;
 	repeaterItemHeader: ElementType;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
-	onPersistPalette: (colors: Color[]) => void;
-	renderTaxonomyCategoryClosedPreview?: (
-		presets: Array<Color & Record<string, unknown>>
-	) => ReactNode;
+	renderTaxonomyCategoryClosedPreview?: (presets: TItem[]) => ReactNode;
+	augmentCategoryShowPreview?: (
+		presets: TItem[],
+		fullItems: TItem[]
+	) => boolean;
 };
 
-/** Color preset taxonomy entry: bridge persistence plus taxonomy tree body. */
-export function ColorPresetTaxonomyBridge({
+export function PresetTaxonomyBridge<TItem extends Record<string, unknown>>({
 	controlName,
-	mainColors,
-	colorsForShadeMerge,
+	mainRepeaterValue,
+	baselineItems,
+	mergeRepeaterPayloadIntoPersisted,
+	onPersistItems,
 	tree,
 	origin,
 	defaultRepeaterItemShape,
 	PresetFields,
 	repeaterItemHeader,
 	presetFieldsPropsResolver,
-	onPersistPalette,
 	renderTaxonomyCategoryClosedPreview,
-}: ColorPresetTaxonomyBridgeProps) {
+	augmentCategoryShowPreview,
+}: PresetTaxonomyBridgeProps<TItem>) {
 	const bridgeControlId = `${controlName}-taxonomy-tree`;
 
 	const cleanRepeaterForPersist = useCallback((raw: unknown) => {
@@ -62,7 +65,7 @@ export function ColorPresetTaxonomyBridge({
 
 	const handleRepeaterRootChange = useCallback(
 		(newValue: unknown) => {
-			let payload = newValue;
+			let payload: unknown = newValue;
 			if (
 				payload !== null &&
 				typeof payload === 'object' &&
@@ -80,33 +83,26 @@ export function ColorPresetTaxonomyBridge({
 					>
 				);
 			}
-			const nextTaxonomy = convertRepeaterValueToColors(
+			const merged = mergeRepeaterPayloadIntoPersisted(
 				payload as object,
-				colorsForShadeMerge
+				baselineItems
 			);
-			const bySlug = new Map(
-				nextTaxonomy.map((r) => [String(r.slug ?? ''), r])
-			);
-			const mergedFull = colorsForShadeMerge.map((row) => {
-				const slug = String(row.slug ?? '');
-				const rep = bySlug.get(slug);
-				return (rep ?? row) as Color;
-			});
-			const merged = mergeColorPaletteWithKeptShades(
-				colorsForShadeMerge,
-				mergedFull
-			);
-			onPersistPalette(merged);
+			onPersistItems(merged);
 		},
-		[cleanRepeaterForPersist, colorsForShadeMerge, onPersistPalette]
+		[
+			baselineItems,
+			cleanRepeaterForPersist,
+			mergeRepeaterPayloadIntoPersisted,
+			onPersistItems,
+		]
 	);
 
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: bridgeControlId,
-			value: mainColors,
+			value: mainRepeaterValue,
 		}),
-		[bridgeControlId, mainColors]
+		[bridgeControlId, mainRepeaterValue]
 	);
 
 	return (
@@ -117,7 +113,7 @@ export function ColorPresetTaxonomyBridge({
 			cleanRepeaterForPersist={cleanRepeaterForPersist}
 			handleRepeaterRootChange={handleRepeaterRootChange}
 		>
-			<ColorPresetTaxonomyBody
+			<PresetTaxonomyBody<TItem>
 				tree={tree}
 				origin={origin}
 				PresetFields={PresetFields}
@@ -126,6 +122,7 @@ export function ColorPresetTaxonomyBridge({
 				renderTaxonomyCategoryClosedPreview={
 					renderTaxonomyCategoryClosedPreview
 				}
+				augmentCategoryShowPreview={augmentCategoryShowPreview}
 			/>
 		</PresetTaxonomySection>
 	);

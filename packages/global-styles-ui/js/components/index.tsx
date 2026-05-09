@@ -20,19 +20,16 @@ export { createPresetFieldsPropsResolver } from './create-preset-fields-props-re
 export * from './preset-taxonomy';
 export {
 	PresetTaxonomySection,
-	PresetTaxonomyPopoverRow,
 	type PresetTaxonomySectionProps,
 	type PresetTaxonomySectionRepeaterContextValue,
+	PresetTaxonomyPopoverRow,
 	type PresetTaxonomyPopoverRowProps,
+	PresetTaxonomyBody,
+	type PresetTaxonomyBodyProps,
+	PresetTaxonomyBridge,
+	type PresetTaxonomyBridgeProps,
+	findRepeaterItemIdBySlug,
 } from './shared-preset-taxonomy';
-export {
-	ColorPresetTaxonomyBody,
-	type ColorPresetTaxonomyBodyProps,
-} from '../colors/color-preset-taxonomy-body';
-export {
-	ColorPresetTaxonomyBridge,
-	type ColorPresetTaxonomyBridgeProps,
-} from '../colors/color-preset-taxonomy-bridge';
 export {
 	TaxonomyGroupHeader,
 	isTaxonomyPopoverOpenEvent,

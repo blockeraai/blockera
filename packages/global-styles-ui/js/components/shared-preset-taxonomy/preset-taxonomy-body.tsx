@@ -3,7 +3,6 @@
  */
 import type { ElementType, ReactNode } from 'react';
 import { useCallback, useContext } from '@wordpress/element';
-import type { Color } from '@wordpress/global-styles-engine';
 
 /**
  * Blockera dependencies
@@ -14,45 +13,53 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import type { PresetFieldsPropsResolver } from '../components/preset-group';
-import type { TaxonomyGroupBranch } from '../components/preset-taxonomy/types';
+import type { PresetFieldsPropsResolver } from '../preset-group';
+import type { TaxonomyGroupBranch } from '../preset-taxonomy/types';
 import {
 	TaxonomyCategoryAccordion,
 	TaxonomyGroupHeader,
-} from '../components/preset-taxonomy-ui';
-import { PresetTaxonomyPopoverRow } from '../components/shared-preset-taxonomy';
-import { findRepeaterItemIdBySlug } from './utils';
-import { usePresetVariationsStorage } from '../context/preset-variations-context';
-import { taxonomyCategoryHasBaseWithShadeVariations } from './color-taxonomy-category-closed-preview';
+} from '../preset-taxonomy-ui';
+import { usePresetVariationsStorage } from '../../context/preset-variations-context';
+import { PresetTaxonomyPopoverRow } from './preset-taxonomy-popover-row';
+import { findRepeaterItemIdBySlug } from './preset-taxonomy-utils';
 
-export type ColorPresetTaxonomyBodyProps = {
-	tree: TaxonomyGroupBranch<Color & Record<string, unknown>>[];
+export type PresetTaxonomyBodyProps<TPreset extends Record<string, unknown>> = {
+	tree: TaxonomyGroupBranch<TPreset>[];
 	origin: string;
 	PresetFields: ElementType;
 	repeaterItemHeader: ElementType;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
-	renderTaxonomyCategoryClosedPreview?: (
-		presets: Array<Color & Record<string, unknown>>
-	) => ReactNode;
+	renderTaxonomyCategoryClosedPreview?: (presets: TPreset[]) => ReactNode;
+	/**
+	 * When true alongside taxonomy `showPreview`, drives accordion preview visibility
+	 * (e.g. persisted variation rows not reflected in declarations alone).
+	 */
+	augmentCategoryShowPreview?: (
+		presets: TPreset[],
+		fullItems: TPreset[]
+	) => boolean;
 };
 
-export function ColorPresetTaxonomyBody({
+export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 	tree,
 	origin,
 	PresetFields,
 	repeaterItemHeader,
 	presetFieldsPropsResolver,
 	renderTaxonomyCategoryClosedPreview,
-}: ColorPresetTaxonomyBodyProps) {
+	augmentCategoryShowPreview,
+}: PresetTaxonomyBodyProps<TPreset>) {
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<string, { slug?: string }>;
 	};
-	const { fullItems } = usePresetVariationsStorage<Color>();
+	const { fullItems } = usePresetVariationsStorage<TPreset>();
 
 	const resolveItemId = useCallback(
 		(slug: string) => findRepeaterItemIdBySlug(repeaterItems, slug) ?? slug,
 		[repeaterItems]
 	);
+
+	const augmentPreview = augmentCategoryShowPreview ?? (() => false);
 
 	return (
 		<div
@@ -96,10 +103,7 @@ export function ColorPresetTaxonomyBody({
 								title={cat.name}
 								showPreview={
 									cat.showPreview ||
-									taxonomyCategoryHasBaseWithShadeVariations(
-										cat.directPresets,
-										fullItems
-									)
+									augmentPreview(cat.directPresets, fullItems)
 								}
 								renderClosedHeaderPreview={
 									renderTaxonomyCategoryClosedPreview
@@ -131,7 +135,7 @@ export function ColorPresetTaxonomyBody({
 										title={sub.name}
 										showPreview={
 											sub.showPreview ||
-											taxonomyCategoryHasBaseWithShadeVariations(
+											augmentPreview(
 												sub.presets,
 												fullItems
 											)

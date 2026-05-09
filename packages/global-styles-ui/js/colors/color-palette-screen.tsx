@@ -34,7 +34,7 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
-	ColorPresetTaxonomyBridge,
+	PresetTaxonomyBridge,
 	buildTaxonomyTree,
 	mergeSimpleRepeaterIntoFullPalette,
 	partitionPresetsForTaxonomyUi,
@@ -49,7 +49,10 @@ import {
 	stripRedundantPaletteShadeBase,
 } from './utils';
 import { ColorPresetOpener } from './color-preset-opener';
-import { ColorTaxonomyCategoryClosedPreview } from './color-taxonomy-category-closed-preview';
+import {
+	ColorTaxonomyCategoryClosedPreview,
+	taxonomyCategoryHasBaseWithShadeVariations,
+} from './color-taxonomy-category-closed-preview';
 import { ColorPresetPreviewUsageProvider } from './color-preset-preview-context';
 import { ColorPresetFields } from './color-preset-fields';
 import { ColorShadesRepeaterItem } from './color-shades-repeater-item';
@@ -238,6 +241,32 @@ function ColorGroupComponent({
 		[mainColors]
 	);
 
+	const mergeTaxonomyRepeaterIntoPersisted = useCallback(
+		(
+			payload: object,
+			baselineItems: Array<Color & Record<string, unknown>>
+		) => {
+			const baseline = baselineItems as Color[];
+			const nextTaxonomy = convertRepeaterValueToColors(
+				payload,
+				baseline
+			);
+			const bySlug = new Map(
+				nextTaxonomy.map((r) => [String(r.slug ?? ''), r])
+			);
+			const mergedFull = baseline.map((row) => {
+				const slug = String(row.slug ?? '');
+				const rep = bySlug.get(slug);
+				return (rep ?? row) as Color;
+			});
+			return mergeColorPaletteWithKeptShades(
+				baseline,
+				mergedFull
+			) as Array<Color & Record<string, unknown>>;
+		},
+		[]
+	);
+
 	const renderTaxonomyCategoryClosedPreview = useCallback(
 		(presets: Array<Color & Record<string, unknown>>) => (
 			<ColorTaxonomyCategoryClosedPreview presets={presets} />
@@ -264,9 +293,9 @@ function ColorGroupComponent({
 	);
 
 	const variationsContextValue = useMemo(
-		(): PresetVariationsContextValue<Color> => ({
+		(): PresetVariationsContextValue<unknown> => ({
 			origin,
-			setFullItems: setFullPalette,
+			setFullItems: (next) => setFullPalette(next as Color[]),
 			fullItems: colors,
 		}),
 		[origin, colors, setFullPalette]
@@ -285,14 +314,20 @@ function ColorGroupComponent({
 			)}
 			<PresetVariationsContext.Provider value={variationsContextValue}>
 				{showTaxonomyUi && taxonomyTree.length > 0 ? (
-					<ColorPresetTaxonomyBridge
+					<PresetTaxonomyBridge<Color & Record<string, unknown>>
 						controlName={controlName}
-						mainColors={
+						mainRepeaterValue={
 							taxonomyBridgeMainColors as Array<
 								Color & Record<string, unknown>
 							>
 						}
-						colorsForShadeMerge={colors}
+						baselineItems={
+							colors as Array<Color & Record<string, unknown>>
+						}
+						mergeRepeaterPayloadIntoPersisted={
+							mergeTaxonomyRepeaterIntoPersisted
+						}
+						onPersistItems={setFullPalette}
 						tree={taxonomyTree}
 						origin={origin}
 						defaultRepeaterItemShape={taxonomyRepeaterDefaults}
@@ -303,9 +338,11 @@ function ColorGroupComponent({
 						presetFieldsPropsResolver={
 							colorPresetFieldsPropsResolver
 						}
-						onPersistPalette={setFullPalette}
 						renderTaxonomyCategoryClosedPreview={
 							renderTaxonomyCategoryClosedPreview
+						}
+						augmentCategoryShowPreview={
+							taxonomyCategoryHasBaseWithShadeVariations
 						}
 					/>
 				) : null}
