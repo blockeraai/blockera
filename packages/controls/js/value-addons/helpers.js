@@ -834,3 +834,37 @@ export function getDeletedItemInfo(item: ValueAddon): {
 
 	return result;
 }
+
+/** Info payload for the variable deleted-state popover when a plain stored theme.json preset slug is missing from merged features. */
+export function getDeletedPlainThemeJsonPresetInfo(slug: string): {
+	name: string,
+	id: string,
+	value: string,
+	referenceType: string,
+	referenceName: string,
+	tooltip: string,
+	before: string,
+	after: string,
+	after2: string | MixedElement,
+} {
+	return {
+		name: slug,
+		id: '',
+		value: __(
+			'Not defined in the merged theme styles anymore.',
+			'blockera'
+		),
+		referenceType: 'preset',
+		referenceName: __('Block Editor', 'blockera'),
+		tooltip: '',
+		before: __(
+			'This theme preset slug is no longer present in theme.json for this control.',
+			'blockera'
+		),
+		after: __(
+			'You have the option to either switch it with another variable or unlink it to clear this reference.',
+			'blockera'
+		),
+		after2: '',
+	};
+}

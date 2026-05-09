@@ -16,7 +16,11 @@ import { Icon } from '@blockera/icons';
  */
 import { Button, Flex, Popover, Tooltip } from '../../../';
 import type { ValueAddonControlProps } from '../control/types';
-import { getDeletedItemInfo } from '../../helpers';
+import {
+	getDeletedItemInfo,
+	getDeletedPlainThemeJsonPresetInfo,
+} from '../../helpers';
+import { hasThemeJsonPlainPresetSlug } from '../../utils';
 
 export default function ({
 	controlProps,
@@ -25,7 +29,16 @@ export default function ({
 	controlProps: ValueAddonControlProps,
 	popoverOffset?: number,
 }): Element<any> {
-	const deletedItem = getDeletedItemInfo(controlProps.value);
+	const deletedItem =
+		controlProps.isDeletedPlainThemeJsonPreset &&
+		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug)
+			? getDeletedPlainThemeJsonPresetInfo(
+					controlProps.themeJsonPlainPresetSlug || ''
+				)
+			: getDeletedItemInfo(controlProps.value);
+
+	const resolvedBoldLabel =
+		deletedItem.name !== '' ? deletedItem.name : deletedItem.id;
 
 	return (
 		<Popover
@@ -57,9 +70,7 @@ export default function ({
 								color: 'var(--blockera-value-addon-deleted-color)',
 							}}
 						>
-							{deletedItem.name !== ''
-								? controlProps.value?.settings?.name
-								: controlProps.value?.settings?.id}
+							{resolvedBoldLabel}
 						</b>
 					</Flex>
 
