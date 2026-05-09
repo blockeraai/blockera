@@ -34,7 +34,7 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
-	ColorPresetTaxonomySection,
+	ColorPresetTaxonomyBridge,
 	buildTaxonomyTree,
 	mergeSimpleRepeaterIntoFullPalette,
 	partitionPresetsForTaxonomyUi,
@@ -54,9 +54,9 @@ import { ColorPresetPreviewUsageProvider } from './color-preset-preview-context'
 import { ColorPresetFields } from './color-preset-fields';
 import { ColorShadesRepeaterItem } from './color-shades-repeater-item';
 import {
-	ColorPaletteVariationsContext,
-	type ColorPaletteVariationsContextValue,
-} from './color-palette-variations-context';
+	PresetVariationsContext,
+	type PresetVariationsContextValue,
+} from '../context/preset-variations-context';
 import type { ColorPresetPreviewUsage } from '../preset-preview/injected-helpers';
 import { filterVariationsByBase } from './color-palette-variations-utils';
 
@@ -264,10 +264,10 @@ function ColorGroupComponent({
 	);
 
 	const variationsContextValue = useMemo(
-		(): ColorPaletteVariationsContextValue => ({
+		(): PresetVariationsContextValue<Color> => ({
 			origin,
-			setFullPalette,
-			fullPalette: colors,
+			setFullItems: setFullPalette,
+			fullItems: colors,
 		}),
 		[origin, colors, setFullPalette]
 	);
@@ -283,11 +283,9 @@ function ColorGroupComponent({
 					onConfirm={handleResetColors}
 				/>
 			)}
-			<ColorPaletteVariationsContext.Provider
-				value={variationsContextValue}
-			>
+			<PresetVariationsContext.Provider value={variationsContextValue}>
 				{showTaxonomyUi && taxonomyTree.length > 0 ? (
-					<ColorPresetTaxonomySection
+					<ColorPresetTaxonomyBridge
 						controlName={controlName}
 						mainColors={
 							taxonomyBridgeMainColors as Array<
@@ -331,7 +329,7 @@ function ColorGroupComponent({
 						partition.simplePresets.length === 0
 					}
 				/>
-			</ColorPaletteVariationsContext.Provider>
+			</PresetVariationsContext.Provider>
 		</>
 	);
 }

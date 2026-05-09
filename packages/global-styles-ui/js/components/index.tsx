@@ -18,7 +18,21 @@ export { FallbackPresetContent } from './fallback-preset-content';
 export { default as ConfirmResetPresetDialog } from './confirm-reset-preset-dialog';
 export { createPresetFieldsPropsResolver } from './create-preset-fields-props-resolver';
 export * from './preset-taxonomy';
-export { ColorPresetTaxonomySection } from '../colors/color-preset-taxonomy-section';
+export {
+	PresetTaxonomySection,
+	PresetTaxonomyPopoverRow,
+	type PresetTaxonomySectionProps,
+	type PresetTaxonomySectionRepeaterContextValue,
+	type PresetTaxonomyPopoverRowProps,
+} from './shared-preset-taxonomy';
+export {
+	ColorPresetTaxonomyBody,
+	type ColorPresetTaxonomyBodyProps,
+} from '../colors/color-preset-taxonomy-body';
+export {
+	ColorPresetTaxonomyBridge,
+	type ColorPresetTaxonomyBridgeProps,
+} from '../colors/color-preset-taxonomy-bridge';
 export {
 	TaxonomyGroupHeader,
 	isTaxonomyPopoverOpenEvent,

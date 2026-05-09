@@ -35,7 +35,7 @@ import {
 	COLOR_SHADE_STEPS,
 	generateColorShades,
 } from './color-shades-generator';
-import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import {
 	findRepeaterItemIdBySlug,
 	parsePaletteShadeSlug,
@@ -96,24 +96,18 @@ function ColorPresetShadeStackHeaderComponent({
 	size?: number;
 	children?: ReactNode;
 }) {
-	const { fullPalette } = useColorPaletteVariationsStorage();
+	const { fullItems } = usePresetVariationsStorage<Color>();
 	const stackRender = useMemo(() => {
-		if (filterVariationsByBase(fullPalette, baseSlug).length === 0) {
+		if (filterVariationsByBase(fullItems, baseSlug).length === 0) {
 			return null;
 		}
-		const ramp = getDisplayShadeRamp(fullPalette, baseSlug, mainPreset);
+		const ramp = getDisplayShadeRamp(fullItems, baseSlug, mainPreset);
 		const hexByStep = variationsToStackMap(ramp);
 		const baselineHexByStep = generateColorShades(
 			mainPreset.color ?? '#000000'
 		);
 		return { hexByStep, baselineHexByStep, steps: COLOR_SHADE_STEPS };
-	}, [
-		fullPalette,
-		baseSlug,
-		mainPreset.slug,
-		mainPreset.name,
-		mainPreset.color,
-	]);
+	}, [fullItems, baseSlug, mainPreset]);
 
 	if (!stackRender) {
 		return null;
@@ -218,7 +212,7 @@ function ColorShadesRepeaterItemComponent({
 	};
 
 	const colorItem = item as VariableType & { color?: string };
-	const { fullPalette } = useColorPaletteVariationsStorage();
+	const { fullItems } = usePresetVariationsStorage<Color>();
 
 	/** Parent row slug (base); nested shade rows receive `baseSlug` in preset fields. */
 	const parentSlug = String(colorItem.slug ?? '');
@@ -227,14 +221,14 @@ function ColorShadesRepeaterItemComponent({
 		name: String(colorItem.name ?? ''),
 		color: colorItem.color,
 	};
-	const storedForBase = filterVariationsByBase(fullPalette, parentSlug);
+	const storedForBase = filterVariationsByBase(fullItems, parentSlug);
 	const showStack = storedForBase.length > 0;
 
 	if (!showStack) {
 		return null;
 	}
 
-	const forBase = getDisplayShadeRamp(fullPalette, parentSlug, mainPreset);
+	const forBase = getDisplayShadeRamp(fullItems, parentSlug, mainPreset);
 
 	return forBase.map((variation) => {
 		const variationSlug = String(variation.slug ?? '');

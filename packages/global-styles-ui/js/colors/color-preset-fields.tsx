@@ -59,7 +59,7 @@ import {
 	COLOR_SHADE_STEPS,
 	generateColorShades,
 } from './color-shades-generator';
-import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import type { VariableType } from '../components/types';
 import {
 	isShadePaletteColor,
@@ -98,10 +98,10 @@ const chromelessColorFieldProps = {
 };
 
 function findMainColorPresetByBaseSlug(
-	fullPalette: Color[],
+	allColors: Color[],
 	baseSlug: string
 ): Color | undefined {
-	return fullPalette.find(
+	return allColors.find(
 		(c) =>
 			!isShadePaletteColor(c as Color & Record<string, unknown>) &&
 			String(c.slug ?? '') === baseSlug
@@ -109,10 +109,10 @@ function findMainColorPresetByBaseSlug(
 }
 
 function filterOutShadeVariationsForBase(
-	fullPalette: Color[],
+	allColors: Color[],
 	baseSlug: string
 ): Color[] {
-	return fullPalette.filter((c) => {
+	return allColors.filter((c) => {
 		const p = parsePaletteShadeSlug(String(c.slug ?? ''));
 		return !p || p.baseSlug !== baseSlug;
 	});
@@ -264,7 +264,7 @@ function resolveRepeaterItemIdForColorUpdates(
 	colorItem: VariableType & { color?: string },
 	presetId: string | number,
 	colorsRepeater: Record<string, { slug?: string }> | undefined,
-	fullPalette: Color[] | undefined
+	allColors: Color[] | undefined
 ): string | number {
 	const slug = String(colorItem.slug ?? '');
 	const parsedShade = parsePaletteShadeSlug(slug);
@@ -282,7 +282,7 @@ function resolveRepeaterItemIdForColorUpdates(
 	if (!isShadePaletteColor(colorItem as Color & Record<string, unknown>)) {
 		return bySlug ?? presetId;
 	}
-	const inFull = fullPalette?.some((c) => String(c.slug ?? '') === slug);
+	const inFull = allColors?.some((c) => String(c.slug ?? '') === slug);
 	if (!inFull) {
 		return presetId;
 	}
@@ -344,11 +344,11 @@ function ColorPresetFieldsComponent({
 	/** Anchor 500 is stored on the main preset; treat like main for UI (shades toggle, stack). */
 	const isShadeRow = isShadePalette && !isAnchorShadeRow;
 	const presetLocked = !useCanEditGlobalStyles();
-	const { fullPalette, setFullPalette } = useColorPaletteVariationsStorage();
+	const { fullItems, setFullItems } = usePresetVariationsStorage<Color>();
 
 	const storedShadesForBase = useMemo(
-		() => filterVariationsByBase(fullPalette, effectiveBaseSlug),
-		[fullPalette, effectiveBaseSlug]
+		() => filterVariationsByBase(fullItems, effectiveBaseSlug),
+		[fullItems, effectiveBaseSlug]
 	);
 	const shadesSaved = storedShadesForBase.length > 0;
 
@@ -357,10 +357,9 @@ function ColorPresetFieldsComponent({
 			return null;
 		}
 		return (
-			findMainColorPresetByBaseSlug(fullPalette, effectiveBaseSlug) ??
-			null
+			findMainColorPresetByBaseSlug(fullItems, effectiveBaseSlug) ?? null
 		);
-	}, [isAnchorShadeRow, fullPalette, effectiveBaseSlug]);
+	}, [isAnchorShadeRow, fullItems, effectiveBaseSlug]);
 
 	const displayRampMain = useMemo(() => {
 		if (!isShadeRow) {
@@ -379,7 +378,7 @@ function ColorPresetFieldsComponent({
 			};
 		}
 		const main = findMainColorPresetByBaseSlug(
-			fullPalette,
+			fullItems,
 			effectiveBaseSlug
 		);
 		return {
@@ -390,7 +389,7 @@ function ColorPresetFieldsComponent({
 	}, [
 		isShadeRow,
 		isAnchorShadeRow,
-		fullPalette,
+		fullItems,
 		effectiveBaseSlug,
 		mainPresetRow,
 		colorItem.name,
@@ -437,12 +436,12 @@ function ColorPresetFieldsComponent({
 		() =>
 			shadesSaved
 				? getDisplayShadeRamp(
-						fullPalette,
+						fullItems,
 						effectiveBaseSlug,
 						displayRampMain
 					)
 				: [],
-		[shadesSaved, fullPalette, effectiveBaseSlug, displayRampMain]
+		[shadesSaved, fullItems, effectiveBaseSlug, displayRampMain]
 	);
 
 	/** Generated preview only — not persisted until “Enable Color Shades” is on. */
@@ -477,9 +476,9 @@ function ColorPresetFieldsComponent({
 				colorItem,
 				presetId,
 				colors as Record<string, { slug?: string }> | undefined,
-				fullPalette
+				fullItems
 			),
-		[colorItem, presetId, colors, fullPalette]
+		[colorItem, presetId, colors, fullItems]
 	);
 
 	const [shadeConsentOpen, setShadeConsentOpen] = useState(false);
@@ -488,7 +487,7 @@ function ColorPresetFieldsComponent({
 	const applyShadeToggle = useCallback(
 		(enabled: boolean) => {
 			const withoutBaseShades = filterOutShadeVariationsForBase(
-				fullPalette,
+				fullItems,
 				effectiveBaseSlug
 			);
 			if (enabled) {
@@ -503,17 +502,14 @@ function ColorPresetFieldsComponent({
 					},
 					shades
 				);
-				setFullPalette([
-					...withoutBaseShades,
-					...rows.map(valueCleanup),
-				]);
+				setFullItems([...withoutBaseShades, ...rows.map(valueCleanup)]);
 			} else {
-				setFullPalette(withoutBaseShades);
+				setFullItems(withoutBaseShades);
 			}
 		},
 		[
-			fullPalette,
-			setFullPalette,
+			fullItems,
+			setFullItems,
 			effectiveBaseSlug,
 			colorItem,
 			displayRampMain,
@@ -579,7 +575,7 @@ function ColorPresetFieldsComponent({
 					String(COLOR_SHADE_ANCHOR_STEP)
 			) {
 				const mainRow = findMainColorPresetByBaseSlug(
-					fullPalette,
+					fullItems,
 					anchorParsed.baseSlug
 				);
 				if (mainRow) {
@@ -609,7 +605,7 @@ function ColorPresetFieldsComponent({
 			repeaterItemIdForUpdates,
 			colorItem,
 			colors,
-			fullPalette,
+			fullItems,
 		]
 	);
 
@@ -624,7 +620,7 @@ function ColorPresetFieldsComponent({
 			}
 
 			const mainMeta = findMainColorPresetByBaseSlug(
-				fullPalette,
+				fullItems,
 				effectiveBaseSlug
 			);
 			const presetName = String(mainMeta?.name ?? colorItem.name);
@@ -634,7 +630,7 @@ function ColorPresetFieldsComponent({
 				newValue
 			);
 			const withoutShades = filterOutShadeVariationsForBase(
-				fullPalette,
+				fullItems,
 				effectiveBaseSlug
 			);
 			const withUpdatedMain = withoutShades.map((c) =>
@@ -642,7 +638,7 @@ function ColorPresetFieldsComponent({
 					? ({ ...c, color: newValue } as Color)
 					: c
 			);
-			setFullPalette([...withUpdatedMain, ...rebuilt]);
+			setFullItems([...withUpdatedMain, ...rebuilt]);
 		},
 		[
 			updateColorViaRepeater,
@@ -650,8 +646,8 @@ function ColorPresetFieldsComponent({
 			storedShadesForBase.length,
 			effectiveBaseSlug,
 			colorItem.name,
-			fullPalette,
-			setFullPalette,
+			fullItems,
+			setFullItems,
 		]
 	);
 
@@ -665,12 +661,12 @@ function ColorPresetFieldsComponent({
 				return;
 			}
 			const shadeRowSlug = shadeVariationSlug(effectiveBaseSlug, step);
-			const nextPalette = fullPalette.map((c) =>
+			const nextPalette = fullItems.map((c) =>
 				String(c.slug ?? '') === shadeRowSlug
 					? ({ ...c, color: newValue } as Color)
 					: c
 			);
-			setFullPalette(nextPalette);
+			setFullItems(nextPalette);
 			const sid = findRepeaterItemIdBySlug(
 				colors as Record<string, { slug?: string }> | undefined,
 				shadeRowSlug
@@ -697,8 +693,8 @@ function ColorPresetFieldsComponent({
 			presetLocked,
 			shadesSaved,
 			effectiveBaseSlug,
-			fullPalette,
-			setFullPalette,
+			fullItems,
+			setFullItems,
 			colors,
 			changeRepeaterItem,
 			onChange,

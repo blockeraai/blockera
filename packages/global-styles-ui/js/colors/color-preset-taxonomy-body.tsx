@@ -20,12 +20,12 @@ import {
 	TaxonomyCategoryAccordion,
 	TaxonomyGroupHeader,
 } from '../components/preset-taxonomy-ui';
+import { PresetTaxonomyPopoverRow } from '../components/shared-preset-taxonomy';
 import { findRepeaterItemIdBySlug } from './utils';
-import { ColorPresetTaxonomyPopoverRow } from './color-preset-taxonomy-popover-row';
-import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { taxonomyCategoryHasBaseWithShadeVariations } from './color-taxonomy-category-closed-preview';
 
-export type ColorPresetTaxonomyTreeBodyProps = {
+export type ColorPresetTaxonomyBodyProps = {
 	tree: TaxonomyGroupBranch<Color & Record<string, unknown>>[];
 	origin: string;
 	PresetFields: ElementType;
@@ -36,18 +36,18 @@ export type ColorPresetTaxonomyTreeBodyProps = {
 	) => ReactNode;
 };
 
-export function ColorPresetTaxonomyTreeBody({
+export function ColorPresetTaxonomyBody({
 	tree,
 	origin,
 	PresetFields,
 	repeaterItemHeader,
 	presetFieldsPropsResolver,
 	renderTaxonomyCategoryClosedPreview,
-}: ColorPresetTaxonomyTreeBodyProps) {
+}: ColorPresetTaxonomyBodyProps) {
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<string, { slug?: string }>;
 	};
-	const { fullPalette } = useColorPaletteVariationsStorage();
+	const { fullItems } = usePresetVariationsStorage<Color>();
 
 	const resolveItemId = useCallback(
 		(slug: string) => findRepeaterItemIdBySlug(repeaterItems, slug) ?? slug,
@@ -76,7 +76,7 @@ export function ColorPresetTaxonomyTreeBody({
 						style={{ width: '100%' }}
 					>
 						{group.directPresets.map((preset) => (
-							<ColorPresetTaxonomyPopoverRow
+							<PresetTaxonomyPopoverRow
 								key={String(preset.slug)}
 								item={preset}
 								itemId={resolveItemId(
@@ -98,7 +98,7 @@ export function ColorPresetTaxonomyTreeBody({
 									cat.showPreview ||
 									taxonomyCategoryHasBaseWithShadeVariations(
 										cat.directPresets,
-										fullPalette
+										fullItems
 									)
 								}
 								renderClosedHeaderPreview={
@@ -111,7 +111,7 @@ export function ColorPresetTaxonomyTreeBody({
 								}
 							>
 								{cat.directPresets.map((preset) => (
-									<ColorPresetTaxonomyPopoverRow
+									<PresetTaxonomyPopoverRow
 										key={String(preset.slug)}
 										item={preset}
 										itemId={resolveItemId(
@@ -133,7 +133,7 @@ export function ColorPresetTaxonomyTreeBody({
 											sub.showPreview ||
 											taxonomyCategoryHasBaseWithShadeVariations(
 												sub.presets,
-												fullPalette
+												fullItems
 											)
 										}
 										renderClosedHeaderPreview={
@@ -146,7 +146,7 @@ export function ColorPresetTaxonomyTreeBody({
 										}
 									>
 										{sub.presets.map((preset) => (
-											<ColorPresetTaxonomyPopoverRow
+											<PresetTaxonomyPopoverRow
 												key={String(preset.slug)}
 												item={preset}
 												itemId={resolveItemId(

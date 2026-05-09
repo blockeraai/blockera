@@ -40,7 +40,7 @@ import {
 } from '../components/preset-variable-variations-header';
 import { filterVariationsByBase } from './color-palette-variations-utils';
 import { useColorPresetPreviewUsageFromProvider } from './color-preset-preview-context';
-import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import {
 	ColorShadesRepeaterItem,
 	ColorPresetShadeStackHeader,
@@ -148,7 +148,7 @@ export function ColorPresetOpener({
 	}, [colorItem?.color, colorItem?.type, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
-	const { fullPalette } = useColorPaletteVariationsStorage();
+	const { fullItems } = usePresetVariationsStorage<Color>();
 
 	const baseSlug = String(colorItem.slug ?? '');
 	const isShadeRow = isShadePaletteColor(
@@ -158,8 +158,8 @@ export function ColorPresetOpener({
 		if (isShadeRow) {
 			return 0;
 		}
-		return filterVariationsByBase(fullPalette, baseSlug).length;
-	}, [isShadeRow, fullPalette, baseSlug]);
+		return filterVariationsByBase(fullItems, baseSlug).length;
+	}, [isShadeRow, fullItems, baseSlug]);
 
 	const mainPresetForStack = useMemo(
 		() => ({
@@ -190,13 +190,13 @@ export function ColorPresetOpener({
 		: baseSlug;
 
 	const mainPresetHexForRamp = useMemo(() => {
-		const main = fullPalette.find(
+		const main = fullItems.find(
 			(c) =>
 				!isShadePaletteColor(c as Color & Record<string, unknown>) &&
 				String(c.slug ?? '') === slugForMainLookup
 		);
 		return String(main?.color ?? colorItem.color ?? '#000000');
-	}, [fullPalette, slugForMainLookup, colorItem.color]);
+	}, [fullItems, slugForMainLookup, colorItem.color]);
 
 	const baselineHexByStep = useMemo(
 		() => generateColorShades(mainPresetHexForRamp),

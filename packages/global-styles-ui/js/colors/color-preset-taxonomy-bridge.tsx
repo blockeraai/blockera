@@ -8,27 +8,21 @@ import type { Color } from '@wordpress/global-styles-engine';
 /**
  * Blockera dependencies
  */
-import {
-	BaseControl,
-	cleanupRepeater,
-	ControlContextProvider,
-} from '@blockera/controls';
+import { cleanupRepeater } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
-import { PresetStateContainer } from '../components/preset-state-container';
 import type { PresetFieldsPropsResolver } from '../components/preset-group';
 import type { TaxonomyGroupBranch } from '../components/preset-taxonomy/types';
-import { TaxonomyRepeaterBridgeInner } from '../components/preset-taxonomy-ui';
-import '../components/preset-taxonomy-ui/style.scss';
+import { PresetTaxonomySection } from '../components/shared-preset-taxonomy';
 import {
 	convertRepeaterValueToColors,
 	mergeColorPaletteWithKeptShades,
 } from './utils';
-import { ColorPresetTaxonomyTreeBody } from './color-preset-taxonomy-tree-body';
+import { ColorPresetTaxonomyBody } from './color-preset-taxonomy-body';
 
-export type ColorPresetTaxonomySectionProps = {
+export type ColorPresetTaxonomyBridgeProps = {
 	controlName: string;
 	mainColors: Array<Color & Record<string, unknown>>;
 	colorsForShadeMerge: Color[];
@@ -39,16 +33,13 @@ export type ColorPresetTaxonomySectionProps = {
 	repeaterItemHeader: ElementType;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
 	onPersistPalette: (colors: Color[]) => void;
-	/**
-	 * Closed-state accordion header preview (inline-end). Omit to suppress aggregated previews.
-	 * Consumers supply preset-feature UI (e.g. color palette stack preview component).
-	 */
 	renderTaxonomyCategoryClosedPreview?: (
 		presets: Array<Color & Record<string, unknown>>
 	) => ReactNode;
 };
 
-export function ColorPresetTaxonomySection({
+/** Color preset taxonomy entry: bridge persistence plus taxonomy tree body. */
+export function ColorPresetTaxonomyBridge({
 	controlName,
 	mainColors,
 	colorsForShadeMerge,
@@ -60,7 +51,7 @@ export function ColorPresetTaxonomySection({
 	presetFieldsPropsResolver,
 	onPersistPalette,
 	renderTaxonomyCategoryClosedPreview,
-}: ColorPresetTaxonomySectionProps) {
+}: ColorPresetTaxonomyBridgeProps) {
 	const bridgeControlId = `${controlName}-taxonomy-tree`;
 
 	const cleanRepeaterForPersist = useCallback((raw: unknown) => {
@@ -119,38 +110,23 @@ export function ColorPresetTaxonomySection({
 	);
 
 	return (
-		<PresetStateContainer activeColor="#1ca120">
-			<div className="blockera-preset-taxonomy-tree">
-				<ControlContextProvider
-					value={repeaterContextValue}
-					storeName={'blockera/controls/repeater'}
-				>
-					<BaseControl
-						controlName={bridgeControlId}
-						columns="columns-1"
-					>
-						<TaxonomyRepeaterBridgeInner
-							controlId={bridgeControlId}
-							defaultRepeaterItemValue={defaultRepeaterItemShape}
-							valueCleanup={cleanRepeaterForPersist}
-							handleRepeaterRootChange={handleRepeaterRootChange}
-						>
-							<ColorPresetTaxonomyTreeBody
-								tree={tree}
-								origin={origin}
-								PresetFields={PresetFields}
-								repeaterItemHeader={repeaterItemHeader}
-								presetFieldsPropsResolver={
-									presetFieldsPropsResolver
-								}
-								renderTaxonomyCategoryClosedPreview={
-									renderTaxonomyCategoryClosedPreview
-								}
-							/>
-						</TaxonomyRepeaterBridgeInner>
-					</BaseControl>
-				</ControlContextProvider>
-			</div>
-		</PresetStateContainer>
+		<PresetTaxonomySection
+			bridgeControlId={bridgeControlId}
+			repeaterContextValue={repeaterContextValue}
+			defaultRepeaterItemShape={defaultRepeaterItemShape}
+			cleanRepeaterForPersist={cleanRepeaterForPersist}
+			handleRepeaterRootChange={handleRepeaterRootChange}
+		>
+			<ColorPresetTaxonomyBody
+				tree={tree}
+				origin={origin}
+				PresetFields={PresetFields}
+				repeaterItemHeader={repeaterItemHeader}
+				presetFieldsPropsResolver={presetFieldsPropsResolver}
+				renderTaxonomyCategoryClosedPreview={
+					renderTaxonomyCategoryClosedPreview
+				}
+			/>
+		</PresetTaxonomySection>
 	);
 }

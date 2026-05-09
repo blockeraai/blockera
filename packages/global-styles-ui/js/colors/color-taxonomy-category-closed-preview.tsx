@@ -12,7 +12,7 @@ import { ColorIndicatorStack } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { filterVariationsByBase } from './color-palette-variations-utils';
 import { ColorPresetShadeStackHeader } from './color-shades-repeater-item';
 import { isShadePaletteColor } from './utils';
@@ -49,17 +49,14 @@ export type ColorTaxonomyCategoryClosedPreviewProps = {
 /** True when any non-shade preset in the slice has persisted shade rows on the full palette. */
 export function taxonomyCategoryHasBaseWithShadeVariations(
 	presets: Array<Color & Record<string, unknown>>,
-	fullPalette: Color[]
+	fullItems: Color[]
 ): boolean {
 	for (const p of presets) {
 		if (isShadePaletteColor(p as Color & Record<string, unknown>)) {
 			continue;
 		}
 		const slug = String(p.slug ?? '');
-		if (
-			slug !== '' &&
-			filterVariationsByBase(fullPalette, slug).length > 0
-		) {
+		if (slug !== '' && filterVariationsByBase(fullItems, slug).length > 0) {
 			return true;
 		}
 	}
@@ -76,7 +73,7 @@ export const ColorTaxonomyCategoryClosedPreview = memo(
 	function ColorTaxonomyCategoryClosedPreview({
 		presets,
 	}: ColorTaxonomyCategoryClosedPreviewProps) {
-		const { fullPalette } = useColorPaletteVariationsStorage();
+		const { fullItems } = usePresetVariationsStorage<Color>();
 
 		const basePresets = useMemo(
 			() =>
@@ -94,13 +91,13 @@ export const ColorTaxonomyCategoryClosedPreview = memo(
 				const slug = String(p.slug ?? '');
 				if (
 					slug !== '' &&
-					filterVariationsByBase(fullPalette, slug).length > 0
+					filterVariationsByBase(fullItems, slug).length > 0
 				) {
 					return p;
 				}
 			}
 			return null;
-		}, [basePresets, fullPalette]);
+		}, [basePresets, fullItems]);
 
 		const mergedStackEntries = useMemo(() => {
 			const out: Array<string | { value: string; type: string }> = [];

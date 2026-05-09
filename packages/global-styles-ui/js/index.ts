@@ -10,6 +10,11 @@ export {
 	mergeBaseAndUserConfigs,
 	useGlobalStylesContext,
 } from './context/global-styles-provider';
+export {
+	PresetVariationsContext,
+	usePresetVariationsStorage,
+	type PresetVariationsContextValue,
+} from './context/preset-variations-context';
 export { getVariationClassName } from './theme-json-utils';
 export { useGlobalSetting, useGlobalStyle } from './context/global-style-hooks';
 
