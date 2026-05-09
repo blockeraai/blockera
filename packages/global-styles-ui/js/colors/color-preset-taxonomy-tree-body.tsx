@@ -22,6 +22,8 @@ import {
 } from '../components/preset-taxonomy-ui/basic';
 import { findRepeaterItemIdBySlug } from './utils';
 import { ColorPresetTaxonomyPopoverRow } from './color-preset-taxonomy-popover-row';
+import { useColorPaletteVariationsStorage } from './color-palette-variations-context';
+import { taxonomyCategoryHasBaseWithShadeVariations } from './color-taxonomy-category-closed-preview';
 
 export type ColorPresetTaxonomyTreeBodyProps = {
 	tree: TaxonomyGroupBranch<Color & Record<string, unknown>>[];
@@ -45,6 +47,7 @@ export function ColorPresetTaxonomyTreeBody({
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<string, { slug?: string }>;
 	};
+	const { fullPalette } = useColorPaletteVariationsStorage();
 
 	const resolveItemId = useCallback(
 		(slug: string) => findRepeaterItemIdBySlug(repeaterItems, slug) ?? slug,
@@ -91,7 +94,13 @@ export function ColorPresetTaxonomyTreeBody({
 							<TaxonomyCategoryAccordion
 								key={`${group.slug}-${cat.slug}`}
 								title={cat.name}
-								showPreview={cat.showPreview}
+								showPreview={
+									cat.showPreview ||
+									taxonomyCategoryHasBaseWithShadeVariations(
+										cat.directPresets,
+										fullPalette
+									)
+								}
 								renderClosedHeaderPreview={
 									renderTaxonomyCategoryClosedPreview
 										? () =>
@@ -120,7 +129,13 @@ export function ColorPresetTaxonomyTreeBody({
 									<TaxonomyCategoryAccordion
 										key={`${group.slug}-${cat.slug}-${sub.slug}`}
 										title={sub.name}
-										showPreview={sub.showPreview}
+										showPreview={
+											sub.showPreview ||
+											taxonomyCategoryHasBaseWithShadeVariations(
+												sub.presets,
+												fullPalette
+											)
+										}
 										renderClosedHeaderPreview={
 											renderTaxonomyCategoryClosedPreview
 												? () =>

@@ -46,10 +46,31 @@ export type ColorTaxonomyCategoryClosedPreviewProps = {
 	presets: Array<Color & Record<string, unknown>>;
 };
 
+/** True when any non-shade preset in the slice has persisted shade rows on the full palette. */
+export function taxonomyCategoryHasBaseWithShadeVariations(
+	presets: Array<Color & Record<string, unknown>>,
+	fullPalette: Color[]
+): boolean {
+	for (const p of presets) {
+		if (isShadePaletteColor(p as Color & Record<string, unknown>)) {
+			continue;
+		}
+		const slug = String(p.slug ?? '');
+		if (
+			slug !== '' &&
+			filterVariationsByBase(fullPalette, slug).length > 0
+		) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /**
  * Collapsed taxonomy accordion header preview for palette categories (`show-preview`).
- * Merges base-variable swatches via {@link ColorIndicatorStack}. When any listed variable has
- * shade variations, shows only the **first** variable’s shade ramp (ordered base presets).
+ * Merges base-variable swatches via {@link ColorIndicatorStack}. When any listed base preset has
+ * shade variations, shows that preset’s ramp — the **first** base (in category order) that
+ * reports variations, not merely the first row in the list.
  */
 export const ColorTaxonomyCategoryClosedPreview = memo(
 	function ColorTaxonomyCategoryClosedPreview({
@@ -68,17 +89,18 @@ export const ColorTaxonomyCategoryClosedPreview = memo(
 			[presets]
 		);
 
-		const sectionHasVariations = useMemo(
-			() =>
-				basePresets.some((p) => {
-					const slug = String(p.slug ?? '');
-					return (
-						slug !== '' &&
-						filterVariationsByBase(fullPalette, slug).length > 0
-					);
-				}),
-			[basePresets, fullPalette]
-		);
+		const firstBaseWithVariations = useMemo(() => {
+			for (const p of basePresets) {
+				const slug = String(p.slug ?? '');
+				if (
+					slug !== '' &&
+					filterVariationsByBase(fullPalette, slug).length > 0
+				) {
+					return p;
+				}
+			}
+			return null;
+		}, [basePresets, fullPalette]);
 
 		const mergedStackEntries = useMemo(() => {
 			const out: Array<string | { value: string; type: string }> = [];
@@ -91,17 +113,15 @@ export const ColorTaxonomyCategoryClosedPreview = memo(
 			return out;
 		}, [basePresets]);
 
-		const firstBase = basePresets[0];
-
-		if (sectionHasVariations && firstBase) {
-			const slug = String(firstBase.slug ?? '');
+		if (firstBaseWithVariations) {
+			const slug = String(firstBaseWithVariations.slug ?? '');
 			return (
 				<ColorPresetShadeStackHeader
 					baseSlug={slug}
 					mainPreset={{
 						slug,
-						name: String(firstBase.name ?? ''),
-						color: firstBase.color,
+						name: String(firstBaseWithVariations.name ?? ''),
+						color: firstBaseWithVariations.color,
 					}}
 				/>
 			);
