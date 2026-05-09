@@ -43,4 +43,14 @@ export type ValueAddonControlProps = {
 	 * Value is active or not
 	 */
 	isActive: boolean,
+	/**
+	 * Plain **snake_case** theme.json preset slug when the attribute stores the slug string only.
+	 */
+	themeJsonPlainPresetSlug?: string,
+	/** Block scope for preset resolution (with `getValueAddonRealValue` / merged presets). */
+	themeJsonResolutionBlockName?: string,
+	/** Optional preset bucket key (`color`, `font-size`, …) for lookups. */
+	themeJsonResolutionPresetCssVarInfix?: string,
+	/** Hint for variable icons when showing `themeJsonPlainPresetSlug`. */
+	themeJsonPlainPresetVariableType?: VariableCategory | string,
 };

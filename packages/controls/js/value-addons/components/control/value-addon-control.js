@@ -20,7 +20,11 @@ import { getVariable, STORE_NAME } from '@blockera/data';
  * Internal dependencies
  */
 import { Tooltip } from '../../../';
-import { isValid } from '../../utils';
+import {
+	hasThemeJsonPlainPresetSlug,
+	isAddonUiActive,
+	isValid,
+} from '../../utils';
 import { ValueAddonPointer } from './index';
 import type { ValueAddonControlProps } from './types';
 import { default as EmptyIcon } from '../../icons/empty.svg';
@@ -77,16 +81,31 @@ export default function ({
 				icon = getDynamicValueIcon(controlProps.value?.settings?.type);
 			}
 		}
+	} else if (
+		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug)
+	) {
+		label = controlProps.themeJsonPlainPresetSlug || '';
+		icon = getVariableIcon({
+			type:
+				controlProps.themeJsonPlainPresetVariableType ||
+				controlProps.variableTypes?.[0] ||
+				'color',
+			value: undefined,
+		});
 	}
 
 	let isIconActive = true;
 	if (controlProps.size === 'small') {
-		isIconActive = !isValid(controlProps.value);
+		isIconActive = !isAddonUiActive(
+			controlProps.value,
+			controlProps.themeJsonPlainPresetSlug
+		);
 	}
 
 	const isVariable =
 		controlProps.value?.valueType === 'variable' ||
-		controlProps.isOpen.startsWith('var-');
+		controlProps.isOpen.startsWith('var-') ||
+		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug);
 
 	let tooltipColor = '';
 
@@ -118,7 +137,13 @@ export default function ({
 				<button
 					className={controlClassNames(
 						'value-addon',
-						'type-' + (controlProps.value?.valueType || 'unknown'),
+						'type-' +
+							(controlProps.value?.valueType ||
+								(hasThemeJsonPlainPresetSlug(
+									controlProps.themeJsonPlainPresetSlug
+								)
+									? 'variable'
+									: 'unknown')),
 						'value-addon-size-' + controlProps.size,
 						isIconActive && 'value-addon-with-icon',
 						isDeleted && 'type-deleted',
@@ -130,6 +155,16 @@ export default function ({
 						classNames
 					)}
 					onClick={(event) => {
+						if (
+							hasThemeJsonPlainPresetSlug(
+								controlProps.themeJsonPlainPresetSlug
+							)
+						) {
+							controlProps.setOpen('var-picker');
+							event.preventDefault();
+							return;
+						}
+
 						switch (controlProps.value?.valueType) {
 							case 'variable':
 								controlProps.setOpen(

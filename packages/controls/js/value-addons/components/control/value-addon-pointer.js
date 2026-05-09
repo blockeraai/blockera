@@ -26,7 +26,7 @@ import {
 	VarDeleted,
 	DVSettingsAdvanced,
 } from '../index';
-import { isValid } from '../../utils';
+import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import RemoveIcon from '../../icons/remove';
 import type { ValueAddonControlProps } from './types';
 import DynamicValueIcon from '../../icons/dynamic-value';
@@ -42,8 +42,9 @@ export default function ({
 	pickerProps: Object,
 }): Element<any> {
 	const isVarActive =
-		isValid(controlProps.value) &&
-		controlProps.value?.valueType === 'variable';
+		(isValid(controlProps.value) &&
+			controlProps.value?.valueType === 'variable') ||
+		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug);
 	const isDVActive =
 		isValid(controlProps.value) &&
 		controlProps.value?.valueType === 'dynamic-value';
@@ -203,7 +204,7 @@ export default function ({
 					e.stopPropagation();
 				}}
 				handleVariableModal={(e: SyntheticMouseEvent<EventTarget>) => {
-					if (isValid(controlProps.value)) {
+					if (isVarActive) {
 						controlProps.setOpen('');
 						controlProps.handleOnClickRemove(e);
 					} else {

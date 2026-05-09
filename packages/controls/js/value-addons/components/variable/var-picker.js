@@ -21,7 +21,7 @@ import {
 	getVariableCategory,
 	getVariableIcon,
 } from '../../helpers';
-import { isValid } from '../../utils';
+import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import { ControlContextProvider } from '../../../context';
 import { Button, Flex, Popover, SearchControl } from '../../../libs';
 import { PickerCategory, PickerValueItem } from '../index';
@@ -149,7 +149,12 @@ export default function ({
 							type={presetType}
 							valueType="variable"
 							isCurrent={
-								controlProps.value?.settings?.id === item.id
+								controlProps.value?.settings?.id === item.id ||
+								(hasThemeJsonPlainPresetSlug(
+									controlProps.themeJsonPlainPresetSlug
+								) &&
+									controlProps.themeJsonPlainPresetSlug ===
+										item.id)
 							}
 							icon={getVariableIcon({
 								type: presetType,
@@ -222,7 +227,10 @@ export default function ({
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>
-					{canUnlinkVariable(controlProps.value) && (
+					{(canUnlinkVariable(controlProps.value) ||
+						hasThemeJsonPlainPresetSlug(
+							controlProps.themeJsonPlainPresetSlug
+						)) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
@@ -234,7 +242,10 @@ export default function ({
 						</Button>
 					)}
 
-					{isValid(controlProps.value) && (
+					{(isValid(controlProps.value) ||
+						hasThemeJsonPlainPresetSlug(
+							controlProps.themeJsonPlainPresetSlug
+						)) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}

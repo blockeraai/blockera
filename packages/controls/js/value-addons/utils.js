@@ -10,6 +10,27 @@ export function isValid(value: ValueAddon | string): boolean {
 	return !!value?.isValueAddon;
 }
 
+/** Non-empty `ValueAddonControlProps.themeJsonPlainPresetSlug` (merged theme.json preset slug). */
+export function hasThemeJsonPlainPresetSlug(
+	themeJsonPlainPresetSlug: mixed
+): boolean {
+	return (
+		typeof themeJsonPlainPresetSlug === 'string' &&
+		themeJsonPlainPresetSlug !== ''
+	);
+}
+
+/** Structured value-addon object or plain merged theme.json preset slug (picker / chip UI). */
+export function isAddonUiActive(
+	value: ValueAddon | string,
+	themeJsonPlainPresetSlug?: mixed
+): boolean {
+	//$FlowFixMe
+	return (
+		isValid(value) || hasThemeJsonPlainPresetSlug(themeJsonPlainPresetSlug)
+	);
+}
+
 /**
  * Extracts the fallback value from a CSS var() function
  * Handles nested var() functions recursively

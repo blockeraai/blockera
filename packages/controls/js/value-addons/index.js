@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import { useState, useMemo, useRef } from '@wordpress/element';
 
 /**
@@ -12,10 +12,13 @@ import { useState, useMemo, useRef } from '@wordpress/element';
  */
 import { isObject, isUndefined } from '@blockera/utils';
 import {
+	STORE_NAME,
 	getVariable,
 	type VariableItem,
+	type VariableCategory,
 	type DynamicValueItem,
-	STORE_NAME,
+	wrapExperimentalFeaturesRaw,
+	isThemeJsonVariableDefinedInMergedFeatures,
 } from '@blockera/data';
 
 /**
@@ -45,8 +48,63 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 	} = props;
 	const presetInterface = props.presetInterface;
 
+	const themeJsonResolutionBlockName =
+		props.themeJsonResolutionBlockName ?? '';
+
+	const normalizedVariableTypes: Array<VariableCategory> = (() => {
+		if (Array.isArray(variableTypes)) {
+			return variableTypes;
+		}
+		if (typeof variableTypes === 'string') {
+			return [(variableTypes: VariableCategory)];
+		}
+		return [];
+	})();
+
+	const themeJsonResolutionPresetCssVarInfix =
+		presetInterface?.themeJsonResolutionPresetCssVarInfix ??
+		(normalizedVariableTypes.length === 1
+			? normalizedVariableTypes[0]
+			: undefined);
+
 	const [isOpen, setOpen] = useState('');
 
+	const mergedThemeJsonFeaturesWrapped = useSelect((wpSelect) => {
+		try {
+			const editorSettings =
+				wpSelect('core/block-editor')?.getSettings?.();
+			return wrapExperimentalFeaturesRaw(
+				editorSettings?.__experimentalFeatures
+			);
+		} catch {
+			return undefined;
+		}
+	}, []);
+
+	const strippedRawInput = useMemo(() => {
+		if (typeof inputValue !== 'string') {
+			return '';
+		}
+		return inputValue.endsWith('func')
+			? inputValue.slice(0, -4)
+			: inputValue;
+	}, [inputValue]);
+	const hasPlainThemeJsonStringValueAddon = useMemo(() => {
+		if (strippedRawInput === '') {
+			return false;
+		}
+		return isThemeJsonVariableDefinedInMergedFeatures(
+			mergedThemeJsonFeaturesWrapped,
+			strippedRawInput,
+			themeJsonResolutionBlockName,
+			themeJsonResolutionPresetCssVarInfix
+		);
+	}, [
+		strippedRawInput,
+		mergedThemeJsonFeaturesWrapped,
+		themeJsonResolutionBlockName,
+		themeJsonResolutionPresetCssVarInfix,
+	]);
 	const effectivePickerProps = applyRegisteredPresetPreviewPickerMerge(
 		pickerProps,
 		presetInterface
@@ -130,10 +188,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 				setValue,
 				onChange,
 				types,
-				variableTypes:
-					typeof variableTypes === 'string'
-						? [variableTypes]
-						: variableTypes,
+				variableTypes: normalizedVariableTypes,
 				dynamicValueTypes:
 					typeof dynamicValueTypes === 'string'
 						? [dynamicValueTypes]
@@ -149,6 +204,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 				pointerProps: {},
 				isDeletedVar: false,
 				isDeletedDV: false,
+				isActive: false,
 			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
@@ -178,30 +234,41 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 	};
 
 	const handleOnUnlinkVar = (): void => {
-		if (canUnlinkVariable(value)) {
+		if (hasPlainThemeJsonStringValueAddon) {
 			setValue({
 				isValueAddon: false,
 				valueType: null,
 				name: null,
 				settings: {},
 			});
+			onChange('');
+			setOpen('');
+			return;
+		}
 
-			if (
-				!isUndefined(value?.settings?.value) &&
-				value?.settings?.value !== ''
-			) {
-				const processedValue = extractCssVarValue(
-					value?.settings?.value
-				);
-				onChange(processedValue || value?.settings?.value);
-			} else {
-				const variable = getVariable(
-					value.valueType,
-					value.settings.id
-				);
+		if (!canUnlinkVariable(value)) {
+			return;
+		}
 
-				if (!isUndefined(variable?.value) && variable?.value !== '') {
-					const rawVarValue = variable?.value;
+		setValue({
+			isValueAddon: false,
+			valueType: null,
+			name: null,
+			settings: {},
+		});
+
+		if (
+			!isUndefined(value?.settings?.value) &&
+			value?.settings?.value !== ''
+		) {
+			const processedValue = extractCssVarValue(value?.settings?.value);
+			onChange(processedValue || value?.settings?.value);
+		} else {
+			const variable = getVariable(value.valueType, value.settings.id);
+
+			if (!isUndefined(variable?.value) && variable?.value !== '') {
+				const rawVarValue = variable?.value;
+				if (typeof rawVarValue === 'string') {
 					const processedValue = extractCssVarValue(rawVarValue);
 					const next =
 						processedValue !== undefined && processedValue !== ''
@@ -212,9 +279,9 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 					}
 				}
 			}
-
-			setOpen('');
 		}
+
+		setOpen('');
 	};
 
 	const handleOnClickDV = (data: DynamicValueItem): void => {
@@ -248,8 +315,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		setValue,
 		onChange,
 		types,
-		variableTypes:
-			typeof variableTypes === 'string' ? [variableTypes] : variableTypes,
+		variableTypes: normalizedVariableTypes,
 		dynamicValueTypes:
 			typeof dynamicValueTypes === 'string'
 				? [dynamicValueTypes]
@@ -265,7 +331,21 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		pickerProps: effectivePickerProps,
 		isDeletedVar: false,
 		isDeletedDV: false,
-		isActive: isValid(value),
+		isActive: isValid(value) || hasPlainThemeJsonStringValueAddon,
+		themeJsonPlainPresetSlug: hasPlainThemeJsonStringValueAddon
+			? strippedRawInput
+			: '',
+		themeJsonResolutionBlockName,
+		themeJsonResolutionPresetCssVarInfix:
+			themeJsonResolutionPresetCssVarInfix !== undefined &&
+			themeJsonResolutionPresetCssVarInfix !== null &&
+			String(themeJsonResolutionPresetCssVarInfix) !== ''
+				? String(themeJsonResolutionPresetCssVarInfix)
+				: undefined,
+		themeJsonPlainPresetVariableType:
+			normalizedVariableTypes.length > 0
+				? normalizedVariableTypes[0]
+				: undefined,
 	};
 
 	/**
@@ -299,7 +379,10 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 
 	return {
 		valueAddonClassNames,
-		isSetValueAddon: () => isValid(value) || isOpen !== '',
+		isSetValueAddon: () =>
+			isValid(value) ||
+			isOpen !== '' ||
+			hasPlainThemeJsonStringValueAddon,
 		ValueAddonPointer: StableValueAddonPointer,
 		ValueAddonControl: StableValueAddonControl,
 		valueAddonControlProps: controlProps,

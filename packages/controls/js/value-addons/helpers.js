@@ -24,6 +24,7 @@ import {
 	getRadialGradients,
 	getSpacings,
 	getVariable,
+	resolveThemeJsonVariableStringFromWpEditor,
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
@@ -171,7 +172,10 @@ export function setValueAddon(
 	setState(newValue);
 }
 
-export function getValueAddonRealValue(value: ValueAddon | string | void): any {
+export function getValueAddonRealValue(
+	value: ValueAddon | string | void,
+	options?: {| blockName?: string |} | void
+): any {
 	if (value === undefined) {
 		return '';
 	}
@@ -181,11 +185,17 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 	}
 
 	if (typeof value === 'string') {
-		return value.endsWith('func') ? value.slice(0, -4) : value;
+		const stripped = value.endsWith('func') ? value.slice(0, -4) : value;
+		return resolveThemeJsonVariableStringFromWpEditor(
+			stripped,
+			options?.blockName ?? ''
+		);
 	}
 
 	if (isObject(value)) {
 		if (value?.isValueAddon) {
+			const blockName = options?.blockName ?? '';
+
 			const variable = getVariable(
 				value?.settings?.type,
 				value?.settings?.id
@@ -219,7 +229,10 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 			if (currentValue && currentVar) {
 				// Structured preset payloads (objects) are not valid var() fallbacks; emit token only.
 				if (typeof currentValue === 'object' && currentValue !== null) {
-					return `var(${currentVar})`;
+					return resolveThemeJsonVariableStringFromWpEditor(
+						`var(${currentVar})`,
+						blockName
+					);
 				}
 
 				// If the value already starts with var({$value['settings']['var']}), return it as is
@@ -227,18 +240,33 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 					typeof currentValue === 'string' &&
 					currentValue.startsWith(`var(${currentVar}`)
 				) {
-					return currentValue;
+					return resolveThemeJsonVariableStringFromWpEditor(
+						currentValue,
+						blockName
+					);
 				}
 
-				return `var(${currentVar}, ${String(currentValue)})`;
+				return resolveThemeJsonVariableStringFromWpEditor(
+					`var(${currentVar}, ${String(currentValue)})`,
+					blockName
+				);
 			}
 
 			if (currentValue) {
+				if (typeof currentValue === 'string') {
+					return resolveThemeJsonVariableStringFromWpEditor(
+						currentValue,
+						blockName
+					);
+				}
 				return currentValue;
 			}
 
 			if (currentVar) {
-				return `var(${currentVar})`;
+				return resolveThemeJsonVariableStringFromWpEditor(
+					`var(${currentVar})`,
+					blockName
+				);
 			}
 		}
 

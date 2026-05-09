@@ -23,7 +23,7 @@ import { getVariable, STORE_NAME } from '@blockera/data';
 /**
  * Internal dependencies
  */
-import { isValid } from '../../utils';
+import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import type { ValueAddon } from '../../types';
 import { default as EmptyIcon } from '../../icons/empty.svg';
 import { default as DeletedIcon } from '../../icons/deleted.svg';
@@ -32,14 +32,47 @@ import { getDynamicValueIcon, getVariableIcon } from '../../helpers';
 export type ValueAddonDisplayProps = {
 	value: ValueAddon,
 	className?: string,
+	themeJsonPlainPresetSlug?: string,
+	themeJsonPlainPresetVariableType?: string,
 };
 
 export default function ValueAddonDisplay({
 	value,
 	className,
+	themeJsonPlainPresetSlug,
+	themeJsonPlainPresetVariableType,
 }: ValueAddonDisplayProps): null | Element<any> {
 	if (!isValid(value)) {
-		return null;
+		if (!hasThemeJsonPlainPresetSlug(themeJsonPlainPresetSlug)) {
+			return null;
+		}
+
+		const label =
+			typeof themeJsonPlainPresetSlug === 'string'
+				? themeJsonPlainPresetSlug
+				: '';
+
+		return (
+			<span
+				className={controlClassNames(
+					'value-addon-display',
+					'type-variable',
+					'value-addon-display-with-icon',
+					className
+				)}
+				title={label}
+				aria-label={label}
+			>
+				<span className={controlInnerClassNames('item-icon')}>
+					{getVariableIcon({
+						type: themeJsonPlainPresetVariableType || 'color',
+						value: undefined,
+						iconSize: 'small',
+					})}
+				</span>
+				<span className={controlClassNames('item-name')}>{label}</span>
+			</span>
+		);
 	}
 
 	if (value.valueType !== 'variable' && value.valueType !== 'dynamic-value') {
