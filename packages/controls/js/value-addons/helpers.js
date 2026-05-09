@@ -24,6 +24,7 @@ import {
 	getRadialGradients,
 	getSpacings,
 	getVariable,
+	resolveThemeJsonPaintPresetStringFromWpEditor,
 	resolveThemeJsonVariableStringFromWpEditor,
 	getWidthSizes,
 	type VariableCategory,
@@ -319,17 +320,66 @@ function resolveVariableIconSizePx(
 	return tierConfig.default;
 }
 
+function resolveVariableIconPaintString({
+	type,
+	value,
+	presetSlug,
+	themeJsonResolutionBlockName,
+	themeJsonResolutionPresetCssVarInfix,
+}: {
+	type: string,
+	value?: string,
+	presetSlug?: string,
+	themeJsonResolutionBlockName?: string,
+	themeJsonResolutionPresetCssVarInfix?: string,
+}): string {
+	const paintable =
+		type === 'color' ||
+		type === 'linear-gradient' ||
+		type === 'radial-gradient';
+	if (!paintable) {
+		return '';
+	}
+
+	return resolveThemeJsonPaintPresetStringFromWpEditor({
+		value,
+		presetSlug,
+		blockName: themeJsonResolutionBlockName ?? '',
+		presetCssVarInfix: themeJsonResolutionPresetCssVarInfix,
+		variablePickerType: type,
+	});
+}
+
 export function getVariableIcon({
 	type,
 	value,
 	iconSize = 'normal',
+	presetSlug,
+	themeJsonResolutionBlockName,
+	themeJsonResolutionPresetCssVarInfix,
 }: {
 	type: string,
 	value?: string,
 	iconSize?: VariableIconSize,
+	presetSlug?: string,
+	themeJsonResolutionBlockName?: string,
+	themeJsonResolutionPresetCssVarInfix?: string,
 }): MixedElement {
 	const sizePx = resolveVariableIconSizePx(type, iconSize);
 	const iconSizeProp = String(sizePx);
+
+	const paintStr = resolveVariableIconPaintString({
+		type,
+		value,
+		presetSlug,
+		themeJsonResolutionBlockName,
+		themeJsonResolutionPresetCssVarInfix,
+	});
+
+	const inferGradient =
+		type === 'linear-gradient' ||
+		type === 'radial-gradient' ||
+		(paintStr !== '' && paintStr.includes('gradient('));
 
 	switch (type) {
 		case 'font-size':
@@ -340,13 +390,28 @@ export function getVariableIcon({
 			return (
 				<ColorIndicator
 					type="gradient"
-					value={value !== '' ? value : ''}
+					value={paintStr !== '' ? paintStr : ''}
 					size={sizePx}
 				/>
 			);
 
 		case 'color':
-			return <ColorIndicator type="color" value={value} size={sizePx} />;
+			if (inferGradient && paintStr !== '') {
+				return (
+					<ColorIndicator
+						type="gradient"
+						value={paintStr}
+						size={sizePx}
+					/>
+				);
+			}
+			return (
+				<ColorIndicator
+					type="color"
+					value={paintStr !== '' ? paintStr : value}
+					size={sizePx}
+				/>
+			);
 
 		case 'spacing':
 			return <Icon icon="variable-spacing" iconSize={iconSizeProp} />;

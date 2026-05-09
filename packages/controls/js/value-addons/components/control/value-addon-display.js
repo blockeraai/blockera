@@ -34,6 +34,8 @@ export type ValueAddonDisplayProps = {
 	className?: string,
 	themeJsonPlainPresetSlug?: string,
 	themeJsonPlainPresetVariableType?: string,
+	themeJsonResolutionBlockName?: string,
+	themeJsonResolutionPresetCssVarInfix?: string,
 };
 
 export default function ValueAddonDisplay({
@@ -41,6 +43,8 @@ export default function ValueAddonDisplay({
 	className,
 	themeJsonPlainPresetSlug,
 	themeJsonPlainPresetVariableType,
+	themeJsonResolutionBlockName,
+	themeJsonResolutionPresetCssVarInfix,
 }: ValueAddonDisplayProps): null | Element<any> {
 	if (!isValid(value)) {
 		if (!hasThemeJsonPlainPresetSlug(themeJsonPlainPresetSlug)) {
@@ -66,8 +70,13 @@ export default function ValueAddonDisplay({
 				<span className={controlInnerClassNames('item-icon')}>
 					{getVariableIcon({
 						type: themeJsonPlainPresetVariableType || 'color',
-						value: undefined,
 						iconSize: 'small',
+						presetSlug:
+							typeof themeJsonPlainPresetSlug === 'string'
+								? themeJsonPlainPresetSlug
+								: undefined,
+						themeJsonResolutionBlockName,
+						themeJsonResolutionPresetCssVarInfix,
 					})}
 				</span>
 				<span className={controlClassNames('item-name')}>{label}</span>
@@ -98,10 +107,20 @@ export default function ValueAddonDisplay({
 			label = !isUndefined(item?.name)
 				? item.name
 				: value?.settings?.name;
+			let variablePaintValue: string | void;
+			if (typeof item?.value === 'string') {
+				variablePaintValue = item.value;
+			} else if (typeof value?.settings?.value === 'string') {
+				variablePaintValue = value.settings.value;
+			} else {
+				variablePaintValue = undefined;
+			}
 			icon = getVariableIcon({
 				type: value?.settings?.type,
-				value: value?.settings?.value,
+				value: variablePaintValue,
 				iconSize: 'small',
+				themeJsonResolutionBlockName,
+				themeJsonResolutionPresetCssVarInfix,
 			});
 		}
 	} else if (value.valueType === 'dynamic-value') {

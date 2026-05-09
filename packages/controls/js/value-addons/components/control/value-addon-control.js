@@ -90,7 +90,11 @@ export default function ({
 				controlProps.themeJsonPlainPresetVariableType ||
 				controlProps.variableTypes?.[0] ||
 				'color',
-			value: undefined,
+			presetSlug: controlProps.themeJsonPlainPresetSlug,
+			themeJsonResolutionBlockName:
+				controlProps.themeJsonResolutionBlockName,
+			themeJsonResolutionPresetCssVarInfix:
+				controlProps.themeJsonResolutionPresetCssVarInfix,
 		});
 	}
 
