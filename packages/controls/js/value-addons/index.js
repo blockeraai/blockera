@@ -24,7 +24,11 @@ import {
 /**
  * Internal dependencies
  */
-import { isValid, extractCssVarValue } from './utils';
+import {
+	isValid,
+	extractCssVarValue,
+	isLikelyThemeJsonPlainPresetSlugString,
+} from './utils';
 import { canUnlinkVariable } from './helpers';
 import { applyRegisteredPresetPreviewPickerMerge } from './preset-preview-picker-props-registry';
 import { ValueAddonControl, ValueAddonPointer } from './components';
@@ -89,7 +93,19 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 			? inputValue.slice(0, -4)
 			: inputValue;
 	}, [inputValue]);
-	const hasPlainThemeJsonStringValueAddon = useMemo(() => {
+	const presetResolutionCssVarInfix =
+		themeJsonResolutionPresetCssVarInfix !== undefined &&
+		themeJsonResolutionPresetCssVarInfix !== null &&
+		String(themeJsonResolutionPresetCssVarInfix) !== ''
+			? themeJsonResolutionPresetCssVarInfix
+			: undefined;
+
+	const hasPresetResolutionContextForOrphans =
+		mergedThemeJsonFeaturesWrapped !== undefined &&
+		mergedThemeJsonFeaturesWrapped !== null &&
+		presetResolutionCssVarInfix !== undefined;
+
+	const presetKnownInMergedThemeJson = useMemo(() => {
 		if (strippedRawInput === '') {
 			return false;
 		}
@@ -105,6 +121,27 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		themeJsonResolutionBlockName,
 		themeJsonResolutionPresetCssVarInfix,
 	]);
+
+	const plainSlugLooksLikeThemeJsonPreset = useMemo(() => {
+		return (
+			strippedRawInput !== '' &&
+			isLikelyThemeJsonPlainPresetSlugString(strippedRawInput)
+		);
+	}, [strippedRawInput]);
+
+	const missingPlainThemeJsonPreset = useMemo(() => {
+		return (
+			hasPresetResolutionContextForOrphans &&
+			plainSlugLooksLikeThemeJsonPreset &&
+			!presetKnownInMergedThemeJson
+		);
+	}, [
+		hasPresetResolutionContextForOrphans,
+		plainSlugLooksLikeThemeJsonPreset,
+		presetKnownInMergedThemeJson,
+	]);
+
+	const hasPlainThemeJsonStringValueAddon = presetKnownInMergedThemeJson;
 	const effectivePickerProps = applyRegisteredPresetPreviewPickerMerge(
 		pickerProps,
 		presetInterface
@@ -203,6 +240,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 				pickerProps: {},
 				pointerProps: {},
 				isDeletedVar: false,
+				isDeletedPlainThemeJsonPreset: false,
 				isDeletedDV: false,
 				isActive: false,
 			},
@@ -234,7 +272,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 	};
 
 	const handleOnUnlinkVar = (): void => {
-		if (hasPlainThemeJsonStringValueAddon) {
+		if (hasPlainThemeJsonStringValueAddon || missingPlainThemeJsonPreset) {
 			setValue({
 				isValueAddon: false,
 				valueType: null,
@@ -330,11 +368,16 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		pointerProps,
 		pickerProps: effectivePickerProps,
 		isDeletedVar: false,
+		isDeletedPlainThemeJsonPreset: missingPlainThemeJsonPreset,
 		isDeletedDV: false,
-		isActive: isValid(value) || hasPlainThemeJsonStringValueAddon,
-		themeJsonPlainPresetSlug: hasPlainThemeJsonStringValueAddon
-			? strippedRawInput
-			: '',
+		isActive:
+			isValid(value) ||
+			hasPlainThemeJsonStringValueAddon ||
+			missingPlainThemeJsonPreset,
+		themeJsonPlainPresetSlug:
+			hasPlainThemeJsonStringValueAddon || missingPlainThemeJsonPreset
+				? strippedRawInput
+				: '',
 		themeJsonResolutionBlockName,
 		themeJsonResolutionPresetCssVarInfix:
 			themeJsonResolutionPresetCssVarInfix !== undefined &&
@@ -382,7 +425,8 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		isSetValueAddon: () =>
 			isValid(value) ||
 			isOpen !== '' ||
-			hasPlainThemeJsonStringValueAddon,
+			hasPlainThemeJsonStringValueAddon ||
+			missingPlainThemeJsonPreset,
 		ValueAddonPointer: StableValueAddonPointer,
 		ValueAddonControl: StableValueAddonControl,
 		valueAddonControlProps: controlProps,

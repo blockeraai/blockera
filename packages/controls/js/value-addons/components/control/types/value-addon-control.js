@@ -36,6 +36,10 @@ export type ValueAddonControlProps = {
 	 */
 	isDeletedVar: boolean,
 	/**
+	 * Plain theme.json preset slug string no longer exists in merged theme.json (preset removed).
+	 */
+	isDeletedPlainThemeJsonPreset?: boolean,
+	/**
 	 * Dynamic value is deleted or not
 	 */
 	isDeletedDV: boolean,
