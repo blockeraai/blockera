@@ -22,4 +22,4 @@ export { ColorPresetTaxonomySection } from '../colors/color-preset-taxonomy-sect
 export {
 	TaxonomyGroupHeader,
 	isTaxonomyPopoverOpenEvent,
-} from './preset-taxonomy-ui/basic';
+} from './preset-taxonomy-ui';

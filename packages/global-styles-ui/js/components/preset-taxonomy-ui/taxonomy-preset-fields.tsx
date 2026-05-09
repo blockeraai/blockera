@@ -7,8 +7,8 @@ import { useMemo } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import type { VariableType } from '../../types';
-import type { PresetFieldsPropsResolver } from '../../preset-group';
+import type { VariableType } from '../types';
+import type { PresetFieldsPropsResolver } from '../preset-group';
 
 export type PresetTaxonomyPresetFieldsProps = {
 	item: VariableType;

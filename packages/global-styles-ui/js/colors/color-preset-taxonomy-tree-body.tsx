@@ -19,7 +19,7 @@ import type { TaxonomyGroupBranch } from '../components/preset-taxonomy/types';
 import {
 	TaxonomyCategoryAccordion,
 	TaxonomyGroupHeader,
-} from '../components/preset-taxonomy-ui/basic';
+} from '../components/preset-taxonomy-ui';
 import { findRepeaterItemIdBySlug } from './utils';
 import { ColorPresetTaxonomyPopoverRow } from './color-preset-taxonomy-popover-row';
 import { useColorPaletteVariationsStorage } from './color-palette-variations-context';

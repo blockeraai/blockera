@@ -20,7 +20,7 @@ import type { VariableType } from '../components/types';
 import {
 	isTaxonomyPopoverOpenEvent,
 	PresetTaxonomyPresetFields,
-} from '../components/preset-taxonomy-ui/basic';
+} from '../components/preset-taxonomy-ui';
 
 export type ColorPresetTaxonomyPopoverRowProps = {
 	item: Color & Record<string, unknown>;

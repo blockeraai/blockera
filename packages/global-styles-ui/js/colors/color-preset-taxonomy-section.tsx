@@ -20,7 +20,7 @@ import {
 import { PresetStateContainer } from '../components/preset-state-container';
 import type { PresetFieldsPropsResolver } from '../components/preset-group';
 import type { TaxonomyGroupBranch } from '../components/preset-taxonomy/types';
-import { TaxonomyRepeaterBridgeInner } from '../components/preset-taxonomy-ui/basic';
+import { TaxonomyRepeaterBridgeInner } from '../components/preset-taxonomy-ui';
 import '../components/preset-taxonomy-ui/style.scss';
 import {
 	convertRepeaterValueToColors,
