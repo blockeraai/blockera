@@ -36,6 +36,7 @@ export type ValueAddonDisplayProps = {
 	themeJsonPlainPresetVariableType?: string,
 	themeJsonResolutionBlockName?: string,
 	themeJsonResolutionPresetCssVarInfix?: string,
+	isDeletedPlainThemeJsonPreset?: boolean,
 };
 
 export default function ValueAddonDisplay({
@@ -45,16 +46,19 @@ export default function ValueAddonDisplay({
 	themeJsonPlainPresetVariableType,
 	themeJsonResolutionBlockName,
 	themeJsonResolutionPresetCssVarInfix,
+	isDeletedPlainThemeJsonPreset = false,
 }: ValueAddonDisplayProps): null | Element<any> {
 	if (!isValid(value)) {
 		if (!hasThemeJsonPlainPresetSlug(themeJsonPlainPresetSlug)) {
 			return null;
 		}
 
-		const label =
-			typeof themeJsonPlainPresetSlug === 'string'
-				? themeJsonPlainPresetSlug
-				: '';
+		let label = '';
+		if (isDeletedPlainThemeJsonPreset) {
+			label = __('Missing Variable', 'blockera');
+		} else if (typeof themeJsonPlainPresetSlug === 'string') {
+			label = themeJsonPlainPresetSlug;
+		}
 
 		return (
 			<span
@@ -62,22 +66,27 @@ export default function ValueAddonDisplay({
 					'value-addon-display',
 					'type-variable',
 					'value-addon-display-with-icon',
+					isDeletedPlainThemeJsonPreset && 'type-deleted',
 					className
 				)}
 				title={label}
 				aria-label={label}
 			>
 				<span className={controlInnerClassNames('item-icon')}>
-					{getVariableIcon({
-						type: themeJsonPlainPresetVariableType || 'color',
-						iconSize: 'small',
-						presetSlug:
-							typeof themeJsonPlainPresetSlug === 'string'
-								? themeJsonPlainPresetSlug
-								: undefined,
-						themeJsonResolutionBlockName,
-						themeJsonResolutionPresetCssVarInfix,
-					})}
+					{isDeletedPlainThemeJsonPreset ? (
+						<DeletedIcon />
+					) : (
+						getVariableIcon({
+							type: themeJsonPlainPresetVariableType || 'color',
+							iconSize: 'small',
+							presetSlug:
+								typeof themeJsonPlainPresetSlug === 'string'
+									? themeJsonPlainPresetSlug
+									: undefined,
+							themeJsonResolutionBlockName,
+							themeJsonResolutionPresetCssVarInfix,
+						})
+					)}
 				</span>
 				<span className={controlClassNames('item-name')}>{label}</span>
 			</span>

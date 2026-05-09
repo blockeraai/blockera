@@ -106,7 +106,8 @@ export default function ({
 							isVarActive && 'active-value-addon',
 							controlProps.isOpen.startsWith('var-') &&
 								'open-value-addon',
-							controlProps.isDeletedVar &&
+							(controlProps.isDeletedVar ||
+								controlProps.isDeletedPlainThemeJsonPreset) &&
 								'is-value-addon-deleted'
 						)}
 						onClick={handleVariableModal}

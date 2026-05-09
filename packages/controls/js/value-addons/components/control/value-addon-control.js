@@ -84,18 +84,24 @@ export default function ({
 	} else if (
 		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug)
 	) {
-		label = controlProps.themeJsonPlainPresetSlug || '';
-		icon = getVariableIcon({
-			type:
-				controlProps.themeJsonPlainPresetVariableType ||
-				controlProps.variableTypes?.[0] ||
-				'color',
-			presetSlug: controlProps.themeJsonPlainPresetSlug,
-			themeJsonResolutionBlockName:
-				controlProps.themeJsonResolutionBlockName,
-			themeJsonResolutionPresetCssVarInfix:
-				controlProps.themeJsonResolutionPresetCssVarInfix,
-		});
+		if (controlProps.isDeletedPlainThemeJsonPreset) {
+			isDeleted = true;
+			label = __('Missing Variable', 'blockera');
+			icon = <DeletedIcon />;
+		} else {
+			label = controlProps.themeJsonPlainPresetSlug || '';
+			icon = getVariableIcon({
+				type:
+					controlProps.themeJsonPlainPresetVariableType ||
+					controlProps.variableTypes?.[0] ||
+					'color',
+				presetSlug: controlProps.themeJsonPlainPresetSlug,
+				themeJsonResolutionBlockName:
+					controlProps.themeJsonResolutionBlockName,
+				themeJsonResolutionPresetCssVarInfix:
+					controlProps.themeJsonResolutionPresetCssVarInfix,
+			});
+		}
 	}
 
 	let isIconActive = true;
@@ -164,7 +170,11 @@ export default function ({
 								controlProps.themeJsonPlainPresetSlug
 							)
 						) {
-							controlProps.setOpen('var-picker');
+							controlProps.setOpen(
+								controlProps.isDeletedPlainThemeJsonPreset
+									? 'var-deleted'
+									: 'var-picker'
+							);
 							event.preventDefault();
 							return;
 						}
