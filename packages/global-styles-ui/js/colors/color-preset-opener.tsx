@@ -17,6 +17,7 @@ import {
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
+import { resolveThemeJsonPaintPresetStringFromWpEditor } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -206,16 +207,35 @@ export function ColorPresetOpener({
 		shadeSlugParsed !== null ? Number(shadeSlugParsed.shadeStep) : null;
 
 	const headerIcon = useMemo(() => {
+		const indicatorPaint = resolveThemeJsonPaintPresetStringFromWpEditor({
+			value: colorItem.color,
+			presetSlug: slugForMainLookup,
+			blockName: '',
+			variablePickerType: colorItem.type,
+		});
+
 		const isGradient =
 			colorItem.type === 'linear-gradient' ||
 			colorItem.type === 'radial-gradient' ||
+			(typeof indicatorPaint === 'string' &&
+				indicatorPaint.includes('gradient(')) ||
 			(typeof colorItem.color === 'string' &&
 				colorItem.color.includes('gradient('));
 
-		const core = colorItem?.color ? (
+		let indicatorValue = '';
+		if (indicatorPaint !== '') {
+			indicatorValue = indicatorPaint;
+		} else if (
+			typeof colorItem.color === 'string' &&
+			colorItem.color !== ''
+		) {
+			indicatorValue = colorItem.color;
+		}
+
+		const core = indicatorValue ? (
 			<ColorIndicator
 				type={isGradient ? 'gradient' : 'color'}
-				value={colorItem.color}
+				value={indicatorValue}
 				size={18}
 			/>
 		) : (
@@ -274,6 +294,7 @@ export function ColorPresetOpener({
 	}, [
 		colorItem?.color,
 		colorItem?.type,
+		slugForMainLookup,
 		isShadeRow,
 		shadeVariationCount,
 		shadeStepNum,
