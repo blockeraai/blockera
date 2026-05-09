@@ -8,6 +8,14 @@ import { getCSSValueFromRawStyle } from '@wordpress/style-engine';
 /**
  * Internal dependencies
  */
+import { getValueFromObjectPath, findInPresetsBy } from '@blockera/data';
+
+export {
+	getValueFromObjectPath,
+	getValueFromVariable,
+	findInPresetsBy,
+} from '@blockera/data';
+
 import {
 	PRESET_METADATA,
 	STYLE_PATH_TO_CSS_VAR_INFIX,
@@ -26,61 +34,6 @@ export function useToolsPanelDropdownMenuProps(): Record<string, unknown> {
 				},
 			}
 		: {};
-}
-
-function findInPresetsBy(
-	features: Record<string, unknown>,
-	blockName: string,
-	presetPath: string[],
-	presetProperty: string,
-	presetValueValue: string
-): Record<string, unknown> | undefined {
-	const orderedPresetsByOrigin = [
-		getValueFromObjectPath(features, ['blocks', blockName, ...presetPath]),
-		getValueFromObjectPath(features, presetPath),
-	];
-
-	for (const presetByOrigin of orderedPresetsByOrigin) {
-		if (presetByOrigin && typeof presetByOrigin === 'object') {
-			const origins = ['custom', 'theme', 'default'];
-			for (const origin of origins) {
-				const presets = (presetByOrigin as Record<string, unknown>)[
-					origin
-				] as unknown[] | undefined;
-				if (presets) {
-					const presetObject = presets.find(
-						(preset) =>
-							typeof preset === 'object' &&
-							preset !== null &&
-							(preset as Record<string, unknown>)[
-								presetProperty
-							] === presetValueValue
-					) as Record<string, unknown> | undefined;
-					if (presetObject) {
-						if (presetProperty === 'slug') {
-							return presetObject;
-						}
-						const highestPresetObjectWithSameSlug = findInPresetsBy(
-							features,
-							blockName,
-							presetPath,
-							'slug',
-							String(presetObject.slug)
-						);
-						if (
-							highestPresetObjectWithSameSlug &&
-							highestPresetObjectWithSameSlug[presetProperty] ===
-								presetObject[presetProperty]
-						) {
-							return presetObject;
-						}
-						return undefined;
-					}
-				}
-			}
-		}
-	}
-	return undefined;
 }
 
 export function getPresetVariableFromValue(
@@ -118,134 +71,6 @@ export function getPresetVariableFromValue(
 	}
 
 	return `var:preset|${cssVarInfix}|${String(presetObject.slug)}`;
-}
-
-function getValueFromPresetVariable(
-	features: Record<string, unknown>,
-	blockName: string,
-	variable: string,
-	[presetType, slug]: [string, string]
-): string | Record<string, unknown> {
-	const metadata = PRESET_METADATA.find(
-		(data) => data.cssVarInfix === presetType
-	);
-	if (!metadata) {
-		return variable;
-	}
-
-	const settings = features.settings as Record<string, unknown> | undefined;
-	if (!settings) {
-		return variable;
-	}
-
-	const presetObject = findInPresetsBy(
-		settings,
-		blockName,
-		metadata.path,
-		'slug',
-		slug
-	);
-
-	if (presetObject) {
-		const { valueKey } = metadata;
-		const result = presetObject[valueKey];
-		return getValueFromVariable(features, blockName, result);
-	}
-
-	return variable;
-}
-
-function getValueFromCustomVariable(
-	features: Record<string, unknown>,
-	blockName: string,
-	variable: string,
-	path: string[]
-): string | Record<string, unknown> {
-	const settings = features.settings as Record<string, unknown> | undefined;
-	const result =
-		getValueFromObjectPath(settings ?? {}, [
-			'blocks',
-			blockName,
-			'custom',
-			...path,
-		]) ?? getValueFromObjectPath(settings ?? {}, ['custom', ...path]);
-	if (!result) {
-		return variable;
-	}
-	return getValueFromVariable(features, blockName, result);
-}
-
-/**
- * Attempts to fetch the value of a theme.json CSS variable.
- */
-export function getValueFromVariable(
-	features: Record<string, unknown>,
-	blockName: string,
-	variable: string | Record<string, unknown>
-): string | Record<string, unknown> {
-	let current: string | Record<string, unknown> | undefined = variable;
-
-	if (!current || typeof current !== 'string') {
-		if (
-			typeof current === 'object' &&
-			current !== null &&
-			typeof (current as { ref?: string }).ref === 'string'
-		) {
-			current = getValueFromObjectPath(
-				features,
-				(current as { ref: string }).ref
-			);
-			if (
-				!current ||
-				(typeof current === 'object' &&
-					current !== null &&
-					'ref' in current &&
-					(current as { ref?: unknown }).ref)
-			) {
-				return current ?? variable;
-			}
-		} else {
-			return variable;
-		}
-	}
-
-	const USER_VALUE_PREFIX = 'var:';
-	const THEME_VALUE_PREFIX = 'var(--wp--';
-	const THEME_VALUE_SUFFIX = ')';
-
-	let parsedVar: string[];
-
-	if (current.startsWith(USER_VALUE_PREFIX)) {
-		parsedVar = current.slice(USER_VALUE_PREFIX.length).split('|');
-	} else if (
-		current.startsWith(THEME_VALUE_PREFIX) &&
-		current.endsWith(THEME_VALUE_SUFFIX)
-	) {
-		parsedVar = current
-			.slice(THEME_VALUE_PREFIX.length, -THEME_VALUE_SUFFIX.length)
-			.split('--');
-	} else {
-		return current;
-	}
-
-	const [type, ...pathParts] = parsedVar;
-	if (type === 'preset') {
-		return getValueFromPresetVariable(
-			features,
-			blockName,
-			current,
-			pathParts as [string, string]
-		);
-	}
-	if (type === 'custom') {
-		return getValueFromCustomVariable(
-			features,
-			blockName,
-			current,
-			pathParts
-		);
-	}
-	return current;
 }
 
 export function scopeSelector(scope: string, selector: string): string {
@@ -448,23 +273,6 @@ export function getVariationClassName(variation: string): string {
 	}
 	return `is-style-${variation}`;
 }
-
-export const getValueFromObjectPath = (
-	object: Record<string, unknown> | undefined,
-	path: string | string[],
-	defaultValue?: unknown
-): unknown => {
-	const arrayPath = Array.isArray(path) ? path : path.split('.');
-	let value: unknown = object;
-	arrayPath.forEach((fieldName) => {
-		if (value && typeof value === 'object' && value !== null) {
-			value = (value as Record<string, unknown>)[fieldName];
-		} else {
-			value = undefined;
-		}
-	});
-	return value ?? defaultValue;
-};
 
 export function uniqByProperty(
 	array: Array<Record<string, unknown>>,

@@ -3,6 +3,11 @@
  * @see wordpress/gutenberg packages/global-styles-engine/src/utils/common.ts
  */
 
+/**
+ * Blockera dependencies
+ */
+import { THEME_JSON_PRESET_METADATA_BASE } from '@blockera/data';
+
 export type PresetMetadataEntry = {
 	path: string[];
 	valueKey: string;
@@ -14,11 +19,14 @@ export type PresetMetadataEntry = {
 	valueFunc?: (preset: Record<string, unknown>) => string;
 };
 
-export const PRESET_METADATA: PresetMetadataEntry[] = [
+const METADATA_EXTRA_BY_INFIX: Record<
+	string,
 	{
-		path: ['color', 'palette'],
-		valueKey: 'color',
-		cssVarInfix: 'color',
+		classes: NonNullable<PresetMetadataEntry['classes']>;
+		valueFunc?: PresetMetadataEntry['valueFunc'];
+	}
+> = {
+	color: {
 		classes: [
 			{ classSuffix: 'color', propertyName: 'color' },
 			{
@@ -31,10 +39,7 @@ export const PRESET_METADATA: PresetMetadataEntry[] = [
 			},
 		],
 	},
-	{
-		path: ['color', 'gradients'],
-		valueKey: 'gradient',
-		cssVarInfix: 'gradient',
+	gradient: {
 		classes: [
 			{
 				classSuffix: 'gradient-background',
@@ -42,52 +47,46 @@ export const PRESET_METADATA: PresetMetadataEntry[] = [
 			},
 		],
 	},
-	{
-		path: ['color', 'duotone'],
-		valueKey: 'colors',
-		cssVarInfix: 'duotone',
+	duotone: {
+		classes: [],
 		valueFunc: (preset: Record<string, unknown>) =>
 			`url( '#wp-duotone-${String(preset.slug)}' )`,
+	},
+	shadow: {
 		classes: [],
 	},
-	{
-		path: ['shadow', 'presets'],
-		valueKey: 'shadow',
-		cssVarInfix: 'shadow',
-		classes: [],
-	},
-	{
-		path: ['typography', 'fontSizes'],
-		valueKey: 'size',
-		cssVarInfix: 'font-size',
+	'font-size': {
 		classes: [{ classSuffix: 'font-size', propertyName: 'font-size' }],
 	},
-	{
-		path: ['typography', 'fontFamilies'],
-		valueKey: 'fontFamily',
-		cssVarInfix: 'font-family',
+	'font-family': {
 		classes: [{ classSuffix: 'font-family', propertyName: 'font-family' }],
 	},
-	{
-		path: ['spacing', 'spacingSizes'],
-		valueKey: 'size',
-		cssVarInfix: 'spacing',
+	spacing: {
+		classes: [],
 		valueFunc: ({ size }: Record<string, unknown>) => String(size ?? ''),
+	},
+	'border-radius': {
 		classes: [],
 	},
-	{
-		path: ['border', 'radiusSizes'],
-		valueKey: 'size',
-		cssVarInfix: 'border-radius',
+	dimension: {
 		classes: [],
 	},
-	{
-		path: ['dimensions', 'dimensionSizes'],
-		valueKey: 'size',
-		cssVarInfix: 'dimension',
-		classes: [],
-	},
-];
+};
+
+export const PRESET_METADATA: PresetMetadataEntry[] =
+	THEME_JSON_PRESET_METADATA_BASE.map((entry) => {
+		const extra = METADATA_EXTRA_BY_INFIX[entry.cssVarInfix];
+		const row: PresetMetadataEntry = {
+			path: [...entry.path],
+			valueKey: entry.valueKey,
+			cssVarInfix: entry.cssVarInfix,
+			classes: extra?.classes ?? [],
+		};
+		if (extra?.valueFunc) {
+			row.valueFunc = extra.valueFunc;
+		}
+		return row;
+	});
 
 export const STYLE_PATH_TO_CSS_VAR_INFIX: Record<string, string> = {
 	'color.background': 'color',
