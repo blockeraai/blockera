@@ -74,6 +74,7 @@ export {
 	generateVariableStringFromAttributeVarString,
 	matchesVarStringMiddleType,
 	getValueAddonFromVarString,
+	parseVarString,
 } from './utils';
 export type { GetValueAddonFromVarStringOptions } from './utils';
 
