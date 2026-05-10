@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * Blockera dependencies
+ */
+import { generateVariableStringFromAttributeVarString } from '@blockera/data';
+
+/**
  * Internal dependencies
  */
 import type { ValueAddon } from './types';
@@ -32,6 +37,58 @@ export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
 	}
 	// Slugs start with a letter so values like `12px` / `500` are not treated as presets.
 	return /^[a-z][a-z0-9_-]*(?:-[a-z0-9_-]+)*$/i.test(s);
+}
+
+/**
+ * `{paint},{slug}` palette/composite storage: slug suffix matches WP preset slug shape (starts with letter).
+ * Split scans commas right-to-left so `paint` may contain commas (e.g. `rgb()`, gradients).
+ */
+const COMPOSITE_PLAIN_COLOR_SLUG_SUFFIX_RE =
+	/^[a-z][a-z0-9_-]*(?:-[a-z0-9_-]+)*$/i;
+
+export function splitStoredCompositePlainColorValue(
+	value: string
+): {| realPart: string, slugPart: string |} | null {
+	if (typeof value !== 'string' || value === '') {
+		return null;
+	}
+	let idx = value.lastIndexOf(',');
+	while (idx > 0) {
+		const slugPart = value.slice(idx + 1).trim();
+		const realPart = value.slice(0, idx).trim();
+		if (
+			realPart !== '' &&
+			slugPart !== '' &&
+			COMPOSITE_PLAIN_COLOR_SLUG_SUFFIX_RE.test(slugPart)
+		) {
+			return { realPart, slugPart };
+		}
+		idx = value.lastIndexOf(',', idx - 1);
+	}
+	return null;
+}
+
+/**
+ * Preset slug for merged-theme lookups when stored plain strings may be `resolvedCss,presetSlug`.
+ */
+export function plainPresetSlugFromStoredPlainPresetInput(
+	strippedPlainInput: string
+): string {
+	const hit = splitStoredCompositePlainColorValue(strippedPlainInput);
+	if (hit) {
+		return hit.slugPart;
+	}
+	return typeof strippedPlainInput === 'string'
+		? strippedPlainInput.trim()
+		: '';
+}
+
+/** Resolved CSS fragment stored before comma when composite plain preset shape matches. */
+export function compositePlainColorPaintFromStoredPlainPresetInput(
+	strippedPlainInput: string
+): string {
+	const hit = splitStoredCompositePlainColorValue(strippedPlainInput);
+	return hit?.realPart ?? '';
 }
 
 /** Non-empty `ValueAddonControlProps.themeJsonPlainPresetSlug` (merged theme.json preset slug). */
@@ -120,4 +177,39 @@ export function extractCssVarValue(value: string): string {
 	}
 
 	return result;
+}
+
+/**
+ * Scalar to persist after unlinking a missing plain preset stored as
+ * `resolvedCss,presetSlug`: extracts the explicit CSS var() fallback for `--wp--preset--…--slug`.
+ */
+export function unlinkPlainThemeJsonPresetCompositeToScalar(
+	compositeResolvedPart: string,
+	presetSlug: string,
+	presetCssVarInfix?: string
+): string {
+	const part =
+		typeof compositeResolvedPart === 'string' ? compositeResolvedPart : '';
+	const slug = typeof presetSlug === 'string' ? presetSlug.trim() : '';
+	if (part === '' || slug === '') {
+		return part;
+	}
+	const infix =
+		presetCssVarInfix !== undefined &&
+		presetCssVarInfix !== null &&
+		String(presetCssVarInfix) !== ''
+			? String(presetCssVarInfix)
+			: 'color';
+	const presetAttrToken = `var:preset|${infix}|${slug}`;
+	const cssVarCore =
+		generateVariableStringFromAttributeVarString(presetAttrToken);
+	const syntheticVar = `var(${cssVarCore}, ${part})`;
+	const extracted = extractCssVarValue(syntheticVar);
+	const next =
+		typeof extracted === 'string' &&
+		extracted !== '' &&
+		extracted.trim() !== ''
+			? extracted.trim()
+			: part;
+	return next;
 }
