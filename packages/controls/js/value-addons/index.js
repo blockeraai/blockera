@@ -28,6 +28,9 @@ import {
 	isValid,
 	extractCssVarValue,
 	isLikelyThemeJsonPlainPresetSlugString,
+	compositePlainColorPaintFromStoredPlainPresetInput,
+	plainPresetSlugFromStoredPlainPresetInput,
+	unlinkPlainThemeJsonPresetCompositeToScalar,
 } from './utils';
 import { canUnlinkVariable } from './helpers';
 import { applyRegisteredPresetPreviewPickerMerge } from './preset-preview-picker-props-registry';
@@ -93,6 +96,20 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 			? inputValue.slice(0, -4)
 			: inputValue;
 	}, [inputValue]);
+
+	const effectivePlainPresetSlug = useMemo(
+		() => plainPresetSlugFromStoredPlainPresetInput(strippedRawInput),
+		[strippedRawInput]
+	);
+
+	const compositePlainPresetPaint = useMemo(
+		() =>
+			compositePlainColorPaintFromStoredPlainPresetInput(
+				strippedRawInput
+			),
+		[strippedRawInput]
+	);
+
 	const presetResolutionCssVarInfix =
 		themeJsonResolutionPresetCssVarInfix !== undefined &&
 		themeJsonResolutionPresetCssVarInfix !== null &&
@@ -106,17 +123,17 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		presetResolutionCssVarInfix !== undefined;
 
 	const presetKnownInMergedThemeJson = useMemo(() => {
-		if (strippedRawInput === '') {
+		if (effectivePlainPresetSlug === '') {
 			return false;
 		}
 		return isThemeJsonVariableDefinedInMergedFeatures(
 			mergedThemeJsonFeaturesWrapped,
-			strippedRawInput,
+			effectivePlainPresetSlug,
 			themeJsonResolutionBlockName,
 			themeJsonResolutionPresetCssVarInfix
 		);
 	}, [
-		strippedRawInput,
+		effectivePlainPresetSlug,
 		mergedThemeJsonFeaturesWrapped,
 		themeJsonResolutionBlockName,
 		themeJsonResolutionPresetCssVarInfix,
@@ -124,10 +141,10 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 
 	const plainSlugLooksLikeThemeJsonPreset = useMemo(() => {
 		return (
-			strippedRawInput !== '' &&
-			isLikelyThemeJsonPlainPresetSlugString(strippedRawInput)
+			effectivePlainPresetSlug !== '' &&
+			isLikelyThemeJsonPlainPresetSlugString(effectivePlainPresetSlug)
 		);
-	}, [strippedRawInput]);
+	}, [effectivePlainPresetSlug]);
 
 	const missingPlainThemeJsonPreset = useMemo(() => {
 		return (
@@ -243,6 +260,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 				isDeletedPlainThemeJsonPreset: false,
 				isDeletedDV: false,
 				isActive: false,
+				themeJsonPlainPresetCompositePaint: '',
 			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
@@ -272,6 +290,28 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 	};
 
 	const handleOnUnlinkVar = (): void => {
+		if (
+			missingPlainThemeJsonPreset &&
+			compositePlainPresetPaint !== '' &&
+			compositePlainPresetPaint !== undefined
+		) {
+			setValue({
+				isValueAddon: false,
+				valueType: null,
+				name: null,
+				settings: {},
+			});
+			onChange(
+				unlinkPlainThemeJsonPresetCompositeToScalar(
+					compositePlainPresetPaint,
+					effectivePlainPresetSlug,
+					presetResolutionCssVarInfix
+				)
+			);
+			setOpen('');
+			return;
+		}
+
 		if (hasPlainThemeJsonStringValueAddon || missingPlainThemeJsonPreset) {
 			setValue({
 				isValueAddon: false,
@@ -376,8 +416,10 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 			missingPlainThemeJsonPreset,
 		themeJsonPlainPresetSlug:
 			hasPlainThemeJsonStringValueAddon || missingPlainThemeJsonPreset
-				? strippedRawInput
+				? effectivePlainPresetSlug
 				: '',
+		themeJsonPlainPresetCompositePaint:
+			compositePlainPresetPaint !== '' ? compositePlainPresetPaint : '',
 		themeJsonResolutionBlockName,
 		themeJsonResolutionPresetCssVarInfix:
 			themeJsonResolutionPresetCssVarInfix !== undefined &&
