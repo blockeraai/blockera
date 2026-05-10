@@ -10,6 +10,8 @@ import {
 	isValid,
 	extractCssVarValue,
 	isLikelyThemeJsonPlainPresetSlugString,
+	splitStoredCompositePlainColorValue,
+	unlinkPlainThemeJsonPresetCompositeToScalar,
 } from '../utils';
 import { generateVariableString } from '@blockera/data';
 import { __ } from '@wordpress/i18n';
@@ -674,6 +676,30 @@ describe('Helper Functions', () => {
 		});
 	});
 
+	describe('unlinkPlainThemeJsonPresetCompositeToScalar', () => {
+		test('extracts var() fallback for wp preset color slug', () => {
+			expect(
+				unlinkPlainThemeJsonPresetCompositeToScalar(
+					'#abc123',
+					'primary',
+					'color'
+				)
+			).toBe('#abc123');
+		});
+
+		test('defaults infix to color when omitted', () => {
+			expect(
+				unlinkPlainThemeJsonPresetCompositeToScalar('#fff', 'accent')
+			).toBe('#fff');
+		});
+
+		test('returns empty composite part unchanged when slug empty', () => {
+			expect(unlinkPlainThemeJsonPresetCompositeToScalar('', 'x')).toBe(
+				''
+			);
+		});
+	});
+
 	describe('isLikelyThemeJsonPlainPresetSlugString', () => {
 		test('accepts typical theme preset slugs', () => {
 			expect(isLikelyThemeJsonPlainPresetSlugString('primary')).toBe(
@@ -701,6 +727,29 @@ describe('Helper Functions', () => {
 		test('rejects empty or untrimmed input', () => {
 			expect(isLikelyThemeJsonPlainPresetSlugString('')).toBe(false);
 			expect(isLikelyThemeJsonPlainPresetSlugString(' slug')).toBe(false);
+		});
+	});
+
+	describe('splitStoredCompositePlainColorValue', () => {
+		test('resolved hex comma preset slug', () => {
+			expect(
+				splitStoredCompositePlainColorValue('#aabbcc,my-accent')
+			).toEqual({
+				realPart: '#aabbcc',
+				slugPart: 'my-accent',
+			});
+		});
+
+		test('rgb() with commas then preset slug uses last comma', () => {
+			const stored = 'rgb(255, 128, 0),accent-orange';
+			expect(splitStoredCompositePlainColorValue(stored)).toEqual({
+				realPart: 'rgb(255, 128, 0)',
+				slugPart: 'accent-orange',
+			});
+		});
+
+		test('slug-only string does not split', () => {
+			expect(splitStoredCompositePlainColorValue('primary')).toBeNull();
 		});
 	});
 });
