@@ -51,6 +51,10 @@ export type ValueAddonControlProps = {
 	 * Plain **snake_case** theme.json preset slug when the attribute stores the slug string only.
 	 */
 	themeJsonPlainPresetSlug?: string,
+	/**
+	 * When storage uses `{paint},{slug}`, resolved paint for icons/indicators (slug-only UI separately).
+	 */
+	themeJsonPlainPresetCompositePaint?: string,
 	/** Block scope for preset resolution (with `getValueAddonRealValue` / merged presets). */
 	themeJsonResolutionBlockName?: string,
 	/** Optional preset bucket key (`color`, `font-size`, …) for lookups. */

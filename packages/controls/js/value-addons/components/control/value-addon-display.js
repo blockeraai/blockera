@@ -33,6 +33,7 @@ export type ValueAddonDisplayProps = {
 	value: ValueAddon,
 	className?: string,
 	themeJsonPlainPresetSlug?: string,
+	themeJsonPlainPresetCompositePaint?: string,
 	themeJsonPlainPresetVariableType?: string,
 	themeJsonResolutionBlockName?: string,
 	themeJsonResolutionPresetCssVarInfix?: string,
@@ -43,6 +44,7 @@ export default function ValueAddonDisplay({
 	value,
 	className,
 	themeJsonPlainPresetSlug,
+	themeJsonPlainPresetCompositePaint,
 	themeJsonPlainPresetVariableType,
 	themeJsonResolutionBlockName,
 	themeJsonResolutionPresetCssVarInfix,
@@ -79,6 +81,12 @@ export default function ValueAddonDisplay({
 						getVariableIcon({
 							type: themeJsonPlainPresetVariableType || 'color',
 							iconSize: 'small',
+							value:
+								themeJsonPlainPresetCompositePaint !==
+									undefined &&
+								themeJsonPlainPresetCompositePaint !== ''
+									? themeJsonPlainPresetCompositePaint
+									: undefined,
 							presetSlug:
 								typeof themeJsonPlainPresetSlug === 'string'
 									? themeJsonPlainPresetSlug

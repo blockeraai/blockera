@@ -95,6 +95,12 @@ export default function ({
 					controlProps.themeJsonPlainPresetVariableType ||
 					controlProps.variableTypes?.[0] ||
 					'color',
+				value:
+					controlProps.themeJsonPlainPresetCompositePaint !==
+						undefined &&
+					controlProps.themeJsonPlainPresetCompositePaint !== ''
+						? controlProps.themeJsonPlainPresetCompositePaint
+						: undefined,
 				presetSlug: controlProps.themeJsonPlainPresetSlug,
 				themeJsonResolutionBlockName:
 					controlProps.themeJsonResolutionBlockName,

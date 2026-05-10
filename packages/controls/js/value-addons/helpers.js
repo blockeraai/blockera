@@ -836,7 +836,10 @@ export function getDeletedItemInfo(item: ValueAddon): {
 }
 
 /** Info payload for the variable deleted-state popover when a plain stored theme.json preset slug is missing from merged features. */
-export function getDeletedPlainThemeJsonPresetInfo(slug: string): {
+export function getDeletedPlainThemeJsonPresetInfo(
+	slug: string,
+	options?: {| compositePaint?: string |}
+): {
 	name: string,
 	id: string,
 	value: string,
@@ -847,6 +850,32 @@ export function getDeletedPlainThemeJsonPresetInfo(slug: string): {
 	after: string,
 	after2: string | MixedElement,
 } {
+	const trimmedPaint =
+		typeof options?.compositePaint === 'string'
+			? options.compositePaint.trim()
+			: '';
+	const hasCompositePaint = trimmedPaint !== '';
+
+	if (hasCompositePaint) {
+		return {
+			name: slug,
+			id: '',
+			value: trimmedPaint,
+			referenceType: 'preset',
+			referenceName: __('Block Editor', 'blockera'),
+			tooltip: '',
+			before: __(
+				'This theme preset slug is no longer present in theme.json for this control. A resolved color was stored with the slug.',
+				'blockera'
+			),
+			after: __(
+				'You can switch to another variable, unlink to keep only this resolved color, or remove to clear the value.',
+				'blockera'
+			),
+			after2: '',
+		};
+	}
+
 	return {
 		name: slug,
 		id: '',

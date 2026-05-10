@@ -33,9 +33,18 @@ export default function ({
 		controlProps.isDeletedPlainThemeJsonPreset &&
 		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug)
 			? getDeletedPlainThemeJsonPresetInfo(
-					controlProps.themeJsonPlainPresetSlug || ''
+					controlProps.themeJsonPlainPresetSlug || '',
+					{
+						compositePaint:
+							controlProps.themeJsonPlainPresetCompositePaint,
+					}
 				)
 			: getDeletedItemInfo(controlProps.value);
+
+	const isCompositeMissingPlainPreset =
+		Boolean(controlProps.isDeletedPlainThemeJsonPreset) &&
+		typeof controlProps.themeJsonPlainPresetCompositePaint === 'string' &&
+		controlProps.themeJsonPlainPresetCompositePaint !== '';
 
 	const resolvedBoldLabel =
 		deletedItem.name !== '' ? deletedItem.name : deletedItem.id;
@@ -171,11 +180,23 @@ export default function ({
 								tabIndex="-1"
 								size={'small'}
 								onClick={controlProps.handleOnUnlinkVar}
-								label={__('Unlink Variable Value', 'blockera')}
+								label={
+									isCompositeMissingPlainPreset
+										? __(
+												'Unlink to resolved color',
+												'blockera'
+											)
+										: __(
+												'Unlink Variable Value',
+												'blockera'
+											)
+								}
 								style={{ padding: '2px 8px' }}
 							>
 								<Icon icon="unlink" iconSize="20" />
-								{__('Unlink Variable', 'blockera')}
+								{isCompositeMissingPlainPreset
+									? __('Unlink color value', 'blockera')
+									: __('Unlink Variable', 'blockera')}
 							</Button>
 							<Button
 								variant="tertiary"
