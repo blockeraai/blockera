@@ -7,6 +7,20 @@ export {
 	type ColorPresetPreviewUsage,
 } from './preset-preview/injected-helpers';
 export {
+	useMergedThemeJsonExperimentalFeaturesWrapped,
+	usePlainThemeJsonPresetMergedState,
+	getPlainThemeJsonPresetMergedState,
+	resolveThemeJsonPresetScalarForGlobalStylesUi,
+	splitStoredCompositePlainPresetValue,
+	plainPresetSlugFromStoredPlainPresetInput,
+	compositeResolvedValueFromStoredPlainPresetInput,
+	unlinkPlainThemeJsonPresetCompositeToScalar,
+	isLikelyThemeJsonPlainPresetSlugString,
+	type PlainThemeJsonPresetMergedStateArgs,
+	type UsePlainThemeJsonPresetMergedStateArgs,
+	type ResolveThemeJsonPresetScalarForGlobalStylesUiArgs,
+} from './theme-json-plain-preset';
+export {
 	mergeBaseAndUserConfigs,
 	useGlobalStylesContext,
 } from './context/global-styles-provider';
