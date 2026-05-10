@@ -12,6 +12,7 @@ import { ColorIndicatorStack } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { splitStoredCompositePlainPresetValue } from '../theme-json-plain-preset';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { filterVariationsByBase } from './color-palette-variations-utils';
 import { ColorPresetShadeStackHeader } from './color-shades-repeater-item';
@@ -20,13 +21,20 @@ import { isShadePaletteColor } from './utils';
 function presetToIndicatorStackEntry(
 	preset: Color & Record<string, unknown>
 ): string | { value: string; type: string } | null {
-	const value = String(preset.color ?? '');
+	const raw = preset.color;
+	const composite =
+		typeof raw === 'string'
+			? splitStoredCompositePlainPresetValue(raw)
+			: null;
+	const paintRaw =
+		composite?.realPart ??
+		(typeof raw === 'string' ? raw : String(raw ?? ''));
+	const value = paintRaw;
 	const typeStr = String(preset.type ?? '');
 	const isGradient =
 		typeStr === 'linear-gradient' ||
 		typeStr === 'radial-gradient' ||
-		(typeof preset.color === 'string' &&
-			preset.color.includes('gradient('));
+		(typeof paintRaw === 'string' && paintRaw.includes('gradient('));
 
 	if (!value && !isGradient) {
 		return null;

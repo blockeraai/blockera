@@ -4,8 +4,15 @@
 import type { Color, Gradient } from '@wordpress/global-styles-engine';
 
 /**
+ * Blockera dependencies
+ */
+import { getValueAddonRealValue, isValid } from '@blockera/controls';
+import { parseVarString } from '@blockera/data';
+
+/**
  * Internal dependencies
  */
+import { splitStoredCompositePlainPresetValue } from '../theme-json-plain-preset';
 import {
 	COLOR_SHADE_ANCHOR_STEP,
 	COLOR_SHADE_STEPS,
@@ -66,6 +73,128 @@ export function filterMainPaletteColors<C extends Color>(colors: C[]): C[] {
 
 export { findRepeaterItemIdBySlug } from '../components/preset-taxonomy-ui/preset-taxonomy-utils';
 
+function palettePickerTypeFromRepeaterRow(v: Record<string, unknown>): string {
+	if (typeof v.type === 'string' && v.type !== '') {
+		return v.type;
+	}
+	return inferPalettePickerTypeFromColorRaw(v.color);
+}
+
+function inferPalettePickerTypeFromColorRaw(raw: unknown): string {
+	if (
+		raw !== null &&
+		typeof raw === 'object' &&
+		'settings' in raw &&
+		raw.settings !== null &&
+		typeof raw.settings === 'object' &&
+		'type' in (raw.settings as Record<string, unknown>)
+	) {
+		const st = String((raw.settings as { type?: string }).type ?? '');
+		if (
+			st === 'linear-gradient' ||
+			st === 'radial-gradient' ||
+			st === 'color'
+		) {
+			return st;
+		}
+	}
+	if (typeof raw === 'string') {
+		const s = raw;
+		if (
+			s.includes('|gradient|') ||
+			s.startsWith('var(--wp--preset--gradient--')
+		) {
+			return 'linear-gradient';
+		}
+	}
+	return 'color';
+}
+
+function parseVarStringCategoryForPalette(pickerType: string): string {
+	if (pickerType === 'linear-gradient' || pickerType === 'radial-gradient') {
+		return 'gradient';
+	}
+	return pickerType;
+}
+
+/**
+ * When `color` is a Block Editor variable reference (`var:` / `var(--wp--preset--…)`),
+ * returns the preset id slug only (no wrappers). Otherwise returns null.
+ */
+function presetSlugFromVariableLikeColorString(
+	value: string,
+	pickerType: string
+): string | null {
+	const trimmed = value.trim();
+	if (trimmed === '') {
+		return null;
+	}
+	const category = parseVarStringCategoryForPalette(pickerType);
+	const parsed = parseVarString(trimmed, category);
+	return parsed.id && parsed.id !== '' ? parsed.id : null;
+}
+
+/**
+ * Normalizes repeater `color` for palette persistence. Value-addon objects become
+ * `resolvedCss,presetSlug` when both resolve; strings matching variable wrappers collapse to slug-only;
+ * already composite strings round-trip unchanged.
+ */
+export function normalizeRepeaterPaletteColorValue(
+	raw: unknown,
+	pickerType: string
+): string {
+	if (raw === undefined || raw === null || raw === '') {
+		return '';
+	}
+
+	if (typeof raw === 'string') {
+		const trimmed = raw.trim();
+		if (trimmed === '') {
+			return '';
+		}
+		if (splitStoredCompositePlainPresetValue(trimmed)) {
+			return trimmed;
+		}
+		return (
+			presetSlugFromVariableLikeColorString(trimmed, pickerType) ??
+			trimmed
+		);
+	}
+
+	if (typeof raw === 'object' && raw !== null && isValid(raw)) {
+		const addon = raw as {
+			settings?: { id?: string };
+		};
+
+		const resolved = getValueAddonRealValue(raw);
+		const resolvedStr = typeof resolved === 'string' ? resolved.trim() : '';
+
+		const slugFromResolved =
+			resolvedStr !== ''
+				? presetSlugFromVariableLikeColorString(resolvedStr, pickerType)
+				: null;
+
+		const idFromSettings =
+			typeof addon.settings?.id === 'string' && addon.settings.id !== ''
+				? addon.settings.id
+				: '';
+
+		const slug = slugFromResolved ?? idFromSettings;
+
+		if (resolvedStr !== '' && slug !== '') {
+			return `${resolvedStr},${slug}`;
+		}
+
+		return slug || resolvedStr;
+	}
+
+	if (typeof raw === 'object' && raw !== null) {
+		return '';
+	}
+
+	return String(raw);
+}
+
 export function convertRepeaterValueToGradients(newValue: object): Gradient[] {
 	return Object.values(
 		newValue as Record<string, Gradient & Record<string, unknown>>
@@ -86,17 +215,20 @@ export function colorPaletteRowFromRepeaterFields(
 ): Color & Record<string, unknown> {
 	const slug = String(v.slug ?? '');
 	const name = String(v.name ?? '');
-	let colorValue = '';
-	if (typeof v.color === 'string') {
-		colorValue = v.color;
-	} else if (v.color !== undefined && v.color !== null && v.color !== '') {
-		colorValue = String(v.color);
-	}
+	const pickerType = palettePickerTypeFromRepeaterRow(v);
+	const colorValue =
+		v.color === undefined || v.color === null || v.color === ''
+			? ''
+			: normalizeRepeaterPaletteColorValue(v.color, pickerType);
+
 	const row: Color & Record<string, unknown> = {
 		slug,
 		name,
 		color: colorValue,
 	};
+	if (typeof v.type === 'string' && v.type !== '') {
+		row.type = v.type;
+	}
 	if (typeof v.isVisible === 'boolean') {
 		row.isVisible = v.isVisible;
 	}
@@ -109,7 +241,7 @@ export function colorPaletteRowFromRepeaterFields(
 	) {
 		row.meta = { ...(v.meta as Record<string, unknown>) };
 	}
-	return row as Color;
+	return row as Color & Record<string, unknown>;
 }
 
 /**

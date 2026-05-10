@@ -17,7 +17,7 @@ import {
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
-import { resolveThemeJsonPaintPresetStringFromWpEditor } from '@blockera/data';
+import { inferPresetCssVarInfixForPaintVariablePickerType } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -45,6 +45,10 @@ import {
 	ColorShadesRepeaterItem,
 	ColorPresetShadeStackHeader,
 } from './color-shades-repeater-item';
+import {
+	splitStoredCompositePlainPresetValue,
+	resolveThemeJsonPresetScalarForGlobalStylesUi,
+} from '../theme-json-plain-preset';
 import {
 	generateColorShades,
 	COLOR_SHADE_ANCHOR_STEP,
@@ -111,19 +115,34 @@ export function ColorPresetOpener({
 		previewUsageProp
 	);
 
+	const presetCssVarInfix =
+		inferPresetCssVarInfixForPaintVariablePickerType(colorItem.type) ??
+		'color';
+
+	const compositeStoredColor = useMemo(() => {
+		const c = colorItem.color;
+		return typeof c === 'string'
+			? splitStoredCompositePlainPresetValue(c)
+			: null;
+	}, [colorItem.color]);
+
+	const palettePaintSource =
+		compositeStoredColor?.realPart ??
+		(typeof colorItem.color === 'string' ? colorItem.color : '');
+
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
-		const color = colorItem?.color;
 		const type = colorItem?.type ?? '';
 		const isGradient =
 			type === 'linear-gradient' ||
 			type === 'radial-gradient' ||
-			(typeof color === 'string' && color.includes('gradient('));
+			(typeof palettePaintSource === 'string' &&
+				palettePaintSource.includes('gradient('));
 
 		if (isGradient) {
 			const declarations =
 				getGlobalStylesColorGradientPresetPreviewDeclarations(
 					{
-						color: colorItem?.color,
+						color: palettePaintSource,
 						type: colorItem?.type,
 					},
 					previewUsage
@@ -136,7 +155,7 @@ export function ColorPresetOpener({
 
 		const patch = getGlobalStylesColorPresetPreviewAttributes(
 			{
-				color: colorItem?.color,
+				color: palettePaintSource,
 				type: colorItem?.type,
 			},
 			previewUsage
@@ -145,7 +164,7 @@ export function ColorPresetOpener({
 			return null;
 		}
 		return { kind: 'attributes', patch };
-	}, [colorItem?.color, colorItem?.type, previewUsage]);
+	}, [palettePaintSource, colorItem?.type, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 	const { fullItems } = usePresetVariationsStorage<Color>();
@@ -165,9 +184,9 @@ export function ColorPresetOpener({
 		() => ({
 			slug: baseSlug,
 			name: String(colorItem.name ?? ''),
-			color: colorItem.color,
+			color: palettePaintSource || colorItem.color,
 		}),
-		[baseSlug, colorItem.name, colorItem.color]
+		[baseSlug, colorItem.name, colorItem.color, palettePaintSource]
 	);
 
 	const { isVariableVariationsPickerHeader } = useMemo(
@@ -195,8 +214,10 @@ export function ColorPresetOpener({
 				!isShadePaletteColor(c as Color & Record<string, unknown>) &&
 				String(c.slug ?? '') === slugForMainLookup
 		);
-		return String(main?.color ?? colorItem.color ?? '#000000');
-	}, [fullItems, slugForMainLookup, colorItem.color]);
+		return String(
+			main?.color ?? palettePaintSource ?? colorItem.color ?? '#000000'
+		);
+	}, [fullItems, slugForMainLookup, colorItem.color, palettePaintSource]);
 
 	const baselineHexByStep = useMemo(
 		() => generateColorShades(mainPresetHexForRamp),
@@ -207,29 +228,35 @@ export function ColorPresetOpener({
 		shadeSlugParsed !== null ? Number(shadeSlugParsed.shadeStep) : null;
 
 	const headerIcon = useMemo(() => {
-		const indicatorPaint = resolveThemeJsonPaintPresetStringFromWpEditor({
-			value: colorItem.color,
-			presetSlug: slugForMainLookup,
-			blockName: '',
-			variablePickerType: colorItem.type,
-		});
+		const indicatorPaint = compositeStoredColor
+			? compositeStoredColor.realPart
+			: resolveThemeJsonPresetScalarForGlobalStylesUi({
+					storedScalar:
+						typeof colorItem.color === 'string'
+							? colorItem.color
+							: '',
+					presetSlug: slugForMainLookup,
+					blockName: '',
+					presetCssVarInfix,
+					variablePickerType: colorItem.type,
+				});
 
 		const isGradient =
 			colorItem.type === 'linear-gradient' ||
 			colorItem.type === 'radial-gradient' ||
 			(typeof indicatorPaint === 'string' &&
 				indicatorPaint.includes('gradient(')) ||
-			(typeof colorItem.color === 'string' &&
-				colorItem.color.includes('gradient('));
+			(typeof palettePaintSource === 'string' &&
+				palettePaintSource.includes('gradient('));
 
 		let indicatorValue = '';
 		if (indicatorPaint !== '') {
 			indicatorValue = indicatorPaint;
 		} else if (
-			typeof colorItem.color === 'string' &&
-			colorItem.color !== ''
+			typeof palettePaintSource === 'string' &&
+			palettePaintSource !== ''
 		) {
-			indicatorValue = colorItem.color;
+			indicatorValue = palettePaintSource;
 		}
 
 		const core = indicatorValue ? (
@@ -255,7 +282,7 @@ export function ColorPresetOpener({
 			shadeStepNum !== null &&
 			shadeStepNum !== COLOR_SHADE_ANCHOR_STEP &&
 			shadeHexDiffersFromBaseline(
-				colorItem.color ?? '',
+				palettePaintSource,
 				baselineHexByStep[String(shadeStepNum)]
 			);
 
@@ -292,8 +319,11 @@ export function ColorPresetOpener({
 			</span>
 		);
 	}, [
+		compositeStoredColor,
+		palettePaintSource,
 		colorItem?.color,
 		colorItem?.type,
+		presetCssVarInfix,
 		slugForMainLookup,
 		isShadeRow,
 		shadeVariationCount,
@@ -336,7 +366,7 @@ export function ColorPresetOpener({
 						opacity: 0.5,
 					}}
 				>
-					{colorItem?.color}
+					{compositeStoredColor?.slugPart ?? colorItem?.color}
 				</span>
 			</span>
 		);
