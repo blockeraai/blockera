@@ -12,6 +12,8 @@ import {
 	isLikelyThemeJsonPlainPresetSlugString,
 	splitStoredCompositePlainColorValue,
 	unlinkPlainThemeJsonPresetCompositeToScalar,
+	normalizeCompositePlainPresetPaintPart,
+	compositePlainColorPaintFromStoredPlainPresetInput,
 } from '../utils';
 import { generateVariableString } from '@blockera/data';
 import { __ } from '@wordpress/i18n';
@@ -730,6 +732,38 @@ describe('Helper Functions', () => {
 		});
 	});
 
+	describe('normalizeCompositePlainPresetPaintPart', () => {
+		test('extracts explicit var() fallback', () => {
+			expect(
+				normalizeCompositePlainPresetPaintPart(
+					'var(--wp--preset--color--accent, #336699)'
+				)
+			).toBe('#336699');
+		});
+
+		test('returns literal paint unchanged', () => {
+			expect(normalizeCompositePlainPresetPaintPart('#abc')).toBe('#abc');
+		});
+
+		test('returns original when var() has no fallback', () => {
+			expect(
+				normalizeCompositePlainPresetPaintPart(
+					'var(--wp--preset--color--accent)'
+				)
+			).toBe('var(--wp--preset--color--accent)');
+		});
+	});
+
+	describe('compositePlainColorPaintFromStoredPlainPresetInput', () => {
+		test('composite with var realPart yields fallback literal', () => {
+			const stored =
+				'var(--wp--preset--color--brand, rgb(10, 20, 30)),brand';
+			expect(
+				compositePlainColorPaintFromStoredPlainPresetInput(stored)
+			).toBe('rgb(10, 20, 30)');
+		});
+	});
+
 	describe('splitStoredCompositePlainColorValue', () => {
 		test('resolved hex comma preset slug', () => {
 			expect(
@@ -745,6 +779,14 @@ describe('Helper Functions', () => {
 			expect(splitStoredCompositePlainColorValue(stored)).toEqual({
 				realPart: 'rgb(255, 128, 0)',
 				slugPart: 'accent-orange',
+			});
+		});
+
+		test('realPart preserves full var() string before slug delimiter', () => {
+			const stored = 'var(--wp--preset--color--brand, #abc123),brand';
+			expect(splitStoredCompositePlainColorValue(stored)).toEqual({
+				realPart: 'var(--wp--preset--color--brand, #abc123)',
+				slugPart: 'brand',
 			});
 		});
 

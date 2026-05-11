@@ -46,6 +46,11 @@ export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
 const COMPOSITE_PLAIN_COLOR_SLUG_SUFFIX_RE =
 	/^[a-z][a-z0-9_-]*(?:-[a-z0-9_-]+)*$/i;
 
+/**
+ * Returns `{ realPart, slugPart }` for composite strings. `realPart` is stored verbatim (may include `var()`).
+ * To use the explicit fallback inside `var(…, fallback)` as a scalar color, use
+ * `normalizeCompositePlainPresetPaintPart(realPart)` or `compositePlainColorPaintFromStoredPlainPresetInput`.
+ */
 export function splitStoredCompositePlainColorValue(
 	value: string
 ): {| realPart: string, slugPart: string |} | null {
@@ -81,14 +86,6 @@ export function plainPresetSlugFromStoredPlainPresetInput(
 	return typeof strippedPlainInput === 'string'
 		? strippedPlainInput.trim()
 		: '';
-}
-
-/** Resolved CSS fragment stored before comma when composite plain preset shape matches. */
-export function compositePlainColorPaintFromStoredPlainPresetInput(
-	strippedPlainInput: string
-): string {
-	const hit = splitStoredCompositePlainColorValue(strippedPlainInput);
-	return hit?.realPart ?? '';
 }
 
 /** Non-empty `ValueAddonControlProps.themeJsonPlainPresetSlug` (merged theme.json preset slug). */
@@ -177,6 +174,41 @@ export function extractCssVarValue(value: string): string {
 	}
 
 	return result;
+}
+
+/**
+ * When `paint` is `var(… , fallback)`, returns `fallback` for UI / scalar handlers.
+ * Otherwise returns `paint` trimmed (including plain hex/rgb or `var()` without fallback).
+ */
+export function normalizeCompositePlainPresetPaintPart(paint: string): string {
+	const raw = typeof paint === 'string' ? paint.trim() : '';
+	if (raw === '' || !raw.includes('var(')) {
+		return raw;
+	}
+	const extracted = extractCssVarValue(raw);
+	if (
+		typeof extracted === 'string' &&
+		extracted !== '' &&
+		extracted.trim() !== ''
+	) {
+		return extracted.trim();
+	}
+	return raw;
+}
+
+/**
+ * Resolved paint from composite storage `paint,presetSlug`: splits like
+ * splitStoredCompositePlainColorValue, then normalizes `realPart` so `var(--wp--preset--…, #rgb)`
+ * yields the literal fallback for indicators/unlink.
+ */
+export function compositePlainColorPaintFromStoredPlainPresetInput(
+	strippedPlainInput: string
+): string {
+	const hit = splitStoredCompositePlainColorValue(strippedPlainInput);
+	if (!hit) {
+		return '';
+	}
+	return normalizeCompositePlainPresetPaintPart(hit.realPart);
 }
 
 /**
