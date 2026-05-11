@@ -25,4 +25,7 @@ export {
 	PresetTaxonomyBridge,
 	type PresetTaxonomyBridgeProps,
 } from './preset-taxonomy-bridge';
-export { findRepeaterItemIdBySlug } from './preset-taxonomy-utils';
+export {
+	findRepeaterItemIdBySlug,
+	isPresetTaxonomyInterfaceSizeSmall,
+} from './preset-taxonomy-utils';

@@ -7,7 +7,7 @@ import { useCallback, useContext } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex, RepeaterContext } from '@blockera/controls';
+import { RepeaterContext } from '@blockera/controls';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
@@ -74,12 +74,7 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 					className="blockera-preset-taxonomy-group-shell"
 				>
 					<TaxonomyGroupHeader label={group.name} />
-					<Flex
-						direction="column"
-						gap="var(--repeater-gap, 8px)"
-						className="blockera-preset-taxonomy-items-stack"
-						style={{ width: '100%' }}
-					>
+					<div className="blockera-preset-taxonomy-items-stack">
 						{group.directPresets.map((preset) => (
 							<PresetTaxonomyPopoverRow
 								key={String(preset.slug)}
@@ -168,7 +163,7 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 								))}
 							</TaxonomyCategoryAccordion>
 						))}
-					</Flex>
+					</div>
 				</div>
 			))}
 		</div>

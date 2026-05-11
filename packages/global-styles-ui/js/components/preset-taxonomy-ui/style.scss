@@ -68,3 +68,25 @@
 	flex-direction: column;
 	gap: var(--repeater-gap, 8px);
 }
+
+.blockera-preset-taxonomy-items-stack {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: stretch;
+	width: 100%;
+	box-sizing: border-box;
+	gap: var(--repeater-gap, 8px);
+}
+
+.blockera-preset-taxonomy-items-stack > * {
+	flex: 1 1 100%;
+	min-width: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.blockera-preset-taxonomy-items-stack
+	> .blockera-preset-taxonomy-row.blockera-preset-taxonomy-row--interface-small {
+	flex: 0 1 calc((100% - var(--repeater-gap, 8px)) / 2);
+	max-width: calc((100% - var(--repeater-gap, 8px)) / 2);
+}

@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import {
 	GroupControl,
 	RepeaterContext,
@@ -27,6 +27,7 @@ import {
 } from '../variable-picker-preset-utils';
 import { isTaxonomyPopoverOpenEvent } from './is-taxonomy-popover-open-event';
 import { PresetTaxonomyPresetFields } from './taxonomy-preset-fields';
+import { isPresetTaxonomyInterfaceSizeSmall } from './preset-taxonomy-utils';
 
 type TaxonomyRepeaterCtx = {
 	popoverTitle?: string;
@@ -60,6 +61,11 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 }: PresetTaxonomyPopoverRowProps) {
 	const [isOpen, setOpen] = useState(false);
 	const rowVisible = item?.isVisible !== false;
+
+	const interfaceSmall = useMemo(
+		() => isPresetTaxonomyInterfaceSizeSmall(item),
+		[item]
+	);
 	const pickerCtx = useVarPickerPresetContext();
 	const repeaterCtx = useContext(RepeaterContext) as TaxonomyRepeaterCtx;
 
@@ -209,9 +215,14 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 
 	return (
 		<div
-			className={controlInnerClassNames(
-				'repeater-item',
-				rowVisible ? ' is-active' : ' is-inactive'
+			className={classNames(
+				controlInnerClassNames(
+					'repeater-item',
+					rowVisible ? ' is-active' : ' is-inactive'
+				),
+				'blockera-preset-taxonomy-row',
+				interfaceSmall &&
+					'blockera-preset-taxonomy-row--interface-small'
 			)}
 			data-cy="repeater-item"
 			data-id={String(itemId)}

@@ -15,3 +15,46 @@ export function findRepeaterItemIdBySlug(
 	}
 	return null;
 }
+
+function presetTaxonomyInterfaceSizeRaw(
+	item: Record<string, unknown>
+): string | undefined {
+	const direct =
+		item['interface-size'] ??
+		(item.interfaceSize as string | number | undefined);
+	if (
+		direct !== undefined &&
+		direct !== null &&
+		String(direct).trim() !== ''
+	) {
+		return String(direct).trim();
+	}
+
+	const meta = item.meta;
+	if (
+		meta !== null &&
+		meta !== undefined &&
+		typeof meta === 'object' &&
+		!Array.isArray(meta)
+	) {
+		const m = meta as Record<string, unknown>;
+		const mv =
+			m['interface-size'] ??
+			(m.interfaceSize as string | number | undefined);
+		if (mv !== undefined && mv !== null && String(mv).trim() !== '') {
+			return String(mv).trim();
+		}
+	}
+
+	return undefined;
+}
+
+/**
+ * Preset variable meta may set `"interface-size": "small"` (or camelCase) so taxonomy rows use half width (two per row).
+ */
+export function isPresetTaxonomyInterfaceSizeSmall(
+	item: Record<string, unknown>
+): boolean {
+	const raw = presetTaxonomyInterfaceSizeRaw(item);
+	return raw !== undefined && raw.toLowerCase() === 'small';
+}

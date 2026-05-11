@@ -83,17 +83,14 @@ export function TaxonomyCategoryAccordion({
 				</Flex>
 			}
 		>
-			<Flex
-				direction="column"
-				gap="var(--repeater-gap, 8px)"
+			<div
 				className={[
 					'blockera-preset-taxonomy-category-body',
 					'blockera-preset-taxonomy-items-stack',
 				].join(' ')}
-				style={{ width: '100%' }}
 			>
 				{children}
-			</Flex>
+			</div>
 		</GroupControl>
 	);
 }
