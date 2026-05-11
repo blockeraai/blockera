@@ -78,6 +78,8 @@ export type ColorPresetOpenerProps = {
 	};
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 	variationsAccordionOpen: boolean;
+	/** When true (preset taxonomy rows), picker ramp chips merge repeater `selectable`. Omit on flat preset lists. */
+	enableVariationPickerStripSelection?: boolean;
 };
 
 function resolveColorPresetPreviewUsage(
@@ -105,6 +107,7 @@ export function ColorPresetOpener({
 	item: colorItem,
 	isOpenPopoverEvent,
 	variationsAccordionOpen,
+	enableVariationPickerStripSelection,
 	contextType = 'repeater',
 	previewUsage: previewUsageProp,
 }: ColorPresetOpenerProps) {
@@ -419,7 +422,8 @@ export function ColorPresetOpener({
 				controlInnerClassNames('repeater-group-header'),
 				{
 					'is-preset-variable-variations-picker-header':
-						isVariableVariationsPickerHeader,
+						isVariableVariationsPickerHeader ||
+						'taxonomy' === contextType,
 				}
 			)}
 			onClick={getPresetRepeaterHeaderOnClick({
@@ -456,6 +460,10 @@ export function ColorPresetOpener({
 						usageType="manual"
 						item={colorItem}
 						itemId={itemId}
+						inheritRepeaterPickerSelection={
+							enableVariationPickerStripSelection === true ||
+							contextType === 'taxonomy'
+						}
 					/>
 				}
 				icon={contextType === 'taxonomy' ? null : headerIcon}
