@@ -1,17 +1,23 @@
 /**
  * External dependencies
  */
-import type { ElementType, MouseEvent as ReactMouseEvent } from 'react';
+import type {
+	ComponentType,
+	ElementType,
+	MouseEvent as ReactMouseEvent,
+} from 'react';
 import { memo, useContext, useMemo, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
+import { isBoolean } from '@blockera/utils';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import {
 	GroupControl,
 	RepeaterContext,
+	RepeaterItemVariationsPane,
 	useControlContext,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
@@ -21,10 +27,7 @@ import {
  */
 import type { PresetFieldsPropsResolver } from '../preset-group';
 import type { VariableType } from '../types';
-import {
-	applyVariablePickerRepeaterSelection,
-	buildPresetVariablePickerPayload,
-} from '../variable-picker-preset-utils';
+import { buildPresetVariablePickerPayload } from '../variable-picker-preset-utils';
 import { isTaxonomyPopoverOpenEvent } from './is-taxonomy-popover-open-event';
 import { PresetTaxonomyPresetFields } from './taxonomy-preset-fields';
 import { isPresetTaxonomyInterfaceSizeSmall } from './preset-taxonomy-utils';
@@ -33,6 +36,10 @@ type TaxonomyRepeaterCtx = {
 	popoverTitle?: string;
 	popoverClassName?: string;
 	popoverOffset?: number;
+	popoverProps?: Record<string, unknown>;
+	design?: string;
+	mode?: string;
+	actionMenuButtonLabel?: string | null;
 	repeaterItems?: Record<string, unknown>;
 	controlId?: string | null;
 	onChange?: (payload: unknown) => void;
@@ -40,6 +47,14 @@ type TaxonomyRepeaterCtx = {
 		itemId: string | number,
 		row: Record<string, unknown>
 	) => void;
+	repeaterItemVariations?: ComponentType<{
+		item: VariableType | Record<string, unknown>;
+		itemId: string;
+	}> | null;
+	repeaterItemChildren?: ComponentType<{
+		item: VariableType | Record<string, unknown>;
+		itemId: string | number;
+	}>;
 };
 
 export type PresetTaxonomyPopoverRowProps = {
@@ -60,6 +75,8 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 	repeaterItemHeader: RepeaterItemHeader,
 }: PresetTaxonomyPopoverRowProps) {
 	const [isOpen, setOpen] = useState(false);
+	const [variationsAccordionOpen, setVariationsAccordionOpen] =
+		useState(false);
 	const rowVisible = item?.isVisible !== false;
 
 	const interfaceSmall = useMemo(
@@ -69,32 +86,35 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 	const pickerCtx = useVarPickerPresetContext();
 	const repeaterCtx = useContext(RepeaterContext) as TaxonomyRepeaterCtx;
 
+	const RepeaterItemVariations = repeaterCtx.repeaterItemVariations ?? null;
+	const RepeaterItemChildren = repeaterCtx.repeaterItemChildren;
+
+	const showVariationsBranch = Boolean(
+		RepeaterItemVariations &&
+		isBoolean(item?.hasVariations) &&
+		item.hasVariations === true
+	);
+
+	let headerContextType: 'repeater' | 'taxonomy';
+	if (showVariationsBranch) {
+		headerContextType = 'repeater';
+	} else if ((item as { baseSlug?: string }).baseSlug) {
+		headerContextType = 'repeater';
+	} else {
+		headerContextType = 'taxonomy';
+	}
+
 	const {
 		dispatch: { modifyControlValue },
 		controlInfo: { name: controlStoreId },
 	} = useControlContext();
 
 	const itemsEffective = useMemo(() => {
-		const raw = repeaterCtx.repeaterItems;
-		if (
-			pickerCtx.active !== true ||
-			typeof pickerCtx.variableType !== 'string' ||
-			!pickerCtx.controlProps
-		) {
-			return raw ?? {};
-		}
-		return applyVariablePickerRepeaterSelection(raw, {
-			variableType: pickerCtx.variableType,
-			origin,
-			pickerValue: pickerCtx.controlProps.value,
-		}) as Record<string, Record<string, unknown>>;
-	}, [
-		repeaterCtx.repeaterItems,
-		pickerCtx.active,
-		pickerCtx.variableType,
-		pickerCtx.controlProps,
-		origin,
-	]);
+		return (repeaterCtx.repeaterItems ?? {}) as Record<
+			string,
+			Record<string, unknown>
+		>;
+	}, [repeaterCtx.repeaterItems]);
 
 	const storeRow =
 		itemsEffective[String(itemId)] &&
@@ -137,16 +157,21 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 	}
 
 	const headerNode = (
-		<RepeaterItemHeader
-			contextType="taxonomy"
-			item={itemForHeader}
-			itemId={String(itemId)}
-			isOpen={isOpen}
-			setOpen={setOpen}
-			isOpenPopoverEvent={isTaxonomyPopoverOpenEvent}
-			variationsAccordionOpen={false}
-			showLeadingValuePreview={true}
-		/>
+		<div className={controlInnerClassNames('repeater-item-header-holder')}>
+			<RepeaterItemHeader
+				contextType={headerContextType}
+				enableVariationPickerStripSelection={true}
+				item={itemForHeader}
+				itemId={String(itemId)}
+				isOpen={isOpen}
+				setOpen={setOpen}
+				isOpenPopoverEvent={isTaxonomyPopoverOpenEvent}
+				variationsAccordionOpen={
+					showVariationsBranch ? variationsAccordionOpen : false
+				}
+				showLeadingValuePreview={true}
+			/>
+		</div>
 	);
 
 	const controlId =
@@ -213,6 +238,85 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 		}
 	};
 
+	const popoverTitle =
+		repeaterCtx.popoverTitle || __('Edit Variable', 'blockera');
+	const popoverOffset = repeaterCtx.popoverOffset ?? 35;
+	const actionMenuButtonLabel =
+		repeaterCtx.actionMenuButtonLabel ?? __('More Options', 'blockera');
+	const design = repeaterCtx.design ?? 'minimal';
+	const mode = repeaterCtx.mode ?? 'popover';
+
+	const presetFieldsFallback = (
+		<PresetTaxonomyPresetFields
+			item={item as unknown as VariableType}
+			itemId={itemId}
+			origin={origin}
+			PresetFields={PresetFields}
+			presetFieldsPropsResolver={presetFieldsPropsResolver}
+		/>
+	);
+
+	const mainGroupControl = (
+		<GroupControl
+			mode={mode}
+			design={design}
+			toggleOpenBorder={true}
+			isOpen={isOpen}
+			onOpen={() => setOpen(true)}
+			onClose={() => setOpen(false)}
+			onClick={handleGroupClick}
+			popoverTitle={popoverTitle}
+			popoverOffset={popoverOffset}
+			popoverClassName={repeaterCtx.popoverClassName}
+			popoverProps={repeaterCtx.popoverProps}
+			actionButtonsType="inline"
+			actionMenuButtonLabel={actionMenuButtonLabel}
+			headerVariableSlug={headerVariableSlug}
+			className={controlInnerClassNames('repeater-item-group', {
+				'is-selected-item': selectableRow ? isSelected : false,
+			})}
+			header={headerNode}
+			headerOpenButton={true}
+		>
+			{RepeaterItemChildren ? (
+				<RepeaterItemChildren item={item} itemId={itemId} />
+			) : (
+				presetFieldsFallback
+			)}
+		</GroupControl>
+	);
+
+	const variationsGroupControl =
+		RepeaterItemVariations && showVariationsBranch ? (
+			<GroupControl
+				mode="accordion"
+				design={design}
+				onClick={() => true}
+				headerOpenButton={true}
+				toggleOpenBorder={true}
+				actionButtonsType="inline"
+				popoverProps={repeaterCtx.popoverProps}
+				isOpen={variationsAccordionOpen}
+				className={controlInnerClassNames('repeater-item-group', {
+					'is-selected-item': selectableRow ? isSelected : false,
+					[controlInnerClassNames('repeater-item-variations-group')]:
+						true,
+				})}
+				onOpen={() => setVariationsAccordionOpen(true)}
+				onClose={() => setVariationsAccordionOpen(false)}
+				actionMenuButtonLabel={actionMenuButtonLabel}
+				header={headerNode}
+				headerVariableSlug={headerVariableSlug}
+			>
+				<RepeaterItemVariationsPane>
+					<RepeaterItemVariations
+						item={item}
+						itemId={String(itemId)}
+					/>
+				</RepeaterItemVariationsPane>
+			</GroupControl>
+		) : null;
+
 	return (
 		<div
 			className={classNames(
@@ -227,37 +331,13 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 			data-cy="repeater-item"
 			data-id={String(itemId)}
 			data-test={String(itemId)}
+			{...(selectableRow && isSelected
+				? { onClick: handleGroupClick }
+				: {})}
 		>
-			<GroupControl
-				mode="popover"
-				design="minimal"
-				toggleOpenBorder={true}
-				isOpen={isOpen}
-				onOpen={() => setOpen(true)}
-				onClose={() => setOpen(false)}
-				onClick={handleGroupClick}
-				popoverTitle={
-					repeaterCtx.popoverTitle || __('Edit Variable', 'blockera')
-				}
-				popoverOffset={repeaterCtx.popoverOffset ?? 35}
-				popoverClassName={repeaterCtx.popoverClassName}
-				actionButtonsType="inline"
-				actionMenuButtonLabel={__('More Options', 'blockera')}
-				headerVariableSlug={headerVariableSlug}
-				className={controlInnerClassNames('repeater-item-group', {
-					'is-selected-item': selectableRow ? isSelected : false,
-				})}
-				header={headerNode}
-				headerOpenButton={true}
-			>
-				<PresetTaxonomyPresetFields
-					item={item as unknown as VariableType}
-					itemId={itemId}
-					origin={origin}
-					PresetFields={PresetFields}
-					presetFieldsPropsResolver={presetFieldsPropsResolver}
-				/>
-			</GroupControl>
+			{showVariationsBranch && variationsGroupControl
+				? variationsGroupControl
+				: mainGroupControl}
 		</div>
 	);
 });
