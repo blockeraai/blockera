@@ -12,6 +12,7 @@ export {
 	getPlainThemeJsonPresetMergedState,
 	resolveThemeJsonPresetScalarForGlobalStylesUi,
 	splitStoredCompositePlainPresetValue,
+	normalizeCompositePlainPresetPaintPart,
 	plainPresetSlugFromStoredPlainPresetInput,
 	compositeResolvedValueFromStoredPlainPresetInput,
 	unlinkPlainThemeJsonPresetCompositeToScalar,

@@ -6,6 +6,7 @@
  */
 export {
 	splitStoredCompositePlainColorValue as splitStoredCompositePlainPresetValue,
+	normalizeCompositePlainPresetPaintPart,
 	plainPresetSlugFromStoredPlainPresetInput,
 	compositePlainColorPaintFromStoredPlainPresetInput as compositeResolvedValueFromStoredPlainPresetInput,
 	unlinkPlainThemeJsonPresetCompositeToScalar,
