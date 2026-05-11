@@ -49,14 +49,14 @@ import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-e
 import {
 	buildVariationPresetsForBase,
 	filterVariationsByBase,
-	getDisplayShadeRamp,
+	getDisplayShadeRampWithStackMap,
 	rebuildVariationsFromMainColor,
 	shadeVariationSlug,
-	variationsToStackMap,
 } from './color-palette-variations-utils';
 import {
 	COLOR_SHADE_ANCHOR_STEP,
 	COLOR_SHADE_STEPS,
+	type ColorShadesMap,
 	generateColorShades,
 } from './color-shades-generator';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
@@ -66,7 +66,9 @@ import {
 	parsePaletteShadeSlug,
 	findRepeaterItemIdBySlug,
 	shadeHexDiffersFromBaseline,
+	normalizeRepeaterPaletteColorValue,
 } from './utils';
+import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
 import './style.scss';
 
 const GLOBAL_STYLES_COLOR_CONTEXT = {
@@ -120,9 +122,14 @@ function filterOutShadeVariationsForBase(
 
 function resolvePresetBaseHex(
 	displayRampMain: { color?: string },
-	colorItem: { color?: string }
+	colorItem: { color?: string; type?: string },
+	presetSlug: string
 ): string {
-	return displayRampMain.color || colorItem.color || '#000000';
+	const stored = displayRampMain.color || colorItem.color;
+	return resolveStoredColorForGenerateColorShades(stored, presetSlug, {
+		variablePickerType:
+			typeof colorItem.type === 'string' ? colorItem.type : undefined,
+	});
 }
 
 function GlobalStylesShadeStepColumn({
@@ -298,7 +305,7 @@ function GlobalStylesMainColorControl({
 	controlName: string;
 	value?: string;
 	disabled?: boolean;
-	onChange: (next: string | undefined) => void;
+	onChange: (next: unknown) => void;
 }) {
 	const pickerCtx = useVarPickerPresetContext();
 
@@ -432,26 +439,37 @@ function ColorPresetFieldsComponent({
 		sharedPresetName,
 	]);
 
-	const forBase = useMemo(
-		() =>
-			shadesSaved
-				? getDisplayShadeRamp(
-						fullItems,
-						effectiveBaseSlug,
-						displayRampMain
-					)
-				: [],
-		[shadesSaved, fullItems, effectiveBaseSlug, displayRampMain]
-	);
+	const { stackMap } = useMemo(() => {
+		if (!shadesSaved) {
+			return {
+				stackMap: {} as ColorShadesMap,
+			};
+		}
+		return getDisplayShadeRampWithStackMap(
+			fullItems,
+			effectiveBaseSlug,
+			displayRampMain
+		);
+	}, [shadesSaved, fullItems, effectiveBaseSlug, displayRampMain]);
 
 	/** Generated preview only — not persisted until “Enable Color Shades” is on. */
 	const previewShadesMap = useMemo(() => {
 		if (shadesSaved || isShadeRow) {
 			return null;
 		}
-		const base = resolvePresetBaseHex(displayRampMain, colorItem);
+		const base = resolvePresetBaseHex(
+			displayRampMain,
+			colorItem,
+			effectiveBaseSlug
+		);
 		return generateColorShades(base);
-	}, [shadesSaved, isShadeRow, colorItem, displayRampMain]);
+	}, [
+		shadesSaved,
+		isShadeRow,
+		colorItem,
+		displayRampMain,
+		effectiveBaseSlug,
+	]);
 
 	const {
 		controlInfo: { name: controlId },
@@ -491,7 +509,11 @@ function ColorPresetFieldsComponent({
 				effectiveBaseSlug
 			);
 			if (enabled) {
-				const base = resolvePresetBaseHex(displayRampMain, colorItem);
+				const base = resolvePresetBaseHex(
+					displayRampMain,
+					colorItem,
+					effectiveBaseSlug
+				);
 				const shades = generateColorShades(base);
 				const rows = buildVariationPresetsForBase(
 					{
@@ -610,12 +632,29 @@ function ColorPresetFieldsComponent({
 	);
 
 	const handleValueChange = useCallback(
-		(newValue: string | undefined) => {
-			updateColorViaRepeater({ color: newValue });
-			if (!newValue || storedShadesForBase.length === 0) {
+		(newValue: unknown) => {
+			const emptyPayload =
+				newValue === undefined ||
+				newValue === null ||
+				newValue === '' ||
+				(typeof newValue === 'string' && newValue.trim() === '');
+
+			if (emptyPayload) {
+				updateColorViaRepeater({ color: newValue });
 				return;
 			}
+
 			if (isShadeRow) {
+				const pickerType = String(
+					(colorItem as { type?: string }).type ?? 'color'
+				);
+				const normalized = normalizeRepeaterPaletteColorValue(
+					newValue,
+					pickerType
+				);
+				updateColorViaRepeater({
+					color: normalized !== '' ? normalized : newValue,
+				});
 				return;
 			}
 
@@ -623,11 +662,52 @@ function ColorPresetFieldsComponent({
 				fullItems,
 				effectiveBaseSlug
 			);
+			const variablePickerType = String(
+				(mainMeta as Color & { type?: string })?.type ??
+					(colorItem as { type?: string }).type ??
+					'color'
+			);
+
+			const normalizedMainColor = normalizeRepeaterPaletteColorValue(
+				newValue,
+				variablePickerType
+			);
+			let colorForPersist = '';
+			if (normalizedMainColor !== '') {
+				colorForPersist = normalizedMainColor;
+			} else if (typeof newValue === 'string') {
+				colorForPersist = newValue.trim();
+			}
+
+			if (!colorForPersist) {
+				updateColorViaRepeater({ color: newValue });
+				return;
+			}
+
+			if (storedShadesForBase.length === 0) {
+				updateColorViaRepeater({ color: colorForPersist });
+				return;
+			}
+
 			const presetName = String(mainMeta?.name ?? colorItem.name);
+			const mainHex = resolvePresetBaseHex(
+				{ ...displayRampMain, color: colorForPersist },
+				{
+					...(colorItem as {
+						color?: string;
+						type?: string;
+					}),
+					type: variablePickerType,
+				},
+				effectiveBaseSlug
+			);
 
 			const rebuilt = rebuildVariationsFromMainColor(
 				{ slug: effectiveBaseSlug, name: presetName },
-				newValue
+				mainHex,
+				{
+					variablePickerType,
+				}
 			);
 			const withoutShades = filterOutShadeVariationsForBase(
 				fullItems,
@@ -635,7 +715,7 @@ function ColorPresetFieldsComponent({
 			);
 			const withUpdatedMain = withoutShades.map((c) =>
 				String(c.slug ?? '') === effectiveBaseSlug
-					? ({ ...c, color: newValue } as Color)
+					? ({ ...c, color: colorForPersist } as Color)
 					: c
 			);
 			setFullItems([...withUpdatedMain, ...rebuilt]);
@@ -645,7 +725,8 @@ function ColorPresetFieldsComponent({
 			isShadeRow,
 			storedShadesForBase.length,
 			effectiveBaseSlug,
-			colorItem.name,
+			colorItem,
+			displayRampMain,
 			fullItems,
 			setFullItems,
 		]
@@ -661,9 +742,20 @@ function ColorPresetFieldsComponent({
 				return;
 			}
 			const shadeRowSlug = shadeVariationSlug(effectiveBaseSlug, step);
+			const shadePaletteRow = fullItems.find(
+				(c) => String(c.slug ?? '') === shadeRowSlug
+			);
+			const pickerType = String(
+				(shadePaletteRow as Color & { type?: string })?.type ??
+					(colorItem as { type?: string }).type ??
+					'color'
+			);
+			const persisted =
+				normalizeRepeaterPaletteColorValue(newValue, pickerType) ||
+				newValue;
 			const nextPalette = fullItems.map((c) =>
 				String(c.slug ?? '') === shadeRowSlug
-					? ({ ...c, color: newValue } as Color)
+					? ({ ...c, color: persisted } as Color)
 					: c
 			);
 			setFullItems(nextPalette);
@@ -684,7 +776,7 @@ function ColorPresetFieldsComponent({
 					itemId: sid,
 					value: {
 						...existingRow,
-						color: newValue,
+						color: persisted,
 					},
 				});
 			}
@@ -702,6 +794,7 @@ function ColorPresetFieldsComponent({
 			controlId,
 			repeaterId,
 			handleValueChange,
+			colorItem,
 		]
 	);
 
@@ -712,15 +805,38 @@ function ColorPresetFieldsComponent({
 			return undefined;
 		}
 		return generateColorShades(
-			resolvePresetBaseHex(displayRampMain, colorItem)
+			resolvePresetBaseHex(
+				{
+					...displayRampMain,
+					color:
+						typeof colorItem.color === 'string'
+							? colorItem.color
+							: normalizeRepeaterPaletteColorValue(
+									colorItem.color,
+									String(
+										(colorItem as { type?: string }).type ??
+											'color'
+									)
+								),
+				},
+				colorItem,
+				effectiveBaseSlug
+			)
 		);
-	}, [origin, slug, isShadeRow, shadesSaved, displayRampMain, colorItem]);
+	}, [
+		origin,
+		slug,
+		isShadeRow,
+		shadesSaved,
+		displayRampMain,
+		colorItem,
+		effectiveBaseSlug,
+	]);
 
 	if (!origin || !slug) {
 		return null;
 	}
 
-	const stackMap = variationsToStackMap(forBase);
 	const displayToggleChecked = shadeConsentOpen ? false : shadesSaved;
 	const showPreviewStack =
 		!isShadeRow && !shadesSaved && previewShadesMap !== null;
