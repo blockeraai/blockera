@@ -9,6 +9,31 @@ function presetSlug(preset: Record<string, unknown>): string {
 	return String(preset.slug ?? '');
 }
 
+/** Overlay canonical row state (e.g. `hasVariations` from the repeater model) onto tree nodes by slug. */
+function mergePresetWithCanonical<T extends Record<string, unknown>>(
+	canonicalBySlug: Map<string, T> | undefined,
+	preset: T
+): T {
+	if (!canonicalBySlug?.size) {
+		return preset;
+	}
+	const slug = presetSlug(preset);
+	const row = canonicalBySlug.get(slug);
+	if (!row) {
+		return preset;
+	}
+	return { ...preset, ...row } as T;
+}
+
+function canonicalPresetMap<T extends Record<string, unknown>>(
+	canonicalPresets?: T[]
+): Map<string, T> | undefined {
+	if (!canonicalPresets?.length) {
+		return undefined;
+	}
+	return new Map(canonicalPresets.map((p) => [presetSlug(p), p]));
+}
+
 export function isPresetInTaxonomyBranch(
 	preset: Record<string, unknown>,
 	declarations: TaxonomyDeclarations
@@ -54,8 +79,11 @@ export function partitionPresetsForTaxonomyUi<
 
 export function buildTaxonomyTree<T extends Record<string, unknown>>(
 	taxonomyPresets: T[],
-	declarations: TaxonomyDeclarations
+	declarations: TaxonomyDeclarations,
+	/** When set (e.g. main repeater value), merged into each tree preset by slug so fields like `hasVariations` match the row model. */
+	canonicalPresets?: T[]
 ): TaxonomyGroupBranch<T>[] {
+	const canonicalBySlug = canonicalPresetMap(canonicalPresets);
 	const branches: TaxonomyGroupBranch<T>[] = [];
 
 	for (const groupDef of declarations.groups) {
@@ -82,9 +110,9 @@ export function buildTaxonomyTree<T extends Record<string, unknown>>(
 				continue;
 			}
 
-			const directPresets = catMembers.filter(
-				(p) => !getPresetMeta(p)?.['sub-category']
-			);
+			const directPresets = catMembers
+				.filter((p) => !getPresetMeta(p)?.['sub-category'])
+				.map((p) => mergePresetWithCanonical(canonicalBySlug, p));
 			for (const p of catMembers) {
 				assigned.add(presetSlug(p));
 			}
@@ -107,11 +135,13 @@ export function buildTaxonomyTree<T extends Record<string, unknown>>(
 					subSlug,
 					declarations.categories
 				),
-				presets: catMembers.filter(
-					(p) =>
-						String(getPresetMeta(p)?.['sub-category'] ?? '') ===
-						subSlug
-				),
+				presets: catMembers
+					.filter(
+						(p) =>
+							String(getPresetMeta(p)?.['sub-category'] ?? '') ===
+							subSlug
+					)
+					.map((p) => mergePresetWithCanonical(canonicalBySlug, p)),
 			}));
 
 			categories.push({
@@ -123,9 +153,9 @@ export function buildTaxonomyTree<T extends Record<string, unknown>>(
 			});
 		}
 
-		const directPresets = members.filter(
-			(p) => !assigned.has(presetSlug(p))
-		);
+		const directPresets = members
+			.filter((p) => !assigned.has(presetSlug(p)))
+			.map((p) => mergePresetWithCanonical(canonicalBySlug, p));
 
 		branches.push({
 			slug: groupDef.slug,
