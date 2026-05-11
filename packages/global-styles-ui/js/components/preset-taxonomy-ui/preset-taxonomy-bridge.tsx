@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import type { ElementType, ReactNode } from 'react';
+import type { ComponentType, ElementType, ReactNode } from 'react';
 import { useCallback, useMemo } from '@wordpress/element';
 
 /**
@@ -13,9 +13,11 @@ import { cleanupRepeater } from '@blockera/controls';
  * Internal dependencies
  */
 import type { PresetFieldsPropsResolver } from '../preset-group';
+import type { VariableType } from '../types';
 import type { TaxonomyGroupBranch } from '../preset-taxonomy/types';
 import { PresetTaxonomyBody } from './preset-taxonomy-body';
 import { PresetTaxonomySection } from './preset-taxonomy-section';
+import { PresetTaxonomyPresetFields } from './taxonomy-preset-fields';
 
 export type PresetTaxonomyBridgeProps<TItem extends Record<string, unknown>> = {
 	controlName: string;
@@ -38,6 +40,10 @@ export type PresetTaxonomyBridgeProps<TItem extends Record<string, unknown>> = {
 		presets: TItem[],
 		fullItems: TItem[]
 	) => boolean;
+	repeaterItemVariations?: ComponentType<{
+		item: VariableType | Record<string, unknown>;
+		itemId: string;
+	}> | null;
 };
 
 export function PresetTaxonomyBridge<TItem extends Record<string, unknown>>({
@@ -54,8 +60,28 @@ export function PresetTaxonomyBridge<TItem extends Record<string, unknown>>({
 	presetFieldsPropsResolver,
 	renderTaxonomyCategoryClosedPreview,
 	augmentCategoryShowPreview,
+	repeaterItemVariations,
 }: PresetTaxonomyBridgeProps<TItem>) {
 	const bridgeControlId = `${controlName}-taxonomy-tree`;
+
+	const taxonomyRepeaterItemChildren = useCallback(
+		({
+			item,
+			itemId,
+		}: {
+			item: VariableType | Record<string, unknown>;
+			itemId: string | number;
+		}) => (
+			<PresetTaxonomyPresetFields
+				item={item as VariableType}
+				itemId={itemId}
+				origin={origin}
+				PresetFields={PresetFields}
+				presetFieldsPropsResolver={presetFieldsPropsResolver}
+			/>
+		),
+		[origin, PresetFields, presetFieldsPropsResolver]
+	);
 
 	const cleanRepeaterForPersist = useCallback((raw: unknown) => {
 		const cleaned = cleanupRepeater(raw as Record<string, unknown>);
@@ -108,10 +134,14 @@ export function PresetTaxonomyBridge<TItem extends Record<string, unknown>>({
 	return (
 		<PresetTaxonomySection
 			bridgeControlId={bridgeControlId}
+			origin={origin}
+			repeaterItemHeader={repeaterItemHeader}
 			repeaterContextValue={repeaterContextValue}
 			defaultRepeaterItemShape={defaultRepeaterItemShape}
 			cleanRepeaterForPersist={cleanRepeaterForPersist}
 			handleRepeaterRootChange={handleRepeaterRootChange}
+			repeaterItemVariations={repeaterItemVariations}
+			repeaterItemChildren={taxonomyRepeaterItemChildren}
 		>
 			<PresetTaxonomyBody<TItem>
 				tree={tree}

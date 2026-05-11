@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import type { ReactNode } from 'react';
+import type { ComponentType, ElementType, ReactNode } from 'react';
 
 /**
  * Blockera dependencies
@@ -12,6 +12,7 @@ import { BaseControl, ControlContextProvider } from '@blockera/controls';
  * Internal dependencies
  */
 import { PresetStateContainer } from '../preset-state-container';
+import type { VariableType } from '../types';
 import { TaxonomyRepeaterBridgeInner } from './taxonomy-repeater-bridge-inner';
 import './style.scss';
 
@@ -21,12 +22,22 @@ export type PresetTaxonomySectionRepeaterContextValue = {
 };
 
 export type PresetTaxonomySectionProps = {
+	children: ReactNode;
 	bridgeControlId: string;
+	origin: string;
+	repeaterItemHeader: ElementType;
 	repeaterContextValue: PresetTaxonomySectionRepeaterContextValue;
 	defaultRepeaterItemShape: Record<string, unknown>;
 	cleanRepeaterForPersist: (raw: unknown) => Record<string, unknown>;
 	handleRepeaterRootChange: (newValue: unknown) => void;
-	children: ReactNode;
+	repeaterItemVariations?: ComponentType<{
+		item: VariableType | Record<string, unknown>;
+		itemId: string;
+	}> | null;
+	repeaterItemChildren?: ComponentType<{
+		item: VariableType | Record<string, unknown>;
+		itemId: string | number;
+	}>;
 };
 
 /**
@@ -34,12 +45,16 @@ export type PresetTaxonomySectionProps = {
  * Persist/conversion logic stays with each preset type (e.g. color bridge).
  */
 export function PresetTaxonomySection({
+	children,
 	bridgeControlId,
+	origin,
+	repeaterItemHeader,
 	repeaterContextValue,
 	defaultRepeaterItemShape,
 	cleanRepeaterForPersist,
 	handleRepeaterRootChange,
-	children,
+	repeaterItemVariations,
+	repeaterItemChildren,
 }: PresetTaxonomySectionProps) {
 	return (
 		<PresetStateContainer activeColor="#1ca120">
@@ -54,9 +69,13 @@ export function PresetTaxonomySection({
 					>
 						<TaxonomyRepeaterBridgeInner
 							controlId={bridgeControlId}
+							origin={origin}
+							repeaterItemHeader={repeaterItemHeader}
 							defaultRepeaterItemValue={defaultRepeaterItemShape}
 							valueCleanup={cleanRepeaterForPersist}
 							handleRepeaterRootChange={handleRepeaterRootChange}
+							repeaterItemVariations={repeaterItemVariations}
+							repeaterItemChildren={repeaterItemChildren}
 						>
 							{children}
 						</TaxonomyRepeaterBridgeInner>
