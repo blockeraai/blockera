@@ -123,12 +123,6 @@ function ColorGroupComponent({
 		taxonomyDeclarations.groups.length > 0 &&
 		partition.taxonomyPresets.length > 0;
 
-	const taxonomyTree = useMemo(
-		() =>
-			buildTaxonomyTree(partition.taxonomyPresets, taxonomyDeclarations),
-		[partition.taxonomyPresets, taxonomyDeclarations]
-	);
-
 	const simpleSlugSet = useMemo(
 		() => new Set(partition.simplePresets.map((p) => String(p.slug ?? ''))),
 		[partition.simplePresets]
@@ -165,13 +159,21 @@ function ColorGroupComponent({
 		simpleSlugSet,
 	]);
 
+	const taxonomyTree = useMemo(
+		() =>
+			buildTaxonomyTree(
+				partition.taxonomyPresets,
+				taxonomyDeclarations,
+				mainColors
+			),
+		[partition.taxonomyPresets, taxonomyDeclarations, mainColors]
+	);
+
 	const taxonomyBridgeMainColors = useMemo(() => {
 		if (!showTaxonomyUi) {
 			return [];
 		}
-		return mainColors.filter((c) =>
-			partition.taxonomySlugSet.has(String(c.slug ?? ''))
-		);
+		return mainColors;
 	}, [mainColors, partition.taxonomySlugSet, showTaxonomyUi]);
 
 	const taxonomyRepeaterDefaults = useMemo(
@@ -349,6 +351,9 @@ function ColorGroupComponent({
 						}
 						augmentCategoryShowPreview={
 							taxonomyCategoryHasBaseWithShadeVariations
+						}
+						repeaterItemVariations={
+							!pickerCtx.active ? null : ColorShadesRepeaterItem
 						}
 					/>
 				) : null}
