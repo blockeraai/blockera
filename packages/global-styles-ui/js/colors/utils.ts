@@ -12,11 +12,12 @@ import { parseVarString } from '@blockera/data';
 /**
  * Internal dependencies
  */
-import { splitStoredCompositePlainPresetValue } from '../theme-json-plain-preset';
 import {
-	COLOR_SHADE_ANCHOR_STEP,
-	COLOR_SHADE_STEPS,
-} from './color-shades-generator';
+	compositeResolvedValueFromStoredPlainPresetInput,
+	normalizeCompositePlainPresetPaintPart,
+	splitStoredCompositePlainPresetValue,
+} from '../theme-json-plain-preset';
+import { COLOR_SHADE_STEPS } from './color-shades-generator';
 
 const PALETTE_SHADE_SLUG_MARKER = '-shade-';
 
@@ -49,20 +50,14 @@ export function isShadePaletteColor(
 	return parsePaletteShadeSlug(String((c as Color).slug ?? '')) !== null;
 }
 
-/** Drops legacy `*-shade-500` rows; anchor color lives on the main preset only. */
+/**
+ * Palette merge helper hook — anchor `*-shade-500` rows are persisted like other steps,
+ * so nothing is stripped here (API retained for callers).
+ */
 export function stripRedundantPaletteShadeBase<C extends Color>(
 	colors: C[]
 ): C[] {
-	return colors.filter((row) => {
-		if (!isShadePaletteColor(row as Color & Record<string, unknown>)) {
-			return true;
-		}
-		const p = parsePaletteShadeSlug(String((row as Color).slug ?? ''));
-		return (
-			p === null ||
-			String(p.shadeStep) !== String(COLOR_SHADE_ANCHOR_STEP)
-		);
-	}) as C[];
+	return colors;
 }
 
 export function filterMainPaletteColors<C extends Color>(colors: C[]): C[] {
@@ -193,6 +188,29 @@ export function normalizeRepeaterPaletteColorValue(
 	}
 
 	return String(raw);
+}
+
+/**
+ * Resolved paint string for shade stacks / indicators from persisted palette `color`.
+ * Uses the same composite split + var fallback rules as storage normalization
+ * ({@link normalizeRepeaterPaletteColorValue}), without re-encoding to composite.
+ */
+export function paintPartFromStoredPaletteColorString(
+	stored: string | undefined
+): string {
+	if (!stored || typeof stored !== 'string') {
+		return '';
+	}
+	const trimmed = stored.trim();
+	if (trimmed === '') {
+		return '';
+	}
+	const fromComposite =
+		compositeResolvedValueFromStoredPlainPresetInput(trimmed);
+	if (fromComposite !== '') {
+		return fromComposite;
+	}
+	return normalizeCompositePlainPresetPaintPart(trimmed);
 }
 
 export function convertRepeaterValueToGradients(newValue: object): Gradient[] {

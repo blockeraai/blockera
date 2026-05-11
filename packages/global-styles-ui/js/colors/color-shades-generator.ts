@@ -11,7 +11,7 @@ export const COLOR_SHADE_STEPS = [
 
 /**
  * Ramp step equal to the main swatch (`generateColorShades` anchors here).
- * Not stored as `*-shade-500` in global styles — the main preset is canonical; UI derives this step.
+ * Persisted as `*-shade-500` with other shade rows; the main preset remains the editor entry for this hue.
  */
 export const COLOR_SHADE_ANCHOR_STEP = 500;
 

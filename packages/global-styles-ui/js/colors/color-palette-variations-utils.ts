@@ -17,7 +17,9 @@ import {
 	colorPaletteRowFromRepeaterFields,
 	isShadePaletteColor,
 	parsePaletteShadeSlug,
+	paintPartFromStoredPaletteColorString,
 } from './utils';
+import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
 
 export function shadeVariationSlug(
 	baseSlug: string,
@@ -50,20 +52,28 @@ export function filterVariationsByBase(
 			return false;
 		}
 		const p = parsePaletteShadeSlug(String(row.slug ?? ''));
-		if (p === null || p.baseSlug !== baseSlug) {
-			return false;
-		}
-		/* Legacy rows; anchor matches main preset and is not persisted anymore. */
-		return String(p.shadeStep) !== String(COLOR_SHADE_ANCHOR_STEP);
+		return p !== null && p.baseSlug === baseSlug;
 	});
 }
 
 export function variationsToStackMap(rows: Color[]): ColorShadesMap {
 	const map: ColorShadesMap = {};
+	if (rows.length === COLOR_SHADE_STEPS.length) {
+		for (let i = 0; i < COLOR_SHADE_STEPS.length; i++) {
+			const stepStr = String(COLOR_SHADE_STEPS[i]);
+			const colorRaw = rows[i]?.color;
+			map[stepStr] = paintPartFromStoredPaletteColorString(
+				typeof colorRaw === 'string' ? colorRaw : ''
+			);
+		}
+		return map;
+	}
 	for (const row of rows) {
 		const p = parsePaletteShadeSlug(String(row.slug ?? ''));
 		if (p) {
-			map[p.shadeStep] = row.color;
+			map[p.shadeStep] = paintPartFromStoredPaletteColorString(
+				typeof row.color === 'string' ? row.color : ''
+			);
 		}
 	}
 	return map;
@@ -81,15 +91,12 @@ export function stackValueFromShades(
 	}));
 }
 
-/**
- * Full ramp for UI (indicator stack, nested shade rows): persisted shades plus synthetic anchor
- * from the main preset color (not a separate `palette.${origin}` entry).
- */
-export function getDisplayShadeRamp(
+function buildDisplayShadeRamp(
 	all: Color[],
 	baseSlug: string,
-	mainPreset: { slug: string; name: string; color?: string }
-): Color[] {
+	mainPreset: { slug: string; name: string; color?: string },
+	withStackMap: boolean
+): { ramp: Color[]; stackMap?: ColorShadesMap } {
 	const storedByStep = new Map<string, Color>();
 	for (const row of filterVariationsByBase(all, baseSlug)) {
 		const p = parsePaletteShadeSlug(String(row.slug ?? ''));
@@ -97,10 +104,20 @@ export function getDisplayShadeRamp(
 			storedByStep.set(p.shadeStep, row);
 		}
 	}
-	return COLOR_SHADE_STEPS.map((step) => {
+	const ramp: Color[] = [];
+	const stackMap: ColorShadesMap | undefined = withStackMap ? {} : undefined;
+
+	for (const step of COLOR_SHADE_STEPS) {
 		const stepStr = String(step);
-		if (step === COLOR_SHADE_ANCHOR_STEP) {
-			return {
+		let row: Color;
+		const stored = storedByStep.get(stepStr);
+		if (stored) {
+			row = {
+				...stored,
+				name: stepStr,
+			};
+		} else if (step === COLOR_SHADE_ANCHOR_STEP) {
+			row = {
 				...colorPaletteRowFromRepeaterFields({
 					slug: shadeVariationSlug(baseSlug, stepStr),
 					name: stepStr,
@@ -109,37 +126,68 @@ export function getDisplayShadeRamp(
 				}),
 				renderRepeaterItem: false,
 			} as Color;
+		} else {
+			row = {
+				...colorPaletteRowFromRepeaterFields({
+					slug: shadeVariationSlug(baseSlug, stepStr),
+					name: stepStr,
+					color: '#000000',
+					isVisible: true,
+				}),
+				renderRepeaterItem: false,
+			} as Color;
 		}
-		const row = storedByStep.get(stepStr);
-		if (row) {
-			return {
-				...row,
-				name: stepStr,
-			};
+		ramp.push(row);
+		if (stackMap) {
+			stackMap[stepStr] = paintPartFromStoredPaletteColorString(
+				typeof row.color === 'string' ? row.color : ''
+			);
 		}
-		return {
-			...colorPaletteRowFromRepeaterFields({
-				slug: shadeVariationSlug(baseSlug, stepStr),
-				name: stepStr,
-				color: '#000000',
-				isVisible: true,
-			}),
-			renderRepeaterItem: false,
-		} as Color;
-	});
+	}
+
+	return { ramp, stackMap };
+}
+
+/**
+ * Same ramp as {@link getDisplayShadeRamp}, plus stack paint map in one pass (avoids a second
+ * slug parse / composite split via {@link variationsToStackMap}).
+ */
+export function getDisplayShadeRampWithStackMap(
+	all: Color[],
+	baseSlug: string,
+	mainPreset: { slug: string; name: string; color?: string }
+): { ramp: Color[]; stackMap: ColorShadesMap } {
+	const { ramp, stackMap } = buildDisplayShadeRamp(
+		all,
+		baseSlug,
+		mainPreset,
+		true
+	);
+	return { ramp, stackMap: stackMap ?? {} };
+}
+
+/**
+ * Full ramp for UI (indicator stack, nested shade rows): persisted shade rows for each step when
+ * present; missing anchor (500) is synthesized from the main preset color.
+ */
+export function getDisplayShadeRamp(
+	all: Color[],
+	baseSlug: string,
+	mainPreset: { slug: string; name: string; color?: string }
+): Color[] {
+	return buildDisplayShadeRamp(all, baseSlug, mainPreset, false).ramp;
 }
 
 /**
  * Shade rows match convertRepeaterValueToColors; parent linkage is encoded in slug (`*-shade-{step}`).
+ * Includes the anchor step (500) as a persisted row alongside other steps.
  */
 export function buildVariationPresetsForBase(
 	preset: { slug: string; name: string },
 	shades: ColorShadesMap
 ): Color[] {
 	const { slug: parentSlug } = preset;
-	return COLOR_SHADE_STEPS.filter(
-		(step) => step !== COLOR_SHADE_ANCHOR_STEP
-	).map((step) => {
+	return COLOR_SHADE_STEPS.map((step) => {
 		const stepStr = String(step);
 		const hex = shades[stepStr] ?? '#000000';
 		return {
@@ -156,7 +204,13 @@ export function buildVariationPresetsForBase(
 
 export function rebuildVariationsFromMainColor(
 	preset: { slug: string; name: string },
-	mainColor: string
+	mainColor: string,
+	options?: { variablePickerType?: string; blockName?: string }
 ): Color[] {
-	return buildVariationPresetsForBase(preset, generateColorShades(mainColor));
+	const hex = resolveStoredColorForGenerateColorShades(
+		mainColor,
+		preset.slug,
+		options
+	);
+	return buildVariationPresetsForBase(preset, generateColorShades(hex));
 }
