@@ -210,11 +210,17 @@ export type ColorShadesRepeaterItemComponentProps = {
 	itemId: string;
 	usageType?: 'auto' | 'manual';
 	item: VariableType | Record<string, unknown>;
+	/**
+	 * When false, nested shade rows ignore `selectable` / `isSelected` from the repeater store
+	 * (e.g. inline picker strip in the preset header — selection stays on the parent row / accordion body).
+	 */
+	inheritRepeaterPickerSelection?: boolean;
 };
 function ColorShadesRepeaterItemComponent({
 	item,
 	usageType = 'auto',
 	itemId: parentRepeaterItemId,
+	inheritRepeaterPickerSelection = true,
 }: ColorShadesRepeaterItemComponentProps) {
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<
@@ -276,6 +282,7 @@ function ColorShadesRepeaterItemComponent({
 		const merged = {
 			...item,
 			...variation,
+			display: true,
 			baseSlug: parentSlug,
 			renderRepeaterItem: true,
 			...('auto' === usageType
@@ -288,7 +295,11 @@ function ColorShadesRepeaterItemComponent({
 				: {}),
 		};
 		const rowItem = { ...merged };
-		if (storeRow && typeof storeRow === 'object') {
+		if (
+			inheritRepeaterPickerSelection &&
+			storeRow &&
+			typeof storeRow === 'object'
+		) {
 			if ('isSelected' in storeRow) {
 				Object.assign(rowItem, {
 					isSelected: storeRow.isSelected,
@@ -299,6 +310,12 @@ function ColorShadesRepeaterItemComponent({
 					selectable: storeRow.selectable,
 				});
 			}
+		}
+		if (!inheritRepeaterPickerSelection) {
+			Object.assign(rowItem as Record<string, unknown>, {
+				selectable: false,
+				isSelected: false,
+			});
 		}
 
 		return (
