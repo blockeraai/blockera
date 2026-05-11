@@ -12,7 +12,10 @@ import { ColorIndicatorStack } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { splitStoredCompositePlainPresetValue } from '../theme-json-plain-preset';
+import {
+	compositeResolvedValueFromStoredPlainPresetInput,
+	splitStoredCompositePlainPresetValue,
+} from '../theme-json-plain-preset';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { filterVariationsByBase } from './color-palette-variations-utils';
 import { ColorPresetShadeStackHeader } from './color-shades-repeater-item';
@@ -22,13 +25,14 @@ function presetToIndicatorStackEntry(
 	preset: Color & Record<string, unknown>
 ): string | { value: string; type: string } | null {
 	const raw = preset.color;
-	const composite =
-		typeof raw === 'string'
-			? splitStoredCompositePlainPresetValue(raw)
-			: null;
-	const paintRaw =
-		composite?.realPart ??
-		(typeof raw === 'string' ? raw : String(raw ?? ''));
+	let paintRaw: string;
+	if (typeof raw === 'string') {
+		paintRaw = splitStoredCompositePlainPresetValue(raw)
+			? compositeResolvedValueFromStoredPlainPresetInput(raw)
+			: raw;
+	} else {
+		paintRaw = String(raw ?? '');
+	}
 	const value = paintRaw;
 	const typeStr = String(preset.type ?? '');
 	const isGradient =
@@ -127,6 +131,10 @@ export const ColorTaxonomyCategoryClosedPreview = memo(
 						slug,
 						name: String(firstBaseWithVariations.name ?? ''),
 						color: firstBaseWithVariations.color,
+						type:
+							typeof firstBaseWithVariations.type === 'string'
+								? firstBaseWithVariations.type
+								: undefined,
 					}}
 				/>
 			);

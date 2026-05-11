@@ -26,8 +26,8 @@ import type { VariableType } from '../components/types';
 import {
 	filterVariationsByBase,
 	getDisplayShadeRamp,
+	getDisplayShadeRampWithStackMap,
 	stackValueFromShades,
-	variationsToStackMap,
 	formatShadePresetName,
 } from './color-palette-variations-utils';
 import {
@@ -35,6 +35,7 @@ import {
 	COLOR_SHADE_STEPS,
 	generateColorShades,
 } from './color-shades-generator';
+import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import {
 	findRepeaterItemIdBySlug,
@@ -48,6 +49,8 @@ export type ColorPresetShadeStackMainPreset = {
 	slug: string;
 	name: string;
 	color?: string;
+	/** Variable-picker paint type for resolving theme tokens before shade math. */
+	type?: string;
 };
 
 /**
@@ -62,8 +65,12 @@ export function buildColorPresetShadeStackValue(
 	if (filterVariationsByBase(fullPalette, baseSlug).length === 0) {
 		return null;
 	}
-	const ramp = getDisplayShadeRamp(fullPalette, baseSlug, mainPreset);
-	return stackValueFromShades(variationsToStackMap(ramp));
+	const { stackMap } = getDisplayShadeRampWithStackMap(
+		fullPalette,
+		baseSlug,
+		mainPreset
+	);
+	return stackValueFromShades(stackMap);
 }
 
 function colorIndicatorStackMarginSpace(count: number): string {
@@ -101,10 +108,19 @@ function ColorPresetShadeStackHeaderComponent({
 		if (filterVariationsByBase(fullItems, baseSlug).length === 0) {
 			return null;
 		}
-		const ramp = getDisplayShadeRamp(fullItems, baseSlug, mainPreset);
-		const hexByStep = variationsToStackMap(ramp);
+		const { stackMap: hexByStep } = getDisplayShadeRampWithStackMap(
+			fullItems,
+			baseSlug,
+			mainPreset
+		);
 		const baselineHexByStep = generateColorShades(
-			mainPreset.color ?? '#000000'
+			resolveStoredColorForGenerateColorShades(
+				mainPreset.color,
+				mainPreset.slug,
+				{
+					variablePickerType: mainPreset.type,
+				}
+			)
 		);
 		return { hexByStep, baselineHexByStep, steps: COLOR_SHADE_STEPS };
 	}, [fullItems, baseSlug, mainPreset]);
@@ -211,15 +227,19 @@ function ColorShadesRepeaterItemComponent({
 		>;
 	};
 
-	const colorItem = item as VariableType & { color?: string };
+	const colorItem = item as VariableType & {
+		color?: string;
+		type?: string;
+	};
 	const { fullItems } = usePresetVariationsStorage<Color>();
 
 	/** Parent row slug (base); nested shade rows receive `baseSlug` in preset fields. */
 	const parentSlug = String(colorItem.slug ?? '');
-	const mainPreset = {
+	const mainPreset: ColorPresetShadeStackMainPreset = {
 		slug: parentSlug,
 		name: String(colorItem.name ?? ''),
 		color: colorItem.color,
+		type: typeof colorItem.type === 'string' ? colorItem.type : undefined,
 	};
 	const storedForBase = filterVariationsByBase(fullItems, parentSlug);
 	const showStack = storedForBase.length > 0;
