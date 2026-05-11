@@ -188,6 +188,9 @@ function ColorGroupComponent({
 	const setFullPalette = useCallback(
 		(next: Color[]) => {
 			const cleaned = stripRedundantPaletteShadeBase(next);
+			if (isEquals(cleaned, colors)) {
+				return;
+			}
 			if ('theme' === origin) {
 				setThemeColors?.(cleaned);
 			} else if ('default' === origin) {
@@ -196,7 +199,7 @@ function ColorGroupComponent({
 				setCustomColors?.(cleaned);
 			}
 		},
-		[origin, setThemeColors, setDefaultColors, setCustomColors]
+		[origin, colors, setThemeColors, setDefaultColors, setCustomColors]
 	);
 
 	const onChange = useCallback(
@@ -210,6 +213,9 @@ function ColorGroupComponent({
 					)
 				: nextMain;
 			const merged = mergeColorPaletteWithKeptShades(colors, mergedFlat);
+			if (isEquals(merged, colors)) {
+				return;
+			}
 			if ('theme' === origin) {
 				setThemeColors?.(merged);
 			} else if ('default' === origin) {
