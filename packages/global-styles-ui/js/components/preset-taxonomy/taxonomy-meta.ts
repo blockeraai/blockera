@@ -44,3 +44,19 @@ export function resolveCategoryShowPreview(
 	);
 	return parent?.['show-preview'] === true;
 }
+
+/**
+ * Maps declarative `initial-open` / normalized `initialOpen` from settings.categories[]
+ * onto accordion initial state. Returns undefined when absent so UI keeps package accordion default.
+ */
+export function resolveCategoryInitialOpen(
+	declaration: TaxonomyCategoryDeclaration | undefined
+): boolean | undefined {
+	if (!declaration) {
+		return undefined;
+	}
+	if (typeof declaration['initial-open'] === 'boolean') {
+		return declaration['initial-open'];
+	}
+	return undefined;
+}

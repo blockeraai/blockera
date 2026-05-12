@@ -44,12 +44,23 @@ function normalizeCategories(raw: unknown): TaxonomyCategoryDeclaration[] {
 				slug: string;
 				name: string;
 				'show-preview'?: unknown;
+				'initial-open'?: unknown;
+				initialOpen?: unknown;
 			};
+			let initialOpenKebab: boolean | undefined;
+			if (typeof r['initial-open'] === 'boolean') {
+				initialOpenKebab = r['initial-open'];
+			} else if (typeof r.initialOpen === 'boolean') {
+				initialOpenKebab = r.initialOpen;
+			}
 			out.push({
 				slug: r.slug,
 				name: r.name,
 				...(typeof r['show-preview'] === 'boolean'
 					? { 'show-preview': r['show-preview'] }
+					: {}),
+				...(initialOpenKebab !== undefined
+					? { 'initial-open': initialOpenKebab }
 					: {}),
 			});
 		}

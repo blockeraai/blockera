@@ -1,6 +1,7 @@
 import type { TaxonomyDeclarations, TaxonomyGroupBranch } from './types';
 import {
 	getPresetMeta,
+	resolveCategoryInitialOpen,
 	resolveCategoryShowPreview,
 	resolveDeclaredCategorySlug,
 } from './taxonomy-meta';
@@ -125,29 +126,43 @@ export function buildTaxonomyTree<T extends Record<string, unknown>>(
 				}
 			}
 
-			const subSections = [...subSlugSet].map((subSlug) => ({
-				slug: subSlug,
-				name:
-					declarations.categories.find((c) => c.slug === subSlug)
-						?.name ?? subSlug,
-				showPreview: resolveCategoryShowPreview(
-					catDef.slug,
-					subSlug,
-					declarations.categories
-				),
-				presets: catMembers
-					.filter(
-						(p) =>
-							String(getPresetMeta(p)?.['sub-category'] ?? '') ===
-							subSlug
-					)
-					.map((p) => mergePresetWithCanonical(canonicalBySlug, p)),
-			}));
+			const subSections = [...subSlugSet].map((subSlug) => {
+				const subDecl = declarations.categories.find(
+					(c) => c.slug === subSlug
+				);
+				const subInitialOpen = resolveCategoryInitialOpen(subDecl);
+				return {
+					slug: subSlug,
+					name: subDecl?.name ?? subSlug,
+					showPreview: resolveCategoryShowPreview(
+						catDef.slug,
+						subSlug,
+						declarations.categories
+					),
+					...(subInitialOpen !== undefined
+						? { initialOpen: subInitialOpen }
+						: {}),
+					presets: catMembers
+						.filter(
+							(p) =>
+								String(
+									getPresetMeta(p)?.['sub-category'] ?? ''
+								) === subSlug
+						)
+						.map((p) =>
+							mergePresetWithCanonical(canonicalBySlug, p)
+						),
+				};
+			});
 
+			const catInitialOpen = resolveCategoryInitialOpen(catDef);
 			categories.push({
 				slug: catDef.slug,
 				name: catDef.name,
 				showPreview: catDef['show-preview'] === true,
+				...(catInitialOpen !== undefined
+					? { initialOpen: catInitialOpen }
+					: {}),
 				directPresets,
 				subSections,
 			});
