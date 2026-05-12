@@ -24,9 +24,9 @@ export type TaxonomyCategoryAccordionProps = {
 
 export function TaxonomyCategoryAccordion({
 	title,
-	defaultOpen = false,
 	children,
 	className,
+	defaultOpen = true,
 	showPreview = false,
 	renderClosedHeaderPreview,
 }: TaxonomyCategoryAccordionProps) {
