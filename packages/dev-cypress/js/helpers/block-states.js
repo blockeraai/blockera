@@ -51,6 +51,7 @@ export function resetBlockState(state, blockType) {
 					.contains(state)
 					.parent()
 					.parent()
+					.parent()
 					.within(() => {
 						cy.getByAriaLabel('More Options').click({
 							force: true,
@@ -63,6 +64,7 @@ export function resetBlockState(state, blockType) {
 			.within(() => {
 				cy.getByDataCy('group-control-header')
 					.contains(state)
+					.parent()
 					.parent()
 					.parent()
 					.within(() => {
