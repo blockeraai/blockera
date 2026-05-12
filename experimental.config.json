@@ -21,6 +21,6 @@
 		"experimentalTools": false
 	},
 	"globalStylesUi": {
-		"presetTaxonomyGroupedUi": false
+		"presetTaxonomyGroupedUi": true
 	}
 }
