@@ -25,6 +25,7 @@ import type { GroupControlProps } from './types';
 export default function GroupControl({
 	design = 'minimal',
 	toggleOpenBorder = false,
+	disableAccordionOpenPrimaryBorder = false,
 	isOpen = false,
 	//
 	mode = 'popover',
@@ -120,7 +121,12 @@ export default function GroupControl({
 				'design-' + design,
 				'mode-' + mode,
 				isOpen ? 'is-open' : 'is-close',
-				toggleOpenBorder ? 'toggle-open-border' : '',
+				toggleOpenBorder && !disableAccordionOpenPrimaryBorder
+					? 'toggle-open-border'
+					: '',
+				disableAccordionOpenPrimaryBorder && mode === 'accordion'
+					? 'no-accordion-open-primary-border'
+					: '',
 				className
 			)}
 			data-cy="control-group"

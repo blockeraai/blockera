@@ -22,6 +22,11 @@ export type GroupControlProps = {
 	 */
 	toggleOpenBorder?: boolean,
 	/**
+	 * When true with accordion mode + toggleOpenBorder + open state, keeps the default neutral border
+	 * instead of the primary accent border and ring.
+	 */
+	disableAccordionOpenPrimaryBorder?: boolean,
+	/**
 	 * is group open by default or not
 	 */
 	isOpen?: boolean,
