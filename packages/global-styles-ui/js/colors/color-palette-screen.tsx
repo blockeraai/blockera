@@ -39,6 +39,7 @@ import {
 	mergeSimpleRepeaterIntoFullPalette,
 	partitionPresetsForTaxonomyUi,
 	usePresetTaxonomyDeclarations,
+	isPresetTaxonomyGroupedUiEnabled,
 } from '../components';
 import { useGetColors } from './use-get-colors';
 import {
@@ -121,7 +122,8 @@ function ColorGroupComponent({
 		origin === 'theme' &&
 		!flattenForColorPickerSearch &&
 		taxonomyDeclarations.groups.length > 0 &&
-		partition.taxonomyPresets.length > 0;
+		partition.taxonomyPresets.length > 0 &&
+		(pickerCtx.active !== true || isPresetTaxonomyGroupedUiEnabled());
 
 	const simpleSlugSet = useMemo(
 		() => new Set(partition.simplePresets.map((p) => String(p.slug ?? ''))),
@@ -174,7 +176,7 @@ function ColorGroupComponent({
 			return [];
 		}
 		return mainColors;
-	}, [mainColors, partition.taxonomySlugSet, showTaxonomyUi]);
+	}, [mainColors, showTaxonomyUi]);
 
 	const taxonomyRepeaterDefaults = useMemo(
 		() => ({

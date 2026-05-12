@@ -19,5 +19,8 @@
 	},
 	"ai": {
 		"experimentalTools": false
+	},
+	"globalStylesUi": {
+		"presetTaxonomyGroupedUi": false
 	}
 }
