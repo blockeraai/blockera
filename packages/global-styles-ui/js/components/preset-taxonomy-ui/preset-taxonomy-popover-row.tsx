@@ -264,6 +264,7 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 			isOpen={isOpen}
 			onOpen={() => setOpen(true)}
 			onClose={() => setOpen(false)}
+			disableAccordionOpenPrimaryBorder={'accordion' === mode}
 			onClick={handleGroupClick}
 			popoverTitle={popoverTitle}
 			popoverOffset={popoverOffset}
@@ -295,6 +296,7 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 				headerOpenButton={true}
 				toggleOpenBorder={true}
 				actionButtonsType="inline"
+				disableAccordionOpenPrimaryBorder={true}
 				popoverProps={repeaterCtx.popoverProps}
 				isOpen={variationsAccordionOpen}
 				className={controlInnerClassNames('repeater-item-group', {

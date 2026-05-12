@@ -56,6 +56,7 @@ export function TaxonomyCategoryAccordion({
 			toggleOpenBorder={true}
 			headerOpenButton={true}
 			actionButtonsType="inline"
+			disableAccordionOpenPrimaryBorder={true}
 			actionMenuButtonLabel={__('More Options', 'blockera')}
 			header={
 				<Flex
