@@ -816,7 +816,11 @@ describe('Block States on inner blocks E2E tests', () => {
 
 		setInnerBlock('elements/container');
 
+		setBlockState('Before');
+
 		resetBlockState('Before');
+
+		checkCurrentState('normal');
 
 		//Check store
 		getWPDataObject().then((data) => {
