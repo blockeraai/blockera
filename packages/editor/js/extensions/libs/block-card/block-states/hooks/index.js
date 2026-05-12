@@ -65,6 +65,8 @@ export const useBlockStates = ({
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
+		setBlockClientMasterState,
+		setBlockClientInnerState,
 	} = dispatch('blockera/extensions') || {};
 	const { getBlockStates, getActiveMasterState, getActiveInnerState } =
 		select('blockera/extensions');
@@ -362,23 +364,64 @@ export const useBlockStates = ({
 	);
 
 	const onReset = useCallback(
-		(itemId: TStates): Object => {
+		(
+			itemId: TStates,
+			repeaterItems: { [key: TStates]: Object }
+		): Object => {
+			let mergedStates: { [key: TStates]: Object } = {
+				...(attributes?.blockeraBlockStates || {}),
+			};
+
+			if (isInnerBlock(currentBlock)) {
+				mergedStates = {
+					...(blockAttributes?.blockeraInnerBlocks?.[currentBlock]
+						?.attributes?.blockeraBlockStates || {}),
+					...mergedStates,
+				};
+			}
+
 			const filteredStates: {
 				[key: TStates]: Object,
-			} = attributes?.blockeraBlockStates || {};
+			} = {};
 
-			for (const key in attributes?.blockeraBlockStates) {
-				const breakpoints =
-					attributes?.blockeraBlockStates[key].breakpoints;
+			for (const key of Object.keys(mergedStates)) {
+				const stateItem = mergedStates[key];
 
-				for (const breakpoint in breakpoints) {
-					if (key === itemId) {
-						filteredStates[key].breakpoints[breakpoint] = {
-							attributes: {},
-						};
-						filteredStates[key].content = '';
-					}
+				if (key !== itemId) {
+					filteredStates[key] =
+						stateItem && 'object' === typeof stateItem
+							? { ...stateItem }
+							: stateItem;
+
+					continue;
 				}
+
+				const prevBreakpoints = stateItem?.breakpoints || {};
+				const nextBreakpoints: {
+					[string]: { attributes: Object },
+				} = {};
+
+				for (const breakpoint of Object.keys(prevBreakpoints)) {
+					nextBreakpoints[breakpoint] = {
+						attributes: {},
+					};
+				}
+
+				if (!Object.keys(nextBreakpoints).length) {
+					nextBreakpoints[getBaseBreakpoint()] = {
+						attributes: {},
+					};
+				}
+
+				filteredStates[key] = {
+					...stateItem,
+					breakpoints: nextBreakpoints,
+					...(undefined !== stateItem &&
+					null !== stateItem &&
+					'content' in stateItem
+						? { content: '' }
+						: {}),
+				};
 			}
 
 			onChange('blockeraBlockStates', filteredStates, {
@@ -396,10 +439,58 @@ export const useBlockStates = ({
 				resetStateAllValues: true,
 			});
 
-			return filteredStates;
+			if (isMasterBlockStates(id)) {
+				setCurrentState?.('normal');
+				setBlockClientMasterState?.({
+					currentState: 'normal',
+					name: block.blockName,
+					clientId: block.clientId,
+				});
+			} else {
+				setInnerBlockState?.('normal');
+				setBlockClientInnerState?.({
+					currentState: 'normal',
+					innerBlockType: currentBlock,
+					clientId: block.clientId,
+				});
+			}
+
+			const nextRepeaterItems: { [key: string]: Object } = {};
+
+			for (const key of Object.keys(repeaterItems)) {
+				const persisted = filteredStates[key];
+
+				if (persisted) {
+					nextRepeaterItems[key] = {
+						...repeaterItems[key],
+						...persisted,
+						breakpoints: persisted.breakpoints,
+						isSelected: key === 'normal',
+					};
+				} else {
+					nextRepeaterItems[key] = {
+						...repeaterItems[key],
+						isSelected: key === 'normal',
+					};
+				}
+			}
+
+			return nextRepeaterItems;
 		},
 		// eslint-disable-next-line
-		[attributes?.blockeraBlockStates]
+		[
+			attributes?.blockeraBlockStates,
+			blockAttributes?.blockeraInnerBlocks,
+			block.blockName,
+			block.clientId,
+			currentBlock,
+			id,
+			onChange,
+			setBlockClientInnerState,
+			setBlockClientMasterState,
+			setCurrentState,
+			setInnerBlockState,
+		]
 	);
 
 	/**
