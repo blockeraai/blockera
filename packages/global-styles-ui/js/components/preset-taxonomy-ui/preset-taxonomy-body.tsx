@@ -14,12 +14,43 @@ import { controlClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import type { PresetFieldsPropsResolver } from '../preset-group';
-import type { TaxonomyGroupBranch } from '../preset-taxonomy/types';
+import type {
+	TaxonomyCategoryBranch,
+	TaxonomyGroupBranch,
+} from '../preset-taxonomy/types';
 import { usePresetVariationsStorage } from '../../context/preset-variations-context';
 import { TaxonomyCategoryAccordion } from './taxonomy-category-accordion';
 import { TaxonomyGroupHeader } from './taxonomy-group-header';
 import { PresetTaxonomyPopoverRow } from './preset-taxonomy-popover-row';
 import { findRepeaterItemIdBySlug } from './preset-taxonomy-utils';
+
+function countPresetsInCategory<T extends Record<string, unknown>>(
+	category: TaxonomyCategoryBranch<T>
+): number {
+	let total = category.directPresets.length;
+	for (const sub of category.subSections) {
+		total += sub.presets.length;
+	}
+	return total;
+}
+
+/** When exactly one preset spans direct rows and all sub-sections, omit category accordion. */
+function getSolePresetInCategory<T extends Record<string, unknown>>(
+	category: TaxonomyCategoryBranch<T>
+): T | undefined {
+	if (countPresetsInCategory(category) !== 1) {
+		return undefined;
+	}
+	if (category.directPresets.length === 1) {
+		return category.directPresets[0];
+	}
+	for (const sub of category.subSections) {
+		if (sub.presets.length === 1) {
+			return sub.presets[0];
+		}
+	}
+	return undefined;
+}
 
 export type PresetTaxonomyBodyProps<TPreset extends Record<string, unknown>> = {
 	tree: TaxonomyGroupBranch<TPreset>[];
@@ -59,6 +90,27 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 
 	const augmentPreview = augmentCategoryShowPreview ?? (() => false);
 
+	const renderPopoverRow = useCallback(
+		(preset: TPreset, rowKey: string) => (
+			<PresetTaxonomyPopoverRow
+				key={rowKey}
+				item={preset}
+				itemId={resolveItemId(String(preset.slug ?? ''))}
+				origin={origin}
+				PresetFields={PresetFields}
+				repeaterItemHeader={repeaterItemHeader}
+				presetFieldsPropsResolver={presetFieldsPropsResolver}
+			/>
+		),
+		[
+			PresetFields,
+			origin,
+			presetFieldsPropsResolver,
+			repeaterItemHeader,
+			resolveItemId,
+		]
+	);
+
 	return (
 		<div
 			className={controlClassNames(
@@ -75,94 +127,93 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 				>
 					<TaxonomyGroupHeader label={group.name} />
 					<div className="blockera-preset-taxonomy-items-stack">
-						{group.directPresets.map((preset) => (
-							<PresetTaxonomyPopoverRow
-								key={String(preset.slug)}
-								item={preset}
-								itemId={resolveItemId(
-									String(preset.slug ?? '')
-								)}
-								origin={origin}
-								PresetFields={PresetFields}
-								repeaterItemHeader={repeaterItemHeader}
-								presetFieldsPropsResolver={
-									presetFieldsPropsResolver
-								}
-							/>
-						))}
-						{group.categories.map((cat) => (
-							<TaxonomyCategoryAccordion
-								key={`${group.slug}-${cat.slug}`}
-								title={cat.name}
-								showPreview={
-									cat.showPreview ||
-									augmentPreview(cat.directPresets, fullItems)
-								}
-								renderClosedHeaderPreview={
-									renderTaxonomyCategoryClosedPreview
-										? () =>
-												renderTaxonomyCategoryClosedPreview(
-													cat.directPresets
-												)
-										: undefined
-								}
-							>
-								{cat.directPresets.map((preset) => (
-									<PresetTaxonomyPopoverRow
-										key={String(preset.slug)}
-										item={preset}
-										itemId={resolveItemId(
+						{group.directPresets.map((preset) =>
+							renderPopoverRow(preset, String(preset.slug ?? ''))
+						)}
+						{group.categories.map((cat) => {
+							const soleInCategory = getSolePresetInCategory(cat);
+							if (soleInCategory !== undefined) {
+								return renderPopoverRow(
+									soleInCategory,
+									`${group.slug}-${cat.slug}-${String(soleInCategory.slug ?? '')}`
+								);
+							}
+							return (
+								<TaxonomyCategoryAccordion
+									key={`${group.slug}-${cat.slug}`}
+									title={cat.name}
+									{...(cat.initialOpen !== undefined
+										? { defaultOpen: cat.initialOpen }
+										: {})}
+									showPreview={
+										cat.showPreview ||
+										augmentPreview(
+											cat.directPresets,
+											fullItems
+										)
+									}
+									renderClosedHeaderPreview={
+										renderTaxonomyCategoryClosedPreview
+											? () =>
+													renderTaxonomyCategoryClosedPreview(
+														cat.directPresets
+													)
+											: undefined
+									}
+								>
+									{cat.directPresets.map((preset) =>
+										renderPopoverRow(
+											preset,
 											String(preset.slug ?? '')
-										)}
-										origin={origin}
-										PresetFields={PresetFields}
-										repeaterItemHeader={repeaterItemHeader}
-										presetFieldsPropsResolver={
-											presetFieldsPropsResolver
-										}
-									/>
-								))}
-								{cat.subSections.map((sub) => (
-									<TaxonomyCategoryAccordion
-										key={`${group.slug}-${cat.slug}-${sub.slug}`}
-										title={sub.name}
-										showPreview={
-											sub.showPreview ||
-											augmentPreview(
-												sub.presets,
-												fullItems
+										)
+									)}
+									{cat.subSections.map((sub) =>
+										sub.presets.length === 1 ? (
+											renderPopoverRow(
+												sub.presets[0],
+												`${group.slug}-${cat.slug}-${sub.slug}-${String(sub.presets[0].slug ?? '')}`
 											)
-										}
-										renderClosedHeaderPreview={
-											renderTaxonomyCategoryClosedPreview
-												? () =>
-														renderTaxonomyCategoryClosedPreview(
-															sub.presets
+										) : (
+											<TaxonomyCategoryAccordion
+												key={`${group.slug}-${cat.slug}-${sub.slug}`}
+												title={sub.name}
+												{...(sub.initialOpen !==
+												undefined
+													? {
+															defaultOpen:
+																sub.initialOpen,
+														}
+													: {})}
+												showPreview={
+													sub.showPreview ||
+													augmentPreview(
+														sub.presets,
+														fullItems
+													)
+												}
+												renderClosedHeaderPreview={
+													renderTaxonomyCategoryClosedPreview
+														? () =>
+																renderTaxonomyCategoryClosedPreview(
+																	sub.presets
+																)
+														: undefined
+												}
+											>
+												{sub.presets.map((preset) =>
+													renderPopoverRow(
+														preset,
+														String(
+															preset.slug ?? ''
 														)
-												: undefined
-										}
-									>
-										{sub.presets.map((preset) => (
-											<PresetTaxonomyPopoverRow
-												key={String(preset.slug)}
-												item={preset}
-												itemId={resolveItemId(
-													String(preset.slug ?? '')
+													)
 												)}
-												origin={origin}
-												PresetFields={PresetFields}
-												repeaterItemHeader={
-													repeaterItemHeader
-												}
-												presetFieldsPropsResolver={
-													presetFieldsPropsResolver
-												}
-											/>
-										))}
-									</TaxonomyCategoryAccordion>
-								))}
-							</TaxonomyCategoryAccordion>
-						))}
+											</TaxonomyCategoryAccordion>
+										)
+									)}
+								</TaxonomyCategoryAccordion>
+							);
+						})}
 					</div>
 				</div>
 			))}
