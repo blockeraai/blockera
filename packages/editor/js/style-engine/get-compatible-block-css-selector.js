@@ -476,6 +476,7 @@ export const getCompatibleBlockCssSelector = ({
 	suffixClass = '',
 	fallbackSupportId,
 	styleVariationName,
+	variationClassPrefix = 'is-style-',
 	isStyleVariation = false,
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
@@ -696,6 +697,7 @@ export const getCompatibleBlockCssSelector = ({
 						{ fallback: true }
 					);
 
+					const variationClass = `${variationClassPrefix}${styleVariationName}`;
 					let selectorWithStyle = generatedSelector;
 					// Handle case when selector contains child combinator.
 					if (
@@ -705,12 +707,12 @@ export const getCompatibleBlockCssSelector = ({
 					) {
 						selectorWithStyle = generatedSelector.replace(
 							selectorConstant,
-							`${selectorConstant}.is-style-${styleVariationName}`
+							`${selectorConstant}.${variationClass}`
 						);
 					}
 					// Handle case when selector does not contain child combinator.
 					else {
-						selectorWithStyle = `${generatedSelector}.is-style-${styleVariationName}`;
+						selectorWithStyle = `${generatedSelector}.${variationClass}`;
 					}
 
 					return getSelectorWithRootBody(selectorWithStyle, false);

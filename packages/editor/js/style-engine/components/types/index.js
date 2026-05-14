@@ -29,6 +29,8 @@ export type BlockStyleProps = {
 	activeDeviceType: TStates,
 	isGlobalStylesWrapper?: boolean,
 	styleVariationName?: string,
+	/** Selector token before the variation slug, e.g. `is-style-` or `is-size-`. */
+	variationClassPrefix?: string,
 	isStyleVariation?: boolean,
 };
 

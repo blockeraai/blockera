@@ -22,6 +22,8 @@ export type NormalizedSelectorProps = {
 	device?: TBreakpoint,
 	blockSelectors: Object,
 	styleVariationName?: string,
+	/** Global style variation class segment before slug: `is-style-` (default) or `is-size-`. */
+	variationClassPrefix?: string,
 	fallbackSupportId?: string | Array<string>,
 	styleEngineConfig?: Object,
 	isStyleVariation?: boolean,
