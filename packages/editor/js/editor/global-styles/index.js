@@ -65,3 +65,4 @@ export default function GlobalStyles({
 }
 
 export * from './registration';
+export * from './variation-filters';
