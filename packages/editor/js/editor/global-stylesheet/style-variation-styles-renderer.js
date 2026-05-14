@@ -24,8 +24,10 @@ import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
 import { getBlockeraGlobalStylesMetaData } from '../global-styles/helpers';
 
+const DEFAULT_STYLE_VARIATION_CLASS_PREFIX = 'is-style-';
+
 /**
- * Renders global styles for a single block style variation.
+ * Renders global styles for a single block style or size variation.
  * Memoized to prevent unnecessary re-renders.
  */
 export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
@@ -34,11 +36,13 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 		variationName,
 		variationGlobalStyles,
 		blockeraMetaData,
+		variationClassPrefix = DEFAULT_STYLE_VARIATION_CLASS_PREFIX,
 	}: {
 		blockType: Object,
 		variationName: string,
 		variationGlobalStyles: Object,
 		blockeraMetaData?: Object,
+		variationClassPrefix?: string,
 	}) => {
 		const { name } = blockType;
 
@@ -113,6 +117,7 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 					isStyleVariation: true,
 					sanitizedBlockGlobalStyles,
 					styleVariationName: variationName,
+					variationClassPrefix,
 				}}
 			/>
 		);
@@ -122,6 +127,7 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 		return (
 			prevProps.blockType.name === nextProps.blockType.name &&
 			prevProps.variationName === nextProps.variationName &&
+			prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
 			isEquals(
 				prevProps.variationGlobalStyles,
 				nextProps.variationGlobalStyles

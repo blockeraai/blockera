@@ -23,6 +23,12 @@ import { staticKeys, defaultBlockStates } from './constants';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { StyleVariationStylesRenderer } from './style-variation-styles-renderer';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
+import {
+	isSizeVariationEntry,
+	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+} from '../global-styles/panel/size-variations';
+
+const DEFAULT_STYLE_VARIATION_CLASS_PREFIX = 'is-style-';
 
 /**
  * Renders global styles for a single block type.
@@ -79,6 +85,22 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 			);
 		}, [variations, blockeraMetaData, name]);
 
+		const styleSurfaceVariationEntries = useMemo(
+			() =>
+				variationEntries.filter(
+					([, data]) => !isSizeVariationEntry(data)
+				),
+			[variationEntries]
+		);
+
+		const sizeSurfaceVariationEntries = useMemo(
+			() =>
+				variationEntries.filter(([, data]) =>
+					isSizeVariationEntry(data)
+				),
+			[variationEntries]
+		);
+
 		// Early return if no styles to render
 		const hasSanitizedStyles =
 			sanitizedBlockGlobalStyles &&
@@ -111,18 +133,38 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 							{...{ ...blockType, sanitizedBlockGlobalStyles }}
 						/>
 					)}
-				{variationEntries.map(([variationName], variationIndex) => (
-					<StyleVariationStylesRenderer
-						{...{
-							blockType,
-							variationName,
-							blockeraMetaData,
-							variationGlobalStyles:
-								variations[variationName] || {},
-						}}
-						key={`${name}-${variationName}-${variationIndex}`}
-					/>
-				))}
+				{styleSurfaceVariationEntries.map(
+					([variationName], variationIndex) => (
+						<StyleVariationStylesRenderer
+							{...{
+								blockType,
+								variationName,
+								blockeraMetaData,
+								variationGlobalStyles:
+									variations[variationName] || {},
+								variationClassPrefix:
+									DEFAULT_STYLE_VARIATION_CLASS_PREFIX,
+							}}
+							key={`${name}-style-${variationName}-${variationIndex}`}
+						/>
+					)
+				)}
+				{sizeSurfaceVariationEntries.map(
+					([variationName], variationIndex) => (
+						<StyleVariationStylesRenderer
+							{...{
+								blockType,
+								variationName,
+								blockeraMetaData,
+								variationGlobalStyles:
+									variations[variationName] || {},
+								variationClassPrefix:
+									BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+							}}
+							key={`${name}-size-${variationName}-${variationIndex}`}
+						/>
+					)
+				)}
 			</>
 		);
 	}
