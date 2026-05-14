@@ -463,16 +463,21 @@ class JSON extends \WP_Theme_JSON {
 
 		// 2. Generate css rules for the block style variations.
         if (! empty($block_metadata['variations'])) {
-            foreach ($block_metadata['variations'] as $key => $style_variation) {
+			foreach ($block_metadata['variations'] as $key => $style_variation) {
 				$style_variation_node           = _wp_array_get( $this->theme_json, $style_variation['path'], array() );
 				$clean_style_variation_selector = trim( $style_variation['selector'] );
+
+				$variation_attrs_for_styles = array_diff_key(
+					$style_variation_node,
+					array_flip( \blockera_get_block_style_variation_metadata_style_keys() )
+				);
 
 				$style_engine = Blockera::getInstance()->make(
 					StyleEngine::class,
 					[
 						'block' => [
 							'blockName' => $block_metadata['name'],
-							'attrs' => $style_variation_node,
+							'attrs' => $variation_attrs_for_styles,
 						],
 						'fallbackSelector' => $clean_style_variation_selector,
 						'isGlobalStyle' => true,

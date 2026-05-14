@@ -116,6 +116,21 @@ if (! function_exists('blockera_editor_wp_theme_json_data_blocks')) {
 	}
 }
 
+if (! function_exists('blockera_get_block_style_variation_metadata_style_keys')) {
+	/**
+	 * Keys merged into {@see blockera_get_valid_supports()} as scalar style leaves (schema value `null`).
+	 * Excluded from CSS generation for variation nodes; kept in sync with the foreach in that function.
+	 *
+	 * @return list<string>
+	 */
+	function blockera_get_block_style_variation_metadata_style_keys(): array {
+		return array(
+			'blockeraVariationType',
+			'blockeraIsDefaultVariation',
+		);
+	}
+}
+
 if (! function_exists('blockera_get_valid_supports')) {
 	/**
      * Get filtered the valid supports list for theme.json schema.
@@ -149,6 +164,10 @@ if (! function_exists('blockera_get_valid_supports')) {
 			'label' => null,
 			'blocks' => null,
 		];
+
+		foreach ( blockera_get_block_style_variation_metadata_style_keys() as $blockera_variation_style_key ) {
+			$with_blockera_supports[ $blockera_variation_style_key ] = null;
+		}
 
 		$cache[ $cache_key ] = $with_blockera_supports;
 		return $with_blockera_supports;
