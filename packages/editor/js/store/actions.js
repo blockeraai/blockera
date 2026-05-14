@@ -204,6 +204,15 @@ export const setSelectedBlockStyleVariation = (
 	};
 };
 
+export const setSelectedBlockSizeVariation = (
+	selectedBlockSizeVariation: Object | void
+): Object => {
+	return {
+		selectedBlockSizeVariation,
+		type: 'SET_SELECTED_BLOCK_SIZE_VARIATION',
+	};
+};
+
 export const setStyleVariationBlocks = (
 	variationName: string,
 	blocks: Array<string>,
