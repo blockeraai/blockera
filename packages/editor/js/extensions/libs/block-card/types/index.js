@@ -24,10 +24,19 @@ export type PropTypes = {
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 };
 
+export type TStyleVariationBlockCardLabels = {
+	closeTooltip?: string,
+	closeButtonDataTest?: string,
+	rootDataTest?: string,
+	editableNamePlaceholder?: string,
+};
+
 export type TStyleVariationBlockCardProps = {
 	clientId: string,
 	isActive: boolean,
 	blockName: string,
+	labels?: TStyleVariationBlockCardLabels,
+	slotName?: string,
 	supports: Object,
 	currentStateAttributes: Object,
 	additional: Object,

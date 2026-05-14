@@ -1,3 +1,13 @@
+.blockera-global-styles-panel-aside {
+	
+	.blockera-block-card-wrapper {
+		
+		&.is-sticky-active {
+			border-top: none;
+		}
+	}
+}
+
 .blockera-block-card-wrapper {
 	&.is-sticky-active {
 		position: sticky;

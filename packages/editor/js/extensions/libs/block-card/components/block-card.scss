@@ -1,3 +1,13 @@
+.blockera-global-styles-panel-aside {
+
+	.blockera-extension.blockera-extension-block-card {
+
+		&.outside-block-inspector {
+			padding-top: 0;
+		}
+	}
+}
+
 .blockera-extension.blockera-extension-block-card {
 	display: flex;
 	position: relative;
@@ -279,8 +289,16 @@
 		align-items: center;
 		flex-wrap: wrap;
 
+		&.justify-content-flex-start {
+			justify-content: flex-start;
+		}
+
 		&.no-flex {
 			display: block;
+		}
+
+		button {
+			box-sizing: border-box;
 		}
 	}
 

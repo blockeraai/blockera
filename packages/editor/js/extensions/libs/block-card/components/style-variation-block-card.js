@@ -44,12 +44,40 @@ import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/pa
 
 const DEBOUNCE_DELAY = 1000;
 
+export const DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME =
+	'blockera-style-variation-block-card';
+
+export function getStyleVariationBlockCardSlotNames(
+	slotNamespace: string,
+	variationName: string
+): {|
+	menu: string,
+	afterPreview: string,
+	children: string,
+|} {
+	const key = variationName ?? '';
+	const kebabVariation = kebabCase(key);
+
+	const children =
+		slotNamespace === DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME
+			? `blockera-${kebabVariation}-style-variation-block-card-children`
+			: `${slotNamespace}-children-${kebabVariation}`;
+
+	return {
+		menu: `${slotNamespace}-menu-${key}`,
+		afterPreview: `${slotNamespace}-after-preview-${key}`,
+		children,
+	};
+}
+
 export function StyleVariationBlockCard({
 	clientId,
 	isActive,
 	children,
 	supports,
 	blockName,
+	labels,
+	slotName = DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
 	handleOnClick,
 	currentBlock,
 	currentState,
@@ -66,6 +94,21 @@ export function StyleVariationBlockCard({
 	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
 }: TStyleVariationBlockCardProps): MixedElement {
+	const resolvedLabels = {
+		closeTooltip: __('Close Block Style', 'blockera'),
+		closeButtonDataTest: 'Close Block Style',
+		rootDataTest: 'blockera-style-variation-block-card',
+		...labels,
+	};
+
+	const variationKey = currentBlockStyleVariation?.name ?? '';
+
+	const {
+		menu: slotMenuName,
+		afterPreview: slotAfterPreviewName,
+		children: slotChildrenName,
+	} = getStyleVariationBlockCardSlotNames(slotName, variationKey);
+
 	const { selectedBlockClientId, statesManagerHandleOnChangeRef } =
 		useGlobalStylesPanelContext();
 	const blockeraGlobalStylesMetaData = useSelect(
@@ -263,7 +306,7 @@ export function StyleVariationBlockCard({
 					'inner-block-is-selected': currentInnerBlock !== null,
 				}
 			)}
-			data-test={'blockera-style-variation-block-card'}
+			data-test={resolvedLabels.rootDataTest}
 		>
 			<div
 				className={extensionInnerClassNames(
@@ -301,7 +344,10 @@ export function StyleVariationBlockCard({
 						>
 							<EditableBlockName
 								content={title}
-								placeholder={currentBlockStyleVariation?.label}
+								placeholder={
+									resolvedLabels.editableNamePlaceholder ??
+									currentBlockStyleVariation?.label
+								}
 								onChange={handleTitleChange}
 								contentEditable={true}
 							/>
@@ -321,11 +367,9 @@ export function StyleVariationBlockCard({
 								'block-card__settings'
 							)}
 						>
-							<Slot
-								name={`blockera-style-variation-block-card-menu-${currentBlockStyleVariation?.name}`}
-							/>
+							<Slot name={slotMenuName} />
 
-							<Tooltip text={__('Close Block Style', 'blockera')}>
+							<Tooltip text={resolvedLabels.closeTooltip}>
 								<Icon
 									className={extensionInnerClassNames(
 										'block-card__close'
@@ -333,7 +377,9 @@ export function StyleVariationBlockCard({
 									library="wp"
 									icon="close-small"
 									iconSize="24"
-									data-test="Close Block Style"
+									data-test={
+										resolvedLabels.closeButtonDataTest
+									}
 									onClick={handleClose}
 								/>
 							</Tooltip>
@@ -346,9 +392,7 @@ export function StyleVariationBlockCard({
 				name={blockName}
 				variation={currentBlockStyleVariation?.name}
 			>
-				<Slot
-					name={`blockera-style-variation-block-card-after-preview-${currentBlockStyleVariation?.name}`}
-				/>
+				<Slot name={slotAfterPreviewName} />
 			</BlockPreviewPanel>
 
 			<Flex
@@ -368,11 +412,7 @@ export function StyleVariationBlockCard({
 						currentStateAttributes?.blockeraUnsavedData
 					}
 				>
-					<Slot
-						name={`blockera-${kebabCase(
-							currentBlockStyleVariation?.name
-						)}-style-variation-block-card-children`}
-					/>
+					<Slot name={slotChildrenName} />
 				</StateContainer>
 
 				{children}
