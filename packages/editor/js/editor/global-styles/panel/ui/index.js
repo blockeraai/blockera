@@ -22,6 +22,11 @@ import type {
 	TBreakpoint,
 } from '../../../../extensions/libs/block-card/block-states/types';
 import type { InnerBlockType } from '../../../../extensions/libs/block-card/inner-blocks/types';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
+import { useGlobalStylesPanelContext } from '../context';
 
 type TBlockStyleVariations = {
 	clientId: string,
@@ -55,6 +60,7 @@ type TBlockStyleVariations = {
 	currentPreviewStyle: Object,
 	setCurrentPreviewStyle: (style: Object) => void,
 	blockeraGlobalStylesMetaData: Object,
+	variationUiSurface?: string,
 };
 
 export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
@@ -82,11 +88,30 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	isHovered,
 	setIsHovered,
 	setCurrentPreviewStyle,
+	variationUiSurface,
 }: TBlockStyleVariations): MixedElement => {
+	const { variationSurface = VARIATION_SURFACE_STYLE } =
+		useGlobalStylesPanelContext();
+
+	const uiSurface =
+		variationUiSurface !== undefined && variationUiSurface !== ''
+			? variationUiSurface
+			: variationSurface;
+
+	const accentDefault =
+		uiSurface === VARIATION_SURFACE_SIZE ? '#0516FF' : '#1ca120';
+
+	if (!['global-styles-panel', 'inspector-controls'].includes(context)) {
+		return <></>;
+	}
+
 	if (
 		!stylesToRender ||
-		stylesToRender.length === 0 ||
-		!['global-styles-panel', 'inspector-controls'].includes(context)
+		(stylesToRender.length === 0 &&
+			!(
+				context === 'global-styles-panel' &&
+				variationSurface === VARIATION_SURFACE_SIZE
+			))
 	) {
 		return <></>;
 	}
@@ -96,9 +121,14 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		!isBaseBreakpoint(currentBreakpoint) ||
 		currentState !== 'normal';
 
-	const activeStyleId = currentActiveStyle?.isDefault
+	const isSizeVariation = uiSurface === VARIATION_SURFACE_SIZE;
+	const styleActiveId = currentActiveStyle?.isDefault
 		? 'default'
 		: currentActiveStyle?.name || 'default';
+	const activeStyleId =
+		isSizeVariation && (!currentActiveStyle || !currentActiveStyle.name)
+			? 'unset'
+			: styleActiveId;
 
 	if ('global-styles-panel' === context) {
 		return (
@@ -107,6 +137,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				isNotActive={false}
 				blockName={blockName}
 				styles={memoizedStyles}
+				pickerVariationSurface={uiSurface}
 			/>
 		);
 	}
@@ -120,7 +151,9 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					{
 						'blockera-control-is-not-active': isNotActive,
 						'is-variation-picker-open': isOpen,
-						'is-variation-deleted': isDeletedStyle ? true : false,
+						'is-variation-deleted': isDeletedStyle,
+						'is-variation-ui-size':
+							uiSurface === VARIATION_SURFACE_SIZE,
 					}
 				)}
 				onClick={(event: MouseEvent) => {
@@ -173,7 +206,9 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 						isChanged={hasChangesets}
 						isAnimated={true}
 						primaryColor={
-							activeStyleId === 'default' ? '#1ca120' : '#ffffff'
+							activeStyleId === 'default'
+								? accentDefault
+								: '#ffffff'
 						}
 						size={'5'}
 						outlineSize={activeStyleId === 'default' ? '1.5' : '0'}
@@ -192,6 +227,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					originDefaultAttributes={originDefaultAttributes}
 					hasChangesets={hasChangesets}
 					setChangesets={setChangesets}
+					pickerVariationSurface={uiSurface}
 					styles={{
 						onSelect,
 						setIsOpen,
@@ -209,3 +245,12 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		</>
 	);
 };
+
+export const BlockSizeVariations: ComponentType<TBlockStyleVariations> = (
+	props: TBlockStyleVariations
+): MixedElement => (
+	<BlockStyleVariations
+		{...props}
+		variationUiSurface={VARIATION_SURFACE_SIZE}
+	/>
+);

@@ -13,8 +13,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { GlobalStylesPanelContextProvider } from './context';
 import { Panel } from './panel';
+import { VARIATION_SURFACE_STYLE } from './variation-surfaces';
 
 export default function App(props: Object): MixedElement {
+	const { variationSurface = VARIATION_SURFACE_STYLE, ...rest } = props;
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 
@@ -33,7 +35,9 @@ export default function App(props: Object): MixedElement {
 				/>
 			)}
 		>
-			<GlobalStylesPanelContextProvider value={props}>
+			<GlobalStylesPanelContextProvider
+				value={{ ...rest, variationSurface }}
+			>
 				<Panel />
 			</GlobalStylesPanelContextProvider>
 		</ErrorBoundary>

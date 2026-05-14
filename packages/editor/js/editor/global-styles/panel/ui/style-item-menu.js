@@ -60,7 +60,16 @@ export const StyleItemMenu = (): MixedElement => {
 		handlePromotionPopover,
 		anchorRef,
 		popoverOffset,
+		variationAllowsMultipleBlocks,
 	} = useStyleItemMenuContext();
+
+	const inactiveLabel = variationAllowsMultipleBlocks
+		? __('Inactive Style', 'blockera')
+		: __('Inactive Size', 'blockera');
+
+	const activeLabel = variationAllowsMultipleBlocks
+		? __('Active Style', 'blockera')
+		: __('Active Size', 'blockera');
 
 	return (
 		<>
@@ -93,7 +102,7 @@ export const StyleItemMenu = (): MixedElement => {
 					blockStyles={blockStyles}
 				/>
 			)}
-			{isOpenUsageForMultipleBlocks && (
+			{variationAllowsMultipleBlocks && isOpenUsageForMultipleBlocks && (
 				<UsageForMultipleBlocksModal
 					style={style}
 					blockName={blockName}
@@ -171,7 +180,7 @@ export const StyleItemMenu = (): MixedElement => {
 							</Button>
 						)}
 
-						{!style?.isDefault && (
+						{variationAllowsMultipleBlocks && !style?.isDefault && (
 							<Button
 								variant="link"
 								contentAlign="left"
@@ -258,8 +267,8 @@ export const StyleItemMenu = (): MixedElement => {
 								</ControlContextProvider>
 
 								{false === cachedStyle?.status
-									? __('Inactive Style', 'blockera')
-									: __('Active Style', 'blockera')}
+									? inactiveLabel
+									: activeLabel}
 							</Grid>
 						)}
 

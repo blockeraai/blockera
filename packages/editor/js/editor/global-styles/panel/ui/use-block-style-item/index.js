@@ -22,7 +22,11 @@ import { omit, mergeObject, kebabCase, cloneObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getDefaultStyle } from '../utils';
+import {
+	getDefaultStyle,
+	replaceActiveSizeVariation,
+	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+} from '../utils';
 import {
 	getCalculatedNewStyle,
 	isRootStyle,
@@ -80,6 +84,7 @@ export const useBlockStyleItem = ({
 	currentBlockStyleVariation,
 	deleteStyleVariationBlocks,
 	setCurrentBlockStyleVariation,
+	skipBlockStyleRegistry = false,
 }: TUseBlockStyleItemProps): TUseBlockStyleItemReturn => {
 	const {
 		setBlockStyles: setGlobalBlockStyles,
@@ -236,25 +241,29 @@ export const useBlockStyleItem = ({
 				);
 
 				// Register new style name in block references in pervious style name.
-				registerStyleForBlockTypes(blockTypesToRegister, editedStyle);
-				setStyleVariationBlocksInStore(
-					editedStyle.name,
-					blockTypesToRegister
-				);
-
-				setTimeout(() => {
-					// Unregister previous style name of current block.
-					unregisterStyleFromBlockTypes(
-						[blockName],
-						currentStyle.name
+				if (!skipBlockStyleRegistry) {
+					registerStyleForBlockTypes(
+						blockTypesToRegister,
+						editedStyle
 					);
 					setStyleVariationBlocksInStore(
-						currentStyle.name,
-						blockTypesToRegister.filter(
-							(blockType) => blockType !== blockName
-						)
+						editedStyle.name,
+						blockTypesToRegister
 					);
-				}, 1);
+
+					setTimeout(() => {
+						unregisterStyleFromBlockTypes(
+							[blockName],
+							currentStyle.name
+						);
+						setStyleVariationBlocksInStore(
+							currentStyle.name,
+							blockTypesToRegister.filter(
+								(blockType) => blockType !== blockName
+							)
+						);
+					}, 1);
+				}
 			} else {
 				// Only update variation fields - merge with existing, don't override other customizations
 				updateBlockeraGlobalStylesMetaData(
@@ -283,6 +292,7 @@ export const useBlockStyleItem = ({
 			setBlockeraGlobalStylesMetaData,
 			getBlockeraGlobalStylesMetaData,
 			updateBlockeraGlobalStylesMetaData,
+			skipBlockStyleRegistry,
 		]
 	);
 
@@ -331,83 +341,104 @@ export const useBlockStyleItem = ({
 			setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
 
 			if ('disable-all' === actionParam) {
-				deleteStyleVariationBlocks(styleParam.name, false);
-				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
-				disabledIn.forEach((block: string) => {
-					unregisterBlockStyle(block, styleParam.name);
-					if (selectedBlockStyle === block) {
-						handleOnUsageForMultipleBlocks(styleParam, 'delete');
-					}
-				});
-				setGlobalStyles(newGlobalStyles);
-				return;
-			}
-
-			if ('enable-all' === actionParam) {
-				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
-				enabledIn.forEach((block: string) => {
-					registerBlockStyle(block, styleParam);
-					if (selectedBlockStyle === block) {
-						handleOnUsageForMultipleBlocks(styleParam, 'add');
-					}
-				});
-				validItems
-					.filter((item) => !enabledIn.includes(item.name))
-					.forEach((item) => {
-						unregisterBlockStyle(item.name, styleParam.name);
-						if (selectedBlockStyle === item.name) {
+				if (!skipBlockStyleRegistry) {
+					deleteStyleVariationBlocks(styleParam.name, false);
+					setStyleVariationBlocks(
+						styleParam.name,
+						enabledIn,
+						'manual'
+					);
+					disabledIn.forEach((block: string) => {
+						unregisterBlockStyle(block, styleParam.name);
+						if (selectedBlockStyle === block) {
 							handleOnUsageForMultipleBlocks(
 								styleParam,
 								'delete'
 							);
 						}
 					});
+				}
 				setGlobalStyles(newGlobalStyles);
 				return;
 			}
 
-			if ('single-enable' === actionParam) {
-				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
-				if (disabledIn?.length && blockTypeParam) {
-					setTimeout(() => {
-						deleteStyleVariationBlocks(
-							styleParam.name,
-							false,
-							blockTypeParam,
-							disabledIn
-						);
-					}, 5);
+			if ('enable-all' === actionParam) {
+				if (!skipBlockStyleRegistry) {
+					setStyleVariationBlocks(
+						styleParam.name,
+						enabledIn,
+						'manual'
+					);
+					enabledIn.forEach((block: string) => {
+						registerBlockStyle(block, styleParam);
+						if (selectedBlockStyle === block) {
+							handleOnUsageForMultipleBlocks(styleParam, 'add');
+						}
+					});
+					validItems
+						.filter((item) => !enabledIn.includes(item.name))
+						.forEach((item) => {
+							unregisterBlockStyle(item.name, styleParam.name);
+							if (selectedBlockStyle === item.name) {
+								handleOnUsageForMultipleBlocks(
+									styleParam,
+									'delete'
+								);
+							}
+						});
 				}
-			} else if ('single-disable' === actionParam && blockTypeParam) {
-				deleteStyleVariationBlocks(
-					styleParam.name,
-					true,
-					blockTypeParam
-				);
-				if (enabledIn?.length) {
-					setTimeout(() => {
-						setStyleVariationBlocks(
-							styleParam.name,
-							enabledIn,
-							'manual'
-						);
-					}, 5);
-				}
+				setGlobalStyles(newGlobalStyles);
+				return;
 			}
 
-			enabledIn.forEach((block: string) => {
-				if (selectedBlockStyle === block) {
-					handleOnUsageForMultipleBlocks(styleParam, 'add');
+			if (!skipBlockStyleRegistry) {
+				if ('single-enable' === actionParam) {
+					setStyleVariationBlocks(
+						styleParam.name,
+						enabledIn,
+						'manual'
+					);
+					if (disabledIn?.length && blockTypeParam) {
+						setTimeout(() => {
+							deleteStyleVariationBlocks(
+								styleParam.name,
+								false,
+								blockTypeParam,
+								disabledIn
+							);
+						}, 5);
+					}
+				} else if ('single-disable' === actionParam && blockTypeParam) {
+					deleteStyleVariationBlocks(
+						styleParam.name,
+						true,
+						blockTypeParam
+					);
+					if (enabledIn?.length) {
+						setTimeout(() => {
+							setStyleVariationBlocks(
+								styleParam.name,
+								enabledIn,
+								'manual'
+							);
+						}, 5);
+					}
 				}
-				registerBlockStyle(block, styleParam);
-			});
 
-			disabledIn.forEach((block: string) => {
-				if (selectedBlockStyle === block) {
-					handleOnUsageForMultipleBlocks(styleParam, 'delete');
-				}
-				unregisterBlockStyle(block, styleParam.name);
-			});
+				enabledIn.forEach((block: string) => {
+					if (selectedBlockStyle === block) {
+						handleOnUsageForMultipleBlocks(styleParam, 'add');
+					}
+					registerBlockStyle(block, styleParam);
+				});
+
+				disabledIn.forEach((block: string) => {
+					if (selectedBlockStyle === block) {
+						handleOnUsageForMultipleBlocks(styleParam, 'delete');
+					}
+					unregisterBlockStyle(block, styleParam.name);
+				});
+			}
 
 			setGlobalStyles(newGlobalStyles);
 		},
@@ -417,6 +448,7 @@ export const useBlockStyleItem = ({
 			setStyleVariationBlocks,
 			deleteStyleVariationBlocks,
 			handleOnUsageForMultipleBlocks,
+			skipBlockStyleRegistry,
 		]
 	);
 
@@ -451,11 +483,16 @@ export const useBlockStyleItem = ({
 				currentStyle.name
 			);
 
-			registerStyleForBlockTypes(blockTypesToRegister, duplicateStyle);
-			setStyleVariationBlocksInStore(
-				duplicateStyle.name,
-				blockTypesToRegister
-			);
+			if (!skipBlockStyleRegistry) {
+				registerStyleForBlockTypes(
+					blockTypesToRegister,
+					duplicateStyle
+				);
+				setStyleVariationBlocksInStore(
+					duplicateStyle.name,
+					blockTypesToRegister
+				);
+			}
 
 			setCurrentBlockStyleVariation(duplicateStyle);
 			setCurrentActiveStyle(duplicateStyle);
@@ -613,7 +650,9 @@ export const useBlockStyleItem = ({
 
 		setBlockStyles(newBlockStyles);
 
-		unregisterBlockStyle(blockName, currentStyleName);
+		if (!skipBlockStyleRegistry) {
+			unregisterBlockStyle(blockName, currentStyleName);
+		}
 
 		setStyles({
 			...styles,
@@ -629,7 +668,9 @@ export const useBlockStyleItem = ({
 				: {}),
 		});
 
-		deleteStyleVariationBlocks(currentStyleName, true, blockName);
+		if (!skipBlockStyleRegistry) {
+			deleteStyleVariationBlocks(currentStyleName, true, blockName);
+		}
 
 		const newCounter = counter - 1;
 		counterMap[blockName] = newCounter;
@@ -789,15 +830,23 @@ export const useBlockStyleItem = ({
 		// Set the editor selected block event to save customizations.
 		setEditorSelectedBlockEvent('save-customizations');
 
-		handleOnChangeAttributes('className', `is-style-${currentStyle.name}`, {
-			effectiveItems: defaultValue,
-			shouldUpdateClassName: false,
-			ref: {
-				current: {
-					action: 'save-customizations',
+		const variationClassPrefix = skipBlockStyleRegistry
+			? BLOCK_SIZE_VARIATION_CLASS_PREFIX
+			: 'is-style-';
+
+		handleOnChangeAttributes(
+			'className',
+			`${variationClassPrefix}${currentStyle.name}`,
+			{
+				effectiveItems: defaultValue,
+				shouldUpdateClassName: false,
+				ref: {
+					current: {
+						action: 'save-customizations',
+					},
 				},
-			},
-		});
+			}
+		);
 
 		setCurrentActiveStyle(currentStyle, 'save-customizations');
 	};
@@ -812,9 +861,20 @@ export const useBlockStyleItem = ({
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
 
+		let sourceClassName = selectedBlock?.attributes?.className || '';
+
+		if (skipBlockStyleRegistry) {
+			sourceClassName = replaceActiveSizeVariation(
+				sourceClassName,
+				currentStyle,
+				null,
+				'detach'
+			);
+		}
+
 		const className = generateUniqueClassName(
 			selectedBlock.clientId,
-			selectedBlock?.attributes?.className || ''
+			sourceClassName
 		);
 
 		const { baseValues, userValues } = getStyleValuesFromSources(

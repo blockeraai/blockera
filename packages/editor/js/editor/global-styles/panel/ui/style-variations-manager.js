@@ -21,10 +21,21 @@ import { PanelBodyControl } from '@blockera/controls';
  */
 import { StyleItem } from './style-item';
 import { AddNewStyleButton } from './add-new-style-button';
-import { useBlockStylesPickerContext } from '../context';
+import {
+	useBlockStylesPickerContext,
+	useGlobalStylesPanelContext,
+} from '../context';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
 
 export const StyleVariationsManager = (): MixedElement => {
 	const { blockStyles, isNotActive } = useBlockStylesPickerContext();
+	const { variationSurface = VARIATION_SURFACE_STYLE } =
+		useGlobalStylesPanelContext();
+
+	const isSizeSurface = variationSurface === VARIATION_SURFACE_SIZE;
 
 	const memoizedStyles = useMemo(
 		() =>
@@ -42,7 +53,9 @@ export const StyleVariationsManager = (): MixedElement => {
 		<PanelBodyControl
 			title={
 				<>
-					{__('Style Variations', 'blockera')}
+					{isSizeSurface
+						? __('Size Variations', 'blockera')
+						: __('Style Variations', 'blockera')}
 
 					<AddNewStyleButton
 						design="no-label"
@@ -52,7 +65,9 @@ export const StyleVariationsManager = (): MixedElement => {
 			}
 			initialOpen={true}
 			icon={<Icon icon="extension-style-variations" iconSize={20} />}
-			className={extensionClassNames('style-variations')}
+			className={extensionClassNames(
+				isSizeSurface ? 'size-variations' : 'style-variations'
+			)}
 			accordion={false}
 		>
 			<div
@@ -68,15 +83,24 @@ export const StyleVariationsManager = (): MixedElement => {
 						'block-style-variations-description'
 					)}
 				>
-					{__(
-						'Create style presets for blocks and apply them instantly across multiple blocks or pages.',
-						'blockera'
-					)}
+					{isSizeSurface
+						? __(
+								'Define size presets stored as block style variations with a dedicated type, and edit them independently of main style variations.',
+								'blockera'
+							)
+						: __(
+								'Create style presets for blocks and apply them instantly across multiple blocks or pages.',
+								'blockera'
+							)}
 				</p>
 
 				<AddNewStyleButton
 					design="with-label"
-					label={__('Add New Style', 'blockera')}
+					label={
+						isSizeSurface
+							? __('Add Size Variations', 'blockera')
+							: __('Add Style Variations', 'blockera')
+					}
 				/>
 			</div>
 		</PanelBodyControl>

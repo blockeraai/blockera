@@ -12,6 +12,7 @@ export const useBackButton = ({
 	setSelectedBlockStyle,
 	resetBlockStateToNormal,
 	setSelectedBlockStyleVariation,
+	setSelectedBlockSizeVariation,
 	statesManagerHandleOnChangeRef,
 }: {
 	className: string,
@@ -23,6 +24,7 @@ export const useBackButton = ({
 	setSelectedBlockRef: (blockRef: string | void) => void,
 	setSelectedBlockStyle: (blockName: string | void) => void,
 	setSelectedBlockStyleVariation: (blockName: string | void) => void,
+	setSelectedBlockSizeVariation?: (variation: Object | void) => void,
 }) => {
 	const backElement = document.querySelector('.components-heading');
 
@@ -61,6 +63,7 @@ export const useBackButton = ({
 				setSelectedBlockRef(undefined);
 				setSelectedBlockStyle(undefined);
 				setSelectedBlockStyleVariation(undefined);
+				setSelectedBlockSizeVariation?.(undefined);
 			});
 	}
 };

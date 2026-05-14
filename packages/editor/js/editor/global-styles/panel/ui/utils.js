@@ -58,7 +58,8 @@ export function getActiveStyle(
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
  * but the BlockCard section edited (used exact code)
  *
- * Replaces the active style in the block's className.
+ * Replaces or removes the active `is-style-{slug}` in the block className only.
+ * `is-size-*` tokens from size variations are left unchanged.
  */
 export function replaceActiveStyle(
 	className: string,
@@ -80,6 +81,87 @@ export function replaceActiveStyle(
 	list.add('is-style-' + newStyle.name);
 
 	return list.value;
+}
+
+/** Class prefix Blockera applies for **size** variations on the block (`is-size-{slug}`). */
+export const BLOCK_SIZE_VARIATION_CLASS_PREFIX = 'is-size-';
+
+/** Resolve size variation row from {@code stylesToRender}, unknown slug string, or null. */
+export function getActiveSizeVariationFromClass(
+	stylesToRender: Array<any>,
+	className: string
+): Object | string | null {
+	const p = BLOCK_SIZE_VARIATION_CLASS_PREFIX;
+	const pLen = p.length;
+
+	for (const token of new TokenList(className || '').values()) {
+		if (token.indexOf(p) !== 0) {
+			continue;
+		}
+
+		const slug = token.substring(pLen);
+		const row = stylesToRender?.find((s) => s.name === slug);
+
+		if (row) {
+			return row;
+		}
+
+		return slug;
+	}
+
+	return null;
+}
+
+/**
+ * Replaces {@code is-size-{slug}} tokens (single active size).
+ * Mirrors {@see replaceActiveStyle} but never touches {@code is-style-*} tokens.
+ */
+export function replaceActiveSizeVariation(
+	className: string,
+	_activeSizeVariation?: Object | null,
+	newSizeVariation?: Object | null,
+	event: 'click' | 'detach' = 'click'
+): string {
+	const list = new TokenList(className || '');
+	const p = BLOCK_SIZE_VARIATION_CLASS_PREFIX;
+
+	for (const token of [...list.values()]) {
+		if (token.indexOf(p) === 0) {
+			list.remove(token);
+		}
+	}
+
+	if ('detach' === event) {
+		return list.value;
+	}
+
+	const slug = newStyleVariationSlug(
+		newStyleVariationMaybe(newSizeVariation)
+	);
+
+	if (!slug) {
+		return list.value;
+	}
+
+	list.add(p + slug);
+
+	return list.value;
+}
+
+function newStyleVariationMaybe(v: mixed): Object | null {
+	if (v && typeof v === 'object' && v !== null) {
+		return v;
+	}
+
+	return null;
+}
+
+function newStyleVariationSlug(style: Object | null): ?string {
+	if (!style?.name || typeof style.name !== 'string') {
+		return null;
+	}
+
+	return style.name;
 }
 
 /**
@@ -311,7 +393,7 @@ export function useStylesForBlocks({
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/use-styles-for-block'
  *
  */
-function useGenericPreviewBlock(block: Object, type: Object) {
+export function useGenericPreviewBlock(block: Object, type: Object): Object {
 	return useMemo(() => {
 		const example = type?.example;
 		const blockName = type?.name;

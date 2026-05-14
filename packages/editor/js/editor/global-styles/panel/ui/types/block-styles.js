@@ -9,6 +9,7 @@ export type T_BLOCK_STYLES_PROPS = {
 	originDefaultAttributes?: Object,
 	setChangesets?: (hasChangesets: boolean) => void,
 	context?: 'global-styles-panel' | 'inspector-controls',
+	pickerVariationSurface?: string,
 	styles: {
 		onSelect: (style: string) => void,
 		stylesToRender: Array<Object>,

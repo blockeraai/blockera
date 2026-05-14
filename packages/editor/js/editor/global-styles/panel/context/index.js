@@ -4,11 +4,11 @@
  * External dependencies
  */
 import {
-	createContext,
-	useContext,
-	useState,
 	useMemo,
+	useState,
+	useContext,
 	useCallback,
+	createContext,
 } from '@wordpress/element';
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
@@ -31,6 +31,14 @@ import { STORE_NAME as EDITOR_STORE_NAME } from '../../../../store/constants';
 import { sanitizeDefaultAttributes } from '../../../../extensions/hooks/utils';
 import { ignoreBlockeraAttributeKeysRegExp } from '../../../../extensions/libs';
 import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
+import {
+	mergeBlockVariationsTrees,
+	attachSizeVariationPersistenceKeys,
+} from '../size-variations';
 
 // Helper functions
 export const getBlockAttributes = (name: string): Object => {
@@ -198,6 +206,9 @@ export const GlobalStylesPanelContext: Object = createContext({
 	setStyleVariationBlocks: () => {},
 	setStyles: () => {},
 	styles: {},
+	variationSurface: VARIATION_SURFACE_STYLE,
+	baseConfig: {},
+	userConfig: {},
 	statesManagerHandleOnChangeRef: {
 		current: null,
 	},
@@ -223,6 +234,7 @@ export const GlobalStylesPanelContextProvider = ({
 		resetBlockStateToNormal,
 		blockType: { name, attributes },
 		statesManagerHandleOnChangeRef,
+		variationSurface = VARIATION_SURFACE_STYLE,
 	} = value;
 
 	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
@@ -245,9 +257,14 @@ export const GlobalStylesPanelContextProvider = ({
 	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
 
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
-		useState(getSelectedBlockStyleVariation());
+		useState(() =>
+			variationSurface === VARIATION_SURFACE_SIZE
+				? undefined
+				: getSelectedBlockStyleVariation()
+		);
 
 	const fallbackClientId = name.replace('/', '-');
+	const isSizeVariation = variationSurface === VARIATION_SURFACE_SIZE;
 	const clientId = currentBlockStyleVariation?.name
 		? `${currentBlockStyleVariation?.name}-${fallbackClientId}`
 		: fallbackClientId;
@@ -311,12 +328,35 @@ export const GlobalStylesPanelContextProvider = ({
 	const handleOnChangeStyle = useCallback(
 		(newStyle: Object) => {
 			const normalized = getNormalizedStyle(newStyle, defaultStyles);
+			const mergedVariationsSnapshot = mergeBlockVariationsTrees(
+				baseConfig || {},
+				userConfig || {},
+				name
+			);
+
+			let payload = normalized;
 
 			if (
-				currentBlockStyleVariation &&
-				!currentBlockStyleVariation.isDefault &&
-				currentBlockStyleVariation.name
+				variationSurface === VARIATION_SURFACE_SIZE &&
+				currentBlockStyleVariation?.name
 			) {
+				payload = attachSizeVariationPersistenceKeys(
+					normalized,
+					currentBlockStyleVariation.name,
+					mergedVariationsSnapshot
+				);
+			}
+
+			const isVariationScopedEdit =
+				variationSurface === VARIATION_SURFACE_SIZE
+					? Boolean(currentBlockStyleVariation?.name)
+					: Boolean(
+							currentBlockStyleVariation &&
+							!currentBlockStyleVariation.isDefault &&
+							currentBlockStyleVariation.name
+						);
+
+			if (isVariationScopedEdit && currentBlockStyleVariation?.name) {
 				const variationName = currentBlockStyleVariation.name;
 				const targetBlocks = getBlockTypesForStyleVariation(
 					getStyleVariationBlocks,
@@ -333,7 +373,7 @@ export const GlobalStylesPanelContextProvider = ({
 									`styles.blocks.${blockName}.variations.${variationName}`.split(
 										'.'
 									),
-									normalized
+									payload
 								),
 							currentConfig
 						);
@@ -342,7 +382,7 @@ export const GlobalStylesPanelContextProvider = ({
 				}
 			}
 
-			setStyle(normalized);
+			setStyle(payload);
 		},
 		[
 			setStyle,
@@ -351,19 +391,54 @@ export const GlobalStylesPanelContextProvider = ({
 			currentBlockStyleVariation,
 			getStyleVariationBlocks,
 			name,
+			variationSurface,
+			baseConfig,
+			userConfig,
 		]
 	);
+
 	const handleOnChangeStyleInLocalState = useCallback(
 		(newStyle: Object): void => {
 			const normalized = getNormalizedStyle(newStyle, defaultStyles);
-			const variationArg = currentBlockStyleVariation?.isDefault
-				? 'default'
-				: currentBlockStyleVariation?.name || 'default';
+			const mergedVariationsSnapshot = mergeBlockVariationsTrees(
+				baseConfig || {},
+				userConfig || {},
+				name
+			);
+
+			let payload = normalized;
 
 			if (
-				!currentBlockStyleVariation?.isDefault &&
-				variationArg !== 'default'
+				variationSurface === VARIATION_SURFACE_SIZE &&
+				currentBlockStyleVariation?.name
 			) {
+				payload = attachSizeVariationPersistenceKeys(
+					normalized,
+					currentBlockStyleVariation.name,
+					mergedVariationsSnapshot
+				);
+			}
+
+			const styleVariationArg = currentBlockStyleVariation?.isDefault
+				? 'default'
+				: currentBlockStyleVariation?.name || 'default';
+			const variationArg = isSizeVariation
+				? currentBlockStyleVariation?.name || ''
+				: styleVariationArg;
+
+			if (variationSurface === VARIATION_SURFACE_SIZE && !variationArg) {
+				return;
+			}
+
+			const shouldFanOutAcrossBlocks =
+				variationSurface === VARIATION_SURFACE_SIZE
+					? Boolean(variationArg)
+					: Boolean(
+							!currentBlockStyleVariation?.isDefault &&
+							variationArg !== 'default'
+						);
+
+			if (shouldFanOutAcrossBlocks) {
 				const targetBlocks = getBlockTypesForStyleVariation(
 					getStyleVariationBlocks,
 					variationArg,
@@ -371,13 +446,13 @@ export const GlobalStylesPanelContextProvider = ({
 				);
 
 				for (const blockName of targetBlocks) {
-					setBlockStyles(blockName, variationArg, normalized);
+					setBlockStyles(blockName, variationArg, payload);
 				}
 
 				return;
 			}
 
-			setBlockStyles(name, variationArg, normalized);
+			setBlockStyles(name, variationArg, payload);
 		},
 		[
 			name,
@@ -385,6 +460,10 @@ export const GlobalStylesPanelContextProvider = ({
 			currentBlockStyleVariation,
 			defaultStyles,
 			getStyleVariationBlocks,
+			variationSurface,
+			baseConfig,
+			userConfig,
+			isSizeVariation,
 		]
 	);
 
@@ -422,6 +501,7 @@ export const GlobalStylesPanelContextProvider = ({
 				userConfig,
 				defaultStyles,
 				fallbackClientId,
+				variationSurface,
 				childrenComponent,
 				getNormalizedStyle,
 				selectedBlockClientId,
@@ -449,6 +529,7 @@ type UseGlobalStylesPanelContextReturnType = {
 	},
 	userConfig: Object,
 	baseConfig: Object,
+	variationSurface: 'size' | 'style',
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
 	getStyle: () => Object,

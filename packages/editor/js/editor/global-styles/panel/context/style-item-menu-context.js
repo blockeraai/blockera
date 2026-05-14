@@ -44,6 +44,7 @@ export const StyleItemMenuContext: Object = createContext({
 	blockStyles: [],
 	anchorRef: { current: null },
 	popoverOffset: 50,
+	variationAllowsMultipleBlocks: true,
 });
 
 export const useStyleItemMenuContext = (): Object => {

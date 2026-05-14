@@ -24,6 +24,10 @@ import { STORE_NAME } from '../../../store/constants';
 import bootstrapScripts from '../../../extensions/scripts';
 import { subscribeToBlockSelection } from './subscribe-unsubscribe';
 import { useResetBlockStateToNormal } from '../../../extensions/libs/block-card/block-states/hooks';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from './variation-surfaces';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
@@ -38,6 +42,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	const {
 		setSelectedBlockRef,
 		setSelectedBlockStyle,
+		setSelectedBlockSizeVariation,
 		setSelectedBlockStyleVariation,
 	} = dispatch(STORE_NAME);
 	const statesManagerHandleOnChangeRef = useRef<
@@ -104,6 +109,7 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockStyle,
 		resetBlockStateToNormal,
 		setSelectedBlockStyleVariation,
+		setSelectedBlockSizeVariation,
 		statesManagerHandleOnChangeRef,
 		className: bodySupportingClassname,
 	});
@@ -140,6 +146,25 @@ export const BlockGlobalStylesPanelScreen = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, hasBlockeraExtensions]);
 
+	const sharedAppProps = useMemo(
+		() => ({
+			selectedBlockClientId: {
+				...(selectedBlock ? { ...selectedBlock } : {}),
+				...(memoizedSelectedBlock ? { ...memoizedSelectedBlock } : {}),
+			}.clientId,
+			blockType,
+			resetBlockStateToNormal,
+			statesManagerHandleOnChangeRef,
+		}),
+		[
+			selectedBlock,
+			memoizedSelectedBlock,
+			blockType,
+			resetBlockStateToNormal,
+			statesManagerHandleOnChangeRef,
+		]
+	);
+
 	if (!hasBlockeraExtensions) {
 		return <></>;
 	}
@@ -157,19 +182,18 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	return createPortal(
 		<div className={className}>
-			<App
-				selectedBlockClientId={
-					{
-						...(selectedBlock ? { ...selectedBlock } : {}),
-						...(memoizedSelectedBlock
-							? { ...memoizedSelectedBlock }
-							: {}),
-					}.clientId
-				}
-				blockType={blockType}
-				resetBlockStateToNormal={resetBlockStateToNormal}
-				statesManagerHandleOnChangeRef={statesManagerHandleOnChangeRef}
-			/>
+			<div className="blockera-global-styles-panel-stack">
+				<App
+					{...sharedAppProps}
+					variationSurface={VARIATION_SURFACE_STYLE}
+				/>
+				<aside className="blockera-global-styles-panel-aside">
+					<App
+						{...sharedAppProps}
+						variationSurface={VARIATION_SURFACE_SIZE}
+					/>
+				</aside>
+			</div>
 		</div>,
 		screenElement
 	);

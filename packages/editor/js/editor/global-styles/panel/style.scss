@@ -4,3 +4,15 @@
 	box-sizing: border-box !important;
 	width: auto;
 }
+
+.blockera-global-styles-panel-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.blockera-global-styles-panel-aside {
+	position: relative;
+	z-index: 99999;
+	background: #ffffff;
+}

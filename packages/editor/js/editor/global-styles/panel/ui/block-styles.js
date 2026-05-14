@@ -53,6 +53,10 @@ import { useBlockContext } from '../../../../extensions/components';
 import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
 import { PromoteGlobalStylesPremiumFeature } from './promote-global-styles-premium-feature';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
 
 // Mapped block dynamic style variations counter for limitation reasons.
 const blockDynamicStylesCount: Object = {};
@@ -66,6 +70,7 @@ function BlockStyles({
 	setChangesets,
 	originDefaultAttributes,
 	context = 'inspector-controls',
+	pickerVariationSurface,
 }: T_BLOCK_STYLES_PROPS): MixedElement | null {
 	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 
@@ -76,7 +81,12 @@ function BlockStyles({
 		setStyle: setStyles,
 		setCurrentBlockStyleVariation,
 		currentBlockStyleVariation,
+		variationSurface: panelVariationSurface = VARIATION_SURFACE_STYLE,
 	} = useGlobalStylesPanelContext();
+	const variationSurface =
+		pickerVariationSurface !== undefined && pickerVariationSurface !== ''
+			? pickerVariationSurface
+			: panelVariationSurface;
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
 	const [counter, setCounter] = useBlockStylesCounter({
@@ -237,6 +247,7 @@ function BlockStyles({
 			hasChangesets: hasChangesets ?? false,
 			setChangesets: setChangesets ?? (() => {}),
 			isNotActive: isNotActive ?? false,
+			variationSurface,
 		}),
 		[
 			blockName,
@@ -258,10 +269,15 @@ function BlockStyles({
 			hasChangesets,
 			setChangesets,
 			isNotActive,
+			variationSurface,
 		]
 	);
 
-	if (!stylesToRender || stylesToRender.length === 0) {
+	if (
+		!stylesToRender ||
+		(stylesToRender.length === 0 &&
+			variationSurface !== VARIATION_SURFACE_SIZE)
+	) {
 		return null;
 	}
 
@@ -348,10 +364,18 @@ function BlockStyles({
 							<>
 								<Flex direction="column" gap="10px">
 									<AddNewStyleButton
-										label={__(
-											'Style Variations',
-											'blockera'
-										)}
+										label={
+											variationSurface !==
+											VARIATION_SURFACE_SIZE
+												? __(
+														'Style Variations',
+														'blockera'
+													)
+												: __(
+														'Size Variations',
+														'blockera'
+													)
+										}
 									/>
 									{isPromotionPopoverOpen && (
 										<PromoteGlobalStylesPremiumFeature
@@ -411,17 +435,19 @@ function BlockStyles({
 									</div>
 								</Flex>
 
-								<Flex direction="column" gap="8px">
-									<h2
-										className={classNames(
-											'blockera-block-styles-category'
-										)}
-									>
-										{__('Actions', 'blockera')}
-									</h2>
+								{activeStyle?.name && (
+									<Flex direction="column" gap="8px">
+										<h2
+											className={classNames(
+												'blockera-block-styles-category'
+											)}
+										>
+											{__('Actions', 'blockera')}
+										</h2>
 
-									<Slot name="block-inspector-style-actions" />
-								</Flex>
+										<Slot name="block-inspector-style-actions" />
+									</Flex>
+								)}
 							</>
 						)}
 
