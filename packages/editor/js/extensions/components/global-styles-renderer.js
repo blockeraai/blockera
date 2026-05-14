@@ -30,6 +30,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			supports,
 			selectors,
 			styleVariationName,
+			variationClassPrefix = 'is-style-',
 			renderInPortal = true,
 			isStyleVariation = false,
 			sanitizedBlockGlobalStyles,
@@ -115,6 +116,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 				isStyleVariation,
 				inlineStyles: [],
 				styleVariationName,
+				variationClassPrefix,
 				isGlobalStylesWrapper: true,
 				defaultAttributes: defaultStyles,
 				clientId,
@@ -128,6 +130,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 				name,
 				isStyleVariation,
 				styleVariationName,
+				variationClassPrefix,
 				defaultStyles,
 				clientId,
 				activeDeviceType,
@@ -187,6 +190,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 		return (
 			prevProps.name === nextProps.name &&
 			prevProps.styleVariationName === nextProps.styleVariationName &&
+			prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
 			prevProps.isStyleVariation === nextProps.isStyleVariation &&
 			prevProps.renderInPortal === nextProps.renderInPortal &&
 			isEquals(

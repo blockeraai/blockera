@@ -10,12 +10,15 @@ import { useMemo } from '@wordpress/element';
  */
 import { isInnerBlock, isNormalState } from './utils';
 import { useEditorStore, useExtensionsStore } from '../../hooks';
+import { VARIATION_SURFACE_SIZE } from '../../editor/global-styles/panel/variation-surfaces';
 
 export const Container = ({
 	activeColor,
+	variationCssVars,
 	children,
 }: {
 	activeColor: string,
+	variationCssVars?: Object,
 	children: Element<any>,
 }): Element<any> => {
 	return (
@@ -25,6 +28,7 @@ export const Container = ({
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,
 				'--blockera-tab-panel-active-color': activeColor,
+				...variationCssVars,
 			}}
 		>
 			{children}
@@ -41,6 +45,7 @@ export default function StateContainer({
 	blockeraUnsavedData,
 	isGlobalStylesCardWrapper = false,
 	insideBlockInspector = true,
+	variationSurface,
 }: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore({ name, clientId });
@@ -70,7 +75,10 @@ export default function StateContainer({
 			(!insideBlockInspector || isGlobalStylesCardWrapper) &&
 			isNormalState(currentState)
 		) {
-			color = '#1ca120';
+			color =
+				variationSurface === VARIATION_SURFACE_SIZE
+					? '#0516FF'
+					: '#1ca120';
 		}
 
 		return color;
@@ -82,7 +90,37 @@ export default function StateContainer({
 		blockeraUnsavedData,
 		insideBlockInspector,
 		currentInnerBlockState,
+		variationSurface,
 	]);
 
-	return <Container activeColor={activeColor}>{children}</Container>;
+	const variationCssVars = useMemo(() => {
+		if (!isGlobalStylesCardWrapper || !isNormalState(currentState)) {
+			return undefined;
+		}
+
+		if (variationSurface === VARIATION_SURFACE_SIZE) {
+			return {
+				'--blockera-controls-variations-color': '#0516FF',
+				'--blockera-controls-variations-color-bk': '#0414cc',
+				'--blockera-controls-variations-color-darker-20':
+					'color-mix(in srgb, #0414cc 100%, #000000 5%)',
+			};
+		}
+
+		return {
+			'--blockera-controls-variations-color': '#1ca120',
+			'--blockera-controls-variations-color-bk': 'hsl(122, 70%, 37%)',
+			'--blockera-controls-variations-color-darker-20':
+				'color-mix(in srgb, hsl(122, 70%, 37%) 100%, #000000 5%)',
+		};
+	}, [isGlobalStylesCardWrapper, currentState, variationSurface]);
+
+	return (
+		<Container
+			activeColor={activeColor}
+			variationCssVars={variationCssVars}
+		>
+			{children}
+		</Container>
+	);
 }

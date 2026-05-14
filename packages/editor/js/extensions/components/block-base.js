@@ -46,6 +46,10 @@ import {
 	useBlockStyleVariations,
 	useCalculateCurrentAttributes,
 } from '../../hooks';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../../editor/global-styles/panel/variation-surfaces';
 import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../..';
 import { SideEffect } from '../libs/base';
@@ -68,6 +72,7 @@ import {
 import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
+import { GlobalStyles } from '../../editor/global-stylesheet';
 import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
@@ -163,6 +168,7 @@ export const BlockBase: ComponentType<any> = (
 		availableAttributes,
 		activeBlockVariation,
 		getActiveBlockVariation,
+		wpBlockType,
 	} = useSelect(
 		(select) => {
 			const {
@@ -215,6 +221,7 @@ export const BlockBase: ComponentType<any> = (
 				),
 				blockVariations: name && getBlockVariations(name, 'transform'),
 				activeVariation: _getActiveBlockVariation(),
+				wpBlockType: name ? getBlockType(name) : null,
 			};
 		},
 		[clientId, name]
@@ -447,7 +454,7 @@ export const BlockBase: ComponentType<any> = (
 		// We should update classname with unique generate classname while customizing style variation.
 		if (
 			shouldUpdateClassName &&
-			/^is-style-.*/g.test(classNameStr) &&
+			/^is-(?:style|size)-/.test(classNameStr) &&
 			!/\s/g.test(classNameStr)
 		) {
 			valueToStore.className = classNames(classNameStr, {
@@ -612,8 +619,25 @@ export const BlockBase: ComponentType<any> = (
 		storedAttributes: cloneObject(attributes),
 		defaultAttributes: availableAttributes,
 		inGlobalStylesPanel: !insideBlockInspector,
+		variationSurface: VARIATION_SURFACE_STYLE,
 	});
 
+	const blockSizeVariationsProps = useBlockStyleVariations({
+		clientId,
+		blockName: name,
+		storedAttributes: cloneObject(attributes),
+		defaultAttributes: availableAttributes,
+		inGlobalStylesPanel: !insideBlockInspector,
+		variationSurface: VARIATION_SURFACE_SIZE,
+	});
+
+	const selectedChangesets = useCallback(
+		(flag: boolean): void => {
+			blockStyleVariationsProps.setChangesets(flag);
+			blockSizeVariationsProps.setChangesets(flag);
+		},
+		[blockStyleVariationsProps, blockSizeVariationsProps]
+	);
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
 		clientId,
 		blockId: name,
@@ -636,9 +660,7 @@ export const BlockBase: ComponentType<any> = (
 		// are properly managed or avoided (consider use of cloneObject as needed).
 		getAttributes: () => cloneObject(attributes),
 		innerBlocks: additional?.blockeraInnerBlocks,
-		setChangesets: isSelected
-			? blockStyleVariationsProps.setChangesets
-			: () => {},
+		setChangesets: isSelected ? selectedChangesets : () => {},
 	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
@@ -773,7 +795,13 @@ export const BlockBase: ComponentType<any> = (
 		if (Object.keys(partial).length) {
 			setBlockAttributes(partial);
 		}
-	}, [blockAttributes, setBlockAttributes, uniqueClassName, clientId]);
+	}, [
+		clientId,
+		blockAttributes,
+		uniqueClassName,
+		setBlockAttributes,
+		insideBlockInspector,
+	]);
 
 	const presetCanvasPreviewValue = useMemo(
 		() => ({
@@ -781,6 +809,32 @@ export const BlockBase: ComponentType<any> = (
 			primePresetHover,
 		}),
 		[primePresetHover]
+	);
+
+	const getCompatibleStyles = useCallback(
+		(mergedBlockGlobalStyles: Object): Object => {
+			return getCompatibleAttributes({
+				args: {
+					...args,
+					insideBlockInspector: false,
+				},
+				isActive,
+				attributes: mergeObject(
+					{},
+					mergedBlockGlobalStyles,
+					cloneObject(blockAttributes)
+				),
+				defaultAttributes: originDefaultAttributes,
+				availableAttributes,
+			});
+		},
+		[
+			args,
+			isActive,
+			blockAttributes,
+			originDefaultAttributes,
+			availableAttributes,
+		]
 	);
 
 	const blockStyleProps = useMemo(() => {
@@ -914,6 +968,9 @@ export const BlockBase: ComponentType<any> = (
 												isSelected
 													? blockStyleVariationsProps
 													: {},
+											blockSizeVariationsProps: isSelected
+												? blockSizeVariationsProps
+												: {},
 											updateBlockEditorSettings,
 											blockProps: {
 												// Sending props like exactly "edit" function props of WordPress Block.
@@ -982,6 +1039,7 @@ export const BlockBase: ComponentType<any> = (
 												currentInnerBlockState,
 												updateBlockEditorSettings,
 												blockStyleVariationsProps,
+												blockSizeVariationsProps,
 												blockProps: {
 													// Sending props like exactly "edit" function props of WordPress Block.
 													// Because needs total block props in outside overriding component like "blockera" in overriding process.
@@ -1058,6 +1116,15 @@ export const BlockBase: ComponentType<any> = (
 									className={className}
 									currentAttributes={currentAttributes}
 								/>
+
+								{insideBlockInspector && wpBlockType && (
+									<GlobalStyles
+										blockType={wpBlockType}
+										getCompatibleStyles={
+											getCompatibleStyles
+										}
+									/>
+								)}
 
 								{children}
 							</>
