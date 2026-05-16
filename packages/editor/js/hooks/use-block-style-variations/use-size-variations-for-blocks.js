@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { dispatch, select, useSelect } from '@wordpress/data';
+import { dispatch, useSelect } from '@wordpress/data';
 import { useMemo, useCallback, useEffect, useRef } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { store as blocksStore, getBlockType } from '@wordpress/blocks';
@@ -33,6 +33,7 @@ export function useSizeVariationsForBlocks({
 	clientId,
 	blockName,
 	mergedVariationsBySlug,
+	sizeVariationMetaRoot,
 	inGlobalStylesPanel = false,
 	inspectorApplyClassName = false,
 	event = 'click',
@@ -41,6 +42,7 @@ export function useSizeVariationsForBlocks({
 	clientId: string,
 	blockName: string,
 	mergedVariationsBySlug: Object,
+	sizeVariationMetaRoot?: Object,
 	inGlobalStylesPanel?: boolean,
 	inspectorApplyClassName?: boolean,
 	event?: 'click' | 'detach',
@@ -74,7 +76,19 @@ export function useSizeVariationsForBlocks({
 		[clientId, blockName]
 	);
 
-	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
+	const themeBaseGlobalStyles = useSelect(
+		(registrySelect) => {
+			if (!enabled) {
+				return null;
+			}
+			const core = registrySelect('core');
+			return typeof core.__experimentalGetCurrentThemeBaseGlobalStyles ===
+				'function'
+				? core.__experimentalGetCurrentThemeBaseGlobalStyles()
+				: null;
+		},
+		[enabled]
+	);
 
 	const stylesToRender = useMemo(() => {
 		if (!enabled) {
@@ -83,7 +97,10 @@ export function useSizeVariationsForBlocks({
 
 		const rendered = getRenderedStyles(
 			styles,
-			prepare(`styles.blocks.${blockName}.variations`, base) || {},
+			prepare(
+				`styles.blocks.${blockName}.variations`,
+				themeBaseGlobalStyles || {}
+			) || {},
 			blockName,
 			inGlobalStylesPanel
 		);
@@ -96,15 +113,17 @@ export function useSizeVariationsForBlocks({
 		return enrichSizeVariationRowsFromMerged(
 			sizesOnly,
 			mergedVariationsBySlug,
-			blockName
+			blockName,
+			sizeVariationMetaRoot
 		);
 	}, [
 		enabled,
 		styles,
 		blockName,
-		base,
+		themeBaseGlobalStyles,
 		inGlobalStylesPanel,
 		mergedVariationsBySlug,
+		sizeVariationMetaRoot,
 	]);
 
 	const selectedFromStore = useSelect(
@@ -117,7 +136,11 @@ export function useSizeVariationsForBlocks({
 		[enabled, inspectorApplyClassName]
 	);
 
-	const genericPreviewBlock = useGenericPreviewBlock(block, blockType);
+	const genericPreviewBlock = useGenericPreviewBlock(
+		block,
+		blockType,
+		!enabled
+	);
 
 	const { setSelectedBlockSizeVariation } = dispatch(STORE_NAME);
 	const { updateBlockAttributes } = dispatch(blockEditorStore);
@@ -347,11 +370,14 @@ function classNameHasKnownIsSizeSlug(
 function enrichSizeVariationRowsFromMerged(
 	rows: Array<Object>,
 	mergedBySlug: Object,
-	blockName: string
+	blockName: string,
+	metaRootOverride?: Object
 ): Array<Object> {
 	const metaRoot =
-		getBlockeraGlobalStylesMetaData()?.blocks?.[blockName]?.variations ||
-		{};
+		(metaRootOverride && typeof metaRootOverride === 'object'
+			? metaRootOverride
+			: getBlockeraGlobalStylesMetaData()?.blocks?.[blockName]
+					?.variations) || {};
 
 	return rows.map((row) => {
 		const slug = row.name;

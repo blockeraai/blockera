@@ -20,7 +20,6 @@ import {
 	getDefaultStyle,
 	getActiveStyle,
 } from '../../editor/global-styles/panel/ui/utils';
-import { getBlockeraGlobalStylesMetaData } from '../../editor/global-styles/helpers';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 import { type T_SET_CURRENT_ACTIVE_STYLE } from '../../editor/global-styles/panel/ui/types';
 import {
@@ -65,6 +64,28 @@ export const useBlockStyleVariations = ({
 		[inGlobalStylesPanel]
 	);
 
+	const blockeraGlobalStylesMetaData = useSelect((registrySelect) => {
+		try {
+			const data =
+				registrySelect(
+					'blockera/editor'
+				).getBlockeraGlobalStylesMetaData?.();
+			if (data && typeof data === 'object') {
+				return data;
+			}
+		} catch (_e) {
+			//
+		}
+		if (
+			typeof window !== 'undefined' &&
+			typeof window.blockeraGlobalStylesMetaData === 'object' &&
+			window.blockeraGlobalStylesMetaData !== null
+		) {
+			return window.blockeraGlobalStylesMetaData;
+		}
+		return {};
+	}, []);
+
 	const effectiveBase = useMemo(
 		() =>
 			inGlobalStylesPanel
@@ -80,10 +101,13 @@ export const useBlockStyleVariations = ({
 		[inGlobalStylesPanel, userConfig, inspectorThemeConfigs]
 	);
 
+	const baseVars = effectiveBase?.styles?.blocks?.[blockName]?.variations;
+	const userVars = effectiveUser?.styles?.blocks?.[blockName]?.variations;
+
 	const mergedVariations = useMemo(
 		() =>
 			mergeBlockVariationsTrees(effectiveBase, effectiveUser, blockName),
-		[effectiveBase, effectiveUser, blockName]
+		[blockName, baseVars, userVars]
 	);
 
 	const [popoverAnchor, setPopoverAnchor] = useState(null);
@@ -118,11 +142,17 @@ export const useBlockStyleVariations = ({
 		};
 	}, [stylesFromWp, mergedVariations]);
 
+	const sizeVariationMetaRoot = useMemo(
+		() => blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations,
+		[blockeraGlobalStylesMetaData, blockName]
+	);
+
 	const stylesFromSize = useSizeVariationsForBlocks({
 		enabled: variationSurface === VARIATION_SURFACE_SIZE,
 		clientId,
 		blockName,
 		mergedVariationsBySlug: mergedVariations,
+		sizeVariationMetaRoot,
 		inGlobalStylesPanel,
 		inspectorApplyClassName:
 			!inGlobalStylesPanel && variationSurface === VARIATION_SURFACE_SIZE,
@@ -197,8 +227,6 @@ export const useBlockStyleVariations = ({
 			onSelect(currentActiveStyle);
 		}
 	}, [currentPreviewStyle]);
-
-	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	const buttonText = useMemo(() => {
 		if (isDeletedStyle) {
