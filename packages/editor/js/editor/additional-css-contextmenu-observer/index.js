@@ -44,19 +44,23 @@ export default function AdditionalCssContextmenuObserver(): MixedElement {
 						return;
 					}
 
-					element.addEventListener('click', (e) => {
-						e.preventDefault();
-						e.stopPropagation();
+					element.addEventListener(
+						'click',
+						(e) => {
+							e.preventDefault();
+							e.stopPropagation();
 
-						// Safety guard: ensure custom CSS button exists
-						const customCssButton = document.querySelector(
-							'.custom-css-button button'
-						);
+							// Safety guard: ensure custom CSS button exists
+							const customCssButton = document.querySelector(
+								'.custom-css-button button'
+							);
 
-						if (customCssButton) {
-							customCssButton.click();
-						}
-					});
+							if (customCssButton) {
+								customCssButton.click();
+							}
+						},
+						{ once: true }
+					);
 				},
 			}
 		);

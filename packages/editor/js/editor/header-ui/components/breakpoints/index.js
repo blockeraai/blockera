@@ -263,7 +263,7 @@ export const BreakpointsUI = ({
 			}
 		};
 
-		window.addEventListener('message', handleMessage);
+		window.addEventListener('message', handleMessage, { once: true });
 		return () => window.removeEventListener('message', handleMessage);
 	}, [handleOnClick]);
 

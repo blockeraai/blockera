@@ -18,8 +18,10 @@ export const styleBookListener = (blockTypes: Array<Object>): void => {
 				?.contentWindow?.document?.querySelector(
 					getBlockTypeSelector(blockType.name)
 				)
-				?.addEventListener('click', () =>
-					sharedListenerCallback(blockType.name)
+				?.addEventListener(
+					'click',
+					() => sharedListenerCallback(blockType.name),
+					{ once: true }
 				);
 		});
 	}, 100);
