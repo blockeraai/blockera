@@ -72,7 +72,6 @@ import {
 import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
-import { GlobalStyles } from '../../editor/global-stylesheet';
 import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
@@ -168,7 +167,6 @@ export const BlockBase: ComponentType<any> = (
 		availableAttributes,
 		activeBlockVariation,
 		getActiveBlockVariation,
-		wpBlockType,
 	} = useSelect(
 		(select) => {
 			const {
@@ -221,7 +219,6 @@ export const BlockBase: ComponentType<any> = (
 				),
 				blockVariations: name && getBlockVariations(name, 'transform'),
 				activeVariation: _getActiveBlockVariation(),
-				wpBlockType: name ? getBlockType(name) : null,
 			};
 		},
 		[clientId, name]
@@ -811,32 +808,6 @@ export const BlockBase: ComponentType<any> = (
 		[primePresetHover]
 	);
 
-	const getCompatibleStyles = useCallback(
-		(mergedBlockGlobalStyles: Object): Object => {
-			return getCompatibleAttributes({
-				args: {
-					...args,
-					insideBlockInspector: false,
-				},
-				isActive,
-				attributes: mergeObject(
-					{},
-					mergedBlockGlobalStyles,
-					cloneObject(blockAttributes)
-				),
-				defaultAttributes: originDefaultAttributes,
-				availableAttributes,
-			});
-		},
-		[
-			args,
-			isActive,
-			blockAttributes,
-			originDefaultAttributes,
-			availableAttributes,
-		]
-	);
-
 	const blockStyleProps = useMemo(() => {
 		const hasPresetPreviewPatch =
 			presetPreviewAttributePatch &&
@@ -1116,15 +1087,6 @@ export const BlockBase: ComponentType<any> = (
 									className={className}
 									currentAttributes={currentAttributes}
 								/>
-
-								{insideBlockInspector && wpBlockType && (
-									<GlobalStyles
-										blockType={wpBlockType}
-										getCompatibleStyles={
-											getCompatibleStyles
-										}
-									/>
-								)}
 
 								{children}
 							</>

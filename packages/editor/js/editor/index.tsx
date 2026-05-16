@@ -14,6 +14,7 @@ import BlocksUI from './blocks-ui';
 import HeaderUI from './header-ui';
 import StyleBook from './style-book';
 import GlobalStylesNavigation from './navigation';
+import GlobalStylesheet from './global-stylesheet';
 import PrimarySidebarController from './primary-sidebar';
 import SecondarySidebarInjector from './secondary-sidebar';
 import FooterToolbarInjector from './footer-toolbar';
@@ -141,11 +142,11 @@ const editorPlugins = [
 		),
 		icon: null,
 	},
-	// {
-	// 	name: 'blockera-global-stylesheet',
-	// 	render: GlobalStylesheet,
-	// 	icon: null,
-	// },
+	{
+		name: 'blockera-global-stylesheet',
+		render: GlobalStylesheet,
+		icon: null,
+	},
 	{
 		name: 'blockera-style-book',
 		render: StyleBook,
