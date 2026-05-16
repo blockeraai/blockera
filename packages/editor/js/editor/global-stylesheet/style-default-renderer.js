@@ -73,40 +73,56 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 			});
 		}, [validBlockGlobalStyles, stablePropsId]);
 
-		// Memoize variation entries, filtering out disabled styles (early return like style-item.js)
-		const variations = useMemo(() => {
-			return blockGlobalStyles?.variations || {};
-		}, [blockGlobalStyles]);
+		const variationSlices = useMemo(() => {
+			const variationsSrc = blockGlobalStyles?.variations;
+			const variationsBase =
+				variationsSrc && typeof variationsSrc === 'object'
+					? variationsSrc
+					: {};
 
-		const variationEntries = useMemo(() => {
-			return Object.entries(variations).filter(
-				([variationName]) =>
+			const entries = [];
+			for (const [variationName, data] of Object.entries(
+				variationsBase
+			)) {
+				if (
 					!isVariationDisabled(blockeraMetaData, name, variationName)
-			);
-		}, [variations, blockeraMetaData, name]);
+				) {
+					entries.push([variationName, data]);
+				}
+			}
 
-		const styleSurfaceVariationEntries = useMemo(
-			() =>
-				variationEntries.filter(
-					([, data]) => !isSizeVariationEntry(data)
-				),
-			[variationEntries]
-		);
+			const styleSurface = [];
+			const sizeSurface = [];
+			for (const entry of entries) {
+				const data = entry[1];
+				if (!isSizeVariationEntry(data)) {
+					styleSurface.push(entry);
+				} else {
+					sizeSurface.push(entry);
+				}
+			}
 
-		const sizeSurfaceVariationEntries = useMemo(
-			() =>
-				variationEntries.filter(([, data]) =>
-					isSizeVariationEntry(data)
-				),
-			[variationEntries]
-		);
+			return {
+				variations: variationsBase,
+				variationEntries: entries,
+				styleSurfaceVariationEntries: styleSurface,
+				sizeSurfaceVariationEntries: sizeSurface,
+			};
+		}, [blockGlobalStyles, blockeraMetaData, name]);
 
-		// Early return if no styles to render
+		const variations = variationSlices.variations;
+		const styleSurfaceVariationEntries =
+			variationSlices.styleSurfaceVariationEntries;
+		const sizeSurfaceVariationEntries =
+			variationSlices.sizeSurfaceVariationEntries;
+
+		const hasVariations = variationSlices.variationEntries.length > 0;
+
 		const hasSanitizedStyles =
 			sanitizedBlockGlobalStyles &&
 			Object.keys(sanitizedBlockGlobalStyles).length > 0;
-		const hasVariations = variationEntries.length > 0;
 
+		// Early return if no styles to render
 		if (!hasSanitizedStyles && !hasVariations) {
 			return null;
 		}
