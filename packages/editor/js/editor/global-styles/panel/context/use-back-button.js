@@ -46,24 +46,33 @@ export const useBackButton = ({
 
 		backElement?.parentElement?.parentElement
 			?.querySelector('button')
-			?.addEventListener('click', () => {
-				if (statesManagerHandleOnChangeRef?.current) {
-					resetBlockStateToNormal();
-				}
+			?.addEventListener(
+				'click',
+				() => {
+					if (statesManagerHandleOnChangeRef?.current) {
+						resetBlockStateToNormal();
+					}
 
-				document.body?.classList?.remove(className);
-				const dataTest = document.body?.getAttribute('data-test');
-				if (dataTest) {
-					document.body?.setAttribute(
-						'data-test',
-						dataTest.replace('has-blockera-global-styles-ui', '')
-					);
-				}
+					document.body?.classList?.remove(className);
+					const dataTest = document.body?.getAttribute('data-test');
+					if (dataTest) {
+						document.body?.setAttribute(
+							'data-test',
+							dataTest.replace(
+								'has-blockera-global-styles-ui',
+								''
+							)
+						);
+					}
 
-				setSelectedBlockRef(undefined);
-				setSelectedBlockStyle(undefined);
-				setSelectedBlockStyleVariation(undefined);
-				setSelectedBlockSizeVariation?.(undefined);
-			});
+					setSelectedBlockRef(undefined);
+					setSelectedBlockStyle(undefined);
+					setSelectedBlockStyleVariation(undefined);
+					setSelectedBlockSizeVariation?.(undefined);
+				},
+				{
+					once: true,
+				}
+			);
 	}
 };

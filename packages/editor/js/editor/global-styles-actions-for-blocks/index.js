@@ -49,16 +49,24 @@ export default function GlobalStylesActionsForBlocks({
 				);
 
 				if (globalStylesButton) {
-					globalStylesButton.addEventListener('click', () => {
-						setSelectedBlockStyle('');
-						setSelectedBlockRef(undefined);
-					});
+					globalStylesButton.addEventListener(
+						'click',
+						() => {
+							setSelectedBlockStyle('');
+							setSelectedBlockRef(undefined);
+						},
+						{ once: true }
+					);
 				}
 
 				if (postDocumentButton) {
-					postDocumentButton.addEventListener('click', () => {
-						changeExtensionCurrentBlock('master');
-					});
+					postDocumentButton.addEventListener(
+						'click',
+						() => {
+							changeExtensionCurrentBlock('master');
+						},
+						{ once: true }
+					);
 				}
 
 				// Set up listeners for each block type
@@ -74,11 +82,18 @@ export default function GlobalStylesActionsForBlocks({
 					);
 
 					if (blockElement) {
-						blockElement.addEventListener('click', () => {
-							document.body?.classList?.add(className);
-							document.body?.setAttribute('data-test', className);
-							sharedListenerCallback(blockType.name);
-						});
+						blockElement.addEventListener(
+							'click',
+							() => {
+								document.body?.classList?.add(className);
+								document.body?.setAttribute(
+									'data-test',
+									className
+								);
+								sharedListenerCallback(blockType.name);
+							},
+							{ once: true }
+						);
 					}
 				});
 			},

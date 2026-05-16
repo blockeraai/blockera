@@ -393,8 +393,26 @@ export function useStylesForBlocks({
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/use-styles-for-block'
  *
  */
-export function useGenericPreviewBlock(block: Object, type: Object): Object {
+export function useGenericPreviewBlock(
+	block: Object,
+	type: Object,
+	skipHeavyClone: boolean = false
+): Object {
 	return useMemo(() => {
+		if (skipHeavyClone) {
+			let nm = '';
+			if (typeof block?.name === 'string') {
+				nm = block.name;
+			} else if (typeof type?.name === 'string') {
+				nm = type.name;
+			}
+			return {
+				name: nm,
+				attributes: {},
+				innerBlocks: [],
+			};
+		}
+
 		const example = type?.example;
 		const blockName = type?.name;
 
@@ -413,7 +431,7 @@ export function useGenericPreviewBlock(block: Object, type: Object): Object {
 			return cloneBlock(block);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [type?.example ? block?.name : block, type]);
+	}, [skipHeavyClone, type?.example ? block?.name : block, type]);
 }
 
 /**
