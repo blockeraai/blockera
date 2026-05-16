@@ -12,16 +12,22 @@ export class IntersectionObserverRenderer {
 	whileNotExistSelectors: string[];
 	whenBodyHasClassname: string;
 	componentSelector: string;
+	observeRootSelector: string;
+	observedAncestor: HTMLElement | Document | Element | null;
 	Component: null | ComponentType<any>;
 	targetElementIsRoot: boolean;
 	callback: Function;
-	onShouldNotRenderer: boolean;
+	onShouldNotRenderer: boolean | Function;
 	isRootComponent: boolean;
 	isRendered: boolean;
 	clickedBlock: boolean;
 	cachedRoot: any;
 	cachedContainer: HTMLElement | null;
 	renderTimeout: TimeoutID | null;
+	mutationFlushRaf: AnimationFrameID | null;
+	mutationAccumulationScratch: MutationRecord[];
+	hasSideEffectHandlers: boolean;
+	skipMutationHandling: boolean;
 
 	constructor(
 		targetSelector: string,
@@ -30,6 +36,7 @@ export class IntersectionObserverRenderer {
 			whileNotExistSelectors = [],
 			whenBodyHasClassname = '',
 			componentSelector = '',
+			observeRootSelector = '',
 			callback = null,
 			targetElementIsRoot = false,
 			onShouldNotRenderer = false,
@@ -39,28 +46,40 @@ export class IntersectionObserverRenderer {
 			root?: string,
 			whenBodyHasClassname?: string,
 			componentSelector?: string,
+			observeRootSelector?: string,
 			whileNotExistSelectors?: string[],
 			targetElementIsRoot?: boolean,
-			onShouldNotRenderer?: boolean,
+			onShouldNotRenderer?: boolean | Function,
 			isRootComponent?: any,
 		} = {}
 	) {
 		this.whileNotExistSelectors = whileNotExistSelectors;
 		this.whenBodyHasClassname = whenBodyHasClassname;
 		this.componentSelector = componentSelector;
+		this.observeRootSelector =
+			typeof observeRootSelector === 'string' ? observeRootSelector : '';
+		this.observedAncestor = null;
 		this.targetSelector = targetSelector;
 		this.Component = Component;
 		this.callback = callback;
 		this.targetElementIsRoot = targetElementIsRoot;
 		this.onShouldNotRenderer = onShouldNotRenderer;
 		this.isRootComponent = isRootComponent;
+		this.isRendered = false;
+		this.clickedBlock = false;
 		this.cachedRoot = null;
 		this.cachedContainer = null;
 		this.renderTimeout = null;
+		this.mutationFlushRaf = null;
+		this.mutationAccumulationScratch = [];
+		this.hasSideEffectHandlers =
+			typeof callback === 'function' ||
+			typeof onShouldNotRenderer === 'function';
+		this.skipMutationHandling = false;
 
 		// Create mutation observer to watch DOM changes
 		this.observer = new MutationObserver((mutations) => {
-			this.handleDomChanges(mutations);
+			this.queueDomChanges(mutations);
 		});
 
 		// Start observing
@@ -70,44 +89,145 @@ export class IntersectionObserverRenderer {
 		this.renderComponent();
 	}
 
-	startObserving() {
-		// Observe the entire document for changes
-		if (document.body) {
-			this.observer.observe(document.body, {
-				childList: true, // Watch for child element changes
-				subtree: true, // Watch all descendants
-				attributes: true, // Watch for attribute changes
-				attributeFilter: ['value'], // Watch for input value changes
+	resolveObserveTarget(): HTMLElement | Document | null {
+		if (this.observeRootSelector.trim()) {
+			const narrowed = document.querySelector(this.observeRootSelector);
+			if (narrowed) {
+				return narrowed;
+			}
+		}
+		return document.body ?? document.documentElement ?? (null: null);
+	}
+
+	queueDomChanges(mutations: MutationRecord[]) {
+		if (this.maybeSkipPassiveMutationHandling()) {
+			return;
+		}
+
+		if (mutations.length === 0) {
+			return;
+		}
+
+		const root = this.observedAncestor;
+		let relevant = mutations;
+
+		if (root instanceof Element || root instanceof Document) {
+			relevant = mutations.filter((mutation) => {
+				const t = mutation.target;
+				return t instanceof Node && root.contains(t);
 			});
+		} else if (!(root instanceof Node)) {
+			return;
+		}
+
+		if (relevant.length === 0) {
+			return;
+		}
+
+		this.mutationAccumulationScratch.push(...relevant);
+
+		if (this.mutationFlushRaf !== null) {
+			return;
+		}
+
+		this.mutationFlushRaf = requestAnimationFrame(() => {
+			this.mutationFlushRaf = null;
+			const accumulated = this.mutationAccumulationScratch;
+			this.mutationAccumulationScratch = [];
+			this.handleDomChanges(accumulated);
+		});
+	}
+
+	maybeSkipPassiveMutationHandling(): boolean {
+		if (this.skipMutationHandling) {
+			return true;
+		}
+
+		const passiveRenderedRoot =
+			this.isRootComponent &&
+			this.isRendered &&
+			!this.hasSideEffectHandlers;
+
+		if (!passiveRenderedRoot) {
+			return false;
+		}
+
+		const isIframeCanvasTarget = this.targetSelector.trim() === 'iframe';
+
+		if (!isIframeCanvasTarget) {
+			this.skipMutationHandling = true;
+			try {
+				this.observer.disconnect();
+			} catch (_e) {
+				//
+			}
+		}
+
+		return true;
+	}
+
+	startObserving() {
+		const observeTarget = this.resolveObserveTarget();
+		if (!(observeTarget instanceof Node)) {
+			return;
+		}
+
+		try {
+			this.observer.observe(observeTarget, {
+				childList: true,
+				subtree: true,
+				attributes: true,
+				attributeFilter: ['value'],
+			});
+			this.observedAncestor = observeTarget;
+		} catch (_err) {
+			//
 		}
 	}
 
+	mutationTouchesTargetSubtree(node: Element): boolean {
+		if (node.matches(this.targetSelector)) {
+			return true;
+		}
+
+		if (this.targetSelector.trim() === 'iframe') {
+			return (
+				node.tagName === 'IFRAME' ||
+				node.getElementsByTagName('iframe').length > 0
+			);
+		}
+
+		return node.querySelector(this.targetSelector) !== null;
+	}
+
 	handleDomChanges(mutations: MutationRecord[]) {
+		if (this.maybeSkipPassiveMutationHandling()) {
+			return;
+		}
+
 		// Check if our target element was added or removed
 		const shouldRerender = mutations.some((mutation) => {
-			// Detect node addition/removal
 			const addedNodes = Array.from(mutation.addedNodes);
 			const removedNodes = Array.from(mutation.removedNodes);
 
 			const nodeChanged = [...addedNodes, ...removedNodes].some(
 				(node) => {
 					if (node instanceof Element) {
-						return (
-							node.matches(this.targetSelector) ||
-							node.querySelector(this.targetSelector)
-						);
+						return this.mutationTouchesTargetSubtree(node);
 					}
 					return false;
 				}
 			);
 
-			// Detect attribute changes on target element
 			const attrChanged =
 				mutation.type === 'attributes' &&
 				mutation.target instanceof Element &&
 				mutation.target.matches(this.targetSelector);
 
+			const relevant = nodeChanged || attrChanged;
+
 			if (
+				relevant &&
 				this.targetElementIsRoot &&
 				this.cachedRoot &&
 				this.cachedContainer
@@ -116,7 +236,7 @@ export class IntersectionObserverRenderer {
 				this.cachedContainer = null;
 			}
 
-			return nodeChanged || attrChanged;
+			return relevant;
 		});
 
 		if (shouldRerender && this.Component) {
@@ -222,6 +342,11 @@ export class IntersectionObserverRenderer {
 	}
 
 	destroy() {
+		if (this.mutationFlushRaf !== null) {
+			cancelAnimationFrame(this.mutationFlushRaf);
+			this.mutationFlushRaf = null;
+		}
+
 		if (this.renderTimeout) {
 			clearTimeout(this.renderTimeout);
 		}
@@ -231,8 +356,11 @@ export class IntersectionObserverRenderer {
 		}
 
 		this.isRendered = false;
+		this.clickedBlock = false;
 		this.cachedContainer = null;
 		this.cachedRoot = null;
+		this.skipMutationHandling = false;
+		this.mutationAccumulationScratch = [];
 
 		// Clean up observer when done
 		this.observer.disconnect();
