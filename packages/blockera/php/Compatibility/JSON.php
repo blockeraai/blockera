@@ -8,6 +8,13 @@ use Blockera\Editor\StyleEngine;
 class JSON extends \WP_Theme_JSON {
 
 	/**
+	 * The prefix for block style variations.
+	 *
+	 * @var string
+	 */
+	private static string $style_variation_prefix = 'is-style-';
+
+	/**
 	 * Store features support list.
 	 *
 	 * @var array $supports Features support list.
@@ -199,6 +206,16 @@ class JSON extends \WP_Theme_JSON {
 	);
 
 	/**
+	 * Set the prefix for block style variations.
+	 *
+	 * @param string $prefix The prefix for block style variations.
+	 * @return void
+	 */
+	public static function set_style_variation_prefix( string $prefix ): void {
+		self::$style_variation_prefix = $prefix;
+	}
+
+	/**
 	 * Merged valid settings schema for sanitization (core + Blockera global-styles-ui preset groups).
 	 *
 	 * @return array<string, mixed>
@@ -219,7 +236,9 @@ class JSON extends \WP_Theme_JSON {
 	 * @param array  $data The data to construct the JSON with.
 	 * @param string $origin The origin of the data.
 	 */
-	public function __construct( array $data = array(), string $origin = 'theme') {
+	public function __construct( array $data = array(), string $origin = 'theme', string $style_variation_prefix = 'is-style-') {
+		self::$style_variation_prefix = $style_variation_prefix;
+
 		parent::__construct($data, $origin);
 
 		global $blockera_block_supports;
@@ -491,6 +510,40 @@ class JSON extends \WP_Theme_JSON {
 
         return $block_rules;
     }
+
+	/**
+	 * Generates a selector for a block style variation.
+	 *
+	 * @since 6.5.0
+	 *
+	 * @param string $variation_name Name of the block style variation.
+	 * @param string $block_selector CSS selector for the block.
+	 * @return string Block selector with block style variation selector added to it.
+	 */
+	protected static function get_block_style_variation_selector( $variation_name, $block_selector ) {
+		$variation_class = sprintf('.%s%s', self::$style_variation_prefix, $variation_name);
+
+		if ( ! $block_selector ) {
+			return $variation_class;
+		}
+
+		$limit          = 1;
+		$selector_parts = explode( ',', $block_selector );
+		$result         = array();
+
+		foreach ( $selector_parts as $part ) {
+			$result[] = preg_replace_callback(
+				'/((?::\([^)]+\))?\s*)([^\s:]+)/',
+				function ( $matches ) use ( $variation_class ) {
+					return $matches[1] . $matches[2] . $variation_class;
+				},
+				$part,
+				$limit
+			);
+		}
+
+		return implode( ',', $result );
+	}
 
 	/**
      * Returns the stylesheet that results of processing
