@@ -5,7 +5,6 @@
  */
 import { useSelect } from '@wordpress/data';
 import { type MixedElement, type ComponentType } from 'react';
-import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { memo, useState, useMemo } from '@wordpress/element';
 
@@ -30,11 +29,10 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			supports,
 			selectors,
 			styleVariationName,
-			variationClassPrefix = 'is-style-',
-			renderInPortal = true,
 			isStyleVariation = false,
 			sanitizedBlockGlobalStyles,
 			attributes: defaultAttributes,
+			variationClassPrefix = 'is-style-',
 		} = blockType;
 		const [notice, setNotice] = useState(null);
 		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
@@ -138,12 +136,6 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			]
 		);
 
-		// Memoize fill name to avoid repeated string concatenation
-		const fillName = useMemo(
-			() => 'blockera-global-styles-wrapper-' + name,
-			[name]
-		);
-
 		// Early return if no styles to render
 		const hasBlockeraPropsId =
 			defaultAttributes.hasOwnProperty('blockeraPropsId');
@@ -173,15 +165,9 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 					/>
 				)}
 			>
-				{renderInPortal ? (
-					<StylesWrapper clientId={name} isGlobalStylesWrapper={true}>
-						<Fill name={fillName}>
-							<BlockStyle {...blockStyleProps} />
-						</Fill>
-					</StylesWrapper>
-				) : (
+				<StylesWrapper isGlobalStylesWrapper={true}>
 					<BlockStyle {...blockStyleProps} />
-				)}
+				</StylesWrapper>
 			</ErrorBoundary>
 		);
 	},
@@ -192,7 +178,6 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			prevProps.styleVariationName === nextProps.styleVariationName &&
 			prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
 			prevProps.isStyleVariation === nextProps.isStyleVariation &&
-			prevProps.renderInPortal === nextProps.renderInPortal &&
 			isEquals(
 				prevProps.sanitizedBlockGlobalStyles,
 				nextProps.sanitizedBlockGlobalStyles

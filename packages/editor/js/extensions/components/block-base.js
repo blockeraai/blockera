@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { ErrorBoundary } from 'react-error-boundary';
-import { SlotFillProvider, Fill } from '@wordpress/components';
+import { SlotFillProvider } from '@wordpress/components';
 import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -1067,15 +1067,8 @@ export const BlockBase: ComponentType<any> = (
 										/>
 									)}
 								>
-									<StylesWrapper clientId={clientId}>
-										<Fill
-											name={
-												'blockera-styles-wrapper-' +
-												clientId
-											}
-										>
-											<BlockStyle {...blockStyleProps} />
-										</Fill>
+									<StylesWrapper>
+										<BlockStyle {...blockStyleProps} />
 									</StylesWrapper>
 								</ErrorBoundary>
 								{/*</StrictMode>*/}

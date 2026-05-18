@@ -148,7 +148,6 @@ export const useBlockPreviewStyles = (
 			<GlobalStylesRenderer
 				{...{
 					...blockType,
-					renderInPortal: false,
 					styleVariationName: variation,
 					isStyleVariation: Boolean(variation),
 					sanitizedBlockGlobalStyles,
