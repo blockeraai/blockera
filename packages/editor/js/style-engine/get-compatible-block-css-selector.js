@@ -691,21 +691,38 @@ export const getCompatibleBlockCssSelector = ({
 					}
 					const blockType =
 						select('core/blocks')?.getBlockType(blockName);
-					const selectorConstant = getBlockCSSSelector(
-						blockType,
+					const blockClassSelector = `.wp-block-${blockName
+						.replace('core/', '')
+						.replace('/', '-')}`;
+					const variationRootSelector = getBlockCSSSelector(
+						{
+							...(blockType || {}),
+							selectors: blockSelectors,
+						},
 						'root',
 						{ fallback: true }
 					);
+					const selectorConstant =
+						blockClassSelector || variationRootSelector || '';
 
 					const variationClass = `${variationClassPrefix}${styleVariationName}`;
 					let selectorWithStyle = generatedSelector;
+					if (
+						variationRootSelector &&
+						blockClassSelector &&
+						generatedSelector.trim() === blockClassSelector &&
+						variationRootSelector !== blockClassSelector &&
+						variationRootSelector.includes(blockClassSelector)
+					) {
+						selectorWithStyle = variationRootSelector;
+					}
 					// Handle case when selector contains child combinator.
 					if (
 						selectorConstant &&
-						generatedSelector.includes(' ') &&
-						generatedSelector.includes(selectorConstant)
+						selectorWithStyle.includes(' ') &&
+						selectorWithStyle.includes(selectorConstant)
 					) {
-						selectorWithStyle = generatedSelector.replace(
+						selectorWithStyle = selectorWithStyle.replace(
 							selectorConstant,
 							`${selectorConstant}.${variationClass}`
 						);
