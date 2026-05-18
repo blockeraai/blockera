@@ -347,11 +347,14 @@ export function getFamilyPreviewStyle(family: any): React.CSSProperties {
  * @param variation The variation name.
  * @return The variation class name.
  */
-export function getVariationClassName(variation: string): string {
+export function getVariationClassName(
+	variation: string,
+	classPrefix: string = 'is-style-'
+): string {
 	if (!variation) {
 		return '';
 	}
-	return `is-style-${variation}`;
+	return `${classPrefix}${variation}`;
 }
 
 /**

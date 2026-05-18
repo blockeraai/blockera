@@ -267,11 +267,14 @@ export const cleanEmptyObject = (object: unknown): unknown => {
 		: Object.fromEntries(cleanedNestedObjects);
 };
 
-export function getVariationClassName(variation: string): string {
+export function getVariationClassName(
+	variation: string,
+	classPrefix: string = 'is-style-'
+): string {
 	if (!variation) {
 		return '';
 	}
-	return `is-style-${variation}`;
+	return `${classPrefix}${variation}`;
 }
 
 export function uniqByProperty(
