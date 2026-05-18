@@ -28,10 +28,12 @@ const SIDEBAR_WIDTH = 235;
 const BlockPreviewPanel = ({
 	name,
 	variation = '',
+	variationClassPrefix = 'is-style-',
 	children,
 }: {
 	name: string,
 	variation: string,
+	variationClassPrefix?: string,
 	children?: MixedElement,
 }): MixedElement => {
 	const { getAttributes } = useBlockContext();
@@ -81,13 +83,13 @@ const BlockPreviewPanel = ({
 				...blockExample.attributes,
 				style: undefined,
 				className: variation
-					? getVariationClassName(variation)
+					? getVariationClassName(variation, variationClassPrefix)
 					: blockExample.attributes?.className,
 			},
 		};
 
 		return getBlockFromExample(name, example);
-	}, [name, blockExample, variation]);
+	}, [name, blockExample, variation, variationClassPrefix]);
 
 	// Memoize viewport calculations - only recalculate when blockExample changes
 	const { viewportWidth, minHeight } = useMemo(() => {
@@ -108,7 +110,8 @@ const BlockPreviewPanel = ({
 	const blockPreviewCssStyles = useBlockPreviewStyles(
 		blockType,
 		variation,
-		attributes
+		attributes,
+		variationClassPrefix
 	);
 
 	// Memoize CSS string - only recalculate when minHeight changes

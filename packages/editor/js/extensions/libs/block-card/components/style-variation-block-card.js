@@ -41,6 +41,11 @@ import { setBlockeraGlobalStylesMetaData } from '../../../../editor/global-style
 import BlockPreviewPanel from '../../../../editor/global-styles/panel/block-preview-panel';
 import { useResetBlockStateToNormal } from '../block-states/hooks';
 import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../../../../editor/global-styles/panel/variation-surfaces';
+import { BLOCK_SIZE_VARIATION_CLASS_PREFIX } from '../../../../editor/global-styles/panel/size-variations';
 
 const DEBOUNCE_DELAY = 1000;
 
@@ -109,8 +114,16 @@ export function StyleVariationBlockCard({
 		children: slotChildrenName,
 	} = getStyleVariationBlockCardSlotNames(slotName, variationKey);
 
-	const { selectedBlockClientId, statesManagerHandleOnChangeRef } =
-		useGlobalStylesPanelContext();
+	const {
+		selectedBlockClientId,
+		statesManagerHandleOnChangeRef,
+		variationSurface = VARIATION_SURFACE_STYLE,
+	} = useGlobalStylesPanelContext();
+
+	const variationClassPrefix =
+		variationSurface === VARIATION_SURFACE_SIZE
+			? BLOCK_SIZE_VARIATION_CLASS_PREFIX
+			: 'is-style-';
 	const blockeraGlobalStylesMetaData = useSelect(
 		(select) =>
 			select('blockera/editor')?.getBlockeraGlobalStylesMetaData?.() ||
@@ -391,6 +404,7 @@ export function StyleVariationBlockCard({
 			<BlockPreviewPanel
 				name={blockName}
 				variation={currentBlockStyleVariation?.name}
+				variationClassPrefix={variationClassPrefix}
 			>
 				<Slot name={slotAfterPreviewName} />
 			</BlockPreviewPanel>

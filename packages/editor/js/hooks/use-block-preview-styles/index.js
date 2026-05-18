@@ -52,7 +52,8 @@ const extractStylesFromContainer = (container: HTMLElement): string => {
 export const useBlockPreviewStyles = (
 	blockType: Object,
 	variation: string,
-	styles: Object = {}
+	styles: Object = {},
+	variationClassPrefix: string = 'is-style-'
 ): string => {
 	const [additionalStyles, setAdditionalStyles] = useState('');
 
@@ -150,6 +151,7 @@ export const useBlockPreviewStyles = (
 					...blockType,
 					styleVariationName: variation,
 					isStyleVariation: Boolean(variation),
+					variationClassPrefix,
 					sanitizedBlockGlobalStyles,
 				}}
 			/>
@@ -177,7 +179,12 @@ export const useBlockPreviewStyles = (
 			cancelAnimationFrame(rafId);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockTypeName, variation, sanitizedBlockGlobalStyles]);
+	}, [
+		blockTypeName,
+		variation,
+		variationClassPrefix,
+		sanitizedBlockGlobalStyles,
+	]);
 
 	// Cleanup on unmount
 	useLayoutEffect(() => {
