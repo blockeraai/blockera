@@ -16,7 +16,10 @@ import { prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { filterRenderedStylesIncludingOnlySizes } from '../../editor/global-styles/variation-filters';
+import {
+	isSizeVariationEntry,
+	filterRenderedStylesIncludingOnlySizes,
+} from '../../editor/global-styles/variation-filters';
 import { getBlockeraGlobalStylesMetaData } from '../../editor/global-styles/helpers';
 import {
 	getActiveSizeVariationFromClass,
@@ -105,8 +108,11 @@ export function useSizeVariationsForBlocks({
 			inGlobalStylesPanel
 		);
 
-		const sizesOnly = filterRenderedStylesIncludingOnlySizes(
-			rendered,
+		const sizesOnly = appendMissingSizeVariationRows(
+			filterRenderedStylesIncludingOnlySizes(
+				rendered,
+				mergedVariationsBySlug
+			),
 			mergedVariationsBySlug
 		);
 
@@ -417,6 +423,36 @@ function enrichSizeVariationRowsFromMerged(
 			...mergedFlags,
 		};
 	});
+}
+
+function appendMissingSizeVariationRows(
+	rows: Array<Object>,
+	mergedBySlug: Object
+): Array<Object> {
+	const existing = new Set(rows.map((row) => row.name));
+	const missingRows = [];
+
+	for (const [slug, data] of Object.entries(mergedBySlug || {})) {
+		if (existing.has(slug) || !isSizeVariationEntry(data)) {
+			continue;
+		}
+
+		missingRows.push({
+			name: slug,
+			label:
+				// $FlowFixMe
+				data?.label ||
+				// $FlowFixMe
+				data?.title ||
+				slug,
+			icon: {
+				name: 'blockera',
+				library: 'blockera',
+			},
+		});
+	}
+
+	return [...rows, ...missingRows];
 }
 
 function getDefaultFromSizeList(styles: Array<Object>): Object | null {
