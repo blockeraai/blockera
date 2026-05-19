@@ -33,6 +33,46 @@ import {
 } from '../../editor/global-styles/variation-filters';
 import { useSizeVariationsForBlocks } from './use-size-variations-for-blocks';
 
+const noop = () => {};
+
+const DISABLED_BLOCK_STYLE_VARIATIONS_PROPS = {
+	isOpen: false,
+	event: 'click',
+	setEvent: noop,
+	onSelect: noop,
+	setIsOpen: noop,
+	isHovered: false,
+	buttonText: '',
+	activeStyle: null,
+	setIsHovered: noop,
+	hasChangesets: false,
+	popoverAnchor: null,
+	setChangesets: noop,
+	memoizedStyles: {
+		onSelect: noop,
+		stylesToRender: [],
+		genericPreviewBlock: null,
+		activeStyle: null,
+		setCurrentActiveStyle: noop,
+		setCurrentPreviewStyle: noop,
+		previewClassName: '',
+		popoverAnchor: null,
+		setIsOpen: noop,
+	},
+	isDeletedStyle: false,
+	stylesToRender: [],
+	previewClassName: '',
+	setPopoverAnchor: noop,
+	currentActiveStyle: null,
+	genericPreviewBlock: null,
+	currentPreviewStyle: null,
+	setCurrentActiveStyle: noop,
+	setCurrentPreviewStyle: noop,
+	originDefaultAttributes: {},
+	currentBlockStyleVariation: undefined,
+	blockeraGlobalStylesMetaData: {},
+};
+
 export const useBlockStyleVariations = ({
 	clientId,
 	blockName,
@@ -40,6 +80,7 @@ export const useBlockStyleVariations = ({
 	defaultAttributes,
 	inGlobalStylesPanel = false,
 	variationSurface: variationSurfaceProp,
+	enabled = true,
 }: {
 	clientId: string,
 	blockName: string,
@@ -47,6 +88,7 @@ export const useBlockStyleVariations = ({
 	defaultAttributes: Object,
 	inGlobalStylesPanel?: boolean,
 	variationSurface?: string,
+	enabled?: boolean,
 }): Object => {
 	const {
 		currentBlockStyleVariation,
@@ -148,7 +190,7 @@ export const useBlockStyleVariations = ({
 	);
 
 	const stylesFromSize = useSizeVariationsForBlocks({
-		enabled: variationSurface === VARIATION_SURFACE_SIZE,
+		enabled: enabled && variationSurface === VARIATION_SURFACE_SIZE,
 		clientId,
 		blockName,
 		mergedVariationsBySlug: mergedVariations,
@@ -291,6 +333,10 @@ export const useBlockStyleVariations = ({
 			currentBlockStyleVariation,
 			variationSurface,
 		});
+
+	if (!enabled) {
+		return DISABLED_BLOCK_STYLE_VARIATIONS_PROPS;
+	}
 
 	return {
 		isOpen,
