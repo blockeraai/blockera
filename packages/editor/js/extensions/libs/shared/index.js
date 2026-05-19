@@ -146,7 +146,8 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	handleOnChangeAttributes,
 	...props
 }: Props): MixedElement => {
-	const { currentBlockStyleVariation } = useGlobalStylesPanelContext();
+	const { currentBlockStyleVariation, variationSurface } =
+		useGlobalStylesPanelContext();
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	useEffect(() => {
@@ -382,6 +383,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			insideBlockInspector={insideBlockInspector}
 			availableStates={availableStates}
 			blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+			variationSurface={variationSurface}
 		>
 			{displayBlockControls && insideBlockInspector && (
 				<Tabs
