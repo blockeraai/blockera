@@ -64,6 +64,19 @@ export const getBlockAttributes = (name: string): Object => {
 	};
 };
 
+const registerDefaultBlockExtensionsSupports = (
+	blockName: string,
+	blockExtension?: Object
+): Object => {
+	if ('function' === typeof blockExtension?.registerExtensions) {
+		blockExtension.registerExtensions(blockName);
+	} else {
+		registerBlockExtensionsSupports(blockName);
+	}
+
+	return select(EXTENSIONS_STORE_NAME).getExtensions(blockName);
+};
+
 const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 	const cleanStyles: { [key: string]: Object } = {};
 
@@ -242,8 +255,10 @@ export const GlobalStylesPanelContextProvider = ({
 		variationSurface = VARIATION_SURFACE_STYLE,
 	} = value;
 
-	const { blockExtension, blockExtensions, blockeraOverrideBlockAttributes } =
-		useMemo(() => getBlockAttributes(name), [name]);
+	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
+		() => getBlockAttributes(name),
+		[name]
+	);
 
 	const originDefaultAttributes = useMemo(() => {
 		return mergeObject(blockeraOverrideBlockAttributes, attributes);
@@ -269,12 +284,17 @@ export const GlobalStylesPanelContextProvider = ({
 
 	useEffect(() => {
 		if (blockExtension?.supportsExtensions) {
+			const baseBlockExtensions = registerDefaultBlockExtensionsSupports(
+				name,
+				blockExtension
+			);
+
 			if (variationSurface === VARIATION_SURFACE_SIZE) {
 				registerBlockExtensionsSupports(
 					name,
 					blockExtension.supportsExtensions(
 						name,
-						blockExtensions,
+						baseBlockExtensions,
 						VARIATION_SURFACE_SIZE
 					)
 				);
@@ -283,7 +303,7 @@ export const GlobalStylesPanelContextProvider = ({
 					name,
 					blockExtension.supportsExtensions(
 						name,
-						blockExtensions,
+						baseBlockExtensions,
 						VARIATION_SURFACE_STYLE
 					)
 				);
