@@ -3,10 +3,11 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
-import { useMemo, useRef } from '@wordpress/element';
+import type { ComponentType, MixedElement } from 'react';
+import { memo, useMemo, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { BlockPreview } from '@wordpress/block-editor';
+import { Slot } from '@wordpress/components';
 import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
 
 /**
@@ -18,33 +19,31 @@ import { getVariationClassName } from '@blockera/global-styles-ui';
 /**
  * Internal dependencies
  */
-import { useBlockContext } from '../../../extensions/components/block-context';
 import { useBlockPreviewStyles } from '../../../hooks/use-block-preview-styles';
 
 // Same as height of InserterPreviewPanel.
 const PREVIEW_HEIGHT = 144;
 const SIDEBAR_WIDTH = 235;
 
-const BlockPreviewPanel = ({
-	name,
-	variation = '',
-	variationClassPrefix = 'is-style-',
-	children,
-}: {
+type BlockPreviewPanelProps = {
 	name: string,
 	variation: string,
+	attributes?: Object,
 	variationClassPrefix?: string,
-	children?: MixedElement,
-}): MixedElement => {
-	const { getAttributes } = useBlockContext();
+	afterPreviewSlotName?: string,
+};
 
+const BlockPreviewPanelComponent = ({
+	name,
+	variation = '',
+	attributes: currentAttributes = {},
+	variationClassPrefix = 'is-style-',
+	afterPreviewSlotName,
+}: BlockPreviewPanelProps): MixedElement => {
 	// Memoize attributes with deep comparison to prevent unnecessary re-renders
 	// when getAttributes() returns a new object reference with the same values
 	const attributesRef = useRef(null);
 	const stableAttributesRef = useRef(null);
-
-	// Get current attributes - call on every render to get latest values
-	const currentAttributes = getAttributes();
 
 	// Compare with previous value and return stable reference if values unchanged
 	const attributes = useMemo(() => {
@@ -157,7 +156,9 @@ const BlockPreviewPanel = ({
 				<div className="block-editor-inserter__preview-content-missing">
 					{__('No preview available.', 'blockera')}
 				</div>
-				{children}
+				{afterPreviewSlotName ? (
+					<Slot name={afterPreviewSlotName} />
+				) : null}
 			</div>
 		);
 	}
@@ -176,9 +177,19 @@ const BlockPreviewPanel = ({
 				minHeight={PREVIEW_HEIGHT}
 				additionalStyles={additionalStyles}
 			/>
-			{children}
+			{afterPreviewSlotName ? <Slot name={afterPreviewSlotName} /> : null}
 		</div>
 	);
 };
+
+const BlockPreviewPanel: ComponentType<BlockPreviewPanelProps> = memo(
+	BlockPreviewPanelComponent,
+	(prevProps, nextProps) =>
+		prevProps.name === nextProps.name &&
+		prevProps.variation === nextProps.variation &&
+		prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
+		prevProps.afterPreviewSlotName === nextProps.afterPreviewSlotName &&
+		isEquals(prevProps.attributes, nextProps.attributes)
+);
 
 export default BlockPreviewPanel;

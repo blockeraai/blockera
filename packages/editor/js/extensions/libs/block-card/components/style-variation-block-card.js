@@ -404,10 +404,10 @@ export function StyleVariationBlockCard({
 			<BlockPreviewPanel
 				name={blockName}
 				variation={currentBlockStyleVariation?.name}
+				attributes={currentStateAttributes}
 				variationClassPrefix={variationClassPrefix}
-			>
-				<Slot name={slotAfterPreviewName} />
-			</BlockPreviewPanel>
+				afterPreviewSlotName={slotAfterPreviewName}
+			/>
 
 			<Flex
 				gap={10}

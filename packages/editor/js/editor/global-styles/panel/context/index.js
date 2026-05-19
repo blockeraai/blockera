@@ -491,32 +491,52 @@ export const GlobalStylesPanelContextProvider = ({
 		]
 	);
 
+	const contextValue = useMemo(
+		() => ({
+			style,
+			getStyle,
+			setStyle,
+			baseConfig,
+			userConfig,
+			defaultStyles,
+			fallbackClientId,
+			variationSurface,
+			childrenComponent,
+			getNormalizedStyle,
+			selectedBlockClientId,
+			memoizedBlockBaseProps,
+			getStyleVariationBlocks,
+			resetBlockStateToNormal,
+			currentBlockStyleVariation,
+			setCurrentBlockStyleVariation,
+			handleOnChangeStyleInLocalState,
+			statesManagerHandleOnChangeRef: statesManagerHandleOnChangeRef || {
+				current: null,
+			},
+		}),
+		[
+			style,
+			getStyle,
+			setStyle,
+			baseConfig,
+			userConfig,
+			defaultStyles,
+			fallbackClientId,
+			variationSurface,
+			childrenComponent,
+			selectedBlockClientId,
+			memoizedBlockBaseProps,
+			getStyleVariationBlocks,
+			resetBlockStateToNormal,
+			currentBlockStyleVariation,
+			setCurrentBlockStyleVariation,
+			statesManagerHandleOnChangeRef,
+			handleOnChangeStyleInLocalState,
+		]
+	);
+
 	return (
-		<GlobalStylesPanelContext.Provider
-			value={{
-				style,
-				getStyle,
-				setStyle,
-				baseConfig,
-				userConfig,
-				defaultStyles,
-				fallbackClientId,
-				variationSurface,
-				childrenComponent,
-				getNormalizedStyle,
-				selectedBlockClientId,
-				memoizedBlockBaseProps,
-				getStyleVariationBlocks,
-				resetBlockStateToNormal,
-				currentBlockStyleVariation,
-				setCurrentBlockStyleVariation,
-				handleOnChangeStyleInLocalState,
-				statesManagerHandleOnChangeRef:
-					statesManagerHandleOnChangeRef || {
-						current: null,
-					},
-			}}
-		>
+		<GlobalStylesPanelContext.Provider value={contextValue}>
 			{children}
 		</GlobalStylesPanelContext.Provider>
 	);
