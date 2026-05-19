@@ -190,3 +190,8 @@
 .blockera-state-colors-container:empty {
 	display: none;
 }
+
+// Set width to 100%. The width issue is result of setting position: absolute to the wrapper.
+.edit-site-global-styles-sidebar__navigator-provider {
+	width: 100%;
+}
