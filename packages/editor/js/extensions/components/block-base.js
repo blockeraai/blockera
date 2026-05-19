@@ -50,6 +50,7 @@ import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../../editor/global-styles/panel/variation-surfaces';
+import { getBlockVariationSupport } from '../../editor/global-styles/panel/block-variation-support';
 import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../..';
 import { SideEffect } from '../libs/base';
@@ -606,6 +607,11 @@ export const BlockBase: ComponentType<any> = (
 		return sanitizedAttributes;
 	};
 
+	const { hasStyleVariations, hasSizeVariations } = useMemo(
+		() => getBlockVariationSupport(additional),
+		[additional]
+	);
+
 	const blockStyleVariationsProps = useBlockStyleVariations({
 		clientId,
 		blockName: name,
@@ -617,6 +623,7 @@ export const BlockBase: ComponentType<any> = (
 		defaultAttributes: availableAttributes,
 		inGlobalStylesPanel: !insideBlockInspector,
 		variationSurface: VARIATION_SURFACE_STYLE,
+		enabled: hasStyleVariations,
 	});
 
 	const blockSizeVariationsProps = useBlockStyleVariations({
@@ -626,6 +633,7 @@ export const BlockBase: ComponentType<any> = (
 		defaultAttributes: availableAttributes,
 		inGlobalStylesPanel: !insideBlockInspector,
 		variationSurface: VARIATION_SURFACE_SIZE,
+		enabled: hasSizeVariations,
 	});
 
 	const selectedChangesets = useCallback(

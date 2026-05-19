@@ -42,6 +42,7 @@ import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../../../../editor/global-styles/panel/variation-surfaces';
+import { useBlockVariationSupport } from '../../../../editor/global-styles/panel/use-block-variation-support';
 import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
 import { BlockCardSettings } from './block-card-settings';
@@ -109,6 +110,8 @@ export function BlockCard({
 	const {
 		variationSurface: panelVariationSurface = VARIATION_SURFACE_STYLE,
 	} = useGlobalStylesPanelContext();
+	const { hasStyleVariations, hasSizeVariations } =
+		useBlockVariationSupport(blockName);
 
 	const {
 		icon: blockIcon,
@@ -191,41 +194,57 @@ export function BlockCard({
 
 	const blockInspectorVariationUI = (
 		<>
-			<BlockStyleVariations
-				{...blockStyleVariationsProps}
-				variationUiSurface={VARIATION_SURFACE_STYLE}
-				clientId={clientId}
-				blockName={blockName}
-				currentBlock={currentBlock}
-				currentState={currentState}
-				context={'inspector-controls'}
-				currentBreakpoint={currentBreakpoint}
-			/>
-			<BlockSizeVariations
-				{...blockSizeVariationsProps}
-				clientId={clientId}
-				blockName={blockName}
-				currentBlock={currentBlock}
-				currentState={currentState}
-				context={'inspector-controls'}
-				currentBreakpoint={currentBreakpoint}
-			/>
+			{hasStyleVariations && (
+				<BlockStyleVariations
+					{...blockStyleVariationsProps}
+					variationUiSurface={VARIATION_SURFACE_STYLE}
+					clientId={clientId}
+					blockName={blockName}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					context={'inspector-controls'}
+					currentBreakpoint={currentBreakpoint}
+				/>
+			)}
+			{hasSizeVariations && (
+				<BlockSizeVariations
+					{...blockSizeVariationsProps}
+					clientId={clientId}
+					blockName={blockName}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					context={'inspector-controls'}
+					currentBreakpoint={currentBreakpoint}
+				/>
+			)}
 			<BlockVariationTransforms blockClientId={clientId} />
 		</>
 	);
 
-	const globalStylesPanelVariationUI =
-		panelVariationSurface === VARIATION_SURFACE_SIZE ? (
-			<BlockSizeVariations
-				{...blockSizeVariationsProps}
-				clientId={clientId}
-				blockName={blockName}
-				currentBlock={currentBlock}
-				currentState={currentState}
-				context={'global-styles-panel'}
-				currentBreakpoint={currentBreakpoint}
-			/>
-		) : (
+	const globalStylesPanelVariationUI = (() => {
+		if (panelVariationSurface === VARIATION_SURFACE_SIZE) {
+			if (!hasSizeVariations) {
+				return null;
+			}
+
+			return (
+				<BlockSizeVariations
+					{...blockSizeVariationsProps}
+					clientId={clientId}
+					blockName={blockName}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					context={'global-styles-panel'}
+					currentBreakpoint={currentBreakpoint}
+				/>
+			);
+		}
+
+		if (!hasStyleVariations) {
+			return null;
+		}
+
+		return (
 			<BlockStyleVariations
 				{...blockStyleVariationsProps}
 				variationUiSurface={VARIATION_SURFACE_STYLE}
@@ -237,6 +256,7 @@ export function BlockCard({
 				currentBreakpoint={currentBreakpoint}
 			/>
 		);
+	})();
 
 	const variationActionsUI = insideBlockInspector
 		? blockInspectorVariationUI
@@ -246,7 +266,9 @@ export function BlockCard({
 		!insideBlockInspector &&
 		panelVariationSurface === VARIATION_SURFACE_SIZE;
 
-	const hasSizeVariations =
+	const showSizeVariationActions =
+		hasSizeVariations &&
+		insideBlockInspector &&
 		Array.isArray(blockSizeVariationsProps?.stylesToRender) &&
 		blockSizeVariationsProps.stylesToRender.length > 0;
 
@@ -369,7 +391,8 @@ export function BlockCard({
 							extensionInnerClassNames('block-card__actions', {
 								'no-flex': !insideBlockInspector,
 							}),
-							hasSizeVariations && 'justify-content-flex-start'
+							showSizeVariationActions &&
+								'justify-content-flex-start'
 						)}
 					>
 						{variationActionsUI}

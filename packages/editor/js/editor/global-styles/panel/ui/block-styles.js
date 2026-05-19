@@ -57,6 +57,8 @@ import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../variation-surfaces';
+import { useBlockVariationSupport } from '../use-block-variation-support';
+import { isVariationSurfaceEnabled } from '../block-variation-support';
 
 // Mapped block dynamic style variations counter for limitation reasons.
 const blockDynamicStylesCount: Object = {};
@@ -87,6 +89,14 @@ function BlockStyles({
 		pickerVariationSurface !== undefined && pickerVariationSurface !== ''
 			? pickerVariationSurface
 			: panelVariationSurface;
+	const variationSupport = useBlockVariationSupport(blockName);
+	const isSurfaceEnabled = isVariationSurfaceEnabled(
+		variationSurface,
+		variationSupport,
+		VARIATION_SURFACE_STYLE,
+		VARIATION_SURFACE_SIZE
+	);
+
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
 	const [counter, setCounter] = useBlockStylesCounter({
@@ -272,6 +282,10 @@ function BlockStyles({
 			variationSurface,
 		]
 	);
+
+	if (!isSurfaceEnabled) {
+		return null;
+	}
 
 	if (
 		!stylesToRender ||

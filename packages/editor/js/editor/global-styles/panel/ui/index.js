@@ -22,11 +22,13 @@ import type {
 	TBreakpoint,
 } from '../../../../extensions/libs/block-card/block-states/types';
 import type { InnerBlockType } from '../../../../extensions/libs/block-card/inner-blocks/types';
+import { useGlobalStylesPanelContext } from '../context';
+import { useBlockVariationSupport } from '../use-block-variation-support';
+import { isVariationSurfaceEnabled } from '../block-variation-support';
 import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../variation-surfaces';
-import { useGlobalStylesPanelContext } from '../context';
 
 type TBlockStyleVariations = {
 	clientId: string,
@@ -97,6 +99,18 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		variationUiSurface !== undefined && variationUiSurface !== ''
 			? variationUiSurface
 			: variationSurface;
+	const variationSupport = useBlockVariationSupport(blockName);
+
+	if (
+		!isVariationSurfaceEnabled(
+			uiSurface,
+			variationSupport,
+			VARIATION_SURFACE_STYLE,
+			VARIATION_SURFACE_SIZE
+		)
+	) {
+		return <></>;
+	}
 
 	const accentDefault =
 		uiSurface === VARIATION_SURFACE_SIZE ? '#0516FF' : '#1ca120';

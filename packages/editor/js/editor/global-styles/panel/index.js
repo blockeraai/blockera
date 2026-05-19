@@ -28,6 +28,7 @@ import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from './variation-surfaces';
+import { useBlockVariationSupport } from './use-block-variation-support';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
@@ -57,6 +58,11 @@ export const BlockGlobalStylesPanelScreen = ({
 	);
 	const screenElement = document.querySelector(screen);
 	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
+	const globalStylesBlockName =
+		selectedBlockStyle || selectedBlock?.name || blockType?.name;
+	const { hasSizeVariations } = useBlockVariationSupport(
+		globalStylesBlockName
+	);
 
 	const memoizedSelectedBlock = useMemo(() => {
 		// Prevent of expensive calculation if selected block is already set.
@@ -187,12 +193,14 @@ export const BlockGlobalStylesPanelScreen = ({
 					{...sharedAppProps}
 					variationSurface={VARIATION_SURFACE_STYLE}
 				/>
-				<aside className="blockera-global-styles-panel-aside">
-					<App
-						{...sharedAppProps}
-						variationSurface={VARIATION_SURFACE_SIZE}
-					/>
-				</aside>
+				{hasSizeVariations && (
+					<aside className="blockera-global-styles-panel-aside">
+						<App
+							{...sharedAppProps}
+							variationSurface={VARIATION_SURFACE_SIZE}
+						/>
+					</aside>
+				)}
 			</div>
 		</div>,
 		screenElement
