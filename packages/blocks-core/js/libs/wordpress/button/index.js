@@ -26,6 +26,7 @@ export const Button: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	hasSizeVariations: true,
 	blockeraInnerBlocks: {
 		'elements/bold': sharedInnerBlocks['elements/bold'],
 		'elements/italic': sharedInnerBlocks['elements/italic'],
