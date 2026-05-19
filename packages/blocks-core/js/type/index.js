@@ -26,4 +26,9 @@ export type BlockType = {
 	supports?: Object,
 	selectors?: Object,
 	blockFeatures?: TBlockFeatures,
+	supportsExtensions?: (
+		blockName: string,
+		current: Object,
+		variationSurface: 'size' | 'style'
+	) => Object,
 };

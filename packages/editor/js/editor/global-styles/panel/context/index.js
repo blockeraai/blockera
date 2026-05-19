@@ -6,6 +6,7 @@
 import {
 	useMemo,
 	useState,
+	useEffect,
 	useContext,
 	useCallback,
 	createContext,
@@ -18,8 +19,8 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isEquals, mergeObject, setImmutably } from '@blockera/utils';
 import { useGlobalStylesContext } from '@blockera/global-styles-ui';
+import { isEmpty, isEquals, mergeObject, setImmutably } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -30,7 +31,9 @@ import { STORE_NAME } from '../../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../../store/constants';
 import { sanitizeDefaultAttributes } from '../../../../extensions/hooks/utils';
 import { ignoreBlockeraAttributeKeysRegExp } from '../../../../extensions/libs';
+import { registerBlockExtensionsSupports } from '../../../../extensions/libs/base';
 import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
+import { STORE_NAME as EXTENSIONS_STORE_NAME } from '../../../../extensions/libs/base/store/constants';
 import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
@@ -47,9 +50,11 @@ export const getBlockAttributes = (name: string): Object => {
 		getBlockTypeAttributes,
 		getSharedBlockAttributes,
 	} = select(STORE_NAME) || {};
+	const { getExtensions } = select(EXTENSIONS_STORE_NAME);
 
 	const blockeraOverrideBlockTypeAttributes = getBlockTypeAttributes(name);
 	return {
+		blockExtensions: getExtensions(name),
 		blockExtension: getBlockExtensionBy('targetBlock', name),
 		blockeraOverrideBlockAttributes: isEmpty(
 			blockeraOverrideBlockTypeAttributes
@@ -237,10 +242,8 @@ export const GlobalStylesPanelContextProvider = ({
 		variationSurface = VARIATION_SURFACE_STYLE,
 	} = value;
 
-	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
-		() => getBlockAttributes(name),
-		[name]
-	);
+	const { blockExtension, blockExtensions, blockeraOverrideBlockAttributes } =
+		useMemo(() => getBlockAttributes(name), [name]);
 
 	const originDefaultAttributes = useMemo(() => {
 		return mergeObject(blockeraOverrideBlockAttributes, attributes);
@@ -252,16 +255,42 @@ export const GlobalStylesPanelContextProvider = ({
 		});
 	}, [originDefaultAttributes]);
 
-	const { getSelectedBlockStyleVariation } = select(EDITOR_STORE_NAME);
+	const { getSelectedBlockStyleVariation, getSelectedBlockSizeVariation } =
+		select(EDITOR_STORE_NAME);
 	const { getStyleVariationBlocks } = select(EDITOR_STORE_NAME);
 	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
 
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
 		useState(() =>
 			variationSurface === VARIATION_SURFACE_SIZE
-				? undefined
+				? getSelectedBlockSizeVariation()
 				: getSelectedBlockStyleVariation()
 		);
+
+	useEffect(() => {
+		if (blockExtension?.supportsExtensions) {
+			if (variationSurface === VARIATION_SURFACE_SIZE) {
+				registerBlockExtensionsSupports(
+					name,
+					blockExtension.supportsExtensions(
+						name,
+						blockExtensions,
+						VARIATION_SURFACE_SIZE
+					)
+				);
+			} else {
+				registerBlockExtensionsSupports(
+					name,
+					blockExtension.supportsExtensions(
+						name,
+						blockExtensions,
+						VARIATION_SURFACE_STYLE
+					)
+				);
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlockStyleVariation]);
 
 	const fallbackClientId = name.replace('/', '-');
 	const isSizeVariation = variationSurface === VARIATION_SURFACE_SIZE;

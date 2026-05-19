@@ -1,18 +1,14 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { __ } from '@wordpress/i18n';
-
-/**
  * Blockera dependencies
  */
 import {
-	SharedBlockExtension,
-	generalBlockStates,
 	sharedBlockStates,
+	generalBlockStates,
+	SharedBlockExtension,
 } from '@blockera/editor';
+import { mergeObjects } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -51,5 +47,67 @@ export const Button: BlockType = {
 		'blockera/elements/icon': {
 			root: '.wp-block-button__link:before,.wp-block-button__link:after',
 		},
+	},
+	supportsExtensions: (
+		blockName: string,
+		current: Object,
+		variationSurface: 'size' | 'style'
+	): Object => {
+		if (variationSurface === 'style') {
+			return current;
+		}
+
+		return mergeObjects(current, {
+			advancedSettingsConfig: {
+				status: false,
+			},
+			backgroundConfig: {
+				status: false,
+			},
+			borderAndShadowConfig: {
+				status: false,
+			},
+			clickAnimationConfig: {
+				status: false,
+			},
+			conditionsConfig: {
+				status: false,
+			},
+			customStyleConfig: {
+				status: true,
+			},
+			effectsConfig: {
+				status: false,
+			},
+			entranceAnimationConfig: {
+				status: false,
+			},
+			flexChildConfig: {
+				status: false,
+			},
+			gridChildConfig: {
+				status: false,
+			},
+			layoutConfig: {
+				blockeraFlexLayout: {
+					status: false,
+				},
+				blockeraGap: {
+					status: false,
+				},
+				blockeraFlexWrap: {
+					status: false,
+				},
+			},
+			mouseConfig: {
+				status: false,
+			},
+			positionConfig: {
+				status: false,
+			},
+			scrollAnimationConfig: {
+				status: false,
+			},
+		});
 	},
 };
