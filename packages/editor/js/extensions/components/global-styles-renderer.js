@@ -29,6 +29,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			supports,
 			selectors,
 			styleVariationName,
+			renderInPortal = true,
 			isStyleVariation = false,
 			sanitizedBlockGlobalStyles,
 			attributes: defaultAttributes,
@@ -165,9 +166,13 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 					/>
 				)}
 			>
-				<StylesWrapper isGlobalStylesWrapper={true}>
+				{renderInPortal ? (
+					<StylesWrapper isGlobalStylesWrapper={true}>
+						<BlockStyle {...blockStyleProps} />
+					</StylesWrapper>
+				) : (
 					<BlockStyle {...blockStyleProps} />
-				</StylesWrapper>
+				)}
 			</ErrorBoundary>
 		);
 	},
@@ -178,6 +183,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			prevProps.styleVariationName === nextProps.styleVariationName &&
 			prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
 			prevProps.isStyleVariation === nextProps.isStyleVariation &&
+			// prevProps.renderInPortal === nextProps.renderInPortal &&
 			isEquals(
 				prevProps.sanitizedBlockGlobalStyles,
 				nextProps.sanitizedBlockGlobalStyles

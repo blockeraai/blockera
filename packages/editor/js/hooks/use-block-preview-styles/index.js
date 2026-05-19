@@ -62,6 +62,7 @@ export const useBlockPreviewStyles = (
 	const containerRef = useRef<HTMLElement | null>(null);
 	const rootRef = useRef<any | null>(null);
 	const isMountedRef = useRef<boolean>(true);
+	const timeoutRef = useRef<TimeoutID | null>(null);
 
 	// Initialize container ID once
 	if (!containerIdRef.current) {
@@ -149,6 +150,7 @@ export const useBlockPreviewStyles = (
 			<GlobalStylesRenderer
 				{...{
 					...blockType,
+					renderInPortal: false,
 					styleVariationName: variation,
 					isStyleVariation: Boolean(variation),
 					variationClassPrefix,
@@ -164,7 +166,7 @@ export const useBlockPreviewStyles = (
 				return;
 			}
 
-			setTimeout(() => {
+			timeoutRef.current = setTimeout(() => {
 				const extractedStyles = extractStylesFromContainer(container);
 
 				// Only update state if styles actually changed
@@ -172,11 +174,15 @@ export const useBlockPreviewStyles = (
 					lastStylesRef.current = extractedStyles;
 					setAdditionalStyles(extractedStyles);
 				}
-			}, 400);
+			}, 0);
 		});
 
 		return () => {
 			cancelAnimationFrame(rafId);
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
+			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
@@ -199,6 +205,11 @@ export const useBlockPreviewStyles = (
 					// Ignore unmount errors (root may already be unmounted)
 				}
 				rootRef.current = null;
+			}
+
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
 			}
 
 			// Remove container element
