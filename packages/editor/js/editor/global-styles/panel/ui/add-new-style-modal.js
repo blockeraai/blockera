@@ -33,6 +33,10 @@ import {
 	setBlockeraGlobalStylesMetaData,
 } from '../../helpers';
 import { generateUniqueStyleVariationHash } from './utils';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
 
 export const AddNewStyleModal = ({
 	blockStyles,
@@ -42,6 +46,7 @@ export const AddNewStyleModal = ({
 	setBlockStyles,
 	setCurrentBlockStyleVariation,
 	setCurrentActiveStyle,
+	variationSurface = VARIATION_SURFACE_STYLE,
 	isOpen,
 	setIsOpen,
 	counter,
@@ -55,13 +60,19 @@ export const AddNewStyleModal = ({
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
+	variationSurface?: string,
 	isOpen: boolean,
 	setIsOpen: (isOpen: boolean) => void,
 	counter: number,
 	setCounter: (counter: number) => void,
 	counterMap: Object,
 }): MixedElement => {
-	const { setStyleVariationBlocks } = dispatch('blockera/editor');
+	const {
+		setSelectedBlockSizeVariation,
+		setSelectedBlockStyleVariation,
+		setStyleVariationBlocks,
+	} = dispatch('blockera/editor');
+	const isSizeVariation = variationSurface === VARIATION_SURFACE_SIZE;
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
 		'root',
@@ -72,12 +83,16 @@ export const AddNewStyleModal = ({
 
 	// Generate default name and ID for new style variation
 	const getDefaultNameAndId = useCallback(() => {
+		const variationSlugPrefix = isSizeVariation ? 'size' : 'style';
+
 		// Find first available number by checking existing style names
 		let number = blockStyles.length + 1;
 
 		const existingNumbers = blockStyles
 			.map((style) => {
-				const match = style.name.match(/^style-(\d+)$/);
+				const match = style.name.match(
+					new RegExp(`^${variationSlugPrefix}-(\\d+)$`)
+				);
 				return match ? parseInt(match[1]) : null;
 			})
 			.filter((num) => num !== null);
@@ -97,11 +112,16 @@ export const AddNewStyleModal = ({
 			number++;
 		}
 
-		const defaultLabel = __('Style', 'blockera') + ' ' + number;
-		const defaultId = `style-${generateUniqueStyleVariationHash()}`;
+		const defaultLabel =
+			(isSizeVariation
+				? __('Size', 'blockera')
+				: __('Style', 'blockera')) +
+			' ' +
+			number;
+		const defaultId = `${variationSlugPrefix}-${generateUniqueStyleVariationHash()}`;
 
 		return { defaultLabel, defaultId };
-	}, [blockStyles]);
+	}, [blockStyles, isSizeVariation]);
 
 	const [styleName, setStyleName] = useState('');
 	const [styleID, setStyleID] = useState('');
@@ -215,10 +235,13 @@ export const AddNewStyleModal = ({
 
 		// Find first available number by checking existing style names
 		let number = blockStyles.length + 1;
+		const variationSlugPrefix = isSizeVariation ? 'size' : 'style';
 
 		const existingNumbers = blockStyles
 			.map((style) => {
-				const match = style.name.match(/^style-(\d+)$/);
+				const match = style.name.match(
+					new RegExp(`^${variationSlugPrefix}-(\\d+)$`)
+				);
 				return match ? parseInt(match[1]) : null;
 			})
 			.filter((num) => num !== null);
@@ -239,9 +262,16 @@ export const AddNewStyleModal = ({
 		}
 
 		// Use provided ID or generate unique one
-		const name = styleID || `style-${generateUniqueStyleVariationHash()}`;
+		const name =
+			styleID ||
+			`${variationSlugPrefix}-${generateUniqueStyleVariationHash()}`;
 		const styleLabel =
-			styleName.trim() || __('Style', 'blockera') + ' ' + number;
+			styleName.trim() ||
+			(isSizeVariation
+				? __('Size', 'blockera')
+				: __('Style', 'blockera')) +
+				' ' +
+				number;
 		const newStyle = {
 			name,
 			label: styleLabel,
@@ -249,7 +279,19 @@ export const AddNewStyleModal = ({
 				name: 'blockera',
 				library: 'blockera',
 			},
+			...(isSizeVariation
+				? {
+						blockeraVariationType: VARIATION_SURFACE_SIZE,
+						blockeraIsDefaultVariation: false,
+					}
+				: {}),
 		};
+		const newVariationStyle = isSizeVariation
+			? {
+					blockeraVariationType: VARIATION_SURFACE_SIZE,
+					blockeraIsDefaultVariation: false,
+				}
+			: newStyle;
 
 		setBlockStyles([...blockStyles, newStyle]);
 
@@ -258,13 +300,18 @@ export const AddNewStyleModal = ({
 				...styles,
 				variations: {
 					...(styles.variations || {}),
-					[newStyle.name]: {},
+					[newStyle.name]: newVariationStyle,
 				},
 			});
 		}
 
-		setStyleVariationBlocks(newStyle, blockName, 'manual');
-		registerBlockStyle(blockName, newStyle);
+		setStyleVariationBlocks(newStyle.name, [blockName], 'manual');
+		if (isSizeVariation) {
+			setSelectedBlockSizeVariation?.(newStyle);
+		} else {
+			registerBlockStyle(blockName, newStyle);
+			setSelectedBlockStyleVariation?.(newStyle);
+		}
 		setCurrentBlockStyleVariation(newStyle);
 		setCurrentActiveStyle(newStyle);
 
@@ -315,7 +362,11 @@ export const AddNewStyleModal = ({
 		<Modal
 			className={componentInnerClassNames('style-variation-modal')}
 			headerIcon={<Icon icon="plus" iconSize="34" />}
-			headerTitle={__('Add new style variation', 'blockera')}
+			headerTitle={
+				isSizeVariation
+					? __('Add new size variation', 'blockera')
+					: __('Add new style variation', 'blockera')
+			}
 			isDismissible={true}
 			onRequestClose={() => setIsOpen(false)}
 			actions={
@@ -348,10 +399,15 @@ export const AddNewStyleModal = ({
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={25}>
 					<p style={{ margin: '0', color: '#707070' }}>
-						{__(
-							"Create a new style variation by providing a name and ID. Choose the ID carefully — it's used as the CSS class name and can't be changed later without breaking blocks that use this style.",
-							'blockera'
-						)}
+						{isSizeVariation
+							? __(
+									"Create a new size variation by providing a name and ID. Choose the ID carefully — it's used as the CSS class name and can't be changed later without breaking blocks that use this size.",
+									'blockera'
+								)
+							: __(
+									"Create a new style variation by providing a name and ID. Choose the ID carefully — it's used as the CSS class name and can't be changed later without breaking blocks that use this style.",
+									'blockera'
+								)}
 					</p>
 
 					<Flex direction="column" gap={20}>
