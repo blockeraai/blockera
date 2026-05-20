@@ -191,8 +191,8 @@ function FontSizeComponent({
 						}}
 					>
 						<ToggleControl
+							labelType={'self'}
 							label={__('Fluid', 'blockera')}
-							columns="2fr 2fr"
 							onChange={handleFluidChange}
 						/>
 					</ControlContextProvider>
@@ -207,8 +207,8 @@ function FontSizeComponent({
 							}}
 						>
 							<ToggleControl
+								labelType={'self'}
 								label={__('Custom Fluid', 'blockera')}
-								columns="2fr 2fr"
 								onChange={handleCustomFluidValues}
 							/>
 						</ControlContextProvider>
