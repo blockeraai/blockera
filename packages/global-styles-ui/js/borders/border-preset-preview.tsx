@@ -24,8 +24,6 @@ const INNER_BASE: CSSProperties = {
 const EMPTY_PREVIEW_STYLE: CSSProperties = {
 	...INNER_BASE,
 	borderRadius: 0,
-	background:
-		'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, transparent)',
 	border: '1px solid var(--blockera-controls-primary-color)',
 };
 
@@ -72,9 +70,6 @@ export default function BorderPresetPreview({
 				aria-hidden
 				style={{
 					...INNER_BASE,
-					borderRadius: 6,
-					background:
-						'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, transparent)',
 					borderWidth: bw,
 					borderStyle: bs,
 					borderColor: bc,
