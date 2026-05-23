@@ -8,7 +8,13 @@ import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { registerBlockStyle } from '@wordpress/blocks';
-import { useState, useEffect, useCallback } from '@wordpress/element';
+import {
+	useState,
+	useEffect,
+	useCallback,
+	useLayoutEffect,
+	useRef,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -37,6 +43,24 @@ import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../variation-surfaces';
+
+function focusNameInputAtEnd(container: ?HTMLElement) {
+	const input = container?.querySelector('input');
+
+	if (!input || !(input instanceof HTMLInputElement)) {
+		return;
+	}
+
+	input.focus();
+
+	const end = input.value.length;
+
+	try {
+		input.setSelectionRange(end, end);
+	} catch {
+		// Some input types do not support selection ranges.
+	}
+}
 
 export const AddNewStyleModal = ({
 	blockStyles,
@@ -127,6 +151,8 @@ export const AddNewStyleModal = ({
 	const [styleID, setStyleID] = useState('');
 	const [isIdManuallyEdited, setIsIdManuallyEdited] = useState(false);
 	const [duplicateIdError, setDuplicateIdError] = useState('');
+	const nameInputContainerRef = useRef<?HTMLElement>(null);
+	const hasFocusedNameOnOpenRef = useRef(false);
 
 	// Check for duplicate ID
 	const checkDuplicateId = useCallback(
@@ -171,6 +197,25 @@ export const AddNewStyleModal = ({
 			checkDuplicateId(defaultId);
 		}
 	}, [isOpen, getDefaultNameAndId, checkDuplicateId]);
+
+	// Place caret at end of the default name when the modal opens (after WP Modal focus trap).
+	useLayoutEffect(() => {
+		if (!isOpen) {
+			hasFocusedNameOnOpenRef.current = false;
+			return;
+		}
+
+		if (!styleName || hasFocusedNameOnOpenRef.current) {
+			return;
+		}
+
+		const frame = requestAnimationFrame(() => {
+			focusNameInputAtEnd(nameInputContainerRef.current);
+			hasFocusedNameOnOpenRef.current = true;
+		});
+
+		return () => cancelAnimationFrame(frame);
+	}, [isOpen, styleName]);
 
 	// Track if this is the first render after modal opens to prevent sync on default values
 	const [isInitialLoad, setIsInitialLoad] = useState(false);
@@ -411,18 +456,20 @@ export const AddNewStyleModal = ({
 					</p>
 
 					<Flex direction="column" gap={20}>
-						<ControlContextProvider
-							value={{
-								name: 'add-style-name',
-								value: styleName,
-							}}
-						>
-							<InputControl
-								label={__('Name', 'blockera')}
-								onChange={handleNameChange}
-								columns="1fr 3fr"
-							/>
-						</ControlContextProvider>
+						<div ref={nameInputContainerRef}>
+							<ControlContextProvider
+								value={{
+									name: 'add-style-name',
+									value: styleName,
+								}}
+							>
+								<InputControl
+									label={__('Name', 'blockera')}
+									onChange={handleNameChange}
+									columns="1fr 3fr"
+								/>
+							</ControlContextProvider>
+						</div>
 
 						<ControlContextProvider
 							value={{
