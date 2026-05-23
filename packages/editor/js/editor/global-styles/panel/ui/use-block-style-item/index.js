@@ -17,7 +17,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { omit, mergeObject, kebabCase, cloneObject } from '@blockera/utils';
+import { omit, mergeObject, cloneObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -26,6 +26,7 @@ import {
 	getDefaultStyle,
 	replaceActiveSizeVariation,
 	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+	sanitizeStyleVariationId,
 } from '../utils';
 import {
 	getCalculatedNewStyle,
@@ -141,7 +142,7 @@ export const useBlockStyleItem = ({
 
 			// Is user confirmed the change style name?
 			if (isConfirmedChangeID) {
-				editedStyle.name = kebabCase(newValue.name);
+				editedStyle.name = sanitizeStyleVariationId(newValue.name);
 				editedStyle.icon = {
 					name: 'blockera',
 					library: 'blockera',
@@ -464,7 +465,7 @@ export const useBlockStyleItem = ({
 
 			const duplicateStyle = customValues
 				? {
-						name: kebabCase(customValues.name),
+						name: sanitizeStyleVariationId(customValues.name),
 						label: customValues.label,
 						icon: {
 							name: 'blockera',

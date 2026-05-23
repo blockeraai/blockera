@@ -19,8 +19,12 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { kebabCase } from '@blockera/utils';
 import { componentInnerClassNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { sanitizeStyleVariationId } from './utils';
 
 export const DuplicateModal = ({
 	style,
@@ -126,7 +130,7 @@ export const DuplicateModal = ({
 	// Sync name to id (kebab case) when name changes, unless id is manually edited
 	useEffect(() => {
 		if (!isIdManuallyEdited && styleName) {
-			const kebabId = kebabCase(styleName.toLowerCase().trim());
+			const kebabId = sanitizeStyleVariationId(styleName);
 			setStyleID(kebabId);
 			// Check for duplicate when syncing
 			checkDuplicateId(kebabId);
@@ -140,7 +144,7 @@ export const DuplicateModal = ({
 
 	// Handle ID input change
 	const handleIdChange = (newValue: string) => {
-		const kebabValue = kebabCase(newValue.toLowerCase().trim());
+		const kebabValue = sanitizeStyleVariationId(newValue);
 		setStyleID(kebabValue);
 		setIsIdManuallyEdited(true);
 		checkDuplicateId(kebabValue);

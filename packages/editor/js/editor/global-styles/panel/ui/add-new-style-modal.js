@@ -28,7 +28,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { kebabCase, mergeObject } from '@blockera/utils';
+import { mergeObject } from '@blockera/utils';
 import { componentInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -38,7 +38,10 @@ import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../helpers';
-import { generateUniqueStyleVariationHash } from './utils';
+import {
+	generateUniqueStyleVariationHash,
+	sanitizeStyleVariationId,
+} from './utils';
 import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
@@ -231,7 +234,7 @@ export const AddNewStyleModal = ({
 
 		// Only sync if not initial load, name exists, and ID hasn't been manually edited
 		if (isInitialLoad && !isIdManuallyEdited && styleName) {
-			const kebabId = kebabCase(styleName.toLowerCase().trim());
+			const kebabId = sanitizeStyleVariationId(styleName);
 			setStyleID(kebabId);
 			// Check for duplicate when syncing
 			checkDuplicateId(kebabId);
@@ -258,7 +261,7 @@ export const AddNewStyleModal = ({
 
 	// Handle ID input change
 	const handleIdChange = (newValue: string) => {
-		const kebabValue = kebabCase(newValue.toLowerCase().trim());
+		const kebabValue = sanitizeStyleVariationId(newValue);
 		setStyleID(kebabValue);
 		setIsIdManuallyEdited(true);
 		checkDuplicateId(kebabValue);
@@ -504,16 +507,13 @@ export const AddNewStyleModal = ({
 
 								{isIdManuallyEdited &&
 									styleID !==
-										kebabCase(
-											styleName.toLowerCase().trim()
-										) && (
+										sanitizeStyleVariationId(styleName) && (
 										<Button
 											onClick={() => {
-												const syncedId = kebabCase(
-													styleName
-														.toLowerCase()
-														.trim()
-												);
+												const syncedId =
+													sanitizeStyleVariationId(
+														styleName
+													);
 												setStyleID(syncedId);
 												setIsIdManuallyEdited(false);
 												checkDuplicateId(syncedId);

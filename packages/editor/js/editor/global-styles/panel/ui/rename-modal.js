@@ -21,8 +21,12 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { kebabCase } from '@blockera/utils';
 import { componentInnerClassNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { sanitizeStyleVariationId } from './utils';
 
 export const RenameModal = ({
 	style,
@@ -79,7 +83,7 @@ export const RenameModal = ({
 	);
 
 	const handleIdChange = (newValue: string) => {
-		const kebabValue = kebabCase(newValue.toLowerCase().trim());
+		const kebabValue = sanitizeStyleVariationId(newValue);
 		setStyleID(kebabValue);
 		checkDuplicateId(kebabValue);
 	};
