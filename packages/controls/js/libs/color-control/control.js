@@ -108,7 +108,8 @@ export default function ColorControl({
 		...propsForLabelControl,
 	};
 
-	if (isSetValueAddon()) {
+	// Keep the color picker open while typing custom CSS (e.g. currentColor).
+	if (isSetValueAddon() && !isOpen) {
 		return (
 			<BaseControl
 				columns={columns}

@@ -47,6 +47,63 @@ const SKETCH_BLOCKED_KEYWORDS: Set<string> = new Set([
 ]);
 
 /**
+ * True when the stored string is (or is being typed as) raw CSS color syntax,
+ * not a theme.json preset slug. Used by value-addon slug heuristics.
+ */
+export function isLikelyRawCssColorInput(input: string): boolean {
+	if (input === null || input === undefined || typeof input !== 'string') {
+		return false;
+	}
+	const trimmed = input.trim();
+	if (trimmed === '') {
+		return false;
+	}
+
+	if (trimmed.startsWith('#')) {
+		return true;
+	}
+	if (/var\s*\(/i.test(trimmed)) {
+		return true;
+	}
+	if (/^\s*rgba?\s*\(/i.test(trimmed)) {
+		return true;
+	}
+	if (/^\s*hsla?\s*\(/i.test(trimmed)) {
+		return true;
+	}
+
+	const norm = trimmed.toLowerCase();
+
+	if (SKETCH_BLOCKED_KEYWORDS.has(norm)) {
+		return true;
+	}
+
+	// In-progress keyword typing (e.g. "c" → currentColor).
+	for (const kw of SKETCH_BLOCKED_KEYWORDS) {
+		if (norm.length < kw.length && kw.startsWith(norm)) {
+			return true;
+		}
+	}
+
+	// CSS keywords such as currentColor use camelCase; theme.json slugs are lowercase.
+	if (/[A-Z]/.test(trimmed)) {
+		return true;
+	}
+
+	const tc = tinycolor(trimmed);
+	if (tc.isValid() && tc.getFormat() === 'name') {
+		return true;
+	}
+
+	// Partial hex bodies while typing (without forcing a leading #).
+	if (/^[0-9a-f]+$/i.test(trimmed)) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * True when the stored CSS color can be driven by react-color Sketch (hex, named, rgb/rgba only).
  * Values like var(), keywords, hsl/hwb/lch/oklch, color-mix(), etc. stay editable as text but disable the wheel.
  */

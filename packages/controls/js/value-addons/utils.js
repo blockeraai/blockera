@@ -8,6 +8,7 @@ import { generateVariableStringFromAttributeVarString } from '@blockera/data';
 /**
  * Internal dependencies
  */
+import { isLikelyRawCssColorInput } from '../libs/color-picker-control/utils/css-color';
 import type { ValueAddon } from './types';
 
 export function isValid(value: ValueAddon | string): boolean {
@@ -33,6 +34,10 @@ export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
 		return false;
 	}
 	if (/\s/.test(s)) {
+		return false;
+	}
+	// Free-form CSS colors (keywords, hex, rgb, in-progress typing) are not preset slugs.
+	if (isLikelyRawCssColorInput(s)) {
 		return false;
 	}
 	// Slugs start with a letter so values like `12px` / `500` are not treated as presets.

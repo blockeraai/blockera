@@ -730,6 +730,19 @@ describe('Helper Functions', () => {
 			expect(isLikelyThemeJsonPlainPresetSlugString('')).toBe(false);
 			expect(isLikelyThemeJsonPlainPresetSlugString(' slug')).toBe(false);
 		});
+
+		test('rejects css color keywords and in-progress keyword typing', () => {
+			expect(isLikelyThemeJsonPlainPresetSlugString('c')).toBe(false);
+			expect(isLikelyThemeJsonPlainPresetSlugString('currentColor')).toBe(
+				false
+			);
+			expect(isLikelyThemeJsonPlainPresetSlugString('transparent')).toBe(
+				false
+			);
+			expect(isLikelyThemeJsonPlainPresetSlugString('ff0000')).toBe(
+				false
+			);
+		});
 	});
 
 	describe('normalizeCompositePlainPresetPaintPart', () => {
