@@ -1,20 +1,4 @@
-.is-open-blockera-shadows-navigation-override {
-
-	.edit-site-global-styles-header__description {
-		display: none;
-	}
-
-	.edit-site-global-styles-screen {
-		margin: 0 !important;
-		
-		& > div {
-
-			& > *:not(.blockera-shadows-presets-navigation) {
-				display: none;
-			}
-		}
-	}
-}
+// Preset panel override rules live in panel-override/styles.scss.
 
 // Inline swatch: box-shadow paints outside the 12×12 tile; default repeater header height clips it.
 .blockera-control-repeater-group-header.blockera-shadow-preset-opener-header {

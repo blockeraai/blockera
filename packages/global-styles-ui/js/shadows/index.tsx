@@ -1,7 +1,13 @@
 /**
  * External dependencies
  */
-import { createPortal, useCallback, useMemo, memo } from '@wordpress/element';
+import {
+	createPortal,
+	useCallback,
+	useMemo,
+	memo,
+	useEffect,
+} from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -25,6 +31,12 @@ import {
 	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
+import {
+	BLOCKERA_SHADOWS_PRESET_INSPECTOR_ACTIVE_CLASS,
+	disablePresetInspectorCleanup,
+	enablePresetInspectorCleanup,
+	useOverrideNavigator,
+} from '../panel-override';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
 import { ShadowPresetOpener } from './shadow-preset-opener';
@@ -289,13 +301,29 @@ interface ShadowsProps {
 }
 
 function Shadows({ screenSelector }: ShadowsProps) {
+	useOverrideNavigator({ panel: 'shadows' });
+
+	useEffect(() => {
+		enablePresetInspectorCleanup(
+			BLOCKERA_SHADOWS_PRESET_INSPECTOR_ACTIVE_CLASS,
+			undefined,
+			'.blockera-shadows-presets-navigation'
+		);
+
+		return () => {
+			disablePresetInspectorCleanup(
+				BLOCKERA_SHADOWS_PRESET_INSPECTOR_ACTIVE_CLASS
+			);
+		};
+	}, []);
+
 	const target = document.querySelector(screenSelector);
 	if (!target) {
 		return null;
 	}
 
 	return createPortal(
-		<div className="blockera-shadows-presets-navigation">
+		<div className="blockera-block-inspector-controls-wrapper blockera-shadows-presets-navigation">
 			{/* We do not have access to the back button here, so we need to add the branding manually. */}
 			<PoweredBy
 				style={{
