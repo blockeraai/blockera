@@ -6,6 +6,27 @@ import {
 	TYPOGRAPHY_OVERRIDE_CLASS,
 } from '@blockera/dev-cypress/js/helpers';
 
+const FONT_SIZE_INSPECTOR_ACTIVE_CLASS =
+	'blockera-font-size-preset-inspector-active';
+
+const NAVIGATOR_SCREEN_SELECTOR =
+	'.edit-site-global-styles-sidebar__navigator-screen, .global-styles-ui-sidebar__navigator-screen';
+
+function openFontSizeVariablesScreen() {
+	openGlobalStylesTypographyFlow();
+
+	cy.contains(
+		'.blockera-font-size-presets-count button',
+		'Font size variables'
+	)
+		.should('be.visible')
+		.click({ force: true });
+
+	cy.get('.blockera-font-size-presets', { timeout: 15000 }).should(
+		'be.visible'
+	);
+}
+
 describe('Global Styles → Typography panel (DOM + observer)', () => {
 	it('adds typography override class and mounts font sizes entry after typography handler runs', () => {
 		openGlobalStylesTypographyFlow();
@@ -26,31 +47,88 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		cy.get('.blockera-font-size-presets-count').should('have.length', 1);
 	});
 
-	it('navigates to Font size variables and applies count-active DOM + hides previous sibling', () => {
+	it('hides native WordPress font size presets entry while Blockera override is active', () => {
 		openGlobalStylesTypographyFlow();
 
-		cy.get('.blockera-font-size-presets-count-active').should('not.exist');
+		cy.contains('button', 'Font size variables').should('be.visible');
+		cy.contains('button', 'Font size presets').should('not.exist');
+	});
+
+	it('applies cleanup + inspector-active DOM when opening font size variables', () => {
+		openGlobalStylesTypographyFlow();
+
+		cy.get('body').should(
+			'not.have.class',
+			'blockera-cleanup-screen-styles'
+		);
 
 		cy.contains(
 			'.blockera-font-size-presets-count button',
 			'Font size variables'
-		)
-			.should('exist')
-			.click({ force: true });
+		).click({ force: true });
 
-		cy.get('.blockera-font-size-presets-count-active').should('exist');
+		cy.get('.blockera-font-size-presets').should('be.visible');
 
-		cy.get('.blockera-font-size-presets-count-active')
-			.prev()
-			.should(($el) => {
-				expect($el.css('display')).to.eq('none');
-			});
+		cy.get('body').should('have.class', 'blockera-cleanup-screen-styles');
+
+		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('exist');
 	});
 
-	it('navigates to heading element screen - applies count-active DOM + hides previous sibling', () => {
+	it('keeps the typography override body class while on the font size variables screen', () => {
+		openFontSizeVariablesScreen();
+
+		cy.get('body').should('have.class', TYPOGRAPHY_OVERRIDE_CLASS);
+	});
+
+	it('shows the font size variables shell with header copy after navigation', () => {
+		openFontSizeVariablesScreen();
+
+		cy.get('.blockera-font-size-presets')
+			.contains('Font Size Variables')
+			.should('be.visible');
+
+		cy.get('.blockera-font-size-presets')
+			.contains(
+				'Create and edit font size variables used for typography across the site.'
+			)
+			.should('be.visible');
+	});
+
+	it('renders at least one font size preset row on the variables screen', () => {
+		openFontSizeVariablesScreen();
+
+		cy.getByDataCy('font-size-repeater-item-header')
+			.its('length')
+			.should('be.gte', 1);
+	});
+
+	it('does not zero out Blockera Spacer padding on the font size variables screen', () => {
+		openFontSizeVariablesScreen();
+
+		cy.get('body').should('have.class', 'blockera-cleanup-screen-styles');
+
+		cy.get('.blockera-font-size-presets .components-spacer').should(
+			($spacer) => {
+				const paddingLeft = parseFloat($spacer.css('padding-left'));
+				expect(paddingLeft).to.be.greaterThan(0);
+			}
+		);
+	});
+
+	it('hides native WordPress font size presets editor while on the variables screen', () => {
+		openFontSizeVariablesScreen();
+
+		cy.get(NAVIGATOR_SCREEN_SELECTOR).within(() => {
+			cy.contains('Font size presets').should('not.be.visible');
+		});
+
+		cy.get('.blockera-font-size-presets').should('be.visible');
+	});
+
+	it('navigates to heading element screen and returns to typography list', () => {
 		openGlobalStylesTypographyFlow();
 
-		cy.get('.blockera-font-size-presets-count-active').should('not.exist');
+		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
 
 		cy.get('button[id="/typography/heading"]').click({ force: true });
 		cy.get('button[data-wp-component="Navigator.BackButton"]')
@@ -60,30 +138,45 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		cy.get('.blockera-font-size-presets-count').should('exist');
 	});
 
-	it('ScreenHeader back runs onBackFontSizes (clears count-active, returns to list)', () => {
+	it('ScreenHeader back runs onBack (clears cleanup + inspector-active, returns to list)', () => {
 		openGlobalStylesTypographyFlow();
 
-		cy.get('.blockera-font-size-presets-count-active').should('not.exist');
+		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
 
 		cy.contains(
 			'.blockera-font-size-presets-count button',
 			'Font size variables'
 		)
+			.should('be.visible')
+			.click({ force: true });
+
+		cy.get('.blockera-font-size-presets', { timeout: 10000 }).should(
+			'be.visible'
+		);
+		cy.get('body', { timeout: 4000 }).should(
+			'have.class',
+			'blockera-cleanup-screen-styles'
+		);
+
+		cy.get('.blockera-font-size-presets')
+			.find('button[data-wp-component="Navigator.BackButton"]')
+			.first()
 			.should('exist')
 			.click({ force: true });
 
-		cy.get('.blockera-font-size-presets-count-active').should('exist');
+		cy.get('body', { timeout: 4000 }).should(
+			'not.have.class',
+			'blockera-cleanup-screen-styles'
+		);
 
-		cy.get('.blockera-font-size-presets-count-active')
-			.find('button[data-wp-component="Navigator.BackButton"]')
-			.first()
-			.click({ force: true });
-
-		cy.get('.blockera-font-size-presets-count-active').should('not.exist');
+		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`, {
+			timeout: 4000,
+		}).should('not.exist');
 
 		cy.contains(
 			'.blockera-font-size-presets-count',
-			'Font size variables'
+			'Font size variables',
+			{ timeout: 4000 }
 		).should('exist');
 	});
 

@@ -19,29 +19,16 @@ import { Flex } from '@blockera/controls';
  */
 import { Subtitle, NavigationButtonAsItem } from '../components';
 
-function FontSizesScreen() {
-	const onClick = (event: Event) => {
-		const button = (event.target as HTMLElement)?.closest(
-			'.blockera-font-size-presets-count'
-		);
-		const parent =
-			button?.parentElement?.parentElement?.parentElement?.parentElement;
+interface FontSizesScreenProps {
+	onClick: (event: Event) => void;
+}
 
-		parent?.classList?.add('blockera-font-size-presets-count-active');
-
-		if (
-			parent.previousElementSibling &&
-			parent.previousElementSibling instanceof HTMLElement
-		) {
-			parent.previousElementSibling.style.display = 'none';
-		}
-	};
-
+function FontSizesScreen({ onClick }: FontSizesScreenProps) {
 	return (
 		<Flex
 			direction="column"
 			gap={'12px'}
-			className="blockera-font-size-presets-count"
+			className="blockera-font-size-presets-navigation blockera-font-size-presets-count"
 		>
 			<Subtitle level={3}>{__('Font Sizes', 'blockera')}</Subtitle>
 
