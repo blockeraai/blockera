@@ -22,6 +22,13 @@
 		"node": ">=12"
 	},
 	"main": "js/index.ts",
+	"exports": {
+		".": "./js/index.ts",
+		"./panel-override": "./js/panel-override/index.ts",
+		"./panel-override/selectors": "./js/panel-override/selectors.ts",
+		"./panel-override/navigator-back-button": "./js/panel-override/navigator-back-button.ts",
+		"./panel-override/override-classes": "./js/panel-override/override-classes.ts"
+	},
 	"dependencies": {
 		"@blockera/env": "file:../env"
 	}

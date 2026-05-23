@@ -1,3 +1,8 @@
+/**
+ * Panel override module (side-effect: loads WP 7-compatible override styles).
+ */
+import './panel-override';
+
 export {
 	registerGlobalStylesPresetPreviewHelpers,
 	registerPresetPreviewCssHelpers,
@@ -62,3 +67,31 @@ export { FallbackPresetContent } from './components/fallback-preset-content';
 export { colorsPanelHandler } from './colors/colors-panel-handler';
 export { typographyPanelHandler } from './font-sizes/typography-panel-handler';
 export { shadowsPanelHandler } from './shadows/shadows-panel-handler';
+
+export {
+	getGlobalStylesPanelSelectors,
+	getGlobalStylesPanelTargets,
+	queryGlobalStylesPanelElement,
+	queryActiveGlobalStylesNavigatorScreen,
+	queryStyleBookIframe,
+	getDualGlobalStylesSelector,
+	getStyleBookBlockExampleSelector,
+	getWordPressVersion,
+	isWordPress70OrHigher,
+	createGlobalStylesPanelHandler,
+	useOverrideNavigator,
+	findGlobalStylesNavigatorBackButton,
+	findGlobalStylesScreenHeader,
+	setGlobalStylesScreenHeaderTitle,
+	revealGlobalStylesScreenHeader,
+	attachGlobalStylesNavigatorBackListener,
+	NAVIGATOR_BACK_RETRY_INTERVAL_MS,
+	NAVIGATOR_BACK_MAX_RETRY_ATTEMPTS,
+	removeBlockeraGlobalStylesUiBodyClass,
+	BLOCKERA_GLOBAL_STYLES_UI_BODY_CLASS,
+	BLOCKERA_NAVIGATION_OVERRIDE_CLASS,
+	BLOCKERA_NAVIGATION_PANEL_CLASS,
+	type GlobalStylesPanelSelectors,
+	type GlobalStylesPanelTargets,
+	type PresetPanelOverride,
+} from './panel-override';

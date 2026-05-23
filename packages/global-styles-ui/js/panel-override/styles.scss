@@ -1,0 +1,214 @@
+/**
+ * Consolidated CSS overrides for Blockera Global Styles panel takeover.
+ *
+ * Targets both pre-WP 7.0 (`edit-site-global-styles-*`) and WP 7.0+
+ * (`global-styles-ui-*`, `editor-global-styles-sidebar*`) class hooks so
+ * overrides stay forward/backward compatible without runtime branching in CSS.
+ */
+
+// Navigator + screen shells
+$gs-navigator-screen: ".edit-site-global-styles-sidebar__navigator-screen, .global-styles-ui-sidebar__navigator-screen";
+$gs-screen-root: ".edit-site-global-styles-screen-root, .global-styles-ui-screen-root";
+$gs-active-style-tile: ".edit-site-global-styles-screen-root__active-style-tile, .global-styles-ui-screen-root__active-style-tile";
+$gs-global-styles-screen: ".edit-site-global-styles-screen, .global-styles-ui-sidebar__navigator-screen, .global-styles-ui-screen-body";
+$gs-screen-body: ".edit-site-global-styles-screen > div, .global-styles-ui-screen-body";
+$gs-screen-header: ".edit-site-global-styles-header, .global-styles-ui-header";
+$gs-header-description: ".edit-site-global-styles-header__description, .global-styles-ui-header__description";
+$gs-block-types-search: ".edit-site-block-types-search, .global-styles-ui-block-types-search";
+$gs-block-types-list: ".edit-site-block-types-item-list, .global-styles-ui-block-types-item-list";
+$gs-block-preview-panel: ".edit-site-global-styles__block-preview-panel, .global-styles-ui__block-preview-panel";
+$gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
+
+@mixin blockera-preset-cleanup-screen-styles(
+	$inspector-active-class,
+	$content-wrapper-class: "blockera-block-inspector-controls-wrapper",
+	$reset-spacer-padding: true
+) {
+	&.blockera-cleanup-screen-styles {
+		#{$gs-global-styles-screen} {
+			margin: 0 !important;
+			padding: 0;
+
+			@if $reset-spacer-padding {
+				.components-spacer {
+					padding: 0;
+				}
+			}
+		}
+
+		div[data-wp-component="Navigator.Screen"]:first-child:not(
+				.#{$inspector-active-class}
+					div[data-wp-component="Navigator.Screen"]:first-child
+			) {
+			> div:first-child {
+				display: none;
+			}
+		}
+	}
+
+	.#{$inspector-active-class} {
+		> *:not(.#{$content-wrapper-class}) {
+			display: none;
+		}
+	}
+}
+
+// Block style variations panel (editor/global-styles)
+.has-blockera-global-styles-ui {
+	#{$gs-navigator-screen}:not(.has-not-blockera-extensions) {
+		// Blockera panel + blocks list + navigator header must stay visible.
+		.blockera-extensions-wrapper {
+			display: block !important;
+		}
+
+		// Keep WP navigator header row visible (back button + title).
+		> *:has(#{$gs-navigator-back-button}) {
+			display: block !important;
+
+			#{$gs-navigator-back-button} {
+				display: inline-flex !important;
+				visibility: visible !important;
+			}
+
+			#{$gs-screen-header},
+			.components-heading {
+				display: block !important;
+			}
+		}
+
+		// Hide native block detail chrome; allowlist blocks list + Blockera UI.
+		> *:not(
+				.blockera-extensions-wrapper,
+				div:has(#{$gs-navigator-back-button}),
+				div:has(+ #{$gs-block-types-search}),
+				#{$gs-block-types-search},
+				#{$gs-block-types-list},
+				div:first-child
+			) {
+			display: none;
+		}
+
+		// Native block screen sections replaced by Blockera on per-block screens.
+		#{$gs-block-preview-panel},
+		.global-styles-ui-screen-variations {
+			display: none !important;
+		}
+	}
+}
+
+// Root navigation shell (editor/navigation)
+.components-surface.components-card#{$gs-screen-root} {
+	&.is-open-blockera-navigation-override,
+	&.is-open-blockera-navigation-panel {
+		#{$gs-active-style-tile},
+		.blockera-extension-navigation-category-description,
+		.components-spacer {
+			display: none;
+		}
+	}
+
+	&.is-open-blockera-navigation-override {
+		.blockera-navigation-panel {
+			display: block;
+		}
+	}
+}
+
+// Colors preset takeover
+.is-open-blockera-colors-navigation-override {
+	@include blockera-preset-cleanup-screen-styles(
+		"blockera-colors-preset-inspector-active"
+	);
+
+	#{$gs-screen-body} {
+		& > *:nth-child(2) {
+			display: none;
+		}
+
+		.blockera-block-inspector-controls-wrapper {
+			div[data-wp-component="Navigator"] {
+				> div:nth-child(2) {
+					display: none;
+					height: 0;
+				}
+			}
+		}
+	}
+
+	#{$gs-screen-header} {
+		display: none;
+	}
+}
+
+// Typography preset takeover
+.is-open-blockera-typography-navigation-override {
+	@include blockera-preset-cleanup-screen-styles(
+		"blockera-font-size-preset-inspector-active",
+		"blockera-block-inspector-controls-wrapper",
+		false
+	);
+
+	#{$gs-screen-body} {
+		// Hide native WP "Font size presets" block; keep Blockera "Font size variables".
+		[data-wp-component="VStack"]:has(
+				button[id="/typography/font-sizes"]
+			):not(:has(.blockera-font-size-presets-count)) {
+			display: none !important;
+		}
+
+		& > *:nth-last-child(2) {
+			display: none;
+		}
+	}
+
+	.blockera-block-inspector-controls-wrapper {
+		div[data-wp-component="Navigator"] {
+			> div:nth-child(2) {
+				display: none;
+				height: 0;
+			}
+		}
+	}
+
+	.blockera-font-size-preset-inspector-active {
+		margin: 0 !important;
+
+		> div > *:not(:last-child) {
+			display: none !important;
+		}
+
+		#{$gs-screen-header} {
+			margin-bottom: 0 !important;
+		}
+	}
+
+	#{$gs-screen-header} {
+		display: none;
+	}
+}
+
+// Shadows preset takeover
+.is-open-blockera-shadows-navigation-override {
+	@include blockera-preset-cleanup-screen-styles(
+		"blockera-shadows-preset-inspector-active",
+		"blockera-shadows-presets-navigation"
+	);
+
+	#{$gs-header-description} {
+		display: none;
+	}
+
+	#{$gs-global-styles-screen} {
+		margin: 0 !important;
+	}
+
+	#{$gs-screen-body} {
+		& > *:not(:has(.blockera-shadows-presets-navigation)) {
+			display: none;
+		}
+	}
+
+	#{$gs-screen-header} {
+		display: none;
+	}
+}
