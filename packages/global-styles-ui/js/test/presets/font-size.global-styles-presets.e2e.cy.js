@@ -25,12 +25,12 @@ describe('Global Styles UI → font size presets (theme.json + UI)', () => {
 	it('merges theme typography.fontSizes.theme from theme.json, shows in UI, persists size edit', () => {
 		openGlobalStylesFontSizesVariablesScreen();
 
-		cy.get('.blockera-font-size-presets', { timeout: 20000 }).should(
+		cy.get('.blockera-font-size-editor', { timeout: 20000 }).should(
 			'contain',
 			'E2E Theme Font Size'
 		);
 		cy.contains(
-			'.blockera-font-size-presets [data-cy="font-size-repeater-item-header"]',
+			'.blockera-font-size-editor [data-cy="font-size-repeater-item-header"]',
 			'E2E Theme Font Size'
 		).click({ force: true });
 
@@ -60,7 +60,7 @@ describe('Global Styles UI → font size presets (theme.json + UI)', () => {
 
 		openGlobalStylesFontSizesVariablesScreen({ reset: false });
 
-		cy.get('.blockera-font-size-presets', { timeout: 20000 }).should(
+		cy.get('.blockera-font-size-editor', { timeout: 20000 }).should(
 			'contain',
 			'E2E Theme Font Size'
 		);
@@ -73,7 +73,7 @@ describe('Global Styles UI → font size presets (theme.json + UI)', () => {
 		);
 
 		cy.contains(
-			'.blockera-font-size-presets [data-cy="font-size-repeater-item-header"]',
+			'.blockera-font-size-editor [data-cy="font-size-repeater-item-header"]',
 			'E2E Theme Font Size'
 		).click({ force: true });
 

@@ -13,8 +13,8 @@ export const shadowsPanelHandler = createGlobalStylesPanelHandler({
 	panel: 'shadows',
 	wpNavigationPath: '/shadows',
 	Component: Shadows,
-	componentSelector: '.blockera-shadows-presets-navigation',
-	whileNotExistSelectors: ['.blockera-shadows-presets-count'],
+	componentSelector: '.blockera-shadows-panel',
+	whileNotExistSelectors: ['.blockera-shadows-hub'],
 	observerLifetimeMs: 1000,
 	onObserverReady: () =>
 		document

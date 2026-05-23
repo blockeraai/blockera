@@ -269,7 +269,7 @@ export function FontSizesPresetContent() {
 	);
 
 	return (
-		<VStack className="blockera-font-size-presets-count" spacing={8}>
+		<VStack className="blockera-font-size-editor-groups" spacing={8}>
 			{showThemeOriginGroup && (
 				<FontSizeGroup
 					origin="theme"
@@ -305,7 +305,7 @@ function FontSizesEditorScreenShell() {
 	return (
 		<VStack
 			spacing={2}
-			className="blockera-font-size-presets"
+			className="blockera-font-size-editor"
 			style={{ paddingBottom: '10px' }}
 		>
 			<ScreenHeader

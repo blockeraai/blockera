@@ -8,7 +8,7 @@ export const colorsPanelHandler = createGlobalStylesPanelHandler({
 	panel: 'colors',
 	wpNavigationPath: '/colors',
 	Component: Colors,
-	componentSelector: '.blockera-colors-presets-navigation',
-	whileNotExistSelectors: ['.blockera-colors-presets-count'],
+	componentSelector: '.blockera-colors-panel',
+	whileNotExistSelectors: ['.blockera-colors-hub'],
 	observerLifetimeMs: 1000,
 });

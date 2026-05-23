@@ -23,7 +23,7 @@ function openGlobalStylesColorsFlow() {
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-colors-presets-count').should('exist');
+	cy.get('.blockera-colors-hub').should('exist');
 }
 
 describe('Global Styles → Colors panel (DOM + observer)', () => {
@@ -32,24 +32,24 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 
 		cy.get('button[id="/colors"]').should('exist');
 
-		cy.get('.blockera-colors-presets-count').should('have.length', 1);
+		cy.get('.blockera-colors-hub').should('have.length', 1);
 	});
 
 	it('does not mount duplicate colors list roots while the list screen is present', () => {
 		openGlobalStylesColorsFlow();
 
-		cy.get('.blockera-colors-presets-count').should('have.length', 1);
+		cy.get('.blockera-colors-hub').should('have.length', 1);
 
 		// eslint-disable-next-line cypress/no-unnecessary-waiting
 		cy.wait(400);
 
-		cy.get('.blockera-colors-presets-count').should('have.length', 1);
+		cy.get('.blockera-colors-hub').should('have.length', 1);
 	});
 
 	it('keeps the colors override body class while on a nested Blockera colors screen', () => {
 		openGlobalStylesColorsFlow();
 
-		cy.contains('.blockera-colors-presets-count button', 'Color variables')
+		cy.contains('.blockera-colors-hub button', 'Color variables')
 			.should('exist')
 			.click({ force: true });
 
@@ -68,10 +68,9 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 			'blockera-cleanup-screen-styles'
 		);
 
-		cy.contains(
-			'.blockera-colors-presets-count button',
-			'Color variables'
-		).click({ force: true });
+		cy.contains('.blockera-colors-hub button', 'Color variables').click({
+			force: true,
+		});
 
 		cy.get('.blockera-color-palette-presets').should('be.visible');
 
@@ -83,10 +82,9 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 	it('shows the color palette shell with header copy after navigation', () => {
 		openGlobalStylesColorsFlow();
 
-		cy.contains(
-			'.blockera-colors-presets-count button',
-			'Color variables'
-		).click({ force: true });
+		cy.contains('.blockera-colors-hub button', 'Color variables').click({
+			force: true,
+		});
 
 		cy.get('.blockera-color-palette-presets')
 			.contains('Color Variables')
@@ -102,10 +100,9 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 	it('renders at least one color preset row on the palette screen', () => {
 		openGlobalStylesColorsFlow();
 
-		cy.contains(
-			'.blockera-colors-presets-count button',
-			'Color variables'
-		).click({ force: true });
+		cy.contains('.blockera-colors-hub button', 'Color variables').click({
+			force: true,
+		});
 
 		cy.getByDataCy('color-repeater-item-header')
 			.its('length')
@@ -116,7 +113,7 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 		openGlobalStylesColorsFlow();
 
 		// Click Color variables and wait until the palette is visible and body class is updated
-		cy.contains('.blockera-colors-presets-count button', 'Color variables')
+		cy.contains('.blockera-colors-hub button', 'Color variables')
 			.should('be.visible')
 			.click({ force: true });
 
@@ -143,7 +140,7 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 			timeout: 4000,
 		}).should('not.exist');
 
-		cy.contains('.blockera-colors-presets-count', 'Color variables', {
+		cy.contains('.blockera-colors-hub', 'Color variables', {
 			timeout: 4000,
 		}).should('exist');
 	});
@@ -151,10 +148,7 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 	it('opens linear gradient variables and returns with ScreenHeader back', () => {
 		openGlobalStylesColorsFlow();
 
-		cy.contains(
-			'.blockera-colors-presets-count button',
-			'Linear gradient variables'
-		)
+		cy.contains('.blockera-colors-hub button', 'Linear gradient variables')
 			.should('be.visible')
 			.click({ force: true });
 
@@ -172,20 +166,15 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 			.should('exist')
 			.click({ force: true });
 
-		cy.contains(
-			'.blockera-colors-presets-count',
-			'Linear gradient variables',
-			{ timeout: 4000 }
-		).should('exist');
+		cy.contains('.blockera-colors-hub', 'Linear gradient variables', {
+			timeout: 4000,
+		}).should('exist');
 	});
 
 	it('opens radial gradient variables and returns with ScreenHeader back', () => {
 		openGlobalStylesColorsFlow();
 
-		cy.contains(
-			'.blockera-colors-presets-count button',
-			'Radial gradient variables'
-		)
+		cy.contains('.blockera-colors-hub button', 'Radial gradient variables')
 			.should('be.visible')
 			.click({ force: true });
 
@@ -203,11 +192,9 @@ describe('Global Styles → Colors panel (DOM + observer)', () => {
 			.should('exist')
 			.click({ force: true });
 
-		cy.contains(
-			'.blockera-colors-presets-count',
-			'Radial gradient variables',
-			{ timeout: 4000 }
-		).should('exist');
+		cy.contains('.blockera-colors-hub', 'Radial gradient variables', {
+			timeout: 4000,
+		}).should('exist');
 	});
 
 	it('removes colors override class when the useOverrideNavigator back target is clicked', () => {

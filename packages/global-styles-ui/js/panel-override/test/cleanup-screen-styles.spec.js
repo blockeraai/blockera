@@ -49,14 +49,14 @@ describe('cleanup-screen-styles', () => {
 	it('markPresetInspectorActive marks the direct parent of matched content', () => {
 		document.body.innerHTML = `
 			<div class="mount-target">
-				<div class="blockera-shadows-presets-navigation">Shadows</div>
+				<div class="blockera-shadows-panel">Shadows</div>
 			</div>
 		`;
 
 		markPresetInspectorActive(
 			'blockera-shadows-preset-inspector-active',
 			undefined,
-			'.blockera-shadows-presets-navigation'
+			'.blockera-shadows-panel'
 		);
 
 		expect(

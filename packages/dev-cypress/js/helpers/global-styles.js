@@ -196,7 +196,7 @@ export function openGlobalStylesColorPaletteScreen(
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-colors-presets-count').should('exist');
+	cy.get('.blockera-colors-hub').should('exist');
 
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(1000);
@@ -279,7 +279,7 @@ export function openGlobalStylesShadowsScreen({ reset } = { reset: true }) {
 	cy.wait(500);
 
 	return cy
-		.get('.blockera-shadows-presets', { timeout: 20000 })
+		.get('.blockera-shadows-editor', { timeout: 20000 })
 		.should('be.visible');
 }
 
@@ -358,9 +358,7 @@ export function openGlobalStylesTypographyFlow({ reset } = { reset: false }) {
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-font-size-presets-count', { timeout: 20000 }).should(
-		'exist'
-	);
+	cy.get('.blockera-font-size-hub', { timeout: 20000 }).should('exist');
 }
 
 /**
@@ -376,16 +374,13 @@ export function openGlobalStylesFontSizesVariablesScreen(
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
 
-	cy.contains(
-		'.blockera-font-size-presets-count button',
-		'Font size variables'
-	)
+	cy.contains('.blockera-font-size-hub button', 'Font size variables')
 		.scrollIntoView()
 		.should('exist')
 		.click({ force: true });
 
 	return cy
-		.get('.blockera-font-size-presets', { timeout: 20000 })
+		.get('.blockera-font-size-editor', { timeout: 20000 })
 		.should('be.visible');
 }
 
@@ -407,15 +402,12 @@ export function openGlobalStylesLinearGradientsScreen(
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-colors-presets-count').should('exist');
+	cy.get('.blockera-colors-hub').should('exist');
 
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
 
-	cy.contains(
-		'.blockera-colors-presets-count button',
-		'Linear gradient variables'
-	)
+	cy.contains('.blockera-colors-hub button', 'Linear gradient variables')
 		.should('be.visible')
 		.click({ force: true });
 
@@ -442,15 +434,12 @@ export function openGlobalStylesRadialGradientsScreen(
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-colors-presets-count').should('exist');
+	cy.get('.blockera-colors-hub').should('exist');
 
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
 
-	cy.contains(
-		'.blockera-colors-presets-count button',
-		'Radial gradient variables'
-	)
+	cy.contains('.blockera-colors-hub button', 'Radial gradient variables')
 		.should('be.visible')
 		.click({ force: true });
 

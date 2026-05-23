@@ -25,13 +25,13 @@ describe('Global Styles UI → box shadow presets (theme.json + UI)', () => {
 	it('merges theme shadow.presets.theme from theme.json, shows in UI, persists box-shadow edit', () => {
 		openGlobalStylesShadowsScreen();
 
-		cy.get('.blockera-shadows-presets', { timeout: 20000 }).should(
+		cy.get('.blockera-shadows-editor', { timeout: 20000 }).should(
 			'contain',
 			'E2E Theme Shadow'
 		);
 
 		cy.contains(
-			'.blockera-shadows-presets [data-cy="shadow-preset-repeater-item-header"]',
+			'.blockera-shadows-editor [data-cy="shadow-preset-repeater-item-header"]',
 			'E2E Theme Shadow'
 		).click({ force: true });
 
@@ -66,7 +66,7 @@ describe('Global Styles UI → box shadow presets (theme.json + UI)', () => {
 
 		openGlobalStylesShadowsScreen({ reset: false });
 
-		cy.get('.blockera-shadows-presets', { timeout: 20000 }).should(
+		cy.get('.blockera-shadows-editor', { timeout: 20000 }).should(
 			'contain',
 			'E2E Theme Shadow'
 		);
@@ -77,7 +77,7 @@ describe('Global Styles UI → box shadow presets (theme.json + UI)', () => {
 		});
 
 		cy.contains(
-			'.blockera-shadows-presets [data-cy="shadow-preset-repeater-item-header"]',
+			'.blockera-shadows-editor [data-cy="shadow-preset-repeater-item-header"]',
 			'E2E Theme Shadow'
 		).click({ force: true });
 

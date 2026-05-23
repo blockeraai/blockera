@@ -28,7 +28,7 @@ function FontSizesScreen({ onClick }: FontSizesScreenProps) {
 		<Flex
 			direction="column"
 			gap={'12px'}
-			className="blockera-font-size-presets-navigation blockera-font-size-presets-count"
+			className="blockera-font-size-panel blockera-font-size-hub"
 		>
 			<Subtitle level={3}>{__('Font Sizes', 'blockera')}</Subtitle>
 

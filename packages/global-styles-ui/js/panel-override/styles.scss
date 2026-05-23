@@ -152,7 +152,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		// Hide native WP "Font size presets" block; keep Blockera "Font size variables".
 		[data-wp-component="VStack"]:has(
 				button[id="/typography/font-sizes"]
-			):not(:has(.blockera-font-size-presets-count)) {
+			):not(:has(.blockera-font-size-hub)) {
 			display: none !important;
 		}
 
@@ -191,7 +191,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 .is-open-blockera-shadows-navigation-override {
 	@include blockera-preset-cleanup-screen-styles(
 		"blockera-shadows-preset-inspector-active",
-		"blockera-shadows-presets-navigation"
+		"blockera-shadows-panel"
 	);
 
 	#{$gs-header-description} {
@@ -203,7 +203,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 	}
 
 	#{$gs-screen-body} {
-		& > *:not(:has(.blockera-shadows-presets-navigation)) {
+		& > *:not(:has(.blockera-shadows-panel)) {
 			display: none;
 		}
 	}

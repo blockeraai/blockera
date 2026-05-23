@@ -15,14 +15,11 @@ const NAVIGATOR_SCREEN_SELECTOR =
 function openFontSizeVariablesScreen() {
 	openGlobalStylesTypographyFlow();
 
-	cy.contains(
-		'.blockera-font-size-presets-count button',
-		'Font size variables'
-	)
+	cy.contains('.blockera-font-size-hub button', 'Font size variables')
 		.should('be.visible')
 		.click({ force: true });
 
-	cy.get('.blockera-font-size-presets', { timeout: 15000 }).should(
+	cy.get('.blockera-font-size-editor', { timeout: 15000 }).should(
 		'be.visible'
 	);
 }
@@ -33,18 +30,18 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 
 		cy.get('button[id="/typography"]').should('exist');
 
-		cy.get('.blockera-font-size-presets-count').should('have.length', 1);
+		cy.get('.blockera-font-size-hub').should('have.length', 1);
 	});
 
 	it('does not mount duplicate font size preset rows while the list screen is present', () => {
 		openGlobalStylesTypographyFlow();
 
-		cy.get('.blockera-font-size-presets-count').should('have.length', 1);
+		cy.get('.blockera-font-size-hub').should('have.length', 1);
 
 		// eslint-disable-next-line cypress/no-unnecessary-waiting
 		cy.wait(400);
 
-		cy.get('.blockera-font-size-presets-count').should('have.length', 1);
+		cy.get('.blockera-font-size-hub').should('have.length', 1);
 	});
 
 	it('hides native WordPress font size presets entry while Blockera override is active', () => {
@@ -63,11 +60,11 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		);
 
 		cy.contains(
-			'.blockera-font-size-presets-count button',
+			'.blockera-font-size-hub button',
 			'Font size variables'
 		).click({ force: true });
 
-		cy.get('.blockera-font-size-presets').should('be.visible');
+		cy.get('.blockera-font-size-editor').should('be.visible');
 
 		cy.get('body').should('have.class', 'blockera-cleanup-screen-styles');
 
@@ -83,11 +80,11 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 	it('shows the font size variables shell with header copy after navigation', () => {
 		openFontSizeVariablesScreen();
 
-		cy.get('.blockera-font-size-presets')
+		cy.get('.blockera-font-size-editor')
 			.contains('Font Size Variables')
 			.should('be.visible');
 
-		cy.get('.blockera-font-size-presets')
+		cy.get('.blockera-font-size-editor')
 			.contains(
 				'Create and edit font size variables used for typography across the site.'
 			)
@@ -107,7 +104,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 
 		cy.get('body').should('have.class', 'blockera-cleanup-screen-styles');
 
-		cy.get('.blockera-font-size-presets .components-spacer').should(
+		cy.get('.blockera-font-size-editor .components-spacer').should(
 			($spacer) => {
 				const paddingLeft = parseFloat($spacer.css('padding-left'));
 				expect(paddingLeft).to.be.greaterThan(0);
@@ -122,7 +119,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			cy.contains('Font size presets').should('not.be.visible');
 		});
 
-		cy.get('.blockera-font-size-presets').should('be.visible');
+		cy.get('.blockera-font-size-editor').should('be.visible');
 	});
 
 	it('navigates to heading element screen and returns to typography list', () => {
@@ -135,7 +132,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			.first()
 			.click({ force: true });
 
-		cy.get('.blockera-font-size-presets-count').should('exist');
+		cy.get('.blockera-font-size-hub').should('exist');
 	});
 
 	it('ScreenHeader back runs onBack (clears cleanup + inspector-active, returns to list)', () => {
@@ -143,14 +140,11 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 
 		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
 
-		cy.contains(
-			'.blockera-font-size-presets-count button',
-			'Font size variables'
-		)
+		cy.contains('.blockera-font-size-hub button', 'Font size variables')
 			.should('be.visible')
 			.click({ force: true });
 
-		cy.get('.blockera-font-size-presets', { timeout: 10000 }).should(
+		cy.get('.blockera-font-size-editor', { timeout: 10000 }).should(
 			'be.visible'
 		);
 		cy.get('body', { timeout: 4000 }).should(
@@ -158,7 +152,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			'blockera-cleanup-screen-styles'
 		);
 
-		cy.get('.blockera-font-size-presets')
+		cy.get('.blockera-font-size-editor')
 			.find('button[data-wp-component="Navigator.BackButton"]')
 			.first()
 			.should('exist')
@@ -173,11 +167,9 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			timeout: 4000,
 		}).should('not.exist');
 
-		cy.contains(
-			'.blockera-font-size-presets-count',
-			'Font size variables',
-			{ timeout: 4000 }
-		).should('exist');
+		cy.contains('.blockera-font-size-hub', 'Font size variables', {
+			timeout: 4000,
+		}).should('exist');
 	});
 
 	it('removes typography override class when the useOverrideNavigator target back button is clicked', () => {

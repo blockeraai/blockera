@@ -8,6 +8,6 @@ export const typographyPanelHandler = createGlobalStylesPanelHandler({
 	panel: 'typography',
 	wpNavigationPath: '/typography',
 	Component: FontSizes,
-	componentSelector: '.blockera-font-size-presets-navigation',
-	whileNotExistSelectors: ['.blockera-font-size-presets-count'],
+	componentSelector: '.blockera-font-size-panel',
+	whileNotExistSelectors: ['.blockera-font-size-hub'],
 });

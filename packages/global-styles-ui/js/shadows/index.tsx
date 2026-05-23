@@ -307,7 +307,7 @@ function Shadows({ screenSelector }: ShadowsProps) {
 		enablePresetInspectorCleanup(
 			BLOCKERA_SHADOWS_PRESET_INSPECTOR_ACTIVE_CLASS,
 			undefined,
-			'.blockera-shadows-presets-navigation'
+			'.blockera-shadows-panel'
 		);
 
 		return () => {
@@ -323,7 +323,7 @@ function Shadows({ screenSelector }: ShadowsProps) {
 	}
 
 	return createPortal(
-		<div className="blockera-block-inspector-controls-wrapper blockera-shadows-presets-navigation">
+		<div className="blockera-block-inspector-controls-wrapper blockera-shadows-panel">
 			{/* We do not have access to the back button here, so we need to add the branding manually. */}
 			<PoweredBy
 				style={{
@@ -337,7 +337,7 @@ function Shadows({ screenSelector }: ShadowsProps) {
 			<Flex
 				direction="column"
 				gap="16px"
-				className="blockera-shadows-presets"
+				className="blockera-shadows-editor"
 				style={{
 					width: '100%',
 					marginTop: '10px',

@@ -147,7 +147,7 @@ function ColorsScreen({ onClick }: ColorsScreenProps) {
 		<Flex
 			direction="column"
 			gap={'12px'}
-			className="blockera-colors-presets-navigation blockera-colors-presets-count"
+			className="blockera-colors-panel blockera-colors-hub"
 		>
 			<Subtitle level={3}>{__('Colors', 'blockera')}</Subtitle>
 			<ColorsNavigationPreviews onClick={onClick} />
