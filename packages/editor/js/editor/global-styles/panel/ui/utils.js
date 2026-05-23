@@ -18,7 +18,7 @@ import { useMemo, useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { prepare } from '@blockera/data-editor';
-import { isString } from '@blockera/utils';
+import { isString, kebabCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -432,6 +432,19 @@ export function useGenericPreviewBlock(
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [skipHeavyClone, type?.example ? block?.name : block, type]);
+}
+
+/**
+ * Normalize a style/size variation ID while typing.
+ * Preserves a trailing hyphen (e.g. `style-` when deleting the numeric suffix of `style-1`).
+ *
+ * @param {string} value Raw ID input.
+ * @return {string} Lowercase kebab-case slug.
+ */
+export function sanitizeStyleVariationId(value: string): string {
+	return kebabCase(value.toLowerCase().trim(), {
+		suffixCharacters: '-',
+	});
 }
 
 /**
