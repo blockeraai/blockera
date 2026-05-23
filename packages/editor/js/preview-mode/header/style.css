@@ -26,7 +26,7 @@ body.blockera-zoom-active {
 	padding: 0 8px;
 	background: #f0f0f0;
 	z-index: 999999;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #cccccc;
 	box-sizing: border-box;
 }
 
@@ -99,13 +99,13 @@ body.blockera-zoom-active {
 	transition: var(--blockera-controls-transition, 0.15s ease);
 	font-family:
 		-apple-system,
-		"system-ui",
-		Segoe UI,
+		system-ui,
+		"Segoe UI",
 		Roboto,
 		Oxygen-Sans,
 		Ubuntu,
 		Cantarell,
-		Helvetica Neue,
+		"Helvetica Neue",
 		sans-serif;
 }
 
@@ -159,13 +159,13 @@ body.blockera-zoom-active .blockera-canvas-header__url-bar {
 	box-shadow: none;
 	font-family:
 		-apple-system,
-		"system-ui",
-		Segoe UI,
+		system-ui,
+		"Segoe UI",
 		Roboto,
 		Oxygen-Sans,
 		Ubuntu,
 		Cantarell,
-		Helvetica Neue,
+		"Helvetica Neue",
 		sans-serif;
 	font-weight: 500;
 	font-size: 13px;

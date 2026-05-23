@@ -14,6 +14,12 @@ import { useLayoutEffect, useCallback } from '@wordpress/element';
 import { Icon } from '@blockera/icons';
 import { Flex } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
+import {
+	getDualGlobalStylesSelector,
+	navigateToGlobalStylesPath,
+	BLOCKERA_NAVIGATION_OVERRIDE_CLASS,
+	BLOCKERA_NAVIGATION_PANEL_CLASS,
+} from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
@@ -24,10 +30,10 @@ import { GeneralNavigation } from './general-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
 
 export const initPath = '/';
-export const wpRootSelector = '.edit-site-global-styles-screen-root';
-export const overrideClassname = 'is-open-blockera-navigation-override';
+export const wpRootSelector: string = getDualGlobalStylesSelector('screenRoot');
+export const overrideClassname = BLOCKERA_NAVIGATION_OVERRIDE_CLASS;
 export const blockeraAdditionalPanelClassname = 'blockera-customized-panel';
-export const blockeraNavPanelClassname = 'is-open-blockera-navigation-panel';
+export const blockeraNavPanelClassname = BLOCKERA_NAVIGATION_PANEL_CLASS;
 
 function PathSync() {
 	const { location } = useNavigator();
@@ -106,9 +112,7 @@ export const BlockeraGlobalStylesNavigation = ({
 						<Navigator.Button
 							path={`${initPath}variations`}
 							onClick={() =>
-								document
-									.querySelector('button[id="/variations"]')
-									?.click()
+								navigateToGlobalStylesPath('/variations')
 							}
 						>
 							<Flex

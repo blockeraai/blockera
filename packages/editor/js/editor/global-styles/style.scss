@@ -1,27 +1,3 @@
-.has-blockera-global-styles-ui {
-	.edit-site-global-styles-sidebar__navigator-screen:not(
-			.has-not-blockera-extensions
-		) {
-		> *:not(
-				.blockera-extensions-wrapper,
-				.edit-site-global-styles-screen-root,
-				div:has(+ .edit-site-block-types-search),
-				.edit-site-block-types-search,
-				.edit-site-block-types-item-list,
-				div:has(+ .edit-site-global-styles-screen),
-				.edit-site-global-styles-screen,
-				div:first-child
-			) {
-			display: none;
-		}
-
-		> div:first-child:has(h2.edit-site-global-styles-header):not(:has(p)) {
-			display: none;
-			border-bottom: 1px solid #e0e0e0;
-		}
-	}
-}
-
 button[id^="/blocks/"] {
 	position: relative;
 

@@ -16,6 +16,11 @@ import {
 } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { queryActiveGlobalStylesNavigatorScreen } from '@blockera/global-styles-ui/panel-override/selectors';
+
+/**
  * Internal dependencies
  */
 import App from './app';
@@ -56,7 +61,9 @@ export const BlockGlobalStylesPanelScreen = ({
 	const [blockType, setBlockType] = useState(
 		getBlockType(selectedBlockStyle)
 	);
-	const screenElement = document.querySelector(screen);
+	const screenElement =
+		queryActiveGlobalStylesNavigatorScreen() ??
+		document.querySelector(screen);
 	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
 	const globalStylesBlockName =
 		selectedBlockStyle || selectedBlock?.name || blockType?.name;
@@ -185,6 +192,10 @@ export const BlockGlobalStylesPanelScreen = ({
 	}
 
 	screenElement?.classList.add('has-blockera-extensions');
+
+	if (!screenElement) {
+		return <></>;
+	}
 
 	return createPortal(
 		<div className={className}>

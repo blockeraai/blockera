@@ -10,6 +10,7 @@ import { select } from '@wordpress/data';
  */
 import { getBlockeraBlockInjectedSlotName } from '@blockera/controls';
 import { prependPortal } from '@blockera/utils';
+import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-override/selectors';
 
 const Component = ({ clientId, sentinelRef, stickyWrapperRef }) => (
 	<>
@@ -50,7 +51,7 @@ export const BlockPartials = memo(({ clientId, isActive }) => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				const wrapper = stickyWrapper.closest(
-					'.edit-site-global-styles-sidebar__navigator-provider'
+					getDualGlobalStylesSelector('navigatorProvider')
 				);
 
 				// Global styles sidebar wrapper should be styling with position absolute to sticky support while user scrolling.

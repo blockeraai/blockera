@@ -9,6 +9,11 @@ import { getBlockTypes } from '@wordpress/blocks';
 import { select, dispatch } from '@wordpress/data';
 
 /**
+ * Blockera dependencies
+ */
+import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-override/selectors';
+
+/**
  * Internal dependencies
  */
 import { getTargets } from '../header-ui/helpers';
@@ -42,7 +47,7 @@ export default function GlobalStylesActionsForBlocks({
 			callback: () => {
 				// Safety guard: ensure button exists before adding listener
 				const globalStylesButton = document.querySelector(
-					'button[aria-controls="edit-site:global-styles"]'
+					getDualGlobalStylesSelector('globalStylesSidebarButton')
 				);
 				const postDocumentButton = document.querySelector(
 					'button[aria-controls="edit-post:document"]'

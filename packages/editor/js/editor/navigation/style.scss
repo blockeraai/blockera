@@ -1,4 +1,5 @@
-.components-surface.components-card.edit-site-global-styles-screen-root {
+.components-surface.components-card.edit-site-global-styles-screen-root,
+.components-surface.components-card.global-styles-ui-screen-root {
 	--padding-size: 16px;
 
 	.blockera-back-navigation,
@@ -41,25 +42,7 @@
 		}
 	}
 
-	&.is-open-blockera-navigation-override {
-		.edit-site-global-styles-screen-root__active-style-tile,
-		.blockera-extension-navigation-category-description,
-		.components-spacer {
-			display: none;
-		}
-
-		.blockera-navigation-panel {
-			display: block;
-		}
-	}
-
-	&.is-open-blockera-navigation-panel {
-		.edit-site-global-styles-screen-root__active-style-tile,
-		.blockera-extension-navigation-category-description,
-		.components-spacer {
-			display: none;
-		}
-	}
+	// Root override visibility rules live in panel-override/styles.scss.
 
 	.components-item-group,
 	p.components-spacer {
