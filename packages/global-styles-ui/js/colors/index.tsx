@@ -16,30 +16,24 @@ import ColorPaletteScreen from './color-palette-screen';
 import LinearGradientsScreen from './linear-gradients-screen';
 import RadialGradientsScreen from './radial-gradients-screen';
 import { NavItemScreen } from '../navigation/nav-item-screen';
-import { useOverrideNavigator } from '../use-override-navigator';
+import {
+	useOverrideNavigator,
+	BLOCKERA_COLORS_PRESET_INSPECTOR_ACTIVE_CLASS,
+	disablePresetInspectorCleanup,
+	enablePresetInspectorCleanup,
+} from '../panel-override';
 
 const onBack = () => {
-	document.body.classList.remove('blockera-cleanup-screen-styles');
-	const parent = document.querySelector(
-		'.blockera-colors-preset-inspector-active'
+	disablePresetInspectorCleanup(
+		BLOCKERA_COLORS_PRESET_INSPECTOR_ACTIVE_CLASS
 	);
-
-	if (parent && parent instanceof HTMLElement) {
-		parent.classList.remove('blockera-colors-preset-inspector-active');
-	}
 };
 
 const onClick = (event: Event) => {
-	document.body.classList.add('blockera-cleanup-screen-styles');
-	const inspectorWrapper = (event.target as HTMLElement)?.closest(
-		'.blockera-block-inspector-controls-wrapper'
+	enablePresetInspectorCleanup(
+		BLOCKERA_COLORS_PRESET_INSPECTOR_ACTIVE_CLASS,
+		event
 	);
-
-	if (inspectorWrapper?.parentElement) {
-		inspectorWrapper.parentElement.classList.add(
-			'blockera-colors-preset-inspector-active'
-		);
-	}
 };
 
 interface ColorsProps {
