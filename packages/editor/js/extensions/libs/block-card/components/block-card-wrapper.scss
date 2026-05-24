@@ -1,7 +1,5 @@
 .blockera-global-styles-panel-aside {
-	
 	.blockera-block-card-wrapper {
-		
 		&.is-sticky-active {
 			border-top: none;
 		}
@@ -13,13 +11,21 @@
 		position: sticky;
 		top: 0;
 		z-index: 9999;
-		transition: box-shadow 0.075s ease, border 0.075s ease;
+		transition:
+			box-shadow 0.075s ease,
+			border 0.075s ease;
 		border-top: 1px solid transparent;
 
 		&.is-stuck {
-			box-shadow: 0 1px 0 #cbcbcb, 0 11px 11px -6px rgba(0, 0, 0, 0.16);
+			box-shadow:
+				0 1px 0 #cbcbcb,
+				0 11px 11px -6px rgba(0, 0, 0, 0.16);
 			border-top-color: var(--blockera-panel-tabs-tab-border-color);
 		}
+	}
+
+	&:has(.block-card--inner-block) {
+		border-top: 1px solid #f6f6f6;
 	}
 }
 
