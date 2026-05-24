@@ -14,6 +14,14 @@
 	.blockera-control-toggle-select {
 		--blockera-controls-input-height: 26px;
 		--padding: 2px;
-		gap: 4px;
+		gap: 1px;
+
+		.blockera-control-toggle-select-option .toggle-select-option-icon svg {
+			--icon-size: 18px;
+			max-height: var(--icon-size);
+			max-width: var(--icon-size);
+			min-height: var(--icon-size);
+			min-width: var(--icon-size);
+		}
 	}
 }
