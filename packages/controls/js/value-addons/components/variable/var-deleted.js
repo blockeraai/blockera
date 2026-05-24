@@ -120,6 +120,7 @@ export default function ({
 													iconSize="16"
 													style={{
 														fill: 'var(--blockera-controls-border-color-soft)',
+														border: 'none',
 													}}
 												/>
 											</span>
