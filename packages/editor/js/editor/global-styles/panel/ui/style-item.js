@@ -310,8 +310,8 @@ export const StyleItem = ({
 			? sprintf(
 					/* translators: %d: number of blocks using this size variation */
 					_n(
-						'This size variation is used for %d block.',
-						'This size variation is used for %d blocks.',
+						'This size variation is shared with %d block.',
+						'This size variation is shared with %d blocks.',
 						count,
 						'blockera'
 					),
@@ -320,8 +320,8 @@ export const StyleItem = ({
 			: sprintf(
 					/* translators: %d: number of blocks using this style variation */
 					_n(
-						'This style variation is used for %d block.',
-						'This style variation is used for %d blocks.',
+						'This style variation is shared with %d block.',
+						'This style variation is shared with %d blocks.',
 						count,
 						'blockera'
 					),
@@ -454,12 +454,12 @@ export const StyleItem = ({
 			);
 		}
 
-		// Category shortcut to "Use for multiple blocks" — only for users who can manage it.
+		// Category shortcut to "Share with other blocks" — only for users who can manage it.
 		if (!isUserCanSaveCustomizations) {
 			return null;
 		}
 
-		const useForBlocksLabel = __('Use for multiple blocks', 'blockera');
+		const useForBlocksLabel = __('Share with other blocks', 'blockera');
 		// Match `.blockera-style-item-multiple-blocks__item` svg rules: mb-icon-size − 4px.
 		const categoryIconSize = variant === 'block-card' ? '18' : '14';
 

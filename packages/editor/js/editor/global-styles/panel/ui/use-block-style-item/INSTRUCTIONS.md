@@ -301,9 +301,9 @@ When renaming a block style variation — regardless of origin (wp core theme.js
    - Use `buildMetadataTransferForRenamedStyle(blockeraMetaData, blockName, currentStyle.name, editedStyle.name, blockTypesToRegister, mergedVariation)`.
    - Copies all blockera metadata for the old style to the new style name:
      - **blocks**: For each block in `blockTypesToRegister`, copy `blocks[blockType].variations[oldStyleName]` → `variations[newStyleName]` (primary block uses `mergedVariation`; other blocks use old data with `name`/`label` updated).
-     - **variations**: Copy `variations[oldStyleName]` (enabledIn, disabledIn for "Use for multiple blocks") → `variations[newStyleName]` with `name`/`label` updated.
+     - **variations**: Copy `variations[oldStyleName]` (enabledIn, disabledIn for "Share with other blocks") → `variations[newStyleName]` with `name`/`label` updated.
    - Merge the transfer result into `metaDataWithDeleted` to produce final `updatedMetaData`.
-   - Ensures "Use for multiple blocks" settings (enabledIn, disabledIn) and per-block variation data (status, index) are preserved after rename.
+   - Ensures "Share with other blocks" settings (enabledIn, disabledIn) and per-block variation data (status, index) are preserved after rename.
 
 #### Rule 2: Extract duplicate logic into standalone helpers
 
@@ -428,7 +428,7 @@ Saves the selected block's current attributes as the global style for the given 
 Manages style variation usage across multiple block types. Two handlers work together:
 
 1. **handleOnUsageForMultipleBlocks** — Updates block styles picker UI when the selected block type is enabled/disabled for a style (add/remove style from `blockStyles` list).
-2. **handleOnSaveUsageForMultipleBlocks** — Applies the "Use for Multiple Blocks" modal changes: register/unregister block styles, update style variation blocks store, update global styles and metadata.
+2. **handleOnSaveUsageForMultipleBlocks** — Applies the "Share with other blocks" modal changes: register/unregister block styles, update style variation blocks store, update global styles and metadata.
 
 The main save logic lives in `handleOnSaveUsageForMultipleBlocks`; `BlockTypes` (block-types.js) is the UI and delegates to it.
 

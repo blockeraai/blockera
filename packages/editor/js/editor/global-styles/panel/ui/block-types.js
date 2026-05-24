@@ -506,7 +506,7 @@ export const BlockTypes = ({
 								{sprintf(
 									/* translators: 1: Current number of blocks using the style, 2: Free tier maximum. */
 									__(
-										'%1$d / %2$d blocks used (Free limit)',
+										'%1$d / %2$d blocks shared (Free limit)',
 										'blockera'
 									),
 									blocksState.items.length,
@@ -686,13 +686,13 @@ export const BlockTypes = ({
 							<Icon icon="category" library="wp" iconSize={24} />
 						),
 						title: __(
-							'Share Style Variation for Multiple Blocks',
+							'Share Style Variation with Other Blocks',
 							'blockera'
 						),
 						description: (
 							<Flex direction="column" gap="6px">
 								{__(
-									'Share a single style variation on as many blocks as you need',
+									'Share a single style variation with other blocks',
 									'blockera'
 								)}
 								<Flex direction="row" gap="6px">

@@ -46,7 +46,7 @@
 		margin 0.2s ease-in-out;
 	color: #000000 !important;
 	box-sizing: border-box;
-	outline: 2px solid #ffffff;
+	outline: 1px solid #ffffff;
 	font-size: 10px;
 	font-weight: 600;
 
@@ -73,6 +73,7 @@
 	.blockera-style-item-multiple-blocks__item {
 	margin-left: -8px;
 	color: var(--blockera-controls-primary-color) !important;
+	outline: 2px solid #ffffff;
 
 	svg {
 		fill: var(--blockera-controls-primary-color) !important;

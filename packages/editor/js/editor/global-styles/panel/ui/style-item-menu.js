@@ -196,7 +196,7 @@ export const StyleItemMenu = (): MixedElement => {
 								}}
 							>
 								<Icon icon="block-types" iconSize="24" />
-								{__('Use for multiple blocks', 'blockera')}
+								{__('Share with other blocks', 'blockera')}
 							</Button>
 						)}
 

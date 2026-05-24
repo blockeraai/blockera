@@ -46,7 +46,7 @@ export const UsageForMultipleBlocksModal = ({
 			headerIcon={<Icon icon="block-types" iconSize="34" />}
 			headerTitle={sprintf(
 				/* translators: %1$s: The style name. */
-				__('Use "%1$s" for Multiple Blocks', 'blockera'),
+				__('Share "%1$s" with Other Blocks', 'blockera'),
 				style.label
 			)}
 			isDismissible={true}
