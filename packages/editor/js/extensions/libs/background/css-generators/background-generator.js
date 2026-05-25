@@ -178,6 +178,14 @@ export function backgroundGenerator(id, props, options) {
 				properties.attachment.push(item['mesh-gradient-attachment']);
 
 				break;
+
+			case 'none':
+				properties.image.push('none');
+				properties.size.push('auto');
+				properties.position.push('0 0');
+				properties.repeat.push('repeat');
+				properties.attachment.push('scroll');
+				break;
 		}
 
 		return undefined;

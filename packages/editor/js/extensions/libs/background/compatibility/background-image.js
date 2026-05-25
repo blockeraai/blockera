@@ -247,6 +247,44 @@ export function backgroundToWPCompatibility({
 		let gradient: ValueAddon | boolean | string = false;
 
 		switch (item?.type) {
+			case 'none':
+				result = mergeObject(
+					result,
+					runInsideBlockInspector(
+						insideBlockInspector,
+						editorSelectedBlockEvent
+					)
+						? {
+								style: {
+									background: {
+										backgroundImage: undefined,
+										backgroundSize: undefined,
+										backgroundPosition: undefined,
+										backgroundRepeat: undefined,
+									},
+									color: {
+										gradient: undefined,
+									},
+								},
+								gradient: undefined,
+							}
+						: {
+								background: {
+									backgroundImage: undefined,
+									backgroundSize: undefined,
+									backgroundPosition: undefined,
+									backgroundRepeat: undefined,
+								},
+								color: {
+									gradient: undefined,
+								},
+							}
+				);
+
+				processedItems.push('none');
+
+				break;
+
 			case 'image':
 				if (item?.image === '') {
 					break;

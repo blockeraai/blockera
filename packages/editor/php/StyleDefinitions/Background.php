@@ -35,6 +35,7 @@ class Background extends BaseStyleDefinition implements Repeater {
 		'linear-gradient' => true,
 		'radial-gradient' => true,
 		'mesh-gradient'   => true,
+		'none'            => true,
 	];
 
 	/**
@@ -55,6 +56,10 @@ class Background extends BaseStyleDefinition implements Repeater {
 
 		if ( ! isset( self::REPEATER_ITEM_TYPES[ $type ] ) ) {
 			return false;
+		}
+
+		if ( 'none' === $type ) {
+			return isset( $setting['isVisible'] ) && $setting['isVisible'];
 		}
 
 		// Direct truthy checks avoid empty() overhead and double array access.
@@ -136,7 +141,31 @@ class Background extends BaseStyleDefinition implements Repeater {
 			case 'mesh-gradient':
 				$this->setMeshGradient( $setting );
 				break;
+
+			case 'none':
+				$this->setNoneBackground( $setting );
+				break;
 		}
+	}
+
+	/**
+	 * Setup none background style — clears layered background for this context.
+	 *
+	 * @param array $setting The none background setting.
+	 *
+	 * @return void
+	 */
+	protected function setNoneBackground( array $setting ): void {
+
+		$props = [
+			'background-image'      => 'none',
+			'background-size'       => 'auto',
+			'background-position'   => '0 0',
+			'background-repeat'     => 'repeat',
+			'background-attachment' => 'scroll',
+		];
+
+		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
 
 	/**
