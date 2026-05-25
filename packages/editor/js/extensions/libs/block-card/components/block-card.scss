@@ -322,6 +322,14 @@
 	}
 }
 
+.blockera-block-card-wrapper:not(.is-stuck) {
+	.blockera-extension.blockera-extension-block-card {
+		&.outside-block-inspector {
+			border-top: 1px solid #e0e0e0;
+		}
+	}
+}
+
 // Fix for Block Card Tabs in Block Inspector
 // It's a bug from tabs component
 // It happens because tabs are hidden while
