@@ -105,7 +105,6 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		}
 
 		// Native block screen sections replaced by Blockera on per-block screens.
-		#{$gs-block-preview-panel},
 		.global-styles-ui-screen-variations {
 			display: none !important;
 		}
