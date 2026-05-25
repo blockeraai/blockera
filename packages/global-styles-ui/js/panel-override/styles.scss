@@ -30,8 +30,16 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 			padding: 0;
 
 			@if $reset-spacer-padding {
-				.components-spacer {
-					padding: 0;
+				@if 'blockera-shadows-panel' == $content-wrapper-class {
+					.components-spacer:not(:has(button[data-wp-component="Navigator.BackButton"])) {
+						padding: 0;
+					}
+				}
+
+				@if 'blockera-shadows-panel' != $content-wrapper-class {
+					.components-spacer {
+						padding: 0;
+					}
 				}
 			}
 		}
@@ -40,8 +48,16 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 				.#{$inspector-active-class}
 					div[data-wp-component="Navigator.Screen"]:first-child
 			) {
-			> div:first-child {
-				display: none;
+			@if 'blockera-shadows-panel' == $content-wrapper-class {
+				> div:first-child:not(:has(button[data-wp-component="Navigator.BackButton"])) {
+					display: none;
+				}
+			}
+
+			@if 'blockera-shadows-panel' != $content-wrapper-class {
+				> div:first-child {
+					display: none;
+				}
 			}
 		}
 	}
@@ -120,6 +136,14 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		"blockera-colors-preset-inspector-active"
 	);
 
+	.blockera-block-inspector-controls-wrapper + div[data-wp-component="VStack"] {
+		display: none;
+	}
+
+	.global-styles-ui-screen-body:has(.blockera-colors-preset-inspector-active) + .components-tools-panel {
+		display: none;
+	}
+
 	#{$gs-screen-body} {
 		& > *:nth-child(2) {
 			display: none;
@@ -152,7 +176,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		// Hide native WP "Font size presets" block; keep Blockera "Font size variables".
 		[data-wp-component="VStack"]:has(
 				button[id="/typography/font-sizes"]
-			):not(:has(.blockera-font-size-hub)) {
+			):not(:has(.blockera-font-size-hub, .blockera-font-size-editor-groups)) {
 			display: none !important;
 		}
 
