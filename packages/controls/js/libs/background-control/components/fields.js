@@ -148,6 +148,21 @@ const Fields: FieldItem = memo<FieldItem>(
 					}
 				/>
 
+				{item.type === 'none' && (
+					<BaseControl
+						label=""
+						columns="columns-1"
+						controlName="empty"
+					>
+						<NoticeControl type="information">
+							{__(
+								'Background is set to none. This block will not have a layered background at this style context.',
+								'blockera'
+							)}
+						</NoticeControl>
+					</BaseControl>
+				)}
+
 				{item.type === 'image' && (
 					<>
 						<MediaImageControl

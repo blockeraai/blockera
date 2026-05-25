@@ -110,6 +110,12 @@ export default function BackgroundControl({
 		for (const [itemId, item] of Object.entries(value)) {
 			const cleanedItem: Object = cleanupRepeaterItem({ ...item });
 
+			// Preserve all type-specific fields so users can switch back from none.
+			if (item?.type === 'none') {
+				cleanedValue[itemId] = cleanedItem;
+				continue;
+			}
+
 			if (item?.type !== 'image') {
 				delete cleanedItem.image;
 				delete cleanedItem['image-size'];
