@@ -938,6 +938,32 @@ describe(
 					});
 				});
 			});
+
+			context('none type', () => {
+				it('should show informational notice when none is selected', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <BackgroundControl />,
+						value: {
+							'none-0': {
+								type: 'none',
+								isVisible: true,
+								isOpen: true,
+							},
+						},
+						store: STORE_NAME,
+						name,
+					});
+
+					cy.get('.blockera-component-popover', {
+						timeout: 20000,
+					}).should('be.visible');
+
+					cy.contains(
+						'Background is set to none. This block will not have a layered background at this style context.'
+					).should('be.visible');
+				});
+			});
 		});
 	}
 );
