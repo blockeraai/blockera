@@ -115,7 +115,7 @@ const Screens = ({
 				/>
 			</div>
 
-			<Flex direction="column" gap="20px">
+			<Flex direction="column" gap="20px" style={{ padding: '0 16px' }}>
 				<Flex
 					gap="4px"
 					direction="column"
