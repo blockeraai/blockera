@@ -14,6 +14,9 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				// Features selectors.
+				'color' => [
+					'root' => ' .wp-block-button__link',
+				],
 				'flex-child' => [
 					'root' => '.wp-block-button',
 				],
