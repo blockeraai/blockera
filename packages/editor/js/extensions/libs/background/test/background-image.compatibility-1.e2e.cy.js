@@ -355,6 +355,80 @@ describe('Background → WP Compatibility', () => {
 				});
 			});
 		});
+
+		describe('WP gradient sentinel values', () => {
+			const getNoneBackgroundItem = (blockeraBackground) => {
+				return Object.entries(blockeraBackground).find(
+					([, item]) => item?.type === 'none'
+				);
+			};
+
+			it('should map gradient "none" to none background layer', () => {
+				appendBlocks(
+					'<!-- wp:paragraph {"style":{"color":{"gradient":"none"}}} -->\n' +
+						'<p class="has-background" style="background:none">Paragraph with none gradient sentinel</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				cy.getBlock('core/paragraph').click();
+				cy.getParentContainer('Image & Gradient').as('bgContainer');
+				cy.addNewTransition();
+
+				getWPDataObject().then((data) => {
+					const blockeraBackground = getSelectedBlock(
+						data,
+						'blockeraBackground'
+					);
+					const noneEntry = getNoneBackgroundItem(blockeraBackground);
+
+					expect(noneEntry).to.not.equal(undefined);
+					expect(noneEntry[1].type).to.equal('none');
+					expect(blockeraBackground['linear-gradient-0']).to.equal(
+						undefined
+					);
+					expect(blockeraBackground['radial-gradient-0']).to.equal(
+						undefined
+					);
+				});
+
+				cy.getBlock('core/paragraph').should(($block) => {
+					expect($block.css('background-image')).to.equal('none');
+				});
+			});
+
+			it('should map gradient "transparent none" to none layer and transparent background color', () => {
+				appendBlocks(
+					'<!-- wp:paragraph {"style":{"color":{"gradient":"transparent none"}}} -->\n' +
+						'<p class="has-background" style="background:transparent none">Paragraph with transparent none gradient sentinel</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				cy.getBlock('core/paragraph').click();
+				cy.getParentContainer('Image & Gradient').as('bgContainer');
+				cy.addNewTransition();
+
+				getWPDataObject().then((data) => {
+					const blockeraBackground = getSelectedBlock(
+						data,
+						'blockeraBackground'
+					);
+					const noneEntry = getNoneBackgroundItem(blockeraBackground);
+
+					expect(noneEntry).to.not.equal(undefined);
+					expect(noneEntry[1].type).to.equal('none');
+					expect(
+						getSelectedBlock(data, 'blockeraBackgroundColor')
+					).to.equal('transparent');
+				});
+
+				cy.getBlock('core/paragraph').should(($block) => {
+					expect($block.css('background-image')).to.equal('none');
+					expect($block.css('background-color')).to.equal(
+						'rgba(0, 0, 0, 0)'
+					);
+				});
+			});
+		});
 	});
 
 	describe('Group Block', () => {
