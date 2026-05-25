@@ -10,6 +10,11 @@ import { getGradientVAFromVarString, getGradientType } from '@blockera/data';
  * Internal dependencies
  */
 import { runInsideBlockInspector } from '../../../utils';
+import {
+	createNoneBackgroundLayer,
+	normalizeWpGradientSentinel,
+	resolveElementWpGradientRawString,
+} from '../../../background/compatibility/wp-gradient-sentinel';
 
 export function elementNormalBackgroundFromWPCompatibility({
 	innerBlock,
@@ -30,6 +35,36 @@ export function elementNormalBackgroundFromWPCompatibility({
 		!attributes?.elements?.[dataCompatibilityElement]?.color?.gradient
 	) {
 		return false;
+	}
+
+	const rawGradient = resolveElementWpGradientRawString(
+		attributes,
+		dataCompatibilityElement,
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+	const gradientSentinel = normalizeWpGradientSentinel(rawGradient);
+
+	if (gradientSentinel) {
+		const innerAttributes: Object = {
+			blockeraBackground: {
+				'none-0': createNoneBackgroundLayer(),
+			},
+		};
+
+		if (gradientSentinel === 'transparent-none') {
+			innerAttributes.blockeraBackgroundColor = 'transparent';
+		}
+
+		return {
+			blockeraInnerBlocks: {
+				value: {
+					[innerBlock]: {
+						attributes: innerAttributes,
+					},
+				},
+			},
+		};
 	}
 
 	//

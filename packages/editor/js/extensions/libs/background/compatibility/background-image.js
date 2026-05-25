@@ -10,6 +10,11 @@ import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import { runInsideBlockInspector } from '../../utils';
+import {
+	createNoneBackgroundLayer,
+	normalizeWpGradientSentinel,
+	resolveWpGradientRawString,
+} from './wp-gradient-sentinel';
 
 export function backgroundFromWPCompatibility({
 	attributes,
@@ -89,7 +94,7 @@ export function backgroundFromWPCompatibility({
 
 		attributes.blockeraBackground = {
 			value: {
-				...attributes.blockeraBackground.value,
+				...attributes.blockeraBackground?.value,
 				'image-0': bgImage,
 			},
 		};
@@ -98,6 +103,30 @@ export function backgroundFromWPCompatibility({
 	//
 	// Gradient Background
 	//
+	const rawGradient = resolveWpGradientRawString(
+		attributes,
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+	const gradientSentinel = normalizeWpGradientSentinel(rawGradient);
+
+	if (gradientSentinel) {
+		attributes.blockeraBackground = {
+			value: {
+				...attributes.blockeraBackground?.value,
+				'none-0': createNoneBackgroundLayer(),
+			},
+		};
+
+		if (gradientSentinel === 'transparent-none') {
+			attributes.blockeraBackgroundColor = {
+				value: 'transparent',
+			};
+		}
+
+		return attributes;
+	}
+
 	let gradient: ValueAddon | boolean | string = false;
 	let gradientType: string = '';
 
@@ -151,7 +180,7 @@ export function backgroundFromWPCompatibility({
 
 			attributes.blockeraBackground = {
 				value: {
-					...attributes.blockeraBackground.value,
+					...attributes.blockeraBackground?.value,
 					'linear-gradient-0': {
 						type: gradientType,
 						'linear-gradient': gradient,
@@ -166,7 +195,7 @@ export function backgroundFromWPCompatibility({
 		} else {
 			attributes.blockeraBackground = {
 				value: {
-					...attributes.blockeraBackground.value,
+					...attributes.blockeraBackground?.value,
 					'radial-gradient-0': {
 						type: gradientType,
 						'radial-gradient': gradient,
