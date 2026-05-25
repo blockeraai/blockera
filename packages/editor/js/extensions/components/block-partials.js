@@ -57,6 +57,7 @@ export const BlockPartials = memo(({ clientId, isActive }) => {
 				// Global styles sidebar wrapper should be styling with position absolute to sticky support while user scrolling.
 				if (wrapper) {
 					wrapper.style.position = 'absolute';
+					wrapper.style.width = '100%';
 				}
 
 				// Add `is-stuck-monitoring` to prevent `is-stuck` atr first time
