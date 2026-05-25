@@ -13,6 +13,7 @@ export { default as AxisY } from './axis-y.svg';
 export { default as BackgroundImage } from './background-image.svg';
 export { default as BackgroundLinearGradient } from './background-linear-gradient';
 export { default as BackgroundMeshGradient } from './background-mesh-gradient';
+export { default as BackgroundNone } from './background-none.svg';
 export { default as BackgroundRadialGradient } from './background-radial-gradient';
 export { default as BackgroundSlideshow } from './background-slideshow.svg';
 export { default as BackgroundVideo } from './background-video.svg';
