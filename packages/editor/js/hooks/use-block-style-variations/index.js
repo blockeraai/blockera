@@ -31,6 +31,12 @@ import {
 	getThemeVariationConfigsFromCoreStore,
 	mergeBlockVariationsTrees,
 } from '../../editor/global-styles/variation-filters';
+import { alignStyleRowsWithSharedRootVariation } from '../../editor/global-styles/panel/size-variations';
+import {
+	blockUsesSharedRootStyleVariation,
+	getBlockVariationSupport,
+} from '../../editor/global-styles/panel/block-variation-support';
+import { STORE_NAME as EXTENSIONS_STORE_NAME } from '../../extensions/store/constants';
 import { useSizeVariationsForBlocks } from './use-size-variations-for-blocks';
 
 const noop = () => {};
@@ -95,8 +101,30 @@ export const useBlockStyleVariations = ({
 		variationSurface: contextVariationSurface = VARIATION_SURFACE_STYLE,
 		baseConfig,
 		userConfig,
+		usesSharedRootStyleVariation: contextUsesSharedRoot = false,
 	} = useGlobalStylesPanelContext();
 	const variationSurface = variationSurfaceProp ?? contextVariationSurface;
+
+	const blockExtension = useSelect(
+		(select) => {
+			const { getBlockExtensionBy } = select(EXTENSIONS_STORE_NAME) || {};
+			if (typeof getBlockExtensionBy !== 'function') {
+				return null;
+			}
+			return getBlockExtensionBy('targetBlock', blockName);
+		},
+		[blockName]
+	);
+
+	const usesSharedRootStyleVariation = useMemo(() => {
+		if (contextUsesSharedRoot) {
+			return true;
+		}
+
+		return blockUsesSharedRootStyleVariation(
+			getBlockVariationSupport(blockExtension)
+		);
+	}, [contextUsesSharedRoot, blockExtension]);
 
 	const inspectorThemeConfigs = useSelect(
 		(select: Function) =>
@@ -172,8 +200,13 @@ export const useBlockStyleVariations = ({
 			stylesFromWp.stylesToRender,
 			mergedVariations
 		);
-		const list =
+		const baseList =
 			filtered.length > 0 ? filtered : stylesFromWp.stylesToRender;
+		const list = alignStyleRowsWithSharedRootVariation(
+			baseList,
+			mergedVariations,
+			usesSharedRootStyleVariation
+		);
 		const active = getActiveStyle(list, stylesFromWp.className);
 		const deleted = typeof active === 'string' ? active : false;
 		return {
@@ -182,7 +215,7 @@ export const useBlockStyleVariations = ({
 			activeStyle: deleted ? getDefaultStyle(list) : active,
 			isDeletedStyle: deleted,
 		};
-	}, [stylesFromWp, mergedVariations]);
+	}, [stylesFromWp, mergedVariations, usesSharedRootStyleVariation]);
 
 	const sizeVariationMetaRoot = useMemo(
 		() => blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations,
@@ -196,6 +229,7 @@ export const useBlockStyleVariations = ({
 		mergedVariationsBySlug: mergedVariations,
 		sizeVariationMetaRoot,
 		inGlobalStylesPanel,
+		usesSharedRootStyleVariation,
 		inspectorApplyClassName:
 			!inGlobalStylesPanel && variationSurface === VARIATION_SURFACE_SIZE,
 		event,
@@ -225,6 +259,22 @@ export const useBlockStyleVariations = ({
 
 	useEffect(() => {
 		if (variationSurface === VARIATION_SURFACE_SIZE) {
+			if (
+				undefined === currentBlockStyleVariation &&
+				currentActiveStyle &&
+				!currentActiveStyle.isDefault
+			) {
+				setCurrentActiveStyle(getDefaultStyle(stylesToRender));
+			}
+
+			if (
+				currentBlockStyleVariation?.name &&
+				currentActiveStyle?.name &&
+				currentBlockStyleVariation?.name !== currentActiveStyle?.name
+			) {
+				setCurrentActiveStyle(currentBlockStyleVariation);
+			}
+
 			const hookName = activeStyle?.name ?? '';
 			const curName = currentActiveStyle?.name ?? '';
 			if (hookName !== curName) {
@@ -277,13 +327,6 @@ export const useBlockStyleVariations = ({
 				: __('Missing Style Variation', 'blockera');
 		}
 
-		if (
-			variationSurface === VARIATION_SURFACE_SIZE &&
-			!currentActiveStyle?.name
-		) {
-			return __('Size variations', 'blockera');
-		}
-
 		return (
 			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
 				currentActiveStyle?.name
@@ -331,7 +374,7 @@ export const useBlockStyleVariations = ({
 			storedAttributes,
 			defaultAttributes,
 			currentBlockStyleVariation,
-			variationSurface,
+			usesSharedRootStyleVariation,
 		});
 
 	if (!enabled) {

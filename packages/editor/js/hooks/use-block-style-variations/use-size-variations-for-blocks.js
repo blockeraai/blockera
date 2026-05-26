@@ -25,10 +25,11 @@ import {
 	getActiveSizeVariationFromClass,
 	getActiveStyle,
 	getRenderedStyles,
+	getDefaultStyle,
 	replaceActiveSizeVariation,
 	useGenericPreviewBlock,
-	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
 } from '../../editor/global-styles/panel/ui/utils';
+import { normalizeSizeVariationRows } from '../../editor/global-styles/panel/size-variations';
 import { STORE_NAME } from '../../store/constants';
 
 export function useSizeVariationsForBlocks({
@@ -38,6 +39,7 @@ export function useSizeVariationsForBlocks({
 	mergedVariationsBySlug,
 	sizeVariationMetaRoot,
 	inGlobalStylesPanel = false,
+	usesSharedRootStyleVariation = false,
 	inspectorApplyClassName = false,
 	event = 'click',
 }: {
@@ -47,6 +49,7 @@ export function useSizeVariationsForBlocks({
 	mergedVariationsBySlug: Object,
 	sizeVariationMetaRoot?: Object,
 	inGlobalStylesPanel?: boolean,
+	usesSharedRootStyleVariation?: boolean,
 	inspectorApplyClassName?: boolean,
 	event?: 'click' | 'detach',
 }): Object {
@@ -116,11 +119,14 @@ export function useSizeVariationsForBlocks({
 			mergedVariationsBySlug
 		);
 
-		return enrichSizeVariationRowsFromMerged(
-			sizesOnly,
-			mergedVariationsBySlug,
-			blockName,
-			sizeVariationMetaRoot
+		return normalizeSizeVariationRows(
+			enrichSizeVariationRowsFromMerged(
+				sizesOnly,
+				mergedVariationsBySlug,
+				blockName,
+				sizeVariationMetaRoot
+			),
+			usesSharedRootStyleVariation
 		);
 	}, [
 		enabled,
@@ -130,6 +136,7 @@ export function useSizeVariationsForBlocks({
 		inGlobalStylesPanel,
 		mergedVariationsBySlug,
 		sizeVariationMetaRoot,
+		usesSharedRootStyleVariation,
 	]);
 
 	const selectedFromStore = useSelect(
@@ -183,7 +190,7 @@ export function useSizeVariationsForBlocks({
 			}
 
 			if (typeof viaSizePrefix === 'string') {
-				return getDefaultFromSizeList(stylesToRender);
+				return getDefaultStyle(stylesToRender);
 			}
 
 			let matchedLegacyStyle = null;
@@ -205,15 +212,15 @@ export function useSizeVariationsForBlocks({
 
 			const ghost = getActiveStyle(stylesToRender, className);
 			if (typeof ghost === 'string') {
-				return getDefaultFromSizeList(stylesToRender);
+				return getDefaultStyle(stylesToRender);
 			}
 
-			return null;
+			return getDefaultStyle(stylesToRender);
 		}
 
 		const selName = selectedFromStore?.name;
 		if (!selName) {
-			return null;
+			return getDefaultStyle(stylesToRender);
 		}
 		return stylesToRender.find((s) => s.name === selName) || null;
 	}, [
@@ -227,82 +234,10 @@ export function useSizeVariationsForBlocks({
 	const isDeletedStyle = Boolean(missingUnknownSizeSlug);
 
 	const inspectorSizeChoiceHandledRef = useRef(false);
-	const prevHadKnownSizeClassRef = useRef(false);
 
 	useEffect(() => {
 		inspectorSizeChoiceHandledRef.current = false;
-		prevHadKnownSizeClassRef.current = false;
 	}, [clientId, blockName]);
-
-	const knownSizeSlugs = useMemo(() => {
-		return new Set(
-			(stylesToRender || []).map((s) =>
-				typeof s?.name === 'string' ? s.name : ''
-			)
-		);
-	}, [stylesToRender]);
-
-	useEffect(() => {
-		if (!inspectorApplyClassName || !enabled) {
-			return;
-		}
-
-		const nowHasKnown = classNameHasKnownIsSizeSlug(
-			className,
-			knownSizeSlugs
-		);
-
-		if (prevHadKnownSizeClassRef.current && !nowHasKnown) {
-			inspectorSizeChoiceHandledRef.current = true;
-		}
-		prevHadKnownSizeClassRef.current = nowHasKnown;
-	}, [inspectorApplyClassName, enabled, className, knownSizeSlugs]);
-
-	useEffect(() => {
-		if (!inspectorApplyClassName || !enabled || !clientId) {
-			return;
-		}
-		if (inspectorSizeChoiceHandledRef.current) {
-			return;
-		}
-		if (!stylesToRender?.length) {
-			return;
-		}
-
-		const defaultRow = stylesToRender.find(
-			(s) => s.blockeraIsDefaultVariation === true
-		);
-		if (!defaultRow?.name) {
-			return;
-		}
-
-		if (classNameHasKnownIsSizeSlug(className, knownSizeSlugs)) {
-			return;
-		}
-
-		const nextClass = replaceActiveSizeVariation(
-			className,
-			null,
-			defaultRow,
-			'click'
-		);
-
-		if (nextClass === className) {
-			return;
-		}
-
-		updateBlockAttributes(clientId, {
-			className: nextClass,
-		});
-	}, [
-		inspectorApplyClassName,
-		enabled,
-		clientId,
-		stylesToRender,
-		className,
-		knownSizeSlugs,
-		updateBlockAttributes,
-	]);
 
 	const onSelect = useCallback(
 		(newStyle: Object) => {
@@ -341,36 +276,13 @@ export function useSizeVariationsForBlocks({
 		onSelect,
 		stylesToRender,
 		activeStyle: isDeletedStyle
-			? getDefaultFromSizeList(stylesToRender)
+			? getDefaultStyle(stylesToRender)
 			: activeStyle,
 		isDeletedStyle: missingUnknownSizeSlug,
 		genericPreviewBlock,
 		className,
 		previewClassName: '',
 	};
-}
-
-function classNameHasKnownIsSizeSlug(
-	className: string,
-	knownSlugs: Set<string>
-): boolean {
-	const prefixLen = BLOCK_SIZE_VARIATION_CLASS_PREFIX.length;
-
-	for (const cls of new TokenList(className || '').values()) {
-		if (
-			cls.indexOf(BLOCK_SIZE_VARIATION_CLASS_PREFIX) !== 0 ||
-			cls.length <= prefixLen
-		) {
-			continue;
-		}
-
-		const slug = cls.slice(prefixLen);
-		if (knownSlugs.has(slug)) {
-			return true;
-		}
-	}
-
-	return false;
 }
 
 function enrichSizeVariationRowsFromMerged(
@@ -417,10 +329,19 @@ function enrichSizeVariationRowsFromMerged(
 					}
 				: {};
 
+		const isDefaultFromMeta = meta.isDefault === true;
+		const isDefaultFromTheme =
+			data !== null &&
+			typeof data === 'object' &&
+			data.blockeraIsDefaultVariation === true;
+
 		return {
 			...row,
 			label: metaLabel || row.label || dataLabel || dataTitle || slug,
 			...mergedFlags,
+			...(isDefaultFromMeta || isDefaultFromTheme
+				? { isDefault: true }
+				: {}),
 		};
 	});
 }
@@ -453,8 +374,4 @@ function appendMissingSizeVariationRows(
 	}
 
 	return [...rows, ...missingRows];
-}
-
-function getDefaultFromSizeList(styles: Array<Object>): Object | null {
-	return styles.find((s) => s.isDefault) || styles[0] || null;
 }
