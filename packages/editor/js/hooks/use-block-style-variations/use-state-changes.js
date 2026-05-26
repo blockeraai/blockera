@@ -20,23 +20,20 @@ import {
 	getBlockAttributes,
 } from '../../editor/global-styles/panel/context';
 import { prepareBlockeraDefaultAttributesValues } from '../../extensions/components/utils';
-import {
-	VARIATION_SURFACE_SIZE,
-	VARIATION_SURFACE_STYLE,
-} from '../../editor/global-styles/panel/variation-surfaces';
+import { isVariationScopedStyleEdit } from '../../editor/global-styles/panel/size-variations';
 
 export const useStateChanges = ({
 	blockName,
 	storedAttributes,
 	defaultAttributes,
 	currentBlockStyleVariation,
-	variationSurface = VARIATION_SURFACE_STYLE,
+	usesSharedRootStyleVariation = false,
 }: {
 	blockName: string,
 	storedAttributes: Object,
 	defaultAttributes: Object,
 	currentBlockStyleVariation: Object,
-	variationSurface?: string,
+	usesSharedRootStyleVariation?: boolean,
 }): Object => {
 	const { blockeraOverrideBlockAttributes } = useMemo(
 		() => getBlockAttributes(blockName),
@@ -50,14 +47,11 @@ export const useStateChanges = ({
 		originDefaultAttributes
 	);
 	let prefixParts: Array<string> = [];
-	if (variationSurface === VARIATION_SURFACE_SIZE) {
-		if (currentBlockStyleVariation?.name) {
-			prefixParts = ['variations', currentBlockStyleVariation.name];
-		}
-	} else if (
-		currentBlockStyleVariation &&
-		!currentBlockStyleVariation?.isDefault &&
-		currentBlockStyleVariation?.name
+	if (
+		isVariationScopedStyleEdit(
+			currentBlockStyleVariation,
+			usesSharedRootStyleVariation
+		)
 	) {
 		prefixParts = ['variations', currentBlockStyleVariation.name];
 	}

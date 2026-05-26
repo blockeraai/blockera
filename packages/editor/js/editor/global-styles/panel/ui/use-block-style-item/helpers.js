@@ -421,6 +421,7 @@ export const blockHasStyle = (blockName: string, style: string): boolean => {
 export const isRootStyle = (currentStyle: Object): boolean => {
 	return (
 		!currentStyle?.name ||
+		currentStyle?.isDefault === true ||
 		('default' === currentStyle.name &&
 			'wordpress' === currentStyle?.icon?.name)
 	);

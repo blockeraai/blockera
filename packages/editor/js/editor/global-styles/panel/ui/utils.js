@@ -109,7 +109,7 @@ export function getActiveSizeVariationFromClass(
 		return slug;
 	}
 
-	return null;
+	return getDefaultStyle(stylesToRender);
 }
 
 /**
@@ -158,6 +158,10 @@ function newStyleVariationMaybe(v: mixed): Object | null {
 
 function newStyleVariationSlug(style: Object | null): ?string {
 	if (!style?.name || typeof style.name !== 'string') {
+		return null;
+	}
+
+	if (style.isDefault) {
 		return null;
 	}
 

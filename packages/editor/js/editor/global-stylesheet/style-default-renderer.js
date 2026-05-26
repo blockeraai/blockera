@@ -97,7 +97,7 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 				const data = entry[1];
 				if (!isSizeVariationEntry(data)) {
 					styleSurface.push(entry);
-				} else {
+				} else if (data?.blockeraIsDefaultVariation !== true) {
 					sizeSurface.push(entry);
 				}
 			}

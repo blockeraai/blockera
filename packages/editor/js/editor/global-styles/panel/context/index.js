@@ -41,7 +41,12 @@ import {
 import {
 	mergeBlockVariationsTrees,
 	attachSizeVariationPersistenceKeys,
+	isVariationScopedStyleEdit,
 } from '../size-variations';
+import {
+	getBlockVariationSupport,
+	blockUsesSharedRootStyleVariation,
+} from '../block-variation-support';
 
 // Helper functions
 export const getBlockAttributes = (name: string): Object => {
@@ -225,6 +230,7 @@ export const GlobalStylesPanelContext: Object = createContext({
 	setStyles: () => {},
 	styles: {},
 	variationSurface: VARIATION_SURFACE_STYLE,
+	usesSharedRootStyleVariation: false,
 	baseConfig: {},
 	userConfig: {},
 	statesManagerHandleOnChangeRef: {
@@ -258,6 +264,14 @@ export const GlobalStylesPanelContextProvider = ({
 	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
 		() => getBlockAttributes(name),
 		[name]
+	);
+
+	const usesSharedRootStyleVariation = useMemo(
+		() =>
+			blockUsesSharedRootStyleVariation(
+				getBlockVariationSupport(blockExtension)
+			),
+		[blockExtension]
 	);
 
 	const originDefaultAttributes = useMemo(() => {
@@ -313,7 +327,6 @@ export const GlobalStylesPanelContextProvider = ({
 	}, [currentBlockStyleVariation]);
 
 	const fallbackClientId = name.replace('/', '-');
-	const isSizeVariation = variationSurface === VARIATION_SURFACE_SIZE;
 	const clientId = currentBlockStyleVariation?.name
 		? `${currentBlockStyleVariation?.name}-${fallbackClientId}`
 		: fallbackClientId;
@@ -327,7 +340,12 @@ export const GlobalStylesPanelContextProvider = ({
 	);
 
 	let prefixParts: Array<string> = [];
-	if (currentBlockStyleVariation && !currentBlockStyleVariation?.isDefault) {
+	if (
+		isVariationScopedStyleEdit(
+			currentBlockStyleVariation,
+			usesSharedRootStyleVariation
+		)
+	) {
 		prefixParts = ['variations', currentBlockStyleVariation.name].concat(
 			prefixParts
 		);
@@ -387,6 +405,10 @@ export const GlobalStylesPanelContextProvider = ({
 
 			if (
 				variationSurface === VARIATION_SURFACE_SIZE &&
+				isVariationScopedStyleEdit(
+					currentBlockStyleVariation,
+					usesSharedRootStyleVariation
+				) &&
 				currentBlockStyleVariation?.name
 			) {
 				payload = attachSizeVariationPersistenceKeys(
@@ -396,14 +418,10 @@ export const GlobalStylesPanelContextProvider = ({
 				);
 			}
 
-			const isVariationScopedEdit =
-				variationSurface === VARIATION_SURFACE_SIZE
-					? Boolean(currentBlockStyleVariation?.name)
-					: Boolean(
-							currentBlockStyleVariation &&
-							!currentBlockStyleVariation.isDefault &&
-							currentBlockStyleVariation.name
-						);
+			const isVariationScopedEdit = isVariationScopedStyleEdit(
+				currentBlockStyleVariation,
+				usesSharedRootStyleVariation
+			);
 
 			if (isVariationScopedEdit && currentBlockStyleVariation?.name) {
 				const variationName = currentBlockStyleVariation.name;
@@ -443,6 +461,7 @@ export const GlobalStylesPanelContextProvider = ({
 			variationSurface,
 			baseConfig,
 			userConfig,
+			usesSharedRootStyleVariation,
 		]
 	);
 
@@ -459,6 +478,10 @@ export const GlobalStylesPanelContextProvider = ({
 
 			if (
 				variationSurface === VARIATION_SURFACE_SIZE &&
+				isVariationScopedStyleEdit(
+					currentBlockStyleVariation,
+					usesSharedRootStyleVariation
+				) &&
 				currentBlockStyleVariation?.name
 			) {
 				payload = attachSizeVariationPersistenceKeys(
@@ -471,21 +494,12 @@ export const GlobalStylesPanelContextProvider = ({
 			const styleVariationArg = currentBlockStyleVariation?.isDefault
 				? 'default'
 				: currentBlockStyleVariation?.name || 'default';
-			const variationArg = isSizeVariation
-				? currentBlockStyleVariation?.name || ''
-				: styleVariationArg;
+			const variationArg = styleVariationArg;
 
-			if (variationSurface === VARIATION_SURFACE_SIZE && !variationArg) {
-				return;
-			}
-
-			const shouldFanOutAcrossBlocks =
-				variationSurface === VARIATION_SURFACE_SIZE
-					? Boolean(variationArg)
-					: Boolean(
-							!currentBlockStyleVariation?.isDefault &&
-							variationArg !== 'default'
-						);
+			const shouldFanOutAcrossBlocks = isVariationScopedStyleEdit(
+				currentBlockStyleVariation,
+				usesSharedRootStyleVariation
+			);
 
 			if (shouldFanOutAcrossBlocks) {
 				const targetBlocks = getBlockTypesForStyleVariation(
@@ -512,7 +526,7 @@ export const GlobalStylesPanelContextProvider = ({
 			variationSurface,
 			baseConfig,
 			userConfig,
-			isSizeVariation,
+			usesSharedRootStyleVariation,
 		]
 	);
 
@@ -550,6 +564,7 @@ export const GlobalStylesPanelContextProvider = ({
 			defaultStyles,
 			fallbackClientId,
 			variationSurface,
+			usesSharedRootStyleVariation,
 			childrenComponent,
 			getNormalizedStyle,
 			selectedBlockClientId,
@@ -572,6 +587,7 @@ export const GlobalStylesPanelContextProvider = ({
 			defaultStyles,
 			fallbackClientId,
 			variationSurface,
+			usesSharedRootStyleVariation,
 			childrenComponent,
 			selectedBlockClientId,
 			memoizedBlockBaseProps,
@@ -599,6 +615,7 @@ type UseGlobalStylesPanelContextReturnType = {
 	userConfig: Object,
 	baseConfig: Object,
 	variationSurface: 'size' | 'style',
+	usesSharedRootStyleVariation: boolean,
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
 	getStyle: () => Object,
