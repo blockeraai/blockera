@@ -14,6 +14,7 @@ import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 /**
  * Blockera dependencies
  */
+import { normalizeFontSizeThemeJsonPreset } from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -76,6 +77,18 @@ export type DefaultPresetValue = {
 
 const fontSizePresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('fontSize');
+
+function normalizeFontSizePresetsForUi(
+	presets: FontSizeType[] | void | null
+): FontSizeType[] {
+	if (!Array.isArray(presets)) {
+		return [];
+	}
+
+	return presets.map(
+		(preset) => normalizeFontSizeThemeJsonPreset(preset) as FontSizeType
+	);
+}
 
 function FontSizeGroupComponent({
 	sizes,
@@ -255,8 +268,18 @@ export function FontSizesPresetContent() {
 		[customFontSizes.length, clearCustomSizes]
 	);
 
-	const themeSizes = (themeFontSizes ?? []) as FontSizeType[];
-	const defaultSizes = (defaultFontSizes ?? []) as FontSizeType[];
+	const themeSizes = useMemo(
+		() => normalizeFontSizePresetsForUi(themeFontSizes as FontSizeType[]),
+		[themeFontSizes]
+	);
+	const defaultSizes = useMemo(
+		() => normalizeFontSizePresetsForUi(defaultFontSizes as FontSizeType[]),
+		[defaultFontSizes]
+	);
+	const customSizesForUi = useMemo(
+		() => normalizeFontSizePresetsForUi(customFontSizes as FontSizeType[]),
+		[customFontSizes]
+	);
 	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
 		!!defaultFontSizesEnabled,
 		themeSizes.length,
@@ -293,7 +316,7 @@ export function FontSizesPresetContent() {
 			<FontSizeGroup
 				origin="custom"
 				label={__('Custom', 'blockera')}
-				sizes={customFontSizes as FontSizeType[]}
+				sizes={customSizesForUi}
 				handleUpdateSizes={handleUpdateCustomSizes}
 				handleResetFontSizes={customResetHandler}
 			/>

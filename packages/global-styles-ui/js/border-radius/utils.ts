@@ -2,6 +2,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue } from '@blockera/controls';
+import { normalizePresetSize } from '@blockera/data';
 
 /**
  * `settings.border` keys allowed by WordPress core theme.json schema.
@@ -32,7 +33,10 @@ export function sanitizeRadiusSizes(
 	if (!Array.isArray(presets)) {
 		return [];
 	}
-	return presets.filter(isValidRadiusSizePreset);
+	return presets.filter(isValidRadiusSizePreset).map((item) => ({
+		...item,
+		size: normalizePresetSize(item.size),
+	}));
 }
 
 function isValidRadiusSizePreset(

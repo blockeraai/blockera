@@ -8,6 +8,7 @@ import { useCallback, useMemo, memo } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
+import { normalizeSizeThemeJsonPreset } from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
@@ -45,6 +46,18 @@ type SpacingSizePreset = {
 
 const spacingPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('spacingSize');
+
+function normalizeSpacingPresetsForUi(
+	presets: SpacingSizePreset[] | void | null
+): SpacingSizePreset[] {
+	if (!Array.isArray(presets)) {
+		return [];
+	}
+
+	return presets.map(
+		(preset) => normalizeSizeThemeJsonPreset(preset) as SpacingSizePreset
+	);
+}
 
 function SpacingSizeGroupComponent({
 	sizes,
@@ -243,8 +256,27 @@ export function SpacingPresetContent({
 		[customSpacingSizes, clearCustomSizes]
 	);
 
-	const themeSizes = (themeSpacingSizes ?? []) as SpacingSizePreset[];
-	const defaultSizes = (defaultSpacingSizes ?? []) as SpacingSizePreset[];
+	const themeSizes = useMemo(
+		() =>
+			normalizeSpacingPresetsForUi(
+				themeSpacingSizes as SpacingSizePreset[]
+			),
+		[themeSpacingSizes]
+	);
+	const defaultSizes = useMemo(
+		() =>
+			normalizeSpacingPresetsForUi(
+				defaultSpacingSizes as SpacingSizePreset[]
+			),
+		[defaultSpacingSizes]
+	);
+	const customSizesForUi = useMemo(
+		() =>
+			normalizeSpacingPresetsForUi(
+				customSpacingSizes as SpacingSizePreset[]
+			),
+		[customSpacingSizes]
+	);
 	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
 		!!defaultSpacingSizesEnabled,
 		themeSizes.length,
@@ -282,7 +314,7 @@ export function SpacingPresetContent({
 				<SpacingSizeGroup
 					origin="custom"
 					label={__('Custom', 'blockera')}
-					sizes={customSpacingSizes as SpacingSizePreset[]}
+					sizes={customSizesForUi}
 					handleUpdateSizes={handleUpdateCustomSizes}
 					handleResetSpacingSizes={customResetHandler}
 				/>
