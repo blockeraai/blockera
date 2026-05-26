@@ -59,7 +59,9 @@ import {
 	type TUseBlockStyleItemProps,
 	type TUseBlockStyleItemReturn,
 } from './types';
+import { setBlockDynamicStylesCount } from '../use-block-styles-counter';
 import { getCompatibleAttributes } from '../../../../../extensions/components/get-compatible-attributes';
+import { VARIATION_SURFACE_STYLE } from '../../variation-surfaces';
 
 export const useBlockStyleItem = ({
 	style,
@@ -86,6 +88,7 @@ export const useBlockStyleItem = ({
 	deleteStyleVariationBlocks,
 	setCurrentBlockStyleVariation,
 	skipBlockStyleRegistry = false,
+	variationSurface = VARIATION_SURFACE_STYLE,
 }: TUseBlockStyleItemProps): TUseBlockStyleItemReturn => {
 	const {
 		setBlockStyles: setGlobalBlockStyles,
@@ -460,7 +463,12 @@ export const useBlockStyleItem = ({
 			customValues?: { label: string, name: string }
 		) => {
 			const newCounter = counter + 1;
-			counterMap[blockName] = newCounter;
+			setBlockDynamicStylesCount(
+				counterMap,
+				blockName,
+				variationSurface,
+				newCounter
+			);
 			setCounter(newCounter);
 
 			const duplicateStyle = customValues
@@ -674,7 +682,12 @@ export const useBlockStyleItem = ({
 		}
 
 		const newCounter = counter - 1;
-		counterMap[blockName] = newCounter;
+		setBlockDynamicStylesCount(
+			counterMap,
+			blockName,
+			variationSurface,
+			newCounter
+		);
 		setCounter(newCounter);
 
 		setCurrentBlockStyleVariation(undefined);

@@ -60,7 +60,7 @@ import {
 import { useBlockVariationSupport } from '../use-block-variation-support';
 import { isVariationSurfaceEnabled } from '../block-variation-support';
 
-// Mapped block dynamic style variations counter for limitation reasons.
+// Mapped block dynamic style/size variation counters per surface (for promotion limits).
 const blockDynamicStylesCount: Object = {};
 
 // Block Styles component for the Settings Sidebar.
@@ -104,6 +104,7 @@ function BlockStyles({
 		baseConfig,
 		userConfig,
 		blockDynamicStylesCount,
+		variationSurface,
 	});
 	const [blockStyles, setBlockStyles] = useState(styles.stylesToRender);
 	const [hoveredStyle, setHoveredStyle] = useState(null);
@@ -113,7 +114,7 @@ function BlockStyles({
 	const isMobileViewport = useViewportMatch('medium', '<');
 
 	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
-		'blockera.block.style.variations.globalStylesMaxItems',
+		`blockera.block.${variationSurface}.variations.globalStylesMaxItems`,
 		2
 	);
 
@@ -319,9 +320,9 @@ function BlockStyles({
 				<StyleVariationsManager />
 				{isPromotionPopoverOpen && (
 					<PromoteGlobalStylesPremiumFeature
-						items={blockStyles}
 						onClose={() => setIsPromotionPopoverOpen(false)}
 						isOpen={isPromotionPopoverOpen}
+						variationSurface={variationSurface}
 					/>
 				)}
 			</BlockStylesPickerContextProvider>
@@ -393,11 +394,11 @@ function BlockStyles({
 									/>
 									{isPromotionPopoverOpen && (
 										<PromoteGlobalStylesPremiumFeature
-											items={blockStyles}
 											onClose={() =>
 												setIsPromotionPopoverOpen(false)
 											}
 											isOpen={isPromotionPopoverOpen}
+											variationSurface={variationSurface}
 										/>
 									)}
 
