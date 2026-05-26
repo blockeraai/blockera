@@ -3,6 +3,10 @@
  * Internal dependencies
  */
 import type { ValueAddonReference } from '../types';
+import {
+	normalizeFontSizeFluid,
+	normalizePresetSize,
+} from './normalize-preset-sizes';
 import { generateVariableString } from './utils';
 import { resolveCurrentThemeDisplayName } from './resolve-current-theme-name';
 
@@ -126,14 +130,14 @@ export function serializeGlobalStylePresetItemValue(
 		case 'border-radius': {
 			const v = item.size ?? item.value ?? '';
 
-			return String(v).trim();
+			return normalizePresetSize(v);
 		}
 
 		case 'spacing':
 		case 'font-size': {
 			const v = item.size ?? item.value ?? '';
 
-			return String(v).trim();
+			return normalizePresetSize(v);
 		}
 
 		case 'color': {
@@ -187,7 +191,12 @@ export function buildPresetVariablePickerPayload(
 		value,
 		var: varString,
 		...(item.fluid !== undefined && item.fluid !== null
-			? { fluid: item.fluid }
+			? {
+					fluid:
+						variableType === 'font-size'
+							? normalizeFontSizeFluid(item.fluid)
+							: item.fluid,
+				}
 			: {}),
 	};
 }

@@ -23,6 +23,10 @@ import {
 	mergeVariableItemsBySlug,
 } from './merge-global-style-simple-presets';
 import { generateVariableString, getBlockEditorSettings } from './index';
+import {
+	normalizeFontSizeFluid,
+	normalizePresetSize,
+} from './normalize-preset-sizes';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
@@ -65,12 +69,12 @@ export const getFontSizes = (): Array<VariableItem> => {
 					const row: VariableItem = {
 						name: item?.name || id,
 						id,
-						value: item.size,
+						value: normalizePresetSize(item.size),
 						reference,
 					};
 
 					if (item?.fluid) {
-						row.fluid = item.fluid;
+						row.fluid = normalizeFontSizeFluid(item.fluid);
 					}
 
 					return row;
@@ -94,8 +98,8 @@ export const getFontSizes = (): Array<VariableItem> => {
 	return list.map((item) => ({
 		name: item?.name || item.slug,
 		id: item.slug,
-		value: item.size,
-		fluid: item?.fluid || null,
+		value: normalizePresetSize(item.size),
+		fluid: item?.fluid ? normalizeFontSizeFluid(item.fluid) : null,
 		reference,
 	}));
 };

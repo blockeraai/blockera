@@ -10,6 +10,10 @@ import { select } from '@wordpress/data';
  */
 import type { ValueAddonReference } from '../types';
 import type { VariableItem } from './types';
+import {
+	normalizeFontSizeFluid,
+	normalizePresetSize,
+} from './normalize-preset-sizes';
 import { resolveCurrentThemeDisplayName } from './resolve-current-theme-name';
 
 const getBlockEditorSettings = (): Object => {
@@ -68,7 +72,7 @@ function mapSpacingCustom(
 	return items.map((item) => ({
 		name: item?.name || item.slug || '',
 		id: item.slug || '',
-		value: item.size || '',
+		value: normalizePresetSize(item.size || ''),
 		reference,
 	}));
 }
@@ -89,8 +93,8 @@ function mapFontSizesCustom(
 	return items.map((item) => ({
 		name: item?.name || item.slug || '',
 		id: item.slug || '',
-		value: item.size || '',
-		...(item?.fluid ? { fluid: item.fluid } : {}),
+		value: normalizePresetSize(item.size || ''),
+		...(item?.fluid ? { fluid: normalizeFontSizeFluid(item.fluid) } : {}),
 		reference,
 	}));
 }
@@ -132,7 +136,7 @@ function mapBorderRadiusPresets(
 		.map((p) => ({
 			name: String(p.name ?? p.slug).trim(),
 			id: String(p.slug).trim(),
-			value: String(p.size ?? '').trim(),
+			value: normalizePresetSize(String(p.size ?? '').trim()),
 			reference,
 		}));
 

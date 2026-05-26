@@ -23,6 +23,7 @@ import {
 	mergeVariableItemsBySlug,
 } from './merge-global-style-simple-presets';
 import { generateVariableString, getBlockEditorSettings } from './index';
+import { normalizePresetSize } from './normalize-preset-sizes';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
@@ -65,7 +66,7 @@ export const getSpacings = (): Array<VariableItem> => {
 					return {
 						name: item?.name || id,
 						id,
-						value: item.size,
+						value: normalizePresetSize(item.size),
 						reference,
 					};
 				}
@@ -84,7 +85,7 @@ export const getSpacings = (): Array<VariableItem> => {
 	return spaces.map((item) => ({
 		name: item?.name || item.slug,
 		id: item.slug,
-		value: item.size,
+		value: normalizePresetSize(item.size),
 		reference: PRESET_ORIGIN_REFERENCE,
 	}));
 };

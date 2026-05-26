@@ -9,6 +9,11 @@
  */
 import { select } from '@wordpress/data';
 
+/**
+ * Internal dependencies
+ */
+import { normalizePresetSize } from './normalize-preset-sizes';
+
 export type ThemeJsonPresetResolutionRow = {|
 	path: $ReadOnlyArray<string>,
 	valueKey: string,
@@ -475,7 +480,9 @@ export function normalizeThemeJsonPresetLeafForScalarUi(
 		case 'spacing':
 		case 'border-radius':
 		case 'dimension':
-			return typeof o.size === 'string' ? o.size : '';
+			return typeof o.size === 'string'
+				? normalizePresetSize(o.size)
+				: '';
 		case 'font-family':
 			return typeof o.fontFamily === 'string' ? o.fontFamily : '';
 		case 'shadow':
