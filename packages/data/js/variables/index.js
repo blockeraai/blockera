@@ -66,6 +66,12 @@ export {
 	buildPresetVariablePickerPayload,
 	serializeGlobalStylePresetItemValue,
 } from './preset-variable-picker-payload';
+export {
+	normalizePresetSize,
+	normalizeFontSizeFluid,
+	normalizeFontSizeThemeJsonPreset,
+	normalizeSizeThemeJsonPreset,
+} from './normalize-preset-sizes';
 export { tryParseLegacyJsonObject } from './legacy-json-settings';
 export { getVariable } from './get-variable';
 export {
