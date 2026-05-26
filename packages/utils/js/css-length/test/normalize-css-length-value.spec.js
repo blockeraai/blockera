@@ -49,6 +49,7 @@ describe('normalizeCssLengthValue', () => {
 		expect(normalizeCssLengthValue('.5')).toBe('0.5px');
 		expect(normalizeCssLengthValue('.5px')).toBe('0.5px');
 		expect(normalizeCssLengthValue('.5rem')).toBe('0.5rem');
+		expect(normalizeCssLengthValue('.9rem', '')).toBe('0.9rem');
 		expect(normalizeCssLengthValue('  -.25em  ')).toBe('-0.25em');
 		expect(normalizeCssLengthValue('  -.125  ')).toBe('-0.125px');
 	});
