@@ -19,7 +19,6 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import {
-	Grid,
 	Button,
 	InputControl,
 	LabelControl,
@@ -36,7 +35,6 @@ export default function BorderRadiusControl({
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	defaultValue = {
@@ -97,7 +95,6 @@ export default function BorderRadiusControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	return (
@@ -118,95 +115,80 @@ export default function BorderRadiusControl({
 					</LabelControlContainer>
 				)}
 
-				<Grid
-					gridTemplateColumns="1fr 30px"
-					gap="8px"
-					justifyItems="end"
-					justifyContent="end"
-				>
-					{value.type === 'all' ? (
-						<InputControl
-							id="all"
-							min={0}
-							unitType="essential"
-							onChange={(newValue) => {
-								setValue({ ...value, all: newValue });
-								modifyControlValue({
-									controlId,
-									value: {
-										...value,
-										all: newValue,
-									},
-								});
-							}}
-							defaultValue={value.all || ''}
-							placeholder="0"
-							size="small"
-							data-test="border-radius-input-all"
-						/>
-					) : (
-						<span></span>
-					)}
-
-					<Button
-						showTooltip={true}
-						tooltipPosition="top"
-						label={__('Custom Border Radius', 'blockera')}
-						size="extra-small"
-						style={{
-							padding: '4px',
-							width: 'var(--blockera-controls-input-height)',
-							height: 'var(--blockera-controls-input-height)',
+				{value.type === 'all' && (
+					<InputControl
+						id="all"
+						min={0}
+						unitType="essential"
+						onChange={(newValue) => {
+							setValue({ ...value, all: newValue });
+							modifyControlValue({
+								controlId,
+								value: {
+									...value,
+									all: newValue,
+								},
+							});
 						}}
-						className={
+						defaultValue={value.all || ''}
+						placeholder="0"
+						size="small"
+						data-test="border-radius-input-all"
+					/>
+				)}
+				<Button
+					showTooltip={true}
+					tooltipPosition="top"
+					label={__('Custom Border Radius', 'blockera')}
+					size="extra-small"
+					style={{
+						color:
 							value.type === 'custom'
-								? 'is-toggle-btn is-toggled'
-								: 'is-toggle-btn'
-						}
-						onClick={() => {
-							// old type
-							if (value.type === 'all') {
-								setValue({
+								? 'var(--blockera-controls-primary-color)'
+								: 'var(--blockera-controls-color)',
+						padding: '5px',
+						width: 'var(--blockera-controls-input-height)',
+						height: 'var(--blockera-controls-input-height)',
+					}}
+					onClick={() => {
+						// old type
+						if (value.type === 'all') {
+							setValue({
+								...value,
+								type: 'custom',
+								topLeft: value.all,
+								topRight: value.all,
+								bottomLeft: value.all,
+								bottomRight: value.all,
+							});
+							modifyControlValue({
+								controlId,
+								value: {
 									...value,
 									type: 'custom',
 									topLeft: value.all,
 									topRight: value.all,
 									bottomLeft: value.all,
 									bottomRight: value.all,
-								});
-								modifyControlValue({
-									controlId,
-									value: {
-										...value,
-										type: 'custom',
-										topLeft: value.all,
-										topRight: value.all,
-										bottomLeft: value.all,
-										bottomRight: value.all,
-									},
-								});
-							} else {
-								setValue({
+								},
+							});
+						} else {
+							setValue({
+								...value,
+								type: 'all',
+							});
+							modifyControlValue({
+								controlId,
+								value: {
 									...value,
 									type: 'all',
-								});
-								modifyControlValue({
-									controlId,
-									value: {
-										...value,
-										type: 'all',
-									},
-								});
-							}
-						}}
-					>
-						{value.type === 'all' ? (
-							<Icon icon="lock" iconSize="24" />
-						) : (
-							<Icon icon="unlock" iconSize="24" />
-						)}
-					</Button>
-				</Grid>
+								},
+							});
+						}
+					}}
+				>
+					<Icon icon="border-radius" iconSize="14" />
+				</Button>
 			</div>
 
 			{value.type === 'custom' && (

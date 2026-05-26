@@ -10,11 +10,9 @@ export function EditableBlockName({
 	placeholder,
 	content,
 	onChange,
-	contentEditable = true,
 }: {
 	placeholder: string,
 	content: string,
-	contentEditable: boolean,
 	onChange: (content: string) => void,
 }): MixedElement {
 	const [text, setText] = useState(content);
@@ -69,9 +67,8 @@ export function EditableBlockName({
 	return (
 		<span
 			ref={ref}
-			className={!contentEditable ? 'block-type' : ''}
 			placeholder={placeholder}
-			contentEditable={contentEditable}
+			contentEditable="true"
 			suppressContentEditableWarning={true}
 			spellCheck={isFocused}
 			onInput={emitChange}

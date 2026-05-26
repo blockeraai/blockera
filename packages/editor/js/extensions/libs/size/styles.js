@@ -76,21 +76,6 @@ export const SizeStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
-	/**
-	 * Get the key for the stretch value.
-	 *
-	 * @param {string} $key - The key for the stretch value.
-	 * @param {string} $value - The value for the stretch value.
-	 * @return {string} The key for the stretch value.
-	 */
-	function getStretchValueKey(key: string, value: string): string {
-		if (value === 'stretch') {
-			return `${key}: 100%; ${key}: -moz-available !important; ${key}: -webkit-fill-available !important; ${key}`;
-		}
-
-		return key;
-	}
-
 	if (isActiveField(blockeraWidth) && currentBlockAttributes?.blockeraWidth) {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
@@ -138,8 +123,6 @@ export const SizeStyles = ({
 				),
 			});
 
-			const key = getStretchValueKey('min-width', minWidth);
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -147,7 +130,7 @@ export const SizeStyles = ({
 						blockeraMinWidth: [
 							{
 								properties: {
-									[key]: minWidth,
+									'min-width': minWidth,
 								},
 								...staticDefinitionParams,
 							},
@@ -179,8 +162,6 @@ export const SizeStyles = ({
 				),
 			});
 
-			const key = getStretchValueKey('max-width', maxWidth);
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -188,7 +169,7 @@ export const SizeStyles = ({
 						blockeraMaxWidth: [
 							{
 								properties: {
-									[key]: maxWidth,
+									'max-width': maxWidth,
 								},
 								...staticDefinitionParams,
 							},
@@ -231,8 +212,6 @@ export const SizeStyles = ({
 				),
 			});
 
-			const key = getStretchValueKey('height', height);
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -240,7 +219,7 @@ export const SizeStyles = ({
 						blockeraHeight: [
 							{
 								properties: {
-									[key]: value,
+									height: value,
 								},
 								...staticDefinitionParams,
 							},
@@ -272,8 +251,6 @@ export const SizeStyles = ({
 				),
 			});
 
-			const key = getStretchValueKey('min-height', minHeight);
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -281,7 +258,7 @@ export const SizeStyles = ({
 						blockeraHeight: [
 							{
 								properties: {
-									[key]: minHeight,
+									'min-height': minHeight,
 								},
 								...staticDefinitionParams,
 							},
@@ -313,8 +290,6 @@ export const SizeStyles = ({
 				),
 			});
 
-			const key = getStretchValueKey('max-height', maxHeight);
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -322,7 +297,7 @@ export const SizeStyles = ({
 						blockeraMaxHeight: [
 							{
 								properties: {
-									[key]: maxHeight,
+									'max-height': maxHeight,
 								},
 								...staticDefinitionParams,
 							},

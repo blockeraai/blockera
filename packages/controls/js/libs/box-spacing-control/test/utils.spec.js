@@ -1,13 +1,12 @@
 import {
-	boxSpacingControlDefaultValue,
+	boxPositionControlDefaultValue,
 	boxSpacingValueCleanup,
-	getSmartLock,
 } from '../utils';
 
 describe('Testing util functions', () => {
 	describe('default value testing', () => {
 		test('default value is correct', () => {
-			expect(boxSpacingControlDefaultValue).toEqual({
+			expect(boxPositionControlDefaultValue).toEqual({
 				margin: {
 					top: '',
 					right: '',
@@ -26,9 +25,11 @@ describe('Testing util functions', () => {
 
 	describe('boxSpacingValueCleanup testing', () => {
 		test('should return exact default value if default value passed', () => {
-			const value = boxSpacingValueCleanup(boxSpacingControlDefaultValue);
+			const value = boxSpacingValueCleanup(
+				boxPositionControlDefaultValue
+			);
 
-			expect(value).toEqual(boxSpacingControlDefaultValue);
+			expect(value).toEqual(boxPositionControlDefaultValue);
 		});
 
 		test('empty value but not exact as default value', () => {
@@ -41,7 +42,7 @@ describe('Testing util functions', () => {
 				},
 			});
 
-			expect(value).toEqual(boxSpacingControlDefaultValue);
+			expect(value).toEqual(boxPositionControlDefaultValue);
 
 			value = boxSpacingValueCleanup({
 				margin: {
@@ -55,7 +56,7 @@ describe('Testing util functions', () => {
 				},
 			});
 
-			expect(value).toEqual(boxSpacingControlDefaultValue);
+			expect(value).toEqual(boxPositionControlDefaultValue);
 		});
 
 		test('complex', () => {
@@ -325,94 +326,5 @@ describe('Testing util functions', () => {
 				});
 			});
 		});
-	});
-});
-
-describe('getSmartLock', () => {
-	test('returns simple when all values are empty', () => {
-		const value = {
-			padding: { top: '', right: '', bottom: '', left: '' },
-			margin: { top: '', right: '', bottom: '', left: '' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('simple');
-		expect(getSmartLock(value, 'margin')).toBe('simple');
-	});
-
-	test('returns expanded when only one value is set', () => {
-		const value = {
-			padding: { top: '10px', right: '', bottom: '', left: '' },
-			margin: { top: '', right: '', bottom: '', left: '5px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('expanded');
-		expect(getSmartLock(value, 'margin')).toBe('expanded');
-	});
-
-	test('returns expanded when left and right are equal and top/bottom are not', () => {
-		const value = {
-			padding: { top: '1px', right: '10px', bottom: '2px', left: '10px' },
-			margin: { top: '3px', right: '5px', bottom: '4px', left: '5px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('expanded');
-		expect(getSmartLock(value, 'margin')).toBe('expanded');
-	});
-
-	test('returns expanded when top and bottom are equal and left/right are not', () => {
-		const value = {
-			padding: { top: '10px', right: '1px', bottom: '10px', left: '2px' },
-			margin: { top: '5px', right: '3px', bottom: '5px', left: '4px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('expanded');
-		expect(getSmartLock(value, 'margin')).toBe('expanded');
-	});
-
-	test('returns simple when all values are equal and not empty', () => {
-		const value = {
-			padding: {
-				top: '10px',
-				right: '10px',
-				bottom: '10px',
-				left: '10px',
-			},
-			margin: { top: '5px', right: '5px', bottom: '5px', left: '5px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('simple');
-		expect(getSmartLock(value, 'margin')).toBe('simple');
-	});
-
-	test('returns simple when top/bottom are equal, left/right are equal, but top != left', () => {
-		const value = {
-			padding: {
-				top: '10px',
-				right: '20px',
-				bottom: '10px',
-				left: '20px',
-			},
-			margin: { top: '5px', right: '15px', bottom: '5px', left: '15px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('simple');
-		expect(getSmartLock(value, 'margin')).toBe('simple');
-	});
-
-	test('returns expanded string for mixed/unequal values', () => {
-		const value = {
-			padding: { top: '1px', right: '2px', bottom: '3px', left: '4px' },
-			margin: { top: '5px', right: '6px', bottom: '7px', left: '8px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('expanded');
-		expect(getSmartLock(value, 'margin')).toBe('expanded');
-	});
-
-	test('returns correct lock when some values are empty', () => {
-		const value = {
-			padding: {
-				top: '10px',
-				right: '',
-				bottom: '10px',
-				left: '',
-			},
-			margin: { top: '', right: '5px', bottom: '', left: '5px' },
-		};
-		expect(getSmartLock(value, 'padding')).toBe('simple');
-		expect(getSmartLock(value, 'margin')).toBe('simple');
 	});
 });

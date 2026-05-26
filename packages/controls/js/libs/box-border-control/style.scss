@@ -1,24 +1,18 @@
+
 .blockera-control-box-border {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 
 	.blockera-control-border-header {
-		display: grid;
+		display: flex;
 		gap: 8px;
 		align-items: center;
 		justify-content: flex-end;
-		grid-template-columns: 1fr 2.5fr;
 
 		.blockera-control-border {
-			width: 100% !important;
-			width: -moz-available !important;
-			width: -webkit-fill-available !important;
-			width: stretch !important;
-			max-width: 100% !important;
-			max-width: -moz-available !important;
-			max-width: -webkit-fill-available !important;
-			max-width: stretch !important;
+			width: 122px !important;
+			max-width: 122px !important;
 		}
 	}
 
@@ -39,7 +33,7 @@
 	.blockera-control-border-corners-preview {
 		height: 90px;
 		position: relative;
-		width: calc(100% - 104px);
+		width: 158px;
 		margin: 15px auto;
 		overflow: hidden;
 
@@ -52,14 +46,10 @@
 			display: block;
 			content: "";
 
-			border-top: var(--pb-top-width, 1px) var(--pb-top-style, dashed)
-				var(--pb-top-color, #eaeaea);
-			border-right: var(--pb-right-width, 1px)
-				var(--pb-right-style, dashed) var(--pb-right-color, #eaeaea);
-			border-bottom: var(--pb-bottom-width, 1px)
-				var(--pb-bottom-style, dashed) var(--pb-bottom-color, #eaeaea);
-			border-left: var(--pb-left-width, 1px) var(--pb-left-style, dashed)
-				var(--pb-left-color, #eaeaea);
+			border-top: var(--pb-top-width, 1px) var(--pb-top-style, dashed) var(--pb-top-color, #eaeaea);
+			border-right: var(--pb-right-width, 1px) var(--pb-right-style, dashed) var(--pb-right-color, #eaeaea);
+			border-bottom: var(--pb-bottom-width, 1px) var(--pb-bottom-style, dashed) var(--pb-bottom-color, #eaeaea);
+			border-left: var(--pb-left-width, 1px) var(--pb-left-style, dashed) var(--pb-left-color, #eaeaea);
 			z-index: -1;
 		}
 	}
@@ -76,7 +66,7 @@
 
 	.blockera-control-border-corner-right {
 		position: absolute;
-		right: 3px;
+		right: 0;
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;
@@ -96,7 +86,7 @@
 
 	.blockera-control-border-corner-left {
 		position: absolute;
-		left: 3px;
+		left: 0;
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;

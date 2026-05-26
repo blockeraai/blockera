@@ -96,42 +96,16 @@ describe('Color-Picker Control', () => {
 				name,
 			});
 
-			cy.get('[data-cy="color-picker-css-value"]').clear();
-			cy.get('[data-cy="color-picker-css-value"]').type('283f8a');
+			cy.get('[id^=inspector-input-control-]').clear();
+			cy.get('[id^=inspector-input-control-]').type('283f8a');
 
-			cy.get('.blockera-control-color-pallet .sketch-picker').should(
-				'be.visible'
-			);
-			cy.then(() => {
-				expect(getControlValue(name)).to.be.equal('#283f8a');
-			});
-		});
-
-		it('accepts currentColor as a stored value', () => {
-			cy.withDataProvider({
-				component: (
-					<ColorPickerControl isOpen={true} isPopover={false} />
-				),
-				value: '#eee',
-				name,
-			});
-
-			cy.get('[data-cy="color-picker-css-value"]').clear();
-			cy.get('[data-cy="color-picker-css-value"]').type('currentColor');
-
-			// Picker stays mounted with a fallback wheel; stored value stays a keyword.
-			cy.get('[data-cy="color-picker-sketch-locked-notice"]').should(
-				'exist'
-			);
-			cy.get('.blockera-control-color-pallet .sketch-picker').should(
-				'exist'
-			);
-			cy.get(
-				'.blockera-control-color-pallet .sketch-picker .saturation-white'
-			).should('be.visible');
-			cy.then(() => {
-				expect(getControlValue(name)).to.be.equal('currentColor');
-			});
+			// visual and data assertion
+			cy.get('.react-colorful__saturation-pointer')
+				.find('.react-colorful__pointer-fill')
+				.should('have.css', 'backgroundColor', 'rgb(40, 63, 138)')
+				.then(() => {
+					expect(getControlValue(name)).to.be.equal('#283f8a');
+				});
 		});
 
 		it('should clear value by clicking on clear button', () => {
@@ -143,12 +117,13 @@ describe('Color-Picker Control', () => {
 				name,
 			});
 
-			cy.get('[data-cy="color-picker-css-value"]').clear();
-			cy.get('[data-cy="color-picker-css-value"]').type('283f8a');
+			cy.get('[id^=inspector-input-control-]').clear();
+			cy.get('[id^=inspector-input-control-]').type('283f8a');
 			cy.get('[aria-label="Reset Color (Clear)"]').click({ force: true });
 
-			cy.get('[data-cy="color-picker-css-value"]')
-				.should('have.value', '')
+			// visual and data assertion
+			cy.get('[id^=inspector-input-control-]')
+				.should('have.value', '000000')
 				.then(() => {
 					expect(Boolean(getControlValue(name))).to.be.equal(false);
 				});
@@ -184,7 +159,7 @@ describe('Color-Picker Control', () => {
 				.should('not.include', 'hidden');
 
 			cy.get('body').then(() => {
-				expect(getControlValue(name)).to.be.equal('rgb(255, 255, 255)');
+				expect('rgb(255, 255, 255)').to.be.equal(getControlValue(name));
 			});
 		});
 	});
@@ -203,13 +178,13 @@ describe('Color-Picker Control', () => {
 				value: undefined,
 			});
 
-			cy.get('[data-cy="color-picker-css-value"]').should(
+			cy.get('[id^=inspector-input-control-]').should(
 				'have.value',
-				'#283f8a'
+				'283F8A'
 			);
-			cy.get('.blockera-control-color-pallet .sketch-picker').should(
-				'be.visible'
-			);
+			cy.get('.react-colorful__saturation-pointer')
+				.find('.react-colorful__pointer-fill')
+				.should('have.css', 'backgroundColor', 'rgb(40, 63, 138)');
 		});
 
 		// 2.
@@ -225,13 +200,13 @@ describe('Color-Picker Control', () => {
 				value: '#eeeeee',
 			});
 
-			cy.get('[data-cy="color-picker-css-value"]').should(
+			cy.get('[id^=inspector-input-control-]').should(
 				'have.value',
-				'#eeeeee'
+				'283F8A'
 			);
-			cy.get('.blockera-control-color-pallet .sketch-picker').should(
-				'be.visible'
-			);
+			cy.get('.react-colorful__saturation-pointer')
+				.find('.react-colorful__pointer-fill')
+				.should('have.css', 'backgroundColor', 'rgb(40, 63, 138)');
 		});
 
 		// 3.
@@ -257,13 +232,13 @@ describe('Color-Picker Control', () => {
 				},
 			});
 
-			cy.get('[data-cy="color-picker-css-value"]').should(
+			cy.get('[id^=inspector-input-control-]').should(
 				'have.value',
-				'#283f8a'
+				'283F8A'
 			);
-			cy.get('.blockera-control-color-pallet .sketch-picker').should(
-				'be.visible'
-			);
+			cy.get('.react-colorful__saturation-pointer')
+				.find('.react-colorful__pointer-fill')
+				.should('have.css', 'backgroundColor', 'rgb(40, 63, 138)');
 		});
 
 		// 4.
@@ -273,13 +248,13 @@ describe('Color-Picker Control', () => {
 				value: '#283f8a',
 			});
 
-			cy.get('[data-cy="color-picker-css-value"]').should(
+			cy.get('[id^=inspector-input-control-]').should(
 				'have.value',
-				'#283f8a'
+				'283F8A'
 			);
-			cy.get('.blockera-control-color-pallet .sketch-picker').should(
-				'be.visible'
-			);
+			cy.get('.react-colorful__saturation-pointer')
+				.find('.react-colorful__pointer-fill')
+				.should('have.css', 'backgroundColor', 'rgb(40, 63, 138)');
 		});
 	});
 });

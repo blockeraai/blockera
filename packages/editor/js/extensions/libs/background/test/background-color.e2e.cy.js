@@ -21,7 +21,18 @@ describe('Background Color → Functionality', () => {
 	});
 
 	it('simple value background color', () => {
-		cy.setColorControlValue('BG Color', '666666');
+		// act: clicking on color button
+		cy.get('@bgColorContainer').within(() => {
+			cy.get('button').as('colorBtn');
+			cy.get('@colorBtn').click();
+		});
+
+		// act: entering new hexColor
+		cy.get('.components-popover').each(() => {
+			cy.get('.components-popover input').as('hexColorInput');
+			cy.get('@hexColorInput').clear();
+			cy.get('@hexColorInput').type('666');
+		});
 
 		//assert data
 		getWPDataObject().then((data) => {
@@ -40,7 +51,7 @@ describe('Background Color → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('p.blockera-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'background-color',
 			'rgb(102, 102, 102)'
@@ -84,7 +95,7 @@ describe('Background Color → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'background-color: var(--wp--preset--color--accent-4, #686868)'
+					'background-color: var(--wp--preset--color--accent-4)'
 				);
 		});
 
@@ -95,7 +106,7 @@ describe('Background Color → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'background-color: var(--wp--preset--color--accent-4, #686868)'
+				'background-color: var(--wp--preset--color--accent-4)'
 			);
 	});
 });

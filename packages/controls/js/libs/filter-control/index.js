@@ -9,15 +9,12 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	controlClassNames,
-	componentInnerClassNames,
-} from '@blockera/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import type { FilterControlProps } from './types';
@@ -60,7 +57,7 @@ export default function FilterControl({
 		}
 
 		return (
-			<UpgradePrompt
+			<PromotionPopover
 				heading={__('Multiple Filters', 'blockera')}
 				featuresList={[
 					__('Multiple filters', 'blockera'),
@@ -126,9 +123,6 @@ export default function FilterControl({
 			id={id}
 			className={controlClassNames('filter', className)}
 			popoverTitle={popoverTitle || __('Filter Effects', 'blockera')}
-			popoverClassName={componentInnerClassNames(
-				'popover-filter-control'
-			)}
 			label={label || __('Filters', 'blockera')}
 			labelPopoverTitle={
 				labelPopoverTitle || __('Filter Effects', 'blockera')

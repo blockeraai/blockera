@@ -59,11 +59,8 @@ export default function RepeaterControl(
 		actionButtonVisibility = true,
 		actionButtonDelete = true,
 		actionButtonClone = true,
-		actionButtonReset = false,
 		injectHeaderButtonsStart = '',
 		injectHeaderButtonsEnd = '',
-		actionButtonsType = 'inline',
-		actionMenuButtonLabel,
 		withoutAdvancedLabel = false,
 		isSupportInserter = false,
 		disableRegenerateId = true,
@@ -85,7 +82,6 @@ export default function RepeaterControl(
 		defaultRepeaterItemValue = { isVisible: true },
 		onChange,
 		onDelete,
-		onReset,
 		overrideItem,
 		valueCleanup = cleanupRepeater,
 		itemIdGenerator,
@@ -149,8 +145,6 @@ export default function RepeaterControl(
 		popoverTitle: popoverTitle || label || '',
 		popoverOffset,
 		popoverTitleButtonsRight,
-		actionButtonsType,
-		actionMenuButtonLabel,
 		//
 		labelPopoverTitle,
 		labelDescription,
@@ -163,12 +157,10 @@ export default function RepeaterControl(
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
-		actionButtonReset,
 		disableRegenerateId,
 		//
 		onChange,
 		onDelete,
-		onReset,
 		controlId,
 		repeaterId,
 		overrideItem,
@@ -496,7 +488,7 @@ export default function RepeaterControl(
 													isFunction(valueCleanup)
 														? valueCleanup(
 																defaultValue
-															)
+														  )
 														: defaultValue
 												}
 											/>

@@ -2,13 +2,18 @@
 /**
  * External dependencies
  */
-import apiFetch from '@wordpress/api-fetch';
 import { addFilter, applyFilters } from '@wordpress/hooks';
 
 /**
  * Internal dependencies
  */
 import withBlockSettings from './block-settings';
+
+export {
+	useBlockContext,
+	BlockEditContext,
+	BlockEditContextProvider,
+} from './context';
 
 export default function applyHooks(beforeApplyHooks: () => void) {
 	if ('function' === typeof beforeApplyHooks) {
@@ -41,35 +46,5 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 			}),
 		9e2
 	);
-
-	// Filter out blockera attributes from block renderer requests.
-	apiFetch.use((options, next) => {
-		if (options.path && options.path.includes('/wp/v2/block-renderer/')) {
-			// Parse and filter attributes
-			const url = new URL(options.path, window.location.origin);
-
-			// Get all search params that start with 'attributes[blockera'
-			const paramsToDelete = [];
-			url.searchParams.forEach((value, key) => {
-				if (key.startsWith('attributes[blockera')) {
-					paramsToDelete.push(key);
-				}
-			});
-
-			// Remove blockera attributes
-			if (paramsToDelete.length > 0) {
-				paramsToDelete.forEach((key) => {
-					url.searchParams.delete(key);
-				});
-
-				return next({
-					...options,
-					path: url.pathname + url.search,
-				});
-			}
-		}
-
-		return next(options);
-	});
 }
 export { default as withBlockSettings } from './block-settings';

@@ -6,11 +6,6 @@
 import { dispatch } from '@wordpress/data';
 
 /**
- * Blockera dependencies
- */
-import { mergeObject } from '@blockera/utils';
-
-/**
  * Internal dependencies
  */
 import * as config from './config';
@@ -21,19 +16,14 @@ export const registerBlockExtensionsSupports = (
 	blockName: string,
 	externalConfig?: Object
 ): void => {
-	const extensionsConfig = applyFilters(
-		'blockera.extensions.supports.configuration',
-		mergeObject(config, externalConfig || {})
-	);
-
-	Object.keys(extensionsConfig).forEach((name: string) => {
-		const targetBlock = blockName.replace(/\//g, '.');
+	Object.keys(externalConfig || config).forEach((name: string) => {
+		const targetBlock = blockName.replace(/\//g, '-');
 		dispatch(STORE_NAME).addExtension({
 			name,
 			blockName,
 			supports: applyFilters(
-				`blockera.block.${targetBlock}.extension.${name}`,
-				extensionsConfig[name],
+				`blockera-${targetBlock}-extension-${name}`,
+				(externalConfig || config)[name],
 				name,
 				targetBlock
 			),

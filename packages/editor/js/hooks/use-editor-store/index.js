@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -16,16 +16,32 @@ export const useEditorStore = (
 	const {
 		getState,
 		getInnerState,
-		getAvailableStates,
-		getAvailableInnerStates,
-		getAvailableBreakpoints,
-	} = select(STORE_NAME);
+		availableStates,
+		availableInnerStates,
+		availableBreakpoints,
+	} = useSelect((select) => {
+		const {
+			getState,
+			getInnerState,
+			getAvailableStates,
+			getAvailableInnerStates,
+			getAvailableBreakpoints,
+		} = select(STORE_NAME);
+
+		return {
+			getState,
+			getInnerState,
+			availableStates: getAvailableStates(options.list),
+			availableInnerStates: getAvailableInnerStates(options.list),
+			availableBreakpoints: getAvailableBreakpoints(options.list),
+		};
+	});
 
 	return {
 		getState,
 		getInnerState,
-		availableStates: getAvailableStates(options.list),
-		availableInnerStates: getAvailableInnerStates(options.list),
-		availableBreakpoints: getAvailableBreakpoints(options.list),
+		availableStates,
+		availableInnerStates,
+		availableBreakpoints,
 	};
 };

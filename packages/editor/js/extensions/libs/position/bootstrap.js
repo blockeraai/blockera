@@ -19,21 +19,22 @@ import {
 	positionToWPCompatibility,
 } from './compatibility/position';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.positionExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			if (blockId === 'core/group') {
 				attributes = positionFromWPCompatibility({
 					attributes,
-					insideBlockInspector,
-					editorSelectedBlockEvent,
 				});
 			}
 
@@ -66,8 +67,7 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
@@ -79,8 +79,6 @@ export const bootstrap = (): void => {
 					positionToWPCompatibility({
 						newValue,
 						ref,
-						insideBlockInspector,
-						editorSelectedBlockEvent,
 					})
 				);
 			}

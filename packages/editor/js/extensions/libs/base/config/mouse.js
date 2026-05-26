@@ -16,7 +16,6 @@ const blockeraCursor: FeatureConfig = {
 	status: true,
 	label: __('Cursor', 'blockera'),
 	onNative: true,
-	keywords: ['cursor', 'pointer', 'mouse', 'hover'],
 };
 
 const blockeraUserSelect: FeatureConfig = {
@@ -25,7 +24,6 @@ const blockeraUserSelect: FeatureConfig = {
 	status: true,
 	label: __('User Select', 'blockera'),
 	onNative: true,
-	keywords: ['select', 'user-select', 'text', 'selection'],
 };
 
 const blockeraPointerEvents: FeatureConfig = {
@@ -34,11 +32,9 @@ const blockeraPointerEvents: FeatureConfig = {
 	status: true,
 	label: __('Pointer Events', 'blockera'),
 	onNative: true,
-	keywords: ['pointer', 'events', 'click', 'interaction'],
 };
 
 export const mouseConfig = {
-	status: true,
 	initialOpen: true,
 	blockeraCursor,
 	blockeraUserSelect,

@@ -13,7 +13,7 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import type { BoxShadowControlProps } from './types';
@@ -56,7 +56,7 @@ export default function BoxShadowControl({
 				}
 
 				return (
-					<UpgradePrompt
+					<PromotionPopover
 						heading={__('Multiple Box Shadows', 'blockera')}
 						featuresList={[
 							__('Multiple box shadows', 'blockera'),

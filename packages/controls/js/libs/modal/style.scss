@@ -1,11 +1,10 @@
 .blockera-component.blockera-component-modal {
+
 	.components-modal__header {
 		height: auto;
 
 		.components-modal__header-heading {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
+			flex-direction: column;
 			gap: 10px;
 		}
 
@@ -19,8 +18,4 @@
 		overflow: auto;
 		padding: 32px 32px 32px;
 	}
-}
-
-.components-modal__screen-overlay {
-	z-index: 1000000;
 }

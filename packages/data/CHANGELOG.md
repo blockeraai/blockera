@@ -1,10 +1,5 @@
 ## Unreleased
 
-## Improvements
-
--   **Improved WordPress Core API Compatibility**: Enhanced variable support for colors, gradients, spacing, and font sizes to work seamlessly with WordPress core's native CSS variable format. This ensures better compatibility with WordPress themes and the block editor, allowing variables to be recognized whether they use WordPress's standard format or Blockera's internal format.
--   **Better Theme Integration**: Color, gradient, spacing, and font size variables now properly recognize and work with WordPress theme presets, making it easier to use theme-defined design tokens across your site.
-
 ## 1.1.0 (2025-03-15)
 
 ### New Features

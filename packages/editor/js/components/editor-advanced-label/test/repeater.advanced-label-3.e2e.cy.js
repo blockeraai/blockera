@@ -342,7 +342,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			// Alias
 			cy.getByAriaLabel('Type').as('type');
 			cy.getByAriaLabel('Angle').as('angle');
-			cy.getByAriaLabel('Scroll Attachment').as('effect');
+			cy.getByAriaLabel('Effect').as('effect');
 
 			// Assert label in normal state
 			cy.get('@type').should('have.class', 'changed-in-normal-state');
@@ -403,7 +403,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		cy.get('@angle').should('have.class', 'changed-in-other-state');
 
 		// Assert Effect label
-		cy.getByAriaLabel('Scroll Attachment').should(
+		cy.getByAriaLabel('Effect').should(
 			'have.class',
 			'changed-in-normal-state'
 		);
@@ -415,7 +415,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		openBackgroundItem();
 
 		// Assert Effect label
-		cy.getByAriaLabel('Scroll Attachment').should(
+		cy.getByAriaLabel('Effect').should(
 			'have.class',
 			'changed-in-normal-state'
 		);
@@ -448,12 +448,12 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				'changed-in-normal-state'
 			);
 
-			openBackgroundItem();
-
 			cy.getByAriaLabel('Size').should(
 				'not.have.class',
 				'changed-in-secondary-state'
 			);
+
+			openBackgroundItem();
 
 			// Assert control
 			cy.getByAriaLabel('Cover').should(

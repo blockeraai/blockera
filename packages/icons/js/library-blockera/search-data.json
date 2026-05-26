@@ -6,15 +6,9 @@
 		"tags": []
 	},
 	{
-		"iconName": "blockera-cube",
-		"title": "cube",
+		"iconName": "blockeraCircle",
+		"title": " Circle",
 		"library": "blockera",
-		"tags": ["blockera", "cube"]
-	},
-	{
-		"iconName": "blockera-one",
-		"title": "one",
-		"library": "blockera",
-		"tags": ["blockera", "one"]
+		"tags": []
 	}
 ]

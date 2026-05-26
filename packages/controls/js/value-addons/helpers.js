@@ -17,12 +17,18 @@ import {
 	getPostDynamicValueItemsBy,
 	getSiteDynamicValueItemsBy,
 	getUserDynamicValueItemsBy,
+	getColorsTitle,
 	getColors,
 	getFontSizes,
+	getFontSizesTitle,
+	getLinearGradientsTitle,
 	getLinearGradients,
+	getRadialGradientsTitle,
 	getRadialGradients,
 	getSpacings,
+	getSpacingsTitle,
 	getVariable,
+	getWidthSizesTitle,
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
@@ -170,9 +176,7 @@ export function setValueAddon(
 	setState(newValue);
 }
 
-export function getValueAddonRealValue(
-	value: ValueAddon | string | undefined
-): any {
+export function getValueAddonRealValue(value: ValueAddon | string): any {
 	if (value === undefined) {
 		return '';
 	}
@@ -192,50 +196,25 @@ export function getValueAddonRealValue(
 				value?.settings?.id
 			);
 
-			let currentValue = '';
-			let currentVar = '';
-
 			//
-			// use current saved value
-			//
-			if (!isUndefined(variable?.value) && variable?.value) {
-				currentValue = variable.value;
-			}
-
-			//
-			// use saved value if current value is not set
+			// use current saved value if variable was not found
 			//
 			if (
-				!currentValue &&
+				isUndefined(variable?.value) &&
 				!isUndefined(value.settings.value) &&
-				value.settings.value
+				value.settings.value !== ''
 			) {
-				currentValue = value.settings.value;
+				return value.settings.value;
 			}
 
-			if (!isUndefined(value?.settings?.var) && value?.settings?.var) {
-				currentVar = value.settings.var;
+			if (
+				isUndefined(value?.settings?.var) ||
+				value?.settings?.var === ''
+			) {
+				return '';
 			}
 
-			if (currentValue && currentVar) {
-				// If the value already starts with var({$value['settings']['var']}), return it as is
-				if (
-					typeof currentValue === 'string' &&
-					currentValue.startsWith(`var(${currentVar}`)
-				) {
-					return currentValue;
-				}
-
-				return `var(${currentVar}, ${currentValue})`;
-			}
-
-			if (currentValue) {
-				return currentValue;
-			}
-
-			if (currentVar) {
-				return `var(${currentVar})`;
-			}
+			return `var(${value?.settings?.var})`;
 		}
 
 		return ''; // return empty string because there is no real string value
@@ -284,42 +263,42 @@ export function getVariableCategory(
 	switch (category) {
 		case 'font-size':
 			return {
-				label: __('Font Size Variables', 'blockera'),
+				label: getFontSizesTitle(),
 				items: getFontSizes(),
 				type: 'font-size',
 			};
 
 		case 'linear-gradient':
 			return {
-				label: __('Linear Gradient Variables', 'blockera'),
+				label: getLinearGradientsTitle(),
 				items: getLinearGradients(),
 				type: 'linear-gradient',
 			};
 
 		case 'radial-gradient':
 			return {
-				label: __('Radial Gradient Variables', 'blockera'),
+				label: getRadialGradientsTitle(),
 				items: getRadialGradients(),
 				type: 'radial-gradient',
 			};
 
 		case 'width-size':
 			return {
-				label: __('Width & Height Variables', 'blockera'),
+				label: getWidthSizesTitle(),
 				items: getWidthSizes(),
 				type: 'width-size',
 			};
 
 		case 'spacing':
 			return {
-				label: __('Spacing Variables', 'blockera'),
+				label: getSpacingsTitle(),
 				items: getSpacings(),
 				type: 'spacing',
 			};
 
 		case 'color':
 			return {
-				label: __('Color Variables', 'blockera'),
+				label: getColorsTitle(),
 				items: getColors(),
 				type: 'color',
 			};

@@ -14,7 +14,7 @@ import { isString } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../../editor/header-ui';
+import { getBaseBreakpoint } from '../../canvas-editor';
 import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
 import type {
 	TBreakpoint,

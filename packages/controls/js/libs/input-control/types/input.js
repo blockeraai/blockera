@@ -41,7 +41,6 @@ export type InputUnitTypes =
 	| 'flex-grow'
 	| 'line-height'
 	| 'min-width'
-	| 'grid-min-width'
 	| 'z-index'
 	| 'media-query';
 

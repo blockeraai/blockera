@@ -20,7 +20,6 @@ export function Tooltip({
 	children,
 	className,
 	text,
-	style = {},
 	...props
 }: TTooltipItem): Node {
 	return (
@@ -35,16 +34,12 @@ export function Tooltip({
 						'tooltip-content',
 						className
 					)}
+					style={{ '--tooltip-width': width }}
 				>
 					{text}
 				</div>
 			}
 			delay={delay}
-			style={{
-				'--tooltip-padding': '8px',
-				'--tooltip-width': width,
-				...style,
-			}}
 			{...props}
 		>
 			{children}

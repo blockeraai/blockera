@@ -147,23 +147,21 @@ export function TypographyStyles({
 				properties['font-style'] = blockeraFontAppearance.style;
 			}
 
-			if (!isEmptyObject(properties)) {
-				styleGroup.push({
-					selector: pickedSelector,
-					declarations: computedCssDeclarations(
-						{
-							blockeraFontAppearance: [
-								{
-									type: 'static',
-									properties,
-								},
-							],
-						},
-						blockProps,
-						pickedSelector
-					),
-				});
-			}
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFontAppearance: [
+							{
+								type: 'static',
+								properties,
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
 		}
 	}
 
@@ -570,7 +568,7 @@ export function TypographyStyles({
 					properties['text-orientation'] = 'mixed' + ' !important';
 			}
 
-			if (!isEmptyObject(properties)) {
+			if (!isEmptyObject(properties))
 				styleGroup.push({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
@@ -586,7 +584,6 @@ export function TypographyStyles({
 						pickedSelector
 					),
 				});
-			}
 		}
 	}
 
@@ -648,30 +645,29 @@ export function TypographyStyles({
 				}
 			}
 
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraTextColumns: [
-							{
-								type: 'static',
-								properties,
-							},
-						],
-					},
-					blockProps,
-					pickedSelector
-				),
-			});
+			if (!isEmptyObject(properties))
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							blockeraTextColumns: [
+								{
+									type: 'static',
+									properties,
+								},
+							],
+						},
+						blockProps,
+						pickedSelector
+					),
+				});
 		}
 	}
 
 	if (isActiveField(blockeraTextStroke)) {
 		const blockeraTextStroke = blockProps.attributes.blockeraTextStroke;
 
-		if (
-			!isEquals(blockeraTextStroke, attributes.blockeraTextStroke.default)
-		) {
+		if (blockeraTextStroke !== attributes.blockeraTextStroke.default) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextStroke',
@@ -696,10 +692,6 @@ export function TypographyStyles({
 									type: 'static',
 									properties: {
 										'-webkit-text-stroke':
-											blockeraTextStroke?.width +
-											' ' +
-											textStrokeColor,
-										'text-stroke':
 											blockeraTextStroke?.width +
 											' ' +
 											textStrokeColor,
@@ -798,7 +790,7 @@ export function TypographyStyles({
 			query: 'blockeraTextShadow',
 			support: 'blockeraTextShadow',
 			fallbackSupportId: getBlockSupportFallback(
-				supports,
+				getBlockSupportCategory('textShadow'),
 				'blockeraTextShadow'
 			),
 		});

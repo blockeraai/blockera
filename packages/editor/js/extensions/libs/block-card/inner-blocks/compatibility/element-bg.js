@@ -6,29 +6,16 @@ import { isValid, type ValueAddon } from '@blockera/controls';
 import { isEmpty, isString, mergeObject } from '@blockera/utils';
 import { getGradientVAFromVarString, getGradientType } from '@blockera/data';
 
-/**
- * Internal dependencies
- */
-import { runInsideBlockInspector } from '../../../utils';
-
 export function elementNormalBackgroundFromWPCompatibility({
 	innerBlock,
 	attributes,
 	dataCompatibilityElement,
-	insideBlockInspector,
-	editorSelectedBlockEvent,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	dataCompatibilityElement: string,
-	insideBlockInspector: boolean,
-	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
-	if (
-		!attributes?.style?.elements?.[dataCompatibilityElement]?.color
-			?.gradient &&
-		!attributes?.elements?.[dataCompatibilityElement]?.color?.gradient
-	) {
+	if (!attributes.style.elements[dataCompatibilityElement]?.color?.gradient) {
 		return false;
 	}
 
@@ -38,40 +25,24 @@ export function elementNormalBackgroundFromWPCompatibility({
 	let gradient: ValueAddon | boolean | string = false;
 	let gradientType: string = '';
 
-	const useStyle = runInsideBlockInspector(
-		insideBlockInspector,
-		editorSelectedBlockEvent
-	);
-
 	if (
-		attributes?.style?.elements[
+		attributes.style.elements[
 			dataCompatibilityElement
-		]?.color?.gradient.startsWith('var:') ||
-		attributes?.elements?.[
-			dataCompatibilityElement
-		]?.color?.gradient.startsWith('var(')
+		]?.color?.gradient.startsWith('var:')
 	) {
 		gradient = getGradientVAFromVarString(
-			useStyle
-				? attributes.style.elements[dataCompatibilityElement]?.color
-						?.gradient
-				: attributes.elements[dataCompatibilityElement]?.color?.gradient
+			attributes.style.elements[dataCompatibilityElement]?.color?.gradient
 		);
 
 		if (isValid(gradient)) {
 			gradientType = getGradientType(gradient);
 		}
 	} else {
-		gradient = useStyle
-			? attributes.style.elements[dataCompatibilityElement]?.color
-					?.gradient
-			: attributes.elements[dataCompatibilityElement]?.color?.gradient
-					?.gradient;
+		gradient =
+			attributes.style.elements[dataCompatibilityElement]?.color
+				?.gradient;
 		gradientType = getGradientType(
-			useStyle
-				? attributes.style.elements[dataCompatibilityElement]?.color
-						?.gradient
-				: attributes.elements[dataCompatibilityElement]?.color?.gradient
+			attributes.style.elements[dataCompatibilityElement]?.color?.gradient
 		);
 	}
 
@@ -146,38 +117,22 @@ export function elementNormalBackgroundToWPCompatibility({
 	element,
 	newValue,
 	ref,
-	insideBlockInspector,
-	editorSelectedBlockEvent,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
-	insideBlockInspector: boolean,
-	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
-	const useStyle = runInsideBlockInspector(
-		insideBlockInspector,
-		editorSelectedBlockEvent
-	);
-
 	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
-		const elements = {
-			elements: {
-				[element]: {
-					color: {
-						gradient: undefined,
+		return {
+			style: {
+				elements: {
+					[element]: {
+						color: {
+							gradient: undefined,
+						},
 					},
 				},
 			},
-		};
-		return {
-			...(useStyle
-				? {
-						style: {
-							elements: elements.elements,
-						},
-					}
-				: elements),
 		};
 	}
 
@@ -207,25 +162,18 @@ export function elementNormalBackgroundToWPCompatibility({
 					gradient = item[item?.type]?.settings?.id;
 
 					if (gradient !== undefined) {
-						const elements = {
-							elements: {
-								[element]: {
-									color: {
-										gradient:
-											'var:preset|gradient|' + gradient,
+						result = mergeObject(result, {
+							style: {
+								elements: {
+									[element]: {
+										color: {
+											gradient:
+												'var:preset|gradient|' +
+												gradient,
+										},
 									},
 								},
 							},
-						};
-
-						result = mergeObject(result, {
-							...(useStyle
-								? {
-										style: {
-											elements: elements.elements,
-										},
-									}
-								: elements),
 						});
 					} else {
 						break;
@@ -243,24 +191,16 @@ export function elementNormalBackgroundToWPCompatibility({
 						);
 					}
 
-					const elements = {
-						elements: {
-							[element]: {
-								color: {
-									gradient,
+					result = mergeObject(result, {
+						style: {
+							elements: {
+								[element]: {
+									color: {
+										gradient,
+									},
 								},
 							},
 						},
-					};
-
-					result = mergeObject(result, {
-						...(useStyle
-							? {
-									style: {
-										elements: elements.elements,
-									},
-								}
-							: elements),
 					});
 				}
 

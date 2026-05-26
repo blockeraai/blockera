@@ -1,7 +1,8 @@
 /**
  * External dependencies
  */
-import { memo, useMemo } from '@wordpress/element';
+import { memo } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -19,59 +20,39 @@ const IconLibraries = ({
 		wp: {
 			lazyLoad: false,
 		},
-		faregular: {
-			lazyLoad: true,
-		},
-		fasolid: {
-			lazyLoad: true,
-		},
-		fabrands: {
-			lazyLoad: true,
-		},
-		brands: {
-			lazyLoad: true,
-		},
 		blockera: {
-			lazyLoad: true,
-		},
-		essentials: {
 			lazyLoad: true,
 		},
 	},
 }) => {
-	// Memoize the library components to prevent unnecessary re-renders
-	const libraryComponents = useMemo(() => {
-		return Object.entries(libraries).map(([library, config]) => {
-			const iconLibraryInfo = getIconLibrary(library);
-			const icon = iconLibraryInfo[library].icon;
-			const title = (
-				<>
-					{icon} {iconLibraryInfo[library].name}
-					<span
-						className={controlInnerClassNames(
-							'library-header__count'
-						)}
-					>
-						{iconLibraryInfo[library]?.count}
-					</span>
-				</>
-			);
+	const stack = [];
 
-			return (
-				<IconLibrary
-					key={library}
-					library={library}
-					lazyLoad={config.lazyLoad}
-					title={title}
-				/>
-			);
-		});
-	}, [libraries]);
+	for (const library in libraries) {
+		const iconLibraryInfo = getIconLibrary(library);
+
+		const icon = iconLibraryInfo[library].icon;
+		const title = (
+			<>
+				{icon}{' '}
+				{sprintf(
+					// translators: %s: Icon Library Name
+					__('%s Icons', 'blockera'),
+					iconLibraryInfo[library].name
+				)}
+			</>
+		);
+
+		stack.push(
+			<IconLibrary
+				library={library}
+				lazyLoad={libraries[library].lazyLoad}
+				title={title}
+			/>
+		);
+	}
 
 	return (
-		<div className={controlInnerClassNames('icon-libraries')}>
-			{libraryComponents}
-		</div>
+		<div className={controlInnerClassNames('icon-libraries')}>{stack}</div>
 	);
 };
 

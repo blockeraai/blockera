@@ -20,10 +20,7 @@
 
 	&.is-active-item {
 		color: var(--blockera-controls-primary-color);
-		border-color: var(
-			--va-border-color,
-			var(--blockera-controls-primary-color)
-		);
+		border-color: var(--va-border-color, var(--blockera-controls-primary-color));
 
 		.blockera-control-item-value,
 		.blockera-control-item-icon {

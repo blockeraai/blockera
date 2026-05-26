@@ -2,12 +2,10 @@
 @import "./picker-value-item";
 
 .blockera-component-popover {
+
 	&.blockera-control-popover-value-addon-deleted {
-		--blockera-controls-primary-color: var(
-			--blockera-value-addon-deleted-color
-		);
-		--blockera-controls-primary-color-darker-20: var(
-			--blockera-value-addon-deleted-color-darker-20
-		);
+		--blockera-controls-primary-color: var(--blockera-value-addon-deleted-color);
+		--blockera-controls-primary-color-darker-20: var(--blockera-value-addon-deleted-color-darker-20);
 	}
 }
+

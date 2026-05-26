@@ -36,8 +36,13 @@ export function CursorIcon({
 	delete props.size;
 
 	if (iconSize) {
-		props.width = iconSize;
-		props.height = iconSize;
+		if (!props?.width) {
+			props.width = iconSize;
+		}
+
+		if (!props?.height) {
+			props.height = iconSize;
+		}
 	}
 
 	return (

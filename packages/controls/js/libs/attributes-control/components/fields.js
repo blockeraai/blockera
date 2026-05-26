@@ -55,7 +55,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		// disable customProps mode if current key is inside key select field options
 		function checkInitCustomMode() {
 			if (item.key !== '') {
-				if (keyFieldOptions.length) {
+				if (keyFieldOptions.length)
 					for (const option in keyFieldOptions) {
 						if (keyFieldOptions[option]?.options) {
 							for (const _option in keyFieldOptions[option]
@@ -73,7 +73,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							return false;
 						}
 					}
-				}
 			}
 
 			return true;

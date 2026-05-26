@@ -9,11 +9,15 @@ import { getBlockType } from '@wordpress/blocks';
  * Determines if any of the block type's attributes have
  * the content role attribute.
  *
+ * @param {Object} state         Data state.
  * @param {string} blockTypeName Block type name.
  * @return {boolean} Whether block type has content role attribute.
  */
-export const hasContentRoleAttribute = (blockTypeName: string): boolean => {
-	const blockType = getBlockType(blockTypeName);
+export const hasContentRoleAttribute = (
+	state: Object,
+	blockTypeName: string
+): boolean => {
+	const blockType = getBlockType(state, blockTypeName);
 	if (!blockType) {
 		return false;
 	}

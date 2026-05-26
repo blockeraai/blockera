@@ -4,11 +4,12 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isString, isUndefined, isObject } from '@blockera/utils';
+import { isBlockTheme, isString, isUndefined } from '@blockera/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
@@ -16,7 +17,6 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
  */
 import { STORE_NAME } from '../store';
 import { generateVariableString, getBlockEditorSettings } from './index';
-import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getColors: () => Array<VariableItem> = memoize(
@@ -94,6 +94,43 @@ export const getColors: () => Array<VariableItem> = memoize(
 	}
 );
 
+export const getColorsTitle: () => string = memoize(function (): string {
+	if (isBlockTheme()) {
+		if (
+			!isUndefined(
+				getBlockEditorSettings()?.__experimentalFeatures?.color?.palette
+					?.theme
+			)
+		) {
+			const { getCurrentTheme } = select('blockera/data');
+
+			const {
+				name: { rendered: themeName },
+			} = getCurrentTheme();
+
+			return sprintf(
+				// translators: it's the product name (a theme or plugin name)
+				__('%s Colors', 'blockera'),
+				themeName
+			);
+		}
+	} else if (!isUndefined(getBlockEditorSettings()?.colors)) {
+		const { getCurrentTheme } = select('blockera/data');
+
+		const theme = getCurrentTheme();
+
+		if (!isUndefined(theme?.name?.rendered)) {
+			return sprintf(
+				// translators: it's the product name (a theme or plugin name)
+				__('%s Color Palette', 'blockera'),
+				theme?.name?.rendered
+			);
+		}
+	}
+
+	return __('Editor Colors', 'blockera');
+});
+
 export const getColor: (id: string) => ?VariableItem = memoize(function (
 	id: string
 ): ?VariableItem {
@@ -146,32 +183,8 @@ export const getColorVAFromIdString: (value: string) => ValueAddon | string =
 
 export const getColorVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
-		if (isString(value)) {
-			const { id, varString } = parseVarString(value, 'color');
-
-			if (id) {
-				const colorVA = getColorVAFromIdString(id);
-
-				if (isObject(colorVA)) {
-					return colorVA;
-				}
-
-				// same value means the variable not found but should be returned as not found
-				if (colorVA === id && varString) {
-					return {
-						settings: {
-							name: id,
-							id: value,
-							value: `var(${varString})`,
-							type: 'color',
-							var: varString,
-						},
-						name: id,
-						isValueAddon: true,
-						valueType: 'variable',
-					};
-				}
-			}
+		if (isString(value) && value.startsWith('var:')) {
+			return getColorVAFromIdString(value.split('|')[2]);
 		}
 
 		return value;

@@ -23,7 +23,7 @@ export default function BlockVariationTransforms({
 }): MixedElement {
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
-	const { name, activeBlockVariation, variations, isContentOnly } = useSelect(
+	const { activeBlockVariation, variations, isContentOnly } = useSelect(
 		(select) => {
 			const { getActiveBlockVariation, getBlockVariations } =
 				select(blocksStore);
@@ -36,7 +36,6 @@ export default function BlockVariationTransforms({
 			const isContentBlock = hasContentRoleAttribute(name);
 
 			return {
-				name,
 				activeBlockVariation: getActiveBlockVariation(
 					name,
 					getBlockAttributes(blockClientId)
@@ -50,8 +49,7 @@ export default function BlockVariationTransforms({
 		[blockClientId]
 	);
 
-	const selectedValue =
-		activeBlockVariation?.name || name.replace('core/', '');
+	const selectedValue = activeBlockVariation?.name;
 
 	// Check if each variation has a unique icon.
 	const hasUniqueIcons = useMemo(() => {

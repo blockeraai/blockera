@@ -13,7 +13,7 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import RepeaterItemHeader from './components/header';
@@ -76,7 +76,7 @@ export default function TextShadowControl({
 				}
 
 				return (
-					<UpgradePrompt
+					<PromotionPopover
 						heading={__('Multiple Text Shadows', 'blockera')}
 						featuresList={[
 							__('Multiple text shadows', 'blockera'),

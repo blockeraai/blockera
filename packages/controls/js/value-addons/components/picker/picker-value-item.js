@@ -96,7 +96,6 @@ export default function ({
 							? __('Coming soon…', 'blockera')
 							: __('Pro Feature', 'blockera')
 					}
-					delay={400}
 					{...props}
 				>
 					{children}
@@ -112,9 +111,7 @@ export default function ({
 					isCurrent && 'is-active-item'
 				)}
 				onClick={() => {
-					if (status === 'active') {
-						onClick(data);
-					}
+					if (status === 'active') onClick(data);
 				}}
 				data-cy={'va-item-' + data.id}
 				{...props}

@@ -52,9 +52,9 @@ export const SupportItem = ({
 	} else {
 		ariaLabel = show
 			? // translators: %s is the feature name in advanced settings panel in extensions
-				sprintf(__('Deactivate %s', 'blockera'), label)
+			  sprintf(__('Deactivate %s', 'blockera'), label)
 			: // translators: %s is the feature name in advanced settings panel in extensions
-				sprintf(__('Activate %s', 'blockera'), label);
+			  sprintf(__('Activate %s', 'blockera'), label);
 	}
 
 	return (
@@ -71,7 +71,7 @@ export const SupportItem = ({
 				'force-item': force,
 				'active-item': show,
 			})}
-			{...(force ? { tabIndex: 1 } : {})}
+			{...(!force ? { tabIndex: 1 } : {})}
 		>
 			{label}
 

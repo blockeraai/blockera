@@ -4,10 +4,10 @@
 }
 
 .blockera-control.blockera-control-block-states-repeater {
-	display: block;
+    display: block;
 	font-size: 0;
-	position: relative;
-	--repeater-gap: 5px;
+    position: relative;
+	--repeater-gap: 6px;
 	--repeater-item-height: 26px;
 
 	.blockera-control-header {
@@ -20,11 +20,13 @@
 		padding-bottom: var(--repeater-gap);
 
 		.blockera-control-btn-add {
+
 			svg {
 				transition: var(--blockera-controls-transition);
 			}
 
 			&.is-focus {
+
 				svg {
 					transform: rotate(-45deg);
 				}
@@ -43,19 +45,11 @@
 		float: left;
 
 		.blockera-control-group-header {
-			padding: 0 5px;
-
-			.blockera-control-repeater-group-header {
-				letter-spacing: -0.3px;
-				font-size: 12px;
-				font-weight: 500;
-			}
+			padding: 0 6px;
 		}
 
 		&:not([data-id="normal"]) {
-			--blockera-controls-primary-color: var(
-				--blockera-controls-states-color
-			);
+			--blockera-controls-primary-color: var(--blockera-controls-states-color);
 		}
 	}
 
@@ -70,30 +64,47 @@
 	}
 
 	.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
-		background: color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 4%,
-			#ffffff 100%
-		);
+		background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
 		border-color: var(--blockera-controls-primary-color);
-		color: color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 100%,
-			#000000 20%
-		);
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 
 		.blockera-control-header-label {
-			color: color-mix(
-				in srgb,
-				var(--blockera-controls-primary-color) 100%,
-				#000000 20%
-			);
+			color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 		}
+	}
+
+	.blockera-control-group .blockera-control-action-buttons {
+		right: -12px;
+		top: -1px;
+		bottom: -1px;
+		border-radius: 0 2px 2px 0;
+		transition: all 0.1s ease;
+		background: linear-gradient(-90deg, var(--blockera-controls-primary-color) 80%, transparent);
+		opacity: 0;
+		visibility: hidden;
+
+		.blockera-component-button {
+			color: #ffffff;
+			--blockera-controls-primary-color: #ffffff !important;
+
+			&:hover {
+				background: transparent;
+			}
+		}
+	}
+
+	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
+	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
+		right: -21px;
+		opacity: 1;
+		visibility: visible;
 	}
 }
 
 .blockera-control-repeater-group-header {
+
 	.blockera-control-content-editable {
+
 		input {
 			border-left: none;
 			border-right: none;

@@ -3,100 +3,62 @@
  * External dependencies
  */
 import type { Element } from 'react';
-import { useInstanceId } from '@wordpress/compose';
-import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
-
-/**
- * Blockera dependencies
- */
-import {
-	componentClassNames,
-	componentInnerClassNames,
-} from '@blockera/classnames';
+import { useRef } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import TabMenu from './tab-menu';
-import type { TTabsProps } from './types';
+import TabPanel from './tab-panel';
+import type { TTabsProps, TTabProps } from './types';
+
+/**
+ * Handle on select event!
+ *
+ * @param {string} tabName the name of tab
+ * @param {Function} setCurrentTab the set current tab to block high level state.
+ */
+const onSelect = (
+	tabName: string,
+	setCurrentTab?: (tabName: string) => void
+): void =>
+	'function' === typeof setCurrentTab ? setCurrentTab(tabName) : undefined;
 
 export function Tabs({
 	activeTab,
 	tabs,
 	getPanel,
-	design = 'clean',
-	fitWidthTabs = true,
-	orientation = 'horizontal',
+	design,
+	orientation,
 	setCurrentTab,
 	className,
-	activeClass = 'is-active-tab',
-	activeIcon,
-	injectMenuEnd,
-	heading,
 }: TTabsProps): Element<any> {
+	const tabsRef: {
+		current: Array<{
+			...TTabProps,
+			icon?: Element<any>,
+			settingSlug?: string,
+		}>,
+	} = useRef(tabs);
 	const ref = useRef();
-	const instanceId = useInstanceId(Tabs, 'tab-panel');
-	const [selected, setSelected] = useState<?string>(null);
-
-	const handleTabClick = useCallback(
-		(tabName: string): void => {
-			setSelected(tabName);
-			if (typeof setCurrentTab === 'function') {
-				setCurrentTab(tabName);
-			}
-		},
-		[setCurrentTab]
-	);
-
-	const selectedTab = tabs.find((tab) => tab.name === selected);
-	const selectedId = `${instanceId}-${selectedTab?.name ?? 'none'}`;
-
-	useEffect(() => {
-		const newSelectedTab = tabs.find((tab) => tab.name === selected);
-		if (!newSelectedTab) {
-			setSelected(activeTab || (tabs.length > 0 ? tabs[0].name : null));
-		}
-	}, [activeTab, selected, tabs]);
 
 	return (
-		<div
-			ref={ref}
-			className={componentClassNames(
-				'tabs',
-				'design-' + design,
-				fitWidthTabs && 'fit-width-tabs',
-				className
-			)}
-		>
-			<TabMenu
-				tabs={tabs}
-				selected={selected}
-				instanceId={instanceId}
-				orientation={orientation}
-				activeClass={activeClass}
-				activeIcon={activeIcon}
-				injectMenuEnd={injectMenuEnd}
-				heading={heading}
-				onTabClick={handleTabClick}
+		<div ref={ref}>
+			<TabPanel
+				activeClass="is-active-tab"
+				onSelect={(tabName) => {
+					onSelect(tabName, setCurrentTab);
+				}}
+				tabs={tabsRef.current}
+				initialTabName={activeTab}
 				design={design}
-			/>
-			{selectedTab && (
-				<div
-					key={selectedId}
-					aria-labelledby={selectedId}
-					role="tabpanel"
-					id={`${selectedId}-view`}
-					className={componentInnerClassNames(
-						'tabs__list__item__content'
-					)}
-				>
-					{getPanel(selectedTab)}
-				</div>
-			)}
+				orientation={orientation}
+				className={className}
+			>
+				{(tab) => getPanel(tab)}
+			</TabPanel>
 		</div>
 	);
 }
 
 export { default as TabPanel } from './tab-panel';
-export { default as TabMenu } from './tab-menu';
 export default Tabs;

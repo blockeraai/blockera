@@ -1,3 +1,5 @@
+@import "./components/style.scss";
+
 body {
 	--blockera-settings-primary-color: #2271b1;
 	--blockera-settings-secondary-color: #ffffff;
@@ -10,28 +12,22 @@ body.wp-admin[class*="blockera_page_"] {
 }
 
 #blockera-admin-settings-container {
-	--card-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04),
-		0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+	--card-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
 	--card-border: 1px solid #dadada;
 	--card-border-radius: 5px;
 	--card-padding: 25px;
-	--card-bg-color: #ffffff;
-	font-size: 16px;
-	margin: 0 0 0 -20px;
-	padding: 0;
-	background: #eaecee;
+    --card-bg-color: #ffffff;
+    font-size: 16px;
+    margin: 0;
+    padding: 20px 20px 20px 0;
+    width: calc(100% - 20px);
+    max-width: 1340px;
+	// height: 100%;
 }
 
 .blockera-settings-panel,
 .blockera-settings-dashboard {
-	--card-bg-color: #ffffff;
-}
-
-.blockera-settings-dashboard {
-	margin: 0 auto;
-	padding: 30px 20px 20px;
-	max-width: 1340px;
-	box-sizing: border-box;
+	height: 100%;
 }
 
 .blockera-settings-button {

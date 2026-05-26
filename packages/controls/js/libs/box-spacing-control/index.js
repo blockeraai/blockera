@@ -4,54 +4,69 @@
  */
 import { useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
-import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import {
-	controlClassNames,
-	controlInnerClassNames,
-} from '@blockera/classnames';
-import { prepare } from '@blockera/data-editor';
-import { Icon } from '@blockera/icons';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import type { BoxSpacingControlProps, BoxSpacingLock } from './types';
+import type {
+	BoxSpacingControlProps,
+	Side,
+	OpenPopover,
+	BoxSpacingLock,
+} from './types';
 import {
-	boxSpacingControlDefaultValue,
+	boxPositionControlDefaultValue,
 	boxSpacingValueCleanup,
-	formatBoxSpacingSidesForChangesetPreview,
-	getSmartLock,
 } from './utils';
-import {
-	BaseControl,
-	Grid,
-	Button,
-	LabelControl,
-	LabelControlContainer,
-	InputControl,
-} from '../index';
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
-import { isValid } from '../..';
+import { MarginAll } from './components/margin/margin-all';
+import { MarginVertical } from './components/margin/margin-vertical';
+import { MarginHorizontal } from './components/margin/margin-horizontal';
+import { MarginTop } from './components/margin/margin-top';
+import { MarginRight } from './components/margin/margin-right';
+import { MarginLeft } from './components/margin/margin-left';
+import { MarginBottom } from './components/margin/margin-bottom';
+import { PaddingAll } from './components/padding/padding-all';
+import { PaddingVertical } from './components/padding/padding-vertical';
+import { PaddingTop } from './components/padding/padding-top';
+import { PaddingBottom } from './components/padding/padding-bottom';
+import { PaddingHorizontal } from './components/padding/padding-horizontal';
+import { PaddingLeft } from './components/padding/padding-left';
+import { PaddingRight } from './components/padding/padding-right';
+import { Margin } from './components/margin/margin';
+import { Padding } from './components/padding/padding';
 
 export default function BoxSpacingControl({
 	className,
-	//
-	// marginDisable = 'none',
-	// paddingDisable = 'none',
+	openSide = '',
 	//
 	id,
-	labelProps: propsForLabelControl = {},
+	label = '',
+	labelPopoverTitle,
+	labelDescription,
 	repeaterItem,
-	defaultValue = boxSpacingControlDefaultValue,
+	singularId,
+	columns = '',
+	defaultValue = boxPositionControlDefaultValue,
 	onChange = () => {},
+	field,
+	marginLock: _marginLock = 'none',
+	paddingLock: _paddingLock = 'none',
+	marginDisable = 'none',
+	paddingDisable = 'none',
+	//
+	...props
 }: BoxSpacingControlProps): MixedElement {
 	const {
 		value,
 		setValue,
+		getId,
 		attribute,
 		blockName,
 		resetToDefault,
@@ -64,736 +79,155 @@ export default function BoxSpacingControl({
 		mergeInitialAndDefault: true,
 	});
 
+	const [openPopover, setOpenPopover]: [OpenPopover, (OpenPopover) => void] =
+		useState(openSide);
+
+	const [focusSide, setFocusSide]: [Side, (Side) => void] = useState('');
+
+	const [controlClassName, setControlClassName]: [string, (string) => void] =
+		useState('');
+
 	const [marginLock, setMarginLock]: [BoxSpacingLock, (string) => void] =
-		useState(getSmartLock(value, 'margin'));
-
+		useState(_marginLock);
 	const [paddingLock, setPaddingLock]: [BoxSpacingLock, (string) => void] =
-		useState(getSmartLock(value, 'padding'));
+		useState(_paddingLock);
 
-	const paddingLabelProps = {
+	const sideProps = {
+		id,
+		getId,
+		//
+		value,
+		setValue,
 		attribute,
 		blockName,
-		label: __('Padding', 'blockera'),
-		labelDescription: (
-			<p>
-				{__(
-					"Define the spacing between the block's content and its border, ensuring control over layout and aesthetics.",
-					'blockera'
-				)}
-			</p>
-		),
-		repeaterItem,
+		defaultValue,
 		resetToDefault,
-		mode: 'advanced',
-		singularId: 'padding',
-		value: value?.padding,
-		defaultValue: defaultValue?.padding,
-		path: getControlPath(attribute, 'padding'),
-		...propsForLabelControl,
-		changesetGraphPreviewRender:
-			propsForLabelControl.changesetGraphPreviewRender ??
-			formatBoxSpacingSidesForChangesetPreview,
+		getControlPath,
+		//
+		focusSide,
+		setFocusSide,
+		openPopover,
+		setOpenPopover,
+		marginDisable,
+		paddingDisable,
+		setControlClassName,
+		marginLock,
+		paddingLock,
+		setMarginLock,
+		setPaddingLock,
 	};
 
-	const marginLabelProps = {
+	const marginAll = MarginAll(sideProps);
+	const marginHorizontal = MarginHorizontal(sideProps);
+	const marginVertical = MarginVertical(sideProps);
+	const marginTop = MarginTop(sideProps);
+	const marginRight = MarginRight(sideProps);
+	const marginBottom = MarginBottom(sideProps);
+	const marginLeft = MarginLeft(sideProps);
+
+	const paddingAll = PaddingAll(sideProps);
+	const paddingHorizontal = PaddingHorizontal(sideProps);
+	const paddingVertical = PaddingVertical(sideProps);
+	const paddingTop = PaddingTop(sideProps);
+	const paddingRight = PaddingRight(sideProps);
+	const paddingBottom = PaddingBottom(sideProps);
+	const paddingLeft = PaddingLeft(sideProps);
+
+	const labelProps = {
+		value,
+		singularId,
 		attribute,
 		blockName,
-		label: __('Margin', 'blockera'),
-		labelDescription: (
-			<>
-				<p>
-					{__(
-						'Use margin to create separation between blocks, optimizing layout and enhancing visual balance.',
-						'blockera'
-					)}
-				</p>
-				<p>
-					{__(
-						"It's beneficial for improving layout and boosting visual harmony, especially in adaptive, responsive designs.",
-						'blockera'
-					)}
-				</p>
-			</>
-		),
+		label,
+		labelPopoverTitle,
+		labelDescription,
 		repeaterItem,
+		defaultValue,
 		resetToDefault,
 		mode: 'advanced',
-		singularId: 'margin',
-		value: value?.margin,
-		defaultValue: defaultValue?.margin,
-		path: getControlPath(attribute, 'margin'),
-		...propsForLabelControl,
-		changesetGraphPreviewRender:
-			propsForLabelControl.changesetGraphPreviewRender ??
-			formatBoxSpacingSidesForChangesetPreview,
+		path: getControlPath(attribute, id),
 	};
 
 	return (
-		<>
-			<BaseControl
-				label=""
-				columns={'columns-1'}
-				controlName="box-spacing-padding"
-			>
-				<div className={controlClassNames('box-spacing', className)}>
-					<div className={controlInnerClassNames('spacing-header')}>
-						<LabelControlContainer
-							style={{
-								marginRight: 'auto',
-							}}
-						>
-							<LabelControl {...paddingLabelProps} />
-						</LabelControlContainer>
-
-						<Grid gridTemplateColumns="1fr 30px" gap="8px">
-							<Grid gridTemplateColumns="1fr 1fr" gap="8px">
-								{(paddingLock === 'simple' ||
-									paddingLock === 'none') && (
-									<>
-										<InputControl
-											className={controlInnerClassNames(
-												'spacing-edge-top-bottom',
-												'spacing-padding-top-bottom',
-												'control-first label-center small-gap'
-											)}
-											data-test="padding-top-bottom"
-											columns="columns-1"
-											label={
-												<Icon
-													icon="padding-vertical"
-													iconSize="18"
-												/>
-											}
-											labelPopoverTitle={__(
-												'Top & Bottom Padding',
-												'blockera'
-											)}
-											labelDescription={
-												<p>
-													{__(
-														'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
-														'blockera'
-													)}
-												</p>
-											}
-											labelProps={{
-												changesetGraphPreview: {
-													type: 'string',
-												},
-											}}
-											id="padding.top"
-											unitType={'padding'}
-											range={false}
-											min={0}
-											//
-											defaultValue={prepare(
-												'padding.top',
-												defaultValue
-											)}
-											onChange={(newValue) => {
-												setValue({
-													...value,
-													padding: {
-														...value.padding,
-														top: newValue,
-														bottom: newValue,
-													},
-												});
-											}}
-											size="small"
-											controlAddonTypes={['variable']}
-											variableTypes={['spacing']}
-										/>
-
-										<InputControl
-											className={controlInnerClassNames(
-												'spacing-edge-left-right',
-												'spacing-padding-left-right',
-												'control-first label-center small-gap'
-											)}
-											data-test="padding-left-right"
-											columns="columns-1"
-											unitType={'padding'}
-											label={
-												<Icon
-													icon="padding-horizontal"
-													iconSize="18"
-												/>
-											}
-											labelPopoverTitle={__(
-												'Left & Right Padding',
-												'blockera'
-											)}
-											labelDescription={
-												<p>
-													{__(
-														'It enables you to set a padding space that applies to both the left and right edges of the block.',
-														'blockera'
-													)}
-												</p>
-											}
-											labelProps={{
-												changesetGraphPreview: {
-													type: 'string',
-												},
-											}}
-											id="padding.left"
-											defaultValue={prepare(
-												'padding.left',
-												defaultValue
-											)}
-											onChange={(newValue) => {
-												setValue({
-													...value,
-													padding: {
-														...value.padding,
-														left: newValue,
-														right: newValue,
-													},
-												});
-											}}
-											size="small"
-											controlAddonTypes={['variable']}
-											variableTypes={['spacing']}
-										/>
-									</>
-								)}
-							</Grid>
-
-							<Button
-								showTooltip={true}
-								tooltipPosition="top"
-								label={__(
-									'Custom Padding for Edges',
-									'blockera'
-								)}
-								data-test="padding-lock"
-								size="extra-small"
-								style={{
-									padding: '4px',
-									width: 'var(--blockera-controls-input-height)',
-									height: 'var(--blockera-controls-input-height)',
-								}}
-								className={
-									paddingLock !== 'simple'
-										? 'is-toggle-btn is-toggled'
-										: 'is-toggle-btn'
-								}
-								onClick={() => {
-									if (paddingLock === 'simple') {
-										setPaddingLock('expanded');
-									} else {
-										setPaddingLock('simple');
-									}
-
-									//
-									// Top or Bottom valid value
-									//
-									let validTPValue = '';
-
-									if (
-										isValid(value.padding.top) ||
-										value.padding.top !== ''
-									) {
-										validTPValue = value.padding.top;
-									} else if (
-										isValid(value.padding.bottom) ||
-										value.padding.bottom !== ''
-									) {
-										validTPValue = value.padding.bottom;
-									}
-
-									//
-									// Left or Right valid value
-									//
-									let validLRValue = '';
-
-									if (
-										isValid(value.padding.left) ||
-										value.padding.left !== ''
-									) {
-										validLRValue = value.padding.left;
-									} else if (
-										isValid(value.padding.right) ||
-										value.padding.right !== ''
-									) {
-										validLRValue = value.padding.right;
-									}
-
-									setValue({
-										...value,
-										padding: {
-											left: validLRValue,
-											right: validLRValue,
-											top: validTPValue,
-											bottom: validTPValue,
-										},
-									});
-								}}
-							>
-								{paddingLock === 'simple' ? (
-									<Icon icon="lock" iconSize="24" />
-								) : (
-									<Icon icon="unlock" iconSize="24" />
-								)}
-							</Button>
-						</Grid>
-					</div>
-
-					{paddingLock === 'expanded' && (
-						<div
-							className={controlInnerClassNames('spacing-edges')}
-						>
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-top',
-									'spacing-padding-top'
-								)}
-								data-test="padding-top"
-								id="padding.top"
-								unitType={'padding'}
-								range={false}
-								min={0}
-								//
-								defaultValue={prepare(
-									'padding.top',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										padding: {
-											...value.padding,
-											top: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-right',
-									'spacing-padding-right'
-								)}
-								data-test="padding-right"
-								id="padding.right"
-								unitType={'padding'}
-								range={false}
-								min={0}
-								//
-								defaultValue={prepare(
-									'padding.right',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										padding: {
-											...value.padding,
-											right: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-bottom',
-									'spacing-padding-bottom'
-								)}
-								data-test="padding-bottom"
-								id="padding.bottom"
-								unitType={'padding'}
-								range={false}
-								min={0}
-								//
-								defaultValue={prepare(
-									'padding.bottom',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										padding: {
-											...value.padding,
-											bottom: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-left',
-									'spacing-padding-left'
-								)}
-								data-test="padding-left"
-								id="padding.left"
-								unitType={'padding'}
-								range={false}
-								min={0}
-								//
-								defaultValue={prepare(
-									'padding.left',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										padding: {
-											...value.padding,
-											left: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<div
-								className={controlInnerClassNames(
-									'spacing-edges-preview'
-								)}
-							></div>
-						</div>
+		<BaseControl
+			columns={columns}
+			controlName={field}
+			className={className}
+			{...(label ? labelProps : {})}
+		>
+			<div className={controlClassNames('box-spacing-container')}>
+				<div
+					{...props}
+					className={controlClassNames(
+						'box-spacing',
+						'padding-lock-' + paddingLock,
+						'margin-lock-' + marginLock,
+						className,
+						controlClassName
 					)}
+					data-cy="box-spacing-control"
+				>
+					<svg
+						width="235"
+						height="150"
+						viewBox="0 0 250 159"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						{marginAll.shape}
+						{marginHorizontal.shape}
+						{marginVertical.shape}
+						{marginTop.shape}
+						{marginRight.shape}
+						{marginBottom.shape}
+						{marginLeft.shape}
+
+						{paddingAll.shape}
+						{paddingHorizontal.shape}
+						{paddingVertical.shape}
+						{paddingTop.shape}
+						{paddingRight.shape}
+						{paddingBottom.shape}
+						{paddingLeft.shape}
+					</svg>
+
+					{marginAll.label}
+					{marginHorizontal.label}
+					{marginVertical.label}
+					{marginTop.label}
+					{marginRight.label}
+					{marginBottom.label}
+					{marginLeft.label}
+
+					{paddingAll.label}
+					{paddingHorizontal.label}
+					{paddingVertical.label}
+					{paddingTop.label}
+					{paddingRight.label}
+					{paddingBottom.label}
+					{paddingLeft.label}
+
+					<Margin {...sideProps} />
+
+					<Padding {...sideProps} />
 				</div>
-			</BaseControl>
 
-			<BaseControl
-				label=""
-				columns={'columns-1'}
-				controlName="box-spacing-margin"
-			>
-				<div className={controlClassNames('box-spacing', className)}>
-					<div className={controlInnerClassNames('spacing-header')}>
-						<LabelControlContainer
-							style={{
-								marginRight: 'auto',
-							}}
-						>
-							<LabelControl {...marginLabelProps} />
-						</LabelControlContainer>
+				{marginAll.popover}
+				{marginHorizontal.popover}
+				{marginVertical.popover}
+				{marginTop.popover}
+				{marginRight.popover}
+				{marginBottom.popover}
+				{marginLeft.popover}
 
-						<Grid gridTemplateColumns="1fr 30px" gap="8px">
-							<Grid gridTemplateColumns="1fr 1fr" gap="8px">
-								{(marginLock === 'simple' ||
-									marginLock === 'none') && (
-									<>
-										<InputControl
-											className={controlInnerClassNames(
-												'spacing-edge-top-bottom',
-												'spacing-margin-top-bottom',
-												'control-first label-center small-gap'
-											)}
-											data-test="margin-top-bottom"
-											columns="columns-1"
-											unitType={'margin'}
-											label={
-												<Icon
-													icon="margin-vertical"
-													iconSize="18"
-												/>
-											}
-											labelPopoverTitle={__(
-												'Top & Bottom Margin',
-												'blockera'
-											)}
-											labelDescription={
-												<p>
-													{__(
-														'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
-														'blockera'
-													)}
-												</p>
-											}
-											labelProps={{
-												changesetGraphPreview: {
-													type: 'string',
-												},
-											}}
-											id="margin.top"
-											defaultValue={prepare(
-												'margin.top',
-												defaultValue
-											)}
-											onChange={(newValue) => {
-												setValue({
-													...value,
-													margin: {
-														...value.margin,
-														top: newValue,
-														bottom: newValue,
-													},
-												});
-											}}
-											size="small"
-											controlAddonTypes={['variable']}
-											variableTypes={['spacing']}
-										/>
-
-										<InputControl
-											className={controlInnerClassNames(
-												'spacing-edge-left-right',
-												'spacing-margin-left-right',
-												'control-first label-center small-gap'
-											)}
-											data-test="margin-left-right"
-											columns="columns-1"
-											unitType={'margin'}
-											label={
-												<Icon
-													icon="margin-horizontal"
-													iconSize="18"
-												/>
-											}
-											labelPopoverTitle={__(
-												'Left & Right Margin',
-												'blockera'
-											)}
-											labelDescription={
-												<p>
-													{__(
-														'It enables you to set a margin space that applies to both the left and right edges of the block.',
-														'blockera'
-													)}
-												</p>
-											}
-											labelProps={{
-												changesetGraphPreview: {
-													type: 'string',
-												},
-											}}
-											id="margin.left"
-											defaultValue={prepare(
-												'margin.left',
-												defaultValue
-											)}
-											onChange={(newValue) => {
-												setValue({
-													...value,
-													margin: {
-														...value.margin,
-														left: newValue,
-														right: newValue,
-													},
-												});
-											}}
-											size="small"
-											controlAddonTypes={['variable']}
-											variableTypes={['spacing']}
-										/>
-									</>
-								)}
-							</Grid>
-
-							<Button
-								showTooltip={true}
-								tooltipPosition="top"
-								label={__(
-									'Custom Margin for Edges',
-									'blockera'
-								)}
-								data-test="margin-lock"
-								size="extra-small"
-								style={{
-									padding: '4px',
-									width: 'var(--blockera-controls-input-height)',
-									height: 'var(--blockera-controls-input-height)',
-								}}
-								className={
-									marginLock !== 'simple'
-										? 'is-toggle-btn is-toggled'
-										: 'is-toggle-btn'
-								}
-								onClick={() => {
-									if (marginLock === 'simple') {
-										setMarginLock('expanded');
-									} else {
-										setMarginLock('simple');
-									}
-
-									//
-									// Top or Bottom valid value
-									//
-									let validTPValue = '';
-
-									if (
-										isValid(value.margin.top) ||
-										value.margin.top !== ''
-									) {
-										validTPValue = value.margin.top;
-									} else if (
-										isValid(value.margin.bottom) ||
-										value.margin.bottom !== ''
-									) {
-										validTPValue = value.margin.bottom;
-									}
-
-									//
-									// Left or Right valid value
-									//
-									let validLRValue = '';
-
-									if (
-										isValid(value.margin.left) ||
-										value.margin.left !== ''
-									) {
-										validLRValue = value.margin.left;
-									} else if (
-										isValid(value.margin.right) ||
-										value.margin.right !== ''
-									) {
-										validLRValue = value.margin.right;
-									}
-
-									setValue({
-										...value,
-										margin: {
-											left: validLRValue,
-											right: validLRValue,
-											top: validTPValue,
-											bottom: validTPValue,
-										},
-									});
-								}}
-							>
-								{marginLock === 'simple' ? (
-									<Icon icon="lock" iconSize="24" />
-								) : (
-									<Icon icon="unlock" iconSize="24" />
-								)}
-							</Button>
-						</Grid>
-					</div>
-
-					{marginLock === 'expanded' && (
-						<div
-							className={controlInnerClassNames('spacing-edges')}
-						>
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-top',
-									'spacing-margin-top'
-								)}
-								data-test="margin-top"
-								id="margin.top"
-								unitType={'margin'}
-								defaultValue={prepare(
-									'margin.top',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										margin: {
-											...value.margin,
-											top: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-right',
-									'spacing-margin-right'
-								)}
-								data-test="margin-right"
-								id="margin.right"
-								unitType={'margin'}
-								defaultValue={prepare(
-									'margin.right',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										margin: {
-											...value.margin,
-											right: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-bottom',
-									'spacing-margin-bottom'
-								)}
-								data-test="margin-bottom"
-								id="margin.bottom"
-								unitType={'margin'}
-								defaultValue={prepare(
-									'margin.bottom',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										margin: {
-											...value.margin,
-											bottom: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<InputControl
-								className={controlInnerClassNames(
-									'spacing-edge-left',
-									'spacing-margin-left'
-								)}
-								data-test="margin-left"
-								id="margin.left"
-								unitType={'margin'}
-								defaultValue={prepare(
-									'margin.left',
-									defaultValue
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										margin: {
-											...value.margin,
-											left: newValue,
-										},
-									});
-								}}
-								size="small"
-								controlAddonTypes={['variable']}
-								variableTypes={['spacing']}
-							/>
-
-							<div
-								className={controlInnerClassNames(
-									'spacing-edges-preview'
-								)}
-							></div>
-						</div>
-					)}
-				</div>
-			</BaseControl>
-		</>
+				{paddingAll.popover}
+				{paddingHorizontal.popover}
+				{paddingVertical.popover}
+				{paddingTop.popover}
+				{paddingRight.popover}
+				{paddingBottom.popover}
+				{paddingLeft.popover}
+			</div>
+		</BaseControl>
 	);
 }

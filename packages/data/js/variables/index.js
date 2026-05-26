@@ -11,11 +11,13 @@ export const getBlockEditorSettings = (): Object => {
 };
 
 export {
+	getLinearGradientsTitle,
 	getLinearGradients,
 	getLinearGradientBy,
 	getLinearGradient,
 } from './linear-gradient';
 export {
+	getRadialGradientsTitle,
 	getRadialGradients,
 	getRadialGradientBy,
 	getRadialGradient,
@@ -31,11 +33,10 @@ export {
 	getFontSizes,
 	getFontSizeBy,
 	getFontSize,
-	getFontSizeVAStringFromId,
-	getFontSizeVAFromIdString,
-	getFontSizeVAFromVarString,
+	getFontSizesTitle,
 } from './font-size';
 export {
+	getSpacingsTitle,
 	getSpacings,
 	getSpacingBy,
 	getSpacing,
@@ -43,13 +44,13 @@ export {
 	getSpacingVAFromVarString,
 } from './spacing';
 export {
+	getWidthSizesTitle,
 	getWidthSizes,
 	getWidthSizeBy,
 	getWidthSize,
-	getWidthSizeVAFromIdString,
-	getWidthSizeVAFromVarString,
 } from './width-size';
 export {
+	getColorsTitle,
 	getColors,
 	getColorBy,
 	getColor,
@@ -60,11 +61,7 @@ export { getVariable } from './get-variable';
 export {
 	generateVariableString,
 	generateAttributeVarStringFromVA,
-	generateVariableStringFromAttributeVarString,
-	matchesVarStringMiddleType,
-	getValueAddonFromVarString,
 } from './utils';
-export type { GetValueAddonFromVarStringOptions } from './utils';
 
 export * from './types';
 export * from './store/types';

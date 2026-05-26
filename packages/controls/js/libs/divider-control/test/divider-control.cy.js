@@ -225,39 +225,16 @@ describe('divider-control component testing', () => {
 
 			cy.getByDataCy('group-control-header').click();
 
-			// Color lives in the divider popover; the picker opens a second popover.
-			cy.getByDataTest('popover-body')
-				.first()
-				.within(() => {
-					cy.getByDataCy('color-btn').click();
-				});
+			cy.getByDataCy('color-btn').click();
 			cy.getByDataTest('popover-body')
 				.last()
 				.within(() => {
-					cy.get('[data-cy="color-picker-css-value"]').clear({
-						force: true,
-					});
-					cy.get('[data-cy="color-picker-css-value"]').type(
-						'43d5b7',
-						{ delay: 0 }
-					);
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('43d5b7 ');
 				});
 
-			// Check control (match outline/box-border: style + label; avoid ambiguous color-btn)
-			cy.getByDataTest('popover-body')
-				.first()
-				.within(() => {
-					cy.getByDataCy('color-btn')
-						.should('have.attr', 'style')
-						.and('match', /43d5b7/i);
-					cy.getByDataCy('color-label')
-						.invoke('text')
-						.should((t) => {
-							expect(t.replace('#', '').toLowerCase()).to.include(
-								'43d5b7'
-							);
-						});
-				});
+			//Check control
+			cy.getByDataCy('color-btn').contains('#43d5b7');
 
 			//Check icon
 

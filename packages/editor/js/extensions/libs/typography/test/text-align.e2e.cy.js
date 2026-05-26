@@ -1,9 +1,10 @@
 import {
 	savePage,
-	createPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
+	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Align → Functionality', () => {
@@ -15,6 +16,8 @@ describe('Text Align → Functionality', () => {
 	});
 
 	it('simple value', () => {
+		openMoreFeaturesControl('More typography settings');
+
 		// center align
 		cy.getByAriaLabel('Center').click();
 

@@ -22,14 +22,12 @@ const LabelControl = ({
 	labelDescription,
 	path,
 	singularId,
-	className = '',
-	labelClassName = '',
+	className,
 	ariaLabel = '',
 	attribute,
 	blockName,
 	isRepeater = false,
 	repeaterItem,
-	iconPosition = 'end',
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
@@ -48,7 +46,7 @@ const LabelControl = ({
 				{...{
 					label,
 					singularId,
-					className: `${className} ${labelClassName}`.trim(),
+					className,
 					ariaLabel,
 					attribute,
 					blockName,
@@ -56,7 +54,6 @@ const LabelControl = ({
 					labelDescription,
 					labelPopoverTitle,
 					repeaterItem,
-					iconPosition,
 					resetToDefault,
 					path: isRepeater ? path || attribute : path,
 					...props,
@@ -69,9 +66,8 @@ const LabelControl = ({
 		<SimpleLabelControl
 			label={label}
 			ariaLabel={ariaLabel}
-			className={`${className} ${labelClassName}`.trim()}
+			className={className}
 			labelDescription={labelDescription}
-			iconPosition={iconPosition}
 			{...props}
 		/>
 	);

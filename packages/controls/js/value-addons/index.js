@@ -50,13 +50,13 @@ export const useValueAddon = ({
 					valueType: value?.valueType || '',
 					id: value?.id || '',
 					settings: value.settings || {},
-				}
+			  }
 			: {
 					isValueAddon: false,
 					valueType: null,
 					id: '',
 					settings: {},
-				};
+			  };
 	}, [value]);
 
 	// type is empty

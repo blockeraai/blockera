@@ -21,7 +21,7 @@ describe('Max Height → Functionality', () => {
 		// activate max height
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Height');
 
-		cy.getParentContainer('Max Height').within(() => {
+		cy.getParentContainer('Max').within(() => {
 			cy.get('input').type(200);
 		});
 
@@ -40,7 +40,7 @@ describe('Max Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p.blockera-block').should('have.css', 'max-height', '200px');
+		cy.get('.blockera-block').should('have.css', 'max-height', '200px');
 	});
 
 	it('variable value', () => {
@@ -48,7 +48,7 @@ describe('Max Height → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Height');
 
 		// open value addon
-		cy.getParentContainer('Max Height').within(() => {
+		cy.getParentContainer('Max').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -61,7 +61,7 @@ describe('Max Height → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'max-height: var(--wp--style--global--content-size, 645px)'
+					'max-height: var(--wp--style--global--content-size)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Max Height → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'max-height: var(--wp--style--global--content-size, 645px)'
+				'max-height: var(--wp--style--global--content-size)'
 			);
 	});
 });

@@ -34,10 +34,9 @@ export default function Grid({
 	return (
 		<div
 			style={{
-				gap:
-					columnGap || rowGap
-						? (rowGap || '') + ' ' + (columnGap || '')
-						: gap,
+				columnGap,
+				rowGap,
+				gap, // gap should be after row and column gap!
 				gridTemplate,
 				gridTemplateColumns,
 				gridTemplateRows,

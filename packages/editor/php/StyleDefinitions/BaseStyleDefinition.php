@@ -7,33 +7,12 @@ use Blockera\Editor\StyleDefinitions\Contracts\HasIgnoreChecks;
 
 abstract class BaseStyleDefinition {
 
-	/**
-	 * Store the style definition identifier.
-	 *
-	 * @var string $id The style definition identifier.
-	 */
-	protected string $id = '';
-
     /**
      * Store the block details includes all settings.
      *
      * @var array $block The block details.
      */
     protected array $block = [];
-
-	/**
-	 * Store the flag to determine if the style is a global style.
-	 *
-	 * @var bool $is_global_style
-	 */
-	protected bool $is_global_style = false;
-
-	/**
-	 * Store the flag to determine if the style is a style variation.
-	 *
-	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
-	 */
-	protected bool $is_style_variation = false;
 
     /**
      * Store style definition identifier.
@@ -98,7 +77,7 @@ abstract class BaseStyleDefinition {
      * @var array
      */
     protected array $options = [
-        'is-important' => false,
+        'is-important' => true,
     ];
 
     /**
@@ -144,13 +123,6 @@ abstract class BaseStyleDefinition {
     protected array $support = [];
 
 	/**
-	 * Store the support type.
-	 *
-	 * @var string $support_type the support type.
-	 */
-	protected string $support_type = 'single';
-
-	/**
 	 * Store the no checks flag.
 	 *
 	 * @var bool $no_checks the no checks flag.
@@ -169,27 +141,6 @@ abstract class BaseStyleDefinition {
     public function __construct( array $supports) { 
         $this->support = $supports;
     }
-
-	/**
-	 * Get the style definition identifier.
-	 *
-	 * @return string the style definition identifier.
-	 */
-	public function getId():string{
-
-		return $this->id;
-	}
-
-	/**
-	 * Set the style definition identifier.
-	 *
-	 * @param string $id the style definition identifier.
-	 *
-	 * @return void
-	 */
-	public function setId( string $id):void{
-		$this->id = $id;
-	}
 
 	/**
 	 * Set the no checks flag.
@@ -214,28 +165,6 @@ abstract class BaseStyleDefinition {
 
         $this->style_id = $id;
     }
-
-	/**
-	 * Get the style identifier.
-	 *
-	 * @return string the style identifier.
-	 */
-	public function getStyleId(): string {
-
-		return $this->style_id;
-	}
-
-	/**
-	 * Set the flag to determine if the style is a global style.
-	 *
-	 * @param bool $is_global_style the flag to determine if the style is a global style.
-	 *
-	 * @return void
-	 */
-	public function setIsGlobalStyle( bool $is_global_style): void {
-		
-		$this->is_global_style = $is_global_style;
-	}
 
     /**
      * Set the current breakpoint.
@@ -270,26 +199,6 @@ abstract class BaseStyleDefinition {
         return $this->selector;
     }
 
-	/**
-	 * Get the flag to determine if the style is a style variation.
-	 *
-	 * @return boolean
-	 */
-	public function getIsStyleVariation(): bool {
-		return $this->is_style_variation;
-	}
-
-	/**
-	 * Set the flag to determine if the style is a style variation.
-	 *
-	 * @param boolean $is_style_variation the flag to indicate current style is variation style or not.
-	 *
-	 * @return void
-	 */
-	public function setIsStyleVariation( bool $is_style_variation): void {
-		$this->is_style_variation = $is_style_variation;
-	}
-
     /**
      * Sets suitable css selector for related property.
      *
@@ -306,7 +215,7 @@ abstract class BaseStyleDefinition {
         $fallback  = $this->getFallbackSupport($support);
         $selectors = blockera_get_block_type_property($this->block['blockName'], 'selectors');
 
-		$prepared_selector = blockera_get_compatible_block_css_selector(
+        $this->selector = blockera_get_compatible_block_css_selector(
             $selectors,
             $support,
             [
@@ -319,11 +228,8 @@ abstract class BaseStyleDefinition {
                 'root'                     => $selectors['root'] ?? null,
                 'blockera-unique-selector' => $this->blockera_unique_selector,
                 'breakpoint'               => $this->breakpoint,
-				'is-global-style'          => $this->is_global_style,
             ]
-		);
-
-		$this->selector = $prepared_selector;
+        );
     }
 
     /**
@@ -361,28 +267,6 @@ abstract class BaseStyleDefinition {
 
         $this->block = $block;
     }
-
-	/**
-	 * Sets the support type.
-	 *
-	 * @param string $support_type the support type.
-	 *
-	 * @return void
-	 */
-	public function setSupportType( string $support_type): void {
-
-		$this->support_type = $support_type;
-	}
-
-	/**
-	 * Get the support type.
-	 *
-	 * @return string the support type.
-	 */
-	public function getSupportType(): string {
-
-		return $this->support_type;
-	}
 
     /**
      * @return array
@@ -505,17 +389,7 @@ abstract class BaseStyleDefinition {
             $value = $value['value'];
         }
 
-        $supports = $this->getSupports(false);
-        $id       = $this->getId();
-        
-        $support = isset($supports[ $id ]) ? $supports[ $id ] : null;
-        
-        if (! $support) {
-
-            return;
-        }
-
-        $cssProperty = $support['css-property'] ?? null;
+        $cssProperty = $this->getSupportCssProperty();
 
         // Skip if no CSS property is defined.
         if (! $cssProperty) {
@@ -524,16 +398,20 @@ abstract class BaseStyleDefinition {
         }
 
         // Skip processing mask and divider properties if they are not enabled in experimental features.
-        if (( 'divider' === $cssProperty || 'mask' === $cssProperty ) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
+        if (in_array($cssProperty, [ 'divider', 'mask' ], true) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
 
             return;
         }
 
-        $is_available = $this->availableInInnerBlock($id);
+        // Skip processing for properties with default value.
+        if (isset($this->default_settings[ $this->style_id ]['default']['value']) && $value === $this->default_settings[ $this->style_id ]['default']['value']) {
+
+            return;
+        }
 
         if ($this instanceof CustomStyle) {
 
-            $settings = $this->getCustomSettings($this->settings, $id, $cssProperty);
+            $settings = $this->getCustomSettings($this->settings, $this->style_id, $cssProperty);
 
         } else {
 
@@ -546,12 +424,21 @@ abstract class BaseStyleDefinition {
             ];
         }
 
-        if ($support && $is_available) {
-            foreach ($settings as $setting) {
+        array_map(
+            function ( array $setting): void {
 
-				$this->css($setting);
-            }
-        }
+                if (! $this->getSupports(false)[ $this->style_id ]) {
+
+                    return;
+                }
+
+                if ($this->availableInInnerBlock($this->style_id)) {
+
+					$this->css($setting);
+                }
+            },
+            $settings
+        );
     }
 
     /**
@@ -568,14 +455,14 @@ abstract class BaseStyleDefinition {
         }
 
         if ($this->isImportant()) {
-            $important_suffix = $this->getImportant();
-            foreach ($declaration as $key => $value) {
-                if (is_string($value)) {
-                    $declaration[ $key ] = $value . $important_suffix;
-                } else {
-                    unset($declaration[ $key ]);
-                }
-            }
+
+            $declaration = array_map(
+                function ( string $declaration_item): string {
+
+                    return $declaration_item . $this->getImportant();
+                },
+                array_filter($declaration, 'is_string')
+            );
         }
 
         if (! empty($selectorSuffix) && ! empty($customSupportId)) {
@@ -585,19 +472,17 @@ abstract class BaseStyleDefinition {
 
         } else {
 
-            $this->setSelector($this->getId());
+            $this->setSelector($this->style_id);
         }
 
-        $selector = $this->selector;
+        if (isset($this->css[ $this->getSelector() ])) {
 
-        if (isset($this->css[ $selector ])) {
-
-            $this->css[ $selector ] = array_merge($this->css[ $selector ], $declaration);
+            $this->css[ $this->getSelector() ] = array_merge($this->css[ $this->getSelector() ], $declaration);
 
             return;
         }
 
-        $this->css[ $selector ] = $declaration;
+        $this->css[ $this->getSelector() ] = $declaration;
     }
 
     /**
@@ -607,7 +492,7 @@ abstract class BaseStyleDefinition {
      */
     protected function isImportant(): bool {
 
-        return $this->options['is-important'];
+        return $this->options['is-important'] && ! blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
     }
 
     /**
@@ -653,18 +538,6 @@ abstract class BaseStyleDefinition {
         $this->settings = $settings;
     }
 
-	/**
-	 * Get the support.
-	 *
-	 * @return array the support.
-	 */
-	protected function getSupport():array{
-
-		$supports = $this->getSupports(false);
-
-		return $supports[ $this->getId() ];
-	}
-
     /**
      * Get blockera support standard css property name.
      *
@@ -672,7 +545,7 @@ abstract class BaseStyleDefinition {
      */
     public function getSupportCssProperty(): ?string {
 
-        return $this->getSupport()['css-property'] ?? null;
+        return $this->getSupports(false)[ $this->style_id ]['css-property'] ?? null;
     }
 
     /**
@@ -737,37 +610,10 @@ abstract class BaseStyleDefinition {
 
 	/**
 	 * Get current breakpoint settings.
-	 * 
-	 * @param bool $is_inner_block The flag to determine if the current settings are for an inner block.
 	 *
 	 * @return array
 	 */
-	protected function getCurrentBreakpointSettings( bool $is_inner_block = false): array {
-
-		if ($is_inner_block) {
-
-			// Try prepare from current inner block state.
-			$settings = $this->getCurrentInnerBlockSettings();
-
-			$block_states = $settings['blockeraBlockStates']['value'] ?? [];
-			
-			if (! empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
-
-				return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
-			}
-
-			// Try prepare from master current state as a fallback way.
-			$settings = $this->getCurrentInnerBlockSettings(true);
-
-			$block_states = $settings['blockeraBlockStates']['value'] ?? [];
-			
-			if (! empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
-
-				return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
-			}
-
-			return $settings;
-		}
+	protected function getCurrentBreakpointSettings(): array {
 
 		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
 
@@ -787,38 +633,6 @@ abstract class BaseStyleDefinition {
 		}
 
 		return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
-	}
-
-	/**
-	 * Get current inner block settings.
-	 * 
-	 * @param bool $from_master_state flag to determine if the current settings are from master state. Default is false.
-	 *
-	 * @return array
-	 */
-	protected function getCurrentInnerBlockSettings( bool $from_master_state = false): array {
-		
-		if (! blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && $from_master_state) {
-
-			$states     = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];
-			$breakpoint = $states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
-
-			return $breakpoint['blockeraInnerBlocks'][ $this->block_type ]['attributes'] ?? [];
-		}
-
-		if (empty($this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ])) {
-
-			return [];
-		}
-		
-		$current_block = $this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ]['attributes'] ?? [];
-
-		if (empty($current_block)) {
-
-			return [];
-		}
-
-		return $current_block;
 	}
 
     /**

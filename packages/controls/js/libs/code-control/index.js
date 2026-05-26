@@ -5,7 +5,7 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState, useRef, useCallback } from '@wordpress/element';
+import { useState, useRef } from '@wordpress/element';
 import { Editor } from '@monaco-editor/react';
 import memoize from 'fast-memoize';
 
@@ -30,7 +30,7 @@ import {
  * Internal dependencies
  */
 import BaseControl from '../base-control';
-import { Button, DynamicHtmlFormatter, TextLoading } from '../';
+import { DynamicHtmlFormatter } from '../';
 import { useControlContext } from '../../context';
 import type { CodeControlProps } from './types';
 
@@ -209,14 +209,11 @@ const CodeControl = ({
 	placeholder = '',
 	editable = true,
 	description = '',
-	suggestionsType = 'block',
-	loadingText,
 	//
 	id,
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns = 'columns-1',
@@ -243,33 +240,6 @@ const CodeControl = ({
 	const editorRef = useRef(null);
 	const timeoutRef = useRef(null);
 
-	// Monaco applies built-in CSS formatting; we sync the formatted buffer into
-	// control state and cancel the pending debounced onChange so we do not
-	// overwrite with a stale value on the next tick.
-	const handlePrettify = useCallback(() => {
-		const editor = editorRef.current;
-
-		if (!editor) {
-			return;
-		}
-
-		const action = editor.getAction('editor.action.formatDocument');
-
-		if (!action || !action.isSupported()) {
-			return;
-		}
-
-		void action.run().then(() => {
-			const next = editor.getValue();
-
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
-
-			setValue(next);
-		});
-	}, [setValue]);
-
 	const labelProps = {
 		value,
 		singularId,
@@ -283,37 +253,36 @@ const CodeControl = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	switch (lang) {
 		case 'css':
 			if (!description) {
 				description = (
-					<p>
-						<DynamicHtmlFormatter
-							text={sprintf(
-								/* translators: %1$s: CSS selector placeholder, %2$s: Block class selector */
-								__(
-									'Use %1$s or %2$s to target current block.',
-									'blockera'
-								),
-								'{&}',
-								'{.block}'
-							)}
-							replacements={{
-								'&': <code>&</code>,
-								'.block': <code>.block</code>,
-							}}
-						/>
-					</p>
+					<>
+						<p>
+							<DynamicHtmlFormatter
+								text={sprintf(
+									/* translators: $1%s is a CSS selector, $2%s is ID. */
+									__(
+										'Use %1$s to target current block.',
+										'blockera'
+									),
+									'{.block}'
+								)}
+								replacements={{
+									'.block': <code>.block</code>,
+								}}
+							/>
+						</p>
+					</>
 				);
 			}
 
 			if (!placeholder) {
 				placeholder = (
 					<>
-						& {'{'}
+						.block {'{'}
 						<br />
 						&nbsp;&nbsp;&nbsp;{'/* Your CSS here */'}
 						<br />
@@ -329,11 +298,10 @@ const CodeControl = ({
 		<BaseControl columns={columns} controlName={field} {...labelProps}>
 			<div className={controlClassNames('code', className)}>
 				<Editor
-					width={width || '100%'}
+					width={width || 248}
 					height={height || 200}
 					defaultLanguage={lang}
 					defaultValue={value}
-					loading={<TextLoading text={loadingText} />}
 					onChange={(newValue) => {
 						setShowPlaceholder(newValue === '');
 
@@ -419,102 +387,28 @@ const CodeControl = ({
 												.trim()
 												.endsWith('.')
 										) {
-											if (suggestionsType === 'block') {
-												return {
-													suggestions: [
-														{
-															label: '.block',
-															kind: monaco
-																.languages
-																.CompletionItemKind
-																.Class,
-															insertText:
-																'.block {\n\t$0\n}\n',
-															insertTextRules:
-																monaco.languages
-																	.CompletionItemInsertTextRule
-																	.InsertAsSnippet,
-															documentation: __(
-																'Target the current block',
-																'blockera'
-															),
-															detail: __(
-																'Current Block',
-																'blockera'
-															),
-															sortText: '.block',
-															range: {
-																startLineNumber:
-																	position.lineNumber,
-																startColumn:
-																	position.column -
-																	1,
-																endLineNumber:
-																	position.lineNumber,
-																endColumn:
-																	position.column,
-															},
-														},
-														{
-															label: '.block:hover',
-															kind: monaco
-																.languages
-																.CompletionItemKind
-																.Class,
-															insertText:
-																'.block:hover {\n\t$0\n}\n',
-															insertTextRules:
-																monaco.languages
-																	.CompletionItemInsertTextRule
-																	.InsertAsSnippet,
-															documentation: __(
-																'Target the current block on hover',
-																'blockera'
-															),
-															detail: __(
-																'Current Block on Hover',
-																'blockera'
-															),
-															sortText:
-																'.block:hover',
-															range: {
-																startLineNumber:
-																	position.lineNumber,
-																startColumn:
-																	position.column -
-																	1,
-																endLineNumber:
-																	position.lineNumber,
-																endColumn:
-																	position.column,
-															},
-														},
-													],
-												};
-											}
-
 											return {
 												suggestions: [
 													{
-														label: 'body',
+														label: '.block',
 														kind: monaco.languages
 															.CompletionItemKind
 															.Class,
 														insertText:
-															'body {\n\t$0\n}\n',
+															'.block {\n\t$0\n}\n',
 														insertTextRules:
 															monaco.languages
 																.CompletionItemInsertTextRule
 																.InsertAsSnippet,
 														documentation: __(
-															'Target the body element',
+															'Target the current block',
 															'blockera'
 														),
 														detail: __(
-															'Body Element',
+															'Current Block',
 															'blockera'
 														),
-														sortText: 'body',
+														sortText: '.block',
 														range: {
 															startLineNumber:
 																position.lineNumber,
@@ -528,26 +422,26 @@ const CodeControl = ({
 														},
 													},
 													{
-														label: '.wp-block-group',
+														label: '.block:hover',
 														kind: monaco.languages
 															.CompletionItemKind
 															.Class,
 														insertText:
-															'.wp-block-group {\n\t$0\n}\n',
+															'.block:hover {\n\t$0\n}\n',
 														insertTextRules:
 															monaco.languages
 																.CompletionItemInsertTextRule
 																.InsertAsSnippet,
 														documentation: __(
-															'Target the group block',
+															'Target the current block on hover',
 															'blockera'
 														),
 														detail: __(
-															'Group Block',
+															'Current Block on Hover',
 															'blockera'
 														),
 														sortText:
-															'.wp-block-group',
+															'.block:hover',
 														range: {
 															startLineNumber:
 																position.lineNumber,
@@ -626,24 +520,13 @@ const CodeControl = ({
 					}}
 					onMount={(editor: any) => {
 						editorRef.current = editor;
-						const currentValue = editor.getValue();
 
-						if (
-							value !== currentValue &&
-							['& {\n    \n}\n', '.block {\n    \n}\n'].includes(
-								currentValue
-							)
-						) {
+						if (value !== editor.getValue()) {
 							editor.setValue(value);
 						}
 
 						// Set cursor position between curly braces for CSS
-						if (
-							lang === 'css' &&
-							['& {\n    \n}\n', '.block {\n    \n}\n'].includes(
-								value
-							)
-						) {
+						if (lang === 'css' && value === '.block {\n    \n}\n') {
 							const position = editor.getPosition();
 							if (position) {
 								editor.setPosition({
@@ -671,38 +554,7 @@ const CodeControl = ({
 							'code-control__description'
 						)}
 					>
-						{/* CSS: helper text on the left, Prettify on the right (same row). */}
-						{lang === 'css' ? (
-							<div
-								className={controlInnerClassNames(
-									'code-control__description-row'
-								)}
-							>
-								<div
-									className={controlInnerClassNames(
-										'code-control__description-body'
-									)}
-								>
-									{description}
-								</div>
-								<div
-									className={controlInnerClassNames(
-										'code-control__description-actions'
-									)}
-								>
-									<Button
-										variant={'tertiary'}
-										size={'extra-small'}
-										text={__('Prettify', 'blockera')}
-										onClick={handlePrettify}
-										disabled={!editable}
-										data-cy="code-control-prettify"
-									/>
-								</div>
-							</div>
-						) : (
-							description
-						)}
+						{description}
 					</div>
 				)}
 			</div>

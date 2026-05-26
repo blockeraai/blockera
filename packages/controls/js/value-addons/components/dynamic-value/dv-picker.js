@@ -82,9 +82,7 @@ export default function ({
 			placement="left-start"
 			onClose={() => {
 				controlProps.setOpen('');
-				if (onClose) {
-					onClose();
-				}
+				if (onClose) onClose();
 			}}
 			className={controlInnerClassNames('popover-dynamic-values')}
 			titleButtonsRight={

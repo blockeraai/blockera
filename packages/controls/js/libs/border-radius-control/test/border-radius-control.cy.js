@@ -73,20 +73,13 @@ describe('border-radius-control component testing', () => {
 					name,
 				});
 
-				cy.getByDataTest('border-radius-input-all').clear({
-					force: true,
-				});
-				cy.getByDataTest('border-radius-input-all').type('10', {
-					force: true,
-				});
+				cy.get('input').clear();
+				cy.get('input').type(10);
 
-				cy.getByDataTest('border-radius-input-all').should(
-					'have.value',
-					'10'
-				);
+				cy.get('input').should('have.value', '10');
 
 				//Check data provider value
-				cy.getByDataTest('border-radius-input-all').then(() => {
+				cy.get('input').then(() => {
 					expect('10px').to.be.equal(getControlValue(name).all);
 				});
 			});
@@ -105,8 +98,11 @@ describe('border-radius-control component testing', () => {
 				cy.getByAriaLabel('Custom Border Radius').click();
 
 				cy.getByAriaLabel('Custom Border Radius')
-					.should('have.class', 'is-toggle-btn')
-					.should('have.class', 'is-toggled');
+					.should('have.attr', 'style')
+					.should(
+						'include',
+						'var(--blockera-controls-primary-color)'
+					);
 
 				//Check data provider value
 				cy.get('input').then(() => {
@@ -427,9 +423,7 @@ describe('border-radius-control component testing', () => {
 			name,
 		});
 
-		cy.getByDataTest('border-radius-input-all').type('5', {
-			force: true,
-		});
+		cy.get('input').type('5');
 
 		cy.get('@onChange').should('have.been.called');
 	});

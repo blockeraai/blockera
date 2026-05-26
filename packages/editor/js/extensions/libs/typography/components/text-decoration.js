@@ -42,7 +42,8 @@ export const TextDecoration = ({
 			}}
 		>
 			<ToggleSelectControl
-				columns="1fr 2.5fr"
+				columns="columns-1"
+				className="control-first label-center small-gap"
 				label={__('Decoration', 'blockera')}
 				labelPopoverTitle={__('Text Decoration', 'blockera')}
 				labelDescription={

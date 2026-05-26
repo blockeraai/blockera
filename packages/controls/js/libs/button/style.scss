@@ -29,32 +29,6 @@
 		height: 24px;
 		padding: 0 5px;
 		line-height: 24px;
-
-		&.is-toggle-btn {
-			position: relative;
-			z-index: 0;
-
-			&:hover:not(.is-toggled) {
-				color: var(--blockera-controls-primary-color) !important;
-			}
-
-			&.is-toggled {
-				color: #ffffff !important;
-
-				&::before {
-					content: "";
-					position: absolute;
-					display: inline-block;
-					left: 3px;
-					right: 3px;
-					top: 3px;
-					bottom: 3px;
-					background: var(--blockera-controls-primary-color);
-					z-index: -1;
-					border-radius: 2px;
-				}
-			}
-		}
 	}
 
 	&.content-align-left {
@@ -66,6 +40,7 @@
 	}
 
 	&.components-button.no-border {
+
 		&:focus:not(:disabled),
 		&:hover,
 		& {
@@ -101,10 +76,7 @@
 
 		&.is-focus:not(:disabled):not(.is-busy),
 		&:focus:not(:disabled):not(.is-busy) {
-			box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-primary-color, #ffffff),
-				0 0 0 1px var(--blockera-controls-background-color),
-				0 0 0 2.5px var(--blockera-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 		}
 
 		&:disabled,
@@ -124,8 +96,7 @@
 		&[aria-disabled="true"]:active:enabled:focus:enabled,
 		&[aria-disabled="true"]:enabled:focus:enabled,
 		&[aria-disabled="true"]:focus:enabled {
-			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color),
-				0 0 0 3px var(--blockera-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 3px var(--blockera-controls-primary-color);
 		}
 
 		&.is-busy,
@@ -156,24 +127,13 @@
 		background-color: #ffffff;
 
 		&:hover:not(:disabled, .no-border, .is-busy) {
-			background-color: color-mix(
-				in srgb,
-				var(--blockera-controls-primary-color) 7%,
-				#ffffff
-			);
+			background-color: color-mix(in srgb, var(--blockera-controls-primary-color) 7%, #ffffff);
 		}
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .is-busy) {
-			box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-primary-color, #ffffff),
-				0 0 0 1px var(--blockera-controls-background-color),
-				0 0 0 2.5px var(--blockera-controls-primary-color) !important;
-			background-color: color-mix(
-				in srgb,
-				var(--blockera-controls-primary-color) 10%,
-				#ffffff
-			);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
+			background-color: color-mix(in srgb, var(--blockera-controls-primary-color) 10%, #ffffff);
 		}
 
 		&:disabled,
@@ -194,16 +154,12 @@
 		&:hover:not(:disabled, .no-border, .is-busy) {
 			outline: 3px solid transparent;
 			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
-			box-shadow: inset 0 0 0 1px
-				var(--blockera-controls-primary-color, #ffffff);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff);
 		}
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .is-busy) {
-			box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-primary-color, #ffffff),
-				0 0 0 1px var(--blockera-controls-background-color),
-				0 0 0 2.5px var(--blockera-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 		}
 
 		&:disabled,
@@ -234,9 +190,7 @@
 		&:hover:not(:disabled, [aria-disabled="true"], .no-border, .is-busy) {
 			background: var(--blockera-controls-background-color);
 			color: var(--blockera-controls-color);
-			--blockera-controls-border-color: var(
-				--blockera-controls-border-color-hover
-			);
+			--blockera-controls-border-color: var(--blockera-controls-border-color-hover);
 		}
 
 		&.is-focus:not(.no-border, .is-busy) {
@@ -245,8 +199,7 @@
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .toggle-focus, .is-busy) {
-			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color),
-				0 0 0 1px var(--blockera-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 1px var(--blockera-controls-primary-color) !important;
 			outline: 2px solid transparent !important;
 		}
 
@@ -258,8 +211,7 @@
 			transform: none;
 
 			&:not(.no-border) {
-				box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-border-color);
+				box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color);
 			}
 		}
 	}
@@ -272,9 +224,7 @@
 		&:hover:not(:disabled, [aria-disabled="true"], .no-border, .is-busy) {
 			background: var(--blockera-controls-background-color);
 			color: var(--blockera-controls-color);
-			--blockera-controls-border-color: var(
-				--blockera-controls-border-color-hover
-			);
+			--blockera-controls-border-color: var(--blockera-controls-border-color-hover);
 			box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color);
 		}
 
@@ -284,8 +234,7 @@
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .toggle-focus, .is-busy) {
-			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color),
-				0 0 0 1px var(--blockera-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 1px var(--blockera-controls-primary-color) !important;
 			outline: 2px solid transparent !important;
 		}
 

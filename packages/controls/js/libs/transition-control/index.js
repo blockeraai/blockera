@@ -8,15 +8,12 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	controlClassNames,
-	componentInnerClassNames,
-} from '@blockera/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import RepeaterItemHeader from './components/header';
@@ -43,9 +40,6 @@ export default function TransitionControl({
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
 			popoverTitle={popoverTitle || __('Transitions', 'blockera')}
-			popoverClassName={componentInnerClassNames(
-				'popover-transition-control'
-			)}
 			label={label || __('Transitions', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transition', 'blockera')}
@@ -65,7 +59,7 @@ export default function TransitionControl({
 				}
 
 				return (
-					<UpgradePrompt
+					<PromotionPopover
 						heading={__('Multiple Transitions', 'blockera')}
 						featuresList={[
 							__('Multiple transitions', 'blockera'),

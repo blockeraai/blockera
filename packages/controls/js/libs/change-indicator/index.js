@@ -20,13 +20,7 @@ import type { IndicatorComponentProps } from './types';
 export default function ChangeIndicator({
 	isChanged = false,
 	isChangedOnStates = false,
-	primaryColor = '#007cba',
-	statesColor = '#d47c14',
-	size = '5',
-	outlineSize = '1.5',
-	isAnimated = false,
 	className,
-	style,
 	...props
 }: IndicatorComponentProps): MixedElement {
 	if (!isChanged && !isChangedOnStates) {
@@ -37,23 +31,15 @@ export default function ChangeIndicator({
 		<div
 			className={componentClassNames('change-indicator', className)}
 			data-test="change-indicator"
-			style={style}
 			{...props}
 		>
 			{isChanged && (
 				<span
 					className={componentInnerClassNames(
 						'indicator',
-						'indicator-primary',
-						isAnimated && 'is-animated'
+						'indicator-primary'
 					)}
 					data-test="primary-change-indicator"
-					data-color={primaryColor}
-					style={{
-						'--indicator-size': size + 'px',
-						'--indicator-color': primaryColor,
-						'--indicator-outline-size': outlineSize + 'px',
-					}}
 				></span>
 			)}
 
@@ -61,16 +47,9 @@ export default function ChangeIndicator({
 				<span
 					className={componentInnerClassNames(
 						'indicator',
-						'indicator-states',
-						isAnimated && 'is-animated'
+						'indicator-states'
 					)}
 					data-test="states-change-indicator"
-					data-color={statesColor}
-					style={{
-						'--indicator-size': size + 'px',
-						'--indicator-color': statesColor,
-						'--indicator-outline-size': outlineSize + 'px',
-					}}
 				></span>
 			)}
 		</div>

@@ -10,7 +10,6 @@ import type { MixedElement } from 'react';
  */
 import {
 	Popover,
-	ConditionalWrapper,
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@blockera/controls';
@@ -20,7 +19,6 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../../api/utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
 import { SelfPerspective } from './self-perspective';
@@ -35,7 +33,6 @@ export const TransformSettings = ({
 	attributes,
 	extensionConfig,
 	setIsTransformSettingsVisible,
-	insidePopover = true,
 }: {
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
@@ -44,6 +41,7 @@ export const TransformSettings = ({
 		blockeraTransform: Array<Object>,
 		blockeraTransition: Array<Object>,
 		blockeraFilter: Array<Object>,
+		blockeraBlendMode: string,
 		blockeraBackdropFilter: Array<Object>,
 		blockeraTransformSelfPerspective: string,
 		blockeraTransformSelfOrigin: {
@@ -67,66 +65,27 @@ export const TransformSettings = ({
 	},
 	extensionConfig: TEffectsExtensionConfig,
 	setIsTransformSettingsVisible: (arg: boolean) => any,
-	insidePopover?: boolean,
 }): MixedElement => {
-	const isShowSelfPerspective = isShowField(
-		extensionConfig.blockeraTransformSelfPerspective,
-		values?.blockeraTransformSelfPerspective,
-		attributes.blockeraTransformSelfPerspective.default
-	);
-
-	const isShowBackfaceVisibility = isShowField(
-		extensionConfig.blockeraBackfaceVisibility,
-		values?.blockeraBackfaceVisibility,
-		attributes.blockeraBackfaceVisibility.default
-	);
-
-	const isShowChildPerspective = isShowField(
-		extensionConfig.blockeraTransformChildPerspective,
-		values?.blockeraTransformChildPerspective,
-		attributes.blockeraTransformChildPerspective.default
-	);
-
-	if (
-		!isShowSelfPerspective &&
-		!isShowBackfaceVisibility &&
-		!isShowChildPerspective
-	) {
-		return <></>;
-	}
-
 	return (
-		<ConditionalWrapper
-			condition={insidePopover}
-			wrapper={(children) => {
-				return (
-					<Popover
-						title={
-							<>
-								<Icon icon="three-d" iconSize="20" />
-								{__('Transform Settings', 'blockera')}
-							</>
-						}
-						offset={35}
-						placement="left-start"
-						className={controlInnerClassNames(
-							'transform-settings-popover'
-						)}
-						onClose={() => {
-							setIsTransformSettingsVisible(false);
-						}}
-						focusOnMount={false}
-					>
-						{children}
-					</Popover>
-				);
+		<Popover
+			title={
+				<>
+					<Icon icon="three-d" iconSize="20" />
+					{__('Transform Settings', 'blockera')}
+				</>
+			}
+			offset={35}
+			placement="left-start"
+			className={controlInnerClassNames('transform-settings-popover')}
+			onClose={() => {
+				setIsTransformSettingsVisible(false);
 			}}
-			elseWrapper={(children) => {
-				return <>{children}</>;
-			}}
+			focusOnMount={false}
 		>
 			<EditorFeatureWrapper
-				isActive={isShowSelfPerspective}
+				isActive={
+					extensionConfig.blockeraTransformSelfPerspective.status
+				}
 				config={extensionConfig.blockeraTransformSelfPerspective}
 			>
 				<ControlContextProvider
@@ -153,7 +112,7 @@ export const TransformSettings = ({
 			</EditorFeatureWrapper>
 
 			<EditorFeatureWrapper
-				isActive={isShowBackfaceVisibility}
+				isActive={extensionConfig.blockeraBackfaceVisibility.status}
 				config={extensionConfig.blockeraBackfaceVisibility}
 			>
 				<ControlContextProvider
@@ -210,7 +169,9 @@ export const TransformSettings = ({
 			</EditorFeatureWrapper>
 
 			<EditorFeatureWrapper
-				isActive={isShowChildPerspective}
+				isActive={
+					extensionConfig.blockeraTransformChildPerspective.status
+				}
 				config={extensionConfig.blockeraTransformChildPerspective}
 			>
 				<ControlContextProvider
@@ -236,6 +197,6 @@ export const TransformSettings = ({
 					/>
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
-		</ConditionalWrapper>
+		</Popover>
 	);
 };

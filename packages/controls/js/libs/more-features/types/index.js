@@ -25,8 +25,4 @@ export type MoreFeaturesProps = {
 	 * The button aria label.
 	 */
 	ariaLabel?: string,
-	/**
-	 * The change indicator is animated or not.
-	 */
-	isAnimated?: boolean,
 };

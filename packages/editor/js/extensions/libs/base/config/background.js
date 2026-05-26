@@ -20,7 +20,6 @@ const blockeraBackground: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Image & Gradient', 'blockera'),
-	keywords: ['background', 'image', 'gradient', 'picture', 'photo', 'mesh'],
 };
 
 const blockeraBackgroundColor: FeatureConfig = {
@@ -29,7 +28,6 @@ const blockeraBackgroundColor: FeatureConfig = {
 	status: true,
 	onNativeOnInnerBlocks: false,
 	label: __('Background Color', 'blockera'),
-	keywords: ['background', 'color', 'colour', 'bg', 'fill'],
 };
 
 const blockeraBackgroundClip: FeatureConfig = {
@@ -37,7 +35,6 @@ const blockeraBackgroundClip: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Background Clipping', 'blockera'),
-	keywords: ['background', 'clip', 'clipping', 'mask'],
 	config: {
 		options: [
 			{
@@ -80,19 +77,9 @@ const blockeraBackgroundClip: FeatureConfig = {
 	},
 };
 
-const blockeraBlendMode: FeatureConfig = {
-	show: false,
-	force: false,
-	status: true,
-	label: __('Blending Mode', 'blockera'),
-	keywords: ['blend', 'blending', 'mode', 'mix', 'overlay'],
-};
-
 export const backgroundConfig = {
-	status: true,
 	initialOpen: true,
 	blockeraBackground,
 	blockeraBackgroundColor,
 	blockeraBackgroundClip,
-	blockeraBlendMode,
 };

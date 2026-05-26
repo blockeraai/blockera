@@ -4,7 +4,6 @@
 import {
 	getValueAddonRealValue,
 	getBackgroundItemBGProperty,
-	getSortedRepeater,
 } from '@blockera/controls';
 
 /**
@@ -30,7 +29,7 @@ export function backgroundGenerator(id, props, options) {
 	let hasProps = true;
 
 	// Collect all properties
-	getSortedRepeater(attributes?.blockeraBackground)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraBackground)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}
@@ -198,11 +197,10 @@ export function backgroundGenerator(id, props, options) {
 		'background-attachment': attachment.join(', ') + ' !important',
 	};
 
-	if (properties['background-color']) {
+	if (properties['background-color'])
 		toReturnProperties['background-color'] =
 			getValueAddonRealValue(properties['background-color']) +
 			' !important';
-	}
 
 	return createCssDeclarations({
 		options,

@@ -4,36 +4,32 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class Display extends BaseStyleDefinition {
 
-	/**
-	 * Use important always (in v2 style engine).
-	 *
-	 * @return boolean
-	 */
-	protected function isImportant(): bool {
-		return true;
-	}
+    protected function css( array $setting): array {
 
-	protected function css( array $setting): array {
-		if (! isset($setting['type'])) {
-			return [];
-		}
+		$declaration = [];
+        $cssProperty = $setting['type'];
 
-		$cssProperty = $setting['type'];
+        if (empty($cssProperty) || empty($setting[ $cssProperty ])) {
 
-		if ('' === $cssProperty || ! isset($setting[ $cssProperty ]) || '' === $setting[ $cssProperty ]) {
-			return [];
-		}
+            return $declaration;
+        }
 
-		$this->declarations[ $cssProperty ] = $setting[ $cssProperty ];
+		$this->setDeclaration($cssProperty, $setting[ $cssProperty ]);
+
 		$this->setCss($this->declarations);
 
-		// Extra deep compatibility for columns block: removes margin-block-start from inner items.
+		// Extra deep compatibility for columns block.
 		// Removes margin-block-start from inner items.
-		$blockName = $this->block['blockName'];
-		if ('core/columns' === $blockName) {
-			$this->setCss([ 'margin-block-start' => '0' ], 'margin-block-start', ' > *');
+		if ( 'core/columns' === $this->block['blockName'] ) {
+			$this->setCss(
+				[
+					'margin-block-start' => '0',
+				],
+				'margin-block-start',
+				' > *'
+			);
 		}
 
-		return $this->css;
-	}
+        return $this->css;
+    }
 }

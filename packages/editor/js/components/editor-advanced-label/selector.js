@@ -21,7 +21,7 @@ import type {
 	TStates,
 	TStatesLabel,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../..';
+import { getBaseBreakpoint } from '../../canvas-editor';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
@@ -39,8 +39,6 @@ export type StateGraphItem = {
 	attributes: Object,
 	label: TStatesLabel,
 	breakpoints?: BreakpointTypes,
-	/** Resolved value for the control path (state graph preview). */
-	resolvedControlValue?: mixed,
 };
 
 export type StateGraphStates = Array<StateGraphItem> | [];
@@ -51,17 +49,10 @@ export type StateGraph = {
 	states: StateGraphStates,
 };
 
-export const getStatesGraphNodes = (
-	attributesRef?: Object,
-	inGlobalStylesPanel: boolean = false
-): Array<StateGraph> => {
+export const getStatesGraphNodes = (): Array<StateGraph> => {
 	const { getSelectedBlock } = select('core/block-editor');
 
-	const block = !inGlobalStylesPanel
-		? getSelectedBlock() || {}
-		: {
-				attributes: attributesRef,
-			};
+	const block = getSelectedBlock();
 
 	if (!block) {
 		return [];
@@ -153,13 +144,13 @@ export const getStatesGraphNodes = (
 
 			if (
 				isInnerBlock(currentBlock) &&
-				state?.breakpoints?.[breakpoint.type]?.attributes &&
-				state?.breakpoints?.[breakpoint.type]?.attributes
-					?.blockeraInnerBlocks?.[currentBlock]
+				state.breakpoints[breakpoint.type]?.attributes &&
+				state.breakpoints[breakpoint.type]?.attributes
+					?.blockeraInnerBlocks[currentBlock]
 			) {
 				const currentAttributes =
-					state.breakpoints[breakpoint.type].attributes
-						.blockeraInnerBlocks[currentBlock]?.attributes;
+					state.breakpoints[breakpoint.type]?.attributes
+						?.blockeraInnerBlocks[currentBlock]?.attributes;
 
 				// $FlowFixMe
 				states.push({

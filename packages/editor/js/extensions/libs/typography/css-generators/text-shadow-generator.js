@@ -1,7 +1,7 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
+import { getValueAddonRealValue } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -17,7 +17,7 @@ export function TextShadowGenerator(id, props, options) {
 
 	const shadows = [];
 
-	getSortedRepeater(attributes?.blockeraTextShadow)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraTextShadow)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return null;
 		}

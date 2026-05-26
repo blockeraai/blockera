@@ -1,5 +1,5 @@
 // @flow
-import type { MixedElement, Element } from 'react';
+import type { MixedElement } from 'react';
 
 export type TTabProps = {
 	name: string,
@@ -9,16 +9,10 @@ export type TTabProps = {
 	icon?: MixedElement,
 };
 
-export type TTabExtendedProps = {
-	...TTabProps,
-	icon?: Element<any>,
-	settingSlug?: string,
-};
-
 export type TTabsProps = {
 	activeTab: string,
-	tabs: Array<TTabExtendedProps>,
-	getPanel: (tab: TTabExtendedProps) => Object,
+	tabs: Array<TTabProps>,
+	getPanel: (tab: TTabProps) => Object,
 	setCurrentTab?: (tabName: string) => void,
 	/**
 	 * @default 'horizontal'
@@ -29,26 +23,6 @@ export type TTabsProps = {
 	 *
 	 * @default 'modern'
 	 */
-	design?: 'default' | 'modern' | 'clean',
+	design?: 'default' | 'modern',
 	className?: string,
-	/**
-	 * @default 'is-active-tab'
-	 */
-	activeClass?: string,
-	/**
-	 * Icon for active item
-	 */
-	activeIcon?: Element<any>,
-	/**
-	 * Inject items to end of the menu
-	 */
-	injectMenuEnd?: any,
-	/**
-	 * Heading for navigation
-	 */
-	heading?: string,
-	/**
-	 * Fit width of the tabs to the container with or keep the tabs original width.
-	 */
-	fitWidthTabs?: boolean,
 };

@@ -63,15 +63,8 @@ class Utils {
 		$prefix = $args['prefix'] ?? '';
 		$suffix = $args['suffix'] ?? '';
 
-		$selectors = [ $selector ];
-
-		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
-		// These functions can contain multiple selectors separated by commas, which should not be split.
-		if ( ! preg_match( blockera_regex_pseudo_class_functions_pattern(), $selector, $matches ) ) {
-		
-			// Split the selector by commas.
-			$selectors = explode( ',', $selector );
-		}
+		// Split the selector by commas.
+		$selectors = explode( ',', $selector );
 
 		// Initialize an array to store modified selectors.
 		$modifiedSelectors = [];
@@ -155,25 +148,24 @@ class Utils {
 	 */
 	public static function isPluginInstalled( string $plugin_slug ): bool {
 
-		$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_slug . '.php';
+		$installed_plugins = get_plugins();
 
-		return file_exists( $plugin_file );
+		return isset( $installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ] );
 	}
 
 	/**
 	 * Convert a string to pascal case.
 	 *
 	 * @param string $string The string to convert to pascal case.
-	 * @param array  $args   The arguments to convert to pascal case.
 	 *
 	 * @return string The pascal case string.
 	 */
-	public static function pascalCase( string $string, array $args = [] ): string {
+	public static function pascalCase( string $string ): string {
 
 		$parsed_string = explode( '-', $string );
 
 		return implode(
-            $args['separator'] ?? '', 
+            '', 
             array_map(
                 function( string $item ):string {
                     return ucfirst( $item );
@@ -181,18 +173,6 @@ class Utils {
                 $parsed_string
             )
 		);
-	}
-
-	/**
-	 * Convert a string to pascal case with space.
-	 *
-	 * @param string $string The string to convert to pascal case with space.
-	 *
-	 * @return string The pascal case with space string.
-	 */
-	public static function pascalCaseWithSpace( string $string ): string {
-
-		return static::pascalCase($string, [ 'separator' => ' ' ]);
 	}
 
 	/**

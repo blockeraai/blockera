@@ -49,7 +49,7 @@ if ( ! function_exists( 'blockera_is_supported_block' ) ) {
 	 */
 	function blockera_is_supported_block( array $block ): bool {
 
-		return ! empty( $block['attrs']['blockeraPropsId'] ) && ! empty( $block['attrs']['className'] );
+		return ! empty( $block['attrs']['blockeraPropsId'] );
 	}
 }
 
@@ -158,22 +158,54 @@ if ( ! function_exists( 'blockera_delete_block_cache' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_convert_to_unique_hash' ) ) {
+
+	/**
+	 * Retrieve unique hash key.
+	 *
+	 * @param string $hash the target hash to convert unique hash.
+	 *
+	 * @throws \Random\RandomException Exception if an appropriate source of randomness cannot be found.
+	 * @return string the unique hash key.
+	 */
+	function blockera_convert_to_unique_hash( string $hash ): string {
+
+		// Generate a unique ID using uniqid (with more entropy for better uniqueness).
+		$unique_id = uniqid( '', true );
+
+		// Optionally, we can append some random data for even more uniqueness.
+		$unique_id .= bin2hex( random_bytes( 10 ) ) . $hash;
+
+		// Hash the unique ID using SHA-256 algorithm.
+		return hash( 'sha256', $unique_id );
+	}
+}
+
 if ( ! function_exists( 'blockera_get_small_random_hash' ) ) {
 
 	/**
-	 * Generates a fast random unique ID (10 characters in base-36) for the block.
-	 * CPU-optimized implementation using native random_bytes and bitwise operations.
+	 * Generates a shortened version of the given string by creating a hash and converting it to a base-36 random string.
 	 *
-	 * @return string A random base-36 string of exactly 10 characters.
+	 * @param string $big_hash The input string to shorten.
+	 *
+	 * @return string The shortened string.
 	 */
-	function blockera_get_small_random_hash(): string {
+	function blockera_get_small_random_hash( string $big_hash ): string {
 
-		// CPU-optimized: Use 6 random bytes (48 bits) converted via fast bit-shift to integer.
-		// Then convert to base-36 for exactly 10 characters. Bitwise operations are fastest.
-		$bytes = random_bytes( 6 );
-		$num   = ( ord( $bytes[0] ) << 40 ) | ( ord( $bytes[1] ) << 32 ) | ( ord( $bytes[2] ) << 24 ) | ( ord( $bytes[3] ) << 16 ) | ( ord( $bytes[4] ) << 8 ) | ord( $bytes[5] );
+		$hash     = 0;
+		$big_hash = blockera_convert_to_unique_hash( $big_hash );
 
-		return base_convert( $num, 10, 36 );
+		for ( $i = 0; $i < strlen( $big_hash ); $i++ ) {
+
+			// Bitwise operations.
+			$hash = ord( $big_hash[ $i ] ) + ( ( $hash << 5 ) - $hash );
+
+			// Convert to 32bit integer.
+			$hash = $hash & 0xFFFFFFFF;
+		}
+
+		// Convert to base-36 string.
+		return base_convert( $hash, 10, 36 );
 	}
 }
 
@@ -186,160 +218,7 @@ if ( ! function_exists( 'blockera_get_unique_class_name_regex' ) ) {
 	 */
 	function blockera_get_unique_class_name_regex(): string {
 
-		return '/\b(blockera-block\s+blockera-block-[^\s]+)/';
-	}
-}
-
-if (! function_exists('blockera_get_wp_classname_details')) {
-
-	/**
-	 * Retrieve details of WordPress classname.
-	 * 
-	 * @param string $classname the search classname.
-	 *
-	 * @return array array. Array with "is_matched" and "matches" index on success retrieved data, empty array on otherwise!
-	 */
-	function blockera_get_wp_classname_details( string $classname): array {
-
-		if (empty(trim($classname))) {
-			return [];
-		}
-
-		$is_matched = (bool) preg_match(blockera_block_get_wp_classname_regex(), $classname, $matches);
-
-		return compact('is_matched', 'matches');
-	}
-}
-
-if (! function_exists('blockera_block_get_wp_classname_regex')) {
-
-	/**
-	 * Retrieve regex pattern to detect WordPress classname.
-	 * 
-	 * @return string the regular expression to detect WordPress classname.
-	 */
-	function blockera_block_get_wp_classname_regex(): string {
-
-		return '/wp-(block|element|elements)/i';
-	}
-}
-
-if (! function_exists('blockera_pick_specific_classname')) {
-
-	/**
-	 * Pick specific classname from the given classname.
-	 *
-	 * @param array $classnames the classnames.
-	 *
-	 * @return string the specific classname.
-	 */
-	function blockera_pick_specific_classname( array $classnames): string {
-		$picked = [];
-
-		foreach ($classnames as $classname) {
-
-			// Priority 1: Look for blockera unique classes.
-			if (preg_match(blockera_get_unique_class_name_regex(), $classname)) {
-				return $classname;
-			}
-
-			// Priority 2: Look for classes with numbers (likely unique identifiers).
-			if (preg_match('/\d+/', $classname)) {
-				$picked[] = $classname;
-			}
-
-			// Return the picked classnames if more than one found.
-			if (count($picked) > 1) {
-				return implode(' ', $picked);
-			}
-		}
-
-		// Fallback: Return first classname if no specific classname found.
-		return $classnames[0] ?? '';
-	}
-}
-
-if ( ! function_exists( 'blockera_create_css_selector' ) ) {
-
-	/**
-	 * Create css selector.
-	 *
-	 * @param string $classname the target element picked classnames which separated by space.
-	 *
-	 * @return string the css selector.
-	 */
-	function blockera_create_css_selector( string $classname ): string {
-
-		// Handle empty classname.
-		if ( empty( trim( $classname ) ) ) {
-			return '';
-		}
-
-		// Check if classname contains pseudo-class functions like :is(), :where(), :not(), etc.
-		// These should be preserved as-is.
-		if ( preg_match( '/:(is|where|not|has|host|host-context|any)\(/', $classname ) ) {
-			// Split by space but preserve pseudo-class functions.
-			$parts = preg_split( '/\s+(?![^(]*\))/', $classname );
-
-			return trim(
-				implode(
-					'',
-					array_map(
-						function ( string $_selector ): string {
-							$_selector = trim( $_selector );
-							
-							if ( empty( $_selector ) ) {
-								return '';
-							}
-							
-							// If already starts with . or contains pseudo-class, return as-is.
-							if ( '.' === $_selector[0] || strpos( $_selector, ':' ) !== false ) {
-								return $_selector;
-							}
-							
-							return '.' . $_selector;
-						},
-						$parts
-					)
-				)
-			);
-		}
-
-		// Standard processing for simple selectors.
-		$selectors = explode( ' ', $classname );
-
-		return trim(
-			implode(
-				'',
-				array_map(
-					function ( string $_selector ): string {
-
-						$_selector = trim( $_selector );
-
-						if ( empty( $_selector ) ) {
-							return '';
-						}
-
-						// Already has a class prefix.
-						if ( '.' === $_selector[0] ) {
-							return $_selector;
-						}
-
-						// Contains pseudo-class or pseudo-element.
-						if ( strpos( $_selector, ':' ) !== false ) {
-							// Check if it needs a class prefix before the pseudo-class.
-							if ( preg_match( '/^([a-zA-Z0-9_-]+)(:.+)$/', $_selector, $matches ) ) {
-								return '.' . $matches[1] . $matches[2];
-							}
-							return $_selector;
-						}
-
-						return '.' . $_selector;
-					},
-					$selectors
-				)
-			)
-		);
+		return '/\b(blockera-block-\S+)\b/';
 	}
 }
 
@@ -354,6 +233,15 @@ if (! function_exists('blockera_block_is_dynamic')) {
 	 */
 	function blockera_block_is_dynamic( array $block ): bool {
 
+		// phpcs:disable
+		// TODO: please implements these block types.
+		// Use this block types in the_content process to handle dynamic blocks.
+		// if (in_array($block['blockName'], ['blockera/the-content', 'blockera/the-content-inners'], true)) {
+
+		// 	return false;
+		// }
+		// phpcs:enable
+
 		$registered_block = WP_Block_Type_Registry::get_instance()->get_registered( $block['blockName'] ?? '' );
 
 		if ( ! $registered_block ) {
@@ -362,33 +250,5 @@ if (! function_exists('blockera_block_is_dynamic')) {
 		}
 
 		return $registered_block->is_dynamic();
-	}
-}
-
-
-if (! function_exists('blockera_contains_blockera_block')) {
-	/**
-	 * Check if post content contains Blockera blocks.
-	 *
-	 * @param string $post_content The post content to check.
-	 * @return bool True if post content contains Blockera blocks, false otherwise.
-	 */
-	function blockera_contains_blockera_block( string $post_content): bool {
-		// Skip if post_content is empty.
-		if (empty($post_content)) {
-			return false;
-		}
-
-		// Check if post_content contains block comments.
-		if (strpos($post_content, '<!-- wp:') === false) {
-			return false;
-		}
-
-		// Check if post_content contains any Blockera block.
-		if (strpos($post_content, 'blockeraPropsId') === false) {
-			return false;
-		}
-
-		return true;
 	}
 }

@@ -7,7 +7,7 @@
 			"id": "blockeraOutline",
 			"definition": "Outline",
 			"css-property": "outline",
-			"fallback": ["outline.color", "outline", "border"],
+			"fallback": ["outline.color", "outline"],
 			"description": "Support for \"blockeraOutline\" value."
 		},
 		"blockeraOffset": {
@@ -15,7 +15,7 @@
 			"id": "blockeraOffset",
 			"definition": "Outline",
 			"css-property": "outline-offset",
-			"fallback": ["outline.offset", "outline", "border"],
+			"fallback": ["outline.offset", "outline"],
 			"description": "Support for \"blockeraOffset\" value."
 		}
 	}

@@ -129,9 +129,9 @@ describe('native select control component testing', () => {
 				value: 'all',
 			});
 			cy.get('select').trigger('mouseover');
-			// WP SelectControl applies `className` on `.components-select-control`, not the flex wrapper above <select>.
 			cy.get('select')
-				.closest('.components-select-control')
+				.parent()
+				.parent()
 				.should('have.class', 'is-hovered');
 		});
 	});
@@ -150,7 +150,8 @@ describe('native select control component testing', () => {
 			});
 			cy.get('select').trigger('focus');
 			cy.get('select')
-				.closest('.components-select-control')
+				.parent()
+				.parent()
 				.should('have.class', 'is-focused');
 		});
 	});
@@ -172,7 +173,8 @@ describe('native select control component testing', () => {
 				value: 'all',
 			});
 			cy.get('select')
-				.closest('.components-select-control')
+				.parent()
+				.parent()
 				.should('not.have.class', 'no-border');
 		});
 
@@ -182,7 +184,8 @@ describe('native select control component testing', () => {
 				value: 'all',
 			});
 			cy.get('select')
-				.closest('.components-select-control')
+				.parent()
+				.parent()
 				.should('have.class', 'no-border');
 		});
 	});

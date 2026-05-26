@@ -148,22 +148,22 @@ export const Popup = ({
 							? __(
 									'You’re already enrolled in our bug reporting program, so we’ve automatically logged this issue.',
 									'blockera'
-								)
+							  )
 							: __(
 									'It looks like this issue has been reported before.',
 									'blockera'
-								)}
+							  )}
 					</p>
 					<p style={{ margin: 0 }}>
 						{0 === reportedCount || !window[id]?.isReported
 							? __(
 									'We’ll review it and get in touch if we need any additional details.',
 									'blockera'
-								)
+							  )
 							: __(
 									'No further action is needed. We’ll keep you updated if we have any new information.',
 									'blockera'
-								)}
+							  )}
 					</p>
 				</Flex>
 
@@ -418,7 +418,7 @@ export const Popup = ({
 								? __(
 										'Oops! Report submission failed!',
 										'blockera'
-									)
+								  )
 								: __('Report bug manually', 'blockera')}
 						</h3>
 
@@ -427,11 +427,11 @@ export const Popup = ({
 								? __(
 										'Something went wrong when trying to log your bug. Follow the manual submission process below to share the necessary info.',
 										'blockera'
-									)
+								  )
 								: __(
 										'If you’d prefer not to send the data automatically, please submit a manual report by following these steps:',
 										'blockera'
-									)}
+								  )}
 						</p>
 					</Flex>
 
@@ -459,7 +459,7 @@ export const Popup = ({
 									>
 										{__('1.', 'blockera')}
 									</strong>
-									{__('Copy the bug details', 'blockera')}
+									{__(' Copy the bug details', 'blockera')}
 								</p>
 
 								{false === canNotCopyToClipboard && (
@@ -564,7 +564,7 @@ export const Popup = ({
 								{__('2.', 'blockera')}
 							</strong>
 
-							{__('Send en email to', 'blockera')}
+							{__(' Send en email to ', 'blockera')}
 
 							<a
 								href="mailto:support@blockera.ai"
@@ -574,7 +574,7 @@ export const Popup = ({
 							>
 								{__('support@blockera.ai', 'blockera')}
 							</a>
-							{__('or', 'blockera')}
+							{__(' or ', 'blockera')}
 							<a
 								href={blockeraCommunityUrl}
 								target="_blank"
@@ -601,7 +601,7 @@ export const Popup = ({
 								{__('3.', 'blockera')}
 							</strong>
 							{__(
-								'Stay tuned. We’ll review your report and reach out if we need more information.',
+								' Stay tuned. We’ll review your report and reach out if we need more information.',
 								'blockera'
 							)}
 						</p>

@@ -29,7 +29,6 @@ export default function AlignmentMatrixControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = {
 		top: '50%',
@@ -68,7 +67,6 @@ export default function AlignmentMatrixControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	if (!inputFields) {

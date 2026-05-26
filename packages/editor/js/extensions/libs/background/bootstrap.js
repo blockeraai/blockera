@@ -23,32 +23,27 @@ import {
 	backgroundColorToWPCompatibility,
 } from './compatibility/background-color';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.backgroundExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const {
-				blockId,
-				blockAttributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
-			} = blockDetail;
+			const { blockId, blockAttributes } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			attributes = backgroundFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = backgroundColorFromWPCompatibility({
 				attributes,
 				blockAttributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -84,9 +79,6 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			const { insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
-
 			switch (featureId) {
 				case 'blockeraBackground':
 					return mergeObject(
@@ -94,8 +86,6 @@ export const bootstrap = (): void => {
 						backgroundToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
 						})
 					);
 
@@ -105,8 +95,6 @@ export const bootstrap = (): void => {
 						backgroundColorToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
 						})
 					);
 			}

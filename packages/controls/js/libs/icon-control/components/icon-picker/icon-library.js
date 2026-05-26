@@ -7,7 +7,6 @@ import {
 	useState,
 	useTransition,
 	useContext,
-	useEffect,
 } from '@wordpress/element';
 
 /**
@@ -30,53 +29,51 @@ const IconLibrary = ({
 	title = '',
 }) => {
 	const ref = useRef(null);
-
 	const isVisible = useIsVisible(ref);
 
-	const [iconsStack, setIconsStack] = useState([]);
+	const [iconsStack] = useState([]);
+
 	const [isPending, startTransition] = useTransition();
+
 	const [isRendered, setRendered] = useState(false);
 
 	const { handleIconSelect, isCurrentIcon } = useContext(IconContext);
 
-	// Handle non-lazy loading
-	useEffect(() => {
-		if (!lazyLoad && !isRendered) {
-			const icons = getLibraryIcons({
+	if (!lazyLoad && !isRendered) {
+		fetchLibraryIcons();
+		setRendered(true);
+	}
+
+	function fetchLibraryIcons() {
+		if (isRendered) {
+			return true;
+		}
+
+		iconsStack.push(
+			getLibraryIcons({
 				library,
 				query: searchQuery,
 				onClick: handleIconSelect,
 				isCurrentIcon,
-			});
-
-			setIconsStack([icons]);
-			setRendered(true);
-		}
-	}, [lazyLoad, isRendered]);
-
-	// Handle lazy loading when component becomes visible
-	useEffect(() => {
-		if (lazyLoad && isVisible && !isRendered) {
-			loadIcons();
-		}
-	}, [lazyLoad, isVisible, isRendered]);
+			})
+		);
+	}
 
 	function loadIcons() {
 		if (isRendered) {
-			return;
+			return true;
 		}
 
 		startTransition(() => {
-			const icons = getLibraryIcons({
-				library,
-				query: searchQuery,
-				onClick: handleIconSelect,
-				isCurrentIcon,
-			});
-
-			setIconsStack([icons]);
+			fetchLibraryIcons();
 			setRendered(true);
 		});
+	}
+
+	function getIcons() {
+		loadIcons();
+
+		return <>{iconsStack}</>;
 	}
 
 	function isEmpty() {
@@ -103,10 +100,13 @@ const IconLibrary = ({
 			)}
 
 			<div className={controlInnerClassNames('library-body')} ref={ref}>
-				{isRendered && !isPending ? (
-					<>{iconsStack}</>
+				{(isRendered || isVisible) && (!lazyLoad || !isPending) ? (
+					<>{getIcons()}</>
 				) : (
-					<IconLibraryLoading />
+					<>
+						<IconLibraryLoading />
+						<div ref={ref} />
+					</>
 				)}
 			</div>
 		</div>

@@ -62,8 +62,4 @@ export type FeatureConfig = {
 	 * on native blockera inner blocks?
 	 */
 	onNativeOnInnerBlocks?: boolean | Array<string>,
-	/**
-	 * Keywords for searching features. Array of strings for search functionality.
-	 */
-	keywords?: Array<string> | string,
 };

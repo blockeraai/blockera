@@ -26,68 +26,25 @@ import {
 	getStatesGraphNodes,
 	type StateGraphItem,
 } from './selector';
-import { getBaseBreakpoint } from '../..';
+import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
-
-/**
- * Resolve control path for state graph rows. Base "normal" nodes use
- * sanitizeBlockAttributes(), so `blockeraFoo` may be a primitive while
- * `path` is still `blockeraFoo.value` — plain prepare() returns undefined.
- */
-const resolveGraphPathValue = (
-	path: null | string,
-	controlId: string,
-	attrs: Object
-): any => {
-	if (!path) {
-		return attrs[controlId];
-	}
-
-	const pathUnderControl =
-		path.indexOf(controlId + '.') === 0
-			? path.slice(controlId.length + 1)
-			: null;
-
-	let resolved = prepare(path, attrs);
-	if ('undefined' === typeof resolved) {
-		resolved = prepare(path, attrs[controlId]);
-	}
-	if ('undefined' === typeof resolved && pathUnderControl) {
-		resolved = prepare(pathUnderControl, attrs[controlId]);
-	}
-	if (
-		'undefined' === typeof resolved &&
-		pathUnderControl === 'value' &&
-		!isObject(attrs[controlId])
-	) {
-		resolved = attrs[controlId];
-	}
-
-	return resolved;
-};
 
 export const getStatesGraph = ({
 	controlId,
 	blockName,
 	defaultValue,
 	path,
-	attributesRef,
 	isRepeaterItem,
-	inGlobalStylesPanel = false,
 }: {
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
 	path: null | string,
-	attributesRef?: Object,
 	isRepeaterItem: Boolean,
-	inGlobalStylesPanel: boolean,
 }): Array<LabelStates> => {
-	const blockStates = controlId
-		? getStatesGraphNodes(attributesRef, inGlobalStylesPanel)
-		: [];
+	const blockStates = controlId ? getStatesGraphNodes() : [];
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { getAttributes = () => {}, currentBlock } = useBlockContext();
@@ -142,11 +99,24 @@ export const getStatesGraph = ({
 									return null;
 								}
 
-								const value = resolveGraphPathValue(
-									path,
-									controlId,
-									state.attributes
-								);
+								let value;
+
+								if (path) {
+									const preparedValueWithPath = prepare(
+										path,
+										state.attributes
+									);
+									value =
+										'undefined' ===
+										typeof preparedValueWithPath
+											? prepare(
+													path,
+													state.attributes[controlId]
+											  )
+											: preparedValueWithPath;
+								} else {
+									value = state.attributes[controlId];
+								}
 
 								if (isUndefined(value) && isRepeaterItem) {
 									return null;
@@ -175,11 +145,15 @@ export const getStatesGraph = ({
 									}
 								}
 
-								const rootValue = resolveGraphPathValue(
+								const preparedValueFromRoot = prepare(
 									path,
-									controlId,
 									attributes
 								);
+
+								const rootValue =
+									'undefined' === typeof preparedValueFromRoot
+										? prepare(path, attributes[controlId])
+										: preparedValueFromRoot;
 
 								if (
 									('normal' !== state.type ||
@@ -202,7 +176,6 @@ export const getStatesGraph = ({
 								return {
 									...state,
 									id: _index,
-									resolvedControlValue: value,
 								};
 							}
 						)

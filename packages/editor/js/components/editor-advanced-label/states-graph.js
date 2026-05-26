@@ -21,7 +21,7 @@ import type {
 	TBreakpoint,
 	TStates,
 } from '../../extensions/libs/block-card/block-states/types';
-import { BreakpointIcon } from '../../editor/header-ui/components/breakpoints/breakpoint-icon';
+import { BreakpointIcon } from '../../canvas-editor/components/breakpoints/breakpoint-icon';
 
 export const StatesGraph = ({
 	onClick,
@@ -30,23 +30,13 @@ export const StatesGraph = ({
 	defaultValue,
 	path,
 	isRepeaterItem,
-	attributesRef,
-	inGlobalStylesPanel = false,
-	changesetGraphPreview: changesetGraphPreviewFromLabel,
-	previewObjectPickKey,
-	changesetGraphPreviewRender: changesetGraphPreviewRenderFromLabel,
 }: {
-	attributesRef?: Object,
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
 	onClick: (state: TStates, device: TBreakpoint) => void,
 	path: null | string,
-	inGlobalStylesPanel: boolean,
 	isRepeaterItem: Boolean,
-	changesetGraphPreview?: void | null | Object,
-	previewObjectPickKey?: ?string,
-	changesetGraphPreviewRender?: ?(value: mixed) => mixed,
 }): null | MixedElement => {
 	if (!controlId) {
 		return null;
@@ -59,9 +49,7 @@ export const StatesGraph = ({
 		blockName,
 		defaultValue,
 		path,
-		attributesRef,
 		isRepeaterItem,
-		inGlobalStylesPanel,
 	});
 
 	if (statesGraph.length === 0) {
@@ -69,15 +57,6 @@ export const StatesGraph = ({
 	}
 
 	const { getDeviceType } = select('blockera/editor');
-	const extensionsSelect = select('blockera/extensions');
-	// One read per graph render; shared for all rows (label override wins when present).
-	const sharedBlockAttributes =
-		extensionsSelect && extensionsSelect.getSharedBlockAttributes
-			? extensionsSelect.getSharedBlockAttributes()
-			: {};
-	const rowPreviewConfig =
-		changesetGraphPreviewFromLabel ??
-		sharedBlockAttributes[controlId]?.changesetGraphPreview;
 
 	return (
 		<div className={controlInnerClassNames('states-changes')}>
@@ -117,10 +96,7 @@ export const StatesGraph = ({
 										'states-changes-breakpoint-title'
 									)}
 								>
-									<BreakpointIcon
-										context="canvas"
-										name={state.graph.type}
-									/>
+									<BreakpointIcon name={state.graph.type} />
 									{state.graph.label}
 								</div>
 							)}
@@ -163,16 +139,6 @@ export const StatesGraph = ({
 													);
 												}}
 												current={false}
-												previewConfig={rowPreviewConfig}
-												previewValue={
-													_state.resolvedControlValue
-												}
-												previewObjectPickKey={
-													previewObjectPickKey
-												}
-												changesetGraphPreviewRender={
-													changesetGraphPreviewRenderFromLabel
-												}
 											/>
 										);
 									}

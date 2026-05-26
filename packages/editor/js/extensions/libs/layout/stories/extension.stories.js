@@ -58,7 +58,10 @@ blocksInitializer({
 		const supports = getExtensions();
 		const [settings, setSettings] = useState(supports);
 
-		const handleOnChangeSettings = (newSettings, key) => {
+		const handleOnChangeSettings = (
+			newSettings: Object,
+			key: string
+		): void => {
 			setSettings({
 				...settings,
 				[key]: {
@@ -81,8 +84,6 @@ blocksInitializer({
 						blockeraGap: {},
 						blockeraFlexWrap: {},
 						blockeraAlignContent: {},
-						blockeraGridMinimumColumnWidth: {},
-						blockeraGridColumnCount: {},
 					}}
 					values={{
 						blockeraDisplay: attributes.blockeraDisplay,
@@ -90,10 +91,6 @@ blocksInitializer({
 						blockeraGap: attributes.blockeraGap,
 						blockeraFlexWrap: attributes.blockeraFlexWrap,
 						blockeraAlignContent: attributes.blockeraAlignContent,
-						blockeraGridMinimumColumnWidth:
-							attributes.blockeraGridMinimumColumnWidth,
-						blockeraGridColumnCount:
-							attributes.blockeraGridColumnCount,
 					}}
 					attributes={{
 						blockeraDisplay: attributes.blockeraDisplay,
@@ -101,10 +98,6 @@ blocksInitializer({
 						blockeraGap: attributes.blockeraGap,
 						blockeraFlexWrap: attributes.blockeraFlexWrap,
 						blockeraAlignContent: attributes.blockeraAlignContent,
-						blockeraGridMinimumColumnWidth:
-							attributes.blockeraGridMinimumColumnWidth,
-						blockeraGridColumnCount:
-							attributes.blockeraGridColumnCount,
 					}}
 					handleOnChangeAttributes={handleOnChangeAttributes}
 					setSettings={handleOnChangeSettings}

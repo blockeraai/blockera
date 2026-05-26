@@ -28,7 +28,6 @@ export const SimpleLabelControl = ({
 	labelDescription,
 	advancedIsOpen = false,
 	resetToDefault,
-	iconPosition = 'end',
 	...props
 }: SimpleLabelControlProps): MixedElement => {
 	if (!label) {
@@ -43,12 +42,7 @@ export const SimpleLabelControl = ({
 	return (
 		<span
 			{...props}
-			className={controlClassNames(
-				'label',
-				className,
-				labelClass,
-				'label-icon-' + iconPosition
-			)}
+			className={controlClassNames('label', className, labelClass)}
 			aria-label={ariaLabel || label}
 			data-cy="label-control"
 			onClick={(event) => {
@@ -66,7 +60,7 @@ export const SimpleLabelControl = ({
 				<Tooltip
 					text={__('Reset to default', 'blockera')}
 					style={{
-						'--tooltip-bg': '#e20b0b',
+						'--tooltip-bg': '#e20000',
 					}}
 					delay={300}
 				>

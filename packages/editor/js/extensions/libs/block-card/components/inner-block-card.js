@@ -46,7 +46,6 @@ export function InnerBlockCard({
 	currentBreakpoint,
 	availableStates,
 	additional,
-	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
@@ -64,7 +63,6 @@ export function InnerBlockCard({
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
-	insideBlockInspector: boolean,
 	handleOnChangeAttributes: (
 		attribute: string,
 		value: any,
@@ -101,12 +99,9 @@ export function InnerBlockCard({
 		<div
 			className={extensionClassNames(
 				'block-card',
-				'block-card--inner-block',
-				{
-					'separator-shadow': !insideBlockInspector,
-				}
+				'block-card--inner-block'
 			)}
-			data-test={'blockera-inner-block-card'}
+			data-test={'blockera-block-card'}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
 				<BlockIcon icon={blockInformation?.icon} />
@@ -128,6 +123,7 @@ export function InnerBlockCard({
 						>
 							{blockInformation?.label}
 						</span>
+
 						<Breadcrumb
 							clientId={clientId}
 							blockName={blockName}
@@ -138,30 +134,21 @@ export function InnerBlockCard({
 							}
 						/>
 
-						<div
-							className={extensionInnerClassNames(
-								'block-card__settings'
-							)}
-						>
-							<Tooltip text={__('Close Inner Block', 'blockera')}>
-								<Icon
-									className={extensionInnerClassNames(
-										'block-card__close'
-									)}
-									library="wp"
-									icon="close-small"
-									iconSize="24"
-									data-test={'Close Inner Block'}
-									onClick={() => {
-										onToggle(true, 'switch-to-parent');
-										handleOnClick(
-											'current-block',
-											'master'
-										);
-									}}
-								/>
-							</Tooltip>
-						</div>
+						<Tooltip text={__('Close Inner Block', 'blockera')}>
+							<Icon
+								className={extensionInnerClassNames(
+									'block-card__close'
+								)}
+								library="wp"
+								icon="close-small"
+								iconSize="24"
+								data-test={'Close Inner Block'}
+								onClick={() => {
+									onToggle(true, 'switch-to-parent');
+									handleOnClick('current-block', 'master');
+								}}
+							/>
+						</Tooltip>
 					</h2>
 
 					{blockInformation?.description && (
@@ -184,9 +171,6 @@ export function InnerBlockCard({
 				}}
 			>
 				<StateContainer
-					name={blockName}
-					clientId={clientId}
-					insideBlockInspector={insideBlockInspector}
 					availableStates={availableStates}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData
@@ -208,7 +192,6 @@ export function InnerBlockCard({
 							supports,
 							blockName,
 							setAttributes,
-							currentBlockStyleVariation: {},
 						}}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}

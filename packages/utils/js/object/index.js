@@ -20,32 +20,15 @@ import { isObject } from '../is';
  * @return {Object} Object with omitted keys.
  */
 export function omit(object: Object, keys: Array<string>): Object {
-	// Create a deep copy of the object to avoid mutating the original object.
-	const clonedObject = copy(object);
-
 	return Object.fromEntries(
-		Object.entries(clonedObject).filter(([key]) => !keys.includes(key))
+		Object.entries(object).filter(([key]) => !keys.includes(key))
 	);
 }
 
-/**
- * Return a new object with the specified keys omitted by pattern.
- *
- * @param {Object} object Original object.
- * @param {Object} pattern Pattern to be omitted.
- *
- * @return {Object} Object with omitted keys.
- */
 export function omitWithPattern(object: Object, pattern: Object): Object {
-	const result: { [key: string]: any } = {};
-
-	for (const key in object) {
-		if (object?.hasOwnProperty(key) && !pattern.test(key)) {
-			result[key] = object[key];
-		}
-	}
-
-	return result;
+	return Object.fromEntries(
+		Object.entries(object).filter(([key]) => !pattern.test(key))
+	);
 }
 
 /**
@@ -62,11 +45,8 @@ export function include(
 	keys: Array<string>,
 	deletePrefixSuffix: string = ''
 ): Object {
-	// Create a deep copy of the object to avoid mutating the original object.
-	const clonedObject = copy(object);
-
 	return Object.fromEntries(
-		Object.entries(clonedObject)
+		Object.entries(object)
 			.filter(([key]) => keys.includes(key))
 			.map((item) => [getCamelCase(item[0], deletePrefixSuffix), item[1]])
 	);
@@ -123,7 +103,7 @@ export function mergeObject(
 	}
 ): Object {
 	if (!isObject(source)) {
-		return { ...target };
+		return target;
 	}
 
 	const { forceUpdated = [], deletedProps = [] } = args || {};
@@ -136,11 +116,9 @@ export function mergeObject(
 			source[key] &&
 			isObject(source[key])
 		) {
-			result[key] = { ...source[key] }; // Clone to prevent reference mutation
+			result[key] = source[key];
 		} else if (isObject(source[key])) {
-			if (!result[key] || !isObject(result[key])) {
-				result[key] = {};
-			}
+			if (!result[key] || !isObject(result[key])) result[key] = {};
 			result[key] = mergeObject(result[key], source[key], args); // Merge recursively
 		} else {
 			if (undefined === source[key] && deletedProps.includes(key)) {
@@ -176,9 +154,8 @@ export function mergeObjects(
 		if (isObject(_source)) {
 			Object.keys(_source).forEach((key) => {
 				if (isObject(_source[key])) {
-					if (!result[key] || !isObject(result[key])) {
+					if (!result[key] || !isObject(result[key]))
 						result[key] = {};
-					}
 					result[key] = mergeObjects(result[key], _source[key]); // Merge recursively
 				} else {
 					result[key] = _source[key];

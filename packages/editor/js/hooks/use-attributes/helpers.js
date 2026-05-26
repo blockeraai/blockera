@@ -21,7 +21,7 @@ import type {
 	TStates,
 	TBreakpoint,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../../editor/header-ui';
+import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
 import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
 
@@ -49,24 +49,20 @@ export const isChanged = (
 export const memoizedRootBreakpoints: (
 	breakpoint: BreakpointTypes,
 	action: Object,
-	insideInnerBlock: boolean,
-	ref: Object
+	insideInnerBlock: boolean
 ) => BreakpointTypes = memoize(
 	(
 		breakpoint,
 		{
 			newValue,
 			attributeId,
-			currentState,
 			currentBlock,
 			effectiveItems,
 			currentBreakpoint,
 			defaultAttributes,
-			currentBlockAttributes,
 			currentInnerBlockState,
 		},
-		insideInnerBlock: boolean = false,
-		ref: Object
+		insideInnerBlock: boolean = false
 	) => {
 		let _effectiveItems = { ...effectiveItems };
 
@@ -92,18 +88,7 @@ export const memoizedRootBreakpoints: (
 									[currentBlock]: {
 										attributes: {
 											...effectiveItems,
-											[attributeId]:
-												isEquals(
-													newValue,
-													defaultAttributes[
-														attributeId
-													]?.default?.value ||
-														defaultAttributes[
-															attributeId
-														]?.default
-												) || ref?.reset
-													? undefined
-													: newValue,
+											[attributeId]: newValue,
 										},
 									},
 								},
@@ -116,8 +101,7 @@ export const memoizedRootBreakpoints: (
 				}
 
 				const isEqualsWithDefault = isEquals(
-					defaultAttributes[attributeId]?.default?.value ||
-						defaultAttributes[attributeId]?.default,
+					defaultAttributes[attributeId]?.default,
 					newValue
 				);
 
@@ -131,24 +115,14 @@ export const memoizedRootBreakpoints: (
 				let content = '';
 				const stateItem = ((
 					(
-						(currentBlockAttributes?.blockeraBlockStates?.value?.[
-							currentState
-						]?.breakpoints?.[currentBreakpoint]?.attributes
-							?.blockeraInnerBlocks || {})[currentBlock] || {}
+						(breakpoint?.attributes?.blockeraInnerBlocks || {})[
+							currentBlock
+						] || {}
 					)?.attributes || {}
 				)?.blockeraBlockStates || {})[currentInnerBlockState];
-				const stateItemInBaseBreakpoint =
-					currentBlockAttributes?.blockeraInnerBlocks?.value?.[
-						currentBlock
-					]?.attributes?.blockeraBlockStates?.[
-						currentInnerBlockState
-					];
 
-				if (hasContent && stateItem?.hasOwnProperty('content')) {
-					content =
-						stateItem?.content ||
-						stateItemInBaseBreakpoint?.content ||
-						'';
+				if (hasContent && !stateItem?.hasOwnProperty('content')) {
+					content = stateItem?.content || '';
 				}
 
 				return mergeObject(
@@ -218,11 +192,7 @@ export const memoizedRootBreakpoints: (
 			{
 				attributes: {
 					...effectiveItems,
-					[attributeId]:
-						(isEqualsWithDefault && isNormalState(currentState)) ||
-						ref?.reset
-							? undefined
-							: newValue,
+					[attributeId]: isEqualsWithDefault ? undefined : newValue,
 				},
 			},
 			{
@@ -249,26 +219,17 @@ export const memoizedBlockStates: (
 			currentState: 'normal',
 			insideInnerBlock: false,
 			currentBlock: 'master',
-			clientId: '',
-			name: '',
 		}
 	): Object => {
 		const {
-			ref,
 			currentState: receivedState,
 			insideInnerBlock,
 			currentBlock,
-			clientId: _clientId,
-			name: _name,
 		} = args;
 		const { currentState, currentBreakpoint } = action;
 		const { getBlockStates } = select('blockera/extensions');
-		const { clientId, name } = select(
-			'core/block-editor'
-		)?.getSelectedBlock() || {
-			name: _name,
-			clientId: _clientId,
-		};
+		const { clientId, name } =
+			select('core/block-editor')?.getSelectedBlock();
 		const blockStates = blockStatesValueCleanup(
 			getBlockStates(
 				clientId,
@@ -278,31 +239,15 @@ export const memoizedBlockStates: (
 			)
 		);
 
-		const stateKey = receivedState || currentState;
-
-		// getBlockStates() returns only `{ normal }` when `blockExtensions[clientId]` is
-		// missing (e.g. global styles / style variation). Stored attributes can still
-		// include other states (hover, marker, …); read breakpoints from there.
-		let breakpoints = blockStates[stateKey]?.breakpoints;
-		if (!breakpoints) {
-			breakpoints =
-				currentBlockAttributes?.blockeraBlockStates?.value?.[stateKey]
-					?.breakpoints ?? {};
-		}
-
-		const currentBreakpointState: BreakpointTypes = breakpoints[
-			currentBreakpoint
-		] ?? { attributes: {} };
+		const breakpoints =
+			blockStates[receivedState || currentState]?.breakpoints;
 
 		const moreProps: Object =
 			(receivedState || currentState) === 'custom-class'
 				? {
 						'css-class': blockStates['custom-class']['css-class'],
-					}
+				  }
 				: {};
-
-		// pass currentBlockAttributes to the memoizedRootBreakpoints function.
-		action.currentBlockAttributes = currentBlockAttributes;
 
 		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
 			return mergeObject(
@@ -311,10 +256,9 @@ export const memoizedBlockStates: (
 					[receivedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
-								currentBreakpointState,
+								breakpoints[currentBreakpoint],
 								action,
-								insideInnerBlock,
-								args
+								insideInnerBlock
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
@@ -339,10 +283,9 @@ export const memoizedBlockStates: (
 					[receivedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
-								currentBreakpointState,
+								breakpoints[currentBreakpoint],
 								action,
-								insideInnerBlock,
-								ref
+								insideInnerBlock
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
@@ -581,7 +524,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 						? prepare(
 								ref.path.replace(absolutePathPattern, ''),
 								ref.defaultValue
-							) || ref.defaultValue
+						  ) || ref.defaultValue
 						: ref.defaultValue
 				);
 
@@ -631,7 +574,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 		...(isInnerBlock(currentBlock)
 			? {
 					blockeraInnerBlocks,
-				}
+			  }
 			: {}),
 	};
 };
@@ -877,101 +820,4 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 		},
 		args
 	);
-};
-
-export const stateResettingValues = (
-	state: Object,
-	{ currentBlock, stateReadyToReset, resetStateAllValues }: Object
-): Object => {
-	if (resetStateAllValues) {
-		for (const key in state.blockeraBlockStates?.value || {}) {
-			const blockState = state.blockeraBlockStates?.value[key];
-
-			for (const breakpoint in blockState?.breakpoints || {}) {
-				const inners =
-					blockState.breakpoints[breakpoint]?.attributes
-						?.blockeraInnerBlocks || {};
-
-				for (const innerBlock in inners) {
-					// Skip resetting for other inner blocks.
-					if (currentBlock !== innerBlock) {
-						continue;
-					}
-
-					const innerStates =
-						inners[innerBlock]?.attributes?.blockeraBlockStates ||
-						{};
-
-					for (const innerState in innerStates) {
-						if (stateReadyToReset !== innerState) {
-							continue;
-						}
-
-						if (
-							innerStates[innerState]?.hasOwnProperty('content')
-						) {
-							state.blockeraBlockStates.value[key].breakpoints[
-								breakpoint
-							].attributes.blockeraInnerBlocks[
-								innerBlock
-							].attributes.blockeraBlockStates[
-								innerState
-							].content = '';
-						}
-
-						const innerBreakpoints =
-							innerStates[innerState]?.breakpoints || {};
-
-						for (const innerBreakpoint in innerBreakpoints) {
-							state.blockeraBlockStates.value[key].breakpoints[
-								breakpoint
-							].attributes.blockeraInnerBlocks[
-								innerBlock
-							].attributes.blockeraBlockStates[
-								innerState
-							].breakpoints[innerBreakpoint].attributes = {};
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return state;
-};
-
-export const stateResettingInnerBlockValues = (
-	state: Object,
-	{ innerBlockReadyToReset }: Object
-): Object => {
-	for (const key in state.blockeraBlockStates?.value || {}) {
-		const blockState = state.blockeraBlockStates?.value[key];
-
-		for (const breakpoint in blockState?.breakpoints || {}) {
-			const inners =
-				blockState.breakpoints[breakpoint]?.attributes
-					?.blockeraInnerBlocks || {};
-
-			for (const innerBlock in inners) {
-				// Skip resetting for other inner blocks.
-				if (innerBlockReadyToReset !== innerBlock) {
-					continue;
-				}
-
-				if (!inners[innerBlock]?.hasOwnProperty('attributes')) {
-					continue;
-				}
-
-				state.blockeraBlockStates.value[key].breakpoints[
-					breakpoint
-				].attributes.blockeraInnerBlocks[innerBlock].attributes = {};
-			}
-		}
-	}
-
-	if (state.blockeraInnerBlocks.value?.[innerBlockReadyToReset]?.attributes) {
-		state.blockeraInnerBlocks.value[innerBlockReadyToReset].attributes = {};
-	}
-
-	return state;
 };

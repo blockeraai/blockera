@@ -1,7 +1,7 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
+import { getValueAddonRealValue } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -20,7 +20,7 @@ export function BoxShadowGenerator(id, props, options) {
 	};
 
 	// Collect all properties
-	getSortedRepeater(attributes?.blockeraBoxShadow)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraBoxShadow)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}
@@ -43,7 +43,7 @@ export function BoxShadowGenerator(id, props, options) {
 			? {
 					'box-shadow':
 						properties['box-shadow'].join(', ') + ' !important',
-				}
+			  }
 			: {};
 
 	return createCssDeclarations({

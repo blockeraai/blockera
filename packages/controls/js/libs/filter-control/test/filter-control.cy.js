@@ -178,14 +178,9 @@ describe('filter-control component testing', () => {
 			cy.getByDataTest('filter-drop-shadow-blur-input').type(15);
 
 			cy.getByDataTest('filter-drop-shadow-color').click();
-			cy.contains('Color Picker')
-				.closest('.blockera-component-popover')
-				.find('[data-cy="color-picker-css-value"]')
-				.clear();
-			cy.contains('Color Picker')
-				.closest('.blockera-component-popover')
-				.find('[data-cy="color-picker-css-value"]')
-				.type('2cf1dd');
+			cy.contains('Color Picker').as('color-picker');
+			cy.get('@color-picker').get('input[maxlength="9"]').clear();
+			cy.get('@color-picker').get('input[maxlength="9"]').type('2cf1dd');
 
 			//Check value
 			cy.get('select').eq(0).should('have.value', 'drop-shadow');

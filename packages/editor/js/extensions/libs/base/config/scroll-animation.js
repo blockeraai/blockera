@@ -15,11 +15,9 @@ const blockeraScrollAnimation: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('On Scroll Animation', 'blockera'),
-	keywords: ['scroll', 'animation', 'parallax', 'reveal'],
 };
 
 export const scrollAnimationConfig = {
-	status: true,
 	initialOpen: true,
 	blockeraScrollAnimation,
 };

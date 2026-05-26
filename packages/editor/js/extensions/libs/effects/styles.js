@@ -2,7 +2,6 @@
 /**
  * Blockera dependencies
  */
-import { isEmptyObject } from '@blockera/utils';
 import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
 import { experimental } from '@blockera/env';
 
@@ -49,6 +48,7 @@ export const EffectsStyles = ({
 		blockeraFilter,
 		blockeraOpacity,
 		blockeraTransform,
+		blockeraBlendMode,
 		blockeraTransition,
 		blockeraBackdropFilter,
 		blockeraDivider,
@@ -230,15 +230,16 @@ export const EffectsStyles = ({
 				blockProps.attributes.blockeraTransformChildOrigin
 			)
 		) {
-			transformProperties['perspective-origin'] =
-				`${getValueAddonRealValue(
-					blockProps.attributes.blockeraTransformChildOrigin?.top
-				)} ${getValueAddonRealValue(
-					blockProps.attributes.blockeraTransformChildOrigin?.left
-				)}`;
+			transformProperties[
+				'perspective-origin'
+			] = `${getValueAddonRealValue(
+				blockProps.attributes.blockeraTransformChildOrigin?.top
+			)} ${getValueAddonRealValue(
+				blockProps.attributes.blockeraTransformChildOrigin?.left
+			)}`;
 		}
 
-		if (!isEmptyObject(transformProperties)) {
+		if (transformProperties) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTransform',
@@ -360,6 +361,41 @@ export const EffectsStyles = ({
 						{
 							type: 'function',
 							function: FilterGenerator,
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraBlendMode) &&
+		blockProps.attributes.blockeraBlendMode !==
+			attributes.blockeraBlendMode.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraBlendMode',
+			support: 'blockeraBlendMode',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBlendMode'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraBlendMode: [
+						{
+							type: 'static',
+							properties: {
+								'mix-blend-mode':
+									blockProps.attributes.blockeraBlendMode,
+							},
 						},
 					],
 				},

@@ -71,7 +71,7 @@ describe('Helper Functions', () => {
 								settings: {
 									name: 'Small',
 									id: 'small',
-									value: '13px', // value is changed to "13" in new updates
+									value: '13px',
 									fluid: null,
 									reference: { type: 'preset' },
 									type: 'font-size',
@@ -81,24 +81,7 @@ describe('Helper Functions', () => {
 								isValueAddon: true,
 								valueType: 'variable',
 							})
-						).toBe('var(--wp--preset--font-size--small, 13)');
-
-						expect(
-							getValueAddonRealValue({
-								settings: {
-									name: 'not-found',
-									id: 'not-found',
-									value: '13px',
-									fluid: null,
-									reference: { type: 'preset' },
-									type: 'font-size',
-									var: '--wp--preset--font-size--not-found',
-								},
-								id: 'not-found',
-								isValueAddon: true,
-								valueType: 'variable',
-							})
-						).toBe('var(--wp--preset--font-size--not-found, 13px)');
+						).toBe('var(--wp--preset--font-size--small)');
 					});
 
 					test('font size - not valid variable - it should return value because the variable is not valid', () => {
@@ -117,7 +100,7 @@ describe('Helper Functions', () => {
 								isValueAddon: true,
 								valueType: 'variable',
 							})
-						).toBe('var(--wp--preset--font-size--small, 13px)');
+						).toBe('13px');
 					});
 
 					test('font size - not valid variable & empty value - it should return var for fallback', () => {
@@ -385,14 +368,14 @@ describe('Helper Functions', () => {
 		test('font size', () => {
 			const category = getVariableCategory('font-size');
 
-			expect(category.label).toBe(__('Font Size Variables', 'blockera'));
+			expect(category.label).toBe(__('Editor Font Sizes', 'blockera'));
 		});
 
 		test('linear gradients', () => {
 			const category = getVariableCategory('linear-gradient');
 
 			expect(category.label).toBe(
-				__('Linear Gradient Variables', 'blockera')
+				__('Editor Linear Gradients', 'blockera')
 			);
 		});
 
@@ -400,7 +383,7 @@ describe('Helper Functions', () => {
 			const category = getVariableCategory('radial-gradient');
 
 			expect(category.label).toBe(
-				__('Radial Gradient Variables', 'blockera')
+				__('Editor Radial Gradients', 'blockera')
 			);
 		});
 
@@ -408,20 +391,20 @@ describe('Helper Functions', () => {
 			const category = getVariableCategory('width-size');
 
 			expect(category.label).toBe(
-				__('Width & Height Variables', 'blockera')
+				__('Editor Width & Height Sizes', 'blockera')
 			);
 		});
 
 		test('spacing', () => {
 			const category = getVariableCategory('spacing');
 
-			expect(category.label).toBe(__('Spacing Variables', 'blockera'));
+			expect(category.label).toBe(__('Editor Spacing Sizes', 'blockera'));
 		});
 
 		test('color', () => {
 			const category = getVariableCategory('color');
 
-			expect(category.label).toBe(__('Color Variables', 'blockera'));
+			expect(category.label).toBe(__('Editor Colors', 'blockera'));
 		});
 	});
 

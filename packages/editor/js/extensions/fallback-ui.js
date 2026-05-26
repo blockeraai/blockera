@@ -153,7 +153,7 @@ export const FallbackUI = ({
 									? {
 											reportedCount:
 												state.reportedCount + 1,
-										}
+									  }
 									: {}),
 							});
 						}

@@ -3,11 +3,6 @@
 import { isString, isUndefined } from '@blockera/utils';
 import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 
-/**
- * Internal dependencies
- */
-import { resolveDimensionValueFromWP } from './dimension-variable-from-wp';
-
 export function widthFromWPCompatibility({
 	attributes,
 	blockId,
@@ -23,9 +18,7 @@ export function widthFromWPCompatibility({
 				attributes?.widthUnit !== undefined
 			) {
 				attributes.blockeraWidth = {
-					value: resolveDimensionValueFromWP(
-						attributes.width + attributes.widthUnit
-					),
+					value: attributes?.width + attributes?.widthUnit,
 				};
 			}
 
@@ -70,24 +63,14 @@ export function widthFromWPCompatibility({
 
 			return attributes;
 
-		// Blocks that support global styles dimensions.width
-		case 'core/column':
-		case 'core/image':
-			// Block inspector: attributes.width
-			if (attributes?.width !== undefined) {
-				attributes.blockeraWidth = {
-					value: resolveDimensionValueFromWP(attributes.width),
-				};
-			}
-
-			return attributes;
-
 		// the Icon Block by Nick Diego
 		case 'outermost/icon-block':
 		case 'core/post-featured-image':
+		case 'core/column':
+		case 'core/image':
 			if (attributes?.width !== undefined) {
 				attributes.blockeraWidth = {
-					value: resolveDimensionValueFromWP(attributes.width),
+					value: attributes?.width,
 				};
 			}
 
@@ -208,29 +191,6 @@ export function widthToWPCompatibility({
 				width: +newValue.replace('%', ''), // remove % and convert to number
 			};
 
-		// Blocks that support global styles dimensions.width
-		case 'core/column':
-			if ('reset' === ref?.current?.action) {
-				return {
-					width: undefined,
-				};
-			}
-
-			if (
-				newValue === '' ||
-				isUndefined(newValue) ||
-				isSpecialUnit(newValue) ||
-				!isString(newValue)
-			) {
-				return {
-					width: undefined,
-				};
-			}
-
-			return {
-				width: newValue,
-			};
-
 		// A number attribute for width without unit (px is unit)
 		case 'core/image':
 			if ('reset' === ref?.current?.action) {
@@ -262,6 +222,7 @@ export function widthToWPCompatibility({
 		// the Icon Block by Nick Diego
 		case 'outermost/icon-block':
 		case 'core/post-featured-image':
+		case 'core/column':
 			if ('reset' === ref?.current?.action) {
 				return {
 					width: undefined,
@@ -272,7 +233,8 @@ export function widthToWPCompatibility({
 				newValue === '' ||
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
-				!isString(newValue)
+				!isString(newValue) ||
+				newValue.endsWith('func')
 			) {
 				return {
 					width: undefined,

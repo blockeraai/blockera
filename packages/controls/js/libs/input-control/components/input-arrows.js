@@ -50,9 +50,7 @@ export function InputArrows({
 					!isEmpty(max) && +value >= +max ? 'is-disabled' : ''
 				)}
 				onClick={() => {
-					if (disabled) {
-						return;
-					}
+					if (disabled) return;
 					let newValue = !isEmpty(value) ? +value : 0;
 					newValue += 1;
 
@@ -74,9 +72,7 @@ export function InputArrows({
 					!isEmpty(min) && +value <= +min ? 'is-disabled' : ''
 				)}
 				onClick={() => {
-					if (disabled) {
-						return;
-					}
+					if (disabled) return;
 					let newValue = !isEmpty(value) ? +value : 0;
 					newValue -= 1;
 

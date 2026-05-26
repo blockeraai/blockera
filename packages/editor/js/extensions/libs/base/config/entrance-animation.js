@@ -15,11 +15,9 @@ const blockeraEntranceAnimation: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('On Entrance', 'blockera'),
-	keywords: ['entrance', 'animation', 'fade', 'slide', 'appear'],
 };
 
 export const entranceAnimationConfig = {
-	status: true,
 	initialOpen: true,
 	blockeraEntranceAnimation,
 };

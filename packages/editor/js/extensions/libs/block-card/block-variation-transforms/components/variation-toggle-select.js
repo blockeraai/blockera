@@ -54,7 +54,7 @@ function VariationsToggleSelectControl({
 								/* translators: %s: Block or block variation name. */
 								__('Transform to %s', 'blockera'),
 								variation.title
-							),
+						  ),
 				'aria-label': sprintf(
 					/* translators: %s: Block or block variation name. */
 					__('Transform to %s', 'blockera'),

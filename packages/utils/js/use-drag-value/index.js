@@ -160,9 +160,7 @@ export const useDragValue = ({
 	const onEnd = (event, force = false) => {
 		// stop only if the drag was actually started
 		// or force
-		if ((dragStarted === false || dragStarted === '') && !force) {
-			return;
-		}
+		if ((dragStarted === false || dragStarted === '') && !force) return;
 
 		// call outside callback
 		callbackOnEnd();

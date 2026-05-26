@@ -38,7 +38,6 @@ const BoxPositionControl = ({
 	label = __('Position', 'blockera'),
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	defaultValue = {
@@ -137,7 +136,6 @@ const BoxPositionControl = ({
 				</p>
 			</>
 		),
-		...propsForLabelControl,
 	};
 
 	const sideProps = {
@@ -218,33 +216,28 @@ const BoxPositionControl = ({
 								<Icon
 									icon="none-circle"
 									className="icon-soft-color"
-									iconSize={18}
 								/>
 							),
 						},
 						{
 							label: __('Relative', 'blockera'),
 							value: 'relative',
-							icon: (
-								<Icon icon="position-relative" iconSize={18} />
-							),
+							icon: <Icon icon="position-relative" />,
 						},
 						{
 							label: __('Absolute', 'blockera'),
 							value: 'absolute',
-							icon: (
-								<Icon icon="position-absolute" iconSize={18} />
-							),
+							icon: <Icon icon="position-absolute" />,
 						},
 						{
 							label: __('Fixed', 'blockera'),
 							value: 'fixed',
-							icon: <Icon icon="position-fixed" iconSize={18} />,
+							icon: <Icon icon="position-fixed" />,
 						},
 						{
 							label: __('Sticky', 'blockera'),
 							value: 'sticky',
-							icon: <Icon icon="position-sticky" iconSize={18} />,
+							icon: <Icon icon="position-sticky" />,
 						},
 					]}
 					type="custom"

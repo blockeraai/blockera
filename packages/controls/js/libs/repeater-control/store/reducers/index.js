@@ -12,7 +12,6 @@ import { sortItem } from './sort-item';
 import { cloneItem } from './clone-item';
 import { removeItem } from './remove-item';
 import { changeItem } from './change-item';
-import { resetItem } from './reset-item';
 import { controlReducer } from '../../../../store/reducers/control-reducer';
 
 // eslint-disable-next-line jsdoc/require-returns-check
@@ -45,9 +44,6 @@ export function repeaterReducer(state: Object = {}, action: Object): Object {
 
 		case 'SORT_REPEATER_ITEM':
 			return sortItem(state, action);
-
-		case 'RESET_REPEATER_ITEM':
-			return resetItem(state, action);
 
 		default:
 			return state;

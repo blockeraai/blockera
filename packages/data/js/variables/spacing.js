@@ -5,18 +5,18 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
+import { isBlockTheme, isUndefined, isString } from '@blockera/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
  * Internal dependencies
  */
 import { generateVariableString, getBlockEditorSettings } from './index';
-import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getSpacings: () => Array<VariableItem> = memoize(
@@ -72,6 +72,31 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 	}
 );
 
+export const getSpacingsTitle: () => string = memoize(function (): string {
+	if (isBlockTheme()) {
+		if (
+			!isUndefined(
+				getBlockEditorSettings()?.__experimentalFeatures?.spacing
+					?.spacingSizes?.theme
+			)
+		) {
+			const { getCurrentTheme } = select('blockera/data');
+
+			const theme = getCurrentTheme();
+
+			if (!isUndefined(theme?.name?.rendered)) {
+				return sprintf(
+					// translators: it's the product name (a theme or plugin name)
+					__('%s Spacing Sizes', 'blockera'),
+					theme?.name?.rendered
+				);
+			}
+		}
+	}
+
+	return __('Editor Spacing Sizes', 'blockera');
+});
+
 export const getSpacing: (id: string) => ?VariableItem = memoize(function (
 	id: string
 ): ?VariableItem {
@@ -111,32 +136,8 @@ export const getSpacingVAFromIdString: (value: string) => ValueAddon | string =
 
 export const getSpacingVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
-		if (isString(value)) {
-			const { id, varString } = parseVarString(value, 'spacing');
-
-			if (id) {
-				const spacingVA = getSpacingVAFromIdString(id);
-
-				if (isObject(spacingVA)) {
-					return spacingVA;
-				}
-
-				// same value means the variable not found but should be returned as not found
-				if (spacingVA === id && varString) {
-					return {
-						settings: {
-							name: id,
-							id: value,
-							value: `var(${varString})`,
-							type: 'spacing',
-							var: varString,
-						},
-						name: id,
-						isValueAddon: true,
-						valueType: 'variable',
-					};
-				}
-			}
+		if (isString(value) && value.startsWith('var:')) {
+			return getSpacingVAFromIdString(value.split('|')[2]);
 		}
 
 		return value;

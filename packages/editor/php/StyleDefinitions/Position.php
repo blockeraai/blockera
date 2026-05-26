@@ -18,31 +18,37 @@ class Position extends BaseStyleDefinition {
      */
     protected function css( array $setting): array {
 
-        if (! isset($setting['type'])) {
-            return [];
-        }
-
+        $declaration = [];
         $cssProperty = $setting['type'];
 
-        if ('position' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
-            return [];
+        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'position' !== $cssProperty) {
+
+            return $declaration;
         }
 
-        $positionData = $setting[ $cssProperty ];
+        [
+            'type'     => $position,
+            'position' => $value,
+        ] = $setting[ $cssProperty ];
 
-        if (! isset($positionData['type'], $positionData['position']) || ! is_array($positionData['position'])) {
-            return [];
-        }
+        $this->setDeclaration($cssProperty, $position);
 
-        $position = $positionData['type'];
-        $value    = $positionData['position'];
+        $filteredValues = array_filter($value);
 
-        $this->declarations[ $cssProperty ] = $position;
+        if (! empty($filteredValues)) {
+            $this->declarations = array_merge(
+                $this->declarations,
+                array_merge(
+                    ...array_map(
+                        static function ( string $item, string $property): array {
 
-        foreach ($value as $property => $item) {
-            if ($item) {
-                $this->declarations[ $property ] = blockera_get_value_addon_real_value($item);
-            }
+                            return [ $property => blockera_get_value_addon_real_value($item) ];
+                        },
+                        $filteredValues,
+                        array_keys($filteredValues)
+                    )
+                )
+            );
         }
 
         $this->setCss($this->declarations);

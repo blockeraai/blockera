@@ -35,15 +35,18 @@ import {
 	fitToWPCompatibility,
 } from './compatibility/fit';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			attributes = widthFromWPCompatibility({
 				attributes,
@@ -58,15 +61,11 @@ export const bootstrap = (): void => {
 			attributes = minHeightFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = ratioFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = fitFromWPCompatibility({
@@ -103,8 +102,7 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
@@ -138,8 +136,6 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
 						})
 					);
 
@@ -150,8 +146,6 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
 						})
 					);
 

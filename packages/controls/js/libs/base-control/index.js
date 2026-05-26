@@ -42,7 +42,6 @@ export default function BaseControl({
 					)}
 					style={{ ...style, gridTemplateColumns: cssColumns || '' }}
 					data-cy="base-control"
-					{...props}
 				>
 					<div className={fieldsInnerClassNames('control')}>
 						{children}

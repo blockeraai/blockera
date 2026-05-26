@@ -32,13 +32,13 @@ describe('Background Image → Functionality', () => {
 			cy.get('[data-test="popover-header"]')
 				.parent()
 				.within(() => {
-					cy.contains('button', /media library/i).click();
+					cy.contains('button', /choose image/i).click();
 				});
 
 			cy.get('#menu-item-upload').click();
 
 			cy.get('input[type="file"]').selectFile(
-				'packages/dev-cypress/js/fixtures/bg-extension-test.png',
+				'packages/dev-cypress/js/fixtures/bg-extension-test.jpeg',
 				{
 					force: true,
 				}
@@ -167,7 +167,7 @@ describe('Background Image → Functionality', () => {
 					cy.get('button[data-value="no-repeat"]').click();
 				});
 
-				cy.getParentContainer('Scroll Attachment').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -240,7 +240,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-upgrade-prompt').should('exist');
+			cy.get('.blockera-component-promotion-popover').should('exist');
 		});
 	});
 
@@ -273,7 +273,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Scroll Attachment').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -357,7 +357,7 @@ describe('Background Image → Functionality', () => {
 					settings: {
 						name: 'Vivid cyan blue to vivid purple',
 						id: 'vivid-cyan-blue-to-vivid-purple',
-						value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)',
+						value: 'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
 						reference: {
 							type: 'theme',
 							theme: 'Twenty Twenty-Five',
@@ -420,7 +420,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-upgrade-prompt').should('exist');
+			cy.get('.blockera-component-promotion-popover').should('exist');
 		});
 	});
 
@@ -466,7 +466,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Scroll Attachment').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -573,7 +573,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-upgrade-prompt').should('exist');
+			cy.get('.blockera-component-promotion-popover').should('exist');
 		});
 	});
 
@@ -603,7 +603,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Scroll Attachment').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -698,7 +698,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-upgrade-prompt').should('exist');
+			cy.get('.blockera-component-promotion-popover').should('exist');
 		});
 	});
 });

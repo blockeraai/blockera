@@ -1,20 +1,23 @@
 .save-settings__save-button {
+
 	&.blockera-settings-has-update {
+
 		&:before {
-			content: "";
+			content: '';
 			background: #ffffff;
 			width: 5px;
 			height: 5px;
 			display: block;
 			margin-right: 8px;
 			border-radius: 5px;
-			animation: saveButtonUpdateAnimation 1300ms infinite;
+    		animation: saveButtonUpdateAnimation 1300ms infinite;
 			animation-delay: 500ms;
 		}
 	}
 }
 
 #blockera-admin-settings-container {
+
 	.message.update-failed {
 		color: #ff0000;
 
@@ -26,12 +29,12 @@
 
 @keyframes saveButtonUpdateAnimation {
 	0% {
-		opacity: 1;
+		opacity:1;
 	}
-	50% {
-		opacity: 0;
+	50%{
+		opacity:0;
 	}
 	100% {
-		opacity: 1;
+		opacity:1;
 	}
 }

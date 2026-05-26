@@ -4,6 +4,7 @@
  * External dependencies
  */
 import Fuse from 'fuse.js';
+import memoize from 'fast-memoize';
 
 /**
  * Internal dependencies
@@ -11,13 +12,11 @@ import Fuse from 'fuse.js';
 import {
 	getIconLibraryIcons,
 	getIconLibrarySearchData,
-	getIconLibrariesSearchIndex,
+	// getIconLibrariesSearchIndex,
 	isValidIconLibrary,
 } from './icon-library';
 import { isValidIcon } from './icon';
 import { type IconLibraryTypes } from './types';
-
-const searchConfig = require('./search-config.json');
 
 export function iconSearch({
 	query,
@@ -32,11 +31,27 @@ export function iconSearch({
 		return {};
 	}
 
-	const getResult = () => {
+	const getMemoizedResult = memoize(() => {
 		const fuse = new Fuse(
 			getIconLibrarySearchData(library),
-			searchConfig,
-			getIconLibrariesSearchIndex(library)
+			{
+				shouldSort: true,
+				includeScore: false,
+				keys: [
+					{
+						name: 'title',
+						weight: 0.2,
+					},
+					{
+						name: 'tags',
+						weight: 0.5,
+					},
+				],
+				minMatchCharLength: 3,
+				useExtendedSearch: false,
+				threshold: 0.15,
+			}
+			// getIconLibrariesSearchIndex()
 		);
 
 		let result = fuse.search(query);
@@ -51,18 +66,17 @@ export function iconSearch({
 
 		const finalResult = {};
 
-		const iconRegistration = (foundItem: Object) => {
-			if (foundItem?.item?.iconName) {
+		const memoizedRegistration = memoize((foundItem) => {
+			if (foundItem?.item?.iconName)
 				finalResult[foundItem.item.iconName] = foundItem.item;
-			}
-		};
+		});
 
-		result.forEach(iconRegistration);
+		result.forEach(memoizedRegistration);
 
 		return finalResult;
-	};
+	});
 
-	return getResult();
+	return getMemoizedResult();
 }
 
 export function createIconsBaseSearchData({

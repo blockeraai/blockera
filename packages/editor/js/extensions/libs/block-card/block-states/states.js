@@ -136,7 +136,6 @@ const baseBlockStates = {
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
 			hasContent: true,
-			supportsInnerBlocks: false,
 		},
 	},
 	after: {
@@ -167,7 +166,6 @@ const baseBlockStates = {
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
 			hasContent: true,
-			supportsInnerBlocks: false,
 		},
 	},
 	'first-child': {
@@ -288,17 +286,6 @@ const baseBlockStates = {
 	},
 };
 
-const baseSimpleBlockStates = {
-	normal: baseBlockStates.normal,
-	hover: baseBlockStates.hover,
-	before: baseBlockStates.before,
-	after: baseBlockStates.after,
-	'first-child': baseBlockStates['first-child'],
-	'last-child': baseBlockStates['last-child'],
-	'only-child': baseBlockStates['only-child'],
-	empty: baseBlockStates.empty,
-};
-
 const baseSharedBlockStates = {
 	active: {
 		type: 'active',
@@ -386,7 +373,6 @@ const baseSharedBlockStates = {
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
 			hasContent: true,
-			supportsInnerBlocks: false,
 		},
 	},
 	placeholder: {
@@ -416,7 +402,6 @@ const baseSharedBlockStates = {
 		force: false,
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
-			supportsInnerBlocks: false,
 		},
 	},
 	'current-menu-item': {
@@ -448,7 +433,6 @@ const baseSharedBlockStates = {
 	},
 	'current-menu-parent': {
 		type: 'current-menu-parent',
-		shortLabel: 'Current Parent',
 		label: __('Current Page Parent', 'blockera'),
 		category: 'special',
 		tooltip: (
@@ -476,7 +460,6 @@ const baseSharedBlockStates = {
 	},
 	'current-menu-ancestor': {
 		type: 'current-menu-ancestor',
-		shortLabel: 'Current Ancestor',
 		label: __('Current Page Ancestor', 'blockera'),
 		category: 'special',
 		tooltip: (
@@ -509,22 +492,10 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 	baseBlockStates
 );
 
-export const generalSimpleBlockStates: { [key: TStates]: StateTypes } =
-	applyFilters(
-		'blockera.editor.extensions.blockStates.availableSimpleBlockStates',
-		baseSimpleBlockStates
-	);
-
 export const generalInnerBlockStates: { [key: TStates]: StateTypes } =
 	applyFilters(
 		'blockera.editor.extensions.blockStates.availableInnerBlocksStates',
 		baseBlockStates
-	);
-
-export const generalSimpleInnerBlockStates: { [key: TStates]: StateTypes } =
-	applyFilters(
-		'blockera.editor.extensions.blockStates.availableSimpleInnerBlocksStates',
-		baseSimpleBlockStates
 	);
 
 export const sharedBlockStates: { [key: TStates]: StateTypes } = applyFilters(

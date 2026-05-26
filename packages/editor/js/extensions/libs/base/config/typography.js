@@ -15,7 +15,6 @@ const blockeraFontFamily: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Font Family', 'blockera'),
-	keywords: ['font', 'family', 'typeface', 'typography', 'text'],
 };
 
 const blockeraFontAppearance: FeatureConfig = {
@@ -23,7 +22,6 @@ const blockeraFontAppearance: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Font Appearance', 'blockera'),
-	keywords: ['font', 'appearance', 'weight', 'style', 'bold', 'italic'],
 };
 
 const blockeraFontSize: FeatureConfig = {
@@ -31,7 +29,6 @@ const blockeraFontSize: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Font Size', 'blockera'),
-	keywords: ['font', 'size', 'text', 'typography'],
 };
 
 const blockeraLineHeight: FeatureConfig = {
@@ -39,7 +36,6 @@ const blockeraLineHeight: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Line Height', 'blockera'),
-	keywords: ['line', 'height', 'typography'],
 };
 
 const blockeraFontColor: FeatureConfig = {
@@ -48,7 +44,6 @@ const blockeraFontColor: FeatureConfig = {
 	status: true,
 	onNativeOnInnerBlocks: false,
 	label: __('Text Color', 'blockera'),
-	keywords: ['text', 'color', 'colour', 'font', 'text color', 'font color'],
 };
 
 const blockeraTextShadow: FeatureConfig = {
@@ -56,7 +51,6 @@ const blockeraTextShadow: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Shadow', 'blockera'),
-	keywords: ['text', 'shadow', 'drop shadow', 'typography'],
 };
 
 const blockeraTextAlign: FeatureConfig = {
@@ -64,15 +58,6 @@ const blockeraTextAlign: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Align', 'blockera'),
-	keywords: [
-		'text',
-		'align',
-		'alignment',
-		'left',
-		'center',
-		'right',
-		'justify',
-	],
 };
 
 const blockeraTextTransform: FeatureConfig = {
@@ -80,7 +65,6 @@ const blockeraTextTransform: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Transform', 'blockera'),
-	keywords: ['text', 'transform', 'uppercase', 'lowercase', 'capitalize'],
 };
 
 const blockeraTextDecoration: FeatureConfig = {
@@ -88,14 +72,6 @@ const blockeraTextDecoration: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Decoration', 'blockera'),
-	keywords: [
-		'text',
-		'decoration',
-		'underline',
-		'line-through',
-		'overline',
-		'none',
-	],
 };
 
 const blockeraDirection: FeatureConfig = {
@@ -103,7 +79,6 @@ const blockeraDirection: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Direction', 'blockera'),
-	keywords: ['direction', 'rtl', 'ltr', 'text direction'],
 };
 
 const blockeraLetterSpacing: FeatureConfig = {
@@ -111,7 +86,6 @@ const blockeraLetterSpacing: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Letter Spacing', 'blockera'),
-	keywords: ['letter', 'spacing', 'typography'],
 };
 
 const blockeraWordSpacing: FeatureConfig = {
@@ -119,8 +93,7 @@ const blockeraWordSpacing: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
-	label: __('Words Spacing', 'blockera'),
-	keywords: ['words', 'spacing', 'typography'],
+	label: __('Word Spacing', 'blockera'),
 };
 
 const blockeraTextIndent: FeatureConfig = {
@@ -129,7 +102,6 @@ const blockeraTextIndent: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Indent', 'blockera'),
-	keywords: ['text', 'indent', 'indentation', 'paragraph'],
 };
 
 const blockeraTextOrientation: FeatureConfig = {
@@ -137,7 +109,6 @@ const blockeraTextOrientation: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Orientation', 'blockera'),
-	keywords: ['text', 'orientation', 'vertical', 'upright'],
 };
 
 const blockeraTextColumns: FeatureConfig = {
@@ -146,7 +117,6 @@ const blockeraTextColumns: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Columns', 'blockera'),
-	keywords: ['text', 'columns', 'column'],
 };
 
 const blockeraTextStroke: FeatureConfig = {
@@ -155,7 +125,6 @@ const blockeraTextStroke: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Stroke', 'blockera'),
-	keywords: ['text', 'stroke', 'outline', 'typography'],
 };
 
 const blockeraWordBreak: FeatureConfig = {
@@ -164,7 +133,6 @@ const blockeraWordBreak: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Word Break', 'blockera'),
-	keywords: ['word', 'break', 'wrap', 'overflow'],
 };
 
 const blockeraTextWrap: FeatureConfig = {
@@ -173,19 +141,9 @@ const blockeraTextWrap: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Wrap', 'blockera'),
-	keywords: [
-		'text',
-		'wrap',
-		'word',
-		'break',
-		'overflow',
-		'pretty',
-		'balance',
-	],
 };
 
 export const typographyConfig = {
-	status: true,
 	blockeraFontFamily,
 	blockeraFontAppearance,
 	blockeraFontSize,

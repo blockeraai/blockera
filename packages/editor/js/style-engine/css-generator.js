@@ -1,10 +1,16 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
+/**
  * Internal dependencies
  */
 import { createCssDeclarations } from './utils';
 import type { DynamicStyleFunction } from './types';
+import { isNormalState } from '../extensions/components/utils';
 
 export default class CssGenerator {
 	name: string = '';
@@ -48,7 +54,25 @@ export default class CssGenerator {
 			return '';
 		}
 
+		const { blockName: name, clientId, state } = this.blockProps;
+		const {
+			getActiveInnerState,
+			getActiveMasterState,
+			getExtensionCurrentBlock,
+		} = select('blockera/extensions');
+
+		const currentBlock = getExtensionCurrentBlock();
+		const innerState = getActiveInnerState(clientId, currentBlock);
+		const masterState = getActiveMasterState(clientId, name);
+
 		const options = this.options;
+
+		if (
+			isNormalState(state) &&
+			(!isNormalState(masterState) || !isNormalState(innerState))
+		) {
+			options.important = this.pickedSelector.includes(`:${state}`);
+		}
 
 		// $FlowFixMe
 		return this[addRule](options);

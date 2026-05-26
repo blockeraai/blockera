@@ -1,11 +1,11 @@
 // @flow
 
 export * from './utils';
-export { SpacingStyles, LayoutStyles, LayoutExtension } from './layout';
+export { LayoutStyles, LayoutExtension } from './layout';
 export { FlexChildStyles, FlexChildExtension } from './flex-child';
-export { GridChildStyles, GridChildExtension } from './grid-child';
 export { SizeStyles, SizeExtension } from './size';
 export { PositionStyles, PositionExtension } from './position';
+export { SpacingStyles, SpacingExtension } from './spacing';
 export { BackgroundStyles, BackgroundExtension } from './background';
 export {
 	BorderAndShadowStyles,
@@ -17,6 +17,7 @@ export { CustomStyleStyles, CustomStyleExtension } from './custom-style';
 export { TypographyStyles, TypographyExtension } from './typography';
 export { InnerBlocksExtension } from './block-card/inner-blocks';
 export { EntranceAnimationExtension } from './entrance-animation';
+export { IconStyles, IconExtension } from './icon';
 export { SharedBlockExtension } from './shared';
 export * as extensionConfig from './base/config';
 export {

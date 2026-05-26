@@ -1,4 +1,5 @@
 .blockera-control-angle {
+
 	.components-flex-item {
 		margin: 0 !important;
 	}
@@ -20,25 +21,18 @@
 			order: 2;
 		}
 
-		.components-input-control__backdrop.components-input-control__backdrop {
+		.components-input-control__backdrop {
 			border: 1px solid var(--blockera-controls-border-color);
 			border-radius: var(--blockera-controls-border-radius);
 		}
 
-		.components-input-control__input {
-			height: var(--blockera-controls-input-height) !important;
-			min-height: var(--blockera-controls-input-height) !important;
-			font-size: 12px !important;
-		}
-
-		.components-input-control__input:focus
-			+ .components-input-control__suffix
-			+ .components-input-control__backdrop {
+		.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
 			border-color: var(--blockera-controls-primary-color) !important;
 			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 		}
 
 		.components-input-control__suffix {
+
 			span {
 				margin-right: 7px;
 			}

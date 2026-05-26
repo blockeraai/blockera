@@ -20,14 +20,9 @@ final class StyleEngine {
 	 *
 	 * @var array $pseudo_classes
 	 */
-	protected array $pseudo_classes = [];
-
-	/**
-	 * Store the flag to determine if the style is a global style.
-	 *
-	 * @var bool $is_global_style
-	 */
-	protected bool $is_global_style = false;
+	protected array $pseudo_classes = [
+		'hover',
+	];
 
 	/**
 	 * Store block array.
@@ -44,33 +39,11 @@ final class StyleEngine {
 	protected array $settings = [];
 
 	/**
-	 * Store the inline styles.
-	 *
-	 * @var array $inline_styles
-	 */
-	protected array $inline_styles = [];
-
-
-	/**
 	 * Store fallback css selector.
 	 *
 	 * @var string $selector The css selector for target element.
 	 */
 	protected string $selector = '';
-
-	/**
-	 * Store the flag to determine if the style is a style variation.
-	 *
-	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
-	 */
-	protected bool $is_style_variation = false;
-
-	/**
-	 * Store the definitions instances stack.
-	 *
-	 * @var array $definitions
-	 */
-	protected array $definitions = [];
 
 	/**
 	 * Store instance of current style definition class.
@@ -94,67 +67,18 @@ final class StyleEngine {
 	protected string $breakpoint;
 
 	/**
+	 * Store the inline styles.
+	 *
+	 * @var array $inline_styles
+	 */
+	protected array $inline_styles = [];
+
+	/**
 	 * Store the supports.
 	 *
 	 * @var array $supports
 	 */
 	protected array $supports = [];
-
-	/**
-	 * Store the processed supports.
-	 *
-	 * @var array $processed_supports
-	 */
-	protected static array $processed_supports = [];
-
-	/**
-	 * Store the cleanup declarations map for properties.
-	 * 
-	 * This map is used to clean up properties were collected from inline styles.
-	 * For example, if the border property is set, the border-width, border-style, and border-color properties should be removed.
-	 *
-	 * @var array $properties_clean_map
-	 */
-	protected static array $properties_clean_map = [
-		// border properties.
-		'border' => [
-			'border-width', 
-			'border-style', 
-			'border-color', 
-		],
-		'border-bottom' => [ 
-			'border-bottom-width', 
-			'border-bottom-style', 
-			'border-bottom-color', 
-		],
-		'border-top' => [
-			'border-top-width', 
-			'border-top-style', 
-			'border-top-color', 
-		],
-		'border-left' => [ 
-			'border-left-width', 
-			'border-left-style', 
-			'border-left-color', 
-		],
-		'border-right' => [
-			'border-right-width', 
-			'border-right-style', 
-			'border-right-color',
-		],
-		// Blockera uses background-image but WP uses the background property.
-		// we need to remove it to prevent future issues and duplicate declarations.
-		'background-image' => [
-			'background',
-		],
-		// padding properties.
-		'padding' => [
-			'padding-top',
-			'padding-right',
-			'padding-bottom',
-			'padding-left',
-		],
-	];
 
 	/**
 	 * Store the breakpoints.
@@ -175,18 +99,16 @@ final class StyleEngine {
 	 *
 	 * @param array  $block            The current block.
 	 * @param string $fallbackSelector The css selector for target element.
-	 * @param bool   $isGlobalStyle    The flag to determine if the style is a global style. Default is `false`.
 	 */
-	public function __construct( array $block, string $fallbackSelector, bool $isGlobalStyle = false ) {
+	public function __construct( array $block, string $fallbackSelector ) {
 
 		[
 			'attrs' => $settings,
 		] = $block;
 
-		$this->block           = $block;
-		$this->settings        = $settings;
-		$this->selector        = $fallbackSelector;
-		$this->is_global_style = $isGlobalStyle;
+		$this->block    = $block;
+		$this->settings = $settings;
+		$this->selector = $fallbackSelector;
 	}
 
 	/**
@@ -210,24 +132,7 @@ final class StyleEngine {
 	 */
 	public function setSupports( array $supports): void {
 
-		foreach ($supports as $data) {
-			foreach ($data['supports'] as $key => $support) {
-				$this->supports[ $key ]         = $support;
-				$this->supports[ $key ]['type'] = $data['type'] ?? 'single';
-			}
-		}
-	}
-
-	/**
-	 * Set the flag to determine if the style is a style variation.
-	 *
-	 * @param boolean $is_style_variation the flag to indicate current style is variation style or not.
-	 *
-	 * @return void
-	 */
-	public function setIsStyleVariation( bool $is_style_variation): void {
-
-		$this->is_style_variation = $is_style_variation;
+		$this->supports = blockera_array_flat(array_column($supports, 'supports'));
 	}
 
 	/**
@@ -276,7 +181,15 @@ final class StyleEngine {
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
 			$states = $this->settings['blockeraBlockStates']['value'];
 
-			// prepare all breakpoints.
+			// Filter pseudo classes to only include states that exist in the block.
+			$this->pseudo_classes = array_filter(
+                $states,
+                function( string $state):bool {
+					return 'normal' === $state || in_array($state, $this->pseudo_classes, true);
+				},
+				ARRAY_FILTER_USE_KEY
+            );
+
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
 
 			// Add force base breakpoint if not exists.
@@ -295,7 +208,7 @@ final class StyleEngine {
             );
 
 			// Add normal pseudo class if not exists.
-			if (! array_key_exists('normal', $states)) {
+			if (! array_key_exists('normal', $this->pseudo_classes)) {
 
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => [
@@ -308,8 +221,6 @@ final class StyleEngine {
 
 			} elseif (! empty($settings)) {
 
-				$normal_breakpoints = $this->settings['blockeraBlockStates']['value']['normal']['breakpoints'] ?? [];
-
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => blockera_get_array_deep_merge(
 						[
@@ -317,46 +228,21 @@ final class StyleEngine {
 								'attributes' => $settings,
 							],
 						],
-						$normal_breakpoints,
+						$this->settings['blockeraBlockStates']['value']['normal']['breakpoints'],
 					),
 					'isVisible' => true,
 				];
 			}
-
-			// prepare all block states.
-			$this->pseudo_classes = blockera_get_array_deep_merge($this->pseudo_classes, $states);
 
 			$breakpointsCssRules = blockera_array_flat(
 				array_filter(
 					array_map(
                         function( array $stateSettings, string $state): array {
 							$this->pseudo_state = $state;
-
-							$state_breakpoints = $stateSettings['breakpoints'] ?? [];
-
-							if (empty($state_breakpoints) && ! empty($stateSettings['content'])) {
-								return [
-									$this->prepareBreakpointStyles(
-                                        $this->breakpoint,
-                                        [
-											'blockeraContentPseudoElement' => '"' . $stateSettings['content'] . '"',
-										]
-                                    ),
-								];
-							}
-
-							if (empty($state_breakpoints)) {
-								return [];
-							}
-
-							$breakpoints = $this->prepareBreakpointsSettings($state_breakpoints);
+							$breakpoints        = blockera_get_array_deep_merge($this->breakpoints, $stateSettings['breakpoints']);
 
 							return array_map(
-                                function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {
-									if (isset($stateSettings['content'])) {
-										$breakpointSettings['attributes']['blockeraContentPseudoElement'] = '"' . $stateSettings['content'] . '"';
-									}
-
+                                function ( $breakpointSettings, string $breakpoint): string {
                                     return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes']);
                                 },
                                 $breakpoints,
@@ -378,30 +264,6 @@ final class StyleEngine {
 		unset($settings['blockeraBlockStates'], $settings['blockeraPropsId'], $settings['blockeraCompatId']);
 
 		return $this->prepareBreakpointStyles($this->breakpoint, $settings);
-	}
-
-	/**
-	 * Prepare breakpoints settings.
-	 *
-	 * @param array $breakpoints The breakpoints settings.
-	 *
-	 * @return array The prepared breakpoints settings.
-	 */
-	protected function prepareBreakpointsSettings( array $breakpoints ): array {
-
-		if (empty($breakpoints)) {
-
-			return [];
-		}
-
-		$available_breakpoints = array_intersect(array_keys($this->breakpoints), array_keys($breakpoints));
-
-		return array_filter(
-			blockera_get_array_deep_merge($this->breakpoints, $breakpoints),
-			function ( $breakpoint) use ( $available_breakpoints): bool {
-				return in_array($breakpoint['type'], $available_breakpoints, true);
-			}
-		);
 	}
 
 	/**
@@ -427,7 +289,7 @@ final class StyleEngine {
 		$this->breakpoint = $breakpoint;
 
 		// We should just prepare normal state styles because not exists any other states.
-		$state_css_rules = $this->prepareStateStyles( $settings );
+		$state_css_rules = $this->prepareStateStyles($settings);
 
 		// Exclude empty css rules.
 		if ( empty( $state_css_rules ) ) {
@@ -439,7 +301,7 @@ final class StyleEngine {
 			PHP_EOL,
 			array_unique(
 				array_filter(
-					is_array( current( $state_css_rules ) ) ? blockera_array_flat( $state_css_rules ) : $state_css_rules,
+					is_array(current($state_css_rules)) ? blockera_array_flat($state_css_rules) : $state_css_rules,
 					'blockera_get_filter_empty_array_item'
 				)
 			)
@@ -463,43 +325,15 @@ final class StyleEngine {
 	 * Get css rules generated by current definition instance.
 	 *
 	 * @param string $id The related supports with current definition instance.
-	 * 
-	 * @throws BaseException Exception for invalid definition.
 	 *
 	 * @return void
 	 */
-	protected function setDefinition( string $id, $flag = false): void {
+	protected function setDefinition( string $id): void {
+		
 		// Early returns for invalid conditions.
-		if (empty($this->supports) || ! isset($this->supports[ $id ], $this->supports[ $id ]['definition'])) {
-
-			$items = ! empty(static::$processed_supports) ? static::$processed_supports : $this->supports;
-			$ids   = array_column($items, 'id');
-			$index = array_search($id, $ids, true);
-
-			if (! $index) {
-				$this->definition           = null;
-				static::$processed_supports = [];
-
-				return;
-			}
-
-			$id = $ids[ $index ];
-
-			try {
-				// Prepare all items while definition index equals with $id.
-				foreach ($items as $key => $support) {
-					if (isset($support['id']) && $support['id'] === $id) {
-						// Attempt to create new instance.
-						$this->definition = $this->app->make($support['definition'], [ 'supports' => $this->supports ]);
-						$this->definition->setSupportType($support['type'] ?? 'single');
-						$this->definition->setId($key);
-	
-						return;
-					}
-				}
-			} catch (\Exception $e) {
-				return;
-			}
+		if (empty($this->supports) ||
+			! isset($this->supports[ $id ], $this->supports[ $id ]['definition'])) {
+			return;
 		}
 
 		// Get definition class name.
@@ -508,11 +342,7 @@ final class StyleEngine {
 		// Attempt to create new instance.
 		try {
 			$this->definition = $this->app->make($definition, [ 'supports' => $this->supports ]);
-			$this->definition->setId($id);
 		} catch (\Exception $e) {
-			if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT) {
-				throw new BaseException($e->getMessage());
-			}
 			return;
 		}
 	}
@@ -535,7 +365,7 @@ final class StyleEngine {
 		$this->setDefinition($id);
 
 		if (! $this->definition) {
-
+			
 			return [];
 		}
 
@@ -551,15 +381,15 @@ final class StyleEngine {
 	 */
 	protected function prepareStateStyles( array $settings ): array {
 
-		// Replace array_map with foreach to avoid closure overhead (eliminates function call overhead per iteration).
-		// Direct iteration is faster than array_map with closures due to reduced opcode dispatch and zval operations.
-		$block_css = [];
-		foreach ($settings as $id => $setting_value) {
-			$css_result = $this->generateCss($setting_value, $id);
-			if (! empty($css_result)) {
-				$block_css[] = $css_result;
-			}
-		}
+		$block_css = array_filter(
+			array_map(
+				function ( $settings, string $id): array {
+					return $this->generateCss($settings, $id);
+				},
+				$settings,
+				array_keys($settings)
+			)
+		);
 
 		if (isset($settings['blockeraInnerBlocks'])) {
 			
@@ -653,7 +483,7 @@ final class StyleEngine {
 								);
 							}
 
-							$this->setDefinition($id, true);
+							$this->setDefinition($id);
 
 							if (! $this->definition) {
 
@@ -661,42 +491,20 @@ final class StyleEngine {
 							}
 
 							return $this->generateInnerBlockCss(is_string($settings) ? [ 'value' => $settings ] : $settings, $blockType, compact('id'));
+
 						},
 						$settings['attributes'] ?? [],
 						array_keys($settings['attributes'] ?? [])
 					);
 				},
-				$settings['blockeraInnerBlocks']['value'] ?? $settings['blockeraInnerBlocks'] ?? [],
-				array_keys($settings['blockeraInnerBlocks']['value'] ?? $settings['blockeraInnerBlocks'] ?? [])
+				blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) ? $settings['blockeraInnerBlocks']['value'] ?? [] : $settings['blockeraInnerBlocks'] ?? [],
+				array_keys(blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) ? $settings['blockeraInnerBlocks']['value'] ?? [] : $settings['blockeraInnerBlocks'] ?? [])
 			);
 
 			$block_css = array_merge( $block_css, array_filter(blockera_array_flat($inner_blocks_css)) );
 		}
 
-		$block_css = blockera_combine_css($block_css);
-
-		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
-			$selectors           = blockera_get_block_type_property($this->block['blockName'], 'selectors');
-			$block_root_selector = blockera_get_compatible_block_css_selector(
-				$selectors,
-				'root',
-				[
-					'fallback'                 => 'root',
-					'block-type'               => 'master',
-					'inner-pseudo-class'       => 'normal',
-					'blockera-unique-selector' => $this->selector,
-					'breakpoint'               => $this->breakpoint,
-					'pseudo-class'             => $this->pseudo_state,
-					'block-settings'           => $this->block['attrs'],
-					'block-name'               => $this->block['blockName'],
-					'root'                     => $selectors['root'] ?? null,
-				]
-			);
-
-			$block_css = $this->mergeInlineStyles($block_css, $block_root_selector);
-		}
-
-		return $this->normalizeCssRules(blockera_convert_css_declarations_to_css_valid_rules($block_css));
+		return $this->normalizeCssRules(blockera_convert_css_declarations_to_css_valid_rules(blockera_combine_css($block_css)));
 	}
 
 	/**
@@ -704,28 +512,12 @@ final class StyleEngine {
 	 * 
 	 * @param array  $settings the settings to generate css.
 	 * @param string $id the settings id.
-	 * @param array  $previous_css_rules the previous css rules. It's has value while calling this method recursively.
 	 *
 	 * @return array The array of collection of selector and declaration.
 	 */
-	protected function generateBlockCss( array $settings, string $id, array $previous_css_rules = []): array {
+	protected function generateBlockCss( array $settings, string $id): array {
 
-		if ( empty( $id ) ) {
-
-			return [];
-		}
-
-		// Grid layout CSS is derived from block attrs + display; values may be empty while display is grid (core default track).
-		$allow_empty_style_value = in_array(
-			$id,
-			[
-				'blockeraGridMinimumColumnWidth',
-				'blockeraGridColumnCount',
-			],
-			true
-		);
-
-		if ( empty( $settings['value'] ) && ! $allow_empty_style_value ) {
+		if ( empty( $settings['value'] ) || empty($id) ) {
 
 			return [];
 		}
@@ -737,45 +529,120 @@ final class StyleEngine {
 		$this->definition->setBreakpoint( $this->breakpoint );
 		$this->definition->setBlockType( 'master' );
 		$this->definition->setPseudoState( $this->pseudo_state );
-		$this->definition->setIsGlobalStyle( $this->is_global_style );
-		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		if (empty($previous_css_rules)) {
-			$css_rules = $this->definition->getCssRules();
-		} else {
-			$css_rules = blockera_get_array_deep_merge($previous_css_rules, $this->definition->getCssRules());
+		$css_rules = $this->definition->getCssRules();
+
+		// Only process inline styles for normal state on base breakpoint.
+		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
+			$css_rules = $this->mergeInlineStyles($css_rules);
 		}
 
-		// This is a multiple support definition.
-		// So we need to generate the css rules for the next support.
-		if ('multiple' === $this->definition->getSupportType()) {
-			// Get the supports stack to filter out the current support.
-			$supports = ! empty(static::$processed_supports) ? static::$processed_supports : $this->supports;
-
-			// Filter out the current support from the supports stack.
-			// Filter out the previous processed supports.
-			static::$processed_supports = $supports;
-			$definition_id              = $this->definition->getId();
-			if (isset(static::$processed_supports[ $definition_id ])) {
-				unset(static::$processed_supports[ $definition_id ]);
-			}
-
-			$this->definition = null;
-
-			// Set the next support definition.
-			$this->setDefinition($id);
-
-			// Generate the css rules for the next support.
-			if ($this->definition) {
-				$css_rules = $this->generateBlockCss($settings, $id, $css_rules);
-			}
-		}
-		
 		// Reset definition property.
 		$this->definition = null;
 
 		return $css_rules;
+	}
+
+	/**
+	 * Merge inline styles with generated CSS rules, avoiding duplicates.
+	 * 
+	 * @param array $css_rules The existing CSS rules.
+	 * @return array The merged CSS rules.
+	 */
+	protected function mergeInlineStyles( array $css_rules): array {
+		$definition_selector = $this->definition->getSelector();
+
+		// Early return if no definition selector.
+		if (empty($definition_selector)) {
+			return $css_rules;
+		}
+
+		// Get all inline styles that match the current definition's selector pattern.
+		$matching_styles = $this->getMatchingInlineStyles($definition_selector);
+
+		foreach ($matching_styles as $selector => $declarations) {
+			// Skip if declarations are empty.
+			if (empty($declarations)) {
+				continue;
+			}
+			
+			$filtered_declarations       = array_filter(
+                $declarations,
+                function( $declaration):bool {
+					return ! empty($declaration) && ! is_array($declaration);
+				}
+            );
+			$filtered_child_declarations = array_diff_key($declarations, $filtered_declarations);
+
+			// Convert declarations to property-value pairs.
+			$prepared_styles       = $this->prepareInlineStyles($filtered_declarations);
+			$prepared_child_styles = $this->prepareInlineStyles(blockera_array_flat($filtered_child_declarations));
+
+			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
+
+			// Merge with existing rules, avoiding duplicates.
+			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {				
+				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
+			}
+
+			if (! empty($prepared_child_styles)) {
+				$css_rules[ array_keys($filtered_child_declarations)[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ] ?? [], $prepared_child_styles);
+			}
+		}
+
+		return $css_rules;
+	}
+
+	/**
+	 * Get inline styles that match the current definition's selector.
+	 * 
+	 * @param string $definition_selector The current definition's selector.
+	 * @return array Matching inline styles.
+	 */
+	protected function getMatchingInlineStyles( string $definition_selector): array {
+		$matching_styles = [];
+		$base_selector   = preg_replace('/^\w+\./i', '.', $definition_selector);
+
+		foreach ($this->inline_styles as $selector => $declarations) {
+			// If selector matches the base selector pattern, include it.
+			if (false !== strpos($selector, $base_selector) || false !== strpos($base_selector, $selector)) {
+				$matching_styles[ $selector ] = $declarations;
+			}
+		}
+
+		return $matching_styles;
+	}
+
+	/**
+	 * Convert inline style declarations to property-value pairs.
+	 * 
+	 * @param array|string $declarations The style declarations.
+	 * @return array The prepared styles.
+	 */
+	protected function prepareInlineStyles( $declarations): array {
+		$prepared_styles = [];
+
+		// Handle string declarations.
+		if (is_string($declarations)) {
+			$parts = explode(':', $declarations);
+			if (count($parts) === 2) {
+				$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
+			}
+			return $prepared_styles;
+		}
+
+		// Handle array declarations.
+		foreach ($declarations as $declaration) {
+			if (is_string($declaration)) {
+				$parts = explode(':', $declaration);
+				if (count($parts) === 2) {
+					$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
+				}
+			}
+		}
+
+		return $prepared_styles;
 	}
 
 	/**
@@ -801,43 +668,12 @@ final class StyleEngine {
 		$this->definition->setStyleId($args['id']);
 		$this->definition->setBlockType( $blockType );
 		$this->definition->setBreakpoint( $this->breakpoint );
-		$this->definition->setIsGlobalStyle( $this->is_global_style );
 		$this->definition->setInnerPseudoState( $args['state'] ?? '' );
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setSettings( $settings );
-		$this->definition->setNoChecks( true );
-		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		$css_rules = $this->definition->getCssRules();
-
-		// This is a multiple support definition.
-		// So we need to generate the css rules for the next support.
-		if ('multiple' === $this->definition->getSupportType()) {
-			// Get the supports stack to filter out the current support.
-			$supports = ! empty(static::$processed_supports) ? static::$processed_supports : $this->supports;
-
-			// Filter out the current support from the supports stack.
-			// Filter out the previous processed supports.
-			static::$processed_supports = $supports;
-			$definition_id              = $this->definition->getId();
-			if (isset(static::$processed_supports[ $definition_id ])) {
-				unset(static::$processed_supports[ $definition_id ]);
-			}
-
-			$this->definition = null;
-
-			// Set the next support definition.
-			$this->setDefinition($args['id']);
-
-			// Generate the css rules for the next support.
-			if ($this->definition) {
-				// Merge the css rules with the generated css rules for the next support.
-				$css_rules = blockera_get_array_deep_merge($css_rules, $this->generateInnerBlockCss($settings, $blockType, $args));
-			}
-		}
-
-		return $css_rules;
+		return $this->definition->getCssRules();
 	}
 
 	/**
@@ -893,60 +729,4 @@ final class StyleEngine {
 		);
 	}
 
-	/**
-	 * Merge inline styles with generated CSS rules, avoiding duplicates.
-	 * 
-	 * @param array  $css_rules The existing CSS rules.
-	 * @param string $definition_selector The current definition's selector.
-	 * 
-	 * @return array The merged CSS rules.
-	 */
-	protected function mergeInlineStyles( array $css_rules, string $definition_selector): array {
-		// Early return if no definition selector.
-		if (empty($definition_selector)) {
-			return $css_rules;
-		}
-
-		$base_selector = preg_replace('/^\w+\./i', '.', $definition_selector);
-
-		foreach ($this->inline_styles as $selector => $declarations) {
-			// If selector matches the base selector pattern, include it.
-			// If $selector is root selector, it should not contains space and ends with base selector.
-			if (str_contains($selector, ' ') || ! str_contains($base_selector, $selector)) {
-				continue;
-			}
-
-			// Skip if declarations are empty.
-			if (empty($declarations)) {
-				continue;
-			}
-
-			if (! isset($css_rules[ $definition_selector ])) {
-				// Set css rule for definition selector as a root collected inline styles.
-				$css_rules[ $definition_selector ] = $declarations;
-			} else {
-				// Cache reference to avoid repeated array access in loop to improve performance.
-				$existing_rules = &$css_rules[ $definition_selector ];
-
-				// Clean up individual properties when shorthand exists.
-				// Build removal array first, then remove all at once for better performance.
-				$properties_to_remove = [];
-				foreach (self::$properties_clean_map as $cleanProperty => $properties) {
-					if ( isset($existing_rules[ $cleanProperty ]) ) {
-						array_push($properties_to_remove, ...$properties);
-					}
-				}
-
-				if ( ! empty($properties_to_remove) ) {
-					// array_diff_key() with array_flip() removes all properties in one native PHP operation (C-level), which is faster than multiple unset() calls.
-					$declarations = array_diff_key($declarations, array_flip($properties_to_remove));
-				}
-
-				// Merge same declaration with the style engine generated declarations.
-				$css_rules[ $definition_selector ] = array_merge($declarations, $existing_rules);
-			}
-		}
-
-		return $css_rules;
-	}
 }

@@ -270,11 +270,9 @@ describe(
 
 				cy.get('.blockera-component-popover').last().as('color-picker');
 				cy.get('@color-picker').within(() => {
+					cy.get('@color-picker').get('input[maxlength="9"]').clear();
 					cy.get('@color-picker')
-						.find('[data-cy="color-picker-css-value"]')
-						.clear();
-					cy.get('@color-picker')
-						.find('[data-cy="color-picker-css-value"]')
+						.get('input[maxlength="9"]')
 						.type('2cf1dd');
 				});
 				cy.getByDataTest('box-shadow-color-control').contains(
@@ -379,13 +377,8 @@ describe(
 
 				cy.get('.blockera-component-popover').last().as('color-picker');
 				cy.get('@color-picker').within(() => {
-					cy.get('[data-cy="color-picker-css-value"]').clear({
-						force: true,
-					});
-					cy.get('[data-cy="color-picker-css-value"]').type(
-						'2cf1dd',
-						{ delay: 0 }
-					);
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('2cf1dd ');
 				});
 				cy.getByDataTest('box-shadow-color-control').contains(
 					'#2cf1dd'

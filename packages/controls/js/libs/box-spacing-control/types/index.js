@@ -9,7 +9,12 @@ import type { MixedElement } from 'react';
  */
 import type { ControlGeneralTypes } from '../../../types';
 
-export type BoxSpacingLock = 'none' | 'simple' | 'expanded';
+export type BoxSpacingLock =
+	| 'none'
+	| 'vertical'
+	| 'horizontal'
+	| 'all'
+	| 'vertical-horizontal';
 
 type BoxSpacingSideDisable = 'none' | 'vertical' | 'horizontal' | 'all';
 
@@ -39,23 +44,90 @@ export type BoxSpacingControlProps = {
 	 *
 	 * @default ``
 	 */
+	openSide?: 'top' | 'right' | 'bottom' | 'left' | '',
 	marginLock: BoxSpacingLock,
 	paddingLock: BoxSpacingLock,
 	paddingDisable?: BoxSpacingSideDisable,
 	marginDisable?: BoxSpacingSideDisable,
 };
 
-export type InputProps = {
+export type SidePopoverProps = {
+	/**
+	 * side has value or not
+	 */
+	hasValue: any,
 	/**
 	 * Reset value of side to default value
 	 */
 	resetToDefault: () => void,
 	id: string,
-	unitType?: 'margin' | 'padding',
+	isOpen: boolean,
+	type?: 'margin' | 'padding',
+	unit?: string,
+	onClose: () => void,
 	onChange: (data: Object) => void,
 	defaultValue: Object,
 	inputLabel?: string | MixedElement,
 	inputLabelDescription?: string | MixedElement,
 	inputLabelPopoverTitle?: string | MixedElement,
-	className?: string,
+	icon?: MixedElement,
+	title?: string,
+	offset?: number,
+};
+
+export type Side =
+	| ''
+	| 'margin-all'
+	| 'margin-vertical'
+	| 'margin-horizontal'
+	| 'margin-top'
+	| 'margin-right'
+	| 'margin-bottom'
+	| 'margin-left'
+	| 'padding-all'
+	| 'padding-vertical'
+	| 'padding-horizontal'
+	| 'padding-top'
+	| 'padding-right'
+	| 'padding-bottom'
+	| 'padding-left';
+
+export type OpenPopover = Side | 'variable-picker';
+
+export type SideProps = {
+	id?: string,
+	getId: (?string, ?string) => string,
+	//
+	value: TDefaultValue,
+	setValue: (Object) => void,
+	attribute: string,
+	blockName: string,
+	defaultValue: any,
+	resetToDefault: () => void,
+	getControlPath: (controlID: string, childControlId: string) => string,
+	//
+	focusSide: Side,
+	setFocusSide: (side: Side) => void,
+	openPopover: OpenPopover,
+	setOpenPopover: (side: OpenPopover) => void,
+	paddingDisable: BoxSpacingSideDisable,
+	marginDisable: BoxSpacingSideDisable,
+	setControlClassName: (string) => void,
+	marginLock: BoxSpacingLock,
+	setMarginLock: (side: Side) => void,
+	paddingLock: BoxSpacingLock,
+	setPaddingLock: (side: Side) => void,
+};
+
+export type SideReturn = {
+	shape: MixedElement,
+	label: MixedElement,
+	popover: MixedElement,
+};
+
+export type SideShapeProps = {
+	...Object,
+	shape?: string,
+	className?: string | Array<string>,
+	tooltipText: string,
 };

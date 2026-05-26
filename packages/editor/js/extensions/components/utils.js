@@ -10,10 +10,7 @@ import { isEquals, omit } from '@blockera/utils';
  */
 import type { TStates } from '../libs/block-card/block-states/types';
 import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
-import {
-	ignoreBlockeraAttributeKeysRegExp,
-	ignoreDefaultBlockAttributeKeysRegExp,
-} from '../libs/utils';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 
 export const propsAreEqual = (perv: Object, next: Object): boolean => {
 	const excludeKeys = ['content', 'text'];
@@ -22,33 +19,6 @@ export const propsAreEqual = (perv: Object, next: Object): boolean => {
 		omit(perv?.attributes, excludeKeys),
 		omit(next?.attributes, excludeKeys)
 	);
-};
-
-/**
- * Get attribute names that should be omitted when applying attributes cross-block.
- * Rich-text and source attributes can cause critical errors in WordPress blocks.
- * Shared by handleOnDetachStyle and block-settings Edit component.
- *
- * @param {Object} attributesSchema - Block attribute schema (e.g. from getBlockType or overrideAttributes).
- * @return {Array<string>} - Attribute names to omit.
- */
-export const getIgnoredAttributesForSchema = (
-	attributesSchema: Object
-): Array<string> => {
-	const ignored: Array<string> = [];
-	if (!attributesSchema) {
-		return ignored;
-	}
-	for (const attribute in attributesSchema) {
-		const attr = attributesSchema[attribute];
-		if (
-			attr?.type === 'rich-text' ||
-			(attr?.source !== undefined && attr?.source !== null)
-		) {
-			ignored.push(attribute);
-		}
-	}
-	return ignored;
 };
 
 /**
@@ -77,10 +47,7 @@ export const isNormalState = (selectedState: TStates | string): boolean =>
  * @return {Object} the attributes cleaned.
  */
 export const prepareBlockeraDefaultAttributesValues = (
-	rootAttributes: Object,
-	{
-		context = 'block-inspector',
-	}: { context?: 'global-styles-panel' | 'block-inspector' } = {}
+	rootAttributes: Object
 ): Object => {
 	// Extracting default prop of items and assigning to a new object
 	const attributes: { [key: string]: any } = {};
@@ -90,78 +57,31 @@ export const prepareBlockeraDefaultAttributesValues = (
 			continue;
 		}
 
-		const isGlobalStylesPanel =
-			'global-styles-panel' === context &&
-			!['blockeraPropsId', 'blockeraCompatId'].includes(key) &&
-			ignoreBlockeraAttributeKeysRegExp().test(key);
-
 		if (rootAttributes[key].default !== undefined) {
-			if (isGlobalStylesPanel) {
-				attributes[key] = {
-					value: rootAttributes[key].default,
-				};
-			} else {
-				attributes[key] = rootAttributes[key].default;
-			}
+			attributes[key] = rootAttributes[key].default;
 
 			continue;
 		}
 
 		switch (rootAttributes[key]?.type) {
 			case 'string':
-				if (isGlobalStylesPanel) {
-					attributes[key] = {
-						value: '',
-					};
-				} else {
-					attributes[key] = '';
-				}
+				attributes[key] = '';
 				break;
 			case 'object':
-				if (isGlobalStylesPanel) {
-					attributes[key] = {
-						value: {},
-					};
-				} else {
-					attributes[key] = {};
-				}
+				attributes[key] = {};
 				break;
 			case 'array':
-				if (isGlobalStylesPanel) {
-					attributes[key] = {
-						value: [],
-					};
-				} else {
-					attributes[key] = [];
-				}
+				attributes[key] = [];
 				break;
 			case 'boolean':
-				if (isGlobalStylesPanel) {
-					attributes[key] = {
-						value: false,
-					};
-				} else {
-					attributes[key] = false;
-				}
+				attributes[key] = false;
 				break;
 			case 'number':
 			case 'integer':
-				if (isGlobalStylesPanel) {
-					attributes[key] = {
-						value: 0,
-					};
-				} else {
-					attributes[key] = 0;
-				}
+				attributes[key] = 0;
 				break;
 			case 'null':
-				if (isGlobalStylesPanel) {
-					attributes[key] = {
-						value: null,
-					};
-				} else {
-					attributes[key] = null;
-				}
+				attributes[key] = null;
 				break;
 		}
 	}

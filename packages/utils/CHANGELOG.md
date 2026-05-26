@@ -1,11 +1,5 @@
 ## Unreleased
 
-### New Features
-- Added new helper functions to improve plugin functionality.
-
-### Improvements
-- Length values used in block styles (for example borders and shadows) are normalized more reliably when saved data uses shorthand decimals or omits a unit; the `normalizeCssLengthValue` helper also accepts an optional default unit (defaults to `px`, or use an empty string to keep numbers unitless).
-
 ## 1.2.1 (2025-06-10)
 
 ### Improvements

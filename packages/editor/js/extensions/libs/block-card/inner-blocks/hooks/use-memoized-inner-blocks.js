@@ -20,14 +20,10 @@ import { getSortedObject } from '@blockera/utils/js/object';
 
 export const useMemoizedInnerBlocks = ({
 	clientId,
-	blockName,
 	controlValue,
 	getBlockInners,
-	getBlockExtensionBy,
 	reservedInnerBlocks,
 	setBlockClientInners,
-	selectedBlockClientId,
-	insideBlockInspector = true,
 }: MemoizedInnerBlocks): InnerBlocks => {
 	// External selectors. to access registered block types on WordPress blocks store api.
 	const { getBlockType } = select('core/blocks');
@@ -63,19 +59,9 @@ export const useMemoizedInnerBlocks = ({
 		}
 
 		// Previous inner blocks stack.
-		// Selected block client id is used to get the dynamic available inner blocks for customization of the selected block inside global styles panel.
-		const inners = getBlockInners(selectedBlockClientId || clientId);
-		let fallbackInners = {};
+		const inners = getBlockInners(clientId);
 
-		// If not running inside block inspector we should create fallback inner blocks object.
-		if (!Object.keys(inners).length && !insideBlockInspector) {
-			fallbackInners = getBlockExtensionBy(
-				'targetBlock',
-				blockName
-			)?.blockeraInnerBlocks;
-		}
-
-		let mergedStackWithStoreInners = mergeObject(inners, stack);
+		const mergedStackWithStoreInners = mergeObject(inners, stack);
 
 		if (!isEquals(inners, mergedStackWithStoreInners)) {
 			setBlockClientInners({
@@ -86,16 +72,6 @@ export const useMemoizedInnerBlocks = ({
 					10
 				),
 			});
-		}
-
-		// If not running inside block inspector we should provided fallback inner blocks,
-		// because in this case not available selected block and client id.
-		if (
-			!insideBlockInspector &&
-			!Object.keys(inners).length &&
-			!Object.keys(mergedStackWithStoreInners).length
-		) {
-			mergedStackWithStoreInners = mergeObject(fallbackInners, stack);
 		}
 
 		return mergedStackWithStoreInners;

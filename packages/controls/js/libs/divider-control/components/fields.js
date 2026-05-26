@@ -59,15 +59,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			items: Array<Object>,
 			value: string
 		) => {
-			if (items.length < 2) {
-				return false;
-			}
-			if (id === 0 && items[1]?.position === value) {
-				return true;
-			}
-			if (id === 1 && items[0]?.position === value) {
-				return true;
-			}
+			if (items.length < 2) return false;
+			if (id === 0 && items[1]?.position === value) return true;
+			if (id === 1 && items[0]?.position === value) return true;
 			return false;
 		};
 
@@ -106,7 +100,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								? __(
 										'You can only add one top divider',
 										'blockera'
-									)
+								  )
 								: __('Top', 'blockera'),
 						},
 						{
@@ -125,7 +119,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								? __(
 										'You can only add one bottom divider',
 										'blockera'
-									)
+								  )
 								: __('Bottom', 'blockera'),
 						},
 					]}

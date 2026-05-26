@@ -4,90 +4,34 @@
  * Blockera dependencies
  */
 import { isBorderRadiusEmpty } from '@blockera/controls';
-import { isObject, isString, normalizeCssLengthValue } from '@blockera/utils';
-
-/**
- * Internal dependencies
- */
-import { runInsideBlockInspector } from '../../utils';
+import { isObject, isString } from '@blockera/utils';
 
 export function borderRadiusFromWPCompatibility({
 	attributes,
-	editorSelectedBlockEvent,
-	insideBlockInspector,
 }: {
 	attributes: Object,
-	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
-	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius?.value)) {
-		const borderRadius = runInsideBlockInspector(
-			insideBlockInspector,
-			editorSelectedBlockEvent
-		)
-			? attributes?.style?.border?.radius
-			: attributes?.border?.radius;
-
-		if (borderRadius) {
-			if (isString(borderRadius)) {
-				const trimmed = borderRadius.trim();
-				// Core may store bare `0` per token; match border.js shorthand handling (skip splitting for calc/var/etc.).
-				const all = trimmed.includes('(')
-					? trimmed
-					: trimmed
-							.split(/\s+/)
-							.filter(Boolean)
-							.map((part) => normalizeCssLengthValue(part))
-							.join(' ');
+		if (attributes?.style?.border?.radius !== undefined) {
+			if (isString(attributes?.style?.border?.radius)) {
 				attributes.blockeraBorderRadius = {
 					value: {
 						type: 'all',
-						all,
+						all: attributes?.style?.border?.radius,
 					},
 				};
-			} else if (isObject(borderRadius)) {
-				const corners: {
-					topLeft?: string,
-					topRight?: string,
-					bottomLeft?: string,
-					bottomRight?: string,
-				} = {
-					topLeft: normalizeCssLengthValue(
-						borderRadius?.topLeft ?? ''
-					),
-					topRight: normalizeCssLengthValue(
-						borderRadius?.topRight ?? ''
-					),
-					bottomLeft: normalizeCssLengthValue(
-						borderRadius?.bottomLeft ?? ''
-					),
-					bottomRight: normalizeCssLengthValue(
-						borderRadius?.bottomRight ?? ''
-					),
+			} else if (isObject(attributes?.style?.border?.radius)) {
+				attributes.blockeraBorderRadius = {
+					value: {
+						topLeft: '',
+						topRight: '',
+						bottomLeft: '',
+						bottomRight: '',
+						...attributes?.style?.border?.radius,
+						type: 'custom',
+						all: '',
+					},
 				};
-
-				const areCordersEqual = Object.values(corners).every(
-					(corner) => {
-						return corner === corners.topLeft;
-					}
-				);
-
-				if (areCordersEqual) {
-					attributes.blockeraBorderRadius = {
-						value: {
-							type: 'all',
-							all: corners.topLeft,
-						},
-					};
-				} else {
-					attributes.blockeraBorderRadius = {
-						value: {
-							...corners,
-							type: 'custom',
-							all: '',
-						},
-					};
-				}
 			}
 		}
 	}
@@ -98,28 +42,11 @@ export function borderRadiusFromWPCompatibility({
 export function borderRadiusToWPCompatibility({
 	newValue,
 	ref,
-	editorSelectedBlockEvent,
-	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
-	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
-	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		if (
-			!runInsideBlockInspector(
-				insideBlockInspector,
-				editorSelectedBlockEvent
-			)
-		) {
-			return {
-				border: {
-					radius: undefined,
-				},
-			};
-		}
-
 		return {
 			style: {
 				border: {
@@ -131,19 +58,6 @@ export function borderRadiusToWPCompatibility({
 
 	if (newValue.type === 'all') {
 		if (!newValue?.all.endsWith('func')) {
-			if (
-				!runInsideBlockInspector(
-					insideBlockInspector,
-					editorSelectedBlockEvent
-				)
-			) {
-				return {
-					border: {
-						radius: newValue?.all,
-					},
-				};
-			}
-
 			return {
 				style: {
 					border: {
@@ -152,28 +66,6 @@ export function borderRadiusToWPCompatibility({
 				},
 			};
 		}
-
-		if (
-			!runInsideBlockInspector(
-				insideBlockInspector,
-				editorSelectedBlockEvent
-			)
-		) {
-			return {
-				border: {
-					radius: undefined,
-				},
-			};
-		}
-
-		// Advanced css functions not supported by core.
-		return {
-			style: {
-				border: {
-					radius: undefined,
-				},
-			},
-		};
 	} else if (newValue.type === 'custom') {
 		if (
 			newValue?.topLeft === '' &&
@@ -181,19 +73,6 @@ export function borderRadiusToWPCompatibility({
 			newValue?.bottomLeft === '' &&
 			newValue?.bottomRight === ''
 		) {
-			if (
-				!runInsideBlockInspector(
-					insideBlockInspector,
-					editorSelectedBlockEvent
-				)
-			) {
-				return {
-					border: {
-						radius: undefined,
-					},
-				};
-			}
-
 			return {
 				style: {
 					border: {
@@ -215,53 +94,26 @@ export function borderRadiusToWPCompatibility({
 			bottomRight: undefined,
 		};
 
-		if (newValue.topLeft !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.topLeft.endsWith('func')) {
-				corners.topLeft = newValue.topLeft;
-			} else {
-				corners.topLeft = undefined;
-			}
+		if (newValue.topLeft !== '' && !newValue.topLeft.endsWith('func')) {
+			corners.topLeft = newValue.topLeft;
 		}
 
-		if (newValue.topRight !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.topRight.endsWith('func')) {
-				corners.topRight = newValue.topRight;
-			} else {
-				corners.topRight = undefined;
-			}
-		}
-
-		if (newValue.bottomLeft !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.bottomLeft.endsWith('func')) {
-				corners.bottomLeft = newValue.bottomLeft;
-			} else {
-				corners.bottomLeft = undefined;
-			}
-		}
-
-		if (newValue.bottomRight !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.bottomRight.endsWith('func')) {
-				corners.bottomRight = newValue.bottomRight;
-			} else {
-				corners.bottomRight = undefined;
-			}
+		if (newValue.topRight !== '' && !newValue.topRight.endsWith('func')) {
+			corners.topRight = newValue.topRight;
 		}
 
 		if (
-			!runInsideBlockInspector(
-				insideBlockInspector,
-				editorSelectedBlockEvent
-			)
+			newValue.bottomLeft !== '' &&
+			!newValue.bottomLeft.endsWith('func')
 		) {
-			return {
-				border: {
-					radius: corners,
-				},
-			};
+			corners.bottomLeft = newValue.bottomLeft;
+		}
+
+		if (
+			newValue.bottomRight !== '' &&
+			!newValue.bottomRight.endsWith('func')
+		) {
+			corners.bottomRight = newValue.bottomRight;
 		}
 
 		return {

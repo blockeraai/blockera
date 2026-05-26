@@ -19,10 +19,7 @@ export const useRenderMonitor = (componentName: string, props: Object) => {
 		if (prevProps.current) {
 			// Compare current and previous props
 			const changedProps = Object.entries(props).reduce(
-				(
-					changes: { [key: string]: { from: any, to: any } },
-					[key, value]
-				) => {
+				(changes, [key, value]) => {
 					if (prevProps.current[key] !== value) {
 						changes[key] = {
 							from: prevProps.current[key],
@@ -41,7 +38,6 @@ export const useRenderMonitor = (componentName: string, props: Object) => {
 					`[${componentName}] Re-render caused by prop changes:`
 				);
 				// eslint-disable-next-line
-				// $FlowFixMe
 				Object.entries(changedProps).forEach(([prop, { from, to }]) => {
 					// eslint-disable-next-line
 					/* @debug-ignore */
@@ -66,7 +62,7 @@ export const useRenderMonitor = (componentName: string, props: Object) => {
 export const withRenderMonitor = (
 	WrappedComponent: any,
 	componentName: string
-): ComponentType<any> => {
+) => {
 	return (props: Object) => {
 		useRenderMonitor(componentName, props);
 		return <WrappedComponent {...props} />;

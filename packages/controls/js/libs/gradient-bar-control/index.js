@@ -24,7 +24,6 @@ export default function GradientBarControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns,
@@ -78,7 +77,6 @@ export default function GradientBarControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	if (isSetValueAddon()) {

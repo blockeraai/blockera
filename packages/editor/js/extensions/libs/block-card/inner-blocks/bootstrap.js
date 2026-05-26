@@ -29,23 +29,22 @@ import {
 	elementNormalBackgroundFromWPCompatibility,
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
-import { getBaseBreakpoint } from '../../../../editor/header-ui';
-import { isResetRef } from '../../utils';
+import { getBaseBreakpoint } from '../../../../canvas-editor';
+import { isBlockNotOriginalState, isResetRef } from '../../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const {
-				innerBlocks,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
-			} = blockDetail;
+			const { innerBlocks } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			if (
-				(isUndefined(attributes?.style?.elements) &&
-					isUndefined(attributes?.elements)) ||
+				isUndefined(attributes?.style?.elements) ||
 				isUndefined(innerBlocks)
 			) {
 				return attributes;
@@ -57,8 +56,7 @@ export const bootstrap = (): void => {
 						?.dataCompatibilityElement || innerBlock;
 
 				if (
-					(!attributes?.style?.elements?.[dataCompatibilityElement] &&
-						!attributes?.elements?.[dataCompatibilityElement]) ||
+					!attributes?.style?.elements[dataCompatibilityElement] ||
 					isUndefined(
 						innerBlocks[innerBlock]?.settings?.dataCompatibility
 					) ||
@@ -85,8 +83,6 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector,
-								editorSelectedBlockEvent,
 							});
 
 						if (newAttributes) {
@@ -114,8 +110,6 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector,
-								editorSelectedBlockEvent,
 							});
 
 						if (newAttributes) {
@@ -147,8 +141,6 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector,
-								editorSelectedBlockEvent,
 							});
 
 						if (bgAttributes) {
@@ -176,8 +168,6 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector,
-								editorSelectedBlockEvent,
 							});
 
 						if (bgAttributes) {
@@ -223,8 +213,6 @@ export const bootstrap = (): void => {
 				currentBlock,
 				innerBlocks,
 				isMasterNormalState,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			} = blockDetail;
 
 			if (
@@ -266,8 +254,6 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
-						insideBlockInspector,
-						editorSelectedBlockEvent,
 					})
 				);
 			}
@@ -288,8 +274,6 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
-						insideBlockInspector,
-						editorSelectedBlockEvent,
 					})
 				);
 			}
@@ -311,8 +295,6 @@ export const bootstrap = (): void => {
 						newValue,
 						ref,
 						getAttributes,
-						insideBlockInspector,
-						editorSelectedBlockEvent,
 					})
 				);
 			}
@@ -343,8 +325,6 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
-						insideBlockInspector,
-						editorSelectedBlockEvent,
 					})
 				);
 			}

@@ -1,5 +1,7 @@
 .blockera-control-input {
+
 	&:not(.blockera-control-unit-special) {
+
 		.blockera-control-unit-select {
 			appearance: none;
 			border: none;
@@ -13,14 +15,12 @@
 			font-size: 11px;
 			color: var(--blockera-controls-primary-color);
 			font-weight: 500;
-			padding: 0;
+			padding: 0 5px 0 0;
 			text-align: center;
 			height: 28px;
 			line-height: 28px;
 			border-radius: 0 2px 2px 0;
-			transition:
-				box-shadow 0.1s linear,
-				border 0.1s linear;
+			transition: box-shadow 0.1s linear, border 0.1s linear;
 			margin: 0;
 
 			&:not(:disabled) {
@@ -65,6 +65,7 @@
 	}
 
 	&.blockera-control-unit-special {
+
 		.blockera-control-unit-select {
 			display: block;
 			width: 100%;
@@ -80,7 +81,6 @@
 			padding: 0 26px 0 8px;
 			background-size: 13px 11px;
 			letter-spacing: 0;
-			transition: var(--blockera-controls-transition);
 
 			&:hover {
 				border-color: var(--blockera-controls-border-color-hover);
@@ -102,6 +102,7 @@
 	}
 
 	&.blockera-control-unit-func {
+
 		.blockera-control-input-tag {
 			padding-right: 65px;
 			white-space: nowrap;
@@ -146,6 +147,7 @@
 	}
 
 	&.is-focused {
+
 		.input-tag-placeholder {
 			color: var(--blockera-controls-primary-color);
 		}

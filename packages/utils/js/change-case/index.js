@@ -29,15 +29,9 @@ export function split(value: string): Array<string> {
 	let start = 0;
 	let end = result.length;
 	// Trim the delimiter from around the output string.
-	while (result.charAt(start) === '\0') {
-		start++;
-	}
-	if (start === end) {
-		return [];
-	}
-	while (result.charAt(end - 1) === '\0') {
-		end--;
-	}
+	while (result.charAt(start) === '\0') start++;
+	if (start === end) return [];
+	while (result.charAt(end - 1) === '\0') end--;
 	return result.slice(start, end).split(/\0/g);
 }
 
@@ -91,9 +85,7 @@ export function camelCase(
 		prefix +
 		words
 			.map((word, index) => {
-				if (index === 0) {
-					return lower(word);
-				}
+				if (index === 0) return lower(word);
 				return transform(word, index);
 			})
 			.join(options?.delimiter ?? '') +
@@ -210,9 +202,7 @@ export function sentenceCase(
 		prefix +
 		words
 			.map((word, index) => {
-				if (index === 0) {
-					return transform(word, index);
-				}
+				if (index === 0) return transform(word, index);
 				return lower(word);
 			})
 			.join(options?.delimiter ?? ' ') +
@@ -288,17 +278,13 @@ function splitPrefixSuffix(
 	let suffixIndex = input.length;
 	while (prefixIndex < input.length) {
 		const char = input.charAt(prefixIndex);
-		if (!prefixCharacters.includes(char)) {
-			break;
-		}
+		if (!prefixCharacters.includes(char)) break;
 		prefixIndex++;
 	}
 	while (suffixIndex > prefixIndex) {
 		const index = suffixIndex - 1;
 		const char = input.charAt(index);
-		if (!suffixCharacters.includes(char)) {
-			break;
-		}
+		if (!suffixCharacters.includes(char)) break;
 		suffixIndex = index;
 	}
 	return [

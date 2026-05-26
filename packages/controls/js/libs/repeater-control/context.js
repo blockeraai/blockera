@@ -22,8 +22,6 @@ const RepeaterContext = createContext({
 	actionButtonClone: true,
 	injectHeaderButtonsStart: '',
 	injectHeaderButtonsEnd: '',
-	actionButtonsType: 'inline',
-	actionMenuButtonLabel: null,
 	//
 	controlId: null,
 	repeaterId: null,
@@ -40,7 +38,7 @@ const RepeaterContext = createContext({
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {
-	if (!isFunction(props.getControlId)) {
+	if (!isFunction(props.getControlId))
 		props.getControlId = (itemId, id) => {
 			if (!/\[.*]/g.test(id)) {
 				id = `.${id}`;
@@ -50,7 +48,6 @@ const RepeaterContextProvider = ({ children, ...props }) => {
 				? `[${itemId}]${id}`
 				: `${props.repeaterId}[${itemId}]${id}`;
 		};
-	}
 
 	return (
 		<RepeaterContext.Provider value={props}>

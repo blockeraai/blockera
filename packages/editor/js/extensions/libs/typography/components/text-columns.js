@@ -99,7 +99,7 @@ export const TextColumns = ({
 						</p>
 					</>
 				}
-				columns="1fr 2.5fr"
+				columns="columns-2"
 				className={
 					display === 'flex' ? 'blockera-control-is-not-active' : ''
 				}
@@ -112,22 +112,22 @@ export const TextColumns = ({
 						{
 							label: __('2 Columns Text', 'blockera'),
 							value: '2-columns',
-							icon: <Icon icon="number-2" iconSize={16} />,
+							icon: <Icon icon="number-2" size={18} />,
 						},
 						{
 							label: __('3 Columns Text', 'blockera'),
 							value: '3-columns',
-							icon: <Icon icon="number-3" iconSize={16} />,
+							icon: <Icon icon="number-3" size={18} />,
 						},
 						{
 							label: __('4 Columns Text', 'blockera'),
 							value: '4-columns',
-							icon: <Icon icon="number-4" iconSize={16} />,
+							icon: <Icon icon="number-4" size={18} />,
 						},
 						{
 							label: __('5 Columns Text', 'blockera'),
 							value: '5-columns',
-							icon: <Icon icon="number-5" iconSize={16} />,
+							icon: <Icon icon="number-5" size={18} />,
 						},
 						{
 							label: __('None', 'blockera'),
@@ -136,7 +136,7 @@ export const TextColumns = ({
 								<Icon
 									library="wp"
 									icon="close-small"
-									iconSize="18"
+									size={18}
 								/>
 							),
 						},
@@ -189,11 +189,6 @@ export const TextColumns = ({
 										</p>
 									</>
 								}
-								labelProps={{
-									changesetGraphPreview: {
-										type: 'string',
-									},
-								}}
 								columns="columns-2"
 								unitType="essential"
 								range={false}

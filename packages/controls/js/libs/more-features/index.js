@@ -29,7 +29,6 @@ export default function MoreFeatures({
 	ariaLabel = __('More features', 'blockera'),
 	className,
 	children,
-	isAnimated = false,
 	...props
 }: MoreFeaturesProps): Node {
 	const [isOpen, setIsOpen] = useState(_isOpen);
@@ -66,10 +65,7 @@ export default function MoreFeatures({
 
 				{label}
 
-				<ChangeIndicator
-					isChanged={isChanged}
-					isAnimated={isAnimated}
-				/>
+				<ChangeIndicator isChanged={isChanged} />
 			</Button>
 
 			{isOpen && (

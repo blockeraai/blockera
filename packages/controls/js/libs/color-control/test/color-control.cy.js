@@ -58,11 +58,11 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-btn').as('btn');
 
 			cy.get('@btn').click();
-			cy.getByDataCy('color-picker-css-value').clear();
-			cy.getByDataCy('color-picker-css-value').type('dddddd');
+			cy.get('input').clear();
+			cy.get('input').type('ddd');
 
 			// visual assertion
-			cy.getByDataCy('color-label').contains('#dddddd');
+			cy.getByDataCy('color-label').contains('#ddd');
 			cy.getByDataCy('color-indicator').should(
 				'have.css',
 				'backgroundColor',
@@ -71,7 +71,7 @@ describe('Color Control', () => {
 
 			// data assertion
 			cy.getByDataCy('color-label')
-				.contains('#dddddd')
+				.contains('#ddd')
 				.then(() => {
 					expect(getControlValue(name)).to.be.equal('#dddddd');
 				});
@@ -108,13 +108,13 @@ describe('Color Control', () => {
 		});
 
 		// 2.
-		it('calculated data must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+		it('calculated defaultValue must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
 			cy.withDataProvider({
-				component: <ColorControl defaultValue="#1b44b5" />,
+				component: <ColorControl defaultValue="#1b44b5" id="x.y" />,
 				value: '#eee',
 			});
 
-			cy.getByDataCy('color-label').contains('#eee');
+			cy.getByDataCy('color-label').contains('#1b44b5');
 		});
 
 		// 3.

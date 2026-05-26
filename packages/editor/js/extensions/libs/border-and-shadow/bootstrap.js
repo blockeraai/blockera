@@ -22,37 +22,24 @@ import {
 	borderRadiusFromWPCompatibility,
 	borderRadiusToWPCompatibility,
 } from './compatibilities/border-radius';
-import {
-	shadowFromWPCompatibility,
-	shadowToWPCompatibility,
-} from './compatibilities/shadow';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			attributes = borderFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = borderRadiusFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
-			});
-
-			attributes = shadowFromWPCompatibility({
-				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -88,9 +75,6 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			const { insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
-
 			switch (featureId) {
 				case 'blockeraBorder':
 					return mergeObject(
@@ -98,8 +82,6 @@ export const bootstrap = (): void => {
 						borderToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
 						})
 					);
 
@@ -109,19 +91,6 @@ export const bootstrap = (): void => {
 						borderRadiusToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						})
-					);
-
-				case 'blockeraBoxShadow':
-					return mergeObject(
-						nextState,
-						shadowToWPCompatibility({
-							newValue,
-							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
 						})
 					);
 			}

@@ -41,7 +41,7 @@ function BlockIcon({
 		? {
 				backgroundColor: icon && icon.background,
 				color: icon && icon.foreground,
-			}
+		  }
 		: {};
 
 	return (

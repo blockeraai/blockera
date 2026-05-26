@@ -81,24 +81,24 @@ export function FeatureWrapper({
 			case 'state':
 				text = typeName
 					? sprintf(
-							/* translators: %1$s: State name(s), %2$s: Plural 's' if multiple states */
+							/* translators: %s is a state name. */
 							__('Only available in %1$s state%2$s!', 'blockera'),
 							typeName.replace(/,(?=[^,]*$)/, ', and '),
 							typeName.includes(', ') ? 's' : ''
-						)
+					  )
 					: __('Not available in current state!', 'blockera');
 				break;
 			case 'breakpoint':
 				text = typeName
 					? sprintf(
-							/* translators: %1$s: Breakpoint name(s), %2$s: Plural 's' if multiple breakpoints */
+							/* translators: %s is a breakpoint name. */
 							__(
 								'Only available in %1$s breakpoint%2$s!',
 								'blockera'
 							),
 							typeName.replace(/,(?=[^,]*$)/, ', and '),
 							typeName.includes(', ') ? 's' : ''
-						)
+					  )
 					: __('Not available in current breakpoint!', 'blockera');
 				break;
 			case 'inner-block':
@@ -107,7 +107,7 @@ export function FeatureWrapper({
 							/* translators: %s is a breakpoint name. */
 							__('Only available in %s inner block!', 'blockera'),
 							typeName
-						)
+					  )
 					: __('Not available in current inner block!', 'blockera');
 				break;
 
@@ -117,7 +117,7 @@ export function FeatureWrapper({
 							/* translators: %s is a breakpoint name. */
 							__('Only available when %s is active.', 'blockera'),
 							typeName
-						)
+					  )
 					: sprintf(
 							/* translators: %s is a breakpoint name. */
 							__(
@@ -125,7 +125,7 @@ export function FeatureWrapper({
 								'blockera'
 							),
 							typeName
-						);
+					  );
 				break;
 		}
 	} else {

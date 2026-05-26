@@ -8,39 +8,22 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 
     protected function css( array $setting): array {
 
-		if ( ! isset( $setting['type'] ) || 'text-shadow' !== $setting['type'] ) {
-			return [];
-		}
-
+		$declaration = [];
 		$cssProperty = $setting['type'];
 
-		if ( ! isset( $setting[ $cssProperty ] ) || '' === $setting[ $cssProperty ] ) {
-			return [];
+		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'text-shadow' !== $cssProperty ) {
+
+			return $declaration;
 		}
 
-		$sortedTextShadows = blockera_get_sorted_repeater($setting[ $cssProperty ]);
+		$filteredTextShadows = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
 
-		if ( ! is_array( $sortedTextShadows ) ) {
-			return [];
+		if (empty($filteredTextShadows)) {
+
+			return $declaration;
 		}
-
-		$count               = count( $sortedTextShadows );
-		$filteredTextShadows = [];
-
-		for ( $i = 0; $i < $count; $i++ ) {
-			if ( isset( $sortedTextShadows[ $i ]['isVisible'] ) && '' !== $sortedTextShadows[ $i ]['isVisible'] ) {
-				$filteredTextShadows[] = $sortedTextShadows[ $i ];
-			}
-		}
-
-		if ( 0 === count( $filteredTextShadows ) ) {
-			return [];
-		}
-
-		$filteredCount = count( $filteredTextShadows );
-		for ( $i = 0; $i < $filteredCount; $i++ ) {
-			$this->setTextShadow( $filteredTextShadows[ $i ] );
-		}
+		
+		$this->setTextShadow($filteredTextShadows[0]);
 
 		$this->setCss( $this->declarations );
 
@@ -56,7 +39,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 */
 	public function isValidSetting( array $setting): bool {
 		
-		return isset( $setting['isVisible'] ) && '' !== $setting['isVisible'];
+		return ! empty( $setting['isVisible'] );
 	}
 
 	/**
@@ -68,16 +51,15 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setTextShadow( array $setting ): void {
 		
-		$previousValue = $this->declarations['text-shadow'] ?? '';
-		$hasPrevious   = '' !== $previousValue;
-
-		$x     = isset( $setting['x'] ) && '' !== $setting['x'] ? blockera_get_value_addon_real_value( $setting['x'] ) : '';
-		$y     = isset( $setting['y'] ) && '' !== $setting['y'] ? blockera_get_value_addon_real_value( $setting['y'] ) : '';
-		$blur  = isset( $setting['blur'] ) && '' !== $setting['blur'] ? blockera_get_value_addon_real_value( $setting['blur'] ) : '';
-		$color = isset( $setting['color'] ) && '' !== $setting['color'] ? blockera_get_value_addon_real_value( $setting['color'] ) : '';
-
-		$textShadowValue = ( $hasPrevious ? $previousValue . ', ' : '' ) . $x . ' ' . $y . ' ' . $blur . ' ' . $color;
-
-		$this->setDeclaration( 'text-shadow', $textShadowValue );
+		$this->setDeclaration(
+            'text-shadow',
+            sprintf(
+                '%1$s %2$s %3$s %4$s',
+                ! empty($setting['x']) ? blockera_get_value_addon_real_value($setting['x']) : '',
+                ! empty($setting['y']) ? blockera_get_value_addon_real_value($setting['y']) : '',
+                ! empty($setting['blur']) ? blockera_get_value_addon_real_value($setting['blur']) : '',
+                ! empty($setting['color']) ? blockera_get_value_addon_real_value($setting['color']) : '',
+            )
+        );
 	}
 }
