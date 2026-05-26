@@ -61,3 +61,13 @@ export function isVariationSurfaceEnabled(
 
 	return support.hasStyleVariations;
 }
+
+/**
+ * Blocks with size variations use the block root (`styles.blocks.{block}`) as the
+ * shared default/main variation for both style and size surfaces.
+ */
+export function blockUsesSharedRootStyleVariation(
+	support: BlockVariationSupport
+): boolean {
+	return support.hasSizeVariations === true;
+}
