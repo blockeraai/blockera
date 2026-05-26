@@ -687,11 +687,7 @@ export const StyleItem = ({
 						alignItems={'center'}
 						style={{ marginLeft: 'auto' }}
 					>
-						{((isSizeVariationUi &&
-							style.blockeraIsDefaultVariation) ||
-							(!isSizeVariationUi &&
-								defaultStyle &&
-								style.isDefault)) && (
+						{defaultStyle && style.isDefault && (
 							<Tooltip
 								text={
 									isSizeVariationUi ? (

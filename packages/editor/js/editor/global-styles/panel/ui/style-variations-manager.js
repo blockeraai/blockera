@@ -21,19 +21,18 @@ import { PanelBodyControl } from '@blockera/controls';
  */
 import { StyleItem } from './style-item';
 import { AddNewStyleButton } from './add-new-style-button';
-import {
-	useBlockStylesPickerContext,
-	useGlobalStylesPanelContext,
-} from '../context';
+import { useBlockStylesPickerContext } from '../context';
 import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../variation-surfaces';
 
 export const StyleVariationsManager = (): MixedElement => {
-	const { blockStyles, isNotActive } = useBlockStylesPickerContext();
-	const { variationSurface = VARIATION_SURFACE_STYLE } =
-		useGlobalStylesPanelContext();
+	const {
+		blockStyles,
+		isNotActive,
+		variationSurface = VARIATION_SURFACE_STYLE,
+	} = useBlockStylesPickerContext();
 
 	const isSizeSurface = variationSurface === VARIATION_SURFACE_SIZE;
 

@@ -161,6 +161,10 @@ function BlockStyles({
 			? setCurrentBlockStyleVariation
 			: fallbackSetCurrentActiveStyle;
 
+	useEffect(() => {
+		setBlockStyles(stylesToRender || []);
+	}, [stylesToRender]);
+
 	// Update ref whenever hoveredStyle changes
 	useEffect(() => {
 		hoveredStyleRef.current = hoveredStyle;

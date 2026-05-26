@@ -44,6 +44,7 @@ import {
 } from '../../../../editor/global-styles/panel/variation-surfaces';
 import { useBlockVariationSupport } from '../../../../editor/global-styles/panel/use-block-variation-support';
 import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
+import { isEphemeralDefaultSizeVariation } from '../../../../editor/global-styles/panel/size-variations';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
 import { BlockCardSettings } from './block-card-settings';
 
@@ -145,7 +146,8 @@ export function BlockCard({
 		// Check if inner block or style variation is selected
 		const isSelected =
 			currentInnerBlock !== null ||
-			Boolean(currentBlockStyleVariation?.name);
+			Boolean(currentBlockStyleVariation?.name) ||
+			isEphemeralDefaultSizeVariation(currentBlockStyleVariation);
 
 		if (isSelected) {
 			// Add delay class instantly
@@ -272,6 +274,13 @@ export function BlockCard({
 		Array.isArray(blockSizeVariationsProps?.stylesToRender) &&
 		blockSizeVariationsProps.stylesToRender.length > 0;
 
+	const isStyleVariationSelected =
+		Boolean(currentBlockStyleVariation?.name) ||
+		(hasSizeVariations &&
+			isEphemeralDefaultSizeVariation(currentBlockStyleVariation));
+	const showStyleVariationBlockCard =
+		!insideBlockInspector && isStyleVariationSelected;
+
 	return (
 		<>
 			{notice}
@@ -280,9 +289,7 @@ export function BlockCard({
 					'master-block-card': true,
 					'outside-block-inspector': !insideBlockInspector,
 					'inner-block-is-selected': currentInnerBlock !== null,
-					'style-variation-is-selected': Boolean(
-						currentBlockStyleVariation?.name
-					),
+					'style-variation-is-selected': isStyleVariationSelected,
 					'is-selected-delay': hasSelectionDelay,
 				})}
 				data-test={'blockera-block-card'}
@@ -395,7 +402,7 @@ export function BlockCard({
 								'justify-content-flex-start'
 						)}
 					>
-						{variationActionsUI}
+						{!showStyleVariationBlockCard && variationActionsUI}
 					</Flex>
 
 					<Slot name={'blockera-block-card-children'} />

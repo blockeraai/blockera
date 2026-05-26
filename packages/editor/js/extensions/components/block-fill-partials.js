@@ -25,6 +25,7 @@ import {
 	DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
 } from '../libs/block-card';
 import { isInnerBlock } from './utils';
+import { isEphemeralDefaultSizeVariation } from '../../editor/global-styles/panel/size-variations';
 import StateContainer from './state-container';
 import { FeatureSearchContextProvider } from './feature-search-context';
 import { filterSettingsBySearch } from '../libs/base/utils/search-features';
@@ -61,6 +62,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		variationSurface,
+		usesSharedRootStyleVariation = false,
 	} = useGlobalStylesPanelContext();
 
 	const variationCardSlotName =
@@ -182,7 +184,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 							}
 						/>
 
-						{Boolean(currentBlockStyleVariation?.name) && (
+						{(Boolean(currentBlockStyleVariation?.name) ||
+							(usesSharedRootStyleVariation &&
+								isEphemeralDefaultSizeVariation(
+									currentBlockStyleVariation
+								))) && (
 							<StyleVariationBlockCard
 								slotName={variationCardSlotName}
 								labels={variationCardLabels}

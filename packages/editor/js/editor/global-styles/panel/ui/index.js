@@ -124,7 +124,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		(stylesToRender.length === 0 &&
 			!(
 				context === 'global-styles-panel' &&
-				variationSurface === VARIATION_SURFACE_SIZE
+				uiSurface === VARIATION_SURFACE_SIZE
 			))
 	) {
 		return <></>;
@@ -135,14 +135,10 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		!isBaseBreakpoint(currentBreakpoint) ||
 		currentState !== 'normal';
 
-	const isSizeVariation = uiSurface === VARIATION_SURFACE_SIZE;
 	const styleActiveId = currentActiveStyle?.isDefault
 		? 'default'
 		: currentActiveStyle?.name || 'default';
-	const activeStyleId =
-		isSizeVariation && (!currentActiveStyle || !currentActiveStyle.name)
-			? 'unset'
-			: styleActiveId;
+	const activeStyleId = styleActiveId;
 
 	if ('global-styles-panel' === context) {
 		return (
