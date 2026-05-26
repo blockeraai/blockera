@@ -287,14 +287,36 @@ export const GlobalStylesPanelContextProvider = ({
 	const { getSelectedBlockStyleVariation, getSelectedBlockSizeVariation } =
 		select(EDITOR_STORE_NAME);
 	const { getStyleVariationBlocks } = select(EDITOR_STORE_NAME);
-	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
+	const {
+		setBlockStyles,
+		setSelectedBlockStyleVariation,
+		setSelectedBlockSizeVariation,
+	} = dispatch(EDITOR_STORE_NAME);
 
-	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
+	const [currentBlockStyleVariation, setCurrentBlockStyleVariationState] =
 		useState(() =>
 			variationSurface === VARIATION_SURFACE_SIZE
 				? getSelectedBlockSizeVariation()
 				: getSelectedBlockStyleVariation()
 		);
+
+	const setCurrentBlockStyleVariation = useCallback(
+		(variation: Object | void) => {
+			setCurrentBlockStyleVariationState(variation);
+
+			if (variationSurface === VARIATION_SURFACE_SIZE) {
+				setSelectedBlockSizeVariation(variation);
+				return;
+			}
+
+			setSelectedBlockStyleVariation(variation);
+		},
+		[
+			variationSurface,
+			setSelectedBlockStyleVariation,
+			setSelectedBlockSizeVariation,
+		]
+	);
 
 	useEffect(() => {
 		if (blockExtension?.supportsExtensions) {
