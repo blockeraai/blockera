@@ -21,7 +21,6 @@ import { unregisterControl } from '@blockera/controls';
 import {
 	BlockCard,
 	InnerBlockCard,
-	StyleVariationBlockCard,
 	DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
 } from '../libs/block-card';
 import { isInnerBlock } from './utils';
@@ -160,6 +159,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 							setCurrentTab={blockProps.setCurrentTab}
 							insideBlockInspector={insideBlockInspector}
 							clientId={fallbackClientId}
+							editorClientId={clientId}
 							blockName={blockProps.name}
 							innerBlocks={blockeraInnerBlocks}
 							currentInnerBlock={currentInnerBlock}
@@ -182,43 +182,13 @@ export const BlockFillPartials: ComponentType<any> = ({
 							activeBlockVariation={
 								blockProps?.activeBlockVariation || ''
 							}
+							handleOnClick={updateBlockEditorSettings}
+							setCurrentBlockStyleVariation={
+								setCurrentBlockStyleVariation
+							}
+							variationBlockCardSlotName={variationCardSlotName}
+							variationBlockCardLabels={variationCardLabels}
 						/>
-
-						{(Boolean(currentBlockStyleVariation?.name) ||
-							(usesSharedRootStyleVariation &&
-								isEphemeralDefaultSizeVariation(
-									currentBlockStyleVariation
-								))) && (
-							<StyleVariationBlockCard
-								slotName={variationCardSlotName}
-								labels={variationCardLabels}
-								insideBlockInspector={insideBlockInspector}
-								isActive={isActive}
-								clientId={clientId}
-								blockName={blockProps.name}
-								handleOnClick={updateBlockEditorSettings}
-								currentBlock={'master'}
-								currentState={currentState}
-								availableStates={availableStates}
-								currentBreakpoint={currentBreakpoint}
-								currentInnerBlock={currentInnerBlock}
-								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={blockProps.attributes}
-								additional={blockProps.additional}
-								blockeraInnerBlocks={blockeraInnerBlocks}
-								supports={blockProps.supports}
-								setAttributes={blockProps.setAttributes}
-								handleOnChangeAttributes={
-									blockProps.handleOnChangeAttributes
-								}
-								setCurrentBlockStyleVariation={
-									setCurrentBlockStyleVariation
-								}
-								currentBlockStyleVariation={
-									currentBlockStyleVariation
-								}
-							/>
-						)}
 
 						{isInnerBlock(currentBlock) && (
 							<InnerBlockCard
@@ -331,7 +301,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 			)}
 
 			{!insideBlockInspector &&
-				currentBlockStyleVariation?.name &&
+				(Boolean(currentBlockStyleVariation?.name) ||
+					(usesSharedRootStyleVariation &&
+						isEphemeralDefaultSizeVariation(
+							currentBlockStyleVariation
+						))) &&
 				isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<FeatureSearchContextProvider
