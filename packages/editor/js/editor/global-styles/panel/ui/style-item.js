@@ -208,6 +208,7 @@ export const StyleItem = ({
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		skipBlockStyleRegistry: isSizeVariationUi,
+		variationSurface,
 	});
 
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');

@@ -60,6 +60,42 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 				}
 			}
 		}
+
+		@if 'blockera-shadows-panel' == $content-wrapper-class {
+			div[data-wp-component="Navigator.Screen"] {
+
+				> div:first-child:has(.global-styles-ui-header__description) {
+					
+					.global-styles-ui-header__description {
+						display: none;
+					}
+				}
+			}
+		}
+		
+		@if 'blockera-block-inspector-controls-wrapper' == $content-wrapper-class {
+			div[data-wp-component="Navigator.Screen"]:first-child:has(.blockera-global-styles-subtitle) {
+
+				> div:first-child:has(.global-styles-ui-header__description) {
+					
+					.global-styles-ui-header__description {
+						display: none;
+					}
+				}
+			}
+		}
+		
+		@if 'blockera-colors-preset-inspector-active' == $inspector-active-class {
+			div[data-wp-component="Navigator.Screen"]:first-child:has(button[id="/colors/linear-gradients"]) {
+
+				> div:first-child:has(.global-styles-ui-header__description) {
+					
+					.global-styles-ui-header__description {
+						display: none;
+					}
+				}
+			}
+		}
 	}
 
 	.#{$inspector-active-class} {
@@ -157,10 +193,6 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 			}
 		}
 	}
-
-	#{$gs-screen-header} {
-		display: none;
-	}
 }
 
 // Typography preset takeover
@@ -204,10 +236,6 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 			margin-bottom: 0 !important;
 		}
 	}
-
-	#{$gs-screen-header} {
-		display: none;
-	}
 }
 
 // Shadows preset takeover
@@ -217,10 +245,6 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		"blockera-shadows-panel"
 	);
 
-	#{$gs-header-description} {
-		display: none;
-	}
-
 	#{$gs-global-styles-screen} {
 		margin: 0 !important;
 	}
@@ -229,9 +253,5 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		& > *:not(:has(.blockera-shadows-panel)) {
 			display: none;
 		}
-	}
-
-	#{$gs-screen-header} {
-		display: none;
 	}
 }

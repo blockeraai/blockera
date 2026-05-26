@@ -58,6 +58,7 @@ export type TUseBlockStyleItemProps = {
 	// The function to get the style variation blocks by name. (get from the Blockera global state)
 	getStyleVariationBlocks: (style: string) => Array<string>,
 	skipBlockStyleRegistry?: boolean,
+	variationSurface?: string,
 };
 
 export type TUseBlockStyleItemReturn = {

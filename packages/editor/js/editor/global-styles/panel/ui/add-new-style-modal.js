@@ -46,6 +46,7 @@ import {
 	VARIATION_SURFACE_SIZE,
 	VARIATION_SURFACE_STYLE,
 } from '../variation-surfaces';
+import { setBlockDynamicStylesCount } from './use-block-styles-counter';
 
 function focusNameInputAtEnd(container: ?HTMLElement) {
 	const input = container?.querySelector('input');
@@ -278,7 +279,12 @@ export const AddNewStyleModal = ({
 		}
 
 		const newCounter = counter + 1;
-		counterMap[blockName] = newCounter;
+		setBlockDynamicStylesCount(
+			counterMap,
+			blockName,
+			variationSurface,
+			newCounter
+		);
 		setCounter(newCounter);
 
 		// Find first available number by checking existing style names
