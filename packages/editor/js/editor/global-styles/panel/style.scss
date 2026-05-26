@@ -12,6 +12,32 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0;
+
+	&.has-dual-variation-surfaces {
+		> :not(.blockera-global-styles-panel-aside) {
+			.blockera-extension-style-variations.blockera-control.blockera-control-panel-body:last-child {
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+
+			.blockera-extension-block-card.master-block-card.outside-block-inspector:not(
+					.style-variation-is-selected
+				) {
+				padding-bottom: 0;
+				border-bottom: none;
+			}
+		}
+
+		.blockera-global-styles-panel-aside {
+			.blockera-block-card-wrapper:not(.is-stuck)
+				.blockera-extension-block-card.outside-block-inspector:not(
+					.style-variation-is-selected
+				) {
+				border-top: none;
+				padding-top: 16px;
+			}
+		}
+	}
 }
 
 .blockera-global-styles-panel-aside {

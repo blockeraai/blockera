@@ -199,7 +199,13 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	return createPortal(
 		<div className={className}>
-			<div className="blockera-global-styles-panel-stack">
+			<div
+				className={
+					hasSizeVariations
+						? 'blockera-global-styles-panel-stack has-dual-variation-surfaces'
+						: 'blockera-global-styles-panel-stack'
+				}
+			>
 				<App
 					{...sharedAppProps}
 					variationSurface={VARIATION_SURFACE_STYLE}
