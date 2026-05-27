@@ -57,6 +57,14 @@ export {
 	getColorVAFromVarString,
 } from './color';
 export {
+	getBorderRadii,
+	getBorderRadiusBy,
+	getBorderRadius,
+	getBorderRadiusVAFromIdString,
+	getBorderRadiusVAFromVarString,
+	getBorderRadiusVAStringFromId,
+} from './border-radius';
+export {
 	getCustomGlobalStylePresetVariables,
 	getMergedGlobalStylePresetVariables,
 	getGlobalStylePresetVariableById,

@@ -16,6 +16,7 @@ import { getFontSizeVAFromVarString } from './font-size';
 import { getGradientVAFromVarString } from './gradient';
 import { getSpacingVAFromVarString } from './spacing';
 import type { VariableCategory } from './types';
+import { getBorderRadiusVAFromVarString } from './border-radius';
 import { getWidthSizeVAFromVarString } from './width-size';
 
 export function generateVariableString({
@@ -213,6 +214,7 @@ function getVAFromVarStringByType(): {
 			'width-size': getWidthSizeVAFromVarString,
 			color: getColorVAFromVarString,
 			'font-size': getFontSizeVAFromVarString,
+			'border-radius': getBorderRadiusVAFromVarString,
 			gradient: getGradientVAFromVarString,
 		};
 	}
