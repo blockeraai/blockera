@@ -21,6 +21,8 @@ import { unregisterControl } from '@blockera/controls';
 import {
 	BlockCard,
 	InnerBlockCard,
+	PatternBlockCard,
+	usePatternEditSection,
 	DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
 } from '../libs/block-card';
 import { isInnerBlock } from './utils';
@@ -128,6 +130,8 @@ export const BlockFillPartials: ComponentType<any> = ({
 		[searchQuery]
 	);
 
+	const patternSectionClientId = usePatternEditSection(clientId);
+
 	return (
 		<>
 			<Fill name={`blockera-block-card-content-${clientId}`}>
@@ -220,6 +224,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 
 				{insideBlockInspector && (
 					<>
+						{patternSectionClientId && (
+							<PatternBlockCard
+								patternClientId={patternSectionClientId}
+							/>
+						)}
 						<BlockCard
 							isActive={isActive}
 							setActive={setActive}
