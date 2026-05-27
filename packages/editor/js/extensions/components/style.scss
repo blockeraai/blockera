@@ -173,6 +173,9 @@
 	+ .block-editor-block-card
 	+ .block-editor-block-inspector-edit-contents,
 .blockera-block-inspector-controls-wrapper
+	+ .block-editor-block-card
+	+ .block-editor-block-inspector-edit-contents,
+.blockera-block-inspector-controls-wrapper
 	~ .block-editor-block-variation-transforms {
 	display: none !important;
 }
