@@ -104,8 +104,7 @@ export function PatternBlockCard({
 
 				<Button
 					className={extensionInnerClassNames(
-						'pattern-block-card__exit',
-						'no-border'
+						'pattern-block-card__exit'
 					)}
 					variant="tertiary"
 					size="extra-small"
