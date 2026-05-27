@@ -24,6 +24,7 @@
 		}
 	}
 
+	&:has(.blockera-extension-pattern-block-card),
 	&:has(.block-card--inner-block) {
 		border-top: 1px solid #f6f6f6;
 	}
