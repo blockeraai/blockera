@@ -42,24 +42,16 @@ class FlexDirection extends BaseStyleDefinition {
 		$alignItems     = $item['alignItems'] ?? null;
 		$justifyContent = $item['justifyContent'] ?? null;
 
-		if (null !== $direction && null !== $alignItems && '' !== $direction) {
+		if (null !== $direction && '' !== $direction) {
 			$this->declarations[ $cssProperty ] = $direction;
 		}
 
-		$changeFlexInside = false;
-		if (null !== $alignItems && null !== $direction && null !== $justifyContent && 'column' === $direction) {
-			if (( 'flex-start' === $alignItems || 'center' === $alignItems || 'flex-end' === $alignItems ) &&
-				( 'flex-start' === $justifyContent || 'center' === $justifyContent || 'flex-end' === $justifyContent )) {
-				$changeFlexInside = true;
-			}
-		}
-
 		if (null !== $alignItems && '' !== $alignItems) {
-			$this->declarations[ $changeFlexInside ? 'justify-content' : 'align-items' ] = $alignItems . ' !important';
+			$this->declarations['align-items'] = $alignItems . ' !important';
 		}
 
 		if (null !== $justifyContent && '' !== $justifyContent) {
-			$this->declarations[ $changeFlexInside ? 'align-items' : 'justify-content' ] = $justifyContent . ' !important';
+			$this->declarations['justify-content'] = $justifyContent . ' !important';
 		}
 
 		$this->setCss($this->declarations);
