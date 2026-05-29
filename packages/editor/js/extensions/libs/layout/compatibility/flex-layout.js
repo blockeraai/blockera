@@ -10,12 +10,16 @@ export function alignItemsFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (
-		attributes?.blockeraFlexLayout?.value?.alignItems !== '' ||
-		attributes?.layout?.verticalAlignment === undefined
-	) {
+	if (attributes?.layout?.verticalAlignment === undefined) {
 		return attributes;
 	}
+
+	// WP `verticalAlignment` is the vertical screen intent. Blockera stores raw
+	// CSS props, so in row it lands on `align-items` (cross axis) but in column
+	// the vertical axis is the main axis → it must land on `justifyContent`.
+	// (Mirrors wp-includes/block-supports/layout.php flex orientation handling.)
+	const direction = attributes?.blockeraFlexLayout?.value?.direction || 'row';
+	const isColumn = 'column' === direction;
 
 	// left WP value - right Blockera value
 	const values = {
@@ -23,12 +27,25 @@ export function alignItemsFromWPCompatibility({
 		center: 'center',
 		bottom: 'flex-end',
 		stretch: 'stretch',
+		'space-between': 'space-between',
 	};
 
+	const mappedValue = values[attributes?.layout?.verticalAlignment] ?? '';
+	const nextValue = isColumn
+		? { justifyContent: mappedValue }
+		: { alignItems: mappedValue };
+
+	if (
+		'' !==
+		attributes?.blockeraFlexLayout?.value?.[
+			isColumn ? 'justifyContent' : 'alignItems'
+		]
+	) {
+		return attributes;
+	}
+
 	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
-		value: {
-			alignItems: values[attributes?.layout?.verticalAlignment] ?? '',
-		},
+		value: nextValue,
 	});
 
 	return attributes;
@@ -39,12 +56,16 @@ export function justifyContentFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (
-		attributes?.blockeraFlexLayout?.value?.justifyContent !== '' ||
-		attributes?.layout?.justifyContent === undefined
-	) {
+	if (attributes?.layout?.justifyContent === undefined) {
 		return attributes;
 	}
+
+	// WP `justifyContent` is the horizontal screen intent. Blockera stores raw
+	// CSS props, so in row it lands on `justify-content` (main axis) but in
+	// column the horizontal axis is the cross axis → it must land on `alignItems`.
+	// (Mirrors wp-includes/block-supports/layout.php flex orientation handling.)
+	const direction = attributes?.blockeraFlexLayout?.value?.direction || 'row';
+	const isColumn = 'column' === direction;
 
 	// left WP value - right Blockera value
 	const values = {
@@ -52,12 +73,25 @@ export function justifyContentFromWPCompatibility({
 		center: 'center',
 		right: 'flex-end',
 		'space-between': 'space-between',
+		stretch: 'stretch',
 	};
 
+	const mappedValue = values[attributes?.layout?.justifyContent] ?? '';
+	const nextValue = isColumn
+		? { alignItems: mappedValue }
+		: { justifyContent: mappedValue };
+
+	if (
+		'' !==
+		attributes?.blockeraFlexLayout?.value?.[
+			isColumn ? 'alignItems' : 'justifyContent'
+		]
+	) {
+		return attributes;
+	}
+
 	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
-		value: {
-			justifyContent: values[attributes?.layout?.justifyContent] ?? '',
-		},
+		value: nextValue,
 	});
 
 	return attributes;
@@ -144,23 +178,26 @@ export function flexLayoutToWPCompatibility({
 		};
 	}
 
-	// Align items
-	// left Blockera value - right WP value
-	const alignItemsValues = {
+	// Vertical screen axis → WP `verticalAlignment` keys.
+	// left Blockera CSS value - right WP value
+	const verticalAlignmentValues = {
 		'flex-start': 'top',
 		center: 'center',
 		'flex-end': 'bottom',
 		stretch: 'stretch',
+		'space-between': 'space-between',
+		'space-around': 'space-around',
 	};
 
-	// justify content items
-	// left Blockera value - right WP value
+	// Horizontal screen axis → WP `justifyContent` keys.
+	// left Blockera CSS value - right WP value
 	const justifyContentValues = {
 		'flex-start': 'left',
 		center: 'center',
 		'flex-end': 'right',
 		'space-between': 'space-between',
 		'space-around': 'space-around',
+		stretch: 'stretch',
 	};
 
 	// Direction items
@@ -170,6 +207,18 @@ export function flexLayoutToWPCompatibility({
 		column: 'vertical',
 	};
 
+	// Blockera stores raw CSS props (`align-items` / `justify-content`). WP layout
+	// fields are screen-oriented (`verticalAlignment` / `justifyContent`). Resolve
+	// each screen axis from the raw props per direction so the right value lands on
+	// the right WP attribute in both row and column.
+	const isColumn = 'column' === newValue?.direction;
+	const verticalValue = isColumn
+		? newValue?.justifyContent
+		: newValue?.alignItems;
+	const horizontalValue = isColumn
+		? newValue?.alignItems
+		: newValue?.justifyContent;
+
 	const finalLayout: {
 		orientation?: string,
 		verticalAlignment?: string,
@@ -177,9 +226,8 @@ export function flexLayoutToWPCompatibility({
 		type?: string,
 	} = {
 		orientation: directionValues[newValue?.direction] ?? undefined,
-		verticalAlignment: alignItemsValues[newValue?.alignItems] ?? undefined,
-		justifyContent:
-			justifyContentValues[newValue?.justifyContent] ?? undefined,
+		verticalAlignment: verticalAlignmentValues[verticalValue] ?? undefined,
+		justifyContent: justifyContentValues[horizontalValue] ?? undefined,
 	};
 
 	if (
