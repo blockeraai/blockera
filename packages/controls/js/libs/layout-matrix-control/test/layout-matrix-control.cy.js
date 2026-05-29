@@ -141,6 +141,78 @@ describe('Layout Matrix Control component testing', () => {
 					);
 				});
 			});
+
+			it('should swap alignItems and justifyContent when direction changes', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <LayoutMatrixControl />,
+					value: {
+						direction: 'row',
+						alignItems: 'flex-start',
+						justifyContent: 'center',
+						dense: false,
+					},
+					name,
+				});
+
+				const checkSelectOption = (index, dataTest) => {
+					cy.get('button[aria-haspopup="listbox"]')
+						.eq(index)
+						.within(() => {
+							cy.getByDataTest(dataTest);
+						});
+				};
+
+				checkSelectOption(0, 'layout-matrix-justify-center');
+				checkSelectOption(1, 'layout-matrix-align-start');
+
+				cy.getByAriaLabel('flex-direction: column').click();
+
+				checkSelectOption(0, 'layout-matrix-align-center');
+				checkSelectOption(1, 'layout-matrix-justify-start');
+
+				cy.get('body').then(() => {
+					expect(getControlValue(name)).to.deep.include({
+						direction: 'column',
+						alignItems: 'center',
+						justifyContent: 'flex-start',
+					});
+				});
+			});
+
+			it('should keep stretch and space distribution on the same property when direction changes', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <LayoutMatrixControl />,
+					value: {
+						direction: 'row',
+						alignItems: 'stretch',
+						justifyContent: 'space-between',
+						dense: false,
+					},
+					name,
+				});
+
+				cy.getByAriaLabel('flex-direction: column').click();
+
+				cy.get('body').then(() => {
+					expect(getControlValue(name)).to.deep.include({
+						direction: 'column',
+						alignItems: 'stretch',
+						justifyContent: 'space-between',
+					});
+				});
+
+				cy.getByAriaLabel('flex-direction: row').click();
+
+				cy.get('body').then(() => {
+					expect(getControlValue(name)).to.deep.include({
+						direction: 'row',
+						alignItems: 'stretch',
+						justifyContent: 'space-between',
+					});
+				});
+			});
 		});
 
 		describe('Dense', () => {
@@ -426,6 +498,67 @@ describe('Layout Matrix Control component testing', () => {
 						direction: 'row',
 						alignItems: 'stretch',
 						justifyContent: 'space-around',
+					});
+				});
+			});
+		});
+
+		describe('Column axis binding', () => {
+			const setCustomSelectOption = (index, option) => {
+				cy.get('button[aria-haspopup="listbox"]')
+					.eq(index)
+					.click({ force: true });
+				cy.get('[role="listbox"]:visible')
+					.last()
+					.within(() => {
+						cy.contains(option).click({ force: true });
+					});
+			};
+
+			it('should update alignItems when X select changes in column direction', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <LayoutMatrixControl />,
+					value: {
+						direction: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
+						dense: false,
+					},
+					name,
+				});
+
+				setCustomSelectOption(0, 'Start');
+
+				cy.get('body').then(() => {
+					expect(getControlValue(name)).to.deep.include({
+						direction: 'column',
+						alignItems: 'flex-start',
+						justifyContent: 'center',
+					});
+				});
+			});
+
+			it('should update justifyContent when Y select changes in column direction', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <LayoutMatrixControl />,
+					value: {
+						direction: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
+						dense: false,
+					},
+					name,
+				});
+
+				setCustomSelectOption(1, 'End');
+
+				cy.get('body').then(() => {
+					expect(getControlValue(name)).to.deep.include({
+						direction: 'column',
+						alignItems: 'center',
+						justifyContent: 'flex-end',
 					});
 				});
 			});
