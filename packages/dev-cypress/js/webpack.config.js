@@ -1,6 +1,21 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const experimentalConfigDefaultPath = path.resolve(
+	__dirname,
+	'../../../experimental.config.json'
+);
+const experimentalConfigLocalPath = path.resolve(
+	__dirname,
+	'../../../local.experimental.config.json'
+);
+const experimentalConfigResolvedPath = fs.existsSync(
+	experimentalConfigLocalPath
+)
+	? experimentalConfigLocalPath
+	: experimentalConfigDefaultPath;
 
 module.exports = {
 	mode: 'development',
@@ -13,6 +28,7 @@ module.exports = {
 		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
 		// Absolute path so Cypress can resolve imports from support/commands.js reliably.
 		alias: {
+			'@blockera/experimental-config': experimentalConfigResolvedPath,
 			'blockera-editor-tabs-test-ids': path.resolve(
 				__dirname,
 				'../../editor/js/tabs/constants/testIds.ts'
