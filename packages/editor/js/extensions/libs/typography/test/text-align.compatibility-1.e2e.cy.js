@@ -104,7 +104,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Change align to left
 			//
 			cy.get(
-				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
@@ -127,7 +127,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Change align to center
 			//
 			cy.get(
-				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
 
@@ -150,7 +150,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Change align to center
 			//
 			cy.get(
-				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
@@ -270,7 +270,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Change align to left
 			//
 			cy.get(
-				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
@@ -293,7 +293,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Change align to center
 			//
 			cy.get(
-				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
 
@@ -318,7 +318,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Change align to center
 			//
 			cy.get(
-				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 

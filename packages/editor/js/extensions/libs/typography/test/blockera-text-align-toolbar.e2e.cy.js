@@ -9,7 +9,7 @@ import {
 	setDeviceType,
 } from '@blockera/dev-cypress/js/helpers';
 
-const TOOLBAR_SCOPE = '[data-blockera-text-align-toolbar]';
+const TOOLBAR_SCOPE = '[data-test="data-blockera-text-align-toolbar"]';
 
 function clickToolbarTextAlign(optionIndex) {
 	cy.get(`${TOOLBAR_SCOPE} button[aria-label="Align text"]`).click();
