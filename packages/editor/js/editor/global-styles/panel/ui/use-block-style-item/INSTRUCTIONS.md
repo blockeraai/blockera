@@ -6,55 +6,13 @@ Merged instructions for all handler callbacks in `use-block-style-item`. Useful 
 
 ## Table of Contents
 
-1. [handleOnClearAllCustomizations](#handleonclearallcustomizations)
-2. [handleOnDelete](#handleondelete)
-3. [handleOnDetachStyle](#handleondetachstyle)
-4. [handleOnDuplicate](#handleonduplicate)
-5. [handleOnEnable](#handleonenable)
-6. [handleOnRename](#handleonrename)
-7. [handleOnSaveCustomizations](#handleonsavecustomizations)
-8. [handleOnUsageForMultipleBlocks](#handleonusageformultipleblocks)
-
----
-
-## handleOnClearAllCustomizations
-
-### Overview
-
-Removes all user customizations for a block style variation from WordPress global styles. The style reverts to its base/theme values. Does not delete the style variation itself — only clears the custom values stored for it.
-
-### Parameters
-
-| Param          | Type   | Description                                                                 |
-|----------------|--------|-----------------------------------------------------------------------------|
-| `currentStyle` | Object | The style variation to clear (includes name, label, icon, etc.).           |
-
-### Flow (execution order)
-
-1. **Remove variation from globalStyles** — `removeStyleVariationFromGlobalStyles(globalStyles, blockName, currentStyle)` returns a new global styles object with the variation removed from `blocks[blockName].variations`.
-2. **Update global styles entity** — `setGlobalStyles(newGlobalStyles)`.
-3. **Reset block styles cache** — `setGlobalBlockStyles(blockName, currentBlockStyleVariation?.name || 'default', {})` — clears the editor's block styles for the current variation.
-4. **Close context menu** — `setIsOpenContextMenu(false)`.
-
-### Key Invariants (DO NOT break when editing)
-
-- Does NOT delete the style variation — only removes its custom values from globalStyles.
-- Uses `removeStyleVariationFromGlobalStyles` — handles both root and non-root styles; clones globalStyles, does not mutate in place.
-- `setGlobalBlockStyles` third param is `{}` — clears all customizations for that variation in the block editor store.
-- Variation name for `setGlobalBlockStyles` comes from `currentBlockStyleVariation?.name || 'default'` — the currently selected variation, not necessarily `currentStyle`.
-
-### Helpers Reference
-
-| Helper                          | Purpose                                                                 |
-|---------------------------------|-------------------------------------------------------------------------|
-| `removeStyleVariationFromGlobalStyles` | Remove variation from globalStyles (clones, returns new object).   |
-| `isRootStyle`                   | Detect if style is root/default (different removal logic).               |
-
-### Related
-
-- `handleOnDelete`: removes the style entirely (unregister, metadata, blockStyles).
-- `handleOnSaveCustomizations`: saves customizations; this handler is the inverse.
-- `setGlobalBlockStyles`: dispatch from `blockera/editor` store.
+1. [handleOnDelete](#handleondelete)
+2. [handleOnDetachStyle](#handleondetachstyle)
+3. [handleOnDuplicate](#handleonduplicate)
+4. [handleOnEnable](#handleonenable)
+5. [handleOnRename](#handleonrename)
+6. [handleOnSaveCustomizations](#handleonsavecustomizations)
+7. [handleOnUsageForMultipleBlocks](#handleonusageformultipleblocks)
 
 ---
 
@@ -104,7 +62,6 @@ Permanently deletes a block style variation. Removes it from global styles, bloc
 
 - `handleOnRename`: uses same metadata pattern when confirming; marks old style as deleted.
 - `handleOnEnable`: only toggles visibility; handleOnDelete removes entirely.
-- `handleOnClearAllCustomizations`: clears values; handleOnDelete removes the style.
 - `delete-modal`: calls `handleOnDelete(style.name)`.
 
 ---
@@ -153,7 +110,6 @@ Detaches the selected block from its style variation. Instead of applying the st
 ### Related
 
 - `handleOnSaveCustomizations`: inverse — attaches block attributes to style; detach makes block independent.
-- `handleOnClearAllCustomizations`: clears style values; detach moves values onto the block.
 
 ---
 
@@ -415,7 +371,6 @@ Saves the selected block's current attributes as the global style for the given 
 
 ### Related
 
-- `handleOnClearAllCustomizations`: inverse — removes customizations; this handler adds/saves them.
 - `handleOnDetachStyle`: detaches block from style; this handler attaches block attributes to style.
 - `saveAllDirtyEntities`: persists dirty entities (global styles, post) to database.
 

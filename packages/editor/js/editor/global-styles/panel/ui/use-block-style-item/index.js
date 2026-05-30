@@ -39,7 +39,6 @@ import {
 	registerStyleForBlockTypes,
 	unregisterStyleFromBlockTypes,
 	setStyleVariationBlocksInStore,
-	removeStyleVariationFromGlobalStyles,
 	markStyleAsDeletedInMetaData,
 	buildMetadataTransferForRenamedStyle,
 } from './helpers';
@@ -547,23 +546,6 @@ export const useBlockStyleItem = ({
 		[styles, blockStyles]
 	);
 
-	/** @see ./handleOnClearAllCustomizations.md for Cursor IDE instructions */
-	const handleOnClearAllCustomizations = (currentStyle: Object) => {
-		const newGlobalStyles = removeStyleVariationFromGlobalStyles(
-			globalStyles,
-			blockName,
-			currentStyle
-		);
-
-		setGlobalStyles(newGlobalStyles);
-		setGlobalBlockStyles(
-			blockName,
-			currentBlockStyleVariation?.name || 'default',
-			{}
-		);
-		setIsOpenContextMenu(false);
-	};
-
 	/** @see ./handleOnEnable.md for Cursor IDE instructions */
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
 		const blockeraMetaData = getBlockeraGlobalStylesMetaData();
@@ -940,6 +922,5 @@ export const useBlockStyleItem = ({
 		handleOnSaveCustomizations,
 		handleOnUsageForMultipleBlocks,
 		handleOnSaveUsageForMultipleBlocks,
-		handleOnClearAllCustomizations,
 	};
 };
