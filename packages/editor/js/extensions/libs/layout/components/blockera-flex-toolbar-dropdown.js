@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { ToolbarGroup } from '@wordpress/components';
 import type { MixedElement } from 'react';
 import { useMemo } from '@wordpress/element';
@@ -15,7 +16,10 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockeraFlexToolbarControl } from './flex-toolbar-control-config';
+import {
+	getEmptyToolbarIconForControls,
+	type BlockeraFlexToolbarControl,
+} from './flex-toolbar-control-config';
 import '../style.scss';
 
 export const BLOCKERA_FLEX_TOOLBAR_DROPDOWN_CLASS =
@@ -84,25 +88,31 @@ export const BlockeraFlexToolbarDropdown = ({
 	onChange: (?string) => void,
 	controls: BlockeraFlexToolbarControl[],
 }): MixedElement | null => {
-	const defaultControl = controls[0];
-	const activeControl =
-		controls.find((control) => control.name === value) || defaultControl;
+	const emptyIcon = useMemo(
+		() => getEmptyToolbarIconForControls(controls),
+		[controls]
+	);
+	const activeControl = value
+		? controls.find((control) => control.name === value)
+		: undefined;
+	const activeIconName = activeControl?.icon ?? emptyIcon;
+	const activeLabel = activeControl?.title ?? __('Empty', 'blockera');
 
 	const activeIcon = useMemo(
 		() =>
 			function ActiveToolbarIcon(): MixedElement {
 				return (
 					<BlockeraToolbarIcon
-						iconName={activeControl?.icon || ''}
+						iconName={activeIconName}
 						direction={direction}
 						iconSize={TOOLBAR_TOGGLE_ICON_SIZE}
 					/>
 				);
 			},
-		[activeControl?.icon, direction]
+		[activeIconName, direction]
 	);
 
-	if (!defaultControl || !activeControl) {
+	if (!controls.length) {
 		return null;
 	}
 
@@ -110,7 +120,7 @@ export const BlockeraFlexToolbarDropdown = ({
 		<ToolbarGroup
 			className={BLOCKERA_FLEX_TOOLBAR_DROPDOWN_CLASS}
 			icon={activeIcon}
-			label={activeControl.title}
+			label={activeLabel}
 			isCollapsed
 			controls={controls.map((control) => ({
 				icon: function ControlIcon(): MixedElement {
