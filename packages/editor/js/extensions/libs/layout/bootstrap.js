@@ -45,8 +45,15 @@ import {
 
 import type { BlockDetail } from '../block-card/block-states/types';
 import { isInvalidCompatibilityRun } from '../utils';
+import {
+	registerHideCoreLayoutToolbarDom,
+	registerHideCoreLayoutToolbarSupports,
+} from './hide-core-layout-toolbar';
 
 export const bootstrap = (): void => {
+	registerHideCoreLayoutToolbarSupports();
+	registerHideCoreLayoutToolbarDom();
+
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.layoutExtension.bootstrap',
