@@ -9,6 +9,7 @@ export { TextDecoration } from './text-decoration';
 export { TextColumns } from './text-columns';
 export { TextStroke } from './text-stroke';
 export { TextAlign } from './text-align';
+export { BlockeraTextAlignToolbar } from './blockera-text-align-toolbar';
 export { TextDirection } from './text-direction';
 export { TextOrientation } from './text-orientation';
 export { WordBreak } from './word-break';
