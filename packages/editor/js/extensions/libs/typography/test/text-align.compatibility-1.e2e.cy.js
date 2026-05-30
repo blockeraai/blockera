@@ -103,7 +103,9 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to left
 			//
-			cy.get('button[aria-label="Align text"]').click();
+			cy.get(
+				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+			).click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
 			cy.addNewTransition();
@@ -124,7 +126,9 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to center
 			//
-			cy.get('button[aria-label="Align text"]').click();
+			cy.get(
+				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+			).click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
 
 			cy.editTransition(200, 2000);
@@ -145,7 +149,9 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to center
 			//
-			cy.get('button[aria-label="Align text"]').click();
+			cy.get(
+				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+			).click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
 			cy.editTransition(201, 2001);
@@ -263,7 +269,9 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to left
 			//
-			cy.get('button[aria-label="Align text"]').click();
+			cy.get(
+				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+			).click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
 			cy.addNewTransition();
@@ -284,7 +292,9 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to center
 			//
-			cy.get('button[aria-label="Align text"]').click();
+			cy.get(
+				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+			).click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
 
 			cy.editTransition(200, 2000);
@@ -307,7 +317,9 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to center
 			//
-			cy.get('button[aria-label="Align text"]').click();
+			cy.get(
+				'[data-blockera-text-align-toolbar] button[aria-label="Align text"]'
+			).click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
 			cy.editTransition(201, 2001);
