@@ -8,6 +8,21 @@
 	}
 }
 
+/* Block flex layout toolbar — match core control density (no extra dropdown padding). */
+[data-test='data-blockera-layout-toolbar'] {
+	.blockera-flex-toolbar-icon svg {
+		transition: transform 0.45s cubic-bezier(0, 0, 0.2, 1);
+	}
+	.blockera-flex-toolbar-dropdown.components-dropdown.components-dropdown-menu.components-toolbar-group {
+		padding: 0;
+	}
+
+	.blockera-flex-toolbar-dropdown
+		.components-button.components-dropdown-menu__toggle {
+		padding: 0;
+	}
+}
+
 .blockera-flex-wrap {
 	.blockera-field-control {
 		flex-direction: row !important;
