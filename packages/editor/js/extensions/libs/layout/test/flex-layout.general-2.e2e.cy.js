@@ -46,6 +46,9 @@ const CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS = [
 	'Stretch to fill',
 ];
 
+const BLOCKERA_LAYOUT_TOOLBAR_SCOPE =
+	'[data-test="data-blockera-layout-toolbar"]';
+
 function assertSelectedBlockType(blockName) {
 	cy.getSelectedBlock().should('have.attr', 'data-type', blockName);
 }
@@ -68,7 +71,13 @@ function assertCoreLayoutToolbarHidden(blockName) {
 			CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS.forEach((pattern) => {
 				const $visibleControls = $toolbar
 					.find(`[aria-label*="${pattern}"]`)
-					.filter(':visible');
+					.filter(':visible')
+					.filter(
+						(index, element) =>
+							Cypress.$(element).closest(
+								BLOCKERA_LAYOUT_TOOLBAR_SCOPE
+							).length === 0
+					);
 
 				expect(
 					$visibleControls.length,
@@ -78,9 +87,20 @@ function assertCoreLayoutToolbarHidden(blockName) {
 		});
 }
 
+function assertBlockeraLayoutToolbarVisible() {
+	cy.get('.block-editor-block-toolbar')
+		.should('be.visible')
+		.within(() => {
+			cy.get(`${BLOCKERA_LAYOUT_TOOLBAR_SCOPE} .components-toolbar-group`)
+				.filter(':visible')
+				.should('have.length.at.least', 2);
+		});
+}
+
 function assertBlockToolbarInterface(blockName) {
 	assertSelectedBlockType(blockName);
 	assertCoreLayoutToolbarHidden(blockName);
+	assertBlockeraLayoutToolbarVisible();
 
 	cy.get('.block-editor-block-toolbar').should('be.visible');
 
