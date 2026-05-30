@@ -32,8 +32,10 @@ export const BLOCKS_WITH_HARDCODED_TEXT_ALIGN_TOOLBAR: Set<string> = new Set([
 
 const BODY_CLASS = 'blockera-hide-core-text-align-toolbar';
 
-const BLOCKERA_TEXT_ALIGN_TOOLBAR_SELECTOR =
-	'[data-blockera-text-align-toolbar]';
+export const BLOCKERA_TEXT_ALIGN_TOOLBAR_TEST_ID =
+	'data-blockera-text-align-toolbar';
+
+export const BLOCKERA_TEXT_ALIGN_TOOLBAR_SELECTOR = `[data-test="${BLOCKERA_TEXT_ALIGN_TOOLBAR_TEST_ID}"]`;
 
 /**
  * Aria-label patterns for core text-align toolbar only (not block wide/full "Align").
@@ -82,7 +84,7 @@ const restoreHiddenToolbarNodes = (toolbar: Element): void => {
 
 /**
  * Undo mistaken hides on Blockera's toolbar (MutationObserver can run before
- * `data-blockera-text-align-toolbar` is copied onto `.components-toolbar-group`).
+ * `data-test="data-blockera-text-align-toolbar"` is copied onto `.components-toolbar-group`).
  */
 const restoreBlockeraTextAlignToolbarNodes = (toolbar: Element): void => {
 	toolbar
