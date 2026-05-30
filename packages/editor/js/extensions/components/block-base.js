@@ -54,6 +54,7 @@ import { getBlockVariationSupport } from '../../editor/global-styles/panel/block
 import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../..';
 import { SideEffect } from '../libs/base';
+import { BlockeraTextAlignToolbar } from '../libs/typography/components/blockera-text-align-toolbar';
 import { BlockPartials } from './block-partials';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
@@ -1080,6 +1081,14 @@ export const BlockBase: ComponentType<any> = (
 									</StylesWrapper>
 								</ErrorBoundary>
 								{/*</StrictMode>*/}
+
+								<BlockeraTextAlignToolbar
+									blockName={name}
+									currentAttributes={currentAttributes}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+								/>
 
 								<ContextualToolbarComponents />
 
