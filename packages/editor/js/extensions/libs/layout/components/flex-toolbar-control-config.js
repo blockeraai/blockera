@@ -14,6 +14,25 @@ export type BlockeraFlexToolbarControl = {
 	title: string,
 };
 
+/** Empty-state icons — same as LayoutMatrixControl axis selects. */
+export const JUSTIFY_CONTENT_EMPTY_ICON = 'justify-content-empty';
+export const ALIGN_ITEMS_EMPTY_ICON = 'flex-align-empty';
+
+/**
+ * Toolbar empty icon for the current control set (justify vs align axis).
+ */
+export const getEmptyToolbarIconForControls = (
+	controls: BlockeraFlexToolbarControl[]
+): string => {
+	const firstIcon = controls[0]?.icon || '';
+
+	if (firstIcon.startsWith('justify-content-')) {
+		return JUSTIFY_CONTENT_EMPTY_ICON;
+	}
+
+	return ALIGN_ITEMS_EMPTY_ICON;
+};
+
 /** justify-content axis (main axis in row, main axis in column vertical toolbar). */
 const JUSTIFY_CONTENT_TOOLBAR_CONTROLS: BlockeraFlexToolbarControl[] = [
 	{
