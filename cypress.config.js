@@ -32,6 +32,9 @@ env = {
 	...process.env,
 };
 
+// GitHub Actions and most CI providers set CI=true; local runs omit it.
+const isCi = Boolean(process.env.CI);
+
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
 	//Requires and imports the main plugin function from the cypress-image-diff-js NPM package
@@ -55,10 +58,10 @@ module.exports = defineConfig({
 	fixturesFolder: 'packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
 	projectId: 'blockera',
-	// runMode: 2 => up to 3 attempts per test (1 run + 2 retries on failure).
+	// CI only: runMode 2 => up to 3 attempts per test (1 run + 2 retries on failure).
 	retries: {
 		openMode: 0,
-		runMode: 2,
+		runMode: isCi ? 2 : 0,
 	},
 	coverage: true,
 	screenshotOnRunFailure: false,
