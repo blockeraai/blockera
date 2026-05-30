@@ -3,8 +3,19 @@
 /**
  * External dependencies
  */
-import { addFilter } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 import { subscribe, select } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
+import { layoutConfig as defaultLayoutConfig } from '../base/config/layout';
+import { STORE_NAME } from '../../store/constants';
+import {
+	isEnabledExtension,
+	isActiveField,
+	isActiveExtension,
+} from '../../api/utils';
 
 /**
  * Blocks where Blockera owns flex layout (matrix in inspector).
@@ -17,34 +28,69 @@ export const BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR: Set<string> = new Set([
 	'core/column',
 ]);
 
-const BODY_CLASS = 'blockera-hide-core-layout-toolbar';
-
 /**
- * WordPress layout toolbar icon paths (@wordpress/icons) — stable across locales.
+ * Blocks with hardcoded layout toolbar in block-library edit (not gated by layout supports).
  */
-const HIDDEN_LAYOUT_TOOLBAR_ICON_PATHS: Set<string> = new Set([
-	'M9 20h6V9H9v11zM4 4v1.5h16V4H4z',
-	'M20 11h-5V4H9v7H4v1.5h5V20h6v-7.5h5z',
-	'M15 4H9v11h6V4zM4 18.5V20h16v-1.5H4z',
-	'M4 4L20 4L20 5.5L4 5.5L4 4ZM10 7L14 7L14 17L10 17L10 7ZM20 18.5L4 18.5L4 20L20 20L20 18.5Z',
-	'M9 9v6h11V9H9zM4 20h1.5V4H4v16z',
-	'M12.5 15v5H11v-5H4V9h7V4h1.5v5h7v6h-7Z',
-	'M4 15h11V9H4v6zM18.5 4v16H20V4h-1.5z',
-	'M9 15h6V9H9v6zm-5 5h1.5V4H4v16zM18.5 4v16H20V4h-1.5z',
+export const BLOCKS_WITH_HARDCODED_LAYOUT_TOOLBAR: Set<string> = new Set([
+	'core/columns',
+	'core/column',
 ]);
 
-const nodeMatchesHiddenLayoutIcon = (node: Element): boolean => {
-	const paths = node.querySelectorAll('svg path[d]');
+/**
+ * WP columns/column are flex containers by default; Blockera gap uses `flex-or-empty`.
+ * Toolbar + core hide should work before the user explicitly sets blockeraDisplay.
+ */
+export const BLOCKS_WITH_IMPLICIT_FLEX_LAYOUT_TOOLBAR: Set<string> = new Set([
+	'core/columns',
+	'core/column',
+]);
 
-	for (let i = 0; i < paths.length; i++) {
-		const pathValue = paths[i].getAttribute('d');
+const BODY_CLASS = 'blockera-hide-core-layout-toolbar';
 
-		if (pathValue && HIDDEN_LAYOUT_TOOLBAR_ICON_PATHS.has(pathValue)) {
+export const BLOCKERA_LAYOUT_TOOLBAR_TEST_ID = 'data-blockera-layout-toolbar';
+
+export const BLOCKERA_LAYOUT_TOOLBAR_SELECTOR = `[data-test="${BLOCKERA_LAYOUT_TOOLBAR_TEST_ID}"]`;
+
+/**
+ * Aria-label patterns for core flex layout toolbar only.
+ */
+const CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS: string[] = [
+	'Justify',
+	'Align top',
+	'Align middle',
+	'Align bottom',
+	'Change vertical alignment',
+	'Stretch to fill',
+];
+
+const nodeMatchesCoreLayoutToolbarAria = (node: Element): boolean => {
+	const label = node.getAttribute('aria-label');
+
+	if (!label) {
+		return false;
+	}
+
+	for (let i = 0; i < CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS.length; i++) {
+		const pattern = CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS[i];
+
+		if (label === pattern || label.startsWith(`${pattern} `)) {
 			return true;
 		}
 	}
 
 	return false;
+};
+
+const isBlockeraLayoutToolbarNode = (node: Element): boolean =>
+	!!node.closest(BLOCKERA_LAYOUT_TOOLBAR_SELECTOR) ||
+	!!node.querySelector(BLOCKERA_LAYOUT_TOOLBAR_SELECTOR);
+
+const hideElement = (element: Element): void => {
+	element.classList.add('blockera-hidden');
+
+	if (element instanceof HTMLElement) {
+		element.style.display = 'none';
+	}
 };
 
 const restoreHiddenToolbarNodes = (toolbar: Element): void => {
@@ -54,6 +100,30 @@ const restoreHiddenToolbarNodes = (toolbar: Element): void => {
 	});
 };
 
+/**
+ * Undo mistaken hides on Blockera's toolbar (MutationObserver can run before
+ * `data-test="data-blockera-layout-toolbar"` is copied onto `.components-toolbar-group`).
+ */
+const restoreBlockeraLayoutToolbarNodes = (toolbar: Element): void => {
+	toolbar
+		.querySelectorAll(BLOCKERA_LAYOUT_TOOLBAR_SELECTOR)
+		.forEach((marker) => {
+			const group = marker.closest('.components-toolbar-group');
+
+			if (group) {
+				group.classList.remove('blockera-hidden');
+				if (group instanceof HTMLElement) {
+					group.style.removeProperty('display');
+				}
+			}
+
+			marker.classList.remove('blockera-hidden');
+			if (marker instanceof HTMLElement) {
+				marker.style.removeProperty('display');
+			}
+		});
+};
+
 const hideCoreLayoutToolbarControls = (): void => {
 	const toolbar = document.querySelector('.block-editor-block-toolbar');
 
@@ -61,22 +131,66 @@ const hideCoreLayoutToolbarControls = (): void => {
 		return;
 	}
 
+	restoreBlockeraLayoutToolbarNodes(toolbar);
+
+	toolbar
+		.querySelectorAll('.components-dropdown.components-dropdown-menu')
+		.forEach((dropdown) => {
+			if (isBlockeraLayoutToolbarNode(dropdown)) {
+				return;
+			}
+
+			const toggle = dropdown.querySelector(
+				'button.components-dropdown-menu__toggle, button[aria-haspopup="true"]'
+			);
+
+			if (toggle && nodeMatchesCoreLayoutToolbarAria(toggle)) {
+				hideElement(dropdown);
+			}
+		});
+
 	toolbar.querySelectorAll('.components-toolbar-group').forEach((group) => {
-		if (!nodeMatchesHiddenLayoutIcon(group)) {
+		if (isBlockeraLayoutToolbarNode(group)) {
 			return;
 		}
 
-		group.classList.add('blockera-hidden');
-		group.style.display = 'none';
+		const buttons = group.querySelectorAll('.components-button');
+
+		if (!buttons.length) {
+			return;
+		}
+
+		let hasCoreLayoutControl = false;
+
+		for (let i = 0; i < buttons.length; i++) {
+			if (nodeMatchesCoreLayoutToolbarAria(buttons[i])) {
+				hasCoreLayoutControl = true;
+				break;
+			}
+		}
+
+		if (hasCoreLayoutControl) {
+			hideElement(group);
+		}
 	});
 
 	toolbar.querySelectorAll('.components-button').forEach((button) => {
-		if (!nodeMatchesHiddenLayoutIcon(button)) {
+		if (
+			isBlockeraLayoutToolbarNode(button) ||
+			!nodeMatchesCoreLayoutToolbarAria(button)
+		) {
 			return;
 		}
 
-		button.classList.add('blockera-hidden');
-		button.style.display = 'none';
+		hideElement(button);
+
+		const dropdown = button.closest(
+			'.components-dropdown.components-dropdown-menu'
+		);
+
+		if (dropdown && !isBlockeraLayoutToolbarNode(dropdown)) {
+			hideElement(dropdown);
+		}
 	});
 };
 
@@ -126,7 +240,6 @@ const startToolbarObserver = (): void => {
 		return;
 	}
 
-	// Toolbar mounts after selection; watch until it appears.
 	bodyToolbarObserver = new MutationObserver(() => {
 		if (!document.querySelector('.block-editor-block-toolbar')) {
 			return;
@@ -146,6 +259,77 @@ const startToolbarObserver = (): void => {
 			subtree: true,
 		});
 	}
+};
+
+export const resolveLayoutConfigForBlock = (blockName: string): Object => {
+	const targetBlock = blockName.replace(/\//g, '.');
+
+	return applyFilters(
+		`blockera.block.${targetBlock}.extension.layoutConfig`,
+		defaultLayoutConfig,
+		'layoutConfig',
+		targetBlock
+	);
+};
+
+const getBlockeraAttributeValue = (attributes: ?Object, key: string): any => {
+	const value = attributes?.[key];
+
+	if (value && 'object' === typeof value && undefined !== value.value) {
+		return value.value;
+	}
+
+	return value;
+};
+
+/**
+ * Whether Blockera flex layout toolbar should render / core layout toolbar should hide.
+ */
+export const shouldShowBlockeraFlexLayoutToolbar = (
+	blockName: string,
+	attributes: ?Object
+): boolean => {
+	const display = getBlockeraAttributeValue(attributes, 'blockeraDisplay');
+
+	if ('flex' === display) {
+		return true;
+	}
+
+	if (
+		BLOCKS_WITH_IMPLICIT_FLEX_LAYOUT_TOOLBAR.has(blockName) &&
+		('' === display || undefined === display)
+	) {
+		return true;
+	}
+
+	return false;
+};
+
+/**
+ * Whether Blockera should own flex layout toolbar (toolbar + disable core).
+ */
+export const shouldUseBlockeraLayoutToolbar = (blockName: string): boolean => {
+	if (!BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR.has(blockName)) {
+		return false;
+	}
+
+	const { getBlockExtensionBy } = select(STORE_NAME) || {};
+	const blockExtension = getBlockExtensionBy?.('targetBlock', blockName);
+
+	if (!blockExtension || !isEnabledExtension(blockExtension)) {
+		return false;
+	}
+
+	const layoutExtensionConfig = resolveLayoutConfigForBlock(blockName);
+
+	if (
+		!isActiveExtension(layoutExtensionConfig) ||
+		!isActiveField(layoutExtensionConfig?.blockeraFlexLayout)
+	) {
+		return false;
+	}
+
+	return true;
 };
 
 const getLayoutSupportOverride = (settings: Object): Object => {
@@ -170,7 +354,7 @@ export const registerHideCoreLayoutToolbarSupports = (): void => {
 		'blocks.registerBlockType',
 		'blockera/editor/hide-core-layout-toolbar-supports',
 		(settings: Object, blockName: string): Object => {
-			if (!BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR.has(blockName)) {
+			if (!shouldUseBlockeraLayoutToolbar(blockName)) {
 				return settings;
 			}
 
@@ -188,23 +372,38 @@ export const registerHideCoreLayoutToolbarSupports = (): void => {
 
 /**
  * Hide hardcoded column/columns BlockVerticalAlignmentToolbar (not gated by layout supports).
+ *
+ * Hook-based blocks (group, …) rely on `allowJustification/allowVerticalAlignment: false`
+ * only — no DOM observer, so Blockera's toolbar is never matched by aria-label hiding.
  */
 export const registerHideCoreLayoutToolbarDom = (): void => {
-	let previousSelectedBlockName: string | null = null;
+	let previousObserverKey: string | null = null;
 
 	subscribe(() => {
 		const selectedBlock = select('core/block-editor').getSelectedBlock();
 		const selectedBlockName = selectedBlock?.name || null;
+		const hasFlexLayoutToolbar = shouldShowBlockeraFlexLayoutToolbar(
+			selectedBlockName || '',
+			selectedBlock?.attributes
+		);
+		const observerKey = selectedBlockName
+			? `${selectedBlockName}:${hasFlexLayoutToolbar ? 'flex' : 'none'}`
+			: null;
 
-		if (selectedBlockName === previousSelectedBlockName) {
+		if (observerKey === previousObserverKey) {
 			return;
 		}
 
-		previousSelectedBlockName = selectedBlockName;
+		previousObserverKey = observerKey;
 
 		if (
 			selectedBlockName &&
-			BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR.has(selectedBlockName)
+			shouldUseBlockeraLayoutToolbar(selectedBlockName) &&
+			BLOCKS_WITH_HARDCODED_LAYOUT_TOOLBAR.has(selectedBlockName) &&
+			shouldShowBlockeraFlexLayoutToolbar(
+				selectedBlockName,
+				selectedBlock?.attributes
+			)
 		) {
 			startToolbarObserver();
 			return;
