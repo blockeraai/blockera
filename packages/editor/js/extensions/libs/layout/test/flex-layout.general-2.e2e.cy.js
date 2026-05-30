@@ -4,7 +4,162 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
+	appendBlocks,
 } from '@blockera/dev-cypress/js/helpers';
+
+const FLEX_GROUP = `<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group"><!-- wp:paragraph -->
+<p>Paragraph 1</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Paragraph 2</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->`;
+
+const FLEX_COLUMNS = `<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph 1</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph 2</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->`;
+
+const BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR = [
+	'core/group',
+	'core/columns',
+	'core/column',
+];
+
+const CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS = [
+	'Justify',
+	'Align top',
+	'Align middle',
+	'Align bottom',
+	'Change vertical alignment',
+	'Stretch to fill',
+];
+
+function assertSelectedBlockType(blockName) {
+	cy.getSelectedBlock().should('have.attr', 'data-type', blockName);
+}
+
+function assertCoreLayoutToolbarHidden(blockName) {
+	cy.window().then((win) => {
+		const layoutSupport = win.wp.blocks.getBlockSupport(
+			blockName,
+			'layout'
+		);
+
+		expect(layoutSupport.allowJustification).to.equal(false);
+		expect(layoutSupport.allowVerticalAlignment).to.equal(false);
+	});
+
+	// Columns/column controls are hidden via DOM (display:none), not unmounted.
+	cy.get('.block-editor-block-toolbar')
+		.should('be.visible')
+		.then(($toolbar) => {
+			CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS.forEach((pattern) => {
+				const $visibleControls = $toolbar
+					.find(`[aria-label*="${pattern}"]`)
+					.filter(':visible');
+
+				expect(
+					$visibleControls.length,
+					`core layout toolbar control "${pattern}" should be hidden`
+				).to.equal(0);
+			});
+		});
+}
+
+function assertBlockToolbarInterface(blockName) {
+	assertSelectedBlockType(blockName);
+	assertCoreLayoutToolbarHidden(blockName);
+
+	cy.get('.block-editor-block-toolbar').should('be.visible');
+
+	cy.get('.block-editor-block-toolbar').within(() => {
+		cy.get('[class*="block-editor-block-switcher"]').should('exist');
+		cy.get('.block-editor-block-toolbar__slot').should('exist');
+		cy.get('.block-editor-block-toolbar__slot button').should(
+			'have.length.at.least',
+			1
+		);
+	});
+
+	cy.get('.block-editor-block-toolbar').then(($toolbar) => {
+		const $visibleMatrix = $toolbar
+			.find('[data-test^="matrix-"]')
+			.filter(':visible');
+
+		expect($visibleMatrix.length).to.equal(0);
+	});
+
+	cy.get('.blockera-extension-block-card').should('be.visible');
+	cy.getParentContainer('Flex Layout').should('be.visible');
+}
+
+function assertCoreLayoutToolbarSupportsRegistered() {
+	cy.window().then((win) => {
+		BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR.forEach((blockName) => {
+			const layoutSupport = win.wp.blocks.getBlockSupport(
+				blockName,
+				'layout'
+			);
+
+			expect(layoutSupport.allowJustification).to.equal(false);
+			expect(layoutSupport.allowVerticalAlignment).to.equal(false);
+		});
+	});
+}
+
+function openFlexDisplayInBlockera() {
+	cy.addNewTransition();
+	cy.getByDataTest('style-tab').click();
+
+	cy.getParentContainer('Display').within(() => {
+		cy.getByAriaLabel('Flex').then(($flexButton) => {
+			if ($flexButton.attr('aria-pressed') !== 'true') {
+				cy.wrap($flexButton).click();
+			}
+		});
+	});
+}
+
+function selectParentBlockFromChild() {
+	cy.get('[aria-label^="Select parent block:"]').click();
+}
+
+function openFlexGroupInBlockera() {
+	appendBlocks(FLEX_GROUP);
+
+	cy.getBlock('core/paragraph').first().click();
+	selectParentBlockFromChild();
+	openFlexDisplayInBlockera();
+}
+
+function openFlexColumnsInBlockera() {
+	appendBlocks(FLEX_COLUMNS);
+
+	cy.getBlock('core/paragraph').first().click();
+	selectParentBlockFromChild();
+	selectParentBlockFromChild();
+	openFlexDisplayInBlockera();
+}
+
+function openFlexColumnInBlockera() {
+	appendBlocks(FLEX_COLUMNS);
+
+	cy.getBlock('core/paragraph').first().click();
+	selectParentBlockFromChild();
+	openFlexDisplayInBlockera();
+}
 
 /**
  * Matrix slots use screen vertical/horizontal; column stores them on swapped flex props.
@@ -234,18 +389,39 @@ describe('Flex Layout → Functionality', () => {
 		});
 	});
 
-	it('should update flex direction correctly', () => {
+	describe('Block toolbar interface', () => {
+		beforeEach(() => {
+			assertCoreLayoutToolbarSupportsRegistered();
+		});
+
+		it('should keep standard toolbar chrome and hide core layout controls on group', () => {
+			openFlexGroupInBlockera();
+			assertBlockToolbarInterface('core/group');
+		});
+
+		it('should keep standard toolbar chrome and hide core layout controls on columns', () => {
+			openFlexColumnsInBlockera();
+			assertBlockToolbarInterface('core/columns');
+		});
+
+		it('should keep standard toolbar chrome and hide core layout controls on column', () => {
+			openFlexColumnInBlockera();
+			assertBlockToolbarInterface('core/column');
+		});
+	});
+
+	it('should update flex direction correctly on group and hide core layout toolbar', () => {
+		openFlexGroupInBlockera();
+
+		assertBlockToolbarInterface('core/group');
+
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
 				cy.getByAriaLabel('flex-direction: row').click();
 			});
 
-		cy.getBlock('core/paragraph').should(
-			'have.css',
-			'flex-direction',
-			'row'
-		);
+		cy.getBlock('core/group').should('have.css', 'flex-direction', 'row');
 
 		getWPDataObject().then((data) => {
 			expect('row').to.be.deep.equal(
@@ -253,13 +429,15 @@ describe('Flex Layout → Functionality', () => {
 			);
 		});
 
+		assertBlockToolbarInterface('core/group');
+
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
 				cy.getByAriaLabel('flex-direction: column').click();
 			});
 
-		cy.getBlock('core/paragraph').should(
+		cy.getBlock('core/group').should(
 			'have.css',
 			'flex-direction',
 			'column'
@@ -271,12 +449,11 @@ describe('Flex Layout → Functionality', () => {
 			);
 		});
 
-		//Check frontend
 		savePage();
 
 		redirectToFrontPage();
 
-		cy.get('p.blockera-block').should(
+		cy.get('.wp-block-group.blockera-block').should(
 			'have.css',
 			'flex-direction',
 			'column'
