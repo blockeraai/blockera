@@ -14,7 +14,11 @@ import { useSelect } from '@wordpress/data';
  * Internal dependencies
  */
 import { useDisplayBlockControls } from '../../../../hooks/use-display-block-controls';
-import { shouldUseBlockeraTextAlignToolbar } from '../hide-core-text-align-toolbar';
+import {
+	shouldUseBlockeraTextAlignToolbar,
+	BLOCKERA_TEXT_ALIGN_TOOLBAR_TEST_ID,
+} from '../hide-core-text-align-toolbar';
+import '../style.scss';
 import type { THandleOnChangeAttributes } from '../../types';
 
 const TEXT_ALIGNMENT_CONTROLS = [
@@ -69,7 +73,7 @@ export const BlockeraTextAlignToolbar = ({
 		[blockName]
 	);
 
-	// Hardcoded block-library toolbars: tag the parent group so DOM hide skips Blockera.
+	// Hardcoded block-library toolbars: tag groups so DOM hide skips Blockera.
 	useLayoutEffect(() => {
 		const marker = toolbarMarkerRef.current;
 
@@ -77,11 +81,16 @@ export const BlockeraTextAlignToolbar = ({
 			return;
 		}
 
-		const toolbarGroup = marker.closest('.components-toolbar-group');
+		marker.setAttribute('data-test', BLOCKERA_TEXT_ALIGN_TOOLBAR_TEST_ID);
 
-		if (toolbarGroup instanceof HTMLElement) {
-			toolbarGroup.setAttribute('data-blockera-text-align-toolbar', '');
-		}
+		marker
+			.querySelectorAll('.components-toolbar-group')
+			.forEach((group) => {
+				group.setAttribute(
+					'data-test',
+					BLOCKERA_TEXT_ALIGN_TOOLBAR_TEST_ID
+				);
+			});
 	});
 
 	const handleToolbarAlignChange = useCallback(
@@ -105,7 +114,10 @@ export const BlockeraTextAlignToolbar = ({
 
 	return (
 		<BlockControls group="block">
-			<div data-blockera-text-align-toolbar ref={toolbarMarkerRef}>
+			<div
+				data-test={BLOCKERA_TEXT_ALIGN_TOOLBAR_TEST_ID}
+				ref={toolbarMarkerRef}
+			>
 				<AlignmentToolbar
 					value={toolbarValue}
 					onChange={handleToolbarAlignChange}
