@@ -12,6 +12,7 @@ import { isEmpty, isUndefined, mergeObject } from '@blockera/utils';
  */
 import { runInsideBlockInspector } from '../../../utils';
 import { elementNormalBackgroundToWPCompatibility } from './element-bg';
+import { getBlockeraInnerBlockItem } from '../utils';
 
 export function elementNormalBackgroundColorFromWPCompatibility({
 	innerBlock,
@@ -61,6 +62,7 @@ export function elementNormalBackgroundColorFromWPCompatibility({
 
 export function elementNormalBackgroundColorToWPCompatibility({
 	element,
+	innerBlock,
 	newValue,
 	ref,
 	getAttributes,
@@ -68,6 +70,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 	editorSelectedBlockEvent,
 }: {
 	element: string,
+	innerBlock: string,
 	newValue: Object,
 	ref?: Object,
 	getAttributes: () => Object,
@@ -85,12 +88,13 @@ export function elementNormalBackgroundColorToWPCompatibility({
 		isUndefined(newValue)
 	) {
 		const attributes = getAttributes();
+		const innerBlockItem = getBlockeraInnerBlockItem(
+			attributes,
+			innerBlock
+		);
 
 		// after removing bg color, the gradient should moved to WP data
-		if (
-			attributes?.blockeraInnerBlocks[element]?.attributes
-				?.blockeraBackground
-		) {
+		if (innerBlockItem?.attributes?.blockeraBackground) {
 			const elements = {
 				elements: {
 					[element]: {
@@ -113,9 +117,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 				},
 				elementNormalBackgroundToWPCompatibility({
 					element,
-					newValue:
-						attributes?.blockeraInnerBlocks[element]?.attributes
-							?.blockeraBackground,
+					newValue: innerBlockItem?.attributes?.blockeraBackground,
 					ref: {},
 					insideBlockInspector,
 					editorSelectedBlockEvent,

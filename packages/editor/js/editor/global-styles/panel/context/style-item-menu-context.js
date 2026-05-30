@@ -26,7 +26,6 @@ export const StyleItemMenuContext: Object = createContext({
 	buttonText: '',
 	handleOnRename: () => {},
 	handleOnDuplicate: () => {},
-	handleOnClearAllCustomizations: () => {},
 	handleOnEnable: () => {},
 	handleOnDelete: () => {},
 	handleOnUsageForMultipleBlocks: () => {},

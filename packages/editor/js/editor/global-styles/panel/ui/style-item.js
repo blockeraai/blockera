@@ -184,7 +184,6 @@ export const StyleItem = ({
 		handleOnSaveCustomizations,
 		handleOnUsageForMultipleBlocks,
 		handleOnSaveUsageForMultipleBlocks,
-		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		style,
 		counter,
@@ -851,7 +850,6 @@ export const StyleItem = ({
 						buttonText,
 						handleOnRename,
 						handleOnDuplicate,
-						handleOnClearAllCustomizations,
 						handleOnEnable,
 						handleOnDelete,
 						handleOnUsageForMultipleBlocks,
@@ -1029,7 +1027,6 @@ export const StyleItem = ({
 								buttonText,
 								handleOnRename,
 								handleOnDuplicate,
-								handleOnClearAllCustomizations,
 								handleOnEnable,
 								handleOnDelete,
 								handleOnUsageForMultipleBlocks,

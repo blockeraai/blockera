@@ -47,7 +47,6 @@ export const StyleItemMenu = (): MixedElement => {
 		buttonText,
 		handleOnRename,
 		handleOnDuplicate,
-		handleOnClearAllCustomizations,
 		handleOnUsageForMultipleBlocks,
 		handleOnSaveUsageForMultipleBlocks,
 		setIsOpenUsageForMultipleBlocks,
@@ -148,18 +147,6 @@ export const StyleItemMenu = (): MixedElement => {
 						>
 							<Icon icon="duplicate" iconSize="24" />
 							{__('Duplicate', 'blockera')}
-						</Button>
-
-						<Button
-							variant="link"
-							contentAlign="left"
-							className={controlInnerClassNames('menu-item')}
-							onClick={() =>
-								handleOnClearAllCustomizations(style)
-							}
-						>
-							<Icon icon="undo" iconSize="24" />
-							{__('Clear all customizations', 'blockera')}
 						</Button>
 
 						{!style?.isDefault && (

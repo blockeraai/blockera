@@ -93,5 +93,4 @@ export type TUseBlockStyleItemReturn = {
 		defaultStyles?: Object
 	) => void,
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
-	handleOnClearAllCustomizations: (currentStyle: Object) => void,
 };

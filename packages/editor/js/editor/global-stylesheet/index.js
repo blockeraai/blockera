@@ -367,6 +367,7 @@ const GlobalStylesIframeBundle: ComponentType<{}> = memo((): MixedElement => {
 		cached.editorSelectedBlockEvent = editorSelectedBlockEvent;
 		cached.activeVariationKey = activeVariationKey;
 		cached.args = nextArgs;
+		nextArgs.insideBlockInspector = false;
 		return nextArgs;
 		// Snapshot ref holds latest selectors; primitives drive invalidation.
 		// eslint-disable-next-line react-hooks/exhaustive-deps

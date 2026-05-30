@@ -61,6 +61,16 @@ export const Search: BlockType = {
 			icon: <Icon icon="block-search-button" iconSize="20" />,
 			settings: {
 				force: true,
+				dataCompatibilityElement: 'button',
+				dataCompatibility: [
+					'font-color',
+					'background-color',
+					'background-image',
+					'font-size',
+					'border',
+					'border-radius',
+					'spacing',
+				],
 			},
 			availableBlockStates: {
 				...generalInnerBlockStates,
