@@ -56,8 +56,15 @@ import {
 } from './compatibility/font-color';
 import type { BlockDetail } from '../block-card/block-states/types';
 import { isInvalidCompatibilityRun } from '../utils';
+import {
+	registerHideCoreTextAlignToolbarDom,
+	registerHideCoreTextAlignToolbarSupports,
+} from './hide-core-text-align-toolbar';
 
 export const bootstrap = (): void => {
+	registerHideCoreTextAlignToolbarSupports();
+	registerHideCoreTextAlignToolbarDom();
+
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
