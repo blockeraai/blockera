@@ -26,6 +26,7 @@ export const BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR: Set<string> = new Set([
 	'core/group',
 	'core/columns',
 	'core/column',
+	'core/buttons',
 ]);
 
 /**
