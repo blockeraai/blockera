@@ -5,7 +5,7 @@
  */
 import { addFilter, applyFilters } from '@wordpress/hooks';
 import { subscribe, select } from '@wordpress/data';
-import { hasBlockSupport } from '@wordpress/blocks';
+import { getBlockSupport, hasBlockSupport } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -20,15 +20,26 @@ import {
 
 /**
  * Blocks with hardcoded AlignmentControl in block-library edit (not gated by typography.textAlign).
+ *
+ * @see packages/block-library/src/quote/edit.js
+ * @see packages/block-library/src/pullquote/edit.js
+ * @see packages/block-library/src/post-author/edit.js
+ * @see packages/block-library/src/term-name/edit.js
  */
 export const BLOCKS_WITH_HARDCODED_TEXT_ALIGN_TOOLBAR: Set<string> = new Set([
 	'core/quote',
 	'core/pullquote',
-	'core/table',
-	'core/media-text',
 	'core/post-author',
 	'core/term-name',
 ]);
+
+/**
+ * Populated at `blocks.registerBlockType` with blocks that ship core text-align toolbar UI.
+ * Used at runtime after Blockera sets `typography.textAlign: false` on those blocks.
+ */
+export const BLOCKS_WITH_CORE_TEXT_ALIGN_TOOLBAR: Set<string> = new Set();
+
+const VALID_TEXT_ALIGNMENTS: string[] = ['left', 'center', 'right'];
 
 const BODY_CLASS = 'blockera-hide-core-text-align-toolbar';
 
@@ -230,22 +241,49 @@ export const resolveTypographyConfigForBlock = (blockName: string): Object => {
 	);
 };
 
-const blockHasCoreTextAlignSupport = (settings: Object): boolean => {
-	if (hasBlockSupport(settings, 'typography.textAlign', false)) {
+/**
+ * Mirrors core `getValidTextAlignments()` in block-editor text-align hook.
+ *
+ * @see source-code-block-editor/packages/block-editor/src/hooks/text-align.js
+ */
+const getValidTextAlignmentsFromSupport = (
+	blockTextAlign: ?(boolean | Array<string>)
+): string[] => {
+	if (Array.isArray(blockTextAlign)) {
+		const valid = [];
+
+		for (let i = 0; i < VALID_TEXT_ALIGNMENTS.length; i++) {
+			const alignment = VALID_TEXT_ALIGNMENTS[i];
+
+			if (blockTextAlign.includes(alignment)) {
+				valid.push(alignment);
+			}
+		}
+
+		return valid;
+	}
+
+	return blockTextAlign === true ? VALID_TEXT_ALIGNMENTS.slice() : [];
+};
+
+/**
+ * Whether core ships text-align on the block toolbar (hook or hardcoded AlignmentControl).
+ */
+export const blockHasCoreTextAlignToolbar = (
+	blockName: string,
+	settings: Object
+): boolean => {
+	if (BLOCKS_WITH_HARDCODED_TEXT_ALIGN_TOOLBAR.has(blockName)) {
 		return true;
 	}
 
-	const typography = settings.supports?.typography;
-
-	if (typography === true) {
-		return true;
+	if (!hasBlockSupport(settings, 'typography.textAlign', false)) {
+		return false;
 	}
 
-	return !!(
-		typography &&
-		typeof typography === 'object' &&
-		typography.textAlign
-	);
+	const blockTextAlign = getBlockSupport(settings, 'typography.textAlign');
+
+	return getValidTextAlignmentsFromSupport(blockTextAlign).length > 0;
 };
 
 /**
@@ -271,14 +309,12 @@ export const shouldUseBlockeraTextAlignToolbar = (
 		return false;
 	}
 
-	if (!settings) {
-		return true;
+	if (settings) {
+		return blockHasCoreTextAlignToolbar(blockName, settings);
 	}
 
-	return (
-		blockHasCoreTextAlignSupport(settings) ||
-		BLOCKS_WITH_HARDCODED_TEXT_ALIGN_TOOLBAR.has(blockName)
-	);
+	// After registration Blockera sets `typography.textAlign: false`; use captured set.
+	return BLOCKS_WITH_CORE_TEXT_ALIGN_TOOLBAR.has(blockName);
 };
 
 const getTypographySupportOverride = (settings: Object): Object | null => {
@@ -312,6 +348,10 @@ export const registerHideCoreTextAlignToolbarSupports = (): void => {
 		'blocks.registerBlockType',
 		'blockera/editor/hide-core-text-align-toolbar-supports',
 		(settings: Object, blockName: string): Object => {
+			if (blockHasCoreTextAlignToolbar(blockName, settings)) {
+				BLOCKS_WITH_CORE_TEXT_ALIGN_TOOLBAR.add(blockName);
+			}
+
 			if (!shouldUseBlockeraTextAlignToolbar(blockName, settings)) {
 				return settings;
 			}
