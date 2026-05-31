@@ -35,6 +35,7 @@ const BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR = [
 	'core/group',
 	'core/columns',
 	'core/column',
+	'core/buttons',
 ];
 
 const CORE_LAYOUT_TOOLBAR_ARIA_PATTERNS = [
