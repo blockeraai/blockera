@@ -216,6 +216,8 @@ function BlockStyles({
 
 			setCurrentActiveStyle(style);
 			onSelect(style);
+			setCurrentPreviewStyle(null);
+			setShowPreview(false);
 			setIsOpen(false);
 			setHoveredStyle(null);
 		},
@@ -225,6 +227,8 @@ function BlockStyles({
 			onSelect,
 			setIsOpen,
 			setHoveredStyle,
+			setCurrentPreviewStyle,
+			setShowPreview,
 		]
 	);
 
@@ -235,7 +239,10 @@ function BlockStyles({
 				return;
 			}
 
-			if (hoveredStyle === item || activeStyle?.name === item?.name) {
+			if (
+				item !== null &&
+				(hoveredStyle === item || activeStyle?.name === item?.name)
+			) {
 				setHoveredStyle(null);
 				setCurrentPreviewStyle(item);
 				return;
