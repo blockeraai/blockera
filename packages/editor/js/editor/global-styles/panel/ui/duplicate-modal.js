@@ -46,12 +46,17 @@ export const DuplicateModal = ({
 	) => void,
 	blockStyles: Array<Object>,
 }): MixedElement => {
+	const defaultVariationLabel = isSizeVariationUi
+		? __('Size', 'blockera')
+		: __('Style', 'blockera');
+	const defaultVariationSlugPrefix = isSizeVariationUi ? 'size' : 'style';
+
 	// Generate default duplicate name and id
 	const getDefaultDuplicateName = () => {
 		const baseLabel =
 			style.label && style.label.replace(/\s\(Copy(\s\d+|)\)$/, '')
 				? style.label.replace(/\s\(Copy(\s\d+|)\)$/, '')
-				: __('Style', 'blockera');
+				: defaultVariationLabel;
 
 		const existingLabels = blockStyles.map((s) => s.label);
 		let counter = 1;
@@ -68,7 +73,7 @@ export const DuplicateModal = ({
 	const getDefaultDuplicateId = () => {
 		const baseName = style.name
 			? style.name.replace(/-copy(-?(\d+|))$/, '')
-			: 'style';
+			: defaultVariationSlugPrefix;
 
 		const existingNames = blockStyles.map((s) => s.name);
 		let counter = 1;
@@ -152,21 +157,25 @@ export const DuplicateModal = ({
 		checkDuplicateId(kebabValue);
 	};
 
+	let headerTitle = isSizeVariationUi
+		? __('Duplicate size variation', 'blockera')
+		: __('Duplicate style variation', 'blockera');
+
+	if (style.label) {
+		headerTitle = sprintf(
+			/* translators: %s: The variation label. */
+			__('Duplicate "%s"', 'blockera'),
+			style.label
+		);
+	}
+
 	return (
 		<Modal
 			className={componentInnerClassNames('style-variation-modal', {
 				'is-variation-ui-size': isSizeVariationUi,
 			})}
 			headerIcon={<Icon icon="duplicate" iconSize="34" />}
-			headerTitle={
-				style.label
-					? sprintf(
-							/* translators: %s: The style variation label. */
-							__('Duplicate "%s"', 'blockera'),
-							style.label
-						)
-					: __('Duplicate style variation', 'blockera')
-			}
+			headerTitle={headerTitle}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDuplicateModal(false)}
 			actions={
@@ -212,10 +221,15 @@ export const DuplicateModal = ({
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={25}>
 					<p style={{ margin: '0', color: '#707070' }}>
-						{__(
-							"A copy will be created with a new name and ID. Choose the ID carefully — it will be used in your site's code and cannot be changed without breaking the styles on affected blocks.",
-							'blockera'
-						)}
+						{isSizeVariationUi
+							? __(
+									"A copy will be created with a new name and ID. Choose the ID carefully — it will be used in your site's code and cannot be changed without breaking blocks that use this size.",
+									'blockera'
+								)
+							: __(
+									"A copy will be created with a new name and ID. Choose the ID carefully — it will be used in your site's code and cannot be changed without breaking the styles on affected blocks.",
+									'blockera'
+								)}
 					</p>
 
 					<Flex direction="column" gap={20}>
