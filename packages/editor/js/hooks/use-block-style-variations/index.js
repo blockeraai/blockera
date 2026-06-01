@@ -3,7 +3,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
+import {
+	useMemo,
+	useState,
+	useEffect,
+	useCallback,
+	useRef,
+} from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -255,7 +261,13 @@ export const useBlockStyleVariations = ({
 		_setCurrentActiveStyle(style);
 	};
 	const setCurrentActiveStyle = useCallback(callbackActivatorStyle, []);
-	const [currentPreviewStyle, setCurrentPreviewStyle] = useState(null);
+	const [currentPreviewStyle, setCurrentPreviewStyleState] = useState(null);
+	// Sync ref: className updates from onSelect can re-render before preview state commits.
+	const previewStyleRef = useRef(null);
+	const setCurrentPreviewStyle = useCallback((style) => {
+		previewStyleRef.current = style;
+		setCurrentPreviewStyleState(style);
+	}, []);
 
 	useEffect(() => {
 		if (variationSurface === VARIATION_SURFACE_SIZE) {
@@ -275,9 +287,15 @@ export const useBlockStyleVariations = ({
 				setCurrentActiveStyle(currentBlockStyleVariation);
 			}
 
+			// Keep committed selection stable during hover preview: className updates
+			// immediately but currentActiveStyle must not sync until the picker closes.
 			const hookName = activeStyle?.name ?? '';
 			const curName = currentActiveStyle?.name ?? '';
-			if (hookName !== curName) {
+			if (
+				hookName !== curName &&
+				previewStyleRef.current === null &&
+				!isOpen
+			) {
 				_setCurrentActiveStyle(activeStyle ?? null);
 			}
 
@@ -304,6 +322,8 @@ export const useBlockStyleVariations = ({
 		stylesToRender,
 		activeStyle,
 		currentActiveStyle,
+		currentPreviewStyle,
+		isOpen,
 		setCurrentActiveStyle,
 		currentBlockStyleVariation,
 	]);
@@ -311,7 +331,7 @@ export const useBlockStyleVariations = ({
 	// Update cached style when active style changes
 	useLateEffect(() => {
 		if (
-			currentPreviewStyle === null &&
+			previewStyleRef.current === null &&
 			activeStyle?.name &&
 			currentActiveStyle?.name &&
 			activeStyle?.name !== currentActiveStyle?.name
