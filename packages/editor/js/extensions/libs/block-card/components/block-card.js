@@ -560,6 +560,11 @@ export function BlockCard({
 						blockName={blockName}
 						labels={variationBlockCardLabels}
 						slotName={variationBlockCardSlotName}
+						variationsProps={
+							panelVariationSurface === VARIATION_SURFACE_SIZE
+								? blockSizeVariationsProps
+								: blockStyleVariationsProps
+						}
 						supports={supports}
 						currentStateAttributes={currentStateAttributes}
 						additional={additional}

@@ -27,6 +27,8 @@ export type PropTypes = {
 export type TStyleVariationBlockCardLabels = {
 	closeTooltip?: string,
 	closeButtonDataTest?: string,
+	settingsTooltip?: string,
+	settingsButtonDataTest?: string,
 	rootDataTest?: string,
 	editableNamePlaceholder?: string,
 };

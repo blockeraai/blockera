@@ -31,6 +31,7 @@ import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
 import StateContainer from '../../../components/state-container';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import BlockPreviewPanel from '../../../../editor/global-styles/panel/block-preview-panel';
+import { VariationBlockCardSettingsMenu } from '../../../../editor/global-styles/panel/ui/variation-block-card-settings-menu';
 import { useResetBlockStateToNormal } from '../block-states/hooks';
 import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
 import {
@@ -65,6 +66,7 @@ export function BlockCardVariationView({
 	handleOnChangeAttributes,
 	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
+	variationsProps,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -80,6 +82,7 @@ export function BlockCardVariationView({
 	blockeraInnerBlocks: Object,
 	currentBlockStyleVariation: Object,
 	setCurrentBlockStyleVariation: (Object) => void,
+	variationsProps?: Object,
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
@@ -92,17 +95,16 @@ export function BlockCardVariationView({
 	const resolvedLabels = {
 		closeTooltip: __('Close Block Style', 'blockera'),
 		closeButtonDataTest: 'Close Block Style',
+		settingsTooltip: __('Style Variation Settings', 'blockera'),
+		settingsButtonDataTest: 'Style Variation Settings',
 		rootDataTest: 'blockera-style-variation-block-card',
 		...labels,
 	};
 
 	const variationKey = currentBlockStyleVariation?.name ?? '';
 
-	const {
-		menu: slotMenuName,
-		afterPreview: slotAfterPreviewName,
-		children: slotChildrenName,
-	} = getStyleVariationBlockCardSlotNames(slotName, variationKey);
+	const { afterPreview: slotAfterPreviewName, children: slotChildrenName } =
+		getStyleVariationBlockCardSlotNames(slotName, variationKey);
 
 	const {
 		selectedBlockClientId,
@@ -214,10 +216,20 @@ export function BlockCardVariationView({
 
 						<div
 							className={extensionInnerClassNames(
-								'block-card__settings'
+								'block-card__settings',
+								'block-card__settings--has-menu'
 							)}
 						>
-							<Slot name={slotMenuName} />
+							{variationsProps && (
+								<VariationBlockCardSettingsMenu
+									blockName={blockName}
+									pickerVariationSurface={variationSurface}
+									currentBlockStyleVariation={
+										currentBlockStyleVariation
+									}
+									variationsProps={variationsProps}
+								/>
+							)}
 
 							<Tooltip text={resolvedLabels.closeTooltip}>
 								<Icon

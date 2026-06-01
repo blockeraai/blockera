@@ -76,9 +76,14 @@ export const BlockFillPartials: ComponentType<any> = ({
 			? {
 					closeTooltip: __('Close Size Variation', 'blockera'),
 					closeButtonDataTest: 'Close Size Variation',
+					settingsTooltip: __('Size Variation Settings', 'blockera'),
+					settingsButtonDataTest: 'Size Variation Settings',
 					rootDataTest: 'blockera-size-variation-block-card',
 				}
-			: undefined;
+			: {
+					settingsTooltip: __('Style Variation Settings', 'blockera'),
+					settingsButtonDataTest: 'Style Variation Settings',
+				};
 
 	const [searchQuery, setSearchQuery] = useState('');
 

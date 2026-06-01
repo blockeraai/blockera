@@ -157,21 +157,8 @@ export const StyleItem = ({
 	const [isOpenDuplicateModal, setIsOpenDuplicateModal] = useState(false);
 	const [isOpenUsageForMultipleBlocks, setIsOpenUsageForMultipleBlocks] =
 		useState(false);
-	const [isOpenBlockCardContextMenu, setIsOpenBlockCardContextMenu] =
-		useState(false);
-	const [isOpenBlockCardRenameModal, setIsOpenBlockCardRenameModal] =
-		useState(false);
-	const [isOpenBlockCardDeleteModal, setIsOpenBlockCardDeleteModal] =
-		useState(false);
-	const [isOpenBlockCardDuplicateModal, setIsOpenBlockCardDuplicateModal] =
-		useState(false);
-	const [
-		isOpenBlockCardUsageForMultipleBlocks,
-		setIsOpenBlockCardUsageForMultipleBlocks,
-	] = useState(false);
 
 	const styleItemContextMenuAnchorRef = useRef(null);
-	const blockCardContextMenuAnchorRef = useRef(null);
 
 	const {
 		handleOnEnable,
@@ -211,16 +198,6 @@ export const StyleItem = ({
 	});
 
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
-
-	const primarySidebarWidth = useSelect((select) => {
-		return (
-			Number(
-				select('blockera/editor-persistence')
-					.getPrimarySidebarWidth()
-					.replace('px', '')
-			) - 50
-		);
-	}, []);
 
 	// Must read via the `select` argument so useSelect subscribes to the store.
 	// Calling context's getStyleVariationBlocks here (global styles path) bypasses
@@ -386,8 +363,7 @@ export const StyleItem = ({
 			return;
 		}
 
-		setIsOpenBlockCardContextMenu(false);
-		setIsOpenBlockCardUsageForMultipleBlocks(true);
+		setIsOpenUsageForMultipleBlocks(true);
 	};
 
 	const renderUsageAcrossBlocksControl = (
@@ -521,7 +497,6 @@ export const StyleItem = ({
 							inGlobalStylesPanel && !currentBlockStyleVariation
 								? false
 								: isActive,
-						'is-focus': isOpenBlockCardContextMenu,
 						'is-enabled':
 							!cachedStyle?.hasOwnProperty('status') ||
 							true === cachedStyle?.status,
@@ -817,7 +792,6 @@ export const StyleItem = ({
 								data-test={`open-${style.name}-contextmenu`}
 								data-anchor="style-item-context-menu"
 								onClick={() => {
-									setIsOpenBlockCardContextMenu(false);
 									setIsOpenContextMenu(true);
 								}}
 							>
@@ -979,82 +953,6 @@ export const StyleItem = ({
 					</Flex>
 				</Fill>
 			)}
-
-			<Fill name={styleVariationBlockCardSlots.menu}>
-				{isUserCanSaveCustomizations && (
-					<Flex alignItems={'center'} gap={0}>
-						{false === cachedStyle?.status && (
-							<Icon
-								icon="eye-hide"
-								iconSize="20"
-								style={{
-									color: '#e20b0b',
-									cursor: 'initial',
-								}}
-							/>
-						)}
-
-						<span
-							ref={blockCardContextMenuAnchorRef}
-							className="context-menu-trigger block-card-context-menu-anchor"
-							data-test={`open-${style.name}-block-card-contextmenu`}
-							data-anchor="block-card-context-menu"
-							onClick={() => {
-								setIsOpenContextMenu(false);
-								setIsOpenBlockCardContextMenu(true);
-							}}
-						>
-							<Icon iconSize="20" icon="more-vertical" />
-						</span>
-
-						<StyleItemMenuContextProvider
-							value={{
-								anchorRef: blockCardContextMenuAnchorRef,
-								popoverOffset: primarySidebarWidth,
-								blockTitle: getBlockType(blockName).title,
-								style,
-								counter,
-								handlePromotionPopover,
-								isOpenDeleteModal: isOpenBlockCardDeleteModal,
-								setIsOpenDeleteModal:
-									setIsOpenBlockCardDeleteModal,
-								isOpenDuplicateModal:
-									isOpenBlockCardDuplicateModal,
-								setIsOpenDuplicateModal:
-									setIsOpenBlockCardDuplicateModal,
-								blockName,
-								setCounter,
-								buttonText,
-								handleOnRename,
-								handleOnDuplicate,
-								handleOnEnable,
-								handleOnDelete,
-								handleOnUsageForMultipleBlocks,
-								handleOnSaveUsageForMultipleBlocks,
-								isConfirmedChangeID,
-								setIsOpenUsageForMultipleBlocks:
-									setIsOpenBlockCardUsageForMultipleBlocks,
-								isOpenUsageForMultipleBlocks:
-									isOpenBlockCardUsageForMultipleBlocks,
-								setIsConfirmedChangeID,
-								cachedStyle,
-								isOpenRenameModal: isOpenBlockCardRenameModal,
-								setIsOpenRenameModal:
-									setIsOpenBlockCardRenameModal,
-								isOpenContextMenu: isOpenBlockCardContextMenu,
-								setIsOpenContextMenu:
-									setIsOpenBlockCardContextMenu,
-								setCurrentBlockStyleVariation,
-								blockStyles,
-								variationAllowsMultipleBlocks:
-									variationSurface !== VARIATION_SURFACE_SIZE,
-							}}
-						>
-							<StyleItemMenu />
-						</StyleItemMenuContextProvider>
-					</Flex>
-				)}
-			</Fill>
 
 			<Fill name={styleVariationBlockCardSlots.afterPreview}>
 				{blockCardAfterPreviewMultipleBlocks}
