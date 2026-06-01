@@ -65,7 +65,15 @@ export const Button: BlockType = {
 				status: false,
 			},
 			borderAndShadowConfig: {
-				status: false,
+				blockeraBoxShadow: {
+					status: false,
+				},
+				blockeraOutline: {
+					status: false,
+				},
+				blockeraBorder: {
+					status: false,
+				},
 			},
 			clickAnimationConfig: {
 				status: false,
