@@ -581,6 +581,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 			>
 				{!activeSearchMode && (
 					<div
+						className="blockera-layout-extension-divider"
 						style={{
 							height: '1px',
 							margin: '15px 0',

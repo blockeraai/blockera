@@ -9,7 +9,7 @@
 }
 
 /* Block flex layout toolbar — match core control density (no extra dropdown padding). */
-[data-test='data-blockera-layout-toolbar'] {
+[data-test="data-blockera-layout-toolbar"] {
 	.blockera-flex-toolbar-icon svg {
 		transition: transform 0.45s cubic-bezier(0, 0, 0.2, 1);
 	}
@@ -34,4 +34,8 @@
 	svg.align-content-flex-start {
 		transform: rotate(180deg) scaleX(-1);
 	}
+}
+
+.blockera-extension-settings-button + .blockera-layout-extension-divider {
+	display: none;
 }
