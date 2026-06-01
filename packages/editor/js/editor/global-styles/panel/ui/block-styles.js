@@ -49,6 +49,7 @@ import {
 } from '../context';
 import { AddNewStyleButton } from './add-new-style-button';
 import { useBlockStylesCounter } from './use-block-styles-counter';
+import { blockDynamicStylesCount } from './use-block-styles-picker-value';
 import { useBlockContext } from '../../../../extensions/components';
 import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
@@ -59,9 +60,6 @@ import {
 } from '../variation-surfaces';
 import { useBlockVariationSupport } from '../use-block-variation-support';
 import { isVariationSurfaceEnabled } from '../block-variation-support';
-
-// Mapped block dynamic style/size variation counters per surface (for promotion limits).
-const blockDynamicStylesCount: Object = {};
 
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({
@@ -340,7 +338,12 @@ function BlockStyles({
 					title={''}
 					offset={10}
 					placement="bottom-start"
-					className="variations-picker-popover"
+					className={classNames('variations-picker-popover', {
+						'is-variation-ui-size':
+							variationSurface === VARIATION_SURFACE_SIZE,
+						'is-variation-ui-style':
+							variationSurface === VARIATION_SURFACE_STYLE,
+					})}
 					onClose={() => {
 						setIsOpen(false);
 						setCurrentPreviewStyle(null);
