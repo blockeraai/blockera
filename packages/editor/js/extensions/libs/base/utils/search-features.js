@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * Internal dependencies
+ */
+import { isActiveField } from '../../../api/utils';
+
+/**
  * Preprocessed keyword index structure for O(1) lookups
  * Similar to PHP's isset() - uses Set for fast membership checks
  */
@@ -161,6 +166,18 @@ export const filterConfigBySearch = (
 		return configObj;
 	}
 
+	// Disabled extension configs must not surface features in search results.
+	if (!isActiveField(configObj)) {
+		const disabledOnly: { [string]: any } = {};
+		if ('status' in configObj) {
+			disabledOnly.status = configObj.status;
+		}
+		if ('initialOpen' in configObj) {
+			disabledOnly.initialOpen = configObj.initialOpen;
+		}
+		return disabledOnly;
+	}
+
 	// Normalize query once
 	const normalizedQuery = trimmedQuery.toLowerCase();
 
@@ -185,14 +202,18 @@ export const filterConfigBySearch = (
 
 		const feature = configObj[key];
 		if (feature && typeof feature === 'object') {
+			// Block-disabled features stay out of search (e.g. size-variation supportsExtensions).
+			if (!isActiveField(feature)) {
+				continue;
+			}
+
 			// Check if this feature matches (pass normalized query to avoid re-normalization)
 			if (matchesNormalizedQuery(feature, normalizedQuery)) {
-				// Feature matches: include with updated properties
+				// Feature matches: reveal in search without re-enabling disabled fields.
 				filtered[key] = {
 					...feature,
 					show: true,
 					force: true,
-					status: true,
 				};
 			}
 			// If doesn't match, skip it (don't add to filtered)
