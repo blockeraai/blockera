@@ -216,20 +216,24 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				>
 					{buttonText}
 
-					<ChangeIndicator
-						isChanged={hasChangesets}
-						isAnimated={true}
-						primaryColor={
-							activeStyleId === 'default'
-								? accentDefault
-								: '#ffffff'
-						}
-						size={'5'}
-						outlineSize={activeStyleId === 'default' ? '1.5' : '0'}
-						style={{
-							opacity: '0.8',
-						}}
-					/>
+					{uiSurface !== VARIATION_SURFACE_SIZE && (
+						<ChangeIndicator
+							isChanged={hasChangesets}
+							isAnimated={true}
+							primaryColor={
+								activeStyleId === 'default'
+									? accentDefault
+									: '#ffffff'
+							}
+							size={'5'}
+							outlineSize={
+								activeStyleId === 'default' ? '1.5' : '0'
+							}
+							style={{
+								opacity: '0.8',
+							}}
+						/>
+					)}
 
 					<Icon icon="more-vertical-small" iconSize={24} />
 				</Flex>
