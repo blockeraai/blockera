@@ -32,10 +32,12 @@ export const DuplicateModal = ({
 	setIsOpenDuplicateModal,
 	setIsConfirmedChangeID,
 	blockStyles,
+	isSizeVariationUi = false,
 }: {
 	style: Object,
 	buttonText: string,
 	isConfirmedChangeID: boolean,
+	isSizeVariationUi?: boolean,
 	setIsOpenDuplicateModal: (isOpen: boolean) => void,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	handleOnDuplicate: (
@@ -152,7 +154,9 @@ export const DuplicateModal = ({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('style-variation-modal', {
+				'is-variation-ui-size': isSizeVariationUi,
+			})}
 			headerIcon={<Icon icon="duplicate" iconSize="34" />}
 			headerTitle={
 				style.label
