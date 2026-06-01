@@ -19,6 +19,30 @@ body {
 	--blockera-controls-inner-blocks-color: #cc0000;
 	--blockera-controls-inner-blocks-color-bk: #cc0000;
 	//
+	--blockera-controls-block-variations-style: #1ca120;
+	--blockera-controls-block-variations-style-bk: hsl(122, 70%, 37%);
+	--blockera-controls-block-variations-style-darker-20: color-mix(
+		in srgb,
+		var(--blockera-controls-block-variations-style-bk) 100%,
+		#000000 5%
+	);
+	--blockera-controls-block-variations-size: #0516ff;
+	--blockera-controls-block-variations-size-bk: #0414cc;
+	--blockera-controls-block-variations-size-darker-20: color-mix(
+		in srgb,
+		var(--blockera-controls-block-variations-size-bk) 100%,
+		#000000 5%
+	);
+	--blockera-controls-variations-color: var(
+		--blockera-controls-block-variations-style
+	);
+	--blockera-controls-variations-color-bk: var(
+		--blockera-controls-block-variations-style-bk
+	);
+	--blockera-controls-variations-color-darker-20: var(
+		--blockera-controls-block-variations-style-darker-20
+	);
+	//
 	--blockera-controls-background-color: #ffffff;
 	--blockera-controls-color: #1e1e1e;
 	--blockera-controls-fill-color: #f6f6f6;
