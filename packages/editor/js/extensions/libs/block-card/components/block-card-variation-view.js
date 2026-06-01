@@ -163,9 +163,12 @@ export function BlockCardVariationView({
 				<BlockIcon
 					icon={
 						<Icon
-							icon="style-variations-animated"
+							icon={
+								variationSurface === VARIATION_SURFACE_SIZE
+									? 'size-variations'
+									: 'style-variations'
+							}
 							iconSize={24}
-							isAnimated={true}
 						/>
 					}
 				/>
