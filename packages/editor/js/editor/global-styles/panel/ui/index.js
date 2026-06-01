@@ -194,7 +194,11 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					data-test="style-variations-button-icon"
 				>
 					<Icon
-						icon="style-variations-animated"
+						icon={
+							uiSurface === VARIATION_SURFACE_SIZE
+								? 'size-variations-animated'
+								: 'style-variations-animated'
+						}
 						iconSize={24}
 						isAnimated={isOpen || isHovered}
 					/>

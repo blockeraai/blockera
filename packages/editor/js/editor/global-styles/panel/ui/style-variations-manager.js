@@ -63,7 +63,16 @@ export const StyleVariationsManager = (): MixedElement => {
 				</>
 			}
 			initialOpen={true}
-			icon={<Icon icon="extension-style-variations" iconSize={20} />}
+			icon={
+				<Icon
+					icon={
+						isSizeSurface
+							? 'extension-size'
+							: 'extension-style-variations'
+					}
+					iconSize={20}
+				/>
+			}
 			className={extensionClassNames(
 				isSizeSurface ? 'size-variations' : 'style-variations'
 			)}
