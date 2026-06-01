@@ -25,26 +25,34 @@ export const DeleteModal = ({
 	style,
 	handleOnDelete,
 	setIsOpenDeleteModal,
+	isSizeVariationUi = false,
 }: {
 	style: Object,
 	handleOnDelete: (style: Object) => void,
 	setIsOpenDeleteModal: (isOpen: boolean) => void,
+	isSizeVariationUi?: boolean,
 }): MixedElement => {
 	const [isConfirmedDelete, setIsConfirmedDelete] = useState(false);
 
+	let headerTitle = isSizeVariationUi
+		? __('Delete size variation', 'blockera')
+		: __('Delete style variation', 'blockera');
+
+	if (style.label) {
+		headerTitle = sprintf(
+			/* translators: %s: The variation label. */
+			__('Delete "%s"?', 'blockera'),
+			style.label
+		);
+	}
+
 	return (
 		<Modal
-			className={componentInnerClassNames('delete-modal')}
+			className={componentInnerClassNames('delete-modal', {
+				'is-variation-ui-size': isSizeVariationUi,
+			})}
 			headerIcon={<Icon icon="trash" iconSize="34" />}
-			headerTitle={
-				style.label
-					? sprintf(
-							/* translators: %s: The style variation label. */
-							__('Delete "%s"?', 'blockera'),
-							style.label
-						)
-					: __('Delete style variation', 'blockera')
-			}
+			headerTitle={headerTitle}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDeleteModal(false)}
 			actions={
@@ -70,7 +78,9 @@ export const DeleteModal = ({
 							setIsOpenDeleteModal(false);
 						}}
 					>
-						{__('Delete style variation', 'blockera')}
+						{isSizeVariationUi
+							? __('Delete size variation', 'blockera')
+							: __('Delete style variation', 'blockera')}
 					</Button>
 				</>
 			}
@@ -78,10 +88,15 @@ export const DeleteModal = ({
 			<Flex direction="column" gap={30}>
 				<Flex direction="column" gap={15}>
 					<p style={{ margin: '0', color: '#1e1e1e' }}>
-						{__(
-							'The style variation will be permanently removed from your site. Any blocks using it will lose their styling and revert to their default appearance.',
-							'blockera'
-						)}
+						{isSizeVariationUi
+							? __(
+									'The size variation will be permanently removed from your site. Any blocks using it will lose their size preset and revert to the default size.',
+									'blockera'
+								)
+							: __(
+									'The style variation will be permanently removed from your site. Any blocks using it will lose their styling and revert to their default appearance.',
+									'blockera'
+								)}
 					</p>
 				</Flex>
 
@@ -101,10 +116,17 @@ export const DeleteModal = ({
 						}}
 					>
 						<CheckboxControl
-							checkboxLabel={__(
-								'I understand and want to delete this style variation.',
-								'blockera'
-							)}
+							checkboxLabel={
+								isSizeVariationUi
+									? __(
+											'I understand and want to delete this size variation.',
+											'blockera'
+										)
+									: __(
+											'I understand and want to delete this style variation.',
+											'blockera'
+										)
+							}
 							onChange={(newValue: boolean) =>
 								setIsConfirmedDelete(newValue)
 							}
