@@ -197,6 +197,12 @@
 				align-items: center;
 				justify-content: flex-end;
 
+				.context-menu-trigger {
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+				}
+
 				svg {
 					fill: currentColor;
 					color: #1e1e1e;
@@ -225,6 +231,23 @@
 		}
 	}
 
+	&.block-card--style-variation {
+		// --blockera-controls-primary-color: #1ca120;
+
+		.blockera-extension-block-card__title {
+			padding-right: 68px;
+		}
+
+		.blockera-extension-block-card__settings--has-menu {
+			gap: 2px;
+		}
+
+		.blockera-extension-block-card__title,
+		.blockera-component-block-icon {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+
 	&.inner-block-is-selected,
 	&.style-variation-is-selected {
 		background-color: #f6f6f6;
@@ -240,15 +263,6 @@
 			box-shadow:
 				0 -1px 0 #cbcbcb,
 				0 -11px 11px -6px rgba(0, 0, 0, 0.16);
-		}
-	}
-
-	&.block-card--style-variation {
-		// --blockera-controls-primary-color: #1ca120;
-
-		.blockera-extension-block-card__title,
-		.blockera-component-block-icon {
-			color: var(--blockera-controls-primary-color);
 		}
 	}
 
