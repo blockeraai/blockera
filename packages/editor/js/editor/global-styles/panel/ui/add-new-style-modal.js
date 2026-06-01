@@ -414,7 +414,9 @@ export const AddNewStyleModal = ({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('style-variation-modal', {
+				'is-variation-ui-size': isSizeVariation,
+			})}
 			headerIcon={<Icon icon="plus" iconSize="34" />}
 			headerTitle={
 				isSizeVariation
