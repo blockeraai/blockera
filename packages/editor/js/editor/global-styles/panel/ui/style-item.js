@@ -849,49 +849,52 @@ export const StyleItem = ({
 
 			{isActive && (
 				<Fill name="block-inspector-style-actions">
-					<Button
-						disabled={
-							false === cachedStyle?.status ||
-							!hasChangesets ||
-							!isUserCanSaveCustomizations
-						}
-						className={classNames('action-save-customizations', {
-							'action-disabled': false,
-						})}
-						variant="tertiary"
-						onClick={() => {
-							handleOnSaveCustomizations(
-								style,
-								originDefaultAttributes
-							);
-
-							if ('function' === typeof setChangesets) {
-								setChangesets(false);
+					{!isSizeVariationUi && (
+						<Button
+							disabled={
+								false === cachedStyle?.status ||
+								!hasChangesets ||
+								!isUserCanSaveCustomizations
 							}
-						}}
-						size="input"
-						data-test={'save-customizations'}
-						style={{
-							gap: '4px',
-							padding: '2px 0',
-							'letter-spacing': '-0.2px',
-						}}
-					>
-						<Icon icon="save" iconSize="18" />
+							className={classNames(
+								'action-save-customizations',
+								{
+									'action-disabled': false,
+								}
+							)}
+							variant="tertiary"
+							onClick={() => {
+								handleOnSaveCustomizations(
+									style,
+									originDefaultAttributes
+								);
 
-						{isSizeVariationUi
-							? __('Save Changes to Size Variation', 'blockera')
-							: __('Save Changes to Style Variation', 'blockera')}
+								if ('function' === typeof setChangesets) {
+									setChangesets(false);
+								}
+							}}
+							size="input"
+							data-test={'save-customizations'}
+							style={{
+								gap: '4px',
+								padding: '2px 0',
+								'letter-spacing': '-0.2px',
+							}}
+						>
+							<Icon icon="save" iconSize="18" />
 
-						{hasChangesets && (
-							<ChangeIndicator
-								isChanged={hasChangesets}
-								isAnimated={true}
-								primaryColor={'#1ca120'}
-								size={'5'}
-							/>
-						)}
-					</Button>
+							{__('Save Changes to Style Variation', 'blockera')}
+
+							{hasChangesets && (
+								<ChangeIndicator
+									isChanged={hasChangesets}
+									isAnimated={true}
+									primaryColor={'#1ca120'}
+									size={'5'}
+								/>
+							)}
+						</Button>
+					)}
 
 					<Flex gap="8px" justifyContent="space-between">
 						<Button
