@@ -36,11 +36,13 @@ export const RenameModal = ({
 	isConfirmedChangeID,
 	setIsOpenRenameModal,
 	setIsConfirmedChangeID,
+	isSizeVariationUi = false,
 }: {
 	style: Object,
 	buttonText: string,
 	blockStyles: Array<Object>,
 	isConfirmedChangeID: boolean,
+	isSizeVariationUi?: boolean,
 	setIsOpenRenameModal: (isOpen: boolean) => void,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	handleOnRename: (
@@ -96,7 +98,9 @@ export const RenameModal = ({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('style-variation-modal', {
+				'is-variation-ui-size': isSizeVariationUi,
+			})}
 			headerIcon={<Icon icon="pen" iconSize="34" />}
 			headerTitle={
 				style.label
