@@ -88,6 +88,7 @@ export const StyleItemMenu = (): MixedElement => {
 				<DeleteModal
 					style={style}
 					handleOnDelete={handleOnDelete}
+					isSizeVariationUi={!variationAllowsMultipleBlocks}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
 				/>
 			)}
