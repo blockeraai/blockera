@@ -94,4 +94,5 @@ export {
 	type GlobalStylesPanelSelectors,
 	type GlobalStylesPanelTargets,
 	type PresetPanelOverride,
+	navigateToGlobalStylesPath,
 } from './panel-override';
