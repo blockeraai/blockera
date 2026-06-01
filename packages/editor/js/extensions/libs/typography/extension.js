@@ -23,7 +23,7 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { isShowField, isActiveExtension } from '../../api/utils';
+import { isShowField, isActiveField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
@@ -185,6 +185,17 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 		isShowWordBreak ||
 		isShowTextWrap;
 
+	// Compact 2×2 grid only when all font-group features are enabled; otherwise
+	// use the same expanded row layout as feature search.
+	const useFontGroupGridLayout =
+		!activeSearchMode &&
+		isActiveField(extensionConfig.blockeraFontFamily) &&
+		isActiveField(extensionConfig.blockeraFontAppearance) &&
+		isActiveField(extensionConfig.blockeraFontSize) &&
+		isActiveField(extensionConfig.blockeraLineHeight);
+	const useFontGroupExpandedLayout =
+		activeSearchMode || !useFontGroupGridLayout;
+
 	return (
 		<PanelBodyControl
 			onToggle={onToggle}
@@ -204,7 +215,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 			)}
 
 			<ConditionalWrapper
-				condition={!activeSearchMode}
+				condition={useFontGroupGridLayout}
 				wrapper={(children) => (
 					<BaseControl
 						columns="1fr 2.5fr"
@@ -223,46 +234,58 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 				elseWrapper={(children) => <>{children}</>}
 			>
 				<EditorFeatureWrapper
+					isActive={isShowFontFamily}
+					config={extensionConfig.blockeraFontFamily}
+				>
+					<FontFamily
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontFamily}
+						defaultValue={attributes.blockeraFontFamily.default}
+						columns={
+							useFontGroupExpandedLayout
+								? '1fr 2.5fr'
+								: 'columns-1'
+						}
+						className={
+							useFontGroupExpandedLayout
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={
+							useFontGroupExpandedLayout
+								? undefined
+								: { margin: '0px' }
+						}
+						{...extensionProps.blockeraFontFamily}
+					/>
+				</EditorFeatureWrapper>
+
+				<EditorFeatureWrapper
 					isActive={isShowFontAppearance}
 					config={extensionConfig.blockeraFontAppearance}
 				>
-					<EditorFeatureWrapper
-						isActive={isShowFontFamily}
-						config={extensionConfig.blockeraFontFamily}
-					>
-						<FontFamily
-							block={block}
-							onChange={handleOnChangeAttributes}
-							value={values.blockeraFontFamily}
-							defaultValue={attributes.blockeraFontFamily.default}
-							columns={
-								activeSearchMode ? '1fr 2.5fr' : 'columns-1'
-							}
-							className={
-								activeSearchMode
-									? ''
-									: 'control-first label-center small-gap'
-							}
-							style={
-								activeSearchMode ? undefined : { margin: '0px' }
-							}
-							{...extensionProps.blockeraFontFamily}
-						/>
-					</EditorFeatureWrapper>
-
 					<FontAppearance
 						block={block}
 						onChange={handleOnChangeAttributes}
 						value={values.blockeraFontAppearance}
 						defaultValue={attributes.blockeraFontAppearance.default}
-						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						columns={
+							useFontGroupExpandedLayout
+								? '1fr 2.5fr'
+								: 'columns-1'
+						}
 						className={
-							activeSearchMode
+							useFontGroupExpandedLayout
 								? ''
 								: 'control-first label-center small-gap'
 						}
-						style={activeSearchMode ? undefined : { margin: '0px' }}
-						activeSearchMode={activeSearchMode}
+						style={
+							useFontGroupExpandedLayout
+								? undefined
+								: { margin: '0px' }
+						}
+						activeSearchMode={useFontGroupExpandedLayout}
 						{...extensionProps.blockeraFontAppearance}
 					/>
 				</EditorFeatureWrapper>
@@ -276,14 +299,22 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 						onChange={handleOnChangeAttributes}
 						value={values.blockeraFontSize}
 						defaultValue={attributes.blockeraFontSize.default}
-						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						columns={
+							useFontGroupExpandedLayout
+								? '1fr 2.5fr'
+								: 'columns-1'
+						}
 						className={
-							activeSearchMode
+							useFontGroupExpandedLayout
 								? ''
 								: 'control-first label-center small-gap'
 						}
-						style={activeSearchMode ? undefined : { margin: '0px' }}
-						size={activeSearchMode ? 'normal' : 'small'}
+						style={
+							useFontGroupExpandedLayout
+								? undefined
+								: { margin: '0px' }
+						}
+						size={useFontGroupExpandedLayout ? 'normal' : 'small'}
 						{...extensionProps.blockeraFontSize}
 					/>
 				</EditorFeatureWrapper>
@@ -297,15 +328,23 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 						value={values.blockeraLineHeight}
 						onChange={handleOnChangeAttributes}
 						defaultValue={attributes.blockeraLineHeight.default}
-						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						columns={
+							useFontGroupExpandedLayout
+								? '1fr 2.5fr'
+								: 'columns-1'
+						}
 						className={
-							activeSearchMode
+							useFontGroupExpandedLayout
 								? ''
 								: 'control-first label-center small-gap'
 						}
-						style={activeSearchMode ? undefined : { margin: '0px' }}
-						size={activeSearchMode ? 'normal' : 'small'}
-						activeSearchMode={activeSearchMode}
+						style={
+							useFontGroupExpandedLayout
+								? undefined
+								: { margin: '0px' }
+						}
+						size={useFontGroupExpandedLayout ? 'normal' : 'small'}
+						activeSearchMode={useFontGroupExpandedLayout}
 						{...extensionProps.blockeraLineHeight}
 					/>
 				</EditorFeatureWrapper>
