@@ -116,6 +116,38 @@ function BlockStyles({
 		2
 	);
 
+	const isSizeVariationUi = variationSurface === VARIATION_SURFACE_SIZE;
+
+	let missingVariationMessage;
+	if (isSizeVariationUi) {
+		/* translators: %s: The name of the missing size variation */
+		missingVariationMessage = __(
+			'The “%s” size variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+			'blockera'
+		);
+	} else {
+		/* translators: %s: The name of the missing style variation */
+		missingVariationMessage = __(
+			'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+			'blockera'
+		);
+	}
+
+	let activeVariationFallbackMessage;
+	if (isSizeVariationUi) {
+		/* translators: %s: The name of the currently active size variation */
+		activeVariationFallbackMessage = __(
+			'This block is currently using the “%s” size instead.',
+			'blockera'
+		);
+	} else {
+		/* translators: %s: The name of the currently active style variation */
+		activeVariationFallbackMessage = __(
+			'This block is currently using the “%s” style instead.',
+			'blockera'
+		);
+	}
+
 	const handlePromotionPopover = useCallback((): boolean => {
 		let canDoAction = true;
 
@@ -478,11 +510,7 @@ function BlockStyles({
 								<p>
 									<DynamicHtmlFormatter
 										text={sprintf(
-											/* translators: %s: The name of the missing style variation */
-											__(
-												'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
-												'blockera'
-											),
+											missingVariationMessage,
 											'{style}'
 										)}
 										replacements={{
@@ -498,11 +526,7 @@ function BlockStyles({
 								<p>
 									<DynamicHtmlFormatter
 										text={sprintf(
-											/* translators: %s: The name of the currently active style */
-											__(
-												'This block is currently using the “%s” style instead.',
-												'blockera'
-											),
+											activeVariationFallbackMessage,
 											'{style}'
 										)}
 										replacements={{
