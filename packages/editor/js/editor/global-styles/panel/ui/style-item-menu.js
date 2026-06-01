@@ -19,7 +19,7 @@ import {
 	ToggleControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { controlInnerClassNames, classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -125,7 +125,10 @@ export const StyleItemMenu = (): MixedElement => {
 					offset={popoverOffset}
 					draggable={true}
 					placement="left-start"
-					className="variations-settings-popover"
+					className={classNames('variations-settings-popover', {
+						'is-variation-ui-size': !variationAllowsMultipleBlocks,
+						'is-variation-ui-style': variationAllowsMultipleBlocks,
+					})}
 					onClose={() => {
 						setIsOpenContextMenu(false);
 					}}
