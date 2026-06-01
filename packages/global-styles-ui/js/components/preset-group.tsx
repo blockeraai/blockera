@@ -436,7 +436,7 @@ export const PresetGroup = ({
 	}
 
 	return (
-		<PresetStateContainer activeColor="#1ca120">
+		<PresetStateContainer activeColor="var(--blockera-controls-block-variations-style)">
 			<ControlContextProvider
 				value={repeaterContextValue}
 				storeName={'blockera/controls/repeater'}

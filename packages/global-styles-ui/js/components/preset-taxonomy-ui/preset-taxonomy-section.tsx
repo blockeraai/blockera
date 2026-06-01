@@ -57,7 +57,7 @@ export function PresetTaxonomySection({
 	repeaterItemChildren,
 }: PresetTaxonomySectionProps) {
 	return (
-		<PresetStateContainer activeColor="#1ca120">
+		<PresetStateContainer activeColor="var(--blockera-controls-block-variations-style)">
 			<div className="blockera-preset-taxonomy-tree">
 				<ControlContextProvider
 					value={repeaterContextValue}
