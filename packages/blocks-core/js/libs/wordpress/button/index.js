@@ -89,6 +89,9 @@ export const Button: BlockType = {
 				status: false,
 			},
 			layoutConfig: {
+				blockeraDisplay: {
+					status: false,
+				},
 				blockeraFlexLayout: {
 					status: false,
 				},
@@ -96,6 +99,52 @@ export const Button: BlockType = {
 					status: false,
 				},
 				blockeraFlexWrap: {
+					status: false,
+				},
+			},
+			typographyConfig: {
+				blockeraFontFamily: {
+					status: false,
+				},
+				blockeraFontColor: {
+					status: false,
+				},
+				blockeraTextShadow: {
+					status: false,
+				},
+				blockeraTextAlign: {
+					status: false,
+				},
+				blockeraTextTransform: {
+					status: false,
+				},
+				blockeraTextDecoration: {
+					status: false,
+				},
+				blockeraDirection: {
+					status: false,
+				},
+				blockeraTextIndent: {
+					status: false,
+				},
+				blockeraTextOrientation: {
+					status: false,
+				},
+				blockeraTextColumns: {
+					status: false,
+				},
+				blockeraTextStroke: {
+					status: false,
+				},
+				blockeraWordBreak: {
+					status: false,
+				},
+				blockeraTextWrap: {
+					status: false,
+				},
+			},
+			sizeConfig: {
+				blockeraOverflow: {
 					status: false,
 				},
 			},
