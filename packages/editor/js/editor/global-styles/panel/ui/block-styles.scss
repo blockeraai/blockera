@@ -110,13 +110,17 @@
 }
 
 .blockera-extension-size-variations {
-	--blockera-controls-primary-color: #0516ff;
-	--blockera-controls-variations-color: #0516ff;
-	--blockera-controls-variations-color-bk: #0414cc;
-	--blockera-controls-variations-color-darker-20: color-mix(
-		in srgb,
-		var(--blockera-controls-variations-color-bk) 100%,
-		#000000 5%
+	--blockera-controls-primary-color: var(
+		--blockera-controls-block-variations-size
+	);
+	--blockera-controls-variations-color: var(
+		--blockera-controls-block-variations-size
+	);
+	--blockera-controls-variations-color-bk: var(
+		--blockera-controls-block-variations-size-bk
+	);
+	--blockera-controls-variations-color-darker-20: var(
+		--blockera-controls-block-variations-size-darker-20
 	);
 }
 
@@ -307,12 +311,14 @@
 }
 
 .blockera-component-style-variation-modal {
-	--blockera-controls-variations-color: #1ca120;
-	--blockera-controls-variations-color-bk: hsl(122, 70%, 37%);
-	--blockera-controls-variations-color-darker-20: color-mix(
-		in srgb,
-		var(--blockera-controls-variations-color-bk) 100%,
-		#000000 5%
+	--blockera-controls-variations-color: var(
+		--blockera-controls-block-variations-style
+	);
+	--blockera-controls-variations-color-bk: var(
+		--blockera-controls-block-variations-style-bk
+	);
+	--blockera-controls-variations-color-darker-20: var(
+		--blockera-controls-block-variations-style-darker-20
 	);
 	--blockera-controls-primary-color: var(
 		--blockera-controls-variations-color
@@ -322,12 +328,14 @@
 	);
 
 	&.is-variation-ui-size {
-		--blockera-controls-variations-color: #0516ff;
-		--blockera-controls-variations-color-bk: #0414cc;
-		--blockera-controls-variations-color-darker-20: color-mix(
-			in srgb,
-			var(--blockera-controls-variations-color-bk) 100%,
-			#000000 5%
+		--blockera-controls-variations-color: var(
+			--blockera-controls-block-variations-size
+		);
+		--blockera-controls-variations-color-bk: var(
+			--blockera-controls-block-variations-size-bk
+		);
+		--blockera-controls-variations-color-darker-20: var(
+			--blockera-controls-block-variations-size-darker-20
 		);
 	}
 
@@ -388,24 +396,28 @@
 
 .components-popover.blockera-component-popover.variations-settings-popover,
 .components-popover.blockera-component-popover.variations-picker-popover {
-	--blockera-controls-variations-color: #1ca120;
-	--blockera-controls-variations-color-bk: hsl(122, 70%, 37%);
-	--blockera-controls-variations-color-darker-20: color-mix(
-		in srgb,
-		var(--blockera-controls-variations-color-bk) 100%,
-		#000000 5%
+	--blockera-controls-variations-color: var(
+		--blockera-controls-block-variations-style
+	);
+	--blockera-controls-variations-color-bk: var(
+		--blockera-controls-block-variations-style-bk
+	);
+	--blockera-controls-variations-color-darker-20: var(
+		--blockera-controls-block-variations-style-darker-20
 	);
 	--blockera-controls-primary-color: var(
 		--blockera-controls-variations-color
 	);
 
 	&.is-variation-ui-size {
-		--blockera-controls-variations-color: #0516ff;
-		--blockera-controls-variations-color-bk: #0414cc;
-		--blockera-controls-variations-color-darker-20: color-mix(
-			in srgb,
-			var(--blockera-controls-variations-color-bk) 100%,
-			#000000 5%
+		--blockera-controls-variations-color: var(
+			--blockera-controls-block-variations-size
+		);
+		--blockera-controls-variations-color-bk: var(
+			--blockera-controls-block-variations-size-bk
+		);
+		--blockera-controls-variations-color-darker-20: var(
+			--blockera-controls-block-variations-size-darker-20
 		);
 	}
 }

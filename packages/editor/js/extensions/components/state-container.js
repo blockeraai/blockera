@@ -77,8 +77,8 @@ export default function StateContainer({
 		) {
 			color =
 				variationSurface === VARIATION_SURFACE_SIZE
-					? '#0516FF'
-					: '#1ca120';
+					? 'var(--blockera-controls-block-variations-size)'
+					: 'var(--blockera-controls-block-variations-style)';
 		}
 
 		return color;
@@ -100,18 +100,22 @@ export default function StateContainer({
 
 		if (variationSurface === VARIATION_SURFACE_SIZE) {
 			return {
-				'--blockera-controls-variations-color': '#0516FF',
-				'--blockera-controls-variations-color-bk': '#0414cc',
+				'--blockera-controls-variations-color':
+					'var(--blockera-controls-block-variations-size)',
+				'--blockera-controls-variations-color-bk':
+					'var(--blockera-controls-block-variations-size-bk)',
 				'--blockera-controls-variations-color-darker-20':
-					'color-mix(in srgb, #0414cc 100%, #000000 5%)',
+					'var(--blockera-controls-block-variations-size-darker-20)',
 			};
 		}
 
 		return {
-			'--blockera-controls-variations-color': '#1ca120',
-			'--blockera-controls-variations-color-bk': 'hsl(122, 70%, 37%)',
+			'--blockera-controls-variations-color':
+				'var(--blockera-controls-block-variations-style)',
+			'--blockera-controls-variations-color-bk':
+				'var(--blockera-controls-block-variations-style-bk)',
 			'--blockera-controls-variations-color-darker-20':
-				'color-mix(in srgb, hsl(122, 70%, 37%) 100%, #000000 5%)',
+				'var(--blockera-controls-block-variations-style-darker-20)',
 		};
 	}, [isGlobalStylesCardWrapper, currentState, variationSurface]);
 

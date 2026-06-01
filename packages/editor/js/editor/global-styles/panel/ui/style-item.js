@@ -889,7 +889,9 @@ export const StyleItem = ({
 								<ChangeIndicator
 									isChanged={hasChangesets}
 									isAnimated={true}
-									primaryColor={'#1ca120'}
+									primaryColor={
+										'var(--blockera-controls-block-variations-style)'
+									}
 									size={'5'}
 								/>
 							)}

@@ -113,7 +113,9 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	}
 
 	const accentDefault =
-		uiSurface === VARIATION_SURFACE_SIZE ? '#0516FF' : '#1ca120';
+		uiSurface === VARIATION_SURFACE_SIZE
+			? 'var(--blockera-controls-block-variations-size)'
+			: 'var(--blockera-controls-block-variations-style)';
 
 	if (!['global-styles-panel', 'inspector-controls'].includes(context)) {
 		return <></>;
