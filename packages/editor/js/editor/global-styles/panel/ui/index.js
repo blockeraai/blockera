@@ -243,7 +243,11 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				<BlockStyles
 					blockName={blockName}
 					originDefaultAttributes={originDefaultAttributes}
-					hasChangesets={hasChangesets}
+					hasChangesets={
+						uiSurface === VARIATION_SURFACE_SIZE
+							? false
+							: hasChangesets
+					}
 					setChangesets={setChangesets}
 					pickerVariationSurface={uiSurface}
 					styles={{
