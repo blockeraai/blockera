@@ -201,3 +201,34 @@ body {
 		}
 	}
 }
+
+.blockera-size-variations-animated {
+	&,
+	.the-layer-top-width,
+	.the-layer-top-bar,
+	.the-layer-left-width,
+	.the-layer-left-bar {
+		transition: var(--blockera-controls-transition);
+	}
+
+	&.is-animated,
+	&:hover {
+		.the-layer-top-width {
+			x: 11;
+			width: 8px;
+		}
+
+		.the-layer-top-bar {
+			x: 10;
+		}
+
+		.the-layer-left-width {
+			x: 9;
+		}
+
+		.the-layer-left-bar {
+			y: 11;
+			height: 8px;
+		}
+	}
+}
