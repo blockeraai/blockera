@@ -307,12 +307,29 @@
 }
 
 .blockera-component-style-variation-modal {
+	--blockera-controls-variations-color: #1ca120;
+	--blockera-controls-variations-color-bk: hsl(122, 70%, 37%);
+	--blockera-controls-variations-color-darker-20: color-mix(
+		in srgb,
+		var(--blockera-controls-variations-color-bk) 100%,
+		#000000 5%
+	);
 	--blockera-controls-primary-color: var(
 		--blockera-controls-variations-color
 	);
 	--blockera-controls-primary-color-darker-20: var(
 		--blockera-controls-variations-color-darker-20
 	);
+
+	&.is-variation-ui-size {
+		--blockera-controls-variations-color: #0516ff;
+		--blockera-controls-variations-color-bk: #0414cc;
+		--blockera-controls-variations-color-darker-20: color-mix(
+			in srgb,
+			var(--blockera-controls-variations-color-bk) 100%,
+			#000000 5%
+		);
+	}
 
 	.components-modal__content {
 		width: 470px;
