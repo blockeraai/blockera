@@ -26,6 +26,10 @@ import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import { usePromotedMoreFeatures } from '../../hooks/use-promoted-more-features';
 import {
+	countTypographyMoreFeatureSlots,
+	shouldUseTypographyMoreFeatures,
+} from './more-features-utils';
+import {
 	TextTransform,
 	TextDecoration,
 	LetterSpacing,
@@ -161,6 +165,40 @@ export const AdvancedTypographyFeatures: ComponentType<
 	isShowTextWrap,
 	isShowWordBreak,
 }: AdvancedFeaturesProps): MixedElement => {
+	const isSpacingVisible =
+		isShowLetterSpacing || isShowWordSpacing || isShowTextIndent;
+
+	const moreFeatureSlotCount = useMemo(
+		() =>
+			countTypographyMoreFeatureSlots({
+				isShowTextShadow,
+				isShowTextTransform,
+				isShowTextDecoration,
+				isShowDirection,
+				isShowTextOrientation,
+				isSpacingVisible,
+				isShowTextColumns,
+				isShowTextStroke,
+				isShowTextWrap,
+				isShowWordBreak,
+			}),
+		[
+			isShowTextShadow,
+			isShowTextTransform,
+			isShowTextDecoration,
+			isShowDirection,
+			isShowTextOrientation,
+			isSpacingVisible,
+			isShowTextColumns,
+			isShowTextStroke,
+			isShowTextWrap,
+			isShowWordBreak,
+		]
+	);
+
+	const shouldUseMoreFeatures =
+		shouldUseTypographyMoreFeatures(moreFeatureSlotCount);
+
 	const featureCheckers = useMemo(
 		() => ({
 			blockeraTextShadow: () =>
@@ -207,6 +245,7 @@ export const AdvancedTypographyFeatures: ComponentType<
 	} = usePromotedMoreFeatures({
 		clientId: block.clientId,
 		getEditedKeys,
+		enabled: shouldUseMoreFeatures,
 	});
 
 	const handleMoreFeaturesOpenChange = useCallback(
@@ -220,14 +259,13 @@ export const AdvancedTypographyFeatures: ComponentType<
 
 	const handleAdvancedOnChange = useCallback(
 		(attribute, newValue, options) => {
-			markTouched(attribute);
+			if (shouldUseMoreFeatures) {
+				markTouched(attribute);
+			}
 			handleOnChangeAttributes(attribute, newValue, options);
 		},
-		[markTouched, handleOnChangeAttributes]
+		[markTouched, handleOnChangeAttributes, shouldUseMoreFeatures]
 	);
-
-	const isSpacingVisible =
-		isShowLetterSpacing || isShowWordSpacing || isShowTextIndent;
 
 	const isSpacingPromoted =
 		isPromoted('blockeraLetterSpacing') ||
@@ -535,7 +573,7 @@ export const AdvancedTypographyFeatures: ComponentType<
 		</>
 	);
 
-	if (activeSearchMode) {
+	if (activeSearchMode || !shouldUseMoreFeatures) {
 		return renderAllFeatures();
 	}
 
