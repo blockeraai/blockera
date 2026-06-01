@@ -90,6 +90,7 @@
 				font-size: 13px;
 				color: var(--blockera-controls-primary-color);
 				min-height: 40px;
+				box-sizing: border-box;
 
 				svg {
 					fill: currentColor;
