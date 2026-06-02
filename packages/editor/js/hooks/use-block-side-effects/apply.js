@@ -16,6 +16,7 @@ import {
 	isStylesInspectorTab,
 	resolveInspectorRoot,
 } from './utils';
+import { useShouldRenderBlockInspectorCardPortal } from '../../extensions/libs/block-card';
 import { useBlockInspectorContainer } from '../../extensions/components/use-block-inspector-container';
 
 const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
@@ -288,7 +289,18 @@ const applyBlockSideEffects = ({
 	}
 };
 
+const clearInspectorBlockeraSideEffects = (inspector) => {
+	if (!inspector) {
+		return;
+	}
+
+	clearBlockeraInspectorClasses(inspector);
+	clearLegacyInspectorTabStyles(inspector);
+	inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
+};
+
 export const useBlockSideEffects = ({
+	clientId = '',
 	activeBlockVariation,
 	blockName,
 	currentTab,
@@ -298,6 +310,11 @@ export const useBlockSideEffects = ({
 }) => {
 	const inspectorContainer = useBlockInspectorContainer();
 	const settingsScopeRef = useRef(null);
+	const shouldApplyInspectorEffects = useShouldRenderBlockInspectorCardPortal(
+		insideBlockInspector ? clientId : ''
+	);
+	const canApplySideEffects =
+		!insideBlockInspector || shouldApplyInspectorEffects;
 
 	useEffect(() => {
 		const inspector = resolveInspectorRoot({
@@ -319,6 +336,12 @@ export const useBlockSideEffects = ({
 			if (settingsScopeRef.current) {
 				restoreSpecificClassCombinations(settingsScopeRef.current);
 				settingsScopeRef.current = null;
+			}
+
+			// Content-only pattern: leave core inspector untouched until "Edit pattern".
+			if (insideBlockInspector && !canApplySideEffects) {
+				clearInspectorBlockeraSideEffects(nextInspector);
+				return;
 			}
 
 			applyBlockSideEffects({
@@ -349,7 +372,10 @@ export const useBlockSideEffects = ({
 
 		runEffects();
 
-		const tabObservers = observeInspectorTabLists(inspector, runEffects);
+		const tabObservers =
+			canApplySideEffects && inspector
+				? observeInspectorTabLists(inspector, runEffects)
+				: [];
 
 		return () => {
 			tabObservers.forEach((observer) => observer.disconnect());
@@ -360,14 +386,14 @@ export const useBlockSideEffects = ({
 			}
 
 			if (inspector) {
-				clearBlockeraInspectorClasses(inspector);
-				clearLegacyInspectorTabStyles(inspector);
-				inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
+				clearInspectorBlockeraSideEffects(inspector);
 			}
 		};
 	}, [
 		activeBlockVariation,
 		blockName,
+		canApplySideEffects,
+		clientId,
 		currentTab,
 		currentState,
 		insideBlockInspector,

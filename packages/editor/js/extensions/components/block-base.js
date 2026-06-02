@@ -919,6 +919,7 @@ export const BlockBase: ComponentType<any> = (
 							<>
 								<SideEffect
 									{...{
+										clientId,
 										insideBlockInspector: true,
 										activeBlockVariation:
 											activeBlockVariation?.name || '',

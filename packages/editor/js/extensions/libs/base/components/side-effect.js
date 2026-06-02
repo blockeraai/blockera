@@ -4,6 +4,7 @@
 import { useBlockSideEffects } from '../../../../hooks';
 
 export const SideEffect = ({
+	clientId = '',
 	blockName,
 	currentBlock,
 	currentTab,
@@ -13,6 +14,7 @@ export const SideEffect = ({
 	insideBlockInspector = true,
 }) => {
 	useBlockSideEffects({
+		clientId,
 		activeBlockVariation,
 		blockName,
 		currentBlock,
