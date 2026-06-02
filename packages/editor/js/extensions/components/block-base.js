@@ -4,10 +4,8 @@
  * External dependencies
  */
 import { ErrorBoundary } from 'react-error-boundary';
-import { SlotFillProvider } from '@wordpress/components';
 import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
-import { InspectorControls } from '@wordpress/block-editor';
 import {
 	createContext,
 	useContext,
@@ -45,6 +43,7 @@ import {
 	useInnerBlocksInfo,
 	useBlockStyleVariations,
 	useCalculateCurrentAttributes,
+	useDisplayBlockControls,
 } from '../../hooks';
 import {
 	VARIATION_SURFACE_SIZE,
@@ -59,6 +58,7 @@ import { BlockeraLayoutToolbar } from '../libs/layout/components/blockera-layout
 import { BlockPartials } from './block-partials';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
+import { BlockInspectorEditContent } from './block-inspector-edit-content';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { getAttributesWithIds } from '../../hooks/use-attributes';
@@ -153,8 +153,11 @@ export const BlockBase: ComponentType<any> = (
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	const [currentTab, setCurrentTab] = useState(
-		additional?.activeTab || 'style'
+		additional?.activeTab || 'styles'
 	);
+
+	// Match InspectorControls: mount inspector UI only for the selected block (or homogenous multi-select).
+	const displayBlockControls = useDisplayBlockControls();
 
 	const {
 		currentBlock,
@@ -912,10 +915,11 @@ export const BlockBase: ComponentType<any> = (
 						value={previewInjectableStylesValue}
 					>
 						{/*<StrictMode>*/}
-						{insideBlockInspector && (
-							<InspectorControls>
+						{insideBlockInspector && displayBlockControls && (
+							<>
 								<SideEffect
 									{...{
+										insideBlockInspector: true,
 										activeBlockVariation:
 											activeBlockVariation?.name || '',
 										blockName: name,
@@ -927,8 +931,51 @@ export const BlockBase: ComponentType<any> = (
 										isActive,
 									}}
 								/>
-								<SlotFillProvider>
-									<BlockPartials clientId={clientId} />
+								<BlockPartials
+									insideBlockInspector
+									clientId={clientId}
+									isActive={isActive}
+									inspectorEdit={
+										<BlockInspectorEditContent
+											{...{
+												notice,
+												clientId,
+												isActive,
+												currentBlock,
+												BlockEditComponent,
+												availableStates,
+												availableInnerStates,
+												insideBlockInspector,
+												blockProps: {
+													name,
+													activeBlockVariation:
+														activeBlockVariation?.name ||
+														'',
+													clientId,
+													supports,
+													className,
+													attributes:
+														sanitizedAttributes,
+													setAttributes,
+													defaultAttributes,
+													currentAttributes,
+													currentTab,
+													currentBlock,
+													currentState,
+													setCurrentTab,
+													currentBreakpoint,
+													blockeraInnerBlocks,
+													currentInnerBlockState,
+													handleOnChangeAttributes,
+													additional,
+													currentStateAttributes:
+														currentAttributes,
+													...props,
+												},
+											}}
+										/>
+									}
+								>
 									<BlockFillPartials
 										{...{
 											notice,
@@ -954,8 +1001,6 @@ export const BlockBase: ComponentType<any> = (
 												: {},
 											updateBlockEditorSettings,
 											blockProps: {
-												// Sending props like exactly "edit" function props of WordPress Block.
-												// Because needs total block props in outside overriding component like "blockera" in overriding process.
 												name,
 												activeBlockVariation:
 													activeBlockVariation?.name ||
@@ -982,8 +1027,8 @@ export const BlockBase: ComponentType<any> = (
 											},
 										}}
 									/>
-								</SlotFillProvider>
-							</InspectorControls>
+								</BlockPartials>
+							</>
 						)}
 
 						{!insideBlockInspector && (
@@ -1000,8 +1045,11 @@ export const BlockBase: ComponentType<any> = (
 											GLOBAL_STYLES_BASE_CONTROL_COMPONENTS,
 									}}
 								>
-									<SlotFillProvider>
-										<BlockPartials clientId={clientId} />
+									<BlockPartials
+										insideBlockInspector={false}
+										clientId={clientId}
+										isActive={isActive}
+									>
 										<BlockFillPartials
 											{...{
 												notice,
@@ -1051,7 +1099,7 @@ export const BlockBase: ComponentType<any> = (
 												},
 											}}
 										/>
-									</SlotFillProvider>
+									</BlockPartials>
 								</BaseControlContext.Provider>
 							</GlobalStylesPanelBaseControlConfigContext.Provider>
 						)}
