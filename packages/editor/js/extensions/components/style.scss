@@ -161,32 +161,19 @@
 	}
 }
 
-// main block card
-.blockera-block-inspector-controls-wrapper + .block-editor-block-card,
-// pattern child block card
-.blockera-block-inspector-controls-wrapper
-	+ .block-editor-block-card
-	+ .block-editor-block-card,
-// pattern exit button
-.blockera-block-inspector-controls-wrapper
-	+ .block-editor-block-card
-	+ .block-editor-block-card
-	+ .block-editor-block-inspector-edit-contents,
-.blockera-block-inspector-controls-wrapper
-	+ .block-editor-block-card
-	+ .block-editor-block-inspector-edit-contents,
-.blockera-block-inspector-controls-wrapper
-	~ .block-editor-block-variation-transforms {
-	display: none !important;
-}
-
-// hide justification control inside layout constrained (Group Block)
-
-.block-editor-block-inspector
-	.block-editor-hooks__layout-constrained
-	.block-editor-hooks__layout-constrained-helptext
-	+ .components-base-control {
-	display: none;
+// Inspector overrides only when Blockera advanced mode is active (see BlockBase isActive).
+.blockera-block-inspector-controls-wrapper.blockera-active-block {
+	// main block card
+	& + .block-editor-block-card,
+	// pattern child block card
+	& + .block-editor-block-card + .block-editor-block-card,
+	// pattern exit button
+	& + .block-editor-block-card + .block-editor-block-card
+		+ .block-editor-block-inspector-edit-contents,
+	& + .block-editor-block-card + .block-editor-block-inspector-edit-contents,
+	& ~ .block-editor-block-variation-transforms {
+		display: none !important;
+	}
 }
 
 .search-features {
@@ -211,13 +198,23 @@
 	}
 }
 
-// Styles / Animations inspector tabs: hide WordPress default panels, keep Blockera UI.
-.block-editor-block-inspector {
+// Styles tab + Blockera active: hide core panels and keep Blockera UI.
+.block-editor-block-inspector.blockera-inspector-on-styles-tab {
+	// hide justification control inside layout constrained (Group block)
+	.block-editor-hooks__layout-constrained
+		.block-editor-hooks__layout-constrained-helptext
+		+ .components-base-control {
+		display: none;
+	}
+
 	.block-editor-block-styles {
 		display: none !important;
 	}
 
-	.block-editor-block-inspector__tabs [role="tabpanel"]:not([hidden]):not([id*="-list-view"]):not([id*="-content-view"]):not([id*="-settings-view"]) {
+	.block-editor-block-inspector__tabs
+		[role="tabpanel"]:not([hidden]):not([id*="-list-view"]):not(
+			[id*="-content-view"]
+		):not([id*="-settings-view"]) {
 		> *:not(:has(.blockera-state-colors-container)) {
 			display: none !important;
 		}
@@ -226,7 +223,7 @@
 	&:has(.block-editor-block-inspector-edit-contents) {
 		.block-editor-block-styles {
 			display: flex !important;
-		}	
+		}
 	}
 }
 

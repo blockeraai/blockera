@@ -187,13 +187,15 @@ const applyBlockSideEffects = ({
 	clearBlockeraInspectorClasses(inspector);
 	clearLegacyInspectorTabStyles(inspector);
 
-	inspector.classList.add(
-		'blockera-active-block-' +
-			blockName.replaceAll('/', '-') +
-			(activeBlockVariation
-				? '-' + activeBlockVariation.replaceAll('/', '-')
-				: '')
-	);
+	if (isActive) {
+		inspector.classList.add(
+			'blockera-active-block-' +
+				blockName.replaceAll('/', '-') +
+				(activeBlockVariation
+					? '-' + activeBlockVariation.replaceAll('/', '-')
+					: '')
+		);
+	}
 
 	const showBlockeraStylePanels =
 		insideBlockInspector && isActive && isStylesInspectorTab(effectiveTab);
