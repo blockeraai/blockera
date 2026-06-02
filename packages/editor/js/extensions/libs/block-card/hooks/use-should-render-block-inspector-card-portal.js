@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { subscribe, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { store as editorStore } from '@wordpress/editor';
 
 /**
  * Internal dependencies
@@ -28,17 +29,20 @@ export function useShouldRenderBlockInspectorCardPortal(
 ): boolean {
 	const shouldDeferFromStore = useSelect(
 		(select) => {
+			// Re-run when navigating between documents (e.g. template part tabs).
+			select(editorStore).getCurrentPostType();
+
 			if (!clientId) {
 				return true;
 			}
 
-			const store = select(blockEditorStore);
+			const blockEditor = select(blockEditorStore);
 
 			return shouldDeferBlockInspectorCardPortal(clientId, {
-				getBlock: store.getBlock,
-				getBlockParents: store.getBlockParents,
+				getBlock: blockEditor.getBlock,
+				getBlockParents: blockEditor.getBlockParents,
 				getTemporarilyEditingAsBlocks:
-					store.__unstableGetTemporarilyEditingAsBlocks,
+					blockEditor.__unstableGetTemporarilyEditingAsBlocks,
 			});
 		},
 		[clientId]

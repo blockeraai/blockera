@@ -3,9 +3,10 @@
 /**
  * External dependencies
  */
-import { dispatch } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
 import { isReusableBlock } from '@wordpress/blocks';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { store as editorStore } from '@wordpress/editor';
 
 /**
  * Whether a block represents a pattern / content-only section container.
@@ -26,10 +27,6 @@ export function isPatternSectionBlock(block: Object | null | void): boolean {
 		return true;
 	}
 
-	if (block.name === 'core/template-part') {
-		return true;
-	}
-
 	if (block.attributes?.metadata?.patternName) {
 		return true;
 	}
@@ -39,6 +36,51 @@ export function isPatternSectionBlock(block: Object | null | void): boolean {
 	}
 
 	return false;
+}
+
+/**
+ * Template part blocks only gate Blockera UI when locked to content-only.
+ *
+ * @param {Object|null|undefined} block Block record from the block editor store.
+ * @return {boolean} Whether the template part should defer inspector UI.
+ */
+export function isContentOnlyTemplatePartSectionBlock(
+	block: Object | null | void
+): boolean {
+	if (!block) {
+		return false;
+	}
+
+	return (
+		block.name === 'core/template-part' &&
+		block.attributes?.templateLock === 'contentOnly'
+	);
+}
+
+/**
+ * Pattern or content-only template part section container.
+ *
+ * @param {Object|null|undefined} block Block record from the block editor store.
+ * @return {boolean} Whether the block defers Blockera inspector UI until edit mode.
+ */
+export function isContentOnlySectionContainerBlock(
+	block: Object | null | void
+): boolean {
+	return (
+		isPatternSectionBlock(block) ||
+		isContentOnlyTemplatePartSectionBlock(block)
+	);
+}
+
+/**
+ * Whether the site editor is editing a template part document (not an embedded part).
+ *
+ * @return {boolean} Whether the current post type is `wp_template_part`.
+ */
+export function isEditingTemplatePartPost(): boolean {
+	const postType = select(editorStore)?.getCurrentPostType?.();
+
+	return postType === 'wp_template_part';
 }
 
 /**
@@ -88,6 +130,10 @@ export function shouldDeferBlockInspectorCardPortal(
 		return true;
 	}
 
+	if (isEditingTemplatePartPost()) {
+		return false;
+	}
+
 	const { getBlock, getBlockParents, getTemporarilyEditingAsBlocks } =
 		storeSelectors;
 
@@ -111,7 +157,7 @@ export function shouldDeferBlockInspectorCardPortal(
 	);
 	const block = getBlock(clientId);
 
-	if (!patternAncestor && !isPatternSectionBlock(block)) {
+	if (!patternAncestor && !isContentOnlySectionContainerBlock(block)) {
 		return false;
 	}
 
@@ -141,7 +187,7 @@ export function findPatternSectionClientId(
 		const parentId = parents[i];
 		const block = getBlock(parentId);
 
-		if (isPatternSectionBlock(block)) {
+		if (isContentOnlySectionContainerBlock(block)) {
 			return parentId;
 		}
 	}
@@ -149,24 +195,28 @@ export function findPatternSectionClientId(
 	return null;
 }
 
+const CORE_CONTENT_ONLY_EXIT_LABELS = ['Exit pattern', 'Exit section'];
+
 /**
- * Core shows an "Exit pattern" button while editing inside a content-only section.
+ * Core shows an exit control while editing inside a content-only section.
  *
  * @param {Function} translate `__` from `@wordpress/i18n`.
- * @return {boolean} Whether core's Exit pattern control is visible in the inspector.
+ * @return {boolean} Whether core's exit content-only control is visible in the inspector.
  */
 export function isCoreExitPatternEditModeVisible(
 	translate: (text: string) => string
 ): boolean {
-	const exitLabel = translate('Exit pattern');
+	const exitLabels = CORE_CONTENT_ONLY_EXIT_LABELS.map((label) =>
+		translate(label)
+	);
 	const buttons = document.querySelectorAll(
 		'.block-editor-block-inspector-edit-contents__button'
 	);
 
 	for (let i = 0; i < buttons.length; i++) {
-		const button = buttons[i];
+		const label = buttons[i].textContent?.trim();
 
-		if (button.textContent?.trim() === exitLabel) {
+		if (label && exitLabels.includes(label)) {
 			return true;
 		}
 	}
@@ -183,15 +233,18 @@ export function isCoreExitPatternEditModeVisible(
 export function clickCoreExitPatternButton(
 	translate: (text: string) => string
 ): boolean {
-	const exitLabel = translate('Exit pattern');
+	const exitLabels = CORE_CONTENT_ONLY_EXIT_LABELS.map((label) =>
+		translate(label)
+	);
 	const buttons = document.querySelectorAll(
 		'.block-editor-block-inspector-edit-contents__button'
 	);
 
 	for (let i = 0; i < buttons.length; i++) {
 		const button = buttons[i];
+		const label = button.textContent?.trim();
 
-		if (button.textContent?.trim() === exitLabel) {
+		if (label && exitLabels.includes(label)) {
 			button.click();
 			return true;
 		}
