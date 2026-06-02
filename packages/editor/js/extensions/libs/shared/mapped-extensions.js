@@ -354,7 +354,7 @@ export const MappedExtensions = ({
 							blockName: block.blockName,
 						}}
 					>
-						<div style={{ padding: '16px' }}>
+						<div className="blockera-control blockera-control-panel-body is-opened">
 							<SearchControl
 								className="search-features"
 								onChange={setSearchQuery}
