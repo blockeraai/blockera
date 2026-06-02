@@ -26,11 +26,96 @@ export function isPatternSectionBlock(block: Object | null | void): boolean {
 		return true;
 	}
 
+	if (block.name === 'core/template-part') {
+		return true;
+	}
+
+	if (block.attributes?.metadata?.patternName) {
+		return true;
+	}
+
 	if (block.attributes?.templateLock === 'contentOnly') {
 		return true;
 	}
 
 	return false;
+}
+
+/**
+ * Whether the block is the edited section or a descendant of it.
+ *
+ * @param {string}   clientId        Block client id.
+ * @param {string}   editedSection   Active content-only section client id.
+ * @param {Function} getBlockParents Block editor `getBlockParents` selector.
+ * @return {boolean} Whether the block is inside the edited content-only section.
+ */
+export function isBlockWithinEditedContentOnlySection(
+	clientId: string,
+	editedSection: string,
+	getBlockParents: (clientId: string, ascending?: boolean) => Array<string>
+): boolean {
+	if (!clientId || !editedSection) {
+		return false;
+	}
+
+	if (clientId === editedSection) {
+		return true;
+	}
+
+	return getBlockParents(clientId, false).includes(editedSection);
+}
+
+/**
+ * Whether the Blockera inspector card portal should stay unmounted until the user
+ * enters pattern edit mode (WordPress 7.0 "Edit pattern" / content-only section).
+ *
+ * @param {string}   clientId Selected block client id.
+ * @param {Object}   storeSelectors Block editor store selectors for the current render.
+ * @return {boolean} True when the portal must not render yet.
+ */
+export function shouldDeferBlockInspectorCardPortal(
+	clientId: string,
+	storeSelectors: {
+		getBlock: (clientId: string) => Object | null,
+		getBlockParents: (
+			clientId: string,
+			ascending?: boolean
+		) => Array<string>,
+		getTemporarilyEditingAsBlocks?: () => string | null,
+	}
+): boolean {
+	if (!clientId) {
+		return true;
+	}
+
+	const { getBlock, getBlockParents, getTemporarilyEditingAsBlocks } =
+		storeSelectors;
+
+	const editedSection = getTemporarilyEditingAsBlocks?.() || null;
+
+	if (
+		editedSection &&
+		isBlockWithinEditedContentOnlySection(
+			clientId,
+			editedSection,
+			getBlockParents
+		)
+	) {
+		return false;
+	}
+
+	const patternAncestor = findPatternSectionClientId(
+		clientId,
+		getBlock,
+		getBlockParents
+	);
+	const block = getBlock(clientId);
+
+	if (!patternAncestor && !isPatternSectionBlock(block)) {
+		return false;
+	}
+
+	return true;
 }
 
 /**
