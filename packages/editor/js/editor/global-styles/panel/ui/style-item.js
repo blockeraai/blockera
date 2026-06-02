@@ -657,10 +657,15 @@ export const StyleItem = ({
 						isActive && <Icon icon="pen" iconSize="18" />}
 
 					<Flex
-						gap={4}
+						gap={0}
 						alignItems={'center'}
 						style={{ marginLeft: 'auto' }}
 					>
+						{renderUsageAcrossBlocksControl(
+							openUsageForMultipleBlocksModal,
+							'list-row'
+						)}
+
 						{defaultStyle && style.isDefault && (
 							<Tooltip
 								text={
@@ -668,7 +673,7 @@ export const StyleItem = ({
 										<>
 											<h5>
 												{__(
-													'The Main size variation',
+													'The base size variation',
 													'blockera'
 												)}
 											</h5>
@@ -683,7 +688,7 @@ export const StyleItem = ({
 										<>
 											<h5>
 												{__(
-													'The Main style variation',
+													'The base style variation',
 													'blockera'
 												)}
 											</h5>
@@ -702,7 +707,7 @@ export const StyleItem = ({
 							>
 								<span className="blockera-style-item-main-variation-badge">
 									<Icon icon="asterisk" iconSize="16" />
-									{__('Main', 'blockera')}
+									{__('Base', 'blockera')}
 								</span>
 							</Tooltip>
 						)}
@@ -733,40 +738,25 @@ export const StyleItem = ({
 										color: !isActive
 											? '#e20b0b'
 											: 'currentColor',
+										marginLeft: '4px',
 									}}
 								/>
 							</Tooltip>
 						)}
 
-						{renderUsageAcrossBlocksControl(
-							openUsageForMultipleBlocksModal,
-							'list-row'
-						)}
-
-						{style.icon && (
+						{style.icon?.name === 'blockera' && (
 							<Tooltip
-								text={(() => {
-									if (style.icon.name === 'blockera') {
-										return isSizeVariationUi
-											? __(
-													'Size variation added or customized by Blockera',
-													'blockera'
-												)
-											: __(
-													'Style variation added or customized by Blockera',
-													'blockera'
-												);
-									}
-									return isSizeVariationUi
+								text={
+									isSizeVariationUi
 										? __(
-												'Size variation from theme or global styles',
+												'Size variation added or customized by Blockera',
 												'blockera'
 											)
 										: __(
-												'Style variation from theme or block editor',
+												'Style variation added or customized by Blockera',
 												'blockera'
-											);
-								})()}
+											)
+								}
 							>
 								<Icon
 									icon={style.icon.name}
@@ -774,12 +764,9 @@ export const StyleItem = ({
 									iconSize="18"
 									style={{
 										opacity: '0.4',
-										'margin-right':
-											isUserCanSaveCustomizations
-												? '-4px'
-												: '6px',
 										position: 'relative',
 										'z-index': '10',
+										marginLeft: '4px',
 									}}
 								/>
 							</Tooltip>
