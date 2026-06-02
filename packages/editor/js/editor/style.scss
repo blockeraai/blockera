@@ -79,6 +79,7 @@
 	background: #ffffff;
 	overflow: hidden;
 	position: relative;
+	border-radius: var(--blockera-controls-border-radius);
 
 	.components-button:hover,
 	&:hover {
