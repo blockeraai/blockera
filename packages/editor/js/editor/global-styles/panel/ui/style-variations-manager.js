@@ -106,8 +106,8 @@ export const StyleVariationsManager = (): MixedElement => {
 					design="with-label"
 					label={
 						isSizeSurface
-							? __('Add Size Variations', 'blockera')
-							: __('Add Style Variations', 'blockera')
+							? __('Add Size Variation', 'blockera')
+							: __('Add Style Variation', 'blockera')
 					}
 				/>
 			</div>
