@@ -205,12 +205,12 @@
 }
 
 // Styles / Animations inspector tabs: hide WordPress default panels, keep Blockera UI.
-.block-editor-block-inspector.blockera-inspector-on-styles-tab {
+.block-editor-block-inspector {
 	.block-editor-block-styles {
 		display: none !important;
 	}
 
-	.block-editor-block-inspector__tabs [role="tabpanel"]:not([hidden]):not(#tabs-1-list-view, #tabs-1-content-view) {
+	.block-editor-block-inspector__tabs [role="tabpanel"]:not([hidden]):not([id*="-list-view"]):not([id*="-content-view"]):not([id*="-settings-view"]) {
 		> *:not(:has(.blockera-state-colors-container)) {
 			display: none !important;
 		}
