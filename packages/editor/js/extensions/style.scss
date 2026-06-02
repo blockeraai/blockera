@@ -20,7 +20,8 @@
 			border-bottom: var(
 					--blockera-panel-tabs-tab-active-indicator-height
 				)
-				solid var(
+				solid
+				var(
 					--blockera-tab-panel-active-color,
 					var(--blockera-controls-primary-color)
 				);
@@ -68,8 +69,7 @@
 
 				&::before {
 					background-color: var(
-						--blockera-tab-panel-active-color,
-						var(--blockera-controls-primary-color)
+						--blockera-panel-tabs-tab-active-bg-color
 					);
 				}
 			}
