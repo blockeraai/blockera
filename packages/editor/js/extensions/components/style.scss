@@ -212,7 +212,7 @@
 	}
 
 	.block-editor-block-inspector__tabs
-		[role="tabpanel"]:not([hidden]):not([id*="-list-view"]):not(
+		[role="tabpanel"]:not([id*="-list-view"]):not(
 			[id*="-content-view"]
 		):not([id*="-settings-view"]) {
 		> *:not(:has(.blockera-state-colors-container)) {
