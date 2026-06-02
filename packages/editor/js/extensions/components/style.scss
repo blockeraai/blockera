@@ -204,6 +204,13 @@
 	display: none;
 }
 
+// Inner blocks: styles-only — hide WP inspector tab chrome.
+.block-editor-block-inspector.blockera-inner-block-inspector {
+	.block-editor-block-inspector__tabs [role="tablist"] {
+		display: none !important;
+	}
+}
+
 // Styles / Animations inspector tabs: hide WordPress default panels, keep Blockera UI.
 .block-editor-block-inspector {
 	.block-editor-block-styles {
@@ -214,6 +221,12 @@
 		> *:not(:has(.blockera-state-colors-container)) {
 			display: none !important;
 		}
+	}
+
+	&:has(.block-editor-block-inspector-edit-contents) {
+		.block-editor-block-styles {
+			display: flex !important;
+		}	
 	}
 }
 

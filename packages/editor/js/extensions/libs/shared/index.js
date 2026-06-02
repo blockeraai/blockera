@@ -205,11 +205,6 @@ const getTabs = (
 			title: __('Styles', 'blockera'),
 			className: 'style-tab',
 		},
-		{
-			name: 'interactions',
-			title: __('Animations', 'blockera'),
-			className: 'interactions-tab',
-		},
 	];
 };
 
@@ -502,9 +497,47 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	);
 
 	const tabs = getTabs(insideBlockInspector, currentBlock);
+	const isInnerBlockTarget = isInnerBlock(currentBlock);
+	const stylesTab =
+		tabs.find((tab) => 'styles' === tab.name) || tabs[0] || null;
+
+	useEffect(() => {
+		if (
+			!isInnerBlockTarget ||
+			!stylesTab ||
+			currentTab === stylesTab.name
+		) {
+			return;
+		}
+
+		setCurrentTab(stylesTab.name);
+	}, [currentTab, isInnerBlockTarget, setCurrentTab, stylesTab]);
+
+	const shouldHideTabChrome = tabs.length <= 1 || isInnerBlockTarget;
+
+	const renderTabsOrPanel = () => {
+		if (shouldHideTabChrome) {
+			return stylesTab ? Panel(stylesTab) : null;
+		}
+
+		return (
+			<Tabs
+				tabs={tabs}
+				design="modern"
+				getPanel={Panel}
+				activeTab={currentTab}
+				orientation="horizontal"
+				setCurrentTab={setCurrentTab}
+				className="block-inspector-tabs"
+			/>
+		);
+	};
 
 	if (insideBlockInspector) {
-		return tabs.map((tab) => (
+		const inspectorTabs =
+			isInnerBlockTarget && stylesTab ? [stylesTab] : tabs;
+
+		return inspectorTabs.map((tab) => (
 			<InspectorControls
 				key={tab.name}
 				group={getBlockInspectorGroup(tab.name)}
@@ -532,17 +565,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
 			variationSurface={variationSurface}
 		>
-			{!insideBlockInspector && (
-				<Tabs
-					tabs={tabs}
-					design="modern"
-					getPanel={Panel}
-					activeTab={currentTab}
-					orientation="horizontal"
-					setCurrentTab={setCurrentTab}
-					className="block-inspector-tabs"
-				/>
-			)}
+			{!insideBlockInspector && renderTabsOrPanel()}
 			{children}
 		</StateContainer>
 	);

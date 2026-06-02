@@ -90,7 +90,7 @@ export const Preview = ({
 	});
 
 	const doingSwitchToInner = useCallback(() => {
-		setCurrentTab?.('style');
+		setCurrentTab?.('styles');
 		const { getState, getInnerState } = select('blockera/editor');
 		const {
 			settings: { supportsInnerBlocks },

@@ -14,52 +14,16 @@ import {
 	isInspectorTabChrome,
 	isSettingsInspectorTab,
 	isStylesInspectorTab,
+	observeInspectorTabLists,
 	resolveInspectorRoot,
 } from './utils';
 import { useShouldRenderBlockInspectorCardPortal } from '../../extensions/libs/block-card';
 import { useBlockInspectorContainer } from '../../extensions/components/use-block-inspector-container';
+import { isInnerBlock } from '../../extensions/components/utils';
 
 const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
 const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
-
-const observeInspectorTabLists = (inspector, onTabChange) => {
-	const observers = [];
-
-	if (!inspector) {
-		return observers;
-	}
-
-	const tabLists = new Set();
-
-	const nestedTabList = inspector.querySelector('[role="tablist"]');
-
-	if (nestedTabList) {
-		tabLists.add(nestedTabList);
-	}
-
-	const complementaryArea =
-		inspector.closest('.interface-complementary-area') ||
-		document.querySelector('.interface-complementary-area');
-	const sidebarTabList = complementaryArea?.querySelector('[role="tablist"]');
-
-	if (sidebarTabList) {
-		tabLists.add(sidebarTabList);
-	}
-
-	tabLists.forEach((tabList) => {
-		const observer = new MutationObserver(onTabChange);
-
-		observer.observe(tabList, {
-			attributes: true,
-			subtree: true,
-			attributeFilter: ['aria-selected'],
-		});
-
-		observers.push(observer);
-	});
-
-	return observers;
-};
+const BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS = 'blockera-inner-block-inspector';
 
 const handleSpecificClassCombinations = (
 	container,
@@ -200,6 +164,7 @@ const applyBlockSideEffects = ({
 	activeBlockVariation,
 	blockName,
 	currentTab,
+	currentBlock,
 	currentState,
 	isActive,
 	insideBlockInspector,
@@ -209,11 +174,11 @@ const applyBlockSideEffects = ({
 		return;
 	}
 
-	const effectiveTab = getEffectiveInspectorTab({
-		insideBlockInspector,
-		currentTab,
-		inspector,
-	});
+	const isInnerBlockTarget =
+		insideBlockInspector && isActive && isInnerBlock(currentBlock);
+	const effectiveTab = isInnerBlockTarget
+		? 'style'
+		: getEffectiveInspectorTab({ currentTab });
 	const notAllowedClass = 'blockera-not-allowed';
 	const hasNestedTabs = Boolean(
 		inspector.querySelector(INSPECTOR_TABS_SELECTOR)
@@ -236,6 +201,11 @@ const applyBlockSideEffects = ({
 	inspector.classList.toggle(
 		BLOCKERA_STYLE_SCOPE_CLASS,
 		showBlockeraStylePanels
+	);
+
+	inspector.classList.toggle(
+		BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS,
+		isInnerBlockTarget
 	);
 
 	// Blocks without nested WP tabs: toggle loose settings nodes by tab.
@@ -297,12 +267,14 @@ const clearInspectorBlockeraSideEffects = (inspector) => {
 	clearBlockeraInspectorClasses(inspector);
 	clearLegacyInspectorTabStyles(inspector);
 	inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
+	inspector.classList.remove(BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS);
 };
 
 export const useBlockSideEffects = ({
 	clientId = '',
 	activeBlockVariation,
 	blockName,
+	currentBlock,
 	currentTab,
 	currentState,
 	isActive,
@@ -348,22 +320,21 @@ export const useBlockSideEffects = ({
 				activeBlockVariation,
 				blockName,
 				currentTab,
+				currentBlock,
 				currentState,
 				isActive,
 				insideBlockInspector,
 				inspector: nextInspector,
 			});
 
+			const effectiveTab = isInnerBlock(currentBlock)
+				? 'style'
+				: getEffectiveInspectorTab({ currentTab });
+
 			if (
 				insideBlockInspector &&
 				isActive &&
-				isSettingsInspectorTab(
-					getEffectiveInspectorTab({
-						insideBlockInspector,
-						currentTab,
-						inspector: nextInspector,
-					})
-				)
+				isSettingsInspectorTab(effectiveTab)
 			) {
 				settingsScopeRef.current =
 					getSettingsTabPanel(nextInspector) || nextInspector;
@@ -395,6 +366,7 @@ export const useBlockSideEffects = ({
 		canApplySideEffects,
 		clientId,
 		currentTab,
+		currentBlock,
 		currentState,
 		insideBlockInspector,
 		inspectorContainer,
