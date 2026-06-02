@@ -11,6 +11,7 @@ import { select } from '@wordpress/data';
 import { getBlockeraBlockInjectedSlotName } from '@blockera/controls';
 import { PrependPortal } from '@blockera/utils';
 import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-override/selectors';
+import { useShouldRenderBlockInspectorCardPortal } from '../libs/block-card';
 import {
 	useBlockInspectorContainer,
 	isBlockInspectorContainerReady,
@@ -99,6 +100,8 @@ export const BlockPartials = memo(
 		const stickyWrapperRef = useRef(null);
 		const sentinelRef = useRef(null);
 		const inspectorContainer = useBlockInspectorContainer();
+		const shouldRenderCardPortal =
+			useShouldRenderBlockInspectorCardPortal(clientId);
 
 		// implementing block card sticky behavior
 		useEffect(() => {
@@ -174,16 +177,17 @@ export const BlockPartials = memo(
 				{inspectorEdit}
 				<SlotFillProvider>
 					{children}
-					{isBlockInspectorContainerReady(inspectorContainer) && (
-						<BlockInspectorCardPortal
-							key={inspectorContainer}
-							clientId={clientId}
-							isActive={isActive}
-							inspectorContainer={inspectorContainer}
-							sentinelRef={sentinelRef}
-							stickyWrapperRef={stickyWrapperRef}
-						/>
-					)}
+					{isBlockInspectorContainerReady(inspectorContainer) &&
+						shouldRenderCardPortal && (
+							<BlockInspectorCardPortal
+								key={inspectorContainer}
+								clientId={clientId}
+								isActive={isActive}
+								inspectorContainer={inspectorContainer}
+								sentinelRef={sentinelRef}
+								stickyWrapperRef={stickyWrapperRef}
+							/>
+						)}
 				</SlotFillProvider>
 			</>
 		);
