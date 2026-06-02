@@ -226,7 +226,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	currentInnerBlockState,
 	handleOnChangeAttributes,
 	...props
-}: Props): MixedElement => {
+}: Props): MixedElement | Array<MixedElement> => {
 	const { currentBlockStyleVariation, variationSurface } =
 		useGlobalStylesPanelContext();
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
