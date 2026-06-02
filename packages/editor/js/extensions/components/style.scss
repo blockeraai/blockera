@@ -204,6 +204,19 @@
 	display: none;
 }
 
+// Styles / Animations inspector tabs: hide WordPress default panels, keep Blockera UI.
+.block-editor-block-inspector.blockera-inspector-on-styles-tab {
+	.block-editor-block-styles {
+		display: none !important;
+	}
+
+	.block-editor-block-inspector__tabs [role="tabpanel"]:not([hidden]):not(#tabs-1-list-view, #tabs-1-content-view) {
+		> *:not(:has(.blockera-state-colors-container)) {
+			display: none !important;
+		}
+	}
+}
+
 // Set width to 100%. The width issue is result of setting position: absolute to the wrapper.
 .edit-site-global-styles-sidebar__navigator-provider {
 	width: 100%;
