@@ -1115,33 +1115,6 @@ export const MappedExtensions = ({
 								}
 								from={'extension'}
 								error={error}
-								configId={'clickAnimationConfig'}
-								title={__('On Click', 'blockera')}
-								icon={<Icon icon="extension-click-animation" />}
-							/>
-						)}
-					>
-						<ClickAnimationExtension
-							block={block}
-							extensionConfig={clickAnimationConfig}
-							extensionProps={{}}
-							values={{}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
-					</ErrorBoundary>
-
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
 								configId={'mouseConfig'}
 								title={__('Mouse', 'blockera')}
 								icon={<Icon icon="extension-mouse" />}
@@ -1172,6 +1145,33 @@ export const MappedExtensions = ({
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							setSettings={handleOnChangeSettings}
+						/>
+					</ErrorBoundary>
+
+					<ErrorBoundary
+						fallbackRender={({ error }) => (
+							<ErrorBoundaryFallback
+								isReportingErrorCompleted={
+									isReportingErrorCompleted
+								}
+								clientId={block.clientId}
+								setIsReportingErrorCompleted={
+									setIsReportingErrorCompleted
+								}
+								from={'extension'}
+								error={error}
+								configId={'clickAnimationConfig'}
+								title={__('On Click', 'blockera')}
+								icon={<Icon icon="extension-click-animation" />}
+							/>
+						)}
+					>
+						<ClickAnimationExtension
+							block={block}
+							extensionConfig={clickAnimationConfig}
+							extensionProps={{}}
+							values={{}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					</ErrorBoundary>
 
