@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { InspectorControls } from '@wordpress/block-editor';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 import { doAction } from '@wordpress/hooks';
@@ -31,16 +32,16 @@ import { STORE_NAME as BLOCK_EXTENSIONS_STORE_NAME } from '../../store/constants
 import { resetExtensionSettings } from '../../utils';
 import { isInnerBlock } from '../../components/utils';
 import { MappedExtensions } from './mapped-extensions';
-import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
 import { filterSettingsBySearch } from '../base/utils/search-features';
 import { useFeatureSearch } from '../../components/feature-search-context';
 import { useGlobalStylesPanelContext } from '../../../editor/global-styles/panel/context';
+import { getBlockInspectorGroup } from '../../../hooks/use-block-side-effects/utils';
 
-const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 const INSPECTOR_UI_CONTEXT = 'block-inspector';
 const GLOBAL_STYLES_UI_CONTEXT = 'global-styles';
+const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 /** Properties ignored when comparing extension supports to persisted cache. */
 const EXTENSIONS_CACHE_OMIT_PROPS = [
@@ -193,14 +194,14 @@ const getTabs = (
 		...(!isInnerBlock(currentBlock) && insideBlockInspector
 			? [
 					{
-						name: 'settings',
+						name: 'setting',
 						title: __('General', 'blockera'),
 						className: 'settings-tab',
 					},
 				]
 			: []),
 		{
-			name: 'style',
+			name: 'styles',
 			title: __('Styles', 'blockera'),
 			className: 'style-tab',
 		},
@@ -500,7 +501,27 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		/>
 	);
 
-	const displayBlockControls = useDisplayBlockControls();
+	const tabs = getTabs(insideBlockInspector, currentBlock);
+
+	if (insideBlockInspector) {
+		return tabs.map((tab) => (
+			<InspectorControls
+				key={tab.name}
+				group={getBlockInspectorGroup(tab.name)}
+			>
+				<StateContainer
+					name={props.name}
+					clientId={props.clientId}
+					insideBlockInspector={insideBlockInspector}
+					availableStates={availableStates}
+					blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+					variationSurface={variationSurface}
+				>
+					{Panel(tab)}
+				</StateContainer>
+			</InspectorControls>
+		));
+	}
 
 	return (
 		<StateContainer
@@ -511,26 +532,15 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
 			variationSurface={variationSurface}
 		>
-			{displayBlockControls && insideBlockInspector && (
+			{!insideBlockInspector && (
 				<Tabs
+					tabs={tabs}
 					design="modern"
-					orientation="horizontal"
-					tabs={getTabs(insideBlockInspector, currentBlock)}
+					getPanel={Panel}
 					activeTab={currentTab}
+					orientation="horizontal"
 					setCurrentTab={setCurrentTab}
 					className="block-inspector-tabs"
-					getPanel={Panel}
-				/>
-			)}
-			{!displayBlockControls && !insideBlockInspector && (
-				<Tabs
-					design="modern"
-					orientation="horizontal"
-					tabs={getTabs(insideBlockInspector, currentBlock)}
-					activeTab={currentTab}
-					setCurrentTab={setCurrentTab}
-					className="block-inspector-tabs"
-					getPanel={Panel}
 				/>
 			)}
 			{children}

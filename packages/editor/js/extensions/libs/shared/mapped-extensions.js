@@ -156,7 +156,7 @@ export const MappedExtensions = ({
 	// Must stay in sync with extension configs rendered under case 'style' (plus flex/grid child when shown).
 	const styleTabHasSearchMatches = useMemo(() => {
 		const q = searchQuery?.trim();
-		if (!q || tab.name !== 'style') {
+		if (!q || tab.name !== 'styles') {
 			return true;
 		}
 		const keysLen = STYLE_TAB_CONFIG_KEYS.length;
@@ -181,7 +181,7 @@ export const MappedExtensions = ({
 	}, [searchQuery, tab.name, settings, parentLayout.layout, gridChildConfig]);
 
 	switch (tab.name) {
-		case 'settings':
+		case 'setting':
 			activePanel.push(
 				<Fragment key={`${block.clientId}-settings-panel`}>
 					<SlotFillProvider>
@@ -309,7 +309,7 @@ export const MappedExtensions = ({
 			);
 			break;
 
-		case 'style':
+		case 'styles':
 			activePanel.push(
 				<Fragment key={`${block.clientId}-style-panel`}>
 					<SlotFillProvider>
