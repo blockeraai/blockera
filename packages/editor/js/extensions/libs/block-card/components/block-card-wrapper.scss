@@ -1,3 +1,12 @@
+// Portal host is only as tall as the card; without this, position:sticky cannot pin
+// against the inspector scroll area and the whole host scrolls away.
+.block-editor-block-inspector
+	> .blockera-block-inspector-controls-wrapper:has(
+		.blockera-block-card-sticky-sentinel
+	) {
+	display: contents;
+}
+
 .blockera-global-styles-panel-aside {
 	.blockera-block-card-wrapper {
 		&.is-sticky-active {

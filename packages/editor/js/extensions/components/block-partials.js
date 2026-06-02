@@ -112,6 +112,11 @@ export const BlockPartials = memo(
 				return;
 			}
 
+			const scrollRoot =
+				sentinel.closest('.editor-sidebar') ||
+				sentinel.closest('.interface-complementary-area') ||
+				null;
+
 			const observer = new IntersectionObserver(
 				([entry]) => {
 					const wrapper = stickyWrapper.closest(
@@ -139,15 +144,16 @@ export const BlockPartials = memo(
 					}
 				},
 				{
-					root: null, // relative to the viewport
-					threshold: 0, // trigger when sentinel is fully out of view
+					// Match the sidebar scroll container so is-stuck tracks real visibility.
+					root: scrollRoot,
+					threshold: 0,
 				}
 			);
 
 			observer.observe(sentinel);
 
 			return () => observer.disconnect();
-		}, [inspectorContainer]);
+		}, [inspectorContainer, shouldRenderCardPortal]);
 
 		// Outside block inspector: preserve legacy Slot/Fill layout and state (Tabs in SharedBlockExtension).
 		if (!insideBlockInspector) {
