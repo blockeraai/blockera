@@ -2,21 +2,22 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useMemo } from '@wordpress/element';
 import { Fragment, type MixedElement } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Button, Slot, SlotFillProvider } from '@wordpress/components';
+import { Slot, SlotFillProvider } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
 import {
+	Flex,
+	Button,
 	type TTabProps,
 	SearchControl,
 	ControlContextProvider,
-	NoticeControl,
 } from '@blockera/controls';
 import { ExtensionSlotFill } from '@blockera/features-core';
 
@@ -355,48 +356,42 @@ export const MappedExtensions = ({
 							<SearchControl
 								className="search-features"
 								onChange={setSearchQuery}
-								placeholder={__('Search Features…', 'blockera')}
+								placeholder={__(
+									'Search color, text, border…',
+									'blockera'
+								)}
 							/>
 							{searchQuery?.trim() &&
 							!styleTabHasSearchMatches ? (
-								// role/aria on wrapper: NoticeControl props are not typed for a11y attrs in Flow.
-								<div
+								<Flex
+									direction="column"
+									alignItems="center"
+									justifyContent="center"
+									gap="15px"
 									className="blockera-search-features-empty"
-									role="status"
-									aria-live="polite"
-									style={{ marginTop: '20px' }}
+									style={{
+										marginTop: '20px',
+									}}
 								>
-									<NoticeControl
-										type="information"
-										field="blockera-feature-search-empty"
-									>
-										<p>
-											<strong>
-												{__(
-													'No features match your search.',
-													'blockera'
-												)}
-											</strong>
-										</p>
-										<p>
-											{__(
-												'Try a different word or check the spelling.',
+									<p style={{ margin: '0' }}>
+										{sprintf(
+											/* translators: %s: the search query */
+											__(
+												'No results for "%s"',
 												'blockera'
-											)}
-										</p>
-										<Button
-											variant="link"
-											onClick={() => setSearchQuery('')}
-											style={{
-												padding: 0,
-												height: 'auto',
-												fontSize: '12px',
-											}}
-										>
-											{__('Clear search', 'blockera')}
-										</Button>
-									</NoticeControl>
-								</div>
+											),
+											searchQuery.trim()
+										)}
+									</p>
+
+									<Button
+										variant="tertiary"
+										onClick={() => setSearchQuery('')}
+										size="small"
+									>
+										{__('Clear search', 'blockera')}
+									</Button>
+								</Flex>
 							) : null}
 						</div>
 					</ControlContextProvider>
