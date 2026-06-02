@@ -59,6 +59,7 @@ import { BlockPartials } from './block-partials';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
 import { BlockInspectorEditContent } from './block-inspector-edit-content';
+import { useSyncBlockInspectorTab } from './use-sync-block-inspector-tab';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { getAttributesWithIds } from '../../hooks/use-attributes';
@@ -158,6 +159,15 @@ export const BlockBase: ComponentType<any> = (
 
 	// Match InspectorControls: mount inspector UI only for the selected block (or homogenous multi-select).
 	const displayBlockControls = useDisplayBlockControls();
+
+	const { setCurrentTab: setCurrentTabAlignedWithInspector } =
+		useSyncBlockInspectorTab({
+			clientId,
+			insideBlockInspector,
+			enabled: insideBlockInspector && displayBlockControls,
+			currentTab,
+			setCurrentTab,
+		});
 
 	const {
 		currentBlock,
@@ -885,7 +895,9 @@ export const BlockBase: ComponentType<any> = (
 				additional,
 				currentBlock,
 				currentState,
-				setCurrentTab,
+				setCurrentTab: insideBlockInspector
+					? setCurrentTabAlignedWithInspector
+					: setCurrentTab,
 				isNormalState,
 				setAttributes,
 				getAttributes,
@@ -963,7 +975,8 @@ export const BlockBase: ComponentType<any> = (
 													currentTab,
 													currentBlock,
 													currentState,
-													setCurrentTab,
+													setCurrentTab:
+														setCurrentTabAlignedWithInspector,
 													currentBreakpoint,
 													blockeraInnerBlocks,
 													currentInnerBlockState,
@@ -1016,7 +1029,8 @@ export const BlockBase: ComponentType<any> = (
 												currentTab,
 												currentBlock,
 												currentState,
-												setCurrentTab,
+												setCurrentTab:
+													setCurrentTabAlignedWithInspector,
 												currentBreakpoint,
 												blockeraInnerBlocks,
 												currentInnerBlockState,
