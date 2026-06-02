@@ -62,6 +62,8 @@ const STYLE_TAB_CONFIG_KEYS: Array<string> = [
 	'sizeConfig',
 	'positionConfig',
 	'effectsConfig',
+	'clickAnimationConfig',
+	'mouseConfig',
 	'customStyleConfig',
 ];
 
@@ -1069,70 +1071,6 @@ export const MappedExtensions = ({
 						/>
 					</ErrorBoundary>
 
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
-								configId={'customStyleConfig'}
-								title={__('Custom CSS', 'blockera')}
-								icon={<Icon icon="extension-custom-style" />}
-							/>
-						)}
-					>
-						<CustomStyleExtension
-							block={block}
-							extensionConfig={customStyleConfig}
-							extensionProps={{
-								blockeraCustomCSS: {},
-							}}
-							values={{
-								blockeraCustomCSS:
-									currentStateAttributes.blockeraCustomCSS,
-							}}
-							attributes={{
-								blockeraCustomCSS: attributes.blockeraCustomCSS,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
-					</ErrorBoundary>
-
-					<SlotFillProvider>
-						<Slot name={'blockera-inspector-styles-end'} />
-						<ExtensionSlotFill
-							{...{
-								block,
-								settings,
-								attributes,
-								useBlockSection,
-								activeSearchMode: Boolean(
-									searchQuery && searchQuery.trim()
-								),
-								blockFeatures:
-									filteredAdditional?.blockFeatures,
-								currentStateAttributes,
-								handleOnChangeSettings,
-								handleOnChangeAttributes,
-								slotName:
-									'blockera-inspector-interactions-start',
-							}}
-						/>
-					</SlotFillProvider>
-				</Fragment>
-			);
-			break;
-
-		case 'interactions':
-			activePanel.push(
-				<Fragment key={`${block.clientId}-interactions-panel`}>
 					<SlotFillProvider>
 						<Slot name={'blockera-inspector-interactions-start'} />
 						<ExtensionSlotFill
@@ -1151,73 +1089,6 @@ export const MappedExtensions = ({
 							}}
 						/>
 					</SlotFillProvider>
-					{/* <ErrorBoundary
-								fallbackRender={({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={block.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'entranceAnimationConfig'
-													}
-													title={__(
-														'On Entrance',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-entrance-animation" />
-													}
-												/>
-										  )}
-							>
-								<EntranceAnimationExtension
-									block={block}
-									extensionConfig={entranceAnimationConfig}
-									extensionProps={{}}
-									values={{}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-								/>
-							</ErrorBoundary> */}
-
-					{/* <ErrorBoundary
-								fallbackRender={({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={block.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'scrollAnimationConfig'
-													}
-													title={__(
-														'On Scroll',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-scroll-animation" />
-													}
-												/>
-										  )}
-							>
-								<ScrollAnimationExtension
-									block={block}
-									extensionConfig={scrollAnimationConfig}
-									extensionProps={{}}
-									values={{}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-								/>
-							</ErrorBoundary> */}
 
 					<SlotFillProvider>
 						<Slot name={'blockera-inspector-interactions'} />
@@ -1308,6 +1179,7 @@ export const MappedExtensions = ({
 							setSettings={handleOnChangeSettings}
 						/>
 					</ErrorBoundary>
+
 					<SlotFillProvider>
 						<Slot name={'blockera-inspector-interactions-end'} />
 						<ExtensionSlotFill
@@ -1322,6 +1194,63 @@ export const MappedExtensions = ({
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
 								slotName: 'blockera-inspector-interactions-end',
+							}}
+						/>
+					</SlotFillProvider>
+
+					<ErrorBoundary
+						fallbackRender={({ error }) => (
+							<ErrorBoundaryFallback
+								isReportingErrorCompleted={
+									isReportingErrorCompleted
+								}
+								clientId={block.clientId}
+								setIsReportingErrorCompleted={
+									setIsReportingErrorCompleted
+								}
+								from={'extension'}
+								error={error}
+								configId={'customStyleConfig'}
+								title={__('Custom CSS', 'blockera')}
+								icon={<Icon icon="extension-custom-style" />}
+							/>
+						)}
+					>
+						<CustomStyleExtension
+							block={block}
+							extensionConfig={customStyleConfig}
+							extensionProps={{
+								blockeraCustomCSS: {},
+							}}
+							values={{
+								blockeraCustomCSS:
+									currentStateAttributes.blockeraCustomCSS,
+							}}
+							attributes={{
+								blockeraCustomCSS: attributes.blockeraCustomCSS,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
+						/>
+					</ErrorBoundary>
+
+					<SlotFillProvider>
+						<Slot name={'blockera-inspector-styles-end'} />
+						<ExtensionSlotFill
+							{...{
+								block,
+								settings,
+								attributes,
+								useBlockSection,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
+								currentStateAttributes,
+								handleOnChangeSettings,
+								handleOnChangeAttributes,
+								slotName: 'blockera-inspector-styles-end',
 							}}
 						/>
 					</SlotFillProvider>

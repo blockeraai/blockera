@@ -12,7 +12,7 @@ describe('Click Animation', () => {
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
-		cy.getByDataTest('interactions-tab').click();
+		cy.getByDataTest('styles-tab').click();
 	});
 
 	it('should update border when add same data to all side', () => {
