@@ -20,7 +20,10 @@
 			border-bottom: var(
 					--blockera-panel-tabs-tab-active-indicator-height
 				)
-				solid var(--blockera-controls-primary-color);
+				solid var(
+					--blockera-tab-panel-active-color,
+					var(--blockera-controls-primary-color)
+				);
 		}
 
 		[role="tab"] {
@@ -47,7 +50,10 @@
 
 			&:hover:not([data-active-item="true"]) {
 				background: var(--blockera-panel-tabs-bg-color) !important;
-				color: var(--blockera-controls-primary-color) !important;
+				color: var(
+					--blockera-tab-panel-active-color,
+					var(--blockera-controls-primary-color)
+				) !important;
 			}
 
 			&[data-active-item="true"],
@@ -55,10 +61,15 @@
 				background: var(
 					--blockera-panel-tabs-tab-active-bg-color
 				) !important;
+				color: var(
+					--blockera-tab-panel-active-color,
+					var(--blockera-controls-primary-color)
+				) !important;
 
 				&::before {
 					background-color: var(
-						--blockera-panel-tabs-tab-active-bg-color
+						--blockera-tab-panel-active-color,
+						var(--blockera-controls-primary-color)
 					);
 				}
 			}

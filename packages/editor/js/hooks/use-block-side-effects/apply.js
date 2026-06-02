@@ -20,6 +20,11 @@ import {
 import { useShouldRenderBlockInspectorCardPortal } from '../../extensions/libs/block-card';
 import { useBlockInspectorContainer } from '../../extensions/components/use-block-inspector-container';
 import { isInnerBlock } from '../../extensions/components/utils';
+import {
+	applyBlockeraActiveColorStyle,
+	clearBlockeraActiveColorStyle,
+} from '../../extensions/components/blockera-active-color';
+import { useBlockeraActiveColor } from '../../extensions/components/use-blockera-active-color';
 
 const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
 const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
@@ -268,6 +273,7 @@ const clearInspectorBlockeraSideEffects = (inspector) => {
 
 	clearBlockeraInspectorClasses(inspector);
 	clearLegacyInspectorTabStyles(inspector);
+	clearBlockeraActiveColorStyle(inspector);
 	inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
 	inspector.classList.remove(BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS);
 };
@@ -281,6 +287,8 @@ export const useBlockSideEffects = ({
 	currentState,
 	isActive,
 	insideBlockInspector = false,
+	availableStates,
+	blockeraUnsavedData,
 }) => {
 	const inspectorContainer = useBlockInspectorContainer();
 	const settingsScopeRef = useRef(null);
@@ -289,6 +297,13 @@ export const useBlockSideEffects = ({
 	);
 	const canApplySideEffects =
 		!insideBlockInspector || shouldApplyInspectorEffects;
+	const { activeColor, variationCssVars } = useBlockeraActiveColor({
+		name: blockName,
+		clientId,
+		availableStates,
+		blockeraUnsavedData,
+		insideBlockInspector,
+	});
 
 	useEffect(() => {
 		const inspector = resolveInspectorRoot({
@@ -329,6 +344,16 @@ export const useBlockSideEffects = ({
 				inspector: nextInspector,
 			});
 
+			if (insideBlockInspector && isActive && canApplySideEffects) {
+				applyBlockeraActiveColorStyle(
+					nextInspector,
+					activeColor,
+					variationCssVars
+				);
+			} else {
+				clearBlockeraActiveColorStyle(nextInspector);
+			}
+
 			const effectiveTab = isInnerBlock(currentBlock)
 				? 'style'
 				: getEffectiveInspectorTab({ currentTab });
@@ -364,6 +389,7 @@ export const useBlockSideEffects = ({
 		};
 	}, [
 		activeBlockVariation,
+		activeColor,
 		blockName,
 		canApplySideEffects,
 		clientId,
@@ -373,5 +399,6 @@ export const useBlockSideEffects = ({
 		insideBlockInspector,
 		inspectorContainer,
 		isActive,
+		variationCssVars,
 	]);
 };

@@ -942,6 +942,13 @@ export const BlockBase: ComponentType<any> = (
 											? currentInnerBlockState
 											: currentState,
 										isActive,
+										availableStates: isInnerBlock(
+											currentBlock
+										)
+											? availableInnerStates
+											: availableStates,
+										blockeraUnsavedData:
+											blockAttributes?.blockeraUnsavedData,
 									}}
 								/>
 								<BlockPartials

@@ -12,6 +12,8 @@ export const SideEffect = ({
 	isActive,
 	activeBlockVariation,
 	insideBlockInspector = true,
+	availableStates,
+	blockeraUnsavedData,
 }) => {
 	useBlockSideEffects({
 		clientId,
@@ -22,6 +24,8 @@ export const SideEffect = ({
 		currentTab,
 		currentState,
 		insideBlockInspector,
+		availableStates,
+		blockeraUnsavedData,
 	});
 
 	return null;
