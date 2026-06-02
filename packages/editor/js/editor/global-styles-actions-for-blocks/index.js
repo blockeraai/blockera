@@ -6,7 +6,7 @@
 import { type MixedElement } from 'react';
 import { useEffect } from '@wordpress/element';
 import { getBlockTypes } from '@wordpress/blocks';
-import { select, dispatch } from '@wordpress/data';
+import { select, dispatch, subscribe } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -16,6 +16,7 @@ import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-ov
 /**
  * Internal dependencies
  */
+import { isInnerBlock } from '../../extensions/components';
 import { getTargets } from '../header-ui/helpers';
 import { getBlockTypeSelector } from './side-bar-listener';
 import { sharedListenerCallback } from './listener-callback';
@@ -41,6 +42,44 @@ export default function GlobalStylesActionsForBlocks({
 	const { version } = getEntity('wp');
 	const { globalStylesPanel } = getTargets(version);
 
+	const resetExtensionCurrentBlockIfInner = () => {
+		const currentBlock =
+			select('blockera/extensions')?.getExtensionCurrentBlock?.() ??
+			'master';
+
+		if (isInnerBlock(currentBlock)) {
+			changeExtensionCurrentBlock('master');
+		}
+	};
+
+	// Align extension currentBlock with WP sidebar when leaving document for global styles.
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useEffect(() => {
+		const GLOBAL_STYLES_AREA = 'edit-site/global-styles';
+		let previousArea =
+			select('core/interface')?.getActiveComplementaryArea?.('core') ??
+			null;
+
+		const unsubscribe = subscribe(() => {
+			const activeArea =
+				select('core/interface')?.getActiveComplementaryArea?.(
+					'core'
+				) ?? null;
+
+			if (
+				activeArea === GLOBAL_STYLES_AREA &&
+				previousArea !== GLOBAL_STYLES_AREA
+			) {
+				resetExtensionCurrentBlockIfInner();
+			}
+
+			previousArea = activeArea;
+		});
+
+		return unsubscribe;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
 		new IntersectionObserverRenderer(globalStylesPanel.screen, null, {
@@ -59,6 +98,7 @@ export default function GlobalStylesActionsForBlocks({
 						() => {
 							setSelectedBlockStyle('');
 							setSelectedBlockRef(undefined);
+							resetExtensionCurrentBlockIfInner();
 						},
 						{ once: true }
 					);
