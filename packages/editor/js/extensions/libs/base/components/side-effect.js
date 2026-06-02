@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import { useEffect } from '@wordpress/element';
-
-/**
  * Internal dependencies
  */
 import { useBlockSideEffects } from '../../../../hooks';
@@ -15,20 +10,8 @@ export const SideEffect = ({
 	currentState,
 	isActive,
 	activeBlockVariation,
+	insideBlockInspector = true,
 }) => {
-	useEffect(() => {
-		const tabs = document.querySelector(
-			'.block-editor-block-inspector .block-editor-block-inspector__tabs div:first-child'
-		);
-
-		if (tabs && isActive) {
-			tabs.style.display = 'none';
-		} else if (tabs) {
-			tabs.style = {};
-		}
-		// eslint-disable-next-line
-	}, [isActive]);
-
 	useBlockSideEffects({
 		activeBlockVariation,
 		blockName,
@@ -36,6 +19,7 @@ export const SideEffect = ({
 		isActive,
 		currentTab,
 		currentState,
+		insideBlockInspector,
 	});
 
 	return null;
