@@ -27,7 +27,7 @@ import {
 import { useBlockeraActiveColor } from '../../extensions/components/use-blockera-active-color';
 
 const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
-const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
+export const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
 const BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS = 'blockera-inner-block-inspector';
 
 const handleSpecificClassCombinations = (
