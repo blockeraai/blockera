@@ -33,6 +33,7 @@ export const classes = [
 			'core/media-text',
 			'core/navigation',
 			'core/navigation-link',
+			'core/navigation-overlay-close',
 			'core/navigation-submenu',
 			'core/page-list',
 			'core/post-author-name',
