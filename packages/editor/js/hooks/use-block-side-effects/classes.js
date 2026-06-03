@@ -31,6 +31,7 @@ export const classes = [
 			'core/latest-posts',
 			'core/loginout',
 			'core/media-text',
+			'core/navigation',
 			'core/navigation-link',
 			'core/navigation-submenu',
 			'core/page-list',
