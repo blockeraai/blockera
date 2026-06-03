@@ -3,6 +3,8 @@
 ### New Features
 - Added a way for blocks to get a unique ID automatically, making them work more smoothly.
 - Added support for blocks to better integrate with the block editor's features.
+- `Navigation` block: add support.
+- `Navigation Overlay Close` block: add support.
 - `Post Time to Read` block: add support.
 - `Post Word Count` block: add support.
 - `Math` block: add support.
