@@ -84,6 +84,17 @@ Tags: {$tags}
 			return;
 		}
 
+		// Blockera stores variation metadata outside the core theme.json user post fields.
+		if ( function_exists( 'blockera_get_cache' ) ) {
+			blockera_get_cache()->deleteMetaCache(
+				$user_custom_post_type_id,
+				'blockeraGlobalStylesMetaData'
+			);
+		}
+
+		// Legacy meta key (pre-cache); keep in sync with JSONResolver::register_block_style_variations_from_user_data().
+		delete_post_meta( $user_custom_post_type_id, 'blockeraGlobalStylesMetaData' );
+
 		// Use Blockera's GlobalStylesController for updating.
 		$global_styles_controller = new GlobalStylesController();
 		$update_request           = new \WP_REST_Request( 'PUT', '/wp/v2/global-styles/' );

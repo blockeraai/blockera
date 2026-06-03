@@ -289,6 +289,8 @@ class RestAPIController {
 			ThemeTemplates::clear_user_template_parts_customizations();
 		}
 
+		wp_get_theme()->cache_delete();
+
 		return rest_ensure_response(
 			array(
 				'status'  => 'SUCCESS',
