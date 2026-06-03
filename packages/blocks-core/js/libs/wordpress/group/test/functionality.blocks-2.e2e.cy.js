@@ -28,6 +28,8 @@ describe('Group Block', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select Group').click();
 
+		cy.get('[role="tab"][aria-label="Styles"]').click();
+
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
@@ -86,7 +88,7 @@ describe('Group Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.get('[role="tab"][aria-label="Settings"]').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.block-editor-block-inspector__position').should(
@@ -96,12 +98,6 @@ describe('Group Block', () => {
 			cy.get('.components-panel__body-title button')
 				.contains('Layout')
 				.should('be.visible');
-
-			cy.get('.components-base-control__label')
-				.contains('Justification')
-				.should('exist')
-				.scrollIntoView()
-				.should('not.be.visible');
 		});
 
 		//
@@ -122,6 +118,44 @@ describe('Group Block', () => {
 				'background-color',
 				'rgb(255, 0, 0)'
 			);
+		});
+	});
+
+	it('Grid layout hides duplicate WP layout controls on settings tab', () => {
+		appendBlocks(`<!-- wp:group {"layout":{"type":"grid","minimumColumnWidth":"15rem","columnCount":4}} -->
+<div class="wp-block-group"><!-- wp:paragraph -->
+<p>Grid layout group.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->`);
+
+		cy.getBlock('core/group').click();
+		cy.get('.blockera-extension-block-card').should('be.visible');
+		cy.get('[role="tab"][aria-label="Settings"]').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.block-editor-block-inspector__position').should(
+				'not.be.visible'
+			);
+
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('not.be.visible');
+
+			cy.get(
+				'.components-base-control__label, .components-base-control__visual-label'
+			)
+				.contains('Max. columns')
+				.should('exist')
+				.scrollIntoView()
+				.should('not.be.visible');
+
+			cy.get(
+				'.components-base-control__label, .components-base-control__visual-label'
+			)
+				.contains('Min. column width')
+				.should('exist')
+				.scrollIntoView()
+				.should('not.be.visible');
 		});
 	});
 });
