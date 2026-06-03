@@ -45,13 +45,17 @@ import {
 import { getIgnoredAttributesForSchema } from '../components/utils';
 import bootstrapScripts from '../scripts';
 
-export const useSharedBlockSideEffect = (): void => {
+export const useSharedBlockSideEffect = (blockName: string): void => {
 	const {
 		blockEditor: { getSelectedBlock },
 	} = useStoreSelectors();
 	const selectedBlock = getSelectedBlock();
 
 	useEffect(() => {
+		if (selectedBlock?.name !== blockName) {
+			return;
+		}
+
 		const blockCard = document.querySelector('.block-editor-block-card');
 
 		if (blockCard) {
@@ -73,16 +77,16 @@ export const useSharedBlockSideEffect = (): void => {
 		if (tabs) {
 			tabs.style.display = 'block';
 		}
-	}, [selectedBlock]);
+	}, [selectedBlock, blockName]);
 
-	useBlockSideEffectsRestore(selectedBlock);
+	useBlockSideEffectsRestore(selectedBlock, blockName);
 };
 
 const EdiBlockWithoutExtensions = ({
 	settings,
 	...props
 }: Object): MixedElement => {
-	useSharedBlockSideEffect();
+	useSharedBlockSideEffect(settings.name);
 
 	return createElement(settings.edit, props);
 };
@@ -428,7 +432,7 @@ function mergeBlockSettings(
 			}
 
 			// eslint-disable-next-line react-hooks/rules-of-hooks
-			useSharedBlockSideEffect();
+			useSharedBlockSideEffect(settings.name);
 
 			return settings.edit(props);
 		},

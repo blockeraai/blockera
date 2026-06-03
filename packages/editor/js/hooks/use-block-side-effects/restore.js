@@ -40,8 +40,12 @@ const restoreSpecificClassCombinations = (container) => {
 /**
  * Restores inspector DOM when switching to a non-Blockera block (see block-settings.js).
  */
-export const useBlockSideEffectsRestore = (selectedBlock) => {
+export const useBlockSideEffectsRestore = (selectedBlock, blockName) => {
 	useEffect(() => {
+		if (selectedBlock?.name !== blockName) {
+			return;
+		}
+
 		const inspector = document.querySelector(
 			'.block-editor-block-inspector'
 		);
@@ -98,5 +102,5 @@ export const useBlockSideEffectsRestore = (selectedBlock) => {
 			inspectorTabs.classList.remove('blockera-hide');
 			restoreSpecificClassCombinations(inspectorTabs);
 		}
-	}, [selectedBlock]);
+	}, [selectedBlock, blockName]);
 };
