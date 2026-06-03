@@ -28,6 +28,7 @@ import {
 	isValid,
 	extractCssVarValue,
 	isLikelyThemeJsonPlainPresetSlugString,
+	hasExplicitPlainThemeJsonPresetStorage,
 	compositePlainColorPaintFromStoredPlainPresetInput,
 	plainPresetSlugFromStoredPlainPresetInput,
 	unlinkPlainThemeJsonPresetCompositeToScalar,
@@ -150,12 +151,14 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		return (
 			hasPresetResolutionContextForOrphans &&
 			plainSlugLooksLikeThemeJsonPreset &&
-			!presetKnownInMergedThemeJson
+			!presetKnownInMergedThemeJson &&
+			hasExplicitPlainThemeJsonPresetStorage(strippedRawInput)
 		);
 	}, [
 		hasPresetResolutionContextForOrphans,
 		plainSlugLooksLikeThemeJsonPreset,
 		presetKnownInMergedThemeJson,
+		strippedRawInput,
 	]);
 
 	const hasPlainThemeJsonStringValueAddon = presetKnownInMergedThemeJson;

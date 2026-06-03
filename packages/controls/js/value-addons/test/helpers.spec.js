@@ -10,6 +10,8 @@ import {
 	isValid,
 	extractCssVarValue,
 	isLikelyThemeJsonPlainPresetSlugString,
+	isLikelyRawCssNonPresetScalarInput,
+	hasExplicitPlainThemeJsonPresetStorage,
 	splitStoredCompositePlainColorValue,
 	unlinkPlainThemeJsonPresetCompositeToScalar,
 	normalizeCompositePlainPresetPaintPart,
@@ -742,6 +744,38 @@ describe('Helper Functions', () => {
 			expect(isLikelyThemeJsonPlainPresetSlugString('ff0000')).toBe(
 				false
 			);
+		});
+
+		test('rejects invalid color typing and css keywords mistaken for slugs', () => {
+			expect(isLikelyThemeJsonPlainPresetSlugString('asd')).toBe(false);
+			expect(isLikelyThemeJsonPlainPresetSlugString('foo')).toBe(false);
+			expect(isLikelyThemeJsonPlainPresetSlugString('auto')).toBe(false);
+		});
+	});
+
+	describe('isLikelyRawCssNonPresetScalarInput', () => {
+		test('detects layout keywords and dimensions', () => {
+			expect(isLikelyRawCssNonPresetScalarInput('auto')).toBe(true);
+			expect(isLikelyRawCssNonPresetScalarInput('12px')).toBe(true);
+			expect(isLikelyRawCssNonPresetScalarInput('calc(100% - 1em)')).toBe(
+				true
+			);
+			expect(isLikelyRawCssNonPresetScalarInput('primary')).toBe(false);
+		});
+	});
+
+	describe('hasExplicitPlainThemeJsonPresetStorage', () => {
+		test('detects composite and wp preset var references', () => {
+			expect(
+				hasExplicitPlainThemeJsonPresetStorage('#aabbcc,my-accent')
+			).toBe(true);
+			expect(
+				hasExplicitPlainThemeJsonPresetStorage(
+					'var(--wp--preset--color--primary)'
+				)
+			).toBe(true);
+			expect(hasExplicitPlainThemeJsonPresetStorage('asd')).toBe(false);
+			expect(hasExplicitPlainThemeJsonPresetStorage('auto')).toBe(false);
 		});
 	});
 

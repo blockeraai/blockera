@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * Blockera dependencies
  */
 import { generateVariableStringFromAttributeVarString } from '@blockera/data';
@@ -10,6 +15,64 @@ import { generateVariableStringFromAttributeVarString } from '@blockera/data';
  */
 import { isLikelyRawCssColorInput } from '../libs/color-picker-control/utils/css-color';
 import type { ValueAddon } from './types';
+
+/** CSS keywords / unitless scalars that share slug-like spelling but are not theme.json preset slugs. */
+const RAW_CSS_NON_PRESET_SCALAR_KEYWORDS: Set<string> = new Set([
+	'auto',
+	'inherit',
+	'initial',
+	'unset',
+	'revert',
+	'revert-layer',
+	'normal',
+	'none',
+	'stretch',
+	'fit-content',
+	'max-content',
+	'min-content',
+	'content',
+	'func',
+]);
+
+/**
+ * True when a stored plain string is raw CSS (keywords, lengths, calc, etc.), not a theme.json preset slug.
+ */
+export function isLikelyRawCssNonPresetScalarInput(input: string): boolean {
+	if (input === null || input === undefined || typeof input !== 'string') {
+		return false;
+	}
+	const trimmed = input.trim();
+	if (trimmed === '') {
+		return false;
+	}
+
+	const lower = trimmed.toLowerCase();
+	const withoutFuncSuffix = lower.endsWith('func')
+		? lower.slice(0, -4)
+		: lower;
+
+	if (RAW_CSS_NON_PRESET_SCALAR_KEYWORDS.has(withoutFuncSuffix)) {
+		return true;
+	}
+
+	// Unitless numbers and dimensions (e.g. 12px, 50%, 1.5em).
+	if (/^-?\d*\.?\d+$/.test(trimmed)) {
+		return true;
+	}
+	if (
+		/^-?\d*\.?\d+(px|em|rem|%|vh|vw|vmin|vmax|ch|ex|cm|mm|in|pt|pc|deg|rad|turn|s|ms|hz|khz|fr|lh|rlh)$/i.test(
+			trimmed
+		)
+	) {
+		return true;
+	}
+
+	if (/^(calc|clamp|min|max|minmax)\(/i.test(trimmed)) {
+		return true;
+	}
+
+	return false;
+}
 
 export function isValid(value: ValueAddon | string): boolean {
 	//$FlowFixMe
@@ -38,6 +101,14 @@ export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
 	}
 	// Free-form CSS colors (keywords, hex, rgb, in-progress typing) are not preset slugs.
 	if (isLikelyRawCssColorInput(s)) {
+		return false;
+	}
+	// `auto`, `12px`, `calc()`, etc. are not theme.json preset slugs.
+	if (isLikelyRawCssNonPresetScalarInput(s)) {
+		return false;
+	}
+	// Invalid letter-only color typing (e.g. `asd`, `foo`) — not WP preset slug references.
+	if (/^[a-z]+$/i.test(s) && !tinycolor(s.trim()).isValid()) {
 		return false;
 	}
 	// Slugs start with a letter so values like `12px` / `500` are not treated as presets.
@@ -76,6 +147,27 @@ export function splitStoredCompositePlainColorValue(
 		idx = value.lastIndexOf(',', idx - 1);
 	}
 	return null;
+}
+
+/**
+ * True when storage clearly references a theme.json preset (composite `paint,slug` or WP preset var tokens).
+ */
+export function hasExplicitPlainThemeJsonPresetStorage(
+	stripped: string
+): boolean {
+	if (typeof stripped !== 'string' || stripped === '') {
+		return false;
+	}
+	if (splitStoredCompositePlainColorValue(stripped) !== null) {
+		return true;
+	}
+	if (stripped.includes('var(--wp--preset--')) {
+		return true;
+	}
+	if (stripped.includes('var:preset|')) {
+		return true;
+	}
+	return false;
 }
 
 /**

@@ -11,4 +11,5 @@ export {
 	compositePlainColorPaintFromStoredPlainPresetInput as compositeResolvedValueFromStoredPlainPresetInput,
 	unlinkPlainThemeJsonPresetCompositeToScalar,
 	isLikelyThemeJsonPlainPresetSlugString,
+	hasExplicitPlainThemeJsonPresetStorage,
 } from '@blockera/controls';
