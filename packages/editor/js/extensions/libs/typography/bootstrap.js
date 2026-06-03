@@ -47,6 +47,10 @@ import {
 	letterSpacingToWPCompatibility,
 } from './compatibility/letter-spacing';
 import {
+	textIndentFromWPCompatibility,
+	textIndentToWPCompatibility,
+} from './compatibility/text-indent';
+import {
 	textOrientationFromWPCompatibility,
 	textOrientationToWPCompatibility,
 } from './compatibility/text-orientation';
@@ -140,6 +144,15 @@ export const bootstrap = (): void => {
 			// Letter Spacing
 			//
 			attributes = letterSpacingFromWPCompatibility({
+				attributes,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
+			});
+
+			//
+			// Text Indent
+			//
+			attributes = textIndentFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
 				editorSelectedBlockEvent,
@@ -281,6 +294,17 @@ export const bootstrap = (): void => {
 					return mergeObject(
 						nextState,
 						letterSpacingToWPCompatibility({
+							newValue,
+							ref,
+							insideBlockInspector,
+							editorSelectedBlockEvent,
+						})
+					);
+
+				case 'blockeraTextIndent':
+					return mergeObject(
+						nextState,
+						textIndentToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
