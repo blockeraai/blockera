@@ -33,7 +33,6 @@ import { PanelBodyControl } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { StyleItem } from './style-item';
 import { SortableStyleItem } from './sortable-style-item';
 import { AddNewStyleButton } from './add-new-style-button';
 import { usePersistVariationOrder } from './use-persist-variation-order';
@@ -70,10 +69,7 @@ export const StyleVariationsManager = (): MixedElement => {
 	);
 
 	const sortableIds = useMemo(
-		() =>
-			blockStyles
-				.filter((row) => row?.name !== 'default')
-				.map((row) => row.name),
+		() => blockStyles.map((row) => row.name),
 		[blockStyles]
 	);
 
@@ -83,24 +79,15 @@ export const StyleVariationsManager = (): MixedElement => {
 				return;
 			}
 
-			const sortable = blockStyles.filter(
-				(row) => row?.name !== 'default'
-			);
-			const oldIndex = sortable.findIndex(
+			const oldIndex = blockStyles.findIndex(
 				(row) => row.name === event.active.id
 			);
-			const newIndex = sortable.findIndex(
+			const newIndex = blockStyles.findIndex(
 				(row) => row.name === event.over.id
 			);
 
 			if (oldIndex !== -1 && newIndex !== -1) {
-				const pinned = blockStyles.filter(
-					(row) => row?.name === 'default'
-				);
-				const nextRows = [
-					...pinned,
-					...arrayMove(sortable, oldIndex, newIndex),
-				];
+				const nextRows = arrayMove(blockStyles, oldIndex, newIndex);
 
 				setBlockStyles(nextRows);
 				persistVariationOrder(nextRows);
@@ -120,17 +107,9 @@ export const StyleVariationsManager = (): MixedElement => {
 					items={sortableIds}
 					strategy={verticalListSortingStrategy}
 				>
-					{blockStyles.map((style) =>
-						style?.name === 'default' ? (
-							<StyleItem
-								key={style.name}
-								style={style}
-								inGlobalStylesPanel={true}
-							/>
-						) : (
-							<SortableStyleItem key={style.name} style={style} />
-						)
-					)}
+					{blockStyles.map((style) => (
+						<SortableStyleItem key={style.name} style={style} />
+					))}
 				</SortableContext>
 			</DndContext>
 		),

@@ -48,20 +48,18 @@ export function getStoredVariationOrder(
 	return slugs.length > 0 ? slugs : undefined;
 }
 
-/** Slugs from rendered rows, excluding the synthetic default row. */
+/** Slugs from rendered rows in list order. */
 export function buildVariationOrderFromRows(
 	rows: Array<Object>
 ): Array<string> {
 	return (rows || [])
 		.map((row) => row?.name)
-		.filter(
-			(name) => typeof name === 'string' && name && name !== 'default'
-		);
+		.filter((name) => typeof name === 'string' && name);
 }
 
 /**
  * Sort variation rows by persisted slug order.
- * Synthetic `default` row stays first; unknown slugs append at the end.
+ * Unknown slugs append at the end.
  */
 export function sortVariationRowsBySlugOrder(
 	rows: Array<Object>,
@@ -76,13 +74,6 @@ export function sortVariationRowsBySlugOrder(
 	);
 
 	return [...(rows || [])].sort((a, b) => {
-		if (a?.name === 'default') {
-			return -1;
-		}
-		if (b?.name === 'default') {
-			return 1;
-		}
-
 		const aIndex: number = orderMap.has(a?.name)
 			? // $FlowFixMe[incompatible-type]
 				orderMap.get(a.name)

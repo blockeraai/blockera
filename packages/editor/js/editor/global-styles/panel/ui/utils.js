@@ -24,6 +24,11 @@ import { isString, kebabCase } from '@blockera/utils';
  * Internal dependencies
  */
 import { getBlockeraGlobalStylesMetaData } from '../../helpers';
+import { getStoredVariationOrder } from '../variation-order';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
@@ -237,15 +242,28 @@ export function getRenderedStyles(
 			return style;
 		})
 		.filter(Boolean);
-	styles = [...(styles || [])].sort((a, b) => {
-		if (a?.isDefault) {
-			return -1;
-		}
-		if (b?.isDefault) {
-			return 1;
-		}
-		return 0;
-	});
+
+	const blockeraMeta = getBlockeraGlobalStylesMetaData();
+	const hasStoredVariationOrder = Boolean(
+		getStoredVariationOrder(
+			blockName,
+			VARIATION_SURFACE_STYLE,
+			blockeraMeta
+		) ||
+		getStoredVariationOrder(blockName, VARIATION_SURFACE_SIZE, blockeraMeta)
+	);
+
+	if (!hasStoredVariationOrder) {
+		styles = [...(styles || [])].sort((a, b) => {
+			if (a?.isDefault) {
+				return -1;
+			}
+			if (b?.isDefault) {
+				return 1;
+			}
+			return 0;
+		});
+	}
 
 	const normalizeStyle = (style: Object): Object => {
 		if (style?.icon) {
