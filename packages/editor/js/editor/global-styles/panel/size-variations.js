@@ -18,6 +18,107 @@ import { VARIATION_SURFACE_SIZE } from './variation-surfaces';
 /** CSS class prefix applied to the block for Blockera **size** variations (`is-size-{slug}`). */
 export const BLOCK_SIZE_VARIATION_CLASS_PREFIX = 'is-size-';
 
+/** theme.json key on `styles.blocks.{block}` declaring size variation display order. */
+export const BLOCK_SIZE_VARIATIONS_ORDER_KEY = 'blockeraSizeVariationsOrder';
+
+/**
+ * Resolve a variation slug to its index in {@param order}.
+ * Prefers the segment after the last `-size-` in the slug, otherwise the full slug.
+ */
+export function getSizeVariationSortIndex(
+	slug: mixed,
+	order: Array<string>
+): number {
+	if (typeof slug !== 'string' || !slug || !order?.length) {
+		return order?.length ?? 0;
+	}
+
+	const normalizedSlug = slug.toLowerCase();
+	const sizeTokenMatch = normalizedSlug.match(/-size-(.+)$/);
+	const sizeToken = sizeTokenMatch ? sizeTokenMatch[1] : normalizedSlug;
+	const index = order.findIndex(
+		(token) => String(token).toLowerCase() === sizeToken
+	);
+
+	return index === -1 ? order.length : index;
+}
+
+/** Sort size rows: synthetic `default` row first, then theme order, then unknown slugs. */
+export function sortSizeVariationRowsByOrder(
+	rows: Array<Object>,
+	order?: Array<string>
+): Array<Object> {
+	if (!order || order.length === 0) {
+		return rows || [];
+	}
+
+	return [...(rows || [])].sort((a, b) => {
+		const aIsSyntheticDefault = a?.name === 'default';
+		const bIsSyntheticDefault = b?.name === 'default';
+
+		if (aIsSyntheticDefault) {
+			return -1;
+		}
+		if (bIsSyntheticDefault) {
+			return 1;
+		}
+
+		const aIndex = getSizeVariationSortIndex(a?.name, order);
+		const bIndex = getSizeVariationSortIndex(b?.name, order);
+
+		if (aIndex !== bIndex) {
+			return aIndex - bIndex;
+		}
+
+		return String(a?.name || '').localeCompare(String(b?.name || ''));
+	});
+}
+
+/**
+ * Reads `styles.blocks.{block}.blockeraSizeVariationsOrder` from theme global styles.
+ * User edits override theme base.
+ */
+export function getBlockSizeVariationsOrder(
+	baseConfig: Object,
+	userConfig: Object,
+	blockName: string
+): Array<string> | void {
+	const normalize = (value: mixed): Array<string> | void => {
+		if (!Array.isArray(value) || value.length === 0) {
+			return undefined;
+		}
+
+		const tokens: Array<string> = [];
+
+		for (const token of value) {
+			if (typeof token !== 'string') {
+				continue;
+			}
+
+			const trimmed = token.trim();
+
+			if (trimmed) {
+				tokens.push(trimmed);
+			}
+		}
+
+		return tokens.length > 0 ? tokens : undefined;
+	};
+
+	return (
+		normalize(
+			userConfig?.styles?.blocks?.[blockName]?.[
+				BLOCK_SIZE_VARIATIONS_ORDER_KEY
+			]
+		) ||
+		normalize(
+			baseConfig?.styles?.blocks?.[blockName]?.[
+				BLOCK_SIZE_VARIATIONS_ORDER_KEY
+			]
+		)
+	);
+}
+
 /**
  * Deep-merge `styles.blocks[blockName].variations` from base + user theme.json data.
  */
@@ -199,11 +300,12 @@ export function alignStyleRowsWithSharedRootVariation(
 
 /**
  * Normalize size rows: map theme.json `blockeraIsDefaultVariation` → `isDefault`,
- * ensure a default row exists, sort default first.
+ * ensure a default row exists, sort by {@param sizeVariationOrder}.
  */
 export function normalizeSizeVariationRows(
 	rows: Array<Object>,
-	usesSharedRootStyleVariation: boolean = true
+	usesSharedRootStyleVariation: boolean = true,
+	sizeVariationOrder?: Array<string>
 ): Array<Object> {
 	let normalized = (rows || []).map((row) => {
 		if (row.blockeraIsDefaultVariation === true || row.isDefault) {
@@ -213,15 +315,7 @@ export function normalizeSizeVariationRows(
 		return row;
 	});
 
-	normalized = [...normalized].sort((a, b) => {
-		if (a?.isDefault) {
-			return -1;
-		}
-		if (b?.isDefault) {
-			return 1;
-		}
-		return 0;
-	});
+	normalized = sortSizeVariationRowsByOrder(normalized, sizeVariationOrder);
 
 	if (
 		usesSharedRootStyleVariation &&

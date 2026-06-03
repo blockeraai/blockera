@@ -30,6 +30,11 @@ import {
 	useGenericPreviewBlock,
 } from '../../editor/global-styles/panel/ui/utils';
 import { normalizeSizeVariationRows } from '../../editor/global-styles/panel/size-variations';
+import {
+	getStoredVariationOrder,
+	sortVariationRowsBySlugOrder,
+} from '../../editor/global-styles/panel/variation-order';
+import { VARIATION_SURFACE_SIZE } from '../../editor/global-styles/panel/variation-surfaces';
 import { STORE_NAME } from '../../store/constants';
 
 export function useSizeVariationsForBlocks({
@@ -40,6 +45,7 @@ export function useSizeVariationsForBlocks({
 	sizeVariationMetaRoot,
 	inGlobalStylesPanel = false,
 	usesSharedRootStyleVariation = false,
+	sizeVariationOrder,
 	inspectorApplyClassName = false,
 	event = 'click',
 }: {
@@ -50,6 +56,7 @@ export function useSizeVariationsForBlocks({
 	sizeVariationMetaRoot?: Object,
 	inGlobalStylesPanel?: boolean,
 	usesSharedRootStyleVariation?: boolean,
+	sizeVariationOrder?: Array<string>,
 	inspectorApplyClassName?: boolean,
 	event?: 'click' | 'detach',
 }): Object {
@@ -96,6 +103,12 @@ export function useSizeVariationsForBlocks({
 		[enabled]
 	);
 
+	const blockeraGlobalStylesMetaData = useSelect(
+		(sel: Function) =>
+			sel(STORE_NAME).getBlockeraGlobalStylesMetaData?.() ?? {},
+		[]
+	);
+
 	const stylesToRender = useMemo(() => {
 		if (!enabled) {
 			return [];
@@ -119,15 +132,25 @@ export function useSizeVariationsForBlocks({
 			mergedVariationsBySlug
 		);
 
-		return normalizeSizeVariationRows(
+		const normalized = normalizeSizeVariationRows(
 			enrichSizeVariationRowsFromMerged(
 				sizesOnly,
 				mergedVariationsBySlug,
 				blockName,
 				sizeVariationMetaRoot
 			),
-			usesSharedRootStyleVariation
+			usesSharedRootStyleVariation,
+			sizeVariationOrder
 		);
+		const storedSizeOrder = getStoredVariationOrder(
+			blockName,
+			VARIATION_SURFACE_SIZE,
+			blockeraGlobalStylesMetaData
+		);
+
+		return storedSizeOrder
+			? sortVariationRowsBySlugOrder(normalized, storedSizeOrder)
+			: normalized;
 	}, [
 		enabled,
 		styles,
@@ -137,6 +160,8 @@ export function useSizeVariationsForBlocks({
 		mergedVariationsBySlug,
 		sizeVariationMetaRoot,
 		usesSharedRootStyleVariation,
+		sizeVariationOrder,
+		blockeraGlobalStylesMetaData,
 	]);
 
 	const selectedFromStore = useSelect(

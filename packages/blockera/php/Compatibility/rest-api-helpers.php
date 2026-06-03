@@ -131,6 +131,20 @@ if (! function_exists('blockera_get_block_style_variation_metadata_style_keys'))
 	}
 }
 
+if (! function_exists('blockera_get_block_styles_metadata_keys')) {
+	/**
+	 * Block-level metadata keys under `styles.blocks.{block}` (not CSS).
+	 * Excluded from CSS generation for block root nodes.
+	 *
+	 * @return list<string>
+	 */
+	function blockera_get_block_styles_metadata_keys(): array {
+		return array(
+			'blockeraSizeVariationsOrder',
+		);
+	}
+}
+
 if (! function_exists('blockera_get_valid_supports')) {
 	/**
      * Get filtered the valid supports list for theme.json schema.
@@ -167,6 +181,10 @@ if (! function_exists('blockera_get_valid_supports')) {
 
 		foreach ( blockera_get_block_style_variation_metadata_style_keys() as $blockera_variation_style_key ) {
 			$with_blockera_supports[ $blockera_variation_style_key ] = null;
+		}
+
+		foreach ( blockera_get_block_styles_metadata_keys() as $blockera_block_style_key ) {
+			$with_blockera_supports[ $blockera_block_style_key ] = null;
 		}
 
 		$cache[ $cache_key ] = $with_blockera_supports;

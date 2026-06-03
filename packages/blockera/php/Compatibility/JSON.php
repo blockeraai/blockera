@@ -470,7 +470,15 @@ class JSON extends \WP_Theme_JSON {
 				[
 					'block' => [
 						'blockName' => $block_metadata['name'],
-						'attrs' => array_diff_key($node, array_flip([ 'variations' ])),
+						'attrs' => array_diff_key(
+							$node,
+							array_flip(
+								array_merge(
+									array( 'variations' ),
+									\blockera_get_block_styles_metadata_keys()
+								)
+							)
+						),
 					],
 					'fallbackSelector' => $block_metadata['selector'],
 					'isGlobalStyle' => true,

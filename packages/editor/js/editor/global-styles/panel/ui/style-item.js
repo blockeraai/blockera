@@ -48,7 +48,18 @@ import {
 export const StyleItem = ({
 	style,
 	inGlobalStylesPanel = false,
-}: $Shape<T_STYLE_ITEM_PROPS>): MixedElement => {
+	dragSortBindings,
+}: $Shape<
+	T_STYLE_ITEM_PROPS & {
+		dragSortBindings?: {
+			setNodeRef: (node: HTMLElement | null) => void,
+			attributes: Object,
+			listeners: Object,
+			isDragging?: boolean,
+			style?: Object,
+		},
+	},
+>): MixedElement => {
 	const pickerContext = useBlockStylesPickerContext();
 	const {
 		blockName,
@@ -159,6 +170,11 @@ export const StyleItem = ({
 		useState(false);
 
 	const styleItemContextMenuAnchorRef = useRef(null);
+
+	const setStyleItemRef = (node: HTMLElement | null) => {
+		styleItemContextMenuAnchorRef.current = node;
+		dragSortBindings?.setNodeRef?.(node);
+	};
 
 	const {
 		handleOnEnable,
@@ -488,9 +504,12 @@ export const StyleItem = ({
 	return (
 		<>
 			<div
-				ref={styleItemContextMenuAnchorRef}
+				ref={setStyleItemRef}
 				role="button"
 				tabIndex={0}
+				style={dragSortBindings?.style}
+				{...(dragSortBindings?.attributes || {})}
+				{...(dragSortBindings?.listeners || {})}
 				className={classNames(
 					'block-editor-block-styles__item__button',
 					{

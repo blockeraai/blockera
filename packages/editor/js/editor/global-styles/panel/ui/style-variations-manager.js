@@ -4,7 +4,21 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useCallback } from '@wordpress/element';
+import {
+	DndContext,
+	closestCenter,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from '@dnd-kit/core';
+import {
+	SortableContext,
+	sortableKeyboardCoordinates,
+	verticalListSortingStrategy,
+	arrayMove,
+} from '@dnd-kit/sortable';
 
 /**
  * Blockera dependencies
@@ -20,7 +34,9 @@ import { PanelBodyControl } from '@blockera/controls';
  * Internal dependencies
  */
 import { StyleItem } from './style-item';
+import { SortableStyleItem } from './sortable-style-item';
 import { AddNewStyleButton } from './add-new-style-button';
+import { usePersistVariationOrder } from './use-persist-variation-order';
 import { useBlockStylesPickerContext } from '../context';
 import {
 	VARIATION_SURFACE_SIZE,
@@ -29,23 +45,96 @@ import {
 
 export const StyleVariationsManager = (): MixedElement => {
 	const {
+		blockName,
 		blockStyles,
+		setBlockStyles,
 		isNotActive,
 		variationSurface = VARIATION_SURFACE_STYLE,
 	} = useBlockStylesPickerContext();
 
 	const isSizeSurface = variationSurface === VARIATION_SURFACE_SIZE;
+	const persistVariationOrder = usePersistVariationOrder(
+		blockName,
+		variationSurface
+	);
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 8,
+			},
+		}),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		})
+	);
+
+	const sortableIds = useMemo(
+		() =>
+			blockStyles
+				.filter((row) => row?.name !== 'default')
+				.map((row) => row.name),
+		[blockStyles]
+	);
+
+	const handleDragEnd = useCallback(
+		(event: Object) => {
+			if (!event.over || event.active.id === event.over.id) {
+				return;
+			}
+
+			const sortable = blockStyles.filter(
+				(row) => row?.name !== 'default'
+			);
+			const oldIndex = sortable.findIndex(
+				(row) => row.name === event.active.id
+			);
+			const newIndex = sortable.findIndex(
+				(row) => row.name === event.over.id
+			);
+
+			if (oldIndex !== -1 && newIndex !== -1) {
+				const pinned = blockStyles.filter(
+					(row) => row?.name === 'default'
+				);
+				const nextRows = [
+					...pinned,
+					...arrayMove(sortable, oldIndex, newIndex),
+				];
+
+				setBlockStyles(nextRows);
+				persistVariationOrder(nextRows);
+			}
+		},
+		[blockStyles, persistVariationOrder, setBlockStyles]
+	);
 
 	const memoizedStyles = useMemo(
-		() =>
-			blockStyles.map((style) => (
-				<StyleItem
-					key={style.name}
-					style={style}
-					inGlobalStylesPanel={true}
-				/>
-			)),
-		[blockStyles]
+		() => (
+			<DndContext
+				sensors={sensors}
+				collisionDetection={closestCenter}
+				onDragEnd={handleDragEnd}
+			>
+				<SortableContext
+					items={sortableIds}
+					strategy={verticalListSortingStrategy}
+				>
+					{blockStyles.map((style) =>
+						style?.name === 'default' ? (
+							<StyleItem
+								key={style.name}
+								style={style}
+								inGlobalStylesPanel={true}
+							/>
+						) : (
+							<SortableStyleItem key={style.name} style={style} />
+						)
+					)}
+				</SortableContext>
+			</DndContext>
+		),
+		[blockStyles, handleDragEnd, sensors, sortableIds]
 	);
 
 	return (
