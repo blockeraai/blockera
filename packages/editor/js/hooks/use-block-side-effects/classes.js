@@ -11,6 +11,8 @@ export const classes = [
 		children: [
 			'.components-panel__body .block-editor-hooks__flex-layout-justification-controls',
 			'.components-panel__body .block-editor-hooks__flex-layout-orientation-controls',
+			'.components-panel__body .block-editor-hooks__grid-layout-columns-and-rows-controls',
+			'.components-panel__body .block-editor-hooks__grid-layout-minimum-width-control',
 		],
 		childrenCheck: 'first',
 	},
