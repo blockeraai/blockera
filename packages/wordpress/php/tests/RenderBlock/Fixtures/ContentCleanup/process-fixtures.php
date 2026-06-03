@@ -657,9 +657,17 @@ return [
 		'expected_content' => '<div class="blockera-block-special">Special Chars</div>',
 		'style_contains'   => [
 			'.blockera-block-special',
-			'content: &quot; Hello&quot; ;',
+			'content: "Hello";',
 			"font-family: 'Arial', sans-serif",
 		],
+	],
+
+	// Complex: CSS custom property with HTML-encoded quotes (breadcrumbs separator)
+	// #43b
+	[
+		'input'            => '<div class="blockera-block-breadcrumbs" style="--separator: &quot;/&quot;">Breadcrumbs</div>',
+		'expected_content' => '<div class="blockera-block-breadcrumbs">Breadcrumbs</div>',
+		'expected_style'   => '.blockera-block-breadcrumbs { --separator: "/"; }' . PHP_EOL,
 	],
 
 	// Complex: Multiple style declarations with extra spaces
