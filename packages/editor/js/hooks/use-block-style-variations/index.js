@@ -37,7 +37,14 @@ import {
 	getThemeVariationConfigsFromCoreStore,
 	mergeBlockVariationsTrees,
 } from '../../editor/global-styles/variation-filters';
-import { alignStyleRowsWithSharedRootVariation } from '../../editor/global-styles/panel/size-variations';
+import {
+	alignStyleRowsWithSharedRootVariation,
+	getBlockSizeVariationsOrder,
+} from '../../editor/global-styles/panel/size-variations';
+import {
+	getStoredVariationOrder,
+	sortVariationRowsBySlugOrder,
+} from '../../editor/global-styles/panel/variation-order';
 import {
 	blockUsesSharedRootStyleVariation,
 	getBlockVariationSupport,
@@ -213,19 +220,43 @@ export const useBlockStyleVariations = ({
 			mergedVariations,
 			usesSharedRootStyleVariation
 		);
-		const active = getActiveStyle(list, stylesFromWp.className);
+		const storedStyleOrder = getStoredVariationOrder(
+			blockName,
+			VARIATION_SURFACE_STYLE,
+			blockeraGlobalStylesMetaData
+		);
+		const orderedList = storedStyleOrder
+			? sortVariationRowsBySlugOrder(list, storedStyleOrder)
+			: list;
+		const active = getActiveStyle(orderedList, stylesFromWp.className);
 		const deleted = typeof active === 'string' ? active : false;
 		return {
 			...stylesFromWp,
-			stylesToRender: list,
-			activeStyle: deleted ? getDefaultStyle(list) : active,
+			stylesToRender: orderedList,
+			activeStyle: deleted ? getDefaultStyle(orderedList) : active,
 			isDeletedStyle: deleted,
 		};
-	}, [stylesFromWp, mergedVariations, usesSharedRootStyleVariation]);
+	}, [
+		stylesFromWp,
+		mergedVariations,
+		usesSharedRootStyleVariation,
+		blockName,
+		blockeraGlobalStylesMetaData,
+	]);
 
 	const sizeVariationMetaRoot = useMemo(
 		() => blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations,
 		[blockeraGlobalStylesMetaData, blockName]
+	);
+
+	const sizeVariationOrder = useMemo(
+		() =>
+			getBlockSizeVariationsOrder(
+				effectiveBase,
+				effectiveUser,
+				blockName
+			),
+		[blockName, effectiveBase, effectiveUser]
 	);
 
 	const stylesFromSize = useSizeVariationsForBlocks({
@@ -236,6 +267,7 @@ export const useBlockStyleVariations = ({
 		sizeVariationMetaRoot,
 		inGlobalStylesPanel,
 		usesSharedRootStyleVariation,
+		sizeVariationOrder,
 		inspectorApplyClassName:
 			!inGlobalStylesPanel && variationSurface === VARIATION_SURFACE_SIZE,
 		event,
