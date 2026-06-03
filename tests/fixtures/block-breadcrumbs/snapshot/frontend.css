@@ -1,0 +1,99 @@
+.blockera-block.blockera-block-1.wp-block-breadcrumbs {
+	background-color: #ffe8e8;
+	border: 2px solid #ff8888;
+	border-radius: 10px;
+	padding: 20px 20px 20px 20px;
+	font-weight: 700;
+	font-style: normal;
+	color: #8b8b8b;
+	font-size: 16px;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) ol li :is(a, span[aria-current="page"]) {
+	padding: 10px 10px 10px 10px;
+	border: 2px solid #ff5c5c;
+	border-radius: 10px;
+	background-color: #ffc0c0;
+	color: #ff3030;
+	text-transform: initial;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) ol li:not(:last-child)::after {
+	padding: 10px 10px 10px 10px;
+	border-radius: 10px;
+	border: 2px solid #ff9595;
+	background-color: #ffcece;
+	color: #ba0000;
+	font-weight: 1000;
+	font-style: normal;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) ol li:last-child span[aria-current="page"] {
+	color: #ffffff;
+	background-color: #ff2626;
+	border: 2px solid #d00000;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-breadcrumbs ol {
+		flex-direction: column;
+		align-items: stretch !important;
+		gap: 20px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-1) ol li :is(a, span[aria-current="page"]) {
+		flex: 1 1 0%;
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-breadcrumbs::before {
+	border-radius: 10px;
+	border: 2px solid #ff7a7a;
+	background-color: #ff9898;
+	padding: 10px 10px 10px 10px;
+	display: inline-block !important;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-breadcrumbs::before {
+		margin-bottom: 20px;
+		content: "Before";
+	}
+
+}
+
+.blockera-block.blockera-block-1.wp-block-breadcrumbs::after {
+	border: 2px solid #ff8888;
+	border-radius: 10px;
+	padding: 10px 10px 10px 10px;
+	display: inline-block !important;
+	background-color: #ffbaba;
+	color: #ff3f3f;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-breadcrumbs::after {
+		margin-top: 20px;
+		content: "After";
+	}
+
+}
+
+.blockera-block-1 {
+	color: #8b8b8b;
+	background-color: #ffe8e8;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 700;
+	border-color: #ff8888;
+	border-radius: 10px;
+	border-width: 2px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	--separator: "/";
+}
