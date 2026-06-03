@@ -9,6 +9,7 @@ export * from './audio';
 export * from './avatar';
 export * from './button';
 export * from './buttons';
+export * from './breadcrumbs';
 export * from './calendar';
 export * from './categories';
 export * from './code';

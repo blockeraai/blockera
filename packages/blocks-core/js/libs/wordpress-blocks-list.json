@@ -1,8 +1,8 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 106,
-		"supported": 90,
+		"total": 107,
+		"supported": 91,
 		"soft-supported": 105,
 		"not-supported": 1,
 		"no-need-to-support": 15
@@ -51,6 +51,10 @@
 		{
 			"name": "core/buttons",
 			"title": "Buttons"
+		},
+		{
+			"name": "core/breadcrumbs",
+			"title": "Breadcrumbs"
 		},
 		{
 			"name": "core/categories",
