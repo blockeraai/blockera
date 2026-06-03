@@ -292,6 +292,13 @@
 		align-items: center;
 		flex-wrap: wrap;
 
+		.blockera-extension-block-card__variations-picker-anchor {
+			display: flex;
+			flex-direction: row;
+			gap: 6px;
+			align-items: center;
+		}
+
 		&.justify-content-flex-start {
 			justify-content: flex-start;
 		}

@@ -241,29 +241,36 @@ export function BlockCard({
 
 	const blockInspectorVariationUI = (
 		<>
-			{hasStyleVariations && (
-				<BlockStyleVariations
-					{...blockStyleVariationsProps}
-					variationUiSurface={VARIATION_SURFACE_STYLE}
-					clientId={clientId}
-					blockName={blockName}
-					currentBlock={currentBlock}
-					currentState={currentState}
-					context={'inspector-controls'}
-					currentBreakpoint={currentBreakpoint}
-				/>
-			)}
-			{hasSizeVariations && (
-				<BlockSizeVariations
-					{...blockSizeVariationsProps}
-					clientId={clientId}
-					blockName={blockName}
-					currentBlock={currentBlock}
-					currentState={currentState}
-					context={'inspector-controls'}
-					currentBreakpoint={currentBreakpoint}
-				/>
-			)}
+			<div
+				data-style-variations-anchor
+				className={extensionInnerClassNames(
+					'block-card__variations-picker-anchor'
+				)}
+			>
+				{hasStyleVariations && (
+					<BlockStyleVariations
+						{...blockStyleVariationsProps}
+						variationUiSurface={VARIATION_SURFACE_STYLE}
+						clientId={clientId}
+						blockName={blockName}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						context={'inspector-controls'}
+						currentBreakpoint={currentBreakpoint}
+					/>
+				)}
+				{hasSizeVariations && (
+					<BlockSizeVariations
+						{...blockSizeVariationsProps}
+						clientId={clientId}
+						blockName={blockName}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						context={'inspector-controls'}
+						currentBreakpoint={currentBreakpoint}
+					/>
+				)}
+			</div>
 			<BlockVariationTransforms blockClientId={clientId} />
 		</>
 	);

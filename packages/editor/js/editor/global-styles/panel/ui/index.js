@@ -173,8 +173,16 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 						setIsOpen(false);
 						setIsHovered(false);
 					} else {
-						// $FlowFixMe
-						setPopoverAnchor(event.currentTarget); // the <button> element itself
+						// $FlowFixMe — currentTarget is the variations button (HTMLElement).
+						const button: HTMLElement = event.currentTarget;
+						const anchor =
+							'inspector-controls' === context
+								? (button.closest(
+										'[data-style-variations-anchor]'
+									) ?? button)
+								: button;
+						// $FlowFixMe — hook stores HTMLElement anchor; prop type is stale.
+						setPopoverAnchor(anchor);
 						setIsOpen(true);
 					}
 				}}
