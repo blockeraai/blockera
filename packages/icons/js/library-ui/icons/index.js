@@ -41,6 +41,7 @@ export { default as BlockBlocksySearchFilter } from './block-blocksy-search-filt
 export { default as BlockBreadcrumbsTrailItems } from './block-breadcrumbs-trail-items.svg';
 export { default as BlockBreadcrumbsCurrentItem } from './block-breadcrumbs-current-item.svg';
 export { default as BlockBreadcrumbsSeparator } from './block-breadcrumbs-separator.svg';
+export { default as BlockNavigationItems } from './block-navigation-items.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
