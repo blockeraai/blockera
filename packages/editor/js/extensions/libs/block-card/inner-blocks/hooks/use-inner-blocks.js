@@ -132,12 +132,16 @@ export const useInnerBlocks = ({
 
 	// We should skip return contextValue when running just inside block inspector and has not any inner blocks.
 	// in global styles panel we need to static inner blocks to design them for all placements.
-	if (
+	// Blocks like core/navigation may have zero extension config but still expose allowed inner blocks via the editor.
+	const hasInnerBlockSupport =
+		innerBlocksLength > 0 ||
+		availableBlocks.length > 0 ||
+		Object.keys(value).length > 0;
+	const skipInnerBlocksContext =
 		insideBlockInspector &&
-		(!innerBlocksLength ||
-			(!availableBlocks.length && !Object.keys(value).length) ||
-			isInnerBlock(currentBlock))
-	) {
+		(!hasInnerBlockSupport || isInnerBlock(currentBlock));
+
+	if (skipInnerBlocksContext) {
 		return {};
 	}
 
