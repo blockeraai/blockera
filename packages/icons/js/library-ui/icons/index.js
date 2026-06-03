@@ -38,6 +38,9 @@ export { default as BlockBlocksySearchResultDropdown } from './block-blocksy-sea
 export { default as BlockBlocksySearchButton } from './block-blocksy-search-button.svg';
 export { default as BlockBlocksySearchInput } from './block-blocksy-search-input.svg';
 export { default as BlockBlocksySearchFilter } from './block-blocksy-search-filter.svg';
+export { default as BlockBreadcrumbsTrailItems } from './block-breadcrumbs-trail-items.svg';
+export { default as BlockBreadcrumbsCurrentItem } from './block-breadcrumbs-current-item.svg';
+export { default as BlockBreadcrumbsSeparator } from './block-breadcrumbs-separator.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
