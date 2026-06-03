@@ -85,6 +85,9 @@ export const Spacer: BlockType = {
 					status: false,
 				},
 			},
+			clickAnimationConfig: {
+				status: false,
+			},
 		});
 
 		registerBlockExtensionsSupports(blockName, config);
