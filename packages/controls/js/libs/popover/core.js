@@ -127,6 +127,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					placement={placement}
 					focusOnMount={focusOnMount}
 					ref={popoverRef}
+					anchor={anchor}
 					{...props}
 				>
 					{title && (
