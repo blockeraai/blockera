@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 107,
-		"supported": 91,
-		"soft-supported": 105,
-		"not-supported": 1,
+		"supported": 92,
+		"soft-supported": 106,
+		"not-supported": 0,
 		"no-need-to-support": 15
 	},
 	"supported": [
@@ -192,6 +192,10 @@
 		{
 			"name": "core/post-navigation-link",
 			"title": "Post Navigation Link"
+		},
+		{
+			"name": "core/navigation",
+			"title": "Navigation"
 		},
 		{
 			"name": "core/navigation-submenu",
@@ -453,11 +457,5 @@
 			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		}
 	],
-	"not-supported": [
-		{
-			"name": "core/navigation",
-			"title": "Navigation",
-			"note": "Advanced editor setting panel compatibility needed."
-		}
-	]
+	"not-supported": []
 }
