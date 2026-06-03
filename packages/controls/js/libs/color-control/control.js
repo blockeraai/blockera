@@ -23,6 +23,7 @@ import {
 	ColorIndicator,
 	ColorPickerControl,
 } from '../index';
+import { getContextualColorKeywordMeta } from '../color-indicator/get-contextual-color-keyword-meta';
 
 export default function ColorControl({
 	type = 'normal',
@@ -145,6 +146,13 @@ export default function ColorControl({
 		);
 	}
 
+	// Contextual keywords (transparent, currentColor, …) have no fixed preview; keep default chrome.
+	const buttonPrimaryColor =
+		typeof value === 'string' &&
+		getContextualColorKeywordMeta(value) !== null
+			? 'var(--blockera-controls-border-color)'
+			: value;
+
 	return (
 		<BaseControl
 			label={label}
@@ -168,7 +176,7 @@ export default function ColorControl({
 				onClick={() => setOpen(!isOpen)}
 				style={{
 					...style,
-					'--blockera-controls-primary-color': value,
+					'--blockera-controls-primary-color': buttonPrimaryColor,
 				}}
 				data-cy="color-btn"
 				{...props}
