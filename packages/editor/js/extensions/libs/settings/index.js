@@ -51,7 +51,10 @@ export const ExtensionSettings = ({
 	});
 
 	const hasItems = (stack: Object): boolean =>
-		0 !== Object.keys(stack).filter((key) => key !== 'initialOpen').length;
+		0 !==
+		Object.keys(stack).filter(
+			(key) => key !== 'initialOpen' && key !== 'status'
+		).length;
 
 	if (!hasItems(tools)) {
 		return <></>;
