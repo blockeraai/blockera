@@ -8,12 +8,16 @@ import {
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
+function openBlockeraStyleTab() {
+	cy.get('[role="tab"][aria-label="Styles"]').click();
+}
+
 describe('Min Height → WP Compatibility', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	describe('core/image Block', () => {
+	describe('core/cover Block', () => {
 		it('Simple Value', () => {
 			appendBlocks(
 				`<!-- wp:cover {"url":"https://placehold.co/600x400","id":60,"dimRatio":50,"minHeight":300,"minHeightUnit":"px","layout":{"type":"constrained"}} -->
@@ -23,41 +27,32 @@ describe('Min Height → WP Compatibility', () => {
 <!-- /wp:cover -->`
 			);
 
-			// Select target block
-			cy.getBlock('core/cover').click();
+			cy.getBlock('core/paragraph').first().click();
 
-			// switch to cover block
-			cy.get(
-				'[aria-label="Select Cover"], [aria-label="Select parent block: Cover"]'
+			cy.getByAriaLabel(
+				'Select parent block: Cover',
+				'Select Cover'
 			).click();
 
-			// add alias to the feature container
+			openBlockeraStyleTab();
+
+			cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
+
 			cy.getParentContainer('Min Height').as('container');
 
 			cy.addNewTransition();
 
-			//
-			// Test 1: WP data to Blockera
-			//
-
-			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraMinHeight')
 				);
 			});
 
-			//
-			// Test 2: Blockera value to WP data
-			//
-
-			// change value
 			cy.get('@container').within(() => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').type('1', { force: true });
 			});
 
-			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect(3001).to.be.equal(getSelectedBlock(data, 'minHeight'));
 				expect('px').to.be.equal(
@@ -65,16 +60,10 @@ describe('Min Height → WP Compatibility', () => {
 				);
 			});
 
-			//
-			// Test 3: Clear Blockera value and check WP data
-			//
-
-			// clear
 			cy.get('@container').within(() => {
 				cy.get('input').clear({ force: true });
 			});
 
-			// WP data should be removed too
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'minHeight')
@@ -94,34 +83,27 @@ describe('Min Height → WP Compatibility', () => {
 <!-- /wp:cover -->`
 			);
 
-			// Select target block
-			cy.getBlock('core/cover').click();
+			cy.getBlock('core/paragraph').first().click();
 
-			// switch to cover block
-			cy.get(
-				'[aria-label="Select Cover"], [aria-label="Select parent block: Cover"]'
+			cy.getByAriaLabel(
+				'Select parent block: Cover',
+				'Select Cover'
 			).click();
 
-			//
-			// Test 1: Blockera data to WP
-			//
+			openBlockeraStyleTab();
 
-			// activate min height
 			cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
-			// add alias to the feature container
 			cy.get('[aria-label="Min Height"]')
 				.closest('[data-cy="base-control"]')
 				.as('container');
 
-			// change value
 			cy.get('@container').within(() => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').type('300', { force: true });
 				cy.get('select').select('px');
 			});
 
-			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraMinHeight')
@@ -134,12 +116,6 @@ describe('Min Height → WP Compatibility', () => {
 				);
 			});
 
-			//
-			// Test 2: Blockera value to WP data
-			//
-
-			// change value
-			// only px is valid for WP
 			cy.get('@container').within(() => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').clear();
@@ -147,7 +123,6 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('select').select('%');
 			});
 
-			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect(200).to.be.equal(getSelectedBlock(data, 'minHeight'));
 
@@ -156,22 +131,63 @@ describe('Min Height → WP Compatibility', () => {
 				);
 			});
 
-			//
-			// Test 3: Clear Blockera value and check WP data
-			//
-
-			// clear
 			cy.get('@container').within(() => {
 				cy.get('input').clear({ force: true });
 			});
 
-			// WP data should be removed too
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'minHeight')
 				);
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'minHeightUnit')
+				);
+			});
+		});
+	});
+
+	describe('core/group Block', () => {
+		it('Simple Value', () => {
+			appendBlocks(`<!-- wp:group {"style":{"dimensions":{"minHeight":"300px"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="min-height:300px"><!-- wp:paragraph -->
+<p>Paragraph 1</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->`);
+
+			cy.getBlock('core/paragraph').first().click();
+
+			cy.getByAriaLabel('Select Group').click();
+
+			openBlockeraStyleTab();
+
+			cy.getParentContainer('Min Height').as('container');
+
+			cy.addNewTransition();
+
+			getWPDataObject().then((data) => {
+				expect('300px').to.be.equal(
+					getSelectedBlock(data, 'blockeraMinHeight')
+				);
+			});
+
+			cy.get('@container').within(() => {
+				cy.get('input').as('containerInput');
+				cy.get('@containerInput').type('1', { force: true });
+			});
+
+			getWPDataObject().then((data) => {
+				expect('3001px').to.be.equal(
+					getSelectedBlock(data, 'style')?.dimensions?.minHeight
+				);
+			});
+
+			cy.get('@container').within(() => {
+				cy.get('input').clear({ force: true });
+			});
+
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.dimensions?.minHeight
 				);
 			});
 		});

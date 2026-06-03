@@ -13,6 +13,7 @@ import { isThemeJsonVariableDefinedInMergedFeatures } from '@blockera/data';
  */
 import {
 	compositeResolvedValueFromStoredPlainPresetInput,
+	hasExplicitPlainThemeJsonPresetStorage,
 	isLikelyThemeJsonPlainPresetSlugString,
 	plainPresetSlugFromStoredPlainPresetInput,
 } from './composite-plain-preset';
@@ -74,7 +75,8 @@ export function getPlainThemeJsonPresetMergedState(
 	const isMissingFromMergedThemeJson =
 		Boolean(hasPresetResolutionContext) &&
 		slugLooksLikeThemeJsonPreset &&
-		!isDefinedInMergedThemeJson;
+		!isDefinedInMergedThemeJson &&
+		hasExplicitPlainThemeJsonPresetStorage(trimmed);
 
 	return {
 		effectiveSlug,

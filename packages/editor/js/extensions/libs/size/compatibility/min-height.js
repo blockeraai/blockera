@@ -12,6 +12,72 @@ import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 import { resolveDimensionValueFromWP } from './dimension-variable-from-wp';
 import { runInsideBlockInspector } from '../../utils';
 
+const DIMENSIONS_MIN_HEIGHT_BLOCKS = [
+	'core/group',
+	'core/post-content',
+	'core/pullquote',
+	'core/quote',
+	'core/verse',
+];
+
+function getDimensionsMinHeightFromWPAttributes(
+	attributes: Object,
+	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style'
+): mixed {
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.dimensions?.minHeight
+		: attributes?.dimensions?.minHeight;
+}
+
+function getDimensionsMinHeightClearPatch(
+	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style'
+): Object {
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? {
+				style: {
+					dimensions: {
+						minHeight: undefined,
+					},
+				},
+			}
+		: {
+				dimensions: {
+					minHeight: undefined,
+				},
+			};
+}
+
+function getDimensionsMinHeightWritePatch(
+	newValue: string,
+	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style'
+): Object {
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? {
+				style: {
+					dimensions: {
+						minHeight: newValue,
+					},
+				},
+			}
+		: {
+				dimensions: {
+					minHeight: newValue,
+				},
+			};
+}
+
 export function minHeightFromWPCompatibility({
 	attributes,
 	blockId,
@@ -52,6 +118,20 @@ export function minHeightFromWPCompatibility({
 				value: resolveDimensionValueFromWP(
 					attributes.dimensions.minHeight
 				),
+			};
+		}
+	}
+
+	if (blockId && DIMENSIONS_MIN_HEIGHT_BLOCKS.includes(blockId)) {
+		const dimensionsMinHeight = getDimensionsMinHeightFromWPAttributes(
+			attributes,
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		);
+
+		if (dimensionsMinHeight !== undefined) {
+			attributes.blockeraMinHeight = {
+				value: resolveDimensionValueFromWP(dimensionsMinHeight),
 			};
 		}
 	}
@@ -133,6 +213,36 @@ export function minHeightToWPCompatibility({
 					minHeight: newValue,
 				},
 			};
+
+		case 'core/group':
+		case 'core/post-content':
+		case 'core/pullquote':
+		case 'core/quote':
+		case 'core/verse':
+			if ('reset' === ref?.current?.action) {
+				return getDimensionsMinHeightClearPatch(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				);
+			}
+
+			if (
+				newValue === '' ||
+				isUndefined(newValue) ||
+				isSpecialUnit(newValue) ||
+				!isString(newValue)
+			) {
+				return getDimensionsMinHeightClearPatch(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				);
+			}
+
+			return getDimensionsMinHeightWritePatch(
+				newValue,
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			);
 	}
 
 	return null;
