@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 107,
-		"supported": 92,
-		"soft-supported": 106,
+		"total": 108,
+		"supported": 93,
+		"soft-supported": 107,
 		"not-supported": 0,
 		"no-need-to-support": 15
 	},
@@ -200,6 +200,10 @@
 		{
 			"name": "core/navigation-submenu",
 			"title": "Submenu"
+		},
+		{
+			"name": "core/navigation-overlay-close",
+			"title": "Navigation Overlay Close"
 		},
 		{
 			"name": "core/post-terms",

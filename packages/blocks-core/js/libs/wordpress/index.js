@@ -46,6 +46,7 @@ export * from './math';
 export * from './media-text';
 export * from './navigation';
 export * from './navigation-link';
+export * from './navigation-overlay-close';
 export * from './navigation-submenu';
 export * from './page-list';
 export * from './paragraph';
