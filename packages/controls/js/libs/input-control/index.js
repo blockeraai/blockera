@@ -141,9 +141,17 @@ export default function InputControl({
 
 	const extractedNoUnit =
 		isUndefined(extractedValue.unit) || extractedValue.unit === '';
-	const unitValue = extractedNoUnit
+	const resolvedUnitValue = extractedNoUnit
 		? pickedUnit
 		: getUnitByValue(extractedValue.unit, units);
+	const fallbackUnit = getFirstUnit(units);
+	let unitValue = { value: '', label: '', format: 'number' };
+
+	if (typeof resolvedUnitValue?.value === 'string') {
+		unitValue = resolvedUnitValue;
+	} else if (typeof fallbackUnit?.value === 'string') {
+		unitValue = fallbackUnit;
+	}
 
 	useEffect(() => {
 		// add css units
