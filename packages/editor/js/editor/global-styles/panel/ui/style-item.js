@@ -488,6 +488,7 @@ export const StyleItem = ({
 	return (
 		<>
 			<div
+				ref={styleItemContextMenuAnchorRef}
 				role="button"
 				tabIndex={0}
 				className={classNames(
@@ -774,7 +775,6 @@ export const StyleItem = ({
 
 						{isUserCanSaveCustomizations && (
 							<span
-								ref={styleItemContextMenuAnchorRef}
 								className="context-menu-trigger style-item-context-menu-anchor"
 								data-test={`open-${style.name}-contextmenu`}
 								data-anchor="style-item-context-menu"
