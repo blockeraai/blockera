@@ -52,6 +52,11 @@ import { BlockCardVariationView } from './block-card-variation-view';
 import type { TStyleVariationBlockCardLabels } from '../types';
 import type { UpdateBlockEditorSettings } from '../../types';
 
+const closeVariationPicker = (pickerProps: Object): void => {
+	pickerProps.setIsOpen(false);
+	pickerProps.setCurrentPreviewStyle(null);
+};
+
 export function BlockCard({
 	notice,
 	isActive,
@@ -239,6 +244,9 @@ export function BlockCard({
 		}
 	};
 
+	const hasExclusiveInspectorVariationPickers =
+		hasStyleVariations && hasSizeVariations;
+
 	const blockInspectorVariationUI = (
 		<>
 			<div
@@ -257,6 +265,14 @@ export function BlockCard({
 						currentState={currentState}
 						context={'inspector-controls'}
 						currentBreakpoint={currentBreakpoint}
+						closeSiblingPicker={
+							hasExclusiveInspectorVariationPickers
+								? () =>
+										closeVariationPicker(
+											blockSizeVariationsProps
+										)
+								: undefined
+						}
 					/>
 				)}
 				{hasSizeVariations && (
@@ -268,6 +284,14 @@ export function BlockCard({
 						currentState={currentState}
 						context={'inspector-controls'}
 						currentBreakpoint={currentBreakpoint}
+						closeSiblingPicker={
+							hasExclusiveInspectorVariationPickers
+								? () =>
+										closeVariationPicker(
+											blockStyleVariationsProps
+										)
+								: undefined
+						}
 					/>
 				)}
 			</div>
