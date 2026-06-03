@@ -33,9 +33,7 @@ export function getSizeVariationSortIndex(
 		return order?.length ?? 0;
 	}
 
-	const normalizedSlug = slug.toLowerCase();
-	const sizeTokenMatch = normalizedSlug.match(/-size-(.+)$/);
-	const sizeToken = sizeTokenMatch ? sizeTokenMatch[1] : normalizedSlug;
+	const sizeToken = slug.toLowerCase();
 	const index = order.findIndex(
 		(token) => String(token).toLowerCase() === sizeToken
 	);
