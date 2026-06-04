@@ -5,26 +5,67 @@
  */
 import { classNames } from '@blockera/classnames';
 
+/**
+ * Internal dependencies
+ */
+import {
+	getBlockeraIconValue,
+	hasBlockeraIconValue,
+} from './icon-attribute-utils';
+
+export {
+	hasBlockeraIconValue,
+	getBlockeraIconValue,
+} from './icon-attribute-utils';
+
+export const DEFAULT_ICON_SIZE_ATTRIBUTE = 'blockeraIconSize';
+
+/** Class marker for Blockera-managed core/icon blocks (not inline icon layout). */
+export const CORE_ICON_BLOCKERA_CLASS = 'wp-block-icon-blockera';
+
+export const isCoreIconBlock = (blockName?: string): boolean =>
+	blockName === 'core/icon';
+
+/** Standalone icon blocks (not inline icon on text/button blocks). */
+export const isStandaloneIconBlock = (blockName?: string): boolean =>
+	blockName === 'blockera/icon' || isCoreIconBlock(blockName);
+
+/**
+ * Block attribute used by the icon Size control (defaults to blockeraIconSize).
+ *
+ * @param {Object} iconSizeConfig blockeraIconSize entry from iconConfig.
+ * @return {string} Attribute name for the icon size control.
+ */
+export const getIconSizeAttributeId = (iconSizeConfig?: Object): string =>
+	iconSizeConfig?.config?.attribute ?? DEFAULT_ICON_SIZE_ATTRIBUTE;
+
 export const getIconAttributes = (): string[] => [
 	'blockeraIcon',
-	// 'blockeraIconGap',
-	// 'blockeraIconSize',
-	// 'blockeraIconLink',
-	// 'blockeraIconColor',
 	'blockeraIconPosition',
 ];
 
-export const addIconClassName = (attributes, iconSettings): Object => {
+export const addIconClassName = (
+	attributes: Object,
+	iconSettings: Object,
+	blockName?: string
+): Object => {
 	attributes = removeIconClassName(attributes);
 
 	const existingClassName = attributes?.className || '';
-	const iconClassName = 'blockera-has-icon-';
+
+	if (isCoreIconBlock(blockName)) {
+		return {
+			...attributes,
+			className: classNames(existingClassName, CORE_ICON_BLOCKERA_CLASS),
+		};
+	}
 
 	return {
 		...attributes,
 		className: classNames(
 			existingClassName,
-			iconClassName + (iconSettings.blockeraIconPosition || 'start')
+			'blockera-has-icon-' +
+				(iconSettings.blockeraIconPosition || 'start')
 		),
 	};
 };
@@ -36,13 +77,39 @@ export const removeIconClassName = (attributes: {
 		return attributes;
 	}
 
-	const existingClassName = attributes?.className || '';
-	const cleanedClassName = existingClassName
+	const cleanedClassName = attributes.className
 		.replace(/\s*blockera-has-icon-(start|end)\s*/g, ' ')
+		.replace(/\s*wp-block-icon-blockera\s*/g, ' ')
 		.trim();
 
 	return {
 		...attributes,
 		className: cleanedClassName,
 	};
+};
+
+/**
+ * Sync className for icon feature (inline blocks vs standalone core/icon).
+ *
+ * @param {Object} attributes Block attributes.
+ * @param {string} blockName  Block type name.
+ * @return {Object} Attributes with icon-related className applied or removed.
+ */
+export const syncIconBlockClassName = (
+	attributes: Object,
+	blockName?: string
+): Object => {
+	const iconValue = getBlockeraIconValue(attributes);
+
+	if (!hasBlockeraIconValue(iconValue)) {
+		return removeIconClassName(attributes);
+	}
+
+	return addIconClassName(
+		attributes,
+		{
+			blockeraIconPosition: attributes?.blockeraIconPosition?.value,
+		},
+		blockName
+	);
 };
