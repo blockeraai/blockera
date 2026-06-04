@@ -302,6 +302,17 @@ class AppServiceProvider extends ServiceProvider {
 		add_filter(
 			'render_block',
 			static function( string $html, array $block) use ( $blockera, $render_instance): string {
+				// core/icon may return empty HTML when the slug is missing from the WP icon registry.
+				// Seed a wrapper so Blockera can inject SVG from blockeraIcon on the frontend.
+				if (
+					'' === ltrim($html)
+					&& 'core/icon' === ( $block['blockName'] ?? '' )
+					&& blockera_is_supported_block($block)
+					&& blockera_core_icon_has_renderable_blockera_icon($block)
+				) {
+					$html = blockera_core_icon_seed_html($block);
+				}
+
 				// Fast empty check without full trim.
 				if ('' === ltrim($html) || 'core/null' === $block['blockName']) {
 					return $html;
