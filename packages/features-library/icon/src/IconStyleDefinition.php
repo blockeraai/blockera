@@ -32,7 +32,12 @@ class IconStyleDefinition extends BaseStyleDefinition {
 				$svg = isset($value, $value['renderedIcon']) ? $value['renderedIcon'] : '';
 
 				if (! empty($svg)) {
-					$decoded_svg = base64_decode($svg);
+					$decoded_svg = RenderedIconCodec::decode($svg);
+
+					if ('' === $decoded_svg) {
+						break;
+					}
+
 					$encoded_svg = rawurlencode($decoded_svg);
 					$this->setDeclaration('--blockera--icon--url', 'url("data:image/svg+xml,' . $encoded_svg . '")');
 				}

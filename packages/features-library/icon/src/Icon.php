@@ -59,7 +59,15 @@ class Icon implements FeatureInterface {
     }
 
 	public function isBlockSupported(): bool {
-		return isset($this->block, $this->block['attrs']['blockeraIcon']);
+		if (! isset($this->block)) {
+			return false;
+		}
+
+		if ('core/icon' === ( $this->block['blockName'] ?? '' )) {
+			return blockera_core_icon_has_renderable_blockera_icon($this->block);
+		}
+
+		return isset($this->block['attrs']['blockeraIcon']);
     }
 
 	/**
