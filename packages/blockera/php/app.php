@@ -21,6 +21,7 @@ global $blockera, $blockera_cache_key, $blockera_cache_group, $blockera_block_su
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
 blockera_add_icon_style_definitions();
+blockera_register_core_icon_navigation_hooks();
 
 // Add blockera object cache to non persistent group to compatible with third party cache plugins.
 $blockera_cache_group = 'plugins';
