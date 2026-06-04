@@ -91,6 +91,9 @@ class Render {
 				continue;
 			}
 
+			$is_core_icon_icon_feature = 'core/icon' === ( $args['block']['blockName'] ?? '' )
+				&& $feature instanceof \Blockera\Feature\Icon\Icon;
+
 			$selector = blockera_get_compatible_block_css_selector(
                 blockera_get_block_type_property($args['block']['blockName'], 'selectors'),
                 'htmlEditable.root',
@@ -102,7 +105,7 @@ class Render {
                 ]
 			);
 		
-			if (empty($selector)) {
+			if (empty($selector) && ! $is_core_icon_icon_feature) {
 				continue;
 			}
 
