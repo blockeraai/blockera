@@ -44,6 +44,17 @@ import {
 } from '../../components';
 import { getIgnoredAttributesForSchema } from '../components/utils';
 import bootstrapScripts from '../scripts';
+import {
+	CORE_ICON_BLOCK_NAME,
+	CORE_ICON_LINK_ATTRIBUTES,
+} from '@blockera/blocks-core/js/libs/wordpress/icon/compatibility/link-attributes';
+
+/**
+ * React 19 memo()/forwardRef components are objects ($$typeof), not plain functions.
+ */
+const isBlockCanvasEdit = (value: any): boolean =>
+	isFunction(value) ||
+	(isObject(value) && value !== null && typeof value.$$typeof === 'symbol');
 
 export const useSharedBlockSideEffect = (blockName: string): void => {
 	const {
@@ -357,12 +368,32 @@ function mergeBlockSettings(
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
-	const overrideAttributes = !settings.attributes?.blockeraPropsId
+	let overrideAttributes = !settings.attributes?.blockeraPropsId
 		? mergeObject(
 				sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
 				sanitizeDefaultAttributes(settings.attributes)
 			)
 		: sanitizeDefaultAttributes(settings.attributes);
+
+	if (CORE_ICON_BLOCK_NAME === settings.name) {
+		const typeSpecificAttrs = getBlockTypeAttributes(settings.name);
+		const linkAttrs: Object = {};
+
+		for (const key of ['href', 'linkTarget', 'rel']) {
+			if (typeSpecificAttrs?.[key]) {
+				linkAttrs[key] = typeSpecificAttrs[key];
+			}
+		}
+
+		overrideAttributes = mergeObject(
+			sanitizeDefaultAttributes(
+				Object.keys(linkAttrs).length
+					? linkAttrs
+					: CORE_ICON_LINK_ATTRIBUTES
+			),
+			overrideAttributes
+		);
+	}
 
 	return {
 		...settings,
@@ -413,6 +444,11 @@ function mergeBlockSettings(
 			}, [selectedBlock]);
 
 			if (isFunction(additional?.edit) && isAvailableBlock()) {
+				// Optional canvasEdit replaces core block canvas (e.g. core/icon → CoreIconCanvasEdit).
+				const CoreBlockEdit = isBlockCanvasEdit(additional?.canvasEdit)
+					? additional.canvasEdit
+					: settings.edit;
+
 				return (
 					<>
 						<Edit
@@ -426,7 +462,7 @@ function mergeBlockSettings(
 								blockeraOverrideBlockAttributes
 							}
 						/>
-						{settings.edit(props)}
+						{createElement(CoreBlockEdit, props)}
 					</>
 				);
 			}

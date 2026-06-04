@@ -92,6 +92,17 @@ export function widthFromWPCompatibility({
 			}
 
 			return attributes;
+
+		case 'core/icon':
+			if (attributes?.style?.dimensions?.width !== undefined) {
+				attributes.blockeraWidth = {
+					value: resolveDimensionValueFromWP(
+						attributes.style.dimensions.width
+					),
+				};
+			}
+
+			return attributes;
 	}
 
 	return attributes;

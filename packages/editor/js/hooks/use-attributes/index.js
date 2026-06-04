@@ -168,7 +168,8 @@ export const useAttributes = (
 					_attributes,
 					attributeId,
 					newValue,
-					options
+					options,
+					blockId
 				);
 			}
 

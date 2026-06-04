@@ -144,7 +144,7 @@ export const classes = [
 		children: [
 			'.components-tools-panel .components-tools-panel-item input[type="number"]',
 		],
-		include: ['outermost/icon-block'],
+		include: ['outermost/icon-block', 'core/icon'],
 	},
 	// "core/search" - Remove width input control
 	{
