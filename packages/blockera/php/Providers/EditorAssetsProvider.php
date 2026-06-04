@@ -262,15 +262,18 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		 */
 		$shared_block_attributes = apply_filters( 'blockera/assets/provider/inline-script/shared-block-attributes', blockera_get_shared_block_attributes() );
 
-		$app = $this->app;
-
 		$blocks_attributes_scripts = array_map(
-			function ( string $block_type ) use ( $editor_object, $app ): string {
+			static function ( string $block_type ) use ( $editor_object ): string {
 
 				return sprintf(
-					'%$1s.editor.unstableRegistrationBlockTypeAttributes(%2$s, %3$s)',
+					'%1$s.editor.unstableRegistrationBlockTypeAttributes(%2$s, %3$s)',
 					$editor_object,
-					wp_json_encode( $app->make( Setup::class )->getCustomizedBlock( $block_type, blockera_get_shared_block_attributes() ) ),
+					wp_json_encode(
+						Setup::getInstance()->getCustomizedBlock(
+							$block_type,
+							blockera_get_shared_block_attributes()
+						)
+					),
 					$block_type
 				);
 			},
