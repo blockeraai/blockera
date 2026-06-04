@@ -44,6 +44,9 @@ const blockeraIconSize: FeatureConfig = {
 	status: true,
 	label: __('Icon Size', 'blockera'),
 	keywords: ['icon', 'size', 'font-size'],
+	config: {
+		attribute: 'blockeraIconSize',
+	},
 };
 
 const blockeraIconColor: FeatureConfig = {

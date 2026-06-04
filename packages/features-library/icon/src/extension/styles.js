@@ -11,6 +11,11 @@ import { getBlockSupportFallback } from '@blockera/editor/js/extensions/utils';
 import { computedCssDeclarations } from '@blockera/editor/js/style-engine/utils';
 import { getCompatibleBlockCssSelector } from '@blockera/editor/js/style-engine/get-compatible-block-css-selector';
 
+import {
+	DEFAULT_ICON_SIZE_ATTRIBUTE,
+	getIconSizeAttributeId,
+} from '../helpers';
+
 export const IconStyles = ({
 	state,
 	config,
@@ -104,7 +109,11 @@ export const IconStyles = ({
 		});
 	}
 
+	const iconSizeAttributeId = getIconSizeAttributeId(blockeraIconSize);
+
+	// When size maps to another attribute (e.g. blockeraWidth on core/icon), the size extension owns CSS.
 	if (
+		iconSizeAttributeId === DEFAULT_ICON_SIZE_ATTRIBUTE &&
 		isActiveField(blockeraIconSize) &&
 		currentBlockAttributes.blockeraIconSize !==
 			attributes.blockeraIconSize.default
