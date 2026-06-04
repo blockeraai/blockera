@@ -19,6 +19,7 @@ export type BlockType = {
 	hasStyleVariations?: boolean,
 	blockeraInnerBlocks?: InnerBlocks,
 	edit: (props: Object) => MixedElement,
+	canvasEdit?: (props: Object) => MixedElement,
 	availableBlockStates?: {
 		[key: string]: StateTypes,
 	},

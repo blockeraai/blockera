@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 108,
-		"supported": 93,
-		"soft-supported": 107,
+		"total": 109,
+		"supported": 94,
+		"soft-supported": 109,
 		"not-supported": 0,
 		"no-need-to-support": 15
 	},
@@ -11,6 +11,10 @@
 		{
 			"name": "core/paragraph",
 			"title": "Paragraph"
+		},
+		{
+			"name": "core/icon",
+			"title": "Icon"
 		},
 		{
 			"name": "core/image",
