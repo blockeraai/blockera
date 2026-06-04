@@ -1,0 +1,23 @@
+/**
+ * Blockera canvas edit for core/icon — mirrors core placeholder + align layout.
+ */
+.blockera-core-icon-canvas-edit__placeholder {
+	backdrop-filter: blur(100px);
+}
+
+.wp-block-icon.aligncenter {
+	display: flex;
+	justify-content: center;
+}
+
+.is-layout-constrained > .wp-block-icon.alignright {
+	float: right;
+	margin-inline-start: 2em;
+	margin-inline-end: 0;
+}
+
+.is-layout-constrained > .wp-block-icon.alignleft {
+	float: left;
+	margin-inline-end: 2em;
+	margin-inline-start: 0;
+}
