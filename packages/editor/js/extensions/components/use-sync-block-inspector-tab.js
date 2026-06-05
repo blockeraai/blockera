@@ -13,238 +13,306 @@ import { useShouldRenderBlockInspectorCardPortal } from '../libs/block-card';
  * Internal dependencies
  */
 import {
-	INSPECTOR_TABS_SELECTOR,
 	isBlockInspectorContainerReady,
 	readBlockeraTabFromInspectorDom,
-	readActiveWordPressInspectorTabName,
 	observeInspectorTabLists,
 	resolveInspectorRoot,
-	activateWordPressInspectorTabForBlockeraTab,
-	ensureWordPressInspectorStylesTab,
+	getWordPressInspectorTabCount,
+	hasMoreThanTwoWordPressInspectorTabs,
+	getBlockInspectorGroup,
 	DEFAULT_BLOCKERA_INSPECTOR_TAB,
 } from '../../hooks/use-block-side-effects/utils';
+import { requestWordPressInspectorTab } from '../../utils/block-editor-private-apis';
 import { useBlockInspectorContainer } from './use-block-inspector-container';
 import { isInnerBlock } from './utils';
 
-const WP_TAB_SYNC_SUPPRESS_MS = 400;
+/**
+ * Inspector tab rules (per blockName::variation, session persistence):
+ *
+ * | WP tabs   | First open (no saved tab)     | Re-select same block type | User changes tab |
+ * |-----------|-------------------------------|---------------------------|------------------|
+ * | 2         | Default Styles + request WP   | Restore saved + request WP| Persist + request|
+ * | >2        | Follow WP active tab only     | Restore saved + request WP| Persist (+ WP if |
+ * |           | (no requestInspectorTab)      |                           |  user via Blockera)|
+ * | Inner blk | Force Styles + request WP     | —                         | —                |
+ */
+
+/** @type {Map<string, string>} Session-only tab per block type + variation. */
+const blockInspectorTabByKey = new Map();
+
+/**
+ * Persistence API for the activated inspector tab (cleared on full page reload).
+ */
+export const blockInspectorTabPersistence = {
+	getKey: (blockName, blockVariation = '') =>
+		`${blockName}::${blockVariation || ''}`,
+
+	get: (blockName, blockVariation = '') =>
+		blockInspectorTabByKey.get(
+			blockInspectorTabPersistence.getKey(blockName, blockVariation)
+		),
+
+	getByKey: (persistenceKey) =>
+		persistenceKey ? blockInspectorTabByKey.get(persistenceKey) : undefined,
+
+	set: (blockName, blockVariation, tab) => {
+		const key = blockInspectorTabPersistence.getKey(
+			blockName,
+			blockVariation
+		);
+
+		blockInspectorTabPersistence.setByKey(key, tab);
+	},
+
+	setByKey: (persistenceKey, tab) => {
+		if (persistenceKey && typeof tab === 'string' && tab) {
+			blockInspectorTabByKey.set(persistenceKey, tab);
+		}
+	},
+};
+
+const getInspectorRoot = (inspectorContainer) =>
+	resolveInspectorRoot({
+		insideBlockInspector: true,
+		inspectorContainer,
+	});
+
+const requestWordPressTabForBlockeraTab = (blockeraTab) => {
+	const wordPressTab = getBlockInspectorGroup(blockeraTab);
+
+	if (wordPressTab) {
+		requestWordPressInspectorTab(wordPressTab);
+	}
+};
+
+/**
+ * @typedef {'inner-block'|'persisted'|'two-tab-default'|'wordpress-default'} InspectorTabActivationMode
+ */
+
+/**
+ * Plans which Blockera tab to activate and whether to request a WP tab switch.
+ * Returns `null` while the inspector DOM is not ready (avoids stale tab reads).
+ *
+ * @param {Object}                        options
+ * @param {string}                        options.persistenceKey
+ * @param {HTMLElement|null|undefined}    options.inspector
+ * @param {boolean}                       options.isInnerBlock
+ * @return {{ tab: string, syncWordPress: boolean, mode: InspectorTabActivationMode }|null} Activation plan, or null while the inspector DOM is not ready.
+ */
+export const getInspectorTabActivationPlan = ({
+	persistenceKey,
+	inspector,
+	isInnerBlock,
+}) => {
+	if (isInnerBlock) {
+		return {
+			tab: DEFAULT_BLOCKERA_INSPECTOR_TAB,
+			syncWordPress: true,
+			mode: 'inner-block',
+		};
+	}
+
+	const persistedTab = blockInspectorTabPersistence.getByKey(persistenceKey);
+
+	if (typeof persistedTab === 'string' && persistedTab) {
+		return {
+			tab: persistedTab,
+			syncWordPress: true,
+			mode: 'persisted',
+		};
+	}
+
+	if (!inspector || !isBlockInspectorContainerReady(inspector)) {
+		return null;
+	}
+
+	const tabCount = getWordPressInspectorTabCount(inspector);
+
+	if (tabCount === 0) {
+		return null;
+	}
+
+	if (hasMoreThanTwoWordPressInspectorTabs(inspector)) {
+		const tab = readBlockeraTabFromInspectorDom(inspector);
+
+		if (!tab) {
+			return null;
+		}
+
+		return {
+			tab,
+			syncWordPress: false,
+			mode: 'wordpress-default',
+		};
+	}
+
+	return {
+		tab: DEFAULT_BLOCKERA_INSPECTOR_TAB,
+		syncWordPress: true,
+		mode: 'two-tab-default',
+	};
+};
+
+/**
+ * Applies a tab change to Blockera state and optionally requests the matching WP tab.
+ * Persistence is handled by BlockBase `setCurrentTab`.
+ *
+ * @param {Object}   options
+ * @param {string}   options.tab
+ * @param {Function} options.setCurrentTab
+ * @param {boolean}  options.syncWordPress
+ */
+const applyInspectorTabChange = ({ tab, setCurrentTab, syncWordPress }) => {
+	if (typeof tab !== 'string' || !tab) {
+		return;
+	}
+
+	setCurrentTab(tab);
+
+	if (syncWordPress) {
+		requestWordPressTabForBlockeraTab(tab);
+	}
+};
 
 /**
  * Keeps BlockBase `currentTab` aligned with WordPress block-inspector tabs.
  *
+ * Blockera → WordPress: `requestInspectorTab` store API.
+ * WordPress → Blockera: `aria-selected` observer (user tab clicks only).
+ *
  * @param {Object}   options
- * @param {string}   options.clientId             Selected block client id.
+ * @param {string}   options.blockName            Block type name (e.g. core/paragraph).
+ * @param {string}   options.blockVariation       Active block variation name, if any.
+ * @param {string}   options.inspectorClientId    Client id for inspector portal deferral only.
  * @param {boolean}  options.insideBlockInspector Whether the block uses the block inspector.
- * @param {boolean}  options.enabled              Whether sync should run for this block instance.
- * @param {string}   options.currentTab           Blockera tab state from BlockBase.
- * @param {Function} options.setCurrentTab        BlockBase tab setter.
- * @return {{ setCurrentTab: Function }} Setter that also activates the matching WP tab.
+ * @param {boolean}  options.enabled              Selected block instance.
+ * @param {string}   options.currentTab           Blockera tab from BlockBase.
+ * @param {Function} options.setCurrentTab        BlockBase tab setter (persists per block type).
+ * @return {{ setCurrentTab: Function }} Setter that syncs WordPress when the user changes tabs.
  */
 export function useSyncBlockInspectorTab({
-	clientId,
+	blockName,
+	blockVariation = '',
+	inspectorClientId = '',
 	insideBlockInspector,
 	enabled,
 	currentTab,
 	setCurrentTab,
 }) {
+	const persistenceKey = blockInspectorTabPersistence.getKey(
+		blockName,
+		blockVariation
+	);
 	const inspectorContainer = useBlockInspectorContainer();
-	const currentBlock = useSelect(
-		(select) => select('blockera/extensions').getExtensionCurrentBlock(),
-		[]
+	const isInnerBlockTarget = useSelect((select) =>
+		isInnerBlock(select('blockera/extensions').getExtensionCurrentBlock())
 	);
-	const isInnerBlockTarget = isInnerBlock(currentBlock);
 	const isInspectorBlockeraReady = useShouldRenderBlockInspectorCardPortal(
-		insideBlockInspector && enabled ? clientId : ''
+		insideBlockInspector && enabled ? inspectorClientId : ''
 	);
-	const canSyncInspectorTabs = Boolean(
+	const canSyncWordPressTabs = Boolean(
 		insideBlockInspector && enabled && isInspectorBlockeraReady
 	);
-	const currentTabRef = useRef(currentTab);
-	const isSyncingFromWordPressRef = useRef(false);
-	const suppressWpSyncUntilRef = useRef(0);
-	const previousClientIdRef = useRef(clientId);
-	const previousEnabledRef = useRef(enabled);
-	const previousInspectorReadyRef = useRef(isInspectorBlockeraReady);
 
-	useEffect(() => {
-		currentTabRef.current = currentTab;
-	}, [currentTab]);
+	const syncStateRef = useRef({
+		currentTab,
+		setCurrentTab,
+	});
 
-	const applyDefaultStylesTabStateOnly = useCallback(() => {
-		suppressWpSyncUntilRef.current = Date.now() + WP_TAB_SYNC_SUPPRESS_MS;
-		setCurrentTab(DEFAULT_BLOCKERA_INSPECTOR_TAB);
-		currentTabRef.current = DEFAULT_BLOCKERA_INSPECTOR_TAB;
-	}, [setCurrentTab]);
+	syncStateRef.current.currentTab = currentTab;
+	syncStateRef.current.setCurrentTab = setCurrentTab;
 
-	const applyDefaultStylesTab = useCallback(() => {
-		applyDefaultStylesTabStateOnly();
+	const applyTab = useCallback((tab, { syncWordPress = false } = {}) => {
+		applyInspectorTabChange({
+			tab,
+			setCurrentTab: syncStateRef.current.setCurrentTab,
+			syncWordPress,
+		});
+	}, []);
 
-		const inspector = resolveInspectorRoot({
-			insideBlockInspector: true,
-			inspectorContainer,
+	const activatePreferredTab = useCallback(() => {
+		const inspector = getInspectorRoot(inspectorContainer);
+		const plan = getInspectorTabActivationPlan({
+			persistenceKey,
+			inspector,
+			isInnerBlock: isInnerBlockTarget,
 		});
 
-		if (inspector) {
-			ensureWordPressInspectorStylesTab(inspector);
+		if (!plan) {
+			return;
 		}
-	}, [applyDefaultStylesTabStateOnly, inspectorContainer]);
+
+		const shouldSyncWordPress =
+			plan.syncWordPress &&
+			canSyncWordPressTabs &&
+			inspector &&
+			isBlockInspectorContainerReady(inspector);
+
+		applyTab(plan.tab, { syncWordPress: shouldSyncWordPress });
+	}, [
+		applyTab,
+		canSyncWordPressTabs,
+		inspectorContainer,
+		isInnerBlockTarget,
+		persistenceKey,
+	]);
 
 	const setCurrentTabAligned = useCallback(
 		(nextTab) => {
-			if (!nextTab || nextTab === currentTabRef.current) {
+			if (
+				typeof nextTab !== 'string' ||
+				!nextTab ||
+				nextTab === syncStateRef.current.currentTab
+			) {
 				return;
 			}
 
-			setCurrentTab(nextTab);
-
-			if (!canSyncInspectorTabs || isSyncingFromWordPressRef.current) {
-				return;
-			}
-
-			const inspector = resolveInspectorRoot({
-				insideBlockInspector: true,
-				inspectorContainer,
-			});
-
-			if (!inspector) {
-				return;
-			}
-
-			activateWordPressInspectorTabForBlockeraTab(inspector, nextTab);
+			applyTab(nextTab, { syncWordPress: canSyncWordPressTabs });
 		},
-		[canSyncInspectorTabs, inspectorContainer, setCurrentTab]
+		[applyTab, canSyncWordPressTabs]
 	);
 
-	// New block selected (or inspector controls become active): default to Styles.
 	useEffect(() => {
-		if (!insideBlockInspector || !enabled || !clientId) {
-			previousClientIdRef.current = clientId;
-			previousEnabledRef.current = enabled;
+		if (!insideBlockInspector || !enabled || !blockName) {
 			return;
 		}
 
-		const clientIdChanged = previousClientIdRef.current !== clientId;
-		const becameActive = !previousEnabledRef.current && enabled;
-
-		previousClientIdRef.current = clientId;
-		previousEnabledRef.current = enabled;
-
-		if (clientIdChanged || becameActive) {
-			if (canSyncInspectorTabs) {
-				applyDefaultStylesTab();
-			} else {
-				// Content-only pattern before "Edit pattern": keep Blockera state only.
-				applyDefaultStylesTabStateOnly();
-			}
-		}
+		activatePreferredTab();
 	}, [
-		clientId,
+		blockName,
+		persistenceKey,
+		inspectorClientId,
 		enabled,
-		canSyncInspectorTabs,
 		insideBlockInspector,
-		applyDefaultStylesTab,
-		applyDefaultStylesTabStateOnly,
-	]);
-
-	// Entering content-only "Edit pattern" mode: same as selecting a block (Styles tab).
-	useEffect(() => {
-		if (!insideBlockInspector || !enabled) {
-			previousInspectorReadyRef.current = isInspectorBlockeraReady;
-			return;
-		}
-
-		const enteredPatternEditMode =
-			!previousInspectorReadyRef.current && isInspectorBlockeraReady;
-
-		previousInspectorReadyRef.current = isInspectorBlockeraReady;
-
-		if (enteredPatternEditMode) {
-			applyDefaultStylesTab();
-		}
-	}, [
-		insideBlockInspector,
-		enabled,
-		isInspectorBlockeraReady,
-		applyDefaultStylesTab,
-	]);
-
-	// Inner blocks only expose the Styles panel — keep Blockera + WP on Styles.
-	useEffect(() => {
-		if (!insideBlockInspector || !enabled || !isInnerBlockTarget) {
-			return;
-		}
-
-		if (canSyncInspectorTabs) {
-			applyDefaultStylesTab();
-		} else {
-			applyDefaultStylesTabStateOnly();
-		}
-	}, [
-		insideBlockInspector,
-		enabled,
 		isInnerBlockTarget,
-		canSyncInspectorTabs,
-		applyDefaultStylesTab,
-		applyDefaultStylesTabStateOnly,
+		canSyncWordPressTabs,
+		inspectorContainer,
+		activatePreferredTab,
 	]);
 
-	// Inspector DOM is rebuilt after selection — activate Styles once the container exists.
 	useEffect(() => {
-		if (!canSyncInspectorTabs) {
+		if (!canSyncWordPressTabs) {
 			return;
 		}
 
-		if (DEFAULT_BLOCKERA_INSPECTOR_TAB !== currentTabRef.current) {
-			return;
-		}
-
-		const inspector = resolveInspectorRoot({
-			insideBlockInspector: true,
-			inspectorContainer,
-		});
+		const inspector = getInspectorRoot(inspectorContainer);
 
 		if (!isBlockInspectorContainerReady(inspector)) {
 			return;
 		}
 
-		if ('styles' !== readActiveWordPressInspectorTabName(inspector)) {
-			suppressWpSyncUntilRef.current =
-				Date.now() + WP_TAB_SYNC_SUPPRESS_MS;
-			ensureWordPressInspectorStylesTab(inspector);
-		}
-	}, [canSyncInspectorTabs, inspectorContainer]);
-
-	useEffect(() => {
-		if (!canSyncInspectorTabs) {
-			return;
-		}
-
-		const syncTabFromWordPress = () => {
-			if (Date.now() < suppressWpSyncUntilRef.current) {
-				return;
-			}
-
-			const inspector = resolveInspectorRoot({
-				insideBlockInspector: true,
-				inspectorContainer,
-			});
+		const handleWordPressTabChange = () => {
+			const { currentTab: activeTab } = syncStateRef.current;
 
 			if (!isBlockInspectorContainerReady(inspector)) {
 				return;
 			}
 
 			if (isInnerBlockTarget) {
-				if ('styles' !== currentTabRef.current) {
-					isSyncingFromWordPressRef.current = true;
-					applyDefaultStylesTabStateOnly();
-					isSyncingFromWordPressRef.current = false;
-				}
-
-				if (
-					'styles' !== readActiveWordPressInspectorTabName(inspector)
-				) {
-					suppressWpSyncUntilRef.current =
-						Date.now() + WP_TAB_SYNC_SUPPRESS_MS;
-					ensureWordPressInspectorStylesTab(inspector);
+				if (activeTab !== DEFAULT_BLOCKERA_INSPECTOR_TAB) {
+					applyTab(DEFAULT_BLOCKERA_INSPECTOR_TAB, {
+						syncWordPress: true,
+					});
 				}
 
 				return;
@@ -252,53 +320,26 @@ export function useSyncBlockInspectorTab({
 
 			const nextTab = readBlockeraTabFromInspectorDom(inspector);
 
-			if (!nextTab || nextTab === currentTabRef.current) {
+			if (!nextTab || nextTab === activeTab) {
 				return;
 			}
 
-			isSyncingFromWordPressRef.current = true;
-			setCurrentTab(nextTab);
-			isSyncingFromWordPressRef.current = false;
-			currentTabRef.current = nextTab;
+			applyTab(nextTab);
 		};
-
-		const inspector = resolveInspectorRoot({
-			insideBlockInspector: true,
-			inspectorContainer,
-		});
-
-		if (!isBlockInspectorContainerReady(inspector)) {
-			return;
-		}
-
-		syncTabFromWordPress();
 
 		const tabObservers = observeInspectorTabLists(
 			inspector,
-			syncTabFromWordPress
+			handleWordPressTabChange
 		);
 
-		const tabsRoot = inspector.querySelector(INSPECTOR_TABS_SELECTOR);
-		let tabsRootObserver = null;
-
-		if (tabsRoot) {
-			tabsRootObserver = new MutationObserver(syncTabFromWordPress);
-			tabsRootObserver.observe(tabsRoot, {
-				childList: true,
-				subtree: true,
-			});
-		}
-
 		return () => {
-			tabsRootObserver?.disconnect();
 			tabObservers.forEach((observer) => observer.disconnect());
 		};
 	}, [
-		canSyncInspectorTabs,
+		applyTab,
+		canSyncWordPressTabs,
 		inspectorContainer,
-		setCurrentTab,
 		isInnerBlockTarget,
-		applyDefaultStylesTabStateOnly,
 	]);
 
 	return { setCurrentTab: setCurrentTabAligned };

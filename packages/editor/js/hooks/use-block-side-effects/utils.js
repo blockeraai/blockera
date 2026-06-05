@@ -97,6 +97,33 @@ export const getSettingsTabPanel = (inspector) => {
 };
 
 /**
+ * Settings tabpanel regardless of which inspector tab is selected.
+ * Used to lock WP origin panels on pseudo states while Blockera is on the Styles tab.
+ *
+ * @param {HTMLElement|null|undefined} inspector Block inspector root element.
+ * @return {HTMLElement|null} Settings tabpanel element, if present.
+ */
+export const getWordPressSettingsTabPanel = (inspector) => {
+	const tabsRoot = inspector?.querySelector(INSPECTOR_TABS_SELECTOR);
+
+	if (!tabsRoot) {
+		return null;
+	}
+
+	const panels = tabsRoot.querySelectorAll('[role="tabpanel"]');
+
+	for (const panel of panels) {
+		const panelId = panel.getAttribute('id') || '';
+
+		if (panelId.includes('settings')) {
+			return panel;
+		}
+	}
+
+	return null;
+};
+
+/**
  * Parses a WordPress inspector tab name from an instanced tab id or related attribute.
  *
  * @param {string} value Tab `id`, `data-tab-id`, or `aria-controls` value.
@@ -188,10 +215,66 @@ export const mapWordPressInspectorTabNameToBlockeraTab = (wordPressTabName) => {
 		case 'styles':
 		case 'effects':
 			return 'styles';
+		case 'content':
+			return 'content';
+		case 'list':
+			return 'list';
 		default:
 			return null;
 	}
 };
+
+/**
+ * WordPress inspector tab names currently rendered in the block inspector.
+ *
+ * @param {HTMLElement|null|undefined} inspector Block inspector root element.
+ * @return {Array<string>} Tab names (`settings`, `styles`, `content`, …).
+ */
+export const readAvailableWordPressInspectorTabNames = (inspector) => {
+	if (!inspector) {
+		return [];
+	}
+
+	const tabsRoot = inspector.querySelector(INSPECTOR_TABS_SELECTOR);
+
+	if (!tabsRoot) {
+		return [];
+	}
+
+	const tabNames = [];
+	const tabs = tabsRoot.querySelectorAll('[role="tab"]');
+
+	for (let i = 0; i < tabs.length; i++) {
+		const tabName = readWordPressInspectorTabNameFromElement(tabs[i]);
+
+		if (tabName && !tabNames.includes(tabName)) {
+			tabNames.push(tabName);
+		}
+	}
+
+	return tabNames;
+};
+
+/**
+ * @param {HTMLElement|null|undefined} inspector Block inspector root element.
+ * @return {number} Count of WordPress inspector tabs currently in the DOM.
+ */
+export const getWordPressInspectorTabCount = (inspector) =>
+	readAvailableWordPressInspectorTabNames(inspector).length;
+
+/**
+ * @param {HTMLElement|null|undefined} inspector Block inspector root element.
+ * @return {boolean} Whether the block inspector exposes exactly two WP tabs.
+ */
+export const hasExactlyTwoWordPressInspectorTabs = (inspector) =>
+	getWordPressInspectorTabCount(inspector) === 2;
+
+/**
+ * @param {HTMLElement|null|undefined} inspector Block inspector root element.
+ * @return {boolean} Whether the block inspector exposes more than two WP tabs.
+ */
+export const hasMoreThanTwoWordPressInspectorTabs = (inspector) =>
+	getWordPressInspectorTabCount(inspector) > 2;
 
 /**
  * Active WordPress block-inspector tab name from the DOM.
@@ -232,99 +315,7 @@ export const readBlockeraTabFromInspectorDom = (inspector) => {
 	return mapWordPressInspectorTabNameToBlockeraTab(wordPressTab);
 };
 
-/**
- * Clicks the WordPress inspector tab that matches a Blockera `currentTab` value.
- *
- * @param {HTMLElement|null|undefined} inspector Block inspector root element.
- * @param {string} blockeraTab Blockera tab (`setting`, `styles`, …).
- * @return {boolean} Whether a tab control was activated.
- */
-export const activateWordPressInspectorTabForBlockeraTab = (
-	inspector,
-	blockeraTab
-) => {
-	if (!inspector || !blockeraTab) {
-		return false;
-	}
-
-	const normalized = normalizeBlockeraTab(blockeraTab);
-	let targetWordPressTab = null;
-
-	if ('settings' === normalized) {
-		targetWordPressTab = 'settings';
-	} else if ('style' === normalized) {
-		targetWordPressTab = 'styles';
-	}
-
-	if (!targetWordPressTab) {
-		return false;
-	}
-
-	const tabsRoot = inspector.querySelector(INSPECTOR_TABS_SELECTOR);
-
-	if (!tabsRoot) {
-		return false;
-	}
-
-	const tabs = tabsRoot.querySelectorAll('[role="tab"]');
-
-	for (let i = 0; i < tabs.length; i++) {
-		const tab = tabs[i];
-
-		if (
-			readWordPressInspectorTabNameFromElement(tab) === targetWordPressTab
-		) {
-			if ('true' !== tab.getAttribute('aria-selected')) {
-				tab.click();
-			}
-
-			return true;
-		}
-	}
-
-	return false;
-};
-
 const DEFAULT_BLOCKERA_INSPECTOR_TAB = 'styles';
-
-/**
- * Activates the WordPress Styles inspector tab (retries while the inspector rebuilds).
- *
- * @param {HTMLElement|null|undefined} inspector Block inspector root element.
- * @param {number}                         maxAttempts Maximum retry frames.
- * @return {boolean} Whether the styles tab is selected.
- */
-export const ensureWordPressInspectorStylesTab = (
-	inspector,
-	maxAttempts = 12
-) => {
-	if (!inspector) {
-		return false;
-	}
-
-	let attempts = 0;
-	let activated = false;
-
-	const tryActivate = () => {
-		if (!document.contains(inspector)) {
-			return;
-		}
-
-		activated = activateWordPressInspectorTabForBlockeraTab(
-			inspector,
-			DEFAULT_BLOCKERA_INSPECTOR_TAB
-		);
-
-		if (!activated && attempts < maxAttempts) {
-			attempts += 1;
-			requestAnimationFrame(tryActivate);
-		}
-	};
-
-	tryActivate();
-
-	return activated;
-};
 
 export { DEFAULT_BLOCKERA_INSPECTOR_TAB };
 

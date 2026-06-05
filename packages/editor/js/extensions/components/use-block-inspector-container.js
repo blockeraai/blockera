@@ -8,47 +8,66 @@ export const BLOCK_INSPECTOR_SELECTOR = '.block-editor-block-inspector';
 const isConnectedInspector = (element) =>
 	Boolean(element && document.contains(element));
 
+let sharedInspectorContainer = null;
+const containerListeners = new Set();
+let bodyObserverStarted = false;
+
+const notifyContainerListeners = () => {
+	containerListeners.forEach((listener) => {
+		listener();
+	});
+};
+
+const syncSharedInspectorContainer = () => {
+	const inspector = document.querySelector(BLOCK_INSPECTOR_SELECTOR);
+	const next =
+		inspector && isConnectedInspector(inspector) ? inspector : null;
+
+	if (sharedInspectorContainer === next) {
+		return;
+	}
+
+	sharedInspectorContainer = next;
+	notifyContainerListeners();
+};
+
+const ensureBodyObserver = () => {
+	if (bodyObserverStarted) {
+		return;
+	}
+
+	bodyObserverStarted = true;
+	syncSharedInspectorContainer();
+
+	const observer = new MutationObserver(syncSharedInspectorContainer);
+
+	observer.observe(document.body, {
+		childList: true,
+		subtree: true,
+	});
+};
+
 /**
- * Resolves the block inspector sidebar element and keeps it in sync when WordPress
- * replaces or rebuilds the inspector DOM (e.g. switching Block ↔ Styles tabs).
+ * Shared block inspector root — one DOM observer for the whole editor session.
  */
 export const useBlockInspectorContainer = () => {
-	const [container, setContainer] = useState(null);
+	const [, setRevision] = useState(0);
 
 	useEffect(() => {
-		const syncContainer = () => {
-			const inspector = document.querySelector(BLOCK_INSPECTOR_SELECTOR);
+		ensureBodyObserver();
 
-			setContainer((previous) => {
-				if (!inspector) {
-					return null;
-				}
-
-				if (
-					previous &&
-					isConnectedInspector(previous) &&
-					previous === inspector
-				) {
-					return previous;
-				}
-
-				return inspector;
-			});
+		const listener = () => {
+			setRevision((revision) => revision + 1);
 		};
 
-		syncContainer();
+		containerListeners.add(listener);
 
-		const observer = new MutationObserver(syncContainer);
-
-		observer.observe(document.body, {
-			childList: true,
-			subtree: true,
-		});
-
-		return () => observer.disconnect();
+		return () => {
+			containerListeners.delete(listener);
+		};
 	}, []);
 
-	return container;
+	return sharedInspectorContainer;
 };
 
 export const isBlockInspectorContainerReady = (container) =>
