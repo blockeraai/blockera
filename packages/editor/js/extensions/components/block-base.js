@@ -5,7 +5,7 @@
  */
 import { ErrorBoundary } from 'react-error-boundary';
 import type { Element, ComponentType, MixedElement } from 'react';
-import { select, useSelect, dispatch } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 import {
 	createContext,
 	useContext,
@@ -17,6 +17,7 @@ import {
 	memo,
 	// StrictMode,
 } from '@wordpress/element';
+import { arePropsEqual } from '../../hooks/use-trace-update';
 
 /**
  * Blockera dependencies
@@ -41,14 +42,9 @@ import {
 	// useIconEffect,
 	useAttributes,
 	useInnerBlocksInfo,
-	useBlockStyleVariations,
 	useCalculateCurrentAttributes,
 	useDisplayBlockControls,
 } from '../../hooks';
-import {
-	VARIATION_SURFACE_SIZE,
-	VARIATION_SURFACE_STYLE,
-} from '../../editor/global-styles/panel/variation-surfaces';
 import { getBlockVariationSupport } from '../../editor/global-styles/panel/block-variation-support';
 import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../..';
@@ -56,10 +52,13 @@ import { SideEffect } from '../libs/base';
 import { BlockeraTextAlignToolbar } from '../libs/typography/components/blockera-text-align-toolbar';
 import { BlockeraLayoutToolbar } from '../libs/layout/components/blockera-layout-toolbar';
 import { BlockPartials } from './block-partials';
-import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
+import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockInspectorEditContent } from './block-inspector-edit-content';
-import { useSyncBlockInspectorTab } from './use-sync-block-inspector-tab';
+import { BlockInspectorTabSync } from './block-inspector-tab-sync';
+import { BlockBaseInspectorBundle } from './block-base-inspector-bundle';
+import { useBlockBaseStoreSelect } from './use-block-base-store-select';
+import { blockInspectorTabPersistence } from './use-sync-block-inspector-tab';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { getAttributesWithIds } from '../../hooks/use-attributes';
@@ -125,9 +124,7 @@ const GLOBAL_STYLES_BASE_CONTROL_COMPONENTS = {
 	AdvancedLabelControl: GlobalStylesAdvancedLabelControl,
 };
 
-export const BlockBase: ComponentType<any> = (
-	_props: Object
-): Element<any> | null => {
+const BlockBaseImpl = (_props: Object): Element<any> | null => {
 	const {
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
@@ -153,21 +150,59 @@ export const BlockBase: ComponentType<any> = (
 		useState(null);
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
-	const [currentTab, setCurrentTab] = useState(
-		additional?.activeTab || 'styles'
+	const inspectorTabPersistenceRef = useRef({
+		blockName: name,
+		blockVariation: '',
+	});
+
+	const [currentTab, _setCurrentTab] = useState(() => {
+		const persistedTab = blockInspectorTabPersistence.get(name, '');
+
+		// Persisted tab or Styles default for two-tab blocks; >2-tab defaults are
+		// resolved when the selected block mounts (see useSyncBlockInspectorTab).
+		return persistedTab || 'styles';
+	});
+
+	const setCurrentTab = useCallback(
+		(nextTab) => {
+			if (typeof nextTab !== 'string' || !nextTab) {
+				return;
+			}
+
+			if (insideBlockInspector) {
+				const { blockName, blockVariation } =
+					inspectorTabPersistenceRef.current;
+
+				blockInspectorTabPersistence.set(
+					blockName,
+					blockVariation,
+					nextTab
+				);
+			}
+
+			_setCurrentTab((previousTab) =>
+				previousTab === nextTab ? previousTab : nextTab
+			);
+		},
+		[insideBlockInspector]
 	);
 
 	// Match InspectorControls: mount inspector UI only for the selected block (or homogenous multi-select).
 	const displayBlockControls = useDisplayBlockControls();
+	const changesetsBridgeRef = useRef({
+		setChangesets: () => {},
+	});
+	const inspectorTabSetterRef = useRef(setCurrentTab);
 
-	const { setCurrentTab: setCurrentTabAlignedWithInspector } =
-		useSyncBlockInspectorTab({
-			clientId,
-			insideBlockInspector,
-			enabled: insideBlockInspector && displayBlockControls,
-			currentTab,
-			setCurrentTab,
-		});
+	inspectorTabSetterRef.current = setCurrentTab;
+
+	const setInspectorTab = useCallback((nextTab) => {
+		inspectorTabSetterRef.current(nextTab);
+	}, []);
+
+	const registerInspectorTabSetter = useCallback((setter) => {
+		inspectorTabSetterRef.current = setter;
+	}, []);
 
 	const {
 		currentBlock,
@@ -183,62 +218,16 @@ export const BlockBase: ComponentType<any> = (
 		availableAttributes,
 		activeBlockVariation,
 		getActiveBlockVariation,
-	} = useSelect(
-		(select) => {
-			const {
-				getBlockExtensionBy,
-				getActiveInnerState,
-				getActiveMasterState,
-				getExtensionCurrentBlock,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera/extensions');
+	} = useBlockBaseStoreSelect({
+		clientId,
+		name,
+		isSelected,
+	});
 
-			const currentBlock = getExtensionCurrentBlock();
-
-			////
-
-			const { getActiveBlockVariation: _getActiveBlockVariation } =
-				select('blockera/extensions');
-			const {
-				getBlockType,
-				getActiveBlockVariation,
-				getBlockVariations,
-			} = select('core/blocks');
-			const { getBlockAttributes } = select('core/block-editor');
-			const {
-				supports,
-				selectors,
-				attributes: availableAttributes,
-			} = getBlockType(name);
-
-			const { getDeviceType, getEditorSelectedBlockEvent } =
-				select('blockera/editor');
-
-			return {
-				getDeviceType,
-				currentBlock,
-				getBlockExtensionBy,
-				currentState: getActiveMasterState(clientId, name),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-				currentInnerBlockState: getActiveInnerState(
-					clientId,
-					currentBlock
-				),
-				supports,
-				selectors,
-				availableAttributes,
-				getActiveBlockVariation,
-				editorSelectedBlockEvent: getEditorSelectedBlockEvent(),
-				activeBlockVariation: getActiveBlockVariation(
-					name,
-					getBlockAttributes(clientId) || {}
-				),
-				blockVariations: name && getBlockVariations(name, 'transform'),
-				activeVariation: _getActiveBlockVariation(),
-			};
-		},
-		[clientId, name]
-	);
+	inspectorTabPersistenceRef.current = {
+		blockName: name,
+		blockVariation: activeBlockVariation?.name || '',
+	};
 
 	// Stable getter for blockera class names from all blocks' attributes (for duplicate detection).
 	// Uses select() on demand instead of useSelect to avoid subscribing to block-editor store
@@ -627,37 +616,19 @@ export const BlockBase: ComponentType<any> = (
 		[additional]
 	);
 
-	const blockStyleVariationsProps = useBlockStyleVariations({
-		clientId,
-		blockName: name,
-		// TODO: In the future, review all custom hooks and child components used in this block
-		// to determine which ones might alter the original `attributes` object reference directly.
-		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
-		// are properly managed or avoided (consider use of cloneObject as needed).
-		storedAttributes: cloneObject(attributes),
-		defaultAttributes: availableAttributes,
-		inGlobalStylesPanel: !insideBlockInspector,
-		variationSurface: VARIATION_SURFACE_STYLE,
-		enabled: hasStyleVariations,
-	});
-
-	const blockSizeVariationsProps = useBlockStyleVariations({
-		clientId,
-		blockName: name,
-		storedAttributes: cloneObject(attributes),
-		defaultAttributes: availableAttributes,
-		inGlobalStylesPanel: !insideBlockInspector,
-		variationSurface: VARIATION_SURFACE_SIZE,
-		enabled: hasSizeVariations,
-	});
-
-	const selectedChangesets = useCallback(
-		(flag: boolean): void => {
-			blockStyleVariationsProps.setChangesets(flag);
-			blockSizeVariationsProps.setChangesets(flag);
-		},
-		[blockStyleVariationsProps, blockSizeVariationsProps]
+	const styleVariationsConfig = useMemo(
+		() => ({
+			clientId,
+			blockName: name,
+			storedAttributes: cloneObject(attributes),
+			defaultAttributes: availableAttributes,
+			inGlobalStylesPanel: !insideBlockInspector,
+		}),
+		[clientId, name, attributes, availableAttributes, insideBlockInspector]
 	);
+
+	const usesStyleVariationHooks = hasStyleVariations || hasSizeVariations;
+
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
 		clientId,
 		blockId: name,
@@ -680,7 +651,12 @@ export const BlockBase: ComponentType<any> = (
 		// are properly managed or avoided (consider use of cloneObject as needed).
 		getAttributes: () => cloneObject(attributes),
 		innerBlocks: additional?.blockeraInnerBlocks,
-		setChangesets: isSelected ? selectedChangesets : () => {},
+		setChangesets: (flag: boolean) => {
+			if (insideBlockInspector && !displayBlockControls) {
+				return;
+			}
+			changesetsBridgeRef.current.setChangesets(flag);
+		},
 	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
@@ -896,7 +872,7 @@ export const BlockBase: ComponentType<any> = (
 				currentBlock,
 				currentState,
 				setCurrentTab: insideBlockInspector
-					? setCurrentTabAlignedWithInspector
+					? setInspectorTab
 					: setCurrentTab,
 				isNormalState,
 				setAttributes,
@@ -929,6 +905,17 @@ export const BlockBase: ComponentType<any> = (
 						{/*<StrictMode>*/}
 						{insideBlockInspector && displayBlockControls && (
 							<>
+								<BlockInspectorTabSync
+									blockName={name}
+									blockVariation={
+										activeBlockVariation?.name || ''
+									}
+									inspectorClientId={clientId}
+									insideBlockInspector={insideBlockInspector}
+									currentTab={currentTab}
+									setCurrentTab={setCurrentTab}
+									onAlignedSetter={registerInspectorTabSetter}
+								/>
 								<SideEffect
 									{...{
 										clientId,
@@ -983,7 +970,7 @@ export const BlockBase: ComponentType<any> = (
 													currentBlock,
 													currentState,
 													setCurrentTab:
-														setCurrentTabAlignedWithInspector,
+														setInspectorTab,
 													currentBreakpoint,
 													blockeraInnerBlocks,
 													currentInnerBlockState,
@@ -997,31 +984,101 @@ export const BlockBase: ComponentType<any> = (
 										/>
 									}
 								>
-									<BlockFillPartials
-										{...{
-											notice,
-											clientId,
-											isActive,
-											setActive,
-											currentState,
-											currentBlock,
-											availableStates,
-											currentInnerBlock,
-											currentBreakpoint,
-											BlockEditComponent,
-											blockeraInnerBlocks,
-											availableInnerStates,
-											insideBlockInspector,
-											currentInnerBlockState,
-											blockStyleVariationsProps:
-												isSelected
-													? blockStyleVariationsProps
-													: {},
-											blockSizeVariationsProps: isSelected
-												? blockSizeVariationsProps
-												: {},
-											updateBlockEditorSettings,
-											blockProps: {
+									{usesStyleVariationHooks ? (
+										<BlockBaseInspectorBundle
+											changesetsBridgeRef={
+												changesetsBridgeRef
+											}
+											hasStyleVariations={
+												hasStyleVariations
+											}
+											hasSizeVariations={
+												hasSizeVariations
+											}
+											styleVariationsConfig={
+												styleVariationsConfig
+											}
+											fillPartialsProps={{
+												notice,
+												clientId,
+												isActive,
+												setActive,
+												currentState,
+												currentBlock,
+												availableStates,
+												currentInnerBlock,
+												currentBreakpoint,
+												BlockEditComponent,
+												blockeraInnerBlocks,
+												availableInnerStates,
+												insideBlockInspector,
+												currentInnerBlockState,
+												updateBlockEditorSettings,
+												blockProps: {
+													name,
+													activeBlockVariation:
+														activeBlockVariation?.name ||
+														'',
+													clientId,
+													supports,
+													className,
+													attributes:
+														sanitizedAttributes,
+													setAttributes,
+													defaultAttributes,
+													currentAttributes,
+													currentTab,
+													currentBlock,
+													currentState,
+													setCurrentTab:
+														setInspectorTab,
+													currentBreakpoint,
+													blockeraInnerBlocks,
+													currentInnerBlockState,
+													handleOnChangeAttributes,
+													additional,
+													currentStateAttributes:
+														currentAttributes,
+													...props,
+												},
+											}}
+										/>
+									) : (
+										<BlockFillPartials
+											blockStyleVariationsProps={{}}
+											blockSizeVariationsProps={{}}
+											notice={notice}
+											clientId={clientId}
+											isActive={isActive}
+											setActive={setActive}
+											currentState={currentState}
+											currentBlock={currentBlock}
+											availableStates={availableStates}
+											currentInnerBlock={
+												currentInnerBlock
+											}
+											currentBreakpoint={
+												currentBreakpoint
+											}
+											BlockEditComponent={
+												BlockEditComponent
+											}
+											blockeraInnerBlocks={
+												blockeraInnerBlocks
+											}
+											availableInnerStates={
+												availableInnerStates
+											}
+											insideBlockInspector={
+												insideBlockInspector
+											}
+											currentInnerBlockState={
+												currentInnerBlockState
+											}
+											updateBlockEditorSettings={
+												updateBlockEditorSettings
+											}
+											blockProps={{
 												name,
 												activeBlockVariation:
 													activeBlockVariation?.name ||
@@ -1036,8 +1093,7 @@ export const BlockBase: ComponentType<any> = (
 												currentTab,
 												currentBlock,
 												currentState,
-												setCurrentTab:
-													setCurrentTabAlignedWithInspector,
+												setCurrentTab: setInspectorTab,
 												currentBreakpoint,
 												blockeraInnerBlocks,
 												currentInnerBlockState,
@@ -1046,9 +1102,9 @@ export const BlockBase: ComponentType<any> = (
 												currentStateAttributes:
 													currentAttributes,
 												...props,
-											},
-										}}
-									/>
+											}}
+										/>
+									)}
 								</BlockPartials>
 							</>
 						)}
@@ -1072,28 +1128,104 @@ export const BlockBase: ComponentType<any> = (
 										clientId={clientId}
 										isActive={isActive}
 									>
-										<BlockFillPartials
-											{...{
-												notice,
-												clientId,
-												isActive,
-												setActive,
-												currentState,
-												currentBlock,
-												availableStates,
-												currentInnerBlock,
-												currentBreakpoint,
-												BlockEditComponent,
-												blockeraInnerBlocks,
-												availableInnerStates,
-												insideBlockInspector,
-												currentInnerBlockState,
-												updateBlockEditorSettings,
-												blockStyleVariationsProps,
-												blockSizeVariationsProps,
-												blockProps: {
-													// Sending props like exactly "edit" function props of WordPress Block.
-													// Because needs total block props in outside overriding component like "blockera" in overriding process.
+										{usesStyleVariationHooks ? (
+											<BlockBaseInspectorBundle
+												changesetsBridgeRef={
+													changesetsBridgeRef
+												}
+												hasStyleVariations={
+													hasStyleVariations
+												}
+												hasSizeVariations={
+													hasSizeVariations
+												}
+												styleVariationsConfig={
+													styleVariationsConfig
+												}
+												fillPartialsProps={{
+													notice,
+													clientId,
+													isActive,
+													setActive,
+													currentState,
+													currentBlock,
+													availableStates,
+													currentInnerBlock,
+													currentBreakpoint,
+													BlockEditComponent,
+													blockeraInnerBlocks,
+													availableInnerStates,
+													insideBlockInspector,
+													currentInnerBlockState,
+													updateBlockEditorSettings,
+													blockProps: {
+														// Sending props like exactly "edit" function props of WordPress Block.
+														// Because needs total block props in outside overriding component like "blockera" in overriding process.
+														name,
+														activeBlockVariation:
+															activeBlockVariation?.name ||
+															'',
+														clientId,
+														supports,
+														className,
+														attributes:
+															sanitizedAttributes,
+														setAttributes,
+														defaultAttributes,
+														currentAttributes,
+														currentTab,
+														currentBlock,
+														currentState,
+														setCurrentTab,
+														currentBreakpoint,
+														blockeraInnerBlocks,
+														currentInnerBlockState,
+														handleOnChangeAttributes,
+														additional,
+														currentStateAttributes:
+															currentAttributes,
+														...props,
+													},
+												}}
+											/>
+										) : (
+											<BlockFillPartials
+												blockStyleVariationsProps={{}}
+												blockSizeVariationsProps={{}}
+												notice={notice}
+												clientId={clientId}
+												isActive={isActive}
+												setActive={setActive}
+												currentState={currentState}
+												currentBlock={currentBlock}
+												availableStates={
+													availableStates
+												}
+												currentInnerBlock={
+													currentInnerBlock
+												}
+												currentBreakpoint={
+													currentBreakpoint
+												}
+												BlockEditComponent={
+													BlockEditComponent
+												}
+												blockeraInnerBlocks={
+													blockeraInnerBlocks
+												}
+												availableInnerStates={
+													availableInnerStates
+												}
+												insideBlockInspector={
+													insideBlockInspector
+												}
+												currentInnerBlockState={
+													currentInnerBlockState
+												}
+												updateBlockEditorSettings={
+													updateBlockEditorSettings
+												}
+												blockProps={{
 													name,
 													activeBlockVariation:
 														activeBlockVariation?.name ||
@@ -1118,9 +1250,9 @@ export const BlockBase: ComponentType<any> = (
 													currentStateAttributes:
 														currentAttributes,
 													...props,
-												},
-											}}
-										/>
+												}}
+											/>
+										)}
 									</BlockPartials>
 								</BaseControlContext.Provider>
 							</GlobalStylesPanelBaseControlConfigContext.Provider>
@@ -1186,3 +1318,11 @@ export const BlockBase: ComponentType<any> = (
 		</BlockEditContextProvider>
 	);
 };
+
+export const BlockBase: ComponentType<any> = memo(
+	BlockBaseImpl,
+	(prevProps: Object, nextProps: Object): boolean =>
+		arePropsEqual(prevProps, nextProps, {
+			shallowKeys: ['setAttributes', 'children', 'additional'],
+		})
+);
