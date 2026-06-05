@@ -6,7 +6,10 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { BLOCKERA_STYLE_SCOPE_CLASS } from './apply';
+import {
+	BLOCKERA_STYLE_SCOPE_CLASS,
+	BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS,
+} from './apply';
 import { classes as classCombinations } from './classes';
 
 const restoreSpecificClassCombinations = (container) => {
@@ -58,6 +61,7 @@ export const useBlockSideEffectsRestore = (selectedBlock, blockName) => {
 			});
 
 			inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
+			inspector.classList.remove(BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS);
 		}
 
 		const inspectorTabs = document.querySelector(

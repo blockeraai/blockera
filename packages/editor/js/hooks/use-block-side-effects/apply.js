@@ -11,6 +11,7 @@ import {
 	getEffectiveInspectorTab,
 	getSettingsOutsideInspectorTabs,
 	getSettingsTabPanel,
+	getWordPressSettingsTabPanel,
 	isInspectorTabChrome,
 	isSettingsInspectorTab,
 	isStylesInspectorTab,
@@ -28,7 +29,8 @@ import { useBlockeraActiveColor } from '../../extensions/components/use-blockera
 
 const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
 export const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
-const BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS = 'blockera-inner-block-inspector';
+export const BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS =
+	'blockera-inner-block-inspector';
 
 const handleSpecificClassCombinations = (
 	container,
@@ -165,6 +167,89 @@ const clearLegacyInspectorTabStyles = (inspector) => {
 	inspectorTabs.removeAttribute('data-test');
 };
 
+const isBlockeraInspectorControl = (element) =>
+	Boolean(element?.closest('.blockera-block-inspector-controls-wrapper'));
+
+const setWordPressSettingsAvailability = (
+	settingElement,
+	currentState,
+	notAllowedClass
+) => {
+	if (
+		!settingElement ||
+		isInspectorTabChrome(settingElement) ||
+		isBlockeraInspectorControl(settingElement)
+	) {
+		return;
+	}
+
+	settingElement.setAttribute('data-test', 'blockera-availability');
+
+	if ('normal' === currentState) {
+		settingElement.classList.remove(notAllowedClass);
+		return;
+	}
+
+	settingElement.classList.add(notAllowedClass);
+};
+
+const applyWordPressSettingsAvailability = ({
+	inspector,
+	effectiveTab,
+	currentState,
+	isActive,
+	insideBlockInspector,
+	hasNestedTabs,
+	notAllowedClass,
+}) => {
+	if (!insideBlockInspector || !isActive) {
+		return;
+	}
+
+	if (hasNestedTabs) {
+		const settingsPanel = getWordPressSettingsTabPanel(inspector);
+
+		if (settingsPanel) {
+			settingsPanel
+				.querySelectorAll(
+					'.components-tools-panel, .components-panel__body'
+				)
+				.forEach((settingElement) => {
+					setWordPressSettingsAvailability(
+						settingElement,
+						currentState,
+						notAllowedClass
+					);
+				});
+		}
+
+		return;
+	}
+
+	const settingsOutsideAnyTabs = getSettingsOutsideInspectorTabs(inspector);
+
+	settingsOutsideAnyTabs.forEach((settingElement) => {
+		if (isInspectorTabChrome(settingElement)) {
+			return;
+		}
+
+		if (isSettingsInspectorTab(effectiveTab) || !isActive) {
+			setWordPressSettingsAvailability(
+				settingElement,
+				currentState,
+				notAllowedClass
+			);
+			return;
+		}
+
+		setWordPressSettingsAvailability(
+			settingElement,
+			currentState,
+			notAllowedClass
+		);
+	});
+};
+
 const applyBlockSideEffects = ({
 	activeBlockVariation,
 	blockName,
@@ -215,40 +300,16 @@ const applyBlockSideEffects = ({
 		isInnerBlockTarget
 	);
 
-	// Blocks without nested WP tabs: toggle loose settings nodes by tab.
-	if (!hasNestedTabs) {
-		const settingsOutsideAnyTabs =
-			getSettingsOutsideInspectorTabs(inspector);
-
-		const setAvailabilityClass = (settingElement) => {
-			if (isInspectorTabChrome(settingElement)) {
-				return;
-			}
-
-			settingElement.setAttribute('data-test', 'blockera-availability');
-
-			if ('normal' === currentState) {
-				settingElement.classList.remove(notAllowedClass);
-			} else {
-				settingElement.classList.add(notAllowedClass);
-			}
-		};
-
-		settingsOutsideAnyTabs.forEach((settingElement) => {
-			if (isInspectorTabChrome(settingElement)) {
-				return;
-			}
-
-			if (isSettingsInspectorTab(effectiveTab) || !isActive) {
-				settingElement.style.removeProperty('display');
-				setAvailabilityClass(settingElement);
-				return;
-			}
-
-			settingElement.style.display = 'none';
-			setAvailabilityClass(settingElement);
-		});
-	}
+	// E2E: pseudo states lock WP origin panels (e.g. Advanced → blockera-not-allowed).
+	applyWordPressSettingsAvailability({
+		inspector,
+		effectiveTab,
+		currentState,
+		isActive,
+		insideBlockInspector,
+		hasNestedTabs,
+		notAllowedClass,
+	});
 
 	// Settings tab: hide duplicate WP panels (class rules), never touch tab chrome.
 	if (
