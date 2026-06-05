@@ -160,11 +160,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 							}
 							insideBlockInspector={insideBlockInspector}
 							variationSurface={variationSurface}
-							availableStates={
-								isInnerBlock(currentBlock)
-									? availableInnerStates
-									: availableStates
-							}
+							availableStates={availableStates}
 						>
 							<BlockCard
 								isActive={isActive}

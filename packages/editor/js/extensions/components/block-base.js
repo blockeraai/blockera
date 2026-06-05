@@ -222,6 +222,7 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 		clientId,
 		name,
 		isSelected,
+		insideBlockInspector,
 	});
 
 	inspectorTabPersistenceRef.current = {
