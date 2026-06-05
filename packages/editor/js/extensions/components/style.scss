@@ -198,6 +198,14 @@
 	}
 }
 
+.block-editor-block-inspector {
+
+	.blockera-block-inspector-controls-wrapper + .block-editor-block-card {
+		display: none !important;
+	}
+}
+
+
 // Styles tab + Blockera active: hide core panels and keep Blockera UI.
 .block-editor-block-inspector.blockera-inspector-on-styles-tab {
 	// hide justification control inside layout constrained (Group block)
@@ -218,6 +226,10 @@
 		> *:not(:has(.blockera-state-colors-container)) {
 			display: none !important;
 		}
+	}
+
+	&.blockera-inner-block-inspector > div:not([class^="blockera-block-inspector-controls-wrapper"]):not([class^="css-"]) {
+		display: none !important;
 	}
 
 	&:has(.block-editor-block-inspector-edit-contents) {
