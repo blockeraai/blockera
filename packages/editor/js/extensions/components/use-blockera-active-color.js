@@ -71,10 +71,18 @@ export function useBlockeraActiveColor({
 		() =>
 			computeBlockeraVariationCssVars({
 				isGlobalStylesCardWrapper,
+				currentBlock,
+				isGlobalStylesPanelRoot,
 				currentState,
 				variationSurface,
 			}),
-		[isGlobalStylesCardWrapper, currentState, variationSurface]
+		[
+			isGlobalStylesCardWrapper,
+			currentBlock,
+			isGlobalStylesPanelRoot,
+			currentState,
+			variationSurface,
+		]
 	);
 
 	return { activeColor, variationCssVars };

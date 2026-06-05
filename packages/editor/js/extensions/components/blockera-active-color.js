@@ -51,7 +51,11 @@ export const computeBlockeraActiveColor = (
 		variationSurface,
 	} = context;
 
-	const selectedState = isInnerBlock(currentBlock)
+	// GS panel root wraps master + inner cards: always resolve master colors here.
+	// Inner block colors are scoped by InnerBlockCard's own StateContainer.
+	const colorContextBlock = isGlobalStylesPanelRoot ? 'master' : currentBlock;
+
+	const selectedState = isInnerBlock(colorContextBlock)
 		? currentInnerBlockState
 		: currentState;
 
@@ -70,6 +74,7 @@ export const computeBlockeraActiveColor = (
 	) {
 		color = '#cc0000';
 	} else if (
+		!isInnerBlock(colorContextBlock) &&
 		(!insideBlockInspector || isGlobalStylesCardWrapper) &&
 		isNormalState(currentState)
 	) {
@@ -87,20 +92,32 @@ export const computeBlockeraActiveColor = (
  *
  * @param {Object} options
  * @param {boolean} options.isGlobalStylesCardWrapper Whether the card is the GS wrapper.
+ * @param {string} options.currentBlock Current Blockera block target (`master` or inner block).
+ * @param {boolean} [options.isGlobalStylesPanelRoot=false] GS root wrapper (master scope only).
  * @param {string} options.currentState Current master block state id.
  * @param {string} options.variationSurface Active variation surface id.
  * @return {Object|void} Custom properties map.
  */
 export const computeBlockeraVariationCssVars = ({
 	isGlobalStylesCardWrapper,
+	currentBlock = 'master',
+	isGlobalStylesPanelRoot = false,
 	currentState,
 	variationSurface,
 }: {
 	isGlobalStylesCardWrapper: boolean,
+	currentBlock?: string,
+	isGlobalStylesPanelRoot?: boolean,
 	currentState: string,
 	variationSurface?: string,
 }): Object | void => {
-	if (!isGlobalStylesCardWrapper || !isNormalState(currentState)) {
+	const colorContextBlock = isGlobalStylesPanelRoot ? 'master' : currentBlock;
+
+	if (
+		!isGlobalStylesCardWrapper ||
+		isInnerBlock(colorContextBlock) ||
+		!isNormalState(currentState)
+	) {
 		return undefined;
 	}
 

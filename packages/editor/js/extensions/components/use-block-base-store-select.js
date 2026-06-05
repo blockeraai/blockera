@@ -21,16 +21,23 @@ import { getBaseBreakpoint } from '../../editor/header-ui/components/breakpoints
  * @param {string}  options.clientId
  * @param {string}  options.name
  * @param {boolean} options.isSelected
+ * @param {boolean} [options.insideBlockInspector=true]
  */
 export function useBlockBaseStoreSelect({
 	clientId,
 	name,
 	isSelected,
+	insideBlockInspector = true,
 }: {
 	clientId: string,
 	name: string,
 	isSelected: boolean,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Global styles panel mounts a single BlockBase (insideBlockInspector=false) without
+	// isSelected; it must still read extension inner-block target from the store.
+	const effectivelySelected = isSelected || !insideBlockInspector;
+
 	return useSelect(
 		(select) => {
 			const {
@@ -52,13 +59,13 @@ export function useBlockBaseStoreSelect({
 			const { getDeviceType, getEditorSelectedBlockEvent } =
 				select('blockera/editor');
 
-			const currentBlock = isSelected
+			const currentBlock = effectivelySelected
 				? getExtensionCurrentBlock()
 				: 'master';
-			const currentBreakpoint = isSelected
+			const currentBreakpoint = effectivelySelected
 				? getExtensionCurrentBlockStateBreakpoint()
 				: getBaseBreakpoint();
-			const editorSelectedBlockEvent = isSelected
+			const editorSelectedBlockEvent = effectivelySelected
 				? getEditorSelectedBlockEvent()
 				: undefined;
 
@@ -74,7 +81,7 @@ export function useBlockBaseStoreSelect({
 				getBlockExtensionBy,
 				currentState: getActiveMasterState(clientId, name),
 				currentBreakpoint,
-				currentInnerBlockState: isSelected
+				currentInnerBlockState: effectivelySelected
 					? getActiveInnerState(clientId, currentBlock)
 					: 'normal',
 				supports,
@@ -90,6 +97,6 @@ export function useBlockBaseStoreSelect({
 				activeVariation: _getActiveBlockVariation(),
 			};
 		},
-		[clientId, name, isSelected]
+		[clientId, name, effectivelySelected]
 	);
 }
