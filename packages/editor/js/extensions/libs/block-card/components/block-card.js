@@ -255,7 +255,7 @@ export function BlockCard({
 					'block-card__variations-picker-anchor'
 				)}
 			>
-				{hasStyleVariations && (
+				{isActive && hasStyleVariations && (
 					<BlockStyleVariations
 						{...blockStyleVariationsProps}
 						variationUiSurface={VARIATION_SURFACE_STYLE}
@@ -275,7 +275,7 @@ export function BlockCard({
 						}
 					/>
 				)}
-				{hasSizeVariations && (
+				{isActive && hasSizeVariations && (
 					<BlockSizeVariations
 						{...blockSizeVariationsProps}
 						clientId={clientId}
