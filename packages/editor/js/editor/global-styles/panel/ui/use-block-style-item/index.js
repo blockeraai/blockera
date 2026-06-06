@@ -61,7 +61,10 @@ import {
 	type TUseBlockStyleItemReturn,
 } from './types';
 import { setBlockDynamicStylesCount } from '../use-block-styles-counter';
-import { getCompatibleAttributes } from '../../../../../extensions/components/get-compatible-attributes';
+import {
+	applyBlockeraSetAttributesCompatibility,
+	getCompatibleAttributes,
+} from '../../../../../extensions/components/get-compatible-attributes';
 import { VARIATION_SURFACE_STYLE } from '../../variation-surfaces';
 
 export const useBlockStyleItem = ({
@@ -726,7 +729,7 @@ export const useBlockStyleItem = ({
 		styleAttributes = omit(styleAttributes, ignoredAttributes);
 
 		// Normalizing style attributes...
-		let currentStyleValue = getNormalizedStyle(
+		const blockeraStyleValue = getNormalizedStyle(
 			styleAttributes,
 			_defaultStyles
 		);
@@ -734,58 +737,48 @@ export const useBlockStyleItem = ({
 		// Run wp compatibility.
 		blockeraExtensionsBootstrap();
 
-		for (const key in currentStyleValue) {
-			currentStyleValue = {
-				...currentStyleValue,
-				/**
-				 * Filterable style value for wp compatibility reasons.
-				 * running just for setAttributes functionalities.
-				 */
-				...applyFilters(
-					'blockera.blockEdit.setAttributes',
-					getNormalizedStyle(styleAttributes, _defaultStyles),
-					key,
-					currentStyleValue[key]?.value || currentStyleValue[key],
-					{
-						action: 'normal',
-						reset: false,
-					},
-					getAttributes,
-					{
-						blockId: blockName,
-						clientId: selectedBlock.clientId,
-						innerBlocks: blockContextValue.additional.innerBlocks,
-						currentBlock: blockContextValue.currentBlock,
-						blockVariations: blockContextValue.blockVariations,
-						defaultAttributes: blockContextValue.defaultAttributes,
-						currentState: isInnerBlock(
-							blockContextValue.currentBlock
-						)
-							? blockContextValue.currentInnerBlockState
-							: blockContextValue.currentState,
-						currentBreakpoint: blockContextValue.currentBreakpoint,
-						activeBlockVariation:
-							blockContextValue.activeBlockVariation,
-						getActiveBlockVariation:
-							blockContextValue.getActiveBlockVariation,
-						currentInnerBlockState:
-							blockContextValue.currentInnerBlockState,
-						isNormalState: blockContextValue.isNormalState,
-						isMasterBlock: !isInnerBlock(
-							blockContextValue.currentBlock
-						),
-						isBaseBreakpoint: isBaseBreakpoint(
-							blockContextValue.currentBreakpoint
-						),
-						isMasterNormalState: isNormalStateOnBaseBreakpoint(
-							blockContextValue.currentState,
-							blockContextValue.currentBreakpoint
-						),
-						insideBlockInspector: false,
-					}
-				),
-			};
-		}
+		const setAttributesBlockDetail = {
+			blockId: blockName,
+			clientId: selectedBlock.clientId,
+			innerBlocks: blockContextValue.additional.innerBlocks,
+			currentBlock: blockContextValue.currentBlock,
+			blockVariations: blockContextValue.blockVariations,
+			defaultAttributes: blockContextValue.defaultAttributes,
+			currentState: isInnerBlock(blockContextValue.currentBlock)
+				? blockContextValue.currentInnerBlockState
+				: blockContextValue.currentState,
+			currentBreakpoint: blockContextValue.currentBreakpoint,
+			activeBlockVariation: blockContextValue.activeBlockVariation,
+			getActiveBlockVariation: blockContextValue.getActiveBlockVariation,
+			currentInnerBlockState: blockContextValue.currentInnerBlockState,
+			isNormalState: blockContextValue.isNormalState,
+			isMasterBlock: !isInnerBlock(blockContextValue.currentBlock),
+			isBaseBreakpoint: isBaseBreakpoint(
+				blockContextValue.currentBreakpoint
+			),
+			isMasterNormalState: isNormalStateOnBaseBreakpoint(
+				blockContextValue.currentState,
+				blockContextValue.currentBreakpoint
+			),
+			insideBlockInspector: false,
+			editorSelectedBlockEvent: 'save-customizations',
+		};
+
+		const currentStyleValue = mergeObject(
+			blockeraStyleValue,
+			applyBlockeraSetAttributesCompatibility({
+				blockeraKeys: blockeraStyleValue,
+				getBlockeraValueForKey: (featureId) =>
+					blockeraStyleValue[featureId]?.value ||
+					blockeraStyleValue[featureId],
+				getAttributes,
+				blockDetail: setAttributesBlockDetail,
+				controlRef: {
+					action: 'normal',
+					reset: false,
+				},
+			})
+		);
 
 		// Skip while not exists any changesets.
 		if (!Object.keys(currentStyleValue).length) {

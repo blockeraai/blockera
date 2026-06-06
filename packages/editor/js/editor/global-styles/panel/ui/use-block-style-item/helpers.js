@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { mergeObject, cloneObject } from '@blockera/utils';
@@ -19,6 +18,7 @@ import {
 	prepareBlockeraDefaultAttributesValues,
 	prepareWordPressDefaultAttributesValues,
 } from '../../../../../extensions/components/utils';
+import { applyBlockeraSetAttributesCompatibility } from '../../../../../extensions/components/get-compatible-attributes';
 
 const EDITOR_STORE = 'blockera/editor';
 
@@ -109,29 +109,19 @@ export const buildSaveCustomizationsEffectiveItems = ({
 		),
 		insideBlockInspector: true,
 	};
-	let wordpressCompatibilityAttributes = {};
-
-	for (const key in blockeraDefaults) {
-		if (!key.startsWith('blockera')) {
-			continue;
-		}
-
-		const defaultAttributeValue =
-			blockeraDefaults[key]?.value ?? blockeraDefaults[key];
-
-		wordpressCompatibilityAttributes = applyFilters(
-			'blockera.blockEdit.setAttributes',
-			wordpressCompatibilityAttributes,
-			key,
-			defaultAttributeValue,
-			{
+	const wordpressCompatibilityAttributes =
+		applyBlockeraSetAttributesCompatibility({
+			blockeraKeys: blockeraDefaults,
+			getBlockeraValueForKey: (featureId) =>
+				blockeraDefaults[featureId]?.value ??
+				blockeraDefaults[featureId],
+			getAttributes,
+			blockDetail: filterContext,
+			controlRef: {
 				action: 'reset',
 				reset: true,
 			},
-			getAttributes,
-			filterContext
-		);
-	}
+		});
 
 	return mergeObject(
 		blockeraDefaults,
