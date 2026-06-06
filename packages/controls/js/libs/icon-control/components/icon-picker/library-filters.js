@@ -15,6 +15,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import TabMenu from '../../../tabs/tab-menu';
+import { getLibrariesIconCount } from './icon-libraries';
 
 function FilterTabLabel({ label, count }) {
 	return (
@@ -37,14 +38,12 @@ export default function LibraryFilters({ libraries, selected, onFilterClick }) {
 	const instanceId = useInstanceId(LibraryFilters, 'icon-library-filters');
 
 	const tabs = useMemo(() => {
-		let allCount = 0;
+		const allCount = getLibrariesIconCount(libraries);
 		const items = [];
 
 		for (const library of Object.keys(libraries)) {
 			const iconLibraryInfo = getIconLibrary(library);
 			const count = iconLibraryInfo[library]?.count ?? 0;
-
-			allCount += count;
 
 			items.push({
 				name: library,
