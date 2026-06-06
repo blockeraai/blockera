@@ -133,15 +133,16 @@ export const CoreIconLinkToolbar = ({
 		setIsEditingURL(false);
 	};
 
-	const blockProps = useBlockProps(
-		ariaLabel ? { 'aria-label': ariaLabel, role: 'img' } : undefined
-	);
+	// Anchor link popover to the block wrapper (core/button pattern), not the toolbar button.
+	const blockProps = useBlockProps({
+		ref: setPopoverAnchor,
+		...(ariaLabel ? { 'aria-label': ariaLabel, role: 'img' } : {}),
+	});
 
 	return (
 		<>
 			<BlockControls group="block">
 				<ToolbarButton
-					ref={setPopoverAnchor}
 					name="link"
 					icon={!isHrefSet ? link : linkOff}
 					title={
@@ -169,6 +170,7 @@ export const CoreIconLinkToolbar = ({
 				>
 					<LinkControl
 						value={linkValue}
+						forceIsEditingLink={isEditingURL}
 						settings={LINK_SETTINGS}
 						onChange={({
 							url: newURL,
