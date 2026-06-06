@@ -21,6 +21,8 @@ export type IconLibrary = {
 	name: string,
 	icon: MixedElement,
 	count: number,
+	author: string,
+	link: string,
 };
 
 export type UploadSVGProps = {
