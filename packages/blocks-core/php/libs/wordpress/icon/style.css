@@ -10,3 +10,9 @@
 		scaleX(var(--blockera--icon--flip-horizontal, 1))
 		scaleY(var(--blockera--icon--flip-vertical, 1));
 }
+
+.blockera-block.wp-block-icon svg[fill="none"],
+.blockera-block.wp-block-icon .blockera-stroke-svg-icon svg {
+	fill: none;
+	stroke: var(--blockera--icon--color, currentColor);
+}
