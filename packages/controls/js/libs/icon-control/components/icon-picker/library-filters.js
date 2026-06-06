@@ -15,7 +15,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import TabMenu from '../../../tabs/tab-menu';
-import { getLibrariesIconCount } from './icon-libraries';
+import { formatIconCount, getLibrariesIconCount } from './icon-libraries';
 
 function FilterTabLabel({ label, count }) {
 	return (
@@ -28,7 +28,7 @@ function FilterTabLabel({ label, count }) {
 			<span
 				className={controlInnerClassNames('icon-picker-filter-count')}
 			>
-				{count}
+				{formatIconCount(count)}
 			</span>
 		</>
 	);
