@@ -16,7 +16,11 @@ import { Icon } from '@blockera/icons';
 import { IconContext } from '../../context';
 import { getLibraryIcons } from '../../utils';
 import SearchControl from '../../../search-control';
-import { DEFAULT_LIBRARIES, getLibrariesIconCount } from './icon-libraries';
+import {
+	DEFAULT_LIBRARIES,
+	formatIconCount,
+	getLibrariesIconCount,
+} from './icon-libraries';
 
 export default function Search({
 	libraries = DEFAULT_LIBRARIES,
@@ -63,9 +67,9 @@ export default function Search({
 					);
 				}}
 				placeholder={sprintf(
-					// translators: %d is the total number of icons available in the library.
-					__('Search %d icons…', 'blockera'),
-					iconCount
+					// translators: %s is the total number of icons available in the library.
+					__('Search %s icons…', 'blockera'),
+					formatIconCount(iconCount)
 				)}
 			/>
 
