@@ -30,6 +30,7 @@ import { parseUploadedMediaAndSetIcon } from './helpers';
 import { sanitizeRawSVGString, isCustomIcon } from './utils';
 import { Button, BaseControl, Tooltip } from '../index';
 import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
+import { useRecentIcons } from './hooks/useRecentIcons';
 
 function IconControl({
 	id,
@@ -56,6 +57,7 @@ function IconControl({
 		});
 
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
+	const { recentIcons, addRecentIcon, removeRecentIcon } = useRecentIcons();
 
 	useLateEffect(() => {
 		setValue(currentIcon);
@@ -83,15 +85,29 @@ function IconControl({
 		setOpenModal(true);
 	};
 
+	const isCurrentIcon = useCallback(
+		(iconName, library) => {
+			return (
+				currentIcon?.icon === iconName &&
+				currentIcon?.library === library
+			);
+		},
+		[currentIcon]
+	);
+
 	const defaultIconState = {
 		id,
 		currentIcon,
 		dispatch: currentIconDispatch,
 		handleIconSelect,
+		isCurrentIcon,
+		recentIcons,
+		removeRecentIcon,
 	};
 
 	// $FlowFixMe
 	function dispatchActions(action) {
+		addRecentIcon(action);
 		currentIconDispatch(action);
 		setOpenModal(false);
 	}
