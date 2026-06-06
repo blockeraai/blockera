@@ -194,9 +194,20 @@ export function saveRecentIcons(items) {
 }
 
 /**
+ * Clear all recent icons from localStorage.
+ */
+export function clearRecentIconsFromStorage() {
+	try {
+		localStorage.removeItem(RECENT_ICONS_STORAGE_KEY);
+	} catch {
+		// localStorage might be full or disabled, ignore
+	}
+}
+
+/**
  * Hook for managing recently used icons in localStorage.
  *
- * @return {Object} recentIcons, addRecentIcon, removeRecentIcon
+ * @return {Object} recentIcons, addRecentIcon, removeRecentIcon, clearRecentIcons
  */
 export function useRecentIcons() {
 	const [recentIcons, setRecentIcons] = useState(loadRecentIcons);
@@ -228,9 +239,15 @@ export function useRecentIcons() {
 		});
 	}, []);
 
+	const clearRecentIcons = useCallback(() => {
+		setRecentIcons([]);
+		clearRecentIconsFromStorage();
+	}, []);
+
 	return {
 		recentIcons,
 		addRecentIcon,
 		removeRecentIcon,
+		clearRecentIcons,
 	};
 }

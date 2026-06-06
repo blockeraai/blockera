@@ -57,7 +57,8 @@ function IconControl({
 		});
 
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
-	const { recentIcons, addRecentIcon, removeRecentIcon } = useRecentIcons();
+	const { recentIcons, addRecentIcon, removeRecentIcon, clearRecentIcons } =
+		useRecentIcons();
 
 	useLateEffect(() => {
 		setValue(currentIcon);
@@ -103,6 +104,7 @@ function IconControl({
 		isCurrentIcon,
 		recentIcons,
 		removeRecentIcon,
+		clearRecentIcons,
 	};
 
 	// $FlowFixMe
