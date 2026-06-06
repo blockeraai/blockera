@@ -75,6 +75,7 @@ export default function IconPickerModal({
 						{search && (
 							<Search
 								key={searchKey}
+								libraries={libraries}
 								onSearchChange={handleSearchChange}
 							/>
 						)}
