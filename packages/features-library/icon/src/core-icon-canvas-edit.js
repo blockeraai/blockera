@@ -12,6 +12,7 @@ import { SVG, Rect, Path } from '@wordpress/primitives';
  */
 import { Icon } from '@blockera/icons';
 import { CoreIconLinkToolbar } from './core-icon-link-toolbar';
+import { CoreIconInspectorControls } from './core-icon-inspector-controls';
 
 import './core-icon-canvas-edit.css';
 
@@ -79,6 +80,8 @@ export const CoreIconCanvasEdit: ComponentType<{
 			[attributes]
 		);
 
+		const showSettingsInspector = hasIcon || Boolean(attributes?.icon);
+
 		const iconContent = hasIcon ? (
 			<Icon
 				library={iconValue.library}
@@ -92,15 +95,22 @@ export const CoreIconCanvasEdit: ComponentType<{
 		);
 
 		return (
-			<CoreIconLinkToolbar
-				attributes={attributes}
-				setAttributes={setAttributes}
-				clientId={clientId}
-				isSelected={isSelected}
-				ariaLabel={ariaLabel}
-			>
-				{iconContent}
-			</CoreIconLinkToolbar>
+			<>
+				<CoreIconInspectorControls
+					attributes={attributes}
+					setAttributes={setAttributes}
+					isVisible={showSettingsInspector}
+				/>
+				<CoreIconLinkToolbar
+					attributes={attributes}
+					setAttributes={setAttributes}
+					clientId={clientId}
+					isSelected={isSelected}
+					ariaLabel={ariaLabel}
+				>
+					{iconContent}
+				</CoreIconLinkToolbar>
+			</>
 		);
 	}
 );
