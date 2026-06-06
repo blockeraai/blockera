@@ -173,10 +173,12 @@ export const prepareBlockeraDefaultAttributesValues = (
  * Preparing WordPress (non-blockera) attribute default values for block reset flows.
  *
  * @param {Object} rootAttributes the root attributes of registration time.
+ * @param {Object} [currentAttributes] current block attributes used to clear customized native attrs.
  * @return {Object} the WordPress attribute defaults.
  */
 export const prepareWordPressDefaultAttributesValues = (
-	rootAttributes: Object
+	rootAttributes: Object,
+	currentAttributes: Object = {}
 ): Object => {
 	if (!rootAttributes) {
 		return {};
@@ -203,7 +205,9 @@ export const prepareWordPressDefaultAttributesValues = (
 			continue;
 		}
 
-		attributes[key] = undefined;
+		if (currentAttributes[key] !== undefined) {
+			attributes[key] = undefined;
+		}
 	}
 
 	return attributes;
