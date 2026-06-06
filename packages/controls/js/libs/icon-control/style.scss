@@ -36,6 +36,13 @@
 			max-height: 80%;
 		}
 
+		// Preview uses StrokeSvgIcon without library-* wrapper — stroke rules required here.
+		.blockera-stroke-svg-icon svg,
+		svg[fill="none"] {
+			fill: none;
+			stroke: currentColor;
+		}
+
 		img {
 			min-width: 50px;
 			max-width: 100%;
@@ -167,6 +174,14 @@
 	}
 }
 
+// StrokeSvgIcon is only used for Feather/Lucide/Untitled UI — never apply fill override.
+.blockera-stroke-svg-icon {
+	svg {
+		fill: none;
+		stroke: currentColor;
+	}
+}
+
 .blockera-control-icon-control-icon {
 	--icon-size: 26px;
 	width: var(--icon-size, 26px);
@@ -194,5 +209,15 @@
 		height: var(--icon-size, 26px);
 		fill: currentcolor;
 		display: inline-block;
+	}
+
+	// Stroke-based icon libraries use fill="none" — prevent global fill override.
+	&.library-feather,
+	&.library-lucide,
+	&.library-untitledui {
+		svg {
+			fill: none;
+			stroke: currentColor;
+		}
 	}
 }

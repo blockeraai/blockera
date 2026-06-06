@@ -15,7 +15,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
+import { Icon, prepareIconSvgForStorage } from '@blockera/icons';
 import { isString, isEmpty, isUndefined, useLateEffect } from '@blockera/utils';
 
 /**
@@ -195,13 +195,15 @@ function IconControl({
 			!isEmpty(currentIcon?.renderedIcon) &&
 			isString(currentIcon?.renderedIcon)
 		) {
+			const previewSvg = prepareIconSvgForStorage(
+				atob(currentIcon.renderedIcon),
+				currentIcon?.library || ''
+			);
+
 			return (
 				<div
 					dangerouslySetInnerHTML={{
-						__html: atob(currentIcon.renderedIcon).replace(
-							/\s*style\s*=\s*["'][^"']*["']/g,
-							''
-						),
+						__html: previewSvg,
 					}}
 				/>
 			);
