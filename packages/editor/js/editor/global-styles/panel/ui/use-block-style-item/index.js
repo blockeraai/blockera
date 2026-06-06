@@ -820,7 +820,7 @@ export const useBlockStyleItem = ({
 		setGlobalStyles(_globalStyles);
 		setGlobalBlockStyles(
 			blockName,
-			currentBlockStyleVariation?.name || 'default',
+			currentBlockStyleVariation?.name || currentStyle?.name || 'default',
 			sanitizedStyleValue
 		);
 
