@@ -89,6 +89,7 @@ const IconLibrary = ({
 
 	return (
 		<div
+			id={`icon-library-section-${library}`}
 			className={controlInnerClassNames(
 				'icon-library',
 				'library-' + library,
