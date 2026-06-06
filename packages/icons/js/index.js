@@ -1,3 +1,10 @@
+export {
+	isStrokeIconLibrary,
+	isStrokeSvgMarkup,
+	prepareIconSvgForStorage,
+	extractSvgMarkup,
+	getIconKebabId,
+} from './helpers';
 export { Icon, getIcon, isValidIcon, createStandardIconObject } from './icon';
 export {
 	isValidIconLibrary,
