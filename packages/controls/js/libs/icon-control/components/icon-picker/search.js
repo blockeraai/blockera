@@ -17,7 +17,7 @@ import { IconContext } from '../../context';
 import { getLibraryIcons } from '../../utils';
 import SearchControl from '../../../search-control';
 
-export default function Search({}) {
+export default function Search({ onSearchChange = () => {} }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [searchData, setSearchData] = useState([]);
 	const [searchData2, setSearchData2] = useState([]);
@@ -36,6 +36,7 @@ export default function Search({}) {
 				defaultValue={searchInput}
 				onChange={(value) => {
 					setSearchInput(value);
+					onSearchChange(value);
 					setSearchData(
 						getLibraryIcons({
 							library: 'search',
