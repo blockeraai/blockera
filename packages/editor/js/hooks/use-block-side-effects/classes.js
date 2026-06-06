@@ -74,6 +74,7 @@ export const classes = [
 			'core/post-navigation-link',
 			'core/post-time-to-read',
 			'core/breadcrumbs',
+			'core/icon',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
