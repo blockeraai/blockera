@@ -9,7 +9,81 @@ import { isPlainObject } from 'is-plain-object';
 /**
  * Blockera dependencies
  */
-import { omit } from '@blockera/utils';
+import { omit, isEquals } from '@blockera/utils';
+
+const EMPTY_OBJECT: Object = {};
+
+/**
+ * Returns the previous snapshot when deep-equal, keeping referential stability for memo children.
+ *
+ * @param {{ current: any }} cacheRef Mutable ref holding the last retained value.
+ * @param {any} next Candidate next value.
+ * @return {any} Stable snapshot reference.
+ */
+export function retainStableSnapshot<T>(cacheRef: { current: T }, next: T): T {
+	if (isEquals(cacheRef.current, next)) {
+		return cacheRef.current;
+	}
+	cacheRef.current = next;
+	return next;
+}
+
+/**
+ * Merges base and user slices for one block type with per-block stable caching.
+ *
+ * @param {Map<string, Object>} cache Per-block merged styles cache.
+ * @param {string} blockName Block type name.
+ * @param {Object} baseStyles Theme base `styles.blocks` slice.
+ * @param {Object} userStyles User `styles.blocks` slice.
+ * @return {Object} Merged block styles (stable reference when unchanged).
+ */
+type MergedBlockStylesCacheEntry = {
+	merged: Object,
+	baseSlice: Object,
+	userSlice: Object,
+};
+
+export function getStableMergedBlockStyles(
+	cache: Map<string, MergedBlockStylesCacheEntry>,
+	blockName: string,
+	baseStyles: Object,
+	userStyles: Object
+): Object {
+	const baseBlock =
+		baseStyles && typeof baseStyles === 'object'
+			? baseStyles[blockName]
+			: undefined;
+	const userBlock =
+		userStyles && typeof userStyles === 'object'
+			? userStyles[blockName]
+			: undefined;
+
+	if (!baseBlock && !userBlock) {
+		return EMPTY_OBJECT;
+	}
+
+	const baseSlice =
+		baseBlock && typeof baseBlock === 'object' ? baseBlock : EMPTY_OBJECT;
+	const userSlice =
+		userBlock && typeof userBlock === 'object' ? userBlock : EMPTY_OBJECT;
+	const cached = cache.get(blockName);
+
+	if (
+		cached &&
+		isEquals(cached.baseSlice, baseSlice) &&
+		isEquals(cached.userSlice, userSlice)
+	) {
+		return cached.merged;
+	}
+
+	const merged = mergeBlockGlobalStyles(baseSlice, userSlice);
+	cache.set(blockName, {
+		merged,
+		baseSlice,
+		userSlice,
+	});
+	return merged;
+}
 
 /**
  * Merges base and user global styles following Gutenberg patterns.
