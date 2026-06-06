@@ -98,6 +98,10 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 		}
 
 		if (!ignoreBlockeraAttributeKeysRegExp().test(key)) {
+			if (styles[key] === undefined) {
+				continue;
+			}
+
 			// Exclude the Block original core attributes is object and contains all values are undefined.
 			if (
 				'object' === typeof styles[key] &&
