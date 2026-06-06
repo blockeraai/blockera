@@ -41,6 +41,8 @@ import {
 	setStyleVariationBlocksInStore,
 	markStyleAsDeletedInMetaData,
 	buildMetadataTransferForRenamedStyle,
+	buildSaveCustomizationsEffectiveItems,
+	sanitizeGlobalStylesNode,
 } from './helpers';
 import { getNormalizedStyle } from '../../context';
 import { isBaseBreakpoint } from '../../../../header-ui/components';
@@ -790,6 +792,8 @@ export const useBlockStyleItem = ({
 			return;
 		}
 
+		const sanitizedStyleValue = sanitizeGlobalStylesNode(currentStyleValue);
+
 		// Cloned globalStyles object.
 		let _globalStyles = cloneObject(globalStyles);
 
@@ -797,7 +801,7 @@ export const useBlockStyleItem = ({
 			_globalStyles = mergeObject(_globalStyles, {
 				blocks: {
 					..._globalStyles?.blocks,
-					[blockName]: currentStyleValue,
+					[blockName]: sanitizedStyleValue,
 				},
 			});
 		} else {
@@ -806,7 +810,7 @@ export const useBlockStyleItem = ({
 					..._globalStyles?.blocks,
 					[blockName]: {
 						variations: {
-							[currentStyle.name]: currentStyleValue,
+							[currentStyle.name]: sanitizedStyleValue,
 						},
 					},
 				},
@@ -817,11 +821,17 @@ export const useBlockStyleItem = ({
 		setGlobalBlockStyles(
 			blockName,
 			currentBlockStyleVariation?.name || 'default',
-			currentStyleValue
+			sanitizedStyleValue
 		);
 
-		const defaultValue =
-			prepareBlockeraDefaultAttributesValues(_defaultStyles);
+		const defaultValue = buildSaveCustomizationsEffectiveItems({
+			blockName,
+			defaultStyles: _defaultStyles,
+			blockAttributesSchema: getBlockType(blockName)?.attributes || {},
+			getAttributes,
+			blockContextValue,
+			selectedBlock,
+		});
 
 		// Set the editor selected block event to save customizations.
 		setEditorSelectedBlockEvent('save-customizations');
