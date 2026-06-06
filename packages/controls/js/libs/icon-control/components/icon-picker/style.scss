@@ -435,6 +435,7 @@
 		font-size: 13px;
 		color: var(--blockera-controls-primary-color);
 		align-items: center;
+		flex-wrap: wrap;
 
 		svg {
 			fill: currentcolor;
@@ -444,6 +445,22 @@
 
 		p {
 			margin: 0;
+		}
+
+		.blockera-control-library-header__author {
+			font-weight: 400;
+			font-size: 12px;
+			color: #757575;
+
+			a {
+				color: inherit;
+				text-decoration: underline;
+				text-underline-offset: 2px;
+
+				&:hover {
+					color: var(--blockera-controls-primary-color);
+				}
+			}
 		}
 
 		.blockera-control-library-header__label {
