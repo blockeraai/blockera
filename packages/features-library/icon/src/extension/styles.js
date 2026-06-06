@@ -11,6 +11,8 @@ import { getBlockSupportFallback } from '@blockera/editor/js/extensions/utils';
 import { computedCssDeclarations } from '@blockera/editor/js/style-engine/utils';
 import { getCompatibleBlockCssSelector } from '@blockera/editor/js/style-engine/get-compatible-block-css-selector';
 
+import { prepareIconSvgForStorage } from '@blockera/icons';
+
 import {
 	DEFAULT_ICON_SIZE_ATTRIBUTE,
 	getIconSizeAttributeId,
@@ -94,9 +96,13 @@ export const IconStyles = ({
 							...staticDefinitionParams,
 							properties: {
 								'--blockera--icon--url': `url("data:image/svg+xml,${encodeURIComponent(
-									atob(
+									prepareIconSvgForStorage(
+										atob(
+											currentBlockAttributes.blockeraIcon
+												?.renderedIcon || ''
+										),
 										currentBlockAttributes.blockeraIcon
-											?.renderedIcon || ''
+											?.library || ''
 									)
 								)}")`,
 							},

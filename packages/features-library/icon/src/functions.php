@@ -23,6 +23,118 @@ if ( ! function_exists('blockera_get_blockera_icon_attr_value')) {
 	}
 }
 
+if ( ! function_exists('blockera_is_stroke_icon_library')) {
+	/**
+	 * Stroke-based npm icon libraries (Feather, Lucide, Untitled UI).
+	 *
+	 * @param string $library Icon library id.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_stroke_icon_library( string $library): bool {
+		return in_array($library, [ 'feather', 'lucide', 'untitledui' ], true);
+	}
+}
+
+if ( ! function_exists('blockera_normalize_stroke_icon_svg')) {
+	/**
+	 * Normalize stroke icon SVG for frontend output (fixes legacy saved fill).
+	 *
+	 * @param string $icon_html SVG markup.
+	 * @param string $library   Icon library id.
+	 *
+	 * @return string
+	 */
+	function blockera_normalize_stroke_icon_svg( string $icon_html, string $library = ''): string {
+		if ('' === $icon_html) {
+			return '';
+		}
+
+		if (! blockera_is_stroke_icon_library($library) && ! blockera_is_stroke_svg_markup($icon_html)) {
+			return $icon_html;
+		}
+
+		if (preg_match('/<svg[\s\S]*<\/svg>/i', $icon_html, $matches)) {
+			$icon_html = $matches[0];
+		}
+
+		$icon_html = preg_replace_callback(
+			'/(<svg[^>]*\sstyle=["\'])([^"\']*)(["\'])/i',
+			static function ( array $matches): string {
+				$style = preg_replace('/\bfill\s*:\s*[^;]+;?/i', '', $matches[2]);
+
+				return $matches[1] . trim($style, '; ') . $matches[3];
+			},
+			$icon_html
+		);
+
+		if (preg_match('/<svg[^>]*\sfill=/i', $icon_html)) {
+			$icon_html = preg_replace(
+				'/(<svg[^>]*)\sfill=["\'][^"\']*["\']/i',
+				'$1 fill="none"',
+				$icon_html
+			);
+		} else {
+			$icon_html = preg_replace('/<svg/i', '<svg fill="none"', $icon_html, 1);
+		}
+
+		if (! preg_match('/<svg[^>]*\sstroke=/i', $icon_html)) {
+			$icon_html = preg_replace('/<svg/i', '<svg stroke="currentColor"', $icon_html, 1);
+		}
+
+		$shape_tags = [ 'path', 'circle', 'rect', 'ellipse', 'line', 'polyline', 'polygon' ];
+
+		foreach ($shape_tags as $tag) {
+			$icon_html = preg_replace_callback(
+				'/<(' . $tag . ')\b([^>]*?)(\/?)>/i',
+				static function ( array $matches): string {
+					$attrs = $matches[2];
+
+					if (preg_match('/\sfill=/i', $attrs)) {
+						$attrs = preg_replace('/\sfill=["\'][^"\']*["\']/i', ' fill="none"', $attrs);
+					} else {
+						$attrs .= ' fill="none"';
+					}
+
+					if (! preg_match('/\sstroke=/i', $attrs)) {
+						$attrs .= ' stroke="currentColor"';
+					}
+
+					$attrs = preg_replace_callback(
+						'/\sstyle=["\']([^"\']*)["\']/i',
+						static function ( array $style_matches): string {
+							$style = preg_replace('/\bfill\s*:\s*[^;]+;?/i', '', $style_matches[1]);
+
+							return ' style="' . trim($style, '; ') . '"';
+						},
+						$attrs
+					);
+
+					return '<' . $matches[1] . $attrs . $matches[3] . '>';
+				},
+				$icon_html
+			);
+		}
+
+		return $icon_html;
+	}
+}
+
+if ( ! function_exists('blockera_is_stroke_svg_markup')) {
+	/**
+	 * Detect stroke SVG markup (fill="none" + stroke).
+	 *
+	 * @param string $svg SVG markup.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_stroke_svg_markup( string $svg): bool {
+		return '' !== $svg
+			&& false !== stripos($svg, 'fill="none"')
+			&& false !== stripos($svg, 'stroke');
+	}
+}
+
 if ( ! function_exists('blockera_core_icon_has_renderable_blockera_icon')) {
 	/**
 	 * Whether core/icon should render Blockera icon output on the frontend.

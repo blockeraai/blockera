@@ -23,7 +23,12 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { Icon } from '@blockera/icons';
+import {
+	Icon,
+	isStrokeIconLibrary,
+	isStrokeSvgMarkup,
+	prepareIconSvgForStorage,
+} from '@blockera/icons';
 import { extensionClassNames } from '@blockera/classnames';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
 import { isEquals, addAngle, isEmpty, isUndefined } from '@blockera/utils';
@@ -92,29 +97,44 @@ export const IconExtension: ComponentType<{
 			: undefined);
 
 	const encodeIcon = useCallback(
-		(iconHTML: string, { hasInlineStyle = false, color } = {}) => {
+		(
+			iconHTML: string,
+			{ library = '', hasInlineStyle = false, color } = {}
+		) => {
+			let normalizedHTML = prepareIconSvgForStorage(iconHTML, library);
+
 			if (hasInlineStyle) {
-				// Apply inline styles based on iconState
 				const iconDoc = new DOMParser().parseFromString(
-					iconHTML,
+					normalizedHTML,
 					'text/html'
 				);
 				const svgElement = iconDoc.querySelector('svg');
 
 				if (svgElement) {
-					// Apply color
 					if (color) {
 						svgElement.style.color = color;
-						svgElement.style.fill = color;
+
+						if (
+							!isStrokeIconLibrary(library) &&
+							!isStrokeSvgMarkup(svgElement.outerHTML)
+						) {
+							svgElement.style.fill = color;
+						} else {
+							svgElement.style.fill = 'none';
+							svgElement.setAttribute('stroke', 'currentColor');
+						}
 					}
 
-					iconHTML = svgElement.outerHTML;
+					normalizedHTML = prepareIconSvgForStorage(
+						svgElement.outerHTML,
+						library
+					);
 				}
 			}
 
 			return {
-				encodedIcon: btoa(unescape(encodeURIComponent(iconHTML))),
-				icon: encodeURIComponent(iconHTML),
+				encodedIcon: btoa(unescape(encodeURIComponent(normalizedHTML))),
+				icon: encodeURIComponent(normalizedHTML),
 			};
 		},
 		[]
@@ -131,11 +151,13 @@ export const IconExtension: ComponentType<{
 			const color = !isUndefined(effectiveItems?.blockeraIconColor?.value)
 				? effectiveItems?.blockeraIconColor?.value
 				: iconColor?.value || iconColor;
+			const isStrokeLibrary = isStrokeIconLibrary(newValue.library);
+
 			iconRoot.render(
 				<Icon
 					style={{
 						color,
-						fill: color,
+						...(!isStrokeLibrary && color ? { fill: color } : {}),
 						width: iconSize ? iconSize : '1em',
 						height: iconSize ? iconSize : '1em',
 						...(iconPosition === 'start' && {
@@ -154,7 +176,10 @@ export const IconExtension: ComponentType<{
 
 			return new Promise((resolve) => {
 				setTimeout(() => {
-					const renderedIcon = encodeIcon(iconNode?.innerHTML || '');
+					const renderedIcon = encodeIcon(iconNode?.innerHTML || '', {
+						library: newValue.library,
+						color,
+					});
 					resolve(renderedIcon);
 					iconRoot.unmount();
 				}, 1);

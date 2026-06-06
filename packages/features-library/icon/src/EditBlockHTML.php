@@ -198,7 +198,13 @@ class EditBlockHTML implements EditableBlockHTML {
 
 		if ('' !== $iconColor) {
 			$properties['color'] = $iconColor;
-			$properties['fill']  = $iconColor;
+
+			$icon_value = blockera_get_blockera_icon_attr_value($block);
+			$library    = $icon_value['library'] ?? '';
+
+			if (! blockera_is_stroke_icon_library($library) && ! blockera_is_stroke_svg_markup($iconHTML)) {
+				$properties['fill'] = $iconColor;
+			}
 		}
 
 		$transform = blockera_build_icon_transform($block);
@@ -552,6 +558,8 @@ class EditBlockHTML implements EditableBlockHTML {
 				$replacement = str_replace('"', '" ', $matches[0]);
 				$iconHTML    = str_replace($matches[0], $replacement, $iconHTML);
 			}
+
+			$iconHTML = blockera_normalize_stroke_icon_svg($iconHTML, $library);
 		}
 
 		if ('' === $iconHTML && '' !== $icon && '' !== $library) {

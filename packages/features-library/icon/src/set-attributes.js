@@ -5,6 +5,11 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
+/**
+ * Blockera dependencies
+ */
+import { isStrokeSvgMarkup, prepareIconSvgForStorage } from '@blockera/icons';
+
 export const filterSetAttributes = () => {
 	addFilter(
 		'blockera.blockEdit.setAttributes',
@@ -91,7 +96,12 @@ export const filterSetAttributes = () => {
 
 					if (color) {
 						styleObj.color = color;
-						styleObj.fill = color;
+
+						if (isStrokeSvgMarkup(svg)) {
+							delete styleObj.fill;
+						} else {
+							styleObj.fill = color;
+						}
 					}
 				}
 				if (
@@ -172,6 +182,13 @@ export const filterSetAttributes = () => {
 					);
 				}
 			}
+
+			const iconLibrary =
+				newValue?.library ||
+				attributes?.blockeraIcon?.value?.library ||
+				'';
+
+			svg = prepareIconSvgForStorage(svg, iconLibrary);
 
 			attributes.url = `data:image/svg+xml;utf8,${encodeURIComponent(
 				svg

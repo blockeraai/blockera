@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * Blockera dependencies
+ */
+import { isStrokeIconLibrary } from '@blockera/icons';
+
+/**
  * Shared attribute readers for icon feature (editor + canvas).
  * Keep icon value / presentation logic here so JS mirrors PHP helpers in functions.php.
  */
@@ -84,12 +89,16 @@ export const getIconTransform = (attributes: Object): string => {
 export const getIconPresentationStyle = (attributes: Object): Object => {
 	const iconColor = getAttrValue(attributes?.blockeraIconColor);
 	const transform = getIconTransform(attributes);
-
-	return {
-		color: iconColor || 'currentColor',
-		fill: iconColor || 'currentColor',
+	const library = getBlockeraIconValue(attributes)?.library;
+	const isStrokeLibrary = isStrokeIconLibrary(library);
+	const resolvedColor = iconColor || 'currentColor';
+	const style = {
+		color: resolvedColor,
+		...(isStrokeLibrary ? {} : { fill: resolvedColor }),
 		...(transform ? { transform } : {}),
 	};
+
+	return style;
 };
 
 export const getCoreIconAriaLabel = (attributes: Object): string =>
