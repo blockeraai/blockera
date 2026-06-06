@@ -121,5 +121,11 @@ function getLibrariesIconCount(libraries) {
 	return count;
 }
 
+function formatIconCount(count) {
+	const locale = document.documentElement.lang || undefined;
+
+	return Number(count).toLocaleString(locale);
+}
+
 export default memo(IconLibraries);
-export { DEFAULT_LIBRARIES, getLibrariesIconCount };
+export { DEFAULT_LIBRARIES, formatIconCount, getLibrariesIconCount };
