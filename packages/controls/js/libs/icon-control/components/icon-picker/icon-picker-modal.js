@@ -26,6 +26,7 @@ import { default as Search } from './search';
 import IconLibraries, { DEFAULT_LIBRARIES } from './icon-libraries';
 import LibraryFilters from './library-filters';
 import CustomIconTab from './custom-icon-tab';
+import RecentIcons from './recent-icons';
 
 const TAB_LIBRARY = 'library';
 const TAB_CUSTOM = 'custom';
@@ -263,6 +264,8 @@ export default function IconPickerModal({
 									onSearchChange={handleSearchChange}
 								/>
 							)}
+
+							{!isSearching && <RecentIcons />}
 
 							{!isSearching && (
 								<IconLibraries
