@@ -25,5 +25,6 @@ export const Icon: TFeature = {
 
 export * from './helpers';
 export { CoreIconCanvasEdit } from './core-icon-canvas-edit';
+export { CoreIconInspectorControls } from './core-icon-inspector-controls';
 export { icon } from './config';
 export { iconConfig } from './extension/supports';
