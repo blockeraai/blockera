@@ -520,7 +520,10 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
 			!isEquals(compatibleAttributes, attributes) &&
-			false === insideBlockInspector
+			false === insideBlockInspector &&
+			!['save-customizations', 'detach-style'].includes(
+				editorSelectedBlockEvent
+			)
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
 			handleOnChangeStyleInLocalState(clonedAttributes);
