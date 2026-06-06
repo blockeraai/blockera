@@ -9,6 +9,7 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
+import { isString } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	Icon,
@@ -25,6 +26,92 @@ import {
 import { Tooltip } from '../';
 import { FeatureWrapper } from '../feature-wrapper';
 import ConditionalWrapper from '../conditional-wrapper';
+
+/**
+ * Whether the current icon value represents a custom SVG (not a library icon).
+ *
+ * @param {Object} icon The current icon state object.
+ * @return {boolean} True when the icon is custom-uploaded or rendered-only custom.
+ */
+export function isCustomIcon(icon) {
+	if (!icon) {
+		return false;
+	}
+
+	if (icon.svgString && icon.svgString !== '') {
+		return true;
+	}
+
+	if (icon.uploadSVG && icon.uploadSVG !== '') {
+		if (typeof icon.uploadSVG === 'object' && icon.uploadSVG.url) {
+			return true;
+		}
+
+		if (typeof icon.uploadSVG === 'string' && icon.uploadSVG !== '') {
+			return true;
+		}
+	}
+
+	// Pro-persisted custom icons may only retain renderedIcon.
+	if (icon.renderedIcon && !icon.icon) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Build draft SVG content from the current icon for the Custom Icon tab.
+ *
+ * @param {Object} icon The current icon state object.
+ * @return {{ svgString: string, uploadSVG: ?Object }} Draft values for editing.
+ */
+export function getCustomSvgDraft(icon) {
+	if (!icon) {
+		return { svgString: '', uploadSVG: null };
+	}
+
+	if (icon.svgString) {
+		return {
+			svgString: icon.svgString,
+			uploadSVG:
+				icon.uploadSVG &&
+				typeof icon.uploadSVG === 'object' &&
+				icon.uploadSVG.url
+					? icon.uploadSVG
+					: null,
+		};
+	}
+
+	if (icon.renderedIcon && isString(icon.renderedIcon)) {
+		try {
+			return {
+				svgString: atob(icon.renderedIcon),
+				uploadSVG:
+					icon.uploadSVG &&
+					typeof icon.uploadSVG === 'object' &&
+					icon.uploadSVG.url
+						? icon.uploadSVG
+						: null,
+			};
+		} catch (error) {
+			return {
+				svgString: '',
+				uploadSVG:
+					icon.uploadSVG &&
+					typeof icon.uploadSVG === 'object' &&
+					icon.uploadSVG.url
+						? icon.uploadSVG
+						: null,
+			};
+		}
+	}
+
+	return {
+		svgString: '',
+		uploadSVG: null,
+	};
+}
 
 export function getLibraryIcons({
 	library,
