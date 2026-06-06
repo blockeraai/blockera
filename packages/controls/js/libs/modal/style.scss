@@ -8,6 +8,7 @@
 		height: var(--modal-header-height);
 		padding: calc(var(--modal-gap) - 10px) var(--modal-gap);
 		background-color: #ffffff;
+		z-index: 100;
 
 		.components-modal__header-heading {
 			display: flex;
