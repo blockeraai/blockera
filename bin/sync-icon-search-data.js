@@ -178,6 +178,37 @@ function getFaBrandsIconNames() {
 }
 
 /**
+ * @return {string[]}
+ */
+function getFeatherIconNames() {
+	const feather = require('feather-icons');
+
+	return Object.keys(feather.icons);
+}
+
+/**
+ * @return {string[]}
+ */
+function getLucideIconNames() {
+	const lucideStatic = require('lucide-static');
+
+	return Object.keys(lucideStatic)
+		.filter((key) => typeof lucideStatic[key] === 'string')
+		.map((key) => getIconKebabId(key));
+}
+
+/**
+ * @return {string[]}
+ */
+function getUntitleduiIconNames() {
+	const untitleduiIcons = require('@untitledui/icons');
+
+	return Object.keys(untitleduiIcons)
+		.filter((key) => typeof untitleduiIcons[key] === 'function')
+		.map((key) => getIconKebabId(key));
+}
+
+/**
  * @param {string} libraryId
  * @return {string[]}
  */
@@ -198,6 +229,12 @@ function getExportedIconNames(libraryId) {
 			return getFaSolidIconNames();
 		case 'fabrands':
 			return getFaBrandsIconNames();
+		case 'feather':
+			return getFeatherIconNames();
+		case 'lucide':
+			return getLucideIconNames();
+		case 'untitledui':
+			return getUntitleduiIconNames();
 		default:
 			return [];
 	}
