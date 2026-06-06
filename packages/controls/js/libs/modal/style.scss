@@ -83,6 +83,11 @@
 	&.blockera-component-ai-experimental-tools-modal {
 		max-width: 600px;
 	}
+
+	.components-modal__children-container {
+		flex-grow: 1;
+		display: flex;
+	}
 }
 
 .components-modal__screen-overlay {
