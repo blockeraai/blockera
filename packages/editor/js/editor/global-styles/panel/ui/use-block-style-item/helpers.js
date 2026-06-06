@@ -47,7 +47,8 @@ export const buildSaveCustomizationsEffectiveItems = ({
 	const blockeraDefaults =
 		prepareBlockeraDefaultAttributesValues(defaultStyles);
 	const wordpressDefaults = prepareWordPressDefaultAttributesValues(
-		blockAttributesSchema
+		blockAttributesSchema,
+		selectedBlock?.attributes || {}
 	);
 	const filterContext = {
 		blockId: blockName,
