@@ -15,7 +15,7 @@ import { mergeObject, cloneObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { mergeBlockGlobalStyles } from './utils';
+import { getStableMergedBlockStyles, retainStableSnapshot } from './utils';
 import { StyleDefaultRenderer } from './style-default-renderer';
 import { getBlockAttributes } from '../global-styles/panel/context/index';
 import { getBlockeraGlobalStylesMetaData } from '../global-styles/helpers';
@@ -24,11 +24,13 @@ import { IntersectionObserverRenderer } from '../intersection-observer-renderer'
 import { prepareBlockeraDefaultAttributesValues } from '../../extensions/components/utils';
 import { getCompatibleAttributes as getCompatibleStyles } from '../../extensions/components/get-compatible-attributes';
 
+const EMPTY_BLOCKS_STYLES: Object = {};
+
 type GlobalStylesProps = {
 	args: Object,
 	blockeraMetaData: Object,
 	blockType: Object,
-	mergedGlobalStyles: Object,
+	rawStylesForBlock: Object,
 };
 
 /**
@@ -41,7 +43,7 @@ function areGlobalStylesPropsEqual(
 	if (!Object.is(prev.args, next.args)) {
 		return false;
 	}
-	if (!Object.is(prev.mergedGlobalStyles, next.mergedGlobalStyles)) {
+	if (!Object.is(prev.rawStylesForBlock, next.rawStylesForBlock)) {
 		return false;
 	}
 	if (!Object.is(prev.blockeraMetaData, next.blockeraMetaData)) {
@@ -104,18 +106,17 @@ type IframeSelectorsShape = {
 
 function buildIframeCompatArgsBundle(
 	blockTypes: Array<Object>,
-	editorSelectedBlockEvent: mixed,
 	selectShape: IframeSelectorsShape,
 	getActiveBlockVariation: Function
 ): Object {
-	const { getBlockExtensionBy, _getActiveBlockVariation } = selectShape;
+	const { getBlockExtensionBy } = selectShape;
 	const entries = blockTypes.map((blockType: Object) => [
 		blockType.name,
 		{
 			blockId: blockType.name,
 			blockClientId: blockType.name.replace('/', '-'),
 			insideBlockInspector: false,
-			editorSelectedBlockEvent,
+			editorSelectedBlockEvent: undefined,
 			isMasterNormalState: 'normal',
 			isNormalState: true,
 			isMasterBlock: true,
@@ -124,7 +125,7 @@ function buildIframeCompatArgsBundle(
 			currentBlock: blockType.name,
 			currentState: 'normal',
 			blockVariations: blockType.variations,
-			activeBlockVariation: _getActiveBlockVariation(),
+			activeBlockVariation: null,
 			getActiveBlockVariation,
 			blockAttributes: prepareBlockeraDefaultAttributesValues(
 				blockType.attributes,
@@ -149,17 +150,16 @@ function GlobalStylesComponent({
 	args,
 	blockType,
 	blockeraMetaData,
-	mergedGlobalStyles,
+	rawStylesForBlock,
 }: GlobalStylesProps): MixedElement | null {
 	const blockName =
 		blockType && typeof blockType.name === 'string' ? blockType.name : '';
 
-	const rawStylesForBlock = useMemo(() => {
-		if (!blockName) {
-			return {};
-		}
-		return mergedGlobalStyles?.[blockName] || {};
-	}, [mergedGlobalStyles, blockName]);
+	const compatibleStylesCacheRef = useRef({
+		args: (null: null | Object),
+		rawStylesForBlock: (EMPTY_BLOCKS_STYLES: Object),
+		styles: (EMPTY_BLOCKS_STYLES: Object),
+	});
 
 	const { blockeraOverrideBlockAttributes } = useMemo(
 		() => getBlockAttributes(blockType.name),
@@ -173,7 +173,18 @@ function GlobalStylesComponent({
 	}, [blockType.attributes, blockeraOverrideBlockAttributes]);
 
 	const styles = useMemo(() => {
+		const cache = compatibleStylesCacheRef.current;
+		if (
+			Object.is(cache.args, args) &&
+			Object.is(cache.rawStylesForBlock, rawStylesForBlock)
+		) {
+			return cache.styles;
+		}
+
 		if (typeof getCompatibleStyles !== 'function') {
+			cache.args = args;
+			cache.rawStylesForBlock = rawStylesForBlock;
+			cache.styles = rawStylesForBlock;
 			return rawStylesForBlock;
 		}
 
@@ -218,6 +229,9 @@ function GlobalStylesComponent({
 			merged.variations = compatibleVariations;
 		}
 
+		cache.args = args;
+		cache.rawStylesForBlock = rawStylesForBlock;
+		cache.styles = merged;
 		return merged;
 	}, [
 		args,
@@ -247,95 +261,105 @@ export const GlobalStyles: ComponentType<GlobalStylesProps> = memo(
 
 /**
  * Iframe root: one {@see GlobalStyles} per registered Blockera block type.
- * Caches iframe `compat` args until schema (attributes/variations), editor selection,
- * or active variation signal changes — avoids rebuilding every store tick.
+ * Caches iframe `compat` args until block schema changes — avoids rebuilding on
+ * unrelated editor ticks (selection, device type, etc.).
  */
 const GlobalStylesIframeBundle: ComponentType<{}> = memo((): MixedElement => {
 	const iframeCompatArgsBundleCacheRef = useRef({
 		schemaFingerprint: '',
-		editorSelectedBlockEvent: (undefined: mixed),
-		activeVariationKey: '',
 		args: (null: null | Object),
 	});
+
+	const blockTypesCacheRef = useRef({
+		schemaFingerprint: '',
+		blockTypes: ([]: Array<Object>),
+	});
+
+	const mergedBlockStylesCacheRef = useRef(new Map());
+
+	const blockeraMetaDataCacheRef = useRef(({}: Object));
+	const userBlockStylesCacheRef = useRef((EMPTY_BLOCKS_STYLES: Object));
+	const baseBlockStylesCacheRef = useRef((EMPTY_BLOCKS_STYLES: Object));
 
 	const iframeSelectorsRef = useRef<null | {
 		selectSnapshot: IframeSelectorsShape,
 		getActiveBlockVariation: Function,
 	}>(null);
 
-	const {
-		activeVariationKey,
-		baseGlobalStyles,
-		blockTypes,
-		blockSchemaFingerprint,
-		blockeraMetaData,
-		editorSelectedBlockEvent,
-		getActiveBlockVariation,
-		selectSnapshot,
-		userGlobalStyles,
-	} = useSelect((select) => {
-		const editor = select('blockera/editor');
-
-		const { getGlobalStyles, getEditorSelectedBlockEvent } = editor;
-
-		const editorSelectedBlockEvent = getEditorSelectedBlockEvent();
-
-		const userStyles = getGlobalStyles()?.userStyles || {};
-		const storeMetaData = userStyles?.blockeraMetaData || {};
-		const windowMetaData = getBlockeraGlobalStylesMetaData() || {};
-
-		const base =
-			select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
-
-		const { getBlockTypes, getActiveBlockVariation } =
-			select('core/blocks');
+	const blockSchemaFingerprint = useSelect((select) => {
+		const { getBlockTypes } = select('core/blocks');
 		const filtered = getBlockTypes().filter((blockType: Object) =>
 			blockType.attributes.hasOwnProperty('blockeraPropsId')
 		);
-		const schemaFingerprint = iframeBlockTypesSchemaFingerprint(filtered);
-		const {
-			getBlockExtensionBy,
-			getActiveBlockVariation: _getActiveBlockVariation,
-		} = select('blockera/extensions');
-		const rawActive = _getActiveBlockVariation();
-		let nextActiveVariationKey = '';
-		if (rawActive && typeof rawActive === 'object') {
-			if (typeof rawActive.name === 'string') {
-				nextActiveVariationKey = rawActive.name;
-			}
-		} else if (
-			rawActive !== null &&
-			rawActive !== undefined &&
-			typeof rawActive !== 'object'
-		) {
-			nextActiveVariationKey = String(rawActive);
+		const fingerprint = iframeBlockTypesSchemaFingerprint(filtered);
+		const cached = blockTypesCacheRef.current;
+		if (cached.schemaFingerprint !== fingerprint) {
+			cached.schemaFingerprint = fingerprint;
+			cached.blockTypes = filtered;
 		}
+		return fingerprint;
+	}, []);
 
-		return {
-			activeVariationKey: nextActiveVariationKey,
-			baseGlobalStyles: base?.styles?.blocks || {},
-			blockTypes: filtered,
-			blockSchemaFingerprint: schemaFingerprint,
-			blockeraMetaData: mergeObject(storeMetaData, windowMetaData),
-			editorSelectedBlockEvent,
+	const userBlockStyles = useSelect((select) => {
+		const blocks =
+			select('blockera/editor').getGlobalStyles()?.userStyles?.styles
+				?.blocks;
+		return blocks && typeof blocks === 'object'
+			? blocks
+			: EMPTY_BLOCKS_STYLES;
+	}, []);
+
+	const baseBlockStyles = useSelect((select) => {
+		const base =
+			select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
+		const blocks = base?.styles?.blocks;
+		return blocks && typeof blocks === 'object'
+			? blocks
+			: EMPTY_BLOCKS_STYLES;
+	}, []);
+
+	const storeBlockeraMetaData = useSelect((select) => {
+		return (
+			select('blockera/editor').getBlockeraGlobalStylesMetaData?.() ?? {}
+		);
+	}, []);
+
+	const rawBlockeraMetaData = useMemo(
+		() =>
+			mergeObject(
+				storeBlockeraMetaData,
+				getBlockeraGlobalStylesMetaData() || {}
+			),
+		[storeBlockeraMetaData]
+	);
+
+	useSelect((select) => {
+		const { getActiveBlockVariation } = select('core/blocks');
+		const { getBlockExtensionBy } = select('blockera/extensions');
+		iframeSelectorsRef.current = {
 			getActiveBlockVariation,
 			selectSnapshot: {
 				getBlockExtensionBy,
-				_getActiveBlockVariation,
+				_getActiveBlockVariation: () => null,
 			},
-			userGlobalStyles: userStyles?.styles?.blocks || {},
 		};
+		return getBlockExtensionBy;
 	}, []);
 
-	const mergedGlobalStyles = useMemo(
-		() => mergeBlockGlobalStyles(baseGlobalStyles, userGlobalStyles),
-		[baseGlobalStyles, userGlobalStyles]
+	const stableUserBlockStyles = retainStableSnapshot(
+		userBlockStylesCacheRef,
+		userBlockStyles
+	);
+	const stableBaseBlockStyles = retainStableSnapshot(
+		baseBlockStylesCacheRef,
+		baseBlockStyles
+	);
+	const blockeraMetaData = retainStableSnapshot(
+		blockeraMetaDataCacheRef,
+		rawBlockeraMetaData
 	);
 
-	iframeSelectorsRef.current = {
-		selectSnapshot,
-		getActiveBlockVariation,
-	};
+	const blockTypes = blockTypesCacheRef.current.blockTypes;
 
 	const compatArgsByBlockName = useMemo(() => {
 		const snap = iframeSelectorsRef.current;
@@ -343,40 +367,23 @@ const GlobalStylesIframeBundle: ComponentType<{}> = memo((): MixedElement => {
 			return {};
 		}
 		const cached = iframeCompatArgsBundleCacheRef.current;
-		const hit =
+		if (
 			cached.args !== null &&
-			cached.schemaFingerprint === blockSchemaFingerprint &&
-			Object.is(
-				cached.editorSelectedBlockEvent,
-				editorSelectedBlockEvent
-			) &&
-			cached.activeVariationKey === activeVariationKey;
-
-		if (hit) {
+			cached.schemaFingerprint === blockSchemaFingerprint
+		) {
 			return cached.args;
 		}
 
 		const nextArgs = buildIframeCompatArgsBundle(
 			blockTypes,
-			editorSelectedBlockEvent,
 			snap.selectSnapshot,
 			snap.getActiveBlockVariation
 		);
 
 		cached.schemaFingerprint = blockSchemaFingerprint;
-		cached.editorSelectedBlockEvent = editorSelectedBlockEvent;
-		cached.activeVariationKey = activeVariationKey;
 		cached.args = nextArgs;
-		nextArgs.insideBlockInspector = false;
 		return nextArgs;
-		// Snapshot ref holds latest selectors; primitives drive invalidation.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		blockSchemaFingerprint,
-		blockTypes,
-		editorSelectedBlockEvent,
-		activeVariationKey,
-	]);
+	}, [blockSchemaFingerprint, blockTypes]);
 
 	return (
 		<>
@@ -386,7 +393,12 @@ const GlobalStylesIframeBundle: ComponentType<{}> = memo((): MixedElement => {
 					blockType={blockType}
 					blockeraMetaData={blockeraMetaData}
 					key={blockType.name}
-					mergedGlobalStyles={mergedGlobalStyles}
+					rawStylesForBlock={getStableMergedBlockStyles(
+						mergedBlockStylesCacheRef.current,
+						blockType.name,
+						stableBaseBlockStyles,
+						stableUserBlockStyles
+					)}
 				/>
 			))}
 		</>
