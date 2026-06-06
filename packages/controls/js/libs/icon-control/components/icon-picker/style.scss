@@ -512,8 +512,30 @@
 	}
 }
 
-.blockera-control-icon-picker-recent-icons {
+.blockera-control-icon-library.library-recent {
 	margin-bottom: 0;
+
+	.blockera-control-library-header.recent-icons-header {
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.blockera-control-recent-icons-header__title {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
+
+	.blockera-component-button.recent-icons-clear {
+		margin-left: auto;
+		font-weight: 400;
+		font-size: 12px;
+		color: #757575;
+
+		&:hover {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
 
 	.blockera-control-library-body {
 		.blockera-control-icon-control-icon.blockera-control-recent-icon-item {
