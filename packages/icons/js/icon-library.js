@@ -89,14 +89,14 @@ export const IconLibraries: {
 	brands: {
 		id: 'brands',
 		// translators: Icon library name
-		name: __('Brands', 'blockera'),
+		name: __('Blockera Branding', 'blockera'),
 		icon: <BrandsIcon />,
 		count: Object.keys(BrandsIcons).length,
 	},
 	blockera: {
 		id: 'blockera',
 		// translators: Icon library name
-		name: __('Blockera Branding', 'blockera'),
+		name: __('Blockera Products', 'blockera'),
 		icon: <LibraryIcon />,
 		count: Object.keys(BlockeraIcons).length,
 	},
@@ -117,7 +117,7 @@ export const IconLibraries: {
 	essentials: {
 		id: 'essentials',
 		// translators: Icon library name
-		name: __('Essentials', 'blockera'),
+		name: __('Blockera Essentials', 'blockera'),
 		icon: <EssentialsLibraryIcon />,
 		count: Object.keys(EssentialsIcons).length,
 	},
