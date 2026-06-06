@@ -75,5 +75,16 @@ const IconLibraries = ({
 	);
 };
 
+function getLibrariesIconCount(libraries) {
+	let count = 0;
+
+	for (const library of Object.keys(libraries)) {
+		const iconLibraryInfo = getIconLibrary(library);
+		count += iconLibraryInfo[library]?.count ?? 0;
+	}
+
+	return count;
+}
+
 export default memo(IconLibraries);
-export { DEFAULT_LIBRARIES };
+export { DEFAULT_LIBRARIES, getLibrariesIconCount };
