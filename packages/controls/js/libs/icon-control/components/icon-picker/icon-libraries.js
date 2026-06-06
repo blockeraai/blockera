@@ -1,7 +1,8 @@
 /**
  * External dependencies
  */
-import { memo, useMemo } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { createInterpolateElement, memo, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -47,6 +48,36 @@ const DEFAULT_LIBRARIES = {
 	},
 };
 
+function getLibraryHeaderTitle(libraryInfo) {
+	const { icon, name, author, link } = libraryInfo;
+
+	return (
+		<>
+			{icon} {name}
+			{author && link && (
+				<span
+					className={controlInnerClassNames('library-header__author')}
+				>
+					{createInterpolateElement(
+						__('by <author></author>', 'blockera'),
+						{
+							author: (
+								<a
+									href={link}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{author}
+								</a>
+							),
+						}
+					)}
+				</span>
+			)}
+		</>
+	);
+}
+
 const IconLibraries = ({
 	libraries = DEFAULT_LIBRARIES,
 	activeFilter = 'all',
@@ -59,12 +90,7 @@ const IconLibraries = ({
 
 		return entries.map(([library, config]) => {
 			const iconLibraryInfo = getIconLibrary(library);
-			const icon = iconLibraryInfo[library].icon;
-			const title = (
-				<>
-					{icon} {iconLibraryInfo[library].name}
-				</>
-			);
+			const title = getLibraryHeaderTitle(iconLibraryInfo[library]);
 
 			return (
 				<IconLibrary
