@@ -27,6 +27,15 @@ const DEFAULT_LIBRARIES = {
 	fabrands: {
 		lazyLoad: true,
 	},
+	feather: {
+		lazyLoad: true,
+	},
+	lucide: {
+		lazyLoad: true,
+	},
+	untitledui: {
+		lazyLoad: true,
+	},
 	brands: {
 		lazyLoad: true,
 	},

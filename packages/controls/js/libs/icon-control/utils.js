@@ -216,6 +216,9 @@ export function getLibraryIcons({
 										'faregular',
 										'fasolid',
 										'fabrands',
+										'feather',
+										'lucide',
+										'untitledui',
 									].includes(icon.library)
 										? 18
 										: 24
@@ -326,6 +329,9 @@ export function buildRecentIconElements({
 										'faregular',
 										'fasolid',
 										'fabrands',
+										'feather',
+										'lucide',
+										'untitledui',
 									].includes(icon.library)
 										? 18
 										: 24
