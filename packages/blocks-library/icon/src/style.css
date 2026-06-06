@@ -8,9 +8,18 @@
 	max-width: 100%;
 	height: auto;
 	vertical-align: bottom;
-	fill: var(--blockera--icon--color, currentColor);
 	color: var(--blockera--icon--color, inherit);
 	transform: rotate(var(--blockera--icon--rotate, 0deg))
 		scaleX(var(--blockera--icon--flip-horizontal, 1))
 		scaleY(var(--blockera--icon--flip-vertical, 1));
+}
+
+.wp-block-image.blockera-is-icon-block .wp-block-image__icon svg:not([fill="none"]) {
+	fill: var(--blockera--icon--color, currentColor);
+}
+
+.wp-block-image.blockera-is-icon-block .wp-block-image__icon svg[fill="none"],
+.wp-block-image.blockera-is-icon-block .blockera-stroke-svg-icon svg {
+	fill: none;
+	stroke: var(--blockera--icon--color, currentColor);
 }

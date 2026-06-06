@@ -5,6 +5,12 @@
 	backdrop-filter: blur(100px);
 }
 
+.wp-block-icon .blockera-stroke-svg-icon svg,
+.wp-block-icon svg[fill="none"] {
+	fill: none;
+	stroke: currentColor;
+}
+
 .wp-block-icon.aligncenter {
 	display: flex;
 	justify-content: center;
