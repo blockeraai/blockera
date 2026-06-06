@@ -40,6 +40,11 @@ import { isInnerBlock } from './utils';
 /** @type {Map<string, string>} Session-only tab per block type + variation. */
 const blockInspectorTabByKey = new Map();
 
+/** Ignore WP→Blockera observer reads briefly after programmatic tab changes. */
+const WP_TAB_SYNC_SUPPRESS_MS = 600;
+
+const ACTIVATION_RETRY_MAX_FRAMES = 48;
+
 /**
  * Persistence API for the activated inspector tab (cleared on full page reload).
  */
@@ -97,12 +102,16 @@ const requestWordPressTabForBlockeraTab = (blockeraTab) => {
  * @param {string}                        options.persistenceKey
  * @param {HTMLElement|null|undefined}    options.inspector
  * @param {boolean}                       options.isInnerBlock
+ * @param {boolean}                       [options.isFirstBlockTypeSelection] First open for this block type in the session.
+ * @param {boolean}                       [options.allowMultiTabDomRead]      Whether >2-tab DOM reads are trusted (after settle or retry timeout).
  * @return {{ tab: string, syncWordPress: boolean, mode: InspectorTabActivationMode }|null} Activation plan, or null while the inspector DOM is not ready.
  */
 export const getInspectorTabActivationPlan = ({
 	persistenceKey,
 	inspector,
 	isInnerBlock,
+	isFirstBlockTypeSelection = false,
+	allowMultiTabDomRead = true,
 }) => {
 	if (isInnerBlock) {
 		return {
@@ -133,6 +142,10 @@ export const getInspectorTabActivationPlan = ({
 	}
 
 	if (hasMoreThanTwoWordPressInspectorTabs(inspector)) {
+		if (isFirstBlockTypeSelection && !allowMultiTabDomRead) {
+			return null;
+		}
+
 		const tab = readBlockeraTabFromInspectorDom(inspector);
 
 		if (!tab) {
@@ -217,45 +230,83 @@ export function useSyncBlockInspectorTab({
 	const syncStateRef = useRef({
 		currentTab,
 		setCurrentTab,
+		persistenceKey,
+		canSyncWordPressTabs,
+		isInnerBlockTarget,
 	});
+	const suppressWpSyncUntilRef = useRef(0);
+	const awaitingBlockTypeActivationRef = useRef(false);
+	const inspectorTabsSettledRef = useRef(false);
+	const previousPersistenceKeyRef = useRef(null);
 
 	syncStateRef.current.currentTab = currentTab;
 	syncStateRef.current.setCurrentTab = setCurrentTab;
+	syncStateRef.current.persistenceKey = persistenceKey;
+	syncStateRef.current.canSyncWordPressTabs = canSyncWordPressTabs;
+	syncStateRef.current.isInnerBlockTarget = isInnerBlockTarget;
 
-	const applyTab = useCallback((tab, { syncWordPress = false } = {}) => {
-		applyInspectorTabChange({
-			tab,
-			setCurrentTab: syncStateRef.current.setCurrentTab,
-			syncWordPress,
-		});
+	const beginWpSyncSuppress = useCallback(() => {
+		suppressWpSyncUntilRef.current = Date.now() + WP_TAB_SYNC_SUPPRESS_MS;
 	}, []);
 
-	const activatePreferredTab = useCallback(() => {
-		const inspector = getInspectorRoot(inspectorContainer);
-		const plan = getInspectorTabActivationPlan({
-			persistenceKey,
-			inspector,
-			isInnerBlock: isInnerBlockTarget,
-		});
+	const isWpSyncSuppressed = useCallback(
+		() => Date.now() < suppressWpSyncUntilRef.current,
+		[]
+	);
 
-		if (!plan) {
-			return;
-		}
+	const applyTab = useCallback(
+		(tab, { syncWordPress = false, suppressWpObserver = true } = {}) => {
+			if (suppressWpObserver) {
+				beginWpSyncSuppress();
+			}
 
-		const shouldSyncWordPress =
-			plan.syncWordPress &&
-			canSyncWordPressTabs &&
-			inspector &&
-			isBlockInspectorContainerReady(inspector);
+			applyInspectorTabChange({
+				tab,
+				setCurrentTab: syncStateRef.current.setCurrentTab,
+				syncWordPress,
+			});
+		},
+		[beginWpSyncSuppress]
+	);
 
-		applyTab(plan.tab, { syncWordPress: shouldSyncWordPress });
-	}, [
-		applyTab,
-		canSyncWordPressTabs,
-		inspectorContainer,
-		isInnerBlockTarget,
-		persistenceKey,
-	]);
+	const activatePreferredTab = useCallback(
+		(activationAttempt = 0) => {
+			const {
+				persistenceKey: activePersistenceKey,
+				canSyncWordPressTabs: canSyncTabs,
+				isInnerBlockTarget: isInnerBlockSelection,
+			} = syncStateRef.current;
+			const inspector = getInspectorRoot(inspectorContainer);
+			const isFirstBlockTypeSelection =
+				awaitingBlockTypeActivationRef.current &&
+				!blockInspectorTabPersistence.getByKey(activePersistenceKey);
+			const plan = getInspectorTabActivationPlan({
+				persistenceKey: activePersistenceKey,
+				inspector,
+				isInnerBlock: isInnerBlockSelection,
+				isFirstBlockTypeSelection,
+				allowMultiTabDomRead:
+					inspectorTabsSettledRef.current ||
+					activationAttempt >= ACTIVATION_RETRY_MAX_FRAMES,
+			});
+
+			if (!plan) {
+				return false;
+			}
+
+			const shouldSyncWordPress =
+				plan.syncWordPress &&
+				canSyncTabs &&
+				inspector &&
+				isBlockInspectorContainerReady(inspector);
+
+			applyTab(plan.tab, { syncWordPress: shouldSyncWordPress });
+			awaitingBlockTypeActivationRef.current = false;
+
+			return true;
+		},
+		[applyTab, inspectorContainer]
+	);
 
 	const setCurrentTabAligned = useCallback(
 		(nextTab) => {
@@ -274,10 +325,60 @@ export function useSyncBlockInspectorTab({
 
 	useEffect(() => {
 		if (!insideBlockInspector || !enabled || !blockName) {
-			return;
+			return undefined;
 		}
 
-		activatePreferredTab();
+		const persistenceKeyChanged =
+			previousPersistenceKeyRef.current !== persistenceKey;
+
+		previousPersistenceKeyRef.current = persistenceKey;
+
+		if (!blockInspectorTabPersistence.getByKey(persistenceKey)) {
+			awaitingBlockTypeActivationRef.current = true;
+
+			if (persistenceKeyChanged) {
+				inspectorTabsSettledRef.current = false;
+			}
+		}
+
+		let frameId = 0;
+		let attempts = 0;
+		const activationTabObservers = [];
+
+		const tryActivate = () => {
+			if (activatePreferredTab(attempts)) {
+				return;
+			}
+
+			if (attempts < ACTIVATION_RETRY_MAX_FRAMES) {
+				attempts += 1;
+				frameId = requestAnimationFrame(tryActivate);
+			}
+		};
+
+		tryActivate();
+
+		const inspector = getInspectorRoot(inspectorContainer);
+
+		if (inspector && isBlockInspectorContainerReady(inspector)) {
+			activationTabObservers.push(
+				...observeInspectorTabLists(inspector, () => {
+					inspectorTabsSettledRef.current = true;
+
+					if (awaitingBlockTypeActivationRef.current) {
+						tryActivate();
+					}
+				})
+			);
+		}
+
+		return () => {
+			if (frameId) {
+				cancelAnimationFrame(frameId);
+			}
+
+			activationTabObservers.forEach((observer) => observer.disconnect());
+		};
 	}, [
 		blockName,
 		persistenceKey,
@@ -305,6 +406,13 @@ export function useSyncBlockInspectorTab({
 			const { currentTab: activeTab } = syncStateRef.current;
 
 			if (!isBlockInspectorContainerReady(inspector)) {
+				return;
+			}
+
+			if (
+				awaitingBlockTypeActivationRef.current ||
+				isWpSyncSuppressed()
+			) {
 				return;
 			}
 
