@@ -22,6 +22,42 @@ import {
 
 const EDITOR_STORE = 'blockera/editor';
 
+const WP_GLOBAL_STYLE_KEYS = [
+	'border',
+	'color',
+	'spacing',
+	'typography',
+	'dimensions',
+	'filter',
+	'outline',
+	'shadow',
+	'background',
+];
+
+/**
+ * Remove WordPress global style keys whose value is `undefined`.
+ * Core's pickStyleKeys() runs JSON.parse(JSON.stringify(value)) and throws
+ * when a style key is explicitly undefined.
+ *
+ * @param {Object} node Global styles node or variation payload.
+ * @return {Object} Sanitized node safe for global styles storage.
+ */
+export const sanitizeGlobalStylesNode = (node: Object): Object => {
+	if (!node || 'object' !== typeof node) {
+		return node;
+	}
+
+	const sanitized = { ...node };
+
+	for (const key of WP_GLOBAL_STYLE_KEYS) {
+		if (sanitized[key] === undefined) {
+			delete sanitized[key];
+		}
+	}
+
+	return sanitized;
+};
+
 /**
  * Build effectiveItems for save-customizations so blockera and WordPress core
  * attributes reset to defaults after persisting customizations to global styles.
