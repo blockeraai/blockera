@@ -112,7 +112,7 @@ export default function Search({
 										'library-header'
 									)}
 								>
-									<Icon icon="search" iconSize="18" />{' '}
+									<Icon icon="search" iconSize="24" />{' '}
 									{__('Search Result', 'blockera')}
 									<span
 										className={controlInnerClassNames(
@@ -159,7 +159,7 @@ export default function Search({
 										'library-header'
 									)}
 								>
-									<Icon icon="search" iconSize="18" />{' '}
+									<Icon icon="search" iconSize="24" />{' '}
 									{__('Search Result', 'blockera')}
 									<span
 										className={controlInnerClassNames(
