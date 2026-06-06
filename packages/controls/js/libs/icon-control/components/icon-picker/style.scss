@@ -202,7 +202,7 @@
 		padding-left: 25px;
 		display: flex;
 		flex-direction: column;
-		gap: 30px;
+		gap: 0;
 
 		.blockera-control-icon-search {
 			position: sticky;
@@ -436,6 +436,11 @@
 		color: var(--blockera-controls-primary-color);
 		align-items: center;
 		flex-wrap: wrap;
+		position: sticky;
+		top: 120px;
+		background: #ffffff;
+		z-index: 1;
+		padding: 20px 0 10px;
 
 		svg {
 			fill: currentcolor;
