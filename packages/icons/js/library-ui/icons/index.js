@@ -233,6 +233,7 @@ export { default as HtmlTagAttribute } from './html-tag-attribute.svg';
 export { default as ResponsiveBreakpoints } from './responsive-breakpoints.svg';
 export { default as iconPositionLeft } from './icon-position-left.svg';
 export { default as iconPositionRight } from './icon-position-right.svg';
+export { default as Icon } from './icon.svg';
 export { default as Information } from './information.svg';
 export { default as InheritSquare } from './inherit-square.svg';
 export { default as InheritCircle } from './inherit-circle.svg';
