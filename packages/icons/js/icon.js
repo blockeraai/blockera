@@ -22,6 +22,9 @@ import { EssentialsIcon } from './library-essentials/icon';
 import { FaRegularIcon } from './library-faregular';
 import { FaBrandsIcon } from './library-fabrands';
 import { FaSolidIcon } from './library-fasolid';
+import { FeatherIcon } from './library-feather';
+import { LucideIcon } from './library-lucide';
+import { UntitleduiIcon } from './library-untitledui';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 import type { IconProps, IconLibraryTypes } from './types';
 
@@ -62,6 +65,15 @@ export function Icon({
 
 		case 'essentials':
 			return <EssentialsIcon library={library} {...props} />;
+
+		case 'feather':
+			return <FeatherIcon library={library} {...props} />;
+
+		case 'lucide':
+			return <LucideIcon library={library} {...props} />;
+
+		case 'untitledui':
+			return <UntitleduiIcon library={library} {...props} />;
 
 		default:
 			return <WPIcon library={library} {...props} />;
@@ -168,6 +180,22 @@ export function createStandardIconObject(
 			library,
 			iconName,
 		};
+	}
+
+	if (['feather', 'lucide', 'untitledui'].includes(library)) {
+		if (
+			typeof icon === 'function' ||
+			typeof icon === 'string' ||
+			icon?.toSvg
+		) {
+			return {
+				icon,
+				library,
+				iconName,
+			};
+		}
+
+		return getIcon(iconName, library, false);
 	}
 
 	if (icon?.icon) {
