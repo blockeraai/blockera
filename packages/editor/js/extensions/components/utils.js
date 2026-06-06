@@ -168,3 +168,43 @@ export const prepareBlockeraDefaultAttributesValues = (
 
 	return attributes;
 };
+
+/**
+ * Preparing WordPress (non-blockera) attribute default values for block reset flows.
+ *
+ * @param {Object} rootAttributes the root attributes of registration time.
+ * @return {Object} the WordPress attribute defaults.
+ */
+export const prepareWordPressDefaultAttributesValues = (
+	rootAttributes: Object
+): Object => {
+	if (!rootAttributes) {
+		return {};
+	}
+
+	const ignoredAttributes = getIgnoredAttributesForSchema(rootAttributes);
+	const attributes: { [key: string]: any } = {};
+	const reservedAttributes = ['className', 'metadata'];
+
+	for (const key in rootAttributes) {
+		if (ignoreBlockeraAttributeKeysRegExp().test(key)) {
+			continue;
+		}
+
+		if (
+			ignoredAttributes.includes(key) ||
+			reservedAttributes.includes(key)
+		) {
+			continue;
+		}
+
+		if (rootAttributes[key].default !== undefined) {
+			attributes[key] = rootAttributes[key].default;
+			continue;
+		}
+
+		attributes[key] = undefined;
+	}
+
+	return attributes;
+};

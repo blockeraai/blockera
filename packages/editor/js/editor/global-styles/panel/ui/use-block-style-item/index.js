@@ -41,6 +41,7 @@ import {
 	setStyleVariationBlocksInStore,
 	markStyleAsDeletedInMetaData,
 	buildMetadataTransferForRenamedStyle,
+	buildSaveCustomizationsEffectiveItems,
 } from './helpers';
 import { getNormalizedStyle } from '../../context';
 import { isBaseBreakpoint } from '../../../../header-ui/components';
@@ -820,8 +821,14 @@ export const useBlockStyleItem = ({
 			currentStyleValue
 		);
 
-		const defaultValue =
-			prepareBlockeraDefaultAttributesValues(_defaultStyles);
+		const defaultValue = buildSaveCustomizationsEffectiveItems({
+			blockName,
+			defaultStyles: _defaultStyles,
+			blockAttributesSchema: getBlockType(blockName)?.attributes || {},
+			getAttributes,
+			blockContextValue,
+			selectedBlock,
+		});
 
 		// Set the editor selected block event to save customizations.
 		setEditorSelectedBlockEvent('save-customizations');

@@ -4,11 +4,104 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { mergeObject, cloneObject } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import { isBaseBreakpoint } from '../../../../header-ui/components';
+import { isNormalStateOnBaseBreakpoint } from '../../../../../extensions/libs/block-card/block-states/helpers';
+import {
+	isInnerBlock,
+	prepareBlockeraDefaultAttributesValues,
+	prepareWordPressDefaultAttributesValues,
+} from '../../../../../extensions/components/utils';
+
 const EDITOR_STORE = 'blockera/editor';
+
+/**
+ * Build effectiveItems for save-customizations so blockera and WordPress core
+ * attributes reset to defaults after persisting customizations to global styles.
+ *
+ * @param {Object} params
+ * @return {Object} - Attribute defaults used to reset the block after save-customizations.
+ */
+export const buildSaveCustomizationsEffectiveItems = ({
+	blockName,
+	defaultStyles,
+	blockAttributesSchema,
+	getAttributes,
+	blockContextValue,
+	selectedBlock,
+}: {
+	blockName: string,
+	defaultStyles: Object,
+	blockAttributesSchema: Object,
+	getAttributes: () => Object,
+	blockContextValue: Object,
+	selectedBlock: Object,
+}): Object => {
+	const blockeraDefaults =
+		prepareBlockeraDefaultAttributesValues(defaultStyles);
+	const wordpressDefaults = prepareWordPressDefaultAttributesValues(
+		blockAttributesSchema
+	);
+	const filterContext = {
+		blockId: blockName,
+		clientId: selectedBlock.clientId,
+		innerBlocks: blockContextValue.additional.innerBlocks,
+		currentBlock: blockContextValue.currentBlock,
+		blockVariations: blockContextValue.blockVariations,
+		defaultAttributes: blockContextValue.defaultAttributes,
+		currentState: isInnerBlock(blockContextValue.currentBlock)
+			? blockContextValue.currentInnerBlockState
+			: blockContextValue.currentState,
+		currentBreakpoint: blockContextValue.currentBreakpoint,
+		activeBlockVariation: blockContextValue.activeBlockVariation,
+		getActiveBlockVariation: blockContextValue.getActiveBlockVariation,
+		currentInnerBlockState: blockContextValue.currentInnerBlockState,
+		isNormalState: blockContextValue.isNormalState,
+		isMasterBlock: !isInnerBlock(blockContextValue.currentBlock),
+		isBaseBreakpoint: isBaseBreakpoint(blockContextValue.currentBreakpoint),
+		isMasterNormalState: isNormalStateOnBaseBreakpoint(
+			blockContextValue.currentState,
+			blockContextValue.currentBreakpoint
+		),
+		insideBlockInspector: true,
+	};
+	let wordpressCompatibilityAttributes = {};
+
+	for (const key in blockeraDefaults) {
+		if (!key.startsWith('blockera')) {
+			continue;
+		}
+
+		const defaultAttributeValue =
+			blockeraDefaults[key]?.value ?? blockeraDefaults[key];
+
+		wordpressCompatibilityAttributes = applyFilters(
+			'blockera.blockEdit.setAttributes',
+			wordpressCompatibilityAttributes,
+			key,
+			defaultAttributeValue,
+			{
+				action: 'reset',
+				reset: true,
+			},
+			getAttributes,
+			filterContext
+		);
+	}
+
+	return mergeObject(
+		blockeraDefaults,
+		wordpressDefaults,
+		wordpressCompatibilityAttributes
+	);
+};
 
 /**
  * Get block types for a style from the editor store.
