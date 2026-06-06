@@ -87,6 +87,7 @@
 	.components-modal__children-container {
 		flex-grow: 1;
 		display: flex;
+		flex-direction: column;
 	}
 }
 
