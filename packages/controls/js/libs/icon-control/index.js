@@ -30,7 +30,7 @@ import { useControlContext } from '../../context';
 import { parseUploadedMediaAndSetIcon } from './helpers';
 import { sanitizeRawSVGString } from './utils';
 import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
-import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
+import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
 
 function IconControl({
 	id,
@@ -392,8 +392,7 @@ function IconControl({
 				</div>
 
 				{isOpenModal && (
-					<IconPickerPopover
-						isOpen={isOpenModal}
+					<IconPickerModal
 						onClose={() => {
 							setOpenModal(false);
 						}}
