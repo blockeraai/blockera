@@ -6,8 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
-import { applyFilters } from '@wordpress/hooks';
-import { useState, useReducer } from '@wordpress/element';
+import { useState, useReducer, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -28,9 +27,10 @@ import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
 import { parseUploadedMediaAndSetIcon } from './helpers';
-import { sanitizeRawSVGString } from './utils';
-import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
-import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
+import { sanitizeRawSVGString, isCustomIcon } from './utils';
+import { Button, BaseControl, Tooltip } from '../index';
+import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
+import { useRecentIcons } from './hooks/useRecentIcons';
 
 function IconControl({
 	id,
@@ -57,6 +57,7 @@ function IconControl({
 		});
 
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
+	const { recentIcons, addRecentIcon, removeRecentIcon } = useRecentIcons();
 
 	useLateEffect(() => {
 		setValue(currentIcon);
@@ -64,9 +65,12 @@ function IconControl({
 
 	const [isOpenModal, setOpenModal] = useState(false);
 	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
+	const [modalInitialTab, setModalInitialTab] = useState('library');
 
 	// $FlowFixMe
-	const openModal = (event) => {
+	const openModal = (event, preferredTab = null) => {
+		event.stopPropagation();
+
 		const target = event.target;
 		if (
 			'svg' === target.nodeName &&
@@ -75,18 +79,35 @@ function IconControl({
 			return;
 		}
 
+		setModalInitialTab(
+			preferredTab ?? (isCustomIcon(currentIcon) ? 'custom' : 'library')
+		);
 		setOpenModal(true);
 	};
+
+	const isCurrentIcon = useCallback(
+		(iconName, library) => {
+			return (
+				currentIcon?.icon === iconName &&
+				currentIcon?.library === library
+			);
+		},
+		[currentIcon]
+	);
 
 	const defaultIconState = {
 		id,
 		currentIcon,
 		dispatch: currentIconDispatch,
 		handleIconSelect,
+		isCurrentIcon,
+		recentIcons,
+		removeRecentIcon,
 	};
 
 	// $FlowFixMe
 	function dispatchActions(action) {
+		addRecentIcon(action);
 		currentIconDispatch(action);
 		setOpenModal(false);
 	}
@@ -131,41 +152,37 @@ function IconControl({
 		dispatchActions(action);
 	}
 
-	const onSelectSVG = (media) => {
-		if ('svg+xml' !== media.subtype) {
-			createNotice(
-				'error',
-				__('Please upload an SVG file!', 'blockera'),
-				{
-					isDismissible: true,
-				}
-			);
-			return;
-		}
+	const parseMediaForDraft = useCallback(
+		(media, setDraft) => {
+			if ('svg+xml' !== media.subtype) {
+				createNotice(
+					'error',
+					__('Please upload an SVG file!', 'blockera'),
+					{
+						isDismissible: true,
+					}
+				);
+				return;
+			}
 
-		parseUploadedMediaAndSetIcon(media, (svgString) => {
-			currentIconDispatch({
-				type: 'UPDATE_SVG',
-				uploadSVG: {
-					title: media.title,
-					filename: media.filename,
-					url: media.url,
-					updated: '',
-				},
-				svgString: sanitizeRawSVGString(svgString),
+			parseUploadedMediaAndSetIcon(media, (svgString) => {
+				setDraft({
+					svgString: sanitizeRawSVGString(svgString),
+					uploadSVG: {
+						title: media.title,
+						filename: media.filename,
+						url: media.url,
+						updated: '',
+					},
+				});
 			});
-		});
-	};
+		},
+		[createNotice]
+	);
 
-	const mediaUploaderOpener = (event, open) => {
-		event.stopPropagation();
-		const callback = applyFilters(
-			'blockera.controls.iconControl.uploadSVG.onClick',
-			() => setIsOpenPromotion(true),
-			open
-		);
-
-		callback();
+	// $FlowFixMe
+	const handleUseCustomIcon = (action) => {
+		dispatchActions(action);
 	};
 
 	function renderIcon() {
@@ -342,23 +359,16 @@ function IconControl({
 									{labelIconLibrary}
 								</Button>
 
-								<MediaUploader
-									allowedTypes={['image/svg+xml']}
-									onSelect={onSelectSVG}
-									mode="upload"
-									render={({ open }) => (
-										<Button
-											data-cy="upload-svg-btn"
-											className="btn-upload"
-											noBorder={true}
-											onClick={(event) =>
-												mediaUploaderOpener(event, open)
-											}
-										>
-											{labelUploadSvg}
-										</Button>
-									)}
-								/>
+								<Button
+									data-cy="upload-svg-btn"
+									className="btn-upload"
+									noBorder={true}
+									onClick={(event) =>
+										openModal(event, 'custom')
+									}
+								>
+									{labelUploadSvg}
+								</Button>
 							</div>
 						</div>
 					) : (
@@ -371,32 +381,26 @@ function IconControl({
 								{labelIconLibrary}
 							</Button>
 
-							<MediaUploader
-								allowedTypes={['image/svg+xml']}
-								onSelect={onSelectSVG}
-								mode="upload"
-								render={({ open }) => (
-									<Button
-										data-cy="upload-svg-btn"
-										className="btn-choose-icon"
-										onClick={(event) =>
-											mediaUploaderOpener(event, open)
-										}
-									>
-										{labelUploadSvg}
-									</Button>
-								)}
-							/>
+							<Button
+								data-cy="upload-svg-btn"
+								className="btn-choose-icon"
+								onClick={(event) => openModal(event, 'custom')}
+							>
+								{labelUploadSvg}
+							</Button>
 						</div>
 					)}
 				</div>
 
 				{isOpenModal && (
-					<IconPickerPopover
-						isOpen={isOpenModal}
+					<IconPickerModal
+						initialActiveTab={modalInitialTab}
 						onClose={() => {
 							setOpenModal(false);
 						}}
+						onProRequired={() => setIsOpenPromotion(true)}
+						onParseMediaForDraft={parseMediaForDraft}
+						onUseCustomIcon={handleUseCustomIcon}
 					/>
 				)}
 			</BaseControl>

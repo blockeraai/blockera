@@ -141,7 +141,8 @@
 
 	.blockera-component-button.btn-choose-icon {
 		background: #ffffff !important;
-		box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color),
+		box-shadow:
+			inset 0 0 0 1px var(--blockera-controls-border-color),
 			0 4px 7px var(--blockera-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
@@ -167,9 +168,9 @@
 }
 
 .blockera-control-icon-control-icon {
-	--icon-size: 24px;
-	width: var(--blockera-controls-input-height);
-	height: var(--blockera-controls-input-height);
+	--icon-size: 26px;
+	width: var(--icon-size, 26px);
+	height: var(--icon-size, 26px);
 	line-height: calc(var(--icon-size, 24px) + 8px);
 	display: flex;
 	align-items: center;
@@ -189,22 +190,9 @@
 
 	svg {
 		transition: all 0.2s ease;
-		width: var(--icon-size, 24px);
-		height: var(--icon-size, 24px);
+		width: var(--icon-size, 26px);
+		height: var(--icon-size, 26px);
 		fill: currentcolor;
 		display: inline-block;
-	}
-
-	&.library-wp {
-		--icon-size: 24px;
-	}
-
-	&.library-blockera {
-		--icon-size: 24px;
-	}
-
-	&.library-fas,
-	&.library-far {
-		--icon-size: 18px;
 	}
 }

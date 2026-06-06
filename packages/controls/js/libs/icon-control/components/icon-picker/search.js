@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __, _n, sprintf } from '@wordpress/i18n';
-import { useState, useContext } from '@wordpress/element';
+import { useState, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,13 +16,21 @@ import { Icon } from '@blockera/icons';
 import { IconContext } from '../../context';
 import { getLibraryIcons } from '../../utils';
 import SearchControl from '../../../search-control';
+import { DEFAULT_LIBRARIES, getLibrariesIconCount } from './icon-libraries';
 
-export default function Search({}) {
+export default function Search({
+	libraries = DEFAULT_LIBRARIES,
+	onSearchChange = () => {},
+}) {
 	const [searchInput, setSearchInput] = useState('');
 	const [searchData, setSearchData] = useState([]);
 	const [searchData2, setSearchData2] = useState([]);
 
 	const { id, handleIconSelect } = useContext(IconContext);
+	const iconCount = useMemo(
+		() => getLibrariesIconCount(libraries),
+		[libraries]
+	);
 
 	return (
 		<div
@@ -36,6 +44,7 @@ export default function Search({}) {
 				defaultValue={searchInput}
 				onChange={(value) => {
 					setSearchInput(value);
+					onSearchChange(value);
 					setSearchData(
 						getLibraryIcons({
 							library: 'search',
@@ -53,7 +62,11 @@ export default function Search({}) {
 						})
 					);
 				}}
-				placeholder={__('Search icons…', 'blockera')}
+				placeholder={sprintf(
+					// translators: %d is the total number of icons available in the library.
+					__('Search %d icons…', 'blockera'),
+					iconCount
+				)}
 			/>
 
 			{searchInput && (
@@ -99,7 +112,7 @@ export default function Search({}) {
 										'library-header'
 									)}
 								>
-									<Icon icon="search" iconSize="18" />{' '}
+									<Icon icon="search" iconSize="24" />{' '}
 									{__('Search Result', 'blockera')}
 									<span
 										className={controlInnerClassNames(
@@ -146,7 +159,7 @@ export default function Search({}) {
 										'library-header'
 									)}
 								>
-									<Icon icon="search" iconSize="18" />{' '}
+									<Icon icon="search" iconSize="24" />{' '}
 									{__('Search Result', 'blockera')}
 									<span
 										className={controlInnerClassNames(

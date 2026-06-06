@@ -8,6 +8,7 @@
 		height: var(--modal-header-height);
 		padding: calc(var(--modal-gap) - 10px) var(--modal-gap);
 		background-color: #ffffff;
+		z-index: 100;
 
 		.components-modal__header-heading {
 			display: flex;
@@ -81,6 +82,12 @@
 
 	&.blockera-component-ai-experimental-tools-modal {
 		max-width: 600px;
+	}
+
+	.components-modal__children-container {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
 	}
 }
 
