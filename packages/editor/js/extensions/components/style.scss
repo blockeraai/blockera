@@ -228,8 +228,17 @@
 		}
 	}
 
-	&.blockera-inner-block-inspector > div:not([class^="blockera-block-inspector-controls-wrapper"]):not([class^="css-"]) {
-		display: none !important;
+	// Keep inspector tabs (Blockera InspectorControls live in the styles tabpanel).
+	&.blockera-inner-block-inspector {
+		> .block-editor-block-card {
+			display: none !important;
+		}
+
+		> div:not([class^="blockera-block-inspector-controls-wrapper"]):not(
+				[class^="css-"]
+			):not(.block-editor-block-inspector__tabs) {
+			display: none !important;
+		}
 	}
 
 	&:has(.block-editor-block-inspector-edit-contents) {
