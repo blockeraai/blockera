@@ -5,6 +5,11 @@
 import type { Element } from 'react';
 
 /**
+ * Blockera dependencies
+ */
+import { PopoverActiveColorStyleProvider } from '@blockera/controls';
+
+/**
  * Internal dependencies
  */
 import { getBlockeraActiveColorStyleProperties } from './blockera-active-color';
@@ -21,17 +26,21 @@ export const Container = ({
 	variationSurface?: string,
 	children: Element<any>,
 }): Element<any> => {
+	const popoverActiveColorStyle = getBlockeraActiveColorStyleProperties(
+		activeColor,
+		variationCssVars
+	);
+
 	return (
-		<div
-			className="blockera-state-colors-container"
-			data-blockera-variation-surface={variationSurface || undefined}
-			style={getBlockeraActiveColorStyleProperties(
-				activeColor,
-				variationCssVars
-			)}
-		>
-			{children}
-		</div>
+		<PopoverActiveColorStyleProvider value={popoverActiveColorStyle}>
+			<div
+				className="blockera-state-colors-container"
+				data-blockera-variation-surface={variationSurface || undefined}
+				style={popoverActiveColorStyle}
+			>
+				{children}
+			</div>
+		</PopoverActiveColorStyleProvider>
 	);
 };
 
