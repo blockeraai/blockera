@@ -362,8 +362,8 @@
 			justify-content: center;
 
 			svg {
-				width: 80px;
-				height: 80px;
+				width: 80px !important;
+				height: auto !important;
 				fill: currentcolor;
 			}
 		}
