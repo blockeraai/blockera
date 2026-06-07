@@ -1,9 +1,15 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
+/**
  * Blockera dependencies
  */
 import { isEquals } from '@blockera/utils';
+import { STORE_NAME as EXTENSIONS_CONFIG_STORE_NAME } from '@blockera/editor/js/extensions/libs/base/store/constants';
 import type { CssRule } from '@blockera/editor/js/style-engine/types';
 import { isActiveField } from '@blockera/editor/js/extensions/api/utils';
 import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
@@ -14,7 +20,9 @@ import { getCompatibleBlockCssSelector } from '@blockera/editor/js/style-engine/
 import { prepareIconSvgForStorage } from '@blockera/icons';
 
 import {
+	DEFAULT_ICON_COLOR_ATTRIBUTE,
 	DEFAULT_ICON_SIZE_ATTRIBUTE,
+	getIconColorAttributeId,
 	getIconSizeAttributeId,
 } from '../helpers';
 import {
@@ -50,6 +58,11 @@ export const IconStyles = ({
 		blockeraIconFlipVertical,
 		// blockeraIconLink,
 	} = config.iconConfig;
+	const { getExtension } = select(EXTENSIONS_CONFIG_STORE_NAME) || {};
+	const registeredIconConfig =
+		'function' === typeof getExtension
+			? getExtension('iconConfig', blockName)
+			: null;
 	const blockProps = {
 		state,
 		attributes: currentBlockAttributes,
@@ -134,7 +147,12 @@ export const IconStyles = ({
 		}
 	}
 
-	const iconSizeAttributeId = getIconSizeAttributeId(blockeraIconSize);
+	const iconSizeAttributeId = getIconSizeAttributeId(
+		registeredIconConfig?.blockeraIconSize || blockeraIconSize
+	);
+	const iconColorAttributeId = getIconColorAttributeId(
+		registeredIconConfig?.blockeraIconColor || blockeraIconColor
+	);
 
 	// When size maps to another attribute (e.g. blockeraWidth on core/icon), the size extension owns CSS.
 	if (
@@ -208,7 +226,9 @@ export const IconStyles = ({
 		});
 	}
 
+	// When color maps to another attribute (e.g. blockeraFontColor on core/icon), typography owns CSS.
 	if (
+		iconColorAttributeId === DEFAULT_ICON_COLOR_ATTRIBUTE &&
 		isActiveField(blockeraIconColor) &&
 		currentBlockAttributes.blockeraIconColor !==
 			attributes.blockeraIconColor.default

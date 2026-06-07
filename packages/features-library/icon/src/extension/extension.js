@@ -6,7 +6,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 import type { MixedElement, ComponentType } from 'react';
 import { createRoot, useCallback } from '@wordpress/element';
-import { dispatch } from '@wordpress/data';
+import { dispatch, useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -34,13 +34,18 @@ import { extensionClassNames } from '@blockera/classnames';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
 import { isEquals, addAngle, isEmpty, isUndefined } from '@blockera/utils';
 import { generateExtensionId } from '@blockera/editor/js/extensions/libs/utils';
+import { STORE_NAME as EXTENSIONS_CONFIG_STORE_NAME } from '@blockera/editor/js/extensions/libs/base/store/constants';
 import { default as EditorFeatureWrapper } from '@blockera/editor/js/components/editor-feature-wrapper';
 
 /**
  * Internal dependencies
  */
 import type { TIconProps } from './types/icon-extension-props';
-import { getIconSizeAttributeId, isStandaloneIconBlock } from '../helpers';
+import {
+	getIconColorAttributeId,
+	getIconSizeAttributeId,
+	isStandaloneIconBlock,
+} from '../helpers';
 import { decodeRenderedIcon } from '../icon-attribute-utils';
 
 export const IconExtension: ComponentType<{
@@ -81,12 +86,29 @@ export const IconExtension: ComponentType<{
 	const { initialOpen, onToggle } = useBlockSection('iconConfig');
 	const blockName = block.activeBlockVariation?.name || block?.blockName;
 	const showInlineIconLayout = !isStandaloneIconBlock(blockName);
-	const iconSizeAttributeId = getIconSizeAttributeId(blockeraIconSize);
+	const registeredIconConfig = useSelect(
+		(select) => {
+			const { getExtension } = select(EXTENSIONS_CONFIG_STORE_NAME) || {};
+
+			return 'function' === typeof getExtension
+				? getExtension('iconConfig', blockName)
+				: null;
+		},
+		[blockName]
+	);
+	const resolvedIconSizeConfig =
+		registeredIconConfig?.blockeraIconSize || blockeraIconSize;
+	const resolvedIconColorConfig =
+		registeredIconConfig?.blockeraIconColor || blockeraIconColor;
+	const iconSizeAttributeId = getIconSizeAttributeId(resolvedIconSizeConfig);
+	const iconColorAttributeId = getIconColorAttributeId(
+		resolvedIconColorConfig
+	);
+
 	const {
 		blockeraIcon: icon,
 		blockeraIconGap: iconGap,
 		blockeraIconLink: iconLink,
-		blockeraIconColor: iconColor,
 		blockeraIconPosition: iconPosition,
 		blockeraIconRotate: iconRotate,
 		blockeraIconFlipHorizontal: iconFlipHorizontal,
@@ -96,6 +118,11 @@ export const IconExtension: ComponentType<{
 		currentStateAttributes[iconSizeAttributeId] ??
 		('blockeraIconSize' !== iconSizeAttributeId
 			? currentStateAttributes.blockeraIconSize
+			: undefined);
+	const iconColor =
+		currentStateAttributes[iconColorAttributeId] ??
+		('blockeraIconColor' !== iconColorAttributeId
+			? currentStateAttributes.blockeraIconColor
 			: undefined);
 
 	const encodeIcon = useCallback(
@@ -326,7 +353,7 @@ export const IconExtension: ComponentType<{
 	const isShownIconColor = isShowField(
 		blockeraIconColor,
 		iconColor,
-		attributes?.blockeraIconColor?.default?.value
+		attributes?.[iconColorAttributeId]?.default?.value
 	);
 	const isShownIconLink = isShowField(
 		blockeraIconLink,
@@ -604,7 +631,7 @@ export const IconExtension: ComponentType<{
 										'icon-color'
 									),
 									value: iconColor,
-									attribute: 'blockeraIconColor',
+									attribute: iconColorAttributeId,
 									blockName: block.blockName,
 								}}
 							>
@@ -632,12 +659,12 @@ export const IconExtension: ComponentType<{
 									}
 									columns="columns-2"
 									defaultValue={
-										attributes?.blockeraIconColor?.default
-											?.value
+										attributes?.[iconColorAttributeId]
+											?.default?.value
 									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
-											'blockeraIconColor',
+											iconColorAttributeId,
 											newValue,
 											{ ref }
 										);
