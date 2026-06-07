@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
  */
 import { PopoverCore } from './core';
 import { DraggablePopover } from './draggable';
-import { useStateContainerActiveColorStyle } from './use-state-container-active-color-style';
+import { usePopoverActiveColorStyle } from '../../context';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
@@ -17,9 +17,9 @@ export default function Popover({
 	style,
 	...props
 }: TPopoverProps): MixedElement {
-	const stateContainerStyle = useStateContainerActiveColorStyle(props.anchor);
+	const activeColorStyle = usePopoverActiveColorStyle();
 	const mergedStyle = {
-		...stateContainerStyle,
+		...activeColorStyle,
 		...(style || {}),
 	};
 

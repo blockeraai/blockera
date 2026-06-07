@@ -114,6 +114,7 @@ export const BlockGlobalStylesPanelScreen = ({
 		clientId: (selectedBlock || memoizedSelectedBlock)?.clientId || '',
 		blockName: selectedBlockStyle || '',
 		statesManagerHandleOnChangeRef,
+		resetAllGlobalStylesSurfaces: true,
 	});
 
 	useBackButton({
@@ -166,14 +167,12 @@ export const BlockGlobalStylesPanelScreen = ({
 				...(memoizedSelectedBlock ? { ...memoizedSelectedBlock } : {}),
 			}.clientId,
 			blockType,
-			resetBlockStateToNormal,
 			statesManagerHandleOnChangeRef,
 		}),
 		[
 			selectedBlock,
 			memoizedSelectedBlock,
 			blockType,
-			resetBlockStateToNormal,
 			statesManagerHandleOnChangeRef,
 		]
 	);

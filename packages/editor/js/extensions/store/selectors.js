@@ -263,9 +263,21 @@ export function hasBlockExtensionSupport(
  *
  * @return {"master"|"heading"|"paragraph"|"icon"|"button"|*|string} The inner block type or master.
  */
-export function getExtensionCurrentBlock({
-	blockExtensions,
-}: Object): 'master' | InnerBlockType {
+export function getExtensionCurrentBlock(
+	{ blockExtensions }: Object,
+	uiContext?: string
+): 'master' | InnerBlockType {
+	if (uiContext) {
+		const scopedBlock =
+			blockExtensions?.currentBlockByUiContext?.[uiContext];
+
+		if (undefined !== scopedBlock) {
+			return scopedBlock;
+		}
+
+		return 'master';
+	}
+
 	return blockExtensions?.currentBlock || 'master';
 }
 

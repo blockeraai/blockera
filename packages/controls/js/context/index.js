@@ -108,3 +108,8 @@ export {
 	PresetCanvasPreviewContext,
 	usePresetCanvasPreview,
 } from './preset-canvas-preview-context';
+export {
+	PopoverActiveColorStyleContext,
+	PopoverActiveColorStyleProvider,
+	usePopoverActiveColorStyle,
+} from './popover-active-color-style-context';

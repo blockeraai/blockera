@@ -47,6 +47,8 @@ import {
 	getBlockVariationSupport,
 	blockUsesSharedRootStyleVariation,
 } from '../block-variation-support';
+import { getExtensionsUiContext } from '../../../../extensions/components/extensions-ui-context';
+import { useResetBlockStateToNormal } from '../../../../extensions/libs/block-card/block-states/hooks';
 
 // Helper functions
 export const getBlockAttributes = (name: string): Object => {
@@ -234,6 +236,7 @@ export const GlobalStylesPanelContext: Object = createContext({
 	setStyles: () => {},
 	styles: {},
 	variationSurface: VARIATION_SURFACE_STYLE,
+	extensionsUiContext: undefined,
 	usesSharedRootStyleVariation: false,
 	baseConfig: {},
 	userConfig: {},
@@ -259,11 +262,18 @@ export const GlobalStylesPanelContextProvider = ({
 	const {
 		className,
 		selectedBlockClientId,
-		resetBlockStateToNormal,
 		blockType: { name, attributes },
 		statesManagerHandleOnChangeRef,
 		variationSurface = VARIATION_SURFACE_STYLE,
 	} = value;
+
+	const extensionsUiContext = getExtensionsUiContext(false, variationSurface);
+	const resetBlockStateToNormal = useResetBlockStateToNormal({
+		clientId: selectedBlockClientId || '',
+		blockName: name,
+		statesManagerHandleOnChangeRef,
+		extensionsUiContext,
+	});
 
 	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
 		() => getBlockAttributes(name),
@@ -590,6 +600,7 @@ export const GlobalStylesPanelContextProvider = ({
 			defaultStyles,
 			fallbackClientId,
 			variationSurface,
+			extensionsUiContext,
 			usesSharedRootStyleVariation,
 			childrenComponent,
 			getNormalizedStyle,
@@ -613,6 +624,7 @@ export const GlobalStylesPanelContextProvider = ({
 			defaultStyles,
 			fallbackClientId,
 			variationSurface,
+			extensionsUiContext,
 			usesSharedRootStyleVariation,
 			childrenComponent,
 			selectedBlockClientId,
@@ -641,6 +653,7 @@ type UseGlobalStylesPanelContextReturnType = {
 	userConfig: Object,
 	baseConfig: Object,
 	variationSurface: 'size' | 'style',
+	extensionsUiContext?: string,
 	usesSharedRootStyleVariation: boolean,
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
