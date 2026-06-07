@@ -28,6 +28,8 @@ import { Tooltip } from '../tooltip';
 import type { TTabMenuProps } from './types';
 import ConditionalWrapper from '../conditional-wrapper';
 
+const LIST_SELECTOR = '.blockera-component-tabs__list';
+
 function TabMenu({
 	tabs,
 	selected,
@@ -41,7 +43,10 @@ function TabMenu({
 	design = 'clean',
 }: TTabMenuProps): Element<any> {
 	const listContainerRef = useRef<?HTMLDivElement>(null);
-	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+	const listElRef = useRef<?HTMLElement>(null);
+	const indicatorRef = useRef<?HTMLDivElement>(null);
+	const indicatorMetricsRef = useRef({ left: 0, width: 0 });
+	const measureRafRef = useRef<?AnimationFrameID>(null);
 	const [transitionEnabled, setTransitionEnabled] = useState(false);
 	const hasEnabledTransitionRef = useRef(false);
 	// Store selected in a ref so updateIndicator identity stays stable across tab changes.
@@ -53,36 +58,55 @@ function TabMenu({
 			return;
 		}
 		const wrapperEl = listContainerRef.current;
-		const listEl = wrapperEl.querySelector(
-			'.blockera-component-tabs__list'
-		);
+		let listEl = listElRef.current;
+		if (!listEl || !listEl.isConnected) {
+			listEl = (wrapperEl.querySelector(LIST_SELECTOR): ?HTMLElement);
+			listElRef.current = listEl;
+		}
 		const currentSelected = selectedRef.current;
 		// Prefer data-test for reliable lookup when selected is known.
 		let activeTab =
 			currentSelected &&
-			wrapperEl.querySelector(`[data-test="${currentSelected}-tab"]`);
-		if (!activeTab) {
-			activeTab = wrapperEl.querySelector(`.${activeClass}`);
+			listEl &&
+			listEl.querySelector(`[data-test="${currentSelected}-tab"]`);
+		if (!activeTab && listEl) {
+			activeTab = listEl.querySelector(`.${activeClass}`);
 		}
 		if (!listEl || !activeTab) {
 			return;
 		}
 		// Walk up to the direct flex child of list for accurate width when wrapped by Tooltip.
 		let tabEl = activeTab;
-		while (tabEl?.parentElement && tabEl.parentElement !== listEl) {
+		while (
+			tabEl instanceof HTMLElement &&
+			tabEl.parentElement &&
+			tabEl.parentElement !== listEl
+		) {
 			tabEl = tabEl.parentElement;
 		}
-		const wrapperRect = wrapperEl.getBoundingClientRect();
-		const tabRect = tabEl.getBoundingClientRect();
-		const newLeft = tabRect.left - wrapperRect.left;
-		const newWidth = tabRect.width;
-		// Only update state when values actually changed to avoid unnecessary re-renders.
-		setIndicatorStyle((prev) => {
-			if (prev.left === newLeft && prev.width === newWidth) {
-				return prev;
-			}
-			return { left: newLeft, width: newWidth };
-		});
+		if (!(tabEl instanceof HTMLElement)) {
+			return;
+		}
+		// Use offset dimensions so parent transforms (e.g. modal open scale) do not
+		// skew the indicator; getBoundingClientRect includes transform scale.
+		let offsetLeft = tabEl.offsetLeft;
+		let offsetNode = tabEl.offsetParent;
+		while (offsetNode instanceof HTMLElement && offsetNode !== wrapperEl) {
+			offsetLeft += offsetNode.offsetLeft;
+			offsetNode = offsetNode.offsetParent;
+		}
+		const newLeft = offsetLeft;
+		const newWidth = tabEl.offsetWidth;
+		const prev = indicatorMetricsRef.current;
+		if (prev.left === newLeft && prev.width === newWidth) {
+			return;
+		}
+		indicatorMetricsRef.current = { left: newLeft, width: newWidth };
+		const indicatorEl = indicatorRef.current;
+		if (indicatorEl) {
+			indicatorEl.style.left = `${newLeft}px`;
+			indicatorEl.style.width = `${newWidth}px`;
+		}
 		// Enable transition after first successful measurement (no transition on initial load).
 		if (!hasEnabledTransitionRef.current) {
 			hasEnabledTransitionRef.current = true;
@@ -90,27 +114,67 @@ function TabMenu({
 		}
 	}, [design, activeClass]);
 
-	useLayoutEffect(() => {
-		updateIndicator();
-		// Re-measure after paint in case layout settles asynchronously.
-		const raf = requestAnimationFrame(updateIndicator);
-		return () => cancelAnimationFrame(raf);
-	}, [selected, tabs, updateIndicator]);
+	const scheduleIndicatorUpdate = useCallback(() => {
+		if (measureRafRef.current !== null) {
+			return;
+		}
+		measureRafRef.current = requestAnimationFrame(() => {
+			measureRafRef.current = null;
+			updateIndicator();
+		});
+	}, [updateIndicator]);
 
-	// Re-measure when container or tabs resize. Stable callback keeps this effect from re-running on tab changes.
+	useLayoutEffect(() => {
+		if (design !== 'modern') {
+			return;
+		}
+		if (listContainerRef.current) {
+			listElRef.current = (listContainerRef.current.querySelector(
+				LIST_SELECTOR
+			): ?HTMLElement);
+		}
+		updateIndicator();
+		scheduleIndicatorUpdate();
+	}, [design, selected, tabs, updateIndicator, scheduleIndicatorUpdate]);
+
+	// Observe resizes and modal open animation; coalesce bursts to one measure per frame.
 	useEffect(() => {
 		if (design !== 'modern' || !listContainerRef.current) {
 			return;
 		}
 		const wrapper = listContainerRef.current;
-		const listEl = wrapper.querySelector('.blockera-component-tabs__list');
-		const ro = new ResizeObserver(updateIndicator);
+		const listEl = (wrapper.querySelector(LIST_SELECTOR): ?HTMLElement);
+		listElRef.current = listEl;
+
+		const ro = new ResizeObserver(scheduleIndicatorUpdate);
 		ro.observe(wrapper);
 		if (listEl) {
 			ro.observe(listEl);
 		}
-		return () => ro.disconnect();
-	}, [design, updateIndicator]);
+
+		const modalEl = wrapper.closest(
+			'.components-modal, .blockera-component-modal'
+		);
+		const onTransitionEnd = (event: TransitionEvent) => {
+			if (modalEl && event.target === modalEl) {
+				scheduleIndicatorUpdate();
+			}
+		};
+		if (modalEl) {
+			modalEl.addEventListener('transitionend', onTransitionEnd);
+		}
+
+		return () => {
+			ro.disconnect();
+			if (modalEl) {
+				modalEl.removeEventListener('transitionend', onTransitionEnd);
+			}
+			if (measureRafRef.current !== null) {
+				cancelAnimationFrame(measureRafRef.current);
+				measureRafRef.current = null;
+			}
+		};
+	}, [design, scheduleIndicatorUpdate]);
 
 	const onNavigate = useCallback(
 		(childIndex: number, child: Object): void => {
@@ -185,13 +249,10 @@ function TabMenu({
 			</NavigableMenu>
 			{design === 'modern' && (
 				<div
+					ref={indicatorRef}
 					className={componentInnerClassNames(
 						'tabs__list__indicator'
 					)}
-					style={{
-						left: indicatorStyle.left,
-						width: indicatorStyle.width,
-					}}
 					aria-hidden="true"
 				/>
 			)}

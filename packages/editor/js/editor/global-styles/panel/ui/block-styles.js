@@ -406,7 +406,11 @@ function BlockStyles({
 						>
 							<SearchControl
 								onChange={handleSearch}
-								placeholder={__('Search styles…', 'blockera')}
+								placeholder={
+									isSizeVariationUi
+										? __('Search sizes…', 'blockera')
+										: __('Search styles…', 'blockera')
+								}
 							/>
 						</ControlContextProvider>
 
