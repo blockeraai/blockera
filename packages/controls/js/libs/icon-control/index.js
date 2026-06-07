@@ -5,8 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
-import { useState, useReducer, useCallback } from '@wordpress/element';
+import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,21 +15,19 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon, prepareIconSvgForStorage } from '@blockera/icons';
-import { isString, isEmpty, isUndefined, useLateEffect } from '@blockera/utils';
+import { isString, isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { UpgradePrompt, Flex } from '../';
-import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { parseUploadedMediaAndSetIcon } from './helpers';
-import { sanitizeRawSVGString, isCustomIcon } from './utils';
+import { isCustomIcon } from './utils';
 import { Button, BaseControl, Tooltip } from '../index';
 import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
-import { useRecentIcons } from './hooks/useRecentIcons';
+import { useIconPickerModal } from './hooks/use-icon-picker-modal';
 
 function IconControl({
 	id,
@@ -48,7 +45,6 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
-	const { createNotice } = dispatch('core/notices');
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
 			id,
@@ -56,136 +52,30 @@ function IconControl({
 			defaultValue,
 		});
 
-	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
-	const { recentIcons, addRecentIcon, removeRecentIcon, clearRecentIcons } =
-		useRecentIcons();
-
-	useLateEffect(() => {
-		setValue(currentIcon);
-	}, [currentIcon]);
-
-	const [isOpenModal, setOpenModal] = useState(false);
-	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
-	const [modalInitialTab, setModalInitialTab] = useState('library');
-
-	// $FlowFixMe
-	const openModal = (event, preferredTab = null) => {
-		event.stopPropagation();
-
-		const target = event.target;
-		if (
-			'svg' === target.nodeName &&
-			'delete' === target.getAttribute('datatype')
-		) {
-			return;
-		}
-
-		setModalInitialTab(
-			preferredTab ?? (isCustomIcon(currentIcon) ? 'custom' : 'library')
-		);
-		setOpenModal(true);
-	};
-
-	const isCurrentIcon = useCallback(
-		(iconName, library) => {
-			return (
-				currentIcon?.icon === iconName &&
-				currentIcon?.library === library
-			);
+	const handlePickerCommit = useCallback(
+		(nextIcon) => {
+			setValue(nextIcon);
 		},
-		[currentIcon]
+		[setValue]
 	);
 
-	const defaultIconState = {
+	const {
+		isOpenModal,
+		modalInitialTab,
+		openModal,
+		closeModal,
+		iconContextValue,
+		parseMediaForDraft,
+		handleUseCustomIcon,
+		hasIcon,
+		commitIconAction,
+	} = useIconPickerModal({
 		id,
-		currentIcon,
-		dispatch: currentIconDispatch,
-		handleIconSelect,
-		isCurrentIcon,
-		recentIcons,
-		removeRecentIcon,
-		clearRecentIcons,
-	};
+		value,
+		onCommit: handlePickerCommit,
+	});
 
-	// $FlowFixMe
-	function dispatchActions(action) {
-		addRecentIcon(action);
-		currentIconDispatch(action);
-		setOpenModal(false);
-	}
-
-	function hasIcon() {
-		if (isUndefined(currentIcon) || isEmpty(currentIcon)) {
-			return false;
-		}
-
-		if ('' !== currentIcon.uploadSVG) {
-			return true;
-		}
-
-		if (
-			!isUndefined(currentIcon?.svgString) &&
-			'' !== currentIcon.svgString
-		) {
-			return true;
-		}
-
-		if (null === currentIcon.icon) {
-			return false;
-		}
-
-		return '' !== currentIcon.icon;
-	}
-
-	// $FlowFixMe
-	function handleIconSelect(event, action) {
-		event.stopPropagation();
-
-		let target = event.target;
-
-		if ('SVG' !== target.nodeName) {
-			target = target.closest('svg');
-		}
-
-		if (target?.classList?.contains('blockera-is-pro-icon')) {
-			return;
-		}
-
-		dispatchActions(action);
-	}
-
-	const parseMediaForDraft = useCallback(
-		(media, setDraft) => {
-			if ('svg+xml' !== media.subtype) {
-				createNotice(
-					'error',
-					__('Please upload an SVG file!', 'blockera'),
-					{
-						isDismissible: true,
-					}
-				);
-				return;
-			}
-
-			parseUploadedMediaAndSetIcon(media, (svgString) => {
-				setDraft({
-					svgString: sanitizeRawSVGString(svgString),
-					uploadSVG: {
-						title: media.title,
-						filename: media.filename,
-						url: media.url,
-						updated: '',
-					},
-				});
-			});
-		},
-		[createNotice]
-	);
-
-	// $FlowFixMe
-	const handleUseCustomIcon = (action) => {
-		dispatchActions(action);
-	};
+	const { currentIcon } = iconContextValue;
 
 	function renderIcon() {
 		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
@@ -247,7 +137,6 @@ function IconControl({
 			);
 		}
 
-		// if custom uploaded svg icon url is available
 		if (
 			!isUndefined(currentIcon?.uploadSVG?.url) &&
 			!isEmpty(currentIcon?.uploadSVG?.url)
@@ -267,8 +156,10 @@ function IconControl({
 		return null;
 	}
 
+	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
+
 	return (
-		<IconContextProvider {...defaultIconState}>
+		<IconContextProvider {...iconContextValue}>
 			<BaseControl
 				label={label}
 				columns={columns}
@@ -359,7 +250,7 @@ function IconControl({
 									}
 									onClick={(e) => {
 										e.stopPropagation();
-										currentIconDispatch({
+										commitIconAction({
 											type: 'DELETE_ICON',
 										});
 									}}
@@ -418,9 +309,7 @@ function IconControl({
 				{isOpenModal && (
 					<IconPickerModal
 						initialActiveTab={modalInitialTab}
-						onClose={() => {
-							setOpenModal(false);
-						}}
+						onClose={closeModal}
 						onParseMediaForDraft={parseMediaForDraft}
 						onUseCustomIcon={handleUseCustomIcon}
 					/>
