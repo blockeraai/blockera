@@ -3,11 +3,15 @@
  */
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { useState, useContext, useMemo } from '@wordpress/element';
+import { SearchControl as WPSearchControl } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -15,7 +19,6 @@ import { Icon } from '@blockera/icons';
  */
 import { IconContext } from '../../context';
 import { getLibraryIcons } from '../../utils';
-import SearchControl from '../../../search-control';
 import {
 	DEFAULT_LIBRARIES,
 	formatIconCount,
@@ -30,11 +33,32 @@ export default function Search({
 	const [searchData, setSearchData] = useState([]);
 	const [searchData2, setSearchData2] = useState([]);
 
-	const { id, handleIconSelect } = useContext(IconContext);
+	const { handleIconSelect } = useContext(IconContext);
 	const iconCount = useMemo(
 		() => getLibrariesIconCount(libraries),
 		[libraries]
 	);
+
+	const handleSearchChange = (value) => {
+		setSearchInput(value);
+		onSearchChange(value);
+		setSearchData(
+			getLibraryIcons({
+				library: 'search',
+				query: value,
+				onClick: handleIconSelect,
+				limit: 49,
+			})
+		);
+		setSearchData2(
+			getLibraryIcons({
+				library: 'search-2',
+				query: value,
+				onClick: handleIconSelect,
+				limit: 49,
+			})
+		);
+	};
 
 	return (
 		<div
@@ -43,34 +67,16 @@ export default function Search({
 				searchInput ? 'is-searched' : ''
 			)}
 		>
-			<SearchControl
-				{...{ ...(id ? { id: `${id}.icon` } : {}) }}
-				defaultValue={searchInput}
-				onChange={(value) => {
-					setSearchInput(value);
-					onSearchChange(value);
-					setSearchData(
-						getLibraryIcons({
-							library: 'search',
-							query: value,
-							onClick: handleIconSelect,
-							limit: 49,
-						})
-					);
-					setSearchData2(
-						getLibraryIcons({
-							library: 'search-2',
-							query: value,
-							onClick: handleIconSelect,
-							limit: 49,
-						})
-					);
-				}}
+			<WPSearchControl
+				value={searchInput}
+				onChange={handleSearchChange}
 				placeholder={sprintf(
 					// translators: %s is the total number of icons available in the library.
 					__('Search %s icons…', 'blockera'),
 					formatIconCount(iconCount)
 				)}
+				className={controlClassNames('search')}
+				__nextHasNoMarginBottom={true}
 			/>
 
 			{searchInput && (
