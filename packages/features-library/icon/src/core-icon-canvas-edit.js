@@ -15,7 +15,7 @@ import {
 	getCoreIconCanvasAttributes,
 	getCoreIconMigrationPatch,
 } from '@blockera/blocks-core/js/libs/wordpress/icon/compatibility/core-icon-block-sync';
-import { CoreIconLinkToolbar } from './core-icon-link-toolbar';
+import { CoreIconBlockToolbar } from './core-icon-block-toolbar';
 import { CoreIconInspectorControls } from './core-icon-inspector-controls';
 
 import './core-icon-canvas-edit.css';
@@ -146,15 +146,16 @@ export const CoreIconCanvasEdit: ComponentType<{
 					setAttributes={setAttributes}
 					isVisible={showSettingsInspector}
 				/>
-				<CoreIconLinkToolbar
+				<CoreIconBlockToolbar
 					attributes={displayAttributes}
 					setAttributes={setAttributes}
 					clientId={clientId}
 					isSelected={isSelected}
+					hasIcon={hasIcon}
 					ariaLabel={ariaLabel}
 				>
 					{iconContent}
-				</CoreIconLinkToolbar>
+				</CoreIconBlockToolbar>
 			</>
 		);
 	}
