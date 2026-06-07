@@ -20,7 +20,12 @@ return array_merge(
 					'root' => ':where(li)',
 				],
 				'blockera/elements/icon' => [
-					'root' => ' li::before',
+					// Exclude list items that define their own icon (blockera-has-icon-*).
+					'root' => ' li:not([class*="blockera-has-icon-"])::before',
+				],
+				// Master-block icon styles resolve query "blockeraIcon" (not elements/icon).
+				'blockeraIcon' => [
+					'root' => ' li:not([class*="blockera-has-icon-"])::before',
 				],
 				'blockera/elements/bold' => [
 					'root' => ':is(strong,b)',
