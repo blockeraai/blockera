@@ -37,11 +37,27 @@ import StateContainer from '../../components/state-container';
 import { filterSettingsBySearch } from '../base/utils/search-features';
 import { useFeatureSearch } from '../../components/feature-search-context';
 import { useGlobalStylesPanelContext } from '../../../editor/global-styles/panel/context';
+import {
+	getExtensionsUiContext as getScopedExtensionsUiContext,
+	INSPECTOR_UI_CONTEXT,
+} from '../../components/extensions-ui-context';
 import { getBlockInspectorGroup } from '../../../hooks/use-block-side-effects/utils';
 
-const INSPECTOR_UI_CONTEXT = 'block-inspector';
-const GLOBAL_STYLES_UI_CONTEXT = 'global-styles';
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
+
+const getExtensionsUiContext = (
+	insideBlockInspector: boolean,
+	variationSurface?: string
+): string => {
+	if (insideBlockInspector) {
+		return INSPECTOR_UI_CONTEXT;
+	}
+
+	return (
+		getScopedExtensionsUiContext(false, variationSurface) ||
+		'global-styles-style'
+	);
+};
 
 /** Properties ignored when comparing extension supports to persisted cache. */
 const EXTENSIONS_CACHE_OMIT_PROPS = [
@@ -126,17 +142,6 @@ const extensionsWithoutLabel = (extensionsObj: Object): Object => {
 	_extensionsWithoutLabelCache.set(extensionsObj, newExtensions);
 
 	return newExtensions;
-};
-
-const getExtensionsUiContext = (
-	insideBlockInspector: boolean,
-	variationSurface?: string
-): string => {
-	if (insideBlockInspector) {
-		return INSPECTOR_UI_CONTEXT;
-	}
-
-	return `${GLOBAL_STYLES_UI_CONTEXT}-${variationSurface || 'style'}`;
 };
 
 const registerDefaultBlockExtensionsSupports = (
