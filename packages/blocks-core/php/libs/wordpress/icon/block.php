@@ -74,6 +74,11 @@ return array_merge(
 								'attribute' => 'blockeraWidth',
 							],
 						],
+						'blockeraIconColor' => [
+							'config' => [
+								'attribute' => 'blockeraFontColor',
+							],
+						],
 					],
 				],
 				'blockFeatures' => [
