@@ -19,6 +19,7 @@ import type { TPreviewProps } from '../types';
 import { useBlockStates } from '../../block-card/block-states/hooks';
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
 import StatesManager from '../../block-card/block-states/components/states-manager';
+import { PreviewActiveColorProvider } from './preview-active-color-provider';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
@@ -138,64 +139,77 @@ export const Preview = ({
 	}, [onStatesManagerReady, handleOnChange]);
 
 	return (
-		<StatesManager
-			states={states}
-			onReset={onReset}
-			onDelete={onDelete}
-			overrideItem={overrideItem}
-			defaultStates={defaultStates}
-			preparedStates={preparedStates}
-			handleOnChange={handleOnChange}
-			deleteCacheData={deleteCacheData}
-			contextValue={blockStatesContextValue}
-			defaultRepeaterItemValue={defaultRepeaterItemValue}
-			maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
-			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
-			{...{
-				InserterComponent: (props: Object) => (
-					<Inserter
-						{...{
-							...props,
-							maxItems:
-								maxItems + Object.keys(preparedStates).length,
-							AvailableBlocks: () => (
-								<Categories
-									blocks={blocks}
-									elements={elements}
-									states={preparedStates}
-									clientId={block?.clientId}
-									savedStates={calculatedStates}
-									setBlockState={handleOnChange}
-									getBlockInners={getBlockInners}
-									setCurrentBlock={setCurrentBlock}
-									doingSwitchToInner={doingSwitchToInner}
-									getBlockStates={() => calculatedStates}
-									setBlockClientInners={setBlockClientInners}
-								/>
-							),
-						}}
-					/>
-				),
-			}}
+		<PreviewActiveColorProvider
+			blockName={block?.blockName}
+			clientId={block?.clientId}
+			availableStates={availableStates}
+			insideBlockInspector={insideBlockInspector}
+			blockeraUnsavedData={
+				blockStatesProps?.attributes?.blockeraUnsavedData
+			}
 		>
-			{innerBlocksContextValue && (
-				<InnerBlocksExtension
-					{...{
-						...innerBlocksProps,
-						maxItems,
-						currentState,
-						setCurrentBlock,
-						currentBreakpoint,
-						doingSwitchToInner,
-						setBlockClientInners,
-						currentInnerBlockState,
-						onReset: onInnerBlocksReset,
-						contextValue: innerBlocksContextValue,
-					}}
-					block={block}
-					onChange={onChange}
-				/>
-			)}
-		</StatesManager>
+			<StatesManager
+				states={states}
+				onReset={onReset}
+				onDelete={onDelete}
+				overrideItem={overrideItem}
+				defaultStates={defaultStates}
+				preparedStates={preparedStates}
+				handleOnChange={handleOnChange}
+				deleteCacheData={deleteCacheData}
+				contextValue={blockStatesContextValue}
+				defaultRepeaterItemValue={defaultRepeaterItemValue}
+				maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
+				getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
+				{...{
+					InserterComponent: (props: Object) => (
+						<Inserter
+							{...{
+								...props,
+								maxItems:
+									maxItems +
+									Object.keys(preparedStates).length,
+								AvailableBlocks: () => (
+									<Categories
+										blocks={blocks}
+										elements={elements}
+										states={preparedStates}
+										clientId={block?.clientId}
+										savedStates={calculatedStates}
+										setBlockState={handleOnChange}
+										getBlockInners={getBlockInners}
+										setCurrentBlock={setCurrentBlock}
+										doingSwitchToInner={doingSwitchToInner}
+										getBlockStates={() => calculatedStates}
+										setBlockClientInners={
+											setBlockClientInners
+										}
+									/>
+								),
+							}}
+						/>
+					),
+				}}
+			>
+				{innerBlocksContextValue && (
+					<InnerBlocksExtension
+						{...{
+							...innerBlocksProps,
+							maxItems,
+							currentState,
+							setCurrentBlock,
+							currentBreakpoint,
+							doingSwitchToInner,
+							setBlockClientInners,
+							currentInnerBlockState,
+							onReset: onInnerBlocksReset,
+							contextValue: innerBlocksContextValue,
+						}}
+						block={block}
+						onChange={onChange}
+					/>
+				)}
+			</StatesManager>
+		</PreviewActiveColorProvider>
 	);
 };
