@@ -18,6 +18,7 @@ import { Button, MediaUploader } from '../../../';
 import { FeatureWrapper } from '../../../feature-wrapper';
 import ConditionalWrapper from '../../../conditional-wrapper';
 import { sanitizeRawSVGString, getCustomIconFeatureType } from '../../utils';
+import SvgEditorPreview from './svg-editor/svg-editor-preview';
 
 const SVG_PLACEHOLDER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
   <path d="..." />
@@ -114,13 +115,10 @@ export default function CustomIconTab({
 
 	if (hasValidPreview) {
 		previewContent = (
-			<div
-				className={controlInnerClassNames(
-					'icon-picker-custom-icon-preview-svg'
-				)}
-				dangerouslySetInnerHTML={{
-					__html: sanitizedDraft,
-				}}
+			<SvgEditorPreview
+				svgString={sanitizedDraft}
+				onChange={handleSvgInput}
+				disabled={isCustomIconLocked}
 			/>
 		);
 	} else if (uploadUrl) {
@@ -246,17 +244,17 @@ export default function CustomIconTab({
 						'icon-picker-custom-icon-preview-header'
 					)}
 				>
-					{__('Live preview', 'blockera')}
+					{__('SVG editor', 'blockera')}
 				</div>
 
-				<div
-					className={controlInnerClassNames(
-						'icon-picker-custom-icon-preview-area'
-					)}
-				>
-					{previewContent ? (
-						previewContent
-					) : (
+				{previewContent ? (
+					previewContent
+				) : (
+					<div
+						className={controlInnerClassNames(
+							'icon-picker-custom-icon-preview-area'
+						)}
+					>
 						<div
 							className={controlInnerClassNames(
 								'icon-picker-custom-icon-preview-placeholder'
@@ -267,8 +265,8 @@ export default function CustomIconTab({
 								'blockera'
 							)}
 						</div>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
