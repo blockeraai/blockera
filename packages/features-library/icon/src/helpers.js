@@ -19,6 +19,7 @@ export {
 } from './icon-attribute-utils';
 
 export const DEFAULT_ICON_SIZE_ATTRIBUTE = 'blockeraIconSize';
+export const DEFAULT_ICON_COLOR_ATTRIBUTE = 'blockeraIconColor';
 
 /** Class marker for Blockera-managed core/icon blocks (not inline icon layout). */
 export const CORE_ICON_BLOCKERA_CLASS = 'wp-block-icon-blockera';
@@ -38,6 +39,15 @@ export const isStandaloneIconBlock = (blockName?: string): boolean =>
  */
 export const getIconSizeAttributeId = (iconSizeConfig?: Object): string =>
 	iconSizeConfig?.config?.attribute ?? DEFAULT_ICON_SIZE_ATTRIBUTE;
+
+/**
+ * Block attribute used by the icon Color control (defaults to blockeraIconColor).
+ *
+ * @param {Object} iconColorConfig blockeraIconColor entry from iconConfig.
+ * @return {string} Attribute name for the icon color control.
+ */
+export const getIconColorAttributeId = (iconColorConfig?: Object): string =>
+	iconColorConfig?.config?.attribute ?? DEFAULT_ICON_COLOR_ATTRIBUTE;
 
 export const getIconAttributes = (): string[] => [
 	'blockeraIcon',

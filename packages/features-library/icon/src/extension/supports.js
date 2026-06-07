@@ -55,6 +55,9 @@ const blockeraIconColor: FeatureConfig = {
 	status: true,
 	label: __('Icon Color', 'blockera'),
 	keywords: ['icon', 'color', 'text-color'],
+	config: {
+		attribute: 'blockeraIconColor',
+	},
 };
 
 const blockeraIconRotate: FeatureConfig = {

@@ -367,6 +367,54 @@ if ( ! function_exists('blockera_get_icon_size_attr_value')) {
 	}
 }
 
+if ( ! function_exists('blockera_get_icon_color_attr_name')) {
+	/**
+	 * Attribute id used for icon color (iconConfig.blockeraIconColor.config.attribute).
+	 *
+	 * @param array $block The block.
+	 *
+	 * @return string
+	 */
+	function blockera_get_icon_color_attr_name( array $block): string {
+		static $cache = [];
+
+		$block_name = $block['blockName'] ?? '';
+
+		if (isset($cache[ $block_name ])) {
+			return $cache[ $block_name ];
+		}
+
+		$registry   = \WP_Block_Type_Registry::get_instance();
+		$block_type = $registry->get_registered($block_name);
+		$attribute  = $block_type->supports['blockExtensions']['iconConfig']['blockeraIconColor']['config']['attribute'] ?? 'blockeraIconColor';
+
+		$cache[ $block_name ] = $attribute;
+
+		return $attribute;
+	}
+}
+
+if ( ! function_exists('blockera_get_icon_color_attr_value')) {
+	/**
+	 * Resolved icon color value from the configured block attribute.
+	 *
+	 * @param array $block The block.
+	 *
+	 * @return string
+	 */
+	function blockera_get_icon_color_attr_value( array $block): string {
+		$attr_name = blockera_get_icon_color_attr_name($block);
+		$value     = blockera_get_block_attr_value($block, $attr_name);
+
+		if ('' !== $value || 'blockeraIconColor' === $attr_name) {
+			return $value;
+		}
+
+		// Legacy data saved on blockeraIconColor before attribute alias.
+		return blockera_get_block_attr_value($block, 'blockeraIconColor');
+	}
+}
+
 if ( ! function_exists('blockera_block_has_icon')) {
 	/**
 	 * Check if the block has an icon.

@@ -138,7 +138,9 @@ export const getIconTransform = (attributes: Object): string => {
 };
 
 export const getIconPresentationStyle = (attributes: Object): Object => {
-	const iconColor = getAttrValue(attributes?.blockeraIconColor);
+	const iconColor =
+		getAttrValue(attributes?.blockeraFontColor) ||
+		getAttrValue(attributes?.blockeraIconColor);
 	const transform = getIconTransform(attributes);
 	const library = getBlockeraIconValue(attributes)?.library;
 	const isStrokeLibrary = isStrokeIconLibrary(library);

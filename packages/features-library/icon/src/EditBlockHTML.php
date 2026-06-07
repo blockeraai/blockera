@@ -188,7 +188,7 @@ class EditBlockHTML implements EditableBlockHTML {
 			$properties['height'] = $iconSize;
 		}
 
-		$iconColor = blockera_get_block_attr_value($block, 'blockeraIconColor');
+		$iconColor = blockera_get_icon_color_attr_value($block);
 
 		if ('' !== $iconColor) {
 			$properties['color'] = $iconColor;
