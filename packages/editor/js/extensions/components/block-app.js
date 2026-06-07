@@ -28,6 +28,7 @@ import type {
 } from './types';
 import { getNormalizedCacheVersion } from '../helpers';
 import { defaultValue, cacheKeyPrefix } from './initializer';
+import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 
 const BlockAppContext = createContext(defaultValue);
 
@@ -54,10 +55,16 @@ export const useBlockAppContext = (): BlockAppContextType =>
 
 export const useBlockSection = (sectionId: string): BlockSection => {
 	const { settings } = useBlockAppContext();
-	const { currentBlock, version } = useSelect((select) => ({
-		currentBlock: select('blockera/extensions').getExtensionCurrentBlock(),
-		version: select('blockera/data').getEntity('blockera')?.version,
-	}));
+	const { extensionsUiContext } = useGlobalStylesPanelContext();
+	const { currentBlock, version } = useSelect(
+		(select) => ({
+			currentBlock: select(
+				'blockera/extensions'
+			).getExtensionCurrentBlock(extensionsUiContext),
+			version: select('blockera/data').getEntity('blockera')?.version,
+		}),
+		[extensionsUiContext]
+	);
 	const { blockSections, sections, focusedSection } = settings;
 	const { collapseAll, focusMode } = blockSections;
 	const section = (sections[currentBlock] || sections.master)[sectionId];
@@ -153,10 +160,16 @@ export const useBlockSections = (): BlockSections => {
 	const { settings } = useBlockAppContext();
 	const { blockSections, sections, focusedSection } = settings;
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
-	const { currentBlock, version } = useSelect((select) => ({
-		currentBlock: select('blockera/extensions').getExtensionCurrentBlock(),
-		version: select('blockera/data').getEntity('blockera')?.version,
-	}));
+	const { extensionsUiContext } = useGlobalStylesPanelContext();
+	const { currentBlock, version } = useSelect(
+		(select) => ({
+			currentBlock: select(
+				'blockera/extensions'
+			).getExtensionCurrentBlock(extensionsUiContext),
+			version: select('blockera/data').getEntity('blockera')?.version,
+		}),
+		[extensionsUiContext]
+	);
 	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 
 	const updateBlockSections = useCallback(

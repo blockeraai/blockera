@@ -129,6 +129,7 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		handleOnChangeStyleInLocalState,
+		extensionsUiContext,
 	} = useGlobalStylesPanelContext();
 	const {
 		name,
@@ -244,10 +245,25 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 	const [isActive, setActive] = useState(true);
 
 	const {
-		changeExtensionCurrentBlock: setCurrentBlock,
+		changeExtensionCurrentBlock: changeExtensionCurrentBlockDispatch,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('blockera/extensions') || {};
+
+	const setCurrentBlock = useCallback(
+		(value) => {
+			const uiContext = insideBlockInspector
+				? undefined
+				: extensionsUiContext;
+
+			changeExtensionCurrentBlockDispatch(value, uiContext);
+		},
+		[
+			insideBlockInspector,
+			extensionsUiContext,
+			changeExtensionCurrentBlockDispatch,
+		]
+	);
 
 	const masterIsNormalState = useCallback(
 		(): boolean =>

@@ -9,6 +9,7 @@ import { useSelect } from '@wordpress/data';
  * Internal dependencies
  */
 import { getBaseBreakpoint } from '../../editor/header-ui/components/breakpoints/helpers';
+import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 
 /**
  * Blockera/extension store slice for BlockBase.
@@ -37,6 +38,12 @@ export function useBlockBaseStoreSelect({
 	// Global styles panel mounts a single BlockBase (insideBlockInspector=false) without
 	// isSelected; it must still read extension inner-block target from the store.
 	const effectivelySelected = isSelected || !insideBlockInspector;
+	const { extensionsUiContext: panelExtensionsUiContext } =
+		useGlobalStylesPanelContext();
+	const extensionsUiContext =
+		effectivelySelected && !insideBlockInspector
+			? panelExtensionsUiContext
+			: undefined;
 
 	return useSelect(
 		(select) => {
@@ -60,7 +67,7 @@ export function useBlockBaseStoreSelect({
 				select('blockera/editor');
 
 			const currentBlock = effectivelySelected
-				? getExtensionCurrentBlock()
+				? getExtensionCurrentBlock(extensionsUiContext)
 				: 'master';
 			const currentBreakpoint = effectivelySelected
 				? getExtensionCurrentBlockStateBreakpoint()
@@ -97,6 +104,6 @@ export function useBlockBaseStoreSelect({
 				activeVariation: _getActiveBlockVariation(),
 			};
 		},
-		[clientId, name, effectivelySelected]
+		[clientId, name, effectivelySelected, extensionsUiContext]
 	);
 }
