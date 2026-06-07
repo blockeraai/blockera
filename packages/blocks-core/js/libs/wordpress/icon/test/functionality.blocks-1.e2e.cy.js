@@ -46,4 +46,27 @@ describe('core/icon Block', () => {
 
 		cy.get('.wp-block-icon svg').should('exist');
 	});
+
+	it('block toolbar opens Blockera icon picker and updates canvas', () => {
+		appendBlocks(`<!-- wp:icon -->
+<div class="wp-block-icon"></div>
+<!-- /wp:icon -->`);
+
+		cy.getBlock('core/icon').first().click();
+
+		cy.get('.block-editor-block-toolbar')
+			.contains('button', 'Choose icon')
+			.click();
+
+		cy.get('.blockera-control-icon-picker-modal').should('be.visible');
+
+		cy.get('.blockera-control-icon-control-icon')
+			.not('.blockera-is-pro-icon')
+			.first()
+			.click();
+
+		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
+
+		cy.get('.wp-block-icon svg').should('exist');
+	});
 });
