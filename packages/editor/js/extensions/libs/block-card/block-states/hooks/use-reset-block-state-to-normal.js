@@ -10,6 +10,7 @@ import { select, dispatch } from '@wordpress/data';
  * Internal dependencies
  */
 import { isInnerBlock } from '../../../../components/utils';
+import { GLOBAL_STYLES_EXTENSION_UI_CONTEXTS } from '../../../../components/extensions-ui-context';
 
 /**
  * Hook to reset block state to normal.
@@ -24,12 +25,16 @@ export const useResetBlockStateToNormal = ({
 	clientId,
 	blockName,
 	statesManagerHandleOnChangeRef,
+	extensionsUiContext,
+	resetAllGlobalStylesSurfaces = false,
 }: {
 	clientId: string,
 	blockName: string,
 	statesManagerHandleOnChangeRef: {
 		current: ((value: Object) => void) | null,
 	},
+	extensionsUiContext?: string,
+	resetAllGlobalStylesSurfaces?: boolean,
 }): (() => void) => {
 	return useCallback(() => {
 		// Call handleOnChange from StatesManager to reset to normal state
@@ -50,8 +55,21 @@ export const useResetBlockStateToNormal = ({
 
 		// Change the extension current block to master to reset the block state to normal.
 		const { changeExtensionCurrentBlock } = dispatch('blockera/extensions');
-		// If the current block is an inner block, change the current block to the master block.
-		if (isInnerBlock(getExtensionCurrentBlock())) {
+
+		if (resetAllGlobalStylesSurfaces) {
+			GLOBAL_STYLES_EXTENSION_UI_CONTEXTS.forEach((uiContext) => {
+				if (isInnerBlock(getExtensionCurrentBlock(uiContext))) {
+					changeExtensionCurrentBlock('master', uiContext);
+				}
+			});
+		} else if (
+			isInnerBlock(getExtensionCurrentBlock(extensionsUiContext))
+		) {
+			changeExtensionCurrentBlock('master', extensionsUiContext);
+		} else if (
+			!extensionsUiContext &&
+			isInnerBlock(getExtensionCurrentBlock())
+		) {
 			changeExtensionCurrentBlock('master');
 		}
 

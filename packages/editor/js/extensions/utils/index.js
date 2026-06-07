@@ -8,6 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { GLOBAL_STYLES_EXTENSION_UI_CONTEXTS } from '../components/extensions-ui-context';
 import size from '../../schemas/block-supports/size-block-supports-list.json';
 import state from '../../schemas/block-supports/state-block-supports-list.json';
 import mouse from '../../schemas/block-supports/mouse-block-supports-list.json';
@@ -31,6 +32,9 @@ export const resetExtensionSettings = () => {
 	} = dispatch('blockera/extensions') || {};
 
 	setCurrentBlock('master');
+	GLOBAL_STYLES_EXTENSION_UI_CONTEXTS.forEach((uiContext) => {
+		setCurrentBlock('master', uiContext);
+	});
 	setCurrentState('normal');
 	setInnerBlockState('normal');
 	// setCurrentBreakpoint('laptop');

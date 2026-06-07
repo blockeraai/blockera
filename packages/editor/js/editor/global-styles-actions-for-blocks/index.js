@@ -17,6 +17,7 @@ import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-ov
  * Internal dependencies
  */
 import { isInnerBlock } from '../../extensions/components';
+import { GLOBAL_STYLES_EXTENSION_UI_CONTEXTS } from '../../extensions/components/extensions-ui-context';
 import { getTargets } from '../header-ui/helpers';
 import { getBlockTypeSelector } from './side-bar-listener';
 import { sharedListenerCallback } from './listener-callback';
@@ -43,11 +44,21 @@ export default function GlobalStylesActionsForBlocks({
 	const { globalStylesPanel } = getTargets(version);
 
 	const resetExtensionCurrentBlockIfInner = () => {
-		const currentBlock =
-			select('blockera/extensions')?.getExtensionCurrentBlock?.() ??
-			'master';
+		const extensionsSelect = select(
+			'blockera/extensions'
+		)?.getExtensionCurrentBlock;
 
-		if (isInnerBlock(currentBlock)) {
+		if (!extensionsSelect) {
+			return;
+		}
+
+		GLOBAL_STYLES_EXTENSION_UI_CONTEXTS.forEach((uiContext) => {
+			if (isInnerBlock(extensionsSelect(uiContext))) {
+				changeExtensionCurrentBlock('master', uiContext);
+			}
+		});
+
+		if (isInnerBlock(extensionsSelect())) {
 			changeExtensionCurrentBlock('master');
 		}
 	};
