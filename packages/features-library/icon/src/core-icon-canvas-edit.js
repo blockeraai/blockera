@@ -4,13 +4,17 @@
  * External dependencies
  */
 import type { ComponentType, MixedElement } from 'react';
-import { memo, useMemo } from '@wordpress/element';
+import { memo, useEffect, useMemo } from '@wordpress/element';
 import { SVG, Rect, Path } from '@wordpress/primitives';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import {
+	getCoreIconCanvasAttributes,
+	getCoreIconMigrationPatch,
+} from '@blockera/blocks-core/js/libs/wordpress/icon/compatibility/core-icon-block-sync';
 import { CoreIconLinkToolbar } from './core-icon-link-toolbar';
 import { CoreIconInspectorControls } from './core-icon-inspector-controls';
 
@@ -61,28 +65,42 @@ export const CoreIconCanvasEdit: ComponentType<{
 	isSelected?: boolean,
 }> = memo(
 	({ attributes, setAttributes, clientId, isSelected }): MixedElement => {
-		const iconValue = useMemo(
-			() => getBlockeraIconValue(attributes),
+		const displayAttributes = useMemo(
+			() => getCoreIconCanvasAttributes(attributes),
 			[attributes]
+		);
+
+		useEffect(() => {
+			const migrationPatch = getCoreIconMigrationPatch(attributes);
+
+			if (migrationPatch) {
+				setAttributes(migrationPatch);
+			}
+		}, [attributes, setAttributes]);
+
+		const iconValue = useMemo(
+			() => getBlockeraIconValue(displayAttributes),
+			[displayAttributes]
 		);
 		const hasIcon = useMemo(
 			() => hasBlockeraIconValue(iconValue),
 			[iconValue]
 		);
 		const resolvedIconSize = useMemo(
-			() => getResolvedIconSize(attributes),
-			[attributes]
+			() => getResolvedIconSize(displayAttributes),
+			[displayAttributes]
 		);
 		const iconStyle = useMemo(
-			() => getIconPresentationStyle(attributes),
-			[attributes]
+			() => getIconPresentationStyle(displayAttributes),
+			[displayAttributes]
 		);
 		const ariaLabel = useMemo(
-			() => getCoreIconAriaLabel(attributes),
-			[attributes]
+			() => getCoreIconAriaLabel(displayAttributes),
+			[displayAttributes]
 		);
 
-		const showSettingsInspector = hasIcon || Boolean(attributes?.icon);
+		const showSettingsInspector =
+			hasIcon || Boolean(displayAttributes?.icon);
 
 		const customSvgMarkup = useMemo(() => {
 			if (!isCustomUploadedIcon(iconValue)) {
@@ -124,12 +142,12 @@ export const CoreIconCanvasEdit: ComponentType<{
 		return (
 			<>
 				<CoreIconInspectorControls
-					attributes={attributes}
+					attributes={displayAttributes}
 					setAttributes={setAttributes}
 					isVisible={showSettingsInspector}
 				/>
 				<CoreIconLinkToolbar
-					attributes={attributes}
+					attributes={displayAttributes}
 					setAttributes={setAttributes}
 					clientId={clientId}
 					isSelected={isSelected}
