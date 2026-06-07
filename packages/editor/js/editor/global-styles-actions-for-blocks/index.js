@@ -11,13 +11,15 @@ import { select, dispatch, subscribe } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-override/selectors';
+import {
+	getDualGlobalStylesSelector,
+	getWordPressVersion,
+} from '@blockera/global-styles-ui/panel-override';
 
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../../extensions/components';
-import { GLOBAL_STYLES_EXTENSION_UI_CONTEXTS } from '../../extensions/components/extensions-ui-context';
+import { resetInnerExtensionCurrentBlocksForGlobalStyles } from '../../extensions/utils';
 import { getTargets } from '../header-ui/helpers';
 import { getBlockTypeSelector } from './side-bar-listener';
 import { sharedListenerCallback } from './listener-callback';
@@ -34,37 +36,7 @@ export default function GlobalStylesActionsForBlocks({
 }: {
 	className: string,
 }): MixedElement {
-	const blockTypes = getBlockTypes();
-	const { setSelectedBlockRef, setSelectedBlockStyle } =
-		dispatch('blockera/editor');
-	const { changeExtensionCurrentBlock } = dispatch('blockera/extensions');
-
-	const { getEntity } = select('blockera/data') || {};
-	const { version } = getEntity('wp');
-	const { globalStylesPanel } = getTargets(version);
-
-	const resetExtensionCurrentBlockIfInner = () => {
-		const extensionsSelect = select(
-			'blockera/extensions'
-		)?.getExtensionCurrentBlock;
-
-		if (!extensionsSelect) {
-			return;
-		}
-
-		GLOBAL_STYLES_EXTENSION_UI_CONTEXTS.forEach((uiContext) => {
-			if (isInnerBlock(extensionsSelect(uiContext))) {
-				changeExtensionCurrentBlock('master', uiContext);
-			}
-		});
-
-		if (isInnerBlock(extensionsSelect())) {
-			changeExtensionCurrentBlock('master');
-		}
-	};
-
 	// Align extension currentBlock with WP sidebar when leaving document for global styles.
-	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
 		const GLOBAL_STYLES_AREA = 'edit-site/global-styles';
 		let previousArea =
@@ -81,81 +53,89 @@ export default function GlobalStylesActionsForBlocks({
 				activeArea === GLOBAL_STYLES_AREA &&
 				previousArea !== GLOBAL_STYLES_AREA
 			) {
-				resetExtensionCurrentBlockIfInner();
+				resetInnerExtensionCurrentBlocksForGlobalStyles();
 			}
 
 			previousArea = activeArea;
 		});
 
 		return unsubscribe;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
-		new IntersectionObserverRenderer(globalStylesPanel.screen, null, {
-			callback: () => {
-				// Safety guard: ensure button exists before adding listener
-				const globalStylesButton = document.querySelector(
-					getDualGlobalStylesSelector('globalStylesSidebarButton')
-				);
-				const postDocumentButton = document.querySelector(
-					'button[aria-controls="edit-post:document"]'
-				);
+		const blockTypes = getBlockTypes();
+		const { globalStylesPanel } = getTargets(getWordPressVersion());
+		const { setSelectedBlockRef, setSelectedBlockStyle } =
+			dispatch('blockera/editor') || {};
+		const { changeExtensionCurrentBlock } =
+			dispatch('blockera/extensions') || {};
 
-				if (globalStylesButton) {
-					globalStylesButton.addEventListener(
-						'click',
-						() => {
-							setSelectedBlockStyle('');
-							setSelectedBlockRef(undefined);
-							resetExtensionCurrentBlockIfInner();
-						},
-						{ once: true }
+		const observer = new IntersectionObserverRenderer(
+			globalStylesPanel.screen,
+			null,
+			{
+				callback: () => {
+					const globalStylesButton = document.querySelector(
+						getDualGlobalStylesSelector('globalStylesSidebarButton')
 					);
-				}
-
-				if (postDocumentButton) {
-					postDocumentButton.addEventListener(
-						'click',
-						() => {
-							changeExtensionCurrentBlock('master');
-						},
-						{ once: true }
-					);
-				}
-
-				// Set up listeners for each block type
-				blockTypes.forEach((blockType) => {
-					// Safety guard: ensure blockType exists
-					if (!blockType) {
-						return;
-					}
-
-					// Set up click listener for block element
-					const blockElement = document.querySelector(
-						getBlockTypeSelector(blockType.name)
+					const postDocumentButton = document.querySelector(
+						'button[aria-controls="edit-post:document"]'
 					);
 
-					if (blockElement) {
-						blockElement.addEventListener(
+					if (globalStylesButton) {
+						globalStylesButton.addEventListener(
 							'click',
 							() => {
-								document.body?.classList?.add(className);
-								document.body?.setAttribute(
-									'data-test',
-									className
-								);
-								sharedListenerCallback(blockType.name);
+								setSelectedBlockStyle?.('');
+								setSelectedBlockRef?.(undefined);
+								resetInnerExtensionCurrentBlocksForGlobalStyles();
 							},
 							{ once: true }
 						);
 					}
-				});
-			},
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+
+					if (postDocumentButton) {
+						postDocumentButton.addEventListener(
+							'click',
+							() => {
+								changeExtensionCurrentBlock?.('master');
+							},
+							{ once: true }
+						);
+					}
+
+					blockTypes.forEach((blockType) => {
+						if (!blockType) {
+							return;
+						}
+
+						const blockElement = document.querySelector(
+							getBlockTypeSelector(blockType.name)
+						);
+
+						if (blockElement) {
+							blockElement.addEventListener(
+								'click',
+								() => {
+									document.body?.classList?.add(className);
+									document.body?.setAttribute(
+										'data-test',
+										className
+									);
+									sharedListenerCallback(blockType.name);
+								},
+								{ once: true }
+							);
+						}
+					});
+				},
+			}
+		);
+
+		return () => {
+			observer.destroy();
+		};
+	}, [className]);
 
 	return <></>;
 }
