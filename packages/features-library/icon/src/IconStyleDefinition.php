@@ -28,16 +28,16 @@ class IconStyleDefinition extends BaseStyleDefinition {
         $value = $setting[ $cssProperty ];
 
 		switch ($cssProperty) {
-			case '--blockera--icon--url':				
-				$svg = isset($value, $value['renderedIcon']) ? $value['renderedIcon'] : '';
+			case '--blockera--icon--url':
+				$decoded_svg = '';
 
-				if (! empty($svg)) {
-					$decoded_svg = RenderedIconCodec::decode($svg);
+				if (! empty($value['svgString']) && is_string($value['svgString'])) {
+					$decoded_svg = $value['svgString'];
+				} elseif (! empty($value['renderedIcon'])) {
+					$decoded_svg = RenderedIconCodec::decode($value['renderedIcon']);
+				}
 
-					if ('' === $decoded_svg) {
-						break;
-					}
-
+				if ('' !== $decoded_svg) {
 					$library        = isset($value['library']) ? (string) $value['library'] : '';
 					$icon_slug      = isset($value['icon']) ? (string) $value['icon'] : '';
 					$is_custom_icon = '' === $library && '' === $icon_slug;
@@ -47,7 +47,23 @@ class IconStyleDefinition extends BaseStyleDefinition {
 					}
 
 					$encoded_svg = rawurlencode($decoded_svg);
-					$this->setDeclaration('--blockera--icon--url', 'url("data:image/svg+xml,' . $encoded_svg . '")');
+					$icon_url    = 'url("data:image/svg+xml,' . $encoded_svg . '")';
+
+					$this->setDeclaration('--blockera--icon--url', $icon_url);
+
+					if (blockera_svg_has_preserved_colors($decoded_svg)) {
+						$this->setDeclaration('--blockera--icon--bg-image', $icon_url);
+						$this->setDeclaration('--blockera--icon--mask-image', 'none');
+						$this->setDeclaration('--blockera--icon--editor-icon-bg', 'transparent');
+					} else {
+						// Reset inherited multi-color vars from ancestor list blocks.
+						$this->setDeclaration('--blockera--icon--bg-image', 'none');
+						$this->setDeclaration('--blockera--icon--mask-image', $icon_url);
+						$this->setDeclaration(
+							'--blockera--icon--editor-icon-bg',
+							'var(--blockera--icon--color, currentColor)'
+						);
+					}
 				}
 				break;
 

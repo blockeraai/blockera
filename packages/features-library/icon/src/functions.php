@@ -135,6 +135,66 @@ if ( ! function_exists('blockera_is_stroke_svg_markup')) {
 	}
 }
 
+if ( ! function_exists('blockera_svg_has_preserved_colors')) {
+	/**
+	 * Whether SVG markup carries explicit fill colors that CSS mask would flatten.
+	 *
+	 * @param string $svg_markup Raw SVG markup.
+	 *
+	 * @return bool
+	 */
+	function blockera_svg_has_preserved_colors( string $svg_markup): bool {
+		if ('' === $svg_markup) {
+			return false;
+		}
+
+		$fills = [];
+
+		if (preg_match_all('/\bfill=["\']([^"\']+)["\']/i', $svg_markup, $matches)) {
+			foreach ($matches[1] as $value) {
+				$normalized = strtolower(trim($value));
+
+				if ('' !== $normalized && ! in_array($normalized, [ 'none', 'currentcolor', 'inherit', 'transparent' ], true)) {
+					$fills[ $normalized ] = true;
+				}
+			}
+		}
+
+		if (preg_match_all('/fill\s*:\s*([^;"\'{}]+)/i', $svg_markup, $matches)) {
+			foreach ($matches[1] as $value) {
+				$normalized = strtolower(trim($value));
+
+				if ('' !== $normalized && ! in_array($normalized, [ 'none', 'currentcolor', 'inherit', 'transparent' ], true)) {
+					$fills[ $normalized ] = true;
+				}
+			}
+		}
+
+		return ! empty($fills);
+	}
+}
+
+if ( ! function_exists('blockera_get_icon_svg_source_from_value')) {
+	/**
+	 * Resolve raw SVG markup from a blockeraIcon value (mirrors JS getCustomIconSvgSource).
+	 *
+	 * @param array $value blockeraIcon value object.
+	 *
+	 * @return string
+	 */
+	function blockera_get_icon_svg_source_from_value( array $value): string {
+		if (! empty($value['svgString']) && is_string($value['svgString'])) {
+			return $value['svgString'];
+		}
+
+		if (! empty($value['renderedIcon']) && is_string($value['renderedIcon'])) {
+			return blockera_decode_rendered_icon($value['renderedIcon']);
+		}
+
+		return '';
+	}
+}
+
 if ( ! function_exists('blockera_core_icon_has_renderable_blockera_icon')) {
 	/**
 	 * Whether core/icon should render Blockera icon output on the frontend.

@@ -229,6 +229,52 @@ export const getCustomIconSvgSource = (iconValue?: Object): string => {
  * @param {string} svgString Raw SVG markup.
  * @return {{ encodedIcon: string, icon: string }} Base64 + URI-encoded forms.
  */
+/**
+ * Whether SVG markup carries explicit fill colors that CSS mask would flatten.
+ *
+ * @param {string} svgMarkup Raw SVG markup.
+ * @return {boolean} True when SVG has non-currentColor fill values.
+ */
+export const svgHasPreservedColors = (svgMarkup?: string): boolean => {
+	if (!svgMarkup || typeof svgMarkup !== 'string') {
+		return false;
+	}
+
+	const fills: Set<string> = new Set();
+
+	const attrFills = svgMarkup.match(/\bfill=["']([^"']+)["']/gi) || [];
+
+	for (const match of attrFills) {
+		const value = match.replace(/^fill=["']/i, '').replace(/["']$/, '');
+
+		if (
+			value &&
+			!['none', 'currentcolor', 'inherit', 'transparent'].includes(
+				value.toLowerCase()
+			)
+		) {
+			fills.add(value.toLowerCase());
+		}
+	}
+
+	const styleFills = svgMarkup.match(/fill\s*:\s*([^;"'}]+)/gi) || [];
+
+	for (const match of styleFills) {
+		const value = match.replace(/fill\s*:\s*/i, '').trim();
+
+		if (
+			value &&
+			!['none', 'currentcolor', 'inherit', 'transparent'].includes(
+				value.toLowerCase()
+			)
+		) {
+			fills.add(value.toLowerCase());
+		}
+	}
+
+	return fills.size > 0;
+};
+
 export const encodeCustomSvgIcon = (
 	svgString: string
 ): { encodedIcon: string, icon: string } => {

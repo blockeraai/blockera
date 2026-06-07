@@ -31,6 +31,7 @@ import {
 	getCustomIconSvgSource,
 	decodeRenderedIcon,
 	isCustomUploadedIcon,
+	svgHasPreservedColors,
 } from '../icon-attribute-utils';
 
 export const IconStyles = ({
@@ -122,9 +123,30 @@ export const IconStyles = ({
 						decodeRenderedIcon(iconValue?.renderedIcon),
 					iconValue?.library || ''
 				);
+		const hasPreservedColors = svgHasPreservedColors(svgForCssUrl);
 
 		// Standalone icon blocks render inline SVG, not CSS mask.
 		if (!isIconBlockVariation) {
+			const iconUrlValue = `url("data:image/svg+xml,${encodeURIComponent(
+				svgForCssUrl
+			)}")`;
+			const iconUrlProperties = hasPreservedColors
+				? {
+						'--blockera--icon--url': iconUrlValue,
+						// Editor canvas: render full-color SVG via background-image, not mask.
+						'--blockera--icon--bg-image': iconUrlValue,
+						'--blockera--icon--mask-image': 'none',
+						'--blockera--icon--editor-icon-bg': 'transparent',
+					}
+				: {
+						'--blockera--icon--url': iconUrlValue,
+						// Reset inherited multi-color vars from ancestor list blocks.
+						'--blockera--icon--bg-image': 'none',
+						'--blockera--icon--mask-image': iconUrlValue,
+						'--blockera--icon--editor-icon-bg':
+							'var(--blockera--icon--color, currentColor)',
+					};
+
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -132,11 +154,7 @@ export const IconStyles = ({
 						blockeraIcon: [
 							{
 								...staticDefinitionParams,
-								properties: {
-									'--blockera--icon--url': `url("data:image/svg+xml,${encodeURIComponent(
-										svgForCssUrl
-									)}")`,
-								},
+								properties: iconUrlProperties,
 							},
 						],
 					},

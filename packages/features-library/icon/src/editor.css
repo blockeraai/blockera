@@ -87,18 +87,28 @@
 	content: "";
 	display: inline-block;
 	position: relative;
-	background: var(--blockera--icon--color, currentColor);
+	background-color: var(
+		--blockera--icon--editor-icon-bg,
+		var(--blockera--icon--color, currentColor)
+	);
+	background-image: var(--blockera--icon--bg-image, none);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
 	margin: auto 0;
 	vertical-align: middle;
 	align-self: center;
 	order: var(--blockera--icon--order, -1);
-	-webkit-mask-image: var(--blockera--icon--url);
+	-webkit-mask-image: var(
+		--blockera--icon--mask-image,
+		var(--blockera--icon--url)
+	);
 	-webkit-mask-position: center;
 	-webkit-mask-repeat: no-repeat;
 	-webkit-mask-size: cover !important;
-	mask-image: var(--blockera--icon--url);
+	mask-image: var(--blockera--icon--mask-image, var(--blockera--icon--url));
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: cover !important;
