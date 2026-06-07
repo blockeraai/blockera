@@ -34,7 +34,13 @@ export function useBlockeraActiveColor({
 	variationCssVars: Object | void,
 } {
 	const { currentBlock, currentState, currentInnerBlockState } =
-		useExtensionsStore({ name, clientId });
+		useExtensionsStore({
+			name,
+			clientId,
+			variationSurface: insideBlockInspector
+				? undefined
+				: variationSurface,
+		});
 	const { getState, getInnerState } = useEditorStore();
 
 	const activeColor = useMemo(

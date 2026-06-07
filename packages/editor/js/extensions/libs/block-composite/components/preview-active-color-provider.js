@@ -19,6 +19,7 @@ import { getBlockeraActiveColorStyleProperties } from '../../../components/block
 import { useBlockeraActiveColor } from '../../../components/use-blockera-active-color';
 import { isInnerBlock } from '../../../components/utils';
 import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
+import { getExtensionsUiContext } from '../../../components/extensions-ui-context';
 
 /**
  * Popover active-color scope for block-composite preview (states / inner-blocks inserters).
@@ -42,14 +43,19 @@ export function PreviewActiveColorProvider({
 	insideBlockInspector?: boolean,
 }): MixedElement {
 	const { variationSurface } = useGlobalStylesPanelContext();
+	const inGlobalStyles = !insideBlockInspector;
+	const extensionsUiContext = getExtensionsUiContext(
+		insideBlockInspector,
+		inGlobalStyles ? variationSurface : undefined
+	);
 	const currentBlock = useSelect(
 		(select) =>
-			select('blockera/extensions')?.getExtensionCurrentBlock?.() ??
-			'master',
-		[]
+			select('blockera/extensions')?.getExtensionCurrentBlock?.(
+				extensionsUiContext
+			) ?? 'master',
+		[extensionsUiContext]
 	);
 	const isMasterScope = !isInnerBlock(currentBlock);
-	const inGlobalStyles = !insideBlockInspector;
 
 	const { activeColor, variationCssVars } = useBlockeraActiveColor({
 		name: blockName,

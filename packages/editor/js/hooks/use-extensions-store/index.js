@@ -11,6 +11,7 @@ import { useSelect, select, dispatch } from '@wordpress/data';
 import { getBaseBreakpoint } from '../../editor/header-ui';
 import type { ExtensionsStoreType } from './ExtensionsStoreType';
 import { isInnerBlock } from '../../extensions/components/utils';
+import { getExtensionsUiContext } from '../../extensions/components/extensions-ui-context';
 import { STORE_NAME } from '../../extensions/libs/base/store/constants';
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
@@ -71,7 +72,12 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 			getExtensionCurrentBlockStateBreakpoint,
 		} = select('blockera/extensions');
 
-		const currentBlock = getExtensionCurrentBlock();
+		const currentBlock = getExtensionCurrentBlock(
+			props?.extensionsUiContext ??
+				(props?.variationSurface
+					? getExtensionsUiContext(false, props.variationSurface)
+					: undefined)
+		);
 
 		return {
 			currentBlock,

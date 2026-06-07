@@ -146,6 +146,7 @@ export function useBlockeraPopoverActiveColorStyle(
 	const { currentBlock } = useExtensionsStore({
 		name: blockName,
 		clientId,
+		variationSurface: inGlobalStyles ? variationSurface : undefined,
 	});
 	const isMasterScope = !isInnerBlock(currentBlock);
 	const isGlobalStylesCardWrapper =
