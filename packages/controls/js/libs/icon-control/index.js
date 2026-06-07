@@ -421,7 +421,6 @@ function IconControl({
 						onClose={() => {
 							setOpenModal(false);
 						}}
-						onProRequired={() => setIsOpenPromotion(true)}
 						onParseMediaForDraft={parseMediaForDraft}
 						onUseCustomIcon={handleUseCustomIcon}
 					/>

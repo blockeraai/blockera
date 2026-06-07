@@ -114,6 +114,18 @@ export function getCustomSvgDraft(icon) {
 	};
 }
 
+/**
+ * Resolve FeatureWrapper type for custom icon upload controls.
+ *
+ * @return {'native'|'none'} Locked (`native`) on free; unlocked (`none`) when Pro filter is active.
+ */
+export function getCustomIconFeatureType() {
+	return applyFilters(
+		'blockera.controls.iconControl.customIcon.featureType',
+		'native'
+	);
+}
+
 export function getLibraryIcons({
 	library,
 	query,

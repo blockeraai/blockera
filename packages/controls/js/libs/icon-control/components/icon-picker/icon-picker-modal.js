@@ -36,7 +36,6 @@ export default function IconPickerModal({
 	search = true,
 	initialActiveTab,
 	onClose = () => {},
-	onProRequired = () => {},
 	onParseMediaForDraft = () => {},
 	onUseCustomIcon = () => {},
 }) {
@@ -280,7 +279,6 @@ export default function IconPickerModal({
 						draftSvgString={draftSvgString}
 						draftUploadSVG={draftUploadSVG}
 						onDraftChange={handleDraftChange}
-						onProRequired={onProRequired}
 					/>
 				)}
 			</div>

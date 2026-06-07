@@ -314,6 +314,28 @@
 		gap: 8px;
 	}
 
+	.blockera-control-icon-picker-custom-icon-dropzone-wrapper,
+	.blockera-control-icon-picker-custom-icon-browse-wrapper {
+		flex: 1;
+		min-height: 0;
+
+		.blockera-component-feature-wrapper__children {
+			flex: 1;
+			display: flex;
+		}
+	}
+
+	.blockera-control-icon-picker-custom-icon-dropzone-wrapper {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 200px;
+	}
+
+	.blockera-control-icon-picker-custom-icon-browse-wrapper {
+		flex: 0 0 auto;
+	}
+
 	.blockera-control-icon-picker-custom-icon-preview-area {
 		flex: 1;
 		min-height: 280px;

@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { applyFilters } from '@wordpress/hooks';
 import { useCallback } from '@wordpress/element';
 import { DropZone } from '@wordpress/components';
 
@@ -16,7 +15,9 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { Button, MediaUploader } from '../../../';
-import { sanitizeRawSVGString } from '../../utils';
+import { FeatureWrapper } from '../../../feature-wrapper';
+import ConditionalWrapper from '../../../conditional-wrapper';
+import { sanitizeRawSVGString, getCustomIconFeatureType } from '../../utils';
 
 const SVG_PLACEHOLDER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
   <path d="..." />
@@ -26,21 +27,11 @@ export default function CustomIconTab({
 	draftSvgString = '',
 	draftUploadSVG = null,
 	onDraftChange = () => {},
-	onProRequired = () => {},
 }) {
 	const sanitizedDraft = sanitizeRawSVGString(draftSvgString);
 	const hasValidPreview = sanitizedDraft !== '';
-
-	const withProGate = useCallback(
-		(action) => {
-			applyFilters(
-				'blockera.controls.iconControl.uploadSVG.onClick',
-				() => onProRequired(),
-				action
-			)();
-		},
-		[onProRequired]
-	);
+	const customIconFeatureType = getCustomIconFeatureType();
+	const isCustomIconLocked = customIconFeatureType === 'native';
 
 	const updateDraft = useCallback(
 		(svgString, uploadSVG = null) => {
@@ -54,23 +45,18 @@ export default function CustomIconTab({
 
 	const handleSvgInput = useCallback(
 		(rawValue) => {
-			withProGate(() => {
-				updateDraft(rawValue, null);
-			});
+			updateDraft(rawValue, null);
 		},
-		[withProGate, updateDraft]
+		[updateDraft]
 	);
 
 	const handlePaste = useCallback(
 		(event) => {
 			event.preventDefault();
 			const pastedText = event.clipboardData.getData('text');
-
-			withProGate(() => {
-				updateDraft(pastedText, null);
-			});
+			updateDraft(pastedText, null);
 		},
-		[withProGate, updateDraft]
+		[updateDraft]
 	);
 
 	const handleFilesDrop = useCallback(
@@ -79,50 +65,43 @@ export default function CustomIconTab({
 				return;
 			}
 
-			withProGate(() => {
-				const file = files[0];
+			const file = files[0];
 
-				if (!file.name?.toLowerCase().endsWith('.svg')) {
-					return;
+			if (!file.name?.toLowerCase().endsWith('.svg')) {
+				return;
+			}
+
+			const reader = new FileReader();
+
+			reader.onload = () => {
+				if (typeof reader.result === 'string') {
+					updateDraft(reader.result, null);
 				}
+			};
 
-				const reader = new FileReader();
-
-				reader.onload = () => {
-					if (typeof reader.result === 'string') {
-						updateDraft(reader.result, null);
-					}
-				};
-
-				reader.readAsText(file);
-			});
+			reader.readAsText(file);
 		},
-		[withProGate, updateDraft]
+		[updateDraft]
 	);
 
 	const handleMediaSelect = useCallback(
 		(media) => {
-			withProGate(() => {
-				if ('svg+xml' !== media.subtype) {
-					return;
-				}
+			if ('svg+xml' !== media.subtype) {
+				return;
+			}
 
-				onDraftChange({
-					media,
-					fromMedia: true,
-				});
+			onDraftChange({
+				media,
+				fromMedia: true,
 			});
 		},
-		[withProGate, onDraftChange]
+		[onDraftChange]
 	);
 
-	const handleBrowseClick = useCallback(
-		(event, open) => {
-			event.stopPropagation();
-			withProGate(open);
-		},
-		[withProGate]
-	);
+	const handleBrowseClick = useCallback((event, open) => {
+		event.stopPropagation();
+		open();
+	}, []);
 
 	const uploadUrl =
 		draftUploadSVG &&
@@ -175,23 +154,40 @@ export default function CustomIconTab({
 					</span>
 				</div>
 
-				<div
-					className={controlInnerClassNames(
-						'icon-picker-custom-icon-dropzone'
+				<ConditionalWrapper
+					condition={isCustomIconLocked}
+					wrapper={(children) => (
+						<FeatureWrapper
+							type={customIconFeatureType}
+							showText="always"
+							className={controlInnerClassNames(
+								'icon-picker-custom-icon-dropzone-wrapper'
+							)}
+						>
+							{children}
+						</FeatureWrapper>
 					)}
 				>
-					<DropZone onFilesDrop={handleFilesDrop} />
-					<textarea
+					<div
 						className={controlInnerClassNames(
-							'icon-picker-custom-icon-textarea'
+							'icon-picker-custom-icon-dropzone'
 						)}
-						value={draftSvgString}
-						onChange={(event) => handleSvgInput(event.target.value)}
-						onPaste={handlePaste}
-						placeholder={SVG_PLACEHOLDER}
-						spellCheck={false}
-					/>
-				</div>
+					>
+						<DropZone onFilesDrop={handleFilesDrop} />
+						<textarea
+							className={controlInnerClassNames(
+								'icon-picker-custom-icon-textarea'
+							)}
+							value={draftSvgString}
+							onChange={(event) =>
+								handleSvgInput(event.target.value)
+							}
+							onPaste={handlePaste}
+							placeholder={SVG_PLACEHOLDER}
+							spellCheck={false}
+						/>
+					</div>
+				</ConditionalWrapper>
 
 				<div
 					className={controlInnerClassNames(
@@ -201,23 +197,43 @@ export default function CustomIconTab({
 					<span>{__('or', 'blockera')}</span>
 				</div>
 
-				<MediaUploader
-					allowedTypes={['image/svg+xml']}
-					onSelect={handleMediaSelect}
-					mode="browse"
-					render={({ open }) => (
-						<Button
+				<ConditionalWrapper
+					condition={isCustomIconLocked}
+					wrapper={(children) => (
+						<FeatureWrapper
+							type={customIconFeatureType}
+							showText="always"
 							className={controlInnerClassNames(
-								'icon-picker-custom-icon-browse-btn'
+								'icon-picker-custom-icon-browse-wrapper'
 							)}
-							onClick={(event) => handleBrowseClick(event, open)}
-							variant="secondary"
 						>
-							<Icon icon="image" library="wp" iconSize={18} />
-							{__('Browse WordPress Media Library', 'blockera')}
-						</Button>
+							{children}
+						</FeatureWrapper>
 					)}
-				/>
+				>
+					<MediaUploader
+						allowedTypes={['image/svg+xml']}
+						onSelect={handleMediaSelect}
+						mode="browse"
+						render={({ open }) => (
+							<Button
+								className={controlInnerClassNames(
+									'icon-picker-custom-icon-browse-btn'
+								)}
+								onClick={(event) =>
+									handleBrowseClick(event, open)
+								}
+								variant="secondary"
+							>
+								<Icon icon="image" library="wp" iconSize={18} />
+								{__(
+									'Browse WordPress Media Library',
+									'blockera'
+								)}
+							</Button>
+						)}
+					/>
+				</ConditionalWrapper>
 			</div>
 
 			<div
