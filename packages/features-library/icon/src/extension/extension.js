@@ -28,6 +28,7 @@ import {
 	isStrokeIconLibrary,
 	isStrokeSvgMarkup,
 	prepareIconSvgForStorage,
+	extractSvgMarkup,
 } from '@blockera/icons';
 import { extensionClassNames } from '@blockera/classnames';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
@@ -40,6 +41,7 @@ import { default as EditorFeatureWrapper } from '@blockera/editor/js/components/
  */
 import type { TIconProps } from './types/icon-extension-props';
 import { getIconSizeAttributeId, isStandaloneIconBlock } from '../helpers';
+import { decodeRenderedIcon } from '../icon-attribute-utils';
 
 export const IconExtension: ComponentType<{
 	...TIconProps,
@@ -99,9 +101,16 @@ export const IconExtension: ComponentType<{
 	const encodeIcon = useCallback(
 		(
 			iconHTML: string,
-			{ library = '', hasInlineStyle = false, color } = {}
+			{
+				library = '',
+				hasInlineStyle = false,
+				color,
+				preserveSvg = false,
+			} = {}
 		) => {
-			let normalizedHTML = prepareIconSvgForStorage(iconHTML, library);
+			let normalizedHTML = preserveSvg
+				? extractSvgMarkup(iconHTML) || iconHTML
+				: prepareIconSvgForStorage(iconHTML, library);
 
 			if (hasInlineStyle) {
 				const iconDoc = new DOMParser().parseFromString(
@@ -115,7 +124,13 @@ export const IconExtension: ComponentType<{
 						svgElement.style.color = color;
 
 						if (
+							!preserveSvg &&
 							!isStrokeIconLibrary(library) &&
+							!isStrokeSvgMarkup(svgElement.outerHTML)
+						) {
+							svgElement.style.fill = color;
+						} else if (
+							preserveSvg &&
 							!isStrokeSvgMarkup(svgElement.outerHTML)
 						) {
 							svgElement.style.fill = color;
@@ -125,10 +140,12 @@ export const IconExtension: ComponentType<{
 						}
 					}
 
-					normalizedHTML = prepareIconSvgForStorage(
-						svgElement.outerHTML,
-						library
-					);
+					normalizedHTML = preserveSvg
+						? svgElement.outerHTML
+						: prepareIconSvgForStorage(
+								svgElement.outerHTML,
+								library
+							);
 				}
 			}
 
@@ -236,12 +253,9 @@ export const IconExtension: ComponentType<{
 						{ ref, effectiveItems: iconEffectiveItems }
 					);
 				}
-			} else if (
-				(newValue.uploadSVG && newValue.svgString) ||
-				!isEmpty(effectiveItems)
-			) {
+			} else if (newValue.svgString || !isEmpty(effectiveItems)) {
 				if (!newValue.hasOwnProperty('svgString')) {
-					newValue.svgString = atob(icon.renderedIcon);
+					newValue.svgString = decodeRenderedIcon(icon.renderedIcon);
 				}
 
 				applyFilters(
@@ -251,6 +265,14 @@ export const IconExtension: ComponentType<{
 						newValue,
 						blockName,
 						encodeIcon,
+						isIconBlock:
+							isStandaloneIconBlock(blockName) ||
+							String(attributes?.className || '').includes(
+								'blockera-is-icon-block'
+							) ||
+							String(attributes?.className || '').includes(
+								'wp-block-icon-blockera'
+							),
 						effectiveItems: {
 							...effectiveItems,
 							blockeraIconColor: {
@@ -642,23 +664,11 @@ export const IconExtension: ComponentType<{
 											?.value
 									}
 									onChange={(newValue, ref) => {
-										if (isStandaloneIconBlock(blockName)) {
-											handleOnChangeAttributesIcon(
-												icon,
-												ref,
-												{
-													blockeraIconColor: {
-														value: newValue,
-													},
-												}
-											);
-										} else {
-											handleOnChangeAttributes(
-												'blockeraIconColor',
-												newValue,
-												{ ref }
-											);
-										}
+										handleOnChangeAttributes(
+											'blockeraIconColor',
+											newValue,
+											{ ref }
+										);
 									}}
 									{...extensionProps.blockeraIconColor}
 								/>

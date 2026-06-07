@@ -10,19 +10,79 @@ import { addFilter } from '@wordpress/hooks';
  */
 import { isStrokeSvgMarkup, prepareIconSvgForStorage } from '@blockera/icons';
 
+import {
+	buildCustomIconDataUrl,
+	decodeRenderedIcon,
+	encodeCustomSvgIcon,
+	getBlockeraIconValue,
+	getCustomIconSvgSource,
+	isBlockeraIconBlockContext,
+	isCustomUploadedIcon,
+	isStandaloneIconBlockContext,
+} from './icon-attribute-utils';
+
 export const filterSetAttributes = () => {
 	addFilter(
 		'blockera.blockEdit.setAttributes',
 		'blockera.features.icon.setAttributes',
-		(attributes, attributeId, newValue) => {
-			if (
-				!attributes?.className?.includes('blockera-is-icon-block') ||
-				!attributes?.blockeraIcon?.value
-			) {
+		(
+			attributes,
+			attributeId,
+			newValue,
+			ref,
+			getAttributes,
+			blockDetail
+		) => {
+			const blockeraIconValue =
+				attributeId === 'blockeraIcon'
+					? newValue
+					: getBlockeraIconValue(getAttributes?.() ?? attributes);
+
+			if (!blockeraIconValue) {
 				return attributes;
 			}
 
-			let svg = atob(
+			const isCustomIcon = isCustomUploadedIcon(blockeraIconValue);
+
+			// Custom SVGs must not be stroke/fill-normalized or restyled on upload.
+			if (isCustomIcon) {
+				const isImageIconBlock = isBlockeraIconBlockContext(
+					attributes,
+					getAttributes,
+					blockDetail
+				);
+				const sourceSvg = getCustomIconSvgSource(blockeraIconValue);
+
+				if (attributeId === 'blockeraIcon' && newValue?.svgString) {
+					attributes.blockeraIcon = {
+						value: {
+							...newValue,
+							renderedIcon:
+								newValue.renderedIcon ||
+								encodeCustomSvgIcon(newValue.svgString)
+									.encodedIcon,
+						},
+					};
+				}
+
+				if (isImageIconBlock && sourceSvg) {
+					attributes.url = buildCustomIconDataUrl(sourceSvg);
+				}
+
+				return attributes;
+			}
+
+			const isStandaloneIconBlock = isStandaloneIconBlockContext(
+				attributes,
+				getAttributes,
+				blockDetail
+			);
+
+			if (!isStandaloneIconBlock) {
+				return attributes;
+			}
+
+			let svg = decodeRenderedIcon(
 				newValue?.renderedIcon ||
 					attributes?.blockeraIcon?.value?.renderedIcon
 			);
@@ -174,7 +234,7 @@ export const filterSetAttributes = () => {
 						/<svg\s+([^>]*?)style="([^"]*)"/,
 						`<svg $1style="${newStyleString}"`
 					);
-				} else {
+				} else if (newStyleString) {
 					// Insert style attribute after <svg
 					svg = svg.replace(
 						/<svg\s?/,

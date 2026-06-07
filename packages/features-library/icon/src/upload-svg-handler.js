@@ -6,9 +6,13 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
-import { isUndefined } from '@blockera/utils';
+import { isStandaloneIconBlock } from './helpers';
+import {
+	buildCustomIconDataUrl,
+	encodeCustomSvgIcon,
+} from './icon-attribute-utils';
 
 /**
  * Default upload-SVG handler for the icon extension when no block-specific override exists.
@@ -25,27 +29,21 @@ export const registerIconUploadSvgHandler = (): void => {
 			const {
 				ref,
 				newValue,
-				encodeIcon,
 				effectiveItems,
 				handleOnChangeAttributes,
+				blockName,
+				isIconBlock,
 			} = payload;
 
-			if (
-				!newValue?.svgString ||
-				!encodeIcon ||
-				!handleOnChangeAttributes
-			) {
+			const shouldSetIconBlockUrl =
+				isIconBlock ?? isStandaloneIconBlock(blockName);
+
+			if (!newValue?.svgString || !handleOnChangeAttributes) {
 				return payload;
 			}
 
-			const color = !isUndefined(effectiveItems?.blockeraIconColor?.value)
-				? effectiveItems?.blockeraIconColor?.value
-				: undefined;
-
-			const renderedIcon = encodeIcon(newValue.svgString, {
-				hasInlineStyle: true,
-				color,
-			});
+			// Preserve custom SVG markup exactly; only encode for storage/transport.
+			const renderedIcon = encodeCustomSvgIcon(newValue.svgString);
 
 			handleOnChangeAttributes(
 				'blockeraIcon',
@@ -53,7 +51,19 @@ export const registerIconUploadSvgHandler = (): void => {
 					...newValue,
 					renderedIcon: renderedIcon.encodedIcon,
 				},
-				{ ref, effectiveItems }
+				{
+					ref,
+					effectiveItems: {
+						...effectiveItems,
+						...(shouldSetIconBlockUrl
+							? {
+									url: buildCustomIconDataUrl(
+										newValue.svgString
+									),
+								}
+							: {}),
+					},
+				}
 			);
 
 			return payload;
