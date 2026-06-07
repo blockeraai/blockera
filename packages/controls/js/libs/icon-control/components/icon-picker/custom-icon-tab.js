@@ -140,10 +140,7 @@ export default function CustomIconTab({
 					'icon-picker-custom-icon-preview-svg'
 				)}
 				dangerouslySetInnerHTML={{
-					__html: sanitizedDraft.replace(
-						/\s*style\s*=\s*["'][^"']*["']/g,
-						''
-					),
+					__html: sanitizedDraft,
 				}}
 			/>
 		);
