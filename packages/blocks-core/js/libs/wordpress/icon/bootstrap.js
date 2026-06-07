@@ -15,6 +15,7 @@ import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-card
 /**
  * Internal dependencies
  */
+import { applyCoreIconBlockCompatibility } from './compatibility/core-icon-block-sync';
 import { hydrateBlockeraIconFromCoreEntity } from './compatibility/hydrate-icon';
 import { syncIconBlockClassName } from '@blockera/feature-icon';
 
@@ -73,17 +74,11 @@ export const bootstrapCoreIconBlock = (): void => {
 				return nextState;
 			}
 
-			if (featureId === 'blockeraIcon') {
-				if (newValue?.icon) {
-					nextState = mergeObject(nextState, {
-						icon: newValue.icon,
-					});
-				}
-
-				return nextState;
-			}
-
-			return nextState;
+			return applyCoreIconBlockCompatibility(
+				nextState,
+				featureId,
+				newValue
+			);
 		}
 	);
 };
