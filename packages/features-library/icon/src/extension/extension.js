@@ -46,7 +46,10 @@ import {
 	getIconSizeAttributeId,
 	isStandaloneIconBlock,
 } from '../helpers';
-import { decodeRenderedIcon } from '../icon-attribute-utils';
+import {
+	decodeRenderedIcon,
+	hasBlockeraIconValue,
+} from '../icon-attribute-utils';
 
 export const IconExtension: ComponentType<{
 	...TIconProps,
@@ -241,20 +244,14 @@ export const IconExtension: ComponentType<{
 			if (newValue.icon) {
 				const renderedIcon = await renderIcon(newValue, effectiveItems);
 
-				const iconEffectiveItems = {
-					...effectiveItems,
-					...(blockName === 'core/icon' && newValue.icon
-						? { icon: newValue.icon }
-						: {}),
-				};
-
+				// core/icon `icon` attribute sync is handled in blocks-core icon bootstrap.
 				handleOnChangeAttributes(
 					'blockeraIcon',
 					{
 						...newValue,
 						renderedIcon: renderedIcon.encodedIcon,
 					},
-					{ ref, effectiveItems: iconEffectiveItems }
+					{ ref, effectiveItems }
 				);
 			} else if (newValue.svgString || !isEmpty(effectiveItems)) {
 				if (!newValue.hasOwnProperty('svgString')) {
@@ -421,7 +418,7 @@ export const IconExtension: ComponentType<{
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
 
-			{icon?.renderedIcon && (
+			{hasBlockeraIconValue(icon) && (
 				<>
 					<BaseControl
 						label={__('Style', 'blockera')}
