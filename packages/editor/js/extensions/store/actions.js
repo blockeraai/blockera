@@ -92,10 +92,12 @@ export function removeBlockExtensions(names: string | Array<string>): Object {
 }
 
 export function changeExtensionCurrentBlock(
-	currentBlock: 'master' | InnerBlockType
+	currentBlock: 'master' | InnerBlockType,
+	uiContext?: string
 ): Object {
 	return {
 		currentBlock,
+		uiContext,
 		type: 'CHANGE_CURRENT_BLOCK',
 	};
 }

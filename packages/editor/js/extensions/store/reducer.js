@@ -77,6 +77,16 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				...keyBlockExtensionsByName(action.blockExtensions),
 			};
 		case 'CHANGE_CURRENT_BLOCK':
+			if (action.uiContext) {
+				return {
+					...state,
+					currentBlockByUiContext: {
+						...(state.currentBlockByUiContext || {}),
+						[action.uiContext]: action.currentBlock,
+					},
+				};
+			}
+
 			return {
 				...state,
 				currentBlock: action.currentBlock,
