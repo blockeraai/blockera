@@ -8,11 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import { isStandaloneIconBlock } from './helpers';
-import {
-	buildCustomIconDataUrl,
-	encodeCustomSvgIcon,
-} from './icon-attribute-utils';
+import { encodeCustomSvgIcon } from './icon-attribute-utils';
 
 /**
  * Default upload-SVG handler for the icon extension when no block-specific override exists.
@@ -26,17 +22,8 @@ export const registerIconUploadSvgHandler = (): void => {
 				return payload;
 			}
 
-			const {
-				ref,
-				newValue,
-				effectiveItems,
-				handleOnChangeAttributes,
-				blockName,
-				isIconBlock,
-			} = payload;
-
-			const shouldSetIconBlockUrl =
-				isIconBlock ?? isStandaloneIconBlock(blockName);
+			const { ref, newValue, effectiveItems, handleOnChangeAttributes } =
+				payload;
 
 			if (!newValue?.svgString || !handleOnChangeAttributes) {
 				return payload;
@@ -53,16 +40,7 @@ export const registerIconUploadSvgHandler = (): void => {
 				},
 				{
 					ref,
-					effectiveItems: {
-						...effectiveItems,
-						...(shouldSetIconBlockUrl
-							? {
-									url: buildCustomIconDataUrl(
-										newValue.svgString
-									),
-								}
-							: {}),
-					},
+					effectiveItems,
 				}
 			);
 

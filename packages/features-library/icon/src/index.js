@@ -25,7 +25,6 @@ export const Icon: TFeature = {
 
 export * from './helpers';
 export {
-	buildCustomIconDataUrl,
 	decodeRenderedIcon,
 	encodeCustomSvgIcon,
 	getCustomIconSvgSource,

@@ -40,48 +40,18 @@ export const getClassNameFromAttributes = (
 };
 
 /**
- * Whether the current block is a standalone image icon block (blockera/icon variation).
+ * Whether the current block uses Blockera standalone icon canvas (core/icon).
  *
  * @param {Object}   attributes     Attributes passed to setAttributes filters.
  * @param {Function} getAttributes  Getter for full compatible attributes.
  * @param {Object}   blockDetail    Block context from the attributes reducer.
- * @return {boolean} True for blockera/icon (core/image variation).
- */
-export const isBlockeraIconBlockContext = (
-	attributes?: Object,
-	getAttributes?: () => Object,
-	blockDetail?: Object
-): boolean => {
-	const className = getClassNameFromAttributes(attributes, getAttributes);
-
-	if (className.includes('blockera-is-icon-block')) {
-		return true;
-	}
-
-	const variationName =
-		blockDetail?.activeBlockVariation?.name ||
-		blockDetail?.getActiveBlockVariation?.()?.name;
-
-	return variationName === 'blockera/icon';
-};
-
-/**
- * Whether the current block uses Blockera standalone icon canvas (core/icon or blockera/icon).
- *
- * @param {Object}   attributes     Attributes passed to setAttributes filters.
- * @param {Function} getAttributes  Getter for full compatible attributes.
- * @param {Object}   blockDetail    Block context from the attributes reducer.
- * @return {boolean} True for core/icon and blockera/icon blocks.
+ * @return {boolean} True for core/icon blocks.
  */
 export const isStandaloneIconBlockContext = (
 	attributes?: Object,
 	getAttributes?: () => Object,
 	blockDetail?: Object
 ): boolean => {
-	if (isBlockeraIconBlockContext(attributes, getAttributes, blockDetail)) {
-		return true;
-	}
-
 	const className = getClassNameFromAttributes(attributes, getAttributes);
 
 	if (className.includes('wp-block-icon-blockera')) {
@@ -271,12 +241,3 @@ export const encodeCustomSvgIcon = (
 		icon: encodeURIComponent(markup),
 	};
 };
-
-/**
- * Build a data URL for icon block img[src] from raw SVG markup.
- *
- * @param {string} svgString Raw SVG markup.
- * @return {string} data:image/svg+xml URL.
- */
-export const buildCustomIconDataUrl = (svgString: string): string =>
-	`data:image/svg+xml;utf8,${encodeURIComponent(svgString?.trim() || '')}`;

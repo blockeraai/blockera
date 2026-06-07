@@ -100,10 +100,8 @@ export const IconStyles = ({
 		const isCustomIcon = isCustomUploadedIcon(iconValue);
 		const className = getClassNameFromAttributes(currentBlockAttributes);
 		const isIconBlockVariation =
-			className.includes('blockera-is-icon-block') ||
 			className.includes('wp-block-icon-blockera') ||
-			blockName === 'core/icon' ||
-			blockName === 'blockera/icon';
+			blockName === 'core/icon';
 		const svgForCssUrl = isCustomIcon
 			? getCustomIconSvgSource(iconValue)
 			: prepareIconSvgForStorage(
@@ -112,7 +110,7 @@ export const IconStyles = ({
 					iconValue?.library || ''
 				);
 
-		// Standalone icon blocks render via core/image img[src], not CSS mask.
+		// Standalone icon blocks render inline SVG, not CSS mask.
 		if (!isIconBlockVariation) {
 			styleGroup.push({
 				selector: pickedSelector,

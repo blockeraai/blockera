@@ -26,7 +26,6 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
-		"@blockera/block-icon": "file:packages/blocks-library/icon",
 		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
 		"@blockera/blocks-core": "file:packages/blocks-core",

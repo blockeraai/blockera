@@ -5,7 +5,6 @@ namespace Blockera\Feature\Icon;
 use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
 use Blockera\Utils\Adapters\DomParser;
-use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
@@ -54,20 +53,15 @@ class EditBlockHTML implements EditableBlockHTML {
      */
     public function htmlManipulate( string $html, array $data): string {
         [
-			'app'          => $app,
             'block'        => $block,
         ] = $data;
 
-		if (! $this->isValidBlock($block, $html) && 'core/image' !== $block['blockName'] && 'core/icon' !== $block['blockName']) {
+		if (! $this->isValidBlock($block, $html) && 'core/icon' !== $block['blockName']) {
 			return $html;
 		}
 
 		// Enqueue the feature assets.
 		$this->enqueueAssets($data['plugin_base_path'], 'feature');
-
-		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			return $app->make(IconBlock::class)->render($html, $this, $data);
-		}
 
 		if ('core/icon' === $block['blockName']) {
 			if (blockera_core_icon_has_renderable_blockera_icon($block)) {

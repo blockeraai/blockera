@@ -28,7 +28,7 @@ export const isCoreIconBlock = (blockName?: string): boolean =>
 
 /** Standalone icon blocks (not inline icon on text/button blocks). */
 export const isStandaloneIconBlock = (blockName?: string): boolean =>
-	blockName === 'blockera/icon' || isCoreIconBlock(blockName);
+	isCoreIconBlock(blockName);
 
 /**
  * Block attribute used by the icon Size control (defaults to blockeraIconSize).

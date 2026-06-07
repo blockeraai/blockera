@@ -74,10 +74,6 @@
 		},
 		{
 			"type": "path",
-			"url": "packages/blocks-library/icon"
-		},
-		{
-			"type": "path",
 			"url": "packages/blocks-core"
 		},
 		{
@@ -105,7 +101,6 @@
 		"blockera/features-core": "*",
 		"blockera/feature-icon": "*",
 		"blockera/blockera-admin": "*",
-		"blockera/block-icon": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
