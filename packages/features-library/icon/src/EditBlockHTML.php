@@ -541,9 +541,10 @@ class EditBlockHTML implements EditableBlockHTML {
 		'title' => '',
 		'role' => '',
 	]): string {
-		$icon         = isset($value['icon']) ? (string) $value['icon'] : '';
-		$library      = isset($value['library']) ? (string) $value['library'] : '';
-		$renderedIcon = $value['renderedIcon'] ?? '';
+		$icon           = isset($value['icon']) ? (string) $value['icon'] : '';
+		$library        = isset($value['library']) ? (string) $value['library'] : '';
+		$renderedIcon   = $value['renderedIcon'] ?? '';
+		$is_custom_icon = '' === $icon && '' === $library;
 
 		$title = isset($args['title']) ? (string) $args['title'] : '';
 		$role  = isset($args['role']) ? (string) $args['role'] : '';
@@ -559,7 +560,9 @@ class EditBlockHTML implements EditableBlockHTML {
 				$iconHTML    = str_replace($matches[0], $replacement, $iconHTML);
 			}
 
-			$iconHTML = blockera_normalize_stroke_icon_svg($iconHTML, $library);
+			if (! $is_custom_icon) {
+				$iconHTML = blockera_normalize_stroke_icon_svg($iconHTML, $library);
+			}
 		}
 
 		if ('' === $iconHTML && '' !== $icon && '' !== $library) {
