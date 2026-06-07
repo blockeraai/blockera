@@ -87,4 +87,5 @@ export type TPopoverProps = {
 	 * When true, PopoverCore skips onClose from focus-outside (e.g. color picker drag blur with null relatedTarget).
 	 */
 	focusOutsideSuppressionRef?: { current: boolean },
+	style?: Object,
 };

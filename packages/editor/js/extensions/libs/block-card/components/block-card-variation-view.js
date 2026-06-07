@@ -271,6 +271,7 @@ export function BlockCardVariationView({
 					isGlobalStylesCard={true}
 					availableStates={availableStates}
 					insideBlockInspector={insideBlockInspector}
+					variationSurface={variationSurface}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData
 					}

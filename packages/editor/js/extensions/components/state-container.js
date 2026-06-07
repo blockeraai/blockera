@@ -13,15 +13,18 @@ import { useBlockeraActiveColor } from './use-blockera-active-color';
 export const Container = ({
 	activeColor,
 	variationCssVars,
+	variationSurface,
 	children,
 }: {
-	activeColor: string,
+	activeColor: string | void,
 	variationCssVars?: Object,
+	variationSurface?: string,
 	children: Element<any>,
 }): Element<any> => {
 	return (
 		<div
 			className="blockera-state-colors-container"
+			data-blockera-variation-surface={variationSurface || undefined}
 			style={getBlockeraActiveColorStyleProperties(
 				activeColor,
 				variationCssVars
@@ -58,6 +61,7 @@ export default function StateContainer({
 		<Container
 			activeColor={activeColor}
 			variationCssVars={variationCssVars}
+			variationSurface={variationSurface}
 		>
 			{children}
 		</Container>
