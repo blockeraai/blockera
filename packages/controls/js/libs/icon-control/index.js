@@ -197,8 +197,30 @@ function IconControl({
 			!isEmpty(currentIcon?.renderedIcon) &&
 			isString(currentIcon?.renderedIcon)
 		) {
-			const previewSvg = prepareIconSvgForStorage(
-				atob(currentIcon.renderedIcon),
+			let previewSvg = currentIcon.svgString;
+
+			if (!previewSvg) {
+				try {
+					previewSvg = decodeURIComponent(
+						escape(atob(currentIcon.renderedIcon))
+					);
+				} catch (error) {
+					previewSvg = atob(currentIcon.renderedIcon);
+				}
+			}
+
+			if (isCustomIcon(currentIcon)) {
+				return (
+					<div
+						dangerouslySetInnerHTML={{
+							__html: previewSvg,
+						}}
+					/>
+				);
+			}
+
+			previewSvg = prepareIconSvgForStorage(
+				previewSvg,
 				currentIcon?.library || ''
 			);
 
@@ -219,10 +241,7 @@ function IconControl({
 			return (
 				<div
 					dangerouslySetInnerHTML={{
-						__html: currentIcon.svgString.replace(
-							/\s*style\s*=\s*["'][^"']*["']/g,
-							''
-						),
+						__html: currentIcon.svgString,
 					}}
 				/>
 			);

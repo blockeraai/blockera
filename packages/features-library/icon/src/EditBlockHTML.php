@@ -5,7 +5,6 @@ namespace Blockera\Feature\Icon;
 use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
 use Blockera\Utils\Adapters\DomParser;
-use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
@@ -54,20 +53,15 @@ class EditBlockHTML implements EditableBlockHTML {
      */
     public function htmlManipulate( string $html, array $data): string {
         [
-			'app'          => $app,
             'block'        => $block,
         ] = $data;
 
-		if (! $this->isValidBlock($block, $html) && 'core/image' !== $block['blockName'] && 'core/icon' !== $block['blockName']) {
+		if (! $this->isValidBlock($block, $html) && 'core/icon' !== $block['blockName']) {
 			return $html;
 		}
 
 		// Enqueue the feature assets.
 		$this->enqueueAssets($data['plugin_base_path'], 'feature');
-
-		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			return $app->make(IconBlock::class)->render($html, $this, $data);
-		}
 
 		if ('core/icon' === $block['blockName']) {
 			if (blockera_core_icon_has_renderable_blockera_icon($block)) {
@@ -541,9 +535,10 @@ class EditBlockHTML implements EditableBlockHTML {
 		'title' => '',
 		'role' => '',
 	]): string {
-		$icon         = isset($value['icon']) ? (string) $value['icon'] : '';
-		$library      = isset($value['library']) ? (string) $value['library'] : '';
-		$renderedIcon = $value['renderedIcon'] ?? '';
+		$icon           = isset($value['icon']) ? (string) $value['icon'] : '';
+		$library        = isset($value['library']) ? (string) $value['library'] : '';
+		$renderedIcon   = $value['renderedIcon'] ?? '';
+		$is_custom_icon = '' === $icon && '' === $library;
 
 		$title = isset($args['title']) ? (string) $args['title'] : '';
 		$role  = isset($args['role']) ? (string) $args['role'] : '';
@@ -559,7 +554,9 @@ class EditBlockHTML implements EditableBlockHTML {
 				$iconHTML    = str_replace($matches[0], $replacement, $iconHTML);
 			}
 
-			$iconHTML = blockera_normalize_stroke_icon_svg($iconHTML, $library);
+			if (! $is_custom_icon) {
+				$iconHTML = blockera_normalize_stroke_icon_svg($iconHTML, $library);
+			}
 		}
 
 		if ('' === $iconHTML && '' !== $icon && '' !== $library) {

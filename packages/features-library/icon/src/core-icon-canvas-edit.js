@@ -22,9 +22,11 @@ import './core-icon-canvas-edit.css';
 import {
 	getBlockeraIconValue,
 	getCoreIconAriaLabel,
+	getCustomIconSvgSource,
 	getIconPresentationStyle,
 	getResolvedIconSize,
 	hasBlockeraIconValue,
+	isCustomUploadedIcon,
 } from './icon-attribute-utils';
 
 /** Matches Gutenberg core/icon placeholder (edit.js). */
@@ -82,17 +84,42 @@ export const CoreIconCanvasEdit: ComponentType<{
 
 		const showSettingsInspector = hasIcon || Boolean(attributes?.icon);
 
-		const iconContent = hasIcon ? (
-			<Icon
-				library={iconValue.library}
-				icon={iconValue.icon}
-				uploadSVG={iconValue.uploadSVG}
-				iconSize={resolvedIconSize}
-				style={iconStyle}
-			/>
-		) : (
-			<IconPlaceholder />
-		);
+		const customSvgMarkup = useMemo(() => {
+			if (!isCustomUploadedIcon(iconValue)) {
+				return '';
+			}
+
+			return getCustomIconSvgSource(iconValue);
+		}, [iconValue]);
+
+		let iconContent;
+
+		if (!hasIcon) {
+			iconContent = <IconPlaceholder />;
+		} else if (customSvgMarkup) {
+			iconContent = (
+				<span
+					className="blockera-core-icon-canvas-edit__custom-svg"
+					style={{
+						display: 'inline-flex',
+						width: resolvedIconSize,
+						height: resolvedIconSize,
+						...iconStyle,
+					}}
+					dangerouslySetInnerHTML={{ __html: customSvgMarkup }}
+				/>
+			);
+		} else {
+			iconContent = (
+				<Icon
+					library={iconValue.library}
+					icon={iconValue.icon}
+					uploadSVG={iconValue.uploadSVG}
+					iconSize={resolvedIconSize}
+					style={iconStyle}
+				/>
+			);
+		}
 
 		return (
 			<>

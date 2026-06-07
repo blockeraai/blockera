@@ -38,8 +38,13 @@ class IconStyleDefinition extends BaseStyleDefinition {
 						break;
 					}
 
-					$library     = isset($value['library']) ? (string) $value['library'] : '';
-					$decoded_svg = blockera_normalize_stroke_icon_svg($decoded_svg, $library);
+					$library        = isset($value['library']) ? (string) $value['library'] : '';
+					$icon_slug      = isset($value['icon']) ? (string) $value['icon'] : '';
+					$is_custom_icon = '' === $library && '' === $icon_slug;
+
+					if (! $is_custom_icon) {
+						$decoded_svg = blockera_normalize_stroke_icon_svg($decoded_svg, $library);
+					}
 
 					$encoded_svg = rawurlencode($decoded_svg);
 					$this->setDeclaration('--blockera--icon--url', 'url("data:image/svg+xml,' . $encoded_svg . '")');

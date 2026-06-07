@@ -116,8 +116,6 @@ module.exports = (env, argv) => {
 			'@blockera/global-styles-ui':
 				'blockeraGlobalStylesUi_' +
 				blockeraPackagesVersion['global-styles-ui'],
-			'@blockera/block-icon':
-				'blockeraBlockIcon_' + blockeraPackagesVersion['block-icon'],
 			'@blockera/blocks-core':
 				'blockeraBlocksCore_' + blockeraPackagesVersion['blocks-core'],
 			'@blockera/feature-icon':

@@ -25,7 +25,6 @@ return [
 			'features-core',
 			'global-styles-ui',
 			'editor',
-			'block-icon',
 			'blocks-core',
 			'bootstrap',
 			'blockera',

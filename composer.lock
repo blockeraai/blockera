@@ -4,30 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5050a521f897d032f5ea8dfd8642e11d",
+    "content-hash": "1b3c1787ba982ecaa33ea9dbe89ffb2d",
     "packages": [
-        {
-            "name": "blockera/block-icon",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/blocks-library/icon",
-                "reference": "a2fda4a3bb8cab32a4feca4930d36e95e0f02938"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\Block\\Icon\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "description": "The Blockera block icon package for Blockera editor.",
-            "transport-options": {
-                "relative": true
-            }
-        },
         {
             "name": "blockera/blockera",
             "version": "1.3.3",
@@ -7792,5 +7770,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

@@ -17,6 +17,13 @@ import {
 	DEFAULT_ICON_SIZE_ATTRIBUTE,
 	getIconSizeAttributeId,
 } from '../helpers';
+import {
+	getBlockeraIconValue,
+	getClassNameFromAttributes,
+	getCustomIconSvgSource,
+	decodeRenderedIcon,
+	isCustomUploadedIcon,
+} from '../icon-attribute-utils';
 
 export const IconStyles = ({
 	state,
@@ -87,32 +94,44 @@ export const IconStyles = ({
 			),
 		});
 
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraIcon: [
-						{
-							...staticDefinitionParams,
-							properties: {
-								'--blockera--icon--url': `url("data:image/svg+xml,${encodeURIComponent(
-									prepareIconSvgForStorage(
-										atob(
-											currentBlockAttributes.blockeraIcon
-												?.renderedIcon || ''
-										),
-										currentBlockAttributes.blockeraIcon
-											?.library || ''
-									)
-								)}")`,
-							},
-						},
-					],
-				},
-				blockProps,
-				pickedSelector
-			),
+		const iconValue = getBlockeraIconValue({
+			blockeraIcon: currentBlockAttributes.blockeraIcon,
 		});
+		const isCustomIcon = isCustomUploadedIcon(iconValue);
+		const className = getClassNameFromAttributes(currentBlockAttributes);
+		const isIconBlockVariation =
+			className.includes('wp-block-icon-blockera') ||
+			blockName === 'core/icon';
+		const svgForCssUrl = isCustomIcon
+			? getCustomIconSvgSource(iconValue)
+			: prepareIconSvgForStorage(
+					getCustomIconSvgSource(iconValue) ||
+						decodeRenderedIcon(iconValue?.renderedIcon),
+					iconValue?.library || ''
+				);
+
+		// Standalone icon blocks render inline SVG, not CSS mask.
+		if (!isIconBlockVariation) {
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraIcon: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'--blockera--icon--url': `url("data:image/svg+xml,${encodeURIComponent(
+										svgForCssUrl
+									)}")`,
+								},
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
 	}
 
 	const iconSizeAttributeId = getIconSizeAttributeId(blockeraIconSize);

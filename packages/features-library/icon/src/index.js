@@ -24,6 +24,13 @@ export const Icon: TFeature = {
 };
 
 export * from './helpers';
+export {
+	decodeRenderedIcon,
+	encodeCustomSvgIcon,
+	getCustomIconSvgSource,
+	isCustomUploadedIcon,
+	isStandaloneIconBlockContext,
+} from './icon-attribute-utils';
 export { CoreIconCanvasEdit } from './core-icon-canvas-edit';
 export { CoreIconInspectorControls } from './core-icon-inspector-controls';
 export { icon } from './config';

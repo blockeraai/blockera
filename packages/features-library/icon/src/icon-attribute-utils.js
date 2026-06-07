@@ -10,6 +10,57 @@ import { isStrokeIconLibrary } from '@blockera/icons';
  * Keep icon value / presentation logic here so JS mirrors PHP helpers in functions.php.
  */
 
+/**
+ * Resolve className from Blockera state or WordPress-compatible attributes.
+ *
+ * @param {Object}   attributes     Attributes passed to setAttributes filters.
+ * @param {Function} getAttributes  Getter for full compatible attributes.
+ * @return {string} className string.
+ */
+export const getClassNameFromAttributes = (
+	attributes?: Object,
+	getAttributes?: () => Object
+): string => {
+	const className =
+		attributes?.className ?? getAttributes?.()?.className ?? '';
+
+	if (typeof className === 'string') {
+		return className;
+	}
+
+	if (
+		className &&
+		typeof className === 'object' &&
+		className.value !== undefined
+	) {
+		return String(className.value);
+	}
+
+	return '';
+};
+
+/**
+ * Whether the current block uses Blockera standalone icon canvas (core/icon).
+ *
+ * @param {Object}   attributes     Attributes passed to setAttributes filters.
+ * @param {Function} getAttributes  Getter for full compatible attributes.
+ * @param {Object}   blockDetail    Block context from the attributes reducer.
+ * @return {boolean} True for core/icon blocks.
+ */
+export const isStandaloneIconBlockContext = (
+	attributes?: Object,
+	getAttributes?: () => Object,
+	blockDetail?: Object
+): boolean => {
+	const className = getClassNameFromAttributes(attributes, getAttributes);
+
+	if (className.includes('wp-block-icon-blockera')) {
+		return true;
+	}
+
+	return blockDetail?.blockId === 'core/icon';
+};
+
 export const getBlockeraIconValue = (attributes: Object): Object => {
 	const blockeraIcon = attributes?.blockeraIcon;
 
@@ -103,3 +154,90 @@ export const getIconPresentationStyle = (attributes: Object): Object => {
 
 export const getCoreIconAriaLabel = (attributes: Object): string =>
 	getAttrValue(attributes?.ariaLabel) || attributes?.ariaLabel || '';
+
+/**
+ * Decode blockeraIcon.renderedIcon (matches editor btoa(unescape(encodeURIComponent(svg)))).
+ *
+ * @param {string} encoded Base64-encoded SVG markup.
+ * @return {string} Decoded SVG markup, or empty string on failure.
+ */
+export const decodeRenderedIcon = (encoded?: string): string => {
+	if (!encoded || typeof encoded !== 'string') {
+		return '';
+	}
+
+	if (encoded.startsWith('<')) {
+		return encoded;
+	}
+
+	try {
+		return decodeURIComponent(escape(atob(encoded)));
+	} catch (error) {
+		try {
+			return atob(encoded);
+		} catch (decodeError) {
+			return '';
+		}
+	}
+};
+
+/**
+ * Whether blockeraIcon is a custom uploaded/pasted SVG (no library slug).
+ *
+ * @param {Object} iconValue Normalized blockeraIcon value.
+ * @return {boolean} True for custom SVG icons.
+ */
+export const isCustomUploadedIcon = (iconValue?: Object): boolean => {
+	if (!iconValue || typeof iconValue !== 'object') {
+		return false;
+	}
+
+	if (iconValue.icon || iconValue.library) {
+		return false;
+	}
+
+	return !!(
+		iconValue.renderedIcon ||
+		iconValue.svgString ||
+		iconValue.uploadSVG
+	);
+};
+
+/**
+ * Source SVG markup for a custom icon (prefer persisted svgString).
+ *
+ * @param {Object} iconValue Normalized blockeraIcon value.
+ * @return {string} Raw SVG markup.
+ */
+export const getCustomIconSvgSource = (iconValue?: Object): string => {
+	if (!iconValue || typeof iconValue !== 'object') {
+		return '';
+	}
+
+	if (iconValue.svgString && typeof iconValue.svgString === 'string') {
+		return iconValue.svgString;
+	}
+
+	return decodeRenderedIcon(iconValue.renderedIcon);
+};
+
+/**
+ * Encode custom SVG for storage without stroke/fill normalization.
+ *
+ * @param {string} svgString Raw SVG markup.
+ * @return {{ encodedIcon: string, icon: string }} Base64 + URI-encoded forms.
+ */
+export const encodeCustomSvgIcon = (
+	svgString: string
+): { encodedIcon: string, icon: string } => {
+	const markup = svgString?.trim() || '';
+
+	if (!markup) {
+		return { encodedIcon: '', icon: '' };
+	}
+
+	return {
+		encodedIcon: btoa(unescape(encodeURIComponent(markup))),
+		icon: encodeURIComponent(markup),
+	};
+};
