@@ -369,6 +369,212 @@
 		}
 	}
 
+	.blockera-control-icon-picker-svg-editor {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		&.is-disabled {
+			opacity: 0.55;
+			pointer-events: none;
+		}
+	}
+
+	.blockera-control-icon-picker-svg-editor-toolbar {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.blockera-control-icon-picker-svg-editor-toolbar-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 6px;
+		width: 100%;
+	}
+
+	.blockera-control-icon-picker-svg-editor-toolbar-actions-start,
+	.blockera-control-icon-picker-svg-editor-toolbar-actions-end {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.blockera-control-icon-picker-svg-editor-color-notice {
+		width: 100%;
+
+		.blockera-control {
+			margin-bottom: 0;
+		}
+
+		.blockera-control-notice {
+			margin: 0;
+		}
+
+		.blockera-control-icon-picker-svg-editor-color-notice-inner {
+			width: 100%;
+			flex-wrap: wrap;
+		}
+
+		.blockera-control-icon-picker-svg-editor-color-notice-text {
+			flex: 1;
+			min-width: 0;
+			font-size: 12px;
+			line-height: 1.45;
+		}
+
+		.blockera-control-icon-picker-svg-editor-color-notice-btn {
+			flex-shrink: 0;
+		}
+	}
+
+	.blockera-control-icon-picker-svg-editor-stroke-width-footer {
+		position: absolute;
+		left: 50%;
+		bottom: 12px;
+		z-index: 3;
+		width: min(240px, calc(100% - 24px));
+		padding: 8px 12px;
+		transform: translateX(-50%);
+		pointer-events: auto;
+		background: rgba(255, 255, 255, 0.94);
+		border: 1px solid var(--blockera-controls-border-color);
+		border-radius: var(--blockera-controls-border-radius);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+		.components-range-control {
+			margin-bottom: 0;
+		}
+	}
+
+	.blockera-control-icon-picker-svg-editor-breadcrumb {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		font-size: 11px;
+		color: #757575;
+	}
+
+	.blockera-control-icon-picker-svg-editor-breadcrumb-label {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.blockera-control-icon-picker-svg-editor-exit-group-btn {
+		flex-shrink: 0;
+		min-height: auto;
+		padding: 0;
+		font-size: 11px;
+	}
+
+	.blockera-control-icon-picker-svg-editor-canvas {
+		position: relative;
+		cursor: default;
+		touch-action: none;
+
+		.blockera-control-icon-picker-svg-editor-mount {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			pointer-events: none;
+
+			svg {
+				max-width: 80%;
+				max-height: 80%;
+				width: 80px !important;
+				height: auto !important;
+				pointer-events: all;
+
+				.blockera-svg-editor-hoverable {
+					cursor: pointer;
+					opacity: 0.92;
+
+					&:hover {
+						opacity: 1;
+						filter: drop-shadow(0 0 1px rgba(0, 124, 186, 0.55));
+					}
+				}
+
+				.blockera-svg-editor-selected,
+				[data-blockera-editor-highlight="true"] {
+					opacity: 1;
+					filter: drop-shadow(0 0 2px rgba(0, 124, 186, 0.85))
+						drop-shadow(0 0 6px rgba(0, 124, 186, 0.35));
+				}
+
+				.blockera-svg-editor-selected {
+					outline: 2px solid #007cba;
+					outline-offset: 2px;
+				}
+			}
+		}
+	}
+
+	.blockera-control-icon-picker-svg-editor-marquee {
+		display: none;
+		position: absolute;
+		pointer-events: none;
+		z-index: 1;
+		box-sizing: border-box;
+		border: 1px dashed #007cba;
+		border-radius: 2px;
+		background: rgba(0, 124, 186, 0.08);
+	}
+
+	.blockera-control-icon-picker-svg-editor-selection-overlay {
+		display: none;
+		position: absolute;
+		pointer-events: none;
+		z-index: 2;
+		box-sizing: border-box;
+		border: 2px solid #007cba;
+		border-radius: 2px;
+		background: rgba(0, 124, 186, 0.12);
+		box-shadow:
+			0 0 0 1px rgba(255, 255, 255, 0.85),
+			0 0 0 3px rgba(0, 124, 186, 0.25);
+	}
+
+	.blockera-control-icon-picker-svg-editor-selection-count {
+		display: none;
+		position: absolute;
+		z-index: 3;
+		min-width: 18px;
+		height: 18px;
+		padding: 0 5px;
+		align-items: center;
+		justify-content: center;
+		transform: translateX(-50%);
+		border-radius: 9px;
+		background: #007cba;
+		color: #ffffff;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1;
+		pointer-events: none;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+	}
+
+	.blockera-control-icon-picker-svg-editor-busy-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.72);
+		font-size: 13px;
+		color: #1e1e1e;
+	}
+
 	.blockera-control-icon-picker-custom-icon-preview-placeholder {
 		max-width: 220px;
 		padding: 16px 20px;
