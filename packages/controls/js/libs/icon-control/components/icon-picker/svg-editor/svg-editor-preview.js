@@ -16,6 +16,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	parseSvgMarkup,
 	serializeSvgElement,
+	materializeStrokeIconPresentation,
 	resolveClickTarget,
 	removeElements,
 	canDeleteSelection,
@@ -195,6 +196,9 @@ export default function SvgEditorPreview({
 		}
 
 		const liveSvg = parsed.cloneNode(true);
+		materializeStrokeIconPresentation(
+			/** @type {SVGSVGElement} */ (liveSvg)
+		);
 		mount.appendChild(liveSvg);
 
 		rootSvgRef.current = /** @type {SVGSVGElement} */ (liveSvg);

@@ -45,6 +45,42 @@ export function isStrokeSvgMarkup(svg: string): boolean {
 }
 
 /**
+ * Whether a fill value is an intentional solid fill (not none / gradient).
+ *
+ * @param {string | null | undefined} fill Fill attribute or style value.
+ * @return {boolean} True when the value is a solid accent fill.
+ */
+export function isSvgFillAccentValue(fill: string | null | undefined): boolean {
+	if (!fill || typeof fill !== 'string') {
+		return false;
+	}
+
+	const lower = fill.trim().toLowerCase();
+
+	return lower !== 'none' && !lower.startsWith('url(');
+}
+
+/**
+ * Whether an SVG shape uses an explicit non-none fill (accent dot, etc.).
+ *
+ * @param {Element | null | undefined} node SVG element.
+ * @return {boolean} True when the element has an intentional fill accent.
+ */
+export function isSvgFillAccentElement(
+	node: Element | null | undefined
+): boolean {
+	if (!node || typeof node.getAttribute !== 'function') {
+		return false;
+	}
+
+	if (!node.hasAttribute('fill')) {
+		return false;
+	}
+
+	return isSvgFillAccentValue(node.getAttribute('fill'));
+}
+
+/**
  * Extract the first SVG element from captured icon HTML.
  *
  * @param {string} html Icon markup (may include wrapper spans).
@@ -153,6 +189,28 @@ export function prepareIconSvgForStorage(
 
 	shapeTags.forEach((tag) => {
 		svg.querySelectorAll(tag).forEach((node) => {
+			const isFillAccent = isSvgFillAccentElement(node);
+
+			if (isFillAccent) {
+				const rootStroke = svg.getAttribute('stroke') || 'currentColor';
+				const rootStrokeWidth = svg.getAttribute('stroke-width');
+
+				if (!node.getAttribute('stroke')) {
+					node.setAttribute('stroke', rootStroke);
+				}
+
+				if (rootStrokeWidth && !node.getAttribute('stroke-width')) {
+					node.setAttribute('stroke-width', rootStrokeWidth);
+				}
+
+				if (node.style?.fill) {
+					node.style.fill = '';
+					node.style.removeProperty('fill');
+				}
+
+				return;
+			}
+
 			node.setAttribute('fill', 'none');
 
 			if (!node.getAttribute('stroke')) {
@@ -167,6 +225,10 @@ export function prepareIconSvgForStorage(
 	});
 
 	svg.querySelectorAll('[fill]').forEach((node) => {
+		if (isSvgFillAccentElement(node)) {
+			return;
+		}
+
 		if (node.getAttribute('fill') !== 'none') {
 			node.setAttribute('fill', 'none');
 		}

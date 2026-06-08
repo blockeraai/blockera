@@ -1,6 +1,8 @@
 export {
 	isStrokeIconLibrary,
 	isStrokeSvgMarkup,
+	isSvgFillAccentValue,
+	isSvgFillAccentElement,
 	prepareIconSvgForStorage,
 	extractSvgMarkup,
 	getIconKebabId,

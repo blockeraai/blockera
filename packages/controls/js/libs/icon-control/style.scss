@@ -1,3 +1,5 @@
+@import "./stroke-icon-preview";
+
 .blockera-control-icon {
 	background: repeating-conic-gradient(
 			#eaeaea 0%,
@@ -37,11 +39,7 @@
 		}
 
 		// Preview uses StrokeSvgIcon without library-* wrapper — stroke rules required here.
-		.blockera-stroke-svg-icon svg,
-		svg[fill="none"] {
-			fill: none;
-			stroke: currentColor;
-		}
+		@include blockera-stroke-icon-svg-preview;
 
 		img {
 			min-width: 50px;
@@ -211,13 +209,6 @@
 		display: inline-block;
 	}
 
-	// Stroke-based icon libraries use fill="none" — prevent global fill override.
-	&.library-feather,
-	&.library-lucide,
-	&.library-untitledui {
-		svg {
-			fill: none;
-			stroke: currentColor;
-		}
-	}
+	// Stroke-based icons (any library) — prevent global fill override.
+	@include blockera-stroke-icon-svg-preview;
 }

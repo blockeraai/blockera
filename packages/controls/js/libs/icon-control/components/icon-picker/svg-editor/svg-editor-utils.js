@@ -2,6 +2,8 @@
  * SVG editor DOM utilities: parse, serialize, selection context, delete.
  */
 
+import { isStrokeSvgMarkup, isSvgFillAccentElement } from '@blockera/icons';
+
 import { splitPathElement } from './svg-path-split';
 
 /** @typedef {SVGElement | SVGGraphicsElement} SvgEditorNode */
@@ -967,5 +969,68 @@ export function copyElementAttributes(source, target, skipAttrs) {
 		}
 
 		target.setAttribute(attr.name, attr.value);
+	}
+}
+
+/**
+ * Materialize inherited stroke-icon paint attrs on shapes for stable editor rendering.
+ *
+ * @param {SVGSVGElement | null} rootSvg Root SVG element.
+ */
+export function materializeStrokeIconPresentation(rootSvg) {
+	if (!rootSvg || rootSvg.nodeName.toLowerCase() !== 'svg') {
+		return;
+	}
+
+	let markup = '';
+
+	try {
+		markup = new XMLSerializer().serializeToString(rootSvg);
+	} catch (error) {
+		return;
+	}
+
+	if (!isStrokeSvgMarkup(markup)) {
+		return;
+	}
+
+	const rootFill = rootSvg.getAttribute('fill') || 'none';
+	const rootStroke = rootSvg.getAttribute('stroke') || 'currentColor';
+	const rootStrokeWidth = rootSvg.getAttribute('stroke-width');
+	const shapes = rootSvg.querySelectorAll(
+		'path, rect, circle, ellipse, line, polyline, polygon'
+	);
+
+	for (let i = 0; i < shapes.length; i++) {
+		const node = shapes[i];
+
+		if (isInsideExcludedContainer(node)) {
+			continue;
+		}
+
+		if (isSvgFillAccentElement(node)) {
+			// Native stroke icons: accent dots inherit root stroke (r=.5 reads larger).
+			if (!node.hasAttribute('stroke') && rootStroke) {
+				node.setAttribute('stroke', rootStroke);
+			}
+
+			if (rootStrokeWidth && !node.hasAttribute('stroke-width')) {
+				node.setAttribute('stroke-width', rootStrokeWidth);
+			}
+
+			continue;
+		}
+
+		if (!node.hasAttribute('fill')) {
+			node.setAttribute('fill', rootFill);
+		}
+
+		if (!node.hasAttribute('stroke')) {
+			node.setAttribute('stroke', rootStroke);
+		}
+
+		if (rootStrokeWidth && !node.hasAttribute('stroke-width')) {
+			node.setAttribute('stroke-width', rootStrokeWidth);
+		}
 	}
 }

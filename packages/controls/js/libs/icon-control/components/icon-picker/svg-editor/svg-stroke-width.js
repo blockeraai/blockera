@@ -2,6 +2,8 @@
  * Scale stroke widths across an SVG icon (percentage relative to baseline at load).
  */
 
+import { isSvgFillAccentElement } from '@blockera/icons';
+
 import {
 	SELECTABLE_SHAPE_TAGS,
 	isInsideExcludedContainer,
@@ -113,6 +115,10 @@ function formatStrokeWidthValue(num, unit) {
  * @return {boolean} Result of the check.
  */
 function isStrokedElement(element, inlineStyle) {
+	if (isSvgFillAccentElement(element)) {
+		return false;
+	}
+
 	const stroke = element.getAttribute('stroke') || inlineStyle.stroke || '';
 	const normalizedStroke = stroke.trim().toLowerCase();
 
@@ -139,6 +145,40 @@ function isStrokedElement(element, inlineStyle) {
 }
 
 /**
+ * Read stroke-width from ancestor svg/g presentation attributes (user units).
+ *
+ * @param {Element} element SVG shape element.
+ * @return {{ source: 'attr' | 'style', raw: string, parsed: { num: number, unit: string } } | null} Inherited stroke-width or null.
+ */
+function resolveInheritedStrokeWidthAttr(element) {
+	let node = element.parentElement;
+
+	while (node) {
+		const tag = node.nodeName.toLowerCase();
+
+		if (tag === 'svg' || tag === 'g') {
+			const attrRaw = node.getAttribute('stroke-width');
+
+			if (attrRaw !== null && attrRaw !== '') {
+				const parsed = parseStrokeWidthValue(attrRaw);
+
+				if (parsed) {
+					return { source: 'attr', raw: attrRaw, parsed };
+				}
+			}
+		}
+
+		if (tag === 'svg') {
+			break;
+		}
+
+		node = node.parentElement;
+	}
+
+	return null;
+}
+
+/**
  * Resolve baseline stroke-width for scaling (attribute, inline, computed, or default).
  *
  * @param {Element} element SVG shape element.
@@ -155,6 +195,13 @@ function resolveStrokeWidthInfo(element) {
 
 	if (!isStrokedElement(element, inlineStyle)) {
 		return null;
+	}
+
+	// Prefer ancestor stroke-width in user units over computed px (viewBox-safe).
+	const inherited = resolveInheritedStrokeWidthAttr(element);
+
+	if (inherited) {
+		return inherited;
 	}
 
 	if (typeof window !== 'undefined' && element.ownerDocument?.defaultView) {

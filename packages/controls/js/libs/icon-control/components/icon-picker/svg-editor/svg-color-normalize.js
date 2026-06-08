@@ -2,7 +2,7 @@
  * Editor-local SVG color detection and normalization for theme icon color.
  */
 
-import { isStrokeSvgMarkup } from '@blockera/icons';
+import { isStrokeSvgMarkup, isSvgFillAccentElement } from '@blockera/icons';
 
 import {
 	parseSvgMarkup,
@@ -322,6 +322,27 @@ function normalizeStrokeIconDom(rootSvg) {
 			continue;
 		}
 
+		const isFillAccent = isSvgFillAccentElement(node);
+
+		if (isFillAccent) {
+			const rootStroke = rootSvg.getAttribute('stroke') || 'currentColor';
+			const rootStrokeWidth = rootSvg.getAttribute('stroke-width');
+
+			if (
+				!node.getAttribute('stroke') ||
+				isHardcodedSolidPaint(node.getAttribute('stroke'))
+			) {
+				node.setAttribute('stroke', rootStroke);
+			}
+
+			if (rootStrokeWidth && !node.getAttribute('stroke-width')) {
+				node.setAttribute('stroke-width', rootStrokeWidth);
+			}
+
+			stripInlineFill(node);
+			continue;
+		}
+
 		node.setAttribute('fill', 'none');
 
 		if (
@@ -340,6 +361,10 @@ function normalizeStrokeIconDom(rootSvg) {
 		const node = withFill[i];
 
 		if (isInsideExcludedContainer(node)) {
+			continue;
+		}
+
+		if (isSvgFillAccentElement(node)) {
 			continue;
 		}
 
