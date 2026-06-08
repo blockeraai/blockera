@@ -19,15 +19,6 @@ const DEFAULT_LIBRARIES = {
 	wp: {
 		lazyLoad: false,
 	},
-	faregular: {
-		lazyLoad: true,
-	},
-	fasolid: {
-		lazyLoad: true,
-	},
-	fabrands: {
-		lazyLoad: true,
-	},
 	feather: {
 		lazyLoad: true,
 	},
@@ -35,6 +26,15 @@ const DEFAULT_LIBRARIES = {
 		lazyLoad: true,
 	},
 	untitledui: {
+		lazyLoad: true,
+	},
+	faregular: {
+		lazyLoad: true,
+	},
+	fasolid: {
+		lazyLoad: true,
+	},
+	fabrands: {
 		lazyLoad: true,
 	},
 	brands: {
