@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useState, useMemo, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -109,6 +109,7 @@ export function BlockCardVariationView({
 	const {
 		selectedBlockClientId,
 		statesManagerHandleOnChangeRef,
+		extensionsUiContext,
 		variationSurface = VARIATION_SURFACE_STYLE,
 	} = useGlobalStylesPanelContext();
 
@@ -139,7 +140,51 @@ export function BlockCardVariationView({
 		clientId,
 		blockName,
 		statesManagerHandleOnChangeRef,
+		extensionsUiContext,
 	});
+
+	const compositePreviewBlock = useMemo(
+		() => ({
+			supports,
+			clientId,
+			blockName,
+			setAttributes,
+			selectedBlockClientId,
+			currentBlockStyleVariation,
+		}),
+		[
+			supports,
+			clientId,
+			blockName,
+			setAttributes,
+			selectedBlockClientId,
+			variationKey,
+			currentBlockStyleVariation?.isDefault,
+		]
+	);
+
+	const compositeBlockStatesProps = useMemo(
+		() => ({
+			attributes: currentStateAttributes,
+		}),
+		[
+			currentStateAttributes?.blockeraBlockStates,
+			currentStateAttributes?.blockeraUnsavedData?.states,
+			currentStateAttributes?.blockeraInnerBlocks,
+		]
+	);
+
+	const compositeInnerBlocksProps = useMemo(
+		() => ({
+			values: currentStateAttributes.blockeraInnerBlocks,
+			innerBlocks: blockeraInnerBlocks,
+		}),
+		[currentStateAttributes.blockeraInnerBlocks, blockeraInnerBlocks]
+	);
+
+	const handleStatesManagerReady = useCallback((handleOnChange) => {
+		statesManagerHandleOnChangeRef.current = handleOnChange;
+	}, []);
 
 	const handleClose = () => {
 		resetBlockStateToNormal();
@@ -268,10 +313,9 @@ export function BlockCardVariationView({
 				<StateContainer
 					name={blockName}
 					clientId={clientId}
-					isGlobalStylesCard={true}
-					availableStates={availableStates}
 					insideBlockInspector={insideBlockInspector}
 					variationSurface={variationSurface}
+					availableStates={availableStates}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData
 					}
@@ -283,15 +327,9 @@ export function BlockCardVariationView({
 
 				{isActive && (
 					<BlockCompositePreview
-						block={{
-							supports,
-							clientId,
-							blockName,
-							setAttributes,
-							selectedBlockClientId,
-							currentBlockStyleVariation,
-						}}
+						block={compositePreviewBlock}
 						insideBlockInspector={false}
+						variationSurface={variationSurface}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}
 						currentBlock={currentBlock}
@@ -299,17 +337,9 @@ export function BlockCardVariationView({
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
 						blockConfig={additional}
-						blockStatesProps={{
-							attributes: currentStateAttributes,
-						}}
-						innerBlocksProps={{
-							values: currentStateAttributes.blockeraInnerBlocks,
-							innerBlocks: blockeraInnerBlocks,
-						}}
-						onStatesManagerReady={(handleOnChange) => {
-							statesManagerHandleOnChangeRef.current =
-								handleOnChange;
-						}}
+						blockStatesProps={compositeBlockStatesProps}
+						innerBlocksProps={compositeInnerBlocksProps}
+						onStatesManagerReady={handleStatesManagerReady}
 					/>
 				)}
 			</Flex>
