@@ -97,6 +97,39 @@
 		flex-direction: column;
 	}
 
+	.components-drop-zone {
+		position: absolute;
+		left: 25px;
+		bottom: 25px;
+		top: 84px;
+		right: 25px;
+		z-index: 5;
+		pointer-events: none;
+
+		.components-drop-zone__content {
+			height: 100%;
+			max-height: 100%;
+			border-radius: 5px;
+		}
+
+		&.is-dragging-over-document,
+		&.is-dragging-over-element {
+			z-index: 100;
+			pointer-events: auto;
+		}
+
+		&.is-active.is-dragging-over-element {
+			.components-drop-zone__content {
+				opacity: 1;
+			}
+
+			.components-drop-zone__content-inner {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+	}
+
 	.blockera-control-icon-picker-modal-body {
 		display: flex;
 		flex-direction: column;

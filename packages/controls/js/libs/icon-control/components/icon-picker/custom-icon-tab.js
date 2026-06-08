@@ -3,7 +3,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useCallback } from '@wordpress/element';
-import { DropZone } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -56,31 +55,6 @@ export default function CustomIconTab({
 			event.preventDefault();
 			const pastedText = event.clipboardData.getData('text');
 			updateDraft(pastedText, null);
-		},
-		[updateDraft]
-	);
-
-	const handleFilesDrop = useCallback(
-		(files) => {
-			if (!files?.length) {
-				return;
-			}
-
-			const file = files[0];
-
-			if (!file.name?.toLowerCase().endsWith('.svg')) {
-				return;
-			}
-
-			const reader = new FileReader();
-
-			reader.onload = () => {
-				if (typeof reader.result === 'string') {
-					updateDraft(reader.result, null);
-				}
-			};
-
-			reader.readAsText(file);
 		},
 		[updateDraft]
 	);
@@ -171,7 +145,6 @@ export default function CustomIconTab({
 							'icon-picker-custom-icon-dropzone'
 						)}
 					>
-						<DropZone onFilesDrop={handleFilesDrop} />
 						<textarea
 							className={controlInnerClassNames(
 								'icon-picker-custom-icon-textarea'

@@ -4,6 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useCallback, useContext } from '@wordpress/element';
 import { useInstanceId } from '@wordpress/compose';
+import { DropZone } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -21,6 +22,7 @@ import {
 	isCustomIcon,
 	getCustomSvgDraft,
 	sanitizeRawSVGString,
+	readSvgFromDroppedFiles,
 } from '../../utils';
 import { default as Search } from './search';
 import IconLibraries, { DEFAULT_LIBRARIES } from './icon-libraries';
@@ -112,6 +114,16 @@ export default function IconPickerModal({
 		setDraftSvgString('');
 		setDraftUploadSVG(null);
 	}, []);
+
+	const handleModalFilesDrop = useCallback(
+		(files) => {
+			readSvgFromDroppedFiles(files, (svgString) => {
+				setActiveTab(TAB_CUSTOM);
+				handleDraftChange({ svgString, uploadSVG: null });
+			});
+		},
+		[handleDraftChange]
+	);
 
 	const handleUseIcon = useCallback(() => {
 		if (!hasValidDraft) {
@@ -238,6 +250,8 @@ export default function IconPickerModal({
 			onRequestClose={onClose}
 			actions={activeTab === TAB_CUSTOM ? customTabFooter : null}
 		>
+			<DropZone onFilesDrop={handleModalFilesDrop} />
+
 			<div className={controlInnerClassNames('icon-picker-modal-body')}>
 				{activeTab === TAB_LIBRARY ? (
 					<div
