@@ -150,6 +150,30 @@ function isNormalizableSolidPaint(raw) {
 }
 
 /**
+ * Whether a fill/stroke value references a paint server (gradient, pattern, etc.).
+ *
+ * @param {string | null | undefined} raw Paint value.
+ * @return {boolean} Result of the check.
+ */
+function isGradientPaintValue(raw) {
+	if (!raw || typeof raw !== 'string') {
+		return false;
+	}
+
+	return raw.trim().toLowerCase().startsWith('url(');
+}
+
+/**
+ * Whether a paint value should be rewritten during normalization.
+ *
+ * @param {string | null | undefined} raw Paint value.
+ * @return {boolean} Result of the check.
+ */
+function isNormalizablePaint(raw) {
+	return isGradientPaintValue(raw) || isNormalizableSolidPaint(raw);
+}
+
+/**
  * Collect normalized hardcoded fill values from an element's fill sources.
  *
  * @param {Element} element SVG element.
@@ -160,14 +184,14 @@ function collectHardcodedFillsFromElement(element) {
 
 	const attrFill = element.getAttribute('fill');
 
-	if (isNormalizableSolidPaint(attrFill)) {
+	if (isNormalizablePaint(attrFill)) {
 		fills.push(attrFill.trim().toLowerCase());
 	}
 
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 	const styleFill = inlineStyle.fill;
 
-	if (isNormalizableSolidPaint(styleFill)) {
+	if (isNormalizablePaint(styleFill)) {
 		fills.push(styleFill.trim().toLowerCase());
 	}
 
@@ -183,13 +207,13 @@ function collectHardcodedFillsFromElement(element) {
 function elementHasHardcodedStroke(element) {
 	const attrStroke = element.getAttribute('stroke');
 
-	if (isNormalizableSolidPaint(attrStroke)) {
+	if (isNormalizablePaint(attrStroke)) {
 		return true;
 	}
 
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	return isNormalizableSolidPaint(inlineStyle.stroke);
+	return isNormalizablePaint(inlineStyle.stroke);
 }
 
 /**
@@ -328,11 +352,11 @@ function normalizeFilledElementFill(element) {
 	const attrFill = element.getAttribute('fill');
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	if (isNormalizableSolidPaint(attrFill)) {
+	if (isNormalizablePaint(attrFill)) {
 		element.setAttribute('fill', 'currentColor');
 	}
 
-	if (isNormalizableSolidPaint(inlineStyle.fill)) {
+	if (isNormalizablePaint(inlineStyle.fill)) {
 		setInlineStyleProp(element, 'fill', 'currentColor');
 	}
 }
@@ -346,12 +370,26 @@ function normalizeFilledElementStroke(element) {
 	const attrStroke = element.getAttribute('stroke');
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	if (isNormalizableSolidPaint(attrStroke)) {
+	if (isNormalizablePaint(attrStroke)) {
 		element.setAttribute('stroke', 'currentColor');
 	}
 
-	if (isNormalizableSolidPaint(inlineStyle.stroke)) {
+	if (isNormalizablePaint(inlineStyle.stroke)) {
 		setInlineStyleProp(element, 'stroke', 'currentColor');
+	}
+}
+
+/**
+ * Rewrite inline stroke when it uses a hardcoded or gradient paint.
+ *
+ * @param {Element} element SVG element.
+ * @param {string}  strokeValue Replacement stroke value.
+ */
+function normalizeInlineStroke(element, strokeValue) {
+	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
+
+	if (isNormalizablePaint(inlineStyle.stroke)) {
+		setInlineStyleProp(element, 'stroke', strokeValue);
 	}
 }
 
@@ -381,11 +419,12 @@ function normalizeStrokeIconDom(rootSvg) {
 
 	if (
 		!rootSvg.getAttribute('stroke') ||
-		isNormalizableSolidPaint(rootSvg.getAttribute('stroke'))
+		isNormalizablePaint(rootSvg.getAttribute('stroke'))
 	) {
 		rootSvg.setAttribute('stroke', 'currentColor');
 	}
 
+	normalizeInlineStroke(rootSvg, 'currentColor');
 	stripInlineFill(rootSvg);
 
 	const shapes = rootSvg.querySelectorAll(SHAPE_SELECTOR);
@@ -405,7 +444,7 @@ function normalizeStrokeIconDom(rootSvg) {
 
 			if (
 				!node.getAttribute('stroke') ||
-				isNormalizableSolidPaint(node.getAttribute('stroke'))
+				isNormalizablePaint(node.getAttribute('stroke'))
 			) {
 				node.setAttribute('stroke', rootStroke);
 			}
@@ -414,6 +453,7 @@ function normalizeStrokeIconDom(rootSvg) {
 				node.setAttribute('stroke-width', rootStrokeWidth);
 			}
 
+			normalizeInlineStroke(node, rootStroke);
 			stripInlineFill(node);
 			continue;
 		}
@@ -426,11 +466,12 @@ function normalizeStrokeIconDom(rootSvg) {
 
 		if (
 			!node.getAttribute('stroke') ||
-			isNormalizableSolidPaint(node.getAttribute('stroke'))
+			isNormalizablePaint(node.getAttribute('stroke'))
 		) {
 			node.setAttribute('stroke', 'currentColor');
 		}
 
+		normalizeInlineStroke(node, 'currentColor');
 		stripInlineFill(node);
 	}
 
@@ -455,13 +496,37 @@ function normalizeStrokeIconDom(rootSvg) {
 
 		const fill = node.getAttribute('fill');
 
-		if (
-			fill &&
-			fill.toLowerCase() !== 'none' &&
-			!fill.toLowerCase().startsWith('url(') &&
-			!isWhitePaintValue(fill)
-		) {
+		if (fill && fill.toLowerCase() !== 'none' && !isWhitePaintValue(fill)) {
 			node.setAttribute('fill', 'none');
+		}
+	}
+}
+
+/**
+ * Remove gradient definitions no longer referenced after paint normalization.
+ *
+ * @param {SVGSVGElement} rootSvg Root SVG element.
+ */
+function removeGradientDefinitions(rootSvg) {
+	const gradients = rootSvg.querySelectorAll(
+		'linearGradient, radialGradient'
+	);
+
+	for (let i = 0; i < gradients.length; i++) {
+		const gradient = gradients[i];
+
+		if (gradient.parentNode) {
+			gradient.parentNode.removeChild(gradient);
+		}
+	}
+
+	const defsElements = rootSvg.querySelectorAll('defs');
+
+	for (let i = 0; i < defsElements.length; i++) {
+		const defs = defsElements[i];
+
+		if (!defs.childElementCount && defs.parentNode) {
+			defs.parentNode.removeChild(defs);
 		}
 	}
 }
@@ -502,8 +567,9 @@ export function normalizeSvgForIconColor(rootSvg) {
 
 	if (isStrokeSvgMarkup(markup)) {
 		normalizeStrokeIconDom(rootSvg);
-		return;
+	} else {
+		normalizeFilledIconDom(rootSvg);
 	}
 
-	normalizeFilledIconDom(rootSvg);
+	removeGradientDefinitions(rootSvg);
 }

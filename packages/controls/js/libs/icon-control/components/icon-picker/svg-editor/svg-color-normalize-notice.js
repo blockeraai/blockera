@@ -52,7 +52,7 @@ export default function SvgColorNormalizeNotice({
 					>
 						{isMultiColor
 							? __(
-									'This SVG defines multiple fixed colors, so icon color cannot be applied to them. Fixing removes solid colors. Gradients are kept.',
+									'This SVG defines multiple fixed colors, so icon color cannot be applied to them. Fixing removes solid colors and gradients.',
 									'blockera'
 								)
 							: __(
