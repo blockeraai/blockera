@@ -429,6 +429,68 @@ export function buildRecentIconElements({
 	return elements;
 }
 
+/**
+ * Extract the single root SVG element from a parsed SVG document.
+ * Tolerates XML declarations, comments, and other non-element nodes
+ * before or after the root `<svg>` (common in Illustrator/Tabler exports).
+ *
+ * @param {Document} svgDoc Parsed SVG document.
+ * @return {SVGSVGElement | null} Root svg element or null when invalid.
+ */
+function extractRootSvgElement(svgDoc) {
+	if (!svgDoc || svgDoc.querySelector('parsererror')) {
+		return null;
+	}
+
+	const root = svgDoc.documentElement;
+
+	if (!root || root.nodeName.toLowerCase() !== 'svg') {
+		return null;
+	}
+
+	// Reject multiple root-level `<svg>` siblings (security / malformed input).
+	let svgCount = 0;
+
+	for (let i = 0; i < svgDoc.childNodes.length; i++) {
+		const node = svgDoc.childNodes[i];
+
+		if (node.nodeType === 1 && node.nodeName.toLowerCase() === 'svg') {
+			svgCount++;
+		}
+	}
+
+	if (svgCount !== 1) {
+		return null;
+	}
+
+	return /** @type {SVGSVGElement} */ (root);
+}
+
+/**
+ * Whether an SVG root has enough structure to display in the icon picker.
+ *
+ * @param {Element} svgElement Root svg element.
+ * @return {boolean} True when the SVG can be rendered.
+ */
+function isRenderableSvgElement(svgElement) {
+	if (!svgElement || svgElement.nodeName.toLowerCase() !== 'svg') {
+		return false;
+	}
+
+	if (
+		svgElement.hasAttribute('viewBox') ||
+		(svgElement.hasAttribute('width') && svgElement.hasAttribute('height'))
+	) {
+		return true;
+	}
+
+	return (
+		svgElement.querySelector(
+			'path, rect, circle, ellipse, line, polyline, polygon, text, use, image, g'
+		) !== null
+	);
+}
+
 export function sanitizeRawSVGString(rawString) {
 	if (!rawString || typeof rawString !== 'string') {
 		return '';
@@ -450,24 +512,15 @@ export function sanitizeRawSVGString(rawString) {
 		return '';
 	}
 
-	// Check for parsing errors
-	if (svgDoc.querySelector('parsererror')) {
+	const svgElement = extractRootSvgElement(svgDoc);
+
+	if (!svgElement || !isRenderableSvgElement(svgElement)) {
 		/* @debug-ignore */
-		console.warn('SVG contains parsing errors');
+		console.warn(
+			'Invalid SVG structure: missing or non-renderable root svg element'
+		);
 		return '';
 	}
-
-	// Validate that we have exactly one SVG element
-	if (
-		svgDoc.childNodes.length !== 1 ||
-		svgDoc.firstChild.nodeName !== 'svg'
-	) {
-		/* @debug-ignore */
-		console.warn('Invalid SVG structure: expected single SVG element');
-		return '';
-	}
-
-	const svgElement = svgDoc.documentElement;
 
 	// Sanitize the SVG element
 	sanitizeSVGElement(svgElement);
