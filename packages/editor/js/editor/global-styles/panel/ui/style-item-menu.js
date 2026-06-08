@@ -29,7 +29,6 @@ import { DeleteModal } from './delete-modal';
 import { DuplicateModal } from './duplicate-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 import { useStyleItemMenuContext } from '../context';
-import { useGlobalStylesPanelActiveColorStyle } from '../use-global-styles-panel-active-color-style';
 
 export const StyleItemMenu = (): MixedElement => {
 	const {
@@ -62,8 +61,6 @@ export const StyleItemMenu = (): MixedElement => {
 		popoverOffset,
 		variationAllowsMultipleBlocks,
 	} = useStyleItemMenuContext();
-	const popoverActiveColorStyle =
-		useGlobalStylesPanelActiveColorStyle(blockName);
 
 	const inactiveLabel = variationAllowsMultipleBlocks
 		? __('Inactive Style', 'blockera')
@@ -131,7 +128,6 @@ export const StyleItemMenu = (): MixedElement => {
 					offset={popoverOffset}
 					draggable={true}
 					placement="left-start"
-					style={popoverActiveColorStyle}
 					className={classNames('variations-settings-popover', {
 						'is-variation-ui-size': !variationAllowsMultipleBlocks,
 						'is-variation-ui-style': variationAllowsMultipleBlocks,

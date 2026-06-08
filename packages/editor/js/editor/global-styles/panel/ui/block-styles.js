@@ -60,7 +60,6 @@ import {
 } from '../variation-surfaces';
 import { useBlockVariationSupport } from '../use-block-variation-support';
 import { isVariationSurfaceEnabled } from '../block-variation-support';
-import { useGlobalStylesPanelActiveColorStyle } from '../use-global-styles-panel-active-color-style';
 
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({
@@ -118,8 +117,6 @@ function BlockStyles({
 	);
 
 	const isSizeVariationUi = variationSurface === VARIATION_SURFACE_SIZE;
-	const popoverActiveColorStyle =
-		useGlobalStylesPanelActiveColorStyle(blockName);
 
 	let missingVariationMessage;
 	if (isSizeVariationUi) {
@@ -380,7 +377,6 @@ function BlockStyles({
 					title={''}
 					offset={10}
 					placement="bottom-start"
-					style={popoverActiveColorStyle}
 					className={classNames('variations-picker-popover', {
 						'is-variation-ui-size':
 							variationSurface === VARIATION_SURFACE_SIZE,
