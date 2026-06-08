@@ -78,6 +78,78 @@ function isHardcodedSolidPaint(raw) {
 }
 
 /**
+ * Whether a paint value is white (kept as-is during normalization).
+ *
+ * White is often used for highlights, cutouts, or accents inside multi-tone
+ * icons and should not be rewritten to currentColor.
+ *
+ * @param {string | null | undefined} raw Paint value.
+ * @return {boolean} Result of the check.
+ */
+function isWhitePaintValue(raw) {
+	if (!raw || typeof raw !== 'string') {
+		return false;
+	}
+
+	const value = raw.trim().toLowerCase();
+
+	if (value === 'white') {
+		return true;
+	}
+
+	const hexMatch = value.match(/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/);
+
+	if (hexMatch) {
+		const hex = hexMatch[1];
+		let r;
+		let g;
+		let b;
+
+		if (hex.length === 3) {
+			r = parseInt(hex[0] + hex[0], 16);
+			g = parseInt(hex[1] + hex[1], 16);
+			b = parseInt(hex[2] + hex[2], 16);
+		} else {
+			r = parseInt(hex.slice(0, 2), 16);
+			g = parseInt(hex.slice(2, 4), 16);
+			b = parseInt(hex.slice(4, 6), 16);
+		}
+
+		return r === 255 && g === 255 && b === 255;
+	}
+
+	const rgbMatch = value.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+
+	if (rgbMatch) {
+		return (
+			Number(rgbMatch[1]) === 255 &&
+			Number(rgbMatch[2]) === 255 &&
+			Number(rgbMatch[3]) === 255
+		);
+	}
+
+	const hslMatch = value.match(
+		/^hsla?\(\s*[\d.]+\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%/
+	);
+
+	if (hslMatch) {
+		return parseFloat(hslMatch[1]) === 0 && parseFloat(hslMatch[2]) === 100;
+	}
+
+	return false;
+}
+
+/**
+ * Whether a hardcoded solid paint should be normalized (excludes white).
+ *
+ * @param {string | null | undefined} raw Paint value.
+ * @return {boolean} Result of the check.
+ */
+function isNormalizableSolidPaint(raw) {
+	return isHardcodedSolidPaint(raw) && !isWhitePaintValue(raw);
+}
+
+/**
  * Collect normalized hardcoded fill values from an element's fill sources.
  *
  * @param {Element} element SVG element.
@@ -88,14 +160,14 @@ function collectHardcodedFillsFromElement(element) {
 
 	const attrFill = element.getAttribute('fill');
 
-	if (isHardcodedSolidPaint(attrFill)) {
+	if (isNormalizableSolidPaint(attrFill)) {
 		fills.push(attrFill.trim().toLowerCase());
 	}
 
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 	const styleFill = inlineStyle.fill;
 
-	if (isHardcodedSolidPaint(styleFill)) {
+	if (isNormalizableSolidPaint(styleFill)) {
 		fills.push(styleFill.trim().toLowerCase());
 	}
 
@@ -111,13 +183,13 @@ function collectHardcodedFillsFromElement(element) {
 function elementHasHardcodedStroke(element) {
 	const attrStroke = element.getAttribute('stroke');
 
-	if (isHardcodedSolidPaint(attrStroke)) {
+	if (isNormalizableSolidPaint(attrStroke)) {
 		return true;
 	}
 
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	return isHardcodedSolidPaint(inlineStyle.stroke);
+	return isNormalizableSolidPaint(inlineStyle.stroke);
 }
 
 /**
@@ -256,11 +328,11 @@ function normalizeFilledElementFill(element) {
 	const attrFill = element.getAttribute('fill');
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	if (isHardcodedSolidPaint(attrFill)) {
+	if (isNormalizableSolidPaint(attrFill)) {
 		element.setAttribute('fill', 'currentColor');
 	}
 
-	if (isHardcodedSolidPaint(inlineStyle.fill)) {
+	if (isNormalizableSolidPaint(inlineStyle.fill)) {
 		setInlineStyleProp(element, 'fill', 'currentColor');
 	}
 }
@@ -274,11 +346,11 @@ function normalizeFilledElementStroke(element) {
 	const attrStroke = element.getAttribute('stroke');
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	if (isHardcodedSolidPaint(attrStroke)) {
+	if (isNormalizableSolidPaint(attrStroke)) {
 		element.setAttribute('stroke', 'currentColor');
 	}
 
-	if (isHardcodedSolidPaint(inlineStyle.stroke)) {
+	if (isNormalizableSolidPaint(inlineStyle.stroke)) {
 		setInlineStyleProp(element, 'stroke', 'currentColor');
 	}
 }
@@ -291,7 +363,10 @@ function normalizeFilledElementStroke(element) {
 function stripInlineFill(element) {
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
 
-	if (inlineStyle.fill !== undefined) {
+	if (
+		inlineStyle.fill !== undefined &&
+		!isWhitePaintValue(inlineStyle.fill)
+	) {
 		setInlineStyleProp(element, 'fill', null);
 	}
 }
@@ -306,7 +381,7 @@ function normalizeStrokeIconDom(rootSvg) {
 
 	if (
 		!rootSvg.getAttribute('stroke') ||
-		isHardcodedSolidPaint(rootSvg.getAttribute('stroke'))
+		isNormalizableSolidPaint(rootSvg.getAttribute('stroke'))
 	) {
 		rootSvg.setAttribute('stroke', 'currentColor');
 	}
@@ -330,7 +405,7 @@ function normalizeStrokeIconDom(rootSvg) {
 
 			if (
 				!node.getAttribute('stroke') ||
-				isHardcodedSolidPaint(node.getAttribute('stroke'))
+				isNormalizableSolidPaint(node.getAttribute('stroke'))
 			) {
 				node.setAttribute('stroke', rootStroke);
 			}
@@ -343,11 +418,15 @@ function normalizeStrokeIconDom(rootSvg) {
 			continue;
 		}
 
-		node.setAttribute('fill', 'none');
+		const nodeFill = node.getAttribute('fill');
+
+		if (!isWhitePaintValue(nodeFill)) {
+			node.setAttribute('fill', 'none');
+		}
 
 		if (
 			!node.getAttribute('stroke') ||
-			isHardcodedSolidPaint(node.getAttribute('stroke'))
+			isNormalizableSolidPaint(node.getAttribute('stroke'))
 		) {
 			node.setAttribute('stroke', 'currentColor');
 		}
@@ -379,7 +458,8 @@ function normalizeStrokeIconDom(rootSvg) {
 		if (
 			fill &&
 			fill.toLowerCase() !== 'none' &&
-			!fill.toLowerCase().startsWith('url(')
+			!fill.toLowerCase().startsWith('url(') &&
+			!isWhitePaintValue(fill)
 		) {
 			node.setAttribute('fill', 'none');
 		}
