@@ -87,7 +87,7 @@ export default function SvgEditorToolbar({
 								'icon-picker-svg-editor-toolbar-btn',
 								'is-ungroup'
 							)}
-							variant="secondary"
+							variant="tertiary"
 							size="extra-small"
 							onClick={onUngroup}
 							disabled={disabled || !canUngroup || isBusy}
@@ -111,7 +111,7 @@ export default function SvgEditorToolbar({
 								'icon-picker-svg-editor-toolbar-btn',
 								'is-delete'
 							)}
-							variant="secondary"
+							variant="tertiary"
 							size="extra-small"
 							onClick={onDelete}
 							disabled={disabled || !canDelete || isBusy}
