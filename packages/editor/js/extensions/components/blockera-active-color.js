@@ -14,6 +14,43 @@ export const BLOCKERA_ACTIVE_COLOR_CSS_PROPERTIES = [
 	'--blockera-controls-variations-color-darker-20',
 ];
 
+type ActiveColorScopeFlags = {
+	insideBlockInspector: boolean,
+	isGlobalStylesPanelRoot: boolean,
+	isGlobalStylesCardWrapper: boolean,
+	variationSurface: string | void,
+};
+
+/**
+ * Normalizes StateContainer / preview-provider active-color scope flags.
+ *
+ * Global-styles surfaces pass `variationSurface` only when `!insideBlockInspector`.
+ * Card-wrapper defaults to the same unless overridden (panel root sets root explicitly).
+ *
+ * @param {Object} options Scope inputs from callers.
+ * @return {ActiveColorScopeFlags} Flags for {@see useBlockeraActiveColor}.
+ */
+export function getBlockeraActiveColorScopeFlags({
+	insideBlockInspector = true,
+	isGlobalStylesPanelRoot = false,
+	isGlobalStylesCardWrapper,
+	variationSurface,
+}: {
+	insideBlockInspector?: boolean,
+	isGlobalStylesPanelRoot?: boolean,
+	isGlobalStylesCardWrapper?: boolean,
+	variationSurface?: string,
+}): ActiveColorScopeFlags {
+	const inGlobalStyles = !insideBlockInspector;
+
+	return {
+		insideBlockInspector,
+		isGlobalStylesPanelRoot,
+		isGlobalStylesCardWrapper: isGlobalStylesCardWrapper ?? inGlobalStyles,
+		variationSurface: inGlobalStyles ? variationSurface : undefined,
+	};
+}
+
 type ActiveColorContext = {
 	currentBlock: string,
 	currentState: string,
@@ -87,6 +124,24 @@ export const computeBlockeraActiveColor = (
 	return color;
 };
 
+const GLOBAL_STYLES_SIZE_VARIATION_CSS_VARS: Object = {
+	'--blockera-controls-variations-color':
+		'var(--blockera-controls-block-variations-size)',
+	'--blockera-controls-variations-color-bk':
+		'var(--blockera-controls-block-variations-size-bk)',
+	'--blockera-controls-variations-color-darker-20':
+		'var(--blockera-controls-block-variations-size-darker-20)',
+};
+
+const GLOBAL_STYLES_STYLE_VARIATION_CSS_VARS: Object = {
+	'--blockera-controls-variations-color':
+		'var(--blockera-controls-block-variations-style)',
+	'--blockera-controls-variations-color-bk':
+		'var(--blockera-controls-block-variations-style-bk)',
+	'--blockera-controls-variations-color-darker-20':
+		'var(--blockera-controls-block-variations-style-darker-20)',
+};
+
 /**
  * Variation surface CSS variables for global styles card wrapper.
  *
@@ -122,24 +177,10 @@ export const computeBlockeraVariationCssVars = ({
 	}
 
 	if (variationSurface === VARIATION_SURFACE_SIZE) {
-		return {
-			'--blockera-controls-variations-color':
-				'var(--blockera-controls-block-variations-size)',
-			'--blockera-controls-variations-color-bk':
-				'var(--blockera-controls-block-variations-size-bk)',
-			'--blockera-controls-variations-color-darker-20':
-				'var(--blockera-controls-block-variations-size-darker-20)',
-		};
+		return GLOBAL_STYLES_SIZE_VARIATION_CSS_VARS;
 	}
 
-	return {
-		'--blockera-controls-variations-color':
-			'var(--blockera-controls-block-variations-style)',
-		'--blockera-controls-variations-color-bk':
-			'var(--blockera-controls-block-variations-style-bk)',
-		'--blockera-controls-variations-color-darker-20':
-			'var(--blockera-controls-block-variations-style-darker-20)',
-	};
+	return GLOBAL_STYLES_STYLE_VARIATION_CSS_VARS;
 };
 
 /**
