@@ -66,7 +66,8 @@ export default function IconPickerModal({
 	);
 	const [isUploadUpgradeOpen, setIsUploadUpgradeOpen] = useState(false);
 	const isUploadUpgradeOpenRef = useRef(false);
-	const suppressUpgradeCloseRef = useRef(false);
+	// Ignore one spurious picker close while the nested upgrade modal dismisses.
+	const closingUpgradeRef = useRef(false);
 
 	const sanitizedDraft = sanitizeRawSVGString(draftSvgString);
 	const hasValidDraft = sanitizedDraft !== '';
@@ -128,7 +129,6 @@ export default function IconPickerModal({
 
 			if (isCustomIconUploadLocked()) {
 				isUploadUpgradeOpenRef.current = true;
-				suppressUpgradeCloseRef.current = true;
 				setIsUploadUpgradeOpen(true);
 				return;
 			}
@@ -142,17 +142,21 @@ export default function IconPickerModal({
 	);
 
 	const handleUpgradePromptClose = useCallback(() => {
-		if (suppressUpgradeCloseRef.current) {
-			suppressUpgradeCloseRef.current = false;
-			return;
-		}
-
+		closingUpgradeRef.current = true;
 		isUploadUpgradeOpenRef.current = false;
 		setIsUploadUpgradeOpen(false);
+		window.setTimeout(() => {
+			closingUpgradeRef.current = false;
+		}, 0);
 	}, []);
 
 	const handleIconPickerClose = useCallback(() => {
+		if (closingUpgradeRef.current) {
+			return;
+		}
+
 		if (isUploadUpgradeOpenRef.current || isUploadUpgradeOpen) {
+			// Nested modal open triggers a spurious picker close — ignore it.
 			return;
 		}
 
