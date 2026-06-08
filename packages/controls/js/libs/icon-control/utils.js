@@ -127,6 +127,15 @@ export function getCustomIconFeatureType() {
 }
 
 /**
+ * Whether custom icon file upload (drop / media library) is locked to PRO.
+ *
+ * @return {boolean} True on free; false when Pro filter unlocks uploads.
+ */
+export function isCustomIconUploadLocked() {
+	return getCustomIconFeatureType() === 'native';
+}
+
+/**
  * Read the first dropped SVG file as text.
  *
  * @param {FileList|File[]} files   Dropped files.
