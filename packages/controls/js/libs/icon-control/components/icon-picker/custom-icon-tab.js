@@ -16,7 +16,11 @@ import { Icon } from '@blockera/icons';
 import { Button, MediaUploader } from '../../../';
 import { FeatureWrapper } from '../../../feature-wrapper';
 import ConditionalWrapper from '../../../conditional-wrapper';
-import { sanitizeRawSVGString, getCustomIconFeatureType } from '../../utils';
+import {
+	sanitizeRawSVGString,
+	getCustomIconFeatureType,
+	isCustomIconUploadLocked,
+} from '../../utils';
 import SvgEditorPreview from './svg-editor/svg-editor-preview';
 
 const SVG_PLACEHOLDER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -31,7 +35,7 @@ export default function CustomIconTab({
 	const sanitizedDraft = sanitizeRawSVGString(draftSvgString);
 	const hasValidPreview = sanitizedDraft !== '';
 	const customIconFeatureType = getCustomIconFeatureType();
-	const isCustomIconLocked = customIconFeatureType === 'native';
+	const isUploadLocked = isCustomIconUploadLocked();
 
 	const updateDraft = useCallback(
 		(svgString, uploadSVG = null) => {
@@ -92,7 +96,6 @@ export default function CustomIconTab({
 			<SvgEditorPreview
 				svgString={sanitizedDraft}
 				onChange={handleSvgInput}
-				disabled={isCustomIconLocked}
 			/>
 		);
 	} else if (uploadUrl) {
@@ -127,7 +130,7 @@ export default function CustomIconTab({
 				</div>
 
 				<ConditionalWrapper
-					condition={isCustomIconLocked}
+					condition={isUploadLocked}
 					wrapper={(children) => (
 						<FeatureWrapper
 							type={customIconFeatureType}
@@ -156,6 +159,7 @@ export default function CustomIconTab({
 							onPaste={handlePaste}
 							placeholder={SVG_PLACEHOLDER}
 							spellCheck={false}
+							disabled={isUploadLocked}
 						/>
 					</div>
 				</ConditionalWrapper>
@@ -169,7 +173,7 @@ export default function CustomIconTab({
 				</div>
 
 				<ConditionalWrapper
-					condition={isCustomIconLocked}
+					condition={isUploadLocked}
 					wrapper={(children) => (
 						<FeatureWrapper
 							type={customIconFeatureType}
