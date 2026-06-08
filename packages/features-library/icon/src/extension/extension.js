@@ -196,6 +196,8 @@ export const IconExtension: ComponentType<{
 					icon: '',
 					library: '',
 					renderedIcon: CORE_ICON_EMPTY_RENDERED_ICON,
+					svgString: '',
+					uploadSVG: '',
 				};
 
 				handleOnChangeAttributes('blockeraIcon', emptyIcon, {
@@ -212,6 +214,8 @@ export const IconExtension: ComponentType<{
 					icon: '',
 					library: '',
 					renderedIcon: '',
+					svgString: '',
+					uploadSVG: '',
 				};
 
 				handleOnChangeAttributes('blockeraIcon', emptyIcon, {

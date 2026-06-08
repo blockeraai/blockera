@@ -126,6 +126,46 @@ export function getCustomIconFeatureType() {
 	);
 }
 
+/**
+ * Whether custom icon file upload (drop / media library) is locked to PRO.
+ *
+ * @return {boolean} True on free; false when Pro filter unlocks uploads.
+ */
+export function isCustomIconUploadLocked() {
+	return getCustomIconFeatureType() === 'native';
+}
+
+/**
+ * Read the first dropped SVG file as text.
+ *
+ * @param {FileList|File[]} files   Dropped files.
+ * @param {Function}        onRead  Callback with the SVG string.
+ */
+export function readSvgFromDroppedFiles(files, onRead) {
+	if (!files?.length) {
+		return;
+	}
+
+	const file = files[0];
+	const isSvgFile =
+		file.type === 'image/svg+xml' ||
+		file.name?.toLowerCase().endsWith('.svg');
+
+	if (!isSvgFile) {
+		return;
+	}
+
+	const reader = new FileReader();
+
+	reader.onload = () => {
+		if (typeof reader.result === 'string') {
+			onRead(reader.result);
+		}
+	};
+
+	reader.readAsText(file);
+}
+
 export function getLibraryIcons({
 	library,
 	query,

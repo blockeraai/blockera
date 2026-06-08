@@ -170,22 +170,32 @@ export function useIconPickerModal({
 			return false;
 		}
 
-		if ('' !== currentIcon.uploadSVG) {
+		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
+			return true;
+		}
+
+		if (
+			!isUndefined(currentIcon?.renderedIcon) &&
+			!isEmpty(currentIcon?.renderedIcon)
+		) {
 			return true;
 		}
 
 		if (
 			!isUndefined(currentIcon?.svgString) &&
-			'' !== currentIcon.svgString
+			!isEmpty(currentIcon?.svgString)
 		) {
 			return true;
 		}
 
-		if (null === currentIcon.icon) {
-			return false;
+		if (
+			!isUndefined(currentIcon?.uploadSVG?.url) &&
+			!isEmpty(currentIcon?.uploadSVG?.url)
+		) {
+			return true;
 		}
 
-		return '' !== currentIcon.icon;
+		return false;
 	}, [currentIcon]);
 
 	const iconContextValue = useMemo(

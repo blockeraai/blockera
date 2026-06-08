@@ -1,6 +1,36 @@
 @import "./stroke-icon-preview";
 
 .blockera-control-icon {
+	> .components-drop-zone {
+		position: absolute;
+		inset: 0;
+		z-index: 5;
+		pointer-events: none;
+
+		.components-drop-zone__content {
+			height: 100%;
+			max-height: 100%;
+			border-radius: var(--blockera-controls-border-radius);
+		}
+
+		&.is-dragging-over-document,
+		&.is-dragging-over-element {
+			z-index: 100;
+			pointer-events: auto;
+		}
+
+		&.is-active.is-dragging-over-element {
+			.components-drop-zone__content {
+				opacity: 1;
+			}
+
+			.components-drop-zone__content-inner {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+	}
+
 	background: repeating-conic-gradient(
 			#eaeaea 0%,
 			#eaeaea 25%,

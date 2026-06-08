@@ -5,7 +5,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useCallback, useState } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
+import { DropZone } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -20,14 +21,15 @@ import { isString, isEmpty, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { UpgradePrompt, Flex } from '../';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
 import { isCustomIcon } from './utils';
 import { Button, BaseControl, Tooltip } from '../index';
 import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
+import CustomIconUploadUpgradePrompt from './components/icon-picker/custom-icon-upload-upgrade-prompt';
 import { useIconPickerModal } from './hooks/use-icon-picker-modal';
+import { useIconPreviewFileDrop } from './hooks/use-icon-preview-file-drop';
 
 function IconControl({
 	id,
@@ -76,6 +78,13 @@ function IconControl({
 	});
 
 	const { currentIcon } = iconContextValue;
+	const {
+		handlePreviewFilesDrop,
+		isUploadUpgradeOpen,
+		closeUploadUpgradePrompt,
+	} = useIconPreviewFileDrop({
+		onCommitSvg: commitIconAction,
+	});
 
 	function renderIcon() {
 		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
@@ -156,8 +165,6 @@ function IconControl({
 		return null;
 	}
 
-	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
-
 	return (
 		<IconContextProvider {...iconContextValue}>
 			<BaseControl
@@ -181,45 +188,12 @@ function IconControl({
 					)}
 					onClick={openModal}
 				>
-					{isOpenPromotion && (
-						<UpgradePrompt
-							lockedFeature={{
-								icon: (
-									<Icon
-										icon="upload"
-										library="wp"
-										iconSize={22}
-									/>
-								),
-								title: __('Custom SVG Icons', 'blockera'),
-								description: (
-									<Flex direction="column" gap="6px">
-										{__(
-											'Upload unlimited custom SVG icons',
-											'blockera'
-										)}
-										<Flex direction="column" gap="6px">
-											<span className="blockera-free-plan-hint">
-												{__(
-													'Free: No uploads allowed',
-													'blockera'
-												)}
-											</span>
-											<span className="blockera-pro-plan-hint">
-												{__(
-													'Pro: Upload unlimited custom icons',
-													'blockera'
-												)}
-											</span>
-										</Flex>
-									</Flex>
-								),
-							}}
-							isOpen={isOpenPromotion}
-							onClose={() => setIsOpenPromotion(false)}
-							type="modal"
-						/>
-					)}
+					<DropZone onFilesDrop={handlePreviewFilesDrop} />
+
+					<CustomIconUploadUpgradePrompt
+						isOpen={isUploadUpgradeOpen}
+						onClose={closeUploadUpgradePrompt}
+					/>
 
 					{hasIcon() ? (
 						<div

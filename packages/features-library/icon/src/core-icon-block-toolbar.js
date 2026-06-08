@@ -6,7 +6,12 @@
 import type { MixedElement } from 'react';
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { ToolbarButton, ToolbarGroup, Popover } from '@wordpress/components';
+import {
+	DropZone,
+	ToolbarButton,
+	ToolbarGroup,
+	Popover,
+} from '@wordpress/components';
 import {
 	BlockControls,
 	LinkControl,
@@ -25,7 +30,9 @@ import {
 } from '@blockera/blocks-core/js/libs/wordpress/icon/compatibility/link-attributes';
 import { IconPickerModalProvider } from '@blockera/controls/js/libs/icon-control/icon-picker-modal-provider';
 import { useIconPickerModal } from '@blockera/controls/js/libs/icon-control/hooks/use-icon-picker-modal';
+import { useIconPreviewFileDrop } from '@blockera/controls/js/libs/icon-control/hooks/use-icon-preview-file-drop';
 import IconPickerModal from '@blockera/controls/js/libs/icon-control/components/icon-picker/icon-picker-modal';
+import CustomIconUploadUpgradePrompt from '@blockera/controls/js/libs/icon-control/components/icon-picker/custom-icon-upload-upgrade-prompt';
 
 /**
  * Internal dependencies
@@ -128,6 +135,14 @@ export const CoreIconBlockToolbar = ({
 		id: `core-icon-toolbar-${clientId}`,
 		value: iconValue,
 		onCommit: handlePickerCommit,
+	});
+
+	const {
+		handlePreviewFilesDrop,
+		isUploadUpgradeOpen,
+		closeUploadUpgradePrompt,
+	} = useIconPreviewFileDrop({
+		onCommitSvg: handleUseCustomIcon,
 	});
 
 	const isInsideNavigation = useSelect(
@@ -250,6 +265,13 @@ export const CoreIconBlockToolbar = ({
 				</Popover>
 			)}
 			<div {...blockProps}>
+				<DropZone onFilesDrop={handlePreviewFilesDrop} />
+
+				<CustomIconUploadUpgradePrompt
+					isOpen={isUploadUpgradeOpen}
+					onClose={closeUploadUpgradePrompt}
+				/>
+
 				<CoreIconLinkWrapper
 					href={href}
 					linkTarget={linkTarget}
