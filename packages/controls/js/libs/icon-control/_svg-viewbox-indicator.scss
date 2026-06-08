@@ -1,0 +1,6 @@
+// Light outline on the rendered SVG box to visualize viewBox bounds.
+@mixin blockera-svg-viewbox-indicator {
+	svg {
+		box-shadow: 0 0 0 1px rgba(117, 117, 117, 0.35);
+	}
+}

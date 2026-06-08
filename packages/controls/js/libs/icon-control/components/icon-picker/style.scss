@@ -1,4 +1,5 @@
 @import "../../stroke-icon-preview";
+@import "../../svg-viewbox-indicator";
 
 .blockera-component-modal.blockera-control-icon-picker-modal {
 	max-width: 80%;
@@ -403,6 +404,7 @@
 			}
 
 			@include blockera-stroke-icon-svg-preview;
+			@include blockera-svg-viewbox-indicator;
 		}
 	}
 
@@ -535,6 +537,8 @@
 			align-items: center;
 			justify-content: center;
 			pointer-events: none;
+
+			@include blockera-svg-viewbox-indicator;
 
 			svg {
 				width: min(280px, 72%) !important;
