@@ -10,6 +10,12 @@ import {
 	SELECTABLE_SHAPE_TAGS,
 	parseInlineStyle,
 } from './svg-editor-utils';
+import {
+	collectEmbeddedSvgCssRules,
+	resolveEmbeddedCssPaintsForElement,
+	rewriteEmbeddedSvgStyleBlocks,
+	removeEmptyEmbeddedSvgStyleBlocks,
+} from './svg-css-paint';
 
 const PAINT_OK_VALUES = new Set([
 	'none',
@@ -90,6 +96,152 @@ function isPaintNormalizeTarget(element) {
 	}
 
 	return SCAN_TAGS.has(tag) || EXTRA_PAINT_TAGS.has(tag);
+}
+
+const EMBEDDED_CSS_PAINT_PROPS = ['fill', 'stroke', 'color', 'stop-color'];
+
+/**
+ * Whether an element already declares a paint property via attribute or inline style.
+ *
+ * @param {Element} element SVG element.
+ * @param {string}  prop    Paint property name.
+ * @return {boolean} Result of the check.
+ */
+function elementDeclaresPaintProp(element, prop) {
+	if (element.hasAttribute(prop)) {
+		return true;
+	}
+
+	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
+
+	return inlineStyle[prop] !== undefined && inlineStyle[prop] !== '';
+}
+
+/**
+ * Collect hardcoded paints declared in embedded `<style>` blocks.
+ *
+ * @param {SVGSVGElement} rootSvg SVG root.
+ * @return {string[]} Distinct normalizable paint values from CSS rules.
+ */
+function collectHardcodedPaintsFromEmbeddedCss(rootSvg) {
+	const fills = [];
+	const rules = collectEmbeddedSvgCssRules(rootSvg);
+
+	for (let i = 0; i < rules.length; i++) {
+		const declarations = rules[i].declarations;
+
+		for (let j = 0; j < EMBEDDED_CSS_PAINT_PROPS.length; j++) {
+			const prop = EMBEDDED_CSS_PAINT_PROPS[j];
+			const value = declarations[prop];
+
+			if (isNormalizablePaint(value)) {
+				fills.push(value.trim().toLowerCase());
+			}
+		}
+	}
+
+	return fills;
+}
+
+/**
+ * Collect hardcoded fills from CSS class/id rules applied to an element.
+ *
+ * @param {Element} element SVG element.
+ * @param {import('./svg-css-paint').SvgEmbeddedCssRule[]} cssRules Parsed CSS rules.
+ * @return {string[]} Distinct fill values needing fix.
+ */
+function collectHardcodedFillsFromEmbeddedCss(element, cssRules) {
+	const fills = [];
+	const cssPaints = resolveEmbeddedCssPaintsForElement(element, cssRules);
+	const cssFill = cssPaints.fill;
+
+	if (
+		cssFill &&
+		!elementDeclaresPaintProp(element, 'fill') &&
+		isNormalizablePaint(cssFill)
+	) {
+		fills.push(cssFill.trim().toLowerCase());
+	}
+
+	return fills;
+}
+
+/**
+ * Whether element has hardcoded stroke from embedded CSS rules.
+ *
+ * @param {Element} element SVG element.
+ * @param {import('./svg-css-paint').SvgEmbeddedCssRule[]} cssRules Parsed CSS rules.
+ * @return {boolean} Result of the check.
+ */
+function elementHasHardcodedStrokeFromEmbeddedCss(element, cssRules) {
+	const cssPaints = resolveEmbeddedCssPaintsForElement(element, cssRules);
+	const cssStroke = cssPaints.stroke;
+
+	return Boolean(
+		cssStroke &&
+		!elementDeclaresPaintProp(element, 'stroke') &&
+		isNormalizablePaint(cssStroke)
+	);
+}
+
+/**
+ * Materialize embedded CSS class/id paints onto elements as SVG attributes.
+ *
+ * @param {SVGSVGElement} rootSvg SVG root.
+ */
+function materializeEmbeddedCssPaints(rootSvg) {
+	const cssRules = collectEmbeddedSvgCssRules(rootSvg);
+
+	if (!cssRules.length) {
+		return;
+	}
+
+	const candidates = rootSvg.querySelectorAll('[class], [id]');
+
+	for (let i = 0; i < candidates.length; i++) {
+		const element = candidates[i];
+
+		if (
+			isInsidePaintNormalizeSkipContainer(element) ||
+			!isPaintNormalizeTarget(element)
+		) {
+			continue;
+		}
+
+		const cssPaints = resolveEmbeddedCssPaintsForElement(element, cssRules);
+
+		if (
+			cssPaints.fill &&
+			!elementDeclaresPaintProp(element, 'fill') &&
+			isNormalizablePaint(cssPaints.fill)
+		) {
+			element.setAttribute('fill', 'currentColor');
+		}
+
+		if (
+			cssPaints.stroke &&
+			!elementDeclaresPaintProp(element, 'stroke') &&
+			isNormalizablePaint(cssPaints.stroke)
+		) {
+			element.setAttribute('stroke', 'currentColor');
+		}
+
+		if (
+			cssPaints.color &&
+			!elementDeclaresPaintProp(element, 'color') &&
+			isNormalizablePaint(cssPaints.color)
+		) {
+			element.setAttribute('color', 'currentColor');
+		}
+
+		if (
+			cssPaints['stop-color'] &&
+			!elementDeclaresPaintProp(element, 'stop-color') &&
+			isNormalizablePaint(cssPaints['stop-color'])
+		) {
+			element.setAttribute('stop-color', 'currentColor');
+		}
+	}
 }
 
 /**
@@ -294,7 +446,9 @@ function elementHasHardcodedStroke(element) {
 function collectPaintScanElements(rootSvg) {
 	const elements = [rootSvg];
 	const seen = new Set([rootSvg]);
-	const painted = rootSvg.querySelectorAll('[fill], [stroke], [style]');
+	const painted = rootSvg.querySelectorAll(
+		'[fill], [stroke], [style], [class], [id]'
+	);
 
 	for (let i = 0; i < painted.length; i++) {
 		const node = painted[i];
@@ -334,8 +488,16 @@ export function svgNeedsIconColorFix(svgString) {
 	}
 
 	const scanElements = collectPaintScanElements(rootSvg);
+	const cssRules = collectEmbeddedSvgCssRules(rootSvg);
 	const distinctFills = new Set();
 	let needsFix = false;
+
+	const embeddedCssFills = collectHardcodedPaintsFromEmbeddedCss(rootSvg);
+
+	for (let j = 0; j < embeddedCssFills.length; j++) {
+		distinctFills.add(embeddedCssFills[j]);
+		needsFix = true;
+	}
 
 	for (let i = 0; i < scanElements.length; i++) {
 		const element = scanElements[i];
@@ -346,7 +508,21 @@ export function svgNeedsIconColorFix(svgString) {
 			needsFix = true;
 		}
 
+		const cssFills = collectHardcodedFillsFromEmbeddedCss(
+			element,
+			cssRules
+		);
+
+		for (let j = 0; j < cssFills.length; j++) {
+			distinctFills.add(cssFills[j]);
+			needsFix = true;
+		}
+
 		if (elementHasHardcodedStroke(element)) {
+			needsFix = true;
+		}
+
+		if (elementHasHardcodedStrokeFromEmbeddedCss(element, cssRules)) {
 			needsFix = true;
 		}
 	}
@@ -665,6 +841,8 @@ export function normalizeSvgForIconColor(rootSvg) {
 		markup = rootSvg.outerHTML || '';
 	}
 
+	materializeEmbeddedCssPaints(rootSvg);
+
 	if (isStrokeSvgMarkup(markup)) {
 		normalizeStrokeIconDom(rootSvg);
 	} else {
@@ -672,5 +850,7 @@ export function normalizeSvgForIconColor(rootSvg) {
 	}
 
 	normalizeRemainingHardcodedPaints(rootSvg);
+	rewriteEmbeddedSvgStyleBlocks(rootSvg, isNormalizablePaint, 'currentColor');
+	removeEmptyEmbeddedSvgStyleBlocks(rootSvg);
 	removeGradientDefinitions(rootSvg);
 }
