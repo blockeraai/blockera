@@ -91,6 +91,9 @@ class Utils {
 
 				// Add the prefix around the part.
 				$modifiedWithPrefix = preg_replace( $pattern, $prefix . $part, $trimmedSel );
+				if ( str_contains( $prefix, $part ) ) {
+					$modifiedWithPrefix = $prefix;
+				}
 
 				// Add the modified selector to the array with the prefix.
 				if ( ! in_array( $modifiedWithPrefix, $modifiedSelectors, true ) ) {

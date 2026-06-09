@@ -865,7 +865,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume received selector is another reference to root, so we should concat together.
-		if ( preg_match( $pattern, $selector, $matches ) ) {
+		if ( preg_match( $pattern, $selector, $matches )) {
 
 			// Appending blockera root unique css selector into picked your selector.
 			return \Blockera\Utils\Utils::modifySelectorPos(
@@ -907,6 +907,11 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			
 			// Return selector with root for block level style.
 			return "{$base}{$root}{$pseudo}";
+		}
+
+		// If root contains selector, we should return the root.
+		if ( str_contains( $root, $selector ) ) {
+			return $root;
 		}
 
 		// If selector started with dot or any other classname of child elements, we imagine it's other classname of root or child of root.
