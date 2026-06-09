@@ -669,11 +669,6 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$root = $args['blockera-unique-selector'];
 
-		// If the style is global style for block, we should append the selector to the root body for specificity reasons.
-		if (isset($args['is-global-style']) && $args['is-global-style']) {
-			$root = ":root body :where($root)";
-		}
-
 		return blockera_append_root_block_css_selector(
 			$selector,
 			$root,
@@ -841,6 +836,14 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
+		$wrap_with_global_style = static function ( string $selector ) use ( $args, $root ) {
+			if (isset($args['is-global-style']) && $args['is-global-style']) {
+				return ":root body :where($root)";
+			}
+
+			return $selector;
+		};
+
 		// We should remove the ampersand character from beginning of the selector if it exists, because it's a indicate root selector and we provided it in next process.
 		if (preg_match( '/^&[^\s|^&]/', $selector )) {
 			
@@ -865,16 +868,36 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume received selector is another reference to root, so we should concat together.
-		if ( preg_match( $pattern, $selector, $matches )) {
+		if ( preg_match( $pattern, $selector, $matches ) ) {
+
+			$block_part = $matches[0];
+			$variations = \Blockera\Utils\Utils::extractBlockVariationClasses( $root );
+
+			$preferred_root = \Blockera\Utils\Utils::preferContainedRootSelector(
+				$selector,
+				$root,
+				$block_part,
+				[
+					'wrap' => $wrap_with_global_style,
+				]
+			);
+
+			if ( null !== $preferred_root ) {
+
+				return $preferred_root;
+			}
 
 			// Appending blockera root unique css selector into picked your selector.
-			return \Blockera\Utils\Utils::modifySelectorPos(
-				$selector,
-				$matches[0],
-				[
-					'prefix' => $root,
-					'suffix' => '',
-				]
+			return $wrap_with_global_style(
+				\Blockera\Utils\Utils::modifySelectorPos(
+					$selector,
+					$block_part,
+					[
+						'prefix'     => $root,
+						'suffix'     => '',
+						'variations' => $variations,
+					]
+				)
 			);
 		}
 

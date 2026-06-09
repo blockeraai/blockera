@@ -357,6 +357,31 @@ class TestHelpers extends \WP_UnitTestCase {
 		$this->assertEquals( '.my-root.my-class', $result );
 	}
 
+	public function testSelectorWithBlockNameWhenRootAlreadyContainsTarget() {
+
+		$selector = '.wp-block-my-block:hover:focus';
+		$root     = '.my-root.wp-block-my-block.is-style-outline.is-size-small';
+		$args     = [ 'block-name' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.my-root.wp-block-my-block.is-style-outline.is-size-small:hover:focus',
+			$result
+		);
+	}
+
+	public function testSelectorWithBlockNameWhenRootContainsTargetWithOnlyStyleVariation() {
+
+		$selector = '.wp-block-my-block:hover';
+		$root     = '.my-root.wp-block-my-block.is-style-outline';
+		$args     = [ 'block-name' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root.wp-block-my-block.is-style-outline:hover', $result );
+	}
+
 	/**
 	 * Test single selector with a suffix.
 	 */
