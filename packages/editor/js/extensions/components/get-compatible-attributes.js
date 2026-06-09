@@ -100,8 +100,8 @@ export const getCompatibleAttributes = ({
 		'undefined' === typeof attributes?.blockeraPropsId &&
 			availableAttributes?.blockeraPropsId
 			? mergeObject(
-					{ ...attributes },
-					prepareBlockeraDefaultAttributesValues(defaultAttributes)
+					prepareBlockeraDefaultAttributesValues(defaultAttributes),
+					{ ...attributes }
 				)
 			: { ...attributes },
 		args
