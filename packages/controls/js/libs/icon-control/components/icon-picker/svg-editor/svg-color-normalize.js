@@ -8,7 +8,6 @@ import {
 	parseSvgMarkup,
 	serializeSvgElement,
 	SELECTABLE_SHAPE_TAGS,
-	isInsideExcludedContainer,
 	parseInlineStyle,
 } from './svg-editor-utils';
 
@@ -22,6 +21,76 @@ const PAINT_OK_VALUES = new Set([
 const SHAPE_SELECTOR = 'path, rect, circle, ellipse, line, polyline, polygon';
 
 const SCAN_TAGS = new Set(['svg', 'g', ...SELECTABLE_SHAPE_TAGS]);
+
+/** Containers skipped for paint normalization (symbol/defs content is still normalized). */
+const PAINT_NORMALIZE_SKIP_CONTAINERS = new Set([
+	'clippath',
+	'mask',
+	'style',
+	'metadata',
+	'title',
+	'desc',
+	'lineargradient',
+	'radialgradient',
+	'marker',
+	'pattern',
+]);
+
+/** Tags that carry paint attrs but are not scanned as editable shapes. */
+const EXTRA_PAINT_TAGS = new Set(['use', 'text', 'tspan', 'textpath', 'stop']);
+
+/**
+ * Whether an element lives inside a container that should not be paint-normalized.
+ *
+ * Unlike editor selection exclusions, `<symbol>` and `<defs>` content is normalized
+ * so `<use href="#…">` icons inherit theme colors from rewritten source shapes.
+ *
+ * @param {Element} element Element to check.
+ * @return {boolean} Result of the check.
+ */
+function isInsidePaintNormalizeSkipContainer(element) {
+	let parent = element.parentElement;
+
+	while (parent) {
+		const tag = parent.nodeName.toLowerCase();
+
+		if (PAINT_NORMALIZE_SKIP_CONTAINERS.has(tag)) {
+			return true;
+		}
+
+		if (tag === 'svg') {
+			return false;
+		}
+
+		parent = parent.parentElement;
+	}
+
+	return false;
+}
+
+/**
+ * Whether an element tag can carry fill/stroke needing normalization.
+ *
+ * @param {Element} element SVG element.
+ * @return {boolean} Result of the check.
+ */
+function isPaintNormalizeTarget(element) {
+	if (!element || element.nodeType !== 1) {
+		return false;
+	}
+
+	const tag = element.nodeName.toLowerCase();
+
+	if (
+		PAINT_NORMALIZE_SKIP_CONTAINERS.has(tag) ||
+		tag === 'defs' ||
+		tag === 'symbol'
+	) {
+		return false;
+	}
+
+	return SCAN_TAGS.has(tag) || EXTRA_PAINT_TAGS.has(tag);
+}
 
 /**
  * @typedef {{ needsFix: boolean, variant: 'info' | 'warning', distinctFillCount: number }} SvgColorFixState
@@ -224,35 +293,22 @@ function elementHasHardcodedStroke(element) {
  */
 function collectPaintScanElements(rootSvg) {
 	const elements = [rootSvg];
-	const shapes = rootSvg.querySelectorAll(SHAPE_SELECTOR);
+	const seen = new Set([rootSvg]);
+	const painted = rootSvg.querySelectorAll('[fill], [stroke], [style]');
 
-	for (let i = 0; i < shapes.length; i++) {
-		const shape = shapes[i];
+	for (let i = 0; i < painted.length; i++) {
+		const node = painted[i];
 
-		if (!isInsideExcludedContainer(shape)) {
-			elements.push(shape);
-		}
-	}
-
-	const groups = rootSvg.querySelectorAll('g');
-
-	for (let i = 0; i < groups.length; i++) {
-		const group = groups[i];
-
-		if (isInsideExcludedContainer(group)) {
+		if (seen.has(node) || isInsidePaintNormalizeSkipContainer(node)) {
 			continue;
 		}
 
-		const hasFill =
-			group.hasAttribute('fill') ||
-			parseInlineStyle(group.getAttribute('style') || '').fill;
-		const hasStroke =
-			group.hasAttribute('stroke') ||
-			parseInlineStyle(group.getAttribute('style') || '').stroke;
-
-		if (hasFill || hasStroke) {
-			elements.push(group);
+		if (!isPaintNormalizeTarget(node)) {
+			continue;
 		}
+
+		seen.add(node);
+		elements.push(node);
 	}
 
 	return elements;
@@ -351,13 +407,18 @@ function setInlineStyleProp(element, prop, value) {
 function normalizeFilledElementFill(element) {
 	const attrFill = element.getAttribute('fill');
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
+	const inlineFill = inlineStyle.fill;
+	const hasNormalizableFill =
+		isNormalizablePaint(attrFill) || isNormalizablePaint(inlineFill);
 
-	if (isNormalizablePaint(attrFill)) {
-		element.setAttribute('fill', 'currentColor');
+	if (!hasNormalizableFill) {
+		return;
 	}
 
-	if (isNormalizablePaint(inlineStyle.fill)) {
-		setInlineStyleProp(element, 'fill', 'currentColor');
+	element.setAttribute('fill', 'currentColor');
+
+	if (isNormalizablePaint(inlineFill)) {
+		setInlineStyleProp(element, 'fill', null);
 	}
 }
 
@@ -369,13 +430,18 @@ function normalizeFilledElementFill(element) {
 function normalizeFilledElementStroke(element) {
 	const attrStroke = element.getAttribute('stroke');
 	const inlineStyle = parseInlineStyle(element.getAttribute('style') || '');
+	const inlineStroke = inlineStyle.stroke;
+	const hasNormalizableStroke =
+		isNormalizablePaint(attrStroke) || isNormalizablePaint(inlineStroke);
 
-	if (isNormalizablePaint(attrStroke)) {
-		element.setAttribute('stroke', 'currentColor');
+	if (!hasNormalizableStroke) {
+		return;
 	}
 
-	if (isNormalizablePaint(inlineStyle.stroke)) {
-		setInlineStyleProp(element, 'stroke', 'currentColor');
+	element.setAttribute('stroke', 'currentColor');
+
+	if (isNormalizablePaint(inlineStroke)) {
+		setInlineStyleProp(element, 'stroke', null);
 	}
 }
 
@@ -432,13 +498,17 @@ function normalizeStrokeIconDom(rootSvg) {
 	for (let i = 0; i < shapes.length; i++) {
 		const node = shapes[i];
 
-		if (isInsideExcludedContainer(node)) {
+		if (isInsidePaintNormalizeSkipContainer(node)) {
 			continue;
 		}
 
 		const isFillAccent = isSvgFillAccentElement(node);
 
 		if (isFillAccent) {
+			// User-initiated normalize: rewrite hardcoded accent fills (keep white).
+			normalizeFilledElementFill(node);
+			normalizeFilledElementStroke(node);
+
 			const rootStroke = rootSvg.getAttribute('stroke') || 'currentColor';
 			const rootStrokeWidth = rootSvg.getAttribute('stroke-width');
 
@@ -454,7 +524,6 @@ function normalizeStrokeIconDom(rootSvg) {
 			}
 
 			normalizeInlineStroke(node, rootStroke);
-			stripInlineFill(node);
 			continue;
 		}
 
@@ -480,17 +549,17 @@ function normalizeStrokeIconDom(rootSvg) {
 	for (let i = 0; i < withFill.length; i++) {
 		const node = withFill[i];
 
-		if (isInsideExcludedContainer(node)) {
+		if (isInsidePaintNormalizeSkipContainer(node)) {
 			continue;
 		}
 
 		if (isSvgFillAccentElement(node)) {
+			normalizeFilledElementFill(node);
+			normalizeFilledElementStroke(node);
 			continue;
 		}
 
-		const tag = node.nodeName.toLowerCase();
-
-		if (!SCAN_TAGS.has(tag)) {
+		if (!isPaintNormalizeTarget(node)) {
 			continue;
 		}
 
@@ -548,6 +617,37 @@ function normalizeFilledIconDom(rootSvg) {
 }
 
 /**
+ * Final pass: rewrite any remaining hardcoded fill/stroke on paint targets.
+ *
+ * @param {SVGSVGElement} rootSvg Root SVG element.
+ */
+function normalizeRemainingHardcodedPaints(rootSvg) {
+	const painted = rootSvg.querySelectorAll(
+		'[fill], [stroke], [style], [stop-color]'
+	);
+
+	for (let i = 0; i < painted.length; i++) {
+		const node = painted[i];
+
+		if (
+			isInsidePaintNormalizeSkipContainer(node) ||
+			!isPaintNormalizeTarget(node)
+		) {
+			continue;
+		}
+
+		normalizeFilledElementFill(node);
+		normalizeFilledElementStroke(node);
+
+		const stopColor = node.getAttribute('stop-color');
+
+		if (isNormalizablePaint(stopColor)) {
+			node.setAttribute('stop-color', 'currentColor');
+		}
+	}
+}
+
+/**
  * Rewrite hardcoded fill/stroke colors so Blockera icon color can apply.
  *
  * @param {SVGSVGElement | null} rootSvg Live root SVG in the editor.
@@ -571,5 +671,6 @@ export function normalizeSvgForIconColor(rootSvg) {
 		normalizeFilledIconDom(rootSvg);
 	}
 
+	normalizeRemainingHardcodedPaints(rootSvg);
 	removeGradientDefinitions(rootSvg);
 }
