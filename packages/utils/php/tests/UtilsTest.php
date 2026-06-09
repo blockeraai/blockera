@@ -180,6 +180,72 @@ class UtilsTest extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Test prefix merge preserves multiple trailing pseudo-classes.
+	 */
+	public function testModifySelectorWithPrefixContainingPartAndMultiplePseudos() {
+
+		$selector = '.wp-block-sample:hover:focus';
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.blockera-block.wp-block-sample' ];
+
+		$expected = '.blockera-block.wp-block-sample:hover:focus';
+
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
+	}
+
+	/**
+	 * Test prefix merge appends style and size variations together.
+	 */
+	public function testModifySelectorWithPrefixContainingPartAndBothVariations() {
+
+		$selector = '.wp-block-sample:hover';
+		$part     = '.wp-block-sample';
+		$args     = [
+			'prefix'     => '.blockera-block.wp-block-sample.is-style-outline.is-size-small',
+			'variations' => [ '.is-style-outline', '.is-size-small' ],
+		];
+
+		$expected = '.blockera-block.wp-block-sample.is-style-outline.is-size-small:hover';
+
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
+	}
+
+	public function testPreferContainedRootSelectorWithMultiplePseudosAndVariations() {
+
+		$selector = '.wp-block-button:hover:focus';
+		$root     = '.blockera-block.wp-block-button.is-style-outline.is-size-small';
+		$part     = '.wp-block-button';
+
+		$expected = '.blockera-block.wp-block-button.is-style-outline.is-size-small:hover:focus';
+
+		$this->assertSame(
+			$expected,
+			Utils::preferContainedRootSelector( $selector, $root, $part )
+		);
+	}
+
+	public function testExtractTrailingPseudosWithMultipleTokens() {
+
+		$this->assertSame( ':hover:focus', Utils::extractTrailingPseudos( '.wp-block-button:hover:focus' ) );
+		$this->assertSame( '::before', Utils::extractTrailingPseudos( '.wp-block-button::before' ) );
+		$this->assertSame( '', Utils::extractTrailingPseudos( '.wp-block-button' ) );
+	}
+
+	public function testAppendVariationsAfterPartWithStyleAndSize() {
+
+		$selector = '.blockera-block.wp-block-button';
+
+		$this->assertSame(
+			'.blockera-block.wp-block-button.is-style-outline.is-size-small',
+			Utils::appendVariationsAfterPart(
+				$selector,
+				'.wp-block-button',
+				[ '.is-style-outline', '.is-size-small' ]
+			)
+		);
+	}
+
+	/**
 	 * Test snake case conversion with various input strings
 	 *
 	 * @dataProvider snakeCaseProvider
