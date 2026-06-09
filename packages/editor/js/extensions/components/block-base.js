@@ -54,6 +54,7 @@ import { BlockeraLayoutToolbar } from '../libs/layout/components/blockera-layout
 import { BlockPartials } from './block-partials';
 import { BlockFillPartials } from './block-fill-partials';
 import { sanitizeBlockAttributes } from '../hooks/utils';
+import { buildPresetPreviewAttributePatch } from '../libs/preset-preview-attributes';
 import { BlockInspectorEditContent } from './block-inspector-edit-content';
 import { BlockInspectorTabSync } from './block-inspector-tab-sync';
 import { BlockBaseInspectorBundle } from './block-base-inspector-bundle';
@@ -819,12 +820,36 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 		insideBlockInspector,
 	]);
 
+	const setPreviewAttributePatchForContext = useCallback(
+		(patch: Object | null): void => {
+			if (!patch || !Object.keys(patch).length) {
+				setPresetPreviewAttributePatch(null);
+				return;
+			}
+
+			if (patch.blockeraBlockStates || patch.blockeraInnerBlocks) {
+				setPresetPreviewAttributePatch(patch);
+				return;
+			}
+
+			setPresetPreviewAttributePatch(
+				buildPresetPreviewAttributePatch(patch, {
+					currentBlock,
+					currentState,
+					currentBreakpoint,
+					currentInnerBlockState,
+				})
+			);
+		},
+		[currentBlock, currentState, currentBreakpoint, currentInnerBlockState]
+	);
+
 	const presetCanvasPreviewValue = useMemo(
 		() => ({
-			setPreviewAttributePatch: setPresetPreviewAttributePatch,
+			setPreviewAttributePatch: setPreviewAttributePatchForContext,
 			primePresetHover,
 		}),
-		[primePresetHover]
+		[primePresetHover, setPreviewAttributePatchForContext]
 	);
 
 	const blockStyleProps = useMemo(() => {
