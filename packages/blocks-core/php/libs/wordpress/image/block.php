@@ -16,43 +16,27 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				// Feature selectors.
-				'width'                     => $sizeSelector,
-				'object-fit'               => $sizeSelector,
-				'box-sizing'                => $sizeSelector,
-				'blockeraRatio'             => [
+				'width' => $sizeSelector,
+				'object-fit' => $sizeSelector,
+				'box-sizing' => $sizeSelector,
+				'blockeraRatio' => [
 					'root' => $sizeSelector,
 				],
-				'border'                    => $sizeSelector,
-				'shadow'                    => $sizeSelector,
-				'filter'                    => $sizeSelector,
-				'border-radius'                    => $sizeSelector,
+				'border' => $sizeSelector,
+				'shadow' => $sizeSelector,
+				'filter' => $sizeSelector,
+				'border-radius' => $sizeSelector,
 				// Inner blocks selectors.
 				'blockera/elements/caption' => [
 					'root' => '&:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption',
 				],
-				'blockera/elements/link'    => [
+				'blockera/elements/link' => [
 					'root' => 'a',
 				],
 				'blockera/elements/img-tag' => [
 					'root' => '&.wp-block-image :is(img, svg)',
 				],
-				'htmlEditable' => [
-					'root' => '&.wp-block-image :is(img, svg)',
-				],
 			]
-		),
-		'supports' => array_merge(
-			$args['supports'] ?? [],
-			[
-				'blockFeatures' => [
-					'icon' => [
-						'status' => true,
-						'htmlEditable' => [
-							'status' => true,
-						],
-					],
-				],
-			],
 		),
 	]
 );

@@ -37,6 +37,9 @@ export const SVG_EDITOR_SELECTED_CLASS = 'blockera-svg-editor-selected';
 export const SVG_EDITOR_HOVER_CLASS = 'blockera-svg-editor-hoverable';
 export const SVG_EDITOR_OVERLAY_CLASS = 'blockera-svg-editor-selection-overlay';
 
+/** Editor-only class tokens stripped from SVG markup on commit. */
+const SVG_EDITOR_CLASSES = [SVG_EDITOR_SELECTED_CLASS, SVG_EDITOR_HOVER_CLASS];
+
 /**
  * Parse SVG markup into a document element.
  *
@@ -103,7 +106,7 @@ export function serializeSvgElement(svgElement, options = {}) {
 }
 
 /**
- * Strip all editor-only data attributes from a cloned SVG tree before commit.
+ * Strip all editor-only attributes and classes from a cloned SVG tree before commit.
  *
  * @param {Element} root Cloned SVG root.
  */
@@ -124,12 +127,13 @@ function stripEditorAttributesFromClone(root) {
 		node.removeAttribute('data-blockera-stroke-source');
 	}
 
-	const selectedNodes = root.querySelectorAll(
-		`.${SVG_EDITOR_SELECTED_CLASS}`
-	);
+	for (let c = 0; c < SVG_EDITOR_CLASSES.length; c++) {
+		const className = SVG_EDITOR_CLASSES[c];
+		const markedNodes = root.querySelectorAll(`.${className}`);
 
-	for (let i = 0; i < selectedNodes.length; i++) {
-		selectedNodes[i].classList.remove(SVG_EDITOR_SELECTED_CLASS);
+		for (let i = 0; i < markedNodes.length; i++) {
+			markedNodes[i].classList.remove(className);
+		}
 	}
 }
 
