@@ -678,9 +678,15 @@ export const getCompatibleBlockCssSelector = ({
 		selectors: blockSelectors,
 	});
 
-	if (selector && selector.trim()) {
+	const blockTypeRoot = blockSelectors?.root;
+	const registrationSelector =
+		selector && selector.trim()
+			? preferBlockTypeRootSelector(selector, blockTypeRoot)
+			: selector;
+
+	if (registrationSelector && registrationSelector.trim()) {
 		if (isStyleVariation && styleVariationName) {
-			register(selector, {
+			register(registrationSelector, {
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
 					if ('default' === styleVariationName) {
@@ -737,16 +743,18 @@ export const getCompatibleBlockCssSelector = ({
 			});
 		} else if (isGlobalStylesWrapper) {
 			// Normalizing selector before registration for global styles purposes.
-			register(selector, {
+			register(registrationSelector, {
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
 					return getSelectorWithRootBody(generatedSelector, false);
 				},
 			});
 		} else if (isInnerBlock(currentBlock)) {
-			register(selector);
+			register(registrationSelector);
 		} else {
-			register(appendRootBlockCssSelector(selector, rootSelector));
+			register(
+				appendRootBlockCssSelector(registrationSelector, rootSelector)
+			);
 		}
 	} else {
 		register(rootSelector);
@@ -861,6 +869,28 @@ export function prepareBlockCssSelector(params: {
 	// Prepared selector with query of support ids like: 'a.b.c.d'.
 	return selector;
 }
+
+/**
+ * Prefer block type root when it already contains the prepared support selector.
+ *
+ * @param {string} preparedSelector The prepared support selector.
+ * @param {string | void} blockTypeRoot The block type root selector.
+ * @return {string} The preferred selector for registration.
+ */
+const preferBlockTypeRootSelector = (
+	preparedSelector: string,
+	blockTypeRoot?: string
+): string => {
+	if (
+		blockTypeRoot &&
+		preparedSelector?.trim() &&
+		blockTypeRoot.includes(preparedSelector.trim())
+	) {
+		return blockTypeRoot;
+	}
+
+	return preparedSelector;
+};
 
 /**
  * Appending received root css selector into base block css selector.
