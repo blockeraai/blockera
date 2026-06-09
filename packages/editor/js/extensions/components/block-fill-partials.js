@@ -211,6 +211,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 							{isInnerBlock(currentBlock) && (
 								<InnerBlockCard
 									insideBlockInspector={insideBlockInspector}
+									variationSurface={variationSurface}
 									isActive={isActive}
 									clientId={clientId}
 									activeBlock={currentBlock}
@@ -284,6 +285,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 							{isInnerBlock(currentBlock) && (
 								<InnerBlockCard
 									insideBlockInspector={insideBlockInspector}
+									variationSurface={variationSurface}
 									isActive={isActive}
 									clientId={clientId}
 									activeBlock={currentBlock}

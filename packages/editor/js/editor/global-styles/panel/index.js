@@ -51,7 +51,10 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockSizeVariation,
 		setSelectedBlockStyleVariation,
 	} = dispatch(STORE_NAME);
-	const statesManagerHandleOnChangeRef = useRef<
+	const styleStatesManagerHandleOnChangeRef = useRef<
+		((value: Object) => void) | null,
+	>(null);
+	const sizeStatesManagerHandleOnChangeRef = useRef<
 		((value: Object) => void) | null,
 	>(null);
 	const blocks = getBlocks();
@@ -113,7 +116,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	const resetBlockStateToNormal = useResetBlockStateToNormal({
 		clientId: (selectedBlock || memoizedSelectedBlock)?.clientId || '',
 		blockName: selectedBlockStyle || '',
-		statesManagerHandleOnChangeRef,
+		statesManagerHandleOnChangeRef: styleStatesManagerHandleOnChangeRef,
 		resetAllGlobalStylesSurfaces: true,
 	});
 
@@ -124,7 +127,7 @@ export const BlockGlobalStylesPanelScreen = ({
 		resetBlockStateToNormal,
 		setSelectedBlockStyleVariation,
 		setSelectedBlockSizeVariation,
-		statesManagerHandleOnChangeRef,
+		statesManagerHandleOnChangeRef: styleStatesManagerHandleOnChangeRef,
 		className: bodySupportingClassname,
 	});
 
@@ -160,21 +163,15 @@ export const BlockGlobalStylesPanelScreen = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, hasBlockeraExtensions]);
 
-	const sharedAppProps = useMemo(
+	const sharedAppBaseProps = useMemo(
 		() => ({
 			selectedBlockClientId: {
 				...(selectedBlock ? { ...selectedBlock } : {}),
 				...(memoizedSelectedBlock ? { ...memoizedSelectedBlock } : {}),
 			}.clientId,
 			blockType,
-			statesManagerHandleOnChangeRef,
 		}),
-		[
-			selectedBlock,
-			memoizedSelectedBlock,
-			blockType,
-			statesManagerHandleOnChangeRef,
-		]
+		[selectedBlock, memoizedSelectedBlock, blockType]
 	);
 
 	if (!hasBlockeraExtensions) {
@@ -206,13 +203,19 @@ export const BlockGlobalStylesPanelScreen = ({
 				}
 			>
 				<App
-					{...sharedAppProps}
+					{...sharedAppBaseProps}
+					statesManagerHandleOnChangeRef={
+						styleStatesManagerHandleOnChangeRef
+					}
 					variationSurface={VARIATION_SURFACE_STYLE}
 				/>
 				{hasSizeVariations && (
 					<aside className="blockera-global-styles-panel-aside">
 						<App
-							{...sharedAppProps}
+							{...sharedAppBaseProps}
+							statesManagerHandleOnChangeRef={
+								sizeStatesManagerHandleOnChangeRef
+							}
 							variationSurface={VARIATION_SURFACE_SIZE}
 						/>
 					</aside>

@@ -1,28 +1,33 @@
 // @flow
 
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { useBlockeraPopoverActiveColorStyle } from '../../../extensions/components/use-blockera-popover-active-color-style';
-import { useGlobalStylesPanelContext } from './context';
+import { useContext, useSyncExternalStore } from '@wordpress/element';
 
 /**
- * Global-styles popover colors — panel context overrides store defaults
- * (fallback client id, variation surface, unsaved state data).
+ * Internal dependencies
+ */
+import { GlobalStylesPanelActiveColorStoreContext } from './context';
+import { createGlobalStylesPanelActiveColorStore } from './global-styles-panel-active-color-store';
+
+const FALLBACK_ACTIVE_COLOR_STORE = createGlobalStylesPanelActiveColorStore();
+
+/**
+ * Read popover active-color CSS variables for the current global-styles panel App.
  *
- * @param {string} blockName Registered block type name.
+ * Resolution runs once in {@see GlobalStylesPanelActiveColorShell}; this hook
+ * only subscribes to that snapshot so BlockStyles / StyleItemMenu re-renders
+ * do not re-run {@see useBlockeraActiveColor}.
+ *
+ * Prefer relying on {@see PopoverActiveColorStyleProvider} from the shell when
+ * using `@blockera/controls` `Popover` without an explicit `style` prop.
+ *
  * @return {Object} React style object with Blockera CSS custom properties.
  */
-export function useGlobalStylesPanelActiveColorStyle(
-	blockName: string
-): Object {
-	const { fallbackClientId, variationSurface, style } =
-		useGlobalStylesPanelContext();
-
-	return useBlockeraPopoverActiveColorStyle({
-		name: blockName,
-		clientId: fallbackClientId,
-		variationSurface,
-		blockeraUnsavedData: style?.blockeraUnsavedData,
-	});
+export function useGlobalStylesPanelActiveColorStyle(): Object {
+	const store =
+		useContext(GlobalStylesPanelActiveColorStoreContext) ||
+		FALLBACK_ACTIVE_COLOR_STORE;
+	return useSyncExternalStore(store.subscribe, store.getSnapshot);
 }

@@ -9,6 +9,7 @@ import {
 	useEffect,
 	useContext,
 	useCallback,
+	useRef,
 	createContext,
 } from '@wordpress/element';
 import type { MixedElement } from 'react';
@@ -49,6 +50,9 @@ import {
 } from '../block-variation-support';
 import { getExtensionsUiContext } from '../../../../extensions/components/extensions-ui-context';
 import { useResetBlockStateToNormal } from '../../../../extensions/libs/block-card/block-states/hooks';
+import { useStableBlockeraUnsavedData } from '../stable-blockera-unsaved-data';
+import { createGlobalStylesPanelActiveColorStore } from '../global-styles-panel-active-color-store';
+import { GlobalStylesPanelActiveColorShell } from '../global-styles-panel-active-color-shell';
 
 // Helper functions
 export const getBlockAttributes = (name: string): Object => {
@@ -244,6 +248,9 @@ export const GlobalStylesPanelContext: Object = createContext({
 		current: null,
 	},
 });
+
+export const GlobalStylesPanelActiveColorStoreContext: Object =
+	createContext(null);
 
 export const GlobalStylesPanelContextConsumer = ({
 	children,
@@ -590,6 +597,15 @@ export const GlobalStylesPanelContextProvider = ({
 		]
 	);
 
+	const blockeraUnsavedDataForActiveColor = useStableBlockeraUnsavedData(
+		style?.blockeraUnsavedData
+	);
+
+	const activeColorStoreRef = useRef(null);
+	if (!activeColorStoreRef.current) {
+		activeColorStoreRef.current = createGlobalStylesPanelActiveColorStore();
+	}
+
 	const contextValue = useMemo(
 		() => ({
 			style,
@@ -639,9 +655,21 @@ export const GlobalStylesPanelContextProvider = ({
 	);
 
 	return (
-		<GlobalStylesPanelContext.Provider value={contextValue}>
-			{children}
-		</GlobalStylesPanelContext.Provider>
+		<GlobalStylesPanelActiveColorStoreContext.Provider
+			value={activeColorStoreRef.current}
+		>
+			<GlobalStylesPanelActiveColorShell
+				store={activeColorStoreRef.current}
+				blockName={name}
+				fallbackClientId={fallbackClientId}
+				variationSurface={variationSurface}
+				blockeraUnsavedData={blockeraUnsavedDataForActiveColor}
+			>
+				<GlobalStylesPanelContext.Provider value={contextValue}>
+					{children}
+				</GlobalStylesPanelContext.Provider>
+			</GlobalStylesPanelActiveColorShell>
+		</GlobalStylesPanelActiveColorStoreContext.Provider>
 	);
 };
 
