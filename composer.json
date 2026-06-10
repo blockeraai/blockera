@@ -151,10 +151,10 @@
 	},
 	"scripts": {
 		"test": "@php ./vendor/bin/phpunit",
-		"lint": "phpcs --standard=phpcs.xml",
+		"lint": "./bin/phpcs.sh --standard=phpcs.xml",
 		"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
 		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage",
-		"phpcs": "phpcs",
+		"phpcs": "./bin/phpcs.sh",
 		"phpcbf": "phpcbf"
 	},
 	"autoload-dev": {

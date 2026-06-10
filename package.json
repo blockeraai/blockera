@@ -293,7 +293,7 @@
 			"npm run lint:css"
 		],
 		"*.php": [
-			"./vendor/bin/phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml"
+			"./bin/phpcs.sh --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml"
 		]
 	},
 	"wp-env": {
