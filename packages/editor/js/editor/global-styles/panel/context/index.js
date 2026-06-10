@@ -124,7 +124,7 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 		}
 
 		// Process all keys if has not default property.
-		if (!defaultStyles[key]?.hasOwnProperty('default')) {
+		if (!defaultStyles?.[key]?.hasOwnProperty('default')) {
 			if (!styles[key]?.hasOwnProperty('value')) {
 				cleanStyles[key] = {
 					value: styles[key],
