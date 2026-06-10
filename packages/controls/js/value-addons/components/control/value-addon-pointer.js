@@ -70,7 +70,9 @@ export default function ({
 							'open-value-addon',
 						controlProps.isDeletedDV && 'is-value-addon-deleted'
 					)}
-					onClick={handleDynamicValueModal}
+					onMouseDown={(e: SyntheticMouseEvent<EventTarget>) => {
+						handleDynamicValueModal(e);
+					}}
 					{...pointerProps}
 				>
 					<DynamicValueIcon
@@ -110,7 +112,9 @@ export default function ({
 								controlProps.isDeletedPlainThemeJsonPreset) &&
 								'is-value-addon-deleted'
 						)}
-						onClick={handleVariableModal}
+						onMouseDown={(e: SyntheticMouseEvent<EventTarget>) => {
+							handleVariableModal(e);
+						}}
 						{...pointerProps}
 					>
 						<Icon

@@ -17,7 +17,8 @@ body {
 	position: absolute;
 	top: -14px;
 	left: -14px;
-	z-index: 12;
+	/* Above `.blockera-field-label:hover` (z-index: 100) so click completes on the pointer. */
+	z-index: 110;
 	pointer-events: none;
 	direction: revert;
 	text-align: left;
@@ -208,6 +209,15 @@ body {
 	&.blockera-value-addon-support-dynamic-value,
 	&.blockera-value-addon-support-variable {
 		position: relative;
+
+		/* Pointer sits on the control/label edge; keep the control column above label hover stacking. */
+		& > .blockera-field-control:has(
+				.blockera-control-value-addon-pointers:hover
+			),
+		& > .blockera-field-control:has(.open-value-addon),
+		& > .blockera-field-control:has(.active-value-addon) {
+			z-index: 101;
+		}
 
 		&:hover {
 			& > .blockera-field.blockera-field-control {
