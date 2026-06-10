@@ -24,7 +24,11 @@ import { isString, isEmpty, isUndefined } from '@blockera/utils';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { isCustomIcon } from './utils';
+import {
+	isCustomIcon,
+	prepareSvgForPreviewDisplay,
+	svgHasPreservedColors,
+} from './utils';
 import { Button, BaseControl, Tooltip } from '../index';
 import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
 import CustomIconUploadUpgradePrompt from './components/icon-picker/custom-icon-upload-upgrade-prompt';
@@ -86,6 +90,23 @@ function IconControl({
 		onCommitSvg: commitIconAction,
 	});
 
+	function renderSvgHtmlPreview(previewSvg: string) {
+		const preparedSvg = prepareSvgForPreviewDisplay(previewSvg);
+		const isMultiColor = svgHasPreservedColors(preparedSvg);
+
+		return (
+			<span
+				className={controlInnerClassNames(
+					'icon-preview-svg',
+					isMultiColor ? 'is-multi-color' : ''
+				)}
+				dangerouslySetInnerHTML={{
+					__html: preparedSvg,
+				}}
+			/>
+		);
+	}
+
 	function renderIcon() {
 		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
 			return <Icon {...currentIcon} iconSize={50} />;
@@ -109,13 +130,7 @@ function IconControl({
 			}
 
 			if (isCustomIcon(currentIcon)) {
-				return (
-					<div
-						dangerouslySetInnerHTML={{
-							__html: previewSvg,
-						}}
-					/>
-				);
+				return renderSvgHtmlPreview(previewSvg);
 			}
 
 			previewSvg = prepareIconSvgForStorage(
@@ -123,13 +138,7 @@ function IconControl({
 				currentIcon?.library || ''
 			);
 
-			return (
-				<div
-					dangerouslySetInnerHTML={{
-						__html: previewSvg,
-					}}
-				/>
-			);
+			return renderSvgHtmlPreview(previewSvg);
 		}
 
 		if (
@@ -137,13 +146,7 @@ function IconControl({
 			!isEmpty(currentIcon?.svgString) &&
 			isString(currentIcon?.svgString)
 		) {
-			return (
-				<div
-					dangerouslySetInnerHTML={{
-						__html: currentIcon.svgString,
-					}}
-				/>
-			);
+			return renderSvgHtmlPreview(currentIcon.svgString);
 		}
 
 		if (

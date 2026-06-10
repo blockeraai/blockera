@@ -61,6 +61,97 @@ export function isCustomIcon(icon) {
 	return false;
 }
 
+const SVG_PREVIEW_SIZE = 50;
+
+/**
+ * Whether SVG markup carries explicit fill colors (not currentColor / none).
+ *
+ * @param {string} svgMarkup Raw SVG markup.
+ * @return {boolean} True when SVG has hardcoded fill paints.
+ */
+export function svgHasPreservedColors(svgMarkup) {
+	if (!svgMarkup || typeof svgMarkup !== 'string') {
+		return false;
+	}
+
+	const fills = new Set();
+	const attrFills = svgMarkup.match(/\bfill=["']([^"']+)["']/gi) || [];
+
+	for (const match of attrFills) {
+		const value = match.replace(/^fill=["']/i, '').replace(/["']$/, '');
+
+		if (
+			value &&
+			!['none', 'currentcolor', 'inherit', 'transparent'].includes(
+				value.toLowerCase()
+			)
+		) {
+			fills.add(value.toLowerCase());
+		}
+	}
+
+	const styleFills = svgMarkup.match(/fill\s*:\s*([^;"'}]+)/gi) || [];
+
+	for (const match of styleFills) {
+		const value = match.replace(/fill\s*:\s*/i, '').trim();
+
+		if (
+			value &&
+			!['none', 'currentcolor', 'inherit', 'transparent'].includes(
+				value.toLowerCase()
+			) &&
+			!value.toLowerCase().startsWith('url(')
+		) {
+			fills.add(value.toLowerCase());
+		}
+	}
+
+	return fills.size > 0;
+}
+
+/**
+ * Ensure custom SVG preview markup has a definite render box in the sidebar control.
+ *
+ * @param {string} svgString Raw SVG markup.
+ * @param {number} previewSize Preview box size in pixels.
+ * @return {string} SVG markup sized for the icon control preview.
+ */
+export function prepareSvgForPreviewDisplay(
+	svgString,
+	previewSize = SVG_PREVIEW_SIZE
+) {
+	if (!svgString || typeof svgString !== 'string') {
+		return '';
+	}
+
+	if (typeof document === 'undefined') {
+		return svgString;
+	}
+
+	const template = document.createElement('template');
+	template.innerHTML = svgString.trim();
+	const svg = template.content.querySelector('svg');
+
+	if (!svg) {
+		return svgString;
+	}
+
+	const width = svg.getAttribute('width');
+	const height = svg.getAttribute('height');
+	const hasViewBox = svg.hasAttribute('viewBox');
+
+	if (!width && !height && hasViewBox) {
+		svg.setAttribute('width', String(previewSize));
+		svg.setAttribute('height', String(previewSize));
+	} else if (!width && height) {
+		svg.setAttribute('width', height);
+	} else if (width && !height && hasViewBox) {
+		svg.setAttribute('height', width);
+	}
+
+	return svg.outerHTML;
+}
+
 /**
  * Build draft SVG content from the current icon for the Custom Icon tab.
  *

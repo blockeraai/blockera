@@ -68,6 +68,48 @@
 			max-height: 80%;
 		}
 
+		.blockera-control-icon-preview-svg {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 50px;
+			height: 50px;
+			max-width: 80px;
+			max-height: 80px;
+			position: relative;
+			z-index: 1;
+			flex-shrink: 0;
+
+			svg {
+				width: 100% !important;
+				height: 100% !important;
+				max-width: 80px;
+				max-height: 80px;
+			}
+		}
+
+		// Multi-color custom SVGs must keep hardcoded fills; stroke-preview rules flatten them.
+		.blockera-control-icon-preview-svg.is-multi-color {
+			svg[fill="none"] {
+				path:not([fill]),
+				rect:not([fill]),
+				circle:not([fill]),
+				ellipse:not([fill]),
+				polygon:not([fill]),
+				polyline:not([fill]) {
+					fill: revert;
+					stroke: revert;
+				}
+
+				[fill]:not([fill="none"]):not([fill="currentColor"]):not(
+						[fill="currentcolor"]
+					) {
+					fill: revert;
+					stroke: revert;
+				}
+			}
+		}
+
 		// Preview uses StrokeSvgIcon without library-* wrapper — stroke rules required here.
 		@include blockera-stroke-icon-svg-preview;
 
