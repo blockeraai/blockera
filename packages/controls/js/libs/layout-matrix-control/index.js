@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useRef, useEffect } from '@wordpress/element';
+import { useRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -391,37 +391,36 @@ export default function LayoutMatrixControl({
 		: 'justifyContent';
 
 	const clickTimerRef = useRef();
-	const prevDirectionRef = useRef(value?.direction ?? direction);
 
-	// ToggleSelectControl updates only `direction` via nested propId; remap axes here
-	// after direction lands in store so align-items / justify-content stay in sync.
-	useEffect(() => {
-		const prev = prevDirectionRef.current;
-		const next = value?.direction ?? direction;
-
+	const handleDirectionChange = (nextDirection: string): void => {
 		if (
-			isDirectionActive &&
-			prev !== undefined &&
-			prev !== '' &&
-			next !== undefined &&
-			next !== '' &&
-			prev !== next
+			!isDirectionActive ||
+			!direction ||
+			!nextDirection ||
+			direction === nextDirection
 		) {
-			const remapped = remapFlexLayoutForDirectionChange(
-				value.alignItems ?? '',
-				value.justifyContent ?? '',
-				next
-			);
-
-			setValue({
-				...value,
-				...remapped,
-			});
+			return;
 		}
 
-		prevDirectionRef.current = next;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [value?.direction]);
+		const remapped = remapFlexLayoutForDirectionChange(
+			value.alignItems ?? '',
+			value.justifyContent ?? '',
+			nextDirection
+		);
+
+		if (
+			remapped.alignItems === value.alignItems &&
+			remapped.justifyContent === value.justifyContent &&
+			remapped.direction === value?.direction
+		) {
+			return;
+		}
+
+		setValue({
+			...value,
+			...remapped,
+		});
+	};
 
 	const onClickHandler = (
 		event?: MouseEvent,
@@ -462,6 +461,7 @@ export default function LayoutMatrixControl({
 							},
 						]}
 						defaultValue={direction}
+						onChange={handleDirectionChange}
 					/>
 				)}
 
