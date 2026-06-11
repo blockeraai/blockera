@@ -50,8 +50,10 @@ import {
 	saveSiteEditorEntityForPreview,
 } from './urlUtils';
 import { useTemplatePreviewUrl } from './useTemplatePreviewUrl';
+import { useTemplatePartPreviewUrl } from './useTemplatePartPreviewUrl';
 import {
 	TEMPLATE_POST_TYPE,
+	TEMPLATE_PART_POST_TYPE,
 	NON_PREVIEWABLE_POST_TYPES,
 	isTemplateAutosavePreviewType,
 } from './constants';
@@ -101,7 +103,8 @@ export interface UseEntityReturn {
 	 * Frontend URL to view/preview this entity.
 	 * - Regular posts/pages: uses the entity's permalink
 	 * - wp_template: generates appropriate URL based on template slug (e.g., search, 404, category)
-	 * - Other site editor types (parts, nav, blocks): null (not directly previewable)
+	 * - wp_template_part: isolated preview page with only the part content
+	 * - Other site editor types (nav, blocks): null (not directly previewable)
 	 */
 	viewUrl: string | null;
 	/** viewUrl is a valid URL. */
@@ -311,17 +314,17 @@ export function useEntity(
 				| undefined;
 			isViewable = postTypeObj?.viewable ?? false;
 
-			// For wp_template, consider it "viewable" for preview purposes
-			// Templates can be previewed via generated URLs (search, 404, archive, etc.)
-			// even though they don't have traditional permalinks
+			// Templates and template parts are previewable via generated URLs even though
+			// they don't have traditional permalinks.
 			const isTemplate = postType === TEMPLATE_POST_TYPE;
-			if (isTemplate) {
+			const isTemplatePart = postType === TEMPLATE_PART_POST_TYPE;
+			if (isTemplate || isTemplatePart) {
 				isViewable = true;
 			}
 
 			// Get saveable state for current document
 			// For site editor types, check saveability even if not traditionally "viewable"
-			if (isCurrentDocument && (isViewable || isTemplate)) {
+			if (isCurrentDocument && isViewable) {
 				isSaveable = editorSelect.isEditedPostSaveable() ?? false;
 			}
 
@@ -442,10 +445,16 @@ export function useEntity(
 		entityData.slug
 	);
 
+	const { previewUrl: templatePartPreviewUrl } = useTemplatePartPreviewUrl(
+		postType,
+		postId
+	);
+
 	// Compute view URL from entity link or template preview URL
 	// - For regular post types: use the entity's link property
 	// - For wp_template: use the generated template preview URL
-	// - For other site editor types (parts, nav, blocks): return null (not previewable)
+	// - For wp_template_part: use the isolated template part preview URL
+	// - For other site editor types (nav, blocks): return null (not previewable)
 	const viewUrl = useMemo((): string | null => {
 		// Regular post types use their direct link
 		if (!isSiteEditorType) {
@@ -457,8 +466,12 @@ export function useEntity(
 			return templatePreviewUrl;
 		}
 
-		// Other site editor types (wp_template_part, wp_navigation, wp_block)
-		// don't have a single frontend page to preview
+		// wp_template_part uses an isolated preview page (theme//slug id)
+		if (postType === TEMPLATE_PART_POST_TYPE) {
+			return templatePartPreviewUrl;
+		}
+
+		// Other site editor types (wp_navigation, wp_block) are not previewable
 		if (
 			NON_PREVIEWABLE_POST_TYPES.includes(
 				postType as (typeof NON_PREVIEWABLE_POST_TYPES)[number]
@@ -468,7 +481,13 @@ export function useEntity(
 		}
 
 		return null;
-	}, [isSiteEditorType, postType, entityData.link, templatePreviewUrl]);
+	}, [
+		isSiteEditorType,
+		postType,
+		entityData.link,
+		templatePreviewUrl,
+		templatePartPreviewUrl,
+	]);
 
 	// Validate view URL
 	const hasValidViewUrl = useMemo(() => isValidUrl(viewUrl), [viewUrl]);

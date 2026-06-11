@@ -10,6 +10,7 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 import { select } from '@wordpress/data';
+import { store as coreStore } from '@wordpress/core-data';
 import { store as editorStore } from '@wordpress/editor';
 import { addQueryArgs } from '@wordpress/url';
 
@@ -20,6 +21,7 @@ import {
 	SITE_EDITOR_POST_TYPES,
 	HOME_URL_TEMPLATES,
 	TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE,
+	TEMPLATE_PART_PREVIEW_ARG,
 	type ParsedTemplateSlug,
 } from './constants';
 
@@ -330,6 +332,38 @@ export function parseTemplateSlug(
 }
 
 /**
+ * Build the isolated frontend URL for previewing a template part.
+ *
+ * Template part IDs use the theme//slug format (e.g. twentytwentyfive//header).
+ *
+ * @param templatePartId Template part id (theme//slug).
+ * @param homeUrl        Site home URL.
+ * @return Preview URL or null when the id cannot be parsed.
+ */
+export function buildTemplatePartPreviewUrl(
+	templatePartId: string,
+	homeUrl: string
+): string | null {
+	const separatorIndex = templatePartId.indexOf('//');
+	if (separatorIndex <= 0) {
+		return null;
+	}
+
+	const theme = templatePartId.slice(0, separatorIndex);
+	const slug = templatePartId.slice(separatorIndex + 2);
+
+	if (!theme || !slug) {
+		return null;
+	}
+
+	return addQueryArgs(homeUrl, {
+		[TEMPLATE_PART_PREVIEW_ARG]: '1',
+		theme,
+		slug,
+	});
+}
+
+/**
  * Autosave a site editor template and return preview_link from the REST response.
  *
  * Cold path: runs only when the user opens live preview with unsaved template edits.
@@ -367,12 +401,49 @@ export async function saveSiteEditorEntityForPreview(
 		data.excerpt = excerpt;
 	}
 
-	try {
-		const response = await apiFetch<{ preview_link?: string }>({
-			path: `/wp/v2/${restBase}/${postId}/autosaves`,
-			method: 'POST',
+	const templateId = String(postId);
+	// Match core-data: template ids are theme//slug — must not encode slashes.
+	const autosavePath = `/wp/v2/${restBase}/${templateId}/autosaves`;
+	const updatePath = `/wp/v2/${restBase}/${templateId}`;
+
+	const coreSelect = select(coreStore) as {
+		getEntityRecord: (
+			kind: string,
+			name: string,
+			id: string | number
+		) => { source?: string; wp_id?: number } | undefined;
+	};
+	const entity = coreSelect.getEntityRecord('postType', postType, postId);
+	// Theme-file templates have no wp_id; WordPress rejects /autosaves with rest_invalid_template.
+	const isThemeFile = !entity?.wp_id || entity?.source === 'theme';
+
+	const requestPreviewLink = async (
+		path: string,
+		method: 'POST' | 'PUT'
+	): Promise<{ preview_link?: string }> =>
+		apiFetch<{ preview_link?: string }>({
+			path,
+			method,
 			data,
 		});
+
+	try {
+		let response: { preview_link?: string };
+
+		if (isThemeFile) {
+			response = await requestPreviewLink(updatePath, 'PUT');
+		} else {
+			try {
+				response = await requestPreviewLink(autosavePath, 'POST');
+			} catch (autosaveError) {
+				const err = autosaveError as { code?: string };
+				if (err?.code === 'rest_invalid_template') {
+					response = await requestPreviewLink(updatePath, 'PUT');
+				} else {
+					throw autosaveError;
+				}
+			}
+		}
 
 		return response.preview_link ?? null;
 	} catch {
