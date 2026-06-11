@@ -3,6 +3,7 @@
 /**
  * Blockera dependencies
  */
+import { getValueAddonRealValue } from '@blockera/controls';
 import { isStrokeIconLibrary } from '@blockera/icons';
 
 /**
@@ -84,6 +85,40 @@ export const getAttrValue = (attr: Object | string | void): string => {
 };
 
 /**
+ * Resolve a Blockera attribute (plain, wrapped, or value-addon) to CSS color.
+ *
+ * @param {Object | string | void} attr     Attribute value or `{ value }` wrapper.
+ * @param {{ blockName?: string }} [options] Optional block scope for preset resolution.
+ * @return {string} Resolved CSS color.
+ */
+export const getResolvedIconColorValue = (
+	attr: Object | string | void,
+	options?: {| blockName?: string |}
+): string => {
+	if (!attr) {
+		return '';
+	}
+
+	let raw = attr;
+
+	if (
+		typeof attr === 'object' &&
+		attr.value !== undefined &&
+		!attr.isValueAddon
+	) {
+		raw = attr.value;
+	}
+
+	const resolved = getValueAddonRealValue(raw, options);
+
+	if (resolved === undefined || resolved === null || resolved === '') {
+		return '';
+	}
+
+	return String(resolved);
+};
+
+/**
  * Whether a blockeraIcon value object is renderable (matches PHP blockera_core_icon_has_renderable_blockera_icon).
  *
  * @param {Object} iconValue Normalized blockeraIcon value.
@@ -139,8 +174,8 @@ export const getIconTransform = (attributes: Object): string => {
 
 export const getIconPresentationStyle = (attributes: Object): Object => {
 	const iconColor =
-		getAttrValue(attributes?.blockeraFontColor) ||
-		getAttrValue(attributes?.blockeraIconColor);
+		getResolvedIconColorValue(attributes?.blockeraFontColor) ||
+		getResolvedIconColorValue(attributes?.blockeraIconColor);
 	const transform = getIconTransform(attributes);
 	const library = getBlockeraIconValue(attributes)?.library;
 	const isStrokeLibrary = isStrokeIconLibrary(library);

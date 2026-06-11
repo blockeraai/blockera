@@ -8,6 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
+import { getValueAddonRealValue } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 import { STORE_NAME as EXTENSIONS_CONFIG_STORE_NAME } from '@blockera/editor/js/extensions/libs/base/store/constants';
 import type { CssRule } from '@blockera/editor/js/style-engine/types';
@@ -245,40 +246,49 @@ export const IconStyles = ({
 	}
 
 	// When color maps to another attribute (e.g. blockeraFontColor on core/icon), typography owns CSS.
-	if (
-		iconColorAttributeId === DEFAULT_ICON_COLOR_ATTRIBUTE &&
-		isActiveField(blockeraIconColor) &&
-		currentBlockAttributes.blockeraIconColor !==
-			attributes.blockeraIconColor.default
-	) {
-		const pickedSelector = getCompatibleBlockCssSelector({
-			...sharedParams,
-			query: 'blockeraIconColor',
-			support: 'blockeraIconColor',
-			fallbackSupportId: getBlockSupportFallback(
-				blockSupports,
-				'blockeraIconColor'
-			),
-		});
+	if (iconColorAttributeId === DEFAULT_ICON_COLOR_ATTRIBUTE) {
+		const resolvedIconColor = getValueAddonRealValue(
+			currentBlockAttributes.blockeraIconColor,
+			{ blockName }
+		);
+		const defaultIconColor = getValueAddonRealValue(
+			attributes.blockeraIconColor.default,
+			{ blockName }
+		);
 
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraIconColor: [
-						{
-							...staticDefinitionParams,
-							properties: {
-								'--blockera--icon--color':
-									currentBlockAttributes.blockeraIconColor,
+		if (
+			isActiveField(blockeraIconColor) &&
+			resolvedIconColor !== defaultIconColor
+		) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraIconColor',
+				support: 'blockeraIconColor',
+				fallbackSupportId: getBlockSupportFallback(
+					blockSupports,
+					'blockeraIconColor'
+				),
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraIconColor: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'--blockera--icon--color':
+										resolvedIconColor,
+								},
 							},
-						},
-					],
-				},
-				blockProps,
-				pickedSelector
-			),
-		});
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
 	}
 
 	if (

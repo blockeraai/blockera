@@ -19,7 +19,10 @@ import {
 /**
  * Internal dependencies
  */
-import { getAttrValue } from './icon-attribute-utils';
+import {
+	getAttrValue,
+	getResolvedIconColorValue,
+} from './icon-attribute-utils';
 
 /** Placeholder SVG used when clearing standalone core/icon selection. */
 export const CORE_ICON_EMPTY_RENDERED_ICON =
@@ -163,8 +166,8 @@ export const renderLibraryIconMarkup = (
  * @return {string} Resolved color value.
  */
 export const getCoreIconColorFromAttributes = (attributes: Object): string =>
-	getAttrValue(attributes?.blockeraFontColor) ||
-	getAttrValue(attributes?.blockeraIconColor) ||
+	getResolvedIconColorValue(attributes?.blockeraFontColor) ||
+	getResolvedIconColorValue(attributes?.blockeraIconColor) ||
 	'';
 
 /**

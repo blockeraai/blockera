@@ -42,6 +42,7 @@ import {
 } from '../helpers';
 import {
 	decodeRenderedIcon,
+	getResolvedIconColorValue,
 	hasBlockeraIconValue,
 } from '../icon-attribute-utils';
 import {
@@ -130,8 +131,11 @@ export const IconExtension: ComponentType<{
 	const renderIcon = useCallback(
 		async (newValue, effectiveItems = {}) => {
 			const color = !isUndefined(effectiveItems?.blockeraIconColor?.value)
-				? effectiveItems?.blockeraIconColor?.value
-				: iconColor?.value || iconColor;
+				? getResolvedIconColorValue(
+						effectiveItems.blockeraIconColor.value,
+						{ blockName }
+					)
+				: getResolvedIconColorValue(iconColor, { blockName });
 
 			return renderLibraryIconMarkup(newValue, {
 				iconColor: color,
@@ -140,7 +144,7 @@ export const IconExtension: ComponentType<{
 				iconPosition,
 			});
 		},
-		[iconColor, iconSize, iconGap, iconPosition]
+		[iconColor, iconSize, iconGap, iconPosition, blockName]
 	);
 
 	const handleOnChangeAttributesIcon = useCallback(
@@ -559,6 +563,8 @@ export const IconExtension: ComponentType<{
 										</>
 									}
 									columns="columns-2"
+									controlAddonTypes={['variable']}
+									variableTypes={['color']}
 									defaultValue={
 										attributes?.[iconColorAttributeId]
 											?.default?.value

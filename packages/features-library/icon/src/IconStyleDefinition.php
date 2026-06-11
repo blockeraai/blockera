@@ -79,6 +79,13 @@ class IconStyleDefinition extends BaseStyleDefinition {
 				$this->setDeclaration($cssProperty, '-1');
 				break;
 				
+			case '--blockera--icon--color':
+				$this->setDeclaration(
+					$cssProperty,
+					blockera_get_value_addon_real_value($value)
+				);
+				break;
+
 			default:
 				$this->setDeclaration($cssProperty, $value);
 				break;

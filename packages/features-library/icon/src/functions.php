@@ -427,6 +427,38 @@ if ( ! function_exists('blockera_get_icon_size_attr_value')) {
 	}
 }
 
+if ( ! function_exists('blockera_resolve_icon_color_attr_value')) {
+	/**
+	 * Resolve icon color from a block attribute (plain, wrapped, or value-addon).
+	 *
+	 * @param array  $block     The block.
+	 * @param string $attr_name Attribute name.
+	 *
+	 * @return string
+	 */
+	function blockera_resolve_icon_color_attr_value( array $block, string $attr_name): string {
+		$attr = $block['attrs'][ $attr_name ] ?? '';
+
+		if (is_array($attr) && array_key_exists('value', $attr)) {
+			$raw = $attr['value'];
+		} else {
+			$raw = $attr;
+		}
+
+		if ('' === $raw || null === $raw) {
+			return '';
+		}
+
+		$resolved = blockera_get_value_addon_real_value($raw);
+
+		if (is_string($resolved) || is_numeric($resolved)) {
+			return (string) $resolved;
+		}
+
+		return '';
+	}
+}
+
 if ( ! function_exists('blockera_get_icon_color_attr_name')) {
 	/**
 	 * Attribute id used for icon color (iconConfig.blockeraIconColor.config.attribute).
@@ -464,14 +496,14 @@ if ( ! function_exists('blockera_get_icon_color_attr_value')) {
 	 */
 	function blockera_get_icon_color_attr_value( array $block): string {
 		$attr_name = blockera_get_icon_color_attr_name($block);
-		$value     = blockera_get_block_attr_value($block, $attr_name);
+		$value     = blockera_resolve_icon_color_attr_value($block, $attr_name);
 
 		if ('' !== $value || 'blockeraIconColor' === $attr_name) {
 			return $value;
 		}
 
 		// Legacy data saved on blockeraIconColor before attribute alias.
-		return blockera_get_block_attr_value($block, 'blockeraIconColor');
+		return blockera_resolve_icon_color_attr_value($block, 'blockeraIconColor');
 	}
 }
 
