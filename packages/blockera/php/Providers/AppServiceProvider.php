@@ -26,6 +26,7 @@ use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Blockera\Editor\PreviewButton;
+use Blockera\Editor\TemplatePreview;
 use Blockera\Editor\TabLocking;
 use Blockera\Editor\BulkActions;
 use Blockera\Editor\EditorPersistenceStore;
@@ -172,6 +173,8 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(PreviewButton::class);
 
+			$this->app->singleton(TemplatePreview::class);
+
 			$this->app->singleton(TabLocking::class);
 
 			$this->app->singleton(BulkActions::class);
@@ -218,6 +221,8 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make(Compatibility::class);
 
 		$this->app->make(PreviewButton::class);
+
+		$this->app->make(TemplatePreview::class);
 
 		$this->app->make(TabLocking::class);
 

@@ -48,6 +48,28 @@ export const NON_PREVIEWABLE_POST_TYPES = [
 export const TEMPLATE_POST_TYPE = 'wp_template' as const;
 
 /**
+ * Site editor post types that support autosave preview via REST.
+ * Maps post type to the wp/v2 collection slug used in autosave paths.
+ */
+export const TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE: Readonly<
+	Record<string, string>
+> = {
+	wp_template: 'templates',
+	wp_template_part: 'template-parts',
+} as const;
+
+/**
+ * Whether a post type supports template autosave preview (draft preview without publish).
+ *
+ * @param postType Post type slug.
+ */
+export function isTemplateAutosavePreviewType(
+	postType: string | null | undefined
+): boolean {
+	return !!postType && postType in TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE;
+}
+
+/**
  * Parsed template slug information.
  * Contains the template type category and any entity/term identifiers.
  */

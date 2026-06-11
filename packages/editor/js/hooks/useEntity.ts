@@ -43,9 +43,18 @@ import type { Post, PostStatus, PostTypeConfig } from '@wordpress/core-data';
 /**
  * Internal dependencies
  */
-import { getEditorUrl, isSiteEditorPostType, isValidUrl } from './urlUtils';
+import {
+	getEditorUrl,
+	isSiteEditorPostType,
+	isValidUrl,
+	saveSiteEditorEntityForPreview,
+} from './urlUtils';
 import { useTemplatePreviewUrl } from './useTemplatePreviewUrl';
-import { TEMPLATE_POST_TYPE, NON_PREVIEWABLE_POST_TYPES } from './constants';
+import {
+	TEMPLATE_POST_TYPE,
+	NON_PREVIEWABLE_POST_TYPES,
+	isTemplateAutosavePreviewType,
+} from './constants';
 
 /**
  * Entity record with title that can be string or object.
@@ -464,9 +473,10 @@ export function useEntity(
 	// Validate view URL
 	const hasValidViewUrl = useMemo(() => isValidUrl(viewUrl), [viewUrl]);
 
-	// Get the unstable save for preview dispatch
 	const { __unstableSaveForPreview } = useDispatch(editorStore) as {
-		__unstableSaveForPreview: () => Promise<string>;
+		__unstableSaveForPreview: (options?: {
+			forceIsAutosaveable?: boolean;
+		}) => Promise<string>;
 	};
 
 	/**
@@ -478,13 +488,26 @@ export function useEntity(
 	 * @return The view/preview URL, or null if not available.
 	 */
 	const getPreviewUrl = useCallback(async (): Promise<string | null> => {
-		// For site editor templates, __unstableSaveForPreview doesn't work
-		// because templates don't have traditional permalinks.
-		// Use our computed viewUrl directly instead.
 		if (isSiteEditorType) {
-			// For templates, if dirty, we still use our computed preview URL
-			// The template content changes don't affect the preview URL
-			// (e.g., search template always previews at ?s=X)
+			// Template autosave preview: persist edits as autosave (not publish) and
+			// open the preview_link nonce URL. Only wp_template / wp_template_part
+			// expose the autosave REST endpoint Blockera extends server-side.
+			if (
+				entityData.dirty &&
+				entityData.isCurrentDocument &&
+				postType &&
+				postId &&
+				isTemplateAutosavePreviewType(postType)
+			) {
+				const previewLink = await saveSiteEditorEntityForPreview(
+					postType,
+					postId
+				);
+
+				if (previewLink && isValidUrl(previewLink)) {
+					return previewLink;
+				}
+			}
 			return viewUrl;
 		}
 
@@ -495,7 +518,15 @@ export function useEntity(
 
 		// If not dirty, return current viewUrl
 		return viewUrl;
-	}, [entityData.dirty, __unstableSaveForPreview, viewUrl, isSiteEditorType]);
+	}, [
+		entityData.dirty,
+		entityData.isCurrentDocument,
+		__unstableSaveForPreview,
+		viewUrl,
+		isSiteEditorType,
+		postType,
+		postId,
+	]);
 
 	/**
 	 * Prefetch this entity to ensure it's loaded.

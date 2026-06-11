@@ -8,6 +8,9 @@
 /**
  * WordPress dependencies
  */
+import apiFetch from '@wordpress/api-fetch';
+import { select } from '@wordpress/data';
+import { store as editorStore } from '@wordpress/editor';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -16,6 +19,7 @@ import { addQueryArgs } from '@wordpress/url';
 import {
 	SITE_EDITOR_POST_TYPES,
 	HOME_URL_TEMPLATES,
+	TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE,
 	type ParsedTemplateSlug,
 } from './constants';
 
@@ -323,4 +327,55 @@ export function parseTemplateSlug(
 		type: 'unknown',
 		originalSlug: templateSlug,
 	};
+}
+
+/**
+ * Autosave a site editor template and return preview_link from the REST response.
+ *
+ * Cold path: runs only when the user opens live preview with unsaved template edits.
+ * core-data drops preview_link when the autosave response id matches the template
+ * string id (e.g. twentytwentyfive//home), so we read it from the POST body.
+ *
+ * @param postType Site editor post type (wp_template or wp_template_part).
+ * @param postId   Template id (e.g. theme//home).
+ * @return Preview URL with preview_nonce, or null on failure.
+ */
+export async function saveSiteEditorEntityForPreview(
+	postType: string,
+	postId: string | number
+): Promise<string | null> {
+	const restBase = TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE[postType];
+	if (!restBase) {
+		return null;
+	}
+
+	const editorSelect = select(editorStore) as {
+		getEditedPostContent: () => string;
+		getEditedPostAttribute: (attr: string) => unknown;
+	};
+
+	// Mirror core-data autosave payload: content + optional title/excerpt only.
+	const data: Record<string, string> = {
+		content: editorSelect.getEditedPostContent(),
+	};
+	const title = editorSelect.getEditedPostAttribute('title');
+	const excerpt = editorSelect.getEditedPostAttribute('excerpt');
+	if (typeof title === 'string') {
+		data.title = title;
+	}
+	if (typeof excerpt === 'string') {
+		data.excerpt = excerpt;
+	}
+
+	try {
+		const response = await apiFetch<{ preview_link?: string }>({
+			path: `/wp/v2/${restBase}/${postId}/autosaves`,
+			method: 'POST',
+			data,
+		});
+
+		return response.preview_link ?? null;
+	} catch {
+		return null;
+	}
 }
