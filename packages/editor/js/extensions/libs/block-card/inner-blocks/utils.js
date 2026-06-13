@@ -4,6 +4,9 @@
  * Internal dependencies
  */
 import type { InnerBlockModel } from './types';
+import { isInnerBlockRegisteredForBlock as isInnerBlockRegisteredForBlockFromStore } from '../../utils';
+
+export { isInnerBlockRegisteredForBlockFromStore as isInnerBlockRegisteredForBlock };
 
 /**
  * Is virtual block.
