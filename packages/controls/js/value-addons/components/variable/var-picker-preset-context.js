@@ -27,9 +27,29 @@ export type VarPickerPresetContextValue = {
 	spacingPresetPreviewUsage?: string,
 	/**
 	 * When `variableType` is `color`, mirrors `controlProps.pickerProps.colorPresetPreviewUsage`
-	 * (font `color` vs `background-color` preview).
+	 * (font `color` vs `background-color` vs border color preview).
 	 */
 	colorPresetPreviewUsage?: string,
+	/**
+	 * When `variableType` is `filter`, mirrors `controlProps.pickerProps.filterPresetPreviewUsage`
+	 * (`filter` vs `backdrop-filter` preview).
+	 */
+	filterPresetPreviewUsage?: string,
+	/**
+	 * When `variableType` is `border`, mirrors `controlProps.pickerProps.borderPresetPreviewUsage`
+	 * (all vs per-side preview).
+	 */
+	borderPresetPreviewUsage?: string,
+	/**
+	 * When `variableType` is `border-radius`, mirrors
+	 * `controlProps.pickerProps.borderRadiusPresetPreviewUsage`.
+	 */
+	borderRadiusPresetPreviewUsage?: string,
+	/**
+	 * When `variableType` is `linear-gradient` or `radial-gradient`, mirrors
+	 * `controlProps.pickerProps.gradientPresetPreviewUsage`.
+	 */
+	gradientPresetPreviewUsage?: string,
 	/**
 	 * Shared search query for catalog lists and preset repeater rows in the variable picker.
 	 */
@@ -53,6 +73,10 @@ export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> 
 		catalogLabel: undefined,
 		spacingPresetPreviewUsage: undefined,
 		colorPresetPreviewUsage: undefined,
+		filterPresetPreviewUsage: undefined,
+		borderPresetPreviewUsage: undefined,
+		borderRadiusPresetPreviewUsage: undefined,
+		gradientPresetPreviewUsage: undefined,
 		searchQuery: '',
 		disablePresetRowEdit: undefined,
 		omitRepeaterSectionLabel: undefined,

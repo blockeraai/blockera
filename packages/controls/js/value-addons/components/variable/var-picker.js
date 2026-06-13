@@ -204,6 +204,27 @@ export default function ({
 									? controlProps.pickerProps
 											?.colorPresetPreviewUsage
 									: undefined,
+							filterPresetPreviewUsage:
+								presetType === 'filter'
+									? controlProps.pickerProps
+											?.filterPresetPreviewUsage
+									: undefined,
+							borderPresetPreviewUsage:
+								presetType === 'border'
+									? controlProps.pickerProps
+											?.borderPresetPreviewUsage
+									: undefined,
+							borderRadiusPresetPreviewUsage:
+								presetType === 'border-radius'
+									? controlProps.pickerProps
+											?.borderRadiusPresetPreviewUsage
+									: undefined,
+							gradientPresetPreviewUsage:
+								presetType === 'linear-gradient' ||
+								presetType === 'radial-gradient'
+									? controlProps.pickerProps
+											?.gradientPresetPreviewUsage
+									: undefined,
 						}}
 					>
 						<PresetPanel />

@@ -76,6 +76,12 @@ export default function BorderControl({
 		variableTypes: resolvedVariableTypes,
 		onChange: setValue,
 		size: 'extra-small',
+		presetInterface: resolvedVariableTypes.includes('border')
+			? {
+					variableTypes: resolvedVariableTypes,
+					id,
+				}
+			: undefined,
 	});
 
 	const labelProps = {

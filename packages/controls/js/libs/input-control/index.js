@@ -88,6 +88,8 @@ export default function InputControl({
 	const normalizedVariableTypes =
 		typeof variableTypes === 'string' ? [variableTypes] : variableTypes;
 
+	const controlFieldId = propsForLabelControl.controlFieldId ?? id;
+
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
@@ -104,12 +106,15 @@ export default function InputControl({
 		size,
 		presetInterface:
 			Array.isArray(normalizedVariableTypes) &&
-			normalizedVariableTypes.includes('spacing')
+			(normalizedVariableTypes.includes('spacing') ||
+				normalizedVariableTypes.includes('border-radius'))
 				? {
 						variableTypes: normalizedVariableTypes,
 						unitType,
 						id,
 						singularId,
+						attribute,
+						controlFieldId,
 					}
 				: undefined,
 	});
@@ -128,7 +133,7 @@ export default function InputControl({
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
 		...propsForLabelControl,
-		controlFieldId: propsForLabelControl.controlFieldId ?? id,
+		controlFieldId,
 	};
 
 	const extractedValue = extractNumberAndUnit(value);

@@ -166,6 +166,24 @@ export default function RepeaterControl(
 
 	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
 
+	let normalizedVariableTypes = [];
+	if (Array.isArray(variableTypes)) {
+		normalizedVariableTypes = variableTypes;
+	} else if (typeof variableTypes === 'string') {
+		normalizedVariableTypes = [variableTypes];
+	}
+
+	const repeaterPresetInterfaceVariableTypes = [
+		'filter',
+		'transform',
+		'transition',
+		'shadow',
+		'text-shadow',
+	];
+	const needsRepeaterPresetInterface = normalizedVariableTypes.some((type) =>
+		repeaterPresetInterfaceVariableTypes.includes(type)
+	);
+
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
@@ -180,6 +198,12 @@ export default function RepeaterControl(
 		dynamicValueTypes,
 		onChange: setValue,
 		size: 'extra-small',
+		presetInterface: needsRepeaterPresetInterface
+			? {
+					variableTypes: normalizedVariableTypes,
+					attribute,
+				}
+			: undefined,
 	});
 
 	if (isSetValueAddon()) {

@@ -180,6 +180,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'padding-top-bottom',
 											}}
 											id="padding.top"
 											unitType={'padding'}
@@ -236,6 +238,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'padding-left-right',
 											}}
 											id="padding.left"
 											defaultValue={prepare(
@@ -521,6 +525,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'margin-top-bottom',
 											}}
 											id="margin.top"
 											defaultValue={prepare(
@@ -573,6 +579,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'margin-left-right',
 											}}
 											id="margin.left"
 											defaultValue={prepare(

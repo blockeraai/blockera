@@ -21,6 +21,8 @@ export type PresetInterface = {
 	singularId?: string | number,
 	/** Block attribute name (e.g. `blockeraFontColor`) for color variable preview context. */
 	attribute?: string,
+	/** Stable field id for spacing locked UI (e.g. `padding-top-bottom`). */
+	controlFieldId?: string,
 	/** Scopes plain-slug preset existence to one bucket (`color`, `spacing`, …). Optional. */
 	themeJsonResolutionPresetCssVarInfix?: string,
 };
