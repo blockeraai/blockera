@@ -17,6 +17,22 @@ import type { TValueTypes } from '@blockera/controls/js/libs/box-border-control/
 import { generateExtensionId } from '../../utils';
 import type { THandleOnChangeAttributes } from '../../types';
 
+export const BORDER_PRESET_ATTRIBUTE = 'blockeraBorder';
+export const BORDER_COLOR_PRESET_PREVIEW_USAGE = 'border-color';
+export const BORDER_PRESET_PREVIEW_USAGE_ALL = 'all';
+export const BORDER_PRESET_PREVIEW_USAGE_TOP = 'top';
+export const BORDER_PRESET_PREVIEW_USAGE_RIGHT = 'right';
+export const BORDER_PRESET_PREVIEW_USAGE_BOTTOM = 'bottom';
+export const BORDER_PRESET_PREVIEW_USAGE_LEFT = 'left';
+
+export const BORDER_PRESET_PREVIEW_USAGES = [
+	BORDER_PRESET_PREVIEW_USAGE_ALL,
+	BORDER_PRESET_PREVIEW_USAGE_TOP,
+	BORDER_PRESET_PREVIEW_USAGE_RIGHT,
+	BORDER_PRESET_PREVIEW_USAGE_BOTTOM,
+	BORDER_PRESET_PREVIEW_USAGE_LEFT,
+];
+
 export const Border = ({
 	block,
 	border,
@@ -34,7 +50,7 @@ export const Border = ({
 			value={{
 				name: generateExtensionId(block, 'border'),
 				value: border,
-				attribute: 'blockeraBorder',
+				attribute: BORDER_PRESET_ATTRIBUTE,
 				blockName: block.blockName,
 			}}
 		>

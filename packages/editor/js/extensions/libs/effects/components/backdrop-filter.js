@@ -25,6 +25,9 @@ import { Icon } from '@blockera/icons';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
 
+export const BACKDROP_FILTER_PRESET_ATTRIBUTE = 'blockeraBackdropFilter';
+export const BACKDROP_FILTER_PRESET_PREVIEW_USAGE = 'backdrop-filter';
+
 export const BackdropFilter = ({
 	backdropFilter,
 	block,
@@ -42,7 +45,7 @@ export const BackdropFilter = ({
 			value={{
 				name: generateExtensionId(block, 'backdrop-filters'),
 				value: backdropFilter,
-				attribute: 'blockeraBackdropFilter',
+				attribute: BACKDROP_FILTER_PRESET_ATTRIBUTE,
 				blockName: block.blockName,
 			}}
 			storeName={'blockera/controls/repeater'}
