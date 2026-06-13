@@ -9,7 +9,6 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import type { ControlContextRefCurrent } from '@blockera/controls';
-import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -59,7 +58,11 @@ import {
 	fontColorToWPCompatibility,
 } from './compatibility/font-color';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 import {
 	registerHideCoreTextAlignToolbarDom,
 	registerHideCoreTextAlignToolbarSupports,
@@ -176,7 +179,7 @@ export const bootstrap = (): void => {
 				editorSelectedBlockEvent,
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -213,51 +216,55 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraFontFamily':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						fontFamilyToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraFontAppearance':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						fontAppearanceToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraFontSize':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						fontSizeToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraLineHeight':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						lineHeightToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraTextAlign':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						textAlignToWPCompatibility({
 							newValue,
@@ -265,66 +272,72 @@ export const bootstrap = (): void => {
 							blockId,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraTextDecoration':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						textDecorationToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraTextTransform':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						textTransformToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraLetterSpacing':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						letterSpacingToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraTextIndent':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						textIndentToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraTextOrientation':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						textOrientationToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraFontColor':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						fontColorToWPCompatibility({
 							newValue,
@@ -333,7 +346,8 @@ export const bootstrap = (): void => {
 							blockDetail,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 			}
 

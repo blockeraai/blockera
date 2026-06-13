@@ -9,7 +9,6 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import type { ControlContextRefCurrent } from '@blockera/controls';
-import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -19,7 +18,11 @@ import {
 	positionToWPCompatibility,
 } from './compatibility/position';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -37,7 +40,7 @@ export const bootstrap = (): void => {
 				});
 			}
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -74,14 +77,15 @@ export const bootstrap = (): void => {
 			}
 
 			if (featureId === 'blockeraPosition' && blockId === 'core/group') {
-				return mergeObject(
+				return mergeWPCompatibility(
 					nextState,
 					positionToWPCompatibility({
 						newValue,
 						ref,
 						insideBlockInspector,
 						editorSelectedBlockEvent,
-					})
+					}),
+					blockDetail
 				);
 			}
 
