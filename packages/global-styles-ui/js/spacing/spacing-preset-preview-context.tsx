@@ -7,7 +7,7 @@ import { createContext, useContext } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import type { SpacingSizePresetUsage } from '../preset-preview/injected-helpers';
+import type { SpacingSizePresetUsage } from './spacing-preset-preview-usage';
 
 const SpacingPresetPreviewUsageContext = createContext<
 	SpacingSizePresetUsage | undefined

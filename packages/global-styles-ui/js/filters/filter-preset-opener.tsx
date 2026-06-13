@@ -9,10 +9,15 @@ import { useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
+import { useVarPickerPresetContext } from '@blockera/controls';
 /**
  * Internal dependencies
  */
 import { getGlobalStylesFilterPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type FilterPresetPreviewUsage,
+	DEFAULT_FILTER_PRESET_PREVIEW_USAGE,
+} from './filter-preset-preview-usage';
 import {
 	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
@@ -31,6 +36,20 @@ export type FilterPresetOpenerProps = {
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 };
 
+function resolveFilterPresetPreviewUsage(
+	pickerCtx: ReturnType<typeof useVarPickerPresetContext>
+): FilterPresetPreviewUsage {
+	if (
+		pickerCtx.active &&
+		pickerCtx.variableType === 'filter' &&
+		pickerCtx.filterPresetPreviewUsage
+	) {
+		return pickerCtx.filterPresetPreviewUsage as FilterPresetPreviewUsage;
+	}
+
+	return DEFAULT_FILTER_PRESET_PREVIEW_USAGE;
+}
+
 export function FilterPresetOpener({
 	itemId,
 	isOpen,
@@ -40,15 +59,19 @@ export function FilterPresetOpener({
 	isOpenPopoverEvent,
 }: FilterPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const pickerCtx = useVarPickerPresetContext();
+	const previewUsage = resolveFilterPresetPreviewUsage(pickerCtx);
+
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesFilterPresetPreviewAttributes(
-			itemsToRepeaterRecord(variable.items || [])
+			itemsToRepeaterRecord(variable.items || []),
+			previewUsage
 		);
 		if (!patch || !Object.keys(patch).length) {
 			return null;
 		}
 		return { kind: 'attributes', patch };
-	}, [variable.items]);
+	}, [variable.items, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 

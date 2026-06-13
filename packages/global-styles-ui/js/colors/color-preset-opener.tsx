@@ -23,10 +23,15 @@ import { inferPresetCssVarInfixForPaintVariablePickerType } from '@blockera/data
  * Internal dependencies
  */
 import {
-	type ColorPresetPreviewUsage,
 	getGlobalStylesColorPresetPreviewAttributes,
+	getGlobalStylesColorPresetPreviewDeclarations,
 	getGlobalStylesColorGradientPresetPreviewDeclarations,
 } from '../preset-preview/injected-helpers';
+import {
+	type ColorPresetPreviewUsage,
+	COLOR_PRESET_PREVIEW_USAGES,
+	DEFAULT_COLOR_PRESET_PREVIEW_USAGE,
+} from './color-preset-preview-usage';
 import {
 	usePresetRowCanvasPreview,
 	type PresetCanvasPreviewPayload,
@@ -91,12 +96,13 @@ function resolveColorPresetPreviewUsage(
 	if (
 		pickerCtx.active &&
 		pickerCtx.variableType === 'color' &&
-		(fromPicker === 'color' || fromPicker === 'background')
+		fromPicker &&
+		COLOR_PRESET_PREVIEW_USAGES.has(fromPicker as ColorPresetPreviewUsage)
 	) {
-		return fromPicker;
+		return fromPicker as ColorPresetPreviewUsage;
 	}
 
-	return fromProvider ?? propUsage ?? 'background';
+	return fromProvider ?? propUsage ?? DEFAULT_COLOR_PRESET_PREVIEW_USAGE;
 }
 
 export function ColorPresetOpener({
@@ -159,6 +165,20 @@ export function ColorPresetOpener({
 					},
 					previewUsage
 				);
+			if (!declarations) {
+				return null;
+			}
+			return { kind: 'declarations', declarations };
+		}
+
+		if (previewUsage === 'border-color') {
+			const declarations = getGlobalStylesColorPresetPreviewDeclarations(
+				{
+					color: palettePaintSource,
+					type: colorItem?.type,
+				},
+				previewUsage
+			);
 			if (!declarations) {
 				return null;
 			}

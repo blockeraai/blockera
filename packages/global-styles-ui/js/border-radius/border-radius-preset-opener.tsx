@@ -9,10 +9,15 @@ import { useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { useVarPickerPresetContext } from '@blockera/controls';
 /**
  * Internal dependencies
  */
 import { getGlobalStylesBorderRadiusPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type BorderRadiusPresetPreviewUsage,
+	DEFAULT_BORDER_RADIUS_PRESET_PREVIEW_USAGE,
+} from './border-radius-preset-preview-usage';
 import {
 	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
@@ -31,6 +36,20 @@ export type BorderRadiusPresetOpenerProps = {
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 };
 
+function resolveBorderRadiusPresetPreviewUsage(
+	pickerCtx: ReturnType<typeof useVarPickerPresetContext>
+): BorderRadiusPresetPreviewUsage {
+	if (
+		pickerCtx.active &&
+		pickerCtx.variableType === 'border-radius' &&
+		pickerCtx.borderRadiusPresetPreviewUsage
+	) {
+		return pickerCtx.borderRadiusPresetPreviewUsage as BorderRadiusPresetPreviewUsage;
+	}
+
+	return DEFAULT_BORDER_RADIUS_PRESET_PREVIEW_USAGE;
+}
+
 export function BorderRadiusPresetOpener({
 	itemId,
 	isOpen,
@@ -40,18 +59,21 @@ export function BorderRadiusPresetOpener({
 	isOpenPopoverEvent,
 }: BorderRadiusPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const pickerCtx = useVarPickerPresetContext();
+	const previewUsage = resolveBorderRadiusPresetPreviewUsage(pickerCtx);
 	const summary = radiusPresetSizeToString(variable?.size);
 	const display = summary || __('EMPTY', 'blockera');
 
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesBorderRadiusPresetPreviewAttributes(
-			variable?.size
+			variable?.size,
+			previewUsage
 		);
 		if (!patch || !Object.keys(patch).length) {
 			return null;
 		}
 		return { kind: 'attributes', patch };
-	}, [variable?.size]);
+	}, [variable?.size, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 

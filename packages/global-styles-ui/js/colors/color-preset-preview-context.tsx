@@ -7,7 +7,7 @@ import { createContext, useContext } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import type { ColorPresetPreviewUsage } from '../preset-preview/injected-helpers';
+import type { ColorPresetPreviewUsage } from './color-preset-preview-usage';
 
 const ColorPresetPreviewUsageContext = createContext<
 	ColorPresetPreviewUsage | undefined

@@ -33,10 +33,10 @@ import { SpacingPresetOpener } from './spacing-preset-opener';
 import { SpacingPresetPreviewUsageProvider } from './spacing-preset-preview-context';
 import { SpacingSize, type SpacingDefaultPresetValue } from './spacing-size';
 import { NavItemBackButton } from '../navigation/nav-item-back-button';
-import type { SpacingSizePresetUsage } from '../preset-preview/injected-helpers';
+import type { SpacingSizePresetUsage } from './spacing-preset-preview-usage';
 
 export type { SpacingDefaultPresetValue };
-export type { SpacingSizePresetUsage } from '../preset-preview/injected-helpers';
+export type { SpacingSizePresetUsage } from './spacing-preset-preview-usage';
 
 type SpacingSizePreset = {
 	slug: string;

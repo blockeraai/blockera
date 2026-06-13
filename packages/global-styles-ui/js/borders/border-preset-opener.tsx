@@ -9,10 +9,15 @@ import { useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { useVarPickerPresetContext } from '@blockera/controls';
 /**
  * Internal dependencies
  */
 import { getGlobalStylesBorderPresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import {
+	type BorderPresetPreviewUsage,
+	DEFAULT_BORDER_PRESET_PREVIEW_USAGE,
+} from './border-preset-preview-usage';
 import {
 	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
@@ -33,6 +38,20 @@ export type BorderPresetOpenerProps = {
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 };
 
+function resolveBorderPresetPreviewUsage(
+	pickerCtx: ReturnType<typeof useVarPickerPresetContext>
+): BorderPresetPreviewUsage {
+	if (
+		pickerCtx.active &&
+		pickerCtx.variableType === 'border' &&
+		pickerCtx.borderPresetPreviewUsage
+	) {
+		return pickerCtx.borderPresetPreviewUsage as BorderPresetPreviewUsage;
+	}
+
+	return DEFAULT_BORDER_PRESET_PREVIEW_USAGE;
+}
+
 export function BorderPresetOpener({
 	itemId,
 	isOpen,
@@ -42,19 +61,22 @@ export function BorderPresetOpener({
 	isOpenPopoverEvent,
 }: BorderPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const pickerCtx = useVarPickerPresetContext();
+	const previewUsage = resolveBorderPresetPreviewUsage(pickerCtx);
 	const a11ySummary = getBorderPresetAccessibilityDescription(
 		variable?.border
 	);
 
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesBorderPresetPreviewAttributes(
-			variable?.border
+			variable?.border,
+			previewUsage
 		);
 		if (!patch || !Object.keys(patch).length) {
 			return null;
 		}
 		return { kind: 'attributes', patch };
-	}, [variable?.border]);
+	}, [variable?.border, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 

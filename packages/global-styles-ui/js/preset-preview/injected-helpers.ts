@@ -5,18 +5,10 @@
  *
  * The global-styles-ui script may load before editor assets; implementations are registered at runtime
  * via registerGlobalStylesPresetPreviewHelpers.
+ *
+ * Usage string unions live with their extension consumers (e.g. filter-preset-preview-usage.ts),
+ * not in this bridge module.
  */
-
-/** Matches editor spacing preset preview — spacing token used as width/height/padding/margin/gap. */
-export type SpacingSizePresetUsage =
-	| 'padding'
-	| 'margin'
-	| 'gap'
-	| 'width'
-	| 'height';
-
-/** Font `color` vs `background-color` for color preset row preview. */
-export type ColorPresetPreviewUsage = 'color' | 'background';
 
 export type GlobalStylesPresetPreviewHelpers = {
 	getGlobalStylesShadowPresetPreviewAttributes: (
@@ -29,20 +21,23 @@ export type GlobalStylesPresetPreviewHelpers = {
 		repeater: object
 	) => Record<string, unknown>;
 	getGlobalStylesFilterPresetPreviewAttributes: (
-		repeater: object
+		repeater: object,
+		usage?: string
 	) => Record<string, unknown>;
 	getGlobalStylesTransformPresetPreviewAttributes: (
 		repeater: object
 	) => Record<string, unknown>;
 	getGlobalStylesBorderPresetPreviewAttributes: (
-		border: object
+		border: object,
+		usage?: string
 	) => Record<string, unknown>;
 	getGlobalStylesBorderRadiusPresetPreviewAttributes: (
-		size: string | number | null | undefined
+		size: string | number | null | undefined,
+		usage?: string
 	) => Record<string, unknown>;
 	getGlobalStylesSpacingSizePresetPreviewAttributes: (
 		size: string | null | undefined,
-		usage?: SpacingSizePresetUsage
+		usage?: string
 	) => Record<string, unknown>;
 	getGlobalStylesFontSizePresetPreviewAttributes: (
 		size: string | null | undefined
@@ -52,17 +47,25 @@ export type GlobalStylesPresetPreviewHelpers = {
 			color?: string;
 			type?: string;
 		},
-		usage?: ColorPresetPreviewUsage
+		usage?: string
 	) => Record<string, unknown>;
+	getGlobalStylesColorPresetPreviewDeclarations: (
+		variable: {
+			color?: string;
+			type?: string;
+		},
+		usage?: string
+	) => string;
 	getGlobalStylesGradientPresetPreviewDeclarations: (
-		gradient: string | null | undefined
+		gradient: string | null | undefined,
+		usage?: string
 	) => string;
 	getGlobalStylesColorGradientPresetPreviewDeclarations: (
 		variable: {
 			color?: string;
 			type?: string;
 		},
-		usage?: ColorPresetPreviewUsage
+		usage?: string
 	) => string;
 };
 
@@ -109,10 +112,14 @@ export function getGlobalStylesTransitionPresetPreviewAttributes(
 }
 
 export function getGlobalStylesFilterPresetPreviewAttributes(
-	repeater: object
+	repeater: object,
+	usage?: string
 ): Record<string, unknown> {
 	return (
-		injected?.getGlobalStylesFilterPresetPreviewAttributes?.(repeater) ?? {}
+		injected?.getGlobalStylesFilterPresetPreviewAttributes?.(
+			repeater,
+			usage
+		) ?? {}
 	);
 }
 
@@ -126,25 +133,32 @@ export function getGlobalStylesTransformPresetPreviewAttributes(
 }
 
 export function getGlobalStylesBorderPresetPreviewAttributes(
-	border: object
+	border: object,
+	usage?: string
 ): Record<string, unknown> {
 	return (
-		injected?.getGlobalStylesBorderPresetPreviewAttributes?.(border) ?? {}
+		injected?.getGlobalStylesBorderPresetPreviewAttributes?.(
+			border,
+			usage
+		) ?? {}
 	);
 }
 
 export function getGlobalStylesBorderRadiusPresetPreviewAttributes(
-	size: string | number | null | undefined
+	size: string | number | null | undefined,
+	usage?: string
 ): Record<string, unknown> {
 	return (
-		injected?.getGlobalStylesBorderRadiusPresetPreviewAttributes?.(size) ??
-		{}
+		injected?.getGlobalStylesBorderRadiusPresetPreviewAttributes?.(
+			size,
+			usage
+		) ?? {}
 	);
 }
 
 export function getGlobalStylesSpacingSizePresetPreviewAttributes(
 	size: string | null | undefined,
-	usage?: SpacingSizePresetUsage
+	usage?: string
 ): Record<string, unknown> {
 	return (
 		injected?.getGlobalStylesSpacingSizePresetPreviewAttributes?.(
@@ -167,7 +181,7 @@ export function getGlobalStylesColorPresetPreviewAttributes(
 		color?: string;
 		type?: string;
 	},
-	usage?: ColorPresetPreviewUsage
+	usage?: string
 ): Record<string, unknown> {
 	return (
 		injected?.getGlobalStylesColorPresetPreviewAttributes?.(
@@ -177,12 +191,29 @@ export function getGlobalStylesColorPresetPreviewAttributes(
 	);
 }
 
+export function getGlobalStylesColorPresetPreviewDeclarations(
+	variable: {
+		color?: string;
+		type?: string;
+	},
+	usage?: string
+): string {
+	return (
+		injected?.getGlobalStylesColorPresetPreviewDeclarations?.(
+			variable,
+			usage
+		) ?? ''
+	);
+}
+
 export function getGlobalStylesGradientPresetPreviewDeclarations(
-	gradient: string | null | undefined
+	gradient: string | null | undefined,
+	usage?: string
 ): string {
 	return (
 		injected?.getGlobalStylesGradientPresetPreviewDeclarations?.(
-			gradient
+			gradient,
+			usage
 		) ?? ''
 	);
 }
@@ -192,7 +223,7 @@ export function getGlobalStylesColorGradientPresetPreviewDeclarations(
 		color?: string;
 		type?: string;
 	},
-	usage?: ColorPresetPreviewUsage
+	usage?: string
 ): string {
 	return (
 		injected?.getGlobalStylesColorGradientPresetPreviewDeclarations?.(

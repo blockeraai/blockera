@@ -8,12 +8,16 @@ import { useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/controls';
+import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
 import { getGlobalStylesGradientPresetPreviewDeclarations } from '../preset-preview/injected-helpers';
+import {
+	type GradientPresetPreviewUsage,
+	DEFAULT_GRADIENT_PRESET_PREVIEW_USAGE,
+} from './gradient-preset-preview-usage';
 import {
 	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
@@ -31,6 +35,21 @@ export type GradientPresetOpenerProps = {
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 };
 
+function resolveGradientPresetPreviewUsage(
+	pickerCtx: ReturnType<typeof useVarPickerPresetContext>
+): GradientPresetPreviewUsage {
+	if (
+		pickerCtx.active &&
+		(pickerCtx.variableType === 'linear-gradient' ||
+			pickerCtx.variableType === 'radial-gradient') &&
+		pickerCtx.gradientPresetPreviewUsage
+	) {
+		return pickerCtx.gradientPresetPreviewUsage as GradientPresetPreviewUsage;
+	}
+
+	return DEFAULT_GRADIENT_PRESET_PREVIEW_USAGE;
+}
+
 export function GradientPresetOpener({
 	itemId,
 	isOpen,
@@ -40,15 +59,19 @@ export function GradientPresetOpener({
 	isOpenPopoverEvent,
 }: GradientPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const pickerCtx = useVarPickerPresetContext();
+	const previewUsage = resolveGradientPresetPreviewUsage(pickerCtx);
+
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const declarations = getGlobalStylesGradientPresetPreviewDeclarations(
-			variable?.gradient
+			variable?.gradient,
+			previewUsage
 		);
 		if (!declarations) {
 			return null;
 		}
 		return { kind: 'declarations', declarations };
-	}, [variable?.gradient]);
+	}, [variable?.gradient, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
 

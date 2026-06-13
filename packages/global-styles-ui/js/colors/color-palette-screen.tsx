@@ -61,7 +61,7 @@ import {
 	PresetVariationsContext,
 	type PresetVariationsContextValue,
 } from '../context/preset-variations-context';
-import type { ColorPresetPreviewUsage } from '../preset-preview/injected-helpers';
+import type { ColorPresetPreviewUsage } from './color-preset-preview-usage';
 import { filterVariationsByBase } from './color-palette-variations-utils';
 
 export type { DefaultColorPresetValue } from './color-palette-variation-types';

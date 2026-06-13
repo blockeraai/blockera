@@ -13,10 +13,12 @@ import { useVarPickerPresetContext } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { getGlobalStylesSpacingSizePresetPreviewAttributes } from '../preset-preview/injected-helpers';
 import {
-	getGlobalStylesSpacingSizePresetPreviewAttributes,
 	type SpacingSizePresetUsage,
-} from '../preset-preview/injected-helpers';
+	SPACING_PRESET_PREVIEW_USAGES,
+	DEFAULT_SPACING_PRESET_PREVIEW_USAGE,
+} from './spacing-preset-preview-usage';
 import {
 	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
@@ -48,12 +50,13 @@ function resolveSpacingPresetPreviewUsage(
 	if (
 		pickerCtx.active &&
 		pickerCtx.variableType === 'spacing' &&
-		pickerCtx.spacingPresetPreviewUsage
+		pickerCtx.spacingPresetPreviewUsage &&
+		SPACING_PRESET_PREVIEW_USAGES.has(pickerCtx.spacingPresetPreviewUsage)
 	) {
-		return pickerCtx.spacingPresetPreviewUsage;
+		return pickerCtx.spacingPresetPreviewUsage as SpacingSizePresetUsage;
 	}
 
-	return fromProvider ?? propUsage ?? 'padding';
+	return fromProvider ?? propUsage ?? DEFAULT_SPACING_PRESET_PREVIEW_USAGE;
 }
 
 export function SpacingPresetOpener({

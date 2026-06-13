@@ -1,0 +1,26 @@
+/**
+ * Border preset canvas preview usages — keep aligned with `Border` extension consumer.
+ */
+export const BORDER_PRESET_PREVIEW_USAGE_ALL = 'all' as const;
+export const BORDER_PRESET_PREVIEW_USAGE_TOP = 'top' as const;
+export const BORDER_PRESET_PREVIEW_USAGE_RIGHT = 'right' as const;
+export const BORDER_PRESET_PREVIEW_USAGE_BOTTOM = 'bottom' as const;
+export const BORDER_PRESET_PREVIEW_USAGE_LEFT = 'left' as const;
+
+export type BorderPresetPreviewUsage =
+	| typeof BORDER_PRESET_PREVIEW_USAGE_ALL
+	| typeof BORDER_PRESET_PREVIEW_USAGE_TOP
+	| typeof BORDER_PRESET_PREVIEW_USAGE_RIGHT
+	| typeof BORDER_PRESET_PREVIEW_USAGE_BOTTOM
+	| typeof BORDER_PRESET_PREVIEW_USAGE_LEFT;
+
+export const BORDER_PRESET_PREVIEW_USAGES = new Set<BorderPresetPreviewUsage>([
+	BORDER_PRESET_PREVIEW_USAGE_ALL,
+	BORDER_PRESET_PREVIEW_USAGE_TOP,
+	BORDER_PRESET_PREVIEW_USAGE_RIGHT,
+	BORDER_PRESET_PREVIEW_USAGE_BOTTOM,
+	BORDER_PRESET_PREVIEW_USAGE_LEFT,
+]);
+
+export const DEFAULT_BORDER_PRESET_PREVIEW_USAGE =
+	BORDER_PRESET_PREVIEW_USAGE_ALL;

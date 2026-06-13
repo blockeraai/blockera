@@ -8,9 +8,13 @@ export {
 	registerPresetPreviewCssHelpers,
 	type GlobalStylesPresetPreviewHelpers,
 	type PresetPreviewCssHelpers,
-	type SpacingSizePresetUsage,
-	type ColorPresetPreviewUsage,
 } from './preset-preview/injected-helpers';
+export type { SpacingSizePresetUsage } from './spacing/spacing-preset-preview-usage';
+export type { ColorPresetPreviewUsage } from './colors/color-preset-preview-usage';
+export type { FilterPresetPreviewUsage } from './filters/filter-preset-preview-usage';
+export type { BorderPresetPreviewUsage } from './borders/border-preset-preview-usage';
+export type { BorderRadiusPresetPreviewUsage } from './border-radius/border-radius-preset-preview-usage';
+export type { GradientPresetPreviewUsage } from './colors/gradient-preset-preview-usage';
 export {
 	useMergedThemeJsonExperimentalFeaturesWrapped,
 	usePlainThemeJsonPresetMergedState,
