@@ -678,11 +678,44 @@ export const getCompatibleBlockCssSelector = ({
 		selectors: blockSelectors,
 	});
 
-	const blockTypeRoot = blockSelectors?.root;
-	const registrationSelector =
-		selector && selector.trim()
-			? preferBlockTypeRootSelector(selector, blockTypeRoot)
-			: selector;
+	const blockTypeRoot = getBlockCSSSelector(
+		{
+			name: blockName,
+			supports,
+			selectors: blockSelectors,
+		},
+		'root',
+		{
+			fallback: true,
+		}
+	);
+	const blockSlug = blockName.replace('core/', '').replace('/', '-');
+	const blockPartPattern = new RegExp(
+		`\\.\\bwp-block-${blockSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`
+	);
+	const blockPartMatch = selector?.match(blockPartPattern);
+	const trimmedSelector = selector?.trim();
+	let preferredRoot =
+		blockPartMatch && trimmedSelector && blockTypeRoot
+			? preferBlockTypeRootSelector(
+					trimmedSelector,
+					blockTypeRoot,
+					blockPartMatch[0]
+				)
+			: null;
+
+	// If the preferredRoot is null and the root contains selector, we should prefer the root.
+	if (!preferredRoot) {
+		preferredRoot = selector
+			?.split(',')
+			.map((s) =>
+				blockTypeRoot?.includes(s.trim()) ? blockTypeRoot : ''
+			)
+			?.filter((s) => s?.trim())
+			?.join(',');
+	}
+
+	const registrationSelector = preferredRoot ?? selector;
 
 	if (registrationSelector && registrationSelector.trim()) {
 		if (isStyleVariation && styleVariationName) {
@@ -870,26 +903,157 @@ export function prepareBlockCssSelector(params: {
 	return selector;
 }
 
+const PSEUDO_CLASS_FUNCTIONS_END_PATTERN = /:(\w+(?:-\w+)*)\s*\([^)]+\)$/;
+
+/**
+ * Remove trailing pseudo-classes and pseudo-elements from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string} The selector base without trailing pseudo tokens.
+ */
+const stripTrailingPseudos = (selector: string): string => {
+	let result = selector;
+	let previous;
+
+	do {
+		previous = result;
+
+		if (PSEUDO_CLASS_FUNCTIONS_END_PATTERN.test(result)) {
+			result = result.replace(PSEUDO_CLASS_FUNCTIONS_END_PATTERN, '');
+			continue;
+		}
+
+		result = result.replace(/(?:::?[a-zA-Z-]+)$/, '');
+	} while (previous !== result && result !== '');
+
+	return result;
+};
+
+/**
+ * Extract trailing pseudo-classes and pseudo-elements from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string} Trailing pseudo tokens (e.g. ":hover:focus" or "::before").
+ */
+const extractTrailingPseudos = (selector: string): string => {
+	const base = stripTrailingPseudos(selector);
+
+	if (base.length >= selector.length) {
+		return '';
+	}
+
+	return selector.slice(base.length);
+};
+
+/**
+ * Extract style and size variation classes from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string[]} Ordered variation class tokens.
+ */
+const extractBlockVariationClasses = (selector: string): Array<string> => {
+	const variations: Array<string> = [];
+	const styleMatches = selector.match(/\.is-style-[^\s,.#\[:]+/g);
+
+	if (styleMatches) {
+		variations.push(...styleMatches);
+	}
+
+	const sizeMatches = selector.match(/\.is-size-[^\s,.#\[:]+/g);
+
+	if (sizeMatches) {
+		variations.push(...sizeMatches);
+	}
+
+	return [...new Set(variations)];
+};
+
+/**
+ * Remove style and size variation classes from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string} The selector without variation classes.
+ */
+const stripBlockVariationClasses = (selector: string): string => {
+	return selector
+		.replace(/\.is-style-[^\s,.#\[:]+/g, '')
+		.replace(/\.is-size-[^\s,.#\[:]+/g, '');
+};
+
+/**
+ * Append missing variation classes after a block part.
+ *
+ * @param {string} selector The css selector.
+ * @param {string} part The block class part to append after.
+ * @param {string[]} variations Variation class tokens to append.
+ * @return {string} The selector with missing variations appended.
+ */
+const appendVariationsAfterPart = (
+	selector: string,
+	part: string,
+	variations: Array<string>
+): string => {
+	if (!variations.length) {
+		return selector;
+	}
+
+	const missing = variations.filter(
+		(variation) => !selector.includes(variation)
+	);
+
+	if (!missing.length) {
+		return selector;
+	}
+
+	return selector.replace(part, `${part}${missing.join('')}`);
+};
+
 /**
  * Prefer block type root when it already contains the prepared support selector.
  *
+ * Mirrors {@see \Blockera\Utils\Utils::preferContainedRootSelector()}.
+ *
  * @param {string} preparedSelector The prepared support selector.
- * @param {string | void} blockTypeRoot The block type root selector.
- * @return {string} The preferred selector for registration.
+ * @param {string} blockTypeRoot The block type root selector.
+ * @param {string} blockPart The matched block class part (e.g. ".wp-block-button").
+ * @param {{wrap?: (selector: string) => string}} args Optional arguments.
+ * @return {string | null} The preferred selector, or null when root does not already contain the target.
  */
 const preferBlockTypeRootSelector = (
 	preparedSelector: string,
-	blockTypeRoot?: string
-): string => {
-	if (
-		blockTypeRoot &&
-		preparedSelector?.trim() &&
-		blockTypeRoot.includes(preparedSelector.trim())
-	) {
-		return blockTypeRoot;
+	blockTypeRoot: string,
+	blockPart: string,
+	args: {
+		wrap?: (selector: string) => string,
+	} = {}
+): ?string => {
+	if (!blockTypeRoot?.trim() || !blockPart?.trim()) {
+		return null;
 	}
 
-	return preparedSelector;
+	const selectorBase = stripTrailingPseudos(preparedSelector);
+	const rootBase = stripBlockVariationClasses(
+		stripTrailingPseudos(blockTypeRoot)
+	);
+	const rootContainsSelector =
+		blockTypeRoot.endsWith(preparedSelector) ||
+		('' !== selectorBase && rootBase.endsWith(selectorBase));
+
+	if (!rootContainsSelector) {
+		return null;
+	}
+
+	const selectorPseudos = extractTrailingPseudos(preparedSelector);
+	const variations = extractBlockVariationClasses(blockTypeRoot);
+
+	let merged = '' !== rootBase ? rootBase : blockTypeRoot;
+	merged = appendVariationsAfterPart(merged, blockPart, variations);
+
+	if (args.wrap && 'function' === typeof args.wrap) {
+		merged = args.wrap(merged);
+	}
+
+	return merged + selectorPseudos;
 };
 
 /**
