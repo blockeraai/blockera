@@ -708,10 +708,15 @@ export const getCompatibleBlockCssSelector = ({
 	if (!preferredRoot) {
 		preferredRoot = selector
 			?.split(',')
-			.map((s) =>
-				blockTypeRoot?.includes(s.trim()) ? blockTypeRoot : ''
-			)
-			?.filter((s) => s?.trim())
+			.reduce((unique: Array<string>, s: string) => {
+				const item = blockTypeRoot?.includes(s.trim())
+					? blockTypeRoot
+					: '';
+				if (item && !unique.includes(item)) {
+					unique.push(item);
+				}
+				return unique;
+			}, [])
 			?.join(',');
 	}
 
