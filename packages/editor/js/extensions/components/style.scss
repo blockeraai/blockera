@@ -16,7 +16,7 @@
 	}
 }
 
-.blockera-not-allowed {
+.blockera-not-allowed:not(:has(.blockera-state-colors-container)) {
 	opacity: 0.5;
 	user-select: none;
 	cursor: not-allowed;
