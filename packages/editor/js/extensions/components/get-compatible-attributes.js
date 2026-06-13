@@ -141,7 +141,7 @@ export const getCompatibleAttributes = ({
 					args
 				);
 
-			if (Object.keys(blockeraInnerBlocks).length) {
+			if (Object.keys(blockeraInnerBlocks || {}).length) {
 				filteredAttributes = mergeObject(filteredAttributes, {
 					blockeraInnerBlocks: {
 						value: {
