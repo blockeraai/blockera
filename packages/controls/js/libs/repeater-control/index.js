@@ -5,7 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useCallback, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -189,6 +189,7 @@ export default function RepeaterControl(
 		isSetValueAddon,
 		ValueAddonControl,
 		ValueAddonPointer,
+		valueAddonControlProps,
 	} = useValueAddon({
 		types: controlAddonTypes,
 		value: repeaterItems,
@@ -205,6 +206,47 @@ export default function RepeaterControl(
 				}
 			: undefined,
 	});
+
+	/**
+	 * Label reset must match value-addon remove (clear attribute + addon state), not only
+	 * reset the repeater store — otherwise block attributes keep the preset and hover preview
+	 * re-applies it on the next picker open.
+	 */
+	const alignedResetToDefault = useCallback(
+		(args) => {
+			if (
+				controlAddonTypes?.length &&
+				isSetValueAddon() &&
+				valueAddonControlProps?.handleOnClickRemove
+			) {
+				valueAddonControlProps.handleOnClickRemove(
+					({
+						stopPropagation: () => {},
+						preventDefault: () => {},
+					}: any)
+				);
+				return;
+			}
+
+			if (typeof resetToDefault !== 'function') {
+				return;
+			}
+
+			return resetToDefault({
+				...(args || {}),
+				onChange: args?.onChange ?? onChange,
+				valueCleanup: args?.valueCleanup ?? valueCleanup,
+			});
+		},
+		[
+			controlAddonTypes,
+			isSetValueAddon,
+			valueAddonControlProps,
+			resetToDefault,
+			onChange,
+			valueCleanup,
+		]
+	);
 
 	if (isSetValueAddon()) {
 		return (
@@ -229,7 +271,7 @@ export default function RepeaterControl(
 									isRepeater={true}
 									blockName={blockName}
 									attribute={attribute}
-									resetToDefault={resetToDefault}
+									resetToDefault={alignedResetToDefault}
 									defaultValue={
 										isFunction(valueCleanup)
 											? valueCleanup(defaultValue)
@@ -582,7 +624,7 @@ export default function RepeaterControl(
 										isRepeater={true}
 										blockName={blockName}
 										attribute={attribute}
-										resetToDefault={resetToDefault}
+										resetToDefault={alignedResetToDefault}
 										defaultValue={
 											isFunction(valueCleanup)
 												? valueCleanup(defaultValue)
@@ -679,7 +721,9 @@ export default function RepeaterControl(
 												isRepeater={true}
 												blockName={blockName}
 												attribute={attribute}
-												resetToDefault={resetToDefault}
+												resetToDefault={
+													alignedResetToDefault
+												}
 												defaultValue={
 													isFunction(valueCleanup)
 														? valueCleanup(
