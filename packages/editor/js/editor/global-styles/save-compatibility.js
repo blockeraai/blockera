@@ -81,10 +81,6 @@ const getGlobalStylesBlocksForCompatibility = (
 		return null;
 	}
 
-	if (hasObjectKeys(styles?.blocks)) {
-		return null;
-	}
-
 	const baseConfig =
 		select('core').__experimentalGetCurrentThemeBaseGlobalStyles?.();
 
@@ -289,6 +285,27 @@ export const runGlobalStylesWordPressCompatibilityBeforeSave = (): boolean => {
 	return true;
 };
 
+export const saveGlobalStylesWordPressCompatibilityBeforePostSave =
+	async (): Promise<boolean> => {
+		if (!runGlobalStylesWordPressCompatibilityBeforeSave()) {
+			return false;
+		}
+
+		const globalStylesRecord = getGlobalStylesRecord();
+
+		if (!globalStylesRecord) {
+			return false;
+		}
+
+		await dispatch('core').saveEditedEntityRecord(
+			'root',
+			'globalStyles',
+			globalStylesRecord.id
+		);
+
+		return true;
+	};
+
 const handleSaveButtonClick = (event: MouseEvent): void => {
 	const target = event.target;
 
@@ -307,8 +324,10 @@ export const registerGlobalStylesSaveCompatibility = (): void => {
 	addFilter(
 		'editor.preSavePost',
 		'blockera/global-styles/save-compatibility',
-		(edits) => {
-			runGlobalStylesWordPressCompatibilityBeforeSave();
+		async (edits, options = {}) => {
+			if (!options?.isAutosave) {
+				await saveGlobalStylesWordPressCompatibilityBeforePostSave();
+			}
 
 			return edits;
 		}
