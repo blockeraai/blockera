@@ -218,12 +218,6 @@ export function omitUnregisteredInnerBlockData(
 		}
 	});
 
-	if (!Object.keys(filtered).length) {
-		const { blockeraInnerBlocks, ...rest } = result;
-
-		return rest;
-	}
-
 	if (result.blockeraInnerBlocks?.value) {
 		return {
 			...result,
