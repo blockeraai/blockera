@@ -4,7 +4,7 @@
  * Wires `@blockera/editor` into global-styles / value-addon preset preview:
  * - Attribute patches → style engine (`StateStyle`) via PresetCanvasPreviewContext.
  * - Gradient / legacy declaration strings → canvas CSS inject.
- * - Picker prop inference (`colorPresetPreviewUsage` / `spacingPresetPreviewUsage`) → `@blockera/controls` registry consumed by `useValueAddon`.
+ * - Picker prop inference (spacing / border / border-radius / filter / gradient / color preview usage) → `@blockera/controls` registry consumed by `useValueAddon`.
  */
 
 /**
@@ -24,9 +24,12 @@ import { mergePickerPropsWithPresetPreviewInference } from '../extensions/libs/p
 import {
 	getGlobalStylesBorderPresetPreviewAttributes,
 	getGlobalStylesBorderRadiusPresetPreviewAttributes,
+	getGlobalStylesColorGradientPresetPreviewDeclarations,
 	getGlobalStylesColorPresetPreviewAttributes,
+	getGlobalStylesColorPresetPreviewDeclarations,
 	getGlobalStylesFilterPresetPreviewAttributes,
 	getGlobalStylesFontSizePresetPreviewAttributes,
+	getGlobalStylesGradientPresetPreviewDeclarations,
 	getGlobalStylesShadowPresetPreviewAttributes,
 	getGlobalStylesSpacingSizePresetPreviewAttributes,
 	getGlobalStylesTextShadowPreviewAttributes,
@@ -51,4 +54,7 @@ registerGlobalStylesPresetPreviewHelpers({
 	getGlobalStylesSpacingSizePresetPreviewAttributes,
 	getGlobalStylesFontSizePresetPreviewAttributes,
 	getGlobalStylesColorPresetPreviewAttributes,
+	getGlobalStylesColorPresetPreviewDeclarations,
+	getGlobalStylesGradientPresetPreviewDeclarations,
+	getGlobalStylesColorGradientPresetPreviewDeclarations,
 });
