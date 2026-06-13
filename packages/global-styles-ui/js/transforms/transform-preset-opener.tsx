@@ -64,6 +64,7 @@ export function TransformPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 				allowEditPopover: canEditGlobalStyles,
+				beforeClick: previewHandlers.onClick,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

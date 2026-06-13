@@ -96,6 +96,7 @@ export function SpacingPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 				allowEditPopover: canEditGlobalStyles,
+				beforeClick: previewHandlers.onClick,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

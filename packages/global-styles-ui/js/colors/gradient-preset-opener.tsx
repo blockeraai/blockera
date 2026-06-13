@@ -61,6 +61,7 @@ export function GradientPresetOpener({
 				setOpen,
 				isOpenPopoverEvent,
 				allowEditPopover: canEditGlobalStyles,
+				beforeClick: previewHandlers.onClick,
 			})}
 			onMouseEnter={previewHandlers.onMouseEnter}
 			onMouseLeave={previewHandlers.onMouseLeave}

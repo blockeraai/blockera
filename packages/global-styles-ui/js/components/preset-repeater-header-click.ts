@@ -17,6 +17,8 @@ export type GetPresetRepeaterHeaderOnClickArgs = {
 	 * Variable-picker rows with `selectable` still delegate selection to GroupControl first.
 	 */
 	readonly allowEditPopover?: boolean;
+	/** Runs on every header click (e.g. clear canvas hover preview). */
+	readonly beforeClick?: () => void;
 };
 
 /**
@@ -28,8 +30,10 @@ export function getPresetRepeaterHeaderOnClick({
 	setOpen,
 	isOpenPopoverEvent,
 	allowEditPopover = true,
+	beforeClick,
 }: GetPresetRepeaterHeaderOnClickArgs): (event: MouseEvent) => void {
 	return (event: MouseEvent) => {
+		beforeClick?.();
 		if (item?.selectable) {
 			return;
 		}

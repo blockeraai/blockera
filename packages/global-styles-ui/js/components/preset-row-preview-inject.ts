@@ -49,6 +49,7 @@ export function usePresetRowCanvasPreview(
 ): {
 	onMouseEnter: () => void;
 	onMouseLeave: () => void;
+	onClick: () => void;
 } {
 	const presetCanvas = usePresetCanvasPreview();
 	const previewInjectable = usePreviewInjectableStyles();
@@ -101,5 +102,6 @@ export function usePresetRowCanvasPreview(
 	return {
 		onMouseEnter: handlePointerEnter,
 		onMouseLeave: handlePointerLeave,
+		onClick: handlePointerLeave,
 	};
 }
