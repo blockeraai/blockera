@@ -1,4 +1,4 @@
-import { getNewIdDetails } from '../utils';
+import { getNewIdDetails, shouldRenameRepeaterItemByType } from '../utils';
 
 describe('generatedDetailsId() function testing ...', () => {
 	it('should generated details for new id when action value include type property', () => {
@@ -51,5 +51,29 @@ describe('generatedDetailsId() function testing ...', () => {
 			itemsCount: 5,
 			uniqueId: '5',
 		});
+	});
+});
+
+describe('shouldRenameRepeaterItemByType() function testing ...', () => {
+	it('should return true when type does not match itemId prefix', () => {
+		expect(
+			shouldRenameRepeaterItemByType('first-0', { type: 'second' })
+		).toBe(true);
+	});
+
+	it('should return false when type matches itemId prefix', () => {
+		expect(
+			shouldRenameRepeaterItemByType('first-0', { type: 'first' })
+		).toBe(false);
+	});
+
+	it('should return false when staticType is provided', () => {
+		expect(
+			shouldRenameRepeaterItemByType(
+				'first-0',
+				{ type: 'second' },
+				'second'
+			)
+		).toBe(false);
 	});
 });
