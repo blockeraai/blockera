@@ -382,6 +382,129 @@ class TestHelpers extends \WP_UnitTestCase {
 		$this->assertEquals( '.my-root.wp-block-my-block.is-style-outline:hover', $result );
 	}
 
+	public function testPseudoOnlySelectorUsesRootBlockPartAndConcatenatesSelector() {
+
+		$selector = '::before';
+		$root     = '.my-root.wp-block-my-block.is-style-outline';
+		$args     = [ 'block-name' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root.wp-block-my-block.is-style-outline::before', $result );
+	}
+
+	public function testPseudoOnlySelectorWithChildCompoundUsesRootAndConcatenatesSelector() {
+
+		$selector = ' :where(li)::marker';
+		$root     = '.my-root.wp-block-page-list.is-style-outline';
+		$args     = [ 'block-name' => 'page-list' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root.wp-block-page-list.is-style-outline :where(li)::marker', $result );
+	}
+
+	public function testPseudoOnlySelectorFallsBackWhenRootHasNoBlockPart() {
+
+		$selector = '::before';
+		$root     = '.my-root';
+		$args     = [ 'block-name' => 'my-block', 'block-type' => 'master' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root::before', $result );
+	}
+
+	public function testListItemRootSelectorMatchesParentListBlockClassSegment() {
+
+		$selector = '::marker';
+		$root     = '.blockera-block.blockera-block--abc';
+		$args     = [
+			'block-name' => 'list-item',
+			'block-type' => 'master',
+			'root'       => '.wp-block-list > li',
+		];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.blockera-block.blockera-block--abc.wp-block-list > li::marker',
+			$result
+		);
+	}
+
+	public function testListItemRootSelectorAppendsVariationsOnLastCompoundForPseudoOnly() {
+
+		$selector = '::marker';
+		$root     = '.blockera-block.blockera-block--abc.is-style-x';
+		$args     = [
+			'block-name' => 'list-item',
+			'block-type' => 'master',
+			'root'       => '.wp-block-list > li',
+		];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.blockera-block.blockera-block--abc.is-style-x.wp-block-list > li.is-style-x::marker',
+			$result
+		);
+	}
+
+	public function testListItemPreferredRootReappendsVariationsOnBlockTypeRoot() {
+
+		$selector = '::marker';
+		$root     = '.wp-block-list > li.is-style-x';
+		$args     = [
+			'block-name' => 'list-item',
+			'block-type' => 'master',
+			'root'       => '.wp-block-list > li',
+		];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.wp-block-list > li.is-style-x::marker',
+			$result
+		);
+	}
+
+	public function testListItemUsesCanonicalBlockClassWhenPresentOnRoot() {
+
+		$selector = '::before';
+		$root     = '.blockera-block.blockera-block--abc.wp-block-list-item.is-style-outline';
+		$args     = [
+			'block-name' => 'list-item',
+			'block-type' => 'master',
+			'root'       => '.wp-block-list > li',
+		];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.blockera-block.blockera-block--abc.wp-block-list-item.is-style-outline::before',
+			$result
+		);
+	}
+
+	public function testListBlockStillMatchesWpBlockListClass() {
+
+		$selector = ' li:not([class*="blockera-has-icon-"])::before';
+		$root     = '.blockera-block.wp-block-list.is-style-outline';
+		$args     = [
+			'block-name' => 'list',
+			'block-type' => 'master',
+			'root'       => '.wp-block-list',
+		];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.blockera-block.wp-block-list.is-style-outline li:not([class*="blockera-has-icon-"])::before',
+			$result
+		);
+	}
+
 	/**
 	 * Test single selector with a suffix.
 	 */
