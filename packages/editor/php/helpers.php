@@ -908,11 +908,11 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			if (isset($args['root']) && ! str_starts_with($args['root'], ' ')) {
 
 				// Replace the custom root with itself plus the standard root selector.
-				return str_replace($args['root'], "{$args['root']}{$root}", $selector);
+				return $wrap_with_global_style( str_replace($args['root'], "{$args['root']}{$root}", $selector) );
 			}
 
 			// Return selector unchanged if no custom root.
-			return "{$root} {$selector}";
+			return $wrap_with_global_style("{$root} {$selector}");
 		}
 
 		// If selector is a child of root or starts with a tag name and should not start with a space because it's a child selector and we should not add it before the root.
@@ -925,20 +925,20 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 			// If the style is global style for block, we should append the selector to the root body for specificity reasons.
 			if (isset($args['is-global-style']) && $args['is-global-style']) {
-				return "{$root}{$pseudo}";
+				return "{$wrap_with_global_style($root)}{$pseudo}";
 			}
 			
 			// Return selector with root for block level style.
-			return "{$base}{$root}{$pseudo}";
+			return "{$wrap_with_global_style("{$base}{$root}")}{$pseudo}";
 		}
 
 		// If root contains selector, we should return the root.
 		if ( str_contains( $root, $selector ) ) {
-			return $root;
+			return $wrap_with_global_style($root);
 		}
 
 		// If selector started with dot or any other classname of child elements, we imagine it's other classname of root or child of root.
-		return "{$root}{$selector}";
+		return $wrap_with_global_style("{$root}{$selector}");
 	}
 }
 
