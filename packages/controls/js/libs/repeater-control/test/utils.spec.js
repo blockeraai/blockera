@@ -1,4 +1,10 @@
-import { prepValueForHeader, getArialLabelSuffix } from '../utils';
+import {
+	prepValueForHeader,
+	getArialLabelSuffix,
+	isRepeaterPromoActive,
+	shouldApplyRepeaterItemNativeStyle,
+	shouldGateRepeaterItemHeaderForPromo,
+} from '../utils';
 
 describe('Util functions', () => {
 	describe('prepValueForHeader', () => {
@@ -85,5 +91,62 @@ describe('Util functions', () => {
 				'this is test'
 			);
 		});
+	});
+});
+
+describe('repeater promo helpers', () => {
+	const items = {
+		'first-0': { type: 'first', order: 0 },
+		'first-1': { type: 'first', order: 1 },
+	};
+
+	const PromoWidgetStub = () => <span>Promo</span>;
+
+	it('isRepeaterPromoActive returns false when PromoComponent is null', () => {
+		expect(isRepeaterPromoActive(null, items, false)).toBe(false);
+	});
+
+	it('isRepeaterPromoActive returns false when disableProHints is true', () => {
+		expect(isRepeaterPromoActive(PromoWidgetStub, items, true)).toBe(false);
+	});
+
+	it('isRepeaterPromoActive returns true when promo component renders', () => {
+		expect(isRepeaterPromoActive(PromoWidgetStub, items, false)).toBe(true);
+	});
+
+	it('shouldGateRepeaterItemHeaderForPromo returns false when promo is inactive', () => {
+		expect(
+			shouldGateRepeaterItemHeaderForPromo(
+				'first-1',
+				{ type: 'first', order: 1 },
+				items,
+				true,
+				false
+			)
+		).toBe(false);
+	});
+
+	it('shouldApplyRepeaterItemNativeStyle returns false when promo is inactive', () => {
+		expect(
+			shouldApplyRepeaterItemNativeStyle(
+				'first-1',
+				{ type: 'first', order: 1 },
+				items,
+				true,
+				false
+			)
+		).toBe(false);
+	});
+
+	it('shouldGateRepeaterItemHeaderForPromo gates second generic item when promo is active', () => {
+		expect(
+			shouldGateRepeaterItemHeaderForPromo(
+				'first-1',
+				{ type: 'first', order: 1 },
+				items,
+				true,
+				true
+			)
+		).toBe(true);
 	});
 });

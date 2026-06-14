@@ -137,3 +137,83 @@ export function isEnabledPromote(
 		0 !== Children.count(Promotion({ items }))
 	);
 }
+
+/**
+ * Whether repeater promo UX (modal, guard, native styling, gated actions) is active.
+ *
+ * Aligns header guard and is-native presentation with PromoComponent and admin
+ * disableProHints — e.g. when Blockera Pro nulls PromoComponent via props filter.
+ *
+ * @param {Function|void} Promotion PromoComponent render prop.
+ * @param {Object} items Repeater items value.
+ * @param {boolean} disableProHints Admin setting to hide pro hints.
+ * @return {boolean} True when promo flow should run.
+ */
+export function isRepeaterPromoActive(
+	Promotion?: (items: Object) => MixedElement,
+	items: Object,
+	disableProHints: boolean = false
+): boolean {
+	return !disableProHints && isEnabledPromote(Promotion, items);
+}
+
+/**
+ * Whether a repeater row should use native promo styling (`is-native` class).
+ *
+ * @param {string} itemId Repeater item id.
+ * @param {Object} item Repeater item value.
+ * @param {Object} items Full repeater value.
+ * @param {boolean} enablePromoCountOnRepeaterItemHeader Header promo flag.
+ * @param {boolean} isPromoActive Whether repeater promo flow is active.
+ * @return {boolean} True when row should use native styling.
+ */
+export function shouldApplyRepeaterItemNativeStyle(
+	itemId: string,
+	item: Object,
+	items: Object,
+	enablePromoCountOnRepeaterItemHeader: boolean,
+	isPromoActive: boolean
+): boolean {
+	if (!isPromoActive) {
+		return false;
+	}
+
+	return (
+		true === item?.native ||
+		(enablePromoCountOnRepeaterItemHeader &&
+			!isFirstRepeaterItem(itemId, items) &&
+			false !== item?.native)
+	);
+}
+
+/**
+ * Whether header/guard interactions should be gated behind promo for a row.
+ *
+ * @param {string} itemId Repeater item id.
+ * @param {Object} item Repeater item value.
+ * @param {Object} items Full repeater value.
+ * @param {boolean} enablePromoCountOnRepeaterItemHeader Header promo flag.
+ * @param {boolean} isPromoActive Whether repeater promo flow is active.
+ * @return {boolean} True when promo should intercept header interactions.
+ */
+export function shouldGateRepeaterItemHeaderForPromo(
+	itemId: string,
+	item: Object,
+	items: Object,
+	enablePromoCountOnRepeaterItemHeader: boolean,
+	isPromoActive: boolean
+): boolean {
+	if (!isPromoActive || false === item?.native) {
+		return false;
+	}
+
+	if (!enablePromoCountOnRepeaterItemHeader) {
+		return false;
+	}
+
+	if (isFirstRepeaterItem(itemId, items) && !item.hasOwnProperty('native')) {
+		return false;
+	}
+
+	return true;
+}
