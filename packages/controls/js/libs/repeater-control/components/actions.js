@@ -21,7 +21,7 @@ import { Button, Tooltip, Flex, MenuItem } from '../../';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
 import ConfirmDeleteModal from './confirm-delete-modal';
-import { getArialLabelSuffix, isEnabledPromote } from '../utils';
+import { getArialLabelSuffix, isRepeaterPromoActive } from '../utils';
 
 export default function RepeaterItemActions({
 	item,
@@ -47,6 +47,7 @@ export default function RepeaterItemActions({
 		repeaterItems,
 		PromoComponent,
 		itemIdGenerator,
+		disableProHints,
 		actionButtonClone,
 		actionButtonReset,
 		actionButtonsType,
@@ -133,7 +134,11 @@ export default function RepeaterItemActions({
 
 		if (
 			!disableRegenerateId &&
-			isEnabledPromote(PromoComponent, repeaterItems)
+			isRepeaterPromoActive(
+				PromoComponent,
+				repeaterItems,
+				disableProHints
+			)
 		) {
 			setCount(count + 1);
 			setDisableAddNewItem(true);
@@ -181,7 +186,11 @@ export default function RepeaterItemActions({
 
 			if (
 				visibleItems.length >= 1 &&
-				isEnabledPromote(PromoComponent, repeaterItems)
+				isRepeaterPromoActive(
+					PromoComponent,
+					repeaterItems,
+					disableProHints
+				)
 			) {
 				return setCount(count + 1);
 			}
@@ -214,7 +223,13 @@ export default function RepeaterItemActions({
 		event.stopPropagation();
 		closeMenu(event);
 
-		if (isEnabledPromote(PromoComponent, repeaterItems)) {
+		if (
+			isRepeaterPromoActive(
+				PromoComponent,
+				repeaterItems,
+				disableProHints
+			)
+		) {
 			setCount(count + 1);
 			setDisableAddNewItem(true);
 

@@ -19,7 +19,7 @@ import { useControlContext } from '../../../context';
 import { Button } from '../../';
 import ConfirmDeleteModal from './confirm-delete-modal';
 import { repeaterOnChange } from '../store/reducers/utils';
-import { getArialLabelSuffix, isEnabledPromote } from '../utils';
+import { getArialLabelSuffix, isRepeaterPromoActive } from '../utils';
 
 type Props = {
 	item: Object,
@@ -45,6 +45,7 @@ export default function RepeaterPopoverTitleDelete({
 		repeaterItems,
 		PromoComponent,
 		itemIdGenerator,
+		disableProHints,
 		actionButtonDelete,
 		disableRegenerateId,
 		setDisableAddNewItem,
@@ -77,7 +78,11 @@ export default function RepeaterPopoverTitleDelete({
 
 		if (
 			!disableRegenerateId &&
-			isEnabledPromote(PromoComponent, repeaterItems)
+			isRepeaterPromoActive(
+				PromoComponent,
+				repeaterItems,
+				disableProHints
+			)
 		) {
 			setCount(count + 1);
 			setDisableAddNewItem(true);
