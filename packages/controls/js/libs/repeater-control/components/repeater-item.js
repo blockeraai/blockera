@@ -26,9 +26,10 @@ import { RepeaterProItemInteractionGuard } from './repeater-pro-item-interaction
 import { RepeaterContext } from '../context';
 import {
 	getArialLabelSuffix,
-	isEnabledPromote,
-	isFirstRepeaterItem,
 	isOpenPopoverEvent,
+	isRepeaterPromoActive,
+	shouldApplyRepeaterItemNativeStyle,
+	shouldGateRepeaterItemHeaderForPromo,
 } from '../utils';
 import { shouldRenameRepeaterItemByType } from '../store/reducers/utils';
 import Flex from '../../flex';
@@ -95,6 +96,7 @@ const RepeaterItem = ({
 		actionMenuButtonLabel,
 		onSelectableItemActivate,
 		enablePromoCountOnRepeaterItemHeader,
+		disableProHints,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -105,32 +107,28 @@ const RepeaterItem = ({
 	const { onClick: customHeaderOnClick, ...restCustomProps } =
 		customProps || {};
 
-	const bumpPromoInteractionCount = (itemId: string): boolean => {
-		if (enablePromoCountOnRepeaterItemHeader === false) {
+	const isPromoActive = isRepeaterPromoActive(
+		PromoComponent,
+		items,
+		disableProHints
+	);
+
+	const bumpPromoInteractionCount = (): boolean => {
+		if (
+			!shouldGateRepeaterItemHeaderForPromo(
+				itemId,
+				item,
+				items,
+				enablePromoCountOnRepeaterItemHeader,
+				isPromoActive
+			)
+		) {
 			return false;
 		}
 
-		let shouldBump = false;
+		setCount((c) => c + 1);
 
-		if (true === item?.native) {
-			if (isEnabledPromote(PromoComponent, items)) {
-				shouldBump = true;
-			}
-		} else if (
-			!item.hasOwnProperty('native') &&
-			isEnabledPromote(PromoComponent, items) &&
-			!isFirstRepeaterItem(itemId, items)
-		) {
-			shouldBump = true;
-		}
-
-		if (shouldBump) {
-			setCount((c) => c + 1);
-
-			return true;
-		}
-
-		return false;
+		return true;
 	};
 
 	const repeaterItemActionsProps = {
@@ -257,7 +255,7 @@ const RepeaterItem = ({
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
 			onClick={(event) => {
-				if (bumpPromoInteractionCount(itemId)) {
+				if (bumpPromoInteractionCount()) {
 					event.stopPropagation();
 					return;
 				}
@@ -300,7 +298,7 @@ const RepeaterItem = ({
 			className={controlInnerClassNames('repeater-item-header-holder')}
 			style={{ width: '100%' }}
 			onClickCapture={(e) => {
-				if (bumpPromoInteractionCount(itemId)) {
+				if (bumpPromoInteractionCount()) {
 					e.stopPropagation();
 					return;
 				}
@@ -340,8 +338,9 @@ const RepeaterItem = ({
 						items={items}
 						itemId={itemId}
 						actionButtonsType={actionButtonsType}
+						isPromoActive={isPromoActive}
 						onBlockedPointerInteraction={() => {
-							bumpPromoInteractionCount(itemId);
+							bumpPromoInteractionCount();
 						}}
 						enablePromoCountOnRepeaterItemHeader={
 							enablePromoCountOnRepeaterItemHeader
@@ -453,11 +452,13 @@ const RepeaterItem = ({
 				isVisible ? ' is-active' : ' is-inactive',
 				{
 					draggable: !isOpen,
-					'is-native':
-						true === item?.native ||
-						(enablePromoCountOnRepeaterItemHeader &&
-							!isFirstRepeaterItem(itemId, items) &&
-							false !== item?.native),
+					'is-native': shouldApplyRepeaterItemNativeStyle(
+						itemId,
+						item,
+						items,
+						enablePromoCountOnRepeaterItemHeader,
+						isPromoActive
+					),
 				}
 			)}
 			draggable={!isOpen}
@@ -482,8 +483,9 @@ const RepeaterItem = ({
 					items={items}
 					itemId={itemId}
 					actionButtonsType={actionButtonsType}
+					isPromoActive={isPromoActive}
 					onBlockedPointerInteraction={() => {
-						bumpPromoInteractionCount(itemId);
+						bumpPromoInteractionCount();
 					}}
 					enablePromoCountOnRepeaterItemHeader={
 						enablePromoCountOnRepeaterItemHeader

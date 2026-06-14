@@ -18,7 +18,10 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { MenuItem } from '../../';
-import { getArialLabelSuffix, isFirstRepeaterItem } from '../utils';
+import {
+	getArialLabelSuffix,
+	shouldGateRepeaterItemHeaderForPromo,
+} from '../utils';
 
 const DEFAULT_UPGRADE_LINK =
 	'https://blockera.ai/products/site-builder/upgrade/?utm_source=repeater-pro-item-guard&utm_medium=referral&utm_campaign=upgrade-feature-wrapper&utm_content=cta-link';
@@ -37,6 +40,7 @@ export function RepeaterProItemInteractionGuard({
 	className = '',
 	showText = 'on-hover',
 	enablePromoCountOnRepeaterItemHeader,
+	isPromoActive,
 }: {
 	item: Object,
 	items: Object,
@@ -47,14 +51,17 @@ export function RepeaterProItemInteractionGuard({
 	className?: string,
 	showText?: 'on-hover' | 'always',
 	enablePromoCountOnRepeaterItemHeader: boolean,
+	isPromoActive: boolean,
 }): MixedElement | null {
-	if (false === item?.native) {
-		return null;
-	}
-	if (!enablePromoCountOnRepeaterItemHeader) {
-		return null;
-	}
-	if (isFirstRepeaterItem(itemId, items) && !item.hasOwnProperty('native')) {
+	if (
+		!shouldGateRepeaterItemHeaderForPromo(
+			itemId,
+			item,
+			items,
+			enablePromoCountOnRepeaterItemHeader,
+			isPromoActive
+		)
+	) {
 		return null;
 	}
 
