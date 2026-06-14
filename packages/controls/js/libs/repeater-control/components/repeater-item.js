@@ -30,6 +30,7 @@ import {
 	isFirstRepeaterItem,
 	isOpenPopoverEvent,
 } from '../utils';
+import { shouldRenameRepeaterItemByType } from '../store/reducers/utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
 import type { RepeaterItemProps } from '../types';
@@ -67,7 +68,12 @@ const RepeaterItem = ({
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch: { sortRepeaterItem, modifyControlValue, changeRepeaterItem },
+		dispatch: {
+			sortRepeaterItem,
+			modifyControlValue,
+			changeRepeaterItem,
+			renameRepeaterItemByType,
+		},
 	} = useControlContext();
 
 	const {
@@ -211,6 +217,31 @@ const RepeaterItem = ({
 		}
 	};
 
+	const getClosingItemValue = () => ({
+		...item,
+		isOpen: false,
+		...(item.creatingStep ? { creatingStep: false } : {}),
+	});
+
+	const commitRepeaterItemClose = () => {
+		const closingValue = getClosingItemValue();
+		const sharedAction = {
+			itemId,
+			value: closingValue,
+			controlId,
+			repeaterId,
+			onChange,
+			valueCleanup,
+		};
+
+		if (shouldRenameRepeaterItemByType(itemId, closingValue)) {
+			renameRepeaterItemByType(sharedAction);
+			return;
+		}
+
+		changeRepeaterItem(sharedAction);
+	};
+
 	if (
 		isBoolean(item?.renderRepeaterItem) &&
 		false === item.renderRepeaterItem
@@ -236,14 +267,17 @@ const RepeaterItem = ({
 				}
 
 				const nextOpen = !isOpen;
+
+				if (!nextOpen) {
+					commitRepeaterItemClose();
+					return;
+				}
+
 				changeRepeaterItem({
 					itemId,
 					value: {
 						...item,
-						isOpen: nextOpen,
-						...(item.creatingStep && !nextOpen
-							? { creatingStep: false }
-							: {}),
+						isOpen: true,
 					},
 					controlId,
 					repeaterId,
@@ -356,31 +390,7 @@ const RepeaterItem = ({
 		isOpen,
 		onClose: () => {
 			setOpen(false);
-
-			if (isEnabledPromote(PromoComponent, items)) {
-				changeRepeaterItem({
-					itemId,
-					value: {
-						...item,
-						isOpen: false,
-						...(item.creatingStep ? { creatingStep: false } : {}),
-					},
-					controlId,
-					repeaterId,
-				});
-				return;
-			}
-
-			changeRepeaterItem({
-				itemId,
-				value: {
-					...item,
-					isOpen: !isOpen,
-					...(item.creatingStep ? { creatingStep: false } : {}),
-				},
-				controlId,
-				repeaterId,
-			});
+			commitRepeaterItemClose();
 		},
 		onClick: (): void | boolean => {
 			if (item?.selectable) {
