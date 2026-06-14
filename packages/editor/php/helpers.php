@@ -817,6 +817,178 @@ if ( ! function_exists( 'blockera_append_css_selector_suffix' ) ) {
     }
 }
 
+if ( ! function_exists( 'blockera_is_pseudo_only_block_selector' ) ) {
+
+	/**
+	 * Check whether a selector is pseudo-only (no block class compound).
+	 *
+	 * @param string $selector The css selector.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_pseudo_only_block_selector( string $selector ): bool {
+
+		if ( preg_match( '/\.\bwp-block-/', $selector ) ) {
+			return false;
+		}
+
+		return (bool) preg_match( '/^[\s>+~]*(?:::|:)/', $selector );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_block_name_segments' ) ) {
+
+	/**
+	 * Build progressively shorter block name segments for smart wp-block matching.
+	 *
+	 * Example: `list-item` => [ 'list-item', 'list' ].
+	 *
+	 * @param string $block_name The block type slug (without `core/`).
+	 *
+	 * @return string[] Ordered from most specific to least specific.
+	 */
+	function blockera_get_block_name_segments( string $block_name ): array {
+
+		$segments = [ $block_name ];
+		$parts    = explode( '-', $block_name );
+
+		while ( count( $parts ) > 1 ) {
+			array_pop( $parts );
+			$segments[] = implode( '-', $parts );
+		}
+
+		return $segments;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_block_css_part_pattern' ) ) {
+
+	/**
+	 * Build a regex pattern for a wp-block class part segment.
+	 *
+	 * @param string $block_name_segment The block name segment.
+	 *
+	 * @return string The regex pattern.
+	 */
+	function blockera_get_block_css_part_pattern( string $block_name_segment ): string {
+
+		return '/\.\b' . preg_quote( 'wp-block-' . $block_name_segment, '/' ) . '\b(?!\w+|-|_)/';
+	}
+}
+
+if ( ! function_exists( 'blockera_resolve_block_css_part' ) ) {
+
+	/**
+	 * Resolve the wp-block class part for the current block type.
+	 *
+	 * Tries the full block name first, then shorter hyphen segments so blocks like
+	 * `core/list-item` can match `.wp-block-list` inside `.wp-block-list > li`.
+	 *
+	 * @param string $selector The prepared support selector.
+	 * @param string $root     The blockera unique root selector.
+	 * @param array  $args     The append arguments.
+	 *
+	 * @return string|null The resolved block class part, or null when not found.
+	 */
+	function blockera_resolve_block_css_part( string $selector, string $root, array $args ): ?string {
+
+		$block_name = $args['block-name'] ?? '';
+
+		if ( '' === trim( $block_name ) ) {
+			return null;
+		}
+
+		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
+			$part_pattern = blockera_get_block_css_part_pattern( $segment );
+
+			if ( preg_match( $part_pattern, $selector, $selector_match ) ) {
+				return $selector_match[0];
+			}
+		}
+
+		if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
+			return null;
+		}
+
+		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
+			$part_pattern = blockera_get_block_css_part_pattern( $segment );
+
+			foreach ( [ $root, $args['root'] ?? '' ] as $source ) {
+				if ( '' === trim( $source ) ) {
+					continue;
+				}
+
+				if ( preg_match( $part_pattern, $source, $source_match ) ) {
+					return $source_match[0];
+				}
+			}
+		}
+
+		return null;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_prefer_source_for_block_part' ) ) {
+
+	/**
+	 * Pick the variation-free source selector for pseudo-only block part merging.
+	 *
+	 * Priority:
+	 * 1. Blockera root without variations when it already contains the resolved wp-block part.
+	 * 2. Block type root from `$args['root']` without variations (e.g. `.wp-block-list > li`).
+	 * 3. Blockera root without variations as a fallback.
+	 *
+	 * Non pseudo-only selectors are returned unchanged.
+	 *
+	 * @param string $selector   The prepared support selector.
+	 * @param string $root       The blockera unique root selector.
+	 * @param string $block_part The resolved wp-block class part.
+	 * @param array  $args       The append arguments.
+	 *
+	 * @return string
+	 */
+	function blockera_get_prefer_source_for_block_part( string $selector, string $root, string $block_part, array $args ): string {
+
+		if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
+			return $selector;
+		}
+
+		$root_without_variations = \Blockera\Utils\Utils::stripBlockVariationClasses(
+			\Blockera\Utils\Utils::stripTrailingPseudos( $root )
+		);
+
+		if ( '' !== trim( $root ) && str_contains( $root, $block_part ) ) {
+			return $root_without_variations;
+		}
+
+		$block_type_root = $args['root'] ?? '';
+
+		if ( '' !== trim( $block_type_root ) && str_contains( $block_type_root, $block_part ) ) {
+			return \Blockera\Utils\Utils::stripBlockVariationClasses(
+				\Blockera\Utils\Utils::stripTrailingPseudos( $block_type_root )
+			);
+		}
+
+		return $root_without_variations;
+	}
+}
+
+if ( ! function_exists( 'blockera_root_contains_block_part' ) ) {
+
+	/**
+	 * Check whether a root selector already includes a resolved wp-block class part.
+	 *
+	 * @param string $root       The root selector.
+	 * @param string $block_part The resolved wp-block class part.
+	 *
+	 * @return bool
+	 */
+	function blockera_root_contains_block_part( string $root, string $block_part ): bool {
+
+		return '' !== trim( $root ) && '' !== trim( $block_part ) && str_contains( $root, $block_part );
+	}
+}
+
 if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 	/**
@@ -864,34 +1036,56 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$is_child_selector = true;
 		}
 
-		$preg_quote = preg_quote( $args['block-name'], '/' );
-		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
+		$variations              = \Blockera\Utils\Utils::extractBlockVariationClasses( $root );
+		$block_part              = blockera_resolve_block_css_part( $selector, $root, $args );
+		$is_pseudo_only_selector = blockera_is_pseudo_only_block_selector( $selector );
 
 		// Assume received selector is another reference to root, so we should concat together.
-		if ( preg_match( $pattern, $selector, $matches ) ) {
+		if ( null !== $block_part ) {
+			$resolved_block_part = $block_part;
+			$prefer_source       = blockera_get_prefer_source_for_block_part( $selector, $root, $block_part, $args );
+			$preferred_root      = null;
 
-			$block_part = $matches[0];
-			$variations = \Blockera\Utils\Utils::extractBlockVariationClasses( $root );
+			/*
+			 * Pseudo-only selectors (e.g. `::marker`, `::before`) have no wp-block compound of their own.
+			 *
+			 * 1. Pick a variation-free preferred root via blockera_get_prefer_source_for_block_part().
+			 * 2. When variations exist, re-append them on the full preferred root (not only the resolved
+			 *    wp-block class segment). Example: `.wp-block-list > li.is-style-x`, not `.wp-block-list.is-style-x > li` when the $is_pseudo_only_selector is true.
+			 * 3. If the blockera root already contains the resolved wp-block part, the varied preferred root
+			 *    is final. Otherwise merge the blockera prefix via modifySelectorPos() (list-item case).
+			 * 4. Without variations, preferContainedRootSelector() handles roots that already contain the target.
+			 */
+			if ( $is_pseudo_only_selector && ! empty( $variations ) ) {
+				$prefer_source = \Blockera\Utils\Utils::appendVariationsToSelector(
+					$prefer_source,
+					$prefer_source,
+					$variations
+				);
+				$variations    = [];
 
-			$preferred_root = \Blockera\Utils\Utils::preferContainedRootSelector(
-				$selector,
-				$root,
-				$block_part,
-				[
-					'wrap' => $wrap_with_global_style,
-				]
-			);
-
-			if ( null !== $preferred_root ) {
-
-				return $preferred_root;
+				if ( blockera_root_contains_block_part( $root, $resolved_block_part ) ) {
+					$preferred_root = $prefer_source;
+				}
+			} else {
+				$preferred_root = \Blockera\Utils\Utils::preferContainedRootSelector(
+					$prefer_source,
+					$root,
+					$block_part,
+					[
+						'wrap' => $wrap_with_global_style,
+					]
+				);
 			}
 
-			// Appending blockera root unique css selector into picked your selector.
-			return $wrap_with_global_style(
+			if ( null !== $preferred_root ) {
+				return $is_pseudo_only_selector ? $preferred_root . $selector : $preferred_root;
+			}
+
+			$merged_selector = $wrap_with_global_style(
 				\Blockera\Utils\Utils::modifySelectorPos(
-					$selector,
-					$block_part,
+					$prefer_source,
+					$resolved_block_part,
 					[
 						'prefix'     => $root,
 						'suffix'     => '',
@@ -899,6 +1093,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 					]
 				)
 			);
+
+			return $is_pseudo_only_selector ? $merged_selector . $selector : $merged_selector;
 		}
 
 		// Handle cases where selector and root are identical or when dealing with inner blocks.
