@@ -289,6 +289,12 @@ class RestAPIController {
 			ThemeTemplates::clear_user_template_parts_customizations();
 		}
 
+		if ( function_exists( 'blockera_get_cache' ) ) {
+			blockera_get_cache()->clear();
+		}
+
+		JSONResolver::clean_cached_data();
+
 		wp_get_theme()->cache_delete();
 
 		return rest_ensure_response(
