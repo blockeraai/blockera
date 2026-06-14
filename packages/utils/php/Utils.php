@@ -83,26 +83,32 @@ class Utils {
 			$trimmedSel = trim( $sel );
 
 			// Check if the current selector contains the part (like ".wp-block-sample").
-			if ( strpos( $trimmedSel, $part ) !== false ) {
+			$anchor_part = $part;
+
+			if ( preg_match( '/[\s>+~]/', $part ) && preg_match( '/^(\.[^\s>+~]+)/', $part, $class_match ) ) {
+				$anchor_part = $class_match[1];
+			}
+
+			if ( strpos( $trimmedSel, $part ) !== false || strpos( $trimmedSel, $anchor_part ) !== false ) {
 				// Remove dot.
-				$partWithoutDot = substr( $part, 1 );
+				$partWithoutDot = substr( $anchor_part, 1 );
 
 				// Regular expression pattern to detecting a specific part of selector.
 				$pattern = '/\.\b' . preg_quote( $partWithoutDot, '/' ) . '\b(?!\w+|-|_)/';
 
 				// Add the prefix around the part.
-				$modifiedWithPrefix = preg_replace( $pattern, $prefix . $part, $trimmedSel );
-				if ( str_contains( $prefix, $part ) ) {
+				$modifiedWithPrefix = preg_replace( $pattern, $prefix . $anchor_part, $trimmedSel );
+				if ( str_contains( $prefix, $anchor_part ) ) {
 					$modifiedWithPrefix = self::mergePrefixWithSelectorPart(
 						$prefix,
-						$part,
+						$anchor_part,
 						$trimmedSel,
 						$variations
 					);
 				} elseif ( ! empty( $variations ) ) {
 					$modifiedWithPrefix = self::appendVariationsAfterPart(
 						$modifiedWithPrefix,
-						$part,
+						$anchor_part,
 						$variations
 					);
 				}
@@ -114,7 +120,7 @@ class Utils {
 
 				// If a suffix is provided, create a new selector and add it as a separate selector.
 				if ( ! empty( $suffix ) ) {
-					$modifiedWithSuffix = preg_replace( $pattern, $part . $suffix, $trimmedSel );
+					$modifiedWithSuffix = preg_replace( $pattern, $anchor_part . $suffix, $trimmedSel );
 
 					// Add the modified selector to the array with the suffix.
 					if ( ! in_array( $modifiedWithSuffix, $modifiedSelectors, true ) ) {
@@ -170,7 +176,18 @@ class Utils {
 		}
 
 		$merged = '' !== $root_base ? $root_base : $root;
-		$merged = self::appendVariationsAfterPart( $merged, $block_part, $variations );
+		$merged = self::appendVariationsToSelector( $merged, $block_part, $variations );
+
+		$missing_variations = array_values(
+			array_filter(
+				$variations,
+				static fn( string $variation ): bool => ! str_contains( $merged, $variation )
+			)
+		);
+
+		if ( ! empty( $missing_variations ) ) {
+			$merged = self::appendVariationsAfterLastCompound( $merged, $missing_variations );
+		}
 
 		if ( isset( $args['wrap'] ) && is_callable( $args['wrap'] ) ) {
 			$merged = $args['wrap']( $merged );
@@ -254,6 +271,71 @@ class Utils {
 	}
 
 	/**
+	 * Append missing variation classes after the last compound in a selector.
+	 *
+	 * @param string   $selector   The css selector.
+	 * @param string[] $variations Variation class tokens to append.
+	 *
+	 * @return string The selector with missing variations appended.
+	 */
+	public static function appendVariationsAfterLastCompound( string $selector, array $variations ): string {
+
+		if ( empty( $variations ) ) {
+
+			return $selector;
+		}
+
+		$missing = array_values(
+			array_filter(
+				$variations,
+				static fn( string $variation ): bool => ! str_contains( $selector, $variation )
+			)
+		);
+
+		if ( empty( $missing ) ) {
+
+			return $selector;
+		}
+
+		$suffix = implode( '', $missing );
+
+		if ( preg_match( '/^(.*[\s>+~])([^\s>+~]+)$/', $selector, $matches ) ) {
+
+			return $matches[1] . $matches[2] . $suffix;
+		}
+
+		return $selector . $suffix;
+	}
+
+	/**
+	 * Append missing variation classes to the appropriate compound in a selector.
+	 *
+	 * Compound selectors (with space/`>`/`+`/`~`) receive variations on the last compound
+	 * (e.g. `.wp-block-list > li.is-style-x`). Simple selectors receive them after the
+	 * matched wp-block class part (e.g. `.wp-block-button.is-style-outline`).
+	 *
+	 * @param string   $selector   The css selector.
+	 * @param string   $block_part The matched block class part.
+	 * @param string[] $variations Variation class tokens to append.
+	 *
+	 * @return string The selector with missing variations appended.
+	 */
+	public static function appendVariationsToSelector( string $selector, string $block_part, array $variations ): string {
+
+		if ( empty( $variations ) ) {
+
+			return $selector;
+		}
+
+		if ( preg_match( '/[\s>+~]/', $selector ) ) {
+
+			return self::appendVariationsAfterLastCompound( $selector, $variations );
+		}
+
+		return self::appendVariationsAfterPart( $selector, $block_part, $variations );
+	}
+
+	/**
 	 * Extract trailing pseudo-classes and pseudo-elements from a selector.
 	 *
 	 * @param string $selector The css selector.
@@ -316,6 +398,13 @@ class Utils {
 	): string {
 
 		$merged = self::appendVariationsAfterPart( $prefix, $part, $variations );
+
+		$part_pos = strpos( $selector, $part );
+
+		if ( false !== $part_pos ) {
+
+			return $merged . substr( $selector, $part_pos + strlen( $part ) );
+		}
 
 		return $merged . self::extractTrailingPseudos( $selector );
 	}

@@ -245,6 +245,29 @@ class UtilsTest extends \WP_UnitTestCase {
 		);
 	}
 
+	public function testAppendVariationsAfterLastCompound() {
+
+		$this->assertSame(
+			'.wp-block-list > li.is-style-x',
+			Utils::appendVariationsAfterLastCompound(
+				'.wp-block-list > li',
+				[ '.is-style-x' ]
+			)
+		);
+	}
+
+	public function testPreferContainedRootSelectorReappendsVariationsOnLastCompound() {
+
+		$selector = '.wp-block-list > li';
+		$root     = '.wp-block-list > li.is-style-x';
+		$part     = '.wp-block-list';
+
+		$this->assertSame(
+			'.wp-block-list > li.is-style-x',
+			Utils::preferContainedRootSelector( $selector, $root, $part )
+		);
+	}
+
 	/**
 	 * Test snake case conversion with various input strings
 	 *
