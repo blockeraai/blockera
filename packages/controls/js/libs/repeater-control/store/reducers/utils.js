@@ -9,7 +9,7 @@ import memoize from 'fast-memoize';
  * Blockera dependencies
  */
 import { prepare, update } from '@blockera/data-editor';
-import { isObject, isInteger, isString } from '@blockera/utils';
+import { isEquals, isObject, isInteger, isString } from '@blockera/utils';
 
 /**
  * has limitation in action?
@@ -111,6 +111,75 @@ export const getNewIdDetails = (
 		itemsCount,
 		uniqueId: `${value.type}-${itemsCount}`,
 	};
+};
+
+/**
+ * Whether a repeater item should be renamed when its type no longer matches itemId.
+ *
+ * @param {string} itemId The current repeater item id.
+ * @param {Object} value The repeater item value.
+ * @param {string|void} staticType Optional fixed id override.
+ * @return {boolean} True when rename-by-type should run.
+ */
+export const shouldRenameRepeaterItemByType = (
+	itemId: string,
+	value: Object,
+	staticType?: string
+): boolean => {
+	return Boolean(
+		value?.type &&
+		!new RegExp(`^${value.type}`, 'i').test(itemId) &&
+		!staticType
+	);
+};
+
+/**
+ * Rename a repeater item key to match its type value.
+ *
+ * @param {Object} controlValue The repeater control value.
+ * @param {Object} state The repeater store state.
+ * @param {Object} action The rename action params.
+ * @return {Object|null} The renamed value, unchanged value on duplicate, or null when skipped.
+ */
+export const renameRepeaterItemByTypeValue = (
+	controlValue: Object,
+	state: Object,
+	action: Object
+): ?Object => {
+	if (
+		!shouldRenameRepeaterItemByType(
+			action.itemId,
+			action.value,
+			action.staticType
+		)
+	) {
+		return null;
+	}
+
+	const clonedPrevValue = { ...controlValue };
+
+	delete clonedPrevValue[action.itemId];
+
+	let { uniqueId } = getNewIdDetails(state, action);
+
+	if ('function' === typeof action.getId) {
+		uniqueId = action.getId();
+	}
+
+	if (
+		clonedPrevValue[uniqueId] &&
+		isEquals(action.value, clonedPrevValue[uniqueId])
+	) {
+		return controlValue;
+	}
+
+	return regeneratedIds(
+		{
+			...clonedPrevValue,
+			[uniqueId]: action.value,
+		},
+		action
+	);
 };
 
 export const repeaterOnChange = (

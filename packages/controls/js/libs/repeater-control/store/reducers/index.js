@@ -12,6 +12,7 @@ import { sortItem } from './sort-item';
 import { cloneItem } from './clone-item';
 import { removeItem } from './remove-item';
 import { changeItem } from './change-item';
+import { renameItemByType } from './rename-item-by-type';
 import { resetItem } from './reset-item';
 import { controlReducer } from '../../../../store/reducers/control-reducer';
 
@@ -39,6 +40,9 @@ export function repeaterReducer(state: Object = {}, action: Object): Object {
 
 		case 'CHANGE_REPEATER_ITEM':
 			return changeItem(state, action);
+
+		case 'RENAME_REPEATER_ITEM_BY_TYPE':
+			return renameItemByType(state, action);
 
 		case 'CLONE_REPEATER_ITEM':
 			return cloneItem(state, action);

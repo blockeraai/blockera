@@ -7,12 +7,7 @@ import { update, prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import {
-	hasRepeaterId,
-	getNewIdDetails,
-	repeaterOnChange,
-	regeneratedIds,
-} from './utils';
+import { hasRepeaterId, repeaterOnChange } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
 	const targetRepeater = prepare(action.repeaterId, controlValue);
@@ -53,52 +48,6 @@ export function changeItem(state = {}, action) {
 	}
 
 	const clonedPrevValue = { ...controlInfo.value };
-
-	if (
-		action.value?.type &&
-		!new RegExp(`^${action.value?.type}`, 'i').test(action.itemId) &&
-		!action?.staticType
-	) {
-		delete clonedPrevValue[action.itemId];
-
-		let { uniqueId } = getNewIdDetails(state, action);
-
-		if ('function' === typeof action.getId) {
-			uniqueId = action.getId();
-		}
-
-		if (
-			clonedPrevValue[uniqueId] &&
-			isEquals(action.value, clonedPrevValue[uniqueId])
-		) {
-			return state;
-		}
-
-		repeaterOnChange(
-			regeneratedIds(
-				{
-					...clonedPrevValue,
-					[uniqueId]: { ...action.value, isOpen: true },
-				},
-				action
-			),
-			action
-		);
-
-		return {
-			...state,
-			[action.controlId]: {
-				...controlInfo,
-				value: regeneratedIds(
-					{
-						...clonedPrevValue,
-						[uniqueId]: { ...action.value, isOpen: true },
-					},
-					action
-				),
-			},
-		};
-	}
 
 	if (isEquals(action.value, clonedPrevValue[action.itemId])) {
 		return state;
