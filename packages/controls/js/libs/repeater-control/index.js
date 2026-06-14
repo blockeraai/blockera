@@ -30,7 +30,7 @@ import MappedItems from './components/mapped-items';
 import RepeaterPopoverTitleDelete from './components/popover-title-delete';
 import { BLOCKERA_REPEATER_PROMO_DATA_CY } from './data-cy';
 import { repeaterOnChange } from './store/reducers/utils';
-import { cleanupRepeater, isEnabledPromote } from './utils';
+import { cleanupRepeater, isRepeaterPromoActive } from './utils';
 
 /**
  * Types
@@ -367,10 +367,17 @@ export default function RepeaterControl(
 			...customProps,
 		},
 		enablePromoCountOnRepeaterItemHeader,
+		disableProHints,
 	};
 
 	const addNewButtonOnClick = () => {
-		if (isEnabledPromote(PromoComponent, repeaterItems)) {
+		if (
+			isRepeaterPromoActive(
+				PromoComponent,
+				repeaterItems,
+				disableProHints
+			)
+		) {
 			setCount(count + 1);
 			setDisableAddNewItem(true);
 
@@ -782,9 +789,12 @@ export default function RepeaterControl(
 					</>
 				)}
 			</div>
-			{!disableProHints &&
-				count >= 1 &&
-				isEnabledPromote(PromoComponent, repeaterItems) && (
+			{count >= 1 &&
+				isRepeaterPromoActive(
+					PromoComponent,
+					repeaterItems,
+					disableProHints
+				) && (
 					<div data-cy={BLOCKERA_REPEATER_PROMO_DATA_CY}>
 						{PromoComponent({
 							isOpen: count >= 1,
