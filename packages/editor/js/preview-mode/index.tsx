@@ -18,6 +18,7 @@ import PreviewButton from './components/PreviewButton';
 import PreviewOverlay from './components/PreviewOverlay';
 import { useCurrentEntity } from '../hooks';
 import { usePrefetchPreview } from './hooks/usePrefetchPreview';
+import { saveGlobalStylesWordPressCompatibilityBeforePostSave } from '../editor/global-styles/save-compatibility';
 
 /**
  * BlockeraPreview component - Main container for the preview feature.
@@ -104,6 +105,13 @@ function BlockeraPreview(): ReactElement {
 		handleCloseRef.current = handleClose;
 	}, [handleClose]);
 
+	const getPreviewUrlWithGlobalStylesCompatibility =
+		useCallback(async (): Promise<string | null> => {
+			await saveGlobalStylesWordPressCompatibilityBeforePostSave();
+
+			return getPreviewUrl();
+		}, [getPreviewUrl]);
+
 	/**
 	 * Handle keyboard shortcut to toggle preview mode.
 	 * Toggles the overlay open/closed when Cmd+P (Mac) or Ctrl+P (Windows) is pressed.
@@ -123,6 +131,7 @@ function BlockeraPreview(): ReactElement {
 				handleCloseRef.current?.();
 			} else {
 				// Open overlay - get fresh preview URL (saves post if needed)
+				await saveGlobalStylesWordPressCompatibilityBeforePostSave();
 				const url = await getPreviewUrlRef.current();
 				if (url) {
 					setPreviewUrl(url);
@@ -140,6 +149,7 @@ function BlockeraPreview(): ReactElement {
 	const handleOpenNewTabShortcut = useCallback(
 		async (event: KeyboardEvent): Promise<void> => {
 			event.preventDefault();
+			await saveGlobalStylesWordPressCompatibilityBeforePostSave();
 			const url = await getPreviewUrlRef.current();
 			if (url) {
 				window.open(url, '_blank', 'noopener,noreferrer');
@@ -162,7 +172,7 @@ function BlockeraPreview(): ReactElement {
 			// Check for modifier keys - open in new tab like core behavior
 			if (event.metaKey || event.ctrlKey) {
 				event.preventDefault();
-				const url = await getPreviewUrl();
+				const url = await getPreviewUrlWithGlobalStylesCompatibility();
 				if (url) {
 					window.open(url, '_blank', 'noopener,noreferrer');
 				}
@@ -175,14 +185,14 @@ function BlockeraPreview(): ReactElement {
 				handleClose();
 			} else {
 				// Get fresh preview URL (saves post if needed)
-				const url = await getPreviewUrl();
+				const url = await getPreviewUrlWithGlobalStylesCompatibility();
 				if (url) {
 					setPreviewUrl(url);
 					setIsOverlayOpen(true);
 				}
 			}
 		},
-		[isOverlayOpen, getPreviewUrl, handleClose]
+		[isOverlayOpen, getPreviewUrlWithGlobalStylesCompatibility, handleClose]
 	);
 
 	// Determine if the button should be disabled:
