@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import type { Element } from 'react';
+import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	Fragment,
@@ -31,6 +31,10 @@ import {
 import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import { ControlContextProvider } from '../../../context';
 import { Button, Flex, Popover, SearchControl } from '../../../libs';
+import {
+	hasOpenModalOverlay,
+	isElementInsideModalOverlay,
+} from '../../../libs/modal/overlay-utils';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
@@ -62,6 +66,10 @@ function getVarPickerPopoverRoot(contentRoot: ?HTMLElement): ?HTMLElement {
 function hasOpenOverlayPopoversAsideFromVarPicker(
 	varPickerPopover: HTMLElement
 ): boolean {
+	if (hasOpenModalOverlay()) {
+		return true;
+	}
+
 	const popovers = document.querySelectorAll('.components-popover');
 
 	for (let i = 0; i < popovers.length; i++) {
@@ -86,7 +94,7 @@ function isDismissTargetOutsideVarPicker(
 		return false;
 	}
 
-	if (target instanceof Element) {
+	if (target instanceof HTMLElement) {
 		if (
 			target.closest(
 				'.blockera-control-value-addon-pointers, [data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]'
@@ -103,6 +111,11 @@ function isDismissTargetOutsideVarPicker(
 
 		// SelectControl and similar dropdown surfaces.
 		if (target.closest('.components-dropdown__content')) {
+			return false;
+		}
+
+		// Nested modals (delete confirm, rename, reset dialogs, upgrade prompts, …).
+		if (isElementInsideModalOverlay(target)) {
 			return false;
 		}
 
@@ -127,7 +140,7 @@ export default function ({
 	controlProps: ValueAddonControlProps,
 	onClose?: () => void,
 	popoverOffset?: number,
-}): Element<any> {
+}): MixedElement {
 	const variableTypes = controlProps.variableTypes || [];
 	const supplementalSections =
 		getSupplementalCustomVariableSections(controlProps);
@@ -161,6 +174,39 @@ export default function ({
 		controlProps.setOpen('');
 	}, [controlProps, onClose]);
 
+	const handleFocusOutside = useCallback(
+		(event: FocusEvent) => {
+			if (hasOpenModalOverlay()) {
+				return;
+			}
+
+			const varPickerPopover = getVarPickerPopoverRoot(
+				popoverContentRef.current
+			);
+			if (
+				varPickerPopover &&
+				hasOpenOverlayPopoversAsideFromVarPicker(varPickerPopover)
+			) {
+				return;
+			}
+
+			const related = event?.relatedTarget;
+			if (related instanceof HTMLElement) {
+				if (isElementInsideModalOverlay(related)) {
+					return;
+				}
+
+				const root = getVarPickerPopoverRoot(popoverContentRef.current);
+				if (root && root.contains(related)) {
+					return;
+				}
+			}
+
+			handleClose();
+		},
+		[handleClose]
+	);
+
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
 			if (event.key !== 'Escape' || event.defaultPrevented) {
@@ -184,6 +230,10 @@ export default function ({
 		};
 
 		const handlePointerDown = (event: MouseEvent) => {
+			if (hasOpenModalOverlay()) {
+				return;
+			}
+
 			const varPickerPopover = getVarPickerPopoverRoot(
 				popoverContentRef.current
 			);
@@ -380,6 +430,7 @@ export default function ({
 			offset={popoverOffset}
 			placement="left-start"
 			onClose={handleClose}
+			onFocusOutside={handleFocusOutside}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>

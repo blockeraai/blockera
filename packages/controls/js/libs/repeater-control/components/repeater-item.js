@@ -23,6 +23,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import RepeaterItemActions from './actions';
 import { RepeaterProItemInteractionGuard } from './repeater-pro-item-interaction-guard';
+import { hasOpenModalOverlay } from '../../modal/overlay-utils';
 import { RepeaterContext } from '../context';
 import {
 	getArialLabelSuffix,
@@ -393,6 +394,10 @@ const RepeaterItem = ({
 		},
 		onClick: (): void | boolean => {
 			if (item?.selectable) {
+				if (hasOpenModalOverlay()) {
+					return;
+				}
+
 				const newItems: { [key: string]: any } = {};
 
 				Object.entries(items).forEach(
