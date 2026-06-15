@@ -13,7 +13,7 @@ describe('useBlockSideEffects Testing ...', () => {
 	it('should be able to hide WordPress block original tabs on styles tab on normal', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.get('[role="tabpanel"] .block-editor-block-inspector__tabs').should(
 			'have.css',
@@ -30,7 +30,7 @@ describe('useBlockSideEffects Testing ...', () => {
 		);
 
 		cy.getBlock('core/social-links').click();
-		cy.getByDataTest('settings-tab').click({ force: true });
+		cy.getByAriaControls('settings-view').click({ force: true });
 
 		cy.get('[aria-labelledby*="-settings"]')
 			.eq(1)
@@ -48,7 +48,7 @@ describe('useBlockSideEffects Testing ...', () => {
 
 		setBlockState('Hover');
 
-		cy.getByDataTest('settings-tab').click({ force: true });
+		cy.getByAriaControls('settings-view').click({ force: true });
 
 		cy.getByDataTest('blockera-availability').should(
 			'have.css',
@@ -68,7 +68,7 @@ describe('useBlockSideEffects Testing ...', () => {
 
 		setBlockState('Hover');
 
-		cy.getByDataTest('settings-tab').click({ force: true });
+		cy.getByAriaControls('settings-view').click({ force: true });
 
 		cy.getByDataTest('blockera-availability').should(
 			'have.css',

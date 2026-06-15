@@ -120,7 +120,7 @@ describe('Post Content Block', () => {
 		//
 		// 2. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-panel__body-title button')

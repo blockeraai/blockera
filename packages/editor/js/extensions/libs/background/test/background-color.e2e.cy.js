@@ -14,7 +14,7 @@ describe('Background Color → Functionality', () => {
 
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		// add alias to the feature container
 		cy.getParentContainer('BG Color').as('bgColorContainer');

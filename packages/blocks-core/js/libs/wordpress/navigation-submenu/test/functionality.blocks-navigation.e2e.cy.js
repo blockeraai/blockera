@@ -116,11 +116,11 @@ describe(
 			cy.getByDataTest('add-new-block-state').click();
 
 			// Icon extension is active
-			cy.getByDataTest('settings-tab').click({ force: true });
+			cy.getByAriaControls('settings-view').click({ force: true });
 			cy.getByAriaLabel('Choose Icon…').should('exist');
 
 			// switch back to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			// switch to parent navigation block
 			cy.get('.blockera-extension-block-card.master-block-card').within(
@@ -310,7 +310,7 @@ describe(
 			// 2. Check settings tab
 			//
 			setParentBlock();
-			cy.getByDataTest('settings-tab').click();
+			cy.getByAriaControls('settings-view').click();
 
 			cy.get('.block-editor-block-inspector').within(() => {
 				cy.get('.components-tools-panel-header')

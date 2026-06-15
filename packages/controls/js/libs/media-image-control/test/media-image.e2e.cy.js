@@ -12,7 +12,7 @@ describe('media-image', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 	});
 
 	context('Functional', () => {
@@ -147,7 +147,7 @@ describe('media-image', () => {
 
 				cy.getIframeBody().getBlock('core/paragraph').first().click();
 
-				cy.getByDataTest('style-tab').click();
+				cy.getByAriaControls('styles-view').click();
 
 				cy.getParentContainer('Image & Gradient').within(() => {
 					cy.getByDataCy('repeater-item').should('exist');

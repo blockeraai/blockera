@@ -12,7 +12,7 @@ describe('Color Control label testing (BG Color)', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		// Alias
 		cy.getParentContainer('BG Color').within(() => {

@@ -40,7 +40,7 @@ describe('Position Control label testing', () => {
 	describe('Check while editing sides', () => {
 		beforeEach(() => {
 			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Position').within(() => {
 				cy.customSelect('Relative');

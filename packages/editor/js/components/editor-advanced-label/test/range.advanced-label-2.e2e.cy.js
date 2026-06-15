@@ -12,7 +12,7 @@ describe('Range Control label testing (Opacity)', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 	});
 
 	const setOpacityValue = (value) => {

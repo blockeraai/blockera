@@ -126,7 +126,7 @@ describe('Button Block', () => {
 		//
 		// 2. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			// block settings panel body should be hidden

@@ -58,7 +58,7 @@ describe('Grid Child', () => {
 			appendBlocks(code);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 		});
 
 		it('should not show Grid Child when parent display is not grid', () => {
@@ -77,19 +77,19 @@ describe('Grid Child', () => {
 			appendBlocks(code);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 		});
 
 		it('should show Grid Child for blocks inside a grid parent', () => {
 			cy.getBlock('core/group').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('not.exist');
 
 			// Wait for the block to be updated
 			cy.wait(200);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('exist');
 
 			// Wait for the block to be updated
@@ -105,7 +105,7 @@ describe('Grid Child', () => {
 			cy.wait(200);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('not.exist');
 
 			// Wait for the block to be updated
@@ -122,7 +122,7 @@ describe('Grid Child', () => {
 			cy.wait(200);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('exist');
 		});
 
@@ -134,7 +134,7 @@ describe('Grid Child', () => {
 			});
 
 			setInnerBlock('elements/bold');
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('exist');
 
 			setParentBlock();
@@ -146,7 +146,7 @@ describe('Grid Child', () => {
 			cy.wait(200);
 
 			setInnerBlock('elements/bold');
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('not.exist');
 		});
 

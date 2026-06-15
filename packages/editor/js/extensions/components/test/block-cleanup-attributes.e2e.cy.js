@@ -33,7 +33,7 @@ describe('BlockBase testing ...', () => {
 	});
 
 	it('should exists blockeraPropsId, blockeraCompatId, blockeraFontColor, and blockera classnames values on selected block when changed text-color control', () => {
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		// Set value.
 		cy.setColorControlValue('Text Color', 'aaaaaa');

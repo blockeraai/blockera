@@ -19,7 +19,7 @@ describe('icon-control', () => {
 
 		cy.getBlock('core/button').click();
 
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 	});
 
 	context('Functional', () => {

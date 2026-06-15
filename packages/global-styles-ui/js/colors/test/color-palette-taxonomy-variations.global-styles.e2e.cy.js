@@ -36,7 +36,7 @@ function openParagraphTextColorVariablePickerPopover() {
 	createPost();
 
 	cy.getBlock('default').type('Taxonomy variable picker.', { delay: 0 });
-	cy.getByDataTest('style-tab').click();
+	cy.getByAriaControls('styles-view').click();
 
 	cy.getParentContainer('Text Color').within(() => {
 		cy.openValueAddon();

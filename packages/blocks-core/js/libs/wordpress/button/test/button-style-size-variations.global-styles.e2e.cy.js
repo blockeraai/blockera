@@ -61,7 +61,7 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		//
 		createPost();
 
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		addBlockToPost('core/button', true);
 

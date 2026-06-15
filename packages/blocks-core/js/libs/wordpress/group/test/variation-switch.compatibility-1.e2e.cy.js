@@ -69,7 +69,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 		// 2.1. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
@@ -84,9 +84,9 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.setBlockVariation('group-row');
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 		cy.editTransition(201, 2001);
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		getWPDataObject().then((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
@@ -108,7 +108,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Display')
 			.first()
@@ -129,7 +129,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 		// 2.1. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
@@ -144,9 +144,9 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.setBlockVariation('group-stack');
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 		cy.editTransition(202, 2002);
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		getWPDataObject().then((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
@@ -168,7 +168,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Display')
 			.first()
@@ -189,7 +189,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 		// 3.1. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
@@ -204,9 +204,9 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.setBlockVariation('group-grid');
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 		cy.editTransition(203, 2003);
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		getWPDataObject().then((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
@@ -229,7 +229,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Display')
 			.first()
@@ -242,7 +242,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 		// 4.1. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
@@ -257,9 +257,9 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.setBlockVariation('group');
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 		cy.editTransition(200, 2000);
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		getWPDataObject().then((data) => {
 			expect('constrained').to.be.equal(
@@ -282,7 +282,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Display')
 			.first()

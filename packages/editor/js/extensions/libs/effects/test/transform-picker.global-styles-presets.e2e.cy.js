@@ -32,7 +32,7 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 		cy.getBlock('default').type('Transform preset paragraph.', {
 			delay: 0,
 		});
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		openRepeaterHeaderVariablePicker(
 			'Transforms',
@@ -64,7 +64,7 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 		createPost();
 
 		cy.getBlock('default').type('Transform edit paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		openRepeaterHeaderVariablePicker(['Transforms']);
 		cy.selectValueAddonItem(slug);

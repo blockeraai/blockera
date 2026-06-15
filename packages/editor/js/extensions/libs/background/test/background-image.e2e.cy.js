@@ -15,7 +15,7 @@ describe('Background Image → Functionality', () => {
 
 		cy.getByAriaLabel('Settings').eq(1).click({ force: true });
 
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 	});
 
 	describe('Image', () => {

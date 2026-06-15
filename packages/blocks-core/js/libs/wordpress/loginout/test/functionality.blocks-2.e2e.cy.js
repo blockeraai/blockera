@@ -143,7 +143,7 @@ describe('Loginout Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-tools-panel-header')
