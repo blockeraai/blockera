@@ -1075,7 +1075,7 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
-	it('should select normal state after resetting a block state and preserve sibling states', () => {
+	it('should keep the active state after resetting a block state and preserve sibling states', () => {
 		appendBlocks(latestCommentsBlockStatesFixture);
 
 		cy.getIframeBody().find('[data-type="core/latest-comments"]').click();
@@ -1084,7 +1084,7 @@ describe('Block State E2E Test', () => {
 
 		resetBlockState('Before');
 
-		checkCurrentState('normal');
+		checkCurrentState('before');
 
 		getWPDataObject().then((data) => {
 			const blockStates = getSelectedBlock(data, 'blockeraBlockStates');

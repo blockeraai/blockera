@@ -65,8 +65,6 @@ export const useBlockStates = ({
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
-		setBlockClientMasterState,
-		setBlockClientInnerState,
 	} = dispatch('blockera/extensions') || {};
 	const { getBlockStates, getActiveMasterState, getActiveInnerState } =
 		select('blockera/extensions');
@@ -383,8 +381,9 @@ export const useBlockStates = ({
 			const filteredStates: {
 				[key: TStates]: Object,
 			} = {};
+			const stateKeys = new Set([...Object.keys(mergedStates), itemId]);
 
-			for (const key of Object.keys(mergedStates)) {
+			for (const key of stateKeys) {
 				const stateItem = mergedStates[key];
 
 				if (key !== itemId) {
@@ -439,38 +438,23 @@ export const useBlockStates = ({
 				resetStateAllValues: true,
 			});
 
-			if (isMasterBlockStates(id)) {
-				setCurrentState?.('normal');
-				setBlockClientMasterState?.({
-					currentState: 'normal',
-					name: block.blockName,
-					clientId: block.clientId,
-				});
-			} else {
-				setInnerBlockState?.('normal');
-				setBlockClientInnerState?.({
-					currentState: 'normal',
-					innerBlockType: currentBlock,
-					clientId: block.clientId,
-				});
-			}
-
 			const nextRepeaterItems: { [key: string]: Object } = {};
 
 			for (const key of Object.keys(repeaterItems)) {
 				const persisted = filteredStates[key];
+				const isSelected = Boolean(repeaterItems[key]?.isSelected);
 
 				if (persisted) {
 					nextRepeaterItems[key] = {
 						...repeaterItems[key],
 						...persisted,
 						breakpoints: persisted.breakpoints,
-						isSelected: key === 'normal',
+						isSelected,
 					};
 				} else {
 					nextRepeaterItems[key] = {
 						...repeaterItems[key],
-						isSelected: key === 'normal',
+						isSelected,
 					};
 				}
 			}
@@ -481,15 +465,8 @@ export const useBlockStates = ({
 		[
 			attributes?.blockeraBlockStates,
 			blockAttributes?.blockeraInnerBlocks,
-			block.blockName,
-			block.clientId,
 			currentBlock,
-			id,
 			onChange,
-			setBlockClientInnerState,
-			setBlockClientMasterState,
-			setCurrentState,
-			setInnerBlockState,
 		]
 	);
 
