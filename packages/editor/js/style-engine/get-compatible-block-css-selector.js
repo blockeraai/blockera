@@ -754,27 +754,21 @@ export const getCompatibleBlockCssSelector = ({
 					if (
 						variationRootSelector &&
 						blockClassSelector &&
-						generatedSelector.trim() === blockClassSelector &&
+						stripTrailingPseudos(generatedSelector).trim() ===
+							blockClassSelector &&
 						variationRootSelector !== blockClassSelector &&
 						variationRootSelector.includes(blockClassSelector)
 					) {
-						selectorWithStyle = variationRootSelector;
+						selectorWithStyle =
+							variationRootSelector +
+							extractTrailingPseudos(generatedSelector);
 					}
-					// Handle case when selector contains child combinator.
-					if (
-						selectorConstant &&
-						selectorWithStyle.includes(' ') &&
-						selectorWithStyle.includes(selectorConstant)
-					) {
-						selectorWithStyle = selectorWithStyle.replace(
-							selectorConstant,
-							`${selectorConstant}.${variationClass}`
-						);
-					}
-					// Handle case when selector does not contain child combinator.
-					else {
-						selectorWithStyle = `${generatedSelector}.${variationClass}`;
-					}
+
+					selectorWithStyle = appendStyleVariationClassToSelector(
+						selectorWithStyle,
+						variationClass,
+						selectorConstant
+					);
 
 					return getSelectorWithRootBody(selectorWithStyle, false);
 				},
@@ -948,6 +942,63 @@ const extractTrailingPseudos = (selector: string): string => {
 	}
 
 	return selector.slice(base.length);
+};
+
+/**
+ * Append a style variation class before trailing pseudo selectors.
+ *
+ * @param {string} selector The css selector.
+ * @param {string} variationClass The variation class token (e.g. "is-style-outline").
+ * @param {string} selectorConstant Optional block class to target in compound selectors.
+ * @return {string} The selector with variation class appended.
+ */
+const appendStyleVariationClassToSelector = (
+	selector: string,
+	variationClass: string,
+	selectorConstant: string = ''
+): string => {
+	if (!selector?.trim() || !variationClass?.trim()) {
+		return selector;
+	}
+
+	const variationToken = variationClass.startsWith('.')
+		? variationClass
+		: `.${variationClass}`;
+
+	if (selector.includes(',')) {
+		return selector
+			.split(',')
+			.map((branch) =>
+				appendStyleVariationClassToSelector(
+					branch.trim(),
+					variationClass,
+					selectorConstant
+				)
+			)
+			.join(', ');
+	}
+
+	const selectorPseudos = extractTrailingPseudos(selector);
+	let base = stripTrailingPseudos(selector);
+
+	if (base.includes(variationToken)) {
+		return base + selectorPseudos;
+	}
+
+	if (
+		selectorConstant &&
+		base.includes(' ') &&
+		base.includes(selectorConstant)
+	) {
+		base = base.replace(
+			selectorConstant,
+			`${selectorConstant}${variationToken}`
+		);
+	} else {
+		base = `${base}${variationToken}`;
+	}
+
+	return base + selectorPseudos;
 };
 
 /**
