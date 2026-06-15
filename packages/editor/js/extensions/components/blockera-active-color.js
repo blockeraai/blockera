@@ -14,6 +14,12 @@ export const BLOCKERA_ACTIVE_COLOR_CSS_PROPERTIES = [
 	'--blockera-controls-variations-color-darker-20',
 ];
 
+const BLOCKERA_VARIATION_COLOR_CSS_PROPERTIES = [
+	'--blockera-controls-variations-color',
+	'--blockera-controls-variations-color-bk',
+	'--blockera-controls-variations-color-darker-20',
+];
+
 type ActiveColorScopeFlags = {
 	insideBlockInspector: boolean,
 	isGlobalStylesPanelRoot: boolean,
@@ -104,21 +110,27 @@ export const computeBlockeraActiveColor = (
 
 	let color = state ? state?.settings?.color : fallbackState?.settings?.color;
 
+	const isMasterGlobalStylesColorScope =
+		!isInnerBlock(colorContextBlock) &&
+		(!insideBlockInspector || isGlobalStylesCardWrapper);
+
 	if (
 		!isGlobalStylesPanelRoot &&
 		isInnerBlock(currentBlock) &&
 		isNormalState(currentInnerBlockState)
 	) {
 		color = '#cc0000';
-	} else if (
-		!isInnerBlock(colorContextBlock) &&
-		(!insideBlockInspector || isGlobalStylesCardWrapper) &&
-		isNormalState(currentState)
-	) {
+	} else if (isMasterGlobalStylesColorScope && isNormalState(selectedState)) {
 		color =
 			variationSurface === VARIATION_SURFACE_SIZE
 				? 'var(--blockera-controls-block-variations-size)'
 				: 'var(--blockera-controls-block-variations-style)';
+	} else if (
+		isMasterGlobalStylesColorScope &&
+		!isNormalState(selectedState)
+	) {
+		// Variation-surface accent is for normal only; block states use the shared states token.
+		color = 'var(--blockera-controls-states-color)';
 	}
 
 	return color;
@@ -150,6 +162,7 @@ const GLOBAL_STYLES_STYLE_VARIATION_CSS_VARS: Object = {
  * @param {string} options.currentBlock Current Blockera block target (`master` or inner block).
  * @param {boolean} [options.isGlobalStylesPanelRoot=false] GS root wrapper (master scope only).
  * @param {string} options.currentState Current master block state id.
+ * @param {string} options.currentInnerBlockState Current inner block state id.
  * @param {string} options.variationSurface Active variation surface id.
  * @return {Object|void} Custom properties map.
  */
@@ -158,20 +171,25 @@ export const computeBlockeraVariationCssVars = ({
 	currentBlock = 'master',
 	isGlobalStylesPanelRoot = false,
 	currentState,
+	currentInnerBlockState = 'normal',
 	variationSurface,
 }: {
 	isGlobalStylesCardWrapper: boolean,
 	currentBlock?: string,
 	isGlobalStylesPanelRoot?: boolean,
 	currentState: string,
+	currentInnerBlockState?: string,
 	variationSurface?: string,
 }): Object | void => {
 	const colorContextBlock = isGlobalStylesPanelRoot ? 'master' : currentBlock;
+	const selectedState = isInnerBlock(colorContextBlock)
+		? currentInnerBlockState
+		: currentState;
 
 	if (
 		!isGlobalStylesCardWrapper ||
 		isInnerBlock(colorContextBlock) ||
-		!isNormalState(currentState)
+		!isNormalState(selectedState)
 	) {
 		return undefined;
 	}
@@ -198,12 +216,29 @@ export const getBlockeraActiveColorStyleProperties = (
 		return {};
 	}
 
-	return {
+	const style: Object = {
 		color: 'inherit',
 		'--blockera-controls-primary-color': activeColor,
 		'--blockera-tab-panel-active-color': activeColor,
-		...variationCssVars,
 	};
+
+	// Reset variation tokens when leaving normal state (React omits removed inline keys).
+	for (
+		let i = 0, n = BLOCKERA_VARIATION_COLOR_CSS_PROPERTIES.length;
+		i < n;
+		i++
+	) {
+		const propertyName = BLOCKERA_VARIATION_COLOR_CSS_PROPERTIES[i];
+		const value = variationCssVars?.[propertyName];
+
+		if (value) {
+			style[propertyName] = value;
+		} else {
+			style[propertyName] = '';
+		}
+	}
+
+	return style;
 };
 
 /**
@@ -225,13 +260,19 @@ export const applyBlockeraActiveColorStyle = (
 	element.style.setProperty('--blockera-controls-primary-color', activeColor);
 	element.style.setProperty('--blockera-tab-panel-active-color', activeColor);
 
-	if (variationCssVars) {
-		Object.keys(variationCssVars).forEach((propertyName) => {
-			element.style.setProperty(
-				propertyName,
-				variationCssVars[propertyName]
-			);
-		});
+	for (
+		let i = 0, n = BLOCKERA_VARIATION_COLOR_CSS_PROPERTIES.length;
+		i < n;
+		i++
+	) {
+		const propertyName = BLOCKERA_VARIATION_COLOR_CSS_PROPERTIES[i];
+		const value = variationCssVars?.[propertyName];
+
+		if (value) {
+			element.style.setProperty(propertyName, value);
+		} else {
+			element.style.removeProperty(propertyName);
+		}
 	}
 };
 
