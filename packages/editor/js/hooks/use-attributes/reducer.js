@@ -86,9 +86,22 @@ const reducer = (state: Object = {}, action: Object): Object => {
 
 	// resetting block state all values.
 	state = stateResettingValues(state, {
+		blockId,
+		clientId,
+		innerBlocks,
 		currentBlock,
+		currentState,
+		isNormalState,
+		getAttributes,
+		blockVariations,
+		currentBreakpoint,
 		stateReadyToReset,
 		resetStateAllValues,
+		defaultAttributes,
+		insideBlockInspector,
+		activeBlockVariation,
+		currentInnerBlockState,
+		getActiveBlockVariation,
 	});
 
 	// resetting inner block all values.
