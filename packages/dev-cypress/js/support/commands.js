@@ -60,6 +60,10 @@ export const registerCommands = () => {
 		return cy.get(`[data-test="${selector}"]`, ...args);
 	});
 
+	Cypress.Commands.add('getByAriaControls', (selector, ...args) => {
+		return cy.get(`[aria-controls*="${selector}"]`, ...args);
+	});
+
 	/**
 	 * Types into a Blockera input that exposes `data-test` on the native input (e.g. layout grid controls).
 	 * Replaces the current value via select-all to work with number and unit fields.
