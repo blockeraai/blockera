@@ -107,6 +107,13 @@ export default function GroupControl({
 	const handleOnClick = (event: MouseEvent): void => {
 		event.stopPropagation();
 
+		if (
+			event.target instanceof Element &&
+			event.target.closest(`.${controlInnerClassNames('action-buttons')}`)
+		) {
+			return;
+		}
+
 		if (!isCallbackEligible(event)) {
 			return;
 		}

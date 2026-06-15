@@ -119,6 +119,10 @@ export default function RepeaterItemActions({
 	}
 
 	function deleteFunction(event: MouseEvent) {
+		if (event && event?.hasOwnProperty('stopPropagation')) {
+			event.stopPropagation();
+		}
+
 		// Try to open the confirm delete modal if it is not open and shouldConfirmDeleteModal is true
 		if (!isConfirmDeleteModalOpen && shouldConfirmDeleteModal) {
 			toggleConfirmDeleteModal();
@@ -127,9 +131,6 @@ export default function RepeaterItemActions({
 			toggleConfirmDeleteModal();
 		}
 
-		if (event && event?.hasOwnProperty('stopPropagation')) {
-			event.stopPropagation();
-		}
 		closeMenu(event);
 
 		if (
@@ -509,6 +510,9 @@ export default function RepeaterItemActions({
 								className={controlInnerClassNames('btn-delete')}
 								noBorder={true}
 								icon={<Icon icon="trash" iconSize={20} />}
+								onMouseDown={(event: MouseEvent) => {
+									event.stopPropagation();
+								}}
 								onClick={deleteFunction}
 								aria-label={sprintf(
 									// translators: %s is the repeater item id. It's aria label for deleting repeater item
