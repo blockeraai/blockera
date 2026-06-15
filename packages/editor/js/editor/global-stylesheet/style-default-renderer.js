@@ -183,14 +183,5 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 				)}
 			</>
 		);
-	},
-	(prevProps, nextProps) => {
-		return (
-			prevProps.blockType?.name === nextProps.blockType?.name &&
-			prevProps.blockType?.attributes ===
-				nextProps.blockType?.attributes &&
-			isEquals(prevProps.styles, nextProps.styles) &&
-			isEquals(prevProps.blockeraMetaData, nextProps.blockeraMetaData)
-		);
 	}
 );

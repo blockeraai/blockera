@@ -121,22 +121,5 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 				}}
 			/>
 		);
-	},
-	(prevProps, nextProps) => {
-		// Custom comparison to prevent re-renders when props haven't changed
-		return (
-			prevProps.blockType.name === nextProps.blockType.name &&
-			prevProps.variationName === nextProps.variationName &&
-			prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
-			isEquals(
-				prevProps.variationGlobalStyles,
-				nextProps.variationGlobalStyles
-			) &&
-			isEquals(prevProps.blockeraMetaData, nextProps.blockeraMetaData) &&
-			isEquals(
-				prevProps.baseVariationStyles,
-				nextProps.baseVariationStyles
-			)
-		);
 	}
 );
