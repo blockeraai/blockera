@@ -59,16 +59,14 @@ function getVarPickerPopoverRoot(contentRoot: ?HTMLElement): ?HTMLElement {
 	return popover instanceof HTMLElement ? popover : null;
 }
 
-function hasNestedOpenRepeaterPopoverInVarPicker(
+function hasOpenOverlayPopoversAsideFromVarPicker(
 	varPickerPopover: HTMLElement
 ): boolean {
-	const nestedPopovers = varPickerPopover.querySelectorAll(
-		'.blockera-control-inner.group-popover'
-	);
+	const popovers = document.querySelectorAll('.components-popover');
 
-	for (let i = 0; i < nestedPopovers.length; i++) {
-		const nestedPopover = nestedPopovers[i].closest('.components-popover');
-		if (nestedPopover && nestedPopover !== varPickerPopover) {
+	for (let i = 0; i < popovers.length; i++) {
+		const popover = popovers[i];
+		if (popover instanceof HTMLElement && popover !== varPickerPopover) {
 			return true;
 		}
 	}
@@ -88,13 +86,34 @@ function isDismissTargetOutsideVarPicker(
 		return false;
 	}
 
-	if (
-		target instanceof Element &&
-		target.closest(
-			'.blockera-control-value-addon-pointers, [data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]'
-		)
-	) {
-		return false;
+	if (target instanceof Element) {
+		if (
+			target.closest(
+				'.blockera-control-value-addon-pointers, [data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]'
+			)
+		) {
+			return false;
+		}
+
+		// Nested menus / color pickers / repeater edit popovers portal outside the var-picker root.
+		const clickedPopover = target.closest('.components-popover');
+		if (clickedPopover && clickedPopover !== varPickerPopover) {
+			return false;
+		}
+
+		// SelectControl and similar dropdown surfaces.
+		if (target.closest('.components-dropdown__content')) {
+			return false;
+		}
+
+		// Host controls (e.g. BoxBorderControl) whose inputs sit beside the picker in the sidebar.
+		if (
+			target.closest(
+				'.blockera-control-box-border, .blockera-control-border'
+			)
+		) {
+			return false;
+		}
 	}
 
 	return true;
@@ -155,7 +174,7 @@ export default function ({
 				return;
 			}
 
-			if (hasNestedOpenRepeaterPopoverInVarPicker(varPickerPopover)) {
+			if (hasOpenOverlayPopoversAsideFromVarPicker(varPickerPopover)) {
 				return;
 			}
 
@@ -175,10 +194,6 @@ export default function ({
 			if (
 				!isDismissTargetOutsideVarPicker(varPickerPopover, event.target)
 			) {
-				return;
-			}
-
-			if (hasNestedOpenRepeaterPopoverInVarPicker(varPickerPopover)) {
 				return;
 			}
 
