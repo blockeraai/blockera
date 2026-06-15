@@ -80,6 +80,7 @@ export function useBlockeraActiveColor({
 				currentBlock,
 				isGlobalStylesPanelRoot,
 				currentState,
+				currentInnerBlockState,
 				variationSurface,
 			}),
 		[
@@ -87,6 +88,7 @@ export function useBlockeraActiveColor({
 			currentBlock,
 			isGlobalStylesPanelRoot,
 			currentState,
+			currentInnerBlockState,
 			variationSurface,
 		]
 	);

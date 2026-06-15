@@ -122,6 +122,20 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 					cy.realPress('Escape');
 				});
 			});
+
+			it('size surface: hover state uses states accent on container and states inserter popover', () => {
+				withinSizeVariationsPanel(() => {
+					setBlockState('Hover');
+
+					assertContainerActiveTabColor(
+						STATE_COLORS_CONTAINER,
+						HOVER_STATE_COLOR
+					);
+					assertStatesInserterPopoverMatchesContainer(
+						STATE_COLORS_CONTAINER
+					);
+				});
+			});
 		});
 	});
 
