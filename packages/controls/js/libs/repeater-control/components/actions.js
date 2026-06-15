@@ -278,6 +278,8 @@ export default function RepeaterItemActions({
 
 	return (
 		<>
+			{interactionGuard}
+
 			{shouldConfirmDeleteModal && isConfirmDeleteModalOpen && (
 				<ConfirmDeleteModal
 					item={item}
@@ -476,8 +478,6 @@ export default function RepeaterItemActions({
 					)}
 				</>
 			)}
-
-			{interactionGuard}
 
 			{showDelete && (
 				<>
