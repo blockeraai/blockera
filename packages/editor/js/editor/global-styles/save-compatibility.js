@@ -276,10 +276,16 @@ export const runGlobalStylesWordPressCompatibilityBeforeSave = (): boolean => {
 		return false;
 	}
 
+	const compatibleStyles = {
+		blocks: compatibleBlocks,
+	};
+
+	if (isEquals(record?.styles, compatibleStyles)) {
+		return false;
+	}
+
 	dispatch('core').editEntityRecord('root', 'globalStyles', id, {
-		styles: {
-			blocks: compatibleBlocks,
-		},
+		styles: compatibleStyles,
 	});
 
 	return true;
