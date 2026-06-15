@@ -15,7 +15,10 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { registerGlobalStylesPresetPreviewHelpers } from '@blockera/global-styles-ui';
+import {
+	registerGlobalStylesPresetPreviewHelpers,
+	mergePickerPropsWithPresetRowPreviewClose,
+} from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
@@ -40,7 +43,13 @@ import {
 addFilter(
 	'blockera.controls.var-picker.merge-picker-props-with-preset-preview',
 	'blockera.editor.register-global-styles-preset-preview-helpers',
-	() => mergePickerPropsWithPresetPreviewInference
+	() => (pickerProps, presetInterface) =>
+		mergePickerPropsWithPresetRowPreviewClose(
+			mergePickerPropsWithPresetPreviewInference(
+				pickerProps,
+				presetInterface
+			)
+		)
 );
 
 registerGlobalStylesPresetPreviewHelpers({
