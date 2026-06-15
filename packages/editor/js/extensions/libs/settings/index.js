@@ -15,7 +15,7 @@ import { Popover } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { More, Supports } from './components';
+import { More, Supports, ToggleAllButton } from './components';
 
 export const ExtensionSettings = ({
 	buttonLabel = __('More Settings', 'blockera'),
@@ -79,11 +79,21 @@ export const ExtensionSettings = ({
 					focusOnMount={true}
 				>
 					<div className={'settings-category'}>
-						<span className={'settings-category__title'}>
-							{hasItems(defaults)
-								? __('Additional Features', 'blockera')
-								: __('Features', 'blockera')}
-						</span>
+						<div className={'settings-category__header'}>
+							<span className={'settings-category__title'}>
+								{hasItems(defaults)
+									? __('Additional Features', 'blockera')
+									: __('Features', 'blockera')}
+							</span>
+
+							{hasItems(defaults) && (
+								<ToggleAllButton
+									tools={tools}
+									update={update}
+									features={features}
+								/>
+							)}
+						</div>
 
 						<div className={'settings-category__items'}>
 							<Supports
