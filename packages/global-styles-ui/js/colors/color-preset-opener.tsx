@@ -65,6 +65,7 @@ import {
 	parsePaletteShadeSlug,
 	shadeHexDiffersFromBaseline,
 } from './utils';
+import { resolvePresetTaxonomyDisplayName } from '../components/preset-taxonomy/taxonomy-meta';
 import './style.scss';
 
 export type ColorPresetOpenerProps = {
@@ -238,6 +239,16 @@ export function ColorPresetOpener({
 			}),
 		[isShadeRow, shadeVariationCount, pickerCtx.active]
 	);
+
+	const headerLabel = useMemo(() => {
+		if (contextType === 'taxonomy') {
+			return resolvePresetTaxonomyDisplayName(
+				colorItem as Record<string, unknown>
+			);
+		}
+		return String(colorItem?.name ?? '');
+	}, [colorItem, contextType]);
+
 	const showHexValue = shadeVariationCount === 0 && colorItem?.color;
 
 	const shadeSlugParsed = parsePaletteShadeSlug(String(colorItem.slug ?? ''));
@@ -488,7 +499,7 @@ export function ColorPresetOpener({
 					/>
 				}
 				icon={contextType === 'taxonomy' ? null : headerIcon}
-				label={colorItem?.name}
+				label={headerLabel}
 			/>
 
 			{trailingHeaderValues}

@@ -10,6 +10,37 @@ export function getPresetMeta(
 }
 
 /**
+ * Reads palette meta `short-name` (or camelCase `shortName`) when set in theme.json.
+ */
+export function resolvePresetShortName(
+	preset: Record<string, unknown>
+): string | undefined {
+	const meta = getPresetMeta(preset);
+	if (!meta) {
+		return undefined;
+	}
+	const raw = meta['short-name'] ?? meta.shortName;
+	if (typeof raw === 'string' && raw.trim() !== '') {
+		return raw.trim();
+	}
+	return undefined;
+}
+
+/**
+ * Taxonomy variable rows prefer meta short-name over the full preset `name`.
+ */
+export function resolvePresetTaxonomyDisplayName(
+	preset: Record<string, unknown>
+): string {
+	const shortName = resolvePresetShortName(preset);
+	if (shortName) {
+		return shortName;
+	}
+	const name = preset.name;
+	return typeof name === 'string' ? name : '';
+}
+
+/**
  * Maps palette meta.category "information" to declared slug "info" (Twenty Twenty-Five).
  */
 export function resolveDeclaredCategorySlug(
