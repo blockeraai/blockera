@@ -4,7 +4,14 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Fragment, useMemo, useRef, useState } from '@wordpress/element';
+import {
+	Fragment,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -44,6 +51,55 @@ export {
 	VAR_PICKER_PRESET_PANEL_FILTER,
 } from './var-picker-constants';
 
+function getVarPickerPopoverRoot(contentRoot: ?HTMLElement): ?HTMLElement {
+	if (!contentRoot) {
+		return null;
+	}
+	const popover = contentRoot.closest('.components-popover');
+	return popover instanceof HTMLElement ? popover : null;
+}
+
+function hasNestedOpenRepeaterPopoverInVarPicker(
+	varPickerPopover: HTMLElement
+): boolean {
+	const nestedPopovers = varPickerPopover.querySelectorAll(
+		'.blockera-control-inner.group-popover'
+	);
+
+	for (let i = 0; i < nestedPopovers.length; i++) {
+		const nestedPopover = nestedPopovers[i].closest('.components-popover');
+		if (nestedPopover && nestedPopover !== varPickerPopover) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function isDismissTargetOutsideVarPicker(
+	varPickerPopover: HTMLElement,
+	target: EventTarget | null
+): boolean {
+	if (!target || !(target instanceof Node)) {
+		return true;
+	}
+
+	if (varPickerPopover.contains(target)) {
+		return false;
+	}
+
+	if (
+		target instanceof Element &&
+		target.closest(
+			'.blockera-control-value-addon-pointers, [data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]'
+		)
+	) {
+		return false;
+	}
+
+	return true;
+}
+
 export default function ({
 	controlProps,
 	onClose,
@@ -71,6 +127,75 @@ export default function ({
 		() => normalizeVariablePickerSearchQuery(searchQuery),
 		[searchQuery]
 	);
+	const popoverContentRef = useRef<?HTMLElement>(null);
+	const isClosingRef = useRef(false);
+
+	const handleClose = useCallback(() => {
+		if (isClosingRef.current) {
+			return;
+		}
+		isClosingRef.current = true;
+
+		if (onClose) {
+			onClose();
+		}
+		controlProps.setOpen('');
+	}, [controlProps, onClose]);
+
+	useEffect(() => {
+		const handleEscape = (event: KeyboardEvent) => {
+			if (event.key !== 'Escape' || event.defaultPrevented) {
+				return;
+			}
+
+			const varPickerPopover = getVarPickerPopoverRoot(
+				popoverContentRef.current
+			);
+			if (!varPickerPopover) {
+				return;
+			}
+
+			if (hasNestedOpenRepeaterPopoverInVarPicker(varPickerPopover)) {
+				return;
+			}
+
+			handleClose();
+			event.preventDefault();
+			event.stopPropagation();
+		};
+
+		const handlePointerDown = (event: MouseEvent) => {
+			const varPickerPopover = getVarPickerPopoverRoot(
+				popoverContentRef.current
+			);
+			if (!varPickerPopover) {
+				return;
+			}
+
+			if (
+				!isDismissTargetOutsideVarPicker(varPickerPopover, event.target)
+			) {
+				return;
+			}
+
+			if (hasNestedOpenRepeaterPopoverInVarPicker(varPickerPopover)) {
+				return;
+			}
+
+			handleClose();
+		};
+
+		document.addEventListener('keydown', handleEscape, true);
+		document.addEventListener('mousedown', handlePointerDown, true);
+
+		return () => {
+			document.removeEventListener('keydown', handleEscape, true);
+			document.removeEventListener('mousedown', handlePointerDown, true);
+			if (!isClosingRef.current && onClose) {
+				onClose();
+			}
+		};
+	}, [handleClose, onClose]);
 
 	const variablePickerSections = variableTypes.map((type, index) => {
 		const data = getVariableCategory(type);
@@ -239,12 +364,7 @@ export default function ({
 			title={__('Variable Picker', 'blockera')}
 			offset={popoverOffset}
 			placement="left-start"
-			onClose={() => {
-				controlProps.setOpen('');
-				if (onClose) {
-					onClose();
-				}
-			}}
+			onClose={handleClose}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>
@@ -281,6 +401,7 @@ export default function ({
 			}
 		>
 			<div
+				ref={popoverContentRef}
 				data-cy="variable-picker-popover"
 				data-test="variable-picker-popover"
 			>
