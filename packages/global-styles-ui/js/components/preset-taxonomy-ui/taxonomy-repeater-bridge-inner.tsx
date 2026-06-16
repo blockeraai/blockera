@@ -139,7 +139,6 @@ export function TaxonomyRepeaterBridgeInner({
 			disableAddNewItem: false,
 			setDisableAddNewItem: noop,
 			popoverTitle: __('Edit Variable', 'blockera'),
-			popoverOffset: 35,
 			actionButtonsType: 'inline',
 			actionMenuButtonLabel: __('More Options', 'blockera'),
 			popoverClassName: controlInnerClassNames('popover-variables'),
