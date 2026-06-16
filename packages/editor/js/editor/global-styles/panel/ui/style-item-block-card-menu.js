@@ -160,16 +160,6 @@ export const StyleItemBlockCardMenu = ({
 
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
 
-	const primarySidebarWidth = useSelect((select) => {
-		return (
-			Number(
-				select('blockera/editor-persistence')
-					.getPrimarySidebarWidth()
-					.replace('px', '')
-			) - 50
-		);
-	}, []);
-
 	if (!isUserCanSaveCustomizations) {
 		return null;
 	}
@@ -214,7 +204,6 @@ export const StyleItemBlockCardMenu = ({
 			<StyleItemMenuContextProvider
 				value={{
 					anchorRef: blockCardContextMenuAnchorRef,
-					popoverOffset: primarySidebarWidth,
 					blockTitle: getBlockType(blockName).title,
 					style,
 					counter,

@@ -10,7 +10,6 @@ export type AdvancedLabelControlProps = {
 	blockName?: string,
 	clientId?: string,
 	attribute?: string,
-	offset?: number,
 	inGlobalStylesPanel?: boolean,
 	getAttributesRef?: () => Object,
 };

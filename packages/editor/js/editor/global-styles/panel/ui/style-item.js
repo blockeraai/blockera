@@ -816,7 +816,6 @@ export const StyleItem = ({
 				<StyleItemMenuContextProvider
 					value={{
 						anchorRef: styleItemContextMenuAnchorRef,
-						popoverOffset: 50,
 						blockTitle: getBlockType(blockName).title,
 						style,
 						counter,

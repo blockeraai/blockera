@@ -980,7 +980,6 @@ const TabsBar = memo(function TabsBar({
 							onClose={onCloseLimitPromotion}
 							type="modal"
 							placement="bottom-end"
-							offset={12}
 							anchor={addTabButtonAnchorRef.current ?? undefined}
 							disableHintsText={false}
 							{...({

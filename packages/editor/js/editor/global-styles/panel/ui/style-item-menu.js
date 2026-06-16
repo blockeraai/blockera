@@ -58,7 +58,6 @@ export const StyleItemMenu = (): MixedElement => {
 		blockStyles,
 		handlePromotionPopover,
 		anchorRef,
-		popoverOffset,
 		variationAllowsMultipleBlocks,
 	} = useStyleItemMenuContext();
 
@@ -125,7 +124,6 @@ export const StyleItemMenu = (): MixedElement => {
 				<Popover
 					anchor={anchorRef?.current}
 					title={''}
-					offset={popoverOffset}
 					draggable={true}
 					placement="left-start"
 					className={classNames('variations-settings-popover', {

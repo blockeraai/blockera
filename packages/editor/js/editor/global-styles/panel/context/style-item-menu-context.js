@@ -42,7 +42,6 @@ export const StyleItemMenuContext: Object = createContext({
 	setCurrentBlockStyleVariation: () => {},
 	blockStyles: [],
 	anchorRef: { current: null },
-	popoverOffset: 50,
 	variationAllowsMultipleBlocks: true,
 });
 

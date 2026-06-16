@@ -279,7 +279,6 @@ export default function TabContextMenu({
 			onClose={onClose}
 			position="bottom left"
 			anchor={anchor}
-			offset={8}
 			className="blockera-tabs-context-menu"
 			{...testIdAttrs(WORKSPACE_TABS_TEST_ID.tabContextMenu)}
 		>
