@@ -20,17 +20,14 @@ import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({
 	controlProps,
-	popoverOffset = 125,
 }: {
 	controlProps: ValueAddonControlProps,
-	popoverOffset?: number,
 }): Element<any> {
 	const deletedItem = getDeletedItemInfo(controlProps.value);
 
 	return (
 		<Popover
 			title={__('Missing Dynamic Value Item', 'blockera')}
-			offset={popoverOffset}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-value-addon-deleted')}

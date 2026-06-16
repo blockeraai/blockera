@@ -88,7 +88,6 @@ const RepeaterItem = ({
 		popoverProps,
 		valueCleanup,
 		popoverTitle,
-		popoverOffset,
 		PromoComponent,
 		popoverClassName,
 		actionButtonsType,
@@ -371,7 +370,6 @@ const RepeaterItem = ({
 			'function' === typeof popoverTitle
 				? popoverTitle(itemId, item)
 				: popoverTitle,
-		popoverOffset,
 		popoverTitleButtonsRight: PopoverTitleButtonsRight && (
 			<PopoverTitleButtonsRight {...repeaterItemActionsProps} />
 		),

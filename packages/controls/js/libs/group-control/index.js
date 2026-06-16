@@ -32,7 +32,6 @@ export default function GroupControl({
 	mode = 'popover',
 	popoverProps,
 	popoverTitle,
-	popoverOffset = 35,
 	popoverTitleButtonsRight,
 	popoverClassName,
 	//
@@ -242,7 +241,6 @@ export default function GroupControl({
 
 			{mode === 'popover' && isOpen && (
 				<Popover
-					offset={popoverOffset}
 					placement="left-start"
 					className={controlInnerClassNames(
 						'group-popover',

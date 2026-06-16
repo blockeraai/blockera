@@ -34,7 +34,6 @@ export type LabelControlProps = {
 		onChange?: (newValue: any) => void,
 		valueCleanup?: (newValue: any) => any,
 	}) => any,
-	offset?: number,
 	iconPosition?: 'start' | 'end',
 	/**
 	 * Optional changeset graph preview config for advanced labels (from PHP `changesetGraphPreview`

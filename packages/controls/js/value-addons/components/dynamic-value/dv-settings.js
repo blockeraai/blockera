@@ -28,10 +28,8 @@ import { Button, Popover, BaseControl, RendererControl } from '../../../libs';
 
 export default function ({
 	controlProps,
-	popoverOffset = 125,
 }: {
 	controlProps: ValueAddonControlProps,
-	popoverOffset?: number,
 }): Element<any> {
 	const { getDynamicValue } = select(STORE_NAME);
 
@@ -66,7 +64,6 @@ export default function ({
 	return (
 		<Popover
 			title={__('Dynamic Value Setting', 'blockera')}
-			offset={popoverOffset}
 			placement="left-start"
 			onClose={() => {
 				controlProps.setOpen('');

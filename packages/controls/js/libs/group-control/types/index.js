@@ -36,10 +36,6 @@ export type GroupControlProps = {
 	mode: GroupControlMode,
 	popoverProps: TPopoverProps,
 	popoverTitle?: string | MixedElement,
-	/**
-	 * Offset for popover
-	 */
-	popoverOffset?: number,
 	popoverTitleButtonsRight?: string | MixedElement,
 	popoverClassName?: string,
 	/**

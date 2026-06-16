@@ -135,11 +135,9 @@ function isDismissTargetOutsideVarPicker(
 export default function ({
 	controlProps,
 	onClose,
-	popoverOffset = 125,
 }: {
 	controlProps: ValueAddonControlProps,
 	onClose?: () => void,
-	popoverOffset?: number,
 }): MixedElement {
 	const variableTypes = controlProps.variableTypes || [];
 	const supplementalSections =
@@ -427,7 +425,6 @@ export default function ({
 	return (
 		<Popover
 			title={__('Variable Picker', 'blockera')}
-			offset={popoverOffset}
 			placement="left-start"
 			onClose={handleClose}
 			onFocusOutside={handleFocusOutside}

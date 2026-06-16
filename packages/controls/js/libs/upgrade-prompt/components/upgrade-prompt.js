@@ -88,7 +88,6 @@ export const UpgradePrompt = ({
 	buttonText,
 	buttonTarget,
 	isOpen: _isOpen,
-	offset = 35,
 	placement = 'left-start',
 	type = 'popover',
 	anchor,
@@ -110,7 +109,6 @@ export const UpgradePrompt = ({
 	buttonText?: string,
 	buttonTarget?: string,
 	isOpen?: boolean,
-	offset?: number,
 	'data-test'?: string,
 	placement?: PopoverPlacement,
 	type?: 'popover' | 'modal',
@@ -234,7 +232,6 @@ export const UpgradePrompt = ({
 	return (
 		<Popover
 			placement={placement}
-			offset={offset}
 			anchor={anchor}
 			title={
 				<UpgradePromptChromeLeft
