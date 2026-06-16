@@ -69,7 +69,11 @@ export type TPopoverProps = {
 	 */
 	animate?: boolean,
 	/**
-	 * The distance (in px) between the anchor and the popover.
+	 * Horizontal gap (in px) between the popover and the InspectorControls
+	 * sidebar edge when opened inside the inspector. Also used as the base
+	 * offset for other placements and contexts.
+	 *
+	 * @default 10
 	 */
 	offset?: number,
 	closeButton?: boolean,
