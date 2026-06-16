@@ -42,7 +42,7 @@ describe('Flex Child', () => {
 			cy.getByAriaControls('styles-view').click();
 		});
 
-		it('should have flex-child block section', () => {
+		it('should have flex-child block section - 1', () => {
 			// Group block should not have the flex child block section
 			cy.getBlock('core/group').click();
 			cy.getByAriaControls('styles-view').click();
@@ -92,7 +92,7 @@ describe('Flex Child', () => {
 			cy.contains('Flex Child').should('exist');
 		});
 
-		it('should have flex-child block section', () => {
+		it('should have flex-child block section - 2', () => {
 			cy.contains('Flex Child').should('exist');
 
 			cy.getParentContainer('Display').within(() => {
@@ -101,7 +101,6 @@ describe('Flex Child', () => {
 
 			// Check inner block to make sure it has the flex child block section
 			setInnerBlock('elements/bold');
-			cy.getByAriaControls('styles-view').click();
 			cy.contains('Flex Child').should('exist');
 
 			// Switch back to the parent block
@@ -112,7 +111,6 @@ describe('Flex Child', () => {
 
 			// Check inner block to make sure it does not have the flex child block section
 			setInnerBlock('elements/bold');
-			cy.getByAriaControls('styles-view').click();
 			cy.contains('Flex Child').should('not.exist');
 		});
 	});
