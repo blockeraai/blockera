@@ -649,18 +649,22 @@ async function clickValueAddonButton(page, container = null) {
  * @return {Promise<void>}
  */
 async function selectValueAddonItem(page, itemID) {
+	const itemSelector = [
+		`[data-test="value-addon-picker-item-${itemID}"]`,
+		`[data-cy="va-item-${itemID}"]`,
+		`[data-cy="group-control-header"][data-variable-slug="${itemID}"]`,
+		`[data-variable-slug="${itemID}"]`,
+	].join(', ');
+
 	const popover = page
 		.locator(
-			'[data-cy="variable-picker-popover"], .blockera-control-popover-variables'
+			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables'
 		)
+		.filter({ visible: true })
 		.first();
+
 	await popover.waitFor({ state: 'visible', timeout: 15000 });
-	await popover
-		.locator(
-			`[data-variable-slug="${itemID}"], [data-cy="va-item-${itemID}"]`
-		)
-		.first()
-		.dispatchEvent('click');
+	await popover.locator(itemSelector).first().dispatchEvent('click');
 }
 
 /**
