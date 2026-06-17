@@ -1,9 +1,6 @@
 import { appendBlocks } from '@blockera/dev-cypress/js/helpers/editor';
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import {
-	addBlockState,
-	setBlockState,
-} from '@blockera/dev-cypress/js/helpers/block-states';
+import { setBlockState } from '@blockera/dev-cypress/js/helpers/block-states';
 
 describe('useBlockSideEffects Testing ...', () => {
 	beforeEach(() => {
@@ -12,7 +9,7 @@ describe('useBlockSideEffects Testing ...', () => {
 
 	it('should be able to hide WordPress block original tabs on styles tab on normal', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
+		cy.getByAriaControls('settings-view').click();
 		cy.getByAriaControls('styles-view').click();
 
 		cy.get('[role="tabpanel"] .block-editor-block-inspector__tabs').should(
@@ -32,9 +29,11 @@ describe('useBlockSideEffects Testing ...', () => {
 		cy.getBlock('core/social-links').click();
 		cy.getByAriaControls('settings-view').click({ force: true });
 
-		cy.get('[aria-labelledby*="-settings"]')
-			.eq(1)
-			.should('have.not.css', 'display', 'none');
+		cy.get('[aria-labelledby*="-settings"]').should(
+			'have.not.css',
+			'display',
+			'none'
+		);
 	});
 
 	it('should be disable original settings tab panel inside blockera settings tab on un normal', () => {
