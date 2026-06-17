@@ -134,7 +134,6 @@ describe('Grid Child', () => {
 			});
 
 			setInnerBlock('elements/bold');
-			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('exist');
 
 			setParentBlock();
@@ -146,7 +145,6 @@ describe('Grid Child', () => {
 			cy.wait(200);
 
 			setInnerBlock('elements/bold');
-			cy.getByAriaControls('styles-view').click();
 			cy.contains('Grid Child').should('not.exist');
 		});
 
