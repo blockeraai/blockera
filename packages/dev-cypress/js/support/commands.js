@@ -1714,4 +1714,28 @@ export const registerCommands = () => {
 		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay).should('not.exist');
 		cy.get('body').should('not.have.class', 'blockera-preview-mode-open');
 	});
+
+	Cypress.Commands.add('setMonacoEditorValue', (value) => {
+		cy.get('.monaco-editor').click();
+		cy.get('.monaco-editor textarea').clear({ force: true });
+		cy.window().then((win) => {
+			const monaco = win.monaco;
+			const fallbackEditor = monaco.editor.getModels
+				? monaco.editor.getModels()[0]
+				: null;
+			const editor = monaco.editor.getEditors
+				? monaco.editor.getEditors()[0]
+				: fallbackEditor;
+			if (editor && typeof editor.setValue === 'function') {
+				editor.setValue(value);
+			} else if (monaco.editor.getModels) {
+				const model = monaco.editor.getModels()[0];
+				if (model && typeof model.setValue === 'function') {
+					model.setValue(value);
+				}
+			} else {
+				throw new Error('Unable to access Monaco editor in the test.');
+			}
+		});
+	});
 };
