@@ -845,6 +845,51 @@ export const registerCommands = () => {
 		});
 	});
 
+	/**
+	 * Close then reopen a repeater row settings popover.
+	 *
+	 * Use after changing a repeater item `type` while the popover stays open so
+	 * rename-by-type runs on close before asserting typed item keys (e.g. linear-gradient-0).
+	 *
+	 * @param {Object} [options]
+	 * @param {number} [options.itemIndex=0] Row index among `[data-cy="repeater-item"]`.
+	 * @param {string} [options.within] Cypress alias or selector scoping the repeater list.
+	 */
+	Cypress.Commands.add(
+		'closeAndReopenRepeaterItemPopover',
+		(options = {}) => {
+			const { itemIndex = 0, within } = options;
+
+			const withRepeaterScope = (callback) => {
+				if (within) {
+					cy.get(within).within(callback);
+				} else {
+					callback();
+				}
+			};
+
+			cy.get('.blockera-component-popover').within(() => {
+				cy.getByDataTest('close-popover').click({
+					force: true,
+				});
+			});
+
+			withRepeaterScope(() => {
+				cy.getByDataCy('repeater-item')
+					.eq(itemIndex)
+					.within(() => {
+						cy.get('.blockera-control-repeater-group-header').click(
+							{
+								force: true,
+							}
+						);
+					});
+			});
+
+			cy.get('.blockera-component-popover').should('be.visible');
+		}
+	);
+
 	Cypress.Commands.add('closeSpotlightPopover', () => {
 		cy.get('.blockera-spotlighter-svg').click({ force: true });
 	});
@@ -1331,7 +1376,7 @@ export const registerCommands = () => {
 	/**
 	 * Creates draft posts via REST while the block editor is loaded (`wp.apiFetch`).
 	 * @param {number} count How many drafts to create.
-	 * @returns {Cypress.Chainable<number[]>} Numeric post IDs.
+	 * @return {Cypress.Chainable<number[]>} Numeric post IDs.
 	 */
 	Cypress.Commands.add('tabsCreateDraftPostsViaRest', (count) => {
 		return cy.window().then((win) => {
