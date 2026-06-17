@@ -1,7 +1,10 @@
 // @flow
 
-export const MODAL_OVERLAY_SELECTOR =
-	'.components-modal__screen-overlay, .components-modal__frame, .components-modal, .components-modal__content, .blockera-component-modal, .blockera-component-delete-modal, [role="dialog"]';
+/**
+ * WordPress modals render inside a dedicated screen overlay. Popovers also use
+ * role="dialog" but never mount this overlay, so it is a reliable open-modal signal.
+ */
+export const MODAL_OVERLAY_SELECTOR = '.components-modal__screen-overlay';
 
 export function hasOpenModalOverlay(): boolean {
 	return document.querySelector(MODAL_OVERLAY_SELECTOR) !== null;
