@@ -115,6 +115,10 @@ describe('Transforms → Functionality', () => {
 					.should('include', 'transform: scale3d(130%, 130%, 50%)');
 			});
 
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@transform',
+			});
+
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -163,6 +167,10 @@ describe('Transforms → Functionality', () => {
 						'include',
 						'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg)'
 					);
+			});
+
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@transform',
 			});
 
 			//Check store
@@ -215,6 +223,10 @@ describe('Transforms → Functionality', () => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
 					.should('include', 'transform: skew(10deg, 20deg)');
+			});
+
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@transform',
 			});
 
 			//Check store
