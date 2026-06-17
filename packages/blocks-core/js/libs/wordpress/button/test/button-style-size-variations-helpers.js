@@ -31,6 +31,22 @@ export const SIZE_VARIATION_DEFINITIONS = [
 
 /** WordPress core/button style variation (registered by core). */
 export const STYLE_VARIATION_SLUG = 'fill';
+
+/** Global styles dual-surface layout (Blockera portal + native WP panel siblings). */
+export const GLOBAL_STYLES_PANEL_STACK = '.blockera-global-styles-panel-stack';
+export const GLOBAL_STYLES_SIZE_ASIDE = '.blockera-global-styles-panel-aside';
+
+/**
+ * Keep nodes rendered in the style column (exclude the size-variation aside).
+ *
+ * @param {Cypress.ObjectLike} $elements Matched elements from a Cypress query.
+ * @return {Cypress.ObjectLike} Filtered elements outside the size aside.
+ */
+export function filterStyleColumnElements($elements) {
+	return $elements.filter((_, element) => {
+		return !element.closest(GLOBAL_STYLES_SIZE_ASIDE);
+	});
+}
 export const CUSTOMIZED_SIZE_BG_HEX = '#336699';
 export const CUSTOMIZED_SIZE_BG_RGB = 'rgb(51, 102, 153)';
 
@@ -207,14 +223,17 @@ export function withinSizeVariationsPanel(callback) {
 }
 
 /**
- * Style variations render in the main global-styles stack (not the aside).
+ * Style-column queries inside the global-styles stack.
+ *
+ * Cypress `.within()` requires a single element. Blockera + the WP panel override
+ * flatten many DOM siblings under the stack (placeholder, block card, variations,
+ * native chrome). Scope to the stack, then exclude `.blockera-global-styles-panel-aside`
+ * in each query via {@link filterStyleColumnElements}.
  */
 export function withinStyleVariationsPanel(callback) {
 	return cy
-		.get(
-			'.blockera-global-styles-panel-stack > .blockera-extensions-wrapper'
-		)
-		.first()
+		.get(GLOBAL_STYLES_PANEL_STACK, { timeout: 20000 })
+		.should('be.visible')
 		.within(callback);
 }
 
@@ -232,9 +251,9 @@ export function assertStyleVariationsRenderedInGlobalStyles() {
 	withinStyleVariationsPanel(() => {
 		// Core ships fill + outline for buttons; assert the primary style surface rows exist.
 		['fill', 'outline'].forEach((slug) => {
-			cy.getByDataTest(`style-${slug}`, { timeout: 20000 }).should(
-				'exist'
-			);
+			cy.getByDataTest(`style-${slug}`, { timeout: 20000 })
+				.then(filterStyleColumnElements)
+				.should('exist');
 		});
 	});
 }
@@ -247,7 +266,10 @@ export function selectSizeVariationInGlobalStyles(slug) {
 
 export function selectStyleVariationInGlobalStyles(slug) {
 	withinStyleVariationsPanel(() => {
-		cy.getByDataTest(`style-${slug}`).first().click({ force: true });
+		cy.getByDataTest(`style-${slug}`)
+			.then(filterStyleColumnElements)
+			.first()
+			.click({ force: true });
 	});
 }
 
