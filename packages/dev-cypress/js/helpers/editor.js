@@ -205,10 +205,14 @@ export function openBlockInserter(selector = false) {
 	}
 	return cy.get('body').then(($body) => {
 		const secondarySidebar = $body.find(
-			'[aria-label="Show secondary sidebar"]'
+			'[aria-label="Show secondary sidebar"], [data-test="blockera-secondary-sidebar-toggle"]'
 		);
 		if (secondarySidebar.length > 0) {
-			return cy.get('[aria-label="Show secondary sidebar"]').click();
+			return cy
+				.get(
+					'[aria-label="Show secondary sidebar"], [data-test="blockera-secondary-sidebar-toggle"]'
+				)
+				.click();
 		}
 		return cy;
 	});
