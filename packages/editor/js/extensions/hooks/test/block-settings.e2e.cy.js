@@ -6,7 +6,6 @@ describe('Block Settings tests ...', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
 	});
 
 	it('should render blockera block icon for supported WordPress core blocks', () => {
@@ -24,7 +23,7 @@ describe('Block Settings tests ...', () => {
 
 		// Be sure hidden blockera block icon on toolbar.
 		cy.get(
-			'.block-editor-block-switcher__toggle [aria-label="Paragraph Block Icon"]'
+			'.block-editor-block-switcher [aria-label="Paragraph Block Icon"]'
 		).should('have.css', 'display', 'none');
 	});
 });
