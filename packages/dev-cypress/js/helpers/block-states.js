@@ -23,17 +23,23 @@ export function openInserter() {
 }
 
 export function setBlockState(state, blockType) {
+	const stateContainer = cy
+		.getByAriaLabel('Blockera Block State Container')
+		.should('exist');
+
 	if (blockType === 'master-block') {
-		cy.getByAriaLabel('Blockera Block State Container')
+		stateContainer
 			.first()
+			.should('be.visible')
 			.within(() => {
 				cy.getByDataCy('group-control-header')
 					.contains(state)
 					.click({ force: true });
 			});
 	} else {
-		cy.getByAriaLabel('Blockera Block State Container')
+		stateContainer
 			.last()
+			.should('be.visible')
 			.within(() => {
 				cy.getByDataCy('group-control-header')
 					.contains(state)
