@@ -237,20 +237,29 @@ export const registerCommands = () => {
 		});
 	});
 
-	// Select a variable row in the variable picker (catalog `va-item-*` or preset repeater `data-variable-slug`).
+	// Select a variable row in the variable picker.
+	// value-addons catalog rows: PickerValueItem (`va-item-*`, `value-addon-picker-item-*`).
+	// global-styles-ui preset repeaters: GroupControl header (`group-control-header` + `data-variable-slug`).
 	Cypress.Commands.add('selectValueAddonItem', (itemID) => {
+		const itemSelector = [
+			`[data-test="value-addon-picker-item-${itemID}"]`,
+			`[data-cy="va-item-${itemID}"]`,
+			`[data-cy="group-control-header"][data-variable-slug="${itemID}"]`,
+			`[data-variable-slug="${itemID}"]`,
+		].join(', ');
+
 		cy.get(
-			'[data-cy="variable-picker-popover"], .blockera-control-popover-variables',
+			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
 			{ timeout: 15000 }
 		)
 			.filter(':visible')
 			.first()
-			.should('exist')
+			.should('be.visible')
 			.within(() => {
-				cy.get(
-					`[data-variable-slug="${itemID}"], [data-cy="va-item-${itemID}"]`
-				)
+				cy.get(itemSelector)
+					.filter(':visible')
 					.first()
+					.should('exist')
 					.click({ force: true });
 			});
 	});
