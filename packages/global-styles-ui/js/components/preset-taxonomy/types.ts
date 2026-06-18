@@ -1,26 +1,15 @@
-export type TaxonomyGroupDeclaration = {
-	name: string;
-	slug: string;
-};
+export type TaxonomyGroupChildRef =
+	| { kind: 'preset'; slug: string }
+	| { kind: 'category'; slug: string };
 
-export type TaxonomyCategoryDeclaration = {
-	name: string;
-	slug: string;
-	'show-preview'?: boolean;
-	/** When set, first paint matches accordion open state (`initial-open` in theme JSON). */
-	'initial-open'?: boolean;
-};
-
-export type TaxonomyDeclarations = {
-	groups: TaxonomyGroupDeclaration[];
-	categories: TaxonomyCategoryDeclaration[];
-};
+export type TaxonomyCategoryChildRef =
+	| { kind: 'preset'; slug: string }
+	| { kind: 'sub'; slug: string };
 
 export type TaxonomySubSection<T> = {
 	slug: string;
 	name: string;
 	showPreview: boolean;
-	/** From matching `categories[]` row when sub slug equals category slug; drives accordion default open. */
 	initialOpen?: boolean;
 	presets: T[];
 };
@@ -32,6 +21,8 @@ export type TaxonomyCategoryBranch<T> = {
 	initialOpen?: boolean;
 	directPresets: T[];
 	subSections: TaxonomySubSection<T>[];
+	/** Palette walk order of direct presets vs sub-section accordions. */
+	childOrder: TaxonomyCategoryChildRef[];
 };
 
 export type TaxonomyGroupBranch<T> = {
@@ -39,4 +30,6 @@ export type TaxonomyGroupBranch<T> = {
 	name: string;
 	directPresets: T[];
 	categories: TaxonomyCategoryBranch<T>[];
+	/** Palette walk order of direct presets vs category accordions. */
+	childOrder: TaxonomyGroupChildRef[];
 };
