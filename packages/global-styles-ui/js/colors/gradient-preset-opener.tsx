@@ -25,11 +25,13 @@ import {
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 export type GradientPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & { gradient?: string };
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -57,8 +59,10 @@ export function GradientPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: GradientPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const pickerCtx = useVarPickerPresetContext();
 	const previewUsage = resolveGradientPresetPreviewUsage(pickerCtx);
 
@@ -114,7 +118,7 @@ export function GradientPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			{children}

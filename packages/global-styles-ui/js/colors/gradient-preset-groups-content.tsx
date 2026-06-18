@@ -79,6 +79,7 @@ export function GradientPresetGroupsContent({
 					variant={variant}
 					origin="theme"
 					gradients={kindTheme}
+					baseGradients={baseKindTheme}
 					themeGradients={themeGradients}
 					defaultGradients={defaultGradients}
 					customGradients={customGradients}

@@ -17,12 +17,10 @@ import {
 	filterRadialGradients,
 } from './utils';
 import {
-	PresetGroup,
+	PresetTaxonomyGroupLayout,
 	getNewIndexFromPresets,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
-	usePresetResetDialogState,
 } from '../components';
 
 export type GradientPresetVariant = 'linear' | 'radial';
@@ -31,6 +29,7 @@ interface GradientPresetGroupProps {
 	variant: GradientPresetVariant;
 	origin: string;
 	gradients: Gradient[];
+	baseGradients?: Gradient[];
 	themeGradients: Gradient[] | undefined;
 	defaultGradients: Gradient[] | undefined;
 	customGradients: Gradient[];
@@ -74,6 +73,7 @@ export function GradientPresetGroup({
 	variant,
 	origin,
 	gradients,
+	baseGradients,
 	themeGradients,
 	defaultGradients,
 	customGradients,
@@ -85,9 +85,6 @@ export function GradientPresetGroup({
 	const isLinear = variant === 'linear';
 	const gradientType = isLinear ? 'linear-gradient' : 'radial-gradient';
 	const slugKind = isLinear ? 'linear' : 'radial';
-
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
 
 	const gradientKindPhrase = isLinear
 		? __('linear gradient', 'blockera')
@@ -144,13 +141,17 @@ export function GradientPresetGroup({
 		[gradientType]
 	);
 
-	const handleUpdate = useCallback(
-		(newValue: object) => {
-			const newGradients = convertRepeaterValueToGradients(newValue);
+	const convertRepeaterToItems = useCallback(
+		(newValue: object) => convertRepeaterValueToGradients(newValue),
+		[]
+	);
+
+	const onPersistItems = useCallback(
+		(next: Gradient[]) => {
 			mergeWithOppositeKind(
 				variant,
 				origin as 'theme' | 'default' | 'custom',
-				newGradients,
+				next,
 				themeGradients,
 				defaultGradients,
 				customGradients,
@@ -172,32 +173,26 @@ export function GradientPresetGroup({
 	);
 
 	return (
-		<>
-			{handleResetGradients && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetGradients}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={GradientPresetOpener}
-				onChange={handleUpdate}
-				controlName={`${slugKind}-gradient-presets-${origin}`}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={gradients}
-				PresetFields={GradientPresetFields}
-				title={
-					isLinear
-						? __('Linear Gradient', 'blockera')
-						: __('Radial Gradient', 'blockera')
-				}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={presetFieldsPropsResolver}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<Gradient & Record<string, unknown>>
+			origin={origin}
+			items={gradients}
+			baseItems={baseGradients}
+			controlName={`${slugKind}-gradient-presets-${origin}`}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={GradientPresetFields}
+			repeaterItemHeader={GradientPresetOpener}
+			presetFieldsPropsResolver={presetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={
+				isLinear
+					? __('Linear Gradient', 'blockera')
+					: __('Radial Gradient', 'blockera')
+			}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetGradients}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
