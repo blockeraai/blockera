@@ -58,7 +58,10 @@ export function PresetTaxonomySection({
 }: PresetTaxonomySectionProps) {
 	return (
 		<PresetStateContainer activeColor="var(--blockera-controls-block-variations-style)">
-			<div className="blockera-preset-taxonomy-tree">
+			<div
+				className="blockera-preset-taxonomy-tree"
+				data-test="preset-taxonomy-tree"
+			>
 				<ControlContextProvider
 					value={repeaterContextValue}
 					storeName={'blockera/controls/repeater'}

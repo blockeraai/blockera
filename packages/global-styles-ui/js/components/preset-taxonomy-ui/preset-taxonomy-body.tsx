@@ -305,6 +305,7 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 					<div
 						key={group.slug}
 						className="blockera-preset-taxonomy-group-shell"
+						data-test="preset-taxonomy-group-shell"
 					>
 						<TaxonomyGroupHeader label={group.name} />
 						<div className="blockera-preset-taxonomy-items-stack">
