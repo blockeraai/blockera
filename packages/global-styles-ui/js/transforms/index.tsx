@@ -15,16 +15,14 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	PresetGroup,
 	getNewIndexFromPresets,
 	createPresetFieldsPropsResolver,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
-	usePresetResetDialogState,
+	PresetTaxonomyGroupLayout,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -41,19 +39,23 @@ const transformPresetFieldsPropsResolver =
 
 function TransformPresetGroupComponent({
 	sizes,
+	baseSizes,
 	origin,
-	handleUpdateSizes,
+	persistSizes,
+	convertRepeaterToItems,
 	handleResetPresets,
 }: {
 	label: string;
 	origin: string;
 	sizes: WpTransformPreset[];
-	handleUpdateSizes?: (newValue: Object) => void;
+	baseSizes?: WpTransformPreset[];
+	persistSizes?: (items: WpTransformPreset[]) => void;
+	convertRepeaterToItems: (
+		newValue: object,
+		baseline: WpTransformPreset[]
+	) => WpTransformPreset[];
 	handleResetPresets?: () => void;
 }) {
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
-
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, __('transform', 'blockera'));
 
@@ -86,40 +88,31 @@ function TransformPresetGroupComponent({
 
 	const controlName = `transform-preset-presets-${origin}`;
 
-	const handleChange = useCallback(
-		(newValue: Object) => {
-			if (!handleUpdateSizes) {
-				return;
-			}
-			handleUpdateSizes(newValue);
+	const onPersistItems = useCallback(
+		(next: WpTransformPreset[]) => {
+			persistSizes?.(next);
 		},
-		[handleUpdateSizes]
+		[persistSizes]
 	);
 
 	return (
-		<>
-			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetPresets}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={TransformPresetOpener}
-				onChange={handleChange}
-				controlName={controlName}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={sizes}
-				PresetFields={TransformPresetSize}
-				title={__('2D & 3D Transforms', 'blockera')}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={transformPresetFieldsPropsResolver}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<WpTransformPreset & Record<string, unknown>>
+			origin={origin}
+			items={sizes}
+			baseItems={baseSizes}
+			controlName={controlName}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={TransformPresetSize}
+			repeaterItemHeader={TransformPresetOpener}
+			presetFieldsPropsResolver={transformPresetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={__('2D & 3D Transforms', 'blockera')}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetPresets}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
 
@@ -190,25 +183,25 @@ export function TransformsPresetContent() {
 		[]
 	);
 
-	const handleUpdateCustomSizes = useCallback(
-		(newValue: Object) => {
-			setCustomPresets(convertRepeaterValueToArray(newValue));
+	const persistThemeSizes = useCallback(
+		(next: WpTransformPreset[]) => {
+			setThemePresets(next);
 		},
-		[convertRepeaterValueToArray, setCustomPresets]
+		[setThemePresets]
 	);
 
-	const handleUpdateThemeSizes = useCallback(
-		(newValue: Object) => {
-			setThemePresets(convertRepeaterValueToArray(newValue));
+	const persistDefaultSizes = useCallback(
+		(next: WpTransformPreset[]) => {
+			setDefaultPresets(next);
 		},
-		[convertRepeaterValueToArray, setThemePresets]
+		[setDefaultPresets]
 	);
 
-	const handleUpdateDefaultSizes = useCallback(
-		(newValue: Object) => {
-			setDefaultPresets(convertRepeaterValueToArray(newValue));
+	const persistCustomSizes = useCallback(
+		(next: WpTransformPreset[]) => {
+			setCustomPresets(next);
 		},
-		[convertRepeaterValueToArray, setDefaultPresets]
+		[setCustomPresets]
 	);
 
 	const resetThemeToBase = useCallback(() => {
@@ -262,6 +255,11 @@ export function TransformsPresetContent() {
 		defaultPresets.length
 	);
 
+	const baseThemeSizes = useMemo(
+		() => sanitizeTransformPresets(baseThemePresets),
+		[baseThemePresets]
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
 			{showThemeOriginGroup && (
@@ -269,7 +267,9 @@ export function TransformsPresetContent() {
 					origin="theme"
 					label={__('Theme', 'blockera')}
 					sizes={themePresets}
-					handleUpdateSizes={handleUpdateThemeSizes}
+					baseSizes={baseThemeSizes}
+					persistSizes={persistThemeSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={themeResetHandler}
 				/>
 			)}
@@ -279,7 +279,8 @@ export function TransformsPresetContent() {
 					origin="default"
 					label={__('Default', 'blockera')}
 					sizes={defaultPresets}
-					handleUpdateSizes={handleUpdateDefaultSizes}
+					persistSizes={persistDefaultSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={defaultResetHandler}
 				/>
 			)}
@@ -288,7 +289,8 @@ export function TransformsPresetContent() {
 				origin="custom"
 				label={__('Custom', 'blockera')}
 				sizes={customPresets}
-				handleUpdateSizes={handleUpdateCustomSizes}
+				persistSizes={persistCustomSizes}
+				convertRepeaterToItems={convertRepeaterValueToArray}
 				handleResetPresets={customResetHandler}
 			/>
 		</Flex>

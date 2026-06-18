@@ -21,11 +21,13 @@ import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-he
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { itemsToRepeaterRecord, type WpTransformPreset } from './utils';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 export type TransformPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & WpTransformPreset;
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -38,8 +40,10 @@ export function TransformPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: TransformPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesTransformPresetPreviewAttributes(
 			itemsToRepeaterRecord(variable.items || [])
@@ -79,7 +83,7 @@ export function TransformPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			{children}
