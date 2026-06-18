@@ -110,13 +110,18 @@ export function parsePresetNameTaxonomy(
 
 export function isNameBasedTaxonomyPreset(
 	preset: Record<string, unknown>,
-	source?: TaxonomyNameSource
+	source?: TaxonomyNameSource,
+	excludePreset?: (preset: Record<string, unknown>) => boolean
 ): boolean {
 	const meta = getPresetMeta(preset);
 	if (meta?.renderRepeaterItem === false) {
 		return false;
 	}
+	if (excludePreset?.(preset)) {
+		return false;
+	}
 	if (
+		!excludePreset &&
 		isShadePaletteColor(preset as Parameters<typeof isShadePaletteColor>[0])
 	) {
 		return false;

@@ -4,3 +4,8 @@ export * from './parse-preset-name-taxonomy';
 export * from './partition-and-tree';
 export * from './use-preset-taxonomy-grouped-ui-enabled';
 export * from './merge-palette-after-simple-repeater';
+export * from './merge-taxonomy-repeater-payload';
+export * from './preset-taxonomy-edit-session-context';
+export * from './use-preset-taxonomy-header-label';
+export * from './use-preset-taxonomy-group-ui';
+export * from './preset-taxonomy-group-bridge';
