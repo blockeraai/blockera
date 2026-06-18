@@ -32,7 +32,6 @@ import {
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
 } from '../utils';
-import { shouldRenameRepeaterItemByType } from '../store/reducers/utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
 import type { RepeaterItemProps } from '../types';
@@ -70,12 +69,7 @@ const RepeaterItem = ({
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch: {
-			sortRepeaterItem,
-			modifyControlValue,
-			changeRepeaterItem,
-			renameRepeaterItemByType,
-		},
+		dispatch: { sortRepeaterItem, modifyControlValue, changeRepeaterItem },
 	} = useControlContext();
 
 	const {
@@ -215,31 +209,6 @@ const RepeaterItem = ({
 		}
 	};
 
-	const getClosingItemValue = () => ({
-		...item,
-		isOpen: false,
-		...(item.creatingStep ? { creatingStep: false } : {}),
-	});
-
-	const commitRepeaterItemClose = () => {
-		const closingValue = getClosingItemValue();
-		const sharedAction = {
-			itemId,
-			value: closingValue,
-			controlId,
-			repeaterId,
-			onChange,
-			valueCleanup,
-		};
-
-		if (shouldRenameRepeaterItemByType(itemId, closingValue)) {
-			renameRepeaterItemByType(sharedAction);
-			return;
-		}
-
-		changeRepeaterItem(sharedAction);
-	};
-
 	if (
 		isBoolean(item?.renderRepeaterItem) &&
 		false === item.renderRepeaterItem
@@ -267,7 +236,6 @@ const RepeaterItem = ({
 				const nextOpen = !isOpen;
 
 				if (!nextOpen) {
-					commitRepeaterItemClose();
 					return;
 				}
 
@@ -388,7 +356,6 @@ const RepeaterItem = ({
 		isOpen,
 		onClose: () => {
 			setOpen(false);
-			commitRepeaterItemClose();
 		},
 		onClick: (): void | boolean => {
 			if (item?.selectable) {

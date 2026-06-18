@@ -64,10 +64,6 @@ describe('Filters → Functionality', () => {
 				);
 		});
 
-		cy.closeAndReopenRepeaterItemPopover({
-			within: '@filters',
-		});
-
 		//Check store
 		getWPDataObject().then((data) => {
 			expect({

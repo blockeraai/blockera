@@ -11,10 +11,7 @@ import { useState } from '@wordpress/element';
 import { PopoverCore } from './core';
 import { DraggablePopover } from './draggable';
 import { usePopoverActiveColorStyle } from '../../context';
-import {
-	useInspectorPopoverOffset,
-	useResolvedPopoverAnchor,
-} from './use-inspector-popover-offset';
+import { useInspectorPopoverOffset } from './use-inspector-popover-offset';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
@@ -27,7 +24,6 @@ export default function Popover({
 }: TPopoverProps): MixedElement {
 	const activeColorStyle = usePopoverActiveColorStyle();
 	const [fallbackAnchor, setFallbackAnchor] = useState(null);
-	const resolvedAnchor = useResolvedPopoverAnchor(anchor, fallbackAnchor);
 
 	const computedOffset = useInspectorPopoverOffset({
 		explicitAnchor: anchor,
@@ -43,7 +39,10 @@ export default function Popover({
 
 	const popoverProps = {
 		...props,
-		anchor: resolvedAnchor ?? undefined,
+		// Keep floating-ui anchored like before: only consumer-provided anchors.
+		// Resolved openers are used for offset math only so draggable transforms
+		// are not overridden by continuous anchor repositioning.
+		anchor: anchor ?? undefined,
 		placement,
 		offset: computedOffset,
 		style: mergedStyle,
