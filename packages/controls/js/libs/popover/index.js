@@ -12,6 +12,7 @@ import { PopoverCore } from './core';
 import { DraggablePopover } from './draggable';
 import { usePopoverActiveColorStyle } from '../../context';
 import { useInspectorPopoverOffset } from './use-inspector-popover-offset';
+import { DEFAULT_POPOVER_OFFSET } from './utils';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
@@ -19,7 +20,7 @@ export default function Popover({
 	style,
 	anchor,
 	placement = 'bottom-start',
-	offset = 10,
+	offset = DEFAULT_POPOVER_OFFSET,
 	...props
 }: TPopoverProps): MixedElement {
 	const activeColorStyle = usePopoverActiveColorStyle();

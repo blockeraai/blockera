@@ -65,7 +65,7 @@ describe('popover offset utils', () => {
 			document.body.appendChild(sidebar);
 
 			expect(computeInspectorPopoverOffset(anchor, 'left-start')).toBe(
-				135
+				150
 			);
 		});
 

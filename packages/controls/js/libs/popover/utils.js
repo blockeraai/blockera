@@ -16,7 +16,7 @@ export const RIGHT_PLACEMENTS: Array<string> = [
 	'right-end',
 ];
 
-export const DEFAULT_POPOVER_OFFSET = 10;
+export const DEFAULT_POPOVER_OFFSET = 25;
 
 export const VALUE_ADDON_OPENER_SELECTORS =
 	'.blockera-control-value-addon-pointer.open-value-addon, [data-cy="value-addon-btn"].open-value-addon, .blockera-control-value-addon.open-value-addon';

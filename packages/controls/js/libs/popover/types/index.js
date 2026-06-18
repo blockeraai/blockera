@@ -73,7 +73,7 @@ export type TPopoverProps = {
 	 * sidebar edge when opened inside the inspector. Also used as the base
 	 * offset for other placements and contexts.
 	 *
-	 * @default 10
+	 * @default 25
 	 */
 	offset?: number,
 	closeButton?: boolean,
