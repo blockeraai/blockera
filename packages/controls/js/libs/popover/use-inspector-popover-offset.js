@@ -85,20 +85,3 @@ export function useInspectorPopoverOffset({
 
 	return offset;
 }
-
-export function useResolvedPopoverAnchor(
-	explicitAnchor: ?HTMLElement,
-	fallbackAnchor: ?HTMLElement
-): ?HTMLElement {
-	const [resolvedAnchor, setResolvedAnchor] = useState<?HTMLElement>(() =>
-		resolvePopoverAnchorElement(explicitAnchor, fallbackAnchor)
-	);
-
-	useLayoutEffect(() => {
-		setResolvedAnchor(
-			resolvePopoverAnchorElement(explicitAnchor, fallbackAnchor)
-		);
-	}, [explicitAnchor, fallbackAnchor]);
-
-	return resolvedAnchor;
-}
