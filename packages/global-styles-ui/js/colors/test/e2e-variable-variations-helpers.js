@@ -11,6 +11,14 @@ import {
 
 export const MU_FIX = 'packages/global-styles-ui/js/colors/test/fixtures';
 
+/** Global Styles color palette: PresetGroup uses `getOriginVariablesLabel( 'theme' )`. */
+export const THEME_PRESET_GROUP_LABELS = ['Theme Variables', 'Theme'];
+
+/** Cypress chainable scoped to the theme color preset repeater section. */
+export function withinThemePresetGroup(fn) {
+	return cy.getParentContainer(THEME_PRESET_GROUP_LABELS).within(fn);
+}
+
 /** @param {string} categoryLabel */
 export function expandTaxonomyCategoryAccordion(categoryLabel) {
 	cy.contains('[data-cy="taxonomy-category-header-label"]', categoryLabel, {
@@ -37,6 +45,23 @@ export function openParagraphTextColorVariablePickerPopover() {
 	cy.getByDataTest('variable-picker-popover', { timeout: 20000 }).should(
 		'be.visible'
 	);
+}
+
+/** Picker closes after a selection; reopen via the value-addon control (open or selected state). */
+export function reopenVariablePickerPopover() {
+	cy.getParentContainer('Text Color').within(() => {
+		cy.get(
+			'[data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]',
+			{ timeout: 20000 }
+		)
+			.first()
+			.click({ force: true });
+	});
+
+	cy.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
+		.should('be.visible');
 }
 
 /** @param {string} categoryLabel */
@@ -71,6 +96,8 @@ export function expandColorPresetVariationsAccordionInVariablePicker(
 			cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
 				timeout: 20000,
 			})
+				.scrollIntoView()
+				.should('be.visible')
 				.parents('.blockera-control-repeater-item-variations-group')
 				.first()
 				.find('.blockera-control-btn-toggle')
@@ -82,7 +109,7 @@ export function expandColorPresetVariationsAccordionInVariablePicker(
 export function expandColorPresetVariationsAccordionOnPaletteScreen(
 	headerLabel
 ) {
-	cy.getParentContainer('Theme').within(() => {
+	withinThemePresetGroup(() => {
 		cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
 			timeout: 20000,
 		})
@@ -94,12 +121,15 @@ export function expandColorPresetVariationsAccordionOnPaletteScreen(
 }
 
 /**
- * Retries until the editor store exposes MU color taxonomy on theme base global styles.
+ * Retries until the editor store exposes MU color preset with name-based taxonomy on theme palette.
  *
- * @param {string} groupSlug
  * @param {string} presetSlug
+ * @param {string} expectedName Full preset name (may use `/` segments).
  */
-export function assertEditorThemeBaseHasMuColorTaxonomy(groupSlug, presetSlug) {
+export function assertEditorThemeBaseHasMuColorTaxonomy(
+	presetSlug,
+	expectedName
+) {
 	cy.window({ timeout: 30000 }).should((win) => {
 		const select = win.wp?.data?.select?.('core');
 		expect(select, 'wp.data select(core)').to.exist;
@@ -112,15 +142,6 @@ export function assertEditorThemeBaseHasMuColorTaxonomy(groupSlug, presetSlug) {
 		expect(base, 'theme base global styles object').to.exist;
 
 		const settings = base.settings ?? base;
-		const groups = settings?.color?.groups;
-		expect(
-			Array.isArray(groups) && groups.length > 0,
-			'settings.color.groups must be a non-empty array for taxonomy UI'
-		).to.eq(true);
-		expect(
-			groups.some((g) => String(g?.slug ?? '') === groupSlug),
-			`settings.color.groups must contain slug "${groupSlug}"`
-		).to.eq(true);
 
 		const pal = settings?.color?.palette;
 		const themePalette = Array.isArray(pal?.theme)
@@ -139,9 +160,13 @@ export function assertEditorThemeBaseHasMuColorTaxonomy(groupSlug, presetSlug) {
 		expect(row, `theme palette must include MU preset "${presetSlug}"`).to
 			.exist;
 		expect(
-			String(row?.meta?.group ?? ''),
-			`preset "${presetSlug}" must retain meta.group "${groupSlug}"`
-		).to.eq(groupSlug);
+			String(row?.name ?? ''),
+			`preset "${presetSlug}" must retain name "${expectedName}"`
+		).to.eq(expectedName);
+		expect(
+			String(row?.name ?? '').includes('/'),
+			`preset "${presetSlug}" name must use / for taxonomy`
+		).to.eq(true);
 	});
 }
 
