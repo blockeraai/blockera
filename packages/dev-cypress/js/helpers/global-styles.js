@@ -477,6 +477,17 @@ export function nameNewGlobalStylesCustomPreset({ addDataTest, presetName }) {
 }
 
 /**
+ * Sets the preset description textarea in the visible variable edit popover.
+ *
+ * @param {string} text Description text to type.
+ */
+export function setGlobalStylesPresetDescription(text) {
+	cy.getByDataTest('global-styles-preset-description-field')
+		.click({ force: true })
+		.type('{selectall}' + text, { delay: 0, force: true });
+}
+
+/**
  * Border custom preset: open the last row and set “all” width so `--wp--preset--border--*` has a non-empty fallback.
  *
  */
