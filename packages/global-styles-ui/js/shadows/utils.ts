@@ -9,6 +9,7 @@ import {
 	parseCssBoxShadowToRepeaterValue,
 	formatControlItemsToCssBoxShadow,
 } from './shadow-preset-css';
+import { withPresetMetaFromRepeaterRow } from '../components/preset-meta-utils';
 
 export type ShadowPresetItem = {
 	type: 'inner' | 'outer';
@@ -170,12 +171,12 @@ export function sanitizeShadowPresets(raw: unknown): WpShadowPreset[] {
 				return null;
 			}
 			const shadow = shadowCssFromPreset(p);
-			return {
+			return withPresetMetaFromRepeaterRow(p, {
 				slug,
 				name,
 				shadow,
 				isVisible: Boolean(p.isVisible ?? true),
-			};
+			});
 		})
 		.filter((p): p is WpShadowPreset => p !== null);
 }

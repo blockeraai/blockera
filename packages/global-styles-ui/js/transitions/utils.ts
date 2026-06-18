@@ -4,6 +4,7 @@
  * (type, duration, timing, delay) — same semantics as block attributes blockeraTransition.
  */
 import { getSortedRepeater } from '@blockera/controls';
+import { withPresetMetaFromRepeaterRow } from '../components/preset-meta-utils';
 
 export type TransitionPresetItem = {
 	type: string;
@@ -56,12 +57,12 @@ export function sanitizeTransitionPresets(raw: unknown): WpTransitionPreset[] {
 			if (!items.length) {
 				items = [{ ...DEFAULT_ITEM }];
 			}
-			return {
+			return withPresetMetaFromRepeaterRow(p, {
 				slug: String(p.slug ?? '').trim(),
 				name: String(p.name ?? '').trim(),
 				items,
 				isVisible: Boolean(p.isVisible ?? true),
-			};
+			});
 		})
 		.filter((p) => p.slug && p.name);
 }

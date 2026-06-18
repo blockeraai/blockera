@@ -3,6 +3,7 @@
  * Each preset stores `items`: transform rows matching TransformControl repeater fields.
  */
 import { getSortedRepeater } from '@blockera/controls';
+import { withPresetMetaFromRepeaterRow } from '../components/preset-meta-utils';
 
 export type TransformPresetItem = {
 	type: 'move' | 'scale' | 'rotate' | 'skew';
@@ -99,12 +100,12 @@ export function sanitizeTransformPresets(raw: unknown): WpTransformPreset[] {
 			if (!items.length) {
 				items = [{ ...DEFAULT_ITEM }];
 			}
-			return {
+			return withPresetMetaFromRepeaterRow(p, {
 				slug: String(p.slug ?? '').trim(),
 				name: String(p.name ?? '').trim(),
 				items,
 				isVisible: Boolean(p.isVisible ?? true),
-			};
+			});
 		})
 		.filter((p) => p.slug && p.name);
 }

@@ -2,6 +2,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue, isValid } from '@blockera/controls';
+import { withPresetMetaFromRepeaterRow } from '../components/preset-meta-utils';
 
 /**
  * Persisted `border` on each repeater item / theme.json preset: width, style, color only.
@@ -98,12 +99,14 @@ export function sanitizeBorderBoxPresets(presets: unknown): BorderBoxPreset[] {
 		if (typeof o.slug !== 'string' || typeof o.name !== 'string') {
 			continue;
 		}
-		out.push({
-			slug: o.slug,
-			name: o.name,
-			isVisible: o.isVisible,
-			border: coerceBorderPresetSide(o.border),
-		});
+		out.push(
+			withPresetMetaFromRepeaterRow(o, {
+				slug: o.slug,
+				name: o.name,
+				isVisible: o.isVisible,
+				border: coerceBorderPresetSide(o.border),
+			})
+		);
 	}
 	return out;
 }

@@ -8,6 +8,7 @@ import {
 	parseCssTextShadowToRepeaterValue,
 	formatRepeaterItemsToCssTextShadow,
 } from '@blockera/controls';
+import { withPresetMetaFromRepeaterRow } from '../components/preset-meta-utils';
 
 export type TextShadowPresetItem = {
 	x: string;
@@ -157,12 +158,12 @@ export function sanitizeTextShadowPresets(raw: unknown): WpTextShadowPreset[] {
 				return null;
 			}
 			const shadow = textShadowCssFromPreset(p);
-			return {
+			return withPresetMetaFromRepeaterRow(p, {
 				slug,
 				name,
 				shadow,
 				isVisible: Boolean(p.isVisible ?? true),
-			};
+			});
 		})
 		.filter((p): p is WpTextShadowPreset => p !== null);
 }
