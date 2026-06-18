@@ -1,4 +1,8 @@
-import type { TaxonomyCategoryDeclaration } from './types';
+import {
+	parsePresetNameTaxonomy,
+	resolvePresetTaxonomyName,
+	type TaxonomyNameSource,
+} from './parse-preset-name-taxonomy';
 
 export function getPresetMeta(
 	preset: Record<string, unknown>
@@ -10,84 +14,59 @@ export function getPresetMeta(
 }
 
 /**
- * Reads palette meta `short-name` (or camelCase `shortName`) when set in theme.json.
+ * Fills missing preset `meta` from the base theme row (e.g. `interface-size` when user styles omit meta).
  */
-export function resolvePresetShortName(
-	preset: Record<string, unknown>
-): string | undefined {
-	const meta = getPresetMeta(preset);
-	if (!meta) {
-		return undefined;
+export function mergePresetTaxonomyMetaFromBase<
+	T extends Record<string, unknown>,
+>(preset: T, source?: TaxonomyNameSource): T {
+	const slug = String(preset.slug ?? '');
+	if (slug === '') {
+		return preset;
 	}
-	const raw = meta['short-name'] ?? meta.shortName;
-	if (typeof raw === 'string' && raw.trim() !== '') {
-		return raw.trim();
+	const base = source?.basePresetsBySlug?.get(slug);
+	if (!base) {
+		return preset;
 	}
-	return undefined;
+	const baseMeta = getPresetMeta(base);
+	if (!baseMeta) {
+		return preset;
+	}
+	const presetMeta = getPresetMeta(preset);
+	if (!presetMeta) {
+		return { ...preset, meta: { ...baseMeta } } as T;
+	}
+	return { ...preset, meta: { ...baseMeta, ...presetMeta } } as T;
 }
 
 /**
- * Taxonomy variable rows prefer meta short-name over the full preset `name`.
+ * Taxonomy row labels use the leaf segment from a `/`-delimited name (base theme fallback when the stored name is flat).
  */
 export function resolvePresetTaxonomyDisplayName(
-	preset: Record<string, unknown>
+	preset: Record<string, unknown>,
+	source?: TaxonomyNameSource
 ): string {
-	const shortName = resolvePresetShortName(preset);
-	if (shortName) {
-		return shortName;
+	const taxonomyName = resolvePresetTaxonomyName(preset, source);
+	if (taxonomyName !== '') {
+		const parsed = parsePresetNameTaxonomy(taxonomyName);
+		if (parsed?.leafName) {
+			return parsed.leafName;
+		}
 	}
 	const name = preset.name;
 	return typeof name === 'string' ? name : '';
 }
 
 /**
- * Maps palette meta.category "information" to declared slug "info" (Twenty Twenty-Five).
+ * Full taxonomy path for the edit form (`Text/Primary/On Brand`), preferring base theme names when the stored row is flat.
  */
-export function resolveDeclaredCategorySlug(
-	rawCategory: unknown,
-	categories: TaxonomyCategoryDeclaration[]
-): string | undefined {
-	if (typeof rawCategory !== 'string' || rawCategory === '') {
-		return undefined;
+export function resolvePresetTaxonomyEditName(
+	preset: Record<string, unknown>,
+	source?: TaxonomyNameSource
+): string {
+	const taxonomyName = resolvePresetTaxonomyName(preset, source);
+	if (taxonomyName !== '') {
+		return taxonomyName;
 	}
-	const slugs = new Set(categories.map((c) => c.slug));
-	if (slugs.has(rawCategory)) {
-		return rawCategory;
-	}
-	if (rawCategory === 'information' && slugs.has('info')) {
-		return 'info';
-	}
-	return undefined;
-}
-
-export function resolveCategoryShowPreview(
-	parentCategorySlug: string,
-	subCategorySlug: string | undefined,
-	declaredCategories: TaxonomyCategoryDeclaration[]
-): boolean {
-	if (subCategorySlug) {
-		const sub = declaredCategories.find((c) => c.slug === subCategorySlug);
-		// Sub-rows never inherit parent category show-preview; only the sub-category declaration counts.
-		return sub !== undefined && sub['show-preview'] === true;
-	}
-	const parent = declaredCategories.find(
-		(c) => c.slug === parentCategorySlug
-	);
-	return parent?.['show-preview'] === true;
-}
-
-/**
- * Maps declarative `initial-open` / normalized `initialOpen` from settings.categories[]
- * onto accordion initial state. Returns undefined when absent so UI keeps package accordion default.
- */
-export function resolveCategoryInitialOpen(
-	declaration: TaxonomyCategoryDeclaration | undefined
-): boolean | undefined {
-	if (!declaration) {
-		return undefined;
-	}
-	if (typeof declaration['initial-open'] === 'boolean') {
-		return declaration['initial-open'];
-	}
-	return undefined;
+	const name = preset.name;
+	return typeof name === 'string' ? name : '';
 }
