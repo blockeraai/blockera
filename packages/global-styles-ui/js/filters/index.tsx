@@ -15,16 +15,14 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	PresetGroup,
 	getNewIndexFromPresets,
 	createPresetFieldsPropsResolver,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
-	usePresetResetDialogState,
+	PresetTaxonomyGroupLayout,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -41,19 +39,23 @@ const filterPresetFieldsPropsResolver =
 
 function FilterPresetGroupComponent({
 	sizes,
+	baseSizes,
 	origin,
-	handleUpdateSizes,
+	persistSizes,
+	convertRepeaterToItems,
 	handleResetPresets,
 }: {
 	label: string;
 	origin: string;
 	sizes: WpFilterPreset[];
-	handleUpdateSizes?: (newValue: Object) => void;
+	baseSizes?: WpFilterPreset[];
+	persistSizes?: (items: WpFilterPreset[]) => void;
+	convertRepeaterToItems: (
+		newValue: object,
+		baseline: WpFilterPreset[]
+	) => WpFilterPreset[];
 	handleResetPresets?: () => void;
 }) {
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
-
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, __('filter', 'blockera'));
 
@@ -84,40 +86,31 @@ function FilterPresetGroupComponent({
 
 	const controlName = `filter-preset-presets-${origin}`;
 
-	const handleChange = useCallback(
-		(newValue: Object) => {
-			if (!handleUpdateSizes) {
-				return;
-			}
-			handleUpdateSizes(newValue);
+	const onPersistItems = useCallback(
+		(next: WpFilterPreset[]) => {
+			persistSizes?.(next);
 		},
-		[handleUpdateSizes]
+		[persistSizes]
 	);
 
 	return (
-		<>
-			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetPresets}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={FilterPresetOpener}
-				onChange={handleChange}
-				controlName={controlName}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={sizes}
-				PresetFields={FilterPresetSize}
-				title={__('Filters', 'blockera')}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={filterPresetFieldsPropsResolver}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<WpFilterPreset & Record<string, unknown>>
+			origin={origin}
+			items={sizes}
+			baseItems={baseSizes}
+			controlName={controlName}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={FilterPresetSize}
+			repeaterItemHeader={FilterPresetOpener}
+			presetFieldsPropsResolver={filterPresetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={__('Filters', 'blockera')}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetPresets}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
 
@@ -188,25 +181,25 @@ export function FiltersPresetContent() {
 		[]
 	);
 
-	const handleUpdateCustomSizes = useCallback(
-		(newValue: Object) => {
-			setCustomPresets(convertRepeaterValueToArray(newValue));
+	const persistThemeSizes = useCallback(
+		(next: WpFilterPreset[]) => {
+			setThemePresets(next);
 		},
-		[convertRepeaterValueToArray, setCustomPresets]
+		[setThemePresets]
 	);
 
-	const handleUpdateThemeSizes = useCallback(
-		(newValue: Object) => {
-			setThemePresets(convertRepeaterValueToArray(newValue));
+	const persistDefaultSizes = useCallback(
+		(next: WpFilterPreset[]) => {
+			setDefaultPresets(next);
 		},
-		[convertRepeaterValueToArray, setThemePresets]
+		[setDefaultPresets]
 	);
 
-	const handleUpdateDefaultSizes = useCallback(
-		(newValue: Object) => {
-			setDefaultPresets(convertRepeaterValueToArray(newValue));
+	const persistCustomSizes = useCallback(
+		(next: WpFilterPreset[]) => {
+			setCustomPresets(next);
 		},
-		[convertRepeaterValueToArray, setDefaultPresets]
+		[setCustomPresets]
 	);
 
 	const resetThemeToBase = useCallback(() => {
@@ -260,6 +253,11 @@ export function FiltersPresetContent() {
 		defaultPresets.length
 	);
 
+	const baseThemeSizes = useMemo(
+		() => sanitizeFilterPresets(baseThemePresets),
+		[baseThemePresets]
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
 			{showThemeOriginGroup && (
@@ -267,7 +265,9 @@ export function FiltersPresetContent() {
 					origin="theme"
 					label={__('Theme', 'blockera')}
 					sizes={themePresets}
-					handleUpdateSizes={handleUpdateThemeSizes}
+					baseSizes={baseThemeSizes}
+					persistSizes={persistThemeSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={themeResetHandler}
 				/>
 			)}
@@ -277,7 +277,8 @@ export function FiltersPresetContent() {
 					origin="default"
 					label={__('Default', 'blockera')}
 					sizes={defaultPresets}
-					handleUpdateSizes={handleUpdateDefaultSizes}
+					persistSizes={persistDefaultSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={defaultResetHandler}
 				/>
 			)}
@@ -286,7 +287,8 @@ export function FiltersPresetContent() {
 				origin="custom"
 				label={__('Custom', 'blockera')}
 				sizes={customPresets}
-				handleUpdateSizes={handleUpdateCustomSizes}
+				persistSizes={persistCustomSizes}
+				convertRepeaterToItems={convertRepeaterValueToArray}
 				handleResetPresets={customResetHandler}
 			/>
 		</Flex>

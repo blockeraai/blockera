@@ -26,11 +26,13 @@ import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-he
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { itemsToRepeaterRecord, type WpFilterPreset } from './utils';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 export type FilterPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & WpFilterPreset;
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -57,8 +59,10 @@ export function FilterPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: FilterPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const pickerCtx = useVarPickerPresetContext();
 	const previewUsage = resolveFilterPresetPreviewUsage(pickerCtx);
 
@@ -102,7 +106,7 @@ export function FilterPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			{children}
