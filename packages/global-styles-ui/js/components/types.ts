@@ -26,6 +26,10 @@ export interface VariableType {
 	 * Set by the repeater when the preset list is selectable (e.g. variable picker).
 	 */
 	selectable?: boolean;
+	/**
+	 * Optional theme.json preset meta (e.g. `description`, taxonomy hints).
+	 */
+	meta?: Record<string, unknown>;
 }
 
 export type VariablesType = Array<VariableType>;

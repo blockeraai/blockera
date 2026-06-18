@@ -1,4 +1,5 @@
 export * from './utils';
+export * from './preset-meta-utils';
 export * from './subtitle';
 export * from './preset-group';
 export * from './screen-header';
