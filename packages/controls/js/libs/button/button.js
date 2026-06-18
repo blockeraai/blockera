@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { Button as WPButton } from '@wordpress/components';
+import { forwardRef } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -16,20 +17,24 @@ import { componentClassNames } from '@blockera/classnames';
  */
 import type { ButtonProps } from './types';
 
-export default function Button({
-	variant = 'tertiary',
-	size = 'normal',
-	contentAlign = 'center',
-	noBorder = false,
-	isFocus,
-	tooltipPosition = 'top',
-	className,
-	children,
-	//
-	...props
-}: ButtonProps): MixedElement {
+function Button(
+	{
+		variant = 'tertiary',
+		size = 'normal',
+		contentAlign = 'center',
+		noBorder = false,
+		isFocus,
+		tooltipPosition = 'top',
+		className,
+		children,
+		//
+		...props
+	}: ButtonProps,
+	ref: { current: ?HTMLElement }
+): MixedElement {
 	return (
 		<WPButton
+			ref={ref}
 			className={componentClassNames(
 				'button',
 				'size-' + size,
@@ -52,3 +57,8 @@ export default function Button({
 		</WPButton>
 	);
 }
+
+export default (forwardRef(Button): React$AbstractComponent<
+	ButtonProps,
+	HTMLElement,
+>);
