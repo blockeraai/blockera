@@ -716,33 +716,25 @@ function getMuPluginTargetName(muPluginPath, targetName = null) {
 }
 
 /**
- * Run `wp eval` for mu-plugin helpers and log stdout/stderr in the Cypress command log.
+ * Run mu-plugin activate/deactivate via Node cy.task (host filesystem).
+ * Avoids `cy.exec` + Docker, which can hang for 60s inside Cypress/Electron.
  *
  * @param {string} action Short label (e.g. activateMuPlugin).
  * @param {string} label Human-readable context for the log line.
- * @param {string} escapedPhpCode Shell-escaped PHP passed to wp eval.
- * @return {Cypress.Chainable} Wrapped wp-cli exec result with stdout/stderr logged.
+ * @param {string} taskName Cypress task name.
+ * @param {object} taskArgs Task payload.
+ * @return {Cypress.Chainable} Wrapped task result with stdout logged.
  */
-function runMuPluginWpEval(action, label, escapedPhpCode) {
-	return cy
-		.wpCli(`wp eval '${escapedPhpCode}'`, true, true)
-		.then((result) => {
-			const stdout = (result.stdout || '').trim();
-			const stderr = (result.stderr || '').trim();
-			const exitCode = result.code ?? 0;
-			const parts = [`[${action}] ${label}`];
-			if (stdout) {
-				parts.push(`stdout: ${stdout}`);
-			}
-			if (stderr) {
-				parts.push(`stderr: ${stderr}`);
-			}
-			if (exitCode !== 0) {
-				parts.push(`exit: ${exitCode}`);
-			}
-			cy.log(parts.join(' | '));
-			return cy.wrap(result);
-		});
+function runMuPluginTask(action, label, taskName, taskArgs) {
+	const startedAt = Date.now();
+
+	return cy.task(taskName, taskArgs).then((result) => {
+		const elapsedMs = Date.now() - startedAt;
+		cy.log(
+			`[${action}] ${label} | ${result?.message || ''} (${elapsedMs}ms)`
+		);
+		return cy.wrap(result);
+	});
 }
 
 /**
@@ -756,18 +748,11 @@ function runMuPluginWpEval(action, label, escapedPhpCode) {
 export function activateMuPlugin(muPluginPath, targetName = null) {
 	targetName = getMuPluginTargetName(muPluginPath, targetName);
 
-	// Build PHP code to copy mu-plugin to mu-plugins directory
-	// Use wp eval to execute PHP code directly without creating temp files
-	const phpCode = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $rel = '${muPluginPath}'; $sourceFile = null; if (defined('BLOCKERA_SB_PATH')) { $try = rtrim(BLOCKERA_SB_PATH, '/') . '/' . $rel; if (is_file($try)) { $sourceFile = $try; } } if (!$sourceFile) { $try = rtrim(WP_PLUGIN_DIR, '/') . '/blockera/' . $rel; if (is_file($try)) { $sourceFile = $try; } } if (!$sourceFile && is_dir(WP_PLUGIN_DIR)) { foreach ((glob(rtrim(WP_PLUGIN_DIR, '/') . '/*', GLOB_ONLYDIR) ?: []) as $dir) { $try = rtrim($dir, '/') . '/' . $rel; if (is_file($try)) { $sourceFile = $try; break; } } } $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if ($sourceFile && is_file($sourceFile)) { file_put_contents($targetFile, file_get_contents($sourceFile)); echo 'activated:' . $targetFile . ' from:' . $sourceFile; } else { echo 'activate_failed: source not found for ' . $rel; }`;
-
-	// Escape single quotes for shell: ' becomes '\''
-	// Use single quotes in shell command to preserve $ signs in PHP
-	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
-
-	return runMuPluginWpEval(
+	return runMuPluginTask(
 		'activateMuPlugin',
 		`${muPluginPath} -> ${targetName}`,
-		escapedPhpCode
+		'muPluginActivate',
+		{ muPluginPath, targetName }
 	);
 }
 
@@ -782,11 +767,10 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
 export function deactivateMuPlugin(muPluginPath, targetName = null) {
 	targetName = getMuPluginTargetName(muPluginPath, targetName);
 
-	// Build PHP code to remove mu-plugin from mu-plugins directory
-	const phpCode = `$targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($targetFile)) { unlink($targetFile); echo 'deactivated:' . $targetFile; } else { echo 'deactivate_skip: not found ' . $targetFile; }`;
-
-	// Escape single quotes for shell: ' becomes '\''
-	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
-
-	return runMuPluginWpEval('deactivateMuPlugin', targetName, escapedPhpCode);
+	return runMuPluginTask(
+		'deactivateMuPlugin',
+		targetName,
+		'muPluginDeactivate',
+		{ muPluginPath, targetName }
+	);
 }
