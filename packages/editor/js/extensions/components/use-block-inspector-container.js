@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useEffect, useState } from '@wordpress/element';
+import { useLayoutEffect, useState } from '@wordpress/element';
 
 export const BLOCK_INSPECTOR_SELECTOR = '.block-editor-block-inspector';
 
@@ -24,11 +24,13 @@ const syncSharedInspectorContainer = () => {
 		inspector && isConnectedInspector(inspector) ? inspector : null;
 
 	if (sharedInspectorContainer === next) {
-		return;
+		return next;
 	}
 
 	sharedInspectorContainer = next;
 	notifyContainerListeners();
+
+	return next;
 };
 
 const ensureBodyObserver = () => {
@@ -51,23 +53,43 @@ const ensureBodyObserver = () => {
  * Shared block inspector root — one DOM observer for the whole editor session.
  */
 export const useBlockInspectorContainer = () => {
-	const [, setRevision] = useState(0);
-
-	useEffect(() => {
+	const [container, setContainer] = useState(() => {
 		ensureBodyObserver();
 
-		const listener = () => {
-			setRevision((revision) => revision + 1);
+		return syncSharedInspectorContainer();
+	});
+
+	useLayoutEffect(() => {
+		ensureBodyObserver();
+
+		const syncContainer = () => {
+			const next = syncSharedInspectorContainer();
+
+			setContainer((current) => (current === next ? current : next));
 		};
 
-		containerListeners.add(listener);
+		containerListeners.add(syncContainer);
+
+		// Inspector may mount between render and this effect (first block selection).
+		syncContainer();
 
 		return () => {
-			containerListeners.delete(listener);
+			containerListeners.delete(syncContainer);
 		};
 	}, []);
 
-	return sharedInspectorContainer;
+	return container;
+};
+
+/**
+ * Resolves the inspector root synchronously (no hook subscription required).
+ *
+ * @return {HTMLElement|null} Connected block inspector root, if present.
+ */
+export const getBlockInspectorContainerSync = () => {
+	ensureBodyObserver();
+
+	return syncSharedInspectorContainer();
 };
 
 export const isBlockInspectorContainerReady = (container) =>
