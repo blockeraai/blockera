@@ -35,10 +35,6 @@ import {
 	VARIATION_SURFACE_SIZE,
 	SIZE_VARIATION_BLOCK_CARD_SLOT_NAME,
 } from '../../editor/global-styles/panel/variation-surfaces';
-import {
-	useBlockInspectorContainer,
-	isBlockInspectorContainerReady,
-} from './use-block-inspector-container';
 
 const excludedControls = ['canvas-editor'];
 
@@ -140,180 +136,164 @@ export const BlockFillPartials: ComponentType<any> = ({
 	);
 
 	const patternSectionClientId = usePatternEditSection(clientId);
-	const inspectorContainer = useBlockInspectorContainer();
-	const isInspectorSlotReady =
-		!insideBlockInspector ||
-		isBlockInspectorContainerReady(inspectorContainer);
 
 	return (
 		<>
-			{isInspectorSlotReady && (
-				<Fill name={`blockera-block-card-content-${clientId}`}>
-					{!insideBlockInspector && (
-						<StateContainer
-							name={blockProps.name}
-							isGlobalStylesPanelRoot={true}
-							clientId={fallbackClientId}
-							isGlobalStylesCardWrapper={!insideBlockInspector}
-							blockeraUnsavedData={
-								blockProps.attributes?.blockeraUnsavedData
+			<Fill name={`blockera-block-card-content-${clientId}`}>
+				{!insideBlockInspector && (
+					<StateContainer
+						name={blockProps.name}
+						isGlobalStylesPanelRoot={true}
+						clientId={fallbackClientId}
+						isGlobalStylesCardWrapper={!insideBlockInspector}
+						blockeraUnsavedData={
+							blockProps.attributes?.blockeraUnsavedData
+						}
+						insideBlockInspector={insideBlockInspector}
+						variationSurface={variationSurface}
+						availableStates={availableStates}
+					>
+						<BlockCard
+							isActive={isActive}
+							setActive={setActive}
+							notice={notice}
+							blockStyleVariationsProps={
+								blockStyleVariationsProps
 							}
+							blockSizeVariationsProps={blockSizeVariationsProps}
+							setCurrentTab={blockProps.setCurrentTab}
 							insideBlockInspector={insideBlockInspector}
-							variationSurface={variationSurface}
+							clientId={fallbackClientId}
+							editorClientId={clientId}
+							blockName={blockProps.name}
+							innerBlocks={blockeraInnerBlocks}
+							currentInnerBlock={currentInnerBlock}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							currentBreakpoint={currentBreakpoint}
+							currentInnerBlockState={currentInnerBlockState}
+							currentStateAttributes={blockProps.attributes}
 							availableStates={availableStates}
-						>
-							<BlockCard
-								isActive={isActive}
-								setActive={setActive}
-								notice={notice}
-								blockStyleVariationsProps={
-									blockStyleVariationsProps
-								}
-								blockSizeVariationsProps={
-									blockSizeVariationsProps
-								}
-								setCurrentTab={blockProps.setCurrentTab}
-								insideBlockInspector={insideBlockInspector}
-								clientId={fallbackClientId}
-								editorClientId={clientId}
-								blockName={blockProps.name}
-								innerBlocks={blockeraInnerBlocks}
-								currentInnerBlock={currentInnerBlock}
-								currentBlock={currentBlock}
-								currentState={currentState}
-								currentBreakpoint={currentBreakpoint}
-								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={blockProps.attributes}
-								availableStates={availableStates}
-								additional={filteredAdditional}
-								blockeraInnerBlocks={blockeraInnerBlocks}
-								supports={blockProps.supports}
-								setAttributes={blockProps.setAttributes}
-								handleOnChangeAttributes={
-									blockProps.handleOnChangeAttributes
-								}
-								currentBlockStyleVariation={
-									currentBlockStyleVariation
-								}
-								activeBlockVariation={
-									blockProps?.activeBlockVariation || ''
-								}
-								handleOnClick={updateBlockEditorSettings}
-								setCurrentBlockStyleVariation={
-									setCurrentBlockStyleVariation
-								}
-								variationBlockCardSlotName={
-									variationCardSlotName
-								}
-								variationBlockCardLabels={variationCardLabels}
-							/>
+							additional={filteredAdditional}
+							blockeraInnerBlocks={blockeraInnerBlocks}
+							supports={blockProps.supports}
+							setAttributes={blockProps.setAttributes}
+							handleOnChangeAttributes={
+								blockProps.handleOnChangeAttributes
+							}
+							currentBlockStyleVariation={
+								currentBlockStyleVariation
+							}
+							activeBlockVariation={
+								blockProps?.activeBlockVariation || ''
+							}
+							handleOnClick={updateBlockEditorSettings}
+							setCurrentBlockStyleVariation={
+								setCurrentBlockStyleVariation
+							}
+							variationBlockCardSlotName={variationCardSlotName}
+							variationBlockCardLabels={variationCardLabels}
+						/>
 
-							{isInnerBlock(currentBlock) && (
-								<InnerBlockCard
-									insideBlockInspector={insideBlockInspector}
-									variationSurface={variationSurface}
-									isActive={isActive}
-									clientId={clientId}
-									activeBlock={currentBlock}
-									blockName={blockProps.name}
-									innerBlocks={blockeraInnerBlocks}
-									handleOnClick={updateBlockEditorSettings}
-									currentBlock={currentBlock}
-									currentState={currentState}
-									availableStates={availableInnerStates}
-									currentBreakpoint={currentBreakpoint}
-									currentInnerBlockState={
-										currentInnerBlockState
-									}
-									currentStateAttributes={
-										blockProps.currentStateAttributes
-									}
-									additional={blockProps.additional}
-									supports={blockProps.supports}
-									setAttributes={blockProps.setAttributes}
-									handleOnChangeAttributes={
-										blockProps.handleOnChangeAttributes
-									}
-								/>
-							)}
-						</StateContainer>
-					)}
-
-					{insideBlockInspector && (
-						<>
-							{patternSectionClientId && (
-								<PatternBlockCard
-									patternClientId={patternSectionClientId}
-								/>
-							)}
-							<BlockCard
-								isActive={isActive}
-								setActive={setActive}
-								notice={notice}
-								setCurrentTab={blockProps.setCurrentTab}
+						{isInnerBlock(currentBlock) && (
+							<InnerBlockCard
 								insideBlockInspector={insideBlockInspector}
+								variationSurface={variationSurface}
+								isActive={isActive}
 								clientId={clientId}
+								activeBlock={currentBlock}
 								blockName={blockProps.name}
 								innerBlocks={blockeraInnerBlocks}
-								currentInnerBlock={currentInnerBlock}
+								handleOnClick={updateBlockEditorSettings}
 								currentBlock={currentBlock}
 								currentState={currentState}
-								blockStyleVariationsProps={
-									blockStyleVariationsProps
-								}
-								blockSizeVariationsProps={
-									blockSizeVariationsProps
-								}
+								availableStates={availableInnerStates}
 								currentBreakpoint={currentBreakpoint}
 								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={blockProps.attributes}
-								availableStates={availableStates}
-								additional={filteredAdditional}
-								blockeraInnerBlocks={blockeraInnerBlocks}
+								currentStateAttributes={
+									blockProps.currentStateAttributes
+								}
+								additional={blockProps.additional}
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
 									blockProps.handleOnChangeAttributes
 								}
-								currentBlockStyleVariation={
-									currentBlockStyleVariation
+							/>
+						)}
+					</StateContainer>
+				)}
+
+				{insideBlockInspector && (
+					<>
+						{patternSectionClientId && (
+							<PatternBlockCard
+								patternClientId={patternSectionClientId}
+							/>
+						)}
+						<BlockCard
+							isActive={isActive}
+							setActive={setActive}
+							notice={notice}
+							setCurrentTab={blockProps.setCurrentTab}
+							insideBlockInspector={insideBlockInspector}
+							clientId={clientId}
+							blockName={blockProps.name}
+							innerBlocks={blockeraInnerBlocks}
+							currentInnerBlock={currentInnerBlock}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							blockStyleVariationsProps={
+								blockStyleVariationsProps
+							}
+							blockSizeVariationsProps={blockSizeVariationsProps}
+							currentBreakpoint={currentBreakpoint}
+							currentInnerBlockState={currentInnerBlockState}
+							currentStateAttributes={blockProps.attributes}
+							availableStates={availableStates}
+							additional={filteredAdditional}
+							blockeraInnerBlocks={blockeraInnerBlocks}
+							supports={blockProps.supports}
+							setAttributes={blockProps.setAttributes}
+							handleOnChangeAttributes={
+								blockProps.handleOnChangeAttributes
+							}
+							currentBlockStyleVariation={
+								currentBlockStyleVariation
+							}
+							activeBlockVariation={
+								blockProps?.activeBlockVariation || ''
+							}
+						/>
+						{isInnerBlock(currentBlock) && (
+							<InnerBlockCard
+								insideBlockInspector={insideBlockInspector}
+								variationSurface={variationSurface}
+								isActive={isActive}
+								clientId={clientId}
+								activeBlock={currentBlock}
+								blockName={blockProps.name}
+								innerBlocks={blockeraInnerBlocks}
+								handleOnClick={updateBlockEditorSettings}
+								currentBlock={currentBlock}
+								currentState={currentState}
+								availableStates={availableInnerStates}
+								currentBreakpoint={currentBreakpoint}
+								currentInnerBlockState={currentInnerBlockState}
+								currentStateAttributes={
+									blockProps.currentStateAttributes
 								}
-								activeBlockVariation={
-									blockProps?.activeBlockVariation || ''
+								additional={blockProps.additional}
+								supports={blockProps.supports}
+								setAttributes={blockProps.setAttributes}
+								handleOnChangeAttributes={
+									blockProps.handleOnChangeAttributes
 								}
 							/>
-							{isInnerBlock(currentBlock) && (
-								<InnerBlockCard
-									insideBlockInspector={insideBlockInspector}
-									variationSurface={variationSurface}
-									isActive={isActive}
-									clientId={clientId}
-									activeBlock={currentBlock}
-									blockName={blockProps.name}
-									innerBlocks={blockeraInnerBlocks}
-									handleOnClick={updateBlockEditorSettings}
-									currentBlock={currentBlock}
-									currentState={currentState}
-									availableStates={availableInnerStates}
-									currentBreakpoint={currentBreakpoint}
-									currentInnerBlockState={
-										currentInnerBlockState
-									}
-									currentStateAttributes={
-										blockProps.currentStateAttributes
-									}
-									additional={blockProps.additional}
-									supports={blockProps.supports}
-									setAttributes={blockProps.setAttributes}
-									handleOnChangeAttributes={
-										blockProps.handleOnChangeAttributes
-									}
-								/>
-							)}
-						</>
-					)}
-				</Fill>
-			)}
+						)}
+					</>
+				)}
+			</Fill>
 			{!insideBlockInspector &&
 				(Boolean(currentBlockStyleVariation?.name) ||
 					(usesSharedRootStyleVariation &&

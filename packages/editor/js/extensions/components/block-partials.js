@@ -15,6 +15,7 @@ import { useShouldRenderBlockInspectorCardPortal } from '../libs/block-card';
 import {
 	useBlockInspectorContainer,
 	isBlockInspectorContainerReady,
+	getBlockInspectorContainerSync,
 } from './use-block-inspector-container';
 
 /**
@@ -100,6 +101,11 @@ export const BlockPartials = memo(
 		const stickyWrapperRef = useRef(null);
 		const sentinelRef = useRef(null);
 		const inspectorContainer = useBlockInspectorContainer();
+		const resolvedInspectorContainer = isBlockInspectorContainerReady(
+			inspectorContainer
+		)
+			? inspectorContainer
+			: getBlockInspectorContainerSync();
 		const shouldRenderCardPortal =
 			useShouldRenderBlockInspectorCardPortal(clientId);
 
@@ -153,7 +159,7 @@ export const BlockPartials = memo(
 			observer.observe(sentinel);
 
 			return () => observer.disconnect();
-		}, [inspectorContainer, shouldRenderCardPortal]);
+		}, [resolvedInspectorContainer, shouldRenderCardPortal]);
 
 		// Outside block inspector: preserve legacy Slot/Fill layout and state (Tabs in SharedBlockExtension).
 		if (!insideBlockInspector) {
@@ -183,17 +189,16 @@ export const BlockPartials = memo(
 				{inspectorEdit}
 				<SlotFillProvider>
 					{children}
-					{isBlockInspectorContainerReady(inspectorContainer) &&
-						shouldRenderCardPortal && (
-							<BlockInspectorCardPortal
-								key={inspectorContainer}
-								clientId={clientId}
-								isActive={isActive}
-								inspectorContainer={inspectorContainer}
-								sentinelRef={sentinelRef}
-								stickyWrapperRef={stickyWrapperRef}
-							/>
-						)}
+					{shouldRenderCardPortal && (
+						<BlockInspectorCardPortal
+							key={clientId}
+							clientId={clientId}
+							isActive={isActive}
+							inspectorContainer={resolvedInspectorContainer}
+							sentinelRef={sentinelRef}
+							stickyWrapperRef={stickyWrapperRef}
+						/>
+					)}
 				</SlotFillProvider>
 			</>
 		);
