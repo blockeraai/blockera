@@ -16,17 +16,15 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	PresetGroup,
 	getNewIndexFromPresets,
 	createPresetFieldsPropsResolver,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
-	usePresetResetDialogState,
 	withPresetMetaFromRepeaterRow,
+	PresetTaxonomyGroupLayout,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -62,19 +60,23 @@ function normalizeSpacingPresetsForUi(
 
 function SpacingSizeGroupComponent({
 	sizes,
+	baseSizes,
 	origin,
-	handleUpdateSizes,
+	persistSizes,
 	handleResetSpacingSizes,
+	convertRepeaterToItems,
 }: {
 	label: string;
 	origin: string;
 	sizes: SpacingSizePreset[];
-	handleUpdateSizes?: (newValue: Object) => void;
+	baseSizes?: SpacingSizePreset[];
+	persistSizes?: (items: SpacingSizePreset[]) => void;
+	convertRepeaterToItems: (
+		newValue: object,
+		baseline: SpacingSizePreset[]
+	) => SpacingSizePreset[];
 	handleResetSpacingSizes?: () => void;
 }) {
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
-
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, __('spacing size', 'blockera'));
 
@@ -99,40 +101,31 @@ function SpacingSizeGroupComponent({
 
 	const controlName = `spacing-size-presets-${origin}`;
 
-	const handleChange = useCallback(
-		(newValue: Object) => {
-			if (!handleUpdateSizes) {
-				return;
-			}
-			handleUpdateSizes(newValue);
+	const onPersistItems = useCallback(
+		(next: SpacingSizePreset[]) => {
+			persistSizes?.(next);
 		},
-		[handleUpdateSizes]
+		[persistSizes]
 	);
 
 	return (
-		<>
-			{handleResetSpacingSizes && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetSpacingSizes}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={SpacingPresetOpener}
-				onChange={handleChange}
-				controlName={controlName}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={sizes}
-				PresetFields={SpacingSize}
-				title={__('Spacing Size', 'blockera')}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={spacingPresetFieldsPropsResolver}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<SpacingSizePreset & Record<string, unknown>>
+			origin={origin}
+			items={sizes}
+			baseItems={baseSizes}
+			controlName={controlName}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={SpacingSize}
+			repeaterItemHeader={SpacingPresetOpener}
+			presetFieldsPropsResolver={spacingPresetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={__('Spacing Size', 'blockera')}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetSpacingSizes}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
 
@@ -193,25 +186,25 @@ export function SpacingPresetContent({
 		[]
 	);
 
-	const handleUpdateCustomSizes = useCallback(
-		(newValue: Object) => {
-			setCustomSpacingSizes(convertRepeaterValueToArray(newValue));
+	const persistThemeSizes = useCallback(
+		(next: SpacingSizePreset[]) => {
+			setThemeSpacingSizes(next);
 		},
-		[convertRepeaterValueToArray, setCustomSpacingSizes]
+		[setThemeSpacingSizes]
 	);
 
-	const handleUpdateThemeSizes = useCallback(
-		(newValue: Object) => {
-			setThemeSpacingSizes(convertRepeaterValueToArray(newValue));
+	const persistDefaultSizes = useCallback(
+		(next: SpacingSizePreset[]) => {
+			setDefaultSpacingSizes(next);
 		},
-		[convertRepeaterValueToArray, setThemeSpacingSizes]
+		[setDefaultSpacingSizes]
 	);
 
-	const handleUpdateDefaultSizes = useCallback(
-		(newValue: Object) => {
-			setDefaultSpacingSizes(convertRepeaterValueToArray(newValue));
+	const persistCustomSizes = useCallback(
+		(next: SpacingSizePreset[]) => {
+			setCustomSpacingSizes(next);
 		},
-		[convertRepeaterValueToArray, setDefaultSpacingSizes]
+		[setCustomSpacingSizes]
 	);
 
 	const resetThemeToBase = useCallback(() => {
@@ -291,6 +284,14 @@ export function SpacingPresetContent({
 		defaultSizes.length
 	);
 
+	const baseThemeSizes = useMemo(
+		() =>
+			normalizeSpacingPresetsForUi(
+				baseThemeSpacingSizes as SpacingSizePreset[]
+			),
+		[baseThemeSpacingSizes]
+	);
+
 	return (
 		<SpacingPresetPreviewUsageProvider value={previewUsage}>
 			<Flex direction="column" gap="32px" style={{ width: '100%' }}>
@@ -299,7 +300,9 @@ export function SpacingPresetContent({
 						origin="theme"
 						label={__('Theme', 'blockera')}
 						sizes={themeSizes}
-						handleUpdateSizes={handleUpdateThemeSizes}
+						baseSizes={baseThemeSizes}
+						persistSizes={persistThemeSizes}
+						convertRepeaterToItems={convertRepeaterValueToArray}
 						handleResetSpacingSizes={themeResetHandler}
 					/>
 				)}
@@ -309,7 +312,8 @@ export function SpacingPresetContent({
 						origin="default"
 						label={__('Default', 'blockera')}
 						sizes={defaultSizes}
-						handleUpdateSizes={handleUpdateDefaultSizes}
+						persistSizes={persistDefaultSizes}
+						convertRepeaterToItems={convertRepeaterValueToArray}
 						handleResetSpacingSizes={defaultResetHandler}
 					/>
 				)}
@@ -318,7 +322,8 @@ export function SpacingPresetContent({
 					origin="custom"
 					label={__('Custom', 'blockera')}
 					sizes={customSizesForUi}
-					handleUpdateSizes={handleUpdateCustomSizes}
+					persistSizes={persistCustomSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetSpacingSizes={customResetHandler}
 				/>
 			</Flex>

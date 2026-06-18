@@ -27,11 +27,13 @@ import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-he
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { useSpacingPresetPreviewUsageFromProvider } from './spacing-preset-preview-context';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 export type SpacingPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & { size: string };
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -67,8 +69,10 @@ export function SpacingPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 	previewUsage: previewUsageProp,
+	contextType = 'repeater',
 }: SpacingPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const pickerCtx = useVarPickerPresetContext();
 	const fromProvider = useSpacingPresetPreviewUsageFromProvider();
 	const previewUsage = resolveSpacingPresetPreviewUsage(
@@ -114,7 +118,7 @@ export function SpacingPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			<span
