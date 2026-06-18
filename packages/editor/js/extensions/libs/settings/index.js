@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useRef, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -29,6 +29,7 @@ export const ExtensionSettings = ({
 	update: (settings: Object) => void,
 }): MixedElement => {
 	const [isOpen, setIsOpen] = useState(false);
+	const settingsButtonRef = useRef(null);
 
 	const defaults: { [key: string]: Object } = {};
 	const tools: { [key: string]: Object } = {};
@@ -63,6 +64,7 @@ export const ExtensionSettings = ({
 	return (
 		<>
 			<More
+				ref={settingsButtonRef}
 				label={buttonLabel}
 				onClick={(): void => setIsOpen(!isOpen)}
 				isOpen={isOpen}
@@ -70,6 +72,7 @@ export const ExtensionSettings = ({
 
 			{isOpen && (
 				<Popover
+					anchor={settingsButtonRef.current}
 					title={title}
 					placement={'left-start'}
 					closeButton={true}
