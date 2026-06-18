@@ -21,17 +21,15 @@ import { isEquals } from '@blockera/utils';
  * Internal dependencies
  */
 import {
-	PresetGroup,
 	ScreenHeader,
 	getNewIndexFromPresets,
 	createPresetFieldsPropsResolver,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
-	usePresetResetDialogState,
 	withPresetMetaFromRepeaterRow,
+	PresetTaxonomyGroupLayout,
 } from '../components';
 import { FontSize } from './font-size';
 import FontSizesScreen from './font-sizes-screen';
@@ -63,8 +61,13 @@ interface FontSizeGroupProps {
 	label: string;
 	origin: string;
 	sizes: FontSizeType[];
+	baseSizes?: FontSizeType[];
+	persistSizes?: (items: FontSizeType[]) => void;
+	convertRepeaterToItems: (
+		newValue: object,
+		baseline: FontSizeType[]
+	) => FontSizeType[];
 	handleResetFontSizes?: () => void;
-	handleUpdateSizes?: (newValue: Object) => void;
 }
 
 export type DefaultPresetValue = {
@@ -93,13 +96,12 @@ function normalizeFontSizePresetsForUi(
 
 function FontSizeGroupComponent({
 	sizes,
+	baseSizes,
 	origin,
-	handleUpdateSizes,
+	persistSizes,
+	convertRepeaterToItems,
 	handleResetFontSizes,
 }: FontSizeGroupProps) {
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
-
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, __('font size', 'blockera'));
 
@@ -125,40 +127,31 @@ function FontSizeGroupComponent({
 
 	const controlName = `font-size-presets-${origin}`;
 
-	const handleChange = useCallback(
-		(newValue: Object) => {
-			if (!handleUpdateSizes) {
-				return;
-			}
-			handleUpdateSizes(newValue);
+	const onPersistItems = useCallback(
+		(next: FontSizeType[]) => {
+			persistSizes?.(next);
 		},
-		[handleUpdateSizes]
+		[persistSizes]
 	);
 
 	return (
-		<>
-			{handleResetFontSizes && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetFontSizes}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={FontSizePresetOpener}
-				onChange={handleChange}
-				controlName={controlName}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={sizes}
-				PresetFields={FontSize}
-				title={__('Font Size', 'blockera')}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={fontSizePresetFieldsPropsResolver}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<FontSizeType & Record<string, unknown>>
+			origin={origin}
+			items={sizes}
+			baseItems={baseSizes}
+			controlName={controlName}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={FontSize}
+			repeaterItemHeader={FontSizePresetOpener}
+			presetFieldsPropsResolver={fontSizePresetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={__('Font Size', 'blockera')}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetFontSizes}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
 
@@ -211,25 +204,25 @@ export function FontSizesPresetContent() {
 		[]
 	);
 
-	const handleUpdateCustomSizes = useCallback(
-		(newValue: Object) => {
-			setCustomFontSizes(convertRepeaterValueToArray(newValue));
+	const persistThemeSizes = useCallback(
+		(next: FontSizeType[]) => {
+			setThemeFontSizes(next);
 		},
-		[convertRepeaterValueToArray, setCustomFontSizes]
+		[setThemeFontSizes]
 	);
 
-	const handleUpdateThemeSizes = useCallback(
-		(newValue: Object) => {
-			setThemeFontSizes(convertRepeaterValueToArray(newValue));
+	const persistDefaultSizes = useCallback(
+		(next: FontSizeType[]) => {
+			setDefaultFontSizes(next);
 		},
-		[convertRepeaterValueToArray, setThemeFontSizes]
+		[setDefaultFontSizes]
 	);
 
-	const handleUpdateDefaultSizes = useCallback(
-		(newValue: Object) => {
-			setDefaultFontSizes(convertRepeaterValueToArray(newValue));
+	const persistCustomSizes = useCallback(
+		(next: FontSizeType[]) => {
+			setCustomFontSizes(next);
 		},
-		[convertRepeaterValueToArray, setDefaultFontSizes]
+		[setCustomFontSizes]
 	);
 
 	const resetThemeToBase = useCallback(() => {
@@ -294,6 +287,12 @@ export function FontSizesPresetContent() {
 		defaultSizes.length
 	);
 
+	const baseThemeSizes = useMemo(
+		() =>
+			normalizeFontSizePresetsForUi(baseThemeFontSizes as FontSizeType[]),
+		[baseThemeFontSizes]
+	);
+
 	return (
 		<VStack className="blockera-font-size-editor-groups" spacing={8}>
 			{showThemeOriginGroup && (
@@ -301,7 +300,9 @@ export function FontSizesPresetContent() {
 					origin="theme"
 					label={__('Theme', 'blockera')}
 					sizes={themeSizes}
-					handleUpdateSizes={handleUpdateThemeSizes}
+					baseSizes={baseThemeSizes}
+					persistSizes={persistThemeSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetFontSizes={themeResetHandler}
 				/>
 			)}
@@ -311,7 +312,8 @@ export function FontSizesPresetContent() {
 					origin="default"
 					label={__('Default', 'blockera')}
 					sizes={defaultSizes}
-					handleUpdateSizes={handleUpdateDefaultSizes}
+					persistSizes={persistDefaultSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetFontSizes={defaultResetHandler}
 				/>
 			)}
@@ -320,7 +322,8 @@ export function FontSizesPresetContent() {
 				origin="custom"
 				label={__('Custom', 'blockera')}
 				sizes={customSizesForUi}
-				handleUpdateSizes={handleUpdateCustomSizes}
+				persistSizes={persistCustomSizes}
+				convertRepeaterToItems={convertRepeaterValueToArray}
 				handleResetFontSizes={customResetHandler}
 			/>
 		</VStack>

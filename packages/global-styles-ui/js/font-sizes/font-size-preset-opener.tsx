@@ -19,12 +19,14 @@ import {
 } from '../components/preset-row-preview-inject';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 import type { VariableType } from '../components/types.ts';
 
 export type FontSizePresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & { size: string };
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -37,8 +39,10 @@ export function FontSizePresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: FontSizePresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
 		const patch = getGlobalStylesFontSizePresetPreviewAttributes(
 			variable?.size
@@ -75,7 +79,7 @@ export function FontSizePresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			<span
