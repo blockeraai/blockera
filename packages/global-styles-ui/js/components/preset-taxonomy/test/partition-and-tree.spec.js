@@ -262,6 +262,35 @@ describe('partition-and-tree', () => {
 		).toBe('Placeholder');
 	});
 
+	it('partitions spacing presets with slash-delimited names (Base / Tiny)', () => {
+		const presets = [
+			{
+				slug: 'e2e-base-tiny',
+				name: 'Base / Tiny',
+				size: '10px',
+			},
+			{
+				slug: 'regular',
+				name: 'Regular',
+				size: '20px',
+			},
+		];
+		const { taxonomyPresets, simplePresets, taxonomySlugSet } =
+			partitionPresetsForTaxonomyUi(presets);
+		expect(taxonomyPresets.map((p) => p.slug)).toEqual(['e2e-base-tiny']);
+		expect(simplePresets.map((p) => p.slug)).toEqual(['regular']);
+		expect(taxonomySlugSet.has('e2e-base-tiny')).toBe(true);
+		const tree = buildTaxonomyTree(taxonomyPresets, presets);
+		expect(tree[0].name).toBe('Base');
+		expect(tree[0].directPresets[0].name).toBe('Base / Tiny');
+		expect(
+			resolvePresetTaxonomyDisplayName({
+				slug: 'e2e-base-tiny',
+				name: 'Base / Tiny',
+			})
+		).toBe('Tiny');
+	});
+
 	it('merges base theme meta so interface-size small applies when user row omits meta', () => {
 		const basePresets = getThemeTaxonomyPrimaryCategoryPalette();
 		const presets = basePresets.map((row) => {
