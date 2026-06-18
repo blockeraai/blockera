@@ -74,7 +74,7 @@ export type PresetGroupPropsType = {
 		itemId: string;
 	}>;
 	/**
-	 * When true with `origin === 'theme'`, the repeater is omitted (e.g. theme colors fully handled by taxonomy UI).
+	 * When true, the flat preset repeater is omitted (all rows handled by taxonomy UI).
 	 */
 	suppressThemeRepeaterWhenTaxonomyBasePopulated?: boolean;
 };
@@ -331,7 +331,8 @@ export const PresetGroup = ({
 				);
 				return;
 			}
-			onChange(newValue);
+			const cleaned = cleanRepeaterForPersist(newValue);
+			onChange(cleaned);
 		},
 		[onChange, cleanRepeaterForPersist]
 	);
@@ -431,7 +432,7 @@ export const PresetGroup = ({
 		pickerCtx.omitRepeaterSectionLabel,
 	]);
 
-	if (origin === 'theme' && suppressThemeRepeaterWhenTaxonomyBasePopulated) {
+	if (suppressThemeRepeaterWhenTaxonomyBasePopulated) {
 		return null;
 	}
 
