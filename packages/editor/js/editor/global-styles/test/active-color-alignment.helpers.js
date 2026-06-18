@@ -49,7 +49,17 @@ const ACTIVE_COLOR_CSS_VARS = [
  * @return {Cypress.Chainable<string>} `--blockera-tab-panel-active-color` value.
  */
 export function getContainerActiveTabColor(containerSelector) {
-	return cy.cssVar('--blockera-tab-panel-active-color', containerSelector);
+	return cy
+		.get(containerSelector)
+		.contains('Normal')
+		.then(($container) => {
+			const color = window
+				.getComputedStyle($container[0].closest(containerSelector))
+				.getPropertyValue('--blockera-tab-panel-active-color')
+				.trim();
+
+			return color;
+		});
 }
 
 /**

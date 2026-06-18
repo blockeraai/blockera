@@ -47,6 +47,7 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 			});
 
 			it('uses hover state color on master state container and states inserter popover', () => {
+				cy.getByDataTest('style-text-subtitle').click();
 				setBlockState('Hover');
 
 				assertContainerActiveTabColor(
@@ -54,11 +55,12 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 					HOVER_STATE_COLOR
 				);
 				assertStatesInserterPopoverMatchesContainer(
-					STATE_COLORS_CONTAINER
+					'.blockera-states-picker-popover'
 				);
 			});
 
 			it('uses inner-block normal color on container and states inserter popover', () => {
+				cy.getByDataTest('style-text-subtitle').click();
 				setInnerBlock('elements/link');
 
 				assertContainerActiveTabColor(
@@ -66,20 +68,21 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 					INNER_BLOCK_NORMAL_COLOR
 				);
 				assertStatesInserterPopoverMatchesContainer(
-					STATE_COLORS_CONTAINER
+					'.blockera-states-picker-popover'
 				);
 			});
 
 			it('uses hover state color while inner block is selected', () => {
+				cy.getByDataTest('style-text-subtitle').click();
 				setInnerBlock('elements/link');
-				setBlockState('Hover');
+				setBlockState('Hover', 'inner-block');
 
 				assertContainerActiveTabColor(
 					STATE_COLORS_CONTAINER,
 					HOVER_STATE_COLOR
 				);
 				assertStatesInserterPopoverMatchesContainer(
-					STATE_COLORS_CONTAINER
+					'.blockera-states-picker-popover'
 				);
 			});
 		});
