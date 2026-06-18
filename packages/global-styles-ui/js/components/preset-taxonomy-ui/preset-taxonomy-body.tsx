@@ -16,13 +16,18 @@ import { controlClassNames } from '@blockera/classnames';
 import type { PresetFieldsPropsResolver } from '../preset-group';
 import type {
 	TaxonomyCategoryBranch,
+	TaxonomyCategoryChildRef,
 	TaxonomyGroupBranch,
+	TaxonomyGroupChildRef,
 } from '../preset-taxonomy/types';
 import { usePresetVariationsStorage } from '../../context/preset-variations-context';
 import { TaxonomyCategoryAccordion } from './taxonomy-category-accordion';
 import { TaxonomyGroupHeader } from './taxonomy-group-header';
 import { PresetTaxonomyPopoverRow } from './preset-taxonomy-popover-row';
-import { findRepeaterItemIdBySlug } from './preset-taxonomy-utils';
+import {
+	findRepeaterItemIdBySlug,
+	collectTaxonomyCategoryPresets,
+} from './preset-taxonomy-utils';
 
 function countPresetsInCategory<T extends Record<string, unknown>>(
 	category: TaxonomyCategoryBranch<T>
@@ -50,6 +55,32 @@ function getSolePresetInCategory<T extends Record<string, unknown>>(
 		}
 	}
 	return undefined;
+}
+
+function defaultGroupChildOrder<T extends Record<string, unknown>>(
+	group: TaxonomyGroupBranch<T>
+): TaxonomyGroupChildRef[] {
+	const refs: TaxonomyGroupChildRef[] = [];
+	for (const preset of group.directPresets) {
+		refs.push({ kind: 'preset', slug: String(preset.slug ?? '') });
+	}
+	for (const category of group.categories) {
+		refs.push({ kind: 'category', slug: category.slug });
+	}
+	return refs;
+}
+
+function defaultCategoryChildOrder<T extends Record<string, unknown>>(
+	category: TaxonomyCategoryBranch<T>
+): TaxonomyCategoryChildRef[] {
+	const refs: TaxonomyCategoryChildRef[] = [];
+	for (const preset of category.directPresets) {
+		refs.push({ kind: 'preset', slug: String(preset.slug ?? '') });
+	}
+	for (const sub of category.subSections) {
+		refs.push({ kind: 'sub', slug: sub.slug });
+	}
+	return refs;
 }
 
 export type PresetTaxonomyBodyProps<TPreset extends Record<string, unknown>> = {
@@ -111,6 +142,143 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 		]
 	);
 
+	const renderCategorySubSection = useCallback(
+		(
+			group: TaxonomyGroupBranch<TPreset>,
+			cat: TaxonomyCategoryBranch<TPreset>,
+			sub: TaxonomyCategoryBranch<TPreset>['subSections'][number]
+		) => {
+			if (sub.presets.length === 1) {
+				return renderPopoverRow(
+					sub.presets[0],
+					`${group.slug}-${cat.slug}-${sub.slug}-${String(sub.presets[0].slug ?? '')}`
+				);
+			}
+			const subPresetsForPreview = sub.presets;
+			const shouldShowSubClosedPreview =
+				Boolean(renderTaxonomyCategoryClosedPreview) &&
+				subPresetsForPreview.length > 0;
+			return (
+				<TaxonomyCategoryAccordion
+					key={`${group.slug}-${cat.slug}-${sub.slug}`}
+					title={sub.name}
+					{...(sub.initialOpen !== undefined
+						? { defaultOpen: sub.initialOpen }
+						: {})}
+					showPreview={
+						shouldShowSubClosedPreview ||
+						sub.showPreview ||
+						augmentPreview(subPresetsForPreview, fullItems)
+					}
+					renderClosedHeaderPreview={
+						renderTaxonomyCategoryClosedPreview
+							? () =>
+									renderTaxonomyCategoryClosedPreview(
+										sub.presets
+									)
+							: undefined
+					}
+				>
+					{sub.presets.map((preset) =>
+						renderPopoverRow(preset, String(preset.slug ?? ''))
+					)}
+				</TaxonomyCategoryAccordion>
+			);
+		},
+		[
+			augmentPreview,
+			fullItems,
+			renderPopoverRow,
+			renderTaxonomyCategoryClosedPreview,
+		]
+	);
+
+	const renderCategoryChildren = useCallback(
+		(
+			group: TaxonomyGroupBranch<TPreset>,
+			cat: TaxonomyCategoryBranch<TPreset>
+		) => {
+			const childOrder = cat.childOrder?.length
+				? cat.childOrder
+				: defaultCategoryChildOrder(cat);
+			const subBySlug = new Map(
+				cat.subSections.map((sub) => [sub.slug, sub])
+			);
+			const presetBySlug = new Map(
+				cat.directPresets.map((preset) => [
+					String(preset.slug ?? ''),
+					preset,
+				])
+			);
+			return childOrder.map((ref) => {
+				if (ref.kind === 'preset') {
+					const preset = presetBySlug.get(ref.slug);
+					if (!preset) {
+						return null;
+					}
+					return renderPopoverRow(preset, ref.slug);
+				}
+				const sub = subBySlug.get(ref.slug);
+				if (!sub) {
+					return null;
+				}
+				return renderCategorySubSection(group, cat, sub);
+			});
+		},
+		[renderCategorySubSection, renderPopoverRow]
+	);
+
+	const renderCategory = useCallback(
+		(
+			group: TaxonomyGroupBranch<TPreset>,
+			cat: TaxonomyCategoryBranch<TPreset>
+		) => {
+			const soleInCategory = getSolePresetInCategory(cat);
+			if (soleInCategory !== undefined) {
+				return renderPopoverRow(
+					soleInCategory,
+					`${group.slug}-${cat.slug}-${String(soleInCategory.slug ?? '')}`
+				);
+			}
+			const categoryPresetsForPreview =
+				collectTaxonomyCategoryPresets(cat);
+			const shouldShowClosedPreview =
+				Boolean(renderTaxonomyCategoryClosedPreview) &&
+				categoryPresetsForPreview.length > 0;
+			return (
+				<TaxonomyCategoryAccordion
+					key={`${group.slug}-${cat.slug}`}
+					title={cat.name}
+					{...(cat.initialOpen !== undefined
+						? { defaultOpen: cat.initialOpen }
+						: {})}
+					showPreview={
+						shouldShowClosedPreview ||
+						cat.showPreview ||
+						augmentPreview(categoryPresetsForPreview, fullItems)
+					}
+					renderClosedHeaderPreview={
+						renderTaxonomyCategoryClosedPreview
+							? () =>
+									renderTaxonomyCategoryClosedPreview(
+										categoryPresetsForPreview
+									)
+							: undefined
+					}
+				>
+					{renderCategoryChildren(group, cat)}
+				</TaxonomyCategoryAccordion>
+			);
+		},
+		[
+			augmentPreview,
+			fullItems,
+			renderCategoryChildren,
+			renderPopoverRow,
+			renderTaxonomyCategoryClosedPreview,
+		]
+	);
+
 	return (
 		<div
 			className={controlClassNames(
@@ -120,103 +288,44 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 			)}
 			data-cy="blockera-repeater-control"
 		>
-			{tree.map((group) => (
-				<div
-					key={group.slug}
-					className="blockera-preset-taxonomy-group-shell"
-				>
-					<TaxonomyGroupHeader label={group.name} />
-					<div className="blockera-preset-taxonomy-items-stack">
-						{group.directPresets.map((preset) =>
-							renderPopoverRow(preset, String(preset.slug ?? ''))
-						)}
-						{group.categories.map((cat) => {
-							const soleInCategory = getSolePresetInCategory(cat);
-							if (soleInCategory !== undefined) {
-								return renderPopoverRow(
-									soleInCategory,
-									`${group.slug}-${cat.slug}-${String(soleInCategory.slug ?? '')}`
-								);
-							}
-							return (
-								<TaxonomyCategoryAccordion
-									key={`${group.slug}-${cat.slug}`}
-									title={cat.name}
-									{...(cat.initialOpen !== undefined
-										? { defaultOpen: cat.initialOpen }
-										: {})}
-									showPreview={
-										cat.showPreview ||
-										augmentPreview(
-											cat.directPresets,
-											fullItems
-										)
+			{tree.map((group) => {
+				const childOrder = group.childOrder?.length
+					? group.childOrder
+					: defaultGroupChildOrder(group);
+				const presetBySlug = new Map(
+					group.directPresets.map((preset) => [
+						String(preset.slug ?? ''),
+						preset,
+					])
+				);
+				const categoryBySlug = new Map(
+					group.categories.map((cat) => [cat.slug, cat])
+				);
+				return (
+					<div
+						key={group.slug}
+						className="blockera-preset-taxonomy-group-shell"
+					>
+						<TaxonomyGroupHeader label={group.name} />
+						<div className="blockera-preset-taxonomy-items-stack">
+							{childOrder.map((ref) => {
+								if (ref.kind === 'preset') {
+									const preset = presetBySlug.get(ref.slug);
+									if (!preset) {
+										return null;
 									}
-									renderClosedHeaderPreview={
-										renderTaxonomyCategoryClosedPreview
-											? () =>
-													renderTaxonomyCategoryClosedPreview(
-														cat.directPresets
-													)
-											: undefined
-									}
-								>
-									{cat.directPresets.map((preset) =>
-										renderPopoverRow(
-											preset,
-											String(preset.slug ?? '')
-										)
-									)}
-									{cat.subSections.map((sub) =>
-										sub.presets.length === 1 ? (
-											renderPopoverRow(
-												sub.presets[0],
-												`${group.slug}-${cat.slug}-${sub.slug}-${String(sub.presets[0].slug ?? '')}`
-											)
-										) : (
-											<TaxonomyCategoryAccordion
-												key={`${group.slug}-${cat.slug}-${sub.slug}`}
-												title={sub.name}
-												{...(sub.initialOpen !==
-												undefined
-													? {
-															defaultOpen:
-																sub.initialOpen,
-														}
-													: {})}
-												showPreview={
-													sub.showPreview ||
-													augmentPreview(
-														sub.presets,
-														fullItems
-													)
-												}
-												renderClosedHeaderPreview={
-													renderTaxonomyCategoryClosedPreview
-														? () =>
-																renderTaxonomyCategoryClosedPreview(
-																	sub.presets
-																)
-														: undefined
-												}
-											>
-												{sub.presets.map((preset) =>
-													renderPopoverRow(
-														preset,
-														String(
-															preset.slug ?? ''
-														)
-													)
-												)}
-											</TaxonomyCategoryAccordion>
-										)
-									)}
-								</TaxonomyCategoryAccordion>
-							);
-						})}
+									return renderPopoverRow(preset, ref.slug);
+								}
+								const cat = categoryBySlug.get(ref.slug);
+								if (!cat) {
+									return null;
+								}
+								return renderCategory(group, cat);
+							})}
+						</div>
 					</div>
-				</div>
-			))}
+				);
+			})}
 		</div>
 	);
 }

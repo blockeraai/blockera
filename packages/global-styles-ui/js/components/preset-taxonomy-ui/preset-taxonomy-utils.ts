@@ -58,3 +58,19 @@ export function isPresetTaxonomyInterfaceSizeSmall(
 	const raw = presetTaxonomyInterfaceSizeRaw(item);
 	return raw !== undefined && raw.toLowerCase() === 'small';
 }
+
+/** All presets under a taxonomy category (direct rows + sub-section rows). */
+export function collectTaxonomyCategoryPresets<
+	T extends Record<string, unknown>,
+>(category: { directPresets: T[]; subSections: { presets: T[] }[] }): T[] {
+	const out: T[] = [];
+	for (const preset of category.directPresets) {
+		out.push(preset);
+	}
+	for (const sub of category.subSections) {
+		for (const preset of sub.presets) {
+			out.push(preset);
+		}
+	}
+	return out;
+}
