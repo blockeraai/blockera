@@ -549,6 +549,95 @@ export function expectBlockAttrIncludesPresetVar(attributeKey, varNeedle) {
 	});
 }
 
+/**
+ * Last visible Gutenberg popover used for global-styles preset edit fields.
+ *
+ * @return {Cypress.Chainable<JQuery<HTMLElement>>}
+ */
+export function getVisibleGlobalStylesPresetPopover() {
+	return cy
+		.get('.components-popover')
+		.filter(':visible')
+		.last()
+		.should('be.visible');
+}
+
+/**
+ * Opens a preset row by repeater header label and waits for the edit popover.
+ *
+ * @param {string} headerSelector `[data-cy]` selector for the repeater header.
+ * @param {string} label Visible header label text.
+ */
+export function openGlobalStylesPresetRepeaterHeader(headerSelector, label) {
+	cy.contains(headerSelector, label, { timeout: 20000 }).click({
+		force: true,
+	});
+	getVisibleGlobalStylesPresetPopover();
+}
+
+/**
+ * Types into the Name field inside the visible preset edit popover.
+ *
+ * @param {string} presetName Full name value to type.
+ * @param {{ clear?: boolean }} [options]
+ */
+export function typeGlobalStylesPresetNameInVisiblePopover(
+	presetName,
+	{ clear = true } = {}
+) {
+	getVisibleGlobalStylesPresetPopover().within(() => {
+		const field = cy
+			.getByDataTest('global-styles-preset-name-field')
+			.first()
+			.should('be.visible');
+		if (clear) {
+			field.clear({ force: true });
+		}
+		field.type(presetName, { delay: 0, force: true });
+	});
+}
+
+/** Closes the visible preset edit popover (Escape). */
+export function closeVisibleGlobalStylesPresetPopover() {
+	cy.realPress('Escape');
+}
+
+/**
+ * Asserts preset taxonomy tree visibility (`data-test="preset-taxonomy-tree"`).
+ *
+ * @param {{ visible?: boolean }} [options]
+ */
+export function assertPresetTaxonomyTreeVisible({ visible = true } = {}) {
+	if (visible) {
+		cy.getByDataTest('preset-taxonomy-tree', { timeout: 20000 }).should(
+			'be.visible'
+		);
+		return;
+	}
+	cy.getByDataTest('preset-taxonomy-tree').should('not.exist');
+}
+
+/**
+ * Asserts a taxonomy group shell label exists or not (`data-test="preset-taxonomy-group-shell"`).
+ *
+ * @param {string} groupLabel Group header label.
+ * @param {{ exists?: boolean }} [options]
+ */
+export function assertPresetTaxonomyGroupShell(
+	groupLabel,
+	{ exists = true } = {}
+) {
+	const chain = cy.contains(
+		'[data-test="preset-taxonomy-group-shell"]',
+		groupLabel
+	);
+	if (exists) {
+		chain.should('exist');
+		return;
+	}
+	chain.should('not.exist');
+}
+
 /** Relative to plugin root; copied to mu-plugins by {@link activateMuPlugin}. */
 export const E2E_GLOBAL_STYLES_READ_ONLY_MU =
 	'packages/global-styles-ui/js/test/fixtures/e2e-global-styles-read-only.php';
