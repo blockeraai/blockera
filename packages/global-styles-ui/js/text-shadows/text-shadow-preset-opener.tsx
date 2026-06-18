@@ -27,6 +27,7 @@ import {
 	textShadowCssFromPreset,
 } from './utils';
 import TextShadowPresetPreview from './text-shadow-preset-preview';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 function TextShadowPresetOpenerValue({
 	preset,
@@ -64,6 +65,7 @@ export type TextShadowPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & WpTextShadowPreset;
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -76,8 +78,10 @@ export function TextShadowPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: TextShadowPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const a11y = getTextShadowPresetAccessibilityDescription(variable);
 
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
@@ -121,7 +125,7 @@ export function TextShadowPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			<span
