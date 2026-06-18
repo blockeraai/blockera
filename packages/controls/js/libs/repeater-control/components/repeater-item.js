@@ -395,7 +395,18 @@ const RepeaterItem = ({
 				});
 
 				if ('function' === typeof onSelectableItemActivate) {
-					onSelectableItemActivate(itemId, newItems[itemId]);
+					const storeRow = newItems[itemId];
+					const displaySlug = String(item?.slug ?? '');
+					const storeSlug = String(storeRow?.slug ?? '');
+					// Shade strip rows share the parent repeater id; merge display item so picker gets the shade slug.
+					const activatedRow =
+						storeRow &&
+						typeof storeRow === 'object' &&
+						displaySlug !== '' &&
+						displaySlug !== storeSlug
+							? { ...storeRow, ...item }
+							: storeRow;
+					onSelectableItemActivate(itemId, activatedRow);
 				}
 
 				return;
@@ -469,7 +480,7 @@ const RepeaterItem = ({
 				<GroupControl
 					mode="accordion"
 					design={design}
-					onClick={() => true}
+					onClick={mainItemGroupSharedProps.onClick}
 					headerOpenButton={true}
 					toggleOpenBorder={true}
 					actionButtonsType="inline"
