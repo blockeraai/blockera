@@ -209,23 +209,6 @@ const RepeaterItem = ({
 		}
 	};
 
-	const getClosingItemValue = () => ({
-		...item,
-		isOpen: false,
-		...(item.creatingStep ? { creatingStep: false } : {}),
-	});
-
-	const commitRepeaterItemClose = () => {
-		changeRepeaterItem({
-			itemId,
-			value: getClosingItemValue(),
-			controlId,
-			repeaterId,
-			onChange,
-			valueCleanup,
-		});
-	};
-
 	if (
 		isBoolean(item?.renderRepeaterItem) &&
 		false === item.renderRepeaterItem
@@ -253,7 +236,6 @@ const RepeaterItem = ({
 				const nextOpen = !isOpen;
 
 				if (!nextOpen) {
-					commitRepeaterItemClose();
 					return;
 				}
 
@@ -374,7 +356,6 @@ const RepeaterItem = ({
 		isOpen,
 		onClose: () => {
 			setOpen(false);
-			commitRepeaterItemClose();
 		},
 		onClick: (): void | boolean => {
 			if (item?.selectable) {
