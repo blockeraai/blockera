@@ -19,9 +19,12 @@ function openGlobalStylesColorsFlow() {
 
 	cy.get('body').should('have.class', COLORS_OVERRIDE_CLASS);
 
-	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
-		timeout: 20000,
-	}).should('exist');
+	cy.get(
+		'.edit-site-global-styles-sidebar__navigator-screen, .global-styles-ui-sidebar__navigator-screen',
+		{
+			timeout: 20000,
+		}
+	).should('exist');
 
 	cy.get('.blockera-colors-hub').should('exist');
 }

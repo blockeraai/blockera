@@ -17,6 +17,10 @@ import { openSiteEditor } from './site-navigation';
 const COLORS_OVERRIDE_CLASS = 'is-open-blockera-colors-navigation-override';
 const SHADOWS_OVERRIDE_CLASS = 'is-open-blockera-shadows-navigation-override';
 
+/** WP 6.x + 7.x global styles navigator screen (class renamed in WP 7). */
+const NAVIGATOR_SCREEN_SELECTOR =
+	'.edit-site-global-styles-sidebar__navigator-screen, .global-styles-ui-sidebar__navigator-screen';
+
 /** Body class while Blockera typography global-styles override is active (exported for Cypress assertions). */
 export const TYPOGRAPHY_OVERRIDE_CLASS =
 	'is-open-blockera-typography-navigation-override';
@@ -192,7 +196,7 @@ export function openGlobalStylesColorPaletteScreen(
 
 	cy.get('body').should('have.class', COLORS_OVERRIDE_CLASS);
 
-	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+	cy.get(NAVIGATOR_SCREEN_SELECTOR, {
 		timeout: 20000,
 	}).should('exist');
 
@@ -226,7 +230,7 @@ function openSiteEditorGlobalStylesBase({ reset } = { reset: true }) {
 	closeWelcomeGuide();
 
 	return cy
-		.get('.edit-site-global-styles-sidebar__navigator-screen', {
+		.get(NAVIGATOR_SCREEN_SELECTOR, {
 			timeout: 20000,
 		})
 		.should('exist');
@@ -354,7 +358,7 @@ export function openGlobalStylesTypographyFlow({ reset } = { reset: false }) {
 
 	cy.get('body').should('have.class', TYPOGRAPHY_OVERRIDE_CLASS);
 
-	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+	cy.get(NAVIGATOR_SCREEN_SELECTOR, {
 		timeout: 20000,
 	}).should('exist');
 
@@ -398,7 +402,7 @@ export function openGlobalStylesLinearGradientsScreen(
 
 	cy.get('body').should('have.class', COLORS_OVERRIDE_CLASS);
 
-	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+	cy.get(NAVIGATOR_SCREEN_SELECTOR, {
 		timeout: 20000,
 	}).should('exist');
 
@@ -430,7 +434,7 @@ export function openGlobalStylesRadialGradientsScreen(
 
 	cy.get('body').should('have.class', COLORS_OVERRIDE_CLASS);
 
-	cy.get('.edit-site-global-styles-sidebar__navigator-screen', {
+	cy.get(NAVIGATOR_SCREEN_SELECTOR, {
 		timeout: 20000,
 	}).should('exist');
 
