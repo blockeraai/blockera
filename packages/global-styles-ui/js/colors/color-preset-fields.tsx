@@ -60,6 +60,8 @@ import {
 	generateColorShades,
 } from './color-shades-generator';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
+import { resolvePresetTaxonomyEditName } from '../components/preset-taxonomy/taxonomy-meta';
+import { isNameBasedTaxonomyPreset } from '../components/preset-taxonomy/parse-preset-name-taxonomy';
 import type { VariableType } from '../components/types';
 import {
 	isShadePaletteColor,
@@ -351,7 +353,8 @@ function ColorPresetFieldsComponent({
 	/** Anchor 500 is stored on the main preset; treat like main for UI (shades toggle, stack). */
 	const isShadeRow = isShadePalette && !isAnchorShadeRow;
 	const presetLocked = !useCanEditGlobalStyles();
-	const { fullItems, setFullItems } = usePresetVariationsStorage<Color>();
+	const { fullItems, setFullItems, taxonomyNameSource } =
+		usePresetVariationsStorage<Color>();
 
 	const storedShadesForBase = useMemo(
 		() => filterVariationsByBase(fullItems, effectiveBaseSlug),
@@ -403,6 +406,18 @@ function ColorPresetFieldsComponent({
 		colorItem.color,
 	]);
 
+	const taxonomyEditName = useMemo(() => {
+		const record = colorItem as Record<string, unknown>;
+		if (!isNameBasedTaxonomyPreset(record, taxonomyNameSource)) {
+			return undefined;
+		}
+		const fullName = resolvePresetTaxonomyEditName(
+			record,
+			taxonomyNameSource
+		);
+		return fullName !== '' ? fullName : undefined;
+	}, [colorItem, taxonomyNameSource]);
+
 	const sharedPresetName = isAnchorShadeRow
 		? String(
 				mainPresetRow?.name ??
@@ -410,7 +425,7 @@ function ColorPresetFieldsComponent({
 					colorItem.name ??
 					''
 			)
-		: String(colorItem.name ?? '');
+		: (taxonomyEditName ?? String(colorItem.name ?? ''));
 	const sharedPresetSlug = isAnchorShadeRow
 		? String(mainPresetRow?.slug ?? effectiveBaseSlug)
 		: String(colorItem.slug ?? '');

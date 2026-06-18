@@ -38,9 +38,9 @@ import {
 	buildTaxonomyTree,
 	mergeSimpleRepeaterIntoFullPalette,
 	partitionPresetsForTaxonomyUi,
-	usePresetTaxonomyDeclarations,
 	isPresetTaxonomyGroupedUiEnabled,
 } from '../components';
+import { presetsBySlugMap } from '../components/preset-taxonomy/parse-preset-name-taxonomy';
 import { useGetColors } from './use-get-colors';
 import {
 	convertRepeaterValueToColors,
@@ -76,6 +76,8 @@ interface ColorGroupProps {
 	label: string;
 	origin: string;
 	colors: Color[];
+	/** Base theme palette — resolves `/` taxonomy paths when user styles use flat labels. */
+	baseColors?: Color[];
 	handleResetColors?: () => void;
 	setThemeColors?: (colors: Color[]) => void;
 	setDefaultColors?: (colors: Color[]) => void;
@@ -87,6 +89,7 @@ const colorPresetFieldsPropsResolver =
 
 function ColorGroupComponent({
 	colors,
+	baseColors,
 	origin,
 	setThemeColors,
 	setCustomColors,
@@ -98,8 +101,6 @@ function ColorGroupComponent({
 	const pickerCtx = useVarPickerPresetContext();
 
 	const controlName = `color-presets-${origin}`;
-
-	const taxonomyDeclarations = usePresetTaxonomyDeclarations('color');
 
 	const flattenForColorPickerSearch = useMemo(
 		() =>
@@ -113,15 +114,14 @@ function ColorGroupComponent({
 		() =>
 			partitionPresetsForTaxonomyUi(
 				colors as Array<Color & Record<string, unknown>>,
-				taxonomyDeclarations
+				baseColors as Array<Color & Record<string, unknown>> | undefined
 			),
-		[colors, taxonomyDeclarations]
+		[colors, baseColors]
 	);
 
 	const showTaxonomyUi =
 		origin === 'theme' &&
 		!flattenForColorPickerSearch &&
-		taxonomyDeclarations.groups.length > 0 &&
 		partition.taxonomyPresets.length > 0 &&
 		(pickerCtx.active !== true || isPresetTaxonomyGroupedUiEnabled());
 
@@ -165,10 +165,10 @@ function ColorGroupComponent({
 		() =>
 			buildTaxonomyTree(
 				partition.taxonomyPresets,
-				taxonomyDeclarations,
-				mainColors
+				mainColors,
+				baseColors as Array<Color & Record<string, unknown>> | undefined
 			),
-		[partition.taxonomyPresets, taxonomyDeclarations, mainColors]
+		[partition.taxonomyPresets, mainColors, baseColors]
 	);
 
 	const taxonomyBridgeMainColors = useMemo(() => {
@@ -307,8 +307,18 @@ function ColorGroupComponent({
 			origin,
 			setFullItems: (next) => setFullPalette(next as Color[]),
 			fullItems: colors,
+			taxonomyNameSource:
+				Array.isArray(baseColors) && baseColors.length > 0
+					? {
+							basePresetsBySlug: presetsBySlugMap(
+								baseColors as Array<
+									Color & Record<string, unknown>
+								>
+							),
+						}
+					: undefined,
 		}),
-		[origin, colors, setFullPalette]
+		[origin, colors, setFullPalette, baseColors]
 	);
 
 	return (
@@ -478,6 +488,7 @@ export function ColorPalettePresetContent({
 						origin="theme"
 						label={__('Theme', 'blockera')}
 						colors={safeThemeColors}
+						baseColors={baseTheme}
 						setThemeColors={setThemeColors}
 						handleResetColors={themeResetHandler}
 					/>

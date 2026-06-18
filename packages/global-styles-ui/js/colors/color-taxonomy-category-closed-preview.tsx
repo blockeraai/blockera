@@ -15,6 +15,7 @@ import { ColorIndicatorStack } from '@blockera/controls';
 import {
 	compositeResolvedValueFromStoredPlainPresetInput,
 	splitStoredCompositePlainPresetValue,
+	resolveThemeJsonPresetScalarForGlobalStylesUi,
 } from '../theme-json-plain-preset';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { filterVariationsByBase } from './color-palette-variations-utils';
@@ -24,6 +25,7 @@ import { isShadePaletteColor } from './utils';
 function presetToIndicatorStackEntry(
 	preset: Color & Record<string, unknown>
 ): string | { value: string; type: string } | null {
+	const slug = String(preset.slug ?? '');
 	const raw = preset.color;
 	let paintRaw: string;
 	if (typeof raw === 'string') {
@@ -33,12 +35,20 @@ function presetToIndicatorStackEntry(
 	} else {
 		paintRaw = String(raw ?? '');
 	}
-	const value = paintRaw;
+	const value =
+		resolveThemeJsonPresetScalarForGlobalStylesUi({
+			storedScalar: paintRaw,
+			presetSlug: slug,
+			blockName: '',
+			presetCssVarInfix: 'color',
+			variablePickerType:
+				typeof preset.type === 'string' ? preset.type : undefined,
+		}) || paintRaw;
 	const typeStr = String(preset.type ?? '');
 	const isGradient =
 		typeStr === 'linear-gradient' ||
 		typeStr === 'radial-gradient' ||
-		(typeof paintRaw === 'string' && paintRaw.includes('gradient('));
+		(typeof value === 'string' && value.includes('gradient('));
 
 	if (!value && !isGradient) {
 		return null;
@@ -53,6 +63,8 @@ function presetToIndicatorStackEntry(
 
 	return { value, type: 'color' };
 }
+
+const CLOSED_CATEGORY_PREVIEW_MAX_ITEMS = 5;
 
 export type ColorTaxonomyCategoryClosedPreviewProps = {
 	presets: Array<Color & Record<string, unknown>>;
@@ -76,7 +88,7 @@ export function taxonomyCategoryHasBaseWithShadeVariations(
 }
 
 /**
- * Collapsed taxonomy accordion header preview for palette categories (`show-preview`).
+ * Collapsed taxonomy accordion header preview for palette categories.
  * Merges base-variable swatches via {@link ColorIndicatorStack}. When any listed base preset has
  * shade variations, shows that preset’s ramp — the **first** base (in category order) that
  * reports variations, not merely the first row in the list.
@@ -147,8 +159,8 @@ export const ColorTaxonomyCategoryClosedPreview = memo(
 		return (
 			<ColorIndicatorStack
 				value={mergedStackEntries}
-				size={16}
-				maxItems={8}
+				size={18}
+				maxItems={CLOSED_CATEGORY_PREVIEW_MAX_ITEMS}
 			/>
 		);
 	}

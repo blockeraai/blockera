@@ -200,7 +200,8 @@ export function ColorPresetOpener({
 	}, [palettePaintSource, colorItem?.type, previewUsage]);
 
 	const previewHandlers = usePresetRowCanvasPreview(getPayload);
-	const { fullItems } = usePresetVariationsStorage<Color>();
+	const { fullItems, taxonomyNameSource } =
+		usePresetVariationsStorage<Color>();
 
 	const baseSlug = String(colorItem.slug ?? '');
 	const isShadeRow = isShadePaletteColor(
@@ -243,11 +244,12 @@ export function ColorPresetOpener({
 	const headerLabel = useMemo(() => {
 		if (contextType === 'taxonomy') {
 			return resolvePresetTaxonomyDisplayName(
-				colorItem as Record<string, unknown>
+				colorItem as Record<string, unknown>,
+				taxonomyNameSource
 			);
 		}
 		return String(colorItem?.name ?? '');
-	}, [colorItem, contextType]);
+	}, [colorItem, contextType, taxonomyNameSource]);
 
 	const showHexValue = shadeVariationCount === 0 && colorItem?.color;
 

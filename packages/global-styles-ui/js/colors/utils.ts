@@ -391,3 +391,24 @@ export function shadeHexDiffersFromBaseline(
 	const b = normalizeHexForCompare(expected);
 	return Boolean(a && b && a !== b);
 }
+
+/**
+ * Theme palette rows from global-styles `settings.color`: prefers `palette.theme`,
+ * falls back to a flat `palette` array (raw theme.json).
+ */
+export function resolveColorPaletteThemeRows(colorSettings: unknown): Color[] {
+	if (!colorSettings || typeof colorSettings !== 'object') {
+		return [];
+	}
+	const palette = (colorSettings as { palette?: unknown }).palette;
+	if (Array.isArray(palette)) {
+		return palette as Color[];
+	}
+	if (palette && typeof palette === 'object') {
+		const theme = (palette as { theme?: unknown }).theme;
+		if (Array.isArray(theme)) {
+			return theme as Color[];
+		}
+	}
+	return [];
+}

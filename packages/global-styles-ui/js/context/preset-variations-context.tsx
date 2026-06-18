@@ -3,11 +3,18 @@
  */
 import { createContext, useContext } from '@wordpress/element';
 
+/**
+ * Internal dependencies
+ */
+import type { TaxonomyNameSource } from '../components/preset-taxonomy/parse-preset-name-taxonomy';
+
 export type PresetVariationsContextValue<TItem = unknown> = {
 	origin: string;
 	/** Full preset list for the active origin (e.g. main presets plus shade rows). */
 	fullItems: TItem[];
 	setFullItems: (next: TItem[]) => void;
+	/** Base theme palette rows — resolves `/` taxonomy names when user styles keep flat labels. */
+	taxonomyNameSource?: TaxonomyNameSource;
 };
 
 export const PresetVariationsContext =

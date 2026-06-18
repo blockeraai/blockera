@@ -8,6 +8,7 @@ import type { Color } from '@wordpress/global-styles-engine';
  * Blockera dependencies
  */
 import { useGlobalSetting } from '../context/global-style-hooks';
+import { resolveColorPaletteThemeRows } from './utils';
 
 export interface UseGetColorsParams {
 	colors: string[];
@@ -32,6 +33,7 @@ export const useGetColors = (): UseGetColorsParams => {
 		'',
 		'base'
 	);
+	const [baseColorSettings] = useGlobalSetting('color', '', 'base');
 	const [defaultColors, setDefaultColors] = useGlobalSetting(
 		'color.palette.default',
 		''
@@ -73,6 +75,21 @@ export const useGetColors = (): UseGetColorsParams => {
 		[defaultPaletteEnabled]
 	);
 
+	const resolvedBaseThemeColors = useMemo(() => {
+		if (Array.isArray(baseThemeColors) && baseThemeColors.length > 0) {
+			return baseThemeColors as Color[];
+		}
+		return resolveColorPaletteThemeRows(baseColorSettings);
+	}, [baseThemeColors, baseColorSettings]);
+
+	const resolvedBaseDefaultColors = useMemo(
+		() =>
+			(Array.isArray(baseDefaultColors)
+				? baseDefaultColors
+				: []) as Color[],
+		[baseDefaultColors]
+	);
+
 	const colors = useMemo(
 		() =>
 			[
@@ -97,9 +114,9 @@ export const useGetColors = (): UseGetColorsParams => {
 		defaultColors: defaultColors as Color[] | undefined,
 		setThemeColors: (rows) => setThemeColors(rows),
 		setCustomColors: (rows) => setCustomColors(rows),
-		baseThemeColors: baseThemeColors as Color[] | undefined,
+		baseThemeColors: resolvedBaseThemeColors,
 		setDefaultColors: (rows) => setDefaultColors(rows),
-		baseDefaultColors: baseDefaultColors as Color[] | undefined,
+		baseDefaultColors: resolvedBaseDefaultColors,
 		defaultPaletteEnabled: safeDefaultPaletteEnabled,
 	};
 };
