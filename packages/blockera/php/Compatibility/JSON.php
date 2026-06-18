@@ -22,16 +22,11 @@ class JSON extends \WP_Theme_JSON {
 	private static array $supports;
 
 	/**
-	 * Extra settings paths allowed in theme.json sanitization (global-styles-ui preset groups).
-	 * Includes {@see https://schemas.wp.org/trunk/theme.json} color.groups / color.categories (e.g. Blockera-One).
+	 * Extra settings paths allowed in theme.json sanitization (global-styles-ui preset extensions).
 	 *
 	 * @var array<string, mixed>
 	 */
 	private const BLOCKERA_VALID_SETTINGS_EXTENSION = array(
-		'color'      => array(
-			'groups'     => null,
-			'categories' => null,
-		),
 		'dimensions' => array(
 			'dimensionSizes' => null,
 		),
