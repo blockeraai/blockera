@@ -239,8 +239,6 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 
 	const popoverTitle =
 		repeaterCtx.popoverTitle || __('Edit Variable', 'blockera');
-	const actionMenuButtonLabel =
-		repeaterCtx.actionMenuButtonLabel ?? __('More Options', 'blockera');
 	const design = repeaterCtx.design ?? 'minimal';
 	const mode = repeaterCtx.mode ?? 'popover';
 
@@ -267,14 +265,12 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 			popoverTitle={popoverTitle}
 			popoverClassName={repeaterCtx.popoverClassName}
 			popoverProps={repeaterCtx.popoverProps}
-			actionButtonsType="inline"
-			actionMenuButtonLabel={actionMenuButtonLabel}
 			headerVariableSlug={headerVariableSlug}
 			className={controlInnerClassNames('repeater-item-group', {
 				'is-selected-item': selectableRow ? isSelected : false,
 			})}
 			header={headerNode}
-			headerOpenButton={true}
+			headerOpenButton={false}
 		>
 			{RepeaterItemChildren ? (
 				<RepeaterItemChildren item={item} itemId={itemId} />
@@ -289,21 +285,25 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 			<GroupControl
 				mode="accordion"
 				design={design}
-				onClick={() => true}
+				onClick={handleGroupClick}
 				headerOpenButton={true}
 				toggleOpenBorder={true}
-				actionButtonsType="inline"
 				disableAccordionOpenPrimaryBorder={true}
 				popoverProps={repeaterCtx.popoverProps}
 				isOpen={variationsAccordionOpen}
-				className={controlInnerClassNames('repeater-item-group', {
-					'is-selected-item': selectableRow ? isSelected : false,
-					[controlInnerClassNames('repeater-item-variations-group')]:
-						true,
-				})}
+				className={[
+					controlInnerClassNames('repeater-item-group', {
+						'is-selected-item': selectableRow ? isSelected : false,
+						[controlInnerClassNames(
+							'repeater-item-variations-group'
+						)]: true,
+					}),
+					'blockera-preset-taxonomy-accordion',
+				]
+					.filter(Boolean)
+					.join(' ')}
 				onOpen={() => setVariationsAccordionOpen(true)}
 				onClose={() => setVariationsAccordionOpen(false)}
-				actionMenuButtonLabel={actionMenuButtonLabel}
 				header={headerNode}
 				headerVariableSlug={headerVariableSlug}
 			>

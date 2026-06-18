@@ -11,6 +11,12 @@
 		> .blockera-control-action-buttons.type-inline {
 			visibility: visible;
 			opacity: 1;
+
+			> *:not(.blockera-component-feature-wrapper) {
+				opacity: 1;
+				visibility: visible;
+				display: flex;
+			}
 		}
 
 		&:hover .blockera-control-header-values {
@@ -33,6 +39,14 @@
 			white-space: nowrap;
 		}
 
+		.blockera-control-header-values {
+			margin-left: auto;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			flex-shrink: 0;
+		}
+
 		.blockera-control-header-values:empty {
 			display: none;
 			margin: 0;
@@ -44,6 +58,15 @@
 
 .blockera-preset-taxonomy-tree {
 	width: 100%;
+
+	.blockera-preset-taxonomy-row > .blockera-control-group
+		> .blockera-control-group-header
+		> .blockera-control-action-buttons {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		pointer-events: none !important;
+	}
 }
 
 .blockera-preset-taxonomy-repeater.blockera-control-repeater {
