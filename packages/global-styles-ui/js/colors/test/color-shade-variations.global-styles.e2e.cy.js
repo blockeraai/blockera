@@ -10,13 +10,12 @@ import {
 import {
 	assertEditorThemeBaseHasMuColorTaxonomy,
 	expandColorPresetVariationsAccordionInVariablePicker,
-	expandColorPresetVariationsAccordionOnPaletteScreen,
-	expandTaxonomyCategoryAccordion,
-	expandTaxonomyCategoryAccordionInVariablePicker,
 	getWPDataObject,
 	MU_FIX,
 	openGlobalStylesColorPaletteScreen,
 	openParagraphTextColorVariablePickerPopover,
+	reopenVariablePickerPopover,
+	withinThemePresetGroup,
 } from './e2e-variable-variations-helpers';
 
 /** Matches COLOR_SHADE_STEPS length in `color-shades-generator.ts` (50–950 ramp). */
@@ -38,7 +37,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 		it('renders a full Tailwind-style shade indicator stack (one swatch per step)', () => {
 			openGlobalStylesColorPaletteScreen();
 
-			cy.getParentContainer('Theme').within(() => {
+			withinThemePresetGroup(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base',
@@ -51,42 +50,28 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 			});
 		});
 
-		it('opens variations accordion and shows generated/persisted shade row (500) in the ramp', () => {
+		it('site editor palette omits variations accordion (shade stack only)', () => {
 			openGlobalStylesColorPaletteScreen();
 
-			cy.getParentContainer('Theme').within(() => {
+			withinThemePresetGroup(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base',
 					{ timeout: 20000 }
 				)
 					.parents('.blockera-control-repeater-item-variations-group')
-					.first()
-					.find('.blockera-control-btn-toggle')
-					.click({ force: true });
-
-				cy.contains(
-					'[data-cy="color-repeater-item-header"]',
-					'E2E Var Shade Base'
-				)
-					.parents('.blockera-control-repeater-item-variations-group')
-					.first()
-					.should('have.class', 'is-open');
-
-				cy.contains(
-					'[data-cy="color-repeater-item-header"]',
-					'E2E Var Shade Base - Shade 500'
-				).should('be.visible');
+					.should('not.exist');
 			});
 		});
 
-		it('palette screen: expands accordion from helper used by shade workflow', () => {
-			openGlobalStylesColorPaletteScreen();
-			expandColorPresetVariationsAccordionOnPaletteScreen(
+		it('variable picker accordion lists persisted shade row (500) in the ramp', () => {
+			openParagraphTextColorVariablePickerPopover();
+
+			expandColorPresetVariationsAccordionInVariablePicker(
 				'E2E Var Shade Base'
 			);
 
-			cy.getParentContainer('Theme').within(() => {
+			cy.getByDataTest('variable-picker-popover').within(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base - Shade 500'
@@ -145,11 +130,11 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 				).to.equal('--wp--preset--color--e-2-e-var-base-shade-500');
 			});
 
-			cy.openValueAddon();
+			reopenVariablePickerPopover();
 
-			cy.getByDataTest('variable-picker-popover', {
-				timeout: 20000,
-			}).should('be.visible');
+			expandColorPresetVariationsAccordionInVariablePicker(
+				'E2E Var Shade Base'
+			);
 
 			cy.selectValueAddonItem('e-2-e-var-base');
 
@@ -177,29 +162,40 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 			openGlobalStylesColorPaletteScreen();
 
 			assertEditorThemeBaseHasMuColorTaxonomy(
-				'e-2-e-tax-var-ramp',
-				'e-2-e-tax-cat-var-base'
+				'e-2-e-tax-cat-var-base',
+				'E2E Tax Var Ramp Group/E2E Tax Var Ramp Category/E2E Tax Cat Var Base'
 			);
 
-			expandTaxonomyCategoryAccordion('E2E Tax Var Ramp Category');
-
 			cy.contains(
-				'[data-cy="color-repeater-item-header"]',
-				'E2E Tax Cat Var Base',
-				{ timeout: 20000 }
-			)
-				.closest('[data-cy="repeater-item"]')
-				.find('[data-cy="header-values"]')
-				.find('[data-cy="color-preset-shade-stack"]')
-				.should('be.visible');
+				'.blockera-preset-taxonomy-group-shell',
+				'E2E Tax Var Ramp Group'
+			).within(() => {
+				cy.contains(
+					'[data-cy="taxonomy-category-header-label"]',
+					'E2E Tax Var Ramp Category'
+				).should('not.exist');
+
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Tax Cat Var Base',
+					{ timeout: 20000 }
+				)
+					.closest('[data-cy="repeater-item"]')
+					.find('[data-cy="header-values"]')
+					.find('[data-cy="color-preset-shade-stack"]')
+					.should('be.visible');
+			});
 		});
 
 		it('picker: selects shade from taxonomy inline strip after category expand', () => {
 			openParagraphTextColorVariablePickerPopover();
 
-			expandTaxonomyCategoryAccordionInVariablePicker(
-				'E2E Tax Var Ramp Category'
-			);
+			cy.getByDataTest('variable-picker-popover').within(() => {
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Tax Cat Var Base'
+				).should('be.visible');
+			});
 
 			cy.selectValueAddonItem('e-2-e-tax-cat-var-base-shade-500');
 
@@ -214,9 +210,12 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 		it('picker: selects taxonomy base slug (anchor) from strip', () => {
 			openParagraphTextColorVariablePickerPopover();
 
-			expandTaxonomyCategoryAccordionInVariablePicker(
-				'E2E Tax Var Ramp Category'
-			);
+			cy.getByDataTest('variable-picker-popover').within(() => {
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Tax Cat Var Base'
+				).should('be.visible');
+			});
 
 			cy.selectValueAddonItem('e-2-e-tax-cat-var-base');
 
