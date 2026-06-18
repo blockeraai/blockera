@@ -9,9 +9,23 @@ import {
 	getWPDataObject,
 	openGlobalStylesColorPaletteScreen,
 } from '@blockera/dev-cypress/js/helpers';
+import {
+	THEME_PRESET_GROUP_LABELS,
+	reopenVariablePickerPopover,
+	withinThemePresetGroup,
+} from './e2e-variable-variations-helpers';
 
 /** MU fixtures live next to this spec under js/colors/test/fixtures (paths relative to plugin root). */
 const MU_FIX = 'packages/global-styles-ui/js/colors/test/fixtures';
+
+/**
+ * Fast local iteration: set `debugColorTaxonomyE2E: 'group-only'` in cypress.env.json
+ * (or `CYPRESS_debugColorTaxonomyE2E=group-only`) to run only the first taxonomy scenario.
+ */
+const describeGroupOnlyScenario =
+	Cypress.env('debugColorTaxonomyE2E') === 'group-only'
+		? describe.only
+		: describe;
 
 /**
  * Opens a taxonomy category accordion by its visible header label.
@@ -85,6 +99,8 @@ function expandColorPresetVariationsAccordionInVariablePicker(headerLabel) {
 			cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
 				timeout: 20000,
 			})
+				.scrollIntoView()
+				.should('be.visible')
 				.parents('.blockera-control-repeater-item-variations-group')
 				.first()
 				.find('.blockera-control-btn-toggle')
@@ -93,51 +109,54 @@ function expandColorPresetVariationsAccordionInVariablePicker(headerLabel) {
 }
 
 describe('Global Styles UI → Color palette taxonomy & variations (theme.json scenarios)', () => {
-	describe('taxonomy: group-only presets (no categories)', () => {
-		const MU = `${MU_FIX}/e2e-color-taxonomy-group-direct.php`;
-		const MU_NAME = 'e2e-color-taxonomy-group-direct.php';
+	describeGroupOnlyScenario(
+		'taxonomy: group-only presets (no categories)',
+		() => {
+			const MU = `${MU_FIX}/e2e-color-taxonomy-group-direct.php`;
+			const MU_NAME = 'e2e-color-taxonomy-group-direct.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
-		});
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
+			});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
-		});
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
+			});
 
-		it('renders taxonomy bridge with group header and a color row under the group', () => {
-			openGlobalStylesColorPaletteScreen();
+			it('renders taxonomy bridge with group header and a color row under the group', () => {
+				openGlobalStylesColorPaletteScreen();
 
-			cy.get('.blockera-color-palette-presets', {
-				timeout: 20000,
-			}).should('be.visible');
+				cy.get('.blockera-color-palette-presets', {
+					timeout: 20000,
+				}).should('be.visible');
 
-			cy.get('.blockera-preset-taxonomy-repeater', {
-				timeout: 20000,
-			}).should('be.visible');
+				cy.get('.blockera-preset-taxonomy-repeater', {
+					timeout: 20000,
+				}).should('be.visible');
 
-			cy.contains(
-				'.blockera-preset-taxonomy-group-shell',
-				'E2E Tax Root Group'
-			).should('be.visible');
+				cy.contains(
+					'.blockera-preset-taxonomy-group-shell',
+					'E2E Tax Root Group'
+				).should('be.visible');
 
-			cy.contains(
-				'[data-cy="color-repeater-item-header"]',
-				'E2E Tax Root Alpha'
-			).should('be.visible');
-		});
-	});
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Tax Root Alpha'
+				).should('be.visible');
+			});
+		}
+	);
 
 	describe('taxonomy: category accordion + interface-size small', () => {
 		const MU = `${MU_FIX}/e2e-color-taxonomy-category.php`;
 		const MU_NAME = 'e2e-color-taxonomy-category.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('shows presets inside category accordion and applies half-width class for small rows', () => {
@@ -175,12 +194,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-taxonomy-subcategory.php`;
 		const MU_NAME = 'e2e-color-taxonomy-subcategory.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('shows direct row and single sub-category row after expanding parent only (no nested sub accordion)', () => {
@@ -213,12 +232,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-taxonomy-category-sole-sub-only.php`;
 		const MU_NAME = 'e2e-color-taxonomy-category-sole-sub-only.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('renders the lone preset row without a category accordion wrapper', () => {
@@ -257,12 +276,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-taxonomy-subsection-single-flat.php`;
 		const MU_NAME = 'e2e-color-taxonomy-subsection-single-flat.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('shows direct row and single sub-category row without a nested accordion header', () => {
@@ -304,19 +323,19 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		});
 	});
 
-	describe('taxonomy: categories[].initial-open true', () => {
+	describe('taxonomy: category accordion expand', () => {
 		const MU = `${MU_FIX}/e2e-color-taxonomy-initial-open-true.php`;
 		const MU_NAME = 'e2e-color-taxonomy-initial-open-true.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
-		it('starts category accordion expanded so preset rows are visible without expanding', () => {
+		it('shows preset rows after expanding the category accordion', () => {
 			openGlobalStylesColorPaletteScreen();
 
 			cy.get('.blockera-preset-taxonomy-repeater', {
@@ -333,6 +352,8 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 				'E2E Tax Init Open Cat'
 			).should('be.visible');
 
+			expandTaxonomyCategoryAccordion('E2E Tax Init Open Cat');
+
 			cy.contains(
 				'[data-cy="color-repeater-item-header"]',
 				'E2E Tax Init Open A'
@@ -345,19 +366,19 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		});
 	});
 
-	describe('taxonomy: sub-category declaration initial-open true', () => {
+	describe('taxonomy: nested sub-category accordion expand', () => {
 		const MU = `${MU_FIX}/e2e-color-taxonomy-subcategory-initial-open.php`;
 		const MU_NAME = 'e2e-color-taxonomy-subcategory-initial-open.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
-		it('opens nested sub-category accordion when parent category expands', () => {
+		it('shows nested preset rows after expanding parent and sub-category accordions', () => {
 			openGlobalStylesColorPaletteScreen();
 
 			cy.get('.blockera-preset-taxonomy-repeater', {
@@ -365,11 +386,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			}).should('be.visible');
 
 			expandTaxonomyCategoryAccordion('E2E Tax Sub IO Parent Cat');
-
-			cy.contains(
-				'[data-cy="taxonomy-category-header-label"]',
-				'E2E Tax Sub IO Slot'
-			).should('be.visible');
+			expandTaxonomyCategoryAccordion('E2E Tax Sub IO Slot');
 
 			cy.contains(
 				'[data-cy="color-repeater-item-header"]',
@@ -387,12 +404,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-taxonomy-category-variations.php`;
 		const MU_NAME = 'e2e-color-taxonomy-category-variations.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('shows shade preview stack on the taxonomy base row inside an expanded category', () => {
@@ -402,16 +419,24 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 				timeout: 20000,
 			}).should('be.visible');
 
-			expandTaxonomyCategoryAccordion('E2E Tax Var Ramp Category');
-
 			cy.contains(
-				'[data-cy="color-repeater-item-header"]',
-				'E2E Tax Cat Var Base'
-			)
-				.closest('[data-cy="repeater-item"]')
-				.find('[data-cy="header-values"]')
-				.find('[data-cy="color-preset-shade-stack"]')
-				.should('be.visible');
+				'.blockera-preset-taxonomy-group-shell',
+				'E2E Tax Var Ramp Group'
+			).within(() => {
+				cy.contains(
+					'[data-cy="taxonomy-category-header-label"]',
+					'E2E Tax Var Ramp Category'
+				).should('not.exist');
+
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Tax Cat Var Base'
+				)
+					.closest('[data-cy="repeater-item"]')
+					.find('[data-cy="header-values"]')
+					.find('[data-cy="color-preset-shade-stack"]')
+					.should('be.visible');
+			});
 		});
 	});
 
@@ -420,12 +445,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU = `${MU_FIX}/e2e-color-taxonomy-group-direct.php`;
 			const MU_NAME = 'e2e-color-taxonomy-group-direct.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
 			it('shows group shell row and selects preset by slug', () => {
@@ -466,12 +491,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU = `${MU_FIX}/e2e-color-taxonomy-category.php`;
 			const MU_NAME = 'e2e-color-taxonomy-category.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
 			it('shows grouped taxonomy in the picker, expands category, selects preset by slug', () => {
@@ -513,12 +538,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU = `${MU_FIX}/e2e-color-taxonomy-subcategory.php`;
 			const MU_NAME = 'e2e-color-taxonomy-subcategory.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
 			it('selects sub-category preset after expanding parent only (no nested sub accordion)', () => {
@@ -565,12 +590,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU = `${MU_FIX}/e2e-color-taxonomy-category-sole-sub-only.php`;
 			const MU_NAME = 'e2e-color-taxonomy-category-sole-sub-only.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
 			it('omits category accordion and selects the lone preset', () => {
@@ -610,12 +635,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU = `${MU_FIX}/e2e-color-taxonomy-subsection-single-flat.php`;
 			const MU_NAME = 'e2e-color-taxonomy-subsection-single-flat.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
 			it('shows direct + single sub row without nested sub accordion header', () => {
@@ -672,27 +697,26 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			});
 		});
 
-		describe('picker: categories[].initial-open true', () => {
+		describe('picker: category accordion expand', () => {
 			const MU = `${MU_FIX}/e2e-color-taxonomy-initial-open-true.php`;
 			const MU_NAME = 'e2e-color-taxonomy-initial-open-true.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
-			it('shows expanded category preset rows without expanding accordion', () => {
+			it('shows category preset rows after expanding accordion in picker', () => {
 				openParagraphTextColorVariablePickerPopover();
 
-				cy.getByDataTest('variable-picker-popover').within(() => {
-					cy.contains(
-						'[data-cy="taxonomy-category-header-label"]',
-						'E2E Tax Init Open Cat'
-					).should('be.visible');
+				expandTaxonomyCategoryAccordionInVariablePicker(
+					'E2E Tax Init Open Cat'
+				);
 
+				cy.getByDataTest('variable-picker-popover').within(() => {
 					cy.contains(
 						'[data-cy="color-repeater-item-header"]',
 						'E2E Tax Init Open A'
@@ -719,31 +743,29 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			});
 		});
 
-		describe('picker: sub-category declaration initial-open true', () => {
+		describe('picker: nested sub-category accordion expand', () => {
 			const MU = `${MU_FIX}/e2e-color-taxonomy-subcategory-initial-open.php`;
 			const MU_NAME = 'e2e-color-taxonomy-subcategory-initial-open.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
-			it('shows nested presets after parent expand without expanding sub accordion', () => {
+			it('shows nested presets after expanding parent and sub accordions in picker', () => {
 				openParagraphTextColorVariablePickerPopover();
 
 				expandTaxonomyCategoryAccordionInVariablePicker(
 					'E2E Tax Sub IO Parent Cat'
 				);
+				expandTaxonomyCategoryAccordionInVariablePicker(
+					'E2E Tax Sub IO Slot'
+				);
 
 				cy.getByDataTest('variable-picker-popover').within(() => {
-					cy.contains(
-						'[data-cy="taxonomy-category-header-label"]',
-						'E2E Tax Sub IO Slot'
-					).should('be.visible');
-
 					cy.contains(
 						'[data-cy="color-repeater-item-header"]',
 						'E2E Tax Sub IO A'
@@ -774,20 +796,16 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU = `${MU_FIX}/e2e-color-taxonomy-category-variations.php`;
 			const MU_NAME = 'e2e-color-taxonomy-category-variations.php';
 
-			beforeEach(() => {
-				activateMuPlugin(MU, MU_NAME);
+			before(() => {
+				return activateMuPlugin(MU, MU_NAME);
 			});
 
-			afterEach(() => {
-				deactivateMuPlugin(MU, MU_NAME);
+			after(() => {
+				return deactivateMuPlugin(MU, MU_NAME);
 			});
 
 			it('selects base from inline shade strip without opening the variations accordion', () => {
 				openParagraphTextColorVariablePickerPopover();
-
-				expandTaxonomyCategoryAccordionInVariablePicker(
-					'E2E Tax Var Ramp Category'
-				);
 
 				cy.getByDataTest('variable-picker-popover').within(() => {
 					cy.contains(
@@ -813,9 +831,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			it('selects persisted shade slug from the inline strip after category expand', () => {
 				openParagraphTextColorVariablePickerPopover();
 
-				expandTaxonomyCategoryAccordionInVariablePicker(
-					'E2E Tax Var Ramp Category'
-				);
+				cy.getByDataTest('variable-picker-popover').within(() => {
+					cy.contains(
+						'[data-cy="color-repeater-item-header"]',
+						'E2E Tax Cat Var Base'
+					).should('be.visible');
+				});
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base-shade-500');
 
@@ -834,9 +855,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			it('switches taxonomy selection from shade slug back to base slug', () => {
 				openParagraphTextColorVariablePickerPopover();
 
-				expandTaxonomyCategoryAccordionInVariablePicker(
-					'E2E Tax Var Ramp Category'
-				);
+				cy.getByDataTest('variable-picker-popover').within(() => {
+					cy.contains(
+						'[data-cy="color-repeater-item-header"]',
+						'E2E Tax Cat Var Base'
+					).should('be.visible');
+				});
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base-shade-500');
 
@@ -848,15 +872,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 					);
 				});
 
-				cy.openValueAddon();
-
-				cy.getByDataTest('variable-picker-popover', {
-					timeout: 20000,
-				}).should('be.visible');
-
-				expandTaxonomyCategoryAccordionInVariablePicker(
-					'E2E Tax Var Ramp Category'
-				);
+				reopenVariablePickerPopover();
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base');
 
@@ -873,12 +889,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-taxonomy-mixed-simple.php`;
 		const MU_NAME = 'e2e-color-taxonomy-mixed-simple.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('renders taxonomy leaf and a plain theme repeater row inside Theme', () => {
@@ -888,14 +904,22 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 				timeout: 20000,
 			}).should('be.visible');
 
-			expandTaxonomyCategoryAccordion('E2E Tax Mixed Category');
-
 			cy.contains(
-				'[data-cy="color-repeater-item-header"]',
-				'E2E Tax Mixed Leaf'
-			).should('be.visible');
+				'.blockera-preset-taxonomy-group-shell',
+				'E2E Tax Mixed Group'
+			).within(() => {
+				cy.contains(
+					'[data-cy="taxonomy-category-header-label"]',
+					'E2E Tax Mixed Category'
+				).should('not.exist');
 
-			cy.getParentContainer('Theme').within(() => {
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Tax Mixed Leaf'
+				).should('be.visible');
+			});
+
+			cy.getParentContainer(THEME_PRESET_GROUP_LABELS).within(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Tax Simple Only'
@@ -908,12 +932,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-variations-no-taxonomy.php`;
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('shows collapsed shade stack on base row when a shade slug exists in theme palette', () => {
@@ -923,7 +947,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 				timeout: 20000,
 			}).should('be.visible');
 
-			cy.getParentContainer('Theme').within(() => {
+			withinThemePresetGroup(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base'
@@ -934,34 +958,25 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			});
 		});
 
-		it('expands variations accordion and surfaces the persisted shade row under the base preset', () => {
+		it('site editor palette shows shade stack only (variations accordion is picker-only)', () => {
 			openGlobalStylesColorPaletteScreen();
 
-			cy.getParentContainer('Theme').within(() => {
+			withinThemePresetGroup(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base',
-					{
-						timeout: 20000,
-					}
+					{ timeout: 20000 }
 				)
-					.parents('.blockera-control-repeater-item-variations-group')
-					.first()
-					.find('.blockera-control-btn-toggle')
-					.click({ force: true });
+					.closest('[data-cy="repeater-item"]')
+					.find('[data-cy="color-preset-shade-stack"]')
+					.should('be.visible');
 
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base'
 				)
 					.parents('.blockera-control-repeater-item-variations-group')
-					.first()
-					.should('have.class', 'is-open');
-
-				cy.contains(
-					'[data-cy="color-repeater-item-header"]',
-					'E2E Var Shade Base - Shade 500'
-				).should('be.visible');
+					.should('not.exist');
 			});
 		});
 	});
@@ -970,12 +985,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU = `${MU_FIX}/e2e-color-variations-no-taxonomy.php`;
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
-		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+		before(() => {
+			return activateMuPlugin(MU, MU_NAME);
 		});
 
-		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+		after(() => {
+			return deactivateMuPlugin(MU, MU_NAME);
 		});
 
 		it('selects the base color preset by slug from the Theme list in the picker', () => {
@@ -1039,11 +1054,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 				).to.equal('--wp--preset--color--e-2-e-var-base-shade-500');
 			});
 
-			cy.openValueAddon();
+			reopenVariablePickerPopover();
 
-			cy.getByDataTest('variable-picker-popover', {
-				timeout: 20000,
-			}).should('be.visible');
+			expandColorPresetVariationsAccordionInVariablePicker(
+				'E2E Var Shade Base'
+			);
 
 			cy.selectValueAddonItem('e-2-e-var-base');
 
