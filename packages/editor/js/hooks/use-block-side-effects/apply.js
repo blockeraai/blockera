@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useEffect, useRef } from '@wordpress/element';
+import { useLayoutEffect, useRef } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -31,6 +31,9 @@ const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
 export const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
 export const BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS =
 	'blockera-inner-block-inspector';
+
+/** Prevents a deselected block cleanup pass from clearing a newer selection. */
+let activeInspectorSideEffectsOwnerClientId = null;
 
 const handleSpecificClassCombinations = (
 	container,
@@ -366,7 +369,7 @@ export const useBlockSideEffects = ({
 		insideBlockInspector,
 	});
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const inspector = resolveInspectorRoot({
 			insideBlockInspector,
 			inspectorContainer,
@@ -390,8 +393,16 @@ export const useBlockSideEffects = ({
 
 			// Content-only pattern: leave core inspector untouched until "Edit pattern".
 			if (insideBlockInspector && !canApplySideEffects) {
+				if (activeInspectorSideEffectsOwnerClientId === clientId) {
+					activeInspectorSideEffectsOwnerClientId = null;
+				}
+
 				clearInspectorBlockeraSideEffects(nextInspector);
 				return;
+			}
+
+			if (insideBlockInspector && isActive) {
+				activeInspectorSideEffectsOwnerClientId = clientId;
 			}
 
 			applyBlockSideEffects({
@@ -444,7 +455,11 @@ export const useBlockSideEffects = ({
 				settingsScopeRef.current = null;
 			}
 
-			if (inspector) {
+			if (
+				inspector &&
+				activeInspectorSideEffectsOwnerClientId === clientId
+			) {
+				activeInspectorSideEffectsOwnerClientId = null;
 				clearInspectorBlockeraSideEffects(inspector);
 			}
 		};

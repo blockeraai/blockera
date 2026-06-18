@@ -4,9 +4,14 @@
 import {
 	BLOCK_INSPECTOR_SELECTOR,
 	isBlockInspectorContainerReady,
+	getBlockInspectorContainerSync,
 } from '../../extensions/components/use-block-inspector-container';
 
-export { BLOCK_INSPECTOR_SELECTOR, isBlockInspectorContainerReady };
+export {
+	BLOCK_INSPECTOR_SELECTOR,
+	isBlockInspectorContainerReady,
+	getBlockInspectorContainerSync,
+};
 
 /**
  * Normalize legacy Blockera tab ids for settings-outside-tabs visibility only.
@@ -375,13 +380,18 @@ export const resolveInspectorRoot = ({
 	insideBlockInspector,
 	inspectorContainer,
 }) => {
-	if (insideBlockInspector) {
-		return isBlockInspectorContainerReady(inspectorContainer)
+	const resolvedContainer =
+		inspectorContainer && isBlockInspectorContainerReady(inspectorContainer)
 			? inspectorContainer
+			: getBlockInspectorContainerSync();
+
+	if (insideBlockInspector) {
+		return isBlockInspectorContainerReady(resolvedContainer)
+			? resolvedContainer
 			: null;
 	}
 
-	const inspector = document.querySelector(BLOCK_INSPECTOR_SELECTOR);
-
-	return isBlockInspectorContainerReady(inspector) ? inspector : null;
+	return isBlockInspectorContainerReady(resolvedContainer)
+		? resolvedContainer
+		: null;
 };
