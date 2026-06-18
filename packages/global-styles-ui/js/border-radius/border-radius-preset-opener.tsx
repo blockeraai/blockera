@@ -26,11 +26,13 @@ import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-he
 import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
 import type { VariableType } from '../components/types.ts';
 import { radiusPresetSizeToString } from './utils';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 export type BorderRadiusPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & { size: string | number };
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -57,8 +59,10 @@ export function BorderRadiusPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: BorderRadiusPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const pickerCtx = useVarPickerPresetContext();
 	const previewUsage = resolveBorderRadiusPresetPreviewUsage(pickerCtx);
 	const summary = radiusPresetSizeToString(variable?.size);
@@ -101,7 +105,7 @@ export function BorderRadiusPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			<span

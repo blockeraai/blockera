@@ -15,17 +15,15 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	PresetGroup,
 	getNewIndexFromPresets,
 	createPresetFieldsPropsResolver,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
-	usePresetResetDialogState,
 	withPresetMetaFromRepeaterRow,
+	PresetTaxonomyGroupLayout,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -44,19 +42,23 @@ const borderRadiusPresetFieldsPropsResolver =
 
 function BorderRadiusSizeGroupComponent({
 	sizes,
+	baseSizes,
 	origin,
-	handleUpdateSizes,
+	persistSizes,
+	convertRepeaterToItems,
 	handleResetPresets,
 }: {
 	label: string;
 	origin: string;
 	sizes: BorderRadiusSizePreset[];
-	handleUpdateSizes?: (newValue: Object) => void;
+	baseSizes?: BorderRadiusSizePreset[];
+	persistSizes?: (items: BorderRadiusSizePreset[]) => void;
+	convertRepeaterToItems: (
+		newValue: object,
+		baseline: BorderRadiusSizePreset[]
+	) => BorderRadiusSizePreset[];
 	handleResetPresets?: () => void;
 }) {
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
-
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, __('border radius', 'blockera'));
 
@@ -81,42 +83,33 @@ function BorderRadiusSizeGroupComponent({
 
 	const controlName = `border-radius-presets-${origin}`;
 
-	const handleChange = useCallback(
-		(newValue: Object) => {
-			if (!handleUpdateSizes) {
-				return;
-			}
-			handleUpdateSizes(newValue);
+	const onPersistItems = useCallback(
+		(next: BorderRadiusSizePreset[]) => {
+			persistSizes?.(next);
 		},
-		[handleUpdateSizes]
+		[persistSizes]
 	);
 
 	return (
-		<>
-			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetPresets}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={BorderRadiusPresetOpener}
-				onChange={handleChange}
-				controlName={controlName}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={sizes}
-				PresetFields={BorderRadiusSize}
-				title={__('Border radius', 'blockera')}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={
-					borderRadiusPresetFieldsPropsResolver
-				}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<
+			BorderRadiusSizePreset & Record<string, unknown>
+		>
+			origin={origin}
+			items={sizes}
+			baseItems={baseSizes}
+			controlName={controlName}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={BorderRadiusSize}
+			repeaterItemHeader={BorderRadiusPresetOpener}
+			presetFieldsPropsResolver={borderRadiusPresetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={__('Border radius', 'blockera')}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetPresets}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
 
@@ -179,25 +172,25 @@ export function BorderRadiusPresetContent() {
 		[]
 	);
 
-	const handleUpdateCustomSizes = useCallback(
-		(newValue: Object) => {
-			setCustomRadiusSizes(convertRepeaterValueToArray(newValue));
+	const persistThemeSizes = useCallback(
+		(next: BorderRadiusSizePreset[]) => {
+			setThemeRadiusSizes(next);
 		},
-		[convertRepeaterValueToArray, setCustomRadiusSizes]
+		[setThemeRadiusSizes]
 	);
 
-	const handleUpdateThemeSizes = useCallback(
-		(newValue: Object) => {
-			setThemeRadiusSizes(convertRepeaterValueToArray(newValue));
+	const persistDefaultSizes = useCallback(
+		(next: BorderRadiusSizePreset[]) => {
+			setDefaultRadiusSizes(next);
 		},
-		[convertRepeaterValueToArray, setThemeRadiusSizes]
+		[setDefaultRadiusSizes]
 	);
 
-	const handleUpdateDefaultSizes = useCallback(
-		(newValue: Object) => {
-			setDefaultRadiusSizes(convertRepeaterValueToArray(newValue));
+	const persistCustomSizes = useCallback(
+		(next: BorderRadiusSizePreset[]) => {
+			setCustomRadiusSizes(next);
 		},
-		[convertRepeaterValueToArray, setDefaultRadiusSizes]
+		[setCustomRadiusSizes]
 	);
 
 	const resetThemeToBase = useCallback(() => {
@@ -250,6 +243,11 @@ export function BorderRadiusPresetContent() {
 		defaultRadiusSizes.length
 	);
 
+	const baseThemeSizes = useMemo(
+		() => sanitizeRadiusSizes(baseThemeRadiusSizes),
+		[baseThemeRadiusSizes]
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
 			{showThemeOriginGroup && (
@@ -257,7 +255,9 @@ export function BorderRadiusPresetContent() {
 					origin="theme"
 					label={__('Theme', 'blockera')}
 					sizes={themeRadiusSizes}
-					handleUpdateSizes={handleUpdateThemeSizes}
+					baseSizes={baseThemeSizes}
+					persistSizes={persistThemeSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={themeResetHandler}
 				/>
 			)}
@@ -267,7 +267,8 @@ export function BorderRadiusPresetContent() {
 					origin="default"
 					label={__('Default', 'blockera')}
 					sizes={defaultRadiusSizes}
-					handleUpdateSizes={handleUpdateDefaultSizes}
+					persistSizes={persistDefaultSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={defaultResetHandler}
 				/>
 			)}
@@ -276,7 +277,8 @@ export function BorderRadiusPresetContent() {
 				origin="custom"
 				label={__('Custom', 'blockera')}
 				sizes={customRadiusSizes}
-				handleUpdateSizes={handleUpdateCustomSizes}
+				persistSizes={persistCustomSizes}
+				convertRepeaterToItems={convertRepeaterValueToArray}
 				handleResetPresets={customResetHandler}
 			/>
 		</Flex>
