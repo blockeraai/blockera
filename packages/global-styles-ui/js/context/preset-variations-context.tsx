@@ -31,3 +31,11 @@ export function usePresetVariationsStorage<
 	}
 	return ctx as PresetVariationsContextValue<TItem>;
 }
+
+export function usePresetVariationsStorageOptional<
+	TItem = unknown,
+>(): PresetVariationsContextValue<TItem> | null {
+	return useContext(
+		PresetVariationsContext
+	) as PresetVariationsContextValue<TItem> | null;
+}
