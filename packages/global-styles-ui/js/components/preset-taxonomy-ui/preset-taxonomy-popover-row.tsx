@@ -6,7 +6,13 @@ import type {
 	ElementType,
 	MouseEvent as ReactMouseEvent,
 } from 'react';
-import { memo, useContext, useMemo, useState } from '@wordpress/element';
+import {
+	memo,
+	useContext,
+	useMemo,
+	useState,
+	useCallback,
+} from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -31,6 +37,7 @@ import { buildPresetVariablePickerPayload } from '../variable-picker-preset-util
 import { isTaxonomyPopoverOpenEvent } from './is-taxonomy-popover-open-event';
 import { PresetTaxonomyPresetFields } from './taxonomy-preset-fields';
 import { isPresetTaxonomyInterfaceSizeSmall } from './preset-taxonomy-utils';
+import { usePresetTaxonomyEditSessionOptional } from '../preset-taxonomy/preset-taxonomy-edit-session-context';
 
 type TaxonomyRepeaterCtx = {
 	popoverTitle?: string;
@@ -84,6 +91,19 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 	);
 	const pickerCtx = useVarPickerPresetContext();
 	const repeaterCtx = useContext(RepeaterContext) as TaxonomyRepeaterCtx;
+	const editSession = usePresetTaxonomyEditSessionOptional();
+	const rowSlug = String(item.slug ?? itemId);
+
+	const handlePopoverOpen = useCallback(() => {
+		setOpen(true);
+		editSession?.beginEditSession(rowSlug);
+	}, [editSession, rowSlug]);
+
+	const handlePopoverClose = useCallback(() => {
+		editSession?.flushSession(rowSlug);
+		editSession?.endEditSession(rowSlug);
+		setOpen(false);
+	}, [editSession, rowSlug]);
 
 	const RepeaterItemVariations = repeaterCtx.repeaterItemVariations ?? null;
 	const RepeaterItemChildren = repeaterCtx.repeaterItemChildren;
@@ -258,8 +278,8 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 			design={design}
 			toggleOpenBorder={true}
 			isOpen={isOpen}
-			onOpen={() => setOpen(true)}
-			onClose={() => setOpen(false)}
+			onOpen={handlePopoverOpen}
+			onClose={handlePopoverClose}
 			disableAccordionOpenPrimaryBorder={'accordion' === mode}
 			onClick={handleGroupClick}
 			popoverTitle={popoverTitle}

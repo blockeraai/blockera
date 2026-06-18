@@ -10,6 +10,7 @@ import {
 	useLayoutEffect,
 	useContext,
 	useCallback,
+	useMemo,
 	useRef,
 } from '@wordpress/element';
 
@@ -42,6 +43,10 @@ import {
 	getPresetDescription,
 } from './preset-meta-utils';
 import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
+import { usePresetVariationsStorageOptional } from '../context/preset-variations-context';
+import { isNameBasedTaxonomyPreset } from './preset-taxonomy/parse-preset-name-taxonomy';
+import { resolvePresetTaxonomyEditName } from './preset-taxonomy/taxonomy-meta';
+import { usePresetTaxonomyEditSessionOptional } from './preset-taxonomy/preset-taxonomy-edit-session-context';
 
 export interface SharedPresetControlsProps<
 	T extends VariableType = VariableType,
@@ -64,8 +69,35 @@ function SharedPresetControlsComponent<T extends VariableType>({
 }: SharedPresetControlsProps<T>) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const presetLocked = !canEditGlobalStyles;
+	const editSession = usePresetTaxonomyEditSessionOptional();
+	const storage = usePresetVariationsStorageOptional();
+	const taxonomyNameSource = storage?.taxonomyNameSource;
 
+	const committedTaxonomyName = useMemo(() => {
+		if (
+			!isNameBasedTaxonomyPreset(
+				variable as Record<string, unknown>,
+				taxonomyNameSource
+			)
+		) {
+			return undefined;
+		}
+		const fullName = resolvePresetTaxonomyEditName(
+			variable as Record<string, unknown>,
+			taxonomyNameSource
+		);
+		return fullName !== '' ? fullName : undefined;
+	}, [variable, taxonomyNameSource]);
+
+	const persistedName = committedTaxonomyName ?? name;
+	const slugKey = String(slug);
 	const isCreating = variable.creatingStep === true;
+	// Buffer name while popover fields are mounted; flushed on unmount via edit session.
+	const deferNamePersist = Boolean(editSession) && !isCreating;
+
+	const [draftName, setDraftName] = useState(persistedName);
+	const draftNameRef = useRef(persistedName);
+	draftNameRef.current = draftName;
 
 	// ID field: locked while creating or until user clicks/focuses ID (then editable buffer).
 	const [variableSlug, setVariableSlug] = useState(slug);
@@ -89,6 +121,12 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	}, [isIdEditable]);
 
 	// Sync when preset changes (e.g. navigation) or after first close (creatingStep → false).
+	useEffect(() => {
+		if (!deferNamePersist) {
+			setDraftName(persistedName);
+		}
+	}, [persistedName, deferNamePersist]);
+
 	useEffect(() => {
 		setVariableSlug(slug);
 		setIsIdEditable(false);
@@ -119,6 +157,57 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
 	};
+
+	const flushPendingName = useCallback(() => {
+		const nextName = draftNameRef.current;
+		if (nextName === persistedName) {
+			return;
+		}
+		changeRepeaterItem({
+			onChange,
+			valueCleanup,
+			controlId,
+			repeaterId,
+			itemId,
+			value: {
+				...variable,
+				name: nextName,
+			},
+		});
+	}, [
+		changeRepeaterItem,
+		controlId,
+		itemId,
+		onChange,
+		persistedName,
+		repeaterId,
+		valueCleanup,
+		variable,
+	]);
+
+	useEffect(() => {
+		if (!editSession) {
+			return;
+		}
+		editSession.registerFlush(slugKey, flushPendingName);
+		return () => {
+			editSession.unregisterFlush(slugKey);
+		};
+	}, [editSession, flushPendingName, slugKey]);
+
+	// Flat repeater popovers mount these fields only while open; defer name persist + tree regroup until close.
+	useLayoutEffect(() => {
+		if (!editSession) {
+			return;
+		}
+		editSession.beginEditSession(slugKey);
+		return () => {
+			editSession.flushSession(slugKey);
+			editSession.endEditSession(slugKey);
+		};
+	}, [editSession, slugKey]);
+
+	const displayedName = deferNamePersist ? draftName : persistedName;
 
 	const slugChanged = !isCreating && isIdEditable && variableSlug !== slug;
 	const slugIsValid = isSlugValid(displayedSlug, allSlugs, slug);
@@ -225,6 +314,11 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				return;
 			}
 
+			if (deferNamePersist) {
+				setDraftName(newValue);
+				return;
+			}
+
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
@@ -239,6 +333,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		},
 		[
 			presetLocked,
+			deferNamePersist,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
@@ -303,7 +398,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				<ControlContextProvider
 					value={{
 						name: `font-size-name-${slug}`,
-						value: name,
+						value: displayedName,
 					}}
 				>
 					<InputControl
