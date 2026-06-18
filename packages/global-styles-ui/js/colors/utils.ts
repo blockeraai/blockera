@@ -18,6 +18,7 @@ import {
 	splitStoredCompositePlainPresetValue,
 } from '../theme-json-plain-preset';
 import { COLOR_SHADE_STEPS } from './color-shades-generator';
+import { withPresetMetaFromRepeaterRow } from '../components/preset-meta-utils';
 
 const PALETTE_SHADE_SLUG_MARKER = '-shade-';
 
@@ -216,12 +217,14 @@ export function paintPartFromStoredPaletteColorString(
 export function convertRepeaterValueToGradients(newValue: object): Gradient[] {
 	return Object.values(
 		newValue as Record<string, Gradient & Record<string, unknown>>
-	).map((v) => ({
-		slug: v.slug,
-		name: v.name,
-		isVisible: v.isVisible,
-		gradient: v.gradient || '',
-	}));
+	).map((v) =>
+		withPresetMetaFromRepeaterRow(v as Record<string, unknown>, {
+			slug: v.slug,
+			name: v.name,
+			isVisible: v.isVisible,
+			gradient: v.gradient || '',
+		})
+	);
 }
 
 /**
@@ -250,16 +253,8 @@ export function colorPaletteRowFromRepeaterFields(
 	if (typeof v.isVisible === 'boolean') {
 		row.isVisible = v.isVisible;
 	}
-	if (
-		'meta' in v &&
-		v.meta !== null &&
-		v.meta !== undefined &&
-		typeof v.meta === 'object' &&
-		!Array.isArray(v.meta)
-	) {
-		row.meta = { ...(v.meta as Record<string, unknown>) };
-	}
-	return row as Color & Record<string, unknown>;
+	return withPresetMetaFromRepeaterRow(v, row) as Color &
+		Record<string, unknown>;
 }
 
 /**
