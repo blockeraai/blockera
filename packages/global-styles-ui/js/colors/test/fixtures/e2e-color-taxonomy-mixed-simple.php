@@ -11,26 +11,10 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 		$data['settings']['color'] = [];
 	}
 	$data['settings']['color']['defaultPalette'] = true;
-	$data['settings']['color']['groups'] = [
-		[
-			'slug' => 'e-2-e-tax-mix',
-			'name' => 'E2E Tax Mixed Group',
-		],
-	];
-	$data['settings']['color']['categories'] = [
-		[
-			'slug' => 'e-2-e-tax-mix-cat',
-			'name' => 'E2E Tax Mixed Category',
-		],
-	];
 	$data['settings']['color']['palette'][] = [
 		'slug'  => 'e-2-e-tax-mix-leaf',
-		'name'  => 'E2E Tax Mixed Leaf',
+		'name'  => 'E2E Tax Mixed Group/E2E Tax Mixed Category/E2E Tax Mixed Leaf',
 		'color' => '#654321',
-		'meta'  => [
-			'group'    => 'e-2-e-tax-mix',
-			'category' => 'e-2-e-tax-mix-cat',
-		],
 	];
 	$data['settings']['color']['palette'][] = [
 		'slug'  => 'e-2-e-tax-simple-only',

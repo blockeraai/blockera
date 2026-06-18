@@ -11,35 +11,17 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 		$data['settings']['color'] = [];
 	}
 	$data['settings']['color']['defaultPalette'] = true;
-	$data['settings']['color']['groups'] = [
-		[
-			'slug' => 'e-2-e-tax-brand',
-			'name' => 'E2E Tax Brand Group',
-		],
-	];
-	$data['settings']['color']['categories'] = [
-		[
-			'slug' => 'e-2-e-tax-text',
-			'name' => 'E2E Tax Text Category',
-		],
-	];
 	$data['settings']['color']['palette'][] = [
 		'slug'  => 'e-2-e-tax-crimson',
-		'name'  => 'E2E Tax Crimson',
+		'name'  => 'E2E Tax Brand Group/E2E Tax Text Category/E2E Tax Crimson',
 		'color' => '#cc0033',
-		'meta'  => [
-			'group'    => 'e-2-e-tax-brand',
-			'category' => 'e-2-e-tax-text',
-		],
 	];
 	$data['settings']['color']['palette'][] = [
 		'slug'  => 'e-2-e-tax-small-slot',
-		'name'  => 'E2E Tax Small Slot',
+		'name'  => 'E2E Tax Brand Group/E2E Tax Text Category/E2E Tax Small Slot',
 		'color' => '#99aa88',
 		'meta'  => [
-			'group'            => 'e-2-e-tax-brand',
-			'category'         => 'e-2-e-tax-text',
-			'interface-size'   => 'small',
+			'interface-size' => 'small',
 		],
 	];
 	return $data;

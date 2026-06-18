@@ -1,6 +1,6 @@
 <?php
 /**
- * E2E theme.json layer: no color.groups/categories — base + shade rows for variation UI (flat repeater).
+ * E2E theme.json layer: base + shade rows for variation UI (flat repeater, no name-based taxonomy).
  */
 add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	$data = $theme_json;
@@ -11,8 +11,6 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 		$data['settings']['color'] = [];
 	}
 	$data['settings']['color']['defaultPalette'] = true;
-	$data['settings']['color']['groups'] = [];
-	$data['settings']['color']['categories'] = [];
 	$data['settings']['color']['palette'][] = [
 		'slug'  => 'e-2-e-var-base',
 		'name'  => 'E2E Var Shade Base',
