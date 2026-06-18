@@ -9,6 +9,10 @@ export {
 	type GlobalStylesPresetPreviewHelpers,
 	type PresetPreviewCssHelpers,
 } from './preset-preview/injected-helpers';
+export {
+	clearActivePresetRowCanvasPreview,
+	mergePickerPropsWithPresetRowPreviewClose,
+} from './components/preset-row-preview-inject';
 export type { SpacingSizePresetUsage } from './spacing/spacing-preset-preview-usage';
 export type { ColorPresetPreviewUsage } from './colors/color-preset-preview-usage';
 export type { FilterPresetPreviewUsage } from './filters/filter-preset-preview-usage';

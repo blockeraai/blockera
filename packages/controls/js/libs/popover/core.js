@@ -167,6 +167,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 											)}
 											size="extra-small"
 											align="center"
+											data-test="close-popover"
 											onClick={onClose}
 											tabIndex="-1"
 											label={__('Close', 'blockera')}

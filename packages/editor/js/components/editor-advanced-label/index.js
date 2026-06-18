@@ -54,7 +54,6 @@ export const EditorAdvancedLabelControl = ({
 	repeaterItem,
 	resetToDefault,
 	onClick,
-	offset = 35,
 	iconPosition = 'end',
 	changesetGraphPreview,
 	changesetGraphPreviewRender,
@@ -233,7 +232,6 @@ export const EditorAdvancedLabelControl = ({
 
 			{isOpenModal && (
 				<Popover
-					offset={offset}
 					title={
 						<>
 							<Icon icon="question-circle" iconSize="24" />

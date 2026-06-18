@@ -33,7 +33,7 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 		createPost();
 
 		cy.getBlock('default').type('Spacing preset paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		setBoxSpacingSide('margin-top', slug, true);
 
@@ -63,7 +63,7 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 		cy.getBlock('default').type('Spacing preset edit paragraph.', {
 			delay: 0,
 		});
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		setBoxSpacingSide('margin-top', slug, true);
 

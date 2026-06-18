@@ -15,7 +15,7 @@ describe('Block Card', () => {
 
 	it('Check block card to be sticky while scrolling', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.get('.editor-sidebar').scrollTo('bottom');
 

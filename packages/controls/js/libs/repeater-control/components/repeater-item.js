@@ -23,6 +23,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import RepeaterItemActions from './actions';
 import { RepeaterProItemInteractionGuard } from './repeater-pro-item-interaction-guard';
+import { hasOpenModalOverlay } from '../../modal/overlay-utils';
 import { RepeaterContext } from '../context';
 import {
 	getArialLabelSuffix,
@@ -87,7 +88,6 @@ const RepeaterItem = ({
 		popoverProps,
 		valueCleanup,
 		popoverTitle,
-		popoverOffset,
 		PromoComponent,
 		popoverClassName,
 		actionButtonsType,
@@ -370,7 +370,6 @@ const RepeaterItem = ({
 			'function' === typeof popoverTitle
 				? popoverTitle(itemId, item)
 				: popoverTitle,
-		popoverOffset,
 		popoverTitleButtonsRight: PopoverTitleButtonsRight && (
 			<PopoverTitleButtonsRight {...repeaterItemActionsProps} />
 		),
@@ -393,6 +392,10 @@ const RepeaterItem = ({
 		},
 		onClick: (): void | boolean => {
 			if (item?.selectable) {
+				if (hasOpenModalOverlay()) {
+					return;
+				}
+
 				const newItems: { [key: string]: any } = {};
 
 				Object.entries(items).forEach(

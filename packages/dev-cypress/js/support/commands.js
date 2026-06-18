@@ -60,6 +60,10 @@ export const registerCommands = () => {
 		return cy.get(`[data-test="${selector}"]`, ...args);
 	});
 
+	Cypress.Commands.add('getByAriaControls', (selector, ...args) => {
+		return cy.get(`[aria-controls*="${selector}"]`, ...args);
+	});
+
 	/**
 	 * Types into a Blockera input that exposes `data-test` on the native input (e.g. layout grid controls).
 	 * Replaces the current value via select-all to work with number and unit fields.
@@ -233,20 +237,29 @@ export const registerCommands = () => {
 		});
 	});
 
-	// Select a variable row in the variable picker (catalog `va-item-*` or preset repeater `data-variable-slug`).
+	// Select a variable row in the variable picker.
+	// value-addons catalog rows: PickerValueItem (`va-item-*`, `value-addon-picker-item-*`).
+	// global-styles-ui preset repeaters: GroupControl header (`group-control-header` + `data-variable-slug`).
 	Cypress.Commands.add('selectValueAddonItem', (itemID) => {
+		const itemSelector = [
+			`[data-test="value-addon-picker-item-${itemID}"]`,
+			`[data-cy="va-item-${itemID}"]`,
+			`[data-cy="group-control-header"][data-variable-slug="${itemID}"]`,
+			`[data-variable-slug="${itemID}"]`,
+		].join(', ');
+
 		cy.get(
-			'[data-cy="variable-picker-popover"], .blockera-control-popover-variables',
+			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
 			{ timeout: 15000 }
 		)
 			.filter(':visible')
 			.first()
-			.should('exist')
+			.should('be.visible')
 			.within(() => {
-				cy.get(
-					`[data-variable-slug="${itemID}"], [data-cy="va-item-${itemID}"]`
-				)
+				cy.get(itemSelector)
+					.filter(':visible')
 					.first()
+					.should('exist')
 					.click({ force: true });
 			});
 	});
@@ -832,6 +845,51 @@ export const registerCommands = () => {
 		});
 	});
 
+	/**
+	 * Close then reopen a repeater row settings popover.
+	 *
+	 * Use after changing a repeater item `type` while the popover stays open so
+	 * rename-by-type runs on close before asserting typed item keys (e.g. linear-gradient-0).
+	 *
+	 * @param {Object} [options]
+	 * @param {number} [options.itemIndex=0] Row index among `[data-cy="repeater-item"]`.
+	 * @param {string} [options.within] Cypress alias or selector scoping the repeater list.
+	 */
+	Cypress.Commands.add(
+		'closeAndReopenRepeaterItemPopover',
+		(options = {}) => {
+			const { itemIndex = 0, within } = options;
+
+			const withRepeaterScope = (callback) => {
+				if (within) {
+					cy.get(within).within(callback);
+				} else {
+					callback();
+				}
+			};
+
+			cy.get('.blockera-component-popover').within(() => {
+				cy.getByDataTest('close-popover').click({
+					force: true,
+				});
+			});
+
+			withRepeaterScope(() => {
+				cy.getByDataCy('repeater-item')
+					.eq(itemIndex)
+					.within(() => {
+						cy.get('.blockera-control-repeater-group-header').click(
+							{
+								force: true,
+							}
+						);
+					});
+			});
+
+			cy.get('.blockera-component-popover').should('be.visible');
+		}
+	);
+
 	Cypress.Commands.add('closeSpotlightPopover', () => {
 		cy.get('.blockera-spotlighter-svg').click({ force: true });
 	});
@@ -1318,7 +1376,7 @@ export const registerCommands = () => {
 	/**
 	 * Creates draft posts via REST while the block editor is loaded (`wp.apiFetch`).
 	 * @param {number} count How many drafts to create.
-	 * @returns {Cypress.Chainable<number[]>} Numeric post IDs.
+	 * @return {Cypress.Chainable<number[]>} Numeric post IDs.
 	 */
 	Cypress.Commands.add('tabsCreateDraftPostsViaRest', (count) => {
 		return cy.window().then((win) => {
@@ -1655,5 +1713,29 @@ export const registerCommands = () => {
 	Cypress.Commands.add('previewExpectOverlayClosed', () => {
 		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay).should('not.exist');
 		cy.get('body').should('not.have.class', 'blockera-preview-mode-open');
+	});
+
+	Cypress.Commands.add('setMonacoEditorValue', (value) => {
+		cy.get('.monaco-editor').click();
+		cy.get('.monaco-editor textarea').clear({ force: true });
+		cy.window().then((win) => {
+			const monaco = win.monaco;
+			const fallbackEditor = monaco.editor.getModels
+				? monaco.editor.getModels()[0]
+				: null;
+			const editor = monaco.editor.getEditors
+				? monaco.editor.getEditors()[0]
+				: fallbackEditor;
+			if (editor && typeof editor.setValue === 'function') {
+				editor.setValue(value);
+			} else if (monaco.editor.getModels) {
+				const model = monaco.editor.getModels()[0];
+				if (model && typeof model.setValue === 'function') {
+					model.setValue(value);
+				}
+			} else {
+				throw new Error('Unable to access Monaco editor in the test.');
+			}
+		});
 	});
 };

@@ -35,7 +35,6 @@ import { isPresetTaxonomyInterfaceSizeSmall } from './preset-taxonomy-utils';
 type TaxonomyRepeaterCtx = {
 	popoverTitle?: string;
 	popoverClassName?: string;
-	popoverOffset?: number;
 	popoverProps?: Record<string, unknown>;
 	design?: string;
 	mode?: string;
@@ -240,7 +239,6 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 
 	const popoverTitle =
 		repeaterCtx.popoverTitle || __('Edit Variable', 'blockera');
-	const popoverOffset = repeaterCtx.popoverOffset ?? 35;
 	const actionMenuButtonLabel =
 		repeaterCtx.actionMenuButtonLabel ?? __('More Options', 'blockera');
 	const design = repeaterCtx.design ?? 'minimal';
@@ -267,7 +265,6 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 			disableAccordionOpenPrimaryBorder={'accordion' === mode}
 			onClick={handleGroupClick}
 			popoverTitle={popoverTitle}
-			popoverOffset={popoverOffset}
 			popoverClassName={repeaterCtx.popoverClassName}
 			popoverProps={repeaterCtx.popoverProps}
 			actionButtonsType="inline"

@@ -70,7 +70,6 @@ export const ExtensionSettings = ({
 
 			{isOpen && (
 				<Popover
-					offset={20}
 					title={title}
 					placement={'left-start'}
 					closeButton={true}

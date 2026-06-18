@@ -93,7 +93,7 @@ describe('Global styles permission (read-only entity vs variable picker)', () =>
 				'Read-only global styles; pick theme transform preset.',
 				{ delay: 0 }
 			);
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			openRepeaterHeaderVariablePicker('Transforms');
 

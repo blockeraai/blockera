@@ -12,10 +12,6 @@ describe('Background Image → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-
-		cy.getByAriaLabel('Settings').eq(1).click({ force: true });
-
-		cy.getByDataTest('style-tab').click();
 	});
 
 	describe('Image', () => {
@@ -280,6 +276,10 @@ describe('Background Image → Functionality', () => {
 				});
 			});
 
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@image-and-gradient',
+			});
+
 			// assert data
 			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
@@ -349,6 +349,10 @@ describe('Background Image → Functionality', () => {
 
 				// select variable
 				cy.selectValueAddonItem('vivid-cyan-blue-to-vivid-purple');
+			});
+
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@image-and-gradient',
 			});
 
 			// assert data
@@ -471,6 +475,10 @@ describe('Background Image → Functionality', () => {
 						.contains('button', /parallax/i)
 						.click();
 				});
+			});
+
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@image-and-gradient',
 			});
 
 			// assert data
@@ -608,6 +616,10 @@ describe('Background Image → Functionality', () => {
 						.contains('button', /parallax/i)
 						.click();
 				});
+			});
+
+			cy.closeAndReopenRepeaterItemPopover({
+				within: '@image-and-gradient',
 			});
 
 			// assert data

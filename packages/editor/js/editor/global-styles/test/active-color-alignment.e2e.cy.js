@@ -5,21 +5,24 @@
 import 'cypress-real-events';
 
 import {
-	GLOBAL_STYLES_SIZE_SURFACE_VAR,
-	GLOBAL_STYLES_STYLE_SURFACE_VAR,
 	HOVER_STATE_COLOR,
 	INNER_BLOCK_NORMAL_COLOR,
-	INSPECTOR_MASTER_NORMAL_COLOR,
 	STATE_COLORS_CONTAINER,
 	assertContainerActiveTabColor,
 	assertLastScopedStateContainerColor,
 	assertLastScopedStateContainerMatchesPopover,
+	assertLastStyleColumnStateContainerColor,
+	assertLastStyleColumnStateContainerMatchesPopover,
 	assertStatesInserterPopoverMatchesContainer,
 	openGlobalStylesButtonDualSurfaces,
 	openGlobalStylesParagraphBlockPanel,
 	openInspectorParagraphWithLinkBlock,
+	openSizeVariationContextMenuInGlobalStyles,
+	openStyleVariationContextMenuInGlobalStyles,
 	setBlockState,
 	setInnerBlock,
+	SIZE_VARIATION_SETTINGS_POPOVER,
+	STYLE_VARIATION_SETTINGS_POPOVER,
 	withinSizeVariationsPanel,
 	withinStyleVariationsPanel,
 } from './active-color-alignment.helpers';
@@ -32,9 +35,11 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 			});
 
 			it('uses style-surface variation color on master normal state and states inserter popover', () => {
+				cy.getByDataTest('style-text-subtitle').click();
+
 				assertContainerActiveTabColor(
 					STATE_COLORS_CONTAINER,
-					GLOBAL_STYLES_STYLE_SURFACE_VAR
+					'#1ca120'
 				);
 				assertStatesInserterPopoverMatchesContainer(
 					STATE_COLORS_CONTAINER
@@ -42,6 +47,7 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 			});
 
 			it('uses hover state color on master state container and states inserter popover', () => {
+				cy.getByDataTest('style-text-subtitle').click();
 				setBlockState('Hover');
 
 				assertContainerActiveTabColor(
@@ -49,11 +55,12 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 					HOVER_STATE_COLOR
 				);
 				assertStatesInserterPopoverMatchesContainer(
-					STATE_COLORS_CONTAINER
+					'.blockera-states-picker-popover'
 				);
 			});
 
 			it('uses inner-block normal color on container and states inserter popover', () => {
+				cy.getByDataTest('style-text-subtitle').click();
 				setInnerBlock('elements/link');
 
 				assertContainerActiveTabColor(
@@ -61,20 +68,21 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 					INNER_BLOCK_NORMAL_COLOR
 				);
 				assertStatesInserterPopoverMatchesContainer(
-					STATE_COLORS_CONTAINER
+					'.blockera-states-picker-popover'
 				);
 			});
 
 			it('uses hover state color while inner block is selected', () => {
+				cy.getByDataTest('style-text-subtitle').click();
 				setInnerBlock('elements/link');
-				setBlockState('Hover');
+				setBlockState('Hover', 'inner-block');
 
 				assertContainerActiveTabColor(
 					STATE_COLORS_CONTAINER,
 					HOVER_STATE_COLOR
 				);
 				assertStatesInserterPopoverMatchesContainer(
-					STATE_COLORS_CONTAINER
+					'.blockera-states-picker-popover'
 				);
 			});
 		});
@@ -84,39 +92,30 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 				openGlobalStylesButtonDualSurfaces();
 			});
 
-			it('style surface: variation picker popover matches state container active color', () => {
+			it('style surface: variation settings popover matches state container active color', () => {
 				withinStyleVariationsPanel(() => {
-					assertLastScopedStateContainerColor(
-						GLOBAL_STYLES_STYLE_SURFACE_VAR
-					);
+					openStyleVariationContextMenuInGlobalStyles('fill');
 
-					cy.get('[data-test="style-variations-button"]')
-						.not('.is-variation-ui-size')
-						.first()
-						.click({ force: true });
+					assertLastStyleColumnStateContainerColor('#1ca120');
 
-					assertLastScopedStateContainerMatchesPopover(
-						'.blockera-component-popover.variations-picker-popover.is-variation-ui-style'
+					assertLastStyleColumnStateContainerMatchesPopover(
+						STYLE_VARIATION_SETTINGS_POPOVER
 					);
 
 					cy.realPress('Escape');
 				});
 			});
 
-			it('size surface: variation picker popover matches state container active color', () => {
-				withinSizeVariationsPanel(() => {
-					assertLastScopedStateContainerColor(
-						GLOBAL_STYLES_SIZE_SURFACE_VAR
+			it('size surface: variation settings popover matches state container active color', () => {
+				cy.get('.blockera-global-styles-panel-aside').within(() => {
+					assertLastScopedStateContainerColor('#7e00ff');
+
+					openSizeVariationContextMenuInGlobalStyles(
+						'e2e-size-small'
 					);
 
-					cy.get(
-						'[data-test="style-variations-button"].is-variation-ui-size'
-					)
-						.first()
-						.click({ force: true });
-
 					assertLastScopedStateContainerMatchesPopover(
-						'.blockera-component-popover.variations-picker-popover.is-variation-ui-size'
+						SIZE_VARIATION_SETTINGS_POPOVER
 					);
 
 					cy.realPress('Escape');
@@ -145,10 +144,7 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 		});
 
 		it('uses WordPress normal state color on master block container and states inserter popover', () => {
-			assertContainerActiveTabColor(
-				STATE_COLORS_CONTAINER,
-				INSPECTOR_MASTER_NORMAL_COLOR
-			);
+			assertContainerActiveTabColor(STATE_COLORS_CONTAINER, '#cc0000');
 			assertStatesInserterPopoverMatchesContainer(STATE_COLORS_CONTAINER);
 		});
 

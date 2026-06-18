@@ -20,6 +20,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { Button, Popover, DropdownMenu } from '../';
+import { hasOpenModalOverlay } from '../modal/overlay-utils';
 import type { GroupControlProps } from './types';
 
 export default function GroupControl({
@@ -31,7 +32,6 @@ export default function GroupControl({
 	mode = 'popover',
 	popoverProps,
 	popoverTitle,
-	popoverOffset = 35,
 	popoverTitleButtonsRight,
 	popoverClassName,
 	//
@@ -106,6 +106,17 @@ export default function GroupControl({
 
 	const handleOnClick = (event: MouseEvent): void => {
 		event.stopPropagation();
+
+		if (hasOpenModalOverlay()) {
+			return;
+		}
+
+		if (
+			event.target instanceof Element &&
+			event.target.closest(`.${controlInnerClassNames('action-buttons')}`)
+		) {
+			return;
+		}
 
 		if (!isCallbackEligible(event)) {
 			return;
@@ -230,7 +241,6 @@ export default function GroupControl({
 
 			{mode === 'popover' && isOpen && (
 				<Popover
-					offset={popoverOffset}
 					placement="left-start"
 					className={controlInnerClassNames(
 						'group-popover',

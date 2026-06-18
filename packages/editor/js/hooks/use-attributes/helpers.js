@@ -21,9 +21,18 @@ import type {
 	TStates,
 	TBreakpoint,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../../editor/header-ui';
-import { isInnerBlock, isNormalState } from '../../extensions/components';
-import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
+import { getBaseBreakpoint, isBaseBreakpoint } from '../../editor/header-ui';
+import {
+	isInnerBlock,
+	isNormalState,
+	prepareBlockeraDefaultAttributesValues,
+	prepareWordPressDefaultAttributesValues,
+} from '../../extensions/components';
+import { applyBlockeraSetAttributesCompatibility } from '../../extensions/components/get-compatible-attributes';
+import {
+	blockStatesValueCleanup,
+	isNormalStateOnBaseBreakpoint,
+} from '../../extensions/libs/block-card/block-states/helpers';
 
 // Check required to update.
 export const isChanged = (
@@ -879,58 +888,234 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 	);
 };
 
+const BLOCKERA_STATE_RESET_SKIP_KEYS = new Set([
+	'blockeraPropsId',
+	'blockeraCompatId',
+	'blockeraBlockStates',
+	'blockeraInnerBlocks',
+]);
+
+const applyStateResetDefaults = (
+	attributes: Object,
+	defaults: Object
+): void => {
+	for (const key in defaults) {
+		if (BLOCKERA_STATE_RESET_SKIP_KEYS.has(key)) {
+			continue;
+		}
+
+		attributes[key] = defaults[key];
+	}
+};
+
+// Blockera + WordPress-compat defaults; computed once per reset (not per inner-block target).
+const getSharedStateResetDefaults = ({
+	defaultAttributes,
+	insideBlockInspector,
+	getAttributes,
+	blockDetail,
+}: Object): Object => {
+	const blockeraDefaults = prepareBlockeraDefaultAttributesValues(
+		defaultAttributes || {},
+		{
+			context: insideBlockInspector
+				? 'block-inspector'
+				: 'global-styles-panel',
+		}
+	);
+
+	const wordpressCompatibilityAttributes =
+		applyBlockeraSetAttributesCompatibility({
+			blockeraKeys: blockeraDefaults,
+			getBlockeraValueForKey: (featureId: string) =>
+				blockeraDefaults[featureId]?.value ??
+				blockeraDefaults[featureId],
+			getAttributes,
+			blockDetail,
+			controlRef: {
+				action: 'reset',
+				reset: true,
+			},
+		});
+
+	return mergeObject(blockeraDefaults, wordpressCompatibilityAttributes);
+};
+
+const getStateResetDefaultsForTarget = (
+	targetAttributes: Object,
+	{ defaultAttributes, sharedDefaults }: Object
+): Object => {
+	const wordpressDefaults = prepareWordPressDefaultAttributesValues(
+		defaultAttributes || {},
+		targetAttributes || {}
+	);
+
+	return mergeObject(sharedDefaults, wordpressDefaults);
+};
+
 export const stateResettingValues = (
 	state: Object,
-	{ currentBlock, stateReadyToReset, resetStateAllValues }: Object
+	{
+		blockId,
+		clientId,
+		innerBlocks,
+		currentBlock,
+		currentState,
+		isNormalState,
+		getAttributes,
+		blockVariations,
+		currentBreakpoint,
+		stateReadyToReset,
+		resetStateAllValues,
+		defaultAttributes,
+		insideBlockInspector,
+		activeBlockVariation,
+		currentInnerBlockState,
+		getActiveBlockVariation,
+	}: Object
 ): Object => {
-	if (resetStateAllValues) {
-		for (const key in state.blockeraBlockStates?.value || {}) {
-			const blockState = state.blockeraBlockStates?.value[key];
+	if (!resetStateAllValues) {
+		return state;
+	}
 
-			for (const breakpoint in blockState?.breakpoints || {}) {
-				const inners =
-					blockState.breakpoints[breakpoint]?.attributes
-						?.blockeraInnerBlocks || {};
+	const blockDetail = {
+		blockId,
+		clientId,
+		innerBlocks,
+		currentBlock,
+		blockVariations,
+		defaultAttributes,
+		currentState: isInnerBlock(currentBlock)
+			? currentInnerBlockState
+			: currentState,
+		currentBreakpoint,
+		activeBlockVariation,
+		currentInnerBlockState,
+		getActiveBlockVariation,
+		isNormalState: isNormalState(),
+		isMasterBlock: !isInnerBlock(currentBlock),
+		isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+		isMasterNormalState: isNormalStateOnBaseBreakpoint(
+			currentState,
+			currentBreakpoint
+		),
+		insideBlockInspector,
+	};
+	const resetContext = {
+		defaultAttributes,
+		sharedDefaults: getSharedStateResetDefaults({
+			defaultAttributes,
+			insideBlockInspector,
+			getAttributes,
+			blockDetail,
+		}),
+	};
 
-				for (const innerBlock in inners) {
-					// Skip resetting for other inner blocks.
-					if (currentBlock !== innerBlock) {
+	// Normal state styles live on root/inner-block attributes, not only in blockeraBlockStates.
+	if (stateReadyToReset === 'normal') {
+		if (isInnerBlock(currentBlock)) {
+			const innerBlockAttributes =
+				state.blockeraInnerBlocks?.value?.[currentBlock]?.attributes;
+
+			if (innerBlockAttributes) {
+				applyStateResetDefaults(
+					innerBlockAttributes,
+					getStateResetDefaultsForTarget(
+						innerBlockAttributes,
+						resetContext
+					)
+				);
+			}
+		} else {
+			applyStateResetDefaults(
+				state,
+				getStateResetDefaultsForTarget(state, resetContext)
+			);
+
+			const innerBlocks = state.blockeraInnerBlocks?.value || {};
+
+			for (const innerBlock in innerBlocks) {
+				if (!innerBlocks[innerBlock]?.attributes) {
+					continue;
+				}
+
+				applyStateResetDefaults(
+					innerBlocks[innerBlock].attributes,
+					getStateResetDefaultsForTarget(
+						innerBlocks[innerBlock].attributes,
+						resetContext
+					)
+				);
+			}
+
+			const normalBreakpoints =
+				state.blockeraBlockStates?.value?.normal?.breakpoints;
+
+			if (normalBreakpoints) {
+				for (const breakpoint in normalBreakpoints) {
+					if (normalBreakpoints[breakpoint]?.attributes) {
+						normalBreakpoints[breakpoint].attributes = {};
+					}
+				}
+			}
+		}
+	}
+
+	for (const key in state.blockeraBlockStates?.value || {}) {
+		const blockState = state.blockeraBlockStates?.value[key];
+
+		for (const breakpoint in blockState?.breakpoints || {}) {
+			const inners =
+				blockState.breakpoints[breakpoint]?.attributes
+					?.blockeraInnerBlocks || {};
+
+			for (const innerBlock in inners) {
+				// Skip resetting for other inner blocks.
+				if (currentBlock !== innerBlock) {
+					continue;
+				}
+
+				if (
+					stateReadyToReset === 'normal' &&
+					inners[innerBlock]?.attributes
+				) {
+					applyStateResetDefaults(
+						inners[innerBlock].attributes,
+						getStateResetDefaultsForTarget(
+							inners[innerBlock].attributes,
+							resetContext
+						)
+					);
+				}
+
+				const innerStates =
+					inners[innerBlock]?.attributes?.blockeraBlockStates || {};
+
+				for (const innerState in innerStates) {
+					if (stateReadyToReset !== innerState) {
 						continue;
 					}
 
-					const innerStates =
-						inners[innerBlock]?.attributes?.blockeraBlockStates ||
-						{};
+					if (innerStates[innerState]?.hasOwnProperty('content')) {
+						state.blockeraBlockStates.value[key].breakpoints[
+							breakpoint
+						].attributes.blockeraInnerBlocks[
+							innerBlock
+						].attributes.blockeraBlockStates[innerState].content =
+							'';
+					}
 
-					for (const innerState in innerStates) {
-						if (stateReadyToReset !== innerState) {
-							continue;
-						}
+					const innerBreakpoints =
+						innerStates[innerState]?.breakpoints || {};
 
-						if (
-							innerStates[innerState]?.hasOwnProperty('content')
-						) {
-							state.blockeraBlockStates.value[key].breakpoints[
-								breakpoint
-							].attributes.blockeraInnerBlocks[
-								innerBlock
-							].attributes.blockeraBlockStates[
-								innerState
-							].content = '';
-						}
-
-						const innerBreakpoints =
-							innerStates[innerState]?.breakpoints || {};
-
-						for (const innerBreakpoint in innerBreakpoints) {
-							state.blockeraBlockStates.value[key].breakpoints[
-								breakpoint
-							].attributes.blockeraInnerBlocks[
-								innerBlock
-							].attributes.blockeraBlockStates[
-								innerState
-							].breakpoints[innerBreakpoint].attributes = {};
-						}
+					for (const innerBreakpoint in innerBreakpoints) {
+						state.blockeraBlockStates.value[key].breakpoints[
+							breakpoint
+						].attributes.blockeraInnerBlocks[
+							innerBlock
+						].attributes.blockeraBlockStates[
+							innerState
+						].breakpoints[innerBreakpoint].attributes = {};
 					}
 				}
 			}

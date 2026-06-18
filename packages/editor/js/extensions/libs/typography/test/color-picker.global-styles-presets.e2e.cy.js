@@ -53,7 +53,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		createPost();
 
 		cy.getBlock('default').type('Variable color paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.openValueAddon();
@@ -135,7 +135,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		cy.getBlock('default').type('Edited preset color paragraph.', {
 			delay: 0,
 		});
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.openValueAddon();

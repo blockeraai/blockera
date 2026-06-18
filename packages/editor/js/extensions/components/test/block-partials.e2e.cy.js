@@ -10,7 +10,7 @@ describe('Block Partials Testing ...', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.get('.block-editor-block-card').should(
 			'have.css',

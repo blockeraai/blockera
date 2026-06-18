@@ -117,7 +117,6 @@ export function ChildPerspective({
 							'Child Perspective Origin',
 							'blockera'
 						)}
-						popoverOffset={141}
 						labelDescription={__(
 							'Defines the perspective origin for nested content. Descendant blocks use this point as their 3D transform reference.',
 							'blockera'

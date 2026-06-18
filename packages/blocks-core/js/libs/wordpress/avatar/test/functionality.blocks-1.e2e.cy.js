@@ -180,7 +180,7 @@ describe('Avatar Block', () => {
 		//
 		// 2.0. Settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			// the range slide for image size should be hidden

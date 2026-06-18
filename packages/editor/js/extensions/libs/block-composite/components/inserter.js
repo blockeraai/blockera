@@ -54,7 +54,6 @@ export const Inserter = ({
 
 			{isOpenPicker && popoverAnchor && (
 				<Popover
-					offset={12}
 					placement="bottom-end"
 					onClose={() => setOpenPicker(false)}
 					title=""

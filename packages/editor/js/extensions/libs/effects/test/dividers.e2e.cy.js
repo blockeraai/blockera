@@ -16,7 +16,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			createPost();
 
 			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Shape Dividers').as('dividers');
 		});

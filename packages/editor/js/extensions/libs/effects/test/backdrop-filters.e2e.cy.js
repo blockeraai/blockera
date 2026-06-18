@@ -14,7 +14,7 @@ describe('Backdrop Filters → Functionality', () => {
 
 	it('Should update filter correctly, when add one drop-shadow', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 		cy.getParentContainer('Backdrop Filters').as('filters');
 
 		cy.get('@filters').within(() => {
@@ -59,6 +59,10 @@ describe('Backdrop Filters → Functionality', () => {
 					'include',
 					'backdrop-filter: drop-shadow(50px 30px 40px #cccccc)'
 				);
+		});
+
+		cy.closeAndReopenRepeaterItemPopover({
+			within: '@filters',
 		});
 
 		// Check store
@@ -108,7 +112,7 @@ describe('Backdrop Filters → Functionality', () => {
 <!-- /wp:paragraph -->`);
 
 		cy.getBlock('core/paragraph').click();
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 		cy.getParentContainer('Backdrop Filters').as('filters');
 
 		// Check block

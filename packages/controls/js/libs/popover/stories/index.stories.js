@@ -33,7 +33,6 @@ export const Default = {
 		resize: false,
 		flip: false,
 		shift: false,
-		offset: 10,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {

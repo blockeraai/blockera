@@ -29,7 +29,7 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 		createPost();
 
 		cy.getBlock('default').type('Filter preset paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		openRepeaterHeaderVariablePicker('Filters');
 
@@ -58,7 +58,7 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 		createPost();
 
 		cy.getBlock('default').type('Filter edit paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		openRepeaterHeaderVariablePicker('Filters');
 		cy.selectValueAddonItem(slug);

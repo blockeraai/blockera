@@ -12,17 +12,13 @@ describe('Custom CSS → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
 	});
 
 	it('should update custom css, when adding value', () => {
 		openSettingsPanel('Custom CSS');
 
 		cy.getParentContainer('Custom CSS Code').within(() => {
-			cy.get('.monaco-editor').click().focused().clear({ force: true });
-			cy.get('.monaco-editor').type('.block { background-color: red; }', {
-				parseSpecialCharSequences: false,
-			});
+			cy.setMonacoEditorValue('.block { background-color: red; }');
 		});
 
 		// Check block

@@ -31,7 +31,6 @@ export default function PositionButtonControl({
 	buttonLabel,
 	popoverTitle = __('Setting', 'blockera'),
 	popoverPlacement = 'left-start',
-	popoverOffset = 121,
 	alignmentMatrixLabel = __('Position', 'blockera'),
 	id,
 	onChange,
@@ -111,7 +110,6 @@ export default function PositionButtonControl({
 				<Popover
 					design="highlight"
 					title={popoverTitle}
-					offset={popoverOffset}
 					placement={popoverPlacement}
 					className={controlInnerClassNames('position-popover')}
 					onClose={() => {

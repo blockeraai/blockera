@@ -142,7 +142,7 @@ function assertCoreLayoutToolbarSupportsRegistered() {
 
 function openFlexDisplayInBlockera() {
 	cy.addNewTransition();
-	cy.getByDataTest('style-tab').click();
+	cy.getByAriaControls('styles-view').click();
 
 	cy.getParentContainer('Display').within(() => {
 		cy.getByAriaLabel('Flex').then(($flexButton) => {
@@ -296,7 +296,7 @@ function configureBlockMatrixAlignment(blockIndex, type, point) {
 	);
 
 	cy.getBlock('core/paragraph').eq(blockIndex).click();
-	cy.getByDataTest('style-tab').click();
+	cy.getByAriaControls('styles-view').click();
 
 	ensureBlockDisplayFlex(blockIndex);
 
@@ -366,7 +366,7 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 			: getAlignAxisSelectIndex(type);
 
 	cy.getBlock('core/paragraph').eq(blockIndex).click();
-	cy.getByDataTest('style-tab').click();
+	cy.getByAriaControls('styles-view').click();
 
 	ensureBlockDisplayFlex(blockIndex);
 
@@ -402,7 +402,7 @@ describe('Flex Layout → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		// change to flex
 		cy.getParentContainer('Display').within(() => {

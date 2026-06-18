@@ -265,6 +265,10 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			isNull(currentValue) ||
 			isEmpty(currentValue)
 		) {
+			if (isRepeaterControl()) {
+				return defaultValue ?? {};
+			}
+
 			return defaultValue;
 		}
 

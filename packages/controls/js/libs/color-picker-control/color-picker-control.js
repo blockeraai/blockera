@@ -224,7 +224,6 @@ export default function ColorPickerControl({
 				{isOpen && (
 					<Popover
 						title={popoverTitle}
-						offset={120}
 						placement={placement}
 						className={`blockera-color-picker-popover ${
 							isPopoverHidden ? 'hidden' : ''

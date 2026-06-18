@@ -20,7 +20,7 @@ describe('Flex Child', () => {
 			appendBlocks(code);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 		});
 
 		it('should not have flex-child block section, if parents display is not flex', () => {
@@ -39,13 +39,13 @@ describe('Flex Child', () => {
 			appendBlocks(code);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 		});
 
-		it('should have flex-child block section', () => {
+		it('should have flex-child block section - 1', () => {
 			// Group block should not have the flex child block section
 			cy.getBlock('core/group').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Flex Child').should('not.exist');
 
 			// Wait for the block to be updated
@@ -53,7 +53,7 @@ describe('Flex Child', () => {
 
 			// Paragraph block should have the flex child block section
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Flex Child').should('exist');
 
 			// Wait for the block to be updated
@@ -70,7 +70,7 @@ describe('Flex Child', () => {
 			cy.wait(200);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Flex Child').should('not.exist');
 
 			// Wait for the block to be updated
@@ -88,11 +88,11 @@ describe('Flex Child', () => {
 			cy.wait(200);
 
 			cy.getBlock('core/paragraph').click();
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.contains('Flex Child').should('exist');
 		});
 
-		it('should have flex-child block section', () => {
+		it('should have flex-child block section - 2', () => {
 			cy.contains('Flex Child').should('exist');
 
 			cy.getParentContainer('Display').within(() => {
@@ -101,7 +101,6 @@ describe('Flex Child', () => {
 
 			// Check inner block to make sure it has the flex child block section
 			setInnerBlock('elements/bold');
-			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('exist');
 
 			// Switch back to the parent block
@@ -112,7 +111,6 @@ describe('Flex Child', () => {
 
 			// Check inner block to make sure it does not have the flex child block section
 			setInnerBlock('elements/bold');
-			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('not.exist');
 		});
 	});

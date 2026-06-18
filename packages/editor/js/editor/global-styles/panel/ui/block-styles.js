@@ -375,7 +375,6 @@ function BlockStyles({
 			<SlotFillProvider>
 				<Popover
 					title={''}
-					offset={10}
 					placement="bottom-start"
 					className={classNames('variations-picker-popover', {
 						'is-variation-ui-size':

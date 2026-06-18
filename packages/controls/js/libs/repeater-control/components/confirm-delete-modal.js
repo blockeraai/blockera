@@ -94,6 +94,9 @@ function ConfirmDeleteModal({
 					<Button
 						data-test="confirm-delete-modal-cancel-button"
 						variant="tertiary"
+						onMouseDown={(event: MouseEvent) => {
+							event.stopPropagation();
+						}}
 						onClick={() => {
 							setIsConfirmedDelete(false);
 							onClose();
@@ -106,6 +109,9 @@ function ConfirmDeleteModal({
 						data-test="confirm-delete-modal-delete-button"
 						disabled={!isConfirmedDelete}
 						variant="primary"
+						onMouseDown={(event: MouseEvent) => {
+							event.stopPropagation();
+						}}
 						onClick={() => {
 							handleRemoveItem(item);
 						}}
@@ -115,37 +121,43 @@ function ConfirmDeleteModal({
 				</>
 			}
 		>
-			<Flex direction="column" gap={30}>
-				<Flex direction="column" gap={15}>
-					<p style={{ margin: '0', color: '#1e1e1e' }}>
-						{warningText}
-					</p>
-				</Flex>
+			<div
+				onMouseDown={(event: MouseEvent) => {
+					event.stopPropagation();
+				}}
+			>
+				<Flex direction="column" gap={30}>
+					<Flex direction="column" gap={15}>
+						<p style={{ margin: '0', color: '#1e1e1e' }}>
+							{warningText}
+						</p>
+					</Flex>
 
-				<Flex
-					gap={15}
-					className={componentInnerClassNames('consent-wrapper')}
-					direction="column"
-				>
-					<NoticeControl type={'error'}>
-						{errorNoticeText}
-					</NoticeControl>
-
-					<ControlContextProvider
-						value={{
-							name: 'confirm-delete-repeater-item',
-							value: isConfirmedDelete,
-						}}
+					<Flex
+						gap={15}
+						className={componentInnerClassNames('consent-wrapper')}
+						direction="column"
 					>
-						<CheckboxControl
-							checkboxLabel={confirmCheckboxLabel}
-							onChange={(newValue: boolean) =>
-								setIsConfirmedDelete(newValue)
-							}
-						/>
-					</ControlContextProvider>
+						<NoticeControl type={'error'}>
+							{errorNoticeText}
+						</NoticeControl>
+
+						<ControlContextProvider
+							value={{
+								name: 'confirm-delete-repeater-item',
+								value: isConfirmedDelete,
+							}}
+						>
+							<CheckboxControl
+								checkboxLabel={confirmCheckboxLabel}
+								onChange={(newValue: boolean) =>
+									setIsConfirmedDelete(newValue)
+								}
+							/>
+						</ControlContextProvider>
+					</Flex>
 				</Flex>
-			</Flex>
+			</div>
 		</Modal>
 	);
 }

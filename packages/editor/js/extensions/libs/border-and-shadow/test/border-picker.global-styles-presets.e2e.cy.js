@@ -30,7 +30,7 @@ describe('Global Styles border preset → value addon (Border)', () => {
 		createPost();
 
 		cy.getBlock('default').type('Border preset paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Border').within(() => {
 			cy.openValueAddon(1);
@@ -63,7 +63,7 @@ describe('Global Styles border preset → value addon (Border)', () => {
 		cy.getBlock('default').type('Border preset edit paragraph.', {
 			delay: 0,
 		});
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Border').within(() => {
 			cy.openValueAddon(1);

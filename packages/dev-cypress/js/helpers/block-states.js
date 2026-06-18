@@ -25,6 +25,7 @@ export function openInserter() {
 export function setBlockState(state, blockType) {
 	if (blockType === 'master-block') {
 		cy.getByAriaLabel('Blockera Block State Container')
+			.should('exist')
 			.first()
 			.within(() => {
 				cy.getByDataCy('group-control-header')
@@ -32,7 +33,8 @@ export function setBlockState(state, blockType) {
 					.click({ force: true });
 			});
 	} else {
-		cy.getByAriaLabel('Blockera Block State Container')
+		cy.get('.block-card--inner-block')
+			.find('[aria-label="Blockera Block State Container"]')
 			.last()
 			.within(() => {
 				cy.getByDataCy('group-control-header')

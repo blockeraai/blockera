@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useCallback } from '@wordpress/element';
+import { useCallback, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -40,6 +40,39 @@ export type PresetCanvasPreviewPayload =
 			declarations: string;
 	  };
 
+let isPresetRowCanvasPreviewActive = false;
+let sharedClearPresetRowCanvasPreview: (() => void) | null = null;
+let mountedPresetRowPreviewHookCount = 0;
+
+/**
+ * Clears active preset-row canvas preview when a host popover closes without a row
+ * `mouseleave` (e.g. value-addon variable picker dismiss while hovering a preset).
+ */
+export function clearActivePresetRowCanvasPreview(): void {
+	if (!isPresetRowCanvasPreviewActive) {
+		return;
+	}
+	sharedClearPresetRowCanvasPreview?.();
+}
+
+/**
+ * Merges value-addon picker props so var-picker `onClose` clears preset hover preview CSS.
+ */
+export function mergePickerPropsWithPresetRowPreviewClose(
+	pickerProps: Record<string, unknown>
+): Record<string, unknown> {
+	const previousOnClose = pickerProps.onClose;
+	return {
+		...pickerProps,
+		onClose: () => {
+			clearActivePresetRowCanvasPreview();
+			if (typeof previousOnClose === 'function') {
+				previousOnClose();
+			}
+		},
+	};
+}
+
 /**
  * Wires repeater row hover to canvas preview: attribute patch → second BlockStyle, or
  * declaration string → PreviewInjectableStylesContext (gradients / fallback raw CSS).
@@ -55,11 +88,19 @@ export function usePresetRowCanvasPreview(
 	const previewInjectable = usePreviewInjectableStyles();
 	const blockClientId = useBlockInjectedSlotClientId();
 
+	const clearPreviewState = useCallback(() => {
+		if (!isPresetRowCanvasPreviewActive) {
+			return;
+		}
+		isPresetRowCanvasPreviewActive = false;
+		presetCanvas?.setPreviewAttributePatch(null);
+		previewInjectable?.setExtraPreviewCss('');
+	}, [presetCanvas, previewInjectable]);
+
 	const handlePointerEnter = useCallback(() => {
 		const payload = getPayload();
 		if (!payload) {
-			presetCanvas?.setPreviewAttributePatch(null);
-			previewInjectable?.setExtraPreviewCss('');
+			clearPreviewState();
 			return;
 		}
 
@@ -70,9 +111,13 @@ export function usePresetRowCanvasPreview(
 			willShowPreview = (payload.declarations?.trim() ?? '').length > 0;
 		}
 
-		if (willShowPreview) {
-			presetCanvas?.primePresetHover?.();
+		if (!willShowPreview) {
+			clearPreviewState();
+			return;
 		}
+
+		isPresetRowCanvasPreviewActive = true;
+		presetCanvas?.primePresetHover?.();
 
 		if (payload.kind === 'attributes') {
 			previewInjectable?.setExtraPreviewCss('');
@@ -85,19 +130,39 @@ export function usePresetRowCanvasPreview(
 		presetCanvas?.setPreviewAttributePatch(null);
 		const d = payload.declarations?.trim() ?? '';
 		if (!d) {
-			previewInjectable?.setExtraPreviewCss('');
+			clearPreviewState();
 			return;
 		}
 		const css = buildPresetRowBlockCanvasCss(blockClientId, d);
 		if (css) {
 			previewInjectable?.setExtraPreviewCss(css);
+			return;
 		}
-	}, [presetCanvas, previewInjectable, blockClientId, getPayload]);
+		clearPreviewState();
+	}, [
+		presetCanvas,
+		previewInjectable,
+		blockClientId,
+		getPayload,
+		clearPreviewState,
+	]);
 
 	const handlePointerLeave = useCallback(() => {
-		presetCanvas?.setPreviewAttributePatch(null);
-		previewInjectable?.setExtraPreviewCss('');
-	}, [presetCanvas, previewInjectable]);
+		clearPreviewState();
+	}, [clearPreviewState]);
+
+	useEffect(() => {
+		mountedPresetRowPreviewHookCount += 1;
+		sharedClearPresetRowCanvasPreview = clearPreviewState;
+
+		return () => {
+			mountedPresetRowPreviewHookCount -= 1;
+			if (mountedPresetRowPreviewHookCount === 0) {
+				sharedClearPresetRowCanvasPreview = null;
+			}
+			clearPreviewState();
+		};
+	}, [clearPreviewState]);
 
 	return {
 		onMouseEnter: handlePointerEnter,

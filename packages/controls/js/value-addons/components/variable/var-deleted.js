@@ -24,10 +24,8 @@ import { hasThemeJsonPlainPresetSlug } from '../../utils';
 
 export default function ({
 	controlProps,
-	popoverOffset = 125,
 }: {
 	controlProps: ValueAddonControlProps,
-	popoverOffset?: number,
 }): Element<any> {
 	const deletedItem =
 		controlProps.isDeletedPlainThemeJsonPreset &&
@@ -52,7 +50,6 @@ export default function ({
 	return (
 		<Popover
 			title={__('Missing Variable', 'blockera')}
-			offset={popoverOffset}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-value-addon-deleted')}

@@ -1,3 +1,11 @@
+.blockera-popover-anchor-resolver {
+	display: block;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
 .blockera-component-popover {
 	position: relative;
 	--popover-overflow: auto;

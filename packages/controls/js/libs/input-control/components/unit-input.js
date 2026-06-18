@@ -705,7 +705,6 @@ export function UnitInput({
 						{isMaximizeVisible && (
 							<Popover
 								title={__('CSS Functions and Vars', 'blockera')}
-								offset={125}
 								placement="left-start"
 								className={controlInnerClassNames(
 									'typography-popover'

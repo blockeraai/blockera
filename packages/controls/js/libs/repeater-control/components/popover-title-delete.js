@@ -65,15 +65,15 @@ export default function RepeaterPopoverTitleDelete({
 	} = useControlContext();
 
 	function deleteFunction(event: MouseEvent) {
+		if (event && event?.hasOwnProperty('stopPropagation')) {
+			event.stopPropagation();
+		}
+
 		if (!isConfirmDeleteModalOpen && shouldConfirmDeleteModal) {
 			toggleConfirmDeleteModal();
 			return;
 		} else if (isConfirmDeleteModalOpen) {
 			toggleConfirmDeleteModal();
-		}
-
-		if (event && event?.hasOwnProperty('stopPropagation')) {
-			event.stopPropagation();
 		}
 
 		if (

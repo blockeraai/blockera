@@ -31,7 +31,7 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 		createPost();
 
 		cy.getBlock('default').type('Radius preset paragraph.', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Radius').within(() => {
 			cy.openValueAddon();
@@ -65,7 +65,7 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 		cy.getBlock('default').type('Radius preset edit paragraph.', {
 			delay: 0,
 		});
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Radius').within(() => {
 			cy.openValueAddon();

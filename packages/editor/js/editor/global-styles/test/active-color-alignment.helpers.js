@@ -14,6 +14,7 @@ import {
 	setInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 import {
+	filterStyleColumnElements,
 	openButtonBlockGlobalStylesVariations,
 	withinSizeVariationsPanel,
 	withinStyleVariationsPanel,
@@ -27,6 +28,12 @@ export const GLOBAL_STYLES_STYLE_SURFACE_VAR =
 	'var(--blockera-controls-block-variations-style)';
 export const GLOBAL_STYLES_SIZE_SURFACE_VAR =
 	'var(--blockera-controls-block-variations-size)';
+
+/** Portaled row context menu (global styles panel — no inspector picker button). */
+export const STYLE_VARIATION_SETTINGS_POPOVER =
+	'.blockera-component-popover.variations-settings-popover.is-variation-ui-style';
+export const SIZE_VARIATION_SETTINGS_POPOVER =
+	'.blockera-component-popover.variations-settings-popover.is-variation-ui-size';
 
 /** Last state-colors scope in the panel (composite preview / inner-block card). */
 export const STATE_COLORS_CONTAINER =
@@ -42,7 +49,17 @@ const ACTIVE_COLOR_CSS_VARS = [
  * @return {Cypress.Chainable<string>} `--blockera-tab-panel-active-color` value.
  */
 export function getContainerActiveTabColor(containerSelector) {
-	return cy.cssVar('--blockera-tab-panel-active-color', containerSelector);
+	return cy
+		.get(containerSelector)
+		.contains('Normal')
+		.then(($container) => {
+			const color = window
+				.getComputedStyle($container[0].closest(containerSelector))
+				.getPropertyValue('--blockera-tab-panel-active-color')
+				.trim();
+
+			return color;
+		});
 }
 
 /**
@@ -70,6 +87,74 @@ export function assertLastScopedStateContainerColor(expected) {
 }
 
 /**
+ * Last state-colors container in the style column (excludes size aside).
+ *
+ * @param {string} expected
+ */
+export function assertLastStyleColumnStateContainerColor(expected) {
+	cy.get('.blockera-state-colors-container')
+		.then(filterStyleColumnElements)
+		.last()
+		.then(($container) => {
+			const color = window
+				.getComputedStyle($container[0])
+				.getPropertyValue('--blockera-tab-panel-active-color')
+				.trim();
+
+			expect(color).to.equal(expected);
+		});
+}
+
+/**
+ * Opens the per-row settings menu in the global styles style-variations list.
+ *
+ * Scoped to the style column (not the size aside). The row menu can sit under
+ * the aside overlay edge, so we scroll + force-click instead of visibility.
+ *
+ * @param {string} styleSlug Preset slug (e.g. `fill`).
+ */
+export function openStyleVariationContextMenuInGlobalStyles(
+	styleSlug = 'fill'
+) {
+	cy.get(`[data-test="open-${styleSlug}-contextmenu"]`)
+		.should('be.visible')
+		.then(filterStyleColumnElements)
+		.first()
+		.as('styleVariationContextMenu');
+
+	cy.get('@styleVariationContextMenu').click({ force: true });
+}
+
+/**
+ * Opens the per-row settings menu in the global styles size-variations aside.
+ *
+ * @param {string} styleSlug Seeded size slug (e.g. `e2e-size-small`).
+ */
+export function openSizeVariationContextMenuInGlobalStyles(
+	styleSlug = 'e2e-size-small'
+) {
+	cy.get(`[data-test="open-${styleSlug}-contextmenu"]`, { timeout: 20000 })
+		.first()
+		.as('sizeVariationContextMenu');
+
+	cy.get('@sizeVariationContextMenu').click({ force: true });
+}
+
+function getLastVisibleElement(selector, root = document.body) {
+	const nodes = Array.from(root.querySelectorAll(selector)).filter((node) => {
+		const style = window.getComputedStyle(node);
+
+		return (
+			style.display !== 'none' &&
+			style.visibility !== 'hidden' &&
+			node.getClientRects().length > 0
+		);
+	});
+
+	return nodes.length ? nodes[nodes.length - 1] : null;
+}
+
+/**
  * Compare the last scoped state container with a visible popover (for nested `.within()`).
  *
  * @param {string} popoverSelector
@@ -77,27 +162,49 @@ export function assertLastScopedStateContainerColor(expected) {
 export function assertLastScopedStateContainerMatchesPopover(popoverSelector) {
 	cy.get('.blockera-state-colors-container')
 		.last()
-		.as('scopedStateColorsContainer');
-
-	cy.get(popoverSelector, { timeout: 15000 })
-		.filter(':visible')
-		.last()
-		.should('be.visible')
-		.then(($popover) => {
-			cy.get('@scopedStateColorsContainer').then(($container) => {
-				const containerStyle = window.getComputedStyle($container[0]);
-				const popoverStyle = window.getComputedStyle($popover[0]);
-
-				ACTIVE_COLOR_CSS_VARS.forEach((cssVarName) => {
-					expect(
-						popoverStyle.getPropertyValue(cssVarName).trim(),
-						`${popoverSelector} ${cssVarName}`
-					).to.equal(
-						containerStyle.getPropertyValue(cssVarName).trim()
-					);
-				});
-			});
+		.then(($container) => {
+			assertStateContainerMatchesPopoverElement(
+				$container[0],
+				popoverSelector
+			);
 		});
+}
+
+/**
+ * Style-column variant of {@link assertLastScopedStateContainerMatchesPopover}.
+ *
+ * @param {string} popoverSelector
+ */
+export function assertLastStyleColumnStateContainerMatchesPopover(
+	popoverSelector
+) {
+	cy.get('.blockera-state-colors-container')
+		.then(filterStyleColumnElements)
+		.last()
+		.then(($container) => {
+			assertStateContainerMatchesPopoverElement(
+				$container[0],
+				popoverSelector
+			);
+		});
+}
+
+function assertStateContainerMatchesPopoverElement(container, popoverSelector) {
+	cy.document().then((doc) => {
+		const popover = getLastVisibleElement(popoverSelector, doc.body);
+
+		expect(popover, popoverSelector).to.not.equal(null);
+
+		const containerStyle = window.getComputedStyle(container);
+		const popoverStyle = window.getComputedStyle(popover);
+
+		ACTIVE_COLOR_CSS_VARS.forEach((cssVarName) => {
+			expect(
+				popoverStyle.getPropertyValue(cssVarName).trim(),
+				`${popoverSelector} ${cssVarName}`
+			).to.equal(containerStyle.getPropertyValue(cssVarName).trim());
+		});
+	});
 }
 
 /**
@@ -151,7 +258,7 @@ export function openGlobalStylesParagraphBlockPanel() {
 	cy.get('.blockera-extension-block-card', { timeout: 20000 }).should(
 		'be.visible'
 	);
-	cy.getByAriaLabel('Blockera Block State Container', {
+	cy.get('.blockera-component-block-style-variations.design-large', {
 		timeout: 20000,
 	}).should('exist');
 }
@@ -161,9 +268,6 @@ export function openGlobalStylesParagraphBlockPanel() {
  */
 export function openGlobalStylesButtonDualSurfaces() {
 	openButtonBlockGlobalStylesVariations();
-	cy.getByAriaLabel('Blockera Block State Container', {
-		timeout: 20000,
-	}).should('exist');
 }
 
 /**

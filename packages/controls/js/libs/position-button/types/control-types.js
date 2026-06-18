@@ -20,12 +20,6 @@ export type TPositionButtonProps = {
 	 */
 	popoverPlacement?: PopoverPlacement,
 	/**
-	 * Offset of the popover
-	 *
-	 * @default 121
-	 */
-	popoverOffset?: number,
-	/**
 	 * Label for field alignment-matrix. If you pass empty value the field will not be added and simple control will be rendered
 	 *
 	 * @default ""

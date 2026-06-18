@@ -107,7 +107,6 @@ export const TransformSettings = ({
 								{__('Transform Settings', 'blockera')}
 							</>
 						}
-						offset={35}
 						placement="left-start"
 						className={controlInnerClassNames(
 							'transform-settings-popover'

@@ -82,7 +82,6 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 					}}
 					defaultValue={states}
 					popoverTitle={__('Block State', 'blockera')}
-					offset={8}
 					popoverProps={{
 						placement: 'bottom-end',
 					}}
