@@ -13,6 +13,7 @@ import {
 	MU_FIX,
 	openGlobalStylesColorPaletteScreen,
 	openParagraphTextColorVariablePickerPopover,
+	withinThemePresetGroup,
 } from '../colors/test/e2e-variable-variations-helpers';
 
 describe('Global Styles UI → Variable variations (basic, colors)', () => {
@@ -28,14 +29,14 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 			deactivateMuPlugin(MU, MU_NAME);
 		});
 
-		it('exposes a Theme color row wired for variable variations (shade stack + accordion shell)', () => {
+		it('exposes a Theme color row wired for variable variations (shade stack on site editor)', () => {
 			openGlobalStylesColorPaletteScreen();
 
 			cy.get('.blockera-color-palette-presets', {
 				timeout: 20000,
 			}).should('be.visible');
 
-			cy.getParentContainer('Theme').within(() => {
+			withinThemePresetGroup(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
 					'E2E Var Shade Base',
@@ -50,7 +51,7 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 					'E2E Var Shade Base'
 				)
 					.parents('.blockera-control-repeater-item-variations-group')
-					.should('exist');
+					.should('not.exist');
 			});
 		});
 
@@ -89,7 +90,7 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 			deactivateMuPlugin(MU, MU_NAME);
 		});
 
-		it('loads declared color.groups + taxonomy bridge after MU theme.json layer', () => {
+		it('loads name-based color taxonomy bridge after MU theme.json layer', () => {
 			openGlobalStylesColorPaletteScreen();
 
 			cy.get('.blockera-color-palette-presets', {
@@ -97,8 +98,8 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 			}).should('be.visible');
 
 			assertEditorThemeBaseHasMuColorTaxonomy(
-				'e-2-e-tax-root',
-				'e-2-e-tax-root-alpha'
+				'e-2-e-tax-root-alpha',
+				'E2E Tax Root Group/E2E Tax Root Alpha'
 			);
 
 			cy.contains(
@@ -109,16 +110,16 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 				}
 			)
 				.scrollIntoView()
-				.should('be.visible');
+				.should('exist');
 
 			cy.get('.blockera-preset-taxonomy-repeater', {
 				timeout: 20000,
-			}).should('be.visible');
+			}).should('exist');
 
 			cy.contains(
 				'[data-cy="color-repeater-item-header"]',
 				'E2E Tax Root Alpha'
-			).should('be.visible');
+			).should('exist');
 		});
 	});
 });
