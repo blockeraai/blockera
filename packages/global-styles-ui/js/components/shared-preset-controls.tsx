@@ -29,6 +29,7 @@ import {
 	useControlContext,
 	ControlContextProvider,
 	Tooltip,
+	TextAreaControl,
 } from '@blockera/controls';
 
 /**
@@ -36,6 +37,10 @@ import {
  */
 import { isSlugValid, normalizeVariablePresetSlug } from './utils';
 import type { VariableType } from './types';
+import {
+	buildPresetWithDescriptionUpdate,
+	getPresetDescription,
+} from './preset-meta-utils';
 import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
 
 export interface SharedPresetControlsProps<
@@ -249,6 +254,32 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		setHasUserEditedSinceUnlock(true);
 	}, []);
 
+	const handleDescriptionChange = useCallback(
+		(newValue: string) => {
+			if (presetLocked) {
+				return;
+			}
+			changeRepeaterItem({
+				onChange,
+				valueCleanup,
+				controlId,
+				repeaterId,
+				itemId,
+				value: buildPresetWithDescriptionUpdate(variable, newValue),
+			});
+		},
+		[
+			presetLocked,
+			changeRepeaterItem,
+			onChange,
+			valueCleanup,
+			controlId,
+			repeaterId,
+			itemId,
+			variable,
+		]
+	);
+
 	const handleConfirmSlugChange = useCallback((newValue: boolean) => {
 		setIsConfirmedSlugChange(newValue);
 	}, []);
@@ -415,6 +446,21 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					</InputControl>
 				</ControlContextProvider>
 			</Flex>
+
+			<ControlContextProvider
+				value={{
+					name: `preset-description-${slug}`,
+					value: getPresetDescription(variable),
+				}}
+			>
+				<TextAreaControl
+					label={__('Description', 'blockera')}
+					disabled={presetLocked}
+					onChange={handleDescriptionChange}
+					columns="1fr 3fr"
+					data-test="global-styles-preset-description-field"
+				/>
+			</ControlContextProvider>
 
 			{children ? (
 				<Flex direction="column" gap={16}>
