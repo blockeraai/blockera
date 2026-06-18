@@ -68,7 +68,7 @@ describe('Rename Repeater Item By Type', function () {
 		).toEqual(state);
 	});
 
-	it('should update item in place without renaming via changeRepeaterItem', function () {
+	it('should rename repeater item when type changes via changeRepeaterItem', function () {
 		let state = {};
 
 		state = repeaterReducer(
@@ -94,7 +94,7 @@ describe('Rename Repeater Item By Type', function () {
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
 				value: {
-					'first-0': { type: 'second', order: 0 },
+					'second-0': { type: 'second', order: 0, isOpen: true },
 				},
 			},
 		});

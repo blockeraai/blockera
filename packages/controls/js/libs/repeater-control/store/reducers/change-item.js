@@ -7,7 +7,12 @@ import { update, prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { hasRepeaterId, repeaterOnChange } from './utils';
+import {
+	hasRepeaterId,
+	repeaterOnChange,
+	renameRepeaterItemByTypeValue,
+	shouldRenameRepeaterItemByType,
+} from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
 	const targetRepeater = prepare(action.repeaterId, controlValue);
@@ -51,6 +56,40 @@ export function changeItem(state = {}, action) {
 
 	if (isEquals(action.value, clonedPrevValue[action.itemId])) {
 		return state;
+	}
+
+	if (
+		shouldRenameRepeaterItemByType(
+			action.itemId,
+			action.value,
+			action.staticType
+		)
+	) {
+		const newValue = renameRepeaterItemByTypeValue(
+			controlInfo.value,
+			state,
+			{
+				...action,
+				value: {
+					...action.value,
+					isOpen: true,
+				},
+			}
+		);
+
+		if (null === newValue || isEquals(newValue, controlInfo.value)) {
+			return state;
+		}
+
+		repeaterOnChange(newValue, action);
+
+		return {
+			...state,
+			[action.controlId]: {
+				...controlInfo,
+				value: newValue,
+			},
+		};
 	}
 
 	if (action?.staticType) {

@@ -45,10 +45,19 @@ const MappedItems = (): MixedElement => {
 
 	delete defaultRepeaterItemValue?.isOpen;
 
-	const getUniqueId = (itemId: string | number) =>
-		!isUndefined(repeaterId)
-			? `${repeaterId}-repeater-item-${itemId}`
-			: `repeater-item-${itemId}`;
+	const getStableItemKey = (
+		itemId: string | number,
+		item: { order?: number | string }
+	) => {
+		const stableSegment =
+			typeof item?.order === 'number' || typeof item?.order === 'string'
+				? `order-${item.order}`
+				: String(itemId);
+
+		return !isUndefined(repeaterId)
+			? `${repeaterId}-repeater-item-${stableSegment}`
+			: `repeater-item-${stableSegment}`;
+	};
 
 	if (
 		visibleRepeaterItems.length === 0 &&
@@ -75,7 +84,7 @@ const MappedItems = (): MixedElement => {
 				itemId,
 				actionButtonsType,
 			}}
-			key={getUniqueId(itemId)}
+			key={getStableItemKey(itemId, item)}
 		/>
 	));
 };

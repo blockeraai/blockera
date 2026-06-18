@@ -32,7 +32,6 @@ import {
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
 } from '../utils';
-import { shouldRenameRepeaterItemByType } from '../store/reducers/utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
 import type { RepeaterItemProps } from '../types';
@@ -70,12 +69,7 @@ const RepeaterItem = ({
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch: {
-			sortRepeaterItem,
-			modifyControlValue,
-			changeRepeaterItem,
-			renameRepeaterItemByType,
-		},
+		dispatch: { sortRepeaterItem, modifyControlValue, changeRepeaterItem },
 	} = useControlContext();
 
 	const {
@@ -222,22 +216,14 @@ const RepeaterItem = ({
 	});
 
 	const commitRepeaterItemClose = () => {
-		const closingValue = getClosingItemValue();
-		const sharedAction = {
+		changeRepeaterItem({
 			itemId,
-			value: closingValue,
+			value: getClosingItemValue(),
 			controlId,
 			repeaterId,
 			onChange,
 			valueCleanup,
-		};
-
-		if (shouldRenameRepeaterItemByType(itemId, closingValue)) {
-			renameRepeaterItemByType(sharedAction);
-			return;
-		}
-
-		changeRepeaterItem(sharedAction);
+		});
 	};
 
 	if (
