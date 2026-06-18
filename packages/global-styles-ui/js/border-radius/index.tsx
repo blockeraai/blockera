@@ -25,6 +25,7 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
+	withPresetMetaFromRepeaterRow,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -166,12 +167,14 @@ export function BorderRadiusPresetContent() {
 						string,
 						BorderRadiusSizePreset & Record<string, unknown>
 					>
-				).map((value) => ({
-					slug: value.slug,
-					name: value.name,
-					size: value.size,
-					isVisible: value.isVisible,
-				}))
+				).map((value) =>
+					withPresetMetaFromRepeaterRow(value, {
+						slug: value.slug,
+						name: value.name,
+						size: value.size,
+						isVisible: value.isVisible,
+					})
+				)
 			),
 		[]
 	);

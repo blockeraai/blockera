@@ -31,6 +31,7 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
+	withPresetMetaFromRepeaterRow,
 } from '../components';
 import { FontSize } from './font-size';
 import FontSizesScreen from './font-sizes-screen';
@@ -198,13 +199,15 @@ export function FontSizesPresetContent() {
 					string,
 					FontSizeType & Record<string, unknown>
 				>
-			).map((value) => ({
-				slug: value.slug,
-				name: value.name,
-				size: value.size,
-				fluid: value.fluid,
-				isVisible: value.isVisible,
-			})),
+			).map((value) =>
+				withPresetMetaFromRepeaterRow(value, {
+					slug: value.slug,
+					name: value.name,
+					size: value.size,
+					fluid: value.fluid,
+					isVisible: value.isVisible,
+				})
+			),
 		[]
 	);
 
