@@ -2,7 +2,12 @@
 /**
  * External dependencies
  */
-import { type MixedElement, useEffect, useRef, createElement } from 'react';
+import {
+	type MixedElement,
+	useLayoutEffect,
+	useRef,
+	createElement,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 const WRAPPER_CLASS = 'blockera-block-inspector-controls-wrapper';
@@ -50,11 +55,10 @@ export function PrependPortal({
 
 	const portalHost = portalHostRef.current;
 
-	useEffect(() => {
-		applyPortalClassName(portalHost, className);
-	}, [className, portalHost]);
+	// Keep wrapper classes current before layout effects run (detached host).
+	applyPortalClassName(portalHost, className);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!container) {
 			return;
 		}
@@ -63,6 +67,8 @@ export function PrependPortal({
 			if (!document.contains(container)) {
 				return;
 			}
+
+			applyPortalClassName(portalHost, className);
 
 			if (!container.contains(portalHost)) {
 				container.prepend(portalHost);
@@ -84,7 +90,7 @@ export function PrependPortal({
 				container.removeChild(portalHost);
 			}
 		};
-	}, [container, portalHost]);
+	}, [container, portalHost, className]);
 
 	if (!container) {
 		return null;
