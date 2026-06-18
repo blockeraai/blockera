@@ -28,11 +28,13 @@ import type { VariableType } from '../components/types.ts';
 import type { BorderBoxPreset } from './utils';
 import { getBorderPresetAccessibilityDescription } from './utils';
 import { BorderPresetOpenerValue } from './border-preset-opener-value';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 export type BorderPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & BorderBoxPreset;
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -59,8 +61,10 @@ export function BorderPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: BorderPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const pickerCtx = useVarPickerPresetContext();
 	const previewUsage = resolveBorderPresetPreviewUsage(pickerCtx);
 	const a11ySummary = getBorderPresetAccessibilityDescription(
@@ -104,7 +108,7 @@ export function BorderPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			<span
