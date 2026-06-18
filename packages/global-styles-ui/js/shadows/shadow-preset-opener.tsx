@@ -27,6 +27,7 @@ import {
 	shadowCssFromPreset,
 } from './utils';
 import ShadowPresetPreview from './shadow-preset-preview';
+import { usePresetTaxonomyHeaderLabel } from '../components';
 
 function ShadowPresetOpenerValue({
 	preset,
@@ -66,6 +67,7 @@ export type ShadowPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
+	contextType?: 'repeater' | 'taxonomy';
 	setOpen: (isOpen: boolean) => boolean;
 	item: VariableType & WpShadowPreset;
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
@@ -78,8 +80,10 @@ export function ShadowPresetOpener({
 	children,
 	item: variable,
 	isOpenPopoverEvent,
+	contextType = 'repeater',
 }: ShadowPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const a11y = getShadowPresetAccessibilityDescription(variable);
 
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
@@ -121,7 +125,7 @@ export function ShadowPresetOpener({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{variable?.name}
+				{headerLabel}
 			</span>
 
 			<span
