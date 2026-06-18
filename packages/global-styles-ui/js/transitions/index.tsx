@@ -15,16 +15,14 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	PresetGroup,
 	getNewIndexFromPresets,
 	createPresetFieldsPropsResolver,
-	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
-	usePresetResetDialogState,
+	PresetTaxonomyGroupLayout,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -41,19 +39,23 @@ const transitionPresetFieldsPropsResolver =
 
 function TransitionPresetGroupComponent({
 	sizes,
+	baseSizes,
 	origin,
-	handleUpdateSizes,
+	persistSizes,
+	convertRepeaterToItems,
 	handleResetPresets,
 }: {
 	label: string;
 	origin: string;
 	sizes: WpTransitionPreset[];
-	handleUpdateSizes?: (newValue: Object) => void;
+	baseSizes?: WpTransitionPreset[];
+	persistSizes?: (items: WpTransitionPreset[]) => void;
+	convertRepeaterToItems: (
+		newValue: object,
+		baseline: WpTransitionPreset[]
+	) => WpTransitionPreset[];
 	handleResetPresets?: () => void;
 }) {
-	const { isResetDialogOpen, toggleResetDialog } =
-		usePresetResetDialogState();
-
 	const { dialogText: resetDialogText, confirmButtonText } =
 		getOriginResetDialogCopy(origin, __('transition', 'blockera'));
 
@@ -86,40 +88,31 @@ function TransitionPresetGroupComponent({
 
 	const controlName = `transition-preset-presets-${origin}`;
 
-	const handleChange = useCallback(
-		(newValue: Object) => {
-			if (!handleUpdateSizes) {
-				return;
-			}
-			handleUpdateSizes(newValue);
+	const onPersistItems = useCallback(
+		(next: WpTransitionPreset[]) => {
+			persistSizes?.(next);
 		},
-		[handleUpdateSizes]
+		[persistSizes]
 	);
 
 	return (
-		<>
-			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetPresetDialog
-					text={resetDialogText}
-					confirmButtonText={confirmButtonText}
-					isOpen={isResetDialogOpen}
-					toggleOpen={toggleResetDialog}
-					onConfirm={handleResetPresets}
-				/>
-			)}
-			<PresetGroup
-				repeaterItemHeader={TransitionPresetOpener}
-				onChange={handleChange}
-				controlName={controlName}
-				defaultPresetValue={defaultPresetValue}
-				origin={origin}
-				variables={sizes}
-				PresetFields={TransitionPresetSize}
-				title={__('Transition', 'blockera')}
-				label={getOriginVariablesLabel(origin)}
-				presetFieldsPropsResolver={transitionPresetFieldsPropsResolver}
-			/>
-		</>
+		<PresetTaxonomyGroupLayout<WpTransitionPreset & Record<string, unknown>>
+			origin={origin}
+			items={sizes}
+			baseItems={baseSizes}
+			controlName={controlName}
+			convertRepeaterToItems={convertRepeaterToItems}
+			onPersistItems={onPersistItems}
+			PresetFields={TransitionPresetSize}
+			repeaterItemHeader={TransitionPresetOpener}
+			presetFieldsPropsResolver={transitionPresetFieldsPropsResolver}
+			defaultPresetValue={defaultPresetValue}
+			title={__('Transition', 'blockera')}
+			label={getOriginVariablesLabel(origin)}
+			handleReset={handleResetPresets}
+			resetDialogText={resetDialogText}
+			resetConfirmButtonText={confirmButtonText}
+		/>
 	);
 }
 
@@ -189,25 +182,25 @@ export function TransitionsPresetContent() {
 		[]
 	);
 
-	const handleUpdateCustomSizes = useCallback(
-		(newValue: Object) => {
-			setCustomPresets(convertRepeaterValueToArray(newValue));
+	const persistThemeSizes = useCallback(
+		(next: WpTransitionPreset[]) => {
+			setThemePresets(next);
 		},
-		[convertRepeaterValueToArray, setCustomPresets]
+		[setThemePresets]
 	);
 
-	const handleUpdateThemeSizes = useCallback(
-		(newValue: Object) => {
-			setThemePresets(convertRepeaterValueToArray(newValue));
+	const persistDefaultSizes = useCallback(
+		(next: WpTransitionPreset[]) => {
+			setDefaultPresets(next);
 		},
-		[convertRepeaterValueToArray, setThemePresets]
+		[setDefaultPresets]
 	);
 
-	const handleUpdateDefaultSizes = useCallback(
-		(newValue: Object) => {
-			setDefaultPresets(convertRepeaterValueToArray(newValue));
+	const persistCustomSizes = useCallback(
+		(next: WpTransitionPreset[]) => {
+			setCustomPresets(next);
 		},
-		[convertRepeaterValueToArray, setDefaultPresets]
+		[setCustomPresets]
 	);
 
 	const resetThemeToBase = useCallback(() => {
@@ -261,6 +254,11 @@ export function TransitionsPresetContent() {
 		defaultPresets.length
 	);
 
+	const baseThemeSizes = useMemo(
+		() => sanitizeTransitionPresets(baseThemePresets),
+		[baseThemePresets]
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
 			{showThemeOriginGroup && (
@@ -268,7 +266,9 @@ export function TransitionsPresetContent() {
 					origin="theme"
 					label={__('Theme', 'blockera')}
 					sizes={themePresets}
-					handleUpdateSizes={handleUpdateThemeSizes}
+					baseSizes={baseThemeSizes}
+					persistSizes={persistThemeSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={themeResetHandler}
 				/>
 			)}
@@ -278,7 +278,8 @@ export function TransitionsPresetContent() {
 					origin="default"
 					label={__('Default', 'blockera')}
 					sizes={defaultPresets}
-					handleUpdateSizes={handleUpdateDefaultSizes}
+					persistSizes={persistDefaultSizes}
+					convertRepeaterToItems={convertRepeaterValueToArray}
 					handleResetPresets={defaultResetHandler}
 				/>
 			)}
@@ -287,7 +288,8 @@ export function TransitionsPresetContent() {
 				origin="custom"
 				label={__('Custom', 'blockera')}
 				sizes={customPresets}
-				handleUpdateSizes={handleUpdateCustomSizes}
+				persistSizes={persistCustomSizes}
+				convertRepeaterToItems={convertRepeaterValueToArray}
 				handleResetPresets={customResetHandler}
 			/>
 		</Flex>
