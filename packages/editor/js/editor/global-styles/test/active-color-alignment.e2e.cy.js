@@ -75,7 +75,7 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 			it('uses hover state color while inner block is selected', () => {
 				cy.getByDataTest('style-text-subtitle').click();
 				setInnerBlock('elements/link');
-				setBlockState('Hover', 'inner-block');
+				setBlockState('Hover');
 
 				assertContainerActiveTabColor(
 					STATE_COLORS_CONTAINER,

@@ -23,25 +23,18 @@ export function openInserter() {
 }
 
 export function setBlockState(state, blockType) {
-	if (blockType === 'master-block') {
-		cy.getByAriaLabel('Blockera Block State Container')
-			.should('exist')
-			.first()
-			.within(() => {
+	cy.getByAriaLabel('Blockera Block State Container')
+		.should('exist')
+		.then(($containers) => {
+			const index =
+				blockType === 'master-block' ? 0 : $containers.length - 1;
+
+			cy.wrap($containers.eq(index)).within(() => {
 				cy.getByDataCy('group-control-header')
 					.contains(state)
 					.click({ force: true });
 			});
-	} else {
-		cy.get('.block-card--inner-block')
-			.find('[aria-label="Blockera Block State Container"]')
-			.last()
-			.within(() => {
-				cy.getByDataCy('group-control-header')
-					.contains(state)
-					.click({ force: true });
-			});
-	}
+		});
 }
 
 export function resetBlockState(state, blockType) {
