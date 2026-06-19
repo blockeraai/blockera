@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect } from '@wordpress/element';
+import { useCallback, useEffect, useRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -97,6 +97,11 @@ export function usePresetRowCanvasPreview(
 		previewInjectable?.setExtraPreviewCss('');
 	}, [presetCanvas, previewInjectable]);
 
+	// Ref keeps popover-close cleanup current without re-running the mount effect when
+	// BlockBase preview context identity changes after hover sets preview state.
+	const clearPreviewStateRef = useRef(clearPreviewState);
+	clearPreviewStateRef.current = clearPreviewState;
+
 	const handlePointerEnter = useCallback(() => {
 		const payload = getPayload();
 		if (!payload) {
@@ -153,16 +158,20 @@ export function usePresetRowCanvasPreview(
 
 	useEffect(() => {
 		mountedPresetRowPreviewHookCount += 1;
-		sharedClearPresetRowCanvasPreview = clearPreviewState;
+		sharedClearPresetRowCanvasPreview = () => {
+			clearPreviewStateRef.current();
+		};
 
 		return () => {
 			mountedPresetRowPreviewHookCount -= 1;
 			if (mountedPresetRowPreviewHookCount === 0) {
 				sharedClearPresetRowCanvasPreview = null;
 			}
-			clearPreviewState();
+			// Preview lives in BlockBase context; row headers remount when preview state
+			// updates — do not clear here or hover preview flashes off while the pointer
+			// is still over the row. Popover onClose + mouseLeave clear instead.
 		};
-	}, [clearPreviewState]);
+	}, []);
 
 	return {
 		onMouseEnter: handlePointerEnter,
