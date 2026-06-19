@@ -1,6 +1,6 @@
 <?php
 /**
- * E2E theme.json layer: category with two presets (name-based taxonomy; accordion default is closed).
+ * E2E theme.json layer: category with two presets (name-based taxonomy; accordion default is open).
  */
 add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	$data = $theme_json;

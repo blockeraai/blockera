@@ -13,7 +13,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 
 export type TaxonomyCategoryAccordionProps = {
 	title: string;
-	/** Initial expanded state; set from taxonomy `categories[].initial-open` when present. */
+	/** Initial expanded state; defaults open unless taxonomy sets `initial-open: false`. */
 	defaultOpen?: boolean;
 	children: ReactNode;
 	className?: string;
@@ -27,7 +27,7 @@ export function TaxonomyCategoryAccordion({
 	title,
 	children,
 	className,
-	defaultOpen = false,
+	defaultOpen = true,
 	showPreview = false,
 	renderClosedHeaderPreview,
 }: TaxonomyCategoryAccordionProps) {

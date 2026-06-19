@@ -24,11 +24,16 @@ export function expandTaxonomyCategoryAccordion(categoryLabel) {
 	cy.contains('[data-cy="taxonomy-category-header-label"]', categoryLabel, {
 		timeout: 20000,
 	})
-		.parents('.blockera-preset-taxonomy-accordion')
+		.parents('[data-cy="control-group"]')
 		.first()
-		.find('.blockera-control-group-header')
-		.first()
-		.click({ force: true });
+		.then(($group) => {
+			if ($group.hasClass('is-close')) {
+				cy.wrap($group)
+					.find('.blockera-control-group-header')
+					.first()
+					.click({ force: true });
+			}
+		});
 }
 
 /** Opens paragraph → Style → Text Color → variable picker popover. */
@@ -77,11 +82,16 @@ export function expandTaxonomyCategoryAccordionInVariablePicker(categoryLabel) {
 					timeout: 20000,
 				}
 			)
-				.parents('.blockera-preset-taxonomy-accordion')
+				.parents('[data-cy="control-group"]')
 				.first()
-				.find('.blockera-control-group-header')
-				.first()
-				.click({ force: true });
+				.then(($group) => {
+					if ($group.hasClass('is-close')) {
+						cy.wrap($group)
+							.find('.blockera-control-group-header')
+							.first()
+							.click({ force: true });
+					}
+				});
 		});
 }
 

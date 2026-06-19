@@ -162,9 +162,7 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 				<TaxonomyCategoryAccordion
 					key={`${group.slug}-${cat.slug}-${sub.slug}`}
 					title={sub.name}
-					{...(sub.initialOpen !== undefined
-						? { defaultOpen: sub.initialOpen }
-						: {})}
+					defaultOpen={sub.initialOpen ?? true}
 					showPreview={
 						shouldShowSubClosedPreview ||
 						sub.showPreview ||
@@ -249,9 +247,7 @@ export function PresetTaxonomyBody<TPreset extends Record<string, unknown>>({
 				<TaxonomyCategoryAccordion
 					key={`${group.slug}-${cat.slug}`}
 					title={cat.name}
-					{...(cat.initialOpen !== undefined
-						? { defaultOpen: cat.initialOpen }
-						: {})}
+					defaultOpen={cat.initialOpen ?? true}
 					showPreview={
 						shouldShowClosedPreview ||
 						cat.showPreview ||
