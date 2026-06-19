@@ -83,6 +83,13 @@ export type RepeaterControlProps = {
 	 */
 	shouldRenderRepeaterItem?: (itemId: string, item: Object) => boolean,
 	/**
+	 * Optional extra class name(s) for a repeater row wrapper (e.g. half-width preset meta).
+	 */
+	resolveRepeaterItemClassName?: (
+		itemId: string,
+		item: Object
+	) => string | undefined,
+	/**
 	 * When true, selectable rows show an edit control to open item settings (e.g. popover).
 	 */
 	showItemEditButton?: boolean,

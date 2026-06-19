@@ -7,6 +7,7 @@ import {
 	memo,
 	useContext,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from '@wordpress/element';
@@ -91,6 +92,7 @@ const RepeaterItem = ({
 		onSelectableItemActivate,
 		enablePromoCountOnRepeaterItemHeader,
 		disableProHints,
+		resolveRepeaterItemClassName,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -164,6 +166,14 @@ const RepeaterItem = ({
 			opacity: draggingIndex && draggingIndex !== itemId ? 0.5 : 1,
 		};
 	}, [draggingIndex, itemId]);
+
+	const extraRepeaterItemClassName = useMemo(() => {
+		if (typeof resolveRepeaterItemClassName !== 'function') {
+			return '';
+		}
+		const resolved = resolveRepeaterItemClassName(String(itemId), item);
+		return typeof resolved === 'string' ? resolved : '';
+	}, [resolveRepeaterItemClassName, itemId, item]);
 
 	const handleDragStart = (e: DragEvent, index: string) => {
 		if (e.dataTransfer) {
@@ -431,6 +441,7 @@ const RepeaterItem = ({
 			className={controlInnerClassNames(
 				'repeater-item',
 				isVisible ? ' is-active' : ' is-inactive',
+				extraRepeaterItemClassName,
 				{
 					draggable: !isOpen,
 					'is-native': shouldApplyRepeaterItemNativeStyle(

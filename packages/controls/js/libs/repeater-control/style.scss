@@ -11,6 +11,8 @@
 		gap: var(--gap);
 		min-height: var(--repeater-item-height);
 		justify-content: space-between;
+		flex-grow: 1;
+		width: 100%;
 	}
 
 	.blockera-control-repeater-item {
@@ -37,8 +39,8 @@
 		}
 	}
 
-	.blockera-control-header + .blockera-control-repeater-item {
-		margin-top: calc(var(--repeater-gap) * -0.5);
+	.blockera-control-header:not(:last-child) {
+		margin-bottom: calc(var(--repeater-gap) * -0.5);
 	}
 
 	.blockera-control-group-header {
