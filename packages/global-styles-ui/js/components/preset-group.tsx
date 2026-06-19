@@ -395,9 +395,16 @@ export const PresetGroup = ({
 	}, [isVariablePicker, pickerCtx.searchQuery]);
 
 	const resolveRepeaterItemInterfaceSize = useCallback(
-		(_itemId: string, item: Record<string, unknown>) =>
-			resolvePresetRepeaterItemSize(item),
-		[]
+		(_itemId: string, item: Record<string, unknown>) => {
+			if (
+				isVariablePicker &&
+				normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== ''
+			) {
+				return 'full';
+			}
+			return resolvePresetRepeaterItemSize(item);
+		},
+		[isVariablePicker, pickerCtx.searchQuery]
 	);
 
 	const repeaterContextValue = useMemo(
