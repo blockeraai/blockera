@@ -294,7 +294,7 @@ export function SpacingPresetContent({
 
 	return (
 		<SpacingPresetPreviewUsageProvider value={previewUsage}>
-			<Flex direction="column" gap="32px" style={{ width: '100%' }}>
+			<Flex direction="column" gap="20px" style={{ width: '100%' }}>
 				{showThemeOriginGroup && (
 					<SpacingSizeGroup
 						origin="theme"

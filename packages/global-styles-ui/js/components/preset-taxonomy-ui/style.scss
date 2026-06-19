@@ -4,7 +4,6 @@
 // direct-child (`>`) selectors, so we mirror spacing here.
 
 .blockera-preset-taxonomy-accordion.blockera-control-group {
-
 	> .blockera-control-group-header {
 		flex-direction: row;
 
@@ -30,7 +29,6 @@
 	}
 
 	.blockera-control-repeater-group-header {
-
 		.blockera-control-header-label {
 			flex: 1;
 			min-width: 0;
@@ -59,7 +57,8 @@
 .blockera-preset-taxonomy-tree {
 	width: 100%;
 
-	.blockera-preset-taxonomy-row > .blockera-control-group
+	.blockera-preset-taxonomy-row
+		> .blockera-control-group
 		> .blockera-control-group-header
 		> .blockera-control-action-buttons {
 		display: none !important;
@@ -71,7 +70,7 @@
 
 .blockera-preset-taxonomy-repeater.blockera-control-repeater {
 	width: 100%;
-	gap: calc(32px);
+	gap: 20px;
 
 	.blockera-preset-taxonomy-group-shell > .blockera-control-header {
 		display: flex;

@@ -256,7 +256,7 @@ export function TextShadowsPresetContent() {
 	);
 
 	return (
-		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
+		<Flex direction="column" gap="20px" style={{ width: '100%' }}>
 			{showThemeOriginGroup && (
 				<TextShadowPresetGroup
 					origin="theme"
