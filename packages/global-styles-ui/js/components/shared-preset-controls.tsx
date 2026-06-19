@@ -92,12 +92,23 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const persistedName = committedTaxonomyName ?? name;
 	const slugKey = String(slug);
 	const isCreating = variable.creatingStep === true;
-	// Buffer name while popover fields are mounted; flushed on unmount via edit session.
-	const deferNamePersist = Boolean(editSession) && !isCreating;
+	// Buffer name/description while popover fields are mounted; flushed on unmount via edit session.
+	const deferFieldPersist = Boolean(editSession) && !isCreating;
+	const deferNamePersist = deferFieldPersist;
+
+	const persistedDescription = useMemo(
+		() => getPresetDescription(variable),
+		[variable]
+	);
 
 	const [draftName, setDraftName] = useState(persistedName);
 	const draftNameRef = useRef(persistedName);
 	draftNameRef.current = draftName;
+
+	const [draftDescription, setDraftDescription] =
+		useState(persistedDescription);
+	const draftDescriptionRef = useRef(persistedDescription);
+	draftDescriptionRef.current = draftDescription;
 
 	// ID field: locked while creating or until user clicks/focuses ID (then editable buffer).
 	const [variableSlug, setVariableSlug] = useState(slug);
@@ -122,10 +133,16 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	// Sync when preset changes (e.g. navigation) or after first close (creatingStep → false).
 	useEffect(() => {
-		if (!deferNamePersist) {
+		if (!deferFieldPersist) {
 			setDraftName(persistedName);
 		}
-	}, [persistedName, deferNamePersist]);
+	}, [persistedName, deferFieldPersist]);
+
+	useEffect(() => {
+		if (!deferFieldPersist) {
+			setDraftDescription(persistedDescription);
+		}
+	}, [persistedDescription, deferFieldPersist]);
 
 	useEffect(() => {
 		setVariableSlug(slug);
@@ -158,27 +175,42 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		valueCleanup: (value: any) => any;
 	};
 
-	const flushPendingName = useCallback(() => {
+	const flushPendingFieldEdits = useCallback(() => {
 		const nextName = draftNameRef.current;
-		if (nextName === persistedName) {
-			return;
+		if (nextName !== persistedName) {
+			changeRepeaterItem({
+				onChange,
+				valueCleanup,
+				controlId,
+				repeaterId,
+				itemId,
+				value: {
+					...variable,
+					name: nextName,
+				},
+			});
 		}
-		changeRepeaterItem({
-			onChange,
-			valueCleanup,
-			controlId,
-			repeaterId,
-			itemId,
-			value: {
-				...variable,
-				name: nextName,
-			},
-		});
+
+		const nextDescription = draftDescriptionRef.current;
+		if (nextDescription !== persistedDescription) {
+			changeRepeaterItem({
+				onChange,
+				valueCleanup,
+				controlId,
+				repeaterId,
+				itemId,
+				value: buildPresetWithDescriptionUpdate(
+					variable,
+					nextDescription
+				),
+			});
+		}
 	}, [
 		changeRepeaterItem,
 		controlId,
 		itemId,
 		onChange,
+		persistedDescription,
 		persistedName,
 		repeaterId,
 		valueCleanup,
@@ -189,11 +221,11 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		if (!editSession) {
 			return;
 		}
-		editSession.registerFlush(slugKey, flushPendingName);
+		editSession.registerFlush(slugKey, flushPendingFieldEdits);
 		return () => {
 			editSession.unregisterFlush(slugKey);
 		};
-	}, [editSession, flushPendingName, slugKey]);
+	}, [editSession, flushPendingFieldEdits, slugKey]);
 
 	// Flat repeater popovers mount these fields only while open; defer name persist + tree regroup until close.
 	useLayoutEffect(() => {
@@ -208,6 +240,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	}, [editSession, slugKey]);
 
 	const displayedName = deferNamePersist ? draftName : persistedName;
+	const displayedDescription = deferFieldPersist
+		? draftDescription
+		: persistedDescription;
 
 	const slugChanged = !isCreating && isIdEditable && variableSlug !== slug;
 	const slugIsValid = isSlugValid(displayedSlug, allSlugs, slug);
@@ -354,6 +389,10 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			if (presetLocked) {
 				return;
 			}
+			if (deferFieldPersist) {
+				setDraftDescription(newValue);
+				return;
+			}
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
@@ -365,6 +404,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		},
 		[
 			presetLocked,
+			deferFieldPersist,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
@@ -545,7 +585,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			<ControlContextProvider
 				value={{
 					name: `preset-description-${slug}`,
-					value: getPresetDescription(variable),
+					value: displayedDescription,
 				}}
 			>
 				<TextAreaControl
