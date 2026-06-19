@@ -60,6 +60,24 @@
 	margin-bottom: 0;
 }
 
+// Flat preset repeater rows: `meta.interface-size: small` uses half width (two per row).
+.blockera-control-preset-group.blockera-control-repeater,
+.blockera-global-styles-preset-repeater.blockera-control-repeater {
+	flex-flow: row wrap;
+
+	> .blockera-control-repeater-item {
+		flex: 1 1 100%;
+		min-width: 0;
+		max-width: 100%;
+		box-sizing: border-box;
+
+		&.blockera-preset-repeater-item--interface-small {
+			flex: 0 1 calc((100% - var(--repeater-gap, 8px)) / 2);
+			max-width: calc((100% - var(--repeater-gap, 8px)) / 2);
+		}
+	}
+}
+
 // Preset repeater + variable picker: selected row (`is-selected-item` on group).
 .blockera-global-styles-preset-repeater.blockera-control-repeater
 	.blockera-control-repeater-item {

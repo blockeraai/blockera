@@ -35,6 +35,7 @@ import { Icon } from '@blockera/icons';
 import type { VariablesType, VariableType } from './types.ts';
 import { PresetStateContainer } from './preset-state-container';
 import { getPresetDeleteConfirmWarningText } from './preset-origin-utils';
+import { resolvePresetInterfaceSizeClassName } from './preset-taxonomy-ui/preset-taxonomy-utils';
 import {
 	applyVariablePickerRepeaterSelection,
 	buildPresetVariablePickerPayload,
@@ -103,6 +104,10 @@ type PresetsProps = {
 		itemId: string,
 		item: Record<string, unknown>
 	) => boolean;
+	resolveRepeaterItemClassName?: (
+		itemId: string,
+		item: Record<string, unknown>
+	) => string | undefined;
 	canEditGlobalStyles: boolean;
 	repeaterItemVariations?: PresetGroupPropsType['repeaterItemVariations'];
 };
@@ -148,6 +153,7 @@ const Presets = ({
 	onSelectableItemActivate,
 	showItemEditButton = false,
 	shouldRenderRepeaterItem,
+	resolveRepeaterItemClassName,
 	canEditGlobalStyles,
 	repeaterItemVariations,
 	...props
@@ -270,6 +276,7 @@ const Presets = ({
 			onSelectableItemActivate={onSelectableItemActivate}
 			showItemEditButton={showItemEditButton}
 			shouldRenderRepeaterItem={shouldRenderRepeaterItem}
+			resolveRepeaterItemClassName={resolveRepeaterItemClassName}
 			showPopoverTitleDelete={canEditGlobalStyles}
 			actionButtonDelete={canEditGlobalStyles}
 			actionButtonClone={canEditGlobalStyles}
@@ -387,6 +394,12 @@ export const PresetGroup = ({
 			variablePickerItemMatchesSearch(item, q);
 	}, [isVariablePicker, pickerCtx.searchQuery]);
 
+	const resolveRepeaterItemInterfaceSizeClassName = useCallback(
+		(_itemId: string, item: Record<string, unknown>) =>
+			resolvePresetInterfaceSizeClassName(item),
+		[]
+	);
+
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`,
@@ -477,6 +490,9 @@ export const PresetGroup = ({
 							pickerCtx.omitRepeaterSectionLabel ? false : true
 						}
 						shouldRenderRepeaterItem={repeaterSearchFilter}
+						resolveRepeaterItemClassName={
+							resolveRepeaterItemInterfaceSizeClassName
+						}
 						repeaterItemVariations={repeaterItemVariations}
 					/>
 				</BaseControl>

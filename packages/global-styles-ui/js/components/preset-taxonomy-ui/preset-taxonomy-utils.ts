@@ -59,6 +59,18 @@ export function isPresetTaxonomyInterfaceSizeSmall(
 	return raw !== undefined && raw.toLowerCase() === 'small';
 }
 
+export const PRESET_INTERFACE_SIZE_SMALL_CLASS =
+	'blockera-preset-repeater-item--interface-small';
+
+/** Class for flat/simple repeater rows with `meta.interface-size: small`. */
+export function resolvePresetInterfaceSizeClassName(
+	item: Record<string, unknown>
+): string | undefined {
+	return isPresetTaxonomyInterfaceSizeSmall(item)
+		? PRESET_INTERFACE_SIZE_SMALL_CLASS
+		: undefined;
+}
+
 /** All presets under a taxonomy category (direct rows + sub-section rows). */
 export function collectTaxonomyCategoryPresets<
 	T extends Record<string, unknown>,

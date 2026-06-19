@@ -69,7 +69,7 @@ export function partitionPresetsForTaxonomyUi<
 	);
 	const taxonomySlugSet = new Set(taxonomyPresets.map((p) => presetSlug(p)));
 	const simplePresets = presets.filter(
-		(p) => !taxonomySlugSet.has(presetSlug(p)) && !p.hasOwnProperty('meta')
+		(p) => !taxonomySlugSet.has(presetSlug(p))
 	);
 	return { taxonomyPresets, simplePresets, taxonomySlugSet };
 }

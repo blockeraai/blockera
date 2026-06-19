@@ -28,4 +28,6 @@ export {
 export {
 	findRepeaterItemIdBySlug,
 	isPresetTaxonomyInterfaceSizeSmall,
+	resolvePresetInterfaceSizeClassName,
+	PRESET_INTERFACE_SIZE_SMALL_CLASS,
 } from './preset-taxonomy-utils';
