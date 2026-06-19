@@ -14,8 +14,7 @@ import {
 } from '../taxonomy-meta';
 import {
 	isPresetTaxonomyInterfaceSizeSmall,
-	resolvePresetInterfaceSizeClassName,
-	PRESET_INTERFACE_SIZE_SMALL_CLASS,
+	resolvePresetRepeaterItemSize,
 } from '../../preset-taxonomy-ui/preset-taxonomy-utils';
 import {
 	getThemeTaxonomyBasePalette,
@@ -130,17 +129,15 @@ describe('partition-and-tree', () => {
 		expect(simplePresets.map((p) => p.slug)).toEqual(['base']);
 	});
 
-	it('resolves interface-size small class for flat presets with meta', () => {
+	it('resolves interface-size small layout size for flat presets with meta', () => {
 		const base = {
 			slug: 'base',
 			name: 'Base',
 			meta: { 'interface-size': 'small' },
 		};
-		expect(resolvePresetInterfaceSizeClassName(base)).toBe(
-			PRESET_INTERFACE_SIZE_SMALL_CLASS
-		);
-		expect(resolvePresetInterfaceSizeClassName({ slug: 'contrast' })).toBe(
-			undefined
+		expect(resolvePresetRepeaterItemSize(base)).toBe('small');
+		expect(resolvePresetRepeaterItemSize({ slug: 'contrast' })).toBe(
+			'full'
 		);
 	});
 

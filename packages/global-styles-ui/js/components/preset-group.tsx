@@ -35,7 +35,7 @@ import { Icon } from '@blockera/icons';
 import type { VariablesType, VariableType } from './types.ts';
 import { PresetStateContainer } from './preset-state-container';
 import { getPresetDeleteConfirmWarningText } from './preset-origin-utils';
-import { resolvePresetInterfaceSizeClassName } from './preset-taxonomy-ui/preset-taxonomy-utils';
+import { resolvePresetRepeaterItemSize } from './preset-taxonomy-ui/preset-taxonomy-utils';
 import {
 	applyVariablePickerRepeaterSelection,
 	buildPresetVariablePickerPayload,
@@ -104,10 +104,10 @@ type PresetsProps = {
 		itemId: string,
 		item: Record<string, unknown>
 	) => boolean;
-	resolveRepeaterItemClassName?: (
+	resolveRepeaterItemSize?: (
 		itemId: string,
 		item: Record<string, unknown>
-	) => string | undefined;
+	) => 'full' | 'small';
 	canEditGlobalStyles: boolean;
 	repeaterItemVariations?: PresetGroupPropsType['repeaterItemVariations'];
 };
@@ -153,7 +153,7 @@ const Presets = ({
 	onSelectableItemActivate,
 	showItemEditButton = false,
 	shouldRenderRepeaterItem,
-	resolveRepeaterItemClassName,
+	resolveRepeaterItemSize,
 	canEditGlobalStyles,
 	repeaterItemVariations,
 	...props
@@ -276,7 +276,7 @@ const Presets = ({
 			onSelectableItemActivate={onSelectableItemActivate}
 			showItemEditButton={showItemEditButton}
 			shouldRenderRepeaterItem={shouldRenderRepeaterItem}
-			resolveRepeaterItemClassName={resolveRepeaterItemClassName}
+			resolveRepeaterItemSize={resolveRepeaterItemSize}
 			showPopoverTitleDelete={canEditGlobalStyles}
 			actionButtonDelete={canEditGlobalStyles}
 			actionButtonClone={canEditGlobalStyles}
@@ -394,9 +394,9 @@ export const PresetGroup = ({
 			variablePickerItemMatchesSearch(item, q);
 	}, [isVariablePicker, pickerCtx.searchQuery]);
 
-	const resolveRepeaterItemInterfaceSizeClassName = useCallback(
+	const resolveRepeaterItemInterfaceSize = useCallback(
 		(_itemId: string, item: Record<string, unknown>) =>
-			resolvePresetInterfaceSizeClassName(item),
+			resolvePresetRepeaterItemSize(item),
 		[]
 	);
 
@@ -490,8 +490,8 @@ export const PresetGroup = ({
 							pickerCtx.omitRepeaterSectionLabel ? false : true
 						}
 						shouldRenderRepeaterItem={repeaterSearchFilter}
-						resolveRepeaterItemClassName={
-							resolveRepeaterItemInterfaceSizeClassName
+						resolveRepeaterItemSize={
+							resolveRepeaterItemInterfaceSize
 						}
 						repeaterItemVariations={repeaterItemVariations}
 					/>

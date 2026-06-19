@@ -59,16 +59,13 @@ export function isPresetTaxonomyInterfaceSizeSmall(
 	return raw !== undefined && raw.toLowerCase() === 'small';
 }
 
-export const PRESET_INTERFACE_SIZE_SMALL_CLASS =
-	'blockera-preset-repeater-item--interface-small';
+export type PresetRepeaterItemSize = 'full' | 'small';
 
-/** Class for flat/simple repeater rows with `meta.interface-size: small`. */
-export function resolvePresetInterfaceSizeClassName(
+/** Layout size for flat/simple repeater rows with `meta.interface-size: small`. */
+export function resolvePresetRepeaterItemSize(
 	item: Record<string, unknown>
-): string | undefined {
-	return isPresetTaxonomyInterfaceSizeSmall(item)
-		? PRESET_INTERFACE_SIZE_SMALL_CLASS
-		: undefined;
+): PresetRepeaterItemSize {
+	return isPresetTaxonomyInterfaceSizeSmall(item) ? 'small' : 'full';
 }
 
 /** All presets under a taxonomy category (direct rows + sub-section rows). */
