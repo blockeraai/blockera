@@ -16,7 +16,11 @@ import {
 	componentInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
-import { ColorIndicator, useVarPickerPresetContext } from '@blockera/controls';
+import {
+	ColorIndicator,
+	normalizeVariablePickerSearchQuery,
+	useVarPickerPresetContext,
+} from '@blockera/controls';
 import { inferPresetCssVarInfixForPaintVariablePickerType } from '@blockera/data';
 
 /**
@@ -65,7 +69,10 @@ import {
 	parsePaletteShadeSlug,
 	shadeHexDiffersFromBaseline,
 } from './utils';
-import { resolvePresetTaxonomyDisplayName } from '../components/preset-taxonomy/taxonomy-meta';
+import {
+	resolvePresetTaxonomyDisplayName,
+	resolvePresetTaxonomyEditName,
+} from '../components/preset-taxonomy/taxonomy-meta';
 import './style.scss';
 
 export type ColorPresetOpenerProps = {
@@ -207,12 +214,14 @@ export function ColorPresetOpener({
 	const isShadeRow = isShadePaletteColor(
 		colorItem as Color & Record<string, unknown>
 	);
+	const itemHasShadeVariations =
+		(colorItem as { hasVariations?: boolean }).hasVariations === true;
 	const shadeVariationCount = useMemo(() => {
-		if (isShadeRow) {
+		if (isShadeRow || !itemHasShadeVariations) {
 			return 0;
 		}
 		return filterVariationsByBase(fullItems, baseSlug).length;
-	}, [isShadeRow, fullItems, baseSlug]);
+	}, [isShadeRow, itemHasShadeVariations, fullItems, baseSlug]);
 
 	const mainPresetForStack = useMemo(
 		() => ({
@@ -242,14 +251,51 @@ export function ColorPresetOpener({
 	);
 
 	const headerLabel = useMemo(() => {
-		if (contextType === 'taxonomy') {
+		const isColorVariablePicker =
+			pickerCtx.active === true && pickerCtx.variableType === 'color';
+		const isPickerSearchActive =
+			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '';
+
+		if (isShadeRow && isColorVariablePicker) {
+			if (isPickerSearchActive) {
+				return resolvePresetTaxonomyEditName(
+					colorItem as Record<string, unknown>,
+					taxonomyNameSource
+				);
+			}
+			const shadeParsed = parsePaletteShadeSlug(
+				String(colorItem.slug ?? '')
+			);
+			if (shadeParsed) {
+				return shadeParsed.shadeStep;
+			}
+		}
+
+		if (
+			contextType === 'taxonomy' ||
+			(isColorVariablePicker && !isPickerSearchActive)
+		) {
 			return resolvePresetTaxonomyDisplayName(
 				colorItem as Record<string, unknown>,
 				taxonomyNameSource
 			);
 		}
+		if (isColorVariablePicker && isPickerSearchActive) {
+			return resolvePresetTaxonomyEditName(
+				colorItem as Record<string, unknown>,
+				taxonomyNameSource
+			);
+		}
 		return String(colorItem?.name ?? '');
-	}, [colorItem, contextType, taxonomyNameSource]);
+	}, [
+		colorItem,
+		contextType,
+		isShadeRow,
+		taxonomyNameSource,
+		pickerCtx.active,
+		pickerCtx.variableType,
+		pickerCtx.searchQuery,
+	]);
 
 	const showHexValue = shadeVariationCount === 0 && colorItem?.color;
 
