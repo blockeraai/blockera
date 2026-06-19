@@ -18,7 +18,7 @@ import { applyFilters } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -132,6 +132,22 @@ function isDismissTargetOutsideVarPicker(
 	return true;
 }
 
+function resolveVariablePickerPresetType(type: string): string {
+	const data = getVariableCategory(type);
+	if (data.notFound) {
+		return String(type);
+	}
+	return data.type || type;
+}
+
+function variablePickerPopoverTypeClassName(presetType: string): string {
+	const segment = String(presetType).trim().toLowerCase();
+	if (segment === '') {
+		return '';
+	}
+	return controlInnerClassNames(`popover-variables-type-${segment}`);
+}
+
 export default function ({
 	controlProps,
 	onClose,
@@ -157,6 +173,22 @@ export default function ({
 		() => normalizeVariablePickerSearchQuery(searchQuery),
 		[searchQuery]
 	);
+	const popoverClassName = useMemo(() => {
+		const typeClassNames = [];
+		const seen = new Set<string>();
+		for (const type of variableTypes) {
+			const presetType = resolveVariablePickerPresetType(type);
+			const className = variablePickerPopoverTypeClassName(presetType);
+			if (className !== '' && !seen.has(className)) {
+				seen.add(className);
+				typeClassNames.push(className);
+			}
+		}
+		return classNames(
+			controlInnerClassNames('popover-variables'),
+			...typeClassNames
+		);
+	}, [variableTypes]);
 	const popoverContentRef = useRef<?HTMLElement>(null);
 	const isClosingRef = useRef(false);
 
@@ -428,7 +460,7 @@ export default function ({
 			placement="left-start"
 			onClose={handleClose}
 			onFocusOutside={handleFocusOutside}
-			className={controlInnerClassNames('popover-variables')}
+			className={popoverClassName}
 			titleButtonsRight={
 				<>
 					{(canUnlinkVariable(controlProps.value) ||

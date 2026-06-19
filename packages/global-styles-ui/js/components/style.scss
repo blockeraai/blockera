@@ -268,8 +268,7 @@
 .blockera-component-popover.blockera-control-popover-variables {
 	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 
-	&:has(.is-preset-variable-variations-picker-header),
-	&:has(.blockera-component-preset-variable-variations-wrapper) {
+	&.blockera-control-popover-variables-type-color {
 		.components-popover__content {
 			width: 340px;
 		}
