@@ -113,16 +113,22 @@ export function PresetVariableVariationsHeader({
 			)}
 			{true === isVariablePickerActive && (
 				<Flex direction={variationsAccordionOpen ? 'row' : 'column'}>
-					<Flex gap={8}>
-						{headerIcon}
-
-						<span
-							className={controlInnerClassNames('header-label')}
-							data-cy="header-label"
-						>
-							{label}
-						</span>
-					</Flex>
+					<span
+						className={controlInnerClassNames('header-label')}
+						data-cy="header-label"
+						style={{
+							padding: '4px 0',
+							flex: `1 1 28px`,
+							width: '100%',
+							position: 'relative',
+							letterSpacing: '-0.2px',
+							fontSize: '12px',
+							borderBottom:
+								'1px solid var(--blockera-controls-sep-color)',
+						}}
+					>
+						{label}
+					</span>
 					{!variationsAccordionOpen && (
 						<Flex
 							gap={2}

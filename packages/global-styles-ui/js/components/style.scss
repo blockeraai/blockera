@@ -228,10 +228,17 @@
 	.blockera-control-group {
 	border: none;
 	box-shadow: none;
+
 	&.is-hovered,
 	&:hover {
 		border: none;
 		box-shadow: none;
+
+		.blockera-control-repeater-group-header {
+			.blockera-control-header-label {
+				opacity: 1;
+			}
+		}
 	}
 
 	&.is-open {
@@ -241,7 +248,15 @@
 
 	.blockera-control-repeater-group-header {
 		flex-direction: column;
-		gap: 4px;
+		gap: 2px;
+		height: auto;
+
+		.blockera-control-header-label {
+			font-weight: 600;
+			font-size: 10px;
+			opacity: 0.5;
+			transition: var(--blockera-controls-transition);
+		}
 	}
 
 	.blockera-control-header-values,
