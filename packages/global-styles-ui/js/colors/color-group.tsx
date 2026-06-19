@@ -107,8 +107,10 @@ function ColorGroupInner({
 			}
 		) => {
 			const slug = String(row.slug ?? '');
+			const hasStoredShades =
+				filterVariationsByBase(colors, slug).length > 0;
 			const baseRepeater = flattenForColorPickerSearch
-				? true
+				? isShadePaletteColor(row) || !hasStoredShades
 				: !isShadePaletteColor(row);
 			let renderRepeaterItem =
 				typeof row.renderRepeaterItem === 'boolean'
@@ -127,7 +129,7 @@ function ColorGroupInner({
 				renderRepeaterItem,
 				hasVariations: flattenForColorPickerSearch
 					? false
-					: filterVariationsByBase(colors, row.slug).length > 0,
+					: hasStoredShades,
 			} as Color & Record<string, unknown>;
 		},
 		[colors, flattenForColorPickerSearch]
