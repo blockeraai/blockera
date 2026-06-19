@@ -7,7 +7,6 @@ import {
 	memo,
 	useContext,
 	useEffect,
-	useMemo,
 	useRef,
 	useState,
 } from '@wordpress/element';
@@ -35,7 +34,7 @@ import {
 } from '../utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
-import type { RepeaterItemProps } from '../types';
+import type { RepeaterItemProps, RepeaterItemSize } from '../types';
 import { useControlContext } from '../../../context';
 
 export function RepeaterItemVariationsPane({
@@ -60,7 +59,9 @@ const RepeaterItem = ({
 	item,
 	itemId,
 	showVariations = true,
+	size,
 }: RepeaterItemProps): null | Element<any> => {
+	const rowSize: RepeaterItemSize = size ?? 'full';
 	const [isOpen, setOpen] = useState(
 		isBoolean(item?.isOpen) ? item?.isOpen : false
 	);
@@ -92,7 +93,6 @@ const RepeaterItem = ({
 		onSelectableItemActivate,
 		enablePromoCountOnRepeaterItemHeader,
 		disableProHints,
-		resolveRepeaterItemClassName,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -166,14 +166,6 @@ const RepeaterItem = ({
 			opacity: draggingIndex && draggingIndex !== itemId ? 0.5 : 1,
 		};
 	}, [draggingIndex, itemId]);
-
-	const extraRepeaterItemClassName = useMemo(() => {
-		if (typeof resolveRepeaterItemClassName !== 'function') {
-			return '';
-		}
-		const resolved = resolveRepeaterItemClassName(String(itemId), item);
-		return typeof resolved === 'string' ? resolved : '';
-	}, [resolveRepeaterItemClassName, itemId, item]);
 
 	const handleDragStart = (e: DragEvent, index: string) => {
 		if (e.dataTransfer) {
@@ -441,8 +433,8 @@ const RepeaterItem = ({
 			className={controlInnerClassNames(
 				'repeater-item',
 				isVisible ? ' is-active' : ' is-inactive',
-				extraRepeaterItemClassName,
 				{
+					'is-small': rowSize === 'small',
 					draggable: !isOpen,
 					'is-native': shouldApplyRepeaterItemNativeStyle(
 						itemId,

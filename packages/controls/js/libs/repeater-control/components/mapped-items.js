@@ -26,6 +26,7 @@ const MappedItems = (): MixedElement => {
 		defaultRepeaterItemValue,
 		actionButtonsType,
 		shouldRenderRepeaterItem,
+		resolveRepeaterItemSize,
 	} = useContext(RepeaterContext);
 
 	// Sorting repeater items based on "order" property value of each item.
@@ -74,19 +75,27 @@ const MappedItems = (): MixedElement => {
 		);
 	}
 
-	return visibleRepeaterItems.map(([itemId, item]) => (
-		<RepeaterItem
-			{...{
-				item: {
-					...defaultRepeaterItemValue,
-					...item,
-				},
-				itemId,
-				actionButtonsType,
-			}}
-			key={getStableItemKey(itemId, item)}
-		/>
-	));
+	return visibleRepeaterItems.map(([itemId, item]) => {
+		const resolvedSize =
+			typeof resolveRepeaterItemSize === 'function'
+				? resolveRepeaterItemSize(String(itemId), item)
+				: 'full';
+
+		return (
+			<RepeaterItem
+				{...{
+					item: {
+						...defaultRepeaterItemValue,
+						...item,
+					},
+					itemId,
+					actionButtonsType,
+					size: resolvedSize === 'small' ? 'small' : 'full',
+				}}
+				key={getStableItemKey(itemId, item)}
+			/>
+		);
+	});
 };
 
 export default MappedItems;

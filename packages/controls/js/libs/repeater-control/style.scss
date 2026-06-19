@@ -39,6 +39,22 @@
 		}
 	}
 
+	&:has(> .blockera-control-repeater-item.is-small) {
+		flex-flow: row wrap;
+
+		> .blockera-control-repeater-item {
+			flex: 1 1 100%;
+			min-width: 0;
+			max-width: 100%;
+			box-sizing: border-box;
+
+			&.is-small {
+				flex: 0 1 calc((100% - var(--repeater-gap)) / 2);
+				max-width: calc((100% - var(--repeater-gap)) / 2);
+			}
+		}
+	}
+
 	.blockera-control-header:not(:last-child) {
 		margin-bottom: calc(var(--repeater-gap) * -0.5);
 	}
