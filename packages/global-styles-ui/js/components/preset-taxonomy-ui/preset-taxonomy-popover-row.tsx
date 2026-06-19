@@ -99,11 +99,23 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 		editSession?.beginEditSession(rowSlug);
 	}, [editSession, rowSlug]);
 
+	// Close UI first; deferred field flush + endEditSession run when preset fields unmount.
 	const handlePopoverClose = useCallback(() => {
-		editSession?.flushSession(rowSlug);
-		editSession?.endEditSession(rowSlug);
 		setOpen(false);
-	}, [editSession, rowSlug]);
+	}, []);
+
+	const setPopoverOpen = useCallback(
+		(next: boolean | ((prev: boolean) => boolean)) => {
+			const resolved = typeof next === 'function' ? next(isOpen) : next;
+			if (resolved) {
+				handlePopoverOpen();
+			} else {
+				handlePopoverClose();
+			}
+			return resolved;
+		},
+		[handlePopoverClose, handlePopoverOpen, isOpen]
+	);
 
 	const RepeaterItemVariations = repeaterCtx.repeaterItemVariations ?? null;
 	const RepeaterItemChildren = repeaterCtx.repeaterItemChildren;
@@ -192,7 +204,7 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 				item={itemForHeader}
 				itemId={String(itemId)}
 				isOpen={isOpen}
-				setOpen={setOpen}
+				setOpen={setPopoverOpen}
 				isOpenPopoverEvent={isTaxonomyPopoverOpenEvent}
 				variationsAccordionOpen={
 					showVariationsBranch ? variationsAccordionOpen : false
