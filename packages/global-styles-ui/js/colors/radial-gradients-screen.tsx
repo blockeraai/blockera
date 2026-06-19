@@ -3,10 +3,14 @@
  */
 import { __ } from '@wordpress/i18n';
 import {
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalView as View,
 } from '@wordpress/components';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -27,8 +31,9 @@ export function RadialGradientsPresetContent() {
 
 function RadialGradientsScreen({ onBackHandler }: RadialGradientsScreenProps) {
 	return (
-		<VStack
-			spacing={2}
+		<Flex
+			direction="column"
+			gap={0}
 			className="blockera-radial-gradients-presets"
 			style={{ paddingBottom: '10px' }}
 		>
@@ -46,7 +51,7 @@ function RadialGradientsScreen({ onBackHandler }: RadialGradientsScreenProps) {
 					<RadialGradientsPresetContent />
 				</Spacer>
 			</View>
-		</VStack>
+		</Flex>
 	);
 }
 

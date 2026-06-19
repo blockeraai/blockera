@@ -2,11 +2,11 @@
  * External dependencies
  */
 import type { Gradient } from '@wordpress/global-styles-engine';
-import { __experimentalVStack as VStack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
+import { Flex } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -73,7 +73,11 @@ export function GradientPresetGroupsContent({
 	);
 
 	return (
-		<VStack spacing={8} className="global-styles-ui-gradient-palette-panel">
+		<Flex
+			direction="column"
+			gap={20}
+			className="global-styles-ui-gradient-palette-panel"
+		>
 			{showThemeOriginGroup && (
 				<GradientPresetGroup
 					variant={variant}
@@ -162,6 +166,6 @@ export function GradientPresetGroupsContent({
 						: undefined
 				}
 			/>
-		</VStack>
+		</Flex>
 	);
 }

@@ -2,7 +2,6 @@
  * External dependencies
  */
 import {
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalView as View,
 } from '@wordpress/components';
@@ -12,6 +11,7 @@ import { useCallback, useMemo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
+import { Flex } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -119,8 +119,9 @@ export function ColorPalettePresetContent({
 
 	return (
 		<ColorPresetPreviewUsageProvider value={previewUsage}>
-			<VStack
-				spacing={8}
+			<Flex
+				direction="column"
+				gap={20}
 				className="global-styles-ui-color-palette-panel"
 			>
 				{showThemeOriginGroup && (
@@ -151,15 +152,16 @@ export function ColorPalettePresetContent({
 					setCustomColors={setCustomColors}
 					handleResetColors={customResetHandler}
 				/>
-			</VStack>
+			</Flex>
 		</ColorPresetPreviewUsageProvider>
 	);
 }
 
 function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 	return (
-		<VStack
-			spacing={2}
+		<Flex
+			direction="column"
+			gap={0}
 			className="blockera-color-palette-presets"
 			style={{ paddingBottom: '10px' }}
 		>
@@ -178,7 +180,7 @@ function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 					<ColorPalettePresetContent />
 				</Spacer>
 			</View>
-		</VStack>
+		</Flex>
 	);
 }
 

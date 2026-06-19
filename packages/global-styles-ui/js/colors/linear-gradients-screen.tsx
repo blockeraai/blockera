@@ -3,10 +3,14 @@
  */
 import { __ } from '@wordpress/i18n';
 import {
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalView as View,
 } from '@wordpress/components';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -27,8 +31,9 @@ export function LinearGradientsPresetContent() {
 
 function LinearGradientsScreen({ onBackHandler }: LinearGradientsScreenProps) {
 	return (
-		<VStack
-			spacing={2}
+		<Flex
+			direction="column"
+			gap={0}
 			className="blockera-linear-gradients-presets"
 			style={{ paddingBottom: '10px' }}
 		>
@@ -46,7 +51,7 @@ function LinearGradientsScreen({ onBackHandler }: LinearGradientsScreenProps) {
 					<LinearGradientsPresetContent />
 				</Spacer>
 			</View>
-		</VStack>
+		</Flex>
 	);
 }
 
