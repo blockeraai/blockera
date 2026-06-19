@@ -5,7 +5,6 @@ import { __, sprintf } from '@wordpress/i18n';
 import {
 	Navigator,
 	__experimentalView as View,
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 } from '@wordpress/components';
 import { memo, useMemo, useCallback, createPortal } from '@wordpress/element';
@@ -14,6 +13,7 @@ import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 /**
  * Blockera dependencies
  */
+import { Flex } from '@blockera/controls';
 import { normalizeFontSizeThemeJsonPreset } from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 
@@ -294,7 +294,11 @@ export function FontSizesPresetContent() {
 	);
 
 	return (
-		<VStack className="blockera-font-size-editor-groups" spacing={8}>
+		<Flex
+			direction="column"
+			gap={20}
+			className="blockera-font-size-editor-groups"
+		>
 			{showThemeOriginGroup && (
 				<FontSizeGroup
 					origin="theme"
@@ -326,14 +330,15 @@ export function FontSizesPresetContent() {
 				convertRepeaterToItems={convertRepeaterValueToArray}
 				handleResetFontSizes={customResetHandler}
 			/>
-		</VStack>
+		</Flex>
 	);
 }
 
 function FontSizesEditorScreenShell() {
 	return (
-		<VStack
-			spacing={2}
+		<Flex
+			direction="column"
+			gap={0}
 			className="blockera-font-size-editor"
 			style={{ paddingBottom: '10px' }}
 		>
@@ -351,7 +356,7 @@ function FontSizesEditorScreenShell() {
 					<FontSizesPresetContent />
 				</Spacer>
 			</View>
-		</VStack>
+		</Flex>
 	);
 }
 
