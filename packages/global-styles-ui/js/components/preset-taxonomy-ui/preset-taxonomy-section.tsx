@@ -6,7 +6,7 @@ import type { ComponentType, ElementType, ReactNode } from 'react';
 /**
  * Blockera dependencies
  */
-import { BaseControl, ControlContextProvider } from '@blockera/controls';
+import { ControlContextProvider } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -66,23 +66,18 @@ export function PresetTaxonomySection({
 					value={repeaterContextValue}
 					storeName={'blockera/controls/repeater'}
 				>
-					<BaseControl
-						controlName={bridgeControlId}
-						columns="columns-1"
+					<TaxonomyRepeaterBridgeInner
+						controlId={bridgeControlId}
+						origin={origin}
+						repeaterItemHeader={repeaterItemHeader}
+						defaultRepeaterItemValue={defaultRepeaterItemShape}
+						valueCleanup={cleanRepeaterForPersist}
+						handleRepeaterRootChange={handleRepeaterRootChange}
+						repeaterItemVariations={repeaterItemVariations}
+						repeaterItemChildren={repeaterItemChildren}
 					>
-						<TaxonomyRepeaterBridgeInner
-							controlId={bridgeControlId}
-							origin={origin}
-							repeaterItemHeader={repeaterItemHeader}
-							defaultRepeaterItemValue={defaultRepeaterItemShape}
-							valueCleanup={cleanRepeaterForPersist}
-							handleRepeaterRootChange={handleRepeaterRootChange}
-							repeaterItemVariations={repeaterItemVariations}
-							repeaterItemChildren={repeaterItemChildren}
-						>
-							{children}
-						</TaxonomyRepeaterBridgeInner>
-					</BaseControl>
+						{children}
+					</TaxonomyRepeaterBridgeInner>
 				</ControlContextProvider>
 			</div>
 		</PresetStateContainer>

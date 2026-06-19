@@ -111,22 +111,22 @@
 }
 
 .blockera-component.blockera-component-flex.blockera-component-preset-variable-variations-strip {
-
 	.blockera-control-group-header {
 		padding: 0 calc(var(--repeater-gap) * 0.11) !important;
 	}
 }
 
 .blockera-control-group.mode-accordion {
-
-	&.is-close.blockera-control-repeater-item-variations-group:not(.blockera-preset-taxonomy-accordion) {
-
+	&.is-close.blockera-control-repeater-item-variations-group:not(
+			.blockera-preset-taxonomy-accordion
+		) {
 		> .blockera-control-group-header {
 			padding: calc(var(--repeater-item-height) * 0.4);
 		}
 
-		.blockera-control-group-header:has(.is-preset-variable-variations-picker-header) {
-		
+		.blockera-control-group-header:has(
+			.is-preset-variable-variations-picker-header
+		) {
 			.blockera-control-action-buttons.type-inline {
 				align-items: end;
 				height: 35% !important;
@@ -144,16 +144,17 @@
 		}
 	}
 
-	&.is-open.blockera-control-repeater-item-variations-group:not(.blockera-preset-taxonomy-accordion) {
-
+	&.is-open.blockera-control-repeater-item-variations-group:not(
+			.blockera-preset-taxonomy-accordion
+		) {
 		> .blockera-control-group-header {
 			padding-top: calc(var(--repeater-item-height) * 0.4);
 		}
 
-		.blockera-control-group-header:has(.is-preset-variable-variations-picker-header) {
-		
+		.blockera-control-group-header:has(
+			.is-preset-variable-variations-picker-header
+		) {
 			.blockera-control-action-buttons.type-inline {
-
 				.blockera-control-btn-edit-item {
 					visibility: hidden;
 					opacity: 0;
@@ -168,12 +169,13 @@
 .blockera-global-styles-preset-repeater.blockera-control-repeater
 	.blockera-control-repeater-item
 	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header,
-	.blockera-preset-taxonomy-tree
-	.blockera-control-repeater-item .mode-accordion
+.blockera-preset-taxonomy-tree
+	.blockera-control-repeater-item
+	.mode-accordion
 	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header {
-		height: auto;
-		min-height: calc(var(--repeater-item-height) - 2px);
-		align-items: flex-start;
+	height: auto;
+	min-height: calc(var(--repeater-item-height) - 2px);
+	align-items: flex-start;
 
 	> .blockera-component-flex {
 		box-sizing: border-box;
@@ -192,8 +194,7 @@
 		max-width: 100%;
 		min-width: 0;
 		padding: 0 0 10px 0;
-		overflow-x: scroll;
-		overflow-y: hidden;
+		overflow: hidden;
 		white-space: nowrap;
 
 		> .blockera-control-repeater-item {
@@ -209,17 +210,22 @@
 	}
 }
 
-.blockera-preset-taxonomy-tree .blockera-control-repeater-item .mode-popover .blockera-control-repeater-item-header-holder {
+.blockera-preset-taxonomy-tree
+	.blockera-control-repeater-item
+	.mode-popover
+	.blockera-control-repeater-item-header-holder {
 	width: 100%;
-} 
+}
 
 // Same context: avoid stacked borders around the parent row and nested shade repeater groups.
 .blockera-global-styles-preset-repeater.blockera-control-repeater
 	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header
-	.blockera-control-group, 
-		.blockera-preset-taxonomy-tree .blockera-control-repeater-item .mode-accordion
-			.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header
-			.blockera-control-group {
+	.blockera-control-group,
+.blockera-preset-taxonomy-tree
+	.blockera-control-repeater-item
+	.mode-accordion
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header
+	.blockera-control-group {
 	border: none;
 	box-shadow: none;
 	&.is-hovered,
@@ -238,18 +244,17 @@
 		gap: 4px;
 	}
 
-	.blockera-control-header-values, 
-		.blockera-control-btn-edit-item {
+	.blockera-control-header-values,
+	.blockera-control-btn-edit-item {
 		display: none;
 	}
 }
 
 .blockera-component-popover.blockera-control-popover-variables {
 	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
-	
+
 	&:has(.is-preset-variable-variations-picker-header),
 	&:has(.blockera-component-preset-variable-variations-wrapper) {
-
 		.components-popover__content {
 			width: 340px;
 		}
