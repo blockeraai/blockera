@@ -77,6 +77,23 @@ describe('Color Control', () => {
 				});
 		});
 
+		it('normalizes 3-digit hex shorthand without hash', () => {
+			cy.withDataProvider({
+				component: <ColorControl />,
+				value: '',
+				name,
+			});
+
+			cy.getByDataCy('color-btn').click();
+			cy.getByDataCy('color-picker-css-value').clear();
+			cy.getByDataCy('color-picker-css-value').type('ccc');
+
+			cy.getByDataCy('color-label').contains('#cccccc');
+			cy.then(() => {
+				expect(getControlValue(name)).to.be.equal('#cccccc');
+			});
+		});
+
 		it('renders None as color label when color gets remove from color-picker', () => {
 			cy.withDataProvider({
 				component: <ColorControl />,

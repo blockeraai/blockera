@@ -107,6 +107,49 @@ describe('Color-Picker Control', () => {
 			});
 		});
 
+		it('normalizes 3-digit hex shorthand without hash', () => {
+			cy.withDataProvider({
+				component: (
+					<ColorPickerControl isOpen={true} isPopover={false} />
+				),
+				value: '#eee',
+				name,
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').clear();
+			cy.get('[data-cy="color-picker-css-value"]').type('ccc');
+
+			cy.get('[data-cy="color-picker-css-value"]').should(
+				'have.value',
+				'#cccccc'
+			);
+			cy.then(() => {
+				expect(getControlValue(name)).to.be.equal('#cccccc');
+			});
+		});
+
+		it('finalizes hash-prefixed 3-digit shorthand on blur', () => {
+			cy.withDataProvider({
+				component: (
+					<ColorPickerControl isOpen={true} isPopover={false} />
+				),
+				value: '#eee',
+				name,
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').clear();
+			cy.get('[data-cy="color-picker-css-value"]').type('#ccc');
+			cy.get('[data-cy="color-picker-css-value"]').blur();
+
+			cy.get('[data-cy="color-picker-css-value"]').should(
+				'have.value',
+				'#cccccc'
+			);
+			cy.then(() => {
+				expect(getControlValue(name)).to.be.equal('#cccccc');
+			});
+		});
+
 		it('accepts currentColor as a stored value', () => {
 			cy.withDataProvider({
 				component: (
