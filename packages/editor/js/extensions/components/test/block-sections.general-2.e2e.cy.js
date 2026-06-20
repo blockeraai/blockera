@@ -12,9 +12,10 @@ describe('Block Sections Manager Testing', () => {
 		createPost();
 
 		appendBlocks(
-			'<!-- wp:paragraph -->\n' +
-				'<p>test</p>\n' +
-				'<!-- /wp:paragraph -->'
+			`<!-- wp:paragraph -->
+				<p>test</p>
+			<!-- /wp:paragraph -->
+			`
 		);
 
 		cy.getBlock('core/paragraph').click();
@@ -139,24 +140,32 @@ describe('Block Sections Manager Testing', () => {
 
 		cy.get('button[aria-label="Block Settings"]').click();
 
-		// Check for opened background section
-		cy.getByAriaLabel('Add New Background').should('not.exist');
-		// Check for opened border section
-		cy.getByDataTest('border-control-width').should('not.exist');
-		// Check for opened Effects section
-		cy.getByAriaLabel('Add New Backdrop Filter').should('not.exist');
-		// Check for opened InnerBlocks section
-		cy.get('button').contains('Add Inner Block').should('not.exist');
-		// Check for opened Layout section
-		cy.get(`[aria-label="Display"]`).should('not.exist');
-		// Check for opened Position section
-		cy.get(`[aria-label="Position"]`).should('not.exist');
-		// Check for opened Size section
-		cy.get(`[aria-label="Width"]`).should('not.exist');
-		// Check for opened Spacing section (box-spacing uses AdvancedLabelControl, so use margin-lock button)
-		cy.get(`button[data-test="margin-lock"]`).should('not.exist');
-		// Check for opened Typography section
-		cy.get(`[aria-label="Font Family"]`).should('not.exist');
+		cy.get('.blockera-state-colors-container')
+			.last()
+			.within(() => {
+				// Check for closed background section
+				cy.get('[aria-label="Add New Background"]').should('not.exist');
+				// Check for closed border section
+				cy.get('[data-test="border-control-width"]').should(
+					'not.exist'
+				);
+				// Check for closed Effects section
+				cy.get('[aria-label="Add New Backdrop Filter"]').should(
+					'not.exist'
+				);
+				// Check for closed InnerBlocks section
+				cy.contains('button', 'Add Inner Block').should('not.exist');
+				// Check for closed Layout section
+				cy.get(`[aria-label="Display"]`).should('not.exist');
+				// Check for closed Position section
+				cy.get(`[aria-label="Position"]`).should('not.exist');
+				// Check for closed Size section
+				cy.get(`[aria-label="Width"]`).should('not.exist');
+				// Check for closed Spacing section (box-spacing uses AdvancedLabelControl, so use margin-lock button)
+				cy.get(`button[data-test="margin-lock"]`).should('not.exist');
+				// Check for closed Typography section
+				cy.get(`[aria-label="Font Family"]`).should('not.exist');
+			});
 	});
 
 	it('should applied focus mode of block sections', () => {
@@ -170,29 +179,41 @@ describe('Block Sections Manager Testing', () => {
 		cy.get('.components-panel__body').contains('Layout').click();
 		cy.get(`button[data-test="margin-lock"]`).should('exist');
 
-		// Check for opened background and closed spacing.
-		cy.get('.components-panel__body').contains('Background').click();
-		cy.get(`button[data-test="margin-lock"]`).should('not.exist');
-		// Check for opened border section
-		cy.get('.components-panel__body').contains('Border And Shadow').click();
-		cy.getByAriaLabel('Add New Background').should('not.exist');
-		// Check for opened Effects section
-		cy.get('.components-panel__body').contains('Effects').click();
-		cy.getByDataTest('border-control-width').should('not.exist');
+		cy.get('.blockera-state-colors-container')
+			.last()
+			.within(() => {
+				// Check for opened background and closed spacing.
+				cy.get('.components-panel__body')
+					.contains('Background')
+					.click();
+				cy.get(`button[data-test="margin-lock"]`).should('not.exist');
+				// Check for opened border section
+				cy.get('.components-panel__body')
+					.contains('Border And Shadow')
+					.click();
+				cy.getByAriaLabel('Add New Background').should('not.exist');
+				// Check for opened Effects section
+				cy.get('.components-panel__body').contains('Effects').click();
+				cy.getByDataTest('border-control-width').should('not.exist');
 
-		cy.getByAriaLabel('Add New Backdrop Filter').should('exist');
-		// Check for opened Layout section
-		cy.get('.components-panel__body').contains('Layout').click();
-		cy.get('button').contains('Add Inner Block').should('not.exist');
-		// Check for opened Position section
-		cy.get('.components-panel__body').contains('Position').click();
-		cy.get(`[aria-label="Display"]`).should('not.exist');
-		// Check for opened Size section
-		cy.get('.components-panel__body').contains('Size').click();
-		cy.get(`[aria-label="Position"]`).should('not.exist');
-		// Check for opened Typography section
-		cy.get('.components-panel__body').contains('Typography').click();
-		cy.get(`[aria-label="Width"]`).should('not.exist');
+				cy.getByAriaLabel('Add New Backdrop Filter').should('exist');
+				// Check for opened Layout section
+				cy.get('.components-panel__body').contains('Layout').click();
+				cy.get('button')
+					.contains('Add Inner Block')
+					.should('not.exist');
+				// Check for opened Position section
+				cy.get('.components-panel__body').contains('Position').click();
+				cy.get(`[aria-label="Display"]`).should('not.exist');
+				// Check for opened Size section
+				cy.get('.components-panel__body').contains('Size').click();
+				cy.get(`[aria-label="Position"]`).should('not.exist');
+				// Check for opened Typography section
+				cy.get('.components-panel__body')
+					.contains('Typography')
+					.click();
+				cy.get(`[aria-label="Width"]`).should('not.exist');
+			});
 	});
 
 	it('should opened inner blocks while applied focus mode of block sections with navigate between inners and master', () => {

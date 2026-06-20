@@ -3,7 +3,6 @@
  * portaled popovers (states inserter, variation pickers) in global styles vs inspector.
  */
 import 'cypress-real-events';
-
 import {
 	HOVER_STATE_COLOR,
 	INNER_BLOCK_NORMAL_COLOR,
@@ -123,17 +122,16 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 			});
 
 			it('size surface: hover state uses states accent on container and states inserter popover', () => {
-				withinSizeVariationsPanel(() => {
-					setBlockState('Hover');
+				cy.getByDataTest('style-e2e-size-small').click();
+				setBlockState('Hover');
 
-					assertContainerActiveTabColor(
-						STATE_COLORS_CONTAINER,
-						HOVER_STATE_COLOR
-					);
-					assertStatesInserterPopoverMatchesContainer(
-						STATE_COLORS_CONTAINER
-					);
-				});
+				assertContainerActiveTabColor(
+					STATE_COLORS_CONTAINER,
+					HOVER_STATE_COLOR
+				);
+				assertStatesInserterPopoverMatchesContainer(
+					'.blockera-states-picker-popover'
+				);
 			});
 		});
 	});
@@ -144,6 +142,7 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 		});
 
 		it('uses WordPress normal state color on master block container and states inserter popover', () => {
+			setInnerBlock('elements/link');
 			assertContainerActiveTabColor(STATE_COLORS_CONTAINER, '#cc0000');
 			assertStatesInserterPopoverMatchesContainer(STATE_COLORS_CONTAINER);
 		});
