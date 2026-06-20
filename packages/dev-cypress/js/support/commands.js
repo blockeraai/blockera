@@ -653,6 +653,7 @@ export const registerCommands = () => {
 					delay: 0,
 					force: true,
 				});
+				cy.getByDataCy('color-picker-css-value').blur();
 
 				cy.getByDataTest('close-popover').click({ force: true });
 			});
