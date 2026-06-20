@@ -407,6 +407,34 @@ export const PresetGroup = ({
 		[isVariablePicker, pickerCtx.searchQuery]
 	);
 
+	const isPickerSearchActive = useMemo(
+		() =>
+			isVariablePicker &&
+			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
+		[isVariablePicker, pickerCtx.searchQuery]
+	);
+
+	const hasPickerSearchMatches = useMemo(() => {
+		if (!isPickerSearchActive || !repeaterSearchFilter) {
+			return true;
+		}
+		for (const [itemId, item] of Object.entries(
+			variablesForRepeater ?? {}
+		)) {
+			if (!item || typeof item !== 'object') {
+				continue;
+			}
+			const row = item as Record<string, unknown>;
+			if (row.renderRepeaterItem === false || row.isVisible === false) {
+				continue;
+			}
+			if (repeaterSearchFilter(itemId, row)) {
+				return true;
+			}
+		}
+		return false;
+	}, [isPickerSearchActive, repeaterSearchFilter, variablesForRepeater]);
+
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`,
@@ -454,6 +482,17 @@ export const PresetGroup = ({
 
 	if (suppressThemeRepeaterWhenTaxonomyBasePopulated) {
 		return null;
+	}
+
+	if (isPickerSearchActive && !hasPickerSearchMatches) {
+		return (
+			<div
+				className={controlInnerClassNames('repeater-filter-empty')}
+				style={{ opacity: 0.5, fontSize: '12px' }}
+			>
+				{__('No variables match your search.', 'blockera')}
+			</div>
+		);
 	}
 
 	return (

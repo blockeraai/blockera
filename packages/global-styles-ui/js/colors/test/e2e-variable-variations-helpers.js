@@ -52,6 +52,58 @@ export function openParagraphTextColorVariablePickerPopover() {
 	);
 }
 
+/** Scoped chainable for the visible variable-picker popover. */
+export function withinVariablePickerPopover(fn) {
+	return cy
+		.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
+		.should('be.visible')
+		.within(fn);
+}
+
+/** Types into the variable picker search field. */
+export function typeInVariablePickerSearch(query) {
+	withinVariablePickerPopover(() => {
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		})
+			.should('be.visible')
+			.clear({ force: true })
+			.type(query, { delay: 0, force: true });
+	});
+}
+
+/** Clears the variable picker search field. */
+export function clearVariablePickerSearch() {
+	withinVariablePickerPopover(() => {
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		})
+			.should('be.visible')
+			.clear({ force: true });
+	});
+}
+
+/** @param {string} headerLabel */
+export function assertColorPresetVisibleInVariablePicker(headerLabel) {
+	withinVariablePickerPopover(() => {
+		cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
+			timeout: 20000,
+		}).should('be.visible');
+	});
+}
+
+/** @param {string} headerLabel */
+export function assertColorPresetNotInVariablePicker(headerLabel) {
+	withinVariablePickerPopover(() => {
+		cy.contains(
+			'[data-cy="color-repeater-item-header"]',
+			headerLabel
+		).should('not.exist');
+	});
+}
+
 /** Picker closes after a selection; reopen via the value-addon control (open or selected state). */
 export function reopenVariablePickerPopover() {
 	cy.getParentContainer('Text Color').within(() => {

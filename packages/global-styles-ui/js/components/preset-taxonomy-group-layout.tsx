@@ -2,6 +2,15 @@
  * External dependencies
  */
 import { type ElementType } from '@wordpress/element';
+import { useMemo } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import {
+	normalizeVariablePickerSearchQuery,
+	useVarPickerPresetContext,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -56,12 +65,22 @@ function PresetTaxonomyGroupLayoutInner<TItem extends Record<string, unknown>>({
 }: PresetTaxonomyGroupLayoutProps<TItem>) {
 	const { isResetDialogOpen, toggleResetDialog } =
 		usePresetResetDialogState();
+	const pickerCtx = useVarPickerPresetContext();
+
+	const flattenForPickerSearch = useMemo(
+		() =>
+			pickerCtx.active === true &&
+			typeof pickerCtx.variableType === 'string' &&
+			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
+		[pickerCtx.active, pickerCtx.searchQuery, pickerCtx.variableType]
+	);
 
 	const taxonomy = usePresetTaxonomyGroupUi<TItem>({
 		items,
 		baseItems,
 		origin,
 		controlName,
+		suppressTaxonomyUi: flattenForPickerSearch,
 		convertRepeaterToItems,
 		onPersistItems,
 	});

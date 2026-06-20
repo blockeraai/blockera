@@ -29,6 +29,8 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 	DynamicHtmlFormatter,
+	normalizeVariablePickerSearchQuery,
+	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
 import {
 	classNames,
@@ -346,10 +348,19 @@ function BlockStyles({
 			return;
 		}
 
+		const normalizedQuery = normalizeVariablePickerSearchQuery(newValue);
 		const filtered = stylesToRender.filter((style) => {
 			const label =
 				style.label || style.name || __('Default', 'blockera');
-			return label.toLowerCase().includes(newValue.toLowerCase());
+			return variablePickerItemMatchesSearch(
+				{
+					name: label,
+					label,
+					slug: style.name,
+					id: style.name,
+				},
+				normalizedQuery
+			);
 		});
 
 		setBlockStyles(filtered);

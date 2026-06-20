@@ -495,6 +495,8 @@ export {
 	useVarPickerPresetContext,
 	resolveVariablePickerPresetGroupLabel,
 	normalizeVariablePickerSearchQuery,
+	tokenizeVariablePickerSearchQuery,
+	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
 	ValueAddonDisplay,
 } from './components';

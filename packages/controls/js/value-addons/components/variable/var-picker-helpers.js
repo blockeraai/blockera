@@ -156,10 +156,79 @@ export function normalizeVariablePickerSearchQuery(query: mixed): string {
 	return String(query).trim().toLowerCase();
 }
 
-const VARIABLE_PICKER_SEARCH_KEYS = ['name', 'slug', 'title', 'label', 'id'];
+const VARIABLE_PICKER_SEARCH_KEYS = [
+	'name',
+	'slug',
+	'title',
+	'label',
+	'id',
+	'color',
+];
+
+/**
+ * Split a normalized picker search string into whitespace-separated tokens.
+ */
+export function tokenizeVariablePickerSearchQuery(
+	normalizedQuery: string
+): Array<string> {
+	if (!normalizedQuery) {
+		return [];
+	}
+	return normalizedQuery.split(/\s+/).filter(Boolean);
+}
+
+/**
+ * Append a scalar field value to the searchable haystack buffer.
+ */
+function appendVariablePickerSearchHaystackPart(
+	parts: Array<string>,
+	raw: mixed
+): void {
+	if (raw === null || raw === undefined || raw === '') {
+		return;
+	}
+	if (typeof raw === 'string' || typeof raw === 'number') {
+		parts.push(String(raw).toLowerCase());
+		return;
+	}
+	if (typeof raw === 'object') {
+		try {
+			parts.push(JSON.stringify(raw).toLowerCase());
+		} catch (_error) {
+			// Skip non-serializable values in search haystack.
+		}
+	}
+}
+
+/**
+ * Build one lowercase haystack string from searchable catalog / picker row fields.
+ */
+export function buildVariablePickerSearchHaystack(item: Object): string {
+	if (!item || typeof item !== 'object') {
+		return '';
+	}
+
+	const parts: Array<string> = [];
+
+	for (const key of VARIABLE_PICKER_SEARCH_KEYS) {
+		if (!(key in item)) {
+			continue;
+		}
+		// $FlowFixMe[prop-missing] dynamic key on catalog / repeater row objects
+		appendVariablePickerSearchHaystackPart(parts, item[key]);
+	}
+
+	if ('value' in item) {
+		// $FlowFixMe[prop-missing] preset rows may expose CSS tokens or structured payloads
+		appendVariablePickerSearchHaystackPart(parts, item.value);
+	}
+
+	return parts.join(' ');
+}
 
 /**
  * Whether a catalog row or repeater preset row matches the normalized search query.
+ * Multi-word queries use AND semantics: every token must match somewhere in the haystack.
  */
 export function variablePickerItemMatchesSearch(
 	item: Object,
@@ -171,20 +240,22 @@ export function variablePickerItemMatchesSearch(
 	if (!item || typeof item !== 'object') {
 		return false;
 	}
-	for (const key of VARIABLE_PICKER_SEARCH_KEYS) {
-		if (!(key in item)) {
-			continue;
-		}
-		// $FlowFixMe[prop-missing] dynamic key on catalog / repeater row objects
-		const value = item[key];
-		if (value === null || value === undefined) {
-			continue;
-		}
-		if (typeof value === 'string' || typeof value === 'number') {
-			if (String(value).toLowerCase().includes(normalizedQuery)) {
-				return true;
-			}
+
+	const tokens = tokenizeVariablePickerSearchQuery(normalizedQuery);
+	if (!tokens.length) {
+		return true;
+	}
+
+	const haystack = buildVariablePickerSearchHaystack(item);
+	if (!haystack) {
+		return false;
+	}
+
+	for (let i = 0, n = tokens.length; i < n; i++) {
+		if (haystack.indexOf(tokens[i]) === -1) {
+			return false;
 		}
 	}
-	return false;
+
+	return true;
 }
