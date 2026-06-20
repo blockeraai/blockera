@@ -498,6 +498,14 @@ export {
 	tokenizeVariablePickerSearchQuery,
 	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
+	PresetVariablesViewModeProvider,
+	usePresetVariablesViewMode,
+	loadPresetVariablesViewMode,
+	savePresetVariablesViewMode,
+	PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY,
+	PRESET_VARIABLES_VIEW_MODE_CHANGE_EVENT,
+	PresetVariablesSummaryRow,
+	PRESET_VARIABLES_SECTION_GAP,
 	ValueAddonDisplay,
 } from './components';
 export {
