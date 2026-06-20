@@ -60,7 +60,7 @@ describe('Block Partials Testing ...', () => {
 
 		cy.getBlock('core/social-links').click();
 
-		cy.getByDataTest('style-variations-button').click();
+		cy.getByDataTest('style-variations-button').eq(0).click();
 
 		cy.get('.blockera-component-popover.variations-picker-popover')
 			.last()
