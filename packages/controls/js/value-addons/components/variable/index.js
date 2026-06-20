@@ -9,6 +9,10 @@ export {
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
 } from './var-picker-preset-context';
+export {
+	VarPickerSummarySlotProvider,
+	useVarPickerSummarySlot,
+} from './var-picker-summary-slot';
 export { resolveVariablePickerPresetGroupLabel } from './var-picker-preset-origin-label';
 export {
 	normalizeVariablePickerSearchQuery,

@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useMemo } from '@wordpress/element';
+import { createPortal, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -11,6 +11,7 @@ import {
 	PRESET_VARIABLES_SECTION_GAP,
 	PresetVariablesSummaryRow,
 	useVarPickerPresetContext,
+	useVarPickerSummarySlot,
 } from '@blockera/controls';
 
 /**
@@ -39,6 +40,7 @@ export function PresetVariablesScreenToolbar<
 	withSummaryRowPadding?: boolean;
 }) {
 	const pickerCtx = useVarPickerPresetContext();
+	const summarySlot = useVarPickerSummarySlot();
 	const searchQuery = searchQueryProp ?? pickerCtx.searchQuery ?? '';
 
 	const variableCount = useMemo(
@@ -64,7 +66,23 @@ export function PresetVariablesScreenToolbar<
 		/>
 	);
 
-	if (pickerCtx.active === true || !withSummaryRowPadding) {
+	if (pickerCtx.active === true) {
+		if (!summarySlot) {
+			return null;
+		}
+
+		return createPortal(
+			<div
+				className="blockera-preset-variables-summary-row-wrapper"
+				style={{ marginBottom: PRESET_VARIABLES_SECTION_GAP }}
+			>
+				{summaryRow}
+			</div>,
+			summarySlot
+		);
+	}
+
+	if (!withSummaryRowPadding) {
 		return summaryRow;
 	}
 

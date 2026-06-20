@@ -34,6 +34,7 @@ import { Button, Flex, Popover, SearchControl } from '../../../libs';
 import { PresetVariablesSummaryRow } from './preset-variables-summary-row';
 import { PresetVariablesViewModeProvider } from './preset-variables-view-mode';
 import { PRESET_VARIABLES_SECTION_GAP } from './preset-variables-section-gap';
+import { VarPickerSummarySlotProvider } from './var-picker-summary-slot';
 import {
 	hasOpenModalOverlay,
 	isElementInsideModalOverlay,
@@ -193,6 +194,7 @@ export default function ({
 		);
 	}, [variableTypes]);
 	const popoverContentRef = useRef<?HTMLElement>(null);
+	const [summarySlot, setSummarySlot] = useState<?HTMLElement>(null);
 	const isClosingRef = useRef(false);
 
 	const handleClose = useCallback(() => {
@@ -504,32 +506,43 @@ export default function ({
 			}
 		>
 			<PresetVariablesViewModeProvider>
-				<div
-					ref={popoverContentRef}
-					data-cy="variable-picker-popover"
-					data-test="variable-picker-popover"
-				>
+				<VarPickerSummarySlotProvider slot={summarySlot}>
 					<div
-						className={controlInnerClassNames('var-picker-search')}
-						style={{ marginBottom: '12px' }}
+						ref={popoverContentRef}
+						data-cy="variable-picker-popover"
+						data-test="variable-picker-popover"
 					>
-						<ControlContextProvider
-							value={searchControlContextValue}
+						<div
+							className={controlInnerClassNames(
+								'var-picker-search'
+							)}
+							style={{ marginBottom: '12px' }}
 						>
-							<SearchControl
-								defaultValue=""
-								onChange={setSearchQuery}
-								placeholder={__(
-									'Search variables…',
-									'blockera'
-								)}
-							/>
-						</ControlContextProvider>
+							<ControlContextProvider
+								value={searchControlContextValue}
+							>
+								<SearchControl
+									defaultValue=""
+									onChange={setSearchQuery}
+									placeholder={__(
+										'Search variables…',
+										'blockera'
+									)}
+								/>
+							</ControlContextProvider>
+						</div>
+						<div
+							ref={setSummarySlot}
+							data-test="var-picker-summary-slot"
+						/>
+						<Flex
+							direction="column"
+							gap={PRESET_VARIABLES_SECTION_GAP}
+						>
+							{variablePickerSections}
+						</Flex>
 					</div>
-					<Flex direction="column" gap={PRESET_VARIABLES_SECTION_GAP}>
-						{variablePickerSections}
-					</Flex>
-				</div>
+				</VarPickerSummarySlotProvider>
 			</PresetVariablesViewModeProvider>
 		</Popover>
 	);
