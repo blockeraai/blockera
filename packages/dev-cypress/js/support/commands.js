@@ -642,20 +642,19 @@ export const registerCommands = () => {
 				cy.getByDataCy('color-btn').click({ force: true });
 			});
 
-		cy.get('[data-wp-component="Popover"]')
+		cy.get('.blockera-color-picker-popover')
 			.last()
+			.should('be.visible')
 			.within(() => {
-				cy.get('[data-cy="color-picker-css-value"]')
-					.click({ force: true })
-					.type('{selectall}' + value + ' ', { delay: 0 })
-					.then(() => {
-						if (Cypress.$(`[aria-label="Close"]`).length) {
-							// close popover
-							Cypress.$(`[aria-label="Close"]`)[0].click({
-								force: true,
-							});
-						}
-					});
+				cy.getByDataCy('color-picker-css-value').clear({
+					force: true,
+				});
+				cy.getByDataCy('color-picker-css-value').type(value, {
+					delay: 0,
+					force: true,
+				});
+
+				cy.getByDataTest('close-popover').click({ force: true });
 			});
 	});
 
@@ -663,13 +662,14 @@ export const registerCommands = () => {
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click();
+				cy.getByDataCy('color-btn').click({ force: true });
 			});
 
-		cy.get('[data-wp-component="Popover"]')
+		cy.get('.blockera-color-picker-popover')
 			.last()
+			.should('be.visible')
 			.within(() => {
-				cy.getByAriaLabel('Reset Color (Clear)').click();
+				cy.getByAriaLabel('Reset Color (Clear)').click({ force: true });
 			});
 	});
 
