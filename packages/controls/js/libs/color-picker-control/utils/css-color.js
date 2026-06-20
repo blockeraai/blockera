@@ -305,21 +305,8 @@ export function valueCleanupColorString(
 		return trimmed;
 	}
 
-	// Placeholder-style shorthand without "#" (e.g. "ccc" → "#cccccc", "fff" → "#ffffff").
-	if (!trimmed.startsWith('#') && isThreeDigitHexShorthand(trimmed)) {
-		const expanded = expandThreeDigitHexShorthand(trimmed);
-
-		if (expanded) {
-			return expanded;
-		}
-	}
-
-	// "#abc" shorthand is finalized on blur/close so "#abcd" can still become "#abcd…".
-	if (
-		finalize &&
-		trimmed.startsWith('#') &&
-		isThreeDigitHexShorthand(trimmed)
-	) {
+	// 3-digit shorthand is finalized on blur/close so longer hex (e.g. "c4c4c4") is not truncated.
+	if (finalize && isThreeDigitHexShorthand(trimmed)) {
 		const expanded = expandThreeDigitHexShorthand(trimmed);
 
 		if (expanded) {
