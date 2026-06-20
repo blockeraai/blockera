@@ -48,7 +48,7 @@ export function PresetVariablesSummaryRow({
 	const selectOptions = useMemo(
 		() => [
 			{
-				label: __('Grouped', 'blockera'),
+				label: __('Group', 'blockera'),
 				value: 'grouped',
 			},
 			{
@@ -94,10 +94,7 @@ export function PresetVariablesSummaryRow({
 				)}
 			</span>
 			{showViewSelect && (
-				<div
-					data-test="preset-variables-view-mode-select"
-					style={{ minWidth: '96px', flexShrink: 0 }}
-				>
+				<div data-test="preset-variables-view-mode-select">
 					<ControlContextProvider value={selectContextValue}>
 						<SelectControl
 							type="native"
