@@ -229,10 +229,66 @@ export function reactColorStateToStorageString(
 		.toLowerCase();
 }
 
+function isInProgressCssKeyword(trimmed: string): boolean {
+	const norm = trimmed.toLowerCase();
+
+	if (SKETCH_BLOCKED_KEYWORDS.has(norm)) {
+		return false;
+	}
+
+	for (const kw of SKETCH_BLOCKED_KEYWORDS) {
+		if (norm.length < kw.length && kw.startsWith(norm)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function isThreeDigitHexShorthand(trimmed: string): boolean {
+	const body = trimmed.startsWith('#')
+		? trimmed.slice(1).replace(/\s/g, '')
+		: trimmed.replace(/\s/g, '');
+
+	return /^[0-9a-f]{3}$/i.test(body);
+}
+
+function expandThreeDigitHexShorthand(trimmed: string): ?string {
+	const withHash = trimmed.startsWith('#')
+		? trimmed
+		: '#' + trimmed.replace(/\s/g, '');
+	const tc = tinycolor(withHash);
+
+	if (!tc.isValid()) {
+		return null;
+	}
+
+	const fmt = tc.getFormat();
+
+	if (fmt !== 'hex' && fmt !== 'hex8') {
+		return null;
+	}
+
+	if (fmt === 'hex8' && tc.getAlpha() < 1) {
+		return tc.toHex8String().toLowerCase();
+	}
+
+	return tc.toHexString().toLowerCase();
+}
+
+type ValueCleanupColorOptions = {|
+	finalize?: boolean,
+|};
+
 /**
  * Normalize user input without destroying case-sensitive CSS (e.g. custom properties).
  */
-export function valueCleanupColorString(value: string): string {
+export function valueCleanupColorString(
+	value: string,
+	options: ValueCleanupColorOptions = {}
+): string {
+	const { finalize = false } = options;
+
 	if (value === '' || value === null || value === undefined) {
 		return '';
 	}
@@ -243,6 +299,32 @@ export function valueCleanupColorString(value: string): string {
 
 	if (/var\s*\(/i.test(trimmed)) {
 		return trimmed;
+	}
+
+	if (isInProgressCssKeyword(trimmed)) {
+		return trimmed;
+	}
+
+	// Placeholder-style shorthand without "#" (e.g. "ccc" → "#cccccc", "fff" → "#ffffff").
+	if (!trimmed.startsWith('#') && isThreeDigitHexShorthand(trimmed)) {
+		const expanded = expandThreeDigitHexShorthand(trimmed);
+
+		if (expanded) {
+			return expanded;
+		}
+	}
+
+	// "#abc" shorthand is finalized on blur/close so "#abcd" can still become "#abcd…".
+	if (
+		finalize &&
+		trimmed.startsWith('#') &&
+		isThreeDigitHexShorthand(trimmed)
+	) {
+		const expanded = expandThreeDigitHexShorthand(trimmed);
+
+		if (expanded) {
+			return expanded;
+		}
 	}
 
 	const hexSource = trimmed.startsWith('#')
@@ -280,4 +362,11 @@ export function valueCleanupColorString(value: string): string {
 	}
 
 	return trimmed;
+}
+
+/**
+ * Finalize color input on blur or popover close (e.g. "#ccc" → "#cccccc").
+ */
+export function finalizeColorString(value: string): string {
+	return valueCleanupColorString(value, { finalize: true });
 }
