@@ -5,7 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useCallback, useState } from '@wordpress/element';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -112,6 +112,7 @@ export default function RepeaterControl(
 		noItemsMessage,
 		customProps = {},
 		enablePromoCountOnRepeaterItemHeader = true,
+		onRegisterAddNewAction,
 		...additionalPropsForRepeaterContext
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
@@ -247,6 +248,47 @@ export default function RepeaterControl(
 			valueCleanup,
 		]
 	);
+
+	const disabledAddNewItemForRegister =
+		!maxItems ||
+		(maxItems !== -1 &&
+			Object.keys(repeaterItems || {})?.length >= maxItems);
+
+	const addNewButtonOnClickRef = useRef<() => void>(() => {});
+
+	useEffect(() => {
+		if (!onRegisterAddNewAction) {
+			return undefined;
+		}
+
+		if (!canAddNewItem || !actionButtonAdd || isSetValueAddon()) {
+			onRegisterAddNewAction(null);
+			return () => {
+				onRegisterAddNewAction(null);
+			};
+		}
+
+		return onRegisterAddNewAction({
+			onClick: () => {
+				addNewButtonOnClickRef.current();
+			},
+			label: addNewButtonLabel || __('Add New', 'blockera'),
+			dataTest: addNewButtonDataTest,
+			canAdd: true,
+			disabled: disabledAddNewItemForRegister,
+		});
+	}, [
+		onRegisterAddNewAction,
+		canAddNewItem,
+		actionButtonAdd,
+		addNewButtonLabel,
+		addNewButtonDataTest,
+		disabledAddNewItemForRegister,
+		repeaterItems,
+		maxItems,
+		isSetValueAddon,
+		valueAddonControlProps?.isOpen,
+	]);
 
 	if (isSetValueAddon()) {
 		return (
@@ -516,6 +558,8 @@ export default function RepeaterControl(
 	const disabledAddNewItem =
 		!maxItems ||
 		(maxItems !== -1 && Object.keys(repeaterItems)?.length >= maxItems);
+
+	addNewButtonOnClickRef.current = addNewButtonOnClick;
 
 	const renderAddItemButtonWithValueAddon = (
 		button: MixedElement

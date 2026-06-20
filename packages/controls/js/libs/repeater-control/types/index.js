@@ -167,6 +167,19 @@ export type RepeaterControlProps = {
 	 */
 	actionButtonAdd?: boolean,
 	/**
+	 * When provided, exposes the repeater "add new" action for external UI (e.g. variable picker header).
+	 * Return a cleanup function from the callback to unregister.
+	 */
+	onRegisterAddNewAction?: (
+		action: {
+			onClick: () => void,
+			label: string,
+			dataTest?: string,
+			canAdd: boolean,
+			disabled?: boolean,
+		} | null
+	) => (() => void) | void,
+	/**
 	 * Specifies the visibility or activation control should be shown for repeater items.
 	 *
 	 * @default true
