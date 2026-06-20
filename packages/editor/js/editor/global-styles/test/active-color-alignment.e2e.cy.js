@@ -141,7 +141,7 @@ describe('Active color alignment (StateContainer ↔ popovers)', () => {
 			openInspectorParagraphWithLinkBlock();
 		});
 
-		it.only('uses WordPress normal state color on master block container and states inserter popover', () => {
+		it('uses WordPress normal state color on master block container and states inserter popover', () => {
 			setInnerBlock('elements/link');
 			assertContainerActiveTabColor(STATE_COLORS_CONTAINER, '#cc0000');
 			assertStatesInserterPopoverMatchesContainer(STATE_COLORS_CONTAINER);
