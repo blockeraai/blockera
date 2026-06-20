@@ -57,12 +57,12 @@ class TestHelpers extends \WP_UnitTestCase {
 		$this->assertEquals(
 			[
 				'desktop'          => '',
-				'tablet'           => '@media screen and (max-width: 991px)',
-				'mobile-landscape' => '@media screen and (max-width: 767px)',
-				'mobile'           => '@media screen and (max-width: 478px)',
+				'tablet'           => '@media screen and (max-width: 991px) and (min-width: 768px)',
+				'mobile-landscape' => '@media screen and (max-width: 767px) and (min-width: 479px)',
+				'mobile'           => '@media screen and (max-width: 478px) and (min-width: 0px)',
 				'2xl-desktop'      => '@media screen and (min-width: 1920px)',
-				'xl-desktop'       => '@media screen and (min-width: 1440px)',
-				'l-desktop'        => '@media screen and (min-width: 1280px)',
+				'xl-desktop'       => '@media screen and (max-width: 1919px) and (min-width: 1440px)',
+				'l-desktop'        => '@media screen and (max-width: 1439px) and (min-width: 1280px)',
 			],
 			blockera_get_css_media_queries(blockera_core_config('breakpoints.list'))
 		);
