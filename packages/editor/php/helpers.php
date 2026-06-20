@@ -1544,9 +1544,9 @@ if (! function_exists('blockera_sort_breakpoints')) {
 	/**
 	 * Sorts breakpoints to ensure correct CSS media query priority for a desktop-first approach.
 	 * The sorting order is:
-	 * 1. The `base` breakpoint (which has no min/max).
-	 * 2. Breakpoints with `max` width (for smaller screens), sorted largest to smallest.
-	 * 3. Breakpoints with `min` width (for larger screens), sorted smallest to largest.
+	 * 1. Breakpoints with `max` width (for smaller screens), sorted largest to smallest.
+	 * 2. Breakpoints with `min` width (for larger screens), sorted smallest to largest.
+	 * 3. The `base` breakpoint (which has no min/max), placed last.
 	 *
 	 * @param array $breakpoints - The array containing breakpoint definitions.
 	 * @return array An array of breakpoint objects sorted for CSS generation.
@@ -1570,11 +1570,11 @@ if (! function_exists('blockera_sort_breakpoints')) {
 				$bIsBase = empty($b['settings']['min']) && empty($b['settings']['max']);
 
 				// Assign a group number to each breakpoint to control the primary sort order.
-				// Group 1: The single `base` breakpoint (no min/max).
-				// Group 2: `max-width` breakpoints (for smaller screens).
-				// Group 3: `min-width` breakpoints (for larger screens).
-				$aGroup = $aIsBase ? 1 : ( $aIsMin ? 3 : 2 );
-				$bGroup = $bIsBase ? 1 : ( $bIsMin ? 3 : 2 );
+				// Group 1: `max-width` breakpoints (for smaller screens).
+				// Group 2: `min-width` breakpoints (for larger screens).
+				// Group 3: The single `base` breakpoint (no min/max).
+				$aGroup = $aIsBase ? 3 : ( $aIsMin ? 2 : 1 );
+				$bGroup = $bIsBase ? 3 : ( $bIsMin ? 2 : 1 );
 
 				// If the breakpoints are in different groups, sort by the group number (1, then 2, then 3).
 				if ($aGroup !== $bGroup) {
@@ -1585,13 +1585,13 @@ if (! function_exists('blockera_sort_breakpoints')) {
 				$aValue = $parsePx($a['settings']['min'] ?? $a['settings']['max'] ?? '');
 				$bValue = $parsePx($b['settings']['min'] ?? $b['settings']['max'] ?? '');
 
-				// For 'max-width' breakpoints (Group 2), sort descending (largest size first).
-				if (2 === $aGroup) {
+				// For 'max-width' breakpoints (Group 1), sort descending (largest size first).
+				if (1 === $aGroup) {
 					return $bValue - $aValue;
 				}
 
-				// For 'min-width' breakpoints (Group 3), sort ascending (smallest size first).
-				if (3 === $aGroup) {
+				// For 'min-width' breakpoints (Group 2), sort ascending (smallest size first).
+				if (2 === $aGroup) {
 					return $aValue - $bValue;
 				}
 
