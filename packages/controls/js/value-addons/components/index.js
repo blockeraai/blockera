@@ -15,6 +15,8 @@ export {
 	useVarPickerPresetContext,
 	VarPickerSummarySlotProvider,
 	useVarPickerSummarySlot,
+	VarPickerCustomAddProvider,
+	useVarPickerCustomAddContext,
 	resolveVariablePickerPresetGroupLabel,
 	normalizeVariablePickerSearchQuery,
 	tokenizeVariablePickerSearchQuery,

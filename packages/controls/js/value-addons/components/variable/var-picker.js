@@ -43,6 +43,10 @@ import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
 import {
+	VarPickerCustomAddProvider,
+	useVarPickerCustomAddContext,
+} from './var-picker-custom-add-context';
+import {
 	collectCatalogItemsForVariableType,
 	getSupplementalCustomVariableSections,
 	normalizeVariablePickerSearchQuery,
@@ -152,6 +156,71 @@ function variablePickerPopoverTypeClassName(presetType: string): string {
 	return controlInnerClassNames(`popover-variables-type-${segment}`);
 }
 
+function VarPickerHeaderActions({
+	controlProps,
+}: {
+	controlProps: ValueAddonControlProps,
+}): MixedElement {
+	const customAddCtx = useVarPickerCustomAddContext();
+	const customAddAction = customAddCtx?.action;
+	const isSingleVariableType =
+		(controlProps.variableTypes || []).length === 1;
+	const showCustomAddButton =
+		isSingleVariableType &&
+		customAddAction !== null &&
+		customAddAction.canAdd === true;
+
+	return (
+		<>
+			{(canUnlinkVariable(controlProps.value) ||
+				hasThemeJsonPlainPresetSlug(
+					controlProps.themeJsonPlainPresetSlug
+				)) && (
+				<Button
+					tabIndex="-1"
+					size={'extra-small'}
+					onClick={controlProps.handleOnUnlinkVar}
+					style={{ padding: '5px' }}
+					label={__('Unlink Variable Value', 'blockera')}
+				>
+					<Icon icon="unlink" iconSize="20" />
+				</Button>
+			)}
+
+			{(isValid(controlProps.value) ||
+				hasThemeJsonPlainPresetSlug(
+					controlProps.themeJsonPlainPresetSlug
+				)) && (
+				<Button
+					tabIndex="-1"
+					size={'extra-small'}
+					onClick={controlProps.handleOnClickRemove}
+					style={{ padding: '5px' }}
+					label={__('Remove variable', 'blockera')}
+				>
+					<Icon icon="trash" iconSize="20" />
+				</Button>
+			)}
+
+			{showCustomAddButton && customAddAction !== null && (
+				<Button
+					tabIndex="-1"
+					size={'extra-small'}
+					data-test="variable-picker-header-add-custom-variable"
+					onClick={customAddAction.onClick}
+					style={{ padding: '5px' }}
+					showTooltip={true}
+					tooltipPosition="top"
+					label={customAddAction.label}
+					disabled={customAddAction.disabled === true}
+				>
+					<Icon icon="plus" iconSize="20" />
+				</Button>
+			)}
+		</>
+	);
+}
+
 export default function ({
 	controlProps,
 	onClose,
@@ -233,6 +302,16 @@ export default function ({
 
 				const root = getVarPickerPopoverRoot(popoverContentRef.current);
 				if (root && root.contains(related)) {
+					return;
+				}
+
+				// Repeater item edit popovers portal outside the picker root.
+				const nestedPopover = related.closest('.components-popover');
+				if (
+					nestedPopover instanceof HTMLElement &&
+					varPickerPopover &&
+					nestedPopover !== varPickerPopover
+				) {
 					return;
 				}
 			}
@@ -465,85 +544,57 @@ export default function ({
 	});
 
 	return (
-		<Popover
-			title={__('Variable Picker', 'blockera')}
-			placement="left-start"
-			onClose={handleClose}
-			onFocusOutside={handleFocusOutside}
-			className={popoverClassName}
-			titleButtonsRight={
-				<>
-					{(canUnlinkVariable(controlProps.value) ||
-						hasThemeJsonPlainPresetSlug(
-							controlProps.themeJsonPlainPresetSlug
-						)) && (
-						<Button
-							tabIndex="-1"
-							size={'extra-small'}
-							onClick={controlProps.handleOnUnlinkVar}
-							style={{ padding: '5px' }}
-							label={__('Unlink Variable Value', 'blockera')}
-						>
-							<Icon icon="unlink" iconSize="20" />
-						</Button>
-					)}
-
-					{(isValid(controlProps.value) ||
-						hasThemeJsonPlainPresetSlug(
-							controlProps.themeJsonPlainPresetSlug
-						)) && (
-						<Button
-							tabIndex="-1"
-							size={'extra-small'}
-							onClick={controlProps.handleOnClickRemove}
-							style={{ padding: '5px' }}
-							label={__('Remove variable', 'blockera')}
-						>
-							<Icon icon="trash" iconSize="20" />
-						</Button>
-					)}
-				</>
-			}
-		>
-			<PresetVariablesViewModeProvider>
-				<VarPickerSummarySlotProvider slot={summarySlot}>
-					<div
-						ref={popoverContentRef}
-						data-cy="variable-picker-popover"
-						data-test="variable-picker-popover"
-					>
+		<VarPickerCustomAddProvider>
+			<Popover
+				title={__('Variable Picker', 'blockera')}
+				placement="left-start"
+				onClose={handleClose}
+				onFocusOutside={handleFocusOutside}
+				className={popoverClassName}
+				titleButtonsRight={
+					<VarPickerHeaderActions controlProps={controlProps} />
+				}
+			>
+				<PresetVariablesViewModeProvider>
+					<VarPickerSummarySlotProvider slot={summarySlot}>
 						<div
-							className={controlInnerClassNames(
-								'var-picker-search'
-							)}
-							style={{ marginBottom: '12px' }}
+							ref={popoverContentRef}
+							data-cy="variable-picker-popover"
+							data-test="variable-picker-popover"
 						>
-							<ControlContextProvider
-								value={searchControlContextValue}
+							<div
+								className={controlInnerClassNames(
+									'var-picker-search'
+								)}
+								style={{ marginBottom: '12px' }}
 							>
-								<SearchControl
-									defaultValue=""
-									onChange={setSearchQuery}
-									placeholder={__(
-										'Search variables…',
-										'blockera'
-									)}
-								/>
-							</ControlContextProvider>
+								<ControlContextProvider
+									value={searchControlContextValue}
+								>
+									<SearchControl
+										defaultValue=""
+										onChange={setSearchQuery}
+										placeholder={__(
+											'Search variables…',
+											'blockera'
+										)}
+									/>
+								</ControlContextProvider>
+							</div>
+							<div
+								ref={setSummarySlot}
+								data-test="var-picker-summary-slot"
+							/>
+							<Flex
+								direction="column"
+								gap={PRESET_VARIABLES_SECTION_GAP}
+							>
+								{variablePickerSections}
+							</Flex>
 						</div>
-						<div
-							ref={setSummarySlot}
-							data-test="var-picker-summary-slot"
-						/>
-						<Flex
-							direction="column"
-							gap={PRESET_VARIABLES_SECTION_GAP}
-						>
-							{variablePickerSections}
-						</Flex>
-					</div>
-				</VarPickerSummarySlotProvider>
-			</PresetVariablesViewModeProvider>
-		</Popover>
+					</VarPickerSummarySlotProvider>
+				</PresetVariablesViewModeProvider>
+			</Popover>
+		</VarPickerCustomAddProvider>
 	);
 }

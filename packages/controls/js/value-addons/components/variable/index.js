@@ -13,6 +13,10 @@ export {
 	VarPickerSummarySlotProvider,
 	useVarPickerSummarySlot,
 } from './var-picker-summary-slot';
+export {
+	VarPickerCustomAddProvider,
+	useVarPickerCustomAddContext,
+} from './var-picker-custom-add-context';
 export { resolveVariablePickerPresetGroupLabel } from './var-picker-preset-origin-label';
 export {
 	normalizeVariablePickerSearchQuery,
