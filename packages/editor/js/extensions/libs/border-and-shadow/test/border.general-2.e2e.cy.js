@@ -11,7 +11,6 @@ describe('Border → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Border').as('container');
 	});
@@ -38,7 +37,7 @@ describe('Border → Functionality', () => {
 
 			cy.get('@container').within(() => {
 				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('div[aria-selected="false"]').eq(1).click();
+				cy.get('div[aria-selected="false"]').eq(0).click();
 			});
 
 			//Check block
@@ -192,7 +191,7 @@ describe('Border → Functionality', () => {
 
 						cy.get('[aria-haspopup="listbox"]').trigger('click');
 						cy.get('div[aria-selected="false"]')
-							.eq(1)
+							.eq(0)
 							.trigger('click');
 
 						cy.getByDataTest('border-control-color').click();
@@ -252,7 +251,7 @@ describe('Border → Functionality', () => {
 
 						cy.get('[aria-haspopup="listbox"]').trigger('click');
 						cy.get('div[aria-selected="false"]')
-							.eq(2)
+							.eq(1)
 							.trigger('click');
 
 						cy.getByDataTest('border-control-color').click();
@@ -316,7 +315,7 @@ describe('Border → Functionality', () => {
 
 						cy.get('[aria-haspopup="listbox"]').trigger('click');
 						cy.get('div[aria-selected="false"]')
-							.eq(3)
+							.eq(2)
 							.trigger('click');
 
 						cy.getByDataTest('border-control-color').click();
