@@ -68,11 +68,7 @@ export const BlockStyle = ({
 			) : null}
 			{hasBlockeraProps && config ? (
 				<>
-					{shouldPrintCustomCss ? (
-						<style id={props.clientId}>{customCss}</style>
-					) : (
-						<></>
-					)}
+					{shouldPrintCustomCss ? <style>{customCss}</style> : <></>}
 					<StateStyle
 						{...{
 							...props,
