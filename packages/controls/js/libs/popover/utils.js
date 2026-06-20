@@ -21,6 +21,9 @@ export const DEFAULT_POPOVER_OFFSET = 25;
 export const VALUE_ADDON_OPENER_SELECTORS =
 	'.blockera-control-value-addon-pointer.open-value-addon, [data-cy="value-addon-btn"].open-value-addon, .blockera-control-value-addon.open-value-addon';
 
+export const FOCUS_OPENER_SELECTORS =
+	'.is-focus, .is-open-popover, [data-cy="label-control"].is-open';
+
 export const POPOVER_ANCHOR_SCOPE_SELECTORS: string = [
 	'.blockera-control-value-addon-pointers',
 	'.blockera-field-control',
@@ -52,13 +55,15 @@ export function resolvePopoverAnchorElement(
 				return valueAddonOpener;
 			}
 
-			const focusOpener = scope.querySelector(
-				'.is-focus, .is-open-popover'
-			);
+			const focusOpener = scope.querySelector(FOCUS_OPENER_SELECTORS);
 
 			if (focusOpener instanceof HTMLElement) {
 				return focusOpener;
 			}
+
+			// Keep offset math scoped to this control; avoid picking an unrelated
+			// open value-addon elsewhere in the document.
+			return fallbackAnchor;
 		}
 	}
 

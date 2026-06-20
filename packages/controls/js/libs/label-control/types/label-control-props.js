@@ -57,4 +57,5 @@ export type SimpleLabelControlProps = {
 	labelDescription?: string | MixedElement,
 	advancedIsOpen?: boolean,
 	iconPosition?: 'start' | 'end',
+	anchorRef?: { current: ?HTMLElement } | ((element: ?HTMLElement) => mixed),
 };

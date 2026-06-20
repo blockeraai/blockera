@@ -6,7 +6,7 @@
 import { __, _n } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useState, useContext } from '@wordpress/element';
+import { useState, useContext, useRef } from '@wordpress/element';
 
 /**
  * Blockera Dependencies
@@ -60,6 +60,7 @@ export const EditorAdvancedLabelControl = ({
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
+	const labelAnchorRef = useRef(null);
 
 	const {
 		getAttributes = () => {},
@@ -136,6 +137,7 @@ export const EditorAdvancedLabelControl = ({
 		<>
 			{label && (
 				<SimpleLabelControl
+					anchorRef={labelAnchorRef}
 					label={label}
 					ariaLabel={ariaLabel}
 					labelDescription={labelDescription}
@@ -232,6 +234,7 @@ export const EditorAdvancedLabelControl = ({
 
 			{isOpenModal && (
 				<Popover
+					anchor={labelAnchorRef.current}
 					title={
 						<>
 							<Icon icon="question-circle" iconSize="24" />

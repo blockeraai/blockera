@@ -174,5 +174,41 @@ describe('popover offset utils', () => {
 				fallbackAnchor
 			);
 		});
+
+		it('prefers the open label control within the field scope', () => {
+			const fieldControl = document.createElement('div');
+			fieldControl.className = 'blockera-field-control';
+
+			const fallbackAnchor = document.createElement('span');
+			const labelControl = document.createElement('span');
+			labelControl.dataset.cy = 'label-control';
+			labelControl.className = 'is-open';
+
+			fieldControl.appendChild(labelControl);
+			fieldControl.appendChild(fallbackAnchor);
+			document.body.appendChild(fieldControl);
+
+			expect(resolvePopoverAnchorElement(null, fallbackAnchor)).toBe(
+				labelControl
+			);
+		});
+
+		it('does not resolve a global value-addon opener when scope has no opener', () => {
+			const fieldControl = document.createElement('div');
+			fieldControl.className = 'blockera-control';
+
+			const fallbackAnchor = document.createElement('span');
+			const globalOpener = document.createElement('div');
+			globalOpener.className =
+				'blockera-control-value-addon-pointer open-value-addon';
+
+			fieldControl.appendChild(fallbackAnchor);
+			document.body.appendChild(fieldControl);
+			document.body.appendChild(globalOpener);
+
+			expect(resolvePopoverAnchorElement(null, fallbackAnchor)).toBe(
+				fallbackAnchor
+			);
+		});
 	});
 });

@@ -29,6 +29,7 @@ export const SimpleLabelControl = ({
 	advancedIsOpen = false,
 	resetToDefault,
 	iconPosition = 'end',
+	anchorRef,
 	...props
 }: SimpleLabelControlProps): MixedElement => {
 	if (!label) {
@@ -42,6 +43,7 @@ export const SimpleLabelControl = ({
 
 	return (
 		<span
+			ref={anchorRef}
 			{...props}
 			className={controlClassNames(
 				'label',
