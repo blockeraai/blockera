@@ -10,7 +10,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import { Flex, PresetVariablesViewModeProvider } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -48,7 +48,9 @@ function RadialGradientsScreen({ onBackHandler }: RadialGradientsScreenProps) {
 
 			<View>
 				<Spacer paddingX={4}>
-					<RadialGradientsPresetContent />
+					<PresetVariablesViewModeProvider>
+						<RadialGradientsPresetContent />
+					</PresetVariablesViewModeProvider>
 				</Spacer>
 			</View>
 		</Flex>
