@@ -13,7 +13,12 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Flex, PoweredBy } from '@blockera/controls';
+import {
+	Flex,
+	PoweredBy,
+	PresetVariablesViewModeProvider,
+	PRESET_VARIABLES_SECTION_GAP,
+} from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -28,6 +33,8 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	PresetTaxonomyGroupLayout,
+	PresetVariablesScreenToolbar,
+	buildVisiblePresetOriginSets,
 } from '../components';
 import {
 	BLOCKERA_SHADOWS_PRESET_INSPECTOR_ACTIVE_CLASS,
@@ -261,8 +268,40 @@ export function ShadowsPresetContent() {
 		[baseThemePresets]
 	);
 
+	const baseDefaultSizes = useMemo(
+		() => sanitizeShadowPresets(baseDefaultPresets),
+		[baseDefaultPresets]
+	);
+
+	const originSets = useMemo(
+		() =>
+			buildVisiblePresetOriginSets({
+				showThemeOriginGroup,
+				showDefaultOriginGroup: showDefaultGroup,
+				themeItems: themePresets,
+				themeBaseItems: baseThemeSizes,
+				defaultItems: defaultPresets,
+				defaultBaseItems: baseDefaultSizes,
+				customItems: customPresets,
+			}),
+		[
+			showThemeOriginGroup,
+			showDefaultGroup,
+			themePresets,
+			baseThemeSizes,
+			defaultPresets,
+			baseDefaultSizes,
+			customPresets,
+		]
+	);
+
 	return (
-		<Flex direction="column" gap="20px" style={{ width: '100%' }}>
+		<Flex
+			direction="column"
+			gap={PRESET_VARIABLES_SECTION_GAP}
+			style={{ width: '100%' }}
+		>
+			<PresetVariablesScreenToolbar originSets={originSets} />
 			{showThemeOriginGroup && (
 				<ShadowPresetGroup
 					origin="theme"
@@ -357,7 +396,9 @@ function Shadows({ screenSelector }: ShadowsProps) {
 					direction="column"
 					style={{ padding: '0 16px', width: '100%' }}
 				>
-					<ShadowsPresetContent />
+					<PresetVariablesViewModeProvider>
+						<ShadowsPresetContent />
+					</PresetVariablesViewModeProvider>
 				</Flex>
 			</Flex>
 		</div>,
