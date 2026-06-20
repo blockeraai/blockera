@@ -480,11 +480,19 @@ export const PresetGroup = ({
 		pickerCtx.omitRepeaterSectionLabel,
 	]);
 
-	if (
-		suppressThemeRepeaterWhenTaxonomyBasePopulated ||
-		(isPickerSearchActive && !hasPickerSearchMatches)
-	) {
+	if (suppressThemeRepeaterWhenTaxonomyBasePopulated) {
 		return null;
+	}
+
+	if (isPickerSearchActive && !hasPickerSearchMatches) {
+		return (
+			<div
+				className={controlInnerClassNames('repeater-filter-empty')}
+				style={{ opacity: 0.5, fontSize: '12px' }}
+			>
+				{__('No variables match your search.', 'blockera')}
+			</div>
+		);
 	}
 
 	return (
