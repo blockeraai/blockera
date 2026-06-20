@@ -18,6 +18,7 @@ import {
 import { Icon } from '@blockera/icons';
 import {
 	ColorIndicator,
+	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
@@ -255,27 +256,42 @@ export function ColorPresetOpener({
 	const headerLabel = useMemo(() => {
 		const isColorVariablePicker =
 			pickerCtx.active === true && pickerCtx.variableType === 'color';
+
+		if (isShadeRow && isColorVariablePicker) {
+			const shadeParsed = parsePaletteShadeSlug(
+				String(colorItem.slug ?? '')
+			);
+			const isListViewWithoutSearch =
+				viewMode === 'list' &&
+				normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) ===
+					'';
+			if (shadeParsed && isListViewWithoutSearch) {
+				return shadeParsed.shadeStep;
+			}
+			const useFullPickerLabelForShade =
+				shouldUsePresetTaxonomyFullPickerLabel(
+					isColorVariablePicker,
+					pickerCtx.variableType,
+					pickerCtx.searchQuery,
+					viewMode
+				);
+			if (useFullPickerLabelForShade) {
+				return resolvePresetTaxonomyEditName(
+					colorItem as Record<string, unknown>,
+					taxonomyNameSource
+				);
+			}
+			if (shadeParsed) {
+				return shadeParsed.shadeStep;
+			}
+		}
+
 		const useFullPickerLabel = shouldUsePresetTaxonomyFullPickerLabel(
 			isColorVariablePicker,
 			pickerCtx.variableType,
 			pickerCtx.searchQuery,
 			viewMode
 		);
-
-		if (isShadeRow && isColorVariablePicker) {
-			if (useFullPickerLabel) {
-				return resolvePresetTaxonomyEditName(
-					colorItem as Record<string, unknown>,
-					taxonomyNameSource
-				);
-			}
-			const shadeParsed = parsePaletteShadeSlug(
-				String(colorItem.slug ?? '')
-			);
-			if (shadeParsed) {
-				return shadeParsed.shadeStep;
-			}
-		}
 
 		if (
 			contextType === 'taxonomy' ||

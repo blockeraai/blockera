@@ -105,7 +105,7 @@ export function applyVariablePickerRepeaterSelection(
 		const r = row as Record<string, unknown>;
 		return {
 			...r,
-			selectable: true,
+			selectable: r.listViewCompactShades === true ? false : true,
 			isSelected: variablePickerRowMatchesSelected(
 				r,
 				variableType,
@@ -200,7 +200,12 @@ export function stripRepeaterPickerUiFields(items: unknown): unknown {
 			return row;
 		}
 		const r = row as Record<string, unknown>;
-		const { isSelected: _is, selectable: _sel, ...rest } = r;
+		const {
+			isSelected: _is,
+			selectable: _sel,
+			listViewCompactShades: _listViewCompactShades,
+			...rest
+		} = r;
 		return rest;
 	};
 

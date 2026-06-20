@@ -85,6 +85,20 @@ function ColorGroupInner({
 		[pickerCtx.active, pickerCtx.searchQuery, pickerCtx.variableType]
 	);
 
+	const isColorPickerListView = useMemo(
+		() =>
+			pickerCtx.active === true &&
+			pickerCtx.variableType === 'color' &&
+			viewMode === 'list' &&
+			!flattenForColorPickerSearch,
+		[
+			pickerCtx.active,
+			pickerCtx.variableType,
+			viewMode,
+			flattenForColorPickerSearch,
+		]
+	);
+
 	const persistColors = useCallback(
 		(next: Color[]) => {
 			const cleaned = stripRedundantPaletteShadeBase(next);
@@ -109,11 +123,12 @@ function ColorGroupInner({
 			}
 		) => {
 			const slug = String(row.slug ?? '');
+			const isShadeRow = isShadePaletteColor(row);
 			const hasStoredShades =
 				filterVariationsByBase(colors, slug).length > 0;
 			const baseRepeater = flattenForColorPickerSearch
-				? isShadePaletteColor(row) || !hasStoredShades
-				: !isShadePaletteColor(row);
+				? isShadeRow || !hasStoredShades
+				: !isShadeRow;
 			let renderRepeaterItem =
 				typeof row.renderRepeaterItem === 'boolean'
 					? row.renderRepeaterItem
@@ -126,15 +141,31 @@ function ColorGroupInner({
 						ctx.simpleSlugSet.has(slug) && baseRepeater;
 				}
 			}
+
+			// Stored repeater defaults set renderRepeaterItem:true on every row;
+			// shade slugs must stay out of the flat list unless search flatten is active.
+			if (isShadeRow && !flattenForColorPickerSearch) {
+				renderRepeaterItem = false;
+			}
+
+			const listViewCompactShades =
+				isColorPickerListView && hasStoredShades && !isShadeRow;
+
 			return {
 				...row,
 				renderRepeaterItem,
 				hasVariations: flattenForColorPickerSearch
 					? false
 					: hasStoredShades,
+				...(listViewCompactShades
+					? {
+							listViewCompactShades: true,
+							selectable: false,
+						}
+					: {}),
 			} as Color & Record<string, unknown>;
 		},
-		[colors, flattenForColorPickerSearch]
+		[colors, flattenForColorPickerSearch, isColorPickerListView]
 	);
 
 	const taxonomy = usePresetTaxonomyGroupUi<Color & Record<string, unknown>>({
