@@ -10,6 +10,7 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
+import { useReducedMotion } from '@wordpress/compose';
 import type { Element, Node } from 'react';
 
 /**
@@ -157,6 +158,8 @@ const RepeaterItem = ({
 	}
 
 	const styleRef = useRef(null);
+	const itemRef = useRef(null);
+	const scrollBehavior = useReducedMotion() ? 'auto' : 'smooth';
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
@@ -166,6 +169,47 @@ const RepeaterItem = ({
 			opacity: draggingIndex && draggingIndex !== itemId ? 0.5 : 1,
 		};
 	}, [draggingIndex, itemId]);
+
+	// New preset rows (creatingStep) open the edit popover and scroll into view when
+	// the repeater lives inside a scrollable panel (e.g. variable picker).
+	useEffect(() => {
+		if (item?.creatingStep !== true) {
+			return;
+		}
+
+		setOpen(true);
+
+		const node = itemRef.current;
+		if (!(node instanceof HTMLElement)) {
+			return;
+		}
+
+		requestAnimationFrame(() => {
+			node.scrollIntoView({
+				inline: 'nearest',
+				block: 'nearest',
+				behavior: scrollBehavior,
+			});
+		});
+	}, [item?.creatingStep, itemId, scrollBehavior]);
+
+	const handleItemPopoverClose = () => {
+		setOpen(false);
+
+		if (item?.creatingStep === true) {
+			changeRepeaterItem({
+				itemId,
+				value: {
+					...item,
+					creatingStep: false,
+				},
+				controlId,
+				repeaterId,
+				onChange,
+				valueCleanup,
+			});
+		}
+	};
 
 	const handleDragStart = (e: DragEvent, index: string) => {
 		if (e.dataTransfer) {
@@ -356,9 +400,7 @@ const RepeaterItem = ({
 		),
 		children: <RepeaterItemChildren {...{ item, itemId }} />,
 		isOpen,
-		onClose: () => {
-			setOpen(false);
-		},
+		onClose: handleItemPopoverClose,
 		onClick: (): void | boolean => {
 			if (item?.selectable) {
 				if (hasOpenModalOverlay()) {
@@ -430,6 +472,7 @@ const RepeaterItem = ({
 
 	return (
 		<div
+			ref={itemRef}
 			className={controlInnerClassNames(
 				'repeater-item',
 				isVisible ? ' is-active' : ' is-inactive',
@@ -454,7 +497,11 @@ const RepeaterItem = ({
 			data-cy="repeater-item"
 			style={styleRef.current}
 			data-id={itemId}
-			data-test={itemId}
+			data-test={
+				item?.creatingStep === true
+					? 'repeater-item-creating-step'
+					: itemId
+			}
 			{...(item?.isSelected
 				? {
 						onClick: mainItemGroupSharedProps.onClick,
