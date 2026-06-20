@@ -22,6 +22,7 @@ import { Button, Popover, BaseControl, NoticeControl } from '../index';
 import {
 	isColorControllableBySketchPicker,
 	validHex,
+	finalizeColorString,
 	valueCleanupColorString,
 } from './utils/css-color';
 
@@ -55,6 +56,19 @@ export default function ColorPickerControl({
 			defaultValue,
 			valueCleanup,
 		});
+
+	const commitColorValue = useCallback(() => {
+		const finalized = finalizeColorString(value);
+
+		if (finalized !== value) {
+			setValue(finalized);
+		}
+	}, [value, setValue]);
+
+	const handleClose = useCallback(() => {
+		commitColorValue();
+		onClose();
+	}, [commitColorValue, onClose]);
 
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
 	const cssValueInputId = useInstanceId(
@@ -197,6 +211,7 @@ export default function ColorPickerControl({
 				onChange={(e) => {
 					setValue(e.target.value);
 				}}
+				onBlur={commitColorValue}
 				autoComplete="off"
 				spellCheck={false}
 				placeholder={__(
@@ -228,7 +243,7 @@ export default function ColorPickerControl({
 						className={`blockera-color-picker-popover ${
 							isPopoverHidden ? 'hidden' : ''
 						}`}
-						onClose={onClose}
+						onClose={handleClose}
 						focusOutsideSuppressionRef={focusOutsideSuppressionRef}
 						titleButtonsRight={
 							<>

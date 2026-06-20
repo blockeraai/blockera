@@ -598,16 +598,11 @@ async function setColorControlValue(page, label, value) {
 	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
-	const popover = page.locator('[data-wp-component="Popover"]').last();
+	const popover = page.locator('.blockera-color-picker-popover').last();
 	await popover.locator('[data-cy="color-picker-css-value"]').clear();
-	await popover
-		.locator('[data-cy="color-picker-css-value"]')
-		.fill(value + ' ');
-
-	const closeButton = popover.locator('[aria-label="Close"]');
-	if ((await closeButton.count()) > 0) {
-		await closeButton.click({ force: true });
-	}
+	await popover.locator('[data-cy="color-picker-css-value"]').fill(value);
+	await popover.locator('[data-cy="color-picker-css-value"]').blur();
+	await popover.locator('[data-test="close-popover"]').click({ force: true });
 }
 
 /**
@@ -621,7 +616,7 @@ async function clearColorControlValue(page, label) {
 	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
-	const popover = page.locator('[data-wp-component="Popover"]').last();
+	const popover = page.locator('.blockera-color-picker-popover').last();
 	await popover.locator('[aria-label="Reset Color (Clear)"]').click();
 
 	// After clearing the color, wait for 50ms to ensure the color is cleared.
