@@ -15,5 +15,13 @@
 				color: var(--blockera-controls-primary-color);
 			}
 		}
+
+		// Taxonomy group labels (e.g. Base, Text, Status).
+		.blockera-preset-taxonomy-group-shell > .blockera-control-header {
+			.blockera-control-label {
+				color: var(--blockera-controls-primary-color);
+				font-weight: 600;
+			}
+		}
 	}
 }
