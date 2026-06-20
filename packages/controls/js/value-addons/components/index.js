@@ -15,6 +15,8 @@ export {
 	useVarPickerPresetContext,
 	resolveVariablePickerPresetGroupLabel,
 	normalizeVariablePickerSearchQuery,
+	tokenizeVariablePickerSearchQuery,
+	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
 } from './variable';
 export {

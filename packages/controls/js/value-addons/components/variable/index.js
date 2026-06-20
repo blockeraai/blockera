@@ -12,5 +12,7 @@ export {
 export { resolveVariablePickerPresetGroupLabel } from './var-picker-preset-origin-label';
 export {
 	normalizeVariablePickerSearchQuery,
+	tokenizeVariablePickerSearchQuery,
+	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
 } from './var-picker-helpers';
