@@ -155,9 +155,9 @@ export const StateStyle = (
 /**
  * Sorts breakpoints to ensure correct CSS media query priority for a desktop-first approach.
  * The sorting order is:
- * 1. Breakpoints with `max` width (for smaller screens), sorted largest to smallest.
- * 2. Breakpoints with `min` width (for larger screens), sorted smallest to largest.
- * 3. The `base` breakpoint (which has no min/max), placed last.
+ * 1. The `base` breakpoint (which has no min/max).
+ * 2. Breakpoints with `max` width (for smaller screens), sorted largest to smallest.
+ * 3. Breakpoints with `min` width (for larger screens), sorted smallest to largest.
  *
  * @param {Object} breakpointsObj - The object containing breakpoint definitions.
  * @return {Array<Object>} An array of breakpoint objects sorted for CSS generation.
@@ -179,25 +179,25 @@ const sortBreakpoints = (breakpointsObj: {
 		const bIsBase = !b.settings?.min && !b.settings?.max;
 
 		// Assign a group number to each breakpoint to control the primary sort order.
-		// Group 1: `max-width` breakpoints (for smaller screens).
-		// Group 2: `min-width` breakpoints (for larger screens).
-		// Group 3: The single `base` breakpoint (no min/max).
+		// Group 1: The single `base` breakpoint (no min/max).
+		// Group 2: `max-width` breakpoints (for smaller screens).
+		// Group 3: `min-width` breakpoints (for larger screens).
 		let aGroup;
 		let bGroup;
 
 		if (aIsBase) {
-			aGroup = 3;
-		} else if (aIsMin) {
-			aGroup = 2;
-		} else {
 			aGroup = 1;
+		} else if (aIsMin) {
+			aGroup = 3;
+		} else {
+			aGroup = 2;
 		}
 		if (bIsBase) {
-			bGroup = 3;
-		} else if (bIsMin) {
-			bGroup = 2;
-		} else {
 			bGroup = 1;
+		} else if (bIsMin) {
+			bGroup = 3;
+		} else {
+			bGroup = 2;
 		}
 
 		// If the breakpoints are in different groups, sort by the group number (1, then 2, then 3).
@@ -209,13 +209,13 @@ const sortBreakpoints = (breakpointsObj: {
 		const aValue = parsePx(a.settings?.min || a.settings?.max);
 		const bValue = parsePx(b.settings?.min || b.settings?.max);
 
-		// For 'max-width' breakpoints (Group 1), sort descending (largest size first).
-		if (aGroup === 1) {
+		// For 'max-width' breakpoints (Group 2), sort descending (largest size first).
+		if (aGroup === 2) {
 			return bValue - aValue;
 		}
 
-		// For 'min-width' breakpoints (Group 2), sort ascending (smallest size first).
-		if (aGroup === 2) {
+		// For 'min-width' breakpoints (Group 3), sort ascending (smallest size first).
+		if (aGroup === 3) {
 			return aValue - bValue;
 		}
 
