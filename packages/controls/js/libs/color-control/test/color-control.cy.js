@@ -87,6 +87,7 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-btn').click();
 			cy.getByDataCy('color-picker-css-value').clear();
 			cy.getByDataCy('color-picker-css-value').type('ccc');
+			cy.getByDataCy('color-picker-css-value').blur();
 
 			cy.getByDataCy('color-label').contains('#cccccc');
 			cy.then(() => {

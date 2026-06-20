@@ -118,6 +118,7 @@ describe('Color-Picker Control', () => {
 
 			cy.get('[data-cy="color-picker-css-value"]').clear();
 			cy.get('[data-cy="color-picker-css-value"]').type('ccc');
+			cy.get('[data-cy="color-picker-css-value"]').blur();
 
 			cy.get('[data-cy="color-picker-css-value"]').should(
 				'have.value',
@@ -147,6 +148,38 @@ describe('Color-Picker Control', () => {
 			);
 			cy.then(() => {
 				expect(getControlValue(name)).to.be.equal('#cccccc');
+			});
+		});
+
+		it('normalizes complete 6-digit hex while typing', () => {
+			cy.withDataProvider({
+				component: (
+					<ColorPickerControl isOpen={true} isPopover={false} />
+				),
+				value: '#eee',
+				name,
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').clear();
+			cy.get('[data-cy="color-picker-css-value"]').type('c4c4', {
+				delay: 0,
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').should(
+				'have.value',
+				'c4c4'
+			);
+
+			cy.get('[data-cy="color-picker-css-value"]').type('c4', {
+				delay: 0,
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').should(
+				'have.value',
+				'#c4c4c4'
+			);
+			cy.then(() => {
+				expect(getControlValue(name)).to.be.equal('#c4c4c4');
 			});
 		});
 

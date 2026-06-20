@@ -4,10 +4,20 @@
 import { finalizeColorString, valueCleanupColorString } from '../css-color';
 
 describe('valueCleanupColorString', () => {
-	it('normalizes 3-digit hex shorthand without hash', () => {
-		expect(valueCleanupColorString('ccc')).toBe('#cccccc');
-		expect(valueCleanupColorString('fff')).toBe('#ffffff');
-		expect(valueCleanupColorString('f00')).toBe('#ff0000');
+	it('defers 3-digit hex shorthand until finalize', () => {
+		expect(valueCleanupColorString('ccc')).toBe('ccc');
+		expect(valueCleanupColorString('#ccc')).toBe('#ccc');
+		expect(finalizeColorString('ccc')).toBe('#cccccc');
+		expect(finalizeColorString('#ccc')).toBe('#cccccc');
+		expect(finalizeColorString('fff')).toBe('#ffffff');
+	});
+
+	it('waits for complete hex while typing longer values', () => {
+		expect(valueCleanupColorString('c4c')).toBe('c4c');
+		expect(valueCleanupColorString('c4c4')).toBe('c4c4');
+		expect(valueCleanupColorString('c4c4c4')).toBe('#c4c4c4');
+		expect(valueCleanupColorString('70c')).toBe('70c');
+		expect(valueCleanupColorString('70ca9e')).toBe('#70ca9e');
 	});
 
 	it('keeps partial hex and keyword typing intact', () => {
@@ -28,10 +38,5 @@ describe('valueCleanupColorString', () => {
 	it('normalizes complete hex values', () => {
 		expect(valueCleanupColorString('dddddd')).toBe('#dddddd');
 		expect(valueCleanupColorString('#283f8a')).toBe('#283f8a');
-	});
-
-	it('defers hash-prefixed 3-digit shorthand until finalize', () => {
-		expect(valueCleanupColorString('#ccc')).toBe('#ccc');
-		expect(finalizeColorString('#ccc')).toBe('#cccccc');
 	});
 });
