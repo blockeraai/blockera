@@ -18,7 +18,6 @@ import type { MediaQueryProps } from './types';
 import { isBaseBreakpoint } from '../../editor/header-ui';
 
 export const MediaQuery = ({
-	clientId,
 	breakpoint,
 	declarations,
 }: MediaQueryProps): Element<any> => {
@@ -27,14 +26,9 @@ export const MediaQuery = ({
 	return (
 		<>
 			{isBaseBreakpoint(breakpoint) && (
-				<Style clientId={clientId} declarations={declarations} />
+				<Style declarations={declarations} />
 			)}
-			{media && (
-				<Style
-					clientId={clientId}
-					declarations={`${media}{${declarations}}`}
-				/>
-			)}
+			{media && <Style declarations={`${media}{${declarations}}`} />}
 		</>
 	);
 };

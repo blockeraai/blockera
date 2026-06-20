@@ -18,6 +18,181 @@ if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_is_valid_breakpoint_px' ) ) {
+
+	/**
+	 * Check if a breakpoint media value is a usable pixel value.
+	 *
+	 * @param string $value The breakpoint min/max value.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_valid_breakpoint_px( string $value ): bool {
+
+		if ( '' === $value || false !== strpos( $value, 'func' ) ) {
+			return false;
+		}
+
+		$numeric = preg_replace( '/[^0-9]/', '', $value );
+
+		return '' !== $numeric && is_numeric( $numeric );
+	}
+}
+
+if ( ! function_exists( 'blockera_parse_breakpoint_px' ) ) {
+
+	/**
+	 * Parse a breakpoint pixel value into an integer.
+	 *
+	 * @param string $value The breakpoint min/max value.
+	 *
+	 * @return int
+	 */
+	function blockera_parse_breakpoint_px( string $value ): int {
+
+		return (int) preg_replace( '/[^0-9]/', '', $value ) ? (int) preg_replace( '/[^0-9]/', '', $value ) : 0;
+	}
+}
+
+if ( ! function_exists( 'blockera_format_breakpoint_px' ) ) {
+
+	/**
+	 * Format an integer pixel value for breakpoint media queries.
+	 *
+	 * @param int $value The pixel value.
+	 *
+	 * @return string
+	 */
+	function blockera_format_breakpoint_px( int $value ): string {
+
+		return $value . 'px';
+	}
+}
+
+if ( ! function_exists( 'blockera_resolve_breakpoint_media_settings' ) ) {
+
+	/**
+	 * Resolve min/max media settings for all non-base breakpoints.
+	 *
+	 * Explicit min/max pairs are kept as-is. Missing bounds are inferred from
+	 * neighboring breakpoints so each range is as specific as possible.
+	 *
+	 * @param array $breakpoints The configured breakpoints.
+	 *
+	 * @return array<string, array{min: string, max: string}>
+	 */
+	function blockera_resolve_breakpoint_media_settings( array $breakpoints): array {
+
+		$resolved = [];
+		$items    = [];
+
+		foreach ( $breakpoints as $breakpoint ) {
+			if ( empty( $breakpoint['type'] ) || ! empty( $breakpoint['base'] ) ) {
+				continue;
+			}
+
+			$items[] = $breakpoint;
+		}
+
+		foreach ( $items as $breakpoint ) {
+			$min = $breakpoint['settings']['min'] ?? '';
+			$max = $breakpoint['settings']['max'] ?? '';
+
+			if ( $min && $max ) {
+				$resolved[ $breakpoint['type'] ] = [
+					'min' => $min,
+					'max' => $max,
+				];
+			}
+		}
+
+		$max_only = array_values(
+			array_filter(
+				$items,
+				function ( array $breakpoint ) use ( $resolved ): bool {
+					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
+						return false;
+					}
+
+					$max = $breakpoint['settings']['max'] ?? '';
+					$min = $breakpoint['settings']['min'] ?? '';
+
+					return blockera_is_valid_breakpoint_px( $max ) && ! $min;
+				}
+			)
+		);
+
+		usort(
+			$max_only,
+			function ( array $a, array $b ): int {
+				return blockera_parse_breakpoint_px( $b['settings']['max'] ?? '' ) - blockera_parse_breakpoint_px( $a['settings']['max'] ?? '' );
+			}
+		);
+
+		foreach ( $max_only as $index => $breakpoint ) {
+			$next = $max_only[ $index + 1 ] ?? null;
+			$min  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['max'] ?? '' ) )
+				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['max'] ) + 1 )
+				: blockera_format_breakpoint_px( 0 );
+
+			$resolved[ $breakpoint['type'] ] = [
+				'min' => $min,
+				'max' => $breakpoint['settings']['max'] ?? '',
+			];
+		}
+
+		$min_only = array_values(
+			array_filter(
+				$items,
+				function ( array $breakpoint ) use ( $resolved ): bool {
+					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
+						return false;
+					}
+
+					$min = $breakpoint['settings']['min'] ?? '';
+					$max = $breakpoint['settings']['max'] ?? '';
+
+					return blockera_is_valid_breakpoint_px( $min ) && ! $max;
+				}
+			)
+		);
+
+		usort(
+			$min_only,
+			function ( array $a, array $b ): int {
+				return blockera_parse_breakpoint_px( $a['settings']['min'] ?? '' ) - blockera_parse_breakpoint_px( $b['settings']['min'] ?? '' );
+			}
+		);
+
+		foreach ( $min_only as $index => $breakpoint ) {
+			$next = $min_only[ $index + 1 ] ?? null;
+			$max  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['min'] ?? '' ) )
+				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['min'] ) - 1 )
+				: '';
+
+			$resolved[ $breakpoint['type'] ] = [
+				'min' => $breakpoint['settings']['min'] ?? '',
+				'max' => $max,
+			];
+		}
+
+		foreach ( $items as $breakpoint ) {
+			$type = $breakpoint['type'];
+			$min  = $breakpoint['settings']['min'] ?? '';
+			$max  = $breakpoint['settings']['max'] ?? '';
+
+			if ( ! isset( $resolved[ $type ] ) && ( $min || $max ) ) {
+				$resolved[ $type ] = [
+					'min' => $min ? $min : '',
+					'max' => $max ? $max : '',
+				];
+			}
+		}
+
+		return $resolved;
+	}
+}
+
 if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 
 	/**
@@ -29,7 +204,8 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 	 */
 	function blockera_get_css_media_queries( array $breakpoints): array {
 
-		$queries = [];
+		$queries        = [];
+		$media_settings = blockera_resolve_breakpoint_media_settings( $breakpoints );
 
 		foreach ( $breakpoints as $breakpoint ) {
 
@@ -39,8 +215,14 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 				continue;
 			}
 
-			[ 'min' => $min, 'max' => $max ] = $breakpoint['settings'];
+			if ( ! empty( $breakpoint['base'] ) ) {
+				$queries[ $breakpoint['type'] ] = '';
 
+				continue;
+			}
+
+			$min   = $media_settings[ $breakpoint['type'] ]['min'] ?? '';
+			$max   = $media_settings[ $breakpoint['type'] ]['max'] ?? '';
 			$media = '';
 
 			if ( $min && $max ) {

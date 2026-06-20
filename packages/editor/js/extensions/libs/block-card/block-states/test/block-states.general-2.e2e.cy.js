@@ -53,7 +53,7 @@ describe('Block State E2E Test', () => {
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
 				'.blockera-state-colors-container:last-child'
-			).should('eq', '#007cba');
+			).should('eq', '#3858e9');
 		});
 
 		it('set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
@@ -101,12 +101,11 @@ describe('Block State E2E Test', () => {
 
 			setBlockState('Hover');
 
+			cy.getByAriaControls('settings-view').click();
+
 			//In this assertion not available data attribute for this selector، Please don't be sensitive.
 			cy.get('button')
 				.contains('Advanced')
-				.parent()
-				.parent()
-				.parent()
 				.parent()
 				.parent()
 				.should('have.class', 'blockera-not-allowed');
