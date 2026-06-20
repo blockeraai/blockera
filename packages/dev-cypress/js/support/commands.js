@@ -1038,6 +1038,15 @@ export const registerCommands = () => {
 		}
 	);
 
+	/** Variable picker header “+” (single-type custom preset add). */
+	Cypress.Commands.add('clickVariablePickerHeaderAddCustomVariable', () => {
+		cy.getByDataTest('variable-picker-header-add-custom-variable', {
+			timeout: 20000,
+		})
+			.should('be.visible')
+			.click({ force: true });
+	});
+
 	Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
 		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
 			'transition'
