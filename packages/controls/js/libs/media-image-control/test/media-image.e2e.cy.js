@@ -12,7 +12,6 @@ describe('media-image', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
 	});
 
 	context('Functional', () => {
@@ -143,7 +142,9 @@ describe('media-image', () => {
 			cy.visit(
 				Cypress.env('testURL') + '/wp-admin/edit.php?post_type=post'
 			).then(() => {
-				cy.get('[aria-label="“(no title)” (Edit)"]').first().click();
+				cy.get('[aria-label="Edit “(no title)”"]')
+					.first()
+					.click({ force: true });
 
 				cy.getIframeBody().getBlock('core/paragraph').first().click();
 
