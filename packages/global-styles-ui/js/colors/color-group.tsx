@@ -11,6 +11,7 @@ import type { ElementType } from 'react';
  */
 import {
 	normalizeVariablePickerSearchQuery,
+	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 
@@ -72,6 +73,7 @@ function ColorGroupInner({
 	const { isResetDialogOpen, toggleResetDialog } =
 		usePresetResetDialogState();
 	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
 
 	const controlName = `color-presets-${origin}`;
 
@@ -142,7 +144,7 @@ function ColorGroupInner({
 			| undefined,
 		origin,
 		controlName,
-		suppressTaxonomyUi: flattenForColorPickerSearch,
+		suppressTaxonomyUi: flattenForColorPickerSearch || viewMode === 'list',
 		convertRepeaterToItems: convertRepeaterValueToColors,
 		onPersistItems: persistColors,
 		augmentMainItem,
