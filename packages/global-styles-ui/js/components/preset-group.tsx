@@ -111,6 +111,7 @@ type PresetsProps = {
 	) => 'full' | 'small';
 	canEditGlobalStyles: boolean;
 	repeaterItemVariations?: PresetGroupPropsType['repeaterItemVariations'];
+	withoutAdvancedLabel?: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -157,6 +158,7 @@ const Presets = ({
 	resolveRepeaterItemSize,
 	canEditGlobalStyles,
 	repeaterItemVariations,
+	withoutAdvancedLabel = false,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -282,6 +284,7 @@ const Presets = ({
 			actionButtonDelete={canEditGlobalStyles}
 			actionButtonClone={canEditGlobalStyles}
 			enablePromoCountOnRepeaterItemHeader={'custom' === origin}
+			withoutAdvancedLabel={withoutAdvancedLabel}
 			{...props}
 		/>
 	);
@@ -545,6 +548,7 @@ export const PresetGroup = ({
 							resolveRepeaterItemInterfaceSize
 						}
 						repeaterItemVariations={repeaterItemVariations}
+						withoutAdvancedLabel={isVariablePicker}
 					/>
 				</BaseControl>
 			</ControlContextProvider>
