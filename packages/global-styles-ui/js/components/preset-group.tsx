@@ -18,6 +18,7 @@ import {
 	cleanupRepeater,
 	normalizeVariablePickerSearchQuery,
 	resolveVariablePickerPresetGroupLabel,
+	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
@@ -302,6 +303,7 @@ export const PresetGroup = ({
 	suppressThemeRepeaterWhenTaxonomyBasePopulated = false,
 }: PresetGroupPropsType) => {
 	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
@@ -397,14 +399,17 @@ export const PresetGroup = ({
 	const resolveRepeaterItemInterfaceSize = useCallback(
 		(_itemId: string, item: Record<string, unknown>) => {
 			if (
-				isVariablePicker &&
-				normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== ''
+				viewMode === 'list' ||
+				(isVariablePicker &&
+					normalizeVariablePickerSearchQuery(
+						pickerCtx.searchQuery
+					) !== '')
 			) {
 				return 'full';
 			}
 			return resolvePresetRepeaterItemSize(item);
 		},
-		[isVariablePicker, pickerCtx.searchQuery]
+		[isVariablePicker, pickerCtx.searchQuery, viewMode]
 	);
 
 	const isPickerSearchActive = useMemo(

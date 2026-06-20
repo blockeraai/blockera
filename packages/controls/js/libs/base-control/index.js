@@ -32,7 +32,10 @@ export default function BaseControl({
 	}
 
 	if (label === '' && columns === '') {
-		if (controlName === 'empty') {
+		const shouldWrapControl =
+			controlName === 'empty' || (style && Object.keys(style).length > 0);
+
+		if (shouldWrapControl) {
 			return (
 				<div
 					className={fieldsClassNames(

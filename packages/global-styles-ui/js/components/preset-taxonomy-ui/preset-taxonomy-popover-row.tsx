@@ -25,6 +25,7 @@ import {
 	RepeaterContext,
 	RepeaterItemVariationsPane,
 	useControlContext,
+	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 
@@ -84,12 +85,13 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
 	const rowVisible = item?.isVisible !== false;
+	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
 
 	const interfaceSmall = useMemo(
-		() => isPresetTaxonomyInterfaceSizeSmall(item),
-		[item]
+		() => viewMode !== 'list' && isPresetTaxonomyInterfaceSizeSmall(item),
+		[item, viewMode]
 	);
-	const pickerCtx = useVarPickerPresetContext();
 	const repeaterCtx = useContext(RepeaterContext) as TaxonomyRepeaterCtx;
 	const editSession = usePresetTaxonomyEditSessionOptional();
 	const rowSlug = String(item.slug ?? itemId);

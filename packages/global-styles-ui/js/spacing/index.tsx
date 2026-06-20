@@ -7,7 +7,11 @@ import { useCallback, useMemo, memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import {
+	Flex,
+	PresetVariablesViewModeProvider,
+	PRESET_VARIABLES_SECTION_GAP,
+} from '@blockera/controls';
 import { normalizeSizeThemeJsonPreset } from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
@@ -25,6 +29,8 @@ import {
 	shouldShowThemePresetGroup,
 	withPresetMetaFromRepeaterRow,
 	PresetTaxonomyGroupLayout,
+	PresetVariablesScreenToolbar,
+	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -292,9 +298,38 @@ export function SpacingPresetContent({
 		[baseThemeSpacingSizes]
 	);
 
+	const originSets = useMemo(
+		() =>
+			buildVisiblePresetOriginSets({
+				showThemeOriginGroup,
+				showDefaultOriginGroup,
+				themeItems: themeSizes,
+				themeBaseItems: baseThemeSizes,
+				defaultItems: defaultSizes,
+				defaultBaseItems: baseDefaultSpacingSizes
+					? normalizeSpacingPresetsForUi(baseDefaultSpacingSizes)
+					: undefined,
+				customItems: customSizesForUi,
+			}),
+		[
+			showThemeOriginGroup,
+			showDefaultOriginGroup,
+			themeSizes,
+			baseThemeSizes,
+			defaultSizes,
+			baseDefaultSpacingSizes,
+			customSizesForUi,
+		]
+	);
+
 	return (
 		<SpacingPresetPreviewUsageProvider value={previewUsage}>
-			<Flex direction="column" gap="20px" style={{ width: '100%' }}>
+			<PresetVariablesScreenToolbar originSets={originSets} />
+			<Flex
+				direction="column"
+				gap={PRESET_VARIABLES_SECTION_GAP}
+				style={{ width: '100%' }}
+			>
 				{showThemeOriginGroup && (
 					<SpacingSizeGroup
 						origin="theme"
@@ -371,7 +406,9 @@ export function Spacing({
 					direction="column"
 					style={{ padding: '0 16px', width: '100%' }}
 				>
-					<SpacingPresetContent previewUsage={previewUsage} />
+					<PresetVariablesViewModeProvider>
+						<SpacingPresetContent previewUsage={previewUsage} />
+					</PresetVariablesViewModeProvider>
 				</Flex>
 			</Flex>
 		</div>

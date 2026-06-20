@@ -11,6 +11,7 @@ import type { ElementType } from 'react';
  */
 import {
 	normalizeVariablePickerSearchQuery,
+	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 
@@ -72,6 +73,7 @@ function ColorGroupInner({
 	const { isResetDialogOpen, toggleResetDialog } =
 		usePresetResetDialogState();
 	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
 
 	const controlName = `color-presets-${origin}`;
 
@@ -81,6 +83,20 @@ function ColorGroupInner({
 			pickerCtx.variableType === 'color' &&
 			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
 		[pickerCtx.active, pickerCtx.searchQuery, pickerCtx.variableType]
+	);
+
+	const isColorPickerListView = useMemo(
+		() =>
+			pickerCtx.active === true &&
+			pickerCtx.variableType === 'color' &&
+			viewMode === 'list' &&
+			!flattenForColorPickerSearch,
+		[
+			pickerCtx.active,
+			pickerCtx.variableType,
+			viewMode,
+			flattenForColorPickerSearch,
+		]
 	);
 
 	const persistColors = useCallback(
@@ -107,11 +123,12 @@ function ColorGroupInner({
 			}
 		) => {
 			const slug = String(row.slug ?? '');
+			const isShadeRow = isShadePaletteColor(row);
 			const hasStoredShades =
 				filterVariationsByBase(colors, slug).length > 0;
 			const baseRepeater = flattenForColorPickerSearch
-				? isShadePaletteColor(row) || !hasStoredShades
-				: !isShadePaletteColor(row);
+				? isShadeRow || !hasStoredShades
+				: !isShadeRow;
 			let renderRepeaterItem =
 				typeof row.renderRepeaterItem === 'boolean'
 					? row.renderRepeaterItem
@@ -124,15 +141,31 @@ function ColorGroupInner({
 						ctx.simpleSlugSet.has(slug) && baseRepeater;
 				}
 			}
+
+			// Stored repeater defaults set renderRepeaterItem:true on every row;
+			// shade slugs must stay out of the flat list unless search flatten is active.
+			if (isShadeRow && !flattenForColorPickerSearch) {
+				renderRepeaterItem = false;
+			}
+
+			const listViewCompactShades =
+				isColorPickerListView && hasStoredShades && !isShadeRow;
+
 			return {
 				...row,
 				renderRepeaterItem,
 				hasVariations: flattenForColorPickerSearch
 					? false
 					: hasStoredShades,
+				...(listViewCompactShades
+					? {
+							listViewCompactShades: true,
+							selectable: false,
+						}
+					: {}),
 			} as Color & Record<string, unknown>;
 		},
-		[colors, flattenForColorPickerSearch]
+		[colors, flattenForColorPickerSearch, isColorPickerListView]
 	);
 
 	const taxonomy = usePresetTaxonomyGroupUi<Color & Record<string, unknown>>({
@@ -142,7 +175,7 @@ function ColorGroupInner({
 			| undefined,
 		origin,
 		controlName,
-		suppressTaxonomyUi: flattenForColorPickerSearch,
+		suppressTaxonomyUi: flattenForColorPickerSearch || viewMode === 'list',
 		convertRepeaterToItems: convertRepeaterValueToColors,
 		onPersistItems: persistColors,
 		augmentMainItem,

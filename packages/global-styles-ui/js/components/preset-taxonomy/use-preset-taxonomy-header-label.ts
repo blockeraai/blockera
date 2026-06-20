@@ -8,6 +8,7 @@ import { useMemo } from '@wordpress/element';
  */
 import {
 	normalizeVariablePickerSearchQuery,
+	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 
@@ -21,6 +22,24 @@ import {
 } from './taxonomy-meta';
 
 /**
+ * Variable picker list/search modes show the full `/`-delimited preset name, not the taxonomy leaf.
+ */
+export function shouldUsePresetTaxonomyFullPickerLabel(
+	pickerActive: boolean,
+	variableType: string | null | undefined,
+	searchQuery: string | undefined,
+	viewMode: 'grouped' | 'list'
+): boolean {
+	if (pickerActive !== true || typeof variableType !== 'string') {
+		return false;
+	}
+	if (normalizeVariablePickerSearchQuery(searchQuery) !== '') {
+		return true;
+	}
+	return viewMode === 'list';
+}
+
+/**
  * Resolves the row header label for taxonomy vs flat repeater contexts.
  */
 export function usePresetTaxonomyHeaderLabel(
@@ -30,14 +49,17 @@ export function usePresetTaxonomyHeaderLabel(
 	const storage = usePresetVariationsStorageOptional();
 	const taxonomyNameSource = storage?.taxonomyNameSource;
 	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
 
 	return useMemo(() => {
-		const isPickerSearchActive =
-			pickerCtx.active === true &&
-			typeof pickerCtx.variableType === 'string' &&
-			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '';
-
-		if (isPickerSearchActive) {
+		if (
+			shouldUsePresetTaxonomyFullPickerLabel(
+				pickerCtx.active === true,
+				pickerCtx.variableType,
+				pickerCtx.searchQuery,
+				viewMode
+			)
+		) {
 			return resolvePresetTaxonomyEditName(
 				item as Record<string, unknown>,
 				taxonomyNameSource
@@ -58,5 +80,6 @@ export function usePresetTaxonomyHeaderLabel(
 		pickerCtx.active,
 		pickerCtx.variableType,
 		pickerCtx.searchQuery,
+		viewMode,
 	]);
 }

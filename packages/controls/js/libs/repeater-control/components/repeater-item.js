@@ -479,7 +479,8 @@ const RepeaterItem = ({
 			{RepeaterItemVariations &&
 			showVariations &&
 			isBoolean(item?.hasVariations) &&
-			item.hasVariations ? (
+			item.hasVariations &&
+			true !== item?.listViewCompactShades ? (
 				<GroupControl
 					mode="accordion"
 					design={design}

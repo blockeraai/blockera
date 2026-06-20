@@ -13,7 +13,11 @@ import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import {
+	Flex,
+	PresetVariablesViewModeProvider,
+	PRESET_VARIABLES_SECTION_GAP,
+} from '@blockera/controls';
 import { normalizeFontSizeThemeJsonPreset } from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 
@@ -30,6 +34,8 @@ import {
 	shouldShowThemePresetGroup,
 	withPresetMetaFromRepeaterRow,
 	PresetTaxonomyGroupLayout,
+	PresetVariablesScreenToolbar,
+	buildVisiblePresetOriginSets,
 } from '../components';
 import { FontSize } from './font-size';
 import FontSizesScreen from './font-sizes-screen';
@@ -293,12 +299,43 @@ export function FontSizesPresetContent() {
 		[baseThemeFontSizes]
 	);
 
+	const baseDefaultSizes = useMemo(
+		() =>
+			normalizeFontSizePresetsForUi(
+				baseDefaultFontSizes as FontSizeType[]
+			),
+		[baseDefaultFontSizes]
+	);
+
+	const originSets = useMemo(
+		() =>
+			buildVisiblePresetOriginSets({
+				showThemeOriginGroup,
+				showDefaultOriginGroup,
+				themeItems: themeSizes,
+				themeBaseItems: baseThemeSizes,
+				defaultItems: defaultSizes,
+				defaultBaseItems: baseDefaultSizes,
+				customItems: customSizesForUi,
+			}),
+		[
+			showThemeOriginGroup,
+			showDefaultOriginGroup,
+			themeSizes,
+			baseThemeSizes,
+			defaultSizes,
+			baseDefaultSizes,
+			customSizesForUi,
+		]
+	);
+
 	return (
 		<Flex
 			direction="column"
-			gap={20}
+			gap={PRESET_VARIABLES_SECTION_GAP}
 			className="blockera-font-size-editor-groups"
 		>
+			<PresetVariablesScreenToolbar originSets={originSets} />
 			{showThemeOriginGroup && (
 				<FontSizeGroup
 					origin="theme"
@@ -353,7 +390,9 @@ function FontSizesEditorScreenShell() {
 
 			<View>
 				<Spacer paddingX={4}>
-					<FontSizesPresetContent />
+					<PresetVariablesViewModeProvider>
+						<FontSizesPresetContent />
+					</PresetVariablesViewModeProvider>
 				</Spacer>
 			</View>
 		</Flex>

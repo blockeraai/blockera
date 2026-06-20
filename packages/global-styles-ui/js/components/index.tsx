@@ -19,6 +19,7 @@ export { FallbackPresetContent } from './fallback-preset-content';
 export { default as ConfirmResetPresetDialog } from './confirm-reset-preset-dialog';
 export { createPresetFieldsPropsResolver } from './create-preset-fields-props-resolver';
 export { PresetTaxonomyGroupLayout } from './preset-taxonomy-group-layout';
+export * from './preset-variables-view';
 export * from './preset-taxonomy';
 export {
 	PresetTaxonomySection,

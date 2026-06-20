@@ -7,11 +7,16 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useCallback, useMemo } from '@wordpress/element';
+import type { Color } from '@wordpress/global-styles-engine';
 
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import {
+	Flex,
+	PresetVariablesViewModeProvider,
+	PRESET_VARIABLES_SECTION_GAP,
+} from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -21,6 +26,8 @@ import {
 	ScreenHeader,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
+	PresetVariablesScreenToolbar,
+	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGetColors } from './use-get-colors';
 import { filterMainPaletteColors } from './utils';
@@ -117,11 +124,48 @@ export function ColorPalettePresetContent({
 		defaultMainCount
 	);
 
+	const originSets = useMemo(
+		() =>
+			buildVisiblePresetOriginSets({
+				showThemeOriginGroup,
+				showDefaultOriginGroup,
+				themeItems: safeThemeColors as Array<
+					Color & Record<string, unknown>
+				>,
+				themeBaseItems: baseTheme as Array<
+					Color & Record<string, unknown>
+				>,
+				defaultItems: safeDefaultColors as Array<
+					Color & Record<string, unknown>
+				>,
+				defaultBaseItems: baseDefault as Array<
+					Color & Record<string, unknown>
+				>,
+				customItems: customColors as Array<
+					Color & Record<string, unknown>
+				>,
+				presetKind: 'color',
+			}),
+		[
+			showThemeOriginGroup,
+			showDefaultOriginGroup,
+			safeThemeColors,
+			baseTheme,
+			safeDefaultColors,
+			baseDefault,
+			customColors,
+		]
+	);
+
 	return (
 		<ColorPresetPreviewUsageProvider value={previewUsage}>
+			<PresetVariablesScreenToolbar
+				originSets={originSets}
+				withSummaryRowPadding
+			/>
 			<Flex
 				direction="column"
-				gap={20}
+				gap={PRESET_VARIABLES_SECTION_GAP}
 				className="global-styles-ui-color-palette-panel"
 			>
 				{showThemeOriginGroup && (
@@ -177,7 +221,9 @@ function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 
 			<View>
 				<Spacer paddingX={4}>
-					<ColorPalettePresetContent />
+					<PresetVariablesViewModeProvider>
+						<ColorPalettePresetContent />
+					</PresetVariablesViewModeProvider>
 				</Spacer>
 			</View>
 		</Flex>

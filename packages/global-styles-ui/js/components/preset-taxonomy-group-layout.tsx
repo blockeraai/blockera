@@ -9,6 +9,7 @@ import { useMemo } from '@wordpress/element';
  */
 import {
 	normalizeVariablePickerSearchQuery,
+	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 
@@ -66,6 +67,7 @@ function PresetTaxonomyGroupLayoutInner<TItem extends Record<string, unknown>>({
 	const { isResetDialogOpen, toggleResetDialog } =
 		usePresetResetDialogState();
 	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
 
 	const flattenForPickerSearch = useMemo(
 		() =>
@@ -80,7 +82,7 @@ function PresetTaxonomyGroupLayoutInner<TItem extends Record<string, unknown>>({
 		baseItems,
 		origin,
 		controlName,
-		suppressTaxonomyUi: flattenForPickerSearch,
+		suppressTaxonomyUi: flattenForPickerSearch || viewMode === 'list',
 		convertRepeaterToItems,
 		onPersistItems,
 	});

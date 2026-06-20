@@ -7,7 +7,11 @@ import { useCallback, useMemo, memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import {
+	Flex,
+	PresetVariablesViewModeProvider,
+	PRESET_VARIABLES_SECTION_GAP,
+} from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
@@ -24,6 +28,8 @@ import {
 	shouldShowThemePresetGroup,
 	withPresetMetaFromRepeaterRow,
 	PresetTaxonomyGroupLayout,
+	PresetVariablesScreenToolbar,
+	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -248,8 +254,40 @@ export function BorderRadiusPresetContent() {
 		[baseThemeRadiusSizes]
 	);
 
+	const baseDefaultSizes = useMemo(
+		() => sanitizeRadiusSizes(baseDefaultRadiusSizes),
+		[baseDefaultRadiusSizes]
+	);
+
+	const originSets = useMemo(
+		() =>
+			buildVisiblePresetOriginSets({
+				showThemeOriginGroup,
+				showDefaultOriginGroup,
+				themeItems: themeRadiusSizes,
+				themeBaseItems: baseThemeSizes,
+				defaultItems: defaultRadiusSizes,
+				defaultBaseItems: baseDefaultSizes,
+				customItems: customRadiusSizes,
+			}),
+		[
+			showThemeOriginGroup,
+			showDefaultOriginGroup,
+			themeRadiusSizes,
+			baseThemeSizes,
+			defaultRadiusSizes,
+			baseDefaultSizes,
+			customRadiusSizes,
+		]
+	);
+
 	return (
-		<Flex direction="column" gap="20px" style={{ width: '100%' }}>
+		<Flex
+			direction="column"
+			gap={PRESET_VARIABLES_SECTION_GAP}
+			style={{ width: '100%' }}
+		>
+			<PresetVariablesScreenToolbar originSets={originSets} />
 			{showThemeOriginGroup && (
 				<BorderRadiusSizeGroup
 					origin="theme"
@@ -323,7 +361,9 @@ export function BorderRadius({
 					direction="column"
 					style={{ padding: '0 16px', width: '100%' }}
 				>
-					<BorderRadiusPresetContent />
+					<PresetVariablesViewModeProvider>
+						<BorderRadiusPresetContent />
+					</PresetVariablesViewModeProvider>
 				</Flex>
 			</Flex>
 		</div>

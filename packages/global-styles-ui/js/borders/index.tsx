@@ -7,7 +7,11 @@ import { useCallback, useMemo, memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import {
+	Flex,
+	PresetVariablesViewModeProvider,
+	PRESET_VARIABLES_SECTION_GAP,
+} from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
@@ -23,6 +27,8 @@ import {
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 	PresetTaxonomyGroupLayout,
+	PresetVariablesScreenToolbar,
+	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
 import { type VariableType } from '../components/types';
@@ -245,8 +251,40 @@ export function BordersPresetContent() {
 		[baseThemePresets]
 	);
 
+	const baseDefaultSizes = useMemo(
+		() => sanitizeBorderBoxPresets(baseDefaultPresets),
+		[baseDefaultPresets]
+	);
+
+	const originSets = useMemo(
+		() =>
+			buildVisiblePresetOriginSets({
+				showThemeOriginGroup,
+				showDefaultOriginGroup,
+				themeItems: themePresets,
+				themeBaseItems: baseThemeSizes,
+				defaultItems: defaultPresets,
+				defaultBaseItems: baseDefaultSizes,
+				customItems: customPresets,
+			}),
+		[
+			showThemeOriginGroup,
+			showDefaultOriginGroup,
+			themePresets,
+			baseThemeSizes,
+			defaultPresets,
+			baseDefaultSizes,
+			customPresets,
+		]
+	);
+
 	return (
-		<Flex direction="column" gap="20px" style={{ width: '100%' }}>
+		<Flex
+			direction="column"
+			gap={PRESET_VARIABLES_SECTION_GAP}
+			style={{ width: '100%' }}
+		>
+			<PresetVariablesScreenToolbar originSets={originSets} />
 			{showThemeOriginGroup && (
 				<BorderPresetGroup
 					origin="theme"
@@ -316,7 +354,9 @@ export function Borders({ closeCallback }: { closeCallback?: () => void }) {
 					direction="column"
 					style={{ padding: '0 16px', width: '100%' }}
 				>
-					<BordersPresetContent />
+					<PresetVariablesViewModeProvider>
+						<BordersPresetContent />
+					</PresetVariablesViewModeProvider>
 				</Flex>
 			</Flex>
 		</div>

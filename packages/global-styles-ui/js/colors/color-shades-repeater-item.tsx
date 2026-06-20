@@ -12,6 +12,9 @@ import {
 	RepeaterItem,
 	RepeaterContext,
 	ColorIndicator,
+	normalizeVariablePickerSearchQuery,
+	usePresetVariablesViewMode,
+	useVarPickerPresetContext,
 } from '@blockera/controls';
 import {
 	componentClassNames,
@@ -222,6 +225,14 @@ function ColorShadesRepeaterItemComponent({
 	itemId: parentRepeaterItemId,
 	inheritRepeaterPickerSelection = true,
 }: ColorShadesRepeaterItemComponentProps) {
+	const pickerCtx = useVarPickerPresetContext();
+	const { viewMode } = usePresetVariablesViewMode();
+	const useListViewShadeStepLabel =
+		pickerCtx.active === true &&
+		pickerCtx.variableType === 'color' &&
+		viewMode === 'list' &&
+		normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) === '';
+
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<
 			string,
@@ -279,20 +290,28 @@ function ColorShadesRepeaterItemComponent({
 
 		const storeKey = String(resolvedItemId);
 		const storeRow = repeaterItems?.[storeKey];
+		const shadeStepLabel =
+			shadeMeta !== null
+				? shadeMeta.shadeStep
+				: String(variation.name ?? '');
+
+		let variationName = String(variation.name ?? '');
+		if (useListViewShadeStepLabel) {
+			variationName = shadeStepLabel;
+		} else if ('auto' === usageType) {
+			variationName = formatShadePresetName(
+				mainPreset.name,
+				variation.name
+			);
+		}
+
 		const merged = {
 			...item,
 			...variation,
 			display: true,
 			baseSlug: parentSlug,
 			renderRepeaterItem: true,
-			...('auto' === usageType
-				? {
-						name: formatShadePresetName(
-							mainPreset.name,
-							variation.name
-						),
-					}
-				: {}),
+			name: variationName,
 		};
 		const rowItem = { ...merged };
 		if (
