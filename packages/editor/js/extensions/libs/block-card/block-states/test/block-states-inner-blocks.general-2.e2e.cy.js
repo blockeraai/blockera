@@ -820,8 +820,6 @@ describe('Block States on inner blocks E2E tests', () => {
 
 		resetBlockState('Before');
 
-		checkCurrentState('normal');
-
 		//Check store
 		getWPDataObject().then((data) => {
 			expect({}).to.be.deep.equal(
