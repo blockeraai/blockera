@@ -8,7 +8,12 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined, union } from '@blockera/utils';
+import {
+	isEmpty,
+	isUndefined,
+	union,
+	getEditorDocumentElement,
+} from '@blockera/utils';
 
 /**
  
@@ -785,7 +790,11 @@ export const getCompatibleBlockCssSelector = ({
 			register(registrationSelector);
 		} else {
 			register(
-				appendRootBlockCssSelector(registrationSelector, rootSelector)
+				appendRootBlockCssSelector(registrationSelector, rootSelector, {
+					clientId,
+					blockName,
+					className,
+				})
 			);
 		}
 	} else {
@@ -1113,47 +1122,243 @@ const preferBlockTypeRootSelector = (
 };
 
 /**
+ * Resolve template tokens in a root selector for DOM class comparison.
+ *
+ * @param {string} root      The root selector (may include template tokens).
+ * @param {string} className The blockera unique class name.
+ * @param {string} clientId  The block client id.
+ * @return {string} The resolved root selector.
+ */
+const resolveRootSelectorForDomCheck = (
+	root: string,
+	className: string,
+	clientId: string
+): string => {
+	const normalizedClassName = className?.replace(/\s/g, '.') || '';
+	const uniqueSelector = normalizedClassName
+		? `.${normalizedClassName}`
+		: `#block-${clientId}`;
+
+	return root
+		.replace(/{{UNIQUE_CLASSNAME}}/g, uniqueSelector)
+		.replace(/{{className}}/g, uniqueSelector);
+};
+
+/**
+ * Extract class names from a css selector string.
+ *
+ * @param {string} selector The css selector.
+ * @return {string[]} Class names without the leading dot.
+ */
+const extractClassNamesFromCssSelector = (selector: string): Array<string> => {
+	const matches = selector.match(/\.[a-zA-Z0-9_-]+/g);
+
+	if (!matches) {
+		return [];
+	}
+
+	return matches.map((classToken) => classToken.slice(1));
+};
+
+/**
+ * Check whether class names referenced by the selector exist on the block wrapper.
+ *
+ * Selectors without class tokens (e.g. ` li::before`) pass automatically.
+ * Leading-space selectors that target inner nodes (e.g. archives list root
+ * ` .wp-block-archives-list`) fail when those classes are not on the wrapper.
+ *
+ * @param {string}      selector     The prepared support selector.
+ * @param {HTMLElement} blockElement The `#block-{clientId}` wrapper element.
+ * @return {boolean} True when selector classes are present on the wrapper.
+ */
+const selectorClassesExistOnBlockElement = (
+	selector: string,
+	blockElement: HTMLElement
+): boolean => {
+	const selectorClasses = extractClassNamesFromCssSelector(selector.trim());
+
+	if (!selectorClasses.length) {
+		return true;
+	}
+
+	return selectorClasses.some((selectorClass) =>
+		blockElement.classList.contains(selectorClass)
+	);
+};
+
+/**
+ * Check whether the editor block wrapper element carries every class from root.
+ *
+ * @param {HTMLElement} blockElement The `#block-{clientId}` wrapper element.
+ * @param {string}      root         The root selector.
+ * @param {string}      className    The blockera unique class name.
+ * @param {string}      clientId     The block client id.
+ * @param {string}      selector     The prepared support selector.
+ * @return {boolean} True when root and selector classes match the wrapper element.
+ */
+const blockWrapperElementContainsRootClasses = (
+	blockElement: HTMLElement,
+	root: string,
+	className: string,
+	clientId: string,
+	selector: string
+): boolean => {
+	const resolvedRoot = resolveRootSelectorForDomCheck(
+		root,
+		className,
+		clientId
+	);
+
+	const rootClasses = extractClassNamesFromCssSelector(resolvedRoot);
+
+	if (!rootClasses.length) {
+		return false;
+	}
+
+	const rootClassesMatch = rootClasses.every((rootClass) =>
+		blockElement.classList.contains(rootClass)
+	);
+
+	if (!rootClassesMatch) {
+		return false;
+	}
+
+	return selectorClassesExistOnBlockElement(selector, blockElement);
+};
+
+/**
+ * Decide whether a leading-space selector targets a descendant of the block wrapper
+ * that is itself the styled root (WordPress `data-type` wrapper with matching classes).
+ *
+ * Mirrors the PHP child-selector trim behavior for blocks like `core/list` where the
+ * wrapper is `.wp-block-list` and inner selectors look like ` li::before`.
+ *
+ * @param {Object} params            Parameters.
+ * @param {string} params.selector   The prepared support selector.
+ * @param {string} params.root       The blockera root selector.
+ * @param {string} params.blockName  The block type name (e.g. `core/list`).
+ * @param {string} params.clientId   The block client id.
+ * @param {string} params.className  The blockera unique class name.
+ * @return {boolean} True when the selector leading space should be trimmed.
+ */
+const shouldTrimLeadingSpaceForBlockWrapperRoot = ({
+	selector,
+	root,
+	blockName,
+	clientId,
+	className,
+}: {
+	selector: string,
+	root: string,
+	blockName: string,
+	clientId: string,
+	className: string,
+}): boolean => {
+	if (!selector.startsWith(' ') && selector.split(' ').length > 1) {
+		return false;
+	}
+
+	if (!clientId || !blockName || !root?.trim()) {
+		return false;
+	}
+
+	const blockElement = getEditorDocumentElement()?.querySelector(
+		`#block-${clientId}`
+	);
+
+	if (!blockElement) {
+		return false;
+	}
+
+	if (blockElement.getAttribute('data-type') !== blockName) {
+		return false;
+	}
+
+	return blockWrapperElementContainsRootClasses(
+		blockElement,
+		root,
+		className,
+		clientId,
+		selector
+	);
+};
+
+/**
  * Appending received root css selector into base block css selector.
  *
  * @param {string} selector the prepared block css selector order by support identifier or query.
  * @param {string} root the root block css selector.
+ * @param {{clientId?: string, blockName?: string, className?: string}} context Optional block context for DOM checks.
  * @return {string} The css selector with include received root selector.
  */
-const appendRootBlockCssSelector = (selector: string, root: string): string => {
+const appendRootBlockCssSelector = (
+	selector: string,
+	root: string,
+	context: {
+		clientId?: string,
+		blockName?: string,
+		className?: string,
+	} = {}
+): string => {
 	// Assume received selector is invalid.
 	if (!selector || isEmpty(selector.trim())) {
 		return root;
 	}
 
+	let normalizedSelector = selector;
+	let trimmedLeadingSpaceForBlockWrapper = false;
+
+	if (
+		shouldTrimLeadingSpaceForBlockWrapperRoot({
+			selector,
+			root,
+			blockName: context.blockName || '',
+			clientId: context.clientId || '',
+			className: context.className || '',
+		})
+	) {
+		normalizedSelector = selector.trimStart();
+		trimmedLeadingSpaceForBlockWrapper = true;
+	}
+
+	// Descendant element selectors inside the block wrapper root (e.g. `li::before`).
+	if (
+		trimmedLeadingSpaceForBlockWrapper &&
+		!/\bwp-block-/.test(normalizedSelector.split(/[\s>+~]/)[0])
+	) {
+		return `${root} ${normalizedSelector}`;
+	}
+
 	// Assume received selector is another reference to root, so we should concat together.
-	const matches = /(wp-block[a-z-_A-Z]+)/g.exec(selector);
+	const matches = /(wp-block[a-z-_A-Z]+)/g.exec(normalizedSelector);
 	if (matches) {
 		// If selector contains a direct child combinator (>), append root after the selector
 		// Example: ".wp-block-foo > .child" becomes ".wp-block-foo > .child.wp-block-bar"
-		if (/\s>\s(\w|\.|#)/.test(selector)) {
-			return `${selector}${root}, ${root}${selector}`;
+		if (/\s>\s(\w|\.|#)/.test(normalizedSelector)) {
+			return `${normalizedSelector}${root}, ${root}${normalizedSelector}`;
 		}
 
 		// If selector starts with a space, append root before the selector to handle cases like:
 		// " .wp-block-foo" becomes ".wp-block-bar .wp-block-foo"
-		if (selector.startsWith(' ')) {
-			return `${root}${selector}`;
+		if (normalizedSelector.startsWith(' ')) {
+			return `${root}${normalizedSelector}`;
 		}
 
 		const subject = matches[0];
 		const regexp = new RegExp('.\\b' + subject + '\\b', 'gi');
 
-		return selector.replace(regexp, `${root}.${subject}`);
+		return normalizedSelector.replace(regexp, `${root}.${subject}`);
 	}
 
 	// If selector has combinators (space, >, +, ~) or starts with a-z html tag name,
 	// and not starts with space,
 	if (
-		!selector.startsWith(' ') &&
-		(/[\s>+~]/.test(selector) || /^[a-z]/.test(selector))
+		!normalizedSelector.startsWith(' ') &&
+		(/[\s>+~]/.test(normalizedSelector) ||
+			/^[a-z]/.test(normalizedSelector))
 	) {
-		return `${selector}${root}`;
+		return `${normalizedSelector}${root}`;
 	}
 
-	return `${root}${selector}`;
+	return `${root}${normalizedSelector}`;
 };
