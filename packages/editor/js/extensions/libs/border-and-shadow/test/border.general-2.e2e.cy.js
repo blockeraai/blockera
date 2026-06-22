@@ -616,7 +616,7 @@ describe('Border → Functionality', () => {
 
 						cy.get('[aria-haspopup="listbox"]').trigger('click');
 						cy.get('div[aria-selected="false"]')
-							.eq(1)
+							.eq(0)
 							.trigger('click');
 					});
 			});
@@ -707,7 +707,7 @@ describe('Border → Functionality', () => {
 
 						cy.get('[aria-haspopup="listbox"]').trigger('click');
 						cy.get('div[aria-selected="false"]')
-							.eq(2)
+							.eq(1)
 							.trigger('click');
 					});
 			});
@@ -817,7 +817,7 @@ describe('Border → Functionality', () => {
 
 						cy.get('[aria-haspopup="listbox"]').trigger('click');
 						cy.get('div[aria-selected="false"]')
-							.eq(3)
+							.eq(2)
 							.trigger('click');
 					});
 			});
