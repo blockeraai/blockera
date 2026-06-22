@@ -118,7 +118,9 @@ export function TaxonomyRepeaterBridgeInner({
 				origin,
 				pickerCtx.variableType
 			);
-			pickerCtx.controlProps.handleOnClickVar(payload as never);
+			pickerCtx.controlProps.handleOnClickVar(payload as never, {
+				keepPickerOpen: row.creatingStep === true,
+			});
 		},
 		[
 			isVariablePicker,
