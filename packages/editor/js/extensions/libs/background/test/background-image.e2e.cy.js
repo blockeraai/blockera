@@ -5,7 +5,14 @@ import {
 	redirectToFrontPage,
 	hexToRGB,
 	createPost,
+	activateMuPlugin,
+	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
+
+const DEFAULT_GRADIENTS_MU =
+	'packages/editor/js/extensions/libs/background/test/fixtures/background-default-gradients-enabled.php';
+const DEFAULT_GRADIENTS_MU_NAME =
+	'blockera-test-background-default-gradients-enabled.php';
 
 describe('Background Image → Functionality', () => {
 	beforeEach(() => {
@@ -243,6 +250,13 @@ describe('Background Image → Functionality', () => {
 	describe('Linear Gradient', () => {
 		// linear-gradient(90deg,#009efa 10%,#e52e00 90%)
 		beforeEach(() => {
+			activateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
+
+			// Parent `createPost()` runs before nested hooks; reload editor with MU active.
+			createPost();
+
+			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+
 			// add bg repeater, open it
 			cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
@@ -253,6 +267,10 @@ describe('Background Image → Functionality', () => {
 			});
 
 			cy.getByAriaLabel('Linear Gradient').click();
+		});
+
+		afterEach(() => {
+			deactivateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
 		});
 
 		it('simple value linear gradient', () => {
@@ -355,8 +373,7 @@ describe('Background Image → Functionality', () => {
 						id: 'vivid-cyan-blue-to-vivid-purple',
 						value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)',
 						reference: {
-							type: 'theme',
-							theme: 'Twenty Twenty-Five',
+							type: 'preset',
 						},
 						type: 'linear-gradient',
 						var: '--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple',
