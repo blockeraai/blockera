@@ -405,6 +405,9 @@ export const getCustomGlobalStylePresetVariables: (
 		case 'spacing':
 			return mapSpacingCustom(features?.spacing?.spacingSizes?.custom);
 
+		case 'width-size':
+			return mapSpacingCustom(features?.layout?.widthSizes?.custom);
+
 		case 'font-size':
 			return mapFontSizesCustom(features?.typography?.fontSizes?.custom);
 
