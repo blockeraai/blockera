@@ -6,6 +6,7 @@
 import type { MixedElement } from 'react';
 import { select, useSelect } from '@wordpress/data';
 import { useState, useMemo, useRef } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -36,6 +37,10 @@ import {
 import { canUnlinkVariable } from './helpers';
 import { applyRegisteredPresetPreviewPickerMerge } from './preset-preview-picker-props-registry';
 import { ValueAddonControl, ValueAddonPointer } from './components';
+import {
+	MISSING_VARIABLE_CAN_RECREATE_FILTER,
+	MISSING_VARIABLE_RECREATE_FILTER,
+} from './components/variable/var-picker-constants';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
 import type { ValueAddonControlProps } from './components/control/types';
 
@@ -253,6 +258,8 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 						: dynamicValueTypes,
 				handleOnClickVar: () => {},
 				handleOnUnlinkVar: () => {},
+				handleOnRecreateMissingVar: () => {},
+				canRecreateMissingVar: false,
 				handleOnClickDV: () => {},
 				handleOnClickRemove: () => {},
 				isOpen: '',
@@ -372,6 +379,31 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		setOpen('');
 	};
 
+	const handleOnRecreateMissingVar = (): void => {
+		if (!isValid(value) || value.valueType !== 'variable') {
+			return;
+		}
+
+		const variableType =
+			value?.settings?.type ??
+			(normalizedVariableTypes.length > 0
+				? normalizedVariableTypes[0]
+				: '');
+
+		const result = applyFilters(
+			MISSING_VARIABLE_RECREATE_FILTER,
+			{ ok: false, reason: 'invalid' },
+			{
+				variableType,
+				settings: value.settings,
+			}
+		);
+
+		if (result?.ok) {
+			setOpen('');
+		}
+	};
+
 	const handleOnClickDV = (data: DynamicValueItem): void => {
 		const newValue = {
 			settings: {
@@ -411,8 +443,13 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 				: dynamicValueTypes,
 		handleOnClickVar,
 		handleOnUnlinkVar,
+		handleOnRecreateMissingVar,
 		handleOnClickDV,
 		handleOnClickRemove,
+		canRecreateMissingVar: applyFilters(
+			MISSING_VARIABLE_CAN_RECREATE_FILTER,
+			false
+		),
 		isOpen,
 		setOpen,
 		size,
@@ -499,6 +536,8 @@ export {
 	VAR_PICKER_PRESET_PANEL_FILTER,
 	VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
 	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+	MISSING_VARIABLE_CAN_RECREATE_FILTER,
+	MISSING_VARIABLE_RECREATE_FILTER,
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
 	VarPickerSummarySlotProvider,

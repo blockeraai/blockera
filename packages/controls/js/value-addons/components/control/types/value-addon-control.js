@@ -30,6 +30,10 @@ export type ValueAddonControlProps = {
 		options?: { keepPickerOpen?: boolean }
 	) => void,
 	handleOnUnlinkVar: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnRecreateMissingVar?: (
+		event: SyntheticMouseEvent<EventTarget>
+	) => void,
+	canRecreateMissingVar?: boolean,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
 	isOpen: string,
 	setOpen: (value: string) => void,

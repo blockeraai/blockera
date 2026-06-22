@@ -21,3 +21,19 @@ export const VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER: string =
  */
 export const VAR_PICKER_PRESET_PANEL_FILTER: string =
 	VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER;
+
+/**
+ * Whether the current editor session can recreate missing variables in custom global styles.
+ *
+ * @see packages/editor/js/editor/missing-variable-recreate-bridge.tsx
+ */
+export const MISSING_VARIABLE_CAN_RECREATE_FILTER: string =
+	'blockera.controls.can-recreate-missing-variable';
+
+/**
+ * Recreate a missing variable as a custom global-styles preset.
+ *
+ * @see packages/editor/js/editor/missing-variable-recreate-bridge.tsx
+ */
+export const MISSING_VARIABLE_RECREATE_FILTER: string =
+	'blockera.controls.recreate-missing-variable';

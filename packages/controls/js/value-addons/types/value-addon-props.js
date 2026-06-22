@@ -59,4 +59,8 @@ export type ValueAddonProps = {
 		// eslint-disable-next-line
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,
+	handleOnRecreateMissingVar?: (
+		// eslint-disable-next-line
+		event: SyntheticMouseEvent<EventTarget>
+	) => void,
 };
