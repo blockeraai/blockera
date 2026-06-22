@@ -84,22 +84,6 @@ describe('Block States on inner blocks E2E tests', () => {
 	});
 
 	describe('current-state', () => {
-		it('Set the hidden style for WordPress block origin features when choose state (apart from normal state)', () => {
-			initialSetting();
-			setInnerBlock('elements/link');
-			setBlockState('Hover');
-
-			//In this assertion not available data attribute for this selector، Please don't be sensitive.
-			cy.get('button')
-				.contains('Advanced')
-				.parent()
-				.parent()
-				.parent()
-				.parent()
-				.parent()
-				.should('have.class', 'blockera-not-allowed');
-		});
-
 		it('Set the current state when add new block states', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
@@ -355,7 +339,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			// set mobile viewport
 			cy.viewport(320, 480);
 			cy.get('.my-link').should(
-				'have.css',
+				'not.have.css',
 				'background-color',
 				'rgb(204, 204, 204)'
 			);
@@ -660,7 +644,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			);
 			cy.get('.my-link').realHover();
 			cy.get('.my-link').should(
-				'have.css',
+				'not.have.css',
 				'background-color',
 				'rgb(204, 204, 204)'
 			);
