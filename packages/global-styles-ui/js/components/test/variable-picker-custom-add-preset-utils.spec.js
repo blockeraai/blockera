@@ -361,6 +361,53 @@ describe('resolveVariablePickerCustomAddPresetValue', () => {
 			).toEqual(defaults);
 		});
 	});
+
+	describe('search seed', () => {
+		it('uses searchSeed for preset name and slug when add follows no-match search', () => {
+			const defaults = { ...baseDefault, size: '16px' };
+			expect(
+				resolveVariablePickerCustomAddPresetValue({
+					rawValue: '',
+					variableType: 'font-size',
+					defaultPresetValue: defaults,
+					searchSeed: 'E2E New Size',
+				})
+			).toEqual({
+				...defaults,
+				name: 'E2E New Size',
+				slug: 'e-2-e-new-size',
+			});
+		});
+
+		it('merges searchSeed with control value seeding', () => {
+			const defaults = { ...baseDefault, size: '16px' };
+			expect(
+				resolveVariablePickerCustomAddPresetValue({
+					rawValue: '24',
+					variableType: 'font-size',
+					defaultPresetValue: defaults,
+					searchSeed: 'Heading 2',
+				})
+			).toEqual({
+				...defaults,
+				size: '24',
+				name: 'Heading 2',
+				slug: 'heading-2',
+			});
+		});
+
+		it('ignores blank searchSeed', () => {
+			const defaults = { ...baseDefault, size: '16px' };
+			expect(
+				resolveVariablePickerCustomAddPresetValue({
+					rawValue: '',
+					variableType: 'font-size',
+					defaultPresetValue: defaults,
+					searchSeed: '   ',
+				})
+			).toEqual(defaults);
+		});
+	});
 });
 
 describe('variable picker creatingStep slug helpers', () => {

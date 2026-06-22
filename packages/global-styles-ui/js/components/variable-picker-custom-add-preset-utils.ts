@@ -25,12 +25,15 @@ import {
 } from '../text-shadows/utils';
 import { repeaterRecordToItems as transformRepeaterToItems } from '../transforms/utils';
 import { repeaterRecordToItems as transitionRepeaterToItems } from '../transitions/utils';
+import { normalizeVariablePresetSlug } from './utils';
 
 export type ResolveVariablePickerCustomAddPresetValueOptions = {
 	rawValue: unknown;
 	variableType: string;
 	defaultPresetValue: Record<string, unknown>;
 	blockName?: string;
+	/** When add-new follows a no-match search, use this as preset name + slug. */
+	searchSeed?: string;
 };
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -263,6 +266,30 @@ function seedByVariableType(
 	}
 }
 
+function seedPresetNameAndSlugFromSearch(
+	defaultPresetValue: Record<string, unknown>,
+	searchSeed: string
+): Record<string, unknown> {
+	const name = searchSeed.trim();
+	if (!name) {
+		return defaultPresetValue;
+	}
+
+	const slug = normalizeVariablePresetSlug(name);
+	if (!slug) {
+		return {
+			...defaultPresetValue,
+			name,
+		};
+	}
+
+	return {
+		...defaultPresetValue,
+		name,
+		slug,
+	};
+}
+
 /**
  * When adding a custom preset from the variable picker header "+", merge the
  * control's current value into the static default when appropriate.
@@ -270,18 +297,29 @@ function seedByVariableType(
 export function resolveVariablePickerCustomAddPresetValue(
 	options: ResolveVariablePickerCustomAddPresetValueOptions
 ): Record<string, unknown> {
-	const { rawValue, variableType, defaultPresetValue, blockName } = options;
-
-	if (shouldSkipSeeding(rawValue)) {
-		return defaultPresetValue;
-	}
-
-	const seeded = seedByVariableType(
+	const {
 		rawValue,
 		variableType,
 		defaultPresetValue,
-		blockName
-	);
+		blockName,
+		searchSeed,
+	} = options;
 
-	return seeded ?? defaultPresetValue;
+	let resolved = defaultPresetValue;
+
+	if (!shouldSkipSeeding(rawValue)) {
+		const seeded = seedByVariableType(
+			rawValue,
+			variableType,
+			defaultPresetValue,
+			blockName
+		);
+		resolved = seeded ?? defaultPresetValue;
+	}
+
+	if (typeof searchSeed === 'string' && searchSeed.trim() !== '') {
+		resolved = seedPresetNameAndSlugFromSearch(resolved, searchSeed);
+	}
+
+	return resolved;
 }
