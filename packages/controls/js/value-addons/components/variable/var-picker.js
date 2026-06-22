@@ -44,13 +44,19 @@ import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
 import {
 	VarPickerCustomAddProvider,
-	useVarPickerCustomAddContext,
+	type VarPickerCustomAddAction,
 } from './var-picker-custom-add-context';
 import { VarPickerCustomAddButton } from './var-picker-section-custom-add-button';
+import { VarPickerSearchContext } from './var-picker-search-context';
+import { VarPickerSearchEmptyState } from './var-picker-search-empty-state';
+import { useVarPickerSingleTypeCustomAddAction } from './use-var-picker-single-type-custom-add-action';
+import { useVarPickerAddWithSearchClear } from './use-var-picker-add-with-search-clear';
+import { VarPickerAddActionRefBridge } from './var-picker-add-action-ref-bridge';
 import {
 	collectCatalogItemsForVariableType,
 	getSupplementalCustomVariableSections,
 	normalizeVariablePickerSearchQuery,
+	variablePickerHasAnySearchMatches,
 	variablePickerItemMatchesSearch,
 } from './var-picker-helpers';
 import {
@@ -175,23 +181,21 @@ function shouldShowVariablePickerOuterCategoryTitle(
 
 function VarPickerHeaderActions({
 	controlProps,
+	triggerAddNew,
 }: {
 	controlProps: ValueAddonControlProps,
+	triggerAddNew: () => void,
 }): MixedElement {
-	const customAddCtx = useVarPickerCustomAddContext();
-	const variableTypes = controlProps.variableTypes || [];
-	const isSingleVariableType = variableTypes.length === 1;
-	const singleType = isSingleVariableType ? variableTypes[0] : null;
-	const customAddAction =
-		singleType !== null && singleType !== undefined
-			? (customAddCtx?.getAction(singleType) ??
-				customAddCtx?.action ??
-				null)
-			: null;
+	const customAddAction = useVarPickerSingleTypeCustomAddAction(controlProps);
 	const showCustomAddButton =
-		isSingleVariableType &&
-		customAddAction !== null &&
-		customAddAction.canAdd === true;
+		customAddAction !== null && customAddAction.canAdd === true;
+	const headerCustomAddAction =
+		showCustomAddButton && customAddAction !== null
+			? {
+					...customAddAction,
+					onClick: triggerAddNew,
+				}
+			: null;
 
 	return (
 		<>
@@ -225,13 +229,40 @@ function VarPickerHeaderActions({
 				</Button>
 			)}
 
-			{showCustomAddButton && customAddAction !== null && (
+			{headerCustomAddAction !== null && (
 				<VarPickerCustomAddButton
-					customAddAction={customAddAction}
+					customAddAction={headerCustomAddAction}
 					dataTest="variable-picker-header-add-custom-variable"
 				/>
 			)}
 		</>
+	);
+}
+
+function VarPickerSearchEmptyStateContainer({
+	controlProps,
+	searchQuery,
+	onClear,
+	triggerAddNew,
+}: {
+	controlProps: ValueAddonControlProps,
+	searchQuery: string,
+	onClear: () => void,
+	triggerAddNew: () => void,
+}): MixedElement {
+	const customAddAction = useVarPickerSingleTypeCustomAddAction(controlProps);
+	const onAddNew =
+		customAddAction !== null && customAddAction.canAdd === true
+			? triggerAddNew
+			: null;
+
+	return (
+		<VarPickerSearchEmptyState
+			searchQuery={searchQuery}
+			onClear={onClear}
+			onAddNew={onAddNew}
+			addNewDisabled={customAddAction?.disabled === true}
+		/>
 	);
 }
 
@@ -259,6 +290,57 @@ export default function ({
 	const normalizedSearch = useMemo(
 		() => normalizeVariablePickerSearchQuery(searchQuery),
 		[searchQuery]
+	);
+	const hasAnySearchMatches = useMemo(
+		() =>
+			variablePickerHasAnySearchMatches(
+				variableTypes,
+				supplementalSections,
+				normalizedSearch
+			),
+		[variableTypes, supplementalSections, normalizedSearch]
+	);
+	const isSearchActive = normalizedSearch !== '';
+	const showSearchEmptyState = isSearchActive && !hasAnySearchMatches;
+	const pendingAddSearchSeedRef = useRef<?string>(null);
+	const captureAddSearchSeed = useCallback(() => {
+		if (!isSearchActive || hasAnySearchMatches) {
+			return;
+		}
+
+		const trimmed = searchQuery.trim();
+		if (trimmed !== '') {
+			pendingAddSearchSeedRef.current = trimmed;
+		}
+	}, [hasAnySearchMatches, isSearchActive, searchQuery]);
+	const consumeAddSearchSeed = useCallback((): ?string => {
+		const seed = pendingAddSearchSeedRef.current;
+		pendingAddSearchSeedRef.current = null;
+		return seed ?? null;
+	}, []);
+	const [registeredCustomAddAction, setRegisteredCustomAddAction] =
+		useState<?VarPickerCustomAddAction>(null);
+	const handleCustomAddActionChange = useCallback(
+		(action: VarPickerCustomAddAction) => {
+			setRegisteredCustomAddAction(action);
+		},
+		[]
+	);
+	const clearSearch = useCallback(() => {
+		setSearchQuery('');
+	}, []);
+	const triggerAddNew = useVarPickerAddWithSearchClear(
+		isSearchActive,
+		clearSearch,
+		registeredCustomAddAction,
+		{ captureSearchSeed: captureAddSearchSeed }
+	);
+	const searchContextValue = useMemo(
+		() => ({
+			deferSectionSearchEmptyState: isSearchActive,
+			consumeAddSearchSeed,
+		}),
+		[isSearchActive, consumeAddSearchSeed]
 	);
 	const popoverClassName = useMemo(() => {
 		const typeClassNames = [];
@@ -440,6 +522,10 @@ export default function ({
 			}
 
 			if (!filteredCatalogItems.length) {
+				if (isSearchActive) {
+					return <Fragment key={`type-${type}-${index}`} />;
+				}
+
 				return (
 					<PickerCategory
 						key={`type-${type}-${index}`}
@@ -562,6 +648,10 @@ export default function ({
 
 	return (
 		<VarPickerCustomAddProvider>
+			<VarPickerAddActionRefBridge
+				controlProps={controlProps}
+				onCustomAddActionChange={handleCustomAddActionChange}
+			/>
 			<Popover
 				title={__('Variable picker', 'blockera')}
 				placement="left-start"
@@ -569,46 +659,85 @@ export default function ({
 				onFocusOutside={handleFocusOutside}
 				className={popoverClassName}
 				titleButtonsRight={
-					<VarPickerHeaderActions controlProps={controlProps} />
+					<VarPickerHeaderActions
+						controlProps={controlProps}
+						triggerAddNew={triggerAddNew}
+					/>
 				}
 			>
 				<PresetVariablesViewModeProvider>
 					<VarPickerSummarySlotProvider slot={summarySlot}>
-						<div
-							ref={popoverContentRef}
-							data-cy="variable-picker-popover"
-							data-test="variable-picker-popover"
+						<VarPickerSearchContext.Provider
+							value={searchContextValue}
 						>
 							<div
-								className={controlInnerClassNames(
-									'var-picker-search'
-								)}
-								style={{ marginBottom: '12px' }}
+								ref={popoverContentRef}
+								data-cy="variable-picker-popover"
+								data-test="variable-picker-popover"
 							>
-								<ControlContextProvider
-									value={searchControlContextValue}
+								<div
+									className={controlInnerClassNames(
+										'var-picker-search'
+									)}
+									style={{ marginBottom: '12px' }}
 								>
-									<SearchControl
-										defaultValue=""
-										onChange={setSearchQuery}
-										placeholder={__(
-											'Search variables…',
-											'blockera'
-										)}
+									<ControlContextProvider
+										value={searchControlContextValue}
+									>
+										<SearchControl
+											defaultValue=""
+											onChange={setSearchQuery}
+											placeholder={__(
+												'Search variables…',
+												'blockera'
+											)}
+										/>
+									</ControlContextProvider>
+								</div>
+								<div
+									ref={setSummarySlot}
+									data-test="var-picker-summary-slot"
+									style={
+										showSearchEmptyState
+											? { display: 'none' }
+											: undefined
+									}
+									aria-hidden={
+										showSearchEmptyState ? true : undefined
+									}
+								/>
+								{showSearchEmptyState ? (
+									<VarPickerSearchEmptyStateContainer
+										controlProps={controlProps}
+										searchQuery={searchQuery}
+										onClear={clearSearch}
+										triggerAddNew={triggerAddNew}
 									/>
-								</ControlContextProvider>
+								) : null}
+								<div
+									style={
+										showSearchEmptyState
+											? { display: 'none' }
+											: undefined
+									}
+									aria-hidden={
+										showSearchEmptyState ? true : undefined
+									}
+									data-test={
+										showSearchEmptyState
+											? 'var-picker-search-hidden-sections'
+											: 'var-picker-sections'
+									}
+								>
+									<Flex
+										direction="column"
+										gap={PRESET_VARIABLES_SECTION_GAP}
+									>
+										{variablePickerSections}
+									</Flex>
+								</div>
 							</div>
-							<div
-								ref={setSummarySlot}
-								data-test="var-picker-summary-slot"
-							/>
-							<Flex
-								direction="column"
-								gap={PRESET_VARIABLES_SECTION_GAP}
-							>
-								{variablePickerSections}
-							</Flex>
-						</div>
+						</VarPickerSearchContext.Provider>
 					</VarPickerSummarySlotProvider>
 				</PresetVariablesViewModeProvider>
 			</Popover>

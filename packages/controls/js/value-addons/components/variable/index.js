@@ -23,7 +23,14 @@ export {
 	tokenizeVariablePickerSearchQuery,
 	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
+	variablePickerHasAnySearchMatches,
 } from './var-picker-helpers';
+export {
+	VarPickerSearchContext,
+	useVarPickerSearchContext,
+} from './var-picker-search-context';
+export { VarPickerSearchEmptyState } from './var-picker-search-empty-state';
+export { useVarPickerSingleTypeCustomAddAction } from './use-var-picker-single-type-custom-add-action';
 export {
 	PresetVariablesViewModeProvider,
 	usePresetVariablesViewMode,
