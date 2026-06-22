@@ -31,7 +31,7 @@ describe('Global Styles UI → Color variables screen', () => {
 
 		cy.realPress('Escape');
 
-		cy.getParentContainer('Custom Variables').within(() => {
+		cy.getParentContainer('Custom variables').within(() => {
 			cy.getByDataCy('repeater-item', { timeout: 15000 }).should(
 				'have.length',
 				1
@@ -53,7 +53,7 @@ describe('Global Styles UI → Color variables screen', () => {
 
 		cy.get('[role="dialog"]').should('not.exist');
 
-		cy.getParentContainer('Custom Variables').within(() => {
+		cy.getParentContainer('Custom variables').within(() => {
 			cy.getByDataCy('repeater-item').should('have.length', 1);
 			cy.getByDataTest(
 				'global-styles-preset-add-color-presets-custom'

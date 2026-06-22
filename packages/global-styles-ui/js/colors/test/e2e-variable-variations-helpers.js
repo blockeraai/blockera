@@ -12,7 +12,7 @@ import {
 export const MU_FIX = 'packages/global-styles-ui/js/colors/test/fixtures';
 
 /** Global Styles color palette: PresetGroup uses `getOriginVariablesLabel( 'theme' )`. */
-export const THEME_PRESET_GROUP_LABELS = ['Theme Variables', 'Theme'];
+export const THEME_PRESET_GROUP_LABELS = ['Theme variables', 'Theme'];
 
 /** Cypress chainable scoped to the theme color preset repeater section. */
 export function withinThemePresetGroup(fn) {
