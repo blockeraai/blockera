@@ -231,8 +231,8 @@ export const registerCommands = () => {
 	});
 
 	// Remove Value Addon Popover
-	Cypress.Commands.add('removeValueAddon', () => {
-		cy.getByDataCy('value-addon-btn-remove').click({
+	Cypress.Commands.add('removeValueAddon', (eq = 0) => {
+		cy.getByDataCy('value-addon-btn-remove').eq(eq).click({
 			force: true,
 		});
 	});
