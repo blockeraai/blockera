@@ -185,10 +185,12 @@ const RepeaterItem = ({
 		}
 
 		requestAnimationFrame(() => {
-			node.scrollIntoView({
-				inline: 'nearest',
-				block: 'nearest',
-				behavior: scrollBehavior,
+			requestAnimationFrame(() => {
+				node.scrollIntoView({
+					inline: 'nearest',
+					block: 'center',
+					behavior: scrollBehavior,
+				});
 			});
 		});
 	}, [item?.creatingStep, itemId, scrollBehavior]);
