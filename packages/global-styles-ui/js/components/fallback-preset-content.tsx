@@ -26,6 +26,7 @@ import {
 	shouldShowThemePresetGroup,
 } from './preset-origin-utils';
 import { PresetGroup } from './preset-group';
+import { WidthSizePresetOpener } from '../width-size/width-size-preset-opener';
 
 function partitionCatalogItems(items: VariableItem[]): {
 	theme: VariableItem[];
@@ -162,6 +163,11 @@ export function FallbackPresetContent() {
 			? catalogLabel
 			: pascalCase(effectiveType);
 
+	const catalogRepeaterItemHeader =
+		effectiveType === 'width-size'
+			? WidthSizePresetOpener
+			: FallbackPresetOpener;
+
 	return (
 		<VarPickerFallbackReadOnlyProvider>
 			<VStack
@@ -170,7 +176,7 @@ export function FallbackPresetContent() {
 			>
 				{showThemeOriginGroup && (
 					<PresetGroup
-						repeaterItemHeader={FallbackPresetOpener}
+						repeaterItemHeader={catalogRepeaterItemHeader}
 						onChange={noop}
 						controlName={`fallback-catalog-theme-${variableType}`}
 						defaultPresetValue={FALLBACK_DEFAULT_PRESET}
@@ -184,7 +190,7 @@ export function FallbackPresetContent() {
 				)}
 				{showDefaultOriginGroup && (
 					<PresetGroup
-						repeaterItemHeader={FallbackPresetOpener}
+						repeaterItemHeader={catalogRepeaterItemHeader}
 						onChange={noop}
 						controlName={`fallback-catalog-default-${variableType}`}
 						defaultPresetValue={FALLBACK_DEFAULT_PRESET}
