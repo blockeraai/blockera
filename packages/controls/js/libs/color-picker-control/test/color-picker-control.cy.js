@@ -183,6 +183,30 @@ describe('Color-Picker Control', () => {
 			});
 		});
 
+		it('replaces the value when pasting instead of concatenating', () => {
+			cy.withDataProvider({
+				component: (
+					<ColorPickerControl isOpen={true} isPopover={false} />
+				),
+				value: '#eeeeee',
+				name,
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').trigger('paste', {
+				clipboardData: {
+					getData: () => 'c4c4c4',
+				},
+			});
+
+			cy.get('[data-cy="color-picker-css-value"]').should(
+				'have.value',
+				'#c4c4c4'
+			);
+			cy.then(() => {
+				expect(getControlValue(name)).to.be.equal('#c4c4c4');
+			});
+		});
+
 		it('accepts currentColor as a stored value', () => {
 			cy.withDataProvider({
 				component: (

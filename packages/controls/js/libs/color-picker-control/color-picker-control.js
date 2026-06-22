@@ -70,6 +70,18 @@ export default function ColorPickerControl({
 		onClose();
 	}, [commitColorValue, onClose]);
 
+	const handlePaste = useCallback(
+		(event: {
+			preventDefault: () => void,
+			clipboardData: { getData: (type: string) => string },
+		}) => {
+			event.preventDefault();
+			const pastedText = event.clipboardData.getData('text').trim();
+			setValue(pastedText);
+		},
+		[setValue]
+	);
+
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
 	const cssValueInputId = useInstanceId(
 		ColorPickerControl,
@@ -211,6 +223,7 @@ export default function ColorPickerControl({
 				onChange={(e) => {
 					setValue(e.target.value);
 				}}
+				onPaste={handlePaste}
 				onBlur={commitColorValue}
 				autoComplete="off"
 				spellCheck={false}
