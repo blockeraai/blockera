@@ -8,9 +8,10 @@ import {
 } from '@blockera/dev-cypress/js/helpers';
 import {
 	assertCustomPresetEditPopoverFieldValue,
-	assertLastVariablePickerRepeaterItemInPopoverBody,
 	clickVariablePickerHeaderAddCustomVariable,
+	assertLastVariablePickerRepeaterItemInPopoverBody,
 	getVariablePickerLastRepeaterItem,
+	getVariablePickerPopoverBody,
 	makeVariablePickerPopoverBodyScrollable,
 	openParagraphFontSizeVariablePickerPopover,
 	scrollVariablePickerPopoverToTop,
@@ -66,6 +67,114 @@ describe('Font Size variable picker → header add custom preset', () => {
 		}).should('exist');
 
 		assertCustomPresetEditPopoverFieldValue('Font Size', '16');
+	});
+
+	it('shows the header add button while search is active with no matches', () => {
+		openParagraphFontSizeVariablePickerPopover();
+
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		})
+			.should('be.visible')
+			.clear({ force: true })
+			.type('no-match-xyz', { delay: 0, force: true });
+
+		cy.getByDataTest('var-picker-search-empty').should('be.visible');
+
+		cy.getByDataTest('variable-picker-header-add-custom-variable').should(
+			'be.visible'
+		);
+
+		cy.getByDataTest(
+			'variable-picker-search-empty-add-custom-variable'
+		).should('be.visible');
+	});
+
+	it('adds a custom preset from the empty-state add button during search', () => {
+		const searchSeed = 'E2E New Size';
+
+		openParagraphFontSizeVariablePickerPopover();
+
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.should('be.visible')
+			.find('[data-cy="repeater-item"]')
+			.its('length')
+			.then((beforeCount) => {
+				cy.get(
+					'.blockera-control-var-picker-search input[type="search"]',
+					{
+						timeout: 20000,
+					}
+				)
+					.should('be.visible')
+					.clear({ force: true })
+					.type(searchSeed, { delay: 0, force: true });
+
+				cy.getByDataTest(
+					'variable-picker-search-empty-add-custom-variable',
+					{ timeout: 20000 }
+				)
+					.should('be.visible')
+					.click({ force: true });
+
+				cy.get(
+					'.blockera-control-var-picker-search input[type="search"]'
+				).should('have.value', '');
+
+				cy.getByDataTest('var-picker-search-empty').should('not.exist');
+
+				cy.getByDataTest('variable-picker-popover')
+					.find('[data-cy="repeater-item"]')
+					.should('have.length', beforeCount + 1);
+			});
+
+		cy.getByDataTest('repeater-item-creating-step', {
+			timeout: 20000,
+		}).should('exist');
+
+		cy.getByDataCy('font-size-repeater-item-header', { timeout: 20000 })
+			.contains(searchSeed)
+			.should('be.visible');
+
+		cy.get('.blockera-component-popover.blockera-control-group-popover', {
+			timeout: 20000,
+		})
+			.filter(':visible')
+			.last()
+			.should('be.visible')
+			.within(() => {
+				cy.getByDataTest('global-styles-preset-name-field')
+					.filter('input')
+					.first()
+					.should('have.value', searchSeed);
+			});
+	});
+
+	it('clears search and creates a preset from the header add button', () => {
+		openParagraphFontSizeVariablePickerPopover();
+
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		})
+			.should('be.visible')
+			.clear({ force: true })
+			.type('no-match-xyz', { delay: 0, force: true });
+
+		clickVariablePickerHeaderAddCustomVariable();
+
+		cy.get(
+			'.blockera-control-var-picker-search input[type="search"]'
+		).should('have.value', '');
+
+		cy.getByDataTest('var-picker-search-empty').should('not.exist');
+
+		cy.getByDataTest('repeater-item-creating-step', {
+			timeout: 20000,
+		}).should('exist');
+
+		getVariablePickerLastRepeaterItem().should('be.visible');
 	});
 
 	it('shows the header add button for a single-type picker', () => {
