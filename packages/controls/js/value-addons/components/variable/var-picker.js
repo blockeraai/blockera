@@ -46,6 +46,7 @@ import {
 	VarPickerCustomAddProvider,
 	useVarPickerCustomAddContext,
 } from './var-picker-custom-add-context';
+import { VarPickerCustomAddButton } from './var-picker-section-custom-add-button';
 import {
 	collectCatalogItemsForVariableType,
 	getSupplementalCustomVariableSections,
@@ -156,15 +157,37 @@ function variablePickerPopoverTypeClassName(presetType: string): string {
 	return controlInnerClassNames(`popover-variables-type-${segment}`);
 }
 
+/**
+ * Global-styles preset panels usually render their own section labels. Width-size is
+ * an exception: its catalog rows omit repeater section labels, so the picker keeps
+ * the outer category title (e.g. “Width & Height Variables”).
+ */
+function shouldShowVariablePickerOuterCategoryTitle(
+	presetType: string,
+	hasGlobalStylesPanel: boolean
+): boolean {
+	if (!hasGlobalStylesPanel) {
+		return true;
+	}
+
+	return presetType === 'width-size';
+}
+
 function VarPickerHeaderActions({
 	controlProps,
 }: {
 	controlProps: ValueAddonControlProps,
 }): MixedElement {
 	const customAddCtx = useVarPickerCustomAddContext();
-	const customAddAction = customAddCtx?.action;
-	const isSingleVariableType =
-		(controlProps.variableTypes || []).length === 1;
+	const variableTypes = controlProps.variableTypes || [];
+	const isSingleVariableType = variableTypes.length === 1;
+	const singleType = isSingleVariableType ? variableTypes[0] : null;
+	const customAddAction =
+		singleType !== null && singleType !== undefined
+			? (customAddCtx?.getAction(singleType) ??
+				customAddCtx?.action ??
+				null)
+			: null;
 	const showCustomAddButton =
 		isSingleVariableType &&
 		customAddAction !== null &&
@@ -203,19 +226,10 @@ function VarPickerHeaderActions({
 			)}
 
 			{showCustomAddButton && customAddAction !== null && (
-				<Button
-					tabIndex="-1"
-					size={'extra-small'}
-					data-test="variable-picker-header-add-custom-variable"
-					onClick={customAddAction.onClick}
-					style={{ padding: '5px' }}
-					showTooltip={true}
-					tooltipPosition="top"
-					label={customAddAction.label}
-					disabled={customAddAction.disabled === true}
-				>
-					<Icon icon="plus" iconSize="20" />
-				</Button>
+				<VarPickerCustomAddButton
+					customAddAction={customAddAction}
+					dataTest="variable-picker-header-add-custom-variable"
+				/>
 			)}
 		</>
 	);
@@ -483,7 +497,10 @@ export default function ({
 			<PickerCategory
 				key={`type-${type}-${index}`}
 				title={data.label}
-				showTitle={!globalStylesPanel}
+				showTitle={shouldShowVariablePickerOuterCategoryTitle(
+					presetType,
+					!!globalStylesPanel
+				)}
 			>
 				<div
 					className={controlInnerClassNames(
@@ -546,7 +563,7 @@ export default function ({
 	return (
 		<VarPickerCustomAddProvider>
 			<Popover
-				title={__('Variable Picker', 'blockera')}
+				title={__('Variable picker', 'blockera')}
 				placement="left-start"
 				onClose={handleClose}
 				onFocusOutside={handleFocusOutside}
