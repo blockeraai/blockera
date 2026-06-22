@@ -73,6 +73,17 @@ export { RadialGradientsPresetContent } from './colors/radial-gradients-screen';
 export { FallbackPresetContent } from './components/fallback-preset-content';
 export { WidthSizePresetContent } from './width-size';
 
+export {
+	buildMissingVariableRecreatePreset,
+	normalizeMissingVariablePresetSlug,
+	type MissingVariableSettings,
+} from './components/missing-variable-recreate-preset-utils';
+export {
+	recreateMissingVariablePreset,
+	type RecreateMissingVariableResult,
+	type RecreateMissingVariablePresetArgs,
+} from './components/recreate-missing-variable-preset';
+
 export { colorsPanelHandler } from './colors/colors-panel-handler';
 export { typographyPanelHandler } from './font-sizes/typography-panel-handler';
 export { shadowsPanelHandler } from './shadows/shadows-panel-handler';
