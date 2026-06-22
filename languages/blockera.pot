@@ -5109,7 +5109,7 @@ msgid "Remove Variable Usage"
 msgstr ""
 
 #: dist/controls/controls.js:32139
-msgid "Custom Variables"
+msgid "Custom variables"
 msgstr ""
 
 #: dist/controls/controls.js:32144
