@@ -1,5 +1,7 @@
 import {
 	canUnlinkVariable,
+	formatMissingVariableCachedValueForDisplay,
+	getDeletedItemInfo,
 	getValueAddonRealValue,
 	getVariableCategory,
 	getVariableIcon,
@@ -839,6 +841,58 @@ describe('Helper Functions', () => {
 
 		test('slug-only string does not split', () => {
 			expect(splitStoredCompositePlainColorValue('primary')).toBeNull();
+		});
+	});
+
+	describe('formatMissingVariableCachedValueForDisplay', () => {
+		test('formats flat border side object as readable string', () => {
+			expect(
+				formatMissingVariableCachedValueForDisplay(
+					{
+						width: '2px',
+						style: 'solid',
+						color: '#112233',
+					},
+					'border'
+				)
+			).toBe('2px · solid · #112233');
+		});
+
+		test('formats border box control value', () => {
+			expect(
+				formatMissingVariableCachedValueForDisplay(
+					{
+						type: 'all',
+						all: {
+							width: '3px',
+							style: 'dotted',
+							color: '#654321',
+						},
+					},
+					'border'
+				)
+			).toBe('3px · dotted · #654321');
+		});
+	});
+
+	describe('getDeletedItemInfo', () => {
+		test('returns string value for border cached settings.value', () => {
+			const info = getDeletedItemInfo({
+				valueType: 'variable',
+				settings: {
+					type: 'border',
+					id: 'frame',
+					name: 'Frame',
+					value: {
+						width: '1px',
+						style: 'solid',
+						color: '#000000',
+					},
+				},
+			});
+
+			expect(typeof info.value).toBe('string');
+			expect(info.value).toBe('1px · solid · #000000');
 		});
 	});
 });

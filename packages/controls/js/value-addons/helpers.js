@@ -567,6 +567,165 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 	return false;
 }
 
+function hasMeaningfulMissingVariableCachedValue(value: mixed): boolean {
+	if (value === undefined || value === null || value === '') {
+		return false;
+	}
+
+	if (typeof value === 'string') {
+		return value.trim() !== '';
+	}
+
+	if (Array.isArray(value)) {
+		return value.length > 0;
+	}
+
+	if (isObject(value)) {
+		return Object.keys(value).length > 0;
+	}
+
+	return true;
+}
+
+function formatBorderCachedValueForDisplay(value: mixed): string {
+	if (!isObject(value)) {
+		return typeof value === 'string' ? value.trim() : '';
+	}
+
+	let side = value;
+	if (value.type === 'all' && isObject(value.all)) {
+		side = value.all;
+	} else if (value.type === 'custom' && isObject(value.custom)) {
+		side = value.custom;
+	}
+
+	const width = String(side.width ?? '').trim();
+	const style = String(side.style ?? '').trim();
+	let color = '';
+	const rawColor = side.color;
+
+	if (typeof rawColor === 'string') {
+		color = rawColor.trim();
+	} else if (isObject(rawColor)) {
+		const resolved = getValueAddonRealValue(rawColor);
+		color =
+			typeof resolved === 'string'
+				? resolved.trim()
+				: String(resolved ?? '').trim();
+	}
+
+	const parts = [];
+	if (width) {
+		parts.push(width);
+	}
+	if (style) {
+		parts.push(style);
+	}
+	if (color) {
+		parts.push(color);
+	}
+
+	return parts.join(' · ');
+}
+
+/** Human-readable label for cached `settings.value` in missing-variable popovers. */
+export function formatMissingVariableCachedValueForDisplay(
+	cachedValue: mixed,
+	variableType?: string
+): string {
+	if (cachedValue === undefined || cachedValue === null) {
+		return '';
+	}
+
+	if (typeof cachedValue === 'string') {
+		return cachedValue.trim();
+	}
+
+	if (typeof cachedValue === 'number') {
+		return String(cachedValue);
+	}
+
+	if (variableType === 'border') {
+		return formatBorderCachedValueForDisplay(cachedValue);
+	}
+
+	if (variableType === 'shadow' || variableType === 'text-shadow') {
+		if (isObject(cachedValue)) {
+			const direct = String(cachedValue.shadow ?? '').trim();
+			if (direct) {
+				return direct;
+			}
+
+			const items = cachedValue.items;
+			if (typeof items === 'string') {
+				return items.trim();
+			}
+
+			if (Array.isArray(items)) {
+				if (items.length && typeof items[0] === 'string') {
+					return items
+						.filter(
+							(item) =>
+								typeof item === 'string' && item.trim() !== ''
+						)
+						.join(', ');
+				}
+
+				if (items.length) {
+					return sprintf(
+						/* translators: %d is the number of shadow layers. */
+						__('%d layers', 'blockera'),
+						items.length
+					);
+				}
+			}
+		}
+	}
+
+	if (
+		variableType === 'transform' ||
+		variableType === 'filter' ||
+		variableType === 'transition'
+	) {
+		if (isObject(cachedValue) && Array.isArray(cachedValue.items)) {
+			const count = cachedValue.items.length;
+			if (count > 0) {
+				return sprintf(
+					/* translators: %d is the number of repeater rows. */
+					__('%d items', 'blockera'),
+					count
+				);
+			}
+		}
+
+		if (Array.isArray(cachedValue)) {
+			return sprintf(
+				/* translators: %d is the number of repeater rows. */
+				__('%d items', 'blockera'),
+				cachedValue.length
+			);
+		}
+	}
+
+	if (isObject(cachedValue) && !Array.isArray(cachedValue)) {
+		const keys = Object.keys(cachedValue);
+		if (keys.some((key) => isObject(cachedValue[key]))) {
+			const rowCount = keys.filter((key) =>
+				isObject(cachedValue[key])
+			).length;
+			if (rowCount > 0) {
+				return sprintf(
+					/* translators: %d is the number of repeater rows. */
+					__('%d items', 'blockera'),
+					rowCount
+				);
+			}
+		}
+	}
+
+	return '';
+}
+
 export function getDeletedItemInfo(item: ValueAddon): {
 	name: string,
 	id: string,
@@ -590,13 +749,16 @@ export function getDeletedItemInfo(item: ValueAddon): {
 		tooltip: '',
 	};
 
-	if (!isUndefined(item?.settings?.value) && item?.settings?.value !== '') {
-		result.value = item?.settings?.value;
+	if (hasMeaningfulMissingVariableCachedValue(item?.settings?.value)) {
+		result.value = formatMissingVariableCachedValueForDisplay(
+			item?.settings?.value,
+			item?.settings?.type
+		);
 
 		switch (item.valueType) {
 			case 'variable':
 				result.after = __(
-					'You have the option to either switch it with another variable or unlink it to use the value directly.',
+					'You have the option to switch it with another variable, recreate it as a custom variable, or unlink it to use the value directly.',
 					'blockera'
 				);
 				break;
