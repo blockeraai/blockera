@@ -259,3 +259,45 @@ export function variablePickerItemMatchesSearch(
 
 	return true;
 }
+
+/**
+ * Whether any catalog row across all variable types matches the normalized search query.
+ */
+export function variablePickerHasAnySearchMatches(
+	variableTypes: Array<string>,
+	supplementalSections: Array<SupplementalCustomSection>,
+	normalizedSearch: string
+): boolean {
+	if (!normalizedSearch) {
+		return true;
+	}
+
+	for (let i = 0, n = variableTypes.length; i < n; i++) {
+		const type = variableTypes[i];
+		const data = getVariableCategory(type);
+
+		if (data.notFound) {
+			continue;
+		}
+
+		const presetType = data.type || type;
+		const catalogItems = collectCatalogItemsForVariableType(
+			presetType,
+			data,
+			supplementalSections
+		);
+
+		for (let j = 0, m = catalogItems.length; j < m; j++) {
+			if (
+				variablePickerItemMatchesSearch(
+					catalogItems[j],
+					normalizedSearch
+				)
+			) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

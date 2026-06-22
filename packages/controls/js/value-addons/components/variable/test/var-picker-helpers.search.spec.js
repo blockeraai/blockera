@@ -6,6 +6,7 @@ import {
 	tokenizeVariablePickerSearchQuery,
 	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
+	variablePickerHasAnySearchMatches,
 } from '../var-picker-helpers';
 
 describe('variable picker search helpers', () => {
@@ -163,6 +164,24 @@ describe('variable picker search helpers', () => {
 				variablePickerItemMatchesSearch(
 					blockStyleSearchItem,
 					normalizeVariablePickerSearchQuery('bas xyz')
+				)
+			).toBe(false);
+		});
+	});
+
+	describe('variablePickerHasAnySearchMatches', () => {
+		it('returns true when search query is empty', () => {
+			expect(variablePickerHasAnySearchMatches(['color'], [], '')).toBe(
+				true
+			);
+		});
+
+		it('returns false when no variable type has matching catalog rows', () => {
+			expect(
+				variablePickerHasAnySearchMatches(
+					['color'],
+					[],
+					normalizeVariablePickerSearchQuery('no-such-preset-xyz')
 				)
 			).toBe(false);
 		});
