@@ -94,7 +94,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const isCreating = variable.creatingStep === true;
 	// Buffer name/description while popover fields are mounted; flushed on unmount via edit session.
 	const deferFieldPersist = Boolean(editSession) && !isCreating;
-	const deferNamePersist = deferFieldPersist;
+	const deferNamePersist = deferFieldPersist || isCreating;
 
 	const persistedDescription = useMemo(
 		() => getPresetDescription(variable),
@@ -151,6 +151,12 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		setIsConfirmedSlugChange(false);
 	}, [name, slug, variable.creatingStep]);
 
+	useEffect(() => {
+		if (isCreating) {
+			setDraftName(persistedName);
+		}
+	}, [isCreating, persistedName]);
+
 	// Auto-lock when user edits ID back to saved slug.
 	useEffect(() => {
 		if (isIdEditable && hasUserEditedSinceUnlock && variableSlug === slug) {
@@ -159,8 +165,13 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		}
 	}, [isIdEditable, hasUserEditedSinceUnlock, variableSlug, slug]);
 
-	// ID display: while creating, slug is driven by name; else locked vs edit buffer.
-	const displayedSlug = isIdEditable ? variableSlug : slug;
+	// ID display: while creating, slug is driven by the draft name; else locked vs edit buffer.
+	let displayedSlug = slug;
+	if (isCreating) {
+		displayedSlug = normalizeVariablePresetSlug(draftName) || slug;
+	} else if (isIdEditable) {
+		displayedSlug = variableSlug;
+	}
 
 	const {
 		controlInfo: { name: controlId },
@@ -178,16 +189,23 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const flushPendingFieldEdits = useCallback(() => {
 		const nextName = draftNameRef.current;
 		if (nextName !== persistedName) {
+			const value: Record<string, unknown> = {
+				...variable,
+				name: nextName,
+			};
+			if (variable.creatingStep === true) {
+				const derivedSlug = normalizeVariablePresetSlug(nextName);
+				if (derivedSlug) {
+					value.slug = derivedSlug;
+				}
+			}
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value: {
-					...variable,
-					name: nextName,
-				},
+				value,
 			});
 		}
 
@@ -332,24 +350,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			if (presetLocked) {
 				return;
 			}
-			if (variable.creatingStep) {
-				const derivedSlug = normalizeVariablePresetSlug(newValue);
-				changeRepeaterItem({
-					onChange,
-					valueCleanup,
-					controlId,
-					repeaterId,
-					itemId,
-					value: {
-						...variable,
-						name: newValue,
-						slug: derivedSlug || variable.slug,
-					},
-				});
-				return;
-			}
-
-			if (deferNamePersist) {
+			if (isCreating || deferNamePersist) {
 				setDraftName(newValue);
 				return;
 			}
@@ -368,6 +369,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		},
 		[
 			presetLocked,
+			isCreating,
 			deferNamePersist,
 			changeRepeaterItem,
 			onChange,
