@@ -51,13 +51,7 @@ describe('Archives Block', () => {
 
 		cy.getBlock('core/archives')
 			.first()
-			.within(() => {
-				cy.get('.wp-block-archives-list.wp-block-archives').should(
-					'have.css',
-					'background-clip',
-					'padding-box'
-				);
-			});
+			.should('have.css', 'background-clip', 'padding-box');
 
 		//
 		// 1.1. elements/item
