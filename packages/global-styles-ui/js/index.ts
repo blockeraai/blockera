@@ -71,6 +71,7 @@ export {
 export { LinearGradientsPresetContent } from './colors/linear-gradients-screen';
 export { RadialGradientsPresetContent } from './colors/radial-gradients-screen';
 export { FallbackPresetContent } from './components/fallback-preset-content';
+export { WidthSizePresetContent } from './width-size';
 
 export { colorsPanelHandler } from './colors/colors-panel-handler';
 export { typographyPanelHandler } from './font-sizes/typography-panel-handler';
