@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback, useMemo } from '@wordpress/element';
+import { useCallback, useMemo, useRef, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -21,6 +21,7 @@ import {
 	usePresetVariablesViewMode,
 	useVarPickerCustomAddContext,
 	useVarPickerPresetContext,
+	VarPickerSectionCustomAddButton,
 	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
 import { noop, pascalCase, isObject } from '@blockera/utils';
@@ -41,8 +42,11 @@ import { resolvePresetRepeaterItemSize } from './preset-taxonomy-ui/preset-taxon
 import {
 	applyVariablePickerRepeaterSelection,
 	buildPresetVariablePickerPayload,
+	mergeVariablePickerCreatingStepIntoItems,
+	resolveVariablePickerCustomAddPresetValue,
 	stripIsSelectedFromRepeaterItems,
 	stripRepeaterPickerUiFields,
+	syncVariablePickerCreatingStepSlugs,
 } from './variable-picker-preset-utils';
 import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
 
@@ -122,6 +126,12 @@ type PresetsProps = {
 			disabled?: boolean;
 		} | null
 	) => (() => void) | void;
+	getDynamicDefaultRepeaterItem?: (
+		index: number,
+		defaultRepeaterItemValue: Record<string, unknown>
+	) => Record<string, unknown>;
+	injectHeaderButtonsEnd?: React.ReactNode;
+	suppressNativeSectionAddButton?: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -170,6 +180,9 @@ const Presets = ({
 	repeaterItemVariations,
 	withoutAdvancedLabel = false,
 	onRegisterAddNewAction,
+	getDynamicDefaultRepeaterItem,
+	injectHeaderButtonsEnd,
+	suppressNativeSectionAddButton = false,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -297,6 +310,9 @@ const Presets = ({
 			enablePromoCountOnRepeaterItemHeader={'custom' === origin}
 			withoutAdvancedLabel={withoutAdvancedLabel}
 			onRegisterAddNewAction={onRegisterAddNewAction}
+			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
+			injectHeaderButtonsEnd={injectHeaderButtonsEnd}
+			suppressNativeSectionAddButton={suppressNativeSectionAddButton}
 			{...props}
 		/>
 	);
@@ -324,10 +340,23 @@ export const PresetGroup = ({
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
 
+	const [creatingStepRevision, setCreatingStepRevision] = useState(0);
+	const creatingStepSlugsRef = useRef<Record<string, true>>({});
+
 	const cleanRepeaterForPersist = useCallback(
 		(raw: Object) => {
 			const cleaned = cleanupRepeater(raw as Record<string, unknown>);
 			delete cleaned?.renderRepeaterItem;
+
+			if (enableCreatingStep) {
+				for (const key of Object.keys(cleaned)) {
+					const row = cleaned[key];
+					if (row && typeof row === 'object' && !Array.isArray(row)) {
+						delete (row as Record<string, unknown>).creatingStep;
+					}
+				}
+			}
+
 			if (!isVariablePicker) {
 				return cleaned;
 			}
@@ -335,12 +364,12 @@ export const PresetGroup = ({
 				cleaned as Record<string, unknown>
 			);
 		},
-		[isVariablePicker]
+		[enableCreatingStep, isVariablePicker]
 	);
 
 	const handleRepeaterOnChange = useCallback(
 		(newValue: Object) => {
-			if (
+			const raw =
 				isObject(newValue) &&
 				Object.prototype.hasOwnProperty.call(
 					newValue,
@@ -348,18 +377,21 @@ export const PresetGroup = ({
 				) &&
 				(newValue as { value?: Object }).value !== undefined &&
 				(newValue as { value?: Object }).value !== null
-			) {
-				onChange(
-					cleanRepeaterForPersist(
-						(newValue as { value: Object }).value
-					)
-				);
-				return;
+					? (newValue as { value: Object }).value
+					: newValue;
+
+			if (enableCreatingStep) {
+				creatingStepSlugsRef.current =
+					syncVariablePickerCreatingStepSlugs(
+						creatingStepSlugsRef.current,
+						raw
+					);
+				setCreatingStepRevision((revision) => revision + 1);
 			}
-			const cleaned = cleanRepeaterForPersist(newValue);
-			onChange(cleaned);
+
+			onChange(cleanRepeaterForPersist(raw));
 		},
-		[onChange, cleanRepeaterForPersist]
+		[onChange, cleanRepeaterForPersist, enableCreatingStep]
 	);
 
 	const handleSelectableItemActivate = useCallback(
@@ -371,12 +403,15 @@ export const PresetGroup = ({
 			) {
 				return;
 			}
+			const row = item as Record<string, unknown>;
 			const payload = buildPresetVariablePickerPayload(
-				item as Record<string, unknown>,
+				row,
 				origin,
 				pickerCtx.variableType
 			);
-			pickerCtx.controlProps.handleOnClickVar(payload as never);
+			pickerCtx.controlProps.handleOnClickVar(payload as never, {
+				keepPickerOpen: row.creatingStep === true,
+			});
 		},
 		[isVariablePicker, pickerCtx, origin]
 	);
@@ -384,10 +419,20 @@ export const PresetGroup = ({
 	const pickerValue = pickerCtx.controlProps?.value;
 
 	const variablesForRepeater = useMemo(() => {
+		const base = stripRepeaterPickerUiFields(variables) as typeof variables;
+
+		const withCreatingStep = enableCreatingStep
+			? mergeVariablePickerCreatingStepIntoItems(
+					base,
+					creatingStepSlugsRef.current
+				)
+			: base;
+
 		if (!isVariablePicker || typeof pickerCtx.variableType !== 'string') {
-			return stripRepeaterPickerUiFields(variables) as typeof variables;
+			return withCreatingStep;
 		}
-		return applyVariablePickerRepeaterSelection(variables, {
+
+		return applyVariablePickerRepeaterSelection(withCreatingStep, {
 			variableType: pickerCtx.variableType,
 			origin,
 			pickerValue,
@@ -395,6 +440,8 @@ export const PresetGroup = ({
 	}, [
 		isVariablePicker,
 		variables,
+		creatingStepRevision,
+		enableCreatingStep,
 		pickerCtx.variableType,
 		origin,
 		pickerValue,
@@ -453,9 +500,38 @@ export const PresetGroup = ({
 				return undefined;
 			}
 
-			return customAddCtx.register(action);
+			return customAddCtx.register(pickerCtx.variableType, action);
 		},
-		[origin, isVariablePicker, customAddCtx]
+		[origin, isVariablePicker, customAddCtx, pickerCtx.variableType]
+	);
+
+	const getDynamicDefaultRepeaterItem = useCallback(
+		(
+			_count: number,
+			staticDefault: Record<string, unknown>
+		): Record<string, unknown> => {
+			if (
+				!isVariablePicker ||
+				origin !== 'custom' ||
+				typeof pickerCtx.variableType !== 'string'
+			) {
+				return staticDefault;
+			}
+
+			return resolveVariablePickerCustomAddPresetValue({
+				rawValue: pickerCtx.controlProps?.rawValue,
+				variableType: pickerCtx.variableType,
+				defaultPresetValue: staticDefault,
+				blockName: pickerCtx.controlProps?.themeJsonResolutionBlockName,
+			});
+		},
+		[
+			isVariablePicker,
+			origin,
+			pickerCtx.controlProps?.rawValue,
+			pickerCtx.controlProps?.themeJsonResolutionBlockName,
+			pickerCtx.variableType,
+		]
 	);
 
 	const hasPickerSearchMatches = useMemo(() => {
@@ -494,12 +570,20 @@ export const PresetGroup = ({
 		if (!isVariablePicker) {
 			return label;
 		}
-		return resolveVariablePickerPresetGroupLabel(title, origin, label);
+		const isMultiTypeVariablePicker =
+			(pickerCtx.controlProps?.variableTypes || []).length > 1;
+		return resolveVariablePickerPresetGroupLabel(
+			title,
+			origin,
+			label,
+			isMultiTypeVariablePicker
+		);
 	}, [
 		isVariablePicker,
 		label,
 		origin,
 		pickerCtx.omitRepeaterSectionLabel,
+		pickerCtx.controlProps?.variableTypes,
 		title,
 	]);
 
@@ -539,6 +623,11 @@ export const PresetGroup = ({
 		);
 	}
 
+	const useVariablePickerCustomSectionAddButton =
+		isVariablePicker &&
+		origin === 'custom' &&
+		typeof pickerCtx.variableType === 'string';
+
 	return (
 		<PresetStateContainer activeColor="var(--blockera-controls-block-variations-style)">
 			<ControlContextProvider
@@ -565,7 +654,6 @@ export const PresetGroup = ({
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
 						enableCreatingStep={enableCreatingStep}
 						selectable={isVariablePicker}
-						valueCleanup={cleanRepeaterForPersist}
 						onSelectableItemActivate={
 							isVariablePicker
 								? handleSelectableItemActivate
@@ -585,7 +673,24 @@ export const PresetGroup = ({
 						}
 						repeaterItemVariations={repeaterItemVariations}
 						withoutAdvancedLabel={isVariablePicker}
-						onRegisterAddNewAction={registerCustomAddNewAction}
+						onRegisterAddNewAction={
+							useVariablePickerCustomSectionAddButton
+								? registerCustomAddNewAction
+								: undefined
+						}
+						getDynamicDefaultRepeaterItem={
+							getDynamicDefaultRepeaterItem
+						}
+						injectHeaderButtonsEnd={
+							useVariablePickerCustomSectionAddButton ? (
+								<VarPickerSectionCustomAddButton
+									variableType={pickerCtx.variableType}
+								/>
+							) : undefined
+						}
+						suppressNativeSectionAddButton={
+							useVariablePickerCustomSectionAddButton
+						}
 					/>
 				</BaseControl>
 			</ControlContextProvider>

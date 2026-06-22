@@ -121,6 +121,11 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'spacing',
 		},
 		{
+			path: ['layout', 'widthSizes'],
+			valueKey: 'size',
+			cssVarInfix: 'width-size',
+		},
+		{
 			path: ['border', 'radiusSizes'],
 			valueKey: 'size',
 			cssVarInfix: 'border-radius',

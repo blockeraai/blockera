@@ -30,6 +30,9 @@ class JSON extends \WP_Theme_JSON {
 		'dimensions' => array(
 			'dimensionSizes' => null,
 		),
+		'layout'     => array(
+			'widthSizes' => null,
+		),
 		'border'     => array(
 			'presets'        => null,
 			'defaultPresets' => null,
@@ -125,6 +128,15 @@ class JSON extends \WP_Theme_JSON {
 			'css_vars'          => '--wp--preset--spacing--$slug',
 			'classes'           => array(),
 			'properties'        => array( 'padding', 'margin' ),
+		),
+		array(
+			'path'              => array( 'layout', 'widthSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--width-size--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'width', 'min-width', 'max-width', 'height', 'min-height', 'max-height' ),
 		),
 		array(
 			'path'              => array( 'shadow', 'presets' ),

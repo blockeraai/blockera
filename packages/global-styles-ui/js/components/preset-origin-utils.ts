@@ -47,12 +47,12 @@ export function shouldShowThemePresetGroup(
 }
 
 /**
- * Repeater section label: "Theme Variables", "Custom Variables", etc.
+ * Repeater section label: "Theme variables", "Custom variables", etc.
  */
 export function getOriginVariablesLabel(origin: string): string {
 	return sprintf(
 		/* translators: %s: Origin name (Theme, Default, or Custom) */
-		__('%s Variables', 'blockera'),
+		__('%s variables', 'blockera'),
 		pascalCase(origin)
 	);
 }

@@ -27,7 +27,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		cy.addNewGlobalStylesCustomColorPreset();
 
 		// eslint-disable-next-line cypress/unsafe-to-chain-command -- last repeater row after add
-		cy.getParentContainer('Custom Variables').within(() => {
+		cy.getParentContainer('Custom variables').within(() => {
 			cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
 				.last()
 				.should('be.visible');
@@ -105,7 +105,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 
 		openGlobalStylesColorPaletteScreen({ reset: false });
 
-		cy.getParentContainer('Custom Variables').within(() => {
+		cy.getParentContainer('Custom variables').within(() => {
 			cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
 				.last()
 				.within(() => {

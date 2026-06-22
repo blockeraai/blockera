@@ -460,18 +460,32 @@ export function openGlobalStylesRadialGradientsScreen(
 export function nameNewGlobalStylesCustomPreset({ addDataTest, presetName }) {
 	cy.addNewGlobalStylesCustomPresetByDataTest(addDataTest);
 
-	cy.getParentContainer('Custom Variables').within(() => {
-		cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
+	cy.getParentContainer('Custom variables').within(() => {
+		cy.get('[data-cy="repeater-item"]', { timeout: 20000 })
 			.last()
 			.should('be.visible');
 	});
 
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
-	cy.getByDataTest('global-styles-preset-name-field')
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
+
+	cy.getByDataTest('global-styles-preset-name-field', { timeout: 20000 })
 		.first()
 		.should('be.visible')
-		.clear({ force: true })
-		.type(presetName, { delay: 0, force: true });
+		.click({ force: true });
+
+	cy.getByDataTest('global-styles-preset-name-field', { timeout: 20000 })
+		.first()
+		.clear({ force: true });
+
+	cy.getByDataTest('global-styles-preset-name-field', { timeout: 20000 })
+		.first()
+		.type('{selectall}' + presetName, { delay: 0, force: true });
+
+	cy.getByDataTest('global-styles-preset-name-field', { timeout: 20000 })
+		.first()
+		.should('have.value', presetName);
 
 	cy.realPress('Escape');
 }

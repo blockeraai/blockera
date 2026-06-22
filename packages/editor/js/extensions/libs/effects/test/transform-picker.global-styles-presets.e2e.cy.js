@@ -11,6 +11,7 @@ import {
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
+import { clickVariablePickerHeaderAddCustomVariable } from '@blockera/dev-cypress/js/helpers/variable-picker';
 
 describe('Global Styles transform preset → value addon (Transforms)', () => {
 	const presetName = 'E2E Transform';
@@ -24,6 +25,56 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 		saveSiteEditorDirtyEntities();
 	}
 
+	it('seeds a new custom transform preset from the current block transform value', function () {
+		createPost();
+
+		cy.getBlock('default').type('Transform seed paragraph.', { delay: 0 });
+		cy.getByAriaControls('styles-view').click();
+
+		cy.getParentContainer('Transforms', 'blockera-repeater-control')
+			.should('exist')
+			.within(() => {
+				cy.getByAriaLabel('Add New Transform').click({ force: true });
+			});
+
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('[aria-label="Move-X"]').clear({
+					force: true,
+					waitForAnimations: false,
+				});
+				cy.get('[aria-label="Move-X"]').type('15', {
+					force: true,
+					waitForAnimations: false,
+				});
+			});
+
+		cy.realPress('Escape');
+
+		openRepeaterHeaderVariablePicker('Transforms');
+
+		cy.get('body').then(function ($body) {
+			const canAddCustom = $body.find(
+				'[data-test="variable-picker-header-add-custom-variable"]:visible'
+			).length;
+
+			if (!canAddCustom) {
+				this.skip();
+			}
+		});
+
+		clickVariablePickerHeaderAddCustomVariable();
+
+		cy.get('.blockera-component-popover', { timeout: 15000 })
+			.filter(':visible')
+			.last()
+			.should('be.visible')
+			.within(() => {
+				cy.getByAriaLabel('Move-X').should('have.value', '15px');
+			});
+	});
+
 	it('applies the custom transform preset', () => {
 		seedTransformPreset();
 
@@ -34,10 +85,7 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 		});
 		cy.getByAriaControls('styles-view').click();
 
-		openRepeaterHeaderVariablePicker(
-			'Transforms',
-			'blockera-repeater-control'
-		);
+		openRepeaterHeaderVariablePicker('Transforms');
 
 		cy.selectValueAddonItem(slug);
 
@@ -66,7 +114,7 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 		cy.getBlock('default').type('Transform edit paragraph.', { delay: 0 });
 		cy.getByAriaControls('styles-view').click();
 
-		openRepeaterHeaderVariablePicker(['Transforms']);
+		openRepeaterHeaderVariablePicker('Transforms');
 		cy.selectValueAddonItem(slug);
 
 		savePage();

@@ -229,6 +229,10 @@ export type RepeaterControlProps = {
 	 */
 	injectHeaderButtonsEnd?: MixedElement | null | string,
 	/**
+	 * When true, the native section "+" inserter is hidden (e.g. variable picker uses a registered context button).
+	 */
+	suppressNativeSectionAddButton?: boolean,
+	/**
 	 * When true, promotional repeater state (`count`) increments on repeater item header
 	 * clicks (including custom `repeaterItemHeader`), when promo conditions apply.
 	 *

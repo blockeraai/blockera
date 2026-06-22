@@ -68,6 +68,7 @@ export default function RepeaterControl(
 		actionButtonReset = false,
 		injectHeaderButtonsStart = '',
 		injectHeaderButtonsEnd = '',
+		suppressNativeSectionAddButton = false,
 		actionButtonsType = 'inline',
 		actionMenuButtonLabel,
 		withoutAdvancedLabel = false,
@@ -288,6 +289,7 @@ export default function RepeaterControl(
 		maxItems,
 		isSetValueAddon,
 		valueAddonControlProps?.isOpen,
+		suppressNativeSectionAddButton,
 	]);
 
 	if (isSetValueAddon()) {
@@ -438,6 +440,36 @@ export default function RepeaterControl(
 		const newItemWithCreatingStep = (value: any): any =>
 			enableCreatingStep ? { ...value, creatingStep: true } : value;
 
+		const resolveNewRepeaterItemId = (
+			itemValue: ?Object,
+			count: number
+		): string => {
+			const fromValue =
+				itemValue &&
+				typeof itemValue === 'object' &&
+				(itemValue.slug ?? itemValue.type);
+			if (
+				fromValue !== null &&
+				fromValue !== undefined &&
+				String(fromValue) !== ''
+			) {
+				return String(fromValue);
+			}
+
+			const fromDefault =
+				defaultRepeaterItemValue?.slug ??
+				defaultRepeaterItemValue?.type;
+			if (
+				fromDefault !== null &&
+				fromDefault !== undefined &&
+				String(fromDefault) !== ''
+			) {
+				return String(fromDefault);
+			}
+
+			return String(count);
+		};
+
 		const callback = (value?: Object): void => {
 			if (!defaultRepeaterItemValue?.selectable) {
 				return;
@@ -453,20 +485,26 @@ export default function RepeaterControl(
 				};
 			});
 
-			const newItemId: string =
-				value?.type ||
-				defaultRepeaterItemValue?.type ||
-				itemsCount + '';
+			const newItemId = resolveNewRepeaterItemId(value, itemsCount);
+			const addedRow = value || defaultRepeaterItemValue;
 
 			const newValue = {
 				...clonedRepeaterItems,
-				[newItemId]: value || defaultRepeaterItemValue,
+				[newItemId]: addedRow,
 			};
 
 			modifyControlValue({
 				controlId,
 				value: newValue,
 			});
+
+			// Apply to the bound control before persisting so the value addon sticks.
+			if (
+				typeof onSelectableItemActivate === 'function' &&
+				addedRow?.creatingStep === true
+			) {
+				onSelectableItemActivate(newItemId, addedRow);
+			}
 
 			repeaterOnChange(newValue, {
 				onChange,
@@ -484,10 +522,10 @@ export default function RepeaterControl(
 				defaultRepeaterItemValue
 			);
 
-			if (value?.selectable) {
+			if (value?.selectable || defaultRepeaterItemValue?.selectable) {
 				return callback(
 					newItemWithCreatingStep({
-						...value,
+						...(value && typeof value === 'object' ? value : {}),
 						isSelected: true,
 					})
 				);
@@ -800,7 +838,8 @@ export default function RepeaterControl(
 
 									{isSupportInserter &&
 										canAddNewItem &&
-										actionButtonAdd && (
+										actionButtonAdd &&
+										!suppressNativeSectionAddButton && (
 											<InserterComponent
 												PlusButton={SmallNativeInserter}
 												callback={addNewButtonOnClick}
@@ -820,7 +859,8 @@ export default function RepeaterControl(
 
 									{!isSupportInserter &&
 										canAddNewItem &&
-										actionButtonAdd && (
+										actionButtonAdd &&
+										!suppressNativeSectionAddButton && (
 											<SmallNativeInserter />
 										)}
 

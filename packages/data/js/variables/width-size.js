@@ -18,6 +18,8 @@ import { STORE_NAME } from '../store';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 import { generateVariableString, parseVarString } from './utils';
+import { CUSTOM_ORIGIN_REFERENCE } from './merge-global-style-simple-presets';
+import { normalizePresetSize } from './normalize-preset-sizes';
 
 export const getWidthSizes = (): Array<VariableItem> | [] => {
 	const reference = {
@@ -26,11 +28,11 @@ export const getWidthSizes = (): Array<VariableItem> | [] => {
 
 	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
 
-	if (isUndefined(layout)) {
-		return [];
-	}
-
 	const items = [];
+
+	if (isUndefined(layout)) {
+		return items;
+	}
 
 	if (!isUndefined(layout?.contentSize)) {
 		items.push({
@@ -48,6 +50,25 @@ export const getWidthSizes = (): Array<VariableItem> | [] => {
 			value: layout?.wideSize,
 			reference,
 		});
+	}
+
+	const customWidthSizes = layout?.widthSizes?.custom;
+	if (Array.isArray(customWidthSizes)) {
+		for (const raw of customWidthSizes) {
+			if (!raw || raw.slug === undefined || raw.slug === null) {
+				continue;
+			}
+			const id = String(raw.slug);
+			if (!id) {
+				continue;
+			}
+			items.push({
+				name: raw?.name || id,
+				id,
+				value: normalizePresetSize(raw.size || ''),
+				reference: CUSTOM_ORIGIN_REFERENCE,
+			});
+		}
 	}
 
 	return items;

@@ -60,6 +60,48 @@ export function scrollVariablePickerPopoverToTop() {
 	});
 }
 
+/** Clicks the custom section “+” in a single-type variable picker (e.g. font-size). */
+export function clickVariablePickerCustomSectionAddCustomVariable(
+	variableType = 'font-size'
+) {
+	clickVariablePickerSectionAddCustomVariable(variableType);
+}
+
+/** Clicks a section “+” for a variable type in a multi-type picker. */
+export function clickVariablePickerSectionAddCustomVariable(variableType) {
+	cy.getByDataTest(`variable-picker-section-add-${variableType}`, {
+		timeout: 20000,
+	})
+		.filter(':visible')
+		.first()
+		.scrollIntoView()
+		.should('be.visible')
+		.click({ force: true });
+
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
+}
+
+/** Opens paragraph → Style → Min Width → variable picker popover. */
+export function openMinWidthVariablePickerPopover() {
+	createPost();
+
+	cy.getBlock('default').type('Min width variable picker.', { delay: 0 });
+	cy.getByAriaControls('styles-view').click();
+	cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
+
+	cy.getParentContainer('Min Width').within(() => {
+		cy.openValueAddon();
+	});
+
+	return cy
+		.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
+		.should('be.visible');
+}
+
 /** Clicks the header “+” that adds a custom preset (single-type pickers only). */
 export function clickVariablePickerHeaderAddCustomVariable() {
 	cy.getByDataTest('variable-picker-header-add-custom-variable', {
@@ -67,8 +109,13 @@ export function clickVariablePickerHeaderAddCustomVariable() {
 	})
 		.filter(':visible')
 		.first()
+		.scrollIntoView()
 		.should('be.visible')
 		.click({ force: true });
+
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
 }
 
 /** Returns the last repeater row inside the visible variable picker popover. */
@@ -117,4 +164,60 @@ export function assertLastVariablePickerRepeaterItemInPopoverBody() {
 			);
 		});
 	});
+}
+
+/**
+ * Asserts a control field value in the visible custom-preset edit popover
+ * opened after header "+" add (creatingStep).
+ *
+ * @param {string} parentLabel Parent container label (e.g. `Font Size`, `Spacing Size`).
+ * @param {string} expectedValue Expected input value.
+ */
+export function assertCustomPresetEditPopoverFieldValue(
+	parentLabel,
+	expectedValue
+) {
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
+
+	cy.get('.blockera-component-popover.blockera-control-group-popover', {
+		timeout: 20000,
+	})
+		.filter(':visible')
+		.last()
+		.should('be.visible')
+		.within(() => {
+			cy.getParentContainer(parentLabel).within(() => {
+				cy.get('input[type="text"]').should(
+					'have.value',
+					expectedValue
+				);
+			});
+		});
+}
+
+/**
+ * Asserts color CSS value in the custom-preset edit popover (after header add).
+ *
+ * @param {string} expectedHex Expected hex without `#` (e.g. `70ca9e`).
+ */
+export function assertCustomPresetEditPopoverColorValue(expectedHex) {
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
+
+	cy.getByDataTest('repeater-item-creating-step').within(() => {
+		cy.get('[data-cy="header-values"]').should(
+			'contain.text',
+			expectedHex.toLowerCase()
+		);
+	});
+
+	cy.get('.blockera-component-popover.blockera-control-group-popover', {
+		timeout: 20000,
+	})
+		.filter(':visible')
+		.last()
+		.should('be.visible');
 }

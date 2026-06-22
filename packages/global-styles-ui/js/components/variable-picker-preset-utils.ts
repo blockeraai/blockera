@@ -223,3 +223,98 @@ export function stripRepeaterPickerUiFields(items: unknown): unknown {
 
 	return items;
 }
+
+/**
+ * Tracks preset slugs that are mid-create. Persisted preset rows drop `creatingStep`
+ * when converted to theme items; this map keeps the edit popover open until the row
+ * is closed once.
+ *
+ * When the derived slug changes while naming a new preset, stale slug keys are dropped
+ * so only the current row stays in the creating state.
+ */
+export function syncVariablePickerCreatingStepSlugs(
+	prev: Record<string, true>,
+	raw: unknown
+): Record<string, true> {
+	const next: Record<string, true> = {};
+	let rows: unknown[] = [];
+	if (Array.isArray(raw)) {
+		rows = raw;
+	} else if (raw && typeof raw === 'object') {
+		rows = Object.values(raw as Record<string, unknown>);
+	}
+
+	const rowsBySlug = new Map<string, Record<string, unknown>>();
+
+	for (const row of rows) {
+		if (!row || typeof row !== 'object' || Array.isArray(row)) {
+			continue;
+		}
+		const r = row as Record<string, unknown>;
+		const slug =
+			r.slug !== null && r.slug !== undefined ? String(r.slug) : '';
+		if (!slug) {
+			continue;
+		}
+		rowsBySlug.set(slug, r);
+		if (r.creatingStep === true) {
+			next[slug] = true;
+		}
+	}
+
+	for (const slug of Object.keys(prev)) {
+		if (next[slug]) {
+			continue;
+		}
+		const row = rowsBySlug.get(slug);
+		if (!row || row.creatingStep === false) {
+			continue;
+		}
+		next[slug] = true;
+	}
+
+	return next;
+}
+
+export function mergeVariablePickerCreatingStepIntoItems<T>(
+	items: T,
+	creatingStepSlugs: Record<string, true>
+): T {
+	if (
+		!Object.keys(creatingStepSlugs).length ||
+		items === null ||
+		items === undefined
+	) {
+		return items;
+	}
+
+	const mapRow = (row: unknown): unknown => {
+		if (!row || typeof row !== 'object' || Array.isArray(row)) {
+			return row;
+		}
+		const r = row as Record<string, unknown>;
+		const slug =
+			r.slug !== null && r.slug !== undefined ? String(r.slug) : '';
+		if (slug && creatingStepSlugs[slug]) {
+			return { ...r, creatingStep: true };
+		}
+		return row;
+	};
+
+	if (Array.isArray(items)) {
+		return items.map(mapRow) as T;
+	}
+
+	if (typeof items === 'object') {
+		const next = { ...(items as Record<string, unknown>) };
+		for (const key of Object.keys(next)) {
+			next[key] = mapRow(next[key]);
+		}
+		return next as T;
+	}
+
+	return items;
+}
+
+export { resolveVariablePickerCustomAddPresetValue } from './variable-picker-custom-add-preset-utils';
+export type { ResolveVariablePickerCustomAddPresetValueOptions } from './variable-picker-custom-add-preset-utils';

@@ -40,7 +40,10 @@ export type ValueAddonProps = {
 	 *
 	 * The callback function
 	 */
-	handleOnClickVar: (data: VariableItem) => void,
+	handleOnClickVar: (
+		data: VariableItem,
+		options?: { keepPickerOpen?: boolean }
+	) => void,
 	/**
 	 * Handle on click icon of dynamic values on control.
 	 *

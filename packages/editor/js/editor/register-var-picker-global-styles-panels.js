@@ -20,6 +20,7 @@ import {
 	TextShadowsPresetContent,
 	TransformsPresetContent,
 	TransitionsPresetContent,
+	WidthSizePresetContent,
 } from '@blockera/global-styles-ui';
 import {
 	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
@@ -28,6 +29,7 @@ import {
 
 const PRESET_PANEL_BY_TYPE = {
 	spacing: SpacingPresetContent,
+	'width-size': WidthSizePresetContent,
 	'font-size': FontSizesPresetContent,
 	color: ColorPalettePresetContent,
 	'linear-gradient': LinearGradientsPresetContent,
