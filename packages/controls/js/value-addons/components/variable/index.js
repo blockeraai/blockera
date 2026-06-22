@@ -33,4 +33,8 @@ export {
 	PRESET_VARIABLES_VIEW_MODE_CHANGE_EVENT,
 } from './preset-variables-view-mode';
 export { PresetVariablesSummaryRow } from './preset-variables-summary-row';
+export {
+	VarPickerCustomAddButton,
+	VarPickerSectionCustomAddButton,
+} from './var-picker-section-custom-add-button';
 export { PRESET_VARIABLES_SECTION_GAP } from './preset-variables-section-gap';
