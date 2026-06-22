@@ -75,7 +75,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 		assertColorPresetNotInVariablePicker(PRESET_NEUTRAL_DISPLAY);
 	});
 
-	it('shows empty state when no presets match', () => {
+	it('shows unified empty state when no presets match', () => {
 		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('bas xyz');
@@ -88,10 +88,41 @@ describe('Global Styles UI → Color variable picker search', () => {
 			.filter(':visible')
 			.first()
 			.within(() => {
-				cy.contains('No variables match your search.').should(
+				cy.getByDataTest('var-picker-search-empty').should(
 					'be.visible'
 				);
+				cy.contains('No results for "bas xyz"').should('be.visible');
+				cy.contains('Clear search').should('be.visible');
+				cy.contains('No variables match your search.').should(
+					'not.exist'
+				);
 			});
+
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.within(() => {
+				cy.getByDataTest('var-picker-summary-slot').should(
+					'not.be.visible'
+				);
+			});
+	});
+
+	it('clears search from the empty-state button', () => {
+		openParagraphTextColorVariablePickerPopover();
+
+		typeInVariablePickerSearch('bas xyz');
+
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.within(() => {
+				cy.contains('button', 'Clear search').click({ force: true });
+			});
+
+		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND_DISPLAY);
+		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT_DISPLAY);
+		assertColorPresetVisibleInVariablePicker(PRESET_NEUTRAL_DISPLAY);
 	});
 
 	it('restores all presets after clearing search', () => {

@@ -74,6 +74,15 @@ export function typeInVariablePickerSearch(query) {
 	});
 }
 
+/** Clears the variable picker search field via the empty-state button. */
+export function clearVariablePickerSearchViaButton() {
+	withinVariablePickerPopover(() => {
+		cy.contains('button', 'Clear search', { timeout: 20000 })
+			.should('be.visible')
+			.click({ force: true });
+	});
+}
+
 /** Clears the variable picker search field. */
 export function clearVariablePickerSearch() {
 	withinVariablePickerPopover(() => {
