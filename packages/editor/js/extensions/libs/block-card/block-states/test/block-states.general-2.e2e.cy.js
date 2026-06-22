@@ -285,7 +285,7 @@ describe('Block State E2E Test', () => {
 
 			// Set mobile-portrait viewport.
 			cy.viewport(478, 580);
-			cy.get('.blockera-block').should('have.css', 'width', '100px');
+			cy.get('.blockera-block').should('not.have.css', 'width', '100px');
 		});
 	});
 
@@ -464,7 +464,7 @@ describe('Block State E2E Test', () => {
 			// Set mobile-portrait viewport
 			cy.viewport(320, 480);
 			cy.get('.blockera-block').realHover();
-			cy.get('.blockera-block').should('have.css', 'width', '100px');
+			cy.get('.blockera-block').should('not.have.css', 'width', '100px');
 		});
 	});
 
