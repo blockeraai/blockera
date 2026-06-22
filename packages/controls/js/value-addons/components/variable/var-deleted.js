@@ -39,13 +39,13 @@ export default function ({
 				)
 			: getDeletedItemInfo(controlProps.value);
 
-	const isCompositeMissingPlainPreset =
-		Boolean(controlProps.isDeletedPlainThemeJsonPreset) &&
-		typeof controlProps.themeJsonPlainPresetCompositePaint === 'string' &&
-		controlProps.themeJsonPlainPresetCompositePaint !== '';
-
 	const resolvedBoldLabel =
 		deletedItem.name !== '' ? deletedItem.name : deletedItem.id;
+
+	const canRecreateMissingVar = controlProps.canRecreateMissingVar !== false;
+	const hasRestorableValue = deletedItem.value !== '';
+	const halfButtonStyle = { flex: 1, padding: '2px 8px', minWidth: 0 };
+	const showRecreateAction = hasRestorableValue && canRecreateMissingVar;
 
 	return (
 		<Popover
@@ -53,6 +53,7 @@ export default function ({
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-value-addon-deleted')}
+			data-test="missing-variable-popover"
 		>
 			<Flex direction="column" gap={10}>
 				{deletedItem.before !== '' && (
@@ -167,68 +168,117 @@ export default function ({
 				)}
 
 				<Flex
-					direction="row-reverse"
+					direction="column"
 					gap={8}
-					style={{ marginTop: '10px' }}
+					style={{ marginTop: '10px', width: '100%' }}
 				>
-					{deletedItem.value !== '' ? (
+					{hasRestorableValue ? (
 						<>
-							<Button
-								variant="primary"
-								tabIndex="-1"
-								size={'small'}
-								onClick={controlProps.handleOnUnlinkVar}
-								label={
-									isCompositeMissingPlainPreset
-										? __(
-												'Unlink to resolved color',
-												'blockera'
-											)
-										: __(
-												'Unlink Variable Value',
-												'blockera'
-											)
-								}
-								style={{ padding: '2px 8px' }}
-							>
-								<Icon icon="unlink" iconSize="20" />
-								{isCompositeMissingPlainPreset
-									? __('Unlink color value', 'blockera')
-									: __('Unlink Variable', 'blockera')}
-							</Button>
-							<Button
-								variant="tertiary"
-								tabIndex="-1"
-								size={'small'}
-								onClick={() => {
-									controlProps.setOpen('var-picker');
-								}}
-								label={__(
-									'Switch To Another Variable',
-									'blockera'
-								)}
-								style={{
-									padding: '2px 8px',
-									marginRight: 'auto',
-								}}
-							>
-								{__('Switch Variable', 'blockera')}
-							</Button>
+							{showRecreateAction ? (
+								<Flex
+									direction="row"
+									gap={8}
+									style={{ width: '100%' }}
+								>
+									<Button
+										variant="primary"
+										tabIndex="-1"
+										size={'small'}
+										onClick={controlProps.handleOnUnlinkVar}
+										label={__('Unlink', 'blockera')}
+										style={halfButtonStyle}
+										data-test="missing-variable-unlink"
+									>
+										<Icon icon="unlink" iconSize="20" />
+										{__('Unlink', 'blockera')}
+									</Button>
+									<Button
+										variant="secondary"
+										tabIndex="-1"
+										size={'small'}
+										onClick={
+											controlProps.handleOnRecreateMissingVar
+										}
+										label={__('Recreate', 'blockera')}
+										style={halfButtonStyle}
+										data-test="missing-variable-recreate"
+									>
+										<Icon icon="plus" iconSize="20" />
+										{__('Recreate', 'blockera')}
+									</Button>
+								</Flex>
+							) : (
+								<Flex
+									direction="row"
+									gap={8}
+									style={{ width: '100%' }}
+								>
+									<Button
+										variant="primary"
+										tabIndex="-1"
+										size={'small'}
+										onClick={controlProps.handleOnUnlinkVar}
+										label={__('Unlink', 'blockera')}
+										style={halfButtonStyle}
+										data-test="missing-variable-unlink"
+									>
+										<Icon icon="unlink" iconSize="20" />
+										{__('Unlink', 'blockera')}
+									</Button>
+									<Button
+										variant="tertiary"
+										tabIndex="-1"
+										size={'small'}
+										onClick={() => {
+											controlProps.setOpen('var-picker');
+										}}
+										label={__(
+											'Switch To Another Variable',
+											'blockera'
+										)}
+										style={halfButtonStyle}
+										data-test="missing-variable-switch"
+									>
+										{__('Switch Variable', 'blockera')}
+									</Button>
+								</Flex>
+							)}
+							{showRecreateAction && (
+								<Button
+									variant="tertiary"
+									tabIndex="-1"
+									size={'small'}
+									onClick={() => {
+										controlProps.setOpen('var-picker');
+									}}
+									label={__(
+										'Switch To Another Variable',
+										'blockera'
+									)}
+									style={{
+										padding: '2px 8px',
+										width: '100%',
+									}}
+									data-test="missing-variable-switch"
+								>
+									{__('Switch Variable', 'blockera')}
+								</Button>
+							)}
 						</>
 					) : (
-						<>
+						<Flex direction="row" gap={8} style={{ width: '100%' }}>
 							<Button
 								variant="primary"
 								tabIndex="-1"
 								size={'small'}
 								onClick={controlProps.handleOnClickRemove}
 								label={__('Remove Variable Usage', 'blockera')}
-								style={{ padding: '2px 8px' }}
+								style={halfButtonStyle}
+								data-test="missing-variable-remove"
 							>
 								<Icon icon="trash" iconSize="20" />
 								{__('Remove', 'blockera')}
 							</Button>
-
 							<Button
 								variant="tertiary"
 								tabIndex="-1"
@@ -240,14 +290,12 @@ export default function ({
 									'Switch To Another Variable',
 									'blockera'
 								)}
-								style={{
-									padding: '2px 8px',
-									marginRight: 'auto',
-								}}
+								style={halfButtonStyle}
+								data-test="missing-variable-switch"
 							>
 								{__('Switch Variable', 'blockera')}
 							</Button>
-						</>
+						</Flex>
 					)}
 				</Flex>
 			</Flex>
