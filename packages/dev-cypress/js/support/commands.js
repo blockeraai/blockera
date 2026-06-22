@@ -1017,7 +1017,7 @@ export const registerCommands = () => {
 	 * Same pattern as `addNewTransition`: `getParentContainer`, then add via aria-label.
 	 */
 	Cypress.Commands.add('addNewGlobalStylesCustomColorPreset', () => {
-		cy.getParentContainer('Custom Variables').as(
+		cy.getParentContainer('Custom variables').as(
 			'globalStylesCustomColorPresetGroup'
 		);
 
@@ -1033,7 +1033,7 @@ export const registerCommands = () => {
 	Cypress.Commands.add(
 		'addNewGlobalStylesCustomPresetByDataTest',
 		(dataTest) => {
-			cy.getParentContainer('Custom Variables').within(() => {
+			cy.getParentContainer('Custom variables').within(() => {
 				cy.getByDataTest(dataTest).click({ force: true });
 			});
 		}
