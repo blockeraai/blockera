@@ -10,7 +10,7 @@ import { getBlockType } from '@wordpress/blocks';
 /**
  * Blockera dependencies
  */
-import { isEquals, isObject, mergeObject } from '@blockera/utils';
+import { isEquals, isEmpty, isObject, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -288,7 +288,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					},
 					{
 						deletedProps: [attributeId],
-						forceUpdated: isObject(newValue) ? [attributeId] : [],
+						forceUpdated:
+							isObject(newValue) ||
+							(!isObject(newValue) && isEmpty(newValue))
+								? [attributeId]
+								: [],
 					}
 				),
 				...hookParams
@@ -357,7 +361,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					},
 					{
 						deletedProps: [attributeId],
-						forceUpdated: isObject(newValue) ? [attributeId] : [],
+						forceUpdated:
+							isObject(newValue) ||
+							(!isObject(newValue) && isEmpty(newValue))
+								? [attributeId]
+								: [],
 					}
 				),
 				...hookParams

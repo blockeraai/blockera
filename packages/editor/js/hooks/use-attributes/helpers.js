@@ -174,7 +174,11 @@ export const memoizedRootBreakpoints: (
 														attributes: {
 															..._effectiveItems,
 															[attributeId]:
-																isEqualsWithDefault
+																isEqualsWithDefault &&
+																isNormalStateOnBaseBreakpoint(
+																	currentInnerBlockState,
+																	currentBreakpoint
+																)
 																	? undefined
 																	: newValue,
 														},
@@ -228,7 +232,11 @@ export const memoizedRootBreakpoints: (
 				attributes: {
 					...effectiveItems,
 					[attributeId]:
-						(isEqualsWithDefault && isNormalState(currentState)) ||
+						(isEqualsWithDefault &&
+							isNormalStateOnBaseBreakpoint(
+								currentState,
+								currentBreakpoint
+							)) ||
 						ref?.reset
 							? undefined
 							: newValue,
