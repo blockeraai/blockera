@@ -17,13 +17,18 @@ import type { ValueAddon } from '../../../types';
 
 export type ValueAddonControlProps = {
 	value: ValueAddon,
+	/** Block / control attribute as stored (scalar string, repeater object, or value-addon object). */
+	rawValue: any,
 	setValue: (value: Object | string) => void,
 	onChange: (value: Object | string) => void,
 	types: Array<'variable' | 'dynamic-value'>,
 	variableTypes: Array<VariableCategory>,
 	dynamicValueTypes: Array<DynamicValueTypes>,
 	handleOnClickDV: (data: DynamicValueItem) => void,
-	handleOnClickVar: (data: VariableItem) => void,
+	handleOnClickVar: (
+		data: VariableItem,
+		options?: { keepPickerOpen?: boolean }
+	) => void,
 	handleOnUnlinkVar: (event: SyntheticMouseEvent<EventTarget>) => void,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
 	isOpen: string,

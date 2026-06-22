@@ -242,6 +242,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 			ValueAddonControl: StableValueAddonControl,
 			valueAddonControlProps: {
 				value,
+				rawValue: inputValue,
 				setValue,
 				onChange,
 				types,
@@ -277,7 +278,10 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		.map((type) => `blockera-value-addon-support-${type}`)
 		.join(' ');
 
-	const handleOnClickVar = (data: VariableItem): void => {
+	const handleOnClickVar = (
+		data: VariableItem,
+		options?: { keepPickerOpen?: boolean }
+	): void => {
 		const newValue = {
 			settings: {
 				...data,
@@ -289,7 +293,10 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 
 		setValue(newValue);
 		onChange(newValue);
-		setOpen('');
+
+		if (!options?.keepPickerOpen) {
+			setOpen('');
+		}
 	};
 
 	const handleOnUnlinkVar = (): void => {
@@ -393,6 +400,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 
 	const controlProps: ValueAddonControlProps = {
 		value,
+		rawValue: inputValue,
 		setValue,
 		onChange,
 		types,
@@ -497,6 +505,7 @@ export {
 	useVarPickerSummarySlot,
 	VarPickerCustomAddProvider,
 	useVarPickerCustomAddContext,
+	VarPickerSectionCustomAddButton,
 	resolveVariablePickerPresetGroupLabel,
 	normalizeVariablePickerSearchQuery,
 	tokenizeVariablePickerSearchQuery,
