@@ -107,8 +107,12 @@ export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
 	if (isLikelyRawCssNonPresetScalarInput(s)) {
 		return false;
 	}
-	// Invalid letter-only color typing (e.g. `asd`, `foo`) — not WP preset slug references.
-	if (/^[a-z]+$/i.test(s) && !tinycolor(s.trim()).isValid()) {
+	// Short letter-only strings that are not valid colors (e.g. `c`, `asd`, `foo`) — in-progress typing, not preset slugs.
+	if (
+		/^[a-z]+$/i.test(s) &&
+		s.length <= 3 &&
+		!tinycolor(s.trim()).isValid()
+	) {
 		return false;
 	}
 	// Slugs start with a letter so values like `12px` / `500` are not treated as presets.
