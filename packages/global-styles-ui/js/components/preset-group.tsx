@@ -21,6 +21,7 @@ import {
 	usePresetVariablesViewMode,
 	useVarPickerCustomAddContext,
 	useVarPickerPresetContext,
+	useVarPickerSearchContext,
 	VarPickerSectionCustomAddButton,
 	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
@@ -334,6 +335,7 @@ export const PresetGroup = ({
 	suppressThemeRepeaterWhenTaxonomyBasePopulated = false,
 }: PresetGroupPropsType) => {
 	const pickerCtx = useVarPickerPresetContext();
+	const pickerSearchCtx = useVarPickerSearchContext();
 	const customAddCtx = useVarPickerCustomAddContext();
 	const { viewMode } = usePresetVariablesViewMode();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
@@ -523,6 +525,8 @@ export const PresetGroup = ({
 				variableType: pickerCtx.variableType,
 				defaultPresetValue: staticDefault,
 				blockName: pickerCtx.controlProps?.themeJsonResolutionBlockName,
+				searchSeed:
+					pickerSearchCtx.consumeAddSearchSeed?.() ?? undefined,
 			});
 		},
 		[
@@ -531,6 +535,7 @@ export const PresetGroup = ({
 			pickerCtx.controlProps?.rawValue,
 			pickerCtx.controlProps?.themeJsonResolutionBlockName,
 			pickerCtx.variableType,
+			pickerSearchCtx.consumeAddSearchSeed,
 		]
 	);
 
@@ -612,7 +617,32 @@ export const PresetGroup = ({
 		return null;
 	}
 
-	if (isPickerSearchActive && !hasPickerSearchMatches) {
+	const useVariablePickerCustomSectionAddButton =
+		isVariablePicker &&
+		origin === 'custom' &&
+		typeof pickerCtx.variableType === 'string';
+
+	const keepMountedForCustomAddRegistration =
+		isPickerSearchActive &&
+		!hasPickerSearchMatches &&
+		pickerSearchCtx.deferSectionSearchEmptyState &&
+		useVariablePickerCustomSectionAddButton;
+
+	const hidePresetGroupForSearch =
+		isPickerSearchActive &&
+		!hasPickerSearchMatches &&
+		pickerSearchCtx.deferSectionSearchEmptyState &&
+		!useVariablePickerCustomSectionAddButton;
+
+	if (hidePresetGroupForSearch) {
+		return null;
+	}
+
+	if (
+		isPickerSearchActive &&
+		!hasPickerSearchMatches &&
+		!pickerSearchCtx.deferSectionSearchEmptyState
+	) {
 		return (
 			<div
 				className={controlInnerClassNames('repeater-filter-empty')}
@@ -623,12 +653,7 @@ export const PresetGroup = ({
 		);
 	}
 
-	const useVariablePickerCustomSectionAddButton =
-		isVariablePicker &&
-		origin === 'custom' &&
-		typeof pickerCtx.variableType === 'string';
-
-	return (
+	const presetGroupContent = (
 		<PresetStateContainer activeColor="var(--blockera-controls-block-variations-style)">
 			<ControlContextProvider
 				value={repeaterContextValue}
@@ -696,4 +721,14 @@ export const PresetGroup = ({
 			</ControlContextProvider>
 		</PresetStateContainer>
 	);
+
+	if (keepMountedForCustomAddRegistration) {
+		return (
+			<div hidden aria-hidden="true">
+				{presetGroupContent}
+			</div>
+		);
+	}
+
+	return presetGroupContent;
 };
