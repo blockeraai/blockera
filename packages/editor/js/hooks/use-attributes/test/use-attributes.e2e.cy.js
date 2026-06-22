@@ -291,4 +291,32 @@ describe('useAttributes Hook Testing ...', () => {
 			});
 		});
 	});
+
+	describe('blockeraBlockStates attribute updates', () => {
+		it('should store empty background color in blockeraBlockStates on tablet breakpoint', () => {
+			cy.getBlock('core/paragraph').click();
+
+			cy.setColorControlValue('BG Color', 'ff0000');
+
+			getWPDataObject().then((data) => {
+				expect('#ff0000').to.be.equal(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
+				);
+			});
+
+			setDeviceType('Tablet');
+			cy.clearColorControlValue('BG Color');
+
+			getWPDataObject().then((data) => {
+				expect('#ff0000').to.be.equal(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
+				);
+
+				expect('').to.be.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes.blockeraBackgroundColor
+				);
+			});
+		});
+	});
 });
