@@ -1254,7 +1254,7 @@ const shouldTrimLeadingSpaceForBlockWrapperRoot = ({
 	clientId: string,
 	className: string,
 }): boolean => {
-	if (!selector.startsWith(' ') && selector.split(' ').length > 1) {
+	if (!selector.startsWith(' ') || selector.split(' ').length > 2) {
 		return false;
 	}
 
@@ -1326,7 +1326,7 @@ const appendRootBlockCssSelector = (
 		trimmedLeadingSpaceForBlockWrapper &&
 		!/\bwp-block-/.test(normalizedSelector.split(/[\s>+~]/)[0])
 	) {
-		return `${root} ${normalizedSelector}`;
+		return `${root}${normalizedSelector}`;
 	}
 
 	// Assume received selector is another reference to root, so we should concat together.
