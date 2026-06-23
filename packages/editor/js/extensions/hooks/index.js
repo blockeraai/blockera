@@ -9,12 +9,12 @@ import { addFilter, applyFilters } from '@wordpress/hooks';
  * Internal dependencies
  */
 import withBlockSettings from './block-settings';
+import {
+	initHideCoreLayoutToolbar,
+	initHideCoreLayoutToolbarDom,
+} from '../libs/layout/hide-core-layout-toolbar';
 
 export default function applyHooks(beforeApplyHooks: () => void) {
-	if ('function' === typeof beforeApplyHooks) {
-		beforeApplyHooks();
-	}
-
 	addFilter(
 		'blocks.registerBlockType',
 		'blockera.editor.extensions.withAdvancedControlsAttributes',
@@ -41,6 +41,14 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 			}),
 		9e2
 	);
+
+	initHideCoreLayoutToolbar();
+
+	if ('function' === typeof beforeApplyHooks) {
+		beforeApplyHooks();
+	}
+
+	initHideCoreLayoutToolbarDom();
 
 	// Filter out blockera attributes from block renderer requests.
 	apiFetch.use((options, next) => {

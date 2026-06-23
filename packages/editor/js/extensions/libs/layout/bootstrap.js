@@ -48,15 +48,8 @@ import {
 	mergeWPCompatibility,
 	sanitizeWPCompatibilityAttributes,
 } from '../utils';
-import {
-	registerHideCoreLayoutToolbarDom,
-	registerHideCoreLayoutToolbarSupports,
-} from './hide-core-layout-toolbar';
 
 export const bootstrap = (): void => {
-	registerHideCoreLayoutToolbarSupports();
-	registerHideCoreLayoutToolbarDom();
-
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.layoutExtension.bootstrap',
