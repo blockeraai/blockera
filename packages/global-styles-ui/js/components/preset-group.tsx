@@ -45,6 +45,7 @@ import {
 	buildPresetVariablePickerPayload,
 	mergeVariablePickerCreatingStepIntoItems,
 	resolveVariablePickerCustomAddPresetValue,
+	shouldClearVariablePickerFeatureOnRowDelete,
 	stripIsSelectedFromRepeaterItems,
 	stripRepeaterPickerUiFields,
 	syncVariablePickerCreatingStepSlugs,
@@ -104,6 +105,7 @@ type PresetsProps = {
 	enableCreatingStep?: boolean;
 	selectable?: boolean;
 	valueCleanup?: (items: Object) => Object;
+	onDelete?: (itemId: string, items: Object) => Object;
 	onSelectableItemActivate?: (itemId: string, item: Object) => void;
 	showItemEditButton?: boolean;
 	actionButtonAdd?: boolean;
@@ -173,6 +175,7 @@ const Presets = ({
 	repeaterItemHeader: RepeaterItemHeader,
 	selectable = false,
 	valueCleanup: repeaterValueCleanup,
+	onDelete,
 	onSelectableItemActivate,
 	showItemEditButton = false,
 	shouldRenderRepeaterItem,
@@ -301,6 +304,7 @@ const Presets = ({
 			)}
 			selectable={selectable}
 			valueCleanup={repeaterValueCleanup}
+			onDelete={onDelete}
 			onSelectableItemActivate={onSelectableItemActivate}
 			showItemEditButton={showItemEditButton}
 			shouldRenderRepeaterItem={shouldRenderRepeaterItem}
@@ -414,6 +418,39 @@ export const PresetGroup = ({
 			pickerCtx.controlProps.handleOnClickVar(payload as never, {
 				keepPickerOpen: row.creatingStep === true,
 			});
+		},
+		[isVariablePicker, pickerCtx, origin]
+	);
+
+	const handleRepeaterItemDelete = useCallback(
+		(itemId: string, items: Object) => {
+			const record = items as Record<string, unknown>;
+			const item = record[itemId];
+
+			if (
+				isVariablePicker &&
+				typeof pickerCtx.variableType === 'string' &&
+				pickerCtx.controlProps &&
+				item &&
+				typeof item === 'object' &&
+				!Array.isArray(item) &&
+				shouldClearVariablePickerFeatureOnRowDelete(
+					item as Record<string, unknown>,
+					{
+						variableType: pickerCtx.variableType,
+						origin,
+						pickerValue: pickerCtx.controlProps.value,
+						themeJsonPlainPresetSlug:
+							pickerCtx.controlProps.themeJsonPlainPresetSlug,
+					}
+				)
+			) {
+				pickerCtx.controlProps.handleOnClickRemove();
+			}
+
+			const next = { ...record };
+			delete next[itemId];
+			return next;
 		},
 		[isVariablePicker, pickerCtx, origin]
 	);
@@ -679,6 +716,11 @@ export const PresetGroup = ({
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
 						enableCreatingStep={enableCreatingStep}
 						selectable={isVariablePicker}
+						onDelete={
+							isVariablePicker
+								? handleRepeaterItemDelete
+								: undefined
+						}
 						onSelectableItemActivate={
 							isVariablePicker
 								? handleSelectableItemActivate
