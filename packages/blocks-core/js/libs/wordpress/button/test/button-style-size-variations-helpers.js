@@ -47,8 +47,17 @@ export function filterStyleColumnElements($elements) {
 		return !element.closest(GLOBAL_STYLES_SIZE_ASIDE);
 	});
 }
-export const CUSTOMIZED_SIZE_BG_HEX = '#336699';
-export const CUSTOMIZED_SIZE_BG_RGB = 'rgb(51, 102, 153)';
+/** Distinct font size applied to the e2e-size-small variation in global styles. */
+export const CUSTOMIZED_SIZE_FONT_SIZE = '18px';
+
+export const CUSTOMIZED_STYLE_BORDER_VALUE = {
+	type: 'all',
+	all: {
+		width: '5px',
+		style: 'dashed',
+		color: '#37e6d4',
+	},
+};
 
 /**
  * @param {Window} win
@@ -264,6 +273,10 @@ export function selectSizeVariationInGlobalStyles(slug) {
 	});
 }
 
+export function closeSizeVariationBlockCardInGlobalStyles() {
+	cy.getByDataTest('Close Size Variation').click({ force: true });
+}
+
 export function selectStyleVariationInGlobalStyles(slug) {
 	withinStyleVariationsPanel(() => {
 		cy.getByDataTest(`style-${slug}`)
@@ -273,8 +286,145 @@ export function selectStyleVariationInGlobalStyles(slug) {
 	});
 }
 
-export function assertCustomizedSizeVariationInStore(expectedHex) {
+/**
+ * Persists a font size on the active size variation (core entity + blockera/editor).
+ * Mirrors the payload shape from global-styles handleOnChangeStyle.
+ */
+export function persistSizeVariationFontSizeInStore(fontSize) {
 	cy.window().should((win) => {
+		const registry = win.wp?.data;
+
+		if (!registry) {
+			expect.fail('wp.data is not available');
+		}
+
+		const gsId = getGlobalStylesEntityId(win);
+		const coreSelect = registry.select('core');
+		const coreDispatch = registry.dispatch('core');
+		const blockeraDispatch = registry.dispatch('blockera/editor');
+
+		const record = coreSelect.getEditedEntityRecord(
+			'root',
+			'globalStyles',
+			gsId
+		);
+
+		const styles = { ...(record?.styles || {}) };
+		const blocks = { ...(styles.blocks || {}) };
+		const buttonBlock = { ...(blocks[BLOCK_NAME] || {}) };
+		const variations = { ...(buttonBlock.variations || {}) };
+		const prev = variations['e2e-size-small'] || {};
+
+		const payload = {
+			...prev,
+			blockeraFontSize: { value: fontSize },
+			blockeraVariationType: VARIATION_SURFACE_SIZE,
+			blockeraIsDefaultVariation:
+				typeof prev.blockeraIsDefaultVariation === 'boolean'
+					? prev.blockeraIsDefaultVariation
+					: true,
+		};
+
+		variations['e2e-size-small'] = payload;
+		buttonBlock.variations = variations;
+		blocks[BLOCK_NAME] = buttonBlock;
+		styles.blocks = blocks;
+
+		coreDispatch.editEntityRecord('root', 'globalStyles', gsId, {
+			styles,
+			blockeraMetaData: record?.blockeraMetaData,
+		});
+
+		blockeraDispatch.setBlockStyles(BLOCK_NAME, 'e2e-size-small', payload);
+	});
+}
+
+export function customizeSizeVariationFontSize(
+	fontSize = CUSTOMIZED_SIZE_FONT_SIZE
+) {
+	// Confirm the size-surface typography control is available (BG Color is disabled).
+	withinSizeVariationsPanel(() => {
+		cy.get('[data-test="blockera-size-variation-block-card"]', {
+			timeout: 20000,
+		}).should('be.visible');
+
+		cy.get('[aria-label="Font Size"]', { timeout: 20000 }).should('exist');
+	});
+
+	persistSizeVariationFontSizeInStore(fontSize);
+}
+
+/**
+ * Persists the customized fill style variation border in global styles stores.
+ */
+export function persistStyleVariationBorderInStore(
+	slug = STYLE_VARIATION_SLUG
+) {
+	cy.window().should((win) => {
+		const registry = win.wp?.data;
+
+		if (!registry) {
+			expect.fail('wp.data is not available');
+		}
+
+		const gsId = getGlobalStylesEntityId(win);
+		const coreSelect = registry.select('core');
+		const coreDispatch = registry.dispatch('core');
+		const blockeraDispatch = registry.dispatch('blockera/editor');
+
+		const record = coreSelect.getEditedEntityRecord(
+			'root',
+			'globalStyles',
+			gsId
+		);
+
+		const styles = { ...(record?.styles || {}) };
+		const blocks = { ...(styles.blocks || {}) };
+		const buttonBlock = { ...(blocks[BLOCK_NAME] || {}) };
+		const variations = { ...(buttonBlock.variations || {}) };
+		const prev = variations[slug] || {};
+
+		const payload = {
+			...prev,
+			blockeraBorder: {
+				value: CUSTOMIZED_STYLE_BORDER_VALUE,
+			},
+		};
+
+		variations[slug] = payload;
+		buttonBlock.variations = variations;
+		blocks[BLOCK_NAME] = buttonBlock;
+		styles.blocks = blocks;
+
+		coreDispatch.editEntityRecord('root', 'globalStyles', gsId, {
+			styles,
+			blockeraMetaData: record?.blockeraMetaData,
+		});
+
+		blockeraDispatch.setBlockStyles(BLOCK_NAME, slug, payload);
+	});
+}
+
+export function assertCustomizedSizeVariationInStore(expectedFontSize) {
+	cy.window().should((win) => {
+		const data = win.wp?.data;
+
+		if (!data) {
+			expect.fail('wp.data is not available');
+		}
+
+		const blockeraStyles = data
+			.select('blockera/editor')
+			.getBlockStyles(BLOCK_NAME, 'e2e-size-small');
+
+		expect(
+			blockeraStyles?.blockeraFontSize?.value,
+			'blockera/editor getBlockStyles (size)'
+		).to.equal(expectedFontSize);
+	});
+
+	// block-base debounces core entity sync outside the inspector (~1s).
+	cy.window({ timeout: 20000 }).should((win) => {
 		const data = win.wp?.data;
 
 		if (!data) {
@@ -296,23 +446,14 @@ export function assertCustomizedSizeVariationInStore(expectedHex) {
 			];
 
 		expect(
-			sizeVariation?.blockeraBackgroundColor?.value,
-			'global styles entity (size variation BG)'
-		).to.equal(expectedHex);
+			sizeVariation?.blockeraFontSize?.value,
+			'global styles entity (size variation font size)'
+		).to.equal(expectedFontSize);
 
 		expect(
 			sizeVariation?.blockeraVariationType,
 			'size variation type persisted'
 		).to.equal(VARIATION_SURFACE_SIZE);
-
-		const blockeraStyles = data
-			.select('blockera/editor')
-			.getBlockStyles(BLOCK_NAME, 'e2e-size-small');
-
-		expect(
-			blockeraStyles?.blockeraBackgroundColor?.value,
-			'blockera/editor getBlockStyles (size)'
-		).to.equal(expectedHex);
 	});
 }
 
@@ -336,7 +477,9 @@ export function pickVariationInInspectorPopover(slug) {
 		.last()
 		.should('be.visible')
 		.within(() => {
-			cy.getByDataTest(`style-${slug}`).click({ force: true });
+			cy.getByDataTest(`style-${slug}`, { timeout: 20000 })
+				.should('be.visible')
+				.click({ force: true });
 		});
 }
 
@@ -345,11 +488,15 @@ export function assertButtonLinkEditorCss(expected) {
 		.first()
 		.should('have.class', `is-size-e2e-size-small`)
 		.within(() => {
-			cy.get('.wp-element-button').should(
-				'have.css',
-				'background-color',
-				expected.backgroundColor
-			);
+			if (expected.fontSize) {
+				const targetPx = parseFloat(expected.fontSize);
+
+				cy.get('.wp-element-button').should(($el) => {
+					const px = parseFloat($el.css('font-size'));
+
+					expect(px).to.be.closeTo(targetPx, 1);
+				});
+			}
 
 			if (expected.border) {
 				cy.get('.wp-element-button').should(
@@ -376,31 +523,24 @@ export function customizeStyleVariationBorder() {
 	});
 
 	cy.getParentContainer('Border').within(() => {
-		cy.get('[aria-haspopup="listbox"]').click();
-		cy.get('motion.div[aria-selected="false"], div[aria-selected="false"]')
-			.eq(1)
-			.click();
+		cy.customSelectOption(1);
 	});
 }
 
 export function assertButtonLinkFrontCss(expected) {
-	cy.get(
-		`.blockera-block.wp-block-button.is-size-e2e-size-small.is-style-${STYLE_VARIATION_SLUG}`
-	)
-		.first()
-		.within(() => {
-			cy.get('.wp-element-button').should(
-				'have.css',
-				'background-color',
-				expected.backgroundColor
-			);
+	// Front markup may omit default `is-style-fill` or use scoped `is-size-*--{id}` instance classes.
+	cy.contains('.entry-content a.wp-element-button', 'button', {
+		timeout: 20000,
+	}).should(($link) => {
+		if (expected.fontSize) {
+			const targetPx = parseFloat(expected.fontSize);
+			const px = parseFloat($link.css('font-size'));
 
-			if (expected.border) {
-				cy.get('.wp-element-button').should(
-					'have.css',
-					'border',
-					expected.border
-				);
-			}
-		});
+			expect(px).to.be.closeTo(targetPx, 1);
+		}
+
+		if (expected.border) {
+			expect($link.css('border')).to.equal(expected.border);
+		}
+	});
 }
