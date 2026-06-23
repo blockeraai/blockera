@@ -57,7 +57,7 @@ export default function ValueAddonDisplay({
 
 		let label = '';
 		if (isDeletedPlainThemeJsonPreset) {
-			label = __('Missing Variable', 'blockera');
+			label = __('Missing variable', 'blockera');
 		} else if (typeof themeJsonPlainPresetSlug === 'string') {
 			label = themeJsonPlainPresetSlug;
 		}
@@ -118,7 +118,7 @@ export default function ValueAddonDisplay({
 
 		if (missing) {
 			isDeleted = true;
-			label = __('Missing Variable', 'blockera');
+			label = __('Missing variable', 'blockera');
 			icon = <DeletedIcon />;
 		} else {
 			label = !isUndefined(item?.name)
@@ -145,7 +145,7 @@ export default function ValueAddonDisplay({
 
 		if (isUndefined(item?.name)) {
 			isDeleted = true;
-			label = __('Missing Item', 'blockera');
+			label = __('Missing item', 'blockera');
 			icon = <DeletedIcon />;
 		} else {
 			label = !isUndefined(item?.name)

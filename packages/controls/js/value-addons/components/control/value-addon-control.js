@@ -48,7 +48,7 @@ export default function ({
 		if (controlProps.value.valueType === 'variable') {
 			if (controlProps.isDeletedVar) {
 				isDeleted = true;
-				label = __('Missing Variable', 'blockera');
+				label = __('Missing variable', 'blockera');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getVariable(
@@ -67,7 +67,7 @@ export default function ({
 		} else if (controlProps.value.valueType === 'dynamic-value') {
 			if (controlProps.isDeletedDV) {
 				isDeleted = true;
-				label = __('Missing Item', 'blockera');
+				label = __('Missing item', 'blockera');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getDynamicValue(
@@ -86,7 +86,7 @@ export default function ({
 	) {
 		if (controlProps.isDeletedPlainThemeJsonPreset) {
 			isDeleted = true;
-			label = __('Missing Variable', 'blockera');
+			label = __('Missing variable', 'blockera');
 			icon = <DeletedIcon />;
 		} else {
 			label = controlProps.themeJsonPlainPresetSlug || '';

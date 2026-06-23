@@ -49,7 +49,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Missing Variable', 'blockera')}
+			title={__('Missing variable', 'blockera')}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-value-addon-deleted')}
@@ -239,7 +239,7 @@ export default function ({
 										style={halfButtonStyle}
 										data-test="missing-variable-switch"
 									>
-										{__('Switch Variable', 'blockera')}
+										{__('Switch variable', 'blockera')}
 									</Button>
 								</Flex>
 							)}
@@ -261,7 +261,7 @@ export default function ({
 									}}
 									data-test="missing-variable-switch"
 								>
-									{__('Switch Variable', 'blockera')}
+									{__('Switch variable', 'blockera')}
 								</Button>
 							)}
 						</>
@@ -293,7 +293,7 @@ export default function ({
 								style={halfButtonStyle}
 								data-test="missing-variable-switch"
 							>
-								{__('Switch Variable', 'blockera')}
+								{__('Switch variable', 'blockera')}
 							</Button>
 						</Flex>
 					)}

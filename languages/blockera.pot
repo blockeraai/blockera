@@ -4974,15 +4974,15 @@ msgstr ""
 
 #: dist/controls/controls.js:30886
 #: dist/controls/controls.js:31935
-msgid "Missing Variable"
+msgid "Missing variable"
 msgstr ""
 
 #: dist/controls/controls.js:30899
-msgid "Missing Item"
+msgid "Missing item"
 msgstr ""
 
 #: dist/controls/controls.js:30913
-msgid "Change Variable"
+msgid "Change variable"
 msgstr ""
 
 #: dist/controls/controls.js:30913
@@ -5101,7 +5101,7 @@ msgstr ""
 
 #: dist/controls/controls.js:32054
 #: dist/controls/controls.js:32078
-msgid "Switch Variable"
+msgid "Switch variable"
 msgstr ""
 
 #: dist/controls/controls.js:32059
