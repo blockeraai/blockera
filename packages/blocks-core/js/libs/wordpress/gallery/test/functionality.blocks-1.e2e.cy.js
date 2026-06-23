@@ -62,6 +62,8 @@ describe('Gallery Block', () => {
 			'padding-box'
 		);
 
+		cy.getByAriaControls('styles-view').click();
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
