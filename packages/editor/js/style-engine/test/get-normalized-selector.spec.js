@@ -1086,4 +1086,35 @@ describe("getNormalizedSelector - supports selectors starting with '&&'", () => 
 		const result = getNormalizedSelector('&&[data-id="test"]', options);
 		expect(result).toBe('.complex-root[data-id="test"].modified:hover');
 	});
+
+	test('should insert only one {{UNIQUE_CLASSNAME}} for && with inner block root', () => {
+		const result = getNormalizedSelector('&& a', {
+			...defaultOptions,
+			rootSelector: 'html:root body :where({{UNIQUE_CLASSNAME}})',
+			fromInnerBlock: true,
+		});
+
+		expect(result).toBe(
+			'html:root body :where({{UNIQUE_CLASSNAME}}) a.modified'
+		);
+	});
+
+	test('should insert only one {{UNIQUE_CLASSNAME}} for && with simple root', () => {
+		const result = getNormalizedSelector('&& a', {
+			...defaultOptions,
+			rootSelector: '{{UNIQUE_CLASSNAME}}',
+			fromInnerBlock: true,
+		});
+
+		expect(result).toBe('{{UNIQUE_CLASSNAME}} a.modified');
+	});
+
+	test('should insert only one {{UNIQUE_CLASSNAME}} for {{UNIQUE_CLASSNAME}}&& prefix', () => {
+		const result = getNormalizedSelector('{{UNIQUE_CLASSNAME}}&& a', {
+			...defaultOptions,
+			rootSelector: '{{UNIQUE_CLASSNAME}}',
+		});
+
+		expect(result).toBe('{{UNIQUE_CLASSNAME}} a.modified');
+	});
 });

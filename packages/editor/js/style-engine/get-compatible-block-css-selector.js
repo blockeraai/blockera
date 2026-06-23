@@ -233,16 +233,10 @@ export const getNormalizedSelector = (
 
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
-		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&
-		if (/^{{UNIQUE_CLASSNAME}}&/.test(selector)) {
-			return selector.replace(
-				/^{{UNIQUE_CLASSNAME}}&/,
-				'{{UNIQUE_CLASSNAME}}'
-			);
-		}
+		const trimmed = selector.trim();
 
-		// Handle selectors starting with &&
-		if (selector.trim().startsWith('&&')) {
+		// Handle && before single & (&& also starts with &).
+		if (trimmed.startsWith('&&')) {
 			isProcessedSelector = true;
 			// Extract the first part of the root selector (everything before the first space)
 			const extractedFirstPart =
@@ -252,17 +246,37 @@ export const getNormalizedSelector = (
 				? getSelectorWithRootBody(extractedFirstPart)
 				: extractedFirstPart;
 
-			return `${rootFirstPart}${selector.trim().substring(2)}`;
+			return `${rootFirstPart}${trimmed.substring(2)}`;
+		}
+
+		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&& (both ampersands → one classname)
+		if (/^{{UNIQUE_CLASSNAME}}&&/.test(trimmed)) {
+			isProcessedSelector = true;
+
+			return trimmed.replace(
+				/^{{UNIQUE_CLASSNAME}}&&/,
+				'{{UNIQUE_CLASSNAME}}'
+			);
+		}
+
+		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&
+		if (/^{{UNIQUE_CLASSNAME}}&/.test(trimmed)) {
+			isProcessedSelector = true;
+
+			return trimmed.replace(
+				/^{{UNIQUE_CLASSNAME}}&/,
+				'{{UNIQUE_CLASSNAME}}'
+			);
 		}
 
 		// Handle selectors starting with &
-		if (selector.trim().startsWith('&')) {
+		if (trimmed.startsWith('&')) {
 			isProcessedSelector = true;
 
-			return `${rootSelector}${selector.trim().substring(1)}`;
+			return `${rootSelector}${trimmed.substring(1)}`;
 		}
 
-		return selector.trim();
+		return trimmed;
 	};
 
 	// Helper to generate the appropriate selector string based on various states.
@@ -270,8 +284,12 @@ export const getNormalizedSelector = (
 		const innerStateType = getInnerState();
 		const masterStateType = getMasterState();
 
-		// If selector contains root selector, set root selector to empty string to avoid duplicate selectors.
-		if (-1 !== selector.indexOf(rootSelector) && !fromInnerBlock) {
+		// Ampersand patterns already inlined the root (& = full, && = first part only).
+		// Also skip re-appending when the selector already contains the full root.
+		if (
+			isProcessedSelector ||
+			(-1 !== selector.indexOf(rootSelector) && !fromInnerBlock)
+		) {
 			rootSelector = '';
 		}
 
