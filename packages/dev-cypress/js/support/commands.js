@@ -674,6 +674,44 @@ export const registerCommands = () => {
 			});
 	});
 
+	/**
+	 * Select an icon from the open Blockera icon library picker by icon id.
+	 * Open the picker first (e.g. cy.getByAriaLabel('Choose Icon…').click()).
+	 *
+	 * Library icons use aria-label="{iconName} Icon" on
+	 * `.blockera-control-icon-control-icon` (see icon-control/utils.js).
+	 *
+	 * @param {string} iconName Icon library id, e.g. "add-card" or "blockera".
+	 */
+	Cypress.Commands.add('selectIconByName', (iconName) => {
+		const ariaLabel = `${iconName} Icon`;
+
+		const clickIcon = () => {
+			cy.get('.blockera-control-icon-control-icon')
+				.filter(`[aria-label="${ariaLabel}"]`)
+				.first()
+				.click();
+		};
+
+		cy.get('body').then(($body) => {
+			if (
+				$body.find('.blockera-control-icon-picker-modal:visible').length
+			) {
+				cy.get('.blockera-control-icon-picker-modal')
+					.should('be.visible')
+					.within(clickIcon);
+				return;
+			}
+
+			cy.get(
+				'[data-wp-component="Popover"]:visible, .components-popover:visible'
+			)
+				.last()
+				.should('be.visible')
+				.within(clickIcon);
+		});
+	});
+
 	Cypress.Commands.add(
 		'resetBlockeraAttribute',
 		(content, label, resetType = 'reset', repeaterItem = false) => {
