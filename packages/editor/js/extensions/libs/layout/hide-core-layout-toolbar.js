@@ -197,9 +197,21 @@ const hideCoreLayoutToolbarControls = (): void => {
 
 let toolbarObserver: MutationObserver | null = null;
 let bodyToolbarObserver: MutationObserver | null = null;
+let hideCoreLayoutToolbarFrame: AnimationFrameID | null = null;
+
+const scheduleHideCoreLayoutToolbarControls = (): void => {
+	if (hideCoreLayoutToolbarFrame !== null) {
+		cancelAnimationFrame(hideCoreLayoutToolbarFrame);
+	}
+
+	hideCoreLayoutToolbarFrame = requestAnimationFrame(() => {
+		hideCoreLayoutToolbarFrame = null;
+		hideCoreLayoutToolbarControls();
+	});
+};
 
 const attachToolbarObserver = (): void => {
-	hideCoreLayoutToolbarControls();
+	scheduleHideCoreLayoutToolbarControls();
 
 	const toolbar = document.querySelector('.block-editor-block-toolbar');
 
@@ -207,11 +219,18 @@ const attachToolbarObserver = (): void => {
 		return;
 	}
 
-	toolbarObserver = new MutationObserver(hideCoreLayoutToolbarControls);
+	toolbarObserver = new MutationObserver(
+		scheduleHideCoreLayoutToolbarControls
+	);
 	toolbarObserver.observe(toolbar, { childList: true, subtree: true });
 };
 
 const stopToolbarObserver = (): void => {
+	if (hideCoreLayoutToolbarFrame !== null) {
+		cancelAnimationFrame(hideCoreLayoutToolbarFrame);
+		hideCoreLayoutToolbarFrame = null;
+	}
+
 	if (bodyToolbarObserver) {
 		bodyToolbarObserver.disconnect();
 		bodyToolbarObserver = null;
@@ -333,6 +352,39 @@ export const shouldUseBlockeraLayoutToolbar = (blockName: string): boolean => {
 	return true;
 };
 
+const blockHasLayoutSupport = (settings: Object): boolean => {
+	const layoutSupport = settings.supports?.layout;
+
+	return layoutSupport !== undefined && layoutSupport !== false;
+};
+
+/**
+ * Registration-time fallback when `blockera/extensions` is not populated yet.
+ */
+const shouldApplyLayoutSupportOverrideAtRegistration = (
+	blockName: string,
+	settings: Object
+): boolean => {
+	if (!BLOCKS_WITH_HIDDEN_CORE_LAYOUT_TOOLBAR.has(blockName)) {
+		return false;
+	}
+
+	if (shouldUseBlockeraLayoutToolbar(blockName)) {
+		return true;
+	}
+
+	if (!blockHasLayoutSupport(settings)) {
+		return false;
+	}
+
+	const layoutExtensionConfig = resolveLayoutConfigForBlock(blockName);
+
+	return (
+		isActiveExtension(layoutExtensionConfig) &&
+		isActiveField(layoutExtensionConfig?.blockeraFlexLayout)
+	);
+};
+
 const getLayoutSupportOverride = (settings: Object): Object => {
 	const existingLayout = settings.supports?.layout;
 	const layoutObject =
@@ -347,15 +399,40 @@ const getLayoutSupportOverride = (settings: Object): Object => {
 	};
 };
 
+let isHideCoreLayoutToolbarSupportsRegistered = false;
+let isHideCoreLayoutToolbarDomRegistered = false;
+
+const shouldObserveCoreLayoutToolbar = (
+	blockName: string,
+	attributes: ?Object
+): boolean => {
+	if (!shouldUseBlockeraLayoutToolbar(blockName)) {
+		return false;
+	}
+
+	return shouldShowBlockeraFlexLayoutToolbar(blockName, attributes);
+};
+
 /**
  * Disable core flex layout toolbar via block supports (locale-safe; used by layout hook).
  */
 export const registerHideCoreLayoutToolbarSupports = (): void => {
+	if (isHideCoreLayoutToolbarSupportsRegistered) {
+		return;
+	}
+
+	isHideCoreLayoutToolbarSupportsRegistered = true;
+
 	addFilter(
 		'blocks.registerBlockType',
 		'blockera/editor/hide-core-layout-toolbar-supports',
 		(settings: Object, blockName: string): Object => {
-			if (!shouldUseBlockeraLayoutToolbar(blockName)) {
+			if (
+				!shouldApplyLayoutSupportOverrideAtRegistration(
+					blockName,
+					settings
+				)
+			) {
 				return settings;
 			}
 
@@ -372,16 +449,29 @@ export const registerHideCoreLayoutToolbarSupports = (): void => {
 };
 
 /**
- * Hide hardcoded column/columns BlockVerticalAlignmentToolbar (not gated by layout supports).
+ * Hide core layout toolbar controls in the block toolbar DOM.
  *
- * Hook-based blocks (group, …) rely on `allowJustification/allowVerticalAlignment: false`
- * only — no DOM observer, so Blockera's toolbar is never matched by aria-label hiding.
+ * Supports-based blocks (group, buttons, …) are covered by layout supports when
+ * registered in time; this observer is the stable fallback for hardcoded toolbars
+ * and for blocks that registered before Blockera filters were attached.
  */
 export const registerHideCoreLayoutToolbarDom = (): void => {
+	if (isHideCoreLayoutToolbarDomRegistered) {
+		return;
+	}
+
+	isHideCoreLayoutToolbarDomRegistered = true;
+
 	let previousObserverKey: string | null = null;
 
 	subscribe(() => {
-		const selectedBlock = select('core/block-editor').getSelectedBlock();
+		const blockEditorSelect = select('core/block-editor');
+
+		if (!blockEditorSelect?.getSelectedBlock) {
+			return;
+		}
+
+		const selectedBlock = blockEditorSelect.getSelectedBlock();
 		const selectedBlockName = selectedBlock?.name || null;
 		const hasFlexLayoutToolbar = shouldShowBlockeraFlexLayoutToolbar(
 			selectedBlockName || '',
@@ -399,17 +489,40 @@ export const registerHideCoreLayoutToolbarDom = (): void => {
 
 		if (
 			selectedBlockName &&
-			shouldUseBlockeraLayoutToolbar(selectedBlockName) &&
-			BLOCKS_WITH_HARDCODED_LAYOUT_TOOLBAR.has(selectedBlockName) &&
-			shouldShowBlockeraFlexLayoutToolbar(
+			shouldObserveCoreLayoutToolbar(
 				selectedBlockName,
 				selectedBlock?.attributes
 			)
 		) {
-			startToolbarObserver();
+			const activeObserverKey = observerKey;
+
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					if (activeObserverKey !== previousObserverKey) {
+						return;
+					}
+
+					startToolbarObserver();
+				});
+			});
+
 			return;
 		}
 
 		stopToolbarObserver();
 	});
+};
+
+/**
+ * Register layout-toolbar hide hooks once, at editor hook bootstrap time.
+ */
+export const initHideCoreLayoutToolbar = (): void => {
+	registerHideCoreLayoutToolbarSupports();
+};
+
+/**
+ * Start the layout-toolbar DOM observer after block extensions are registered.
+ */
+export const initHideCoreLayoutToolbarDom = (): void => {
+	registerHideCoreLayoutToolbarDom();
 };
