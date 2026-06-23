@@ -694,19 +694,7 @@ export const registerCommands = () => {
 		};
 
 		cy.get('body').then(($body) => {
-			if (
-				$body.find('.blockera-control-icon-picker-modal:visible').length
-			) {
-				cy.get('.blockera-control-icon-picker-modal')
-					.should('be.visible')
-					.within(clickIcon);
-				return;
-			}
-
-			cy.get(
-				'[data-wp-component="Popover"]:visible, .components-popover:visible'
-			)
-				.last()
+			cy.get('.blockera-control-icon-picker-modal')
 				.should('be.visible')
 				.within(clickIcon);
 		});
