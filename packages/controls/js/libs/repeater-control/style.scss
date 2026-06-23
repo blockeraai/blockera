@@ -229,11 +229,13 @@
 
 	.blockera-control-group.is-hovered
 		.blockera-control-action-buttons.type-inline:not(:empty)
-		+ .blockera-control-repeater-group-header
+		+ .blockera-control-repeater-item-header-holder
+		.blockera-control-repeater-group-header
 		.blockera-control-header-values,
 	.blockera-control-group-header:hover
 		.blockera-control-action-buttons.type-inline:not(:empty)
-		+ .blockera-control-repeater-group-header
+		+ .blockera-control-repeater-item-header-holder
+		.blockera-control-repeater-group-header
 		.blockera-control-header-values {
 		opacity: 0;
 		visibility: hidden;
