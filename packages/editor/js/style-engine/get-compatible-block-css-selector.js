@@ -700,17 +700,27 @@ export const getCompatibleBlockCssSelector = ({
 	);
 	const blockPartMatch = selector?.match(blockPartPattern);
 	const trimmedSelector = selector?.trim();
+	const blockPart = blockPartMatch?.[0];
+	const $shouldPreferBlockTypeRootSelector =
+		shouldPreferBlockTypeRootSelector(
+			trimmedSelector,
+			blockTypeRoot,
+			blockPart
+		);
 	let preferredRoot =
-		blockPartMatch && trimmedSelector && blockTypeRoot
+		blockPart &&
+		trimmedSelector &&
+		blockTypeRoot &&
+		$shouldPreferBlockTypeRootSelector
 			? preferBlockTypeRootSelector(
 					trimmedSelector,
 					blockTypeRoot,
-					blockPartMatch[0]
+					blockPart
 				)
 			: null;
 
 	// If the preferredRoot is null and the root contains selector, we should prefer the root.
-	if (!preferredRoot) {
+	if (!preferredRoot && $shouldPreferBlockTypeRootSelector) {
 		preferredRoot = selector
 			?.split(',')
 			.reduce((unique: Array<string>, s: string) => {
@@ -1074,6 +1084,88 @@ const appendVariationsAfterPart = (
 };
 
 /**
+ * Check whether a selector includes trailing pseudo-classes or pseudo-elements.
+ *
+ * @param {string} selector The css selector.
+ * @return {boolean} True when trailing pseudo tokens are present.
+ */
+const hasTrailingPseudoClasses = (selector: string): boolean =>
+	'' !== extractTrailingPseudos(selector);
+
+/**
+ * Check whether a selector includes block style or size variation classes.
+ *
+ * @param {string} selector The css selector.
+ * @return {boolean} True when variation classes are present.
+ */
+const hasBlockVariationClasses = (selector: string): boolean =>
+	0 < extractBlockVariationClasses(selector).length;
+
+/**
+ * Validate whether the block type root can be preferred for a prepared selector.
+ *
+ * Normalizes trailing pseudos and variation classes before checking containment.
+ * When the selector carries variation classes, every token must also exist on
+ * the block type root so mismatched style/size pairs do not prefer the wrong root.
+ *
+ * @param {string} trimmedSelector The prepared support selector.
+ * @param {string} blockTypeRoot   The block type root selector.
+ * @param {string} blockPart       The matched wp-block class part.
+ * @return {boolean} True when preferBlockTypeRootSelector should run.
+ */
+const shouldPreferBlockTypeRootSelector = (
+	trimmedSelector?: string,
+	blockTypeRoot?: string,
+	blockPart?: string
+): boolean => {
+	if (!trimmedSelector || !blockTypeRoot || !blockPart) {
+		return false;
+	}
+
+	if (!blockTypeRoot?.trim() || !blockPart?.trim()) {
+		return false;
+	}
+
+	if (!trimmedSelector.includes(blockPart)) {
+		return false;
+	}
+
+	const selectorBase = stripBlockVariationClasses(
+		stripTrailingPseudos(trimmedSelector)
+	);
+	const rootBase = stripBlockVariationClasses(
+		stripTrailingPseudos(blockTypeRoot)
+	);
+
+	const rootContainsPreparedSelector =
+		blockTypeRoot.endsWith(trimmedSelector) ||
+		('' !== selectorBase && rootBase.endsWith(selectorBase));
+
+	if (!rootContainsPreparedSelector) {
+		return false;
+	}
+
+	if (
+		hasTrailingPseudoClasses(trimmedSelector) &&
+		!selectorBase.includes(blockPart)
+	) {
+		return false;
+	}
+
+	if (hasBlockVariationClasses(trimmedSelector)) {
+		const selectorVariations =
+			extractBlockVariationClasses(trimmedSelector);
+		const rootVariations = extractBlockVariationClasses(blockTypeRoot);
+
+		return selectorVariations.every((variation) =>
+			rootVariations.includes(variation)
+		);
+	}
+
+	return true;
+};
+
+/**
  * Prefer block type root when it already contains the prepared support selector.
  *
  * Mirrors {@see \Blockera\Utils\Utils::preferContainedRootSelector()}.
@@ -1096,19 +1188,20 @@ const preferBlockTypeRootSelector = (
 		return null;
 	}
 
-	const selectorBase = stripTrailingPseudos(preparedSelector);
-	const rootBase = stripBlockVariationClasses(
-		stripTrailingPseudos(blockTypeRoot)
-	);
-	const rootContainsSelector =
-		blockTypeRoot.endsWith(preparedSelector) ||
-		('' !== selectorBase && rootBase.endsWith(selectorBase));
-
-	if (!rootContainsSelector) {
+	if (
+		!shouldPreferBlockTypeRootSelector(
+			preparedSelector,
+			blockTypeRoot,
+			blockPart
+		)
+	) {
 		return null;
 	}
 
 	const selectorPseudos = extractTrailingPseudos(preparedSelector);
+	const rootBase = stripBlockVariationClasses(
+		stripTrailingPseudos(blockTypeRoot)
+	);
 	const variations = extractBlockVariationClasses(blockTypeRoot);
 
 	let merged = '' !== rootBase ? rootBase : blockTypeRoot;
