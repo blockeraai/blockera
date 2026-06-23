@@ -38,7 +38,7 @@ function referencesEqual(a: unknown, b: unknown): boolean {
 	return true;
 }
 
-function variablePickerRowMatchesSelected(
+export function variablePickerRowMatchesSelected(
 	row: Record<string, unknown>,
 	variableType: string,
 	origin: string | string[],
@@ -79,6 +79,42 @@ function variablePickerRowMatchesSelected(
 	}
 
 	return referencesEqual(selectedRef, referenceFromPresetOrigin(origin));
+}
+
+/**
+ * Whether deleting a preset row should clear the control currently bound in the variable picker.
+ */
+export function shouldClearVariablePickerFeatureOnRowDelete(
+	row: Record<string, unknown>,
+	options: {
+		variableType: string;
+		origin: string | string[];
+		pickerValue: unknown;
+		themeJsonPlainPresetSlug?: string;
+	}
+): boolean {
+	const {
+		variableType,
+		origin,
+		pickerValue,
+		themeJsonPlainPresetSlug = '',
+	} = options;
+
+	const rowId = String(row.slug ?? row.id ?? '');
+	if (!rowId) {
+		return false;
+	}
+
+	if (themeJsonPlainPresetSlug !== '' && themeJsonPlainPresetSlug === rowId) {
+		return true;
+	}
+
+	return variablePickerRowMatchesSelected(
+		row,
+		variableType,
+		origin,
+		pickerValue
+	);
 }
 
 /**
