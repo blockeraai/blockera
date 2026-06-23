@@ -42,11 +42,7 @@ describe('Categories Block', () => {
 
 		cy.getByAriaLabel('Choose Icon…').click();
 
-		cy.get('[data-wp-component="Popover"]')
-			.last()
-			.within(() => {
-				cy.getByAriaLabel('add-card Icon').click();
-			});
+		cy.selectIconByName('add-card');
 
 		// switch by advanced icon settings button from extension
 		cy.getByAriaLabel('Advanced Icon Settings').click();
