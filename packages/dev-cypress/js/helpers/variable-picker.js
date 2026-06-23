@@ -221,3 +221,40 @@ export function assertCustomPresetEditPopoverColorValue(expectedHex) {
 		.last()
 		.should('be.visible');
 }
+
+/**
+ * Deletes a preset row from the open variable picker (custom/theme repeater section).
+ *
+ * @param {string} slug Preset slug (`data-variable-slug`).
+ */
+export function deleteVariableFromVariablePicker(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
+			.filter(':visible')
+			.first()
+			.as('variablePickerRow');
+
+		cy.get('@variablePickerRow')
+			.closest('[data-cy="repeater-item"]')
+			.realHover();
+
+		cy.get('@variablePickerRow')
+			.closest('[data-cy="repeater-item"]')
+			.within(() => {
+				cy.get('button[aria-label^="Delete"]')
+					.first()
+					.click({ force: true });
+			});
+	});
+
+	cy.get('.blockera-component-delete-modal', { timeout: 20000 })
+		.filter(':visible')
+		.last()
+		.should('be.visible')
+		.within(() => {
+			cy.get('input[type="checkbox"]').check({ force: true });
+			cy.getByDataTest('confirm-delete-modal-delete-button').click({
+				force: true,
+			});
+		});
+}
