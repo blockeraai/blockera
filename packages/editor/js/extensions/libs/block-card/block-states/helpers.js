@@ -14,7 +14,7 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from './types';
-import { isNormalState, isInnerBlock } from '../../../components/utils';
+import { isNormalState } from '../../../components/utils';
 import { getBaseBreakpoint } from '../../../../editor/header-ui';
 
 /**
@@ -80,49 +80,71 @@ export function onChangeBlockStates(
 				clientId: block?.clientId,
 			};
 
-	const { syncBlockStatesAfterDelete } =
-		dispatch('blockera/extensions') || {};
+	const {
+		setBlockClientStates,
+		setBlockClientInnerState,
+		setBlockClientMasterState,
+		changeExtensionCurrentBlockState: setCurrentState,
+		changeExtensionInnerBlockState: setInnerBlockState,
+	} = dispatch('blockera/extensions') || {};
 
-	let selectedState: TStates | null = null;
-
-	// $FlowFixMe
-	for (const stateType: TStates in newValue) {
-		const state = newValue[stateType];
-
-		if (!isMasterBlockStates && state?.isSelected) {
-			selectedState = stateType;
-		} else if (state?.isSelected) {
-			selectedState = stateType;
-
-			const { getState, getInnerState } = select('blockera/editor');
-			const {
-				settings: { supportsInnerBlocks },
-			} = getState(stateType) ||
-				getInnerState(stateType) || {
-					settings: { supportsInnerBlocks: true },
-				};
-
-			if (
-				false === supportsInnerBlocks &&
-				'function' === typeof setCurrentBlock
-			) {
-				setCurrentBlock('master');
-			}
-		} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
-			selectedState = 'normal';
-		}
-	}
+	let selectedState = null;
 
 	if (!skipExtensionSync) {
-		syncBlockStatesAfterDelete({
+		// $FlowFixMe
+		for (const stateType: TStates in newValue) {
+			const state = newValue[stateType];
+			const setInnerBlockDetails = () => {
+				selectedState = stateType;
+				setInnerBlockState(stateType);
+				setBlockClientInnerState({
+					currentState: stateType,
+					innerBlockType: currentBlock,
+					clientId,
+				});
+			};
+			const setBlockDetails = () => {
+				selectedState = stateType;
+				setCurrentState(stateType);
+				setBlockClientMasterState({
+					currentState: stateType,
+					name,
+					clientId,
+				});
+
+				const { getState, getInnerState } = select('blockera/editor');
+				const {
+					settings: { supportsInnerBlocks },
+				} = getState(stateType) ||
+					getInnerState(stateType) || {
+						settings: { supportsInnerBlocks: true },
+					};
+
+				if (
+					false === supportsInnerBlocks &&
+					'function' === typeof setCurrentBlock
+				) {
+					setCurrentBlock('master');
+				}
+			};
+
+			if (!isMasterBlockStates && state?.isSelected) {
+				setInnerBlockDetails();
+			} else if (state?.isSelected) {
+				setBlockDetails();
+			} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
+				if (!isMasterBlockStates) {
+					setInnerBlockDetails();
+				} else {
+					setBlockDetails();
+				}
+			}
+		}
+
+		setBlockClientStates({
 			clientId,
-			blockName: name,
-			innerBlockType: isInnerBlock(currentBlock)
-				? currentBlock
-				: undefined,
-			blockStates: newValue,
 			blockType: !isMasterBlockStates ? currentBlock : name,
-			currentState: selectedState || 'normal',
+			blockStates: newValue,
 		});
 	}
 

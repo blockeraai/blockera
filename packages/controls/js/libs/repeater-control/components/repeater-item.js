@@ -65,7 +65,7 @@ const RepeaterItem = ({
 	const rowSize: RepeaterItemSize = size ?? 'full';
 	// Start closed; open via effect when item is new (isOpen/creatingStep) so focus-outside
 	// suppression is armed before the popover mounts.
-	const [isOpen, setOpen] = useState(false);
+	const [isOpen, setOpen] = useState(item?.isOpen ?? false);
 	const [isVisible, setVisibility] = useState(
 		isBoolean(item?.isVisible) ? item.isVisible : true
 	);
