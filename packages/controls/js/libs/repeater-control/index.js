@@ -256,40 +256,64 @@ export default function RepeaterControl(
 			Object.keys(repeaterItems || {})?.length >= maxItems);
 
 	const addNewButtonOnClickRef = useRef<() => void>(() => {});
+	const registerAddNewOnClickRef = useRef<() => void>(() => {
+		addNewButtonOnClickRef.current();
+	});
+	const addNewActionRef = useRef({
+		onClick: registerAddNewOnClickRef.current,
+		label: '',
+		dataTest: undefined,
+		canAdd: true,
+		disabled: false,
+	});
+
+	addNewActionRef.current.onClick = registerAddNewOnClickRef.current;
+	addNewActionRef.current.label =
+		addNewButtonLabel || __('Add New', 'blockera');
+	addNewActionRef.current.dataTest = addNewButtonDataTest;
+	addNewActionRef.current.disabled = disabledAddNewItemForRegister;
+
+	const canRegisterCustomAddNewAction =
+		Boolean(onRegisterAddNewAction) &&
+		canAddNewItem &&
+		actionButtonAdd &&
+		!isSetValueAddon();
 
 	useEffect(() => {
 		if (!onRegisterAddNewAction) {
 			return undefined;
 		}
 
-		if (!canAddNewItem || !actionButtonAdd || isSetValueAddon()) {
+		if (!canRegisterCustomAddNewAction) {
 			onRegisterAddNewAction(null);
 			return () => {
 				onRegisterAddNewAction(null);
 			};
 		}
 
-		return onRegisterAddNewAction({
-			onClick: () => {
-				addNewButtonOnClickRef.current();
-			},
-			label: addNewButtonLabel || __('Add New', 'blockera'),
-			dataTest: addNewButtonDataTest,
-			canAdd: true,
-			disabled: disabledAddNewItemForRegister,
-		});
+		const cleanup = onRegisterAddNewAction(addNewActionRef.current);
+
+		return () => {
+			if (typeof cleanup === 'function') {
+				cleanup();
+			} else {
+				onRegisterAddNewAction(null);
+			}
+		};
+	}, [onRegisterAddNewAction, canRegisterCustomAddNewAction]);
+
+	useEffect(() => {
+		if (!canRegisterCustomAddNewAction) {
+			return;
+		}
+
+		onRegisterAddNewAction?.(addNewActionRef.current);
 	}, [
 		onRegisterAddNewAction,
-		canAddNewItem,
-		actionButtonAdd,
+		canRegisterCustomAddNewAction,
 		addNewButtonLabel,
 		addNewButtonDataTest,
 		disabledAddNewItemForRegister,
-		repeaterItems,
-		maxItems,
-		isSetValueAddon,
-		valueAddonControlProps?.isOpen,
-		suppressNativeSectionAddButton,
 	]);
 
 	if (isSetValueAddon()) {
