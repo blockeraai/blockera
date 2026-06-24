@@ -118,6 +118,10 @@ jobs:
             - name: Build wp-env app
               run: npm run build
 
+            - name: Ensure mu-plugins directory exists for Cypress tests
+              run: |
+                  npx wp-env run cli -- wp eval 'if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); }'
+
             - name: Debug Matrix Category
               run: |
                   echo "Running category: ${{ matrix.category }}"
