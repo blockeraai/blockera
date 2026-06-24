@@ -22,74 +22,14 @@ import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-p
  * Internal dependencies
  */
 import { Button } from '../button';
-import { isElementInsideModalOverlay } from '../modal/overlay-utils';
+import {
+	getPopoverRoot,
+	isOtherPopoverClosing,
+	markPopoverClosing,
+	normalizePopoverRoot,
+	shouldIgnorePopoverFocusOutside,
+} from './utils';
 import type { TPopoverProps } from './types';
-
-function shouldIgnorePopoverFocusOutside(
-	event: FocusEvent,
-	popoverRoot: ?HTMLElement
-): boolean {
-	const related = event?.relatedTarget;
-
-	if (related && popoverRoot && popoverRoot.contains(related)) {
-		return true;
-	}
-
-	if (related instanceof HTMLElement) {
-		if (isElementInsideModalOverlay(related)) {
-			return true;
-		}
-
-		if (related.closest('.components-dropdown__content')) {
-			return true;
-		}
-
-		// Color pickers, nested settings popovers, and similar UI portal outside.
-		const nestedPopover = related.closest('.components-popover');
-		if (nestedPopover && nestedPopover !== popoverRoot) {
-			return true;
-		}
-
-		if (
-			related.closest(
-				'.blockera-control-value-addon-pointers, [data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]'
-			)
-		) {
-			return true;
-		}
-	}
-
-	// WordPress focus-outside often fires with a null relatedTarget while the
-	// user is interacting with portaled surfaces. Only suppress close when focus
-	// is still inside this popover or a related overlay — not for genuine
-	// outside clicks (which also report null relatedTarget).
-	if (!related) {
-		const active = popoverRoot?.ownerDocument?.activeElement;
-
-		if (active instanceof Node && popoverRoot?.contains(active)) {
-			return true;
-		}
-
-		if (active instanceof HTMLElement) {
-			if (isElementInsideModalOverlay(active)) {
-				return true;
-			}
-
-			if (active.closest('.components-dropdown__content')) {
-				return true;
-			}
-
-			const nestedPopover = active.closest('.components-popover');
-			if (nestedPopover && nestedPopover !== popoverRoot) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	return false;
-}
 
 type TPopoverCoreProps = {
 	...TPopoverProps,
@@ -138,6 +78,14 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					return;
 				}
 
+				if (
+					isOtherPopoverClosing(
+						normalizePopoverRoot(popoverRef.current)
+					)
+				) {
+					return;
+				}
+
 				const excludeClasses = [
 					'btn-choose-image',
 					'btn-media-library',
@@ -171,6 +119,35 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				onClose();
 			}
 
+			function handlePopoverDismissFromOverlay() {
+				if (
+					isOtherPopoverClosing(
+						normalizePopoverRoot(popoverRef.current)
+					)
+				) {
+					return;
+				}
+
+				onClose();
+			}
+
+			function handleCloseButtonPointerDown(
+				event: MouseEvent & { currentTarget: HTMLElement }
+			) {
+				event.stopPropagation();
+				markPopoverClosing(
+					getPopoverRoot(event.currentTarget) ??
+						normalizePopoverRoot(popoverRef.current)
+				);
+			}
+
+			function handleCloseButtonClick(
+				event: MouseEvent & { currentTarget: HTMLElement }
+			) {
+				event.stopPropagation();
+				onClose();
+			}
+
 			return (
 				<WPPopover
 					className={componentClassNames(
@@ -179,7 +156,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 						title && 'with-header',
 						className
 					)}
-					onClose={onClose}
+					onClose={handlePopoverDismissFromOverlay}
 					onFocusOutside={
 						isFunction(onFocusOutside)
 							? onFocusOutside
@@ -233,7 +210,10 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 											size="extra-small"
 											align="center"
 											data-test="close-popover"
-											onClick={onClose}
+											onMouseDown={
+												handleCloseButtonPointerDown
+											}
+											onClick={handleCloseButtonClick}
 											tabIndex="-1"
 											label={__('Close', 'blockera')}
 											aria-label={__('Close', 'blockera')}
