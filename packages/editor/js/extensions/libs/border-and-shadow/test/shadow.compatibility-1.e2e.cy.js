@@ -169,6 +169,7 @@ describe('Shadow → WP Compatibility', () => {
 			);
 
 			cy.getBlock('core/image').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.getParentContainer('Box Shadows').as('container');
 			cy.addNewTransition();
 
