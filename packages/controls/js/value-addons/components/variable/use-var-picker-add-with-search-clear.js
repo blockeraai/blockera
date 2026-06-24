@@ -19,11 +19,25 @@ type UseVarPickerAddWithSearchClearOptions = {
 export function useVarPickerAddWithSearchClear(
 	isSearchActive: boolean,
 	clearSearch: () => void,
-	customAddAction: VarPickerCustomAddAction,
+	customAddAction:
+		| VarPickerCustomAddAction
+		| { current: VarPickerCustomAddAction },
 	options: UseVarPickerAddWithSearchClearOptions = {}
 ): () => void {
 	const { captureSearchSeed } = options;
 	const pendingAddRef = useRef(false);
+
+	const resolveCustomAddAction = (): VarPickerCustomAddAction => {
+		if (
+			customAddAction &&
+			typeof customAddAction === 'object' &&
+			'current' in customAddAction
+		) {
+			return customAddAction.current;
+		}
+
+		return customAddAction;
+	};
 
 	const triggerAddNew = useCallback(() => {
 		if (isSearchActive) {
@@ -33,8 +47,10 @@ export function useVarPickerAddWithSearchClear(
 			return;
 		}
 
-		if (customAddAction?.canAdd === true) {
-			customAddAction.onClick();
+		const resolvedCustomAddAction = resolveCustomAddAction();
+
+		if (resolvedCustomAddAction?.canAdd === true) {
+			resolvedCustomAddAction.onClick();
 		}
 	}, [isSearchActive, clearSearch, customAddAction, captureSearchSeed]);
 
@@ -43,7 +59,12 @@ export function useVarPickerAddWithSearchClear(
 			return;
 		}
 
-		if (!customAddAction || customAddAction.canAdd !== true) {
+		const resolvedCustomAddAction = resolveCustomAddAction();
+
+		if (
+			!resolvedCustomAddAction ||
+			resolvedCustomAddAction.canAdd !== true
+		) {
 			return;
 		}
 
@@ -51,7 +72,7 @@ export function useVarPickerAddWithSearchClear(
 
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
-				customAddAction.onClick();
+				resolvedCustomAddAction.onClick();
 			});
 		});
 	}, [isSearchActive, customAddAction]);

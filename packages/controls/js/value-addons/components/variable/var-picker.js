@@ -6,6 +6,7 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	Fragment,
+	memo,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -268,6 +269,101 @@ function VarPickerSearchEmptyStateContainer({
 	);
 }
 
+function VariablePickerPresetPanel({
+	presetType,
+	controlProps,
+	catalogItems,
+	catalogLabel,
+	PresetPanel,
+	pickerProps,
+}: {
+	presetType: string,
+	controlProps: ValueAddonControlProps,
+	catalogItems: Array<any>,
+	catalogLabel: string,
+	PresetPanel: React$ComponentType<any>,
+	pickerProps: ValueAddonControlProps['pickerProps'],
+}): MixedElement {
+	const controlPropsRef = useRef(controlProps);
+	controlPropsRef.current = controlProps;
+
+	const controlPropsSelectionKey = useMemo(
+		() => ({
+			value: controlProps?.value,
+			themeJsonPlainPresetSlug: controlProps?.themeJsonPlainPresetSlug,
+			variableTypes: controlProps?.variableTypes,
+		}),
+		[
+			controlProps?.value,
+			controlProps?.themeJsonPlainPresetSlug,
+			controlProps?.variableTypes,
+		]
+	);
+
+	const presetContextValue = useMemo(
+		() => ({
+			active: true,
+			variableType: presetType,
+			controlProps: controlPropsRef.current,
+			controlPropsRef,
+			catalogItems,
+			catalogLabel,
+			spacingPresetPreviewUsage:
+				presetType === 'spacing'
+					? pickerProps?.spacingPresetPreviewUsage
+					: undefined,
+			colorPresetPreviewUsage:
+				presetType === 'color'
+					? pickerProps?.colorPresetPreviewUsage
+					: undefined,
+			filterPresetPreviewUsage:
+				presetType === 'filter'
+					? pickerProps?.filterPresetPreviewUsage
+					: undefined,
+			borderPresetPreviewUsage:
+				presetType === 'border'
+					? pickerProps?.borderPresetPreviewUsage
+					: undefined,
+			borderRadiusPresetPreviewUsage:
+				presetType === 'border-radius'
+					? pickerProps?.borderRadiusPresetPreviewUsage
+					: undefined,
+			gradientPresetPreviewUsage:
+				presetType === 'linear-gradient' ||
+				presetType === 'radial-gradient'
+					? pickerProps?.gradientPresetPreviewUsage
+					: undefined,
+		}),
+		[
+			presetType,
+			catalogItems,
+			catalogLabel,
+			controlPropsSelectionKey,
+			pickerProps?.spacingPresetPreviewUsage,
+			pickerProps?.colorPresetPreviewUsage,
+			pickerProps?.filterPresetPreviewUsage,
+			pickerProps?.borderPresetPreviewUsage,
+			pickerProps?.borderRadiusPresetPreviewUsage,
+			pickerProps?.gradientPresetPreviewUsage,
+		]
+	);
+
+	return (
+		<VarPickerPresetContext.Provider value={presetContextValue}>
+			<PresetPanel />
+		</VarPickerPresetContext.Provider>
+	);
+}
+
+const MemoizedVariablePickerPresetPanel = memo<{
+	presetType: string,
+	controlProps: ValueAddonControlProps,
+	catalogItems: Array<any>,
+	catalogLabel: string,
+	PresetPanel: React$ComponentType<any>,
+	pickerProps: ValueAddonControlProps['pickerProps'],
+}>(VariablePickerPresetPanel);
+
 export default function ({
 	controlProps,
 	onClose,
@@ -320,11 +416,11 @@ export default function ({
 		pendingAddSearchSeedRef.current = null;
 		return seed ?? null;
 	}, []);
-	const [registeredCustomAddAction, setRegisteredCustomAddAction] =
-		useState<?VarPickerCustomAddAction>(null);
+	const registeredCustomAddActionRef =
+		useRef<?VarPickerCustomAddAction>(null);
 	const handleCustomAddActionChange = useCallback(
 		(action: VarPickerCustomAddAction) => {
-			setRegisteredCustomAddAction(action);
+			registeredCustomAddActionRef.current = action;
 		},
 		[]
 	);
@@ -334,15 +430,17 @@ export default function ({
 	const triggerAddNew = useVarPickerAddWithSearchClear(
 		isSearchActive,
 		clearSearch,
-		registeredCustomAddAction,
+		registeredCustomAddActionRef,
 		{ captureSearchSeed: captureAddSearchSeed }
 	);
 	const searchContextValue = useMemo(
 		() => ({
 			deferSectionSearchEmptyState: isSearchActive,
 			consumeAddSearchSeed,
+			searchQuery,
+			normalizedSearchQuery: normalizedSearch,
 		}),
-		[isSearchActive, consumeAddSearchSeed]
+		[isSearchActive, consumeAddSearchSeed, searchQuery, normalizedSearch]
 	);
 	const popoverClassName = useMemo(() => {
 		const typeClassNames = [];
@@ -600,49 +698,14 @@ export default function ({
 						}
 					}
 				>
-					<VarPickerPresetContext.Provider
-						value={{
-							active: true,
-							variableType: presetType,
-							controlProps,
-							catalogItems,
-							catalogLabel: data.label,
-							searchQuery,
-							spacingPresetPreviewUsage:
-								presetType === 'spacing'
-									? controlProps.pickerProps
-											?.spacingPresetPreviewUsage
-									: undefined,
-							colorPresetPreviewUsage:
-								presetType === 'color'
-									? controlProps.pickerProps
-											?.colorPresetPreviewUsage
-									: undefined,
-							filterPresetPreviewUsage:
-								presetType === 'filter'
-									? controlProps.pickerProps
-											?.filterPresetPreviewUsage
-									: undefined,
-							borderPresetPreviewUsage:
-								presetType === 'border'
-									? controlProps.pickerProps
-											?.borderPresetPreviewUsage
-									: undefined,
-							borderRadiusPresetPreviewUsage:
-								presetType === 'border-radius'
-									? controlProps.pickerProps
-											?.borderRadiusPresetPreviewUsage
-									: undefined,
-							gradientPresetPreviewUsage:
-								presetType === 'linear-gradient' ||
-								presetType === 'radial-gradient'
-									? controlProps.pickerProps
-											?.gradientPresetPreviewUsage
-									: undefined,
-						}}
-					>
-						<PresetPanel />
-					</VarPickerPresetContext.Provider>
+					<MemoizedVariablePickerPresetPanel
+						presetType={presetType}
+						controlProps={controlProps}
+						catalogItems={catalogItems}
+						catalogLabel={data.label}
+						PresetPanel={PresetPanel}
+						pickerProps={controlProps.pickerProps}
+					/>
 				</div>
 			</PickerCategory>
 		);

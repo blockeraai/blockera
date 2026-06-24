@@ -12,6 +12,7 @@ import {
 	PresetVariablesSummaryRow,
 	useVarPickerPresetContext,
 	useVarPickerSummarySlot,
+	useVariablePickerSearchQuery,
 } from '@blockera/controls';
 
 /**
@@ -41,7 +42,8 @@ export function PresetVariablesScreenToolbar<
 }) {
 	const pickerCtx = useVarPickerPresetContext();
 	const summarySlot = useVarPickerSummarySlot();
-	const searchQuery = searchQueryProp ?? pickerCtx.searchQuery ?? '';
+	const pickerSearchQuery = useVariablePickerSearchQuery();
+	const searchQuery = searchQueryProp ?? pickerSearchQuery;
 
 	const variableCount = useMemo(
 		() => countPresetVariables(originSets, searchQuery),

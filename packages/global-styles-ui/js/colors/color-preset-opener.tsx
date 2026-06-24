@@ -21,6 +21,7 @@ import {
 	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
+	useVariablePickerSearchQuery,
 } from '@blockera/controls';
 import { inferPresetCssVarInfixForPaintVariablePickerType } from '@blockera/data';
 
@@ -129,6 +130,7 @@ export function ColorPresetOpener({
 }: ColorPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const pickerCtx = useVarPickerPresetContext();
+	const variablePickerSearchQuery = useVariablePickerSearchQuery();
 	const { viewMode } = usePresetVariablesViewMode();
 	const fromProvider = useColorPresetPreviewUsageFromProvider();
 	const previewUsage = resolveColorPresetPreviewUsage(
@@ -263,8 +265,9 @@ export function ColorPresetOpener({
 			);
 			const isListViewWithoutSearch =
 				viewMode === 'list' &&
-				normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) ===
-					'';
+				normalizeVariablePickerSearchQuery(
+					variablePickerSearchQuery
+				) === '';
 			if (shadeParsed && isListViewWithoutSearch) {
 				return shadeParsed.shadeStep;
 			}
@@ -272,7 +275,7 @@ export function ColorPresetOpener({
 				shouldUsePresetTaxonomyFullPickerLabel(
 					isColorVariablePicker,
 					pickerCtx.variableType,
-					pickerCtx.searchQuery,
+					variablePickerSearchQuery,
 					viewMode
 				);
 			if (useFullPickerLabelForShade) {
@@ -289,7 +292,7 @@ export function ColorPresetOpener({
 		const useFullPickerLabel = shouldUsePresetTaxonomyFullPickerLabel(
 			isColorVariablePicker,
 			pickerCtx.variableType,
-			pickerCtx.searchQuery,
+			variablePickerSearchQuery,
 			viewMode
 		);
 
@@ -316,7 +319,7 @@ export function ColorPresetOpener({
 		taxonomyNameSource,
 		pickerCtx.active,
 		pickerCtx.variableType,
-		pickerCtx.searchQuery,
+		variablePickerSearchQuery,
 		viewMode,
 	]);
 

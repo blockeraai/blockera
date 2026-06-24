@@ -18,6 +18,7 @@ export {
 export {
 	VarPickerCustomAddProvider,
 	useVarPickerCustomAddContext,
+	useVarPickerCustomAddRegister,
 } from './var-picker-custom-add-context';
 export { resolveVariablePickerPresetGroupLabel } from './var-picker-preset-origin-label';
 export {
@@ -30,6 +31,7 @@ export {
 export {
 	VarPickerSearchContext,
 	useVarPickerSearchContext,
+	useVariablePickerSearchQuery,
 } from './var-picker-search-context';
 export { VarPickerSearchEmptyState } from './var-picker-search-empty-state';
 export { useVarPickerSingleTypeCustomAddAction } from './use-var-picker-single-type-custom-add-action';

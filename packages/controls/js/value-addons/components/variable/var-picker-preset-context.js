@@ -18,6 +18,13 @@ export type VarPickerPresetContextValue = {
 	active: boolean,
 	variableType: string | null,
 	controlProps: ValueAddonControlProps | null,
+	/**
+	 * Always-current control props ref for variable-picker preset panels.
+	 * Prefer reading `.current` in callbacks to avoid preset context churn.
+	 */
+	controlPropsRef?: {
+		current: ValueAddonControlProps | null,
+	},
 	catalogItems?: Array<VariableItem>,
 	catalogLabel?: string,
 	/**

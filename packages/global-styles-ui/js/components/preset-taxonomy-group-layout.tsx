@@ -11,6 +11,7 @@ import {
 	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
+	useVariablePickerSearchQuery,
 } from '@blockera/controls';
 
 /**
@@ -67,14 +68,16 @@ function PresetTaxonomyGroupLayoutInner<TItem extends Record<string, unknown>>({
 	const { isResetDialogOpen, toggleResetDialog } =
 		usePresetResetDialogState();
 	const pickerCtx = useVarPickerPresetContext();
+	const variablePickerSearchQuery = useVariablePickerSearchQuery();
 	const { viewMode } = usePresetVariablesViewMode();
 
 	const flattenForPickerSearch = useMemo(
 		() =>
 			pickerCtx.active === true &&
 			typeof pickerCtx.variableType === 'string' &&
-			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
-		[pickerCtx.active, pickerCtx.searchQuery, pickerCtx.variableType]
+			normalizeVariablePickerSearchQuery(variablePickerSearchQuery) !==
+				'',
+		[pickerCtx.active, variablePickerSearchQuery, pickerCtx.variableType]
 	);
 
 	const taxonomy = usePresetTaxonomyGroupUi<TItem>({

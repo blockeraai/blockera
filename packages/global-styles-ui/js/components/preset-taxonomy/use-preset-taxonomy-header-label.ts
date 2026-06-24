@@ -10,6 +10,7 @@ import {
 	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
+	useVariablePickerSearchQuery,
 } from '@blockera/controls';
 
 /**
@@ -49,6 +50,7 @@ export function usePresetTaxonomyHeaderLabel(
 	const storage = usePresetVariationsStorageOptional();
 	const taxonomyNameSource = storage?.taxonomyNameSource;
 	const pickerCtx = useVarPickerPresetContext();
+	const variablePickerSearchQuery = useVariablePickerSearchQuery();
 	const { viewMode } = usePresetVariablesViewMode();
 
 	return useMemo(() => {
@@ -56,7 +58,7 @@ export function usePresetTaxonomyHeaderLabel(
 			shouldUsePresetTaxonomyFullPickerLabel(
 				pickerCtx.active === true,
 				pickerCtx.variableType,
-				pickerCtx.searchQuery,
+				variablePickerSearchQuery,
 				viewMode
 			)
 		) {
@@ -79,7 +81,7 @@ export function usePresetTaxonomyHeaderLabel(
 		taxonomyNameSource,
 		pickerCtx.active,
 		pickerCtx.variableType,
-		pickerCtx.searchQuery,
+		variablePickerSearchQuery,
 		viewMode,
 	]);
 }

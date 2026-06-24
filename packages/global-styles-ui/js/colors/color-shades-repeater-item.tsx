@@ -15,6 +15,7 @@ import {
 	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
+	useVariablePickerSearchQuery,
 } from '@blockera/controls';
 import {
 	componentClassNames,
@@ -226,12 +227,13 @@ function ColorShadesRepeaterItemComponent({
 	inheritRepeaterPickerSelection = true,
 }: ColorShadesRepeaterItemComponentProps) {
 	const pickerCtx = useVarPickerPresetContext();
+	const variablePickerSearchQuery = useVariablePickerSearchQuery();
 	const { viewMode } = usePresetVariablesViewMode();
 	const useListViewShadeStepLabel =
 		pickerCtx.active === true &&
 		pickerCtx.variableType === 'color' &&
 		viewMode === 'list' &&
-		normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) === '';
+		normalizeVariablePickerSearchQuery(variablePickerSearchQuery) === '';
 
 	const { repeaterItems } = useContext(RepeaterContext) as {
 		repeaterItems?: Record<

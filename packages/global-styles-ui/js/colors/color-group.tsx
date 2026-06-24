@@ -13,6 +13,7 @@ import {
 	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
+	useVariablePickerSearchQuery,
 } from '@blockera/controls';
 
 /**
@@ -73,6 +74,7 @@ function ColorGroupInner({
 	const { isResetDialogOpen, toggleResetDialog } =
 		usePresetResetDialogState();
 	const pickerCtx = useVarPickerPresetContext();
+	const variablePickerSearchQuery = useVariablePickerSearchQuery();
 	const { viewMode } = usePresetVariablesViewMode();
 
 	const controlName = `color-presets-${origin}`;
@@ -81,8 +83,9 @@ function ColorGroupInner({
 		() =>
 			pickerCtx.active === true &&
 			pickerCtx.variableType === 'color' &&
-			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
-		[pickerCtx.active, pickerCtx.searchQuery, pickerCtx.variableType]
+			normalizeVariablePickerSearchQuery(variablePickerSearchQuery) !==
+				'',
+		[pickerCtx.active, variablePickerSearchQuery, pickerCtx.variableType]
 	);
 
 	const isColorPickerListView = useMemo(
