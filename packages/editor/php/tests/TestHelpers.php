@@ -568,6 +568,31 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 	}
 
+	public function testTableBackgroundClipSelectorAppendsUniqueClassOnWrapperCompound(): void {
+
+		$selectors = blockera_get_block_type_property( 'core/table', 'selectors' );
+		$unique    = '.blockera-block.blockera-block--abc';
+
+		$result = blockera_get_compatible_block_css_selector(
+			$selectors,
+			'blockeraBackgroundClip',
+			[
+				'block-type'               => 'master',
+				'block-name'               => 'core/table',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+				'breakpoint'               => 'desktop',
+				'root'                     => $selectors['root'] ?? null,
+				'blockera-unique-selector' => $unique,
+			]
+		);
+
+		$this->assertSame(
+			".blockera-block.blockera-block--abc.wp-block-table > table",
+			$result
+		);
+	}
+
 	public function testListItemInnerBlockLinkBackgroundColorSelectorScopesToUniqueClass(): void {
 
 		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );

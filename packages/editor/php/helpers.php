@@ -877,6 +877,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 				'block-type' => $args['block-type'],
 				'is-global-style' => $args['is-global-style'] ?? false,
 				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
+				'full-block-name' => $args['block-name'],
 			]
 		);
 	}
@@ -1189,6 +1190,69 @@ if ( ! function_exists( 'blockera_root_contains_block_part' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_compound_root_classes_on_wrapper' ) ) {
+
+	/**
+	 * Whether Blockera unique classes live on the wrapper (first compound) of a `>` root.
+	 *
+	 * Blocks like core/table use `.wp-block-table > table` for visual styles but render
+	 * `className` on the figure (`.wp-block-table`), with spacing selectors targeting that wrapper.
+	 * core/list-item is the opposite: classes belong on the last compound (`li`).
+	 *
+	 * @param array $args The append arguments (expects `root` block-type root and `block-name`).
+	 *
+	 * @return bool
+	 */
+	function blockera_compound_root_classes_on_wrapper( array $args ): bool {
+
+		$block_type_root = trim( (string) ( $args['root'] ?? '' ) );
+
+		if ( ! preg_match( '/\s>\s/', $block_type_root ) ) {
+			return false;
+		}
+
+		$block_name = (string) ( $args['full-block-name'] ?? $args['block-name'] ?? '' );
+
+		if ( '' === $block_name ) {
+			return false;
+		}
+
+		if ( ! str_contains( $block_name, '/' ) ) {
+			$block_name = 'core/' . $block_name;
+		}
+
+		$wrapper_parts = preg_split( '/\s>\s/', $block_type_root, 2 );
+		$wrapper       = trim( (string) ( $wrapper_parts[0] ?? '' ) );
+
+		if ( '' === $wrapper ) {
+			return false;
+		}
+
+		$selectors          = blockera_get_block_type_property( $block_name, 'selectors' ) ?? [];
+		$spacing_candidates = [];
+
+		if ( isset( $selectors['spacing'] ) ) {
+			$spacing_candidates[] = is_array( $selectors['spacing'] )
+				? ( $selectors['spacing']['root'] ?? '' )
+				: $selectors['spacing'];
+		}
+
+		if ( isset( $selectors['blockeraBoxSpacing'] ) ) {
+			$spacing_candidates[] = is_array( $selectors['blockeraBoxSpacing'] )
+				? ( $selectors['blockeraBoxSpacing']['root'] ?? '' )
+				: $selectors['blockeraBoxSpacing'];
+		}
+
+		foreach ( $spacing_candidates as $candidate ) {
+			if ( is_string( $candidate ) && trim( $candidate ) === $wrapper ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
 if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 	/**
@@ -1284,9 +1348,10 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			}
 
 			/*
-			 * Compound selectors like `.wp-block-list > li` (core/list-item): Blockera classes live on
-			 * the child `li`, not the parent list. Append the unique root to the last compound instead
-			 * of prefixing `.wp-block-list` via modifySelectorPos() — mirrors editor JS appendRootBlockCssSelector().
+			 * Compound selectors with a direct child combinator (`>`).
+			 *
+			 * - core/list-item (`.wp-block-list > li`): classes live on the child `li`.
+			 * - core/table (`.wp-block-table > table`): classes live on the wrapper figure.
 			 */
 			if ( preg_match( '/\s>\s/', $prefer_source ) ) {
 				/*
@@ -1300,6 +1365,22 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 					&& preg_match( '/\s>\s/', (string) $args['root'] )
 				) {
 					$compound_source = (string) $args['root'];
+				}
+
+				if ( blockera_compound_root_classes_on_wrapper( $args ) ) {
+					$merged_selector = $wrap_with_global_style(
+						\Blockera\Utils\Utils::modifySelectorPos(
+							$prefer_source,
+							$resolved_block_part,
+							[
+								'prefix'     => $root,
+								'suffix'     => '',
+								'variations' => $variations,
+							]
+						)
+					);
+
+					return $is_pseudo_only_selector ? $merged_selector . $selector : $merged_selector;
 				}
 
 				$parts         = preg_split( '/(?:::|:)/', $compound_source, 2 );
