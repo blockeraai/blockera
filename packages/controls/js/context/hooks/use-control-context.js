@@ -191,7 +191,9 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			const {
 				attributes: { blockeraBlockStates },
 			} = getSelectedBlock();
-			const states = Object.keys(blockeraBlockStates);
+			const states = Object.keys(
+				blockeraBlockStates?.value || blockeraBlockStates
+			);
 			const breakpoints = Object.keys(getBreakpoints());
 			//get `blockera/controls` store or details of that
 			const { getControl } = isRepeaterControl()
@@ -223,6 +225,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					modify(name);
 				});
 			});
+
+			// When no states are present or normal state is not present, modify the control value to the default value.
+			if (!states.length || !states.includes('normal')) {
+				modify(controlInfo.name);
+			}
 
 			resetRef();
 
