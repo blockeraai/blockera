@@ -1239,7 +1239,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			 * 2. When variations exist, re-append them on the full preferred root (not only the resolved
 			 *    wp-block class segment). Example: `.wp-block-list > li.is-style-x`, not `.wp-block-list.is-style-x > li` when the $is_pseudo_only_selector is true.
 			 * 3. If the blockera root already contains the resolved wp-block part, the varied preferred root
-			 *    is final. Otherwise merge the blockera prefix via modifySelectorPos() (list-item case).
+			 *    is final. Otherwise compound child selectors append the root on the last compound (list-item);
+			 *    simple selectors merge the blockera prefix via modifySelectorPos().
 			 * 4. Without variations, preferContainedRootSelector() handles roots that already contain the target.
 			 */
 			if ( $is_pseudo_only_selector && ! empty( $variations ) ) {
@@ -1266,6 +1267,36 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 			if ( null !== $preferred_root ) {
 				return $is_pseudo_only_selector ? $preferred_root . $selector : $preferred_root;
+			}
+
+			/*
+			 * Compound selectors like `.wp-block-list > li` (core/list-item): Blockera classes live on
+			 * the child `li`, not the parent list. Append the unique root to the last compound instead
+			 * of prefixing `.wp-block-list` via modifySelectorPos() — mirrors editor JS appendRootBlockCssSelector().
+			 */
+			if ( preg_match( '/\s>\s/', $prefer_source ) ) {
+				/*
+				 * Pseudo-only selectors (e.g. `::marker`): prefer_source may already include variation
+				 * classes while $root carries them too — use the block-type compound root as base.
+				 */
+				$compound_source = $prefer_source;
+				if (
+					$is_pseudo_only_selector
+					&& isset( $args['root'] )
+					&& preg_match( '/\s>\s/', (string) $args['root'] )
+				) {
+					$compound_source = (string) $args['root'];
+				}
+
+				$parts         = preg_split( '/(?:::|:)/', $compound_source, 2 );
+				$base          = $parts[0];
+				$inline_pseudo = isset( $parts[1] )
+					? ( str_contains( $compound_source, '::' ) ? '::' : ':' ) . $parts[1]
+					: '';
+
+				$merged_selector = $wrap_with_global_style( "{$base}{$root}" ) . $inline_pseudo;
+
+				return $is_pseudo_only_selector ? $merged_selector . $selector : $merged_selector;
 			}
 
 			$merged_selector = $wrap_with_global_style(

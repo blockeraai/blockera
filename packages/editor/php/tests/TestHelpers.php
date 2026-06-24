@@ -428,7 +428,25 @@ class TestHelpers extends \WP_UnitTestCase {
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
 		$this->assertEquals(
-			'.blockera-block.blockera-block--abc.wp-block-list > li::marker',
+			'.wp-block-list > li.blockera-block.blockera-block--abc::marker',
+			$result
+		);
+	}
+
+	public function testListItemMasterBlockCompoundSelectorAppendsRootOnLastCompound() {
+
+		$selector = '.wp-block-list > li';
+		$root     = '.blockera-block.blockera-block--abc';
+		$args     = [
+			'block-name' => 'list-item',
+			'block-type' => 'master',
+			'root'       => '.wp-block-list > li',
+		];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals(
+			'.wp-block-list > li.blockera-block.blockera-block--abc',
 			$result
 		);
 	}
@@ -446,7 +464,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
 		$this->assertEquals(
-			'.blockera-block.blockera-block--abc.is-style-x.wp-block-list > li.is-style-x::marker',
+			'.wp-block-list > li.blockera-block.blockera-block--abc.is-style-x::marker',
 			$result
 		);
 	}
@@ -501,6 +519,31 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertEquals(
 			'.blockera-block.wp-block-list.is-style-outline li:not([class*="blockera-has-icon-"])::before',
+			$result
+		);
+	}
+
+	public function testListItemBackgroundClipSelectorAppendsUniqueClassOnLastCompound(): void {
+
+		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );
+		$unique    = '.blockera-block.blockera-block--abc';
+
+		$result = blockera_get_compatible_block_css_selector(
+			$selectors,
+			'blockeraBackgroundClip',
+			[
+				'block-type'               => 'master',
+				'block-name'               => 'core/list-item',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+				'breakpoint'               => 'desktop',
+				'root'                     => $selectors['root'] ?? null,
+				'blockera-unique-selector' => $unique,
+			]
+		);
+
+		$this->assertSame(
+			".wp-block-list > li{$unique}",
 			$result
 		);
 	}
