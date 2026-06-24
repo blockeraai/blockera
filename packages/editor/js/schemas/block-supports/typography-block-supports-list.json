@@ -50,7 +50,7 @@
 			"id": "blockeraDirection",
 			"definition": "Direction",
 			"css-property": "direction",
-			"fallback": ["direction", "typography"],
+			"fallback": ["direction", "typography", "root"],
 			"description": "Support for \"blockeraDirection\" value, this is mirror for WordPress block core \"direction\" support."
 		},
 		"blockeraTextAlign": {
