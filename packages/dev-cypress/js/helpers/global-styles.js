@@ -148,6 +148,41 @@ export function getThemeBaseGlobalStylesSetting(dotPath) {
 }
 
 /**
+ * Retries until theme base global styles include core default gradients and a slug.
+ * Use before opening the variable picker when tests depend on MU `defaultGradients`.
+ *
+ * @param {string} slug Gradient preset slug (e.g. `vivid-cyan-blue-to-vivid-purple`).
+ * @return {Cypress.Chainable}
+ */
+export function waitForThemeBaseDefaultGradientPreset(slug) {
+	return cy.window({ timeout: 30000 }).should((win) => {
+		const select = win.wp?.data?.select?.('core');
+		expect(
+			select?.__experimentalGetCurrentThemeBaseGlobalStyles,
+			'__experimentalGetCurrentThemeBaseGlobalStyles'
+		).to.be.a('function');
+
+		const base = select.__experimentalGetCurrentThemeBaseGlobalStyles();
+		expect(base, 'theme base global styles').to.exist;
+
+		const settings = base.settings ?? base;
+		expect(
+			settings?.color?.defaultGradients,
+			'color.defaultGradients'
+		).to.equal(true);
+
+		const defaults = settings?.color?.gradients?.default;
+		expect(
+			Array.isArray(defaults) && defaults.length > 0,
+			'color.gradients.default'
+		).to.equal(true);
+
+		const row = defaults.find((g) => String(g?.slug ?? '') === slug);
+		expect(row, `default gradient preset "${slug}"`).to.exist;
+	});
+}
+
+/**
  * Reads `settings` from the edited global styles entity (user / Site Editor layer).
  *
  * @param {string} dotPath

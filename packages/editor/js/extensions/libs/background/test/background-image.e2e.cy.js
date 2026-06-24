@@ -7,6 +7,7 @@ import {
 	createPost,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	waitForThemeBaseDefaultGradientPreset,
 } from '@blockera/dev-cypress/js/helpers';
 
 const DEFAULT_GRADIENTS_MU =
@@ -15,6 +16,15 @@ const DEFAULT_GRADIENTS_MU_NAME =
 	'blockera-test-background-default-gradients-enabled.php';
 
 describe('Background Image → Functionality', () => {
+	// Activate before any `createPost()` so REST base global styles include core gradients.
+	before(() => {
+		activateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
+	});
+
+	after(() => {
+		deactivateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
+	});
+
 	beforeEach(() => {
 		createPost();
 
@@ -250,13 +260,6 @@ describe('Background Image → Functionality', () => {
 	describe('Linear Gradient', () => {
 		// linear-gradient(90deg,#009efa 10%,#e52e00 90%)
 		beforeEach(() => {
-			// Parent `createPost()` runs first; reload editor after MU is active so REST
-			// global-styles base config includes core gradient presets.
-			activateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
-			createPost();
-
-			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-
 			// add bg repeater, open it
 			cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
@@ -267,10 +270,6 @@ describe('Background Image → Functionality', () => {
 			});
 
 			cy.getByAriaLabel('Linear Gradient').click();
-		});
-
-		afterEach(() => {
-			deactivateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
 		});
 
 		it('simple value linear gradient', () => {
@@ -354,16 +353,17 @@ describe('Background Image → Functionality', () => {
 		});
 
 		it('variable linear gradient', () => {
-			cy.get('.blockera-component-popover').within(() => {
-				cy.getParentContainer('Linear Gradient')
-					.last()
-					.within(() => {
-						cy.openValueAddon();
-					});
+			waitForThemeBaseDefaultGradientPreset(
+				'vivid-cyan-blue-to-vivid-purple'
+			);
 
-				// select variable
-				cy.selectValueAddonItem('vivid-cyan-blue-to-vivid-purple');
-			});
+			cy.getParentContainer('Linear Gradient')
+				.last()
+				.within(() => {
+					cy.openValueAddon();
+				});
+
+			cy.selectValueAddonItem('vivid-cyan-blue-to-vivid-purple');
 
 			// assert data
 			getWPDataObject().then((data) => {
