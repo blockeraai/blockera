@@ -226,8 +226,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				});
 			});
 
-			// When no states are present, modify the control value to the default value.
-			if (!states.length) {
+			// When no states are present or normal state is not present, modify the control value to the default value.
+			if (!states.length || !states.includes('normal')) {
 				modify(controlInfo.name);
 			}
 
