@@ -96,6 +96,18 @@ const getGroupGlobalStyles = (data) =>
 const getInnerAttrs = (groupRecord, innerBlockKey) =>
 	groupRecord?.blockeraInnerBlocks?.value?.[innerBlockKey]?.attributes;
 
+/**
+ * Assert on core/group global styles with Cypress retry (theme merge + bootstrap sync).
+ *
+ * @param {(group: object) => void} assertFn
+ */
+const withGroupGlobalStyles = (assertFn) => {
+	cy.window({ timeout: 20000 }).should((win) => {
+		const group = getGroupGlobalStyles(win.wp.data);
+		assertFn(group);
+	});
+};
+
 const openGroupGlobalStyles = () => {
 	cy.openGlobalStylesPanel();
 	closeWelcomeGuide();
@@ -129,8 +141,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe('color (special compat)', () => {
 		it('imports link colors from theme.json into blockeraInnerBlocks', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const link = group?.elements?.link;
 
 				expect('#ffbaba').to.equal(link?.color?.text);
@@ -154,8 +165,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports link preset colors from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const link = group?.elements?.link;
 
 				// Global styles store resolves preset refs to CSS variables.
@@ -173,9 +183,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports button text color from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
-
+			withGroupGlobalStyles((group) => {
 				expect('#ff6868').to.equal(
 					group?.elements?.button?.color?.text
 				);
@@ -186,9 +194,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports button background color from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
-
+			withGroupGlobalStyles((group) => {
 				expect('#ffcaca').to.equal(
 					group?.elements?.button?.color?.background
 				);
@@ -230,8 +236,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe('typography (registry)', () => {
 		it('imports button typography core properties from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const typography = group?.elements?.button?.typography;
 				const inner = getInnerAttrs(group, 'core/button');
 
@@ -245,8 +250,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports button typography extra properties from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const typography = group?.elements?.button?.typography;
 				const inner = getInnerAttrs(group, 'core/button');
 
@@ -260,8 +264,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports link text decoration and hover from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const link = group?.elements?.link;
 
 				expect('underline').to.equal(link?.typography?.textDecoration);
@@ -278,8 +281,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe('border (registry)', () => {
 		it('imports partial button border facets from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const border = group?.elements?.button?.border;
 				const innerBorder = getInnerAttrs(
 					group,
@@ -294,9 +296,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports button border radius from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
-
+			withGroupGlobalStyles((group) => {
 				expect('12px').to.equal(
 					group?.elements?.button?.border?.radius
 				);
@@ -309,8 +309,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe('spacing (registry)', () => {
 		it('imports button spacing from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const spacing = group?.elements?.button?.spacing;
 				const inner = getInnerAttrs(group, 'core/button');
 
@@ -324,9 +323,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe('shadow (registry)', () => {
 		it('imports button shadow from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
-
+			withGroupGlobalStyles((group) => {
 				expect('var(--wp--preset--shadow--natural)').to.equal(
 					group?.elements?.button?.shadow
 				);
@@ -339,8 +336,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe('dimensions (registry)', () => {
 		it('imports button dimensions from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const dimensions = group?.elements?.button?.dimensions;
 				const inner = getInnerAttrs(group, 'core/button');
 
@@ -356,9 +352,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 	describe(':hover pseudo (registry + blockeraBlockStates)', () => {
 		it('imports button hover typography from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
-
+			withGroupGlobalStyles((group) => {
 				expect('20px').to.equal(
 					group?.elements?.button?.[':hover']?.typography?.fontSize
 				);
@@ -371,8 +365,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 		});
 
 		it('imports button hover border from theme.json', () => {
-			getWPDataObject().then((data) => {
-				const group = getGroupGlobalStyles(data);
+			withGroupGlobalStyles((group) => {
 				const hoverBorder = getInnerAttrs(group, 'core/button')
 					?.blockeraBlockStates?.hover?.breakpoints?.desktop
 					?.attributes?.blockeraBorder;

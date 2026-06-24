@@ -1,3 +1,8 @@
+/**
+ * Blockera dependencies
+ */
+import { mergeObject } from '@blockera/utils';
+
 function getIframeDocument(containerClass) {
 	return cy
 		.get(containerClass + ' iframe')
@@ -94,21 +99,40 @@ export function getSelectedBlockStyle(data, name, variation = 'default') {
 /**
  * Get the WordPress globalStyles entity record.
  *
+ * For `styles`, the default `merged` mode layers Blockera's merged theme + user
+ * styles (same as Playwright) so mu-plugin theme.json fixtures are visible in tests.
+ *
  * @param {*} data the @wordpress/data package object.
  * @param {*} prop the property of record. like style, settings, etc.
  * @param {*} innerField the inner property name in record[prop] object.
+ * @param {'merged'|'original'} [type='merged'] Use `original` for the raw edited entity only.
  *
  * @return anythings.
  */
-export function getEditedGlobalStylesRecord(data, prop, innerField) {
+export function getEditedGlobalStylesRecord(
+	data,
+	prop,
+	innerField,
+	type = 'merged'
+) {
 	const { __experimentalGetCurrentGlobalStylesId } = data.select('core');
 	const { getEditedEntityRecord } = data.select('core');
 
-	const record = getEditedEntityRecord(
+	let record = getEditedEntityRecord(
 		'root',
 		'globalStyles',
 		__experimentalGetCurrentGlobalStylesId()
 	);
+
+	if ('styles' === prop && 'merged' === type) {
+		const userStyles =
+			data.select('blockera/editor')?.getGlobalStyles?.()?.userStyles
+				?.styles || {};
+
+		record = mergeObject(record, {
+			styles: userStyles,
+		});
+	}
 
 	if (prop) {
 		if (innerField) {
