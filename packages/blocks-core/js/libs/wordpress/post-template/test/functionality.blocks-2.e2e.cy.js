@@ -26,8 +26,6 @@ describe('Post Template Block', () => {
 		// Select target block
 		cy.getBlock('core/post-template').click({ force: true });
 
-		cy.get('button[aria-label="Post Template"]').click();
-
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
