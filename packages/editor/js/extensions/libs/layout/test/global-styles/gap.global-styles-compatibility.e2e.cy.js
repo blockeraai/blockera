@@ -20,7 +20,7 @@ const getGroupGlobalStyles = (data) =>
 const openGroupGlobalStyles = () => {
 	cy.openGlobalStylesPanel();
 	closeWelcomeGuide();
-	cy.getByDataTest('block-style-variations').eq(1).click();
+	cy.getByDataTest('block-style-variations').eq(0).click();
 	cy.get('button[id="/blocks/core%2Fgroup"]').click();
 	cy.getByDataTest('style-default').click();
 	cy.addNewTransition();

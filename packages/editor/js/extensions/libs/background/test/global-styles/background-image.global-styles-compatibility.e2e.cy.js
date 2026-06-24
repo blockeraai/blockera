@@ -47,7 +47,7 @@ const getGroupGlobalStyles = (data) =>
 const openGlobalStylesBase = () => {
 	cy.openGlobalStylesPanel();
 	closeWelcomeGuide();
-	cy.getByDataTest('block-style-variations').eq(1).click();
+	cy.getByDataTest('block-style-variations').eq(0).click();
 };
 
 const openParagraphGlobalStyles = () => {

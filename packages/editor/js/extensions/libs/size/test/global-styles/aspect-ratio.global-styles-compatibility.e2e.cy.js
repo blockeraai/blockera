@@ -20,7 +20,7 @@ const getCoverGlobalStyles = (data) =>
 const openCoverGlobalStyles = () => {
 	cy.openGlobalStylesPanel();
 	closeWelcomeGuide();
-	cy.getByDataTest('block-style-variations').eq(1).click();
+	cy.getByDataTest('block-style-variations').eq(0).click();
 	cy.get('button[id="/blocks/core%2Fcover"]').click();
 	cy.getByDataTest('style-default').click();
 	cy.addNewTransition();

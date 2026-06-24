@@ -45,7 +45,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 		openSiteEditor();
 		cy.openGlobalStylesPanel();
 		closeWelcomeGuide();
-		cy.getByDataTest('block-style-variations').eq(1).click();
+		cy.getByDataTest('block-style-variations').eq(0).click();
 		cy.get('button[id="/blocks/core%2Fparagraph"]').click();
 		cy.getByDataTest('style-default').click();
 		cy.addNewTransition();

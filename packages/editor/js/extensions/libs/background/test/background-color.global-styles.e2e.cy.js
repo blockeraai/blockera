@@ -15,7 +15,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 
 		closeWelcomeGuide();
 
-		cy.getByDataTest('block-style-variations').eq(1).click();
+		cy.getByDataTest('block-style-variations').eq(0).click();
 
 		cy.get(`button[id="/blocks/core%2Fparagraph"]`).click();
 	});
