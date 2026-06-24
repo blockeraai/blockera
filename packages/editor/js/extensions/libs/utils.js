@@ -247,10 +247,19 @@ export function mergeWPCompatibility(
 	compatResult: Object,
 	blockDetail: BlockDetail
 ): Object {
+	if (!compatResult) {
+		return nextState;
+	}
+
 	const sanitized = omitUnregisteredInnerBlockData(
 		compatResult,
 		blockDetail.blockId
 	);
+
+	if (!sanitized) {
+		return nextState;
+	}
+
 	const {
 		forceUpdated,
 		deletedProps,
