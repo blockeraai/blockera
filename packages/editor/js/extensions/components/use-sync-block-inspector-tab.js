@@ -40,9 +40,6 @@ import { isInnerBlock } from './utils';
 /** @type {Map<string, string>} Session-only tab per block type + variation. */
 const blockInspectorTabByKey = new Map();
 
-/** Ignore WP→Blockera observer reads briefly after programmatic tab changes. */
-const WP_TAB_SYNC_SUPPRESS_MS = 600;
-
 const ACTIVATION_RETRY_MAX_FRAMES = 48;
 
 /**
@@ -234,7 +231,6 @@ export function useSyncBlockInspectorTab({
 		canSyncWordPressTabs,
 		isInnerBlockTarget,
 	});
-	const suppressWpSyncUntilRef = useRef(0);
 	const awaitingBlockTypeActivationRef = useRef(false);
 	const inspectorTabsSettledRef = useRef(false);
 	const previousPersistenceKeyRef = useRef(null);
@@ -245,29 +241,13 @@ export function useSyncBlockInspectorTab({
 	syncStateRef.current.canSyncWordPressTabs = canSyncWordPressTabs;
 	syncStateRef.current.isInnerBlockTarget = isInnerBlockTarget;
 
-	const beginWpSyncSuppress = useCallback(() => {
-		suppressWpSyncUntilRef.current = Date.now() + WP_TAB_SYNC_SUPPRESS_MS;
+	const applyTab = useCallback((tab, { syncWordPress = false } = {}) => {
+		applyInspectorTabChange({
+			tab,
+			setCurrentTab: syncStateRef.current.setCurrentTab,
+			syncWordPress,
+		});
 	}, []);
-
-	const isWpSyncSuppressed = useCallback(
-		() => Date.now() < suppressWpSyncUntilRef.current,
-		[]
-	);
-
-	const applyTab = useCallback(
-		(tab, { syncWordPress = false, suppressWpObserver = true } = {}) => {
-			if (suppressWpObserver) {
-				beginWpSyncSuppress();
-			}
-
-			applyInspectorTabChange({
-				tab,
-				setCurrentTab: syncStateRef.current.setCurrentTab,
-				syncWordPress,
-			});
-		},
-		[beginWpSyncSuppress]
-	);
 
 	const activatePreferredTab = useCallback(
 		(activationAttempt = 0) => {
@@ -409,10 +389,7 @@ export function useSyncBlockInspectorTab({
 				return;
 			}
 
-			if (
-				awaitingBlockTypeActivationRef.current ||
-				isWpSyncSuppressed()
-			) {
+			if (awaitingBlockTypeActivationRef.current) {
 				return;
 			}
 
