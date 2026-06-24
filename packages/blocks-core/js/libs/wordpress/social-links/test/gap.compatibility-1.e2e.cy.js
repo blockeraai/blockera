@@ -1,11 +1,12 @@
 import {
 	savePage,
-	getWPDataObject,
-	getSelectedBlock,
-	redirectToFrontPage,
 	createPost,
 	selectBlock,
 	appendBlocks,
+	getWPDataObject,
+	getSelectedBlock,
+	openBlockNavigator,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Social Links Block → Gap → Compatibility', () => {
@@ -22,7 +23,11 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
+			openBlockNavigator();
+
 			selectBlock('Social Icons');
+
+			cy.getByAriaControls('styles-view').click();
 
 			cy.addNewTransition();
 
@@ -207,7 +212,11 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
+			openBlockNavigator();
+
 			selectBlock('Social Icons');
+
+			cy.getByAriaControls('styles-view').click();
 
 			cy.addNewTransition();
 
@@ -423,7 +432,11 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
+			openBlockNavigator();
+
 			selectBlock('Social Icons');
+
+			cy.getByAriaControls('styles-view').click();
 
 			cy.addNewTransition();
 
@@ -747,7 +760,11 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
+			openBlockNavigator();
+
 			selectBlock('Social Icons');
+
+			cy.getByAriaControls('styles-view').click();
 
 			cy.addNewTransition();
 
