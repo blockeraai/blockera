@@ -26,8 +26,6 @@ describe('Term Template Block', () => {
 		// Select target block
 		cy.getBlock('core/term-template').click({ force: true });
 
-		cy.get('button[aria-label="Term Template"]').click();
-
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
