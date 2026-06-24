@@ -37,9 +37,11 @@ import { PresetVariablesViewModeProvider } from './preset-variables-view-mode';
 import { PRESET_VARIABLES_SECTION_GAP } from './preset-variables-section-gap';
 import { VarPickerSummarySlotProvider } from './var-picker-summary-slot';
 import {
-	hasOpenModalOverlay,
-	isElementInsideModalOverlay,
-} from '../../../libs/modal/overlay-utils';
+	getPopoverRoot,
+	hasNestedOverlayOpenAsideFrom,
+	isOtherPopoverClosing,
+	isPopoverDismissIgnoredTarget,
+} from '../../../libs/popover/utils';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
@@ -72,83 +74,6 @@ export {
 	MISSING_VARIABLE_CAN_RECREATE_FILTER,
 	MISSING_VARIABLE_RECREATE_FILTER,
 } from './var-picker-constants';
-
-function getVarPickerPopoverRoot(contentRoot: ?HTMLElement): ?HTMLElement {
-	if (!contentRoot) {
-		return null;
-	}
-	const popover = contentRoot.closest('.components-popover');
-	return popover instanceof HTMLElement ? popover : null;
-}
-
-function hasOpenOverlayPopoversAsideFromVarPicker(
-	varPickerPopover: HTMLElement
-): boolean {
-	if (hasOpenModalOverlay()) {
-		return true;
-	}
-
-	const popovers = document.querySelectorAll('.components-popover');
-
-	for (let i = 0; i < popovers.length; i++) {
-		const popover = popovers[i];
-		if (popover instanceof HTMLElement && popover !== varPickerPopover) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function isDismissTargetOutsideVarPicker(
-	varPickerPopover: HTMLElement,
-	target: EventTarget | null
-): boolean {
-	if (!target || !(target instanceof Node)) {
-		return true;
-	}
-
-	if (varPickerPopover.contains(target)) {
-		return false;
-	}
-
-	if (target instanceof HTMLElement) {
-		if (
-			target.closest(
-				'.blockera-control-value-addon-pointers, [data-cy="value-addon-btn-open"], [data-cy="value-addon-btn"]'
-			)
-		) {
-			return false;
-		}
-
-		// Nested menus / color pickers / repeater edit popovers portal outside the var-picker root.
-		const clickedPopover = target.closest('.components-popover');
-		if (clickedPopover && clickedPopover !== varPickerPopover) {
-			return false;
-		}
-
-		// SelectControl and similar dropdown surfaces.
-		if (target.closest('.components-dropdown__content')) {
-			return false;
-		}
-
-		// Nested modals (delete confirm, rename, reset dialogs, upgrade prompts, …).
-		if (isElementInsideModalOverlay(target)) {
-			return false;
-		}
-
-		// Host controls (e.g. BoxBorderControl) whose inputs sit beside the picker in the sidebar.
-		if (
-			target.closest(
-				'.blockera-control-box-border, .blockera-control-border'
-			)
-		) {
-			return false;
-		}
-	}
-
-	return true;
-}
 
 function resolveVariablePickerPresetType(type: string): string {
 	const data = getVariableCategory(type);
@@ -474,63 +399,18 @@ export default function ({
 		controlProps.setOpen('');
 	}, [controlProps, onClose]);
 
-	const handleFocusOutside = useCallback(
-		(event: FocusEvent) => {
-			if (hasOpenModalOverlay()) {
-				return;
-			}
-
-			const varPickerPopover = getVarPickerPopoverRoot(
-				popoverContentRef.current
-			);
-			if (
-				varPickerPopover &&
-				hasOpenOverlayPopoversAsideFromVarPicker(varPickerPopover)
-			) {
-				return;
-			}
-
-			const related = event?.relatedTarget;
-			if (related instanceof HTMLElement) {
-				if (isElementInsideModalOverlay(related)) {
-					return;
-				}
-
-				const root = getVarPickerPopoverRoot(popoverContentRef.current);
-				if (root && root.contains(related)) {
-					return;
-				}
-
-				// Repeater item edit popovers portal outside the picker root.
-				const nestedPopover = related.closest('.components-popover');
-				if (
-					nestedPopover instanceof HTMLElement &&
-					varPickerPopover &&
-					nestedPopover !== varPickerPopover
-				) {
-					return;
-				}
-			}
-
-			handleClose();
-		},
-		[handleClose]
-	);
-
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
 			if (event.key !== 'Escape' || event.defaultPrevented) {
 				return;
 			}
 
-			const varPickerPopover = getVarPickerPopoverRoot(
-				popoverContentRef.current
-			);
-			if (!varPickerPopover) {
+			const popoverRoot = getPopoverRoot(popoverContentRef.current);
+			if (!popoverRoot) {
 				return;
 			}
 
-			if (hasOpenOverlayPopoversAsideFromVarPicker(varPickerPopover)) {
+			if (hasNestedOverlayOpenAsideFrom(popoverRoot)) {
 				return;
 			}
 
@@ -540,20 +420,16 @@ export default function ({
 		};
 
 		const handlePointerDown = (event: MouseEvent) => {
-			if (hasOpenModalOverlay()) {
+			const popoverRoot = getPopoverRoot(popoverContentRef.current);
+			if (!popoverRoot) {
 				return;
 			}
 
-			const varPickerPopover = getVarPickerPopoverRoot(
-				popoverContentRef.current
-			);
-			if (!varPickerPopover) {
+			if (isOtherPopoverClosing(popoverRoot)) {
 				return;
 			}
 
-			if (
-				!isDismissTargetOutsideVarPicker(varPickerPopover, event.target)
-			) {
+			if (isPopoverDismissIgnoredTarget(popoverRoot, event.target)) {
 				return;
 			}
 
@@ -721,7 +597,6 @@ export default function ({
 				title={__('Variable picker', 'blockera')}
 				placement="left-start"
 				onClose={handleClose}
-				onFocusOutside={handleFocusOutside}
 				className={popoverClassName}
 				titleButtonsRight={
 					<VarPickerHeaderActions
