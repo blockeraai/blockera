@@ -1,5 +1,10 @@
 // @flow
 
+import {
+	hasOpenModalOverlay,
+	isElementInsideModalOverlay,
+} from '../modal/overlay-utils';
+
 export const INSPECTOR_SIDEBAR_SELECTORS: Array<string> = [
 	'.interface-interface-skeleton__sidebar',
 	'.blockera-tabbed-sidebar',
@@ -132,4 +137,185 @@ export function computeInspectorPopoverOffset(
 	}
 
 	return inspectorGap;
+}
+
+export const POPOVER_ROOT_SELECTOR =
+	'.blockera-component-popover, .components-popover';
+
+export function getPopoverRoot(element: ?Node): ?HTMLElement {
+	if (!element || !(element instanceof Element)) {
+		return null;
+	}
+
+	const popover = element.closest(POPOVER_ROOT_SELECTOR);
+	return popover instanceof HTMLElement ? popover : null;
+}
+
+export function normalizePopoverRoot(element: ?HTMLElement): ?HTMLElement {
+	if (!(element instanceof HTMLElement)) {
+		return null;
+	}
+
+	return getPopoverRoot(element) ?? element;
+}
+
+export const POPOVER_CLOSE_CONTROL_SELECTOR = '[data-test="close-popover"]';
+
+let closingPopoverRoot: ?HTMLElement = null;
+let closingClearTimer: ?TimeoutID = null;
+
+/** Marks which popover is closing so parent popovers ignore the resulting dismiss events. */
+export function markPopoverClosing(popoverRoot: ?HTMLElement): void {
+	const normalizedRoot = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalizedRoot instanceof HTMLElement)) {
+		return;
+	}
+
+	closingPopoverRoot = normalizedRoot;
+
+	if (closingClearTimer) {
+		clearTimeout(closingClearTimer);
+	}
+
+	// WordPress queues focus-outside checks via setTimeout(..., 0).
+	closingClearTimer = setTimeout(() => {
+		if (closingPopoverRoot === normalizedRoot) {
+			closingPopoverRoot = null;
+		}
+		closingClearTimer = null;
+	}, 100);
+}
+
+export function isOtherPopoverClosing(popoverRoot: ?HTMLElement): boolean {
+	if (!(closingPopoverRoot instanceof HTMLElement)) {
+		return false;
+	}
+
+	return closingPopoverRoot !== normalizePopoverRoot(popoverRoot);
+}
+
+export function getPopoverRootFromCloseControl(
+	target: ?EventTarget
+): ?HTMLElement {
+	if (!(target instanceof Element)) {
+		return null;
+	}
+
+	if (!target.closest(POPOVER_CLOSE_CONTROL_SELECTOR)) {
+		return null;
+	}
+
+	return getPopoverRoot(target);
+}
+
+/**
+ * Whether a pointer/focus target should keep the popover open:
+ * - inside the current popover
+ * - inside another popover (nested UI portaled outside the root)
+ * - inside a modal opened from nested UI in the popover
+ * - inside dropdown surfaces such as SelectControl menus
+ */
+export function isPopoverDismissIgnoredTarget(
+	popoverRoot: ?HTMLElement,
+	target: ?EventTarget
+): boolean {
+	if (!target || !(target instanceof Node)) {
+		return false;
+	}
+
+	if (popoverRoot?.contains(target)) {
+		return true;
+	}
+
+	if (!(target instanceof HTMLElement)) {
+		return false;
+	}
+
+	if (isElementInsideModalOverlay(target)) {
+		return true;
+	}
+
+	const nestedPopover = getPopoverRoot(target);
+	if (nestedPopover instanceof HTMLElement && nestedPopover !== popoverRoot) {
+		return true;
+	}
+
+	if (target.closest('.components-dropdown__content')) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * WordPress focus-outside often fires with a null relatedTarget while the user
+ * interacts with portaled surfaces. Fall back to activeElement in that case.
+ */
+export function shouldIgnorePopoverFocusOutside(
+	event: FocusEvent,
+	popoverRoot: ?HTMLElement
+): boolean {
+	if (isOtherPopoverClosing(popoverRoot)) {
+		return true;
+	}
+
+	const closeControlRoot = getPopoverRootFromCloseControl(event.target);
+	if (closeControlRoot && closeControlRoot !== popoverRoot) {
+		return true;
+	}
+
+	const related = event?.relatedTarget;
+
+	if (isPopoverDismissIgnoredTarget(popoverRoot, related)) {
+		return true;
+	}
+
+	if (!related) {
+		const active = popoverRoot?.ownerDocument?.activeElement ?? null;
+
+		return isPopoverDismissIgnoredTarget(popoverRoot, active);
+	}
+
+	return false;
+}
+
+/** True when a nested popover or modal should receive Escape / dismiss first. */
+export function hasNestedOverlayOpenAsideFrom(
+	popoverRoot: ?HTMLElement
+): boolean {
+	if (hasOpenModalOverlay()) {
+		return true;
+	}
+
+	const popovers = document.querySelectorAll(POPOVER_ROOT_SELECTOR);
+
+	for (let i = 0; i < popovers.length; i++) {
+		const popover = popovers[i];
+		if (popover instanceof HTMLElement && popover !== popoverRoot) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function handlePopoverCloseGuardPointerDown(event: MouseEvent | TouchEvent) {
+	const root = getPopoverRootFromCloseControl(event.target);
+	if (root) {
+		markPopoverClosing(root);
+	}
+}
+
+if (typeof document !== 'undefined') {
+	document.addEventListener(
+		'mousedown',
+		handlePopoverCloseGuardPointerDown,
+		true
+	);
+	document.addEventListener(
+		'touchstart',
+		handlePopoverCloseGuardPointerDown,
+		true
+	);
 }
