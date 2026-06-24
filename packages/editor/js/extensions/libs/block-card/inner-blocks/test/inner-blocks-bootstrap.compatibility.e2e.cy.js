@@ -94,7 +94,7 @@ const getGroupGlobalStyles = (data) =>
 	getEditedGlobalStylesRecord(data, 'styles', 'blocks')?.['core/group'];
 
 const getInnerAttrs = (groupRecord, innerBlockKey) =>
-	groupRecord?.blockeraInnerBlocks?.[innerBlockKey]?.attributes;
+	groupRecord?.blockeraInnerBlocks?.value?.[innerBlockKey]?.attributes;
 
 const openGroupGlobalStyles = () => {
 	cy.openGlobalStylesPanel();
@@ -158,8 +158,11 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 				const group = getGroupGlobalStyles(data);
 				const link = group?.elements?.link;
 
-				expect('var:preset|color|accent-3').to.equal(link?.color?.text);
-				expect('var:preset|color|accent-4').to.equal(
+				// Global styles store resolves preset refs to CSS variables.
+				expect('var(--wp--preset--color--accent-3)').to.equal(
+					link?.color?.text
+				);
+				expect('var(--wp--preset--color--accent-4)').to.equal(
 					link?.[':hover']?.color?.text
 				);
 				expect(
@@ -299,7 +302,6 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 				);
 				expect(
 					getInnerAttrs(group, 'core/button')?.blockeraBorderRadius
-						?.all
 				).to.equal('12px');
 			});
 		});
@@ -315,7 +317,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 				expect('8px').to.equal(spacing?.padding?.top);
 				expect('16px').to.equal(spacing?.blockGap);
 				expect(inner?.blockeraSpacing).to.not.equal(undefined);
-				expect(inner?.blockeraGap?.gap).to.equal('16px');
+				expect(inner?.blockeraGap).to.equal('16px');
 			});
 		});
 	});
@@ -325,7 +327,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 			getWPDataObject().then((data) => {
 				const group = getGroupGlobalStyles(data);
 
-				expect('var:preset|shadow|natural').to.equal(
+				expect('var(--wp--preset--shadow--natural)').to.equal(
 					group?.elements?.button?.shadow
 				);
 				expect(
@@ -344,8 +346,10 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 
 				expect('48px').to.equal(dimensions?.minHeight);
 				expect('16/9').to.equal(dimensions?.aspectRatio);
-				expect(inner?.blockeraMinHeight).to.equal('48px');
-				expect(inner?.blockeraRatio?.val).to.not.equal(undefined);
+				expect(inner?.blockeraMinHeight?.value).to.equal('48px');
+				expect(inner?.blockeraRatio?.value?.val).to.not.equal(
+					undefined
+				);
 			});
 		});
 	});
