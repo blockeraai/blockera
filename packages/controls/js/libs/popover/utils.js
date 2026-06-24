@@ -161,7 +161,10 @@ export function normalizePopoverRoot(element: ?HTMLElement): ?HTMLElement {
 
 export const POPOVER_CLOSE_CONTROL_SELECTOR = '[data-test="close-popover"]';
 
+export const SKETCH_PICKER_SELECTOR = '.sketch-picker';
+
 let closingPopoverRoot: ?HTMLElement = null;
+let sketchPickerInteractionPopoverRoot: ?HTMLElement = null;
 let closingClearTimer: ?TimeoutID = null;
 
 /** Marks which popover is closing so parent popovers ignore the resulting dismiss events. */
@@ -249,6 +252,18 @@ export function isPopoverDismissIgnoredTarget(
 }
 
 /**
+ * True while the user is dragging inside a sketch-picker in this popover.
+ */
+export function isSketchPickerInteractionActiveFor(
+	popoverRoot: ?HTMLElement
+): boolean {
+	return (
+		sketchPickerInteractionPopoverRoot instanceof HTMLElement &&
+		sketchPickerInteractionPopoverRoot === normalizePopoverRoot(popoverRoot)
+	);
+}
+
+/**
  * WordPress focus-outside often fires with a null relatedTarget while the user
  * interacts with portaled surfaces. Fall back to activeElement in that case.
  */
@@ -257,6 +272,10 @@ export function shouldIgnorePopoverFocusOutside(
 	popoverRoot: ?HTMLElement
 ): boolean {
 	if (isOtherPopoverClosing(popoverRoot)) {
+		return true;
+	}
+
+	if (isSketchPickerInteractionActiveFor(popoverRoot)) {
 		return true;
 	}
 
@@ -307,6 +326,24 @@ function handlePopoverCloseGuardPointerDown(event: MouseEvent | TouchEvent) {
 	}
 }
 
+function handleSketchPickerInteractionStart(
+	event: MouseEvent | PointerEvent | TouchEvent
+) {
+	if (!(event.target instanceof Element)) {
+		return;
+	}
+
+	if (!event.target.closest(SKETCH_PICKER_SELECTOR)) {
+		return;
+	}
+
+	sketchPickerInteractionPopoverRoot = getPopoverRoot(event.target);
+}
+
+function clearSketchPickerInteraction() {
+	sketchPickerInteractionPopoverRoot = null;
+}
+
 if (typeof document !== 'undefined') {
 	document.addEventListener(
 		'mousedown',
@@ -316,6 +353,23 @@ if (typeof document !== 'undefined') {
 	document.addEventListener(
 		'touchstart',
 		handlePopoverCloseGuardPointerDown,
+		true
+	);
+	document.addEventListener(
+		'pointerdown',
+		handleSketchPickerInteractionStart,
+		true
+	);
+	document.addEventListener(
+		'mousedown',
+		handleSketchPickerInteractionStart,
+		true
+	);
+	document.addEventListener('pointerup', clearSketchPickerInteraction, true);
+	document.addEventListener('mouseup', clearSketchPickerInteraction, true);
+	document.addEventListener(
+		'pointercancel',
+		clearSketchPickerInteraction,
 		true
 	);
 }
