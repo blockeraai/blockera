@@ -163,6 +163,12 @@ const RepeaterItem = ({
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
+	const suppressPopoverFocusOutsideRef = useRef(false);
+
+	useEffect(() => {
+		suppressPopoverFocusOutsideRef.current =
+			item?.creatingStep === true && isOpen;
+	}, [item?.creatingStep, isOpen]);
 
 	useEffect(() => {
 		styleRef.current = {
@@ -381,7 +387,10 @@ const RepeaterItem = ({
 			: mode,
 		toggleOpenBorder: true,
 		design,
-		popoverProps,
+		popoverProps: {
+			...(popoverProps || {}),
+			focusOutsideSuppressionRef: suppressPopoverFocusOutsideRef,
+		},
 		popoverTitle:
 			'function' === typeof popoverTitle
 				? popoverTitle(itemId, item)
