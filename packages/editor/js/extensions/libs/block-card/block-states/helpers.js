@@ -14,7 +14,7 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from './types';
-import { isNormalState } from '../../../components/utils';
+import { isNormalState, isInnerBlock } from '../../../components/utils';
 import { getBaseBreakpoint } from '../../../../editor/header-ui';
 
 /**
@@ -66,6 +66,7 @@ export function onChangeBlockStates(
 		setCurrentBlock,
 		isMasterBlockStates,
 		currentBlockStyleVariation,
+		skipExtensionSync = false,
 	} = params;
 
 	const { getSelectedBlock } = select('core/block-editor');
@@ -79,36 +80,19 @@ export function onChangeBlockStates(
 				clientId: block?.clientId,
 			};
 
-	const {
-		setBlockClientStates,
-		setBlockClientInnerState,
-		setBlockClientMasterState,
-		changeExtensionCurrentBlockState: setCurrentState,
-		changeExtensionInnerBlockState: setInnerBlockState,
-	} = dispatch('blockera/extensions') || {};
+	const { syncBlockStatesAfterDelete } =
+		dispatch('blockera/extensions') || {};
 
-	let selectedState = null;
+	let selectedState: TStates | null = null;
 
 	// $FlowFixMe
 	for (const stateType: TStates in newValue) {
 		const state = newValue[stateType];
-		const setInnerBlockDetails = () => {
+
+		if (!isMasterBlockStates && state?.isSelected) {
 			selectedState = stateType;
-			setInnerBlockState(stateType);
-			setBlockClientInnerState({
-				currentState: stateType,
-				innerBlockType: currentBlock,
-				clientId,
-			});
-		};
-		const setBlockDetails = () => {
+		} else if (state?.isSelected) {
 			selectedState = stateType;
-			setCurrentState(stateType);
-			setBlockClientMasterState({
-				currentState: stateType,
-				name,
-				clientId,
-			});
 
 			const { getState, getInnerState } = select('blockera/editor');
 			const {
@@ -124,26 +108,23 @@ export function onChangeBlockStates(
 			) {
 				setCurrentBlock('master');
 			}
-		};
-
-		if (!isMasterBlockStates && state?.isSelected) {
-			setInnerBlockDetails();
-		} else if (state?.isSelected) {
-			setBlockDetails();
 		} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
-			if (!isMasterBlockStates) {
-				setInnerBlockDetails();
-			} else {
-				setBlockDetails();
-			}
+			selectedState = 'normal';
 		}
 	}
 
-	setBlockClientStates({
-		clientId,
-		blockType: !isMasterBlockStates ? currentBlock : name,
-		blockStates: newValue,
-	});
+	if (!skipExtensionSync) {
+		syncBlockStatesAfterDelete({
+			clientId,
+			blockName: name,
+			innerBlockType: isInnerBlock(currentBlock)
+				? currentBlock
+				: undefined,
+			blockStates: newValue,
+			blockType: !isMasterBlockStates ? currentBlock : name,
+			currentState: selectedState || 'normal',
+		});
+	}
 
 	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
 		let blockStates = {};
