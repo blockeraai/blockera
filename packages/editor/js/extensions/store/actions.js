@@ -183,6 +183,32 @@ export function setBlockClientInners({ inners, clientId }: Object): Object {
 	};
 }
 
+export function syncBlockStatesAfterDelete({
+	clientId,
+	blockName,
+	innerBlockType,
+	blockStates,
+	blockType,
+	currentState = 'normal',
+}: {
+	clientId: string,
+	blockName: string,
+	innerBlockType?: string,
+	blockStates: Object,
+	blockType: string,
+	currentState?: TStates,
+}): Object {
+	return {
+		type: 'SYNC_BLOCK_STATES_AFTER_DELETE',
+		clientId,
+		blockName,
+		innerBlockType,
+		blockStates,
+		blockType,
+		currentState,
+	};
+}
+
 export const registerSharedBlockAttributes = (attributes: Object): Object => {
 	return {
 		attributes,
