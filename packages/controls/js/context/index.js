@@ -4,8 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { createContext, useEffect } from '@wordpress/element';
+import { useDispatch, useSelect, select as dataSelect } from '@wordpress/data';
+import { createContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -38,45 +38,35 @@ export const ControlContextProvider = ({
 	storeName = STORE_NAME,
 	...props
 }: ControlContextProviderProps): MixedElement | null => {
-	// $FlowFixMe
-	registerControl({
-		...{
+	if (!dataSelect(storeName).getControl(controlInfo.name)) {
+		// $FlowFixMe
+		registerControl({
 			...controlInfo,
-			needUpdate: controlInfo?.needUpdate || (() => true),
-		},
-		type: storeName,
-	});
+			type: storeName,
+		});
+	}
 
 	//Prepare control status and value!
 	const { status, value } = useSelect(
 		(select) => {
 			const { getControl } = select(storeName);
 
-			return getControl(controlInfo.name);
+			const control = getControl(controlInfo.name);
+
+			if (!isEquals(control?.value, controlInfo.value)) {
+				return {
+					...control,
+					value: controlInfo.value,
+				};
+			}
+
+			return control;
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[controlInfo]
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
-
-	// Assume control has side effect from parent components ...
-	useEffect(() => {
-		if (
-			controlInfo?.needUpdate &&
-			!controlInfo.needUpdate(controlInfo.value)
-		) {
-			return;
-		}
-
-		if (!isEquals(controlInfo.value, value)) {
-			dispatch.modifyControlValue({
-				controlId: controlInfo.name,
-				value: controlInfo.value,
-			});
-		}
-		// eslint-disable-next-line
-	}, [controlInfo]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
