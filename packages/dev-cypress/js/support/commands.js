@@ -190,18 +190,42 @@ export const registerCommands = () => {
 		// by passing default it clicks on editor that creates a paragraph block
 		if (blockName === 'default') {
 			if (Cypress.$('iframe[name="editor-canvas"]').length) {
-				cy.getIframeBody()
-					.find(`[aria-label="Add default block"]`)
-					.click();
-				blockName = 'core/paragraph';
-				return cy
-					.getIframeBody()
-					.find(`[data-type="${blockName}"]`)
-					.eq(0);
+				return cy.getIframeBody().then((body) => {
+					const $paragraph = Cypress.$(body).find(
+						'[data-type="core/paragraph"]'
+					);
+
+					if ($paragraph.length) {
+						return cy.wrap($paragraph.first());
+					}
+
+					return cy
+						.getIframeBody()
+						.find(`[aria-label="Add default block"]`, {
+							timeout: 20000,
+						})
+						.click()
+						.then(() =>
+							cy
+								.getIframeBody()
+								.find('[data-type="core/paragraph"]')
+								.first()
+						);
+				});
 			}
-			cy.getByAriaLabel('Add default block').click();
-			blockName = 'core/paragraph';
-			return cy.get(`[data-type="${blockName}"]`).eq(0);
+
+			return cy.get('body').then(($body) => {
+				const $paragraph = $body.find('[data-type="core/paragraph"]');
+
+				if ($paragraph.length) {
+					return cy.wrap($paragraph.first());
+				}
+
+				return cy
+					.getByAriaLabel('Add default block', { timeout: 20000 })
+					.click()
+					.then(() => cy.get('[data-type="core/paragraph"]').first());
+			});
 		}
 
 		if (Cypress.$('iframe[name="editor-canvas"]').length) {

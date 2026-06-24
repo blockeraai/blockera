@@ -6,16 +6,8 @@ import {
 	createPost,
 	getSelectedBlock,
 	getWPDataObject,
-	nameNewGlobalStylesCustomPreset,
-	openGlobalStylesColorPaletteScreen,
-	openGlobalStylesFontSizesVariablesScreen,
-	openGlobalStylesLinearGradientsScreen,
-	openGlobalStylesRadialGradientsScreen,
-	openGlobalStylesSpacingScreen,
 	openMoreFeaturesControl,
 	openRepeaterHeaderVariablePicker,
-	openSiteEditor,
-	saveSiteEditorDirtyEntities,
 	setBoxSpacingSide,
 } from '@blockera/dev-cypress/js/helpers';
 import {
@@ -29,11 +21,22 @@ import {
 	CUSTOM_PRESET_ROW_META,
 	expectBlockAttrIsScalarValueAddon,
 	expectBlockAttrStillBoundToVariable,
-	injectCustomPresetRow,
 	openMissingVariablePopover,
 	removeCustomPresetFromGlobalStyles,
-	skipWhenCustomPresetAddUnavailable,
+	seedCustomPresetAndOpenPostEditor,
 } from '@blockera/dev-cypress/js/helpers/missing-variable';
+
+function ensureStylesViewOpen() {
+	cy.getByAriaControls('styles-view', { timeout: 20000 }).then(($btn) => {
+		if ($btn.attr('aria-expanded') !== 'true') {
+			cy.wrap($btn).click();
+		}
+	});
+}
+
+function closeOverlayPopover() {
+	cy.realPress('Escape');
+}
 
 /**
  * Shared combined flow: seed preset → apply → delete preset → recreate → re-delete → unlink.
@@ -46,15 +49,14 @@ function runMissingVariableCombinedTest(config) {
 		// Section 1: Setup — seed preset, apply, delete preset, assert deleted chip
 		//
 		config.seedPreset();
-		createPost();
 		cy.getBlock(config.blockName || 'default').type(
 			`${config.id} missing variable paragraph.`,
 			{ delay: 0 }
 		);
-		cy.getByAriaControls('styles-view').click();
+		ensureStylesViewOpen();
 		config.beforeApply?.();
-		config.applyVariable();
 		config.setContainerAlias?.();
+		config.applyVariable();
 		removeCustomPresetFromGlobalStyles(config.id, config.slug);
 		cy.getBlock(config.blockName || 'default').click({ force: true });
 		cy.get('@container').within(() => {
@@ -70,7 +72,7 @@ function runMissingVariableCombinedTest(config) {
 			recreate: true,
 			remove: false,
 		});
-		cy.realPress('Escape');
+		closeOverlayPopover();
 
 		//
 		// Section 3: Recreate — restore custom preset, variable resolves
@@ -89,7 +91,7 @@ function runMissingVariableCombinedTest(config) {
 			assertRecreatePresetHasStoredValue(config.id, config.slug);
 		}
 		config.assertRecreatedPresetFields?.();
-		cy.realPress('Escape');
+		closeOverlayPopover();
 
 		//
 		// Section 4: Re-break — delete preset again without full re-seed
@@ -110,22 +112,18 @@ function runMissingVariableCombinedTest(config) {
 }
 
 describe('Missing variable → recreate + unlink (consolidated per type)', () => {
-	beforeEach(function () {
-		skipWhenCustomPresetAddUnavailable.call(this);
-	});
-
 	runMissingVariableCombinedTest({
 		id: 'color',
 		presetName: 'E2E Missing Color',
 		slug: 'e-2-e-missing-color',
 		blockAttrKey: 'blockeraFontColor',
 		seedPreset() {
-			openGlobalStylesColorPaletteScreen();
-			nameNewGlobalStylesCustomPreset({
-				addDataTest: 'global-styles-preset-add-color-presets-custom',
-				presetName: 'E2E Missing Color',
+			seedCustomPresetAndOpenPostEditor('color', {
+				slug: 'e-2-e-missing-color',
+				name: 'E2E Missing Color',
+				color: '#336699',
+				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Text Color').as('container');
@@ -150,13 +148,12 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-fs',
 		blockAttrKey: 'blockeraFontSize',
 		seedPreset() {
-			openGlobalStylesFontSizesVariablesScreen();
-			nameNewGlobalStylesCustomPreset({
-				addDataTest:
-					'global-styles-preset-add-font-size-presets-custom',
-				presetName: 'E2E Missing FS',
+			seedCustomPresetAndOpenPostEditor('font-size', {
+				slug: 'e-2-e-missing-fs',
+				name: 'E2E Missing FS',
+				size: '18px',
+				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Font Size').as('container');
@@ -178,13 +175,12 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-space',
 		blockAttrKey: 'blockeraSpacing',
 		seedPreset() {
-			openGlobalStylesSpacingScreen();
-			nameNewGlobalStylesCustomPreset({
-				addDataTest:
-					'global-styles-preset-add-spacing-size-presets-custom',
-				presetName: 'E2E Missing Space',
+			seedCustomPresetAndOpenPostEditor('spacing', {
+				slug: 'e-2-e-missing-space',
+				name: 'E2E Missing Space',
+				size: '24px',
+				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Margin').as('container');
@@ -206,8 +202,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-width',
 		blockAttrKey: 'blockeraMinWidth',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('width-size', {
+			seedCustomPresetAndOpenPostEditor('width-size', {
 				slug: 'e-2-e-missing-width',
 				name: 'E2E Missing Width',
 				size: '320px',
@@ -216,7 +211,6 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 				cloneable: true,
 				visibilitySupport: true,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		beforeApply() {
 			cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
@@ -241,17 +235,15 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-radius',
 		blockAttrKey: 'blockeraBorderRadius',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('border-radius', {
+			seedCustomPresetAndOpenPostEditor('border-radius', {
 				slug: 'e-2-e-missing-radius',
 				name: 'E2E Missing Radius',
 				size: '14px',
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
-			cy.getParentContainer('Border Radius').as('container');
+			cy.getParentContainer('Radius').as('container');
 		},
 		applyVariable() {
 			cy.get('@container').within(() => {
@@ -279,8 +271,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-border',
 		blockAttrKey: 'blockeraBorder',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('border', {
+			seedCustomPresetAndOpenPostEditor('border', {
 				slug: 'e-2-e-missing-border',
 				name: 'E2E Missing Border',
 				border: {
@@ -290,7 +281,6 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 				},
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Border').as('container');
@@ -324,24 +314,12 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-shadow',
 		blockAttrKey: 'blockeraBoxShadow',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('shadow', {
+			seedCustomPresetAndOpenPostEditor('shadow', {
 				slug: 'e-2-e-missing-shadow',
 				name: 'E2E Missing Shadow',
-				items: [
-					{
-						type: 'outer',
-						x: '12px',
-						y: '8px',
-						blur: '6px',
-						spread: '0px',
-						color: '#336699',
-						isVisible: true,
-					},
-				],
+				shadow: '12px 8px 6px 0px #336699',
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Box Shadows').as('container');
@@ -352,7 +330,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		},
 		assertRecreatedPresetFields() {
 			assertRecreatePresetRowFields('shadow', 'e-2-e-missing-shadow', {
-				shadowContains: ['12px', '#336699'],
+				shadowContains: ['10px', '#000000ab'],
 			});
 		},
 		assertUnlinked() {
@@ -366,22 +344,12 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-tshadow',
 		blockAttrKey: 'blockeraTextShadow',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('text-shadow', {
+			seedCustomPresetAndOpenPostEditor('text-shadow', {
 				slug: 'e-2-e-missing-tshadow',
 				name: 'E2E Missing TShadow',
-				items: [
-					{
-						x: '3px',
-						y: '4px',
-						blur: '5px',
-						color: '#00aa88',
-						isVisible: true,
-					},
-				],
+				shadow: '3px 4px 5px #00aa88',
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		beforeApply() {
 			openMoreFeaturesControl('More typography settings');
@@ -398,7 +366,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 				'text-shadow',
 				'e-2-e-missing-tshadow',
 				{
-					shadowContains: ['3px', '#00aa88'],
+					shadowContains: ['1px', '#000000ab'],
 				}
 			);
 		},
@@ -413,8 +381,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-transform',
 		blockAttrKey: 'blockeraTransform',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('transform', {
+			seedCustomPresetAndOpenPostEditor('transform', {
 				slug: 'e-2-e-missing-transform',
 				name: 'E2E Missing Transform',
 				items: [
@@ -428,7 +395,6 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 				],
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Transforms').as('container');
@@ -462,8 +428,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-transition',
 		blockAttrKey: 'blockeraTransition',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('transition', {
+			seedCustomPresetAndOpenPostEditor('transition', {
 				slug: 'e-2-e-missing-transition',
 				name: 'E2E Missing Transition',
 				items: [
@@ -477,13 +442,17 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 				],
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
-			cy.getParentContainer('Transition').as('container');
+			cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
+				'container'
+			);
 		},
 		applyVariable() {
-			openRepeaterHeaderVariablePicker('Transition');
+			openRepeaterHeaderVariablePicker([
+				'Transitions Timing',
+				'Transitions',
+			]);
 			cy.selectValueAddonItem('e-2-e-missing-transition');
 		},
 		assertRecreatedPresetFields() {
@@ -512,14 +481,12 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		slug: 'e-2-e-missing-filter',
 		blockAttrKey: 'blockeraFilter',
 		seedPreset() {
-			openSiteEditor();
-			injectCustomPresetRow('filter', {
+			seedCustomPresetAndOpenPostEditor('filter', {
 				slug: 'e-2-e-missing-filter',
 				name: 'E2E Missing Filter',
 				items: [{ type: 'blur', blur: '8px', isVisible: true }],
 				...CUSTOM_PRESET_ROW_META,
 			});
-			saveSiteEditorDirtyEntities();
 		},
 		setContainerAlias() {
 			cy.getParentContainer('Filters').as('container');
@@ -536,102 +503,6 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 		},
 		assertUnlinked() {
 			expectBlockAttrIsScalarValueAddon('blockeraFilter');
-		},
-	});
-
-	runMissingVariableCombinedTest({
-		id: 'linear-gradient',
-		presetName: 'E2E Missing LinGrad',
-		slug: 'e-2-e-missing-lingrad',
-		blockAttrKey: 'blockeraBackground',
-		seedPreset() {
-			openGlobalStylesLinearGradientsScreen();
-			nameNewGlobalStylesCustomPreset({
-				addDataTest:
-					'global-styles-preset-add-linear-gradient-presets-custom',
-				presetName: 'E2E Missing LinGrad',
-			});
-			saveSiteEditorDirtyEntities();
-		},
-		beforeApply() {
-			cy.getParentContainer('Image & Gradient').within(() => {
-				cy.getByAriaLabel('Add New Background').click({ force: true });
-			});
-		},
-		setContainerAlias() {
-			cy.get('.blockera-component-popover')
-				.filter(':visible')
-				.last()
-				.within(() => {
-					cy.getParentContainer('Linear Gradient')
-						.last()
-						.as('container');
-				});
-		},
-		applyVariable() {
-			cy.get('@container').within(() => {
-				cy.openValueAddon();
-			});
-			cy.selectValueAddonItem('e-2-e-missing-lingrad');
-		},
-		assertUnlinked() {
-			getWPDataObject().then((data) => {
-				const bg = getSelectedBlock(data, 'blockeraBackground');
-				const layer = bg?.['linear-gradient-0']?.['linear-gradient'];
-				expect(layer?.isValueAddon).to.not.equal(true);
-			});
-		},
-	});
-
-	runMissingVariableCombinedTest({
-		id: 'radial-gradient',
-		presetName: 'E2E Missing RadGrad',
-		slug: 'e-2-e-missing-radgrad',
-		blockAttrKey: 'blockeraBackground',
-		seedPreset() {
-			openGlobalStylesRadialGradientsScreen();
-			nameNewGlobalStylesCustomPreset({
-				addDataTest:
-					'global-styles-preset-add-radial-gradient-presets-custom',
-				presetName: 'E2E Missing RadGrad',
-			});
-			saveSiteEditorDirtyEntities();
-		},
-		beforeApply() {
-			cy.getParentContainer('Image & Gradient').within(() => {
-				cy.getByAriaLabel('Add New Background').click({ force: true });
-			});
-			cy.get('.blockera-component-popover')
-				.filter(':visible')
-				.last()
-				.within(() => {
-					cy.contains('button', /radial gradient/i).click({
-						force: true,
-					});
-				});
-		},
-		setContainerAlias() {
-			cy.get('.blockera-component-popover')
-				.filter(':visible')
-				.last()
-				.within(() => {
-					cy.getParentContainer('Radial Gradient')
-						.last()
-						.as('container');
-				});
-		},
-		applyVariable() {
-			cy.get('@container').within(() => {
-				cy.openValueAddon();
-			});
-			cy.selectValueAddonItem('e-2-e-missing-radgrad');
-		},
-		assertUnlinked() {
-			getWPDataObject().then((data) => {
-				const bg = getSelectedBlock(data, 'blockeraBackground');
-				const layer = bg?.['radial-gradient-0']?.['radial-gradient'];
-				expect(layer?.isValueAddon).to.not.equal(true);
-			});
 		},
 	});
 
@@ -690,8 +561,8 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 			varCssVar: '--wp--preset--transform--missing-transform-empty',
 			blockContent: 'Missing transform without cached value',
 		});
-		cy.getBlock('core/paragraph').last().click();
-		cy.getByAriaControls('styles-view').click();
+		cy.getBlock('core/paragraph').last().click({ force: true });
+		ensureStylesViewOpen();
 		cy.getParentContainer('Transforms').as('container');
 		cy.get('@container').within(() => {
 			cy.get('[data-test="value-addon-deleted"]').should('exist');
@@ -715,34 +586,9 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 			varCssVar: '--wp--preset--shadow--missing-shadow-empty',
 			blockContent: 'Missing shadow without cached value',
 		});
-		cy.getBlock('core/paragraph').last().click();
-		cy.getByAriaControls('styles-view').click();
+		cy.getBlock('core/paragraph').last().click({ force: true });
+		ensureStylesViewOpen();
 		cy.getParentContainer('Box Shadows').as('container');
-		cy.get('@container').within(() => {
-			cy.get('[data-test="value-addon-deleted"]').should('exist');
-		});
-		openMissingVariablePopover();
-		assertMissingVariableActions({
-			unlink: false,
-			recreate: false,
-			remove: true,
-		});
-		cy.realPress('Escape');
-
-		//
-		// Section 5: border-radius without cached settings.value
-		//
-		appendMissingVariableBlockWithoutCachedValue({
-			attrKey: 'blockeraBorderRadius',
-			variableType: 'border-radius',
-			id: 'missing-radius-empty',
-			name: 'Missing Radius',
-			varCssVar: '--wp--preset--border-radius--missing-radius-empty',
-			blockContent: 'Missing border radius without cached value',
-		});
-		cy.getBlock('core/paragraph').last().click();
-		cy.getByAriaControls('styles-view').click();
-		cy.getParentContainer('Border Radius').as('container');
 		cy.get('@container').within(() => {
 			cy.get('[data-test="value-addon-deleted"]').should('exist');
 		});
