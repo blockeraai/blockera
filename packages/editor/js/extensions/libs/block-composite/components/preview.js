@@ -37,9 +37,6 @@ import {
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
 import StatesManager from '../../block-card/block-states/components/states-manager';
 
-// the instance of in-memory cache.
-const deleteCacheData: Object = new Map();
-
 function getActiveColorInsideBlockInspector(props: TPreviewProps): boolean {
 	if (props.activeColorInsideBlockInspector !== undefined) {
 		return props.activeColorInsideBlockInspector;
@@ -309,7 +306,6 @@ const PreviewComponent = ({
 		currentState,
 		setCurrentBlock,
 		availableStates,
-		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
 	});
@@ -412,7 +408,6 @@ const PreviewComponent = ({
 				defaultStates={defaultStates}
 				preparedStates={preparedStates}
 				handleOnChange={handleOnChange}
-				deleteCacheData={deleteCacheData}
 				contextValue={blockStatesContextValue}
 				defaultRepeaterItemValue={defaultRepeaterItemValue}
 				maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
