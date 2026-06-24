@@ -113,7 +113,6 @@ describe('Font Size → WP Compatibility', () => {
 						name: 'Small',
 						id: 'small',
 						value: '0.875rem',
-						fluid: null,
 						reference: {
 							type: 'theme',
 							theme: 'Twenty Twenty-Five',
