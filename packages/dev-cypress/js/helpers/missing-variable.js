@@ -3,10 +3,12 @@
  */
 import {
 	appendBlocks,
-	getEditedGlobalStylesSetting,
 	getSelectedBlock,
 	getWPDataObject,
+	saveSiteEditorDirtyEntities,
 } from './editor';
+import { getEditedGlobalStylesSetting } from './global-styles';
+import { createPost, openSiteEditor } from './site-navigation';
 
 const GLOBAL_STYLES_KIND = 'root';
 const GLOBAL_STYLES_NAME = 'globalStyles';
@@ -165,6 +167,20 @@ export function injectCustomPresetRow(variableType, row) {
 }
 
 /**
+ * Seeds a custom global-styles preset in Site Editor, saves, then opens a new post.
+ *
+ * @param {string} variableType
+ * @param {Record<string, unknown>} row
+ */
+export function seedCustomPresetAndOpenPostEditor(variableType, row) {
+	openSiteEditor();
+	injectCustomPresetRow(variableType, row);
+	saveSiteEditorDirtyEntities();
+	createPost();
+	cy.getIframeBody({ timeout: 30000 }).should('exist');
+}
+
+/**
  * Removes a custom preset row from the edited global styles entity (simulates deletion).
  *
  * @param {string} variableType
@@ -315,12 +331,14 @@ export function expectBlockAttrStillBoundToVariable(attributeKey, slug) {
 
 /**
  * Skip helper when custom preset add is unavailable (free tier quota).
+ * Must run after navigating to a screen that exposes add controls (Global Styles
+ * preset screen or an open variable picker).
  */
 export function skipWhenCustomPresetAddUnavailable() {
 	cy.get('body').then(function ($body) {
 		const canAdd =
 			$body.find(
-				'[data-test="variable-picker-header-add-custom-variable"]:visible, [data-test^="variable-picker-section-add-"]:visible, [data-test^="global-styles-preset-add-"]:visible'
+				'[data-test="variable-picker-header-add-custom-variable"]:visible, [data-test^="variable-picker-section-add-"]:visible, [data-test^="global-styles-preset-add-"]:visible, [data-cy^="global-styles-preset-add-"]:visible'
 			).length > 0;
 
 		if (!canAdd) {
