@@ -24,6 +24,8 @@ describe('Image Block → Selectors test', () => {
 		// Select target block
 		cy.getBlock('core/image').click();
 
+		cy.getByAriaControls('styles-view').click();
+
 		//
 		// Width
 		//
@@ -128,9 +130,9 @@ describe('Image Block → Selectors test', () => {
 			});
 
 		cy.get('@borderContainer').within(() => {
-			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('div[aria-selected="false"]').eq(1).click();
+			cy.customSelectOption(1);
 		});
+
 		cy.getBlock('core/image')
 			.first()
 			.within(() => {

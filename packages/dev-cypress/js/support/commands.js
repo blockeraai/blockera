@@ -407,6 +407,20 @@ export const registerCommands = () => {
 		});
 	});
 
+	/**
+	 * Select an option from CustomSelectControl (Ariakit listbox) by index.
+	 * Prefer this over aria-selected selectors; use inside `.within()` to scope.
+	 *
+	 * @param {number} index Zero-based index of the [role="option"] item.
+	 * @param {{ force?: boolean }} [options]
+	 */
+	Cypress.Commands.add('customSelectOption', (index = 0, options = {}) => {
+		const { force = false } = options;
+
+		cy.get('[aria-haspopup="listbox"]').click({ force });
+		cy.get('div[role="option"]').eq(index).click({ force });
+	});
+
 	Cypress.Commands.add('openAccordion', (accordionHeading) =>
 		cy
 			.get('h2')
@@ -694,19 +708,7 @@ export const registerCommands = () => {
 		};
 
 		cy.get('body').then(($body) => {
-			if (
-				$body.find('.blockera-control-icon-picker-modal:visible').length
-			) {
-				cy.get('.blockera-control-icon-picker-modal')
-					.should('be.visible')
-					.within(clickIcon);
-				return;
-			}
-
-			cy.get(
-				'[data-wp-component="Popover"]:visible, .components-popover:visible'
-			)
-				.last()
+			cy.get('.blockera-control-icon-picker-modal')
 				.should('be.visible')
 				.within(clickIcon);
 		});

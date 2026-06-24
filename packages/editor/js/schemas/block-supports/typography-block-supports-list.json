@@ -23,7 +23,7 @@
 			"id": "blockeraTextShadow",
 			"definition": "TextShadow",
 			"css-property": "text-shadow",
-			"fallback": ["text-shadow", "typography"],
+			"fallback": ["text-shadow", "typography", "root"],
 			"description": "Support for \"blockeraTextShadow\" value."
 		},
 		"blockeraFontColor": {
@@ -50,7 +50,7 @@
 			"id": "blockeraDirection",
 			"definition": "Direction",
 			"css-property": "direction",
-			"fallback": ["direction", "typography"],
+			"fallback": ["direction", "typography", "root"],
 			"description": "Support for \"blockeraDirection\" value, this is mirror for WordPress block core \"direction\" support."
 		},
 		"blockeraTextAlign": {
@@ -58,7 +58,7 @@
 			"id": "blockeraTextAlign",
 			"definition": "TextAlign",
 			"css-property": "text-align",
-			"fallback": ["text-align", "typography"],
+			"fallback": ["text-align", "typography", "root"],
 			"description": "Support for \"blockeraTextAlign\" value, this is mirror for WordPress block core \"align\" support."
 		},
 		"blockeraWordBreak": {
@@ -130,7 +130,7 @@
 			"id": "blockeraTextOrientation",
 			"definition": "TextOrientation",
 			"css-property": "text-orientation",
-			"fallback": ["typography.writingMode", "typography"],
+			"fallback": ["typography.writingMode", "typography", "root"],
 			"description": "Support for \"blockeraTextOrientation\" value."
 		},
 		"blockeraTextStroke": {

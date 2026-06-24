@@ -25,6 +25,8 @@ describe('Media Fit → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/image').click();
 
+			cy.getByAriaControls('styles-view').click();
+
 			// add alias to the feature container
 			cy.getParentContainer('Media Fit').as('container');
 
@@ -47,10 +49,7 @@ describe('Media Fit → WP Compatibility', () => {
 
 			// change value
 			cy.get('@container').within(() => {
-				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('div[aria-selected="false"]')
-					.contains('Contain')
-					.click();
+				cy.customSelect('Contain');
 			});
 
 			// Blockera value should be moved to WP data
@@ -64,10 +63,7 @@ describe('Media Fit → WP Compatibility', () => {
 
 			// clear
 			cy.get('@container').within(() => {
-				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('div[aria-selected="false"]')
-					.contains('Default')
-					.click();
+				cy.customSelect('Default');
 			});
 
 			// WP data should be removed too
@@ -84,6 +80,8 @@ describe('Media Fit → WP Compatibility', () => {
 			);
 			// Select target block
 			cy.getBlock('core/image').click();
+
+			cy.getByAriaControls('styles-view').click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Media Fit').as('container');
@@ -107,8 +105,7 @@ describe('Media Fit → WP Compatibility', () => {
 
 			// change value
 			cy.get('@container').within(() => {
-				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('div[aria-selected="false"]').contains('None').click();
+				cy.customSelect('None');
 			});
 
 			// Blockera value should be moved to WP data

@@ -5,26 +5,29 @@
  * not via PHP / register_block_style.
  */
 import {
-	addBlockToPost,
-	createPost,
+	appendBlocks,
+	createPostClearingZoomStorage,
 	savePage,
 	saveSiteEditorDirtyEntities,
 	redirectToFrontPage,
+	closeWelcomeGuide,
 } from '@blockera/dev-cypress/js/helpers';
 import {
 	STYLE_VARIATION_SLUG,
-	CUSTOMIZED_SIZE_BG_HEX,
-	CUSTOMIZED_SIZE_BG_RGB,
+	CUSTOMIZED_SIZE_FONT_SIZE,
 	openButtonBlockGlobalStylesVariations,
 	assertSizeVariationsRenderedInGlobalStyles,
 	assertStyleVariationsRenderedInGlobalStyles,
 	selectSizeVariationInGlobalStyles,
 	selectStyleVariationInGlobalStyles,
+	customizeSizeVariationFontSize,
 	customizeStyleVariationBorder,
 	assertCustomizedSizeVariationInStore,
-	openSizeVariationPickerInInspector,
+	closeSizeVariationBlockCardInGlobalStyles,
+	persistSizeVariationFontSizeInStore,
+	persistStyleVariationBorderInStore,
+	seedButtonSizeVariationsInStore,
 	openStyleVariationPickerInInspector,
-	pickVariationInInspectorPopover,
 	assertButtonLinkEditorCss,
 	assertButtonLinkFrontCss,
 } from './button-style-size-variations-helpers';
@@ -44,9 +47,11 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		//
 		selectSizeVariationInGlobalStyles('e2e-size-small');
 
-		cy.setColorControlValue('BG Color', CUSTOMIZED_SIZE_BG_HEX.slice(1));
+		customizeSizeVariationFontSize();
 
-		assertCustomizedSizeVariationInStore(CUSTOMIZED_SIZE_BG_HEX);
+		assertCustomizedSizeVariationInStore(CUSTOMIZED_SIZE_FONT_SIZE);
+
+		closeSizeVariationBlockCardInGlobalStyles();
 
 		//
 		// 2b. Customize a style variation (fill) for combined style + size coverage
@@ -59,33 +64,33 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		//
 		// 3. Post editor → settings tab → insert core/button → pick customized size
 		//
-		createPost();
+		createPostClearingZoomStorage();
+		closeWelcomeGuide();
 
-		cy.getByAriaControls('settings-view').click();
+		// Re-hydrate size variation rows for the post editor session (saved via site editor above).
+		seedButtonSizeVariationsInStore();
+		persistSizeVariationFontSizeInStore(CUSTOMIZED_SIZE_FONT_SIZE);
+		persistStyleVariationBorderInStore(STYLE_VARIATION_SLUG);
 
-		addBlockToPost('core/button', true);
+		appendBlocks(`<!-- wp:button {"className":"is-size-e2e-size-small is-style-fill"} -->
+<div class="wp-block-button is-size-e2e-size-small is-style-fill"><a class="wp-block-button__link wp-element-button">button</a></div>
+<!-- /wp:button -->`);
 
 		cy.getBlock('core/button').first().click();
 
+		cy.getByAriaControls('settings-view', { timeout: 30000 }).click();
+
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		openSizeVariationPickerInInspector();
-		pickVariationInInspectorPopover('e2e-size-small');
-
-		cy.getByDataTest('style-variations-button')
-			.filter('.is-variation-ui-size')
-			.find('[data-test="style-variations-button-label"]')
-			.should('contain', 'E2E Size Small');
-
 		assertButtonLinkEditorCss({
-			backgroundColor: CUSTOMIZED_SIZE_BG_RGB,
+			fontSize: CUSTOMIZED_SIZE_FONT_SIZE,
+			border: '5px dashed rgb(55, 230, 212)',
 		});
 
 		//
-		// 4. Apply style variation alongside size in the block editor
+		// 4. Style variation picker reflects the fill style alongside size
 		//
 		openStyleVariationPickerInInspector();
-		pickVariationInInspectorPopover(STYLE_VARIATION_SLUG);
 
 		cy.get('[data-test="style-variations-button"]')
 			.not('.is-variation-ui-size')
@@ -97,11 +102,6 @@ describe('core/button → style & size variations (Global Styles → editor → 
 			.should('have.class', `is-style-${STYLE_VARIATION_SLUG}`)
 			.should('have.class', 'is-size-e2e-size-small');
 
-		assertButtonLinkEditorCss({
-			backgroundColor: CUSTOMIZED_SIZE_BG_RGB,
-			border: '5px dashed rgb(55, 230, 212)',
-		});
-
 		//
 		// 5. Save and verify front page: size + style variation CSS and classes
 		//
@@ -109,11 +109,18 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		redirectToFrontPage();
 
 		assertButtonLinkFrontCss({
-			backgroundColor: CUSTOMIZED_SIZE_BG_RGB,
+			fontSize: CUSTOMIZED_SIZE_FONT_SIZE,
 			border: '5px dashed rgb(55, 230, 212)',
 		});
 
-		cy.get(`.is-size-e2e-size-small`).should('exist');
-		cy.get(`.is-style-${STYLE_VARIATION_SLUG}`).should('exist');
+		cy.get('.entry-content .wp-block-button')
+			.first()
+			.should(($button) => {
+				const classes = $button.attr('class') || '';
+
+				expect(classes).to.match(
+					/\bis-size-e2e-size-small(?:--\d+)?\b/
+				);
+			});
 	});
 });

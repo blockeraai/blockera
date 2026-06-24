@@ -102,8 +102,7 @@ describe('Button Block', () => {
 		});
 
 		cy.getParentContainer('Border').within(() => {
-			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('div[aria-selected="false"]').eq(0).click();
+			cy.customSelectOption(1);
 		});
 
 		cy.wait(10);

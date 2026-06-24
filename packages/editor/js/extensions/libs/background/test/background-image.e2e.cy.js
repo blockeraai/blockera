@@ -250,9 +250,9 @@ describe('Background Image → Functionality', () => {
 	describe('Linear Gradient', () => {
 		// linear-gradient(90deg,#009efa 10%,#e52e00 90%)
 		beforeEach(() => {
+			// Parent `createPost()` runs first; reload editor after MU is active so REST
+			// global-styles base config includes core gradient presets.
 			activateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
-
-			// Parent `createPost()` runs before nested hooks; reload editor with MU active.
 			createPost();
 
 			cy.getBlock('default').type('This is test paragraph', { delay: 0 });

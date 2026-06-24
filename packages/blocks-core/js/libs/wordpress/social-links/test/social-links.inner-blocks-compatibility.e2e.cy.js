@@ -38,6 +38,8 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Select target block
 		selectBlock('Social Icons');
 
+		cy.getByAriaControls('styles-view').click();
+
 		cy.addNewTransition();
 
 		//
@@ -248,6 +250,8 @@ describe('Social Links Block → WP Compatibility', () => {
 
 		// Select target block
 		selectBlock('Social Icons');
+
+		cy.getByAriaControls('styles-view').click();
 
 		cy.addNewTransition();
 

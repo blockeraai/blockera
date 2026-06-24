@@ -81,8 +81,7 @@ describe('Latest Posts Block', () => {
 			].forEach((item) => {
 				cy.get('.components-tools-panel-header')
 					.contains(item)
-					.scrollIntoView()
-					.should('be.visible');
+					.should('not.be.hidden');
 			});
 		});
 

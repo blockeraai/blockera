@@ -506,6 +506,50 @@ class TestHelpers extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Paragraph inner span must not run append_root for blockeraFontColor.
+	 * str_replace('p', ...) would corrupt [data-rich-text-placeholder].
+	 */
+	public function testInnerBlockSpanFontColorSelectorSkipsAppendRoot(): void {
+
+		$selectors = array_merge(
+			$this->selectors,
+			[
+				'root'                   => 'p',
+				'blockera/elements/span' => [
+					'root' => 'span:not([data-rich-text-placeholder])',
+				],
+			]
+		);
+
+		register_block_type(
+			'core/paragraph',
+			[
+				'selectors' => $selectors,
+			]
+		);
+
+		$result = blockera_get_compatible_block_css_selector(
+			$selectors,
+			'blockeraFontColor',
+			[
+				'block-name'               => 'core/paragraph',
+				'fallback'                 => [ 'color.text', 'color', 'typography' ],
+				'block-type'               => 'elements/span',
+				'blockera-unique-selector' => '.blockera-block.blockera-block--phggmy',
+				'root'                     => 'p',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+				'breakpoint'               => 'desktop',
+			]
+		);
+
+		$this->assertSame(
+			'html:root body :where(p) span:not([data-rich-text-placeholder])',
+			$result
+		);
+	}
+
+	/**
 	 * Test single selector with a suffix.
 	 */
 	public function testSingleSelectorWithSuffix() {

@@ -52,7 +52,6 @@ export const classes = [
 			'core/video',
 			'core/audio',
 			'core/avatar',
-			'core/image',
 			'core/file',
 			'outermost/icon-block',
 			'core/accordion',
