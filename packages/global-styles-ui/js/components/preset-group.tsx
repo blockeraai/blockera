@@ -3,7 +3,14 @@
  */
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useCallback, useMemo, useRef, useState } from '@wordpress/element';
+import {
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -19,13 +26,14 @@ import {
 	normalizeVariablePickerSearchQuery,
 	resolveVariablePickerPresetGroupLabel,
 	usePresetVariablesViewMode,
-	useVarPickerCustomAddContext,
+	useVarPickerCustomAddRegister,
 	useVarPickerPresetContext,
 	useVarPickerSearchContext,
+	useVariablePickerSearchQuery,
 	VarPickerSectionCustomAddButton,
 	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
-import { noop, pascalCase, isObject } from '@blockera/utils';
+import { noop, pascalCase, isObject, isEquals } from '@blockera/utils';
 import {
 	classNames,
 	controlClassNames,
@@ -51,6 +59,20 @@ import {
 	syncVariablePickerCreatingStepSlugs,
 } from './variable-picker-preset-utils';
 import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
+
+function areCreatingStepSlugMapsEqual(
+	a: Record<string, true>,
+	b: Record<string, true>
+): boolean {
+	const keysA = Object.keys(a);
+	const keysB = Object.keys(b);
+
+	if (keysA.length !== keysB.length) {
+		return false;
+	}
+
+	return keysA.every((key) => b[key]);
+}
 
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
@@ -323,7 +345,7 @@ const Presets = ({
 	);
 };
 
-export const PresetGroup = ({
+export const PresetGroup = memo(function PresetGroup({
 	label,
 	title,
 	origin,
@@ -337,17 +359,30 @@ export const PresetGroup = ({
 	enableCreatingStep = true,
 	repeaterItemVariations,
 	suppressThemeRepeaterWhenTaxonomyBasePopulated = false,
-}: PresetGroupPropsType) => {
+}: PresetGroupPropsType) {
 	const pickerCtx = useVarPickerPresetContext();
 	const pickerSearchCtx = useVarPickerSearchContext();
-	const customAddCtx = useVarPickerCustomAddContext();
+	const variablePickerSearchQuery = useVariablePickerSearchQuery();
+	const customAddRegister = useVarPickerCustomAddRegister();
 	const { viewMode } = usePresetVariablesViewMode();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
+	const pickerControlProps =
+		pickerCtx.controlPropsRef?.current ?? pickerCtx.controlProps;
+	const pickerControlPropsRef = useRef(pickerControlProps);
+	pickerControlPropsRef.current = pickerControlProps;
 
 	const [creatingStepRevision, setCreatingStepRevision] = useState(0);
 	const creatingStepSlugsRef = useRef<Record<string, true>>({});
+	const hasSeededVariablePickerRepeaterRef = useRef(false);
+
+	useEffect(() => {
+		if (!isVariablePicker) {
+			hasSeededVariablePickerRepeaterRef.current = false;
+			creatingStepSlugsRef.current = {};
+		}
+	}, [isVariablePicker]);
 
 	const cleanRepeaterForPersist = useCallback(
 		(raw: Object) => {
@@ -387,12 +422,23 @@ export const PresetGroup = ({
 					: newValue;
 
 			if (enableCreatingStep) {
-				creatingStepSlugsRef.current =
+				const prevCreatingStepSlugs = creatingStepSlugsRef.current;
+				const nextCreatingStepSlugs =
 					syncVariablePickerCreatingStepSlugs(
-						creatingStepSlugsRef.current,
+						prevCreatingStepSlugs,
 						raw
 					);
-				setCreatingStepRevision((revision) => revision + 1);
+
+				creatingStepSlugsRef.current = nextCreatingStepSlugs;
+
+				if (
+					!areCreatingStepSlugMapsEqual(
+						prevCreatingStepSlugs,
+						nextCreatingStepSlugs
+					)
+				) {
+					setCreatingStepRevision((revision) => revision + 1);
+				}
 			}
 
 			onChange(cleanRepeaterForPersist(raw));
@@ -402,9 +448,11 @@ export const PresetGroup = ({
 
 	const handleSelectableItemActivate = useCallback(
 		(_itemId: string, item: Object) => {
+			const controlProps = pickerControlPropsRef.current;
+
 			if (
 				!isVariablePicker ||
-				!pickerCtx.controlProps?.handleOnClickVar ||
+				!controlProps?.handleOnClickVar ||
 				!pickerCtx.variableType
 			) {
 				return;
@@ -415,22 +463,23 @@ export const PresetGroup = ({
 				origin,
 				pickerCtx.variableType
 			);
-			pickerCtx.controlProps.handleOnClickVar(payload as never, {
+			controlProps.handleOnClickVar(payload as never, {
 				keepPickerOpen: row.creatingStep === true,
 			});
 		},
-		[isVariablePicker, pickerCtx, origin]
+		[isVariablePicker, pickerCtx.variableType, origin]
 	);
 
 	const handleRepeaterItemDelete = useCallback(
 		(itemId: string, items: Object) => {
+			const controlProps = pickerControlPropsRef.current;
 			const record = items as Record<string, unknown>;
 			const item = record[itemId];
 
 			if (
 				isVariablePicker &&
 				typeof pickerCtx.variableType === 'string' &&
-				pickerCtx.controlProps &&
+				controlProps &&
 				item &&
 				typeof item === 'object' &&
 				!Array.isArray(item) &&
@@ -439,23 +488,23 @@ export const PresetGroup = ({
 					{
 						variableType: pickerCtx.variableType,
 						origin,
-						pickerValue: pickerCtx.controlProps.value,
+						pickerValue: controlProps.value,
 						themeJsonPlainPresetSlug:
-							pickerCtx.controlProps.themeJsonPlainPresetSlug,
+							controlProps.themeJsonPlainPresetSlug,
 					}
 				)
 			) {
-				pickerCtx.controlProps.handleOnClickRemove();
+				controlProps.handleOnClickRemove();
 			}
 
 			const next = { ...record };
 			delete next[itemId];
 			return next;
 		},
-		[isVariablePicker, pickerCtx, origin]
+		[isVariablePicker, pickerCtx.variableType, origin]
 	);
 
-	const pickerValue = pickerCtx.controlProps?.value;
+	const pickerValue = pickerControlProps?.value;
 
 	const variablesForRepeater = useMemo(() => {
 		const base = stripRepeaterPickerUiFields(variables) as typeof variables;
@@ -490,13 +539,13 @@ export const PresetGroup = ({
 		if (!isVariablePicker) {
 			return undefined;
 		}
-		const q = normalizeVariablePickerSearchQuery(pickerCtx.searchQuery);
+		const q = normalizeVariablePickerSearchQuery(variablePickerSearchQuery);
 		if (!q) {
 			return undefined;
 		}
 		return (itemId: string, item: Record<string, unknown>) =>
 			variablePickerItemMatchesSearch(item, q);
-	}, [isVariablePicker, pickerCtx.searchQuery]);
+	}, [isVariablePicker, variablePickerSearchQuery]);
 
 	const resolveRepeaterItemInterfaceSize = useCallback(
 		(_itemId: string, item: Record<string, unknown>) => {
@@ -504,21 +553,22 @@ export const PresetGroup = ({
 				viewMode === 'list' ||
 				(isVariablePicker &&
 					normalizeVariablePickerSearchQuery(
-						pickerCtx.searchQuery
+						variablePickerSearchQuery
 					) !== '')
 			) {
 				return 'full';
 			}
 			return resolvePresetRepeaterItemSize(item);
 		},
-		[isVariablePicker, pickerCtx.searchQuery, viewMode]
+		[isVariablePicker, variablePickerSearchQuery, viewMode]
 	);
 
 	const isPickerSearchActive = useMemo(
 		() =>
 			isVariablePicker &&
-			normalizeVariablePickerSearchQuery(pickerCtx.searchQuery) !== '',
-		[isVariablePicker, pickerCtx.searchQuery]
+			normalizeVariablePickerSearchQuery(variablePickerSearchQuery) !==
+				'',
+		[isVariablePicker, variablePickerSearchQuery]
 	);
 
 	const registerCustomAddNewAction = useCallback(
@@ -534,14 +584,14 @@ export const PresetGroup = ({
 			if (
 				origin !== 'custom' ||
 				!isVariablePicker ||
-				!customAddCtx?.register
+				!customAddRegister
 			) {
 				return undefined;
 			}
 
-			return customAddCtx.register(pickerCtx.variableType, action);
+			return customAddRegister(pickerCtx.variableType, action);
 		},
-		[origin, isVariablePicker, customAddCtx, pickerCtx.variableType]
+		[origin, isVariablePicker, customAddRegister, pickerCtx.variableType]
 	);
 
 	const getDynamicDefaultRepeaterItem = useCallback(
@@ -549,6 +599,8 @@ export const PresetGroup = ({
 			_count: number,
 			staticDefault: Record<string, unknown>
 		): Record<string, unknown> => {
+			const controlProps = pickerControlPropsRef.current;
+
 			if (
 				!isVariablePicker ||
 				origin !== 'custom' ||
@@ -558,10 +610,10 @@ export const PresetGroup = ({
 			}
 
 			return resolveVariablePickerCustomAddPresetValue({
-				rawValue: pickerCtx.controlProps?.rawValue,
+				rawValue: controlProps?.rawValue,
 				variableType: pickerCtx.variableType,
 				defaultPresetValue: staticDefault,
-				blockName: pickerCtx.controlProps?.themeJsonResolutionBlockName,
+				blockName: controlProps?.themeJsonResolutionBlockName,
 				searchSeed:
 					pickerSearchCtx.consumeAddSearchSeed?.() ?? undefined,
 			});
@@ -569,8 +621,6 @@ export const PresetGroup = ({
 		[
 			isVariablePicker,
 			origin,
-			pickerCtx.controlProps?.rawValue,
-			pickerCtx.controlProps?.themeJsonResolutionBlockName,
 			pickerCtx.variableType,
 			pickerSearchCtx.consumeAddSearchSeed,
 		]
@@ -597,13 +647,44 @@ export const PresetGroup = ({
 		return false;
 	}, [isPickerSearchActive, repeaterSearchFilter, variablesForRepeater]);
 
-	const repeaterContextValue = useMemo(
-		() => ({
-			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`,
+	const stableRepeaterContextRef = useRef<{
+		name: string;
+		value: VariablesType;
+	} | null>(null);
+
+	const repeaterContextValue = useMemo(() => {
+		const name = `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`;
+		const prev = stableRepeaterContextRef.current;
+
+		if (
+			prev &&
+			prev.name === name &&
+			isEquals(prev.value, variablesForRepeater)
+		) {
+			return prev;
+		}
+
+		const next = {
+			name,
 			value: variablesForRepeater,
-		}),
-		[origin, title, variablesForRepeater, isVariablePicker]
-	);
+			needUpdate: () => {
+				if (!isVariablePicker) {
+					return true;
+				}
+
+				// Seed once from props; while the variable picker is open the repeater
+				// store owns live edits (onChange persists back to the parent).
+				if (!hasSeededVariablePickerRepeaterRef.current) {
+					hasSeededVariablePickerRepeaterRef.current = true;
+					return true;
+				}
+
+				return false;
+			},
+		};
+		stableRepeaterContextRef.current = next;
+		return next;
+	}, [origin, title, variablesForRepeater, isVariablePicker]);
 
 	const labelForVariablePicker = useMemo(() => {
 		if (pickerCtx.omitRepeaterSectionLabel) {
@@ -613,7 +694,7 @@ export const PresetGroup = ({
 			return label;
 		}
 		const isMultiTypeVariablePicker =
-			(pickerCtx.controlProps?.variableTypes || []).length > 1;
+			(pickerControlProps?.variableTypes || []).length > 1;
 		return resolveVariablePickerPresetGroupLabel(
 			title,
 			origin,
@@ -625,7 +706,7 @@ export const PresetGroup = ({
 		label,
 		origin,
 		pickerCtx.omitRepeaterSectionLabel,
-		pickerCtx.controlProps?.variableTypes,
+		pickerControlProps?.variableTypes,
 		title,
 	]);
 
@@ -650,14 +731,28 @@ export const PresetGroup = ({
 		pickerCtx.omitRepeaterSectionLabel,
 	]);
 
+	const customSectionAddButton = useMemo(() => {
+		if (
+			!isVariablePicker ||
+			origin !== 'custom' ||
+			typeof pickerCtx.variableType !== 'string'
+		) {
+			return undefined;
+		}
+
+		return (
+			<VarPickerSectionCustomAddButton
+				variableType={pickerCtx.variableType}
+			/>
+		);
+	}, [isVariablePicker, origin, pickerCtx.variableType]);
+
 	if (suppressThemeRepeaterWhenTaxonomyBasePopulated) {
 		return null;
 	}
 
 	const useVariablePickerCustomSectionAddButton =
-		isVariablePicker &&
-		origin === 'custom' &&
-		typeof pickerCtx.variableType === 'string';
+		customSectionAddButton !== undefined;
 
 	const keepMountedForCustomAddRegistration =
 		isPickerSearchActive &&
@@ -748,13 +843,7 @@ export const PresetGroup = ({
 						getDynamicDefaultRepeaterItem={
 							getDynamicDefaultRepeaterItem
 						}
-						injectHeaderButtonsEnd={
-							useVariablePickerCustomSectionAddButton ? (
-								<VarPickerSectionCustomAddButton
-									variableType={pickerCtx.variableType}
-								/>
-							) : undefined
-						}
+						injectHeaderButtonsEnd={customSectionAddButton}
 						suppressNativeSectionAddButton={
 							useVariablePickerCustomSectionAddButton
 						}
@@ -773,4 +862,4 @@ export const PresetGroup = ({
 	}
 
 	return presetGroupContent;
-};
+});

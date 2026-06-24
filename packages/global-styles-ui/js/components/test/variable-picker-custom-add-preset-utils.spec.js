@@ -418,12 +418,22 @@ describe('variable picker creatingStep slug helpers', () => {
 				'font-size-1': { slug: 'font-size-1', creatingStep: true },
 			}
 		);
-		expect(slugs).toEqual({ 'font-size-1': true });
+		expect(slugs).toEqual({ 'slug:font-size-1': true });
 
 		slugs = syncVariablePickerCreatingStepSlugs(slugs, {
 			'font-size-1': { slug: 'font-size-1', creatingStep: false },
 		});
 		expect(slugs).toEqual({});
+	});
+
+	it('syncVariablePickerCreatingStepSlugs tracks slugless rows by item id', () => {
+		const slugs = syncVariablePickerCreatingStepSlugs(
+			{},
+			{
+				'new-row-0': { name: 'Untitled', creatingStep: true },
+			}
+		);
+		expect(slugs).toEqual({ 'id:new-row-0': true });
 	});
 
 	it('syncVariablePickerCreatingStepSlugs drops stale slug when derived slug changes during create', () => {
@@ -433,28 +443,28 @@ describe('variable picker creatingStep slug helpers', () => {
 				0: { slug: 'transform-1', creatingStep: true },
 			}
 		);
-		expect(slugs).toEqual({ 'transform-1': true });
+		expect(slugs).toEqual({ 'slug:transform-1': true });
 
 		slugs = syncVariablePickerCreatingStepSlugs(slugs, {
 			0: { slug: 'e-2-e-transform', creatingStep: true },
 		});
-		expect(slugs).toEqual({ 'e-2-e-transform': true });
+		expect(slugs).toEqual({ 'slug:e-2-e-transform': true });
 	});
 
 	it('syncVariablePickerCreatingStepSlugs keeps mid-create slug after persist strips creatingStep', () => {
 		const slugs = syncVariablePickerCreatingStepSlugs(
-			{ 'e-2-e-transform': true },
+			{ 'slug:e-2-e-transform': true },
 			{
 				0: { slug: 'e-2-e-transform', name: 'E2E Transform' },
 			}
 		);
-		expect(slugs).toEqual({ 'e-2-e-transform': true });
+		expect(slugs).toEqual({ 'slug:e-2-e-transform': true });
 	});
 
 	it('mergeVariablePickerCreatingStepIntoItems restores creatingStep on array rows', () => {
 		const items = [{ slug: 'font-size-2', size: '20px' }];
 		const merged = mergeVariablePickerCreatingStepIntoItems(items, {
-			'font-size-2': true,
+			'slug:font-size-2': true,
 		});
 		expect(merged[0].creatingStep).toBe(true);
 	});

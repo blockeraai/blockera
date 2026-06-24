@@ -139,28 +139,55 @@ export function applyVariablePickerRepeaterSelection(
 			return row;
 		}
 		const r = row as Record<string, unknown>;
+		const nextSelectable = r.listViewCompactShades === true ? false : true;
+		const nextIsSelected = variablePickerRowMatchesSelected(
+			r,
+			variableType,
+			origin,
+			pickerValue
+		);
+
+		if (
+			r.selectable === nextSelectable &&
+			r.isSelected === nextIsSelected
+		) {
+			return row;
+		}
+
 		return {
 			...r,
-			selectable: r.listViewCompactShades === true ? false : true,
-			isSelected: variablePickerRowMatchesSelected(
-				r,
-				variableType,
-				origin,
-				pickerValue
-			),
+			selectable: nextSelectable,
+			isSelected: nextIsSelected,
 		};
 	};
 
 	if (Array.isArray(items)) {
-		return items.map(mapRow);
+		let changed = false;
+		const mapped = items.map((row) => {
+			const nextRow = mapRow(row);
+			if (nextRow !== row) {
+				changed = true;
+			}
+			return nextRow;
+		});
+		return changed ? mapped : items;
 	}
 
 	if (typeof items === 'object') {
-		const next = { ...(items as Record<string, unknown>) };
-		for (const key of Object.keys(next)) {
-			next[key] = mapRow(next[key]);
+		const source = items as Record<string, unknown>;
+		let next: Record<string, unknown> | null = null;
+
+		for (const key of Object.keys(source)) {
+			const mappedRow = mapRow(source[key]);
+			if (mappedRow !== source[key]) {
+				if (!next) {
+					next = { ...source };
+				}
+				next[key] = mappedRow;
+			}
 		}
-		return next;
+
+		return next ?? source;
 	}
 
 	return items;
@@ -242,19 +269,45 @@ export function stripRepeaterPickerUiFields(items: unknown): unknown {
 			listViewCompactShades: _listViewCompactShades,
 			...rest
 		} = r;
+
+		if (
+			_is === undefined &&
+			_sel === undefined &&
+			_listViewCompactShades === undefined
+		) {
+			return row;
+		}
+
 		return rest;
 	};
 
 	if (Array.isArray(items)) {
-		return items.map(stripRow);
+		let changed = false;
+		const mapped = items.map((row) => {
+			const nextRow = stripRow(row);
+			if (nextRow !== row) {
+				changed = true;
+			}
+			return nextRow;
+		});
+		return changed ? mapped : items;
 	}
 
 	if (typeof items === 'object') {
-		const next = { ...(items as Record<string, unknown>) };
-		for (const key of Object.keys(next)) {
-			next[key] = stripRow(next[key]);
+		const source = items as Record<string, unknown>;
+		let next: Record<string, unknown> | null = null;
+
+		for (const key of Object.keys(source)) {
+			const strippedRow = stripRow(source[key]);
+			if (strippedRow !== source[key]) {
+				if (!next) {
+					next = { ...source };
+				}
+				next[key] = strippedRow;
+			}
 		}
-		return next;
+
+		return next ?? source;
 	}
 
 	return items;
@@ -273,40 +326,62 @@ export function syncVariablePickerCreatingStepSlugs(
 	raw: unknown
 ): Record<string, true> {
 	const next: Record<string, true> = {};
-	let rows: unknown[] = [];
-	if (Array.isArray(raw)) {
-		rows = raw;
-	} else if (raw && typeof raw === 'object') {
-		rows = Object.values(raw as Record<string, unknown>);
-	}
-
 	const rowsBySlug = new Map<string, Record<string, unknown>>();
+	const rowsByItemId = new Map<string, Record<string, unknown>>();
 
-	for (const row of rows) {
+	const ingestRow = (itemId: string, row: unknown) => {
 		if (!row || typeof row !== 'object' || Array.isArray(row)) {
-			continue;
+			return;
 		}
 		const r = row as Record<string, unknown>;
+		rowsByItemId.set(itemId, r);
 		const slug =
 			r.slug !== null && r.slug !== undefined ? String(r.slug) : '';
-		if (!slug) {
-			continue;
+
+		if (slug) {
+			rowsBySlug.set(slug, r);
 		}
-		rowsBySlug.set(slug, r);
+
 		if (r.creatingStep === true) {
-			next[slug] = true;
+			if (slug) {
+				next[`slug:${slug}`] = true;
+			} else {
+				next[`id:${itemId}`] = true;
+			}
+		}
+	};
+
+	if (Array.isArray(raw)) {
+		raw.forEach((row, index) => {
+			ingestRow(String(index), row);
+		});
+	} else if (raw && typeof raw === 'object') {
+		for (const [itemId, row] of Object.entries(
+			raw as Record<string, unknown>
+		)) {
+			ingestRow(itemId, row);
 		}
 	}
 
-	for (const slug of Object.keys(prev)) {
-		if (next[slug]) {
+	for (const key of Object.keys(prev)) {
+		if (next[key]) {
 			continue;
 		}
-		const row = rowsBySlug.get(slug);
-		if (!row || row.creatingStep === false) {
+
+		if (key.startsWith('id:')) {
+			const itemId = key.slice(3);
+			const row = rowsByItemId.get(itemId);
+			if (row && row.creatingStep !== false) {
+				next[key] = true;
+			}
 			continue;
 		}
-		next[slug] = true;
+
+		const slugKey = key.startsWith('slug:') ? key.slice(5) : key;
+		const row = rowsBySlug.get(slugKey);
+		if (row && row.creatingStep !== false) {
+			next[key.startsWith('slug:') ? key : `slug:${slugKey}`] = true;
+		}
 	}
 
 	return next;
@@ -324,29 +399,70 @@ export function mergeVariablePickerCreatingStepIntoItems<T>(
 		return items;
 	}
 
-	const mapRow = (row: unknown): unknown => {
+	const rowHasCreatingStep = (
+		row: Record<string, unknown>,
+		itemId?: string
+	): boolean => {
+		const slug =
+			row.slug !== null && row.slug !== undefined ? String(row.slug) : '';
+
+		if (slug) {
+			if (creatingStepSlugs[`slug:${slug}`] || creatingStepSlugs[slug]) {
+				return true;
+			}
+		}
+
+		if (itemId && creatingStepSlugs[`id:${itemId}`]) {
+			return true;
+		}
+
+		return false;
+	};
+
+	const mapRow = (row: unknown, itemId?: string): unknown => {
 		if (!row || typeof row !== 'object' || Array.isArray(row)) {
 			return row;
 		}
 		const r = row as Record<string, unknown>;
-		const slug =
-			r.slug !== null && r.slug !== undefined ? String(r.slug) : '';
-		if (slug && creatingStepSlugs[slug]) {
-			return { ...r, creatingStep: true };
+
+		if (!rowHasCreatingStep(r, itemId)) {
+			return row;
 		}
-		return row;
+
+		if (r.creatingStep === true) {
+			return row;
+		}
+
+		return { ...r, creatingStep: true };
 	};
 
 	if (Array.isArray(items)) {
-		return items.map(mapRow) as T;
+		let changed = false;
+		const mapped = items.map((row, index) => {
+			const nextRow = mapRow(row, String(index));
+			if (nextRow !== row) {
+				changed = true;
+			}
+			return nextRow;
+		});
+		return (changed ? mapped : items) as T;
 	}
 
 	if (typeof items === 'object') {
-		const next = { ...(items as Record<string, unknown>) };
-		for (const key of Object.keys(next)) {
-			next[key] = mapRow(next[key]);
+		const source = items as Record<string, unknown>;
+		let next: Record<string, unknown> | null = null;
+
+		for (const [itemId, row] of Object.entries(source)) {
+			const mappedRow = mapRow(row, itemId);
+			if (mappedRow !== row) {
+				if (!next) {
+					next = { ...source };
+				}
+				next[itemId] = mappedRow;
+			}
 		}
-		return next as T;
+
+		return (next ?? source) as T;
 	}
 
 	return items;
