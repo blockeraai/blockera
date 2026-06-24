@@ -35,6 +35,8 @@ describe('Social Links Block', () => {
 		// Select target block
 		selectBlock('Social Icons');
 
+		cy.getByAriaControls('styles-view').click();
+
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
