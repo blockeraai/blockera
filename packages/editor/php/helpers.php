@@ -318,6 +318,20 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 			$root = $args['blockera-unique-selector'] . $root;
 		}
 
+		/*
+		 * Block type roots like `.wp-block-list > li` (core/list-item) describe element shape only.
+		 * Inner block styles must scope to the blockera unique class on the target compound (the `li`).
+		 */
+		$unique_selector = $args['blockera-unique-selector'] ?? '';
+		if (
+			'' !== trim( $unique_selector )
+			&& ! str_contains( $root, $unique_selector )
+			&& preg_match( '/\s>\s/', $root )
+		) {
+			$parts = preg_split( '/(?:::|:)/', $root, 2 );
+			$root  = $parts[0] . $unique_selector;
+		}
+
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
 

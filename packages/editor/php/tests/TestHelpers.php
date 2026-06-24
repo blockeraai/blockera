@@ -523,6 +523,26 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 	}
 
+	public function testListItemInnerBlockLinkSelectorScopesToUniqueClass() {
+
+		$result = blockera_get_inner_block_state_selector(
+			'a:not(.wp-element-button)',
+			[
+				'block-name'               => 'core/list-item',
+				'block-type'               => 'elements/link',
+				'root'                     => '.wp-block-list > li',
+				'blockera-unique-selector' => '.blockera-block.blockera-block--abc',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+			]
+		);
+
+		$this->assertSame(
+			'html:root body :where(.wp-block-list > li.blockera-block.blockera-block--abc) a:not(.wp-element-button)',
+			$result
+		);
+	}
+
 	public function testListItemBackgroundClipSelectorAppendsUniqueClassOnLastCompound(): void {
 
 		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );
@@ -544,6 +564,31 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertSame(
 			".wp-block-list > li{$unique}",
+			$result
+		);
+	}
+
+	public function testListItemInnerBlockLinkBackgroundColorSelectorScopesToUniqueClass(): void {
+
+		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );
+		$unique    = '.blockera-block.blockera-block--abc';
+
+		$result = blockera_get_compatible_block_css_selector(
+			$selectors,
+			'blockeraBackgroundColor',
+			[
+				'block-type'               => 'elements/link',
+				'block-name'               => 'core/list-item',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+				'breakpoint'               => 'desktop',
+				'root'                     => $selectors['root'] ?? null,
+				'blockera-unique-selector' => $unique,
+			]
+		);
+
+		$this->assertSame(
+			"html:root body :where(.wp-block-list > li{$unique}) a:not(.wp-element-button)",
 			$result
 		);
 	}
