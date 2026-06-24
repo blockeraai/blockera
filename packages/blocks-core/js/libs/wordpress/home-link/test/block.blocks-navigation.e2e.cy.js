@@ -41,7 +41,7 @@ describe(
 				.last()
 				.within(() => {
 					// Open blocks menu
-					cy.get('[aria-label="Add block"]')
+					cy.get('[aria-label="Add page"]')
 						.first()
 						.click({ force: true });
 				});
