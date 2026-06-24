@@ -661,12 +661,8 @@ export const registerCommands = () => {
 			.last()
 			.should('be.visible')
 			.within(() => {
-				cy.getByDataCy('color-picker-css-value').clear({
-					force: true,
-				});
-				cy.getByDataCy('color-picker-css-value').type(value, {
-					delay: 0,
-					force: true,
+				cy.getByDataCy('color-picker-css-value').then(($input) => {
+					cy.wrap($input).setControlledInputValue(value);
 				});
 				cy.getByDataCy('color-picker-css-value').blur();
 
