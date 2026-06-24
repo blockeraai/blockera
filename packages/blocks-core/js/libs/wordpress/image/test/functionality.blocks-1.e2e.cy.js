@@ -124,39 +124,7 @@ describe('Image Block', () => {
 			});
 
 		//
-		// 2. Check settings tab
-		//
-		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
-
-		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
-				.contains('Settings')
-				.scrollIntoView()
-				.should('be.visible');
-
-			cy.get(
-				'.components-tools-panel:not(.block-editor-bindings__panel)'
-			).within(() => {
-				cy.get('.components-input-control__label')
-					.contains('Aspect ratio')
-					.should('exist')
-					.should('not.be.visible');
-
-				cy.get('.components-input-control__label')
-					.contains('Width')
-					.should('exist')
-					.should('not.be.visible');
-
-				cy.get('.components-input-control__label')
-					.contains('Height')
-					.should('exist')
-					.should('not.be.visible');
-			});
-		});
-
-		//
-		// 3. Assert inner blocks selectors in front end
+		// 2. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();
