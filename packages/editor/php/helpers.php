@@ -844,7 +844,11 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		// We not needs append blockera root block css selector into inners selector.
 		// because it's already appended in the inner block selector.
-		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) ) {
+		if (
+			! $feature_id
+			|| str_starts_with( $feature_id, 'blockera/' )
+			|| ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) )
+		) {
 
 			return ! empty( $selector ) ? $selector : $args['blockera-unique-selector'];
 		}
