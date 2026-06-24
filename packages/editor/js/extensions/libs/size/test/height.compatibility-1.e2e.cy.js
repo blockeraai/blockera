@@ -24,6 +24,8 @@ describe('Height → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/image').click();
 
+			cy.getByAriaControls('styles-view').click();
+
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');
 
@@ -80,6 +82,8 @@ describe('Height → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('core/image').click();
+
+			cy.getByAriaControls('styles-view').click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');
