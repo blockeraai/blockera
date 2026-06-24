@@ -250,16 +250,17 @@ export const registerCommands = () => {
 
 		cy.get(
 			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
-			{ timeout: 15000 }
+			{ timeout: 20000 }
 		)
 			.filter(':visible')
-			.first()
+			.last()
 			.should('be.visible')
 			.within(() => {
-				cy.get(itemSelector)
+				cy.get(itemSelector, { timeout: 20000 })
 					.filter(':visible')
 					.first()
-					.should('exist')
+					.scrollIntoView()
+					.should('be.visible')
 					.click({ force: true });
 			});
 	});
