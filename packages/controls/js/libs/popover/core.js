@@ -56,7 +56,6 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				titleButtonsLeft = '',
 				headerRef,
 				anchor,
-				focusOutsideSuppressionRef,
 				...props
 			}: TPopoverCoreProps,
 			ref
@@ -66,6 +65,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 
 			const internalRef = useRef();
 			const popoverRef = ref || internalRef;
+			const ignoreFocusOutsideDuringMountRef = useRef(true);
 
 			useEffect(() => {
 				popoverRef.current?.focus();
@@ -73,8 +73,21 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, []);
 
+			useEffect(() => {
+				ignoreFocusOutsideDuringMountRef.current = true;
+
+				const timer = setTimeout(() => {
+					ignoreFocusOutsideDuringMountRef.current = false;
+				}, 100);
+
+				return () => {
+					clearTimeout(timer);
+					ignoreFocusOutsideDuringMountRef.current = false;
+				};
+			}, []);
+
 			function popoverOnFocusOutside(e: FocusEvent) {
-				if (focusOutsideSuppressionRef?.current) {
+				if (ignoreFocusOutsideDuringMountRef.current) {
 					return;
 				}
 
