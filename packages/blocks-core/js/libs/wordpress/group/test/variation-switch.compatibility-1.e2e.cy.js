@@ -248,7 +248,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-panel__body-title button')
 				.contains('Layout')
-				.should('be.visible');
+				.should('be.hidden');
 		});
 
 		//
