@@ -63,9 +63,9 @@ const RepeaterItem = ({
 	size,
 }: RepeaterItemProps): null | Element<any> => {
 	const rowSize: RepeaterItemSize = size ?? 'full';
-	const [isOpen, setOpen] = useState(
-		isBoolean(item?.isOpen) ? item?.isOpen : false
-	);
+	// Start closed; open via effect when item is new (isOpen/creatingStep) so focus-outside
+	// suppression is armed before the popover mounts.
+	const [isOpen, setOpen] = useState(false);
 	const [isVisible, setVisibility] = useState(
 		isBoolean(item?.isVisible) ? item.isVisible : true
 	);
@@ -94,6 +94,8 @@ const RepeaterItem = ({
 		onSelectableItemActivate,
 		enablePromoCountOnRepeaterItemHeader,
 		disableProHints,
+		pendingOpenItemId,
+		clearPendingOpenItemId,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -163,12 +165,24 @@ const RepeaterItem = ({
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
-	const suppressPopoverFocusOutsideRef = useRef(false);
+	const isPendingOpenItem = pendingOpenItemId === itemId;
+	const shouldSuppressInitialFocusOutsideRef = useRef(
+		item?.creatingStep === true || isPendingOpenItem
+	);
+	const suppressPopoverFocusOutsideRef = useRef(
+		shouldSuppressInitialFocusOutsideRef.current
+	);
 
 	useEffect(() => {
 		suppressPopoverFocusOutsideRef.current =
-			item?.creatingStep === true && isOpen;
-	}, [item?.creatingStep, isOpen]);
+			isOpen &&
+			(item?.creatingStep === true ||
+				pendingOpenItemId === itemId ||
+				shouldSuppressInitialFocusOutsideRef.current);
+		if (!isOpen) {
+			shouldSuppressInitialFocusOutsideRef.current = false;
+		}
+	}, [item?.creatingStep, isOpen, pendingOpenItemId, itemId]);
 
 	useEffect(() => {
 		styleRef.current = {
@@ -176,14 +190,25 @@ const RepeaterItem = ({
 		};
 	}, [draggingIndex, itemId]);
 
-	// New preset rows (creatingStep) open the edit popover and scroll into view when
-	// the repeater lives inside a scrollable panel (e.g. variable picker).
+	// New rows open the edit popover in an effect so focus-outside suppression is armed
+	// before the popover mounts (pendingOpenItemId / creatingStep survive valueCleanup).
 	useEffect(() => {
-		if (item?.creatingStep !== true) {
+		if (
+			item?.creatingStep !== true &&
+			pendingOpenItemId !== itemId &&
+			item?.isOpen !== true
+		) {
 			return;
 		}
 
 		setOpen(true);
+	}, [item?.creatingStep, item?.isOpen, pendingOpenItemId, itemId]);
+
+	// Preset creatingStep rows scroll into the nearest scrollable panel (e.g. variable picker).
+	useEffect(() => {
+		if (item?.creatingStep !== true) {
+			return;
+		}
 
 		const node = itemRef.current;
 		if (!(node instanceof HTMLElement)) {
@@ -203,6 +228,8 @@ const RepeaterItem = ({
 
 	const handleItemPopoverClose = () => {
 		setOpen(false);
+		shouldSuppressInitialFocusOutsideRef.current = false;
+		clearPendingOpenItemId(itemId);
 
 		if (item?.creatingStep === true) {
 			changeRepeaterItem({

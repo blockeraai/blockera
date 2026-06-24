@@ -29,7 +29,10 @@ import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 import RepeaterPopoverTitleDelete from './components/popover-title-delete';
 import { BLOCKERA_REPEATER_PROMO_DATA_CY } from './data-cy';
-import { repeaterOnChange } from './store/reducers/utils';
+import {
+	countPropertiesWithPattern,
+	repeaterOnChange,
+} from './store/reducers/utils';
 import { cleanupRepeater, isRepeaterPromoActive } from './utils';
 
 /**
@@ -165,6 +168,13 @@ export default function RepeaterControl(
 	});
 
 	const [count, setCount] = useState(0);
+	const [pendingOpenItemId, setPendingOpenItemId] = useState(null);
+
+	const clearPendingOpenItemId = useCallback((itemId?: string) => {
+		setPendingOpenItemId((current) =>
+			itemId === undefined || current === itemId ? null : current
+		);
+	}, []);
 
 	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
 
@@ -436,6 +446,8 @@ export default function RepeaterControl(
 		},
 		enablePromoCountOnRepeaterItemHeader,
 		disableProHints,
+		pendingOpenItemId,
+		clearPendingOpenItemId,
 	};
 
 	const addNewButtonOnClick = () => {
@@ -494,6 +506,38 @@ export default function RepeaterControl(
 			return String(count);
 		};
 
+		const resolveStandardNewRepeaterItemId = (
+			itemValue: Object
+		): string => {
+			if ('function' === typeof itemIdGenerator) {
+				return itemIdGenerator(itemsCount);
+			}
+
+			if (!itemValue?.type) {
+				return String(itemsCount);
+			}
+
+			const typeCount = countPropertiesWithPattern(
+				repeaterItems || {},
+				new RegExp(`^${itemValue.type}`, 'i')
+			);
+
+			return `${itemValue.type}-${typeCount}`;
+		};
+
+		const queueEditPopoverForAddedItem = (
+			itemValue: ?Object,
+			{ selectableId = false }: { selectableId?: boolean } = {}
+		): void => {
+			const addedItemId = selectableId
+				? resolveNewRepeaterItemId(itemValue, itemsCount)
+				: resolveStandardNewRepeaterItemId(
+						itemValue || defaultRepeaterItemValue
+					);
+
+			setPendingOpenItemId(addedItemId);
+		};
+
 		const callback = (value?: Object): void => {
 			if (!defaultRepeaterItemValue?.selectable) {
 				return;
@@ -534,6 +578,8 @@ export default function RepeaterControl(
 				onChange,
 				valueCleanup,
 			});
+
+			queueEditPopoverForAddedItem(value, { selectableId: true });
 		};
 
 		if (maxItems !== -1 && itemsCount >= maxItems) {
@@ -563,6 +609,8 @@ export default function RepeaterControl(
 				value: newItemWithCreatingStep(value),
 			});
 
+			queueEditPopoverForAddedItem(newItemWithCreatingStep(value));
+
 			return;
 		}
 
@@ -578,6 +626,8 @@ export default function RepeaterControl(
 			itemIdGenerator,
 			value: defaultRepeaterItemValue,
 		});
+
+		queueEditPopoverForAddedItem(defaultRepeaterItemValue);
 	};
 
 	const hasRepeaterItems = Object.keys(repeaterItems || {}).length > 0;
