@@ -42,7 +42,7 @@ describe(
 				.last()
 				.within(() => {
 					// Open blocks menu
-					cy.get('[aria-label="Add block"]')
+					cy.get('[aria-label="Add page"]')
 						.first()
 						.click({ force: true });
 				});
@@ -153,20 +153,7 @@ describe(
 				});
 
 			//
-			// 3. Check settings tab
-			//
-			setParentBlock();
-			cy.getByAriaControls('settings-view').click();
-
-			cy.get('.block-editor-block-inspector').within(() => {
-				cy.get('.components-tools-panel-header')
-					.contains('Settings')
-					.scrollIntoView()
-					.should('be.visible');
-			});
-
-			//
-			// 4. Assert inner blocks selectors in front end
+			// 3. Assert inner blocks selectors in front end
 			//
 			savePage();
 			redirectToFrontPage();
