@@ -100,7 +100,8 @@ export function getSelectedBlockStyle(data, name, variation = 'default') {
  * Get the WordPress globalStyles entity record.
  *
  * For `styles`, the default `merged` mode layers Blockera's merged theme + user
- * styles (same as Playwright) so mu-plugin theme.json fixtures are visible in tests.
+ * styles when available, otherwise merges WordPress theme base global styles
+ * (parity with Playwright / registration.js).
  *
  * @param {*} data the @wordpress/data package object.
  * @param {*} prop the property of record. like style, settings, etc.
@@ -125,13 +126,27 @@ export function getEditedGlobalStylesRecord(
 	);
 
 	if ('styles' === prop && 'merged' === type) {
-		const userStyles =
-			data.select('blockera/editor')?.getGlobalStyles?.()?.userStyles
-				?.styles || {};
+		const coreSelect = data.select('core');
+		const blockeraMergedStyles = data
+			.select('blockera/editor')
+			?.getGlobalStyles?.()?.userStyles?.styles;
 
-		record = mergeObject(record, {
-			styles: userStyles,
-		});
+		if (
+			blockeraMergedStyles &&
+			'object' === typeof blockeraMergedStyles &&
+			Object.keys(blockeraMergedStyles).length
+		) {
+			record = mergeObject(record, {
+				styles: blockeraMergedStyles,
+			});
+		} else {
+			const baseConfig =
+				coreSelect.__experimentalGetCurrentThemeBaseGlobalStyles?.();
+
+			if (baseConfig && 'object' === typeof baseConfig) {
+				record = mergeObject(mergeObject({}, baseConfig), record);
+			}
+		}
 	}
 
 	if (prop) {
