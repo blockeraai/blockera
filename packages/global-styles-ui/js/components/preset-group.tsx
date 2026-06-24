@@ -375,11 +375,9 @@ export const PresetGroup = memo(function PresetGroup({
 
 	const [creatingStepRevision, setCreatingStepRevision] = useState(0);
 	const creatingStepSlugsRef = useRef<Record<string, true>>({});
-	const hasSeededVariablePickerRepeaterRef = useRef(false);
 
 	useEffect(() => {
 		if (!isVariablePicker) {
-			hasSeededVariablePickerRepeaterRef.current = false;
 			creatingStepSlugsRef.current = {};
 		}
 	}, [isVariablePicker]);
@@ -667,20 +665,6 @@ export const PresetGroup = memo(function PresetGroup({
 		const next = {
 			name,
 			value: variablesForRepeater,
-			needUpdate: () => {
-				if (!isVariablePicker) {
-					return true;
-				}
-
-				// Seed once from props; while the variable picker is open the repeater
-				// store owns live edits (onChange persists back to the parent).
-				if (!hasSeededVariablePickerRepeaterRef.current) {
-					hasSeededVariablePickerRepeaterRef.current = true;
-					return true;
-				}
-
-				return false;
-			},
 		};
 		stableRepeaterContextRef.current = next;
 		return next;
