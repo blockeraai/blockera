@@ -2,13 +2,16 @@
 /**
  * External dependencies
  */
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import type { ValueAddonControlProps } from '../control/types';
-import type { VarPickerCustomAddAction } from './var-picker-custom-add-context';
+import {
+	areVarPickerCustomAddActionsEqual,
+	type VarPickerCustomAddAction,
+} from './var-picker-custom-add-context';
 import { useVarPickerSingleTypeCustomAddAction } from './use-var-picker-single-type-custom-add-action';
 
 type VarPickerAddActionRefBridgeProps = {
@@ -24,8 +27,19 @@ export function VarPickerAddActionRefBridge({
 	onCustomAddActionChange,
 }: VarPickerAddActionRefBridgeProps): null {
 	const customAddAction = useVarPickerSingleTypeCustomAddAction(controlProps);
+	const previousActionRef = useRef<?VarPickerCustomAddAction>(null);
 
 	useEffect(() => {
+		if (
+			areVarPickerCustomAddActionsEqual(
+				previousActionRef.current,
+				customAddAction
+			)
+		) {
+			return;
+		}
+
+		previousActionRef.current = customAddAction;
 		onCustomAddActionChange(customAddAction);
 	}, [customAddAction, onCustomAddActionChange]);
 
