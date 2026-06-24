@@ -5,7 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { useInstanceId } from '@wordpress/compose';
 import type { MixedElement } from 'react';
-import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
+import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -87,36 +87,6 @@ export default function ColorPickerControl({
 		ColorPickerControl,
 		'blockera-color-picker-css'
 	);
-	// Some color pickers blur the active element on drag; null relatedTarget can close the popover on focus-outside.
-	const focusOutsideSuppressionRef = useRef(false);
-
-	useEffect(() => {
-		if (!isOpen || !isPopover) {
-			return undefined;
-		}
-		const doc = typeof document !== 'undefined' ? document : null;
-		if (!doc) {
-			return undefined;
-		}
-		const onPointerDownCapture = (ev: PointerEvent) => {
-			const t = ev.target;
-			if (t instanceof Element && t.closest('.sketch-picker')) {
-				focusOutsideSuppressionRef.current = true;
-			}
-		};
-		const clearSuppression = () => {
-			focusOutsideSuppressionRef.current = false;
-		};
-		doc.addEventListener('pointerdown', onPointerDownCapture, true);
-		doc.addEventListener('pointerup', clearSuppression, true);
-		doc.addEventListener('pointercancel', clearSuppression, true);
-		return () => {
-			doc.removeEventListener('pointerdown', onPointerDownCapture, true);
-			doc.removeEventListener('pointerup', clearSuppression, true);
-			doc.removeEventListener('pointercancel', clearSuppression, true);
-			focusOutsideSuppressionRef.current = false;
-		};
-	}, [isOpen, isPopover]);
 
 	const eyeDropper: any = window?.EyeDropper ? new window.EyeDropper() : null;
 
@@ -257,7 +227,6 @@ export default function ColorPickerControl({
 							isPopoverHidden ? 'hidden' : ''
 						}`}
 						onClose={handleClose}
-						focusOutsideSuppressionRef={focusOutsideSuppressionRef}
 						titleButtonsRight={
 							<>
 								<Button

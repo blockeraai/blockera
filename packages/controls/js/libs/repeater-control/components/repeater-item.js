@@ -63,8 +63,7 @@ const RepeaterItem = ({
 	size,
 }: RepeaterItemProps): null | Element<any> => {
 	const rowSize: RepeaterItemSize = size ?? 'full';
-	// Start closed; open via effect when item is new (isOpen/creatingStep) so focus-outside
-	// suppression is armed before the popover mounts.
+	// Start closed; open via effect when item is new (isOpen/creatingStep).
 	const [isOpen, setOpen] = useState(item?.isOpen ?? false);
 	const [isVisible, setVisibility] = useState(
 		isBoolean(item?.isVisible) ? item.isVisible : true
@@ -165,24 +164,6 @@ const RepeaterItem = ({
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
-	const isPendingOpenItem = pendingOpenItemId === itemId;
-	const shouldSuppressInitialFocusOutsideRef = useRef(
-		item?.creatingStep === true || isPendingOpenItem
-	);
-	const suppressPopoverFocusOutsideRef = useRef(
-		shouldSuppressInitialFocusOutsideRef.current
-	);
-
-	useEffect(() => {
-		suppressPopoverFocusOutsideRef.current =
-			isOpen &&
-			(item?.creatingStep === true ||
-				pendingOpenItemId === itemId ||
-				shouldSuppressInitialFocusOutsideRef.current);
-		if (!isOpen) {
-			shouldSuppressInitialFocusOutsideRef.current = false;
-		}
-	}, [item?.creatingStep, isOpen, pendingOpenItemId, itemId]);
 
 	useEffect(() => {
 		styleRef.current = {
@@ -190,8 +171,7 @@ const RepeaterItem = ({
 		};
 	}, [draggingIndex, itemId]);
 
-	// New rows open the edit popover in an effect so focus-outside suppression is armed
-	// before the popover mounts (pendingOpenItemId / creatingStep survive valueCleanup).
+	// New rows open the edit popover in an effect (pendingOpenItemId / creatingStep survive valueCleanup).
 	useEffect(() => {
 		if (
 			item?.creatingStep !== true &&
@@ -228,7 +208,6 @@ const RepeaterItem = ({
 
 	const handleItemPopoverClose = () => {
 		setOpen(false);
-		shouldSuppressInitialFocusOutsideRef.current = false;
 		clearPendingOpenItemId(itemId);
 
 		if (item?.creatingStep === true) {
@@ -414,10 +393,7 @@ const RepeaterItem = ({
 			: mode,
 		toggleOpenBorder: true,
 		design,
-		popoverProps: {
-			...(popoverProps || {}),
-			focusOutsideSuppressionRef: suppressPopoverFocusOutsideRef,
-		},
+		popoverProps: popoverProps || {},
 		popoverTitle:
 			'function' === typeof popoverTitle
 				? popoverTitle(itemId, item)
