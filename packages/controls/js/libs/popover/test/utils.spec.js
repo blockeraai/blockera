@@ -7,6 +7,7 @@ import {
 	hasNestedOverlayOpenAsideFrom,
 	isOtherPopoverClosing,
 	isPopoverDismissIgnoredTarget,
+	isSketchPickerInteractionActiveFor,
 	markPopoverClosing,
 	resolvePopoverAnchorElement,
 	shouldIgnorePopoverFocusOutside,
@@ -358,6 +359,32 @@ describe('popover offset utils', () => {
 
 			expect(isOtherPopoverClosing(parentPopover)).toBe(true);
 			expect(isOtherPopoverClosing(nestedPopover)).toBe(false);
+		});
+
+		it('shouldIgnorePopoverFocusOutside ignores sketch-picker drag interaction', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const sketchPicker = document.createElement('div');
+			sketchPicker.className = 'sketch-picker';
+			popover.appendChild(sketchPicker);
+			document.body.appendChild(popover);
+
+			sketchPicker.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+
+			const event = new FocusEvent('focusout', {
+				relatedTarget: null,
+			});
+
+			expect(isSketchPickerInteractionActiveFor(popover)).toBe(true);
+			expect(shouldIgnorePopoverFocusOutside(event, popover)).toBe(true);
+
+			document.dispatchEvent(
+				new MouseEvent('mouseup', { bubbles: true })
+			);
+
+			expect(isSketchPickerInteractionActiveFor(popover)).toBe(false);
 		});
 
 		it('shouldIgnorePopoverFocusOutside ignores close-button clicks on nested popovers', () => {
