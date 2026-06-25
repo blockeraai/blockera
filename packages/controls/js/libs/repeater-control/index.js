@@ -286,7 +286,7 @@ export default function RepeaterControl(
 	const canRegisterCustomAddNewAction =
 		Boolean(onRegisterAddNewAction) &&
 		canAddNewItem &&
-		actionButtonAdd &&
+		(actionButtonAdd || injectHeaderButtonsEnd) &&
 		!isSetValueAddon();
 
 	useEffect(() => {
@@ -866,7 +866,9 @@ export default function RepeaterControl(
 
 				{design === 'minimal' && (
 					<>
-						{actionButtonAdd && (
+						{(actionButtonAdd ||
+							injectHeaderButtonsStart ||
+							injectHeaderButtonsEnd) && (
 							<div className={controlInnerClassNames('header')}>
 								{label && (
 									<>

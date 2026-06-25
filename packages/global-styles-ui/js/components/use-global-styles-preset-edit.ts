@@ -11,3 +11,20 @@ export function useCanEditGlobalStyles(): boolean {
 	const { canEditGlobalStyles } = useGlobalStylesContext();
 	return canEditGlobalStyles === true;
 }
+
+/**
+ * Variable picker: allow custom preset add while global-styles caps are still loading.
+ * Site Editor preset screens keep strict `useCanEditGlobalStyles()`.
+ */
+export function useCanAddCustomPresetInVariablePicker(): boolean {
+	const { canEditGlobalStyles, isReady } = useGlobalStylesContext() as {
+		canEditGlobalStyles?: boolean;
+		isReady?: boolean;
+	};
+
+	if (canEditGlobalStyles === true) {
+		return true;
+	}
+
+	return isReady !== true;
+}

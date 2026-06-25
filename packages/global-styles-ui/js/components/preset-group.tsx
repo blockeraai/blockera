@@ -58,7 +58,10 @@ import {
 	stripRepeaterPickerUiFields,
 	syncVariablePickerCreatingStepSlugs,
 } from './variable-picker-preset-utils';
-import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
+import {
+	useCanAddCustomPresetInVariablePicker,
+	useCanEditGlobalStyles,
+} from './use-global-styles-preset-edit';
 
 function areCreatingStepSlugMapsEqual(
 	a: Record<string, true>,
@@ -366,8 +369,12 @@ export const PresetGroup = memo(function PresetGroup({
 	const customAddRegister = useVarPickerCustomAddRegister();
 	const { viewMode } = usePresetVariablesViewMode();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
+	const canAddCustomPresetInPicker = useCanAddCustomPresetInVariablePicker();
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
+	// Outer picker category titles replace theme/default labels only; custom keeps its header + add button.
+	const omitOriginRepeaterSectionLabel =
+		pickerCtx.omitRepeaterSectionLabel === true && origin !== 'custom';
 	const pickerControlProps =
 		pickerCtx.controlPropsRef?.current ?? pickerCtx.controlProps;
 	const pickerControlPropsRef = useRef(pickerControlProps);
@@ -582,7 +589,8 @@ export const PresetGroup = memo(function PresetGroup({
 			if (
 				origin !== 'custom' ||
 				!isVariablePicker ||
-				!customAddRegister
+				!customAddRegister ||
+				typeof pickerCtx.variableType !== 'string'
 			) {
 				return undefined;
 			}
@@ -671,7 +679,7 @@ export const PresetGroup = memo(function PresetGroup({
 	}, [origin, title, variablesForRepeater, isVariablePicker]);
 
 	const labelForVariablePicker = useMemo(() => {
-		if (pickerCtx.omitRepeaterSectionLabel) {
+		if (omitOriginRepeaterSectionLabel) {
 			return '';
 		}
 		if (!isVariablePicker) {
@@ -689,13 +697,13 @@ export const PresetGroup = memo(function PresetGroup({
 		isVariablePicker,
 		label,
 		origin,
-		pickerCtx.omitRepeaterSectionLabel,
+		omitOriginRepeaterSectionLabel,
 		pickerControlProps?.variableTypes,
 		title,
 	]);
 
 	const repeaterLabel = useMemo(() => {
-		if (pickerCtx.omitRepeaterSectionLabel) {
+		if (omitOriginRepeaterSectionLabel) {
 			return '';
 		}
 		if (isVariablePicker) {
@@ -712,7 +720,7 @@ export const PresetGroup = memo(function PresetGroup({
 		isVariablePicker,
 		label,
 		labelForVariablePicker,
-		pickerCtx.omitRepeaterSectionLabel,
+		omitOriginRepeaterSectionLabel,
 	]);
 
 	const customSectionAddButton = useMemo(() => {
@@ -787,7 +795,10 @@ export const PresetGroup = memo(function PresetGroup({
 						PresetFields={PresetFields}
 						popoverTitle={__('Edit Variable', 'blockera')}
 						canAddNewItem={
-							'custom' === origin && canEditGlobalStyles
+							'custom' === origin &&
+							(isVariablePicker
+								? canAddCustomPresetInPicker
+								: canEditGlobalStyles)
 						}
 						canEditGlobalStyles={canEditGlobalStyles}
 						repeaterItemHeader={repeaterItemHeader}
@@ -811,7 +822,8 @@ export const PresetGroup = memo(function PresetGroup({
 							canEditGlobalStyles
 						}
 						actionButtonAdd={
-							pickerCtx.omitRepeaterSectionLabel ? false : true
+							(isVariablePicker && origin === 'custom') ||
+							!omitOriginRepeaterSectionLabel
 						}
 						shouldRenderRepeaterItem={repeaterSearchFilter}
 						resolveRepeaterItemSize={
