@@ -125,7 +125,7 @@ export const Popup = ({
 
 		body = (
 			<Flex
-				data-test="bug-detector-and-reporter-popup"
+				data-test="successfully-reported-bug"
 				direction={'column'}
 				gap={30}
 			>
@@ -366,7 +366,7 @@ export const Popup = ({
 
 		body = (
 			<Flex
-				data-test="bug-detector-and-reporter-popup"
+				data-test="manually-reporting-bug"
 				direction={'column'}
 				gap={40}
 			>
