@@ -52,6 +52,28 @@ describe('variablePickerRowMatchesSelected', () => {
 			)
 		).toBe(false);
 	});
+
+	it('matches theme catalog rows using explicit row reference (theme slug vs display name)', () => {
+		expect(
+			variablePickerRowMatchesSelected(
+				{
+					slug: 'heading-2-color',
+					id: 'heading-2-color',
+					reference: { type: 'theme', theme: 'blocksy' },
+				},
+				'color',
+				'theme',
+				{
+					valueType: 'variable',
+					settings: {
+						id: 'heading-2-color',
+						type: 'color',
+						reference: { type: 'theme', theme: 'blocksy' },
+					},
+				}
+			)
+		).toBe(true);
+	});
 });
 
 describe('shouldClearVariablePickerFeatureOnRowDelete', () => {

@@ -33,7 +33,13 @@ function referencesEqual(a: unknown, b: unknown): boolean {
 		return false;
 	}
 	if (ra.type === 'theme') {
-		return String(ra.theme ?? '') === String(rb.theme ?? '');
+		const themeA = String(ra.theme ?? '');
+		const themeB = String(rb.theme ?? '');
+		if (themeA === themeB) {
+			return true;
+		}
+		// Theme compatibility catalogs often store slug (`blocksy`); preset origin uses display name.
+		return themeA.toLowerCase() === themeB.toLowerCase();
 	}
 	return true;
 }
@@ -78,7 +84,14 @@ export function variablePickerRowMatchesSelected(
 		return false;
 	}
 
-	return referencesEqual(selectedRef, referenceFromPresetOrigin(origin));
+	const rowReference =
+		row.reference &&
+		typeof row.reference === 'object' &&
+		!Array.isArray(row.reference)
+			? row.reference
+			: referenceFromPresetOrigin(origin);
+
+	return referencesEqual(selectedRef, rowReference);
 }
 
 /**
