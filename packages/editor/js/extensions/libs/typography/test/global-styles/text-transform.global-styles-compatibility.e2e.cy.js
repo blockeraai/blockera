@@ -26,7 +26,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 		cy.openGlobalStylesPanel();
 		closeWelcomeGuide();
 		cy.getByDataTest('block-style-variations').eq(0).click();
-		cy.get('button[id="/blocks/core%2Fparagraph"]').click();
+		cy.get('button[id="/blocks/core%2Fparagraph"]').eq(0).click();
 		cy.getByDataTest('style-default').click();
 		cy.addNewTransition();
 		openMoreFeaturesControl('More typography settings');
@@ -49,7 +49,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.getByAriaLabel('Capitalize').click();
+					cy.getByAriaLabel('Capitalize').last().click();
 				});
 
 				getWPDataObject().then((data) => {
