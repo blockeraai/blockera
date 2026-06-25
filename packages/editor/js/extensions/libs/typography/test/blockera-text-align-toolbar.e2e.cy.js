@@ -157,7 +157,9 @@ describe('Blockera text-align toolbar', () => {
 				expect('left').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
-				expect('left').to.equal(getSelectedBlock(data, 'textAlign'));
+				expect('left').to.equal(
+					getSelectedBlock(data, 'style')?.typography?.textAlign
+				);
 			});
 		});
 	});
