@@ -92,6 +92,7 @@ export const UpgradePrompt = ({
 	type = 'popover',
 	anchor,
 	'data-test': dataTest,
+	shouldCloseOnClickOutside = true,
 	...props
 }: {
 	product?: UpgradePromptProductId,
@@ -110,6 +111,7 @@ export const UpgradePrompt = ({
 	buttonTarget?: string,
 	isOpen?: boolean,
 	'data-test'?: string,
+	shouldCloseOnClickOutside?: boolean,
 	placement?: PopoverPlacement,
 	type?: 'popover' | 'modal',
 	anchor?: HTMLElement,
@@ -117,6 +119,8 @@ export const UpgradePrompt = ({
 	const [isOpen, setOpen] = useState(_isOpen);
 
 	useEffect(() => setOpen(_isOpen), [_isOpen]);
+
+	const isPromptOpen = _isOpen ?? isOpen;
 
 	const { OfferPill, RightColumn } = useMemo(
 		() => getUpgradePromptProductChrome(product),
@@ -136,7 +140,7 @@ export const UpgradePrompt = ({
 
 	const featureLockedLabel = lockedFeature?.title || title;
 
-	if (!isOpen) {
+	if (!isPromptOpen) {
 		return <></>;
 	}
 
@@ -162,13 +166,16 @@ export const UpgradePrompt = ({
 			<Modal
 				onRequestClose={handleClose}
 				className={componentClassNames('upgrade-prompt')}
-				data-test={dataTest}
+				shouldCloseOnClickOutside={shouldCloseOnClickOutside}
 				{...props}
 			>
 				<div
 					className={componentInnerClassNames(
 						'upgrade-prompt-modal-root'
 					)}
+					{...(dataTest
+						? { 'data-test': dataTest, 'test-id': dataTest }
+						: {})}
 				>
 					<div
 						className={componentInnerClassNames(
