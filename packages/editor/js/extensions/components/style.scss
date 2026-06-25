@@ -199,12 +199,10 @@
 }
 
 .block-editor-block-inspector {
-
 	.blockera-block-inspector-controls-wrapper + .block-editor-block-card {
 		display: none !important;
 	}
 }
-
 
 // Styles tab + Blockera active: hide core panels and keep Blockera UI.
 .block-editor-block-inspector.blockera-inspector-on-styles-tab {
@@ -223,7 +221,16 @@
 		[role="tabpanel"]:not([id*="-list-view"]):not(
 			[id*="-content-view"]
 		):not([id*="-settings-view"]) {
+		// Hide all core controls in the styles tabpanel.
 		> *:not(:has(.blockera-state-colors-container)) {
+			display: none !important;
+		}
+
+		// Hide all elements after the first child of the state colors container.
+		// Elements that third party plugins add to the block inspector.
+		> div:first-child
+			> .blockera-state-colors-container
+			+ *:not(.blockera-state-colors-container) {
 			display: none !important;
 		}
 	}
