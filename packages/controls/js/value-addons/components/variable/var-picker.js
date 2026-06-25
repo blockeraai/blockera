@@ -13,6 +13,7 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -20,15 +21,12 @@ import { applyFilters } from '@wordpress/hooks';
  */
 import { Icon } from '@blockera/icons';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
+import { STORE_NAME } from '@blockera/data';
 
 /**
  * Internal dependencies
  */
-import {
-	canUnlinkVariable,
-	getVariableCategory,
-	getVariableIcon,
-} from '../../helpers';
+import { canUnlinkVariable, getVariableIcon } from '../../helpers';
 import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import { ControlContextProvider } from '../../../context';
 import { Button, Flex, Popover, SearchControl } from '../../../libs';
@@ -56,9 +54,12 @@ import { useVarPickerSingleTypeCustomAddAction } from './use-var-picker-single-t
 import { useVarPickerAddWithSearchClear } from './use-var-picker-add-with-search-clear';
 import { VarPickerAddActionRefBridge } from './var-picker-add-action-ref-bridge';
 import {
+	buildVariablePickerSectionKeys,
 	collectCatalogItemsForVariableType,
 	getSupplementalCustomVariableSections,
+	isVariablePickerDynamicGroupSection,
 	normalizeVariablePickerSearchQuery,
+	resolveVariablePickerRow,
 	variablePickerHasAnySearchMatches,
 	variablePickerItemMatchesSearch,
 } from './var-picker-helpers';
@@ -74,14 +75,6 @@ export {
 	MISSING_VARIABLE_CAN_RECREATE_FILTER,
 	MISSING_VARIABLE_RECREATE_FILTER,
 } from './var-picker-constants';
-
-function resolveVariablePickerPresetType(type: string): string {
-	const data = getVariableCategory(type);
-	if (data.notFound) {
-		return String(type);
-	}
-	return data.type || type;
-}
 
 function variablePickerPopoverTypeClassName(presetType: string): string {
 	const segment = String(presetType).trim().toLowerCase();
@@ -201,6 +194,7 @@ function VariablePickerPresetPanel({
 	catalogLabel,
 	PresetPanel,
 	pickerProps,
+	omitRepeaterSectionLabel,
 }: {
 	presetType: string,
 	controlProps: ValueAddonControlProps,
@@ -208,6 +202,7 @@ function VariablePickerPresetPanel({
 	catalogLabel: string,
 	PresetPanel: React$ComponentType<any>,
 	pickerProps: ValueAddonControlProps['pickerProps'],
+	omitRepeaterSectionLabel?: boolean,
 }): MixedElement {
 	const controlPropsRef = useRef(controlProps);
 	controlPropsRef.current = controlProps;
@@ -258,6 +253,7 @@ function VariablePickerPresetPanel({
 				presetType === 'radial-gradient'
 					? pickerProps?.gradientPresetPreviewUsage
 					: undefined,
+			omitRepeaterSectionLabel,
 		}),
 		[
 			presetType,
@@ -270,6 +266,7 @@ function VariablePickerPresetPanel({
 			pickerProps?.borderPresetPreviewUsage,
 			pickerProps?.borderRadiusPresetPreviewUsage,
 			pickerProps?.gradientPresetPreviewUsage,
+			omitRepeaterSectionLabel,
 		]
 	);
 
@@ -287,6 +284,7 @@ const MemoizedVariablePickerPresetPanel = memo<{
 	catalogLabel: string,
 	PresetPanel: React$ComponentType<any>,
 	pickerProps: ValueAddonControlProps['pickerProps'],
+	omitRepeaterSectionLabel?: boolean,
 }>(VariablePickerPresetPanel);
 
 export default function ({
@@ -296,7 +294,15 @@ export default function ({
 	controlProps: ValueAddonControlProps,
 	onClose?: () => void,
 }): MixedElement {
-	const variableTypes = controlProps.variableTypes || [];
+	const controlVariableTypes = controlProps.variableTypes || [];
+	const variablePickerSectionKeys = useSelect(
+		(wpSelect) =>
+			buildVariablePickerSectionKeys(
+				controlVariableTypes,
+				wpSelect(STORE_NAME).getVariableGroups()
+			),
+		[controlVariableTypes]
+	);
 	const supplementalSections =
 		getSupplementalCustomVariableSections(controlProps);
 	const [searchQuery, setSearchQuery] = useState('');
@@ -317,11 +323,17 @@ export default function ({
 	const hasAnySearchMatches = useMemo(
 		() =>
 			variablePickerHasAnySearchMatches(
-				variableTypes,
+				variablePickerSectionKeys,
+				controlVariableTypes,
 				supplementalSections,
 				normalizedSearch
 			),
-		[variableTypes, supplementalSections, normalizedSearch]
+		[
+			variablePickerSectionKeys,
+			controlVariableTypes,
+			supplementalSections,
+			normalizedSearch,
+		]
 	);
 	const isSearchActive = normalizedSearch !== '';
 	const showSearchEmptyState = isSearchActive && !hasAnySearchMatches;
@@ -370,9 +382,17 @@ export default function ({
 	const popoverClassName = useMemo(() => {
 		const typeClassNames = [];
 		const seen = new Set<string>();
-		for (const type of variableTypes) {
-			const presetType = resolveVariablePickerPresetType(type);
-			const className = variablePickerPopoverTypeClassName(presetType);
+		for (const sectionKey of variablePickerSectionKeys) {
+			const resolved = resolveVariablePickerRow(
+				sectionKey,
+				controlVariableTypes
+			);
+			if (!resolved) {
+				continue;
+			}
+			const className = variablePickerPopoverTypeClassName(
+				resolved.effectiveType
+			);
 			if (className !== '' && !seen.has(className)) {
 				seen.add(className);
 				typeClassNames.push(className);
@@ -382,7 +402,7 @@ export default function ({
 			controlInnerClassNames('popover-variables'),
 			...typeClassNames
 		);
-	}, [variableTypes]);
+	}, [variablePickerSectionKeys, controlVariableTypes]);
 	const popoverContentRef = useRef<?HTMLElement>(null);
 	const [summarySlot, setSummarySlot] = useState<?HTMLElement>(null);
 	const isClosingRef = useRef(false);
@@ -448,144 +468,190 @@ export default function ({
 		};
 	}, [handleClose, onClose]);
 
-	const variablePickerSections = variableTypes.map((type, index) => {
-		const data = getVariableCategory(type);
-
-		if (data.notFound) {
-			return <Fragment key={`type-${type}-${index}`} />;
-		}
-
-		const presetType = data.type || type;
-		const catalogItems = collectCatalogItemsForVariableType(
-			presetType,
-			data,
-			supplementalSections
-		);
-		const filteredCatalogItems = normalizedSearch
-			? catalogItems.filter((item) =>
-					variablePickerItemMatchesSearch(item, normalizedSearch)
-				)
-			: catalogItems;
-
-		const globalStylesPanel = applyFilters(
-			VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
-			null,
-			presetType
-		);
-		const PresetPanel =
-			globalStylesPanel ||
-			applyFilters(
-				VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
-				null,
-				presetType
+	const variablePickerSections = variablePickerSectionKeys.map(
+		(sectionKey, index) => {
+			const resolved = resolveVariablePickerRow(
+				sectionKey,
+				controlVariableTypes
 			);
 
-		if (!PresetPanel) {
-			if (!catalogItems.length) {
-				return (
-					<PickerCategory
-						key={`type-${type}-${index}`}
-						title={data.label}
-					>
-						<span style={{ opacity: '0.5', fontSize: '12px' }}>
-							{__(
-								'This variable type is not available in this context.',
-								'blockera'
-							)}
-						</span>
-					</PickerCategory>
-				);
+			if (!resolved) {
+				return <Fragment key={`type-${sectionKey}-${index}`} />;
 			}
 
-			if (!filteredCatalogItems.length) {
-				if (isSearchActive) {
-					return <Fragment key={`type-${type}-${index}`} />;
+			const { data, effectiveType: presetType } = resolved;
+			const isDynamicGroup = isVariablePickerDynamicGroupSection(
+				sectionKey,
+				controlVariableTypes
+			);
+			const hasDynamicGroupsForPresetType =
+				variablePickerSectionKeys.some((key) => {
+					if (
+						!isVariablePickerDynamicGroupSection(
+							key,
+							controlVariableTypes
+						)
+					) {
+						return false;
+					}
+
+					const dynamicRow = resolveVariablePickerRow(
+						key,
+						controlVariableTypes
+					);
+
+					return dynamicRow?.effectiveType === presetType;
+				});
+			const catalogItems = collectCatalogItemsForVariableType(
+				presetType,
+				data,
+				supplementalSections
+			);
+			const filteredCatalogItems = normalizedSearch
+				? catalogItems.filter((item) =>
+						variablePickerItemMatchesSearch(item, normalizedSearch)
+					)
+				: catalogItems;
+
+			const globalStylesPanel = isDynamicGroup
+				? null
+				: applyFilters(
+						VAR_PICKER_GLOBAL_STYLES_PRESET_PANEL_FILTER,
+						null,
+						presetType
+					);
+			const PresetPanel = isDynamicGroup
+				? applyFilters(
+						VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+						null,
+						presetType
+					)
+				: globalStylesPanel ||
+					applyFilters(
+						VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
+						null,
+						presetType
+					);
+			const showOuterCategoryTitle =
+				isDynamicGroup ||
+				hasDynamicGroupsForPresetType ||
+				shouldShowVariablePickerOuterCategoryTitle(
+					presetType,
+					!!globalStylesPanel
+				);
+
+			if (!PresetPanel) {
+				if (!catalogItems.length) {
+					return (
+						<PickerCategory
+							key={`type-${sectionKey}-${index}`}
+							title={data.label}
+						>
+							<span style={{ opacity: '0.5', fontSize: '12px' }}>
+								{__(
+									'This variable type is not available in this context.',
+									'blockera'
+								)}
+							</span>
+						</PickerCategory>
+					);
+				}
+
+				if (!filteredCatalogItems.length) {
+					if (isSearchActive) {
+						return <Fragment key={`type-${sectionKey}-${index}`} />;
+					}
+
+					return (
+						<PickerCategory
+							key={`type-${sectionKey}-${index}`}
+							title={data.label}
+						>
+							<span style={{ opacity: '0.5', fontSize: '12px' }}>
+								{__(
+									'No variables match your search.',
+									'blockera'
+								)}
+							</span>
+						</PickerCategory>
+					);
 				}
 
 				return (
 					<PickerCategory
-						key={`type-${type}-${index}`}
+						key={`type-${sectionKey}-${index}`}
 						title={data.label}
 					>
-						<span style={{ opacity: '0.5', fontSize: '12px' }}>
-							{__('No variables match your search.', 'blockera')}
-						</span>
+						<PresetVariablesSummaryRow
+							variableCount={filteredCatalogItems.length}
+							hasTaxonomyGroups={false}
+							hideViewSelect={normalizedSearch !== ''}
+						/>
+						{filteredCatalogItems.map((item) => (
+							<PickerValueItem
+								key={`${presetType}-${item.id}`}
+								value={controlProps.value}
+								data={item}
+								onClick={controlProps.handleOnClickVar}
+								name={item.name}
+								type={presetType}
+								valueType="variable"
+								isCurrent={
+									controlProps.value?.settings?.id ===
+										item.id ||
+									(hasThemeJsonPlainPresetSlug(
+										controlProps.themeJsonPlainPresetSlug
+									) &&
+										controlProps.themeJsonPlainPresetSlug ===
+											item.id)
+								}
+								icon={getVariableIcon({
+									type: presetType,
+									value:
+										typeof item.value === 'string'
+											? item.value
+											: undefined,
+								})}
+								status={'active'}
+							/>
+						))}
 					</PickerCategory>
 				);
 			}
 
 			return (
 				<PickerCategory
-					key={`type-${type}-${index}`}
+					key={`type-${sectionKey}-${index}`}
 					title={data.label}
+					showTitle={showOuterCategoryTitle}
 				>
-					<PresetVariablesSummaryRow
-						variableCount={filteredCatalogItems.length}
-						hasTaxonomyGroups={false}
-						hideViewSelect={normalizedSearch !== ''}
-					/>
-					{filteredCatalogItems.map((item) => (
-						<PickerValueItem
-							key={`${presetType}-${item.id}`}
-							value={controlProps.value}
-							data={item}
-							onClick={controlProps.handleOnClickVar}
-							name={item.name}
-							type={presetType}
-							valueType="variable"
-							isCurrent={
-								controlProps.value?.settings?.id === item.id ||
-								(hasThemeJsonPlainPresetSlug(
-									controlProps.themeJsonPlainPresetSlug
-								) &&
-									controlProps.themeJsonPlainPresetSlug ===
-										item.id)
+					<div
+						className={controlInnerClassNames(
+							'var-picker-preset-panel'
+						)}
+						style={
+							{
+								// width: '100%',
 							}
-							icon={getVariableIcon({
-								type: presetType,
-								value:
-									typeof item.value === 'string'
-										? item.value
-										: undefined,
-							})}
-							status={'active'}
+						}
+					>
+						<MemoizedVariablePickerPresetPanel
+							presetType={presetType}
+							controlProps={controlProps}
+							catalogItems={catalogItems}
+							catalogLabel={data.label}
+							PresetPanel={PresetPanel}
+							pickerProps={controlProps.pickerProps}
+							omitRepeaterSectionLabel={
+								showOuterCategoryTitle &&
+								presetType !== 'width-size'
+							}
 						/>
-					))}
+					</div>
 				</PickerCategory>
 			);
 		}
-
-		return (
-			<PickerCategory
-				key={`type-${type}-${index}`}
-				title={data.label}
-				showTitle={shouldShowVariablePickerOuterCategoryTitle(
-					presetType,
-					!!globalStylesPanel
-				)}
-			>
-				<div
-					className={controlInnerClassNames(
-						'var-picker-preset-panel'
-					)}
-					style={
-						{
-							// width: '100%',
-						}
-					}
-				>
-					<MemoizedVariablePickerPresetPanel
-						presetType={presetType}
-						controlProps={controlProps}
-						catalogItems={catalogItems}
-						catalogLabel={data.label}
-						PresetPanel={PresetPanel}
-						pickerProps={controlProps.pickerProps}
-					/>
-				</div>
-			</PickerCategory>
-		);
-	});
+	);
 
 	return (
 		<VarPickerCustomAddProvider>

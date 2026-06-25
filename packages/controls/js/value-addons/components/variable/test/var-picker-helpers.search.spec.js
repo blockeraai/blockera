@@ -171,14 +171,15 @@ describe('variable picker search helpers', () => {
 
 	describe('variablePickerHasAnySearchMatches', () => {
 		it('returns true when search query is empty', () => {
-			expect(variablePickerHasAnySearchMatches(['color'], [], '')).toBe(
-				true
-			);
+			expect(
+				variablePickerHasAnySearchMatches(['color'], ['color'], [], '')
+			).toBe(true);
 		});
 
 		it('returns false when no variable type has matching catalog rows', () => {
 			expect(
 				variablePickerHasAnySearchMatches(
+					['color'],
 					['color'],
 					[],
 					normalizeVariablePickerSearchQuery('no-such-preset-xyz')

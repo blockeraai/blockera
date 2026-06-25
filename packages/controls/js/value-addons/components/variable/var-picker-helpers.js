@@ -29,6 +29,55 @@ export type ResolvedVariablePickerRow = {|
 |};
 
 /**
+ * Built-in picker keys from the control plus bootstrapped groups whose `type`
+ * matches (e.g. Blocksy `blocksy-colors` when the control offers `color`).
+ */
+export function buildVariablePickerSectionKeys(
+	controlVariableTypes: Array<string>,
+	variableGroups: ?Object
+): Array<string> {
+	const groups =
+		variableGroups && typeof variableGroups === 'object'
+			? variableGroups
+			: {};
+	const dynamicKeys: Array<string> = [];
+
+	for (const groupKey of Object.keys(groups)) {
+		const group = groups[groupKey];
+		if (group?.type && controlVariableTypes.includes(group.type)) {
+			dynamicKeys.push(groupKey);
+		}
+	}
+
+	const seen = new Set<string>();
+	const keys: Array<string> = [];
+
+	for (const key of [...dynamicKeys, ...controlVariableTypes]) {
+		if (seen.has(key)) {
+			continue;
+		}
+		seen.add(key);
+		keys.push(key);
+	}
+
+	return keys;
+}
+
+/**
+ * True when `sectionKey` is a bootstrapped variable group, not a built-in category.
+ */
+export function isVariablePickerDynamicGroupSection(
+	sectionKey: string,
+	controlVariableTypes: Array<string>
+): boolean {
+	if (!getVariableCategory(sectionKey).notFound) {
+		return false;
+	}
+
+	return resolveVariablePickerRow(sectionKey, controlVariableTypes) !== null;
+}
+
+/**
  * Resolve store / category data for one variable type in the picker list.
  */
 export function resolveVariablePickerRow(
@@ -38,7 +87,7 @@ export function resolveVariablePickerRow(
 	let data: DynamicVariableGroup | VariableCategoryDetail =
 		getVariableCategory(type);
 
-	if (data?.label === '') {
+	if (data.notFound) {
 		const { getVariableGroup } = select(STORE_NAME);
 		data = getVariableGroup(type);
 		if (!data?.type || !controlVariableTypes.includes(data.type)) {
@@ -264,7 +313,8 @@ export function variablePickerItemMatchesSearch(
  * Whether any catalog row across all variable types matches the normalized search query.
  */
 export function variablePickerHasAnySearchMatches(
-	variableTypes: Array<string>,
+	sectionKeys: Array<string>,
+	controlVariableTypes: Array<string>,
 	supplementalSections: Array<SupplementalCustomSection>,
 	normalizedSearch: string
 ): boolean {
@@ -272,17 +322,20 @@ export function variablePickerHasAnySearchMatches(
 		return true;
 	}
 
-	for (let i = 0, n = variableTypes.length; i < n; i++) {
-		const type = variableTypes[i];
-		const data = getVariableCategory(type);
+	for (let i = 0, n = sectionKeys.length; i < n; i++) {
+		const sectionKey = sectionKeys[i];
+		const resolved = resolveVariablePickerRow(
+			sectionKey,
+			controlVariableTypes
+		);
 
-		if (data.notFound) {
+		if (!resolved) {
 			continue;
 		}
 
-		const presetType = data.type || type;
+		const { data, effectiveType } = resolved;
 		const catalogItems = collectCatalogItemsForVariableType(
-			presetType,
+			effectiveType,
 			data,
 			supplementalSections
 		);
