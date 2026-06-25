@@ -31,6 +31,7 @@ import {
 	useCallback,
 	memo,
 	useMemo,
+	createPortal,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { displayShortcut } from '@wordpress/keycodes';
@@ -838,8 +839,28 @@ const TabsBar = memo(function TabsBar({
 		return null;
 	}, [limitExceededType]);
 
+	const limitUpgradePrompt =
+		limitPromotionContent && limitExceededType
+			? createPortal(
+					<UpgradePrompt
+						key={limitExceededType}
+						lockedFeature={limitPromotionContent.lockedFeature}
+						isOpen
+						onClose={onCloseLimitPromotion}
+						type="modal"
+						shouldCloseOnClickOutside={false}
+						disableHintsText={false}
+						data-test={
+							WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt
+						}
+					/>,
+					document.body
+				)
+			: null;
+
 	return (
 		<>
+			{limitUpgradePrompt}
 			<div className="blockera-tabs-bar" ref={tabsBarRef}>
 				<DndContext
 					sensors={sensors}
@@ -972,22 +993,6 @@ const TabsBar = memo(function TabsBar({
 							/>
 						</div>
 					</Tooltip>
-
-					{limitPromotionContent && (
-						<UpgradePrompt
-							lockedFeature={limitPromotionContent.lockedFeature}
-							isOpen={!!limitExceededType}
-							onClose={onCloseLimitPromotion}
-							type="modal"
-							placement="bottom-end"
-							anchor={addTabButtonAnchorRef.current ?? undefined}
-							disableHintsText={false}
-							{...({
-								'data-test':
-									WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
-							} as Record<string, string>)}
-						/>
-					)}
 				</div>
 			</div>
 
