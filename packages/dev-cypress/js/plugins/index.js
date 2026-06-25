@@ -1,11 +1,53 @@
 const webpack = require('@cypress/webpack-preprocessor');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+const crypto = require('crypto');
 const { execSync } = require('child_process');
 
 const BLOCKERA_PLUGIN_ROOT = path.resolve(__dirname, '../../../..');
-const WP_PLUGIN_SLUG = 'blockera';
+const WP_PLUGIN_SLUG = path.basename(BLOCKERA_PLUGIN_ROOT);
+const WP_ENV_BIN = path.join(
+	BLOCKERA_PLUGIN_ROOT,
+	'node_modules',
+	'.bin',
+	'wp-env'
+);
 const WP_EVAL_TIMEOUT_MS = 120000;
+
+/**
+ * @return {string}
+ */
+function getWpEnvHome() {
+	return process.env.WP_ENV_HOME || path.join(os.homedir(), '.wp-env');
+}
+
+/**
+ * Resolve wp-env mu-plugins directory for this blockera project (host path).
+ *
+ * @return {string|null}
+ */
+function resolveWpEnvMuPluginsDir() {
+	const configFilePath = path.join(BLOCKERA_PLUGIN_ROOT, '.wp-env.json');
+	if (!fs.existsSync(configFilePath)) {
+		return null;
+	}
+
+	const envHash = crypto
+		.createHash('md5')
+		.update(configFilePath)
+		.digest('hex');
+	const muDir = path.join(
+		getWpEnvHome(),
+		envHash,
+		'wordpress-latest',
+		'wp-content',
+		'mu-plugins'
+	);
+
+	fs.mkdirSync(muDir, { recursive: true });
+	return muDir;
+}
 
 /**
  * @param {string} muPluginPath
@@ -19,6 +61,17 @@ function getMuPluginTargetName(muPluginPath, targetName = null) {
 	const pathParts = muPluginPath.split('/');
 	const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
 	return `blockera-test-${folderName}.php`;
+}
+
+/**
+ * @param {string} filePath
+ * @return {string}
+ */
+function fileHash(filePath) {
+	return crypto
+		.createHash('md5')
+		.update(fs.readFileSync(filePath))
+		.digest('hex');
 }
 
 /**
@@ -44,24 +97,101 @@ function parseWpEvalStdout(stdout) {
 }
 
 /**
- * Run PHP inside the wp-env CLI container (same approach as Playwright).
- * Host filesystem copies to ~/.wp-env/.../wordpress-latest/mu-plugins are unreliable on CI.
+ * Run PHP inside the wp-env CLI container.
+ * Uses the local wp-env binary — never `npx`, which breaks inside Cypress plugin
+ * processes (esbuild platform mismatch when Cypress runs x64 Node on arm64).
  *
  * @param {string} phpCode
  * @return {string}
  */
 function runWpEval(phpCode) {
-	const escaped = escapePhpForShell(phpCode);
-	const command = `npx wp-env run cli -- wp eval '${escaped}'`;
+	if (!fs.existsSync(WP_ENV_BIN)) {
+		throw new Error(
+			`wp-env binary not found at ${WP_ENV_BIN}. Run npm install in the plugin root.`
+		);
+	}
 
-	return parseWpEvalStdout(
-		execSync(command, {
-			cwd: BLOCKERA_PLUGIN_ROOT,
-			encoding: 'utf8',
-			timeout: WP_EVAL_TIMEOUT_MS,
-			stdio: ['pipe', 'pipe', 'pipe'],
-		})
-	);
+	const escaped = escapePhpForShell(phpCode);
+	const command = `"${WP_ENV_BIN}" run cli -- wp eval '${escaped}'`;
+
+	try {
+		return parseWpEvalStdout(
+			execSync(command, {
+				cwd: BLOCKERA_PLUGIN_ROOT,
+				encoding: 'utf8',
+				timeout: WP_EVAL_TIMEOUT_MS,
+				stdio: ['pipe', 'pipe', 'pipe'],
+			})
+		);
+	} catch (error) {
+		const detail = [error.message, error.stderr, error.stdout]
+			.filter(Boolean)
+			.join('\n');
+		throw new Error(`wp eval failed: ${detail}`);
+	}
+}
+
+/**
+ * @param {string} muPluginPath Relative to plugin root.
+ * @param {string} targetName
+ * @return {{ ok: boolean, message: string }}
+ */
+function activateMuPluginOnHost(muPluginPath, targetName) {
+	const sourceFile = path.join(BLOCKERA_PLUGIN_ROOT, muPluginPath);
+	const muDir = resolveWpEnvMuPluginsDir();
+	const targetFile = muDir ? path.join(muDir, targetName) : null;
+
+	if (!muDir || !targetFile) {
+		throw new Error('wp-env mu-plugins directory not found');
+	}
+
+	if (!fs.existsSync(sourceFile)) {
+		throw new Error(
+			`activate_failed: source not found for ${muPluginPath}`
+		);
+	}
+
+	if (
+		fs.existsSync(targetFile) &&
+		fileHash(sourceFile) === fileHash(targetFile)
+	) {
+		return {
+			ok: true,
+			message: `already_active:${targetFile}`,
+		};
+	}
+
+	fs.copyFileSync(sourceFile, targetFile);
+	return {
+		ok: true,
+		message: `activated:${targetFile} from:${sourceFile}`,
+	};
+}
+
+/**
+ * @param {string} targetName
+ * @return {{ ok: boolean, message: string }}
+ */
+function deactivateMuPluginOnHost(targetName) {
+	const muDir = resolveWpEnvMuPluginsDir();
+	const targetFile = muDir ? path.join(muDir, targetName) : null;
+
+	if (!targetFile) {
+		throw new Error('wp-env mu-plugins directory not found');
+	}
+
+	if (!fs.existsSync(targetFile)) {
+		return {
+			ok: true,
+			message: `deactivate_skip: not found ${targetFile}`,
+		};
+	}
+
+	fs.unlinkSync(targetFile);
+	return {
+		ok: true,
+		message: `deactivated:${targetFile}`,
+	};
 }
 
 /**
@@ -78,32 +208,25 @@ function activateMuPluginInContainer(muPluginPath, targetName) {
 		);
 	}
 
-	const checkPhp = `$target = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($target)) { echo 'needs_copy'; exit(0); } $source = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; if (!file_exists($source)) { echo 'source_missing'; exit(1); } echo md5_file($target) === md5_file($source) ? 'already_active' : 'needs_copy';`;
-	const checkResult = runWpEval(checkPhp);
+	const activatePhp = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } if (file_exists($targetFile) && md5_file($targetFile) === md5_file($sourceFile)) { echo 'already_active'; exit(0); } file_put_contents($targetFile, file_get_contents($sourceFile)); echo file_exists($targetFile) ? 'installed' : 'not_installed';`;
+	const result = runWpEval(activatePhp);
 
-	if (checkResult === 'already_active') {
+	if (result === 'source_missing') {
+		throw new Error(
+			`activate_failed: source missing in container for ${muPluginPath}`
+		);
+	}
+
+	if (result === 'already_active') {
 		return {
 			ok: true,
 			message: `already_active:${targetName}`,
 		};
 	}
 
-	if (checkResult === 'source_missing') {
+	if (result !== 'installed') {
 		throw new Error(
-			`activate_failed: source missing in container for ${muPluginPath}`
-		);
-	}
-
-	const activatePhp = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($sourceFile)) { fwrite(STDERR, 'source missing: ' . $sourceFile); exit(1); } file_put_contents($targetFile, file_get_contents($sourceFile));`;
-	runWpEval(activatePhp);
-
-	const verifyResult = runWpEval(
-		`echo file_exists(WPMU_PLUGIN_DIR . '/${targetName}') ? 'installed' : 'not_installed';`
-	);
-
-	if (verifyResult !== 'installed') {
-		throw new Error(
-			`activate_verify_failed: ${targetName} (got: ${verifyResult})`
+			`activate_verify_failed: ${targetName} (got: ${result})`
 		);
 	}
 
@@ -128,6 +251,16 @@ function deactivateMuPluginInContainer(targetName) {
 	};
 }
 
+/**
+ * Host copy is fast and avoids subprocess issues in the Cypress plugin process.
+ * Container copy is used on CI where host ~/.wp-env paths are unreliable.
+ *
+ * @return {boolean}
+ */
+function shouldUseHostMuPlugins() {
+	return !process.env.CI && Boolean(resolveWpEnvMuPluginsDir());
+}
+
 module.exports = (on, config) => {
 	const options = {
 		webpackOptions: require(
@@ -150,6 +283,10 @@ module.exports = (on, config) => {
 				targetName
 			);
 
+			if (shouldUseHostMuPlugins()) {
+				return activateMuPluginOnHost(muPluginPath, resolvedTarget);
+			}
+
 			return activateMuPluginInContainer(muPluginPath, resolvedTarget);
 		},
 		muPluginDeactivate({ muPluginPath, targetName }) {
@@ -157,6 +294,10 @@ module.exports = (on, config) => {
 				muPluginPath,
 				targetName
 			);
+
+			if (shouldUseHostMuPlugins()) {
+				return deactivateMuPluginOnHost(resolvedTarget);
+			}
 
 			return deactivateMuPluginInContainer(resolvedTarget);
 		},
