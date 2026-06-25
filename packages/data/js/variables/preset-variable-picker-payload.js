@@ -26,6 +26,34 @@ export function referenceFromPresetOrigin(
 	return { type: 'preset' };
 }
 
+function resolveExplicitCatalogVarString(item: { +[string]: mixed }): ?string {
+	const raw = item.var;
+	if (typeof raw !== 'string') {
+		return null;
+	}
+	const trimmed = raw.trim();
+	if (trimmed === '') {
+		return null;
+	}
+
+	return trimmed.startsWith('--') ? trimmed : `--${trimmed}`;
+}
+
+function resolveCatalogItemReference(
+	item: { +[string]: mixed },
+	origin: string | string[]
+): ValueAddonReference {
+	if (
+		item.reference &&
+		typeof item.reference === 'object' &&
+		!Array.isArray(item.reference)
+	) {
+		return (item.reference: ValueAddonReference);
+	}
+
+	return referenceFromPresetOrigin(origin);
+}
+
 /**
  * Repeater rows for variable payload, or a single CSS string when theme.json stores `shadow` only.
  */
@@ -173,13 +201,16 @@ export function buildPresetVariablePickerPayload(
 	origin: string | string[],
 	variableType: string
 ): { +[string]: mixed } {
-	const reference = referenceFromPresetOrigin(origin);
+	const reference = resolveCatalogItemReference(item, origin);
 	const id = String(item.slug ?? item.id ?? '');
-	const varString = generateVariableString({
-		reference,
-		type: variableType,
-		id,
-	});
+	const explicitVar = resolveExplicitCatalogVarString(item);
+	const varString =
+		explicitVar ??
+		generateVariableString({
+			reference,
+			type: variableType,
+			id,
+		});
 
 	const value = serializeGlobalStylePresetItemValue(item, variableType);
 
@@ -190,6 +221,8 @@ export function buildPresetVariablePickerPayload(
 		reference,
 		value,
 		var: varString,
+		...(typeof item.group === 'string' ? { group: item.group } : {}),
+		...(typeof item.label === 'string' ? { label: item.label } : {}),
 		...(item.fluid !== undefined && item.fluid !== null
 			? {
 					fluid:
