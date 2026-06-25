@@ -161,10 +161,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 			const linkInnerBlock =
 				root?.blockeraInnerBlocks?.value?.['elements/link'];
 
-			expect('var:preset|color|accent-3').to.equal(
+			expect('var(--wp--preset--color--accent-3)').to.equal(
 				linkElement?.color?.text
 			);
-			expect('var:preset|color|accent-4').to.equal(
+			expect('var(--wp--preset--color--accent-4)').to.equal(
 				linkElement?.[':hover']?.color?.text
 			);
 			expect({
