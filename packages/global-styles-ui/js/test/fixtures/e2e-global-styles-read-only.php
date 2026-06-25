@@ -2,8 +2,11 @@
 /**
  * E2E: force global styles entity to be read-only (no edit/delete) while keeping read access.
  *
- * Used with Cypress to assert Blockera global-styles-ui respects `canUser( 'update', globalStyles )`
- * and that variable-picker “pick preset” still works (block-level value, not mutating theme.json).
+ * Revokes real WordPress capabilities so core-data `canUser( 'update', globalStyles )` is false.
+ * Used to assert Blockera variable-picker UI hides add/edit controls but still allows picking
+ * existing theme presets (block-level value; does not mutate theme.json).
+ *
+ * @see packages/global-styles-ui/js/context/global-styles-provider.ts
  */
 
 if (! defined('ABSPATH')) {
@@ -34,7 +37,7 @@ add_filter(
 );
 
 /**
- * Belt-and-suspenders: reject mutating REST requests to global styles.
+ * Reject mutating REST requests to global styles.
  */
 add_filter(
 	'rest_pre_dispatch',

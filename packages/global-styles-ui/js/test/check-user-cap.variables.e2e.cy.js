@@ -1,12 +1,11 @@
 /**
- * User capability: global styles presets are read-only without `update` on the global styles entity,
- * while variable-picker “pick preset” for blocks still works (does not mutate theme.json).
+ * User capability: without `canUser( 'update', globalStyles )`, Blockera must not offer
+ * variable add/edit controls, but the block variable picker must still apply existing presets.
  *
- * Covers flows used from:
- * - Site Editor → Blockera Design System (editor global-styles navigation)
- * - Post editor → value addon / variable picker (controls value-addons)
+ * Site Editor Design System is out of scope: WP 7+ hides the Styles sidebar when update
+ * is false on load, so restricted-user coverage lives in the post editor variable picker.
  *
- * Read-only mode is enforced server-side via MU plugin {@link ../fixtures/e2e-global-styles-read-only.php}.
+ * Read-only caps are enforced server-side via {@link ../fixtures/e2e-global-styles-read-only.php}.
  */
 import {
 	activateGlobalStylesReadOnlyE2eFixture,
@@ -15,87 +14,99 @@ import {
 	deactivateGlobalStylesReadOnlyE2eFixture,
 	deactivateMuPlugin,
 	expectBlockAttrIncludesPresetVar,
-	openGlobalStylesTransformsScreen,
+	expectGlobalStylesEntityUpdateForbidden,
 	openRepeaterHeaderVariablePicker,
 } from '@blockera/dev-cypress/js/helpers';
+import { withinVariablePickerPopover } from '@blockera/dev-cypress/js/helpers/variable-picker';
 
 const THEME_TRANSFORM_MU =
 	'packages/global-styles-ui/js/test/fixtures/preset-theme-transform.php';
 const THEME_TRANSFORM_MU_NAME = 'blockera-test-gsui-preset-transform.php';
 
-/** Theme.json preset from {@link THEME_TRANSFORM_MU}; matches `preset-theme-transform.php`. */
+const CUSTOM_TRANSFORM_MU =
+	'packages/global-styles-ui/js/test/fixtures/preset-custom-transform.php';
+const CUSTOM_TRANSFORM_MU_NAME =
+	'blockera-test-gsui-preset-custom-transform.php';
+
+/** Theme.json preset from {@link THEME_TRANSFORM_MU}. */
 const THEME_TRANSFORM_SLUG = 'e-2-e-theme-transform';
+const THEME_TRANSFORM_LABEL = 'E2E Theme Transform';
 
-describe('Global styles permission (read-only entity vs variable picker)', () => {
-	describe('Site Editor → Design System transforms (global-styles-ui)', () => {
-		beforeEach(() => {
-			activateMuPlugin(THEME_TRANSFORM_MU, THEME_TRANSFORM_MU_NAME);
-			activateGlobalStylesReadOnlyE2eFixture();
-		});
+/** User custom preset from {@link CUSTOM_TRANSFORM_MU}. */
+const CUSTOM_TRANSFORM_SLUG = 'e-2-e-custom-transform';
+const CUSTOM_TRANSFORM_LABEL = 'E2E Custom Transform';
 
-		afterEach(() => {
-			deactivateGlobalStylesReadOnlyE2eFixture();
-			deactivateMuPlugin(THEME_TRANSFORM_MU, THEME_TRANSFORM_MU_NAME);
-		});
+function openTransformVariablePicker() {
+	createPost();
 
-		it('does not open the preset edit popover when clicking a theme transform row (read-only)', () => {
-			openGlobalStylesTransformsScreen();
+	cy.getBlock('default').type(
+		'Global styles read-only; transform variable picker.',
+		{ delay: 0 }
+	);
+	cy.getByAriaControls('styles-view').click();
 
-			cy.get('.blockera-transforms-presets', { timeout: 20000 }).should(
-				'contain',
-				'E2E Theme Transform'
-			);
+	openRepeaterHeaderVariablePicker('Transforms');
+}
 
-			cy.contains(
-				'.blockera-transforms-presets [data-cy="transform-preset-repeater-item-header"]',
-				'E2E Theme Transform'
-			).click({ force: true });
+function assertTransformPickerReadOnlyControlsHidden() {
+	cy.getByDataTest('variable-picker-header-add-custom-variable').should(
+		'not.exist'
+	);
 
-			// eslint-disable-next-line cypress/no-unnecessary-waiting
-			cy.wait(400);
+	cy.get(
+		'[data-test="global-styles-preset-add-transform-preset-presets-custom"]'
+	).should('not.exist');
 
-			cy.get('body').then(($body) => {
-				expect(
-					$body.find('[aria-label="Move-X"]').length,
-					'Move-X control should not mount when popover is blocked'
-				).to.eq(0);
-			});
-		});
+	cy.get('[class*="btn-edit-item"]').should('not.exist');
+}
 
-		it('does not offer “Add New” for custom transform presets when read-only', () => {
-			openGlobalStylesTransformsScreen();
-
-			cy.get('.blockera-transforms-presets', { timeout: 20000 }).should(
-				'be.visible'
-			);
-
-			cy.get(
-				'[data-cy="global-styles-preset-add-transform-preset-presets-custom"]'
-			).should('not.exist');
-		});
+function assertPresetEditPopoverBlockedAfterHeaderClick(label) {
+	withinVariablePickerPopover(() => {
+		cy.contains('[data-cy="transform-preset-repeater-item-header"]', label)
+			.scrollIntoView()
+			.click({ force: true });
 	});
 
-	describe('Post editor → variable picker (value-addons)', () => {
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(400);
+
+	cy.get('body').then(($body) => {
+		expect(
+			$body.find('[aria-label="Move-X"]').length,
+			'Move-X control should not mount when edit is forbidden'
+		).to.eq(0);
+	});
+
+	cy.get('[class*="btn-edit-item"]').should('not.exist');
+}
+
+describe('Global styles permission (no update on entity → variable picker)', () => {
+	beforeEach(() => {
+		activateGlobalStylesReadOnlyE2eFixture();
+	});
+
+	afterEach(() => {
+		deactivateGlobalStylesReadOnlyE2eFixture();
+	});
+
+	describe('Theme variables', () => {
 		beforeEach(() => {
 			activateMuPlugin(THEME_TRANSFORM_MU, THEME_TRANSFORM_MU_NAME);
-			activateGlobalStylesReadOnlyE2eFixture();
 		});
 
 		afterEach(() => {
-			deactivateGlobalStylesReadOnlyE2eFixture();
 			deactivateMuPlugin(THEME_TRANSFORM_MU, THEME_TRANSFORM_MU_NAME);
 		});
 
-		it('still applies a theme transform preset to the block when global styles are read-only', () => {
-			createPost();
+		it('hides add and edit controls but still applies an existing theme transform preset', () => {
+			openTransformVariablePicker();
 
-			cy.getBlock('default').type(
-				'Read-only global styles; pick theme transform preset.',
-				{ delay: 0 }
-			);
-			cy.getByAriaControls('styles-view').click();
+			expectGlobalStylesEntityUpdateForbidden();
 
-			openRepeaterHeaderVariablePicker('Transforms');
+			withinVariablePickerPopover(() => {
+				cy.contains(THEME_TRANSFORM_LABEL).should('be.visible');
+				assertTransformPickerReadOnlyControlsHidden();
+			});
 
 			cy.selectValueAddonItem(THEME_TRANSFORM_SLUG);
 
@@ -108,6 +119,59 @@ describe('Global styles permission (read-only entity vs variable picker)', () =>
 			});
 
 			expectBlockAttrIncludesPresetVar('blockeraTransform', varNeedle);
+		});
+
+		it('does not open a preset edit popover when clicking a theme transform row', () => {
+			openTransformVariablePicker();
+
+			expectGlobalStylesEntityUpdateForbidden();
+
+			assertPresetEditPopoverBlockedAfterHeaderClick(
+				THEME_TRANSFORM_LABEL
+			);
+		});
+	});
+
+	describe('Custom variables', () => {
+		beforeEach(() => {
+			activateMuPlugin(CUSTOM_TRANSFORM_MU, CUSTOM_TRANSFORM_MU_NAME);
+		});
+
+		afterEach(() => {
+			deactivateMuPlugin(CUSTOM_TRANSFORM_MU, CUSTOM_TRANSFORM_MU_NAME);
+		});
+
+		it('hides add and edit controls but still applies an existing custom transform preset', () => {
+			openTransformVariablePicker();
+
+			expectGlobalStylesEntityUpdateForbidden();
+
+			withinVariablePickerPopover(() => {
+				cy.contains(CUSTOM_TRANSFORM_LABEL).should('be.visible');
+				assertTransformPickerReadOnlyControlsHidden();
+			});
+
+			cy.selectValueAddonItem(CUSTOM_TRANSFORM_SLUG);
+
+			const varNeedle = `--wp--preset--transform--${CUSTOM_TRANSFORM_SLUG}`;
+
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should('include', varNeedle);
+			});
+
+			expectBlockAttrIncludesPresetVar('blockeraTransform', varNeedle);
+		});
+
+		it('does not open a preset edit popover when clicking a custom transform row', () => {
+			openTransformVariablePicker();
+
+			expectGlobalStylesEntityUpdateForbidden();
+
+			assertPresetEditPopoverBlockedAfterHeaderClick(
+				CUSTOM_TRANSFORM_LABEL
+			);
 		});
 	});
 });
