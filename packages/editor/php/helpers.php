@@ -319,8 +319,11 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 		}
 
 		/*
-		 * Block type roots like `.wp-block-list > li` (core/list-item) describe element shape only.
-		 * Inner block styles must scope to the blockera unique class on the target compound (the `li`).
+		 * Compound block-type roots (e.g. `.wp-block-list > li`, `.wp-block-table > table`) describe
+		 * element shape only. Inner block styles must scope to the blockera unique class on the
+		 * compound that actually carries `className` in rendered HTML:
+		 * - core/list-item: unique class on the child `li`
+		 * - core/table: unique class on the wrapper figure (`.wp-block-table`)
 		 */
 		$unique_selector = $args['blockera-unique-selector'] ?? '';
 		if (
@@ -328,8 +331,24 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 			&& ! str_contains( $root, $unique_selector )
 			&& preg_match( '/\s>\s/', $root )
 		) {
-			$parts = preg_split( '/(?:::|:)/', $root, 2 );
-			$root  = $parts[0] . $unique_selector;
+			$block_name = (string) ( $args['block-name'] ?? '' );
+
+			if ( blockera_compound_root_classes_on_wrapper(
+				[
+					'root'            => $root,
+					'full-block-name' => $block_name,
+					'block-name'      => str_replace( [ 'core/', '/' ], [ '', '-' ], $block_name ),
+				]
+			) ) {
+				$compound_parts = preg_split( '/\s>\s/', $root, 2 );
+				$wrapper        = trim( (string) ( $compound_parts[0] ?? '' ) );
+				$child          = trim( (string) ( $compound_parts[1] ?? '' ) );
+
+				$root = $wrapper . $unique_selector . ( '' !== $child ? ' > ' . $child : '' );
+			} else {
+				$parts = preg_split( '/(?:::|:)/', $root, 2 );
+				$root  = $parts[0] . $unique_selector;
+			}
 		}
 
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
