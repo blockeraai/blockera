@@ -108,8 +108,6 @@ describe('Text Align → WP Compatibility', () => {
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
-			cy.addNewTransition();
-
 			//
 			// assert values
 			//
@@ -130,8 +128,6 @@ describe('Text Align → WP Compatibility', () => {
 				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
-
-			cy.editTransition(200, 2000);
 
 			//
 			// assert values
@@ -154,8 +150,6 @@ describe('Text Align → WP Compatibility', () => {
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
-			cy.editTransition(201, 2001);
-
 			//
 			// assert values
 			//
@@ -174,7 +168,7 @@ describe('Text Align → WP Compatibility', () => {
 	describe('Heading Block', () => {
 		it('in heading the attribute is textAlign', () => {
 			appendBlocks(
-				`<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"x-large"} -->
+				`<!-- wp:heading {"level":1,"fontSize":"x-large","style":{"typography":{"textAlign":"center"}}} -->
 <h1 class="wp-block-heading has-text-align-center has-x-large-font-size">A commitment to innovation and sustainability</h1>
 <!-- /wp:heading -->`
 			);
@@ -197,7 +191,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('center').to.be.equal(
-					getSelectedBlock(data, 'textAlign')
+					getSelectedBlock(data, 'style')?.typography?.textAlign
 				);
 			});
 
@@ -216,7 +210,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('right').to.be.equal(
-					getSelectedBlock(data, 'textAlign')
+					getSelectedBlock(data, 'style')?.typography?.textAlign
 				);
 			});
 
@@ -232,7 +226,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'textAlign')
+					getSelectedBlock(data, 'style')?.typography?.textAlign
 				);
 			});
 
@@ -251,14 +245,14 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'textAlign')
+					getSelectedBlock(data, 'style')?.typography?.textAlign
 				);
 			});
 		});
 
 		it('Changing align from block toolbar affects the Blockera text align', () => {
 			appendBlocks(
-				`<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"x-large"} -->
+				`<!-- wp:heading {"level":1,"fontSize":"x-large","style":{"typography":{"textAlign":"center"}}} -->
 <h1 class="wp-block-heading has-text-align-center has-x-large-font-size">A commitment to innovation and sustainability</h1>
 <!-- /wp:heading -->`
 			);
@@ -274,8 +268,6 @@ describe('Text Align → WP Compatibility', () => {
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
-			cy.addNewTransition();
-
 			//
 			// assert values
 			//
@@ -286,7 +278,9 @@ describe('Text Align → WP Compatibility', () => {
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
 
-				expect('left').to.be.equal(getSelectedBlock(data, 'textAlign'));
+				expect('left').to.be.equal(
+					getSelectedBlock(data, 'style')?.typography?.textAlign
+				);
 			});
 
 			//
@@ -296,8 +290,6 @@ describe('Text Align → WP Compatibility', () => {
 				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
-
-			cy.editTransition(200, 2000);
 
 			//
 			// assert values
@@ -310,7 +302,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('center').to.be.equal(
-					getSelectedBlock(data, 'textAlign')
+					getSelectedBlock(data, 'style')?.typography?.textAlign
 				);
 			});
 
@@ -322,8 +314,6 @@ describe('Text Align → WP Compatibility', () => {
 			).click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
-			cy.editTransition(201, 2001);
-
 			//
 			// assert values
 			//
@@ -335,7 +325,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('right').to.be.equal(
-					getSelectedBlock(data, 'textAlign')
+					getSelectedBlock(data, 'style')?.typography?.textAlign
 				);
 			});
 		});
