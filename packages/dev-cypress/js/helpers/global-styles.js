@@ -490,9 +490,13 @@ export function openGlobalStylesRadialGradientsScreen(
 /**
  * Adds a custom preset row, sets the display name (slug follows SharedPresetControls), closes the popover.
  *
- * @param {{ addDataTest: string, presetName: string }} options - Options for adding and naming the custom preset.
+ * @param {{ addDataTest: string, presetName: string, closePopover?: boolean }} options - Options for adding and naming the custom preset.
  */
-export function nameNewGlobalStylesCustomPreset({ addDataTest, presetName }) {
+export function nameNewGlobalStylesCustomPreset({
+	addDataTest,
+	presetName,
+	closePopover = true,
+}) {
 	cy.addNewGlobalStylesCustomPresetByDataTest(addDataTest);
 
 	cy.getParentContainer('Custom variables').within(() => {
@@ -522,7 +526,9 @@ export function nameNewGlobalStylesCustomPreset({ addDataTest, presetName }) {
 		.first()
 		.should('have.value', presetName);
 
-	cy.realPress('Escape');
+	if (closePopover) {
+		cy.realPress('Escape');
+	}
 }
 
 /**
@@ -537,19 +543,35 @@ export function setGlobalStylesPresetDescription(text) {
 }
 
 /**
- * Border custom preset: open the last row and set “all” width so `--wp--preset--border--*` has a non-empty fallback.
+ * Border custom preset: set “all” width so `--wp--preset--border--*` has a non-empty fallback.
+ * When the create/edit popover is already open (e.g. right after naming), skips the header click.
  *
+ * @param {string} widthPx Width in pixels (no unit).
+ * @param {{ presetName?: string }} [options] When set, targets that row under `.blockera-borders-presets`.
  */
-export function setGlobalStylesCustomBorderPresetMinWidth(widthPx = '2') {
-	cy.getByDataCy('border-preset-repeater-item-header')
-		.last()
-		.click({ force: true });
+export function setGlobalStylesCustomBorderPresetMinWidth(
+	widthPx = '2',
+	{ presetName } = {}
+) {
+	cy.get('body').then(($body) => {
+		if ($body.find('[data-test="border-control-width"]:visible').length) {
+			return;
+		}
 
-	cy.get('.components-popover', { timeout: 15000 }).should('be.visible');
+		const headerSelector =
+			'.blockera-borders-presets [data-cy="border-preset-repeater-item-header"]';
 
-	cy.get('.components-popover')
+		if (presetName) {
+			cy.contains(headerSelector, presetName).click({ force: true });
+		} else {
+			cy.get(headerSelector).last().click({ force: true });
+		}
+	});
+
+	cy.get('.components-popover', { timeout: 15000 })
 		.filter(':visible')
 		.last()
+		.should('be.visible')
 		.within(() => {
 			cy.getByDataTest('border-control-width').clear({ force: true });
 			cy.getByDataTest('border-control-width').type(widthPx, {
@@ -709,4 +731,27 @@ export function deactivateGlobalStylesReadOnlyE2eFixture() {
 		E2E_GLOBAL_STYLES_READ_ONLY_MU,
 		E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME
 	);
+}
+
+/**
+ * Asserts core-data reports no update permission on the current global styles entity.
+ *
+ * @return {Cypress.Chainable} Cypress chain after the assertion runs in the editor window.
+ */
+export function expectGlobalStylesEntityUpdateForbidden() {
+	return cy.window().then((win) => {
+		const { select } = getCoreDataStoreApis(win);
+		const recordId = getGlobalStylesIdFromStore({ select });
+
+		expect(recordId, 'global styles entity id').to.exist;
+
+		expect(
+			select.canUser('update', {
+				kind: GLOBAL_STYLES_KIND,
+				name: GLOBAL_STYLES_NAME,
+				id: recordId,
+			}),
+			'canUser( update, globalStyles )'
+		).to.equal(false);
+	});
 }
