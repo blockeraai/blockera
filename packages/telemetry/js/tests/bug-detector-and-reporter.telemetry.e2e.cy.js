@@ -44,7 +44,7 @@ describe('Bug Detector and Reporter', () => {
 
 		cy.getByDataTest('blockera-loading-text').should('be.visible');
 
-		cy.getByDataTest('manually-reporting-bug', { timeout: 500000 }).should(
+		cy.getByDataTest('manually-reporting-bug', { timeout: 60000 }).should(
 			'be.visible'
 		);
 	});
