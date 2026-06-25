@@ -39,7 +39,7 @@ describe('Global Styles UI → color palette presets (theme.json + UI)', () => {
 			.filter(':visible')
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click({ force: true });
+				cy.getByDataCy('color-btn').first().click({ force: true });
 			});
 
 		cy.get('.components-popover')
