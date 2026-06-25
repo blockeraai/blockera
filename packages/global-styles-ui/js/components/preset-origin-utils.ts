@@ -34,6 +34,18 @@ export function shouldShowDefaultPresetGroup(
 	);
 }
 
+/**
+ * Variable picker: show WordPress default presets only when the theme layer is empty.
+ * Avoids duplicating core palette rows when a theme (or theme.json) already supplies colors.
+ */
+export function shouldShowDefaultPresetGroupInVariablePicker(
+	defaultLayerEnabled: boolean,
+	themeItemCount: number,
+	defaultItemCount: number
+): boolean {
+	return defaultLayerEnabled && themeItemCount === 0 && defaultItemCount > 0;
+}
+
 export function shouldShowThemePresetGroup(
 	defaultLayerEnabled: boolean,
 	themeItemCount: number,

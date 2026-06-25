@@ -22,7 +22,7 @@ import { noop, pascalCase } from '@blockera/utils';
 import { FallbackPresetFields } from './fallback-preset-fields';
 import { FallbackPresetOpener } from './fallback-preset-opener';
 import {
-	shouldShowDefaultPresetGroup,
+	shouldShowDefaultPresetGroupInVariablePicker,
 	shouldShowThemePresetGroup,
 } from './preset-origin-utils';
 import { PresetGroup } from './preset-group';
@@ -147,16 +147,18 @@ export function FallbackPresetContent() {
 	}
 
 	const defaultLayerEnabled = true;
-	const showThemeOriginGroup = shouldShowThemePresetGroup(
-		defaultLayerEnabled,
-		theme.length,
-		defaultItems.length
-	);
-	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
-		defaultLayerEnabled,
-		theme.length,
-		defaultItems.length
-	);
+	const showThemeOriginGroup =
+		shouldShowThemePresetGroup(
+			defaultLayerEnabled,
+			theme.length,
+			defaultItems.length
+		) && theme.length > 0;
+	const showDefaultOriginGroup =
+		shouldShowDefaultPresetGroupInVariablePicker(
+			defaultLayerEnabled,
+			theme.length,
+			defaultItems.length
+		) && defaultItems.length > 0;
 
 	const title =
 		catalogLabel && String(catalogLabel).trim() !== ''

@@ -16,6 +16,7 @@ import {
 	Flex,
 	PresetVariablesViewModeProvider,
 	PRESET_VARIABLES_SECTION_GAP,
+	useVarPickerPresetContext,
 } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
@@ -25,6 +26,7 @@ import { isEquals } from '@blockera/utils';
 import {
 	ScreenHeader,
 	shouldShowDefaultPresetGroup,
+	shouldShowDefaultPresetGroupInVariablePicker,
 	shouldShowThemePresetGroup,
 	PresetVariablesScreenToolbar,
 	buildVisiblePresetOriginSets,
@@ -112,12 +114,22 @@ export function ColorPalettePresetContent({
 		[customColors.length, clearCustomColors]
 	);
 
+	const pickerCtx = useVarPickerPresetContext();
+	const isColorVariablePicker =
+		pickerCtx.active === true && pickerCtx.variableType === 'color';
+
 	const defaultLayerOn = !!defaultPaletteEnabled;
-	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
-		defaultLayerOn,
-		themeMainCount,
-		defaultMainCount
-	);
+	const showDefaultOriginGroup = isColorVariablePicker
+		? shouldShowDefaultPresetGroupInVariablePicker(
+				defaultLayerOn,
+				themeMainCount,
+				defaultMainCount
+			)
+		: shouldShowDefaultPresetGroup(
+				defaultLayerOn,
+				themeMainCount,
+				defaultMainCount
+			);
 	const showThemeOriginGroup = shouldShowThemePresetGroup(
 		defaultLayerOn,
 		themeMainCount,
