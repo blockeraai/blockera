@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __, isRTL } from '@wordpress/i18n';
+import { __, isRTL, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { serialize } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
@@ -20,6 +20,7 @@ import {
 	ToggleControl,
 	BlockeraLoading,
 	ControlContextProvider,
+	DynamicHtmlFormatter,
 } from '@blockera/controls';
 import { componentClassNames } from '@blockera/classnames';
 
@@ -407,7 +408,7 @@ export const Popup = ({
 											fontWeight: 600,
 										}}
 									>
-										{__('1.', 'blockera')}
+										{__('1.', 'blockera')}{' '}
 									</strong>
 									{__('Copy the bug details', 'blockera')}
 								</p>
@@ -511,30 +512,50 @@ export const Popup = ({
 									fontWeight: 600,
 								}}
 							>
-								{__('2.', 'blockera')}
+								{__('2.', 'blockera')}{' '}
 							</strong>
 
-							{__('Send en email to', 'blockera')}
-
-							<a
-								href="mailto:support@blockera.ai"
-								style={{
-									color: 'var(--blockera-controls-primary-color)',
+							<DynamicHtmlFormatter
+								text={sprintf(
+									// translators: %1$s: support email link placeholder, %2$s: bug ticket link placeholder.
+									__(
+										'Send an email to %1$s or %2$s.',
+										'blockera'
+									),
+									'{support-email}',
+									'{bug-ticket}'
+								)}
+								replacements={{
+									'support-email': (
+										<a
+											href="mailto:support@blockera.ai"
+											style={{
+												color: 'var(--blockera-controls-primary-color)',
+											}}
+										>
+											{__(
+												'support@blockera.ai',
+												'blockera'
+											)}
+										</a>
+									),
+									'bug-ticket': (
+										<a
+											href={blockeraCommunityUrl}
+											target="_blank"
+											rel="noreferrer"
+											style={{
+												color: 'var(--blockera-controls-primary-color)',
+											}}
+										>
+											{__(
+												'create a bug ticket',
+												'blockera'
+											)}
+										</a>
+									),
 								}}
-							>
-								{__('support@blockera.ai', 'blockera')}
-							</a>
-							{__('or', 'blockera')}
-							<a
-								href={blockeraCommunityUrl}
-								target="_blank"
-								rel="noreferrer"
-								style={{
-									color: 'var(--blockera-controls-primary-color)',
-								}}
-							>
-								{__('create a bug ticket', 'blockera')}
-							</a>
+							/>
 						</p>
 
 						<p
@@ -548,7 +569,7 @@ export const Popup = ({
 									fontWeight: 600,
 								}}
 							>
-								{__('3.', 'blockera')}
+								{__('3.', 'blockera')}{' '}
 							</strong>
 							{__(
 								'Stay tuned. We’ll review your report and reach out if we need more information.',
