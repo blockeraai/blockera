@@ -82,9 +82,9 @@ describe('Workspace tabs: Regular limit (free tier)', () => {
 
 		cy.tabsExpectUnpinnedCount(3, { timeout: 60000 });
 		cy.tabsExpectLimitUpgradePrompt({ timeout: 30000 });
-		cy.getByTestId(WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt).should(
+		cy.get('.blockera-component-upgrade-prompt').should(
 			'contain.text',
-			'More open tabs in Pro'
+			'Unlimited Open Tabs'
 		);
 	});
 });

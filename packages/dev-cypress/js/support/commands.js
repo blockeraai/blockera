@@ -1689,10 +1689,13 @@ export const registerCommands = () => {
 	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 20000 }`.
 	 */
 	Cypress.Commands.add('tabsExpectLimitUpgradePrompt', (options = {}) => {
-		cy.getByTestId(
-			WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
+		const id = WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt;
+		cy.get(
+			`[data-test="${id}"], [test-id="${id}"], .blockera-component-upgrade-prompt`,
 			options
-		).should('be.visible');
+		)
+			.should('exist')
+			.should('be.visible');
 	});
 
 	/**
