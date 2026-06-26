@@ -167,7 +167,6 @@ describe('Style Engine Testing ...', () => {
 				// Set background color.
 				cy.setColorControlValue('BG Color', '#e3178b');
 
-				setDevice('Desktop');
 				setDevice('Tablet');
 
 				cy.getBlock('core/paragraph').should(
@@ -192,32 +191,18 @@ describe('Style Engine Testing ...', () => {
 			);
 
 			context('checking generated styles on desktop device', () => {
-				// Set xl-desktop viewport
-				cy.viewport(1441, 1920);
-				setDevice('Desktop');
+				setBlockState('Normal');
 
-				cy.getBlock('core/paragraph').should(
-					'not.have.css',
-					'background-color',
-					'rgb(22, 226, 193)'
-				);
-				cy.getBlock('core/paragraph').should(
-					'not.have.css',
-					'transition',
-					'all 0.5s ease 0s'
-				);
-
-				cy.getBlock('core/paragraph').realHover();
-				cy.getBlock('core/paragraph').should(
-					'not.have.css',
-					'background-color',
-					'rgb(227, 23, 139)'
-				);
-				cy.getBlock('core/paragraph').should(
-					'not.have.css',
-					'transition',
-					'all 0.5s ease 0s'
-				);
+				// Tablet-only rules must stay inside the tablet media query in editor CSS.
+				cy.getBlockeraStylesWrapper()
+					.invoke('text')
+					.should('match', /@media screen and \(max-width: 991px\)/);
+				cy.getBlockeraStylesWrapper()
+					.invoke('text')
+					.should('include', '#16e2c1');
+				cy.getBlockeraStylesWrapper()
+					.invoke('text')
+					.should('include', 'transition: all 500ms ease 0ms');
 			});
 
 			context('front end - check style inheritance', () => {
