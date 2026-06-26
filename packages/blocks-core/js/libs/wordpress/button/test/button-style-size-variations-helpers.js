@@ -47,7 +47,13 @@ export function filterStyleColumnElements($elements) {
 		return !element.closest(GLOBAL_STYLES_SIZE_ASIDE);
 	});
 }
-/** Distinct font size applied to the e2e-size-small variation in global styles. */
+/** Default size variation slug (shared block root — not used for scoped font-size CSS). */
+export const DEFAULT_SIZE_VARIATION_SLUG = 'e2e-size-small';
+
+/** Non-default size variation customized with a distinct font size in global styles. */
+export const CUSTOMIZED_SIZE_VARIATION_SLUG = 'e2e-size-large';
+
+/** Distinct font size applied to {@link CUSTOMIZED_SIZE_VARIATION_SLUG} in global styles. */
 export const CUSTOMIZED_SIZE_FONT_SIZE = '18px';
 
 export const CUSTOMIZED_STYLE_BORDER_VALUE = {
@@ -287,10 +293,13 @@ export function selectStyleVariationInGlobalStyles(slug) {
 }
 
 /**
- * Persists a font size on the active size variation (core entity + blockera/editor).
- * Mirrors the payload shape from global-styles handleOnChangeStyle.
+ * Persists a font size on a non-default size variation (`variations.{slug}`).
+ * Default size rows use the shared block root path and are not covered here.
  */
-export function persistSizeVariationFontSizeInStore(fontSize) {
+export function persistSizeVariationFontSizeInStore(
+	fontSize,
+	slug = CUSTOMIZED_SIZE_VARIATION_SLUG
+) {
 	cy.window().should((win) => {
 		const registry = win.wp?.data;
 
@@ -313,7 +322,7 @@ export function persistSizeVariationFontSizeInStore(fontSize) {
 		const blocks = { ...(styles.blocks || {}) };
 		const buttonBlock = { ...(blocks[BLOCK_NAME] || {}) };
 		const variations = { ...(buttonBlock.variations || {}) };
-		const prev = variations['e2e-size-small'] || {};
+		const prev = variations[slug] || {};
 
 		const payload = {
 			...prev,
@@ -322,10 +331,10 @@ export function persistSizeVariationFontSizeInStore(fontSize) {
 			blockeraIsDefaultVariation:
 				typeof prev.blockeraIsDefaultVariation === 'boolean'
 					? prev.blockeraIsDefaultVariation
-					: true,
+					: false,
 		};
 
-		variations['e2e-size-small'] = payload;
+		variations[slug] = payload;
 		buttonBlock.variations = variations;
 		blocks[BLOCK_NAME] = buttonBlock;
 		styles.blocks = blocks;
@@ -335,23 +344,31 @@ export function persistSizeVariationFontSizeInStore(fontSize) {
 			blockeraMetaData: record?.blockeraMetaData,
 		});
 
-		blockeraDispatch.setBlockStyles(BLOCK_NAME, 'e2e-size-small', payload);
+		blockeraDispatch.setBlockStyles(BLOCK_NAME, slug, payload);
 	});
 }
 
 export function customizeSizeVariationFontSize(
-	fontSize = CUSTOMIZED_SIZE_FONT_SIZE
+	fontSize = CUSTOMIZED_SIZE_FONT_SIZE,
+	slug = CUSTOMIZED_SIZE_VARIATION_SLUG
 ) {
-	// Confirm the size-surface typography control is available (BG Color is disabled).
+	const numericSize = String(parseFloat(fontSize));
+
+	selectSizeVariationInGlobalStyles(slug);
+
 	withinSizeVariationsPanel(() => {
 		cy.get('[data-test="blockera-size-variation-block-card"]', {
 			timeout: 20000,
 		}).should('be.visible');
 
-		cy.get('[aria-label="Font Size"]', { timeout: 20000 }).should('exist');
+		cy.getParentContainer('Font Size').within(() => {
+			cy.get('input[type="text"]').clear();
+			cy.get('input[type="text"]').type(numericSize, {
+				force: true,
+				delay: 0,
+			});
+		});
 	});
-
-	persistSizeVariationFontSizeInStore(fontSize);
 }
 
 /**
@@ -405,7 +422,10 @@ export function persistStyleVariationBorderInStore(
 	});
 }
 
-export function assertCustomizedSizeVariationInStore(expectedFontSize) {
+export function assertCustomizedSizeVariationInStore(
+	expectedFontSize,
+	slug = CUSTOMIZED_SIZE_VARIATION_SLUG
+) {
 	cy.window().should((win) => {
 		const data = win.wp?.data;
 
@@ -415,11 +435,11 @@ export function assertCustomizedSizeVariationInStore(expectedFontSize) {
 
 		const blockeraStyles = data
 			.select('blockera/editor')
-			.getBlockStyles(BLOCK_NAME, 'e2e-size-small');
+			.getBlockStyles(BLOCK_NAME, slug);
 
 		expect(
 			blockeraStyles?.blockeraFontSize?.value,
-			'blockera/editor getBlockStyles (size)'
+			'blockera/editor getBlockStyles (size variation)'
 		).to.equal(expectedFontSize);
 	});
 
@@ -441,9 +461,7 @@ export function assertCustomizedSizeVariationInStore(expectedFontSize) {
 			.getEditedEntityRecord('root', 'globalStyles', gsId);
 
 		const sizeVariation =
-			edited?.styles?.blocks?.[BLOCK_NAME]?.variations?.[
-				'e2e-size-small'
-			];
+			edited?.styles?.blocks?.[BLOCK_NAME]?.variations?.[slug];
 
 		expect(
 			sizeVariation?.blockeraFontSize?.value,
@@ -484,9 +502,12 @@ export function pickVariationInInspectorPopover(slug) {
 }
 
 export function assertButtonLinkEditorCss(expected) {
+	const sizeClass =
+		expected.sizeClass || `is-size-${CUSTOMIZED_SIZE_VARIATION_SLUG}`;
+
 	cy.getBlock('core/button')
 		.first()
-		.should('have.class', `is-size-e2e-size-small`)
+		.should('have.class', sizeClass)
 		.within(() => {
 			if (expected.fontSize) {
 				const targetPx = parseFloat(expected.fontSize);

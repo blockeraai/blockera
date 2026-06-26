@@ -15,10 +15,10 @@ import {
 import {
 	STYLE_VARIATION_SLUG,
 	CUSTOMIZED_SIZE_FONT_SIZE,
+	CUSTOMIZED_SIZE_VARIATION_SLUG,
 	openButtonBlockGlobalStylesVariations,
 	assertSizeVariationsRenderedInGlobalStyles,
 	assertStyleVariationsRenderedInGlobalStyles,
-	selectSizeVariationInGlobalStyles,
 	selectStyleVariationInGlobalStyles,
 	customizeSizeVariationFontSize,
 	customizeStyleVariationBorder,
@@ -43,10 +43,8 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		assertStyleVariationsRenderedInGlobalStyles();
 
 		//
-		// 2. Customize one size variation and verify store + entity record
+		// 2. Customize a non-default size variation and verify store + entity record
 		//
-		selectSizeVariationInGlobalStyles('e2e-size-small');
-
 		customizeSizeVariationFontSize();
 
 		assertCustomizedSizeVariationInStore(CUSTOMIZED_SIZE_FONT_SIZE);
@@ -72,8 +70,8 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		persistSizeVariationFontSizeInStore(CUSTOMIZED_SIZE_FONT_SIZE);
 		persistStyleVariationBorderInStore(STYLE_VARIATION_SLUG);
 
-		appendBlocks(`<!-- wp:button {"className":"is-size-e2e-size-small is-style-fill"} -->
-<div class="wp-block-button is-size-e2e-size-small is-style-fill"><a class="wp-block-button__link wp-element-button">button</a></div>
+		appendBlocks(`<!-- wp:button {"className":"is-size-${CUSTOMIZED_SIZE_VARIATION_SLUG} is-style-fill"} -->
+<div class="wp-block-button is-size-${CUSTOMIZED_SIZE_VARIATION_SLUG} is-style-fill"><a class="wp-block-button__link wp-element-button">button</a></div>
 <!-- /wp:button -->`);
 
 		cy.getBlock('core/button').first().click();
@@ -100,7 +98,7 @@ describe('core/button → style & size variations (Global Styles → editor → 
 		cy.getBlock('core/button')
 			.first()
 			.should('have.class', `is-style-${STYLE_VARIATION_SLUG}`)
-			.should('have.class', 'is-size-e2e-size-small');
+			.should('have.class', `is-size-${CUSTOMIZED_SIZE_VARIATION_SLUG}`);
 
 		//
 		// 5. Save and verify front page: size + style variation CSS and classes
@@ -119,7 +117,9 @@ describe('core/button → style & size variations (Global Styles → editor → 
 				const classes = $button.attr('class') || '';
 
 				expect(classes).to.match(
-					/\bis-size-e2e-size-small(?:--\d+)?\b/
+					new RegExp(
+						`\\bis-size-${CUSTOMIZED_SIZE_VARIATION_SLUG}(?:--\\d+)?\\b`
+					)
 				);
 			});
 	});
