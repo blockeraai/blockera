@@ -29,27 +29,63 @@ describe('Shared style variation updates across block types (Global Styles)', ()
 			.last()
 			.should('contain', 'Add new style variation')
 			.within(() => {
-				// One subject per command: clear() calls click() internally; avoid cy.wrap(jQuery).
-				cy.get('input:visible').should('have.length.at.least', 2);
-				cy.get('input:visible').eq(0).clear({ force: true });
-				cy.get('input:visible')
-					.eq(0)
-					.type(`E2E Shared ${styleSlug}`, { delay: 0, force: true });
-				cy.get('input:visible').eq(1).clear({ force: true });
-				cy.get('input:visible').eq(1).type(styleSlug, {
-					delay: 0,
-					force: true,
-				});
+				cy.get('[aria-label="Name"]')
+					.closest('[data-cy=base-control]')
+					.find('input')
+					.type(`{selectall}E2E Shared ${styleSlug}`, {
+						delay: 0,
+						force: true,
+					});
+
+				cy.get('[aria-label="ID"]')
+					.closest('[data-cy=base-control]')
+					.find('input')
+					.type(`{selectall}${styleSlug}`, {
+						delay: 0,
+						force: true,
+					});
 			});
 
-		cy.getByDataTest('add-style-button').click();
+		cy.getByDataTest('add-style-button').should('not.be.disabled').click();
 
-		cy.getByDataTest(`style-${styleSlug}`, { timeout: 20000 })
+		cy.contains('[role="dialog"]', 'Add new style variation').should(
+			'not.exist'
+		);
+
+		cy.window().should((win) => {
+			const data = win.wp?.data;
+
+			expect(
+				data
+					?.select('blockera/editor')
+					?.getSelectedBlockStyleVariation()?.name,
+				'selected variation after add'
+			).to.equal(styleSlug);
+
+			const blockStyles =
+				data?.select('core/blocks')?.getBlockStyles('core/paragraph') ||
+				[];
+
+			expect(
+				blockStyles.map((style) => style.name),
+				'registered paragraph block styles'
+			).to.include(styleSlug);
+		});
+
+		// Block card menu is available for the auto-selected variation even when the list row lags.
+		cy.getByDataTest(`open-${styleSlug}-block-card-contextmenu`, {
+			timeout: 20000,
+		})
+			.filter(':visible')
 			.first()
+			.scrollIntoView()
 			.click({ force: true });
 
-		cy.getByDataTest(`${styleSlug}-usage-for-blocks-trigger`)
-			.first()
+		cy.get('.variations-settings-popover')
+			.filter(':visible')
+			.last()
+			.find('button')
+			.contains('Share with other blocks')
 			.click({ force: true });
 
 		cy.getByDataTest('save-usage-for-multiple-blocks-button', {
@@ -68,8 +104,6 @@ describe('Shared style variation updates across block types (Global Styles)', ()
 		cy.getByDataTest('save-usage-for-multiple-blocks-button', {
 			timeout: 20000,
 		}).should('not.exist');
-
-		cy.getByDataTest(`style-${styleSlug}`).first().click({ force: true });
 
 		cy.setColorControlValue('BG Color', '445566');
 
