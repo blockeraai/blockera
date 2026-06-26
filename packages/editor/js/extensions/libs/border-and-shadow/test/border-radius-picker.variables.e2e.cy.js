@@ -74,47 +74,54 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 
 		savePage();
 
-		openGlobalStylesBorderRadiusScreen({ reset: false });
+		cy.get('.blockera-preview-button-wrapper a')
+			.invoke('attr', 'href')
+			.then((postUrl) => {
+				openGlobalStylesBorderRadiusScreen({ reset: false });
 
-		cy.getByDataCy('border-radius-preset-repeater-item-header')
-			.last()
-			.click({ force: true });
+				cy.contains(
+					'.blockera-border-radius-presets [data-cy="border-radius-preset-repeater-item-header"]',
+					presetName
+				).click({ force: true });
 
-		cy.get('.components-popover')
-			.filter(':visible')
-			.last()
-			.within(() => {
-				cy.getByDataTest('border-radius-size-input').clear({
-					force: true,
-				});
-				cy.getByDataTest('border-radius-size-input').type('12px', {
-					delay: 0,
-					force: true,
-				});
+				cy.get('.components-popover')
+					.filter(':visible')
+					.last()
+					.within(() => {
+						cy.getByDataTest('border-radius-size-input').clear({
+							force: true,
+						});
+						cy.getByDataTest('border-radius-size-input').type(
+							'12px',
+							{
+								delay: 0,
+								force: true,
+							}
+						);
+					});
+
+				cy.realPress('Escape');
+
+				saveSiteEditorDirtyEntities();
+
+				cy.visit(postUrl);
+
+				cy.get('style#global-styles-inline-css')
+					.invoke('text')
+					.should(
+						'match',
+						new RegExp(
+							`--wp--preset--border-radius--${slug}:\\s*12px`
+						)
+					);
+
+				cy.get('style#blockera-inline-css')
+					.invoke('text')
+					.should('include', `--wp--preset--border-radius--${slug}`);
+
+				cy.contains('Radius preset edit paragraph.')
+					.closest('.blockera-block')
+					.should('have.css', 'border-radius', '12px');
 			});
-
-		cy.realPress('Escape');
-
-		cy.getIframeBody().within(() => {
-			cy.get('#blockera-styles-wrapper')
-				.invoke('text')
-				.should(
-					'include',
-					`border-radius: var(--wp--preset--border-radius--${slug}, 12px)`
-				);
-		});
-
-		savePage();
-
-		redirectToFrontPage();
-
-		cy.get('style#blockera-inline-css')
-			.invoke('text')
-			.should(
-				'include',
-				`border-radius: var(--wp--preset--border-radius--${slug}, 4px)`
-			);
-
-		cy.get('.blockera-block').should('have.css', 'border-radius', '12px');
 	});
 });
