@@ -6,10 +6,20 @@ export const PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY =
 	'blockera-variables-view-mode';
 
 /**
+ * Variable picker portals the summary row into `var-picker-summary-slot` below search.
+ * Prefer that row over legacy per-section summary rows in the catalog fallback path.
+ *
+ * Uses scoped selectors (not `body`) so callers work inside `.within(popover)`.
+ *
  * @returns {Cypress.Chainable<JQuery<HTMLElement>>}
  */
 export function getPresetVariablesSummaryRow() {
-	return cy.getByDataTest('preset-variables-summary-row', { timeout: 20000 });
+	return cy
+		.get(
+			'[data-test="var-picker-summary-slot"] [data-test="preset-variables-summary-row"], [data-test="preset-variables-summary-row"]',
+			{ timeout: 20000 }
+		)
+		.first();
 }
 
 /**
@@ -25,9 +35,10 @@ export function setPresetVariablesViewMode(mode) {
  * @returns {Cypress.Chainable<JQuery<HTMLElement>>}
  */
 export function getPresetVariablesViewModeSelect() {
-	return cy.getByDataTest('preset-variables-view-mode-select', {
-		timeout: 20000,
-	});
+	return getPresetVariablesSummaryRow().find(
+		'[data-test="preset-variables-view-mode-select"]',
+		{ timeout: 20000 }
+	);
 }
 
 /**
@@ -56,10 +67,9 @@ export function expectPresetTaxonomyGroupedHidden() {
  * @param {number} count
  */
 export function expectPresetVariablesCount(count) {
-	cy.getByDataTest('preset-variables-count', { timeout: 20000 }).should(
-		'contain.text',
-		String(count)
-	);
+	getPresetVariablesSummaryRow()
+		.find('[data-test="preset-variables-count"]')
+		.should('contain.text', String(count));
 }
 
 /**

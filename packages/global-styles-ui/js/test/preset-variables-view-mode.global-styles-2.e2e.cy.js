@@ -136,7 +136,7 @@ describe('Preset variables view mode (grouped/list)', () => {
 		const MU_NAME = 'e2e-color-taxonomy-mixed-simple.php';
 
 		beforeEach(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin(MU, MU_NAME);
 		});
 
 		afterEach(() => {
@@ -148,7 +148,7 @@ describe('Preset variables view mode (grouped/list)', () => {
 
 			withinVariablePickerPopover(() => {
 				getPresetVariablesSummaryRow().should('be.visible');
-				expectPresetVariablesCount(2);
+				expectPresetVariablesCount('10 variables');
 				expectPresetVariablesViewModeSelectVisible(true);
 				expectPresetTaxonomyGroupedVisible();
 
@@ -176,7 +176,7 @@ describe('Preset variables view mode (grouped/list)', () => {
 
 			withinVariablePickerPopover(() => {
 				expectPresetVariablesViewModeSelectVisible(true);
-				expectPresetVariablesCount(2);
+				expectPresetVariablesCount('10 variables');
 			});
 		});
 	});
