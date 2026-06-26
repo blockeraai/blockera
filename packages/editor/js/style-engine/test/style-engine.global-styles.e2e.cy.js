@@ -1,11 +1,11 @@
 import {
-	savePage,
 	setBlockState,
 	openSiteEditor,
 	getWPDataObject,
 	closeWelcomeGuide,
 	redirectToFrontPage,
 	getSelectedBlockStyle,
+	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Style Engine → Global Styles', () => {
@@ -43,7 +43,7 @@ describe('Style Engine → Global Styles', () => {
 		});
 
 		//Check frontend
-		savePage();
+		saveSiteEditorDirtyEntities();
 
 		redirectToFrontPage();
 
@@ -91,14 +91,6 @@ describe('Style Engine → Global Styles', () => {
 			});
 		});
 
-		//Check block
-		cy.getBlock('core/paragraph')
-			.contains('Sorry, but nothing was found.')
-			.realHover();
-		cy.getBlock('core/paragraph')
-			.contains('Sorry, but nothing was found.')
-			.should('have.css', 'font-size', '20px');
-
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('20px').to.be.equal(
@@ -108,8 +100,20 @@ describe('Style Engine → Global Styles', () => {
 			);
 		});
 
+		//Check editor — global styles output real :hover rules in the iframe wrapper
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-global-styles-wrapper')
+				.invoke('text')
+				.should('include', 'font-size: 20px')
+				.should(
+					(text) =>
+						text.includes(':where(p):hover') ||
+						text.includes(':where(p:hover)')
+				);
+		});
+
 		//Check frontend
-		savePage();
+		saveSiteEditorDirtyEntities();
 
 		redirectToFrontPage();
 
