@@ -5,7 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { useDispatch, useSelect, select as dataSelect } from '@wordpress/data';
-import { createContext, useEffect, useRef } from '@wordpress/element';
+import { createContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -46,8 +46,6 @@ export const ControlContextProvider = ({
 		});
 	}
 
-	const prevControlInfoValueRef = useRef(controlInfo.value);
-
 	//Prepare control status and value!
 	const { status, value } = useSelect(
 		(select) => {
@@ -55,15 +53,7 @@ export const ControlContextProvider = ({
 
 			const control = getControl(controlInfo.name);
 
-			const parentValueUpdated = !isEquals(
-				controlInfo.value,
-				prevControlInfoValueRef.current
-			);
-
-			if (
-				parentValueUpdated &&
-				!isEquals(control?.value, controlInfo.value)
-			) {
+			if (!isEquals(control?.value, controlInfo.value)) {
 				return {
 					...control,
 					value: controlInfo.value,
@@ -75,10 +65,6 @@ export const ControlContextProvider = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[controlInfo]
 	);
-
-	useEffect(() => {
-		prevControlInfoValueRef.current = controlInfo.value;
-	});
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
 
