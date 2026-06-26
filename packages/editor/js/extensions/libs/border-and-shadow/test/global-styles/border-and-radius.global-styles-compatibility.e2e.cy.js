@@ -115,10 +115,14 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 						all: '20px',
 					}).to.deep.equal(root?.blockeraBorderRadius?.value);
 					expect({
-						radius: '20px',
 						color: '#ff4848',
 						width: '20px',
 						style: 'solid',
+						radius: '20px',
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
 					}).to.deep.equal(root?.border);
 				});
 
@@ -282,12 +286,6 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 						bottomRight: '80px',
 					}).to.deep.equal(root?.blockeraBorderRadius?.value);
 					expect({
-						radius: {
-							topLeft: '50px',
-							topRight: '60px',
-							bottomLeft: '70px',
-							bottomRight: '80px',
-						},
 						top: {
 							color: '#ff4848',
 							width: '10px',
@@ -308,6 +306,15 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 							width: '40px',
 							style: 'solid',
 						},
+						radius: {
+							topLeft: '50px',
+							topRight: '60px',
+							bottomLeft: '70px',
+							bottomRight: '80px',
+						},
+						color: undefined,
+						width: undefined,
+						style: undefined,
 					}).to.deep.equal(root?.border);
 				});
 
