@@ -3,7 +3,10 @@ module.exports = {
 	rootDir: '../../../',
 	preset: '@wordpress/jest-preset-default',
 	collectCoverageFrom: ['<rootDir>/packages/**/*.js'],
-	setupFiles: ['<rootDir>/packages/dev-jest/js/setup-text-encoding.js'],
+	setupFiles: [
+		'<rootDir>/packages/dev-jest/js/setup-text-encoding.js',
+		'<rootDir>/packages/dev-jest/js/setup-jsdom-css.js',
+	],
 	setupFilesAfterEnv: [
 		require.resolve('@wordpress/jest-preset-default/scripts/setup-globals.js'),
 	],
