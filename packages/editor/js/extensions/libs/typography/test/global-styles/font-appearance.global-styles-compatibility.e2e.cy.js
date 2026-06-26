@@ -76,7 +76,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.get('select').eq(1).select('200-normal');
+					cy.get('select').select('200-normal');
 				});
 
 				getWPDataObject().then((data) => {
@@ -86,7 +86,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.get('select').eq(1).select('', { force: true });
+					cy.get('select').select('', { force: true });
 				});
 
 				getWPDataObject().then((data) => {
@@ -115,7 +115,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.get('select').eq(1).select('400-normal');
+					cy.get('select').select('400-normal');
 				});
 
 				getWPDataObject().then((data) => {
@@ -141,7 +141,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.get('select').eq(1).select('300-normal');
+					cy.get('select').select('300-normal');
 				});
 
 				getWPDataObject().then((data) => {
