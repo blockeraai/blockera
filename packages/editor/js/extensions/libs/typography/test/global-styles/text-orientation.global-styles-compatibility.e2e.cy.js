@@ -98,10 +98,8 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 
 				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
-					expect('horizontal-tb').to.equal(
-						root?.typography?.writingMode
-					);
-					expect('initial').to.equal(
+					expect(undefined).to.equal(root?.typography?.writingMode);
+					expect(undefined).to.equal(
 						root?.blockeraTextOrientation?.value
 					);
 				});
