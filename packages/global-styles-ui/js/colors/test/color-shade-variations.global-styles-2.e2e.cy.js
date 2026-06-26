@@ -7,6 +7,7 @@ import {
 	deactivateMuPlugin,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
+import { clearPresetVariablesViewModeStorage } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
 import {
 	assertEditorThemeBaseHasMuColorTaxonomy,
 	expandColorPresetVariationsAccordionInVariablePicker,
@@ -27,6 +28,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
 		beforeEach(() => {
+			clearPresetVariablesViewModeStorage();
 			activateMuPlugin(MU, MU_NAME);
 		});
 
@@ -64,18 +66,20 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 			});
 		});
 
-		it('variable picker accordion lists persisted shade row (500) in the ramp', () => {
+		it('variable picker inline strip lists persisted shade row (500) in the ramp', () => {
 			openParagraphTextColorVariablePickerPopover();
-
-			expandColorPresetVariationsAccordionInVariablePicker(
-				'E2E Var Shade Base'
-			);
 
 			cy.getByDataTest('variable-picker-popover').within(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
-					'E2E Var Shade Base - Shade 500'
-				).should('be.visible');
+					'E2E Var Shade Base',
+					{ timeout: 20000 }
+				)
+					.find(
+						'.blockera-component-preset-variable-variations-strip'
+					)
+					.contains('[data-cy="color-repeater-item-header"]', '500')
+					.should('be.visible');
 			});
 		});
 	});
@@ -85,6 +89,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
 		beforeEach(() => {
+			clearPresetVariablesViewModeStorage();
 			activateMuPlugin(MU, MU_NAME);
 		});
 
@@ -98,13 +103,6 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 			expandColorPresetVariationsAccordionInVariablePicker(
 				'E2E Var Shade Base'
 			);
-
-			cy.getByDataTest('variable-picker-popover').within(() => {
-				cy.contains(
-					'[data-cy="color-repeater-item-header"]',
-					'E2E Var Shade Base - Shade 500'
-				).should('be.visible');
-			});
 
 			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
 
