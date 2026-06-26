@@ -82,8 +82,14 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@minHeightContainer').within(() => {
-					cy.get('input').eq(1).clear({ force: true });
-					cy.get('input').eq(1).type('400px', { force: true });
+					cy.get('input').clear({ force: true });
+				});
+
+				// Re-activate min height
+				cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
+
+				cy.get('@minHeightContainer').within(() => {
+					cy.get('input').type('400px', { force: true });
 				});
 
 				getWPDataObject().then((data) => {
@@ -93,7 +99,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@minHeightContainer').within(() => {
-					cy.get('input').eq(1).clear({ force: true });
+					cy.get('input').clear({ force: true });
 				});
 
 				getWPDataObject().then((data) => {
@@ -123,8 +129,14 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@minHeightContainer').within(() => {
-					cy.get('input').eq(1).clear({ force: true });
-					cy.get('input').eq(1).type('400px', { force: true });
+					cy.get('input').clear({ force: true });
+				});
+
+				// Re-activate min height
+				cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
+
+				cy.getParentContainer('Min Height').within(() => {
+					cy.get('input').type('400px', { force: true });
 				});
 
 				getWPDataObject().then((data) => {
@@ -134,7 +146,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@minHeightContainer').within(() => {
-					cy.get('input').eq(1).clear({ force: true });
+					cy.get('input').clear({ force: true });
 				});
 
 				getWPDataObject().then((data) => {
