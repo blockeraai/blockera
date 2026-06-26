@@ -113,7 +113,28 @@ export const useBlockStylesPickerValue = ({
 			: fallbackSetCurrentActiveStyle;
 
 	useEffect(() => {
-		setBlockStyles(stylesToRender || []);
+		setBlockStyles((previousStyles) => {
+			const rendered = stylesToRender || [];
+
+			if (!previousStyles.length) {
+				return rendered;
+			}
+
+			const renderedSet = {};
+			for (let i = 0; i < rendered.length; i++) {
+				renderedSet[rendered[i].name] = true;
+			}
+
+			const pending = [];
+			for (let i = 0; i < previousStyles.length; i++) {
+				const style = previousStyles[i];
+				if (!renderedSet[style.name]) {
+					pending.push(style);
+				}
+			}
+
+			return pending.length ? [...rendered, ...pending] : rendered;
+		});
 	}, [stylesToRender]);
 
 	useEffect(() => {
