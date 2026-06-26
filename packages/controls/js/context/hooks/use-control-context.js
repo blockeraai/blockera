@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { useContext, useCallback, useRef } from '@wordpress/element';
 
@@ -170,8 +169,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		// eslint-disable-next-line
 	}, []);
 
-	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
-	const calculatedValue = _getCalculatedValue();
+	const calculatedValue = getCalculatedInitValue();
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
