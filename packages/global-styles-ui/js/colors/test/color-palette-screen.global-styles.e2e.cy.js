@@ -19,15 +19,19 @@ describe('Global Styles UI → Color variables screen', () => {
 
 		cy.addNewGlobalStylesCustomColorPreset();
 
-		const unique = `${Date.now()}`;
-		cy.getByDataTest('global-styles-preset-name-field').within(() => {
-			// eslint-disable-next-line cypress/unsafe-to-chain-command -- single input in preset name field
-			cy.get('input')
-				.first()
-				.should('be.visible')
-				.clear({ force: true })
-				.type(`e2e free cap ${unique}`, { delay: 0, force: true });
+		cy.getParentContainer('Custom variables').within(() => {
+			cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
+				.last()
+				.should('be.visible');
 		});
+
+		const unique = `${Date.now()}`;
+		// eslint-disable-next-line cypress/unsafe-to-chain-command -- data-test is on the input itself
+		cy.getByDataTest('global-styles-preset-name-field')
+			.first()
+			.should('be.visible')
+			.clear({ force: true })
+			.type(`e2e free cap ${unique}`, { delay: 0, force: true });
 
 		cy.realPress('Escape');
 
@@ -40,18 +44,14 @@ describe('Global Styles UI → Color variables screen', () => {
 
 		cy.addNewGlobalStylesCustomColorPreset();
 
-		cy.get('[role="dialog"]', { timeout: 15000 })
+		cy.get('.blockera-component-upgrade-prompt', { timeout: 15000 })
 			.should('be.visible')
-			.and('contain', 'Premium Feature')
-			.within(() => {
-				cy.contains('h3', 'Multiple Custom Variables').should(
-					'be.visible'
-				);
-			});
+			.and('contain.text', 'Unlimited Custom Color Variables')
+			.and('contain.text', 'Free: 1 variable');
 
 		cy.realPress('Escape');
 
-		cy.get('[role="dialog"]').should('not.exist');
+		cy.get('.blockera-component-upgrade-prompt').should('not.exist');
 
 		cy.getParentContainer('Custom variables').within(() => {
 			cy.getByDataCy('repeater-item').should('have.length', 1);
