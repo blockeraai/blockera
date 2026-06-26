@@ -1034,8 +1034,12 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			cy.getByDataTest('variable-picker-popover').within(() => {
 				cy.contains(
 					'[data-cy="color-repeater-item-header"]',
-					'E2E Var Shade Base - Shade 500'
-				).should('be.visible');
+					'E2E Var Shade Base'
+				)
+					.parents('.blockera-control-repeater-item-variations-group')
+					.first()
+					.contains('[data-cy="color-repeater-item-header"]', '500')
+					.should('be.visible');
 			});
 
 			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
