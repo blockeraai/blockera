@@ -69,44 +69,49 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 
 		savePage();
 
-		openGlobalStylesSpacingScreen({ reset: false });
+		cy.get('.blockera-preview-button-wrapper a')
+			.invoke('attr', 'href')
+			.then((postUrl) => {
+				openGlobalStylesSpacingScreen({ reset: false });
 
-		cy.getByDataCy('spacing-size-repeater-item-header')
-			.last()
-			.click({ force: true });
+				cy.contains(
+					'.blockera-spacing-presets [data-cy="spacing-size-repeater-item-header"]',
+					presetName
+				).click({ force: true });
 
-		cy.get('.components-popover')
-			.filter(':visible')
-			.last()
-			.within(() => {
-				cy.getByDataTest('spacing-size-input').clear({ force: true });
-				cy.getByDataTest('spacing-size-input').type('33px', {
-					delay: 0,
-					force: true,
-				});
+				cy.get('.components-popover')
+					.filter(':visible')
+					.last()
+					.within(() => {
+						cy.getByDataTest('spacing-size-input').clear({
+							force: true,
+						});
+						cy.getByDataTest('spacing-size-input').type('33px', {
+							delay: 0,
+							force: true,
+						});
+					});
+
+				cy.realPress('Escape');
+
+				saveSiteEditorDirtyEntities();
+
+				cy.visit(postUrl);
+
+				cy.get('style#global-styles-inline-css')
+					.invoke('text')
+					.should(
+						'match',
+						new RegExp(`--wp--preset--spacing--${slug}:\\s*33px`)
+					);
+
+				cy.get('style#blockera-inline-css')
+					.invoke('text')
+					.should('include', `--wp--preset--spacing--${slug}`);
+
+				cy.contains('Spacing preset edit paragraph.')
+					.closest('.blockera-block')
+					.should('have.css', 'margin-top', '33px');
 			});
-
-		cy.realPress('Escape');
-
-		const expectedDecl = `margin-top: var(--wp--preset--spacing--${slug}, 33px)`;
-
-		cy.getIframeBody().within(() => {
-			cy.get('#blockera-styles-wrapper')
-				.invoke('text')
-				.should('include', expectedDecl);
-		});
-
-		savePage();
-
-		redirectToFrontPage();
-
-		cy.get('style#blockera-inline-css')
-			.invoke('text')
-			.should(
-				'include',
-				`margin-top: var(--wp--preset--spacing--${slug})`
-			);
-
-		cy.get('.blockera-block').should('have.css', 'margin-top', '33px');
 	});
 });
