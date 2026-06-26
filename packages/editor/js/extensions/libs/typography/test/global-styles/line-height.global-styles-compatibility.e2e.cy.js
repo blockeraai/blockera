@@ -46,8 +46,8 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.get('input').first().clear({ force: true });
-					cy.get('input').first().type('2.5', { force: true });
+					cy.get('input').clear({ force: true });
+					cy.get('input').type('2.5{enter}', { force: true });
 				});
 
 				getWPDataObject().then((data) => {
@@ -57,7 +57,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 				});
 
 				cy.get('@container').within(() => {
-					cy.get('input').first().clear({ force: true });
+					cy.get('input').clear({ force: true });
 				});
 
 				getWPDataObject().then((data) => {
