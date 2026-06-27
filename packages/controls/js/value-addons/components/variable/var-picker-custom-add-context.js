@@ -7,7 +7,6 @@ import {
 	useCallback,
 	useContext,
 	useMemo,
-	useRef,
 	useState,
 } from '@wordpress/element';
 
@@ -42,6 +41,10 @@ export function areVarPickerCustomAddActionsEqual(
 type VarPickerCustomAddContextValue = {
 	/** @deprecated Prefer getAction(variableType) for multi-type pickers. */
 	action: VarPickerCustomAddAction,
+	/** Per-type custom-add actions; subscribe via context for section header buttons. */
+	actionsByType: {
+		[string]: VarPickerCustomAddAction,
+	},
 	getAction: (variableType: string) => VarPickerCustomAddAction,
 	register: (
 		variableType: string,
@@ -70,8 +73,6 @@ export function VarPickerCustomAddProvider({
 	const [actionsByType, setActionsByType] = useState<{
 		[string]: VarPickerCustomAddAction,
 	}>({});
-	const actionsByTypeRef = useRef(actionsByType);
-	actionsByTypeRef.current = actionsByType;
 
 	const register = useCallback(
 		(variableType: string, nextAction: VarPickerCustomAddAction) => {
@@ -126,9 +127,9 @@ export function VarPickerCustomAddProvider({
 			if (typeKey === '') {
 				return null;
 			}
-			return actionsByTypeRef.current[typeKey] ?? null;
+			return actionsByType[typeKey] ?? null;
 		},
-		[]
+		[actionsByType]
 	);
 
 	const action = useMemo((): VarPickerCustomAddAction => {
@@ -142,10 +143,11 @@ export function VarPickerCustomAddProvider({
 	const value = useMemo(
 		() => ({
 			action,
+			actionsByType,
 			getAction,
 			register,
 		}),
-		[action, getAction, register]
+		[action, actionsByType, getAction, register]
 	);
 
 	const registerContextValue = useMemo(

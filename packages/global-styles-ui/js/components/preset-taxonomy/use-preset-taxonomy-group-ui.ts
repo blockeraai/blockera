@@ -260,6 +260,7 @@ export function usePresetTaxonomyGroupUi<
 	);
 
 	const suppressThemeRepeaterWhenTaxonomyBasePopulated =
+		origin !== 'custom' &&
 		showTaxonomyUi &&
 		taxonomyTree.length > 0 &&
 		partition.simplePresets.length === 0;

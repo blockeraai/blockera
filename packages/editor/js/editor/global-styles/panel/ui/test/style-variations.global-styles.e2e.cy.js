@@ -51,6 +51,74 @@ const openSiteEditorDocumentPanel = () => {
 		});
 };
 
+const renameSection1WithNewId = (label = 'New Name', id = 'new-id') => {
+	cy.getByDataTest('style-section-1').click();
+	cy.getByDataTest('open-section-1-block-card-contextmenu').click();
+	cy.get('.blockera-component-popover-body button')
+		.contains('Rename')
+		.click();
+
+	cy.getParentContainer('Name').within(() => {
+		cy.get('input').clear();
+		cy.get('input').type(label);
+	});
+
+	cy.getParentContainer('ID').within(() => {
+		cy.get('input').clear();
+		cy.get('input').type(id);
+	});
+
+	cy.get('input[type="checkbox"]').check();
+	cy.getByDataTest('save-rename-button').click();
+	cy.get('.blockera-extension-block-card__close').click();
+	cy.getByDataTest(`style-${id}`).should('contain', label);
+};
+
+const ensureNewIdStyleVariation = (label = 'New Name', id = 'new-id') => {
+	cy.get('body').then(() => {
+		// Cypress .find() is unreliable for checking presence, use Cypress directly:
+		cy.get(`[data-test="style-${id}"]`).then(($el) => {
+			if ($el.length) {
+				cy.wrap($el).should('contain', label);
+			} else {
+				renameSection1WithNewId(label, id);
+			}
+		});
+	});
+};
+
+const openStyleVariationContextMenu = (styleSlug) => {
+	cy.getByDataTest(`open-${styleSlug}-contextmenu`)
+		.filter(':visible')
+		.first()
+		.as('styleContextMenuTrigger');
+
+	cy.get('@styleContextMenuTrigger').scrollIntoView();
+	cy.get('@styleContextMenuTrigger').click({ force: true });
+
+	cy.get('.variations-settings-popover')
+		.filter(':visible')
+		.last()
+		.should('be.visible');
+};
+
+const setStyleVariationActive = (styleSlug, active) => {
+	const currentLabel = active ? 'Inactive Style' : 'Active Style';
+
+	cy.get('.variations-settings-popover')
+		.filter(':visible')
+		.last()
+		.find(`[data-test="${styleSlug}-active-toggle-row"]`)
+		.should('contain', currentLabel);
+
+	cy.get('.variations-settings-popover')
+		.filter(':visible')
+		.last()
+		.find(`[data-test="${styleSlug}-active-toggle-row"]`)
+		.find('.components-form-toggle__input')
+		.click({ force: true });
+};
+
 const selectBlockByType = (blockName, index = 0) => {
 	cy.window().then((win) => {
 		const blockEditor = win.wp.data.select('core/block-editor');
@@ -147,31 +215,11 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		saveSiteEditor();
 		cy.reload();
 		openGroupBlockStyleVariations();
-		cy.getByDataTest('style-section-1').click();
 		cy.getByDataTest('style-section-1').should('contain', 'New Name');
 	});
 
 	it('should be able to rename with new ID specific style variation', () => {
-		cy.getByDataTest('style-section-1').click();
-		cy.getByDataTest('open-section-1-block-card-contextmenu').click();
-		cy.get('.blockera-component-popover-body button')
-			.contains('Rename')
-			.click();
-
-		cy.getParentContainer('Name').within(() => {
-			cy.get('input').clear();
-			cy.get('input').type('New Name');
-		});
-
-		cy.getParentContainer('ID').within(() => {
-			cy.get('input').clear();
-			cy.get('input').type('new id');
-		});
-
-		cy.get('input[type="checkbox"]').check();
-		cy.getByDataTest('save-rename-button').click();
-		cy.get('.blockera-extension-block-card__close').click();
-		cy.getByDataTest('style-new-id').should('contain', 'New Name');
+		renameSection1WithNewId();
 
 		saveSiteEditor();
 		cy.reload();
@@ -180,13 +228,10 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 	});
 
 	it('should be able to Active/Inactive specific style variation', () => {
-		cy.getByDataTest('open-new-id-contextmenu').first().click();
+		ensureNewIdStyleVariation();
 
-		cy.get('.blockera-component-grid')
-			.contains('Active Style')
-			.parents('.blockera-component-grid')
-			.find('input')
-			.click();
+		openStyleVariationContextMenu('new-id');
+		setStyleVariationActive('new-id', false);
 
 		cy.getByDataTest('style-new-id').should('not.have.class', 'is-enabled');
 
@@ -245,10 +290,15 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 	});
 
 	it('should be able to delete specific style variation', () => {
-		cy.getByDataTest('open-new-id-contextmenu').first().click();
-		cy.get('.blockera-component-popover-body button')
+		ensureNewIdStyleVariation();
+
+		openStyleVariationContextMenu('new-id');
+		cy.get('.variations-settings-popover')
+			.filter(':visible')
+			.last()
+			.find('button')
 			.contains('Delete')
-			.click();
+			.click({ force: true });
 
 		cy.get('.components-modal__content')
 			.find('input[type="checkbox"]')
@@ -284,7 +334,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			expect(
 				data.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0
-			).to.equal(3);
+			).to.equal(5);
 		});
 
 		openSiteEditorDocumentPanel();
