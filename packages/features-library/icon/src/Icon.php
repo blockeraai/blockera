@@ -64,7 +64,8 @@ class Icon implements FeatureInterface {
 		}
 
 		if ('core/icon' === ( $this->block['blockName'] ?? '' )) {
-			return blockera_core_icon_has_renderable_blockera_icon($this->block);
+			// Standalone core/icon SVG is injected in render_block_core/icon (see blockera_core_icon_render_frontend_html).
+			return false;
 		}
 
 		return isset($this->block['attrs']['blockeraIcon']);
