@@ -94,6 +94,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 					actionButtonsType="menu"
 					popoverTitleButtonsRight={PopoverTitleButtons}
 					addNewButtonDataTest={'add-new-block-state'}
+					addNewButtonLabel={__('Add New State', 'blockera')}
 					PromoComponent={({
 						items,
 						onClose = () => {},
