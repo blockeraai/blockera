@@ -250,6 +250,8 @@ describe('useAttributes Hook Testing ...', () => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
 
+				// Open the more typography settings panel
+				cy.getByAriaLabel('More typography settings').click();
 				// Add default text shadow item
 				cy.getByAriaLabel('Add New Text Shadow').click();
 			});
@@ -260,6 +262,8 @@ describe('useAttributes Hook Testing ...', () => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
 
+				// Open the more typography settings panel
+				cy.getByAriaLabel('More typography settings').click();
 				// Add default text shadow item
 				cy.getByAriaLabel('Add New Text Shadow').click();
 			});
