@@ -285,7 +285,7 @@ export const runGlobalStylesWordPressCompatibilityBeforeSave = (): boolean => {
 	}
 
 	dispatch('core').editEntityRecord('root', 'globalStyles', id, {
-		styles: compatibleStyles,
+		styles: mergeObject(record?.styles || {}, compatibleStyles),
 	});
 
 	return true;
