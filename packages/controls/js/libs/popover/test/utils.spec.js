@@ -10,6 +10,7 @@ import {
 	isSketchPickerInteractionActiveFor,
 	markPopoverClosing,
 	resolvePopoverAnchorElement,
+	shouldDismissPopoverFromPointerDown,
 	shouldIgnorePopoverFocusOutside,
 } from '../utils';
 
@@ -324,6 +325,75 @@ describe('popover offset utils', () => {
 			});
 
 			expect(shouldIgnorePopoverFocusOutside(event, popover)).toBe(true);
+		});
+
+		it('shouldIgnorePopoverFocusOutside dismisses when pointer down was outside but focus stayed inside', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const inside = document.createElement('button');
+			popover.appendChild(inside);
+			document.body.appendChild(popover);
+
+			const outside = document.createElement('button');
+			document.body.appendChild(outside);
+
+			inside.focus();
+
+			outside.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+
+			const event = new FocusEvent('focusout', {
+				relatedTarget: null,
+			});
+
+			expect(shouldIgnorePopoverFocusOutside(event, popover)).toBe(false);
+		});
+
+		it('shouldDismissPopoverFromPointerDown dismisses for outside targets', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			document.body.appendChild(popover);
+
+			const outside = document.createElement('button');
+			document.body.appendChild(outside);
+
+			expect(
+				shouldDismissPopoverFromPointerDown(popover, outside, null)
+			).toBe(true);
+		});
+
+		it('shouldDismissPopoverFromPointerDown ignores the popover anchor', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			document.body.appendChild(popover);
+
+			const anchor = document.createElement('button');
+			document.body.appendChild(anchor);
+
+			expect(
+				shouldDismissPopoverFromPointerDown(popover, anchor, anchor)
+			).toBe(false);
+		});
+
+		it('shouldDismissPopoverFromPointerDown ignores nested popovers', () => {
+			const rootPopover = document.createElement('div');
+			rootPopover.className = 'blockera-component-popover';
+			document.body.appendChild(rootPopover);
+
+			const nestedPopover = document.createElement('div');
+			nestedPopover.className = 'blockera-component-popover';
+			const nestedButton = document.createElement('button');
+			nestedPopover.appendChild(nestedButton);
+			document.body.appendChild(nestedPopover);
+
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					rootPopover,
+					nestedButton,
+					null
+				)
+			).toBe(false);
 		});
 
 		it('hasNestedOverlayOpenAsideFrom detects other popovers and modals', () => {

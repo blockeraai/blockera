@@ -166,6 +166,7 @@ export const SKETCH_PICKER_SELECTOR = '.sketch-picker';
 let closingPopoverRoot: ?HTMLElement = null;
 let sketchPickerInteractionPopoverRoot: ?HTMLElement = null;
 let closingClearTimer: ?TimeoutID = null;
+let lastPopoverPointerDownTarget: ?EventTarget = null;
 
 /** Marks which popover is closing so parent popovers ignore the resulting dismiss events. */
 export function markPopoverClosing(popoverRoot: ?HTMLElement): void {
@@ -291,12 +292,46 @@ export function shouldIgnorePopoverFocusOutside(
 	}
 
 	if (!related) {
+		// Cypress force clicks and some sidebar controls do not move focus, so
+		// relatedTarget stays null while activeElement remains inside the popover.
+		// Use the most recent pointer target to decide whether dismiss is intended.
+		if (
+			lastPopoverPointerDownTarget &&
+			!isPopoverDismissIgnoredTarget(
+				popoverRoot,
+				lastPopoverPointerDownTarget
+			)
+		) {
+			return false;
+		}
+
 		const active = popoverRoot?.ownerDocument?.activeElement ?? null;
 
 		return isPopoverDismissIgnoredTarget(popoverRoot, active);
 	}
 
 	return false;
+}
+
+/** Whether a capture-phase pointer down outside the popover should dismiss it. */
+export function shouldDismissPopoverFromPointerDown(
+	popoverRoot: ?HTMLElement,
+	target: ?EventTarget,
+	anchor: ?HTMLElement
+): boolean {
+	if (!popoverRoot) {
+		return false;
+	}
+
+	if (isOtherPopoverClosing(popoverRoot)) {
+		return false;
+	}
+
+	if (anchor && target instanceof Node && anchor.contains(target)) {
+		return false;
+	}
+
+	return !isPopoverDismissIgnoredTarget(popoverRoot, target);
 }
 
 /** True when a nested popover or modal should receive Escape / dismiss first. */
@@ -320,6 +355,8 @@ export function hasNestedOverlayOpenAsideFrom(
 }
 
 function handlePopoverCloseGuardPointerDown(event: MouseEvent | TouchEvent) {
+	lastPopoverPointerDownTarget = event.target;
+
 	const root = getPopoverRootFromCloseControl(event.target);
 	if (root) {
 		markPopoverClosing(root);

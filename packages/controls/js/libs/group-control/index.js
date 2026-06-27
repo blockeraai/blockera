@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import React, { type MixedElement } from 'react';
+import React, { type MixedElement, useRef } from 'react';
 
 /**
  * Blockera dependencies
@@ -52,6 +52,8 @@ export default function GroupControl({
 	onOpen: fnOnOpen = () => {},
 	onClick = () => {},
 }: GroupControlProps): MixedElement {
+	const groupHeaderRef = useRef<?HTMLElement>(null);
+
 	const getHeaderOpenIcon = (): MixedElement | string => {
 		if (headerOpenIcon) {
 			return headerOpenIcon;
@@ -144,6 +146,7 @@ export default function GroupControl({
 			aria-label={'group-control'}
 		>
 			<div
+				ref={groupHeaderRef}
 				className={controlInnerClassNames('group-header')}
 				data-cy="group-control-header"
 				{...(headerVariableSlug
@@ -248,6 +251,7 @@ export default function GroupControl({
 					)}
 					title={popoverTitle || header}
 					titleButtonsRight={popoverTitleButtonsRight}
+					anchor={groupHeaderRef.current ?? undefined}
 					onClose={() => {
 						onClose();
 					}}

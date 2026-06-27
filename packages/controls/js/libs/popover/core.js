@@ -5,7 +5,13 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { Popover as WPPopover } from '@wordpress/components';
-import { useContext, useRef, useEffect, forwardRef } from '@wordpress/element';
+import {
+	useContext,
+	useRef,
+	useEffect,
+	forwardRef,
+	useCallback,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -27,6 +33,7 @@ import {
 	isOtherPopoverClosing,
 	markPopoverClosing,
 	normalizePopoverRoot,
+	shouldDismissPopoverFromPointerDown,
 	shouldIgnorePopoverFocusOutside,
 } from './utils';
 import type { TPopoverProps } from './types';
@@ -66,6 +73,69 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 			const internalRef = useRef();
 			const popoverRef = ref || internalRef;
 			const ignoreFocusOutsideDuringMountRef = useRef(true);
+			const isClosingRef = useRef(false);
+
+			const dismissPopover = useCallback(
+				({
+					skipMountGuard = false,
+				}: { skipMountGuard?: boolean } = {}) => {
+					if (isClosingRef.current) {
+						return;
+					}
+
+					if (
+						!skipMountGuard &&
+						ignoreFocusOutsideDuringMountRef.current
+					) {
+						return;
+					}
+
+					const popoverRoot = normalizePopoverRoot(
+						popoverRef.current
+					);
+					if (isOtherPopoverClosing(popoverRoot)) {
+						return;
+					}
+
+					isClosingRef.current = true;
+					onClose();
+				},
+				[onClose]
+			);
+
+			useEffect(() => {
+				isClosingRef.current = false;
+			}, []);
+
+			useEffect(() => {
+				const handlePointerDown = (event: MouseEvent) => {
+					const popoverRoot = normalizePopoverRoot(
+						popoverRef.current
+					);
+
+					if (
+						!shouldDismissPopoverFromPointerDown(
+							popoverRoot,
+							event.target,
+							anchor
+						)
+					) {
+						return;
+					}
+
+					dismissPopover({ skipMountGuard: true });
+				};
+
+				document.addEventListener('mousedown', handlePointerDown, true);
+
+				return () => {
+					document.removeEventListener(
+						'mousedown',
+						handlePointerDown,
+						true
+					);
+				};
+			}, [anchor, dismissPopover]);
 
 			useEffect(() => {
 				popoverRef.current?.focus();
@@ -129,7 +199,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					return;
 				}
 
-				onClose();
+				dismissPopover();
 			}
 
 			function handlePopoverDismissFromOverlay() {
@@ -141,7 +211,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					return;
 				}
 
-				onClose();
+				dismissPopover();
 			}
 
 			function handleCloseButtonPointerDown(
@@ -158,7 +228,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				event: MouseEvent & { currentTarget: HTMLElement }
 			) {
 				event.stopPropagation();
-				onClose();
+				dismissPopover();
 			}
 
 			return (
