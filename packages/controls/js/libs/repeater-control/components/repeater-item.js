@@ -5,6 +5,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import {
 	memo,
+	useCallback,
 	useContext,
 	useEffect,
 	useRef,
@@ -129,16 +130,6 @@ const RepeaterItem = ({
 		return true;
 	};
 
-	const repeaterItemActionsProps = {
-		item,
-		itemId,
-		isOpen,
-		setOpen,
-		isVisible,
-		setVisibility,
-		isOpenPopoverEvent,
-	};
-
 	let headerVariableSlug: string | void;
 	if (!item?.selectable) {
 		headerVariableSlug = undefined;
@@ -164,6 +155,38 @@ const RepeaterItem = ({
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
+	const [popoverContentKey, setPopoverContentKey] = useState(0);
+
+	const refreshPopoverContent = useCallback(() => {
+		setPopoverContentKey((key) => key + 1);
+	}, []);
+
+	const handleItemOpen = useCallback(() => {
+		setOpen(true);
+		refreshPopoverContent();
+	}, [refreshPopoverContent]);
+
+	const setOpenWithContentRefresh = useCallback(
+		(nextOpen: boolean) => {
+			if (nextOpen) {
+				handleItemOpen();
+				return;
+			}
+
+			setOpen(false);
+		},
+		[handleItemOpen]
+	);
+
+	const repeaterItemActionsProps = {
+		item,
+		itemId,
+		isOpen,
+		setOpen: setOpenWithContentRefresh,
+		isVisible,
+		setVisibility,
+		isOpenPopoverEvent,
+	};
 
 	useEffect(() => {
 		styleRef.current = {
@@ -181,8 +204,14 @@ const RepeaterItem = ({
 			return;
 		}
 
-		setOpen(true);
-	}, [item?.creatingStep, item?.isOpen, pendingOpenItemId, itemId]);
+		handleItemOpen();
+	}, [
+		item?.creatingStep,
+		item?.isOpen,
+		pendingOpenItemId,
+		itemId,
+		handleItemOpen,
+	]);
 
 	// Preset creatingStep rows scroll into the nearest scrollable panel (e.g. variable picker).
 	useEffect(() => {
@@ -216,6 +245,22 @@ const RepeaterItem = ({
 				value: {
 					...item,
 					creatingStep: false,
+				},
+				controlId,
+				repeaterId,
+				onChange,
+				valueCleanup,
+			});
+
+			return;
+		}
+
+		if (item?.isOpen === true) {
+			changeRepeaterItem({
+				itemId,
+				value: {
+					...item,
+					isOpen: false,
 				},
 				controlId,
 				repeaterId,
@@ -290,7 +335,7 @@ const RepeaterItem = ({
 				}
 
 				if (isOpenPopoverEvent(event)) {
-					setOpen(!isOpen);
+					setOpenWithContentRefresh(!isOpen);
 				}
 
 				const nextOpen = !isOpen;
@@ -358,7 +403,7 @@ const RepeaterItem = ({
 				itemId={repeaterItemActionsProps.itemId}
 				isVisible={repeaterItemActionsProps.isVisible}
 				setVisibility={repeaterItemActionsProps.setVisibility}
-				onOpenItemSettings={() => setOpen(true)}
+				onOpenItemSettings={handleItemOpen}
 				showItemEditButton={showItemEditButton}
 				interactionGuard={
 					<RepeaterProItemInteractionGuard
@@ -382,7 +427,7 @@ const RepeaterItem = ({
 				itemId={repeaterItemActionsProps.itemId}
 				isVisible={repeaterItemActionsProps.isVisible}
 				setVisibility={repeaterItemActionsProps.setVisibility}
-				onOpenItemSettings={() => setOpen(true)}
+				onOpenItemSettings={handleItemOpen}
 				showItemEditButton={showItemEditButton}
 			/>
 		);
@@ -412,8 +457,14 @@ const RepeaterItem = ({
 				'is-selected-item': item?.selectable ? item.isSelected : false,
 			}
 		),
-		children: <RepeaterItemChildren {...{ item, itemId }} />,
+		children: (
+			<RepeaterItemChildren
+				key={popoverContentKey}
+				{...{ item, itemId }}
+			/>
+		),
 		isOpen,
+		onOpen: handleItemOpen,
 		onClose: handleItemPopoverClose,
 		onClick: (): void | boolean => {
 			if (item?.selectable) {
