@@ -173,7 +173,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			setInnerBlock('elements/link');
 
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -267,7 +267,7 @@ describe('useAttributes Hook Testing ...', () => {
 			describe('adding hover -> desktop state', () => {
 				beforeEach(() => {
 					// Set hover as current state.
-					cy.getByAriaLabel('Add New State').click();
+					setBlockState('Hover');
 				});
 
 				it('should add "hover" block-state into block with blockeraTextShadow attribute is undefined', () => {
