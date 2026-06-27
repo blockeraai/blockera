@@ -18,9 +18,7 @@ describe('useAttributes Hook Testing ...', () => {
 		);
 	});
 
-	// TODO: There is a bug in handleOnChangeAttributes callback, it is not working correctly.
-	/* @debug-ignore */
-	describe.skip('handleOnChangeAttributes callback', () => {
+	describe('handleOnChangeAttributes callback', () => {
 		it('should sets value when state is paragraph -> normal -> laptop', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
