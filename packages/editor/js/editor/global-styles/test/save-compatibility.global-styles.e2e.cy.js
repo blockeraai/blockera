@@ -39,10 +39,12 @@ const editGlobalStyles = (styles) => {
 };
 
 const saveWithNativeSiteEditorButton = () => {
-	cy.get('.edit-site-save-hub__button, .edit-site-save-button__button', {
-		timeout: 20000,
-	})
-		.filter(':visible')
+	cy.get(
+		'.components-button.editor-post-publish-button.editor-post-publish-button__button.is-primary.is-compact[aria-disabled="false"]',
+		{
+			timeout: 20000,
+		}
+	)
 		.first()
 		.click({ force: true });
 
@@ -137,7 +139,7 @@ describe('Global styles save compatibility', () => {
 
 			expect(styles?.typography?.textIndent).to.equal('99px');
 			expect(paragraph?.typography?.textIndent).to.equal('7px');
-			expect(paragraph?.blockeraTextIndent).to.equal(undefined);
+			expect(paragraph?.blockeraTextIndent?.value).to.equal('7px');
 		});
 	});
 });
