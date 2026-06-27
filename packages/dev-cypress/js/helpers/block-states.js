@@ -35,6 +35,9 @@ export function setBlockState(state, blockType) {
 					.click({ force: true });
 			});
 		});
+
+	// Switching block state should dismiss any open inspector popovers.
+	cy.get('.blockera-component-popover').should('not.exist');
 }
 
 export function resetBlockState(state, blockType) {

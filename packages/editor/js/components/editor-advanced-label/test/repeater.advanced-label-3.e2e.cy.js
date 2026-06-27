@@ -1,7 +1,6 @@
 import {
 	createPost,
 	setBlockState,
-	addBlockState,
 	setDeviceType,
 	getWPDataObject,
 	getSelectedBlock,
