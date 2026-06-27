@@ -102,7 +102,7 @@ class EditBlockHTML implements EditableBlockHTML {
 	 * @return string
 	 */
 	protected function replaceCoreIconSvg( string $html, array $block, array $data): string {
-		$value     = blockera_get_blockera_icon_attr_value($block);
+		$value     = blockera_resolve_core_icon_blockera_icon_value($block);
 		$ariaLabel = $block['attrs']['ariaLabel'] ?? '';
 
 		$iconArgs = [];
@@ -560,8 +560,12 @@ class EditBlockHTML implements EditableBlockHTML {
 		}
 
 		if ('' === $iconHTML && '' !== $icon && '' !== $library) {
-			$iconData = IconsManager::getIcon($icon, $library);
-			$iconHTML = is_array($iconData) ? (string) ( $iconData['icon'] ?? '' ) : '';
+			if ('wp' === $library) {
+				$iconHTML = blockera_get_wp_icon_registry_svg(blockera_to_core_icon_attribute($icon));
+			} else {
+				$iconData = IconsManager::getIcon($icon, $library);
+				$iconHTML = is_array($iconData) ? (string) ( $iconData['icon'] ?? '' ) : '';
+			}
 		}
 
         if (empty($iconHTML)) {

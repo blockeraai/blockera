@@ -195,6 +195,170 @@ if ( ! function_exists('blockera_get_icon_svg_source_from_value')) {
 	}
 }
 
+if ( ! function_exists('blockera_strip_core_icon_namespace')) {
+	/**
+	 * Strip the WordPress core/icon namespace prefix from a slug.
+	 *
+	 * @param string $slug Icon slug from core/icon or blockeraIcon.
+	 *
+	 * @return string
+	 */
+	function blockera_strip_core_icon_namespace( string $slug): string {
+		if ('' === $slug) {
+			return '';
+		}
+
+		return str_starts_with($slug, 'core/') ? substr($slug, 5) : $slug;
+	}
+}
+
+if ( ! function_exists('blockera_to_core_icon_attribute')) {
+	/**
+	 * Normalize a Blockera wp library slug to core/icon attribute format.
+	 *
+	 * @param string $slug Blockera wp icon slug (with or without `core/`).
+	 *
+	 * @return string
+	 */
+	function blockera_to_core_icon_attribute( string $slug): string {
+		if ('' === $slug) {
+			return '';
+		}
+
+		return str_starts_with($slug, 'core/') ? $slug : 'core/' . $slug;
+	}
+}
+
+if ( ! function_exists('blockera_get_core_icon_block_slug')) {
+	/**
+	 * Read the core/icon `icon` attribute slug from block attrs.
+	 *
+	 * @param array $block The block.
+	 *
+	 * @return string
+	 */
+	function blockera_get_core_icon_block_slug( array $block): string {
+		return blockera_get_block_attr_value($block, 'icon');
+	}
+}
+
+if ( ! function_exists('blockera_get_wp_icon_registry_svg')) {
+	/**
+	 * Resolve SVG markup from the WordPress core icon registry.
+	 *
+	 * @param string $core_icon_slug Namespaced or bare icon slug.
+	 *
+	 * @return string
+	 */
+	function blockera_get_wp_icon_registry_svg( string $core_icon_slug): string {
+		if ('' === $core_icon_slug || ! class_exists('WP_Icons_Registry')) {
+			return '';
+		}
+
+		$stripped   = blockera_strip_core_icon_namespace($core_icon_slug);
+		$namespaced = blockera_to_core_icon_attribute($stripped);
+		$candidates = [];
+
+		foreach ( [ $core_icon_slug, $namespaced, $stripped ] as $candidate ) {
+			if ('' !== $candidate) {
+				$candidates[ $candidate ] = true;
+			}
+		}
+
+		$registry = \WP_Icons_Registry::get_instance();
+
+		foreach (array_keys($candidates) as $candidate) {
+			$icon = $registry->get_registered_icon($candidate);
+
+			if (null !== $icon && ! empty($icon['content'])) {
+				return (string) $icon['content'];
+			}
+		}
+
+		return '';
+	}
+}
+
+if ( ! function_exists('blockera_blockera_icon_value_is_renderable')) {
+	/**
+	 * Whether a blockeraIcon value object can produce frontend SVG output.
+	 *
+	 * @param array $value blockeraIcon value object.
+	 *
+	 * @return bool
+	 */
+	function blockera_blockera_icon_value_is_renderable( array $value): bool {
+		if (! empty($value['renderedIcon']) || ! empty($value['uploadSVG'])) {
+			return true;
+		}
+
+		return ! empty($value['icon']) && ! empty($value['library']);
+	}
+}
+
+if ( ! function_exists('blockera_build_blockera_icon_value_from_core_slug')) {
+	/**
+	 * Build blockeraIcon value from a core/icon slug (mirrors JS hydrate-icon.js).
+	 *
+	 * @param string $core_icon_slug Raw core/icon attribute slug.
+	 *
+	 * @return array Empty array when the slug cannot be resolved.
+	 */
+	function blockera_build_blockera_icon_value_from_core_slug( string $core_icon_slug): array {
+		if ('' === $core_icon_slug) {
+			return [];
+		}
+
+		$blockera_slug = blockera_strip_core_icon_namespace($core_icon_slug);
+		$svg           = blockera_get_wp_icon_registry_svg($core_icon_slug);
+
+		if ('' === $svg) {
+			return [];
+		}
+
+		return [
+			'icon'         => $blockera_slug,
+			'library'      => 'wp',
+			'uploadSVG'    => '',
+			'svgString'    => '',
+			'renderedIcon' => \Blockera\Feature\Icon\RenderedIconCodec::encode($svg),
+		];
+	}
+}
+
+if ( ! function_exists('blockera_resolve_core_icon_blockera_icon_value')) {
+	/**
+	 * Resolve the effective blockeraIcon value for core/icon frontend rendering.
+	 *
+	 * Hydrates from the core/icon `icon` attribute when blockeraIcon is empty.
+	 *
+	 * @param array $block The block.
+	 *
+	 * @return array
+	 */
+	function blockera_resolve_core_icon_blockera_icon_value( array $block): array {
+		$value = blockera_get_blockera_icon_attr_value($block);
+
+		if (blockera_blockera_icon_value_is_renderable($value)) {
+			return $value;
+		}
+
+		$core_icon_slug = blockera_get_core_icon_block_slug($block);
+
+		if ('' === $core_icon_slug) {
+			return $value;
+		}
+
+		$hydrated = blockera_build_blockera_icon_value_from_core_slug($core_icon_slug);
+
+		if (empty($hydrated)) {
+			return $value;
+		}
+
+		return array_merge($hydrated, array_filter($value));
+	}
+}
+
 if ( ! function_exists('blockera_core_icon_has_renderable_blockera_icon')) {
 	/**
 	 * Whether core/icon should render Blockera icon output on the frontend.
@@ -208,13 +372,9 @@ if ( ! function_exists('blockera_core_icon_has_renderable_blockera_icon')) {
 			return false;
 		}
 
-		$value = blockera_get_blockera_icon_attr_value($block);
-
-		if (! empty($value['renderedIcon']) || ! empty($value['uploadSVG'])) {
-			return true;
-		}
-
-		return ! empty($value['icon']) && ! empty($value['library']);
+		return blockera_blockera_icon_value_is_renderable(
+			blockera_resolve_core_icon_blockera_icon_value($block)
+		);
 	}
 }
 
@@ -612,6 +772,55 @@ if ( ! function_exists('blockera_core_icon_wrap_with_link')) {
 	}
 }
 
+if ( ! function_exists('blockera_core_icon_render_frontend_html')) {
+	/**
+	 * Replace core/icon frontend markup with Blockera-managed SVG output.
+	 *
+	 * Runs on render_block_core/icon so icon rendering does not depend on blockeraPropsId
+	 * or the full Blockera render_block CSS pipeline.
+	 *
+	 * @param string $html       HTML from WordPress core/icon render (may be empty).
+	 * @param array  $attributes Block attributes.
+	 *
+	 * @return string
+	 */
+	function blockera_core_icon_render_frontend_html( string $html, array $attributes): string {
+		$block = [
+			'blockName' => 'core/icon',
+			'attrs'     => $attributes,
+		];
+
+		if (! blockera_core_icon_has_renderable_blockera_icon($block)) {
+			return $html;
+		}
+
+		$trimmed_html = ltrim($html);
+
+		// Core may return empty markup when the slug is missing from WP_Icons_Registry.
+		if ('' === $trimmed_html) {
+			$html = blockera_core_icon_seed_html($block);
+		}
+
+		static $edit_block_html = null;
+
+		if (null === $edit_block_html) {
+			$edit_block_html = new \Blockera\Feature\Icon\EditBlockHTML([]);
+		}
+
+		$vendor_path = function_exists('blockera_core_config')
+			? blockera_core_config('app.vendor_path')
+			: '';
+
+		return $edit_block_html->htmlManipulate(
+			$html,
+			[
+				'block'            => $block,
+				'plugin_base_path' => $vendor_path,
+			]
+		);
+	}
+}
+
 if ( ! function_exists('blockera_core_icon_register_navigation_hooks')) {
 	/**
 	 * Navigation: list-item wrapper + render context for link class names.
@@ -642,6 +851,23 @@ if ( ! function_exists('blockera_core_icon_register_navigation_hooks')) {
 			},
 			10,
 			3
+		);
+
+		add_filter(
+			'render_block_core/icon',
+			static function ( $html, $parsed_block ): string {
+				// WP passes the parsed block array (attrs live under `attrs`), not flat attributes.
+				$attrs = is_array($parsed_block['attrs'] ?? null)
+					? $parsed_block['attrs']
+					: ( is_array($parsed_block) ? $parsed_block : [] );
+
+				return blockera_core_icon_render_frontend_html(
+					is_string($html) ? $html : '',
+					$attrs
+				);
+			},
+			10,
+			2
 		);
 
 		add_filter(

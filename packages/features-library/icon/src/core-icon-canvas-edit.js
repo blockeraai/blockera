@@ -28,6 +28,7 @@ import {
 	getCoreIconAriaLabel,
 	getCustomIconSvgSource,
 	getIconPresentationStyle,
+	getProGatedLibraryIconSvgMarkup,
 	getResolvedIconSize,
 	hasBlockeraIconValue,
 	isCustomUploadedIcon,
@@ -110,11 +111,18 @@ export const CoreIconCanvasEdit: ComponentType<{
 			return getCustomIconSvgSource(iconValue);
 		}, [iconValue]);
 
+		const proGatedLibrarySvgMarkup = useMemo(
+			() => getProGatedLibraryIconSvgMarkup(iconValue),
+			[iconValue]
+		);
+
 		let iconContent;
 
 		if (!hasIcon) {
 			iconContent = <IconPlaceholder />;
-		} else if (customSvgMarkup) {
+		} else if (customSvgMarkup || proGatedLibrarySvgMarkup) {
+			const svgMarkup = customSvgMarkup || proGatedLibrarySvgMarkup;
+
 			iconContent = (
 				<span
 					className="blockera-core-icon-canvas-edit__custom-svg"
@@ -124,7 +132,7 @@ export const CoreIconCanvasEdit: ComponentType<{
 						height: resolvedIconSize,
 						...iconStyle,
 					}}
-					dangerouslySetInnerHTML={{ __html: customSvgMarkup }}
+					dangerouslySetInnerHTML={{ __html: svgMarkup }}
 				/>
 			);
 		} else {

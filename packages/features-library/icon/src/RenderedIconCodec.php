@@ -47,4 +47,29 @@ final class RenderedIconCodec {
 
 		return $binary;
 	}
+
+	/**
+	 * Encode SVG markup for blockeraIcon.renderedIcon storage (JS btoa(unescape(encodeURIComponent(svg)))).
+	 *
+	 * @param string $svg SVG markup.
+	 *
+	 * @return string Base64-encoded SVG markup, or empty string when input is empty.
+	 */
+	public static function encode( string $svg): string {
+		$svg = trim($svg);
+
+		if ('' === $svg) {
+			return '';
+		}
+
+		if (function_exists('mb_convert_encoding')) {
+			$binary = mb_convert_encoding($svg, 'ISO-8859-1', 'UTF-8');
+
+			if (is_string($binary) && '' !== $binary) {
+				return base64_encode($binary);
+			}
+		}
+
+		return base64_encode($svg);
+	}
 }
