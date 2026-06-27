@@ -52,7 +52,9 @@ export function VarPickerSectionCustomAddButton({
 	variableType: string,
 }): MixedElement | null {
 	const customAddCtx = useVarPickerCustomAddContext();
-	const customAddAction = customAddCtx?.getAction(variableType) ?? null;
+	const typeKey = String(variableType || '').trim();
+	const customAddAction =
+		(typeKey !== '' && customAddCtx?.actionsByType?.[typeKey]) || null;
 
 	return (
 		<VarPickerCustomAddButton
