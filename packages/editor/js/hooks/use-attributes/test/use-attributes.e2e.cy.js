@@ -13,14 +13,14 @@ describe('useAttributes Hook Testing ...', () => {
 		createPost();
 
 		appendBlocks(
-			'<!-- wp:paragraph -->\n' +
-				'<p>Test</p>\n' +
-				'<!-- /wp:paragraph -->'
+			`<!-- wp:paragraph -->
+				<p>Test</p>
+			<!-- /wp:paragraph -->`
 		);
 	});
 
 	describe('handleOnChangeAttributes callback', () => {
-		it('should sets value when state is paragraph -> normal -> laptop', () => {
+		it('should sets value when state is paragraph -> normal -> desktop', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -53,7 +53,7 @@ describe('useAttributes Hook Testing ...', () => {
 			});
 		});
 
-		it('should sets value when state is paragraph -> normal -> laptop -> link -> hover -> tablet', () => {
+		it('should sets value when state is paragraph -> normal -> desktop -> link -> hover -> tablet', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -77,7 +77,7 @@ describe('useAttributes Hook Testing ...', () => {
 			});
 		});
 
-		it('should sets value when state is paragraph -> hover -> laptop', () => {
+		it('should sets value when state is paragraph -> hover -> desktop', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -91,7 +91,7 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraBackgroundColor
+						.breakpoints.desktop.attributes.blockeraBackgroundColor
 				);
 			});
 		});
@@ -117,7 +117,7 @@ describe('useAttributes Hook Testing ...', () => {
 			});
 		});
 
-		it('should sets value when state is paragraph -> hover -> laptop -> link -> normal -> laptop', () => {
+		it('should sets value when state is paragraph -> hover -> desktop -> link -> normal -> desktop', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -133,13 +133,14 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBackgroundColor
+						.breakpoints.desktop.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraBackgroundColor
 				);
 			});
 		});
 
-		it('should sets value when state is paragraph -> hover -> tablet -> link -> normal -> laptop', () => {
+		it('should sets value when state is paragraph -> hover -> tablet -> link -> normal -> desktop', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -157,13 +158,14 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBackgroundColor
+						.breakpoints.tablet.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraBackgroundColor
 				);
 			});
 		});
 
-		it('should sets value when state is paragraph -> hover -> laptop -> link -> hover -> laptop', () => {
+		it('should sets value when state is paragraph -> hover -> desktop -> link -> hover -> desktop', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -180,8 +182,9 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
+						.breakpoints.desktop.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraBlockStates.hover.breakpoints.desktop
 						.attributes.blockeraBackgroundColor
 				);
 			});
@@ -205,14 +208,15 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.mobile.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.mobile
+						.breakpoints.mobile.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraBlockStates.hover.breakpoints.mobile
 						.attributes.blockeraBackgroundColor
 				);
 			});
 		});
 
-		describe('in paragraph -> normal -> laptop state has blockeraBackgroundColor with 27px value', () => {
+		describe('in paragraph -> normal -> desktop state has blockeraBackgroundColor with 27px value', () => {
 			beforeEach(() => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
@@ -221,7 +225,7 @@ describe('useAttributes Hook Testing ...', () => {
 				cy.getParentContainer('BG Color').should('contain', '#000000');
 			});
 
-			describe('adding hover -> laptop state', () => {
+			describe('adding hover -> desktop state', () => {
 				beforeEach(() => {
 					// Set hover as current state.
 					setBlockState('Hover');
@@ -241,7 +245,7 @@ describe('useAttributes Hook Testing ...', () => {
 			});
 		});
 
-		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
+		describe('in paragraph -> normal -> desktop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
@@ -251,7 +255,7 @@ describe('useAttributes Hook Testing ...', () => {
 			});
 		});
 
-		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
+		describe('in paragraph -> normal -> desktop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
@@ -260,7 +264,7 @@ describe('useAttributes Hook Testing ...', () => {
 				cy.getByAriaLabel('Add New Text Shadow').click();
 			});
 
-			describe('adding hover -> laptop state', () => {
+			describe('adding hover -> desktop state', () => {
 				beforeEach(() => {
 					// Set hover as current state.
 					cy.getByAriaLabel('Add New State').click();
