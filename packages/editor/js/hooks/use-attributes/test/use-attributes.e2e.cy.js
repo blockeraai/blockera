@@ -5,6 +5,7 @@ import {
 	setInnerBlock,
 	setDeviceType,
 	createPost,
+	setBlockState,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('useAttributes Hook Testing ...', () => {
@@ -59,7 +60,7 @@ describe('useAttributes Hook Testing ...', () => {
 			setDeviceType('Tablet');
 			setInnerBlock('elements/link');
 
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -81,7 +82,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// set hover state
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -102,7 +103,7 @@ describe('useAttributes Hook Testing ...', () => {
 			setDeviceType('Tablet');
 
 			// set hover state
-			cy.getByAriaLabel('Add New State').click();
+			setBlockState('Hover');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -121,7 +122,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// set hover state
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			setInnerBlock('elements/link');
 
@@ -145,7 +146,7 @@ describe('useAttributes Hook Testing ...', () => {
 			setDeviceType('Tablet');
 
 			// set hover state
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			setInnerBlock('elements/link');
 
@@ -166,7 +167,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			setInnerBlock('elements/link');
 
@@ -190,12 +191,12 @@ describe('useAttributes Hook Testing ...', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			setDeviceType('Mobile Portrait');
 			setInnerBlock('elements/link');
 
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -223,7 +224,7 @@ describe('useAttributes Hook Testing ...', () => {
 			describe('adding hover -> laptop state', () => {
 				beforeEach(() => {
 					// Set hover as current state.
-					cy.getByAriaLabel('Add New State').click();
+					setBlockState('Hover');
 				});
 
 				it('should not sets blockeraBlockStates in block attributes', () => {
