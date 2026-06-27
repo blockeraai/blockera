@@ -417,6 +417,7 @@ class TemplatePreview {
 		$slug = isset( $_GET['slug'] ) ? sanitize_title( wp_unslash( $_GET['slug'] ) ) : '';
 
 		if ( ! $theme || ! $slug ) {
+			// @debug-ignore
 			wp_die( esc_html__( 'Invalid template part preview.', 'blockera' ), '', array( 'response' => 400 ) );
 		}
 
@@ -432,22 +433,26 @@ class TemplatePreview {
 			list( $preview_id, $autosave, $parent ) = $preview_context;
 
 			if ( ! current_user_can( 'edit_post', $preview_id ) ) {
+				// @debug-ignore
 				wp_die( esc_html__( 'Sorry, you are not allowed to preview this template part.', 'blockera' ), '', array( 'response' => 403 ) );
 			}
 
 			if ( ! $this->template_part_post_matches_request( $parent, $theme, $slug ) ) {
+				// @debug-ignore
 				wp_die( esc_html__( 'Template part preview mismatch.', 'blockera' ), '', array( 'response' => 400 ) );
 			}
 
 			$content   = $autosave->post_content;
 			$part_post = $parent;
 		} elseif ( ! current_user_can( 'edit_theme_options' ) ) {
+			// @debug-ignore
 			wp_die( esc_html__( 'Sorry, you are not allowed to preview template parts.', 'blockera' ), '', array( 'response' => 403 ) );
 		}
 
 		if ( null === $content ) {
 			$template = get_block_template( $theme . '//' . $slug, 'wp_template_part' );
 			if ( ! $template || ! is_object( $template ) || ! isset( $template->content ) ) {
+				// @debug-ignore
 				wp_die( esc_html__( 'Template part not found.', 'blockera' ), '', array( 'response' => 404 ) );
 			}
 
