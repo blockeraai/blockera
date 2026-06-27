@@ -17,6 +17,7 @@ describe('core/icon Block', () => {
 			);
 
 			if (!hasCoreIcon) {
+				// @debug-ignore
 				this.skip();
 			}
 		});

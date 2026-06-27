@@ -89,10 +89,12 @@ describe('Min Width variable picker → multi-type custom preset add', () => {
 				dataCy === 'blockera-repeater-promo' ||
 				dataCy === 'blockera-modal'
 			) {
+				// @debug-ignore
 				this.skip();
 			}
 
 			if (dataTest !== 'repeater-item-creating-step') {
+				// @debug-ignore
 				this.skip();
 			}
 

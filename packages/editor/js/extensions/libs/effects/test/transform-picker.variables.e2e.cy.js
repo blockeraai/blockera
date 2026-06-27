@@ -60,6 +60,7 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 			).length;
 
 			if (!canAddCustom) {
+				// @debug-ignore
 				this.skip();
 			}
 		});
