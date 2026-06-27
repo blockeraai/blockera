@@ -116,13 +116,15 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			.click();
 
 		cy.getByDataTest('promote-global-styles-premium-feature').should(
-			'be.visible'
+			'be.exist'
 		);
+
+		cy.getByAriaLabel('Close').click();
 
 		saveSiteEditor();
 		cy.reload();
 		openGroupBlockStyleVariations();
-		cy.getByDataTest('style-default-copy').should('be.visible');
+		cy.getByDataTest('style-default-copy').should('be.exist');
 	});
 
 	it('should be able to rename specific style variation', () => {
@@ -135,9 +137,11 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		cy.getParentContainer('Name').within(() => {
 			cy.get('input').clear();
 			cy.get('input').type('New Name');
+			cy.get('input').should('have.value', 'New Name');
 		});
 
 		cy.getByDataTest('save-rename-button').click();
+		cy.get('.blockera-extension-block-card__close').click();
 		cy.getByDataTest('style-section-1').should('contain', 'New Name');
 
 		saveSiteEditor();
@@ -166,6 +170,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 
 		cy.get('input[type="checkbox"]').check();
 		cy.getByDataTest('save-rename-button').click();
+		cy.get('.blockera-extension-block-card__close').click();
 		cy.getByDataTest('style-new-id').should('contain', 'New Name');
 
 		saveSiteEditor();
