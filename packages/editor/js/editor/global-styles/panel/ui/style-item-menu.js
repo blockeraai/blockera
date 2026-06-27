@@ -228,39 +228,41 @@ export const StyleItemMenu = (): MixedElement => {
 						)}
 
 						{!style?.isDefault && (
-							<Grid
-								gridTemplateColumns="24px 1fr"
-								gap={8}
-								alignItems="center"
-								style={{
-									padding: '0 6px',
-									height: '36px',
-								}}
-							>
-								<ControlContextProvider
-									value={{
-										name: `${style.name}-toggle`,
-										value:
-											true === cachedStyle?.status ||
-											!cachedStyle.hasOwnProperty(
-												'status'
-											),
+							<div data-test={`${style.name}-active-toggle-row`}>
+								<Grid
+									gridTemplateColumns="24px 1fr"
+									gap={8}
+									alignItems="center"
+									style={{
+										padding: '0 6px',
+										height: '36px',
 									}}
 								>
-									<ToggleControl
-										labelType={'self'}
-										label={' '}
-										onChange={(value: boolean): void =>
-											handleOnEnable(value, style)
-										}
-										size="small"
-									/>
-								</ControlContextProvider>
+									<ControlContextProvider
+										value={{
+											name: `${style.name}-toggle`,
+											value:
+												true === cachedStyle?.status ||
+												!cachedStyle.hasOwnProperty(
+													'status'
+												),
+										}}
+									>
+										<ToggleControl
+											labelType={'self'}
+											label={' '}
+											onChange={(value: boolean): void =>
+												handleOnEnable(value, style)
+											}
+											size="small"
+										/>
+									</ControlContextProvider>
 
-								{false === cachedStyle?.status
-									? inactiveLabel
-									: activeLabel}
-							</Grid>
+									{false === cachedStyle?.status
+										? inactiveLabel
+										: activeLabel}
+								</Grid>
+							</div>
 						)}
 
 						{!style.isDefault && (
