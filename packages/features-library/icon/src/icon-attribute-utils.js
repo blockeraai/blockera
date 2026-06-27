@@ -4,7 +4,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue } from '@blockera/controls';
-import { isStrokeIconLibrary } from '@blockera/icons';
+import { isStrokeIconLibrary, NativeIconLibrariesList } from '@blockera/icons';
 
 /**
  * Shared attribute readers for icon feature (editor + canvas).
@@ -258,14 +258,30 @@ export const getCustomIconSvgSource = (iconValue?: Object): string => {
 	return decodeRenderedIcon(iconValue.renderedIcon);
 };
 
+/** Pro-gated libraries (search-libraries-2.json) — same list as icon picker FeatureWrapper. */
+const PRO_GATED_ICON_LIBRARIES: Set<string> = new Set(NativeIconLibrariesList);
+
+/**
+ * SVG from blockeraIcon.renderedIcon for pro-gated libraries in free Blockera.
+ * Picker is locked, but content saved in Pro must still render in the canvas.
+ *
+ * @param {Object} iconValue Normalized blockeraIcon value.
+ * @return {string} Decoded SVG markup or empty string.
+ */
+export const getProGatedLibraryIconSvgMarkup = (iconValue?: Object): string => {
+	if (
+		!iconValue?.renderedIcon ||
+		!iconValue.library ||
+		!PRO_GATED_ICON_LIBRARIES.has(iconValue.library)
+	) {
+		return '';
+	}
+
+	return decodeRenderedIcon(iconValue.renderedIcon);
+};
+
 /**
  * Encode custom SVG for storage without stroke/fill normalization.
- *
- * @param {string} svgString Raw SVG markup.
- * @return {{ encodedIcon: string, icon: string }} Base64 + URI-encoded forms.
- */
-/**
- * Whether SVG markup carries explicit fill colors that CSS mask would flatten.
  *
  * @param {string} svgMarkup Raw SVG markup.
  * @return {boolean} True when SVG has non-currentColor fill values.
