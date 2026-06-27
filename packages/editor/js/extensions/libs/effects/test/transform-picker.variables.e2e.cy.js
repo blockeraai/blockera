@@ -54,17 +54,6 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 
 		openRepeaterHeaderVariablePicker('Transforms');
 
-		cy.get('body').then(function ($body) {
-			const canAddCustom = $body.find(
-				'[data-test="variable-picker-header-add-custom-variable"]:visible'
-			).length;
-
-			if (!canAddCustom) {
-				// @debug-ignore
-				this.skip();
-			}
-		});
-
 		clickVariablePickerHeaderAddCustomVariable();
 
 		cy.get('.blockera-component-popover', { timeout: 15000 })
