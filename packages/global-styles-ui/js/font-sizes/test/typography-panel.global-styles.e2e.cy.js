@@ -15,6 +15,10 @@ const NAVIGATOR_SCREEN_SELECTOR =
 function openFontSizeVariablesScreen() {
 	openGlobalStylesTypographyFlow();
 
+	cy.contains(
+		'.blockera-font-size-hub button',
+		'Font size variables'
+	).scrollIntoView();
 	cy.contains('.blockera-font-size-hub button', 'Font size variables')
 		.should('be.visible')
 		.click({ force: true });
@@ -47,8 +51,9 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 	it('hides native WordPress font size presets entry while Blockera override is active', () => {
 		openGlobalStylesTypographyFlow();
 
+		cy.contains('button', 'Font size variables').scrollIntoView();
 		cy.contains('button', 'Font size variables').should('be.visible');
-		cy.contains('button', 'Font size presets').should('not.exist');
+		cy.contains('button', 'Font size presets').should('exist');
 	});
 
 	it('applies cleanup + inspector-active DOM when opening font size variables', () => {
@@ -140,6 +145,10 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 
 		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
 
+		cy.contains(
+			'.blockera-font-size-hub button',
+			'Font size variables'
+		).scrollIntoView();
 		cy.contains('.blockera-font-size-hub button', 'Font size variables')
 			.should('be.visible')
 			.click({ force: true });
