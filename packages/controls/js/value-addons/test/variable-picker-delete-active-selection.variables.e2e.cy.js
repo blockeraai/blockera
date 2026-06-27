@@ -19,10 +19,6 @@ describe('Variable picker — delete active variable', () => {
 	const slug = 'e-2-e-picker-delete-fs';
 	const presetName = 'E2E Picker Delete FS';
 
-	beforeEach(function () {
-		skipWhenCustomPresetAddUnavailable.call(this);
-	});
-
 	it('clears the feature binding when deleting the selected variable inside the picker', () => {
 		openSiteEditor();
 		injectCustomPresetRow('font-size', {
@@ -52,7 +48,7 @@ describe('Variable picker — delete active variable', () => {
 		expectBlockAttrStillBoundToVariable('blockeraFontSize', slug);
 
 		cy.get('@container').within(() => {
-			cy.openValueAddon();
+			cy.clickValueAddonButton();
 		});
 
 		deleteVariableFromVariablePicker(slug);
@@ -97,7 +93,7 @@ describe('Variable picker — delete active variable', () => {
 		cy.selectValueAddonItem(slug);
 
 		cy.get('@container').within(() => {
-			cy.openValueAddon();
+			cy.clickValueAddonButton();
 		});
 
 		deleteVariableFromVariablePicker(otherSlug);
