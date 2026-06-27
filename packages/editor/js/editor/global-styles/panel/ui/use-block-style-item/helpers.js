@@ -238,6 +238,23 @@ export const getMergedNormalizedStyleFromSources = (
 };
 
 /**
+ * Extract block-level style values from a global styles block node.
+ * Root block configs also carry a nested `variations` map; omit it so duplicate/rename
+ * flows do not nest variation trees inside a new variation payload.
+ *
+ * @param {Object} blockConfig - Block node from global styles (base or user).
+ * @return {Object} Block-level style values without structural `variations`.
+ */
+export const getRootBlockStyleValues = (blockConfig: Object): Object => {
+	if (!blockConfig || 'object' !== typeof blockConfig) {
+		return {};
+	}
+
+	const { variations, ...rootStyle } = blockConfig;
+	return rootStyle;
+};
+
+/**
  * Get style values from base theme and user global styles for a given block/style.
  *
  * @param {Object} base - Base theme global styles.
@@ -253,11 +270,11 @@ export const getStyleValuesFromSources = (
 	currentStyle: Object
 ): { baseValues: Object, userValues: Object } => {
 	const baseValues = isRootStyle(currentStyle)
-		? base?.styles?.blocks?.[blockName] || {}
+		? getRootBlockStyleValues(base?.styles?.blocks?.[blockName])
 		: base?.styles?.blocks?.[blockName]?.variations?.[currentStyle.name] ||
 			{};
 	const userValues = isRootStyle(currentStyle)
-		? globalStyles?.blocks?.[blockName] || {}
+		? getRootBlockStyleValues(globalStyles?.blocks?.[blockName])
 		: globalStyles?.blocks?.[blockName]?.variations?.[currentStyle.name] ||
 			{};
 	return { baseValues, userValues };

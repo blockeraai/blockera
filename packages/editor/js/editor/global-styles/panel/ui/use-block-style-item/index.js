@@ -490,12 +490,9 @@ export const useBlockStyleItem = ({
 						currentStyle,
 						action: 'duplicate',
 					});
-
-			const blockTypesToRegister = getBlockTypesForStyleFromStore(
-				blockName,
-				currentStyle.name
-			);
-
+			const blockTypesToRegister = isRootStyle(currentStyle)
+				? [blockName]
+				: getBlockTypesForStyleFromStore(blockName, currentStyle.name);
 			if (!skipBlockStyleRegistry) {
 				registerStyleForBlockTypes(
 					blockTypesToRegister,
@@ -512,14 +509,16 @@ export const useBlockStyleItem = ({
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 
-			const normalizedStyle = getMergedNormalizedStyleFromSources(
-				base,
-				globalStyles,
-				blockName,
-				currentStyle,
-				styles,
-				defaultStyles,
-				getNormalizedStyle
+			const normalizedStyle = sanitizeGlobalStylesNode(
+				getMergedNormalizedStyleFromSources(
+					base,
+					globalStyles,
+					blockName,
+					currentStyle,
+					styles,
+					defaultStyles,
+					getNormalizedStyle
+				)
 			);
 
 			const blocksUpdate = buildBlocksUpdateForStyle(
@@ -527,17 +526,14 @@ export const useBlockStyleItem = ({
 				duplicateStyle.name,
 				normalizedStyle
 			);
-
 			const metaDataUpdate = buildDuplicateStyleMetaDataUpdate(
 				blockName,
 				duplicateStyle,
 				blockTypesToRegister
 			);
-
 			mergeBlockeraGlobalStylesMetaData(metaDataUpdate);
 
 			const blockeraMetaData = getBlockeraGlobalStylesMetaData();
-
 			setGlobalStyles(
 				mergeObject(globalStyles, {
 					blockeraMetaData,
