@@ -23,43 +23,14 @@ describe('icon-control', () => {
 	});
 
 	context('Functional', () => {
-		// @debug-ignore
-		it.skip('should be able to upload custom svg when there is selected icon', () => {
-			// act
-			cy.get('[aria-label="button Icon"]').click();
-			cy.contains('button', /upload svg/i).click({ force: true });
-			cy.get('input[type="file"]').selectFile(
-				'cypress/fixtures/home.svg',
-				{
-					force: true,
-				}
-			);
+		it('should be able to add new icon from library', () => {
+			cy.getByAriaLabel('Choose Icon…').first().click();
 
-			cy.get('.media-toolbar-primary > .button').click();
-
-			// data assertion
-
-			// eslint-disable-next-line cypress/no-unnecessary-waiting
-			cy.wait(200).then(() => {
-				getWPDataObject().then((data) => {
-					const uploadedFileName = getSelectedBlock(
-						data,
-						'blockeraIcon'
-					).uploadSVG.filename;
-					expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
-				});
+			cy.get('.blockera-control-icon-picker-modal').within(() => {
+				cy.get('input[type="search"]').type('blockera');
+				cy.getByAriaLabel('blockera Icon').should('be.visible').click();
 			});
-		});
 
-		// @debug-ignore
-		it.skip('should be able to add new icon from library', () => {
-			// act
-			cy.get('[aria-label="Icon Library"]').click();
-
-			cy.get('input[type="search"]').eq(1).type('pub');
-			cy.get('span[aria-label="blockera Icon"]').click();
-
-			// data assertion
 			getWPDataObject().then((data) => {
 				const selectedIconName = getSelectedBlock(
 					data,
@@ -70,14 +41,10 @@ describe('icon-control', () => {
 		});
 
 		it('should be able to delete selected icon', () => {
-			// act
-			cy.get('[aria-label="Choose Icon…"]').first().click();
+			cy.getByAriaLabel('Choose Icon…').first().click();
+			cy.selectIconByName('add-card');
 
-			cy.get('span[aria-label="add-card Icon"]').first().click();
-
-			// act
-			// cy.get('[aria-label="button Icon"]').click();
-			cy.get('button[aria-label="Remove Icon"]').click({
+			cy.getByAriaLabel('Remove Icon').click({
 				force: true,
 			});
 
