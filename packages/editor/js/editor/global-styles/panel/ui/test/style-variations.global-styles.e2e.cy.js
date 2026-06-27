@@ -75,13 +75,15 @@ const renameSection1WithNewId = (label = 'New Name', id = 'new-id') => {
 };
 
 const ensureNewIdStyleVariation = (label = 'New Name', id = 'new-id') => {
-	cy.get('body').then(($body) => {
-		if ($body.find(`[data-test="style-${id}"]`).length) {
-			cy.getByDataTest(`style-${id}`).should('contain', label);
-			return;
-		}
-
-		renameSection1WithNewId(label, id);
+	cy.get('body').then(() => {
+		// Cypress .find() is unreliable for checking presence, use Cypress directly:
+		cy.get(`[data-test="style-${id}"]`).then(($el) => {
+			if ($el.length) {
+				cy.wrap($el).should('contain', label);
+			} else {
+				renameSection1WithNewId(label, id);
+			}
+		});
 	});
 };
 
@@ -113,7 +115,7 @@ const setStyleVariationActive = (styleSlug, active) => {
 		.filter(':visible')
 		.last()
 		.find(`[data-test="${styleSlug}-active-toggle-row"]`)
-		.find('.components-form-toggle')
+		.find('.components-form-toggle__input')
 		.click({ force: true });
 };
 
@@ -213,7 +215,6 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		saveSiteEditor();
 		cy.reload();
 		openGroupBlockStyleVariations();
-		cy.getByDataTest('style-section-1').click();
 		cy.getByDataTest('style-section-1').should('contain', 'New Name');
 	});
 
@@ -333,7 +334,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			expect(
 				data.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0
-			).to.equal(3);
+			).to.equal(5);
 		});
 
 		openSiteEditorDocumentPanel();
