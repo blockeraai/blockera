@@ -165,7 +165,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 
 		cy.getParentContainer('ID').within(() => {
 			cy.get('input').clear();
-			cy.get('input').type('new id');
+			cy.get('input').type('new-id');
 		});
 
 		cy.get('input[type="checkbox"]').check();
