@@ -805,7 +805,7 @@ describe('Color Control label testing (BG Color)', () => {
 		});
 
 		it('set value in normal/desktop and navigate between states', () => {
-			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
+			cy.setColorControlValue('BG Color', 'c4c4c4');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -900,7 +900,7 @@ describe('Color Control label testing (BG Color)', () => {
 		it('set value in hover/desktop and navigate between states', () => {
 			setBlockState('Hover');
 
-			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
+			cy.setColorControlValue('BG Color', 'c4c4c4');
 
 			// Assert label
 			cy.checkLabelClassName(
