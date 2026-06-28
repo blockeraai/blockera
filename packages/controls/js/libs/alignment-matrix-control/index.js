@@ -45,6 +45,7 @@ export default function AlignmentMatrixControl({
 	const {
 		value,
 		setValue,
+		getId,
 		attribute,
 		blockName,
 		resetToDefault,
@@ -141,7 +142,7 @@ export default function AlignmentMatrixControl({
 					>
 						<InputControl
 							columns="columns-2"
-							id={`${id}.top`}
+							id={getId(id, 'top')}
 							label={__('Top', 'blockera')}
 							min={0}
 							max={100}
@@ -160,7 +161,7 @@ export default function AlignmentMatrixControl({
 
 						<InputControl
 							columns="columns-2"
-							id={`${id}.left`}
+							id={getId(id, 'left')}
 							label={__('Left', 'blockera')}
 							min={0}
 							max={100}
