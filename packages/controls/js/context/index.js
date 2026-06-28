@@ -10,7 +10,7 @@ import { createContext } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals } from '@blockera/utils';
+import { isEquals, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -53,7 +53,10 @@ export const ControlContextProvider = ({
 
 			const control = getControl(controlInfo.name);
 
-			if (!isEquals(control?.value, controlInfo.value)) {
+			if (
+				!isUndefined(controlInfo.value) &&
+				!isEquals(control?.value, controlInfo.value)
+			) {
 				return {
 					...control,
 					value: controlInfo.value,
