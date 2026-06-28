@@ -5,7 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { useDispatch, useSelect, select as dataSelect } from '@wordpress/data';
-import { createContext } from '@wordpress/element';
+import { createContext, useRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -38,6 +38,8 @@ export const ControlContextProvider = ({
 	storeName = STORE_NAME,
 	...props
 }: ControlContextProviderProps): MixedElement | null => {
+	const previousControlInfoValueRef = useRef(controlInfo.value);
+
 	if (!dataSelect(storeName).getControl(controlInfo.name)) {
 		// $FlowFixMe
 		registerControl({
@@ -52,9 +54,16 @@ export const ControlContextProvider = ({
 			const { getControl } = select(storeName);
 
 			const control = getControl(controlInfo.name);
+			const externalValueChanged = !isEquals(
+				previousControlInfoValueRef.current,
+				controlInfo.value
+			);
 
+			// Prefer an externally updated `controlInfo.value` (e.g. block switch),
+			// but keep store updates from user interactions when the prop is unchanged.
 			if (
 				!isUndefined(controlInfo.value) &&
+				externalValueChanged &&
 				!isEquals(control?.value, controlInfo.value)
 			) {
 				return {
@@ -68,6 +77,8 @@ export const ControlContextProvider = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[controlInfo]
 	);
+
+	previousControlInfoValueRef.current = controlInfo.value;
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
 
