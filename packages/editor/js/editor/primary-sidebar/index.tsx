@@ -126,26 +126,16 @@ export default function PrimarySidebarController() {
 		);
 	}, [primarySidebarWidth]);
 
-	// Check if the active sidebar is one of the primary sidebars we track
-	// Note: edit-post/block is also a primary sidebar (block settings)
-	const isPrimarySidebarOpen =
-		activeComplementaryArea === 'edit-post/document' ||
-		activeComplementaryArea === 'edit-post/block' ||
-		activeComplementaryArea === 'edit-site/global-styles' ||
-		activeComplementaryArea ===
-			'cbt-plugin-sidebar/create-block-theme-sidebar';
+	// Any complementary area (including third-party plugin sidebars like Spectra).
+	const isAnySidebarOpen = !!activeComplementaryArea;
 
 	// Keep Blockera session flag in sync with the real complementary area (for areBothSidebarsClosed / toggle-both).
 	useEffect(() => {
-		if (blockeraPrimarySidebarOpen === isPrimarySidebarOpen) {
+		if (blockeraPrimarySidebarOpen === isAnySidebarOpen) {
 			return;
 		}
-		setPrimarySidebarOpen(isPrimarySidebarOpen);
-	}, [
-		blockeraPrimarySidebarOpen,
-		isPrimarySidebarOpen,
-		setPrimarySidebarOpen,
-	]);
+		setPrimarySidebarOpen(isAnySidebarOpen);
+	}, [blockeraPrimarySidebarOpen, isAnySidebarOpen, setPrimarySidebarOpen]);
 
 	// Initialize sidebar container reference (runs once, retries if not found)
 	useEffect(() => {
@@ -195,21 +185,16 @@ export default function PrimarySidebarController() {
 
 		// After mount: handle sidebar state changes
 		const previousSidebar = previousSidebarRef.current;
-		const wasPrimarySidebarOpen =
-			previousSidebar === 'edit-post/document' ||
-			previousSidebar === 'edit-post/block' ||
-			previousSidebar === 'edit-site/global-styles' ||
-			previousSidebar === 'cbt-plugin-sidebar/create-block-theme-sidebar';
+		const wasAnySidebarOpen = !!previousSidebar;
 
-		// Case 1: Changing sidebar (was one open, now another open) - do nothing
-		if (wasPrimarySidebarOpen && isPrimarySidebarOpen) {
-			// Sidebar switching - no action needed, just update previous state
+		// Case 1: Switching between any open complementary areas — keep width.
+		if (wasAnySidebarOpen && isAnySidebarOpen) {
 			previousSidebarRef.current = activeComplementaryArea;
 			return;
 		}
 
-		// Case 2: Closing sidebar (was open, now closed) - set width to 0
-		if (wasPrimarySidebarOpen && !isPrimarySidebarOpen) {
+		// Case 2: Closing sidebar (no complementary area active) — animate width to 0.
+		if (wasAnySidebarOpen && !isAnySidebarOpen) {
 			sidebarContainerRef.current.style.setProperty(
 				'--sidebar-width',
 				'0'
@@ -221,8 +206,8 @@ export default function PrimarySidebarController() {
 			return;
 		}
 
-		// Case 3: Opening sidebar (was closed, now open) - restore width from store with animation
-		if (!wasPrimarySidebarOpen && isPrimarySidebarOpen) {
+		// Case 3: Opening any sidebar (core or third-party) — restore width from store.
+		if (!wasAnySidebarOpen && isAnySidebarOpen) {
 			// Ensure starting point is 0 for smooth animation
 			// Use requestAnimationFrame to ensure browser can animate the transition
 			const beforeComputed = window
@@ -329,7 +314,7 @@ export default function PrimarySidebarController() {
 
 		// Update previous sidebar state for next comparison
 		previousSidebarRef.current = activeComplementaryArea;
-	}, [activeComplementaryArea, isPrimarySidebarOpen, primarySidebarWidth]);
+	}, [activeComplementaryArea, isAnySidebarOpen, primarySidebarWidth]);
 
 	// Handle resize callback - updates store width
 	const handleResize = (width: string) => {
@@ -338,11 +323,11 @@ export default function PrimarySidebarController() {
 
 	return (
 		<>
-			{/* Resize handle - only show when sidebar is open */}
-			{isPrimarySidebarOpen && (
+			{/* Resize handle — any open complementary area (core or third-party). */}
+			{isAnySidebarOpen && (
 				<ResizeHandle
 					side="left"
-					isVisible={isPrimarySidebarOpen}
+					isVisible={isAnySidebarOpen}
 					minWidth={280}
 					maxWidth={600}
 					defaultValue={defaultPrimarySidebarWidth}
