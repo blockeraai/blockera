@@ -29,6 +29,14 @@ describe('Button Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.get('.blockera-extension-block-card.master-block-card').within(
+			() => {
+				cy.get('button[data-test="back-to-parent-navigation"]').should(
+					'be.visible'
+				);
+			}
+		);
+
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
 
 		cy.checkBlockStatesPickerItems(
