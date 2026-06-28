@@ -12,6 +12,7 @@ import {
 	isValid,
 	extractCssVarValue,
 	isLikelyThemeJsonPlainPresetSlugString,
+	plainStoredScalarConflictsWithRawCssColorPresetSlug,
 	isLikelyRawCssNonPresetScalarInput,
 	hasExplicitPlainThemeJsonPresetStorage,
 	splitStoredCompositePlainColorValue,
@@ -703,6 +704,38 @@ describe('Helper Functions', () => {
 			expect(unlinkPlainThemeJsonPresetCompositeToScalar('', 'x')).toBe(
 				''
 			);
+		});
+	});
+
+	describe('plainStoredScalarConflictsWithRawCssColorPresetSlug', () => {
+		test('detects css color keywords that collide with preset slugs', () => {
+			expect(
+				plainStoredScalarConflictsWithRawCssColorPresetSlug(
+					'white',
+					'white'
+				)
+			).toBe(true);
+			expect(
+				plainStoredScalarConflictsWithRawCssColorPresetSlug(
+					'red',
+					'red'
+				)
+			).toBe(true);
+		});
+
+		test('allows composite preset storage and non-color slugs', () => {
+			expect(
+				plainStoredScalarConflictsWithRawCssColorPresetSlug(
+					'#ffffff,white',
+					'white'
+				)
+			).toBe(false);
+			expect(
+				plainStoredScalarConflictsWithRawCssColorPresetSlug(
+					'primary',
+					'primary'
+				)
+			).toBe(false);
 		});
 	});
 

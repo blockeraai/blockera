@@ -5751,7 +5751,11 @@ msgid "Word Break"
 msgstr ""
 
 #: dist/editor/editor.js:9161
-msgid "Go to parent Navigation block"
+msgid "Go to \"%s\" block"
+msgstr ""
+
+#: dist/editor/editor.js:9161
+msgid "Go to parent block"
 msgstr ""
 
 #: dist/editor/editor.js:9184

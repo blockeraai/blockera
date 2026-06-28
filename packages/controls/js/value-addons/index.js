@@ -32,6 +32,7 @@ import {
 	hasExplicitPlainThemeJsonPresetStorage,
 	compositePlainColorPaintFromStoredPlainPresetInput,
 	plainPresetSlugFromStoredPlainPresetInput,
+	plainStoredScalarConflictsWithRawCssColorPresetSlug,
 	unlinkPlainThemeJsonPresetCompositeToScalar,
 } from './utils';
 import { canUnlinkVariable } from './helpers';
@@ -132,6 +133,16 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		if (effectivePlainPresetSlug === '') {
 			return false;
 		}
+
+		if (
+			plainStoredScalarConflictsWithRawCssColorPresetSlug(
+				strippedRawInput,
+				effectivePlainPresetSlug
+			)
+		) {
+			return false;
+		}
+
 		return isThemeJsonVariableDefinedInMergedFeatures(
 			mergedThemeJsonFeaturesWrapped,
 			effectivePlainPresetSlug,
@@ -140,6 +151,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		);
 	}, [
 		effectivePlainPresetSlug,
+		strippedRawInput,
 		mergedThemeJsonFeaturesWrapped,
 		themeJsonResolutionBlockName,
 		themeJsonResolutionPresetCssVarInfix,
