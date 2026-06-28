@@ -28,7 +28,9 @@ import { RepeaterProItemInteractionGuard } from './repeater-pro-item-interaction
 import { hasOpenModalOverlay } from '../../modal/overlay-utils';
 import { RepeaterContext } from '../context';
 import {
+	closeInspectorRepeaterPopovers,
 	getArialLabelSuffix,
+	INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT,
 	isOpenPopoverEvent,
 	isRepeaterPromoActive,
 	shouldApplyRepeaterItemNativeStyle,
@@ -194,24 +196,14 @@ const RepeaterItem = ({
 		};
 	}, [draggingIndex, itemId]);
 
-	// New rows open the edit popover in an effect (pendingOpenItemId / creatingStep survive valueCleanup).
+	// New rows open the edit popover via pendingOpenItemId or persisted store isOpen.
 	useEffect(() => {
-		if (
-			item?.creatingStep !== true &&
-			pendingOpenItemId !== itemId &&
-			item?.isOpen !== true
-		) {
+		if (pendingOpenItemId !== itemId && item?.isOpen !== true) {
 			return;
 		}
 
 		handleItemOpen();
-	}, [
-		item?.creatingStep,
-		item?.isOpen,
-		pendingOpenItemId,
-		itemId,
-		handleItemOpen,
-	]);
+	}, [item?.isOpen, pendingOpenItemId, itemId, handleItemOpen]);
 
 	// Preset creatingStep rows scroll into the nearest scrollable panel (e.g. variable picker).
 	useEffect(() => {
@@ -235,7 +227,7 @@ const RepeaterItem = ({
 		});
 	}, [item?.creatingStep, itemId, scrollBehavior]);
 
-	const handleItemPopoverClose = () => {
+	const handleItemPopoverClose = useCallback(() => {
 		setOpen(false);
 		clearPendingOpenItemId(itemId);
 
@@ -268,7 +260,38 @@ const RepeaterItem = ({
 				valueCleanup,
 			});
 		}
-	};
+	}, [
+		item,
+		itemId,
+		controlId,
+		repeaterId,
+		onChange,
+		valueCleanup,
+		changeRepeaterItem,
+		clearPendingOpenItemId,
+	]);
+
+	useEffect(() => {
+		const closeOpenPopover = () => {
+			if (!isOpen) {
+				return;
+			}
+
+			handleItemPopoverClose();
+		};
+
+		document.addEventListener(
+			INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT,
+			closeOpenPopover
+		);
+
+		return () => {
+			document.removeEventListener(
+				INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT,
+				closeOpenPopover
+			);
+		};
+	}, [isOpen, handleItemPopoverClose]);
 
 	const handleDragStart = (e: DragEvent, index: string) => {
 		if (e.dataTransfer) {
@@ -471,6 +494,8 @@ const RepeaterItem = ({
 				if (hasOpenModalOverlay()) {
 					return;
 				}
+
+				closeInspectorRepeaterPopovers();
 
 				const newItems: { [key: string]: any } = {};
 

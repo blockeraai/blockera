@@ -217,3 +217,17 @@ export function shouldGateRepeaterItemHeaderForPromo(
 
 	return true;
 }
+
+export const INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT =
+	'blockera/close-inspector-repeater-popovers';
+
+/** Ask all repeater rows to close any open local edit popovers. */
+export function closeInspectorRepeaterPopovers(): void {
+	if (typeof document === 'undefined') {
+		return;
+	}
+
+	document.dispatchEvent(
+		new CustomEvent(INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT)
+	);
+}
