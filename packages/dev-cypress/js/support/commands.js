@@ -692,9 +692,23 @@ export const registerCommands = () => {
 
 				cy.getByDataTest('close-popover').click({ force: true });
 			});
+
+		cy.get('.blockera-color-picker-popover')
+			.last()
+			.within(() => {
+				cy.getByDataTest('close-popover').click({ force: true });
+			});
 	});
 
 	Cypress.Commands.add('clearColorControlValue', (label) => {
+		cy.getParentContainer(label).then(($container) => {
+			$container[0].scrollIntoView({
+				block: 'center',
+				inline: 'nearest',
+				behavior: 'auto',
+			});
+		});
+		cy.getParentContainer(label).should('be.visible');
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
