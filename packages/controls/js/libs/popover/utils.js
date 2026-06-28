@@ -331,7 +331,43 @@ export function shouldDismissPopoverFromPointerDown(
 		return false;
 	}
 
-	return !isPopoverDismissIgnoredTarget(popoverRoot, target);
+	if (!target || !(target instanceof Node)) {
+		return false;
+	}
+
+	if (popoverRoot.contains(target)) {
+		return false;
+	}
+
+	if (!(target instanceof HTMLElement)) {
+		return true;
+	}
+
+	if (isElementInsideModalOverlay(target)) {
+		return false;
+	}
+
+	if (target.closest('.components-dropdown__content')) {
+		return false;
+	}
+
+	if (isSketchPickerInteractionActiveFor(popoverRoot)) {
+		return false;
+	}
+
+	// Only ignore nested Blockera popover surfaces (e.g. color pickers). Generic
+	// WordPress `.components-popover` wrappers in the sidebar should still
+	// dismiss open inspector group popovers (e.g. block state selection).
+	const targetPopover = getPopoverRoot(target);
+	if (
+		targetPopover instanceof HTMLElement &&
+		targetPopover !== popoverRoot &&
+		targetPopover.classList.contains('blockera-component-popover')
+	) {
+		return false;
+	}
+
+	return true;
 }
 
 /** True when a nested popover or modal should receive Escape / dismiss first. */

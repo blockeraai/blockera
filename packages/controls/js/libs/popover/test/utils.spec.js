@@ -396,6 +396,28 @@ describe('popover offset utils', () => {
 			).toBe(false);
 		});
 
+		it('shouldDismissPopoverFromPointerDown dismisses when target is only inside a WordPress popover wrapper', () => {
+			const rootPopover = document.createElement('div');
+			rootPopover.className =
+				'components-popover blockera-component-popover';
+			document.body.appendChild(rootPopover);
+
+			const sidebarWrapper = document.createElement('div');
+			sidebarWrapper.className = 'components-popover';
+			const blockStateHeader = document.createElement('button');
+			blockStateHeader.textContent = 'Hover';
+			sidebarWrapper.appendChild(blockStateHeader);
+			document.body.appendChild(sidebarWrapper);
+
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					rootPopover,
+					blockStateHeader,
+					null
+				)
+			).toBe(true);
+		});
+
 		it('hasNestedOverlayOpenAsideFrom detects other popovers and modals', () => {
 			const rootPopover = document.createElement('div');
 			rootPopover.className = 'blockera-component-popover';
