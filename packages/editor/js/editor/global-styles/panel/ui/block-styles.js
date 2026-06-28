@@ -420,6 +420,7 @@ function BlockStyles({
 						setCurrentPreviewStyle(null);
 					}}
 					anchor={popoverAnchor}
+					offset={12}
 				>
 					<Flex
 						className={componentClassNames('block-styles')}

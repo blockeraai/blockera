@@ -59,6 +59,7 @@ export const Inserter = ({
 					title=""
 					className={classNames('blockera-states-picker-popover')}
 					anchor={popoverAnchor}
+					offset={12}
 				>
 					<AvailableBlocks onClick={callback} />
 				</Popover>
