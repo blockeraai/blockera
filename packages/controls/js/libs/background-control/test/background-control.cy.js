@@ -262,19 +262,21 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
+						// WP 31+ opens ColorPicker from a control point (not the bar background).
 						cy.get(
-							'.components-custom-gradient-picker__gradient-bar-background'
-						).as('gradientBar');
-
-						cy.get('@gradientBar').click();
+							'.components-custom-gradient-picker__control-point-button'
+						)
+							.first()
+							.click();
 					});
 
-					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('FFA33C ', {
-						delay: 0,
-					});
+					cy.get('input[maxlength="9"]', { timeout: 20000 })
+						.should('be.visible')
+						.setControlledInputValue('FFA33C');
 
-					cy.get('@gradientBar').should(($gradientBar) => {
+					cy.get(
+						'.components-custom-gradient-picker__gradient-bar-background'
+					).should(($gradientBar) => {
 						const background = $gradientBar.css('background');
 						expect(background).to.include('rgb(255, 163, 60)');
 					});
@@ -429,17 +431,21 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
+						// WP 31+ opens ColorPicker from a control point (not the bar background).
 						cy.get(
-							'.components-custom-gradient-picker__gradient-bar-background'
-						).as('gradientBar');
-
-						cy.get('@gradientBar').click();
+							'.components-custom-gradient-picker__control-point-button'
+						)
+							.first()
+							.click();
 					});
 
-					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('FFA33C', { delay: 0 });
+					cy.get('input[maxlength="9"]', { timeout: 20000 })
+						.should('be.visible')
+						.setControlledInputValue('FFA33C');
 
-					cy.get('@gradientBar').should(($gradientBar) => {
+					cy.get(
+						'.components-custom-gradient-picker__gradient-bar-background'
+					).should(($gradientBar) => {
 						const background = $gradientBar.css('background');
 						expect(background).to.include('rgb(255, 163, 60)');
 					});
@@ -872,10 +878,9 @@ describe(
 							.as('addColor')
 							.click();
 
-						cy.get('[data-id="--c1"]').within(() => {
-							cy.get('[aria-label~="Delete"]').click({
-								force: true,
-							});
+						cy.getByDataId('--c1').realHover();
+						cy.getByAriaLabel('Delete c1').click({
+							force: true,
 						});
 						cy.then(() => {
 							const mesh = getControlValue(name, STORE_NAME)[
@@ -919,9 +924,9 @@ describe(
 							timeout: 20000,
 						}).should('be.visible');
 
-						cy.getByAriaLabel('Parallax').click();
+						cy.get('button[aria-label="Parallax"]').click();
 
-						cy.getByAriaLabel('Parallax')
+						cy.get('button[aria-label="Parallax"]')
 							.should('have.attr', 'aria-checked', 'true')
 							.then(() => {
 								const meshGradientAttachment = getControlValue(
