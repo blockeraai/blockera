@@ -83,6 +83,23 @@ export function isValid(value: ValueAddon | string): boolean {
  * Whether `s` looks like a theme.json preset **slug** (not raw CSS).
  * Used to avoid treating arbitrary stored strings (e.g. hex colors) as orphan presets.
  */
+/**
+ * Plain stored value equals the extracted slug and is raw CSS color syntax (keyword, hex, rgb).
+ * Must not bind to a theme.json preset that shares the spelling (e.g. WP preset slug `white`).
+ */
+export function plainStoredScalarConflictsWithRawCssColorPresetSlug(
+	strippedPlainInput: string,
+	presetSlug: string
+): boolean {
+	return (
+		typeof strippedPlainInput === 'string' &&
+		typeof presetSlug === 'string' &&
+		presetSlug !== '' &&
+		strippedPlainInput === presetSlug &&
+		isLikelyRawCssColorInput(strippedPlainInput)
+	);
+}
+
 export function isLikelyThemeJsonPlainPresetSlugString(s: string): boolean {
 	if (typeof s !== 'string' || s === '') {
 		return false;
