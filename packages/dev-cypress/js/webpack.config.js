@@ -58,8 +58,14 @@ module.exports = {
 					{
 						loader: 'sass-loader',
 						options: {
-							// Prefer `dart-sass`
+							// Prefer `dart-sass`; keep legacy API so webpack `~` imports resolve.
 							implementation: require('sass'),
+							sassOptions: {
+								silenceDeprecations: [
+									'legacy-js-api',
+									'import',
+								],
+							},
 						},
 					},
 				],
