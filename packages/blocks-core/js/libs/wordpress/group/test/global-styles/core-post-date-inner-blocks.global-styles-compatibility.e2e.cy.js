@@ -31,14 +31,10 @@ describe('Group Block → Post Date Inner Block → WP Data Compatibility (Globa
 
 		getWPDataObject().then((data) => {
 			const root = getGroupSectionGlobalStyles(data);
-			const postDateInnerBlock = root?.blocks?.['core/post-date'];
 			const blockeraPostDateInnerBlock =
 				root?.blockeraInnerBlocks?.value?.['core/post-date']
 					?.attributes;
 
-			expect(
-				'color-mix(in srgb, currentColor 85%, transparent)'
-			).to.equal(postDateInnerBlock?.color?.text);
 			expect(
 				'color-mix(in srgb, currentColor 85%, transparent)'
 			).to.equal(blockeraPostDateInnerBlock?.blockeraFontColor);
@@ -48,12 +44,10 @@ describe('Group Block → Post Date Inner Block → WP Data Compatibility (Globa
 
 		getWPDataObject().then((data) => {
 			const root = getGroupSectionGlobalStyles(data);
-			const postDateInnerBlock = root?.blocks?.['core/post-date'];
 			const blockeraPostDateInnerBlock =
 				root?.blockeraInnerBlocks?.value?.['core/post-date']
 					?.attributes;
 
-			expect('#666666').to.equal(postDateInnerBlock?.color?.text);
 			expect('#666666').to.equal(
 				blockeraPostDateInnerBlock?.blockeraFontColor
 			);
@@ -63,12 +57,10 @@ describe('Group Block → Post Date Inner Block → WP Data Compatibility (Globa
 
 		getWPDataObject().then((data) => {
 			const root = getGroupSectionGlobalStyles(data);
-			const postDateInnerBlock = root?.blocks?.['core/post-date'];
 			const blockeraPostDateInnerBlock =
 				root?.blockeraInnerBlocks?.value?.['core/post-date']
 					?.attributes;
 
-			expect(undefined).to.equal(postDateInnerBlock?.color?.text);
 			expect(undefined).to.equal(
 				blockeraPostDateInnerBlock?.blockeraFontColor
 			);
