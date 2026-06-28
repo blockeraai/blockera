@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __, isRTL } from '@wordpress/i18n';
+import { __, isRTL, sprintf } from '@wordpress/i18n';
 import {
 	store as blockEditorStore,
 	useBlockDisplayInformation,
@@ -51,6 +51,7 @@ import { BlockCardSettings } from './block-card-settings';
 import { BlockCardVariationView } from './block-card-variation-view';
 import type { TStyleVariationBlockCardLabels } from '../types';
 import type { UpdateBlockEditorSettings } from '../../types';
+import { getParentListViewBlock } from '../helpers/parent-list-view-nav';
 
 const closeVariationPicker = (pickerProps: Object): void => {
 	pickerProps.setIsOpen(false);
@@ -214,20 +215,25 @@ export function BlockCard({
 		setHasSelectionDelay(false);
 	}, [currentInnerBlock, currentBlockStyleVariation]);
 
-	const { parentNavBlockClientId } = useSelect((select) => {
-		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
-			select(blockEditorStore);
+	const parentListViewBlock = useSelect(
+		(select) => {
+			const {
+				getBlockParents,
+				getBlockName,
+				getBlockOrder,
+				getBlockListSettings,
+			} = select(blockEditorStore);
 
-		const _selectedBlockClientId = getSelectedBlockClientId();
-
-		return {
-			parentNavBlockClientId: getBlockParentsByBlockName(
-				_selectedBlockClientId,
-				'core/navigation',
-				true
-			)[0],
-		};
-	}, []);
+			return getParentListViewBlock(
+				clientId,
+				getBlockParents,
+				getBlockName,
+				getBlockOrder,
+				getBlockListSettings
+			);
+		},
+		[clientId]
+	);
 
 	const { selectBlock } = useDispatch(blockEditorStore);
 
@@ -402,15 +408,30 @@ export function BlockCard({
 								'block-card__inner'
 							)}
 						>
-							{parentNavBlockClientId && (
+							{parentListViewBlock?.clientId && (
 								<Button
 									onClick={() =>
-										selectBlock(parentNavBlockClientId)
+										selectBlock(
+											parentListViewBlock.clientId
+										)
 									}
-									label={__(
-										'Go to parent Navigation block',
-										'blockera'
-									)}
+									label={
+										parentListViewBlock.blockName
+											? sprintf(
+													/* translators: %s: The name of the parent block. */
+													__(
+														'Go to "%s" block',
+														'blockera'
+													),
+													getBlockType(
+														parentListViewBlock.blockName
+													)?.title
+												)
+											: __(
+													'Go to parent block',
+													'blockera'
+												)
+									}
 									style={{
 										minWidth: 24,
 										padding: 0,
