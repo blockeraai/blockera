@@ -5,7 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	DropZone,
 	ToolbarButton,
@@ -33,11 +33,17 @@ import { useIconPickerModal } from '@blockera/controls/js/libs/icon-control/hook
 import { useIconPreviewFileDrop } from '@blockera/controls/js/libs/icon-control/hooks/use-icon-preview-file-drop';
 import IconPickerModal from '@blockera/controls/js/libs/icon-control/components/icon-picker/icon-picker-modal';
 import CustomIconUploadUpgradePrompt from '@blockera/controls/js/libs/icon-control/components/icon-picker/custom-icon-upload-upgrade-prompt';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { getBlockeraIconValue } from './icon-attribute-utils';
+import {
+	getAttrValue,
+	getBlockeraIconValue,
+	getNextIconRotateValue,
+	getToggledIconFlipValue,
+} from './icon-attribute-utils';
 import { commitCoreIconPickerSelection } from './core-icon-picker-commit';
 
 const LINK_SETTINGS = [
@@ -115,6 +121,11 @@ export const CoreIconBlockToolbar = ({
 		() => getBlockeraIconValue(attributes),
 		[attributes]
 	);
+	const iconRotate = getAttrValue(attributes?.blockeraIconRotate);
+	const iconFlipHorizontal = getAttrValue(
+		attributes?.blockeraIconFlipHorizontal
+	);
+	const iconFlipVertical = getAttrValue(attributes?.blockeraIconFlipVertical);
 
 	const handlePickerCommit = useCallback(
 		(nextIcon) => {
@@ -222,6 +233,83 @@ export const CoreIconBlockToolbar = ({
 						}
 						isActive={isHrefSet}
 					/>
+					{hasIcon && (
+						<>
+							<ToolbarButton
+								icon={
+									<Icon
+										icon="rotate-right"
+										library="wp"
+										iconSize="22"
+										style={{
+											transform: `rotate(${
+												iconRotate ? iconRotate : 0
+											}deg)`,
+										}}
+									/>
+								}
+								label={
+									iconRotate !== ''
+										? sprintf(
+												// translators: %s is the icon rotation degree.
+												__('Rotated %s°', 'blockera'),
+												iconRotate
+											)
+										: __('Rotate', 'blockera')
+								}
+								isPressed={iconRotate !== ''}
+								onClick={() =>
+									setAttributes({
+										blockeraIconRotate: {
+											value: getNextIconRotateValue(
+												iconRotate
+											),
+										},
+									})
+								}
+							/>
+							<ToolbarButton
+								icon={
+									<Icon
+										icon="flip-horizontal"
+										library="wp"
+										iconSize="22"
+									/>
+								}
+								label={__('Flip Horizontal', 'blockera')}
+								isPressed={!!iconFlipHorizontal}
+								onClick={() =>
+									setAttributes({
+										blockeraIconFlipHorizontal: {
+											value: getToggledIconFlipValue(
+												iconFlipHorizontal
+											),
+										},
+									})
+								}
+							/>
+							<ToolbarButton
+								icon={
+									<Icon
+										icon="flip-vertical"
+										library="wp"
+										iconSize="22"
+									/>
+								}
+								label={__('Flip Vertical', 'blockera')}
+								isPressed={!!iconFlipVertical}
+								onClick={() =>
+									setAttributes({
+										blockeraIconFlipVertical: {
+											value: getToggledIconFlipValue(
+												iconFlipVertical
+											),
+										},
+									})
+								}
+							/>
+						</>
+					)}
 				</ToolbarGroup>
 			</BlockControls>
 			{isOpenModal && (
