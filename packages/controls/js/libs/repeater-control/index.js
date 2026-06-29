@@ -178,7 +178,7 @@ export default function RepeaterControl(
 
 	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
 
-	let normalizedVariableTypes = [];
+	let normalizedVariableTypes: string[] = [];
 	if (Array.isArray(variableTypes)) {
 		normalizedVariableTypes = variableTypes;
 	} else if (typeof variableTypes === 'string') {
