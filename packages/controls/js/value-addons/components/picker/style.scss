@@ -1,5 +1,5 @@
-@import "./picker-category";
-@import "./picker-value-item";
+@use "./picker-category";
+@use "./picker-value-item";
 
 .blockera-component-popover {
 	&.blockera-control-popover-value-addon-deleted {
