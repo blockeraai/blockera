@@ -44,7 +44,12 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { VariablesType, VariableType } from './types.ts';
+import type { VariableType } from './types.ts';
+import {
+	type PresetRepeaterValue,
+	type PresetVariablesInput,
+	variablesToPresetRepeaterValue,
+} from './preset-repeater-value-utils';
 import { PresetStateContainer } from './preset-state-container';
 import { getPresetDeleteConfirmWarningText } from './preset-origin-utils';
 import { resolvePresetRepeaterItemSize } from './preset-taxonomy-ui/preset-taxonomy-utils';
@@ -87,7 +92,8 @@ export type PresetGroupPropsType = {
 	label: string;
 	title: string;
 	controlName: string;
-	variables: VariablesType;
+	/** Theme.json preset arrays; converted to a slug-keyed repeater map internally. */
+	variables: PresetVariablesInput;
 	origin: string | string[];
 	PresetFields: React.ElementType;
 	onChange: (newValue: Object) => void;
@@ -120,11 +126,10 @@ type PresetsProps = {
 	onClose: () => void;
 	canAddNewItem: boolean;
 	defaultPresetValue: VariableType | any;
-	variables: VariablesType;
 	origin: string | string[];
 	PresetFields: React.ElementType;
 	repeaterItemHeader: PresetGroupPropsType['repeaterItemHeader'];
-	onChange: (variables: VariablesType) => void;
+	onChange: (newValue: Object) => void;
 	popoverTitle: string | ((itemId: string, item: VariableType) => string);
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
 	enableCreatingStep?: boolean;
@@ -189,7 +194,6 @@ const Presets = ({
 	origin,
 	onClose,
 	onChange,
-	variables,
 	controlName,
 	popoverTitle,
 	PresetFields,
@@ -221,7 +225,7 @@ const Presets = ({
 			onClose: _onClose = noop,
 		}: {
 			isOpen: boolean;
-			items: VariablesType;
+			items: PresetRepeaterValue;
 			onClose: (isClose: boolean) => void;
 		}): React.ReactNode | null => {
 			if (getRepeaterActiveItemsCount(items) < 1) {
@@ -511,8 +515,8 @@ export const PresetGroup = memo(function PresetGroup({
 
 	const pickerValue = pickerControlProps?.value;
 
-	const variablesForRepeater = useMemo(() => {
-		const base = stripRepeaterPickerUiFields(variables) as typeof variables;
+	const variablesForRepeater = useMemo((): PresetRepeaterValue => {
+		const base = stripRepeaterPickerUiFields(variables);
 
 		const withCreatingStep = enableCreatingStep
 			? mergeVariablePickerCreatingStepIntoItems(
@@ -521,15 +525,16 @@ export const PresetGroup = memo(function PresetGroup({
 				)
 			: base;
 
-		if (!isVariablePicker || typeof pickerCtx.variableType !== 'string') {
-			return withCreatingStep;
-		}
+		const withPickerSelection =
+			isVariablePicker && typeof pickerCtx.variableType === 'string'
+				? applyVariablePickerRepeaterSelection(withCreatingStep, {
+						variableType: pickerCtx.variableType,
+						origin,
+						pickerValue,
+					})
+				: withCreatingStep;
 
-		return applyVariablePickerRepeaterSelection(withCreatingStep, {
-			variableType: pickerCtx.variableType,
-			origin,
-			pickerValue,
-		}) as typeof variables;
+		return variablesToPresetRepeaterValue(withPickerSelection);
 	}, [
 		isVariablePicker,
 		variables,
@@ -655,7 +660,7 @@ export const PresetGroup = memo(function PresetGroup({
 
 	const stableRepeaterContextRef = useRef<{
 		name: string;
-		value: VariablesType;
+		value: PresetRepeaterValue;
 	} | null>(null);
 
 	const repeaterContextValue = useMemo(() => {
@@ -790,7 +795,6 @@ export const PresetGroup = memo(function PresetGroup({
 						onClose={noop}
 						origin={origin}
 						onChange={handleRepeaterOnChange}
-						variables={variablesForRepeater}
 						controlName={controlName}
 						PresetFields={PresetFields}
 						popoverTitle={__('Edit Variable', 'blockera')}
