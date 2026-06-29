@@ -642,7 +642,7 @@ export const PresetGroup = memo(function PresetGroup({
 			if (!item || typeof item !== 'object') {
 				continue;
 			}
-			const row = item as Record<string, unknown>;
+			const row = item as unknown as Record<string, unknown>;
 			if (row.renderRepeaterItem === false || row.isVisible === false) {
 				continue;
 			}
