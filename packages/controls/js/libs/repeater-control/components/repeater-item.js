@@ -198,14 +198,24 @@ const RepeaterItem = ({
 		};
 	}, [draggingIndex, itemId]);
 
-	// New rows open the edit popover via pendingOpenItemId or persisted store isOpen.
+	// New rows open the edit popover via pendingOpenItemId, creatingStep, or store isOpen.
 	useEffect(() => {
-		if (pendingOpenItemId !== itemId && item?.isOpen !== true) {
+		if (
+			pendingOpenItemId !== itemId &&
+			item?.isOpen !== true &&
+			item?.creatingStep !== true
+		) {
 			return;
 		}
 
 		handleItemOpen();
-	}, [item?.isOpen, pendingOpenItemId, itemId, handleItemOpen]);
+	}, [
+		item?.isOpen,
+		item?.creatingStep,
+		pendingOpenItemId,
+		itemId,
+		handleItemOpen,
+	]);
 
 	// Preset creatingStep rows scroll into the nearest scrollable panel (e.g. variable picker).
 	useEffect(() => {

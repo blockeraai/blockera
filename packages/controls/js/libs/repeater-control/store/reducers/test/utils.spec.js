@@ -1,4 +1,8 @@
-import { getNewIdDetails, shouldRenameRepeaterItemByType } from '../utils';
+import {
+	getNewIdDetails,
+	resolveAddedRepeaterItemId,
+	shouldRenameRepeaterItemByType,
+} from '../utils';
 
 describe('generatedDetailsId() function testing ...', () => {
 	it('should generated details for new id when action value include type property', () => {
@@ -51,6 +55,60 @@ describe('generatedDetailsId() function testing ...', () => {
 			itemsCount: 5,
 			uniqueId: '5',
 		});
+	});
+});
+
+describe('resolveAddedRepeaterItemId()', () => {
+	const defaultRepeaterItemValue = { isVisible: true };
+
+	it('prefers slug for custom preset rows so pending popover id matches parent value', () => {
+		expect(
+			resolveAddedRepeaterItemId({
+				itemValue: { slug: 'spacing-3', name: 'Spacing 3' },
+				itemsCount: 2,
+				repeaterItems: {
+					'spacing-1': { slug: 'spacing-1' },
+					'spacing-2': { slug: 'spacing-2' },
+				},
+				defaultRepeaterItemValue,
+			})
+		).toBe('spacing-3');
+	});
+
+	it('falls back to type-count ids for typed repeater rows without slug', () => {
+		expect(
+			resolveAddedRepeaterItemId({
+				itemValue: { type: 'filter' },
+				itemsCount: 1,
+				repeaterItems: {
+					'filter-0': { type: 'filter' },
+				},
+				defaultRepeaterItemValue,
+			})
+		).toBe('filter-1');
+	});
+
+	it('uses numeric id when no slug or type is available', () => {
+		expect(
+			resolveAddedRepeaterItemId({
+				itemValue: { name: 'Item' },
+				itemsCount: 4,
+				repeaterItems: {},
+				defaultRepeaterItemValue,
+			})
+		).toBe('4');
+	});
+
+	it('uses slug or type from selectable rows', () => {
+		expect(
+			resolveAddedRepeaterItemId({
+				itemValue: { slug: 'custom-var', selectable: true },
+				itemsCount: 0,
+				repeaterItems: {},
+				defaultRepeaterItemValue,
+				selectableId: true,
+			})
+		).toBe('custom-var');
 	});
 });
 

@@ -113,6 +113,76 @@ export const getNewIdDetails = (
 	};
 };
 
+type ResolveAddedRepeaterItemIdArgs = {
+	itemValue: ?Object,
+	itemsCount: number,
+	repeaterItems: Object,
+	defaultRepeaterItemValue: Object,
+	itemIdGenerator?: (count: number) => string,
+	selectableId?: boolean,
+};
+
+/**
+ * Resolve the repeater item id for a newly added row so it matches pending popover
+ * open state and slug-keyed preset values (e.g. global-styles custom presets).
+ */
+export const resolveAddedRepeaterItemId = ({
+	itemValue,
+	itemsCount,
+	repeaterItems,
+	defaultRepeaterItemValue,
+	itemIdGenerator,
+	selectableId = false,
+}: ResolveAddedRepeaterItemIdArgs): string => {
+	if (selectableId) {
+		const fromValue =
+			itemValue &&
+			typeof itemValue === 'object' &&
+			(itemValue.slug ?? itemValue.type);
+		if (
+			fromValue !== null &&
+			fromValue !== undefined &&
+			String(fromValue) !== ''
+		) {
+			return String(fromValue);
+		}
+
+		const fromDefault =
+			defaultRepeaterItemValue?.slug ?? defaultRepeaterItemValue?.type;
+		if (
+			fromDefault !== null &&
+			fromDefault !== undefined &&
+			String(fromDefault) !== ''
+		) {
+			return String(fromDefault);
+		}
+
+		return String(itemsCount);
+	}
+
+	if ('function' === typeof itemIdGenerator) {
+		return itemIdGenerator(itemsCount);
+	}
+
+	const resolvedItemValue = itemValue || defaultRepeaterItemValue;
+	const slug = resolvedItemValue?.slug;
+
+	if (slug !== null && slug !== undefined && String(slug) !== '') {
+		return String(slug);
+	}
+
+	if (!resolvedItemValue?.type) {
+		return String(itemsCount);
+	}
+
+	const typeCount = countPropertiesWithPattern(
+		repeaterItems || {},
+		new RegExp(`^${resolvedItemValue.type}`, 'i')
+	);
+
+	return `${resolvedItemValue.type}-${typeCount}`;
+};
+
 /**
  * Whether a repeater item should be renamed when its type no longer matches itemId.
  *

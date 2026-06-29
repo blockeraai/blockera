@@ -30,8 +30,8 @@ import MappedItems from './components/mapped-items';
 import RepeaterPopoverTitleDelete from './components/popover-title-delete';
 import { BLOCKERA_REPEATER_PROMO_DATA_CY } from './data-cy';
 import {
-	countPropertiesWithPattern,
 	repeaterOnChange,
+	resolveAddedRepeaterItemId,
 } from './store/reducers/utils';
 import { cleanupRepeater, isRepeaterPromoActive } from './utils';
 
@@ -476,66 +476,26 @@ export default function RepeaterControl(
 		const newItemWithCreatingStep = (value: any): any =>
 			enableCreatingStep ? { ...value, creatingStep: true } : value;
 
-		const resolveNewRepeaterItemId = (
+		const resolveAddedItemId = (
 			itemValue: ?Object,
-			count: number
-		): string => {
-			const fromValue =
-				itemValue &&
-				typeof itemValue === 'object' &&
-				(itemValue.slug ?? itemValue.type);
-			if (
-				fromValue !== null &&
-				fromValue !== undefined &&
-				String(fromValue) !== ''
-			) {
-				return String(fromValue);
-			}
-
-			const fromDefault =
-				defaultRepeaterItemValue?.slug ??
-				defaultRepeaterItemValue?.type;
-			if (
-				fromDefault !== null &&
-				fromDefault !== undefined &&
-				String(fromDefault) !== ''
-			) {
-				return String(fromDefault);
-			}
-
-			return String(count);
-		};
-
-		const resolveStandardNewRepeaterItemId = (
-			itemValue: Object
-		): string => {
-			if ('function' === typeof itemIdGenerator) {
-				return itemIdGenerator(itemsCount);
-			}
-
-			if (!itemValue?.type) {
-				return String(itemsCount);
-			}
-
-			const typeCount = countPropertiesWithPattern(
-				repeaterItems || {},
-				new RegExp(`^${itemValue.type}`, 'i')
-			);
-
-			return `${itemValue.type}-${typeCount}`;
-		};
+			{ selectableId = false }: { selectableId?: boolean } = {}
+		): string =>
+			resolveAddedRepeaterItemId({
+				itemValue: itemValue || defaultRepeaterItemValue,
+				itemsCount,
+				repeaterItems,
+				defaultRepeaterItemValue,
+				itemIdGenerator,
+				selectableId,
+			});
 
 		const queueEditPopoverForAddedItem = (
 			itemValue: ?Object,
 			{ selectableId = false }: { selectableId?: boolean } = {}
 		): void => {
-			const addedItemId = selectableId
-				? resolveNewRepeaterItemId(itemValue, itemsCount)
-				: resolveStandardNewRepeaterItemId(
-						itemValue || defaultRepeaterItemValue
-					);
-
-			setPendingOpenItemId(addedItemId);
+			setPendingOpenItemId(
+				resolveAddedItemId(itemValue, { selectableId })
+			);
 		};
 
 		const callback = (value?: Object): void => {
@@ -553,7 +513,7 @@ export default function RepeaterControl(
 				};
 			});
 
-			const newItemId = resolveNewRepeaterItemId(value, itemsCount);
+			const newItemId = resolveAddedItemId(value, { selectableId: true });
 			const addedRow = value || defaultRepeaterItemValue;
 
 			const newValue = {
@@ -601,15 +561,19 @@ export default function RepeaterControl(
 				);
 			}
 
+			const addedItemValue = newItemWithCreatingStep(value);
+			const addedItemId = resolveAddedItemId(addedItemValue);
+
 			addRepeaterItem({
 				onChange,
 				controlId,
 				repeaterId,
 				valueCleanup,
-				value: newItemWithCreatingStep(value),
+				itemIdGenerator: () => addedItemId,
+				value: addedItemValue,
 			});
 
-			queueEditPopoverForAddedItem(newItemWithCreatingStep(value));
+			queueEditPopoverForAddedItem(addedItemValue);
 
 			return;
 		}
@@ -618,12 +582,14 @@ export default function RepeaterControl(
 			return callback();
 		}
 
+		const addedItemId = resolveAddedItemId(defaultRepeaterItemValue);
+
 		addRepeaterItem({
 			onChange,
 			controlId,
 			repeaterId,
 			valueCleanup,
-			itemIdGenerator,
+			itemIdGenerator: () => addedItemId,
 			value: defaultRepeaterItemValue,
 		});
 
