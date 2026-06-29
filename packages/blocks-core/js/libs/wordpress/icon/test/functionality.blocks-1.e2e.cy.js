@@ -4,6 +4,8 @@
 import {
 	appendBlocks,
 	createPost,
+	getWPDataObject,
+	getSelectedBlock,
 	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -64,6 +66,54 @@ describe('core/icon Block', () => {
 		redirectToFrontPage();
 
 		cy.get('.wp-block-icon svg').should('exist');
+	});
+
+	it('block toolbar rotate and flip controls update icon attributes', () => {
+		appendBlocks(`<!-- wp:icon {"icon":"core/image"} /-->`);
+
+		cy.getBlock('core/icon').first().click();
+
+		cy.get('.block-editor-block-toolbar').within(() => {
+			cy.getByAriaLabel('Rotate').should('be.visible').click();
+		});
+
+		getWPDataObject().then((data) => {
+			expect(getSelectedBlock(data, 'blockeraIconRotate')).to.equal(90);
+		});
+
+		cy.get('.block-editor-block-toolbar').within(() => {
+			cy.getByAriaLabel('Flip Horizontal').click();
+		});
+
+		getWPDataObject().then((data) => {
+			expect(
+				getSelectedBlock(data, 'blockeraIconFlipHorizontal')
+			).to.equal(true);
+		});
+
+		cy.get('.block-editor-block-toolbar').within(() => {
+			cy.getByAriaLabel('Flip Vertical').click();
+		});
+
+		getWPDataObject().then((data) => {
+			expect(getSelectedBlock(data, 'blockeraIconFlipVertical')).to.equal(
+				true
+			);
+		});
+
+		cy.get('.block-editor-block-toolbar').within(() => {
+			cy.getByAriaLabel('Flip Horizontal').click();
+			cy.getByAriaLabel('Flip Vertical').click();
+		});
+
+		getWPDataObject().then((data) => {
+			expect(
+				getSelectedBlock(data, 'blockeraIconFlipHorizontal')
+			).to.equal('');
+			expect(getSelectedBlock(data, 'blockeraIconFlipVertical')).to.equal(
+				''
+			);
+		});
 	});
 
 	it('renders persisted pro library icon in editor and on frontend (free Blockera)', () => {
