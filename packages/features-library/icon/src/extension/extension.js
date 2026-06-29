@@ -332,118 +332,182 @@ export const IconExtension: ComponentType<{
 						label={__('Style', 'blockera')}
 						columns="1fr 180px"
 					>
-						{showInlineIconLayout && (
-							<EditorFeatureWrapper
-								isActive={isShownIconPosition}
-								config={blockeraIconPosition}
-							>
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'icon-position'
-										),
-										value: iconPosition,
-										attribute: 'blockeraIconPosition',
-										blockName: block.blockName,
-									}}
+						<Flex direction="column" gap="12px">
+							{showInlineIconLayout && (
+								<EditorFeatureWrapper
+									isActive={isShownIconPosition}
+									config={blockeraIconPosition}
 								>
-									<ToggleSelectControl
-										label={__('Position', 'blockera')}
-										labelPopoverTitle={__(
-											'Icon Position',
-											'blockera'
-										)}
-										labelDescription={
-											<>
-												<p>
-													{__(
-														'Sets the placement of the icon within the block.',
-														'blockera'
-													)}
-												</p>
-												<p>
-													{__(
-														'You can choose to display the icon on the left or right side of the block content, allowing better alignment with your layout and design needs.',
-														'blockera'
-													)}
-												</p>
-											</>
-										}
-										columns="columns-2"
-										options={[
-											{
-												label: __('Start', 'blockera'),
-												value: 'start',
-												icon: (
-													<Icon
-														icon="icon-position-left"
-														iconSize="18"
-													/>
-												),
-											},
-											{
-												label: __('End', 'blockera'),
-												value: 'end',
-												icon: (
-													<Icon
-														icon="icon-position-right"
-														iconSize="18"
-													/>
-												),
-											},
-										]}
-										isDeselectable={true}
-										defaultValue={
-											attributes?.blockeraIconPosition
-												?.default?.value
-										}
-										onChange={(newValue, ref) => {
-											handleOnChangeAttributes(
-												'blockeraIconPosition',
-												newValue,
-												{ ref }
-											);
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'icon-position'
+											),
+											value: iconPosition,
+											attribute: 'blockeraIconPosition',
+											blockName: block.blockName,
 										}}
-										{...extensionProps.blockeraIconPosition}
-									/>
-								</ControlContextProvider>
-							</EditorFeatureWrapper>
-						)}
+									>
+										<ToggleSelectControl
+											label={__('Position', 'blockera')}
+											labelPopoverTitle={__(
+												'Icon Position',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Sets the placement of the icon within the block.',
+															'blockera'
+														)}
+													</p>
+													<p>
+														{__(
+															'You can choose to display the icon on the left or right side of the block content, allowing better alignment with your layout and design needs.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											columns="columns-2"
+											options={[
+												{
+													label: __(
+														'Start',
+														'blockera'
+													),
+													value: 'start',
+													icon: (
+														<Icon
+															icon="icon-position-left"
+															iconSize="18"
+														/>
+													),
+												},
+												{
+													label: __(
+														'End',
+														'blockera'
+													),
+													value: 'end',
+													icon: (
+														<Icon
+															icon="icon-position-right"
+															iconSize="18"
+														/>
+													),
+												},
+											]}
+											isDeselectable={true}
+											defaultValue={
+												attributes?.blockeraIconPosition
+													?.default?.value
+											}
+											onChange={(newValue, ref) => {
+												handleOnChangeAttributes(
+													'blockeraIconPosition',
+													newValue,
+													{ ref }
+												);
+											}}
+											{...extensionProps.blockeraIconPosition}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+							)}
 
-						{showInlineIconLayout && (
+							{showInlineIconLayout && (
+								<EditorFeatureWrapper
+									isActive={isShownIconGap}
+									config={blockeraIconGap}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'icon-gap'
+											),
+											value: iconGap,
+											attribute: 'blockeraIconGap',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											label={__('Gap', 'blockera')}
+											labelPopoverTitle={__(
+												'Icon Gap',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Controls the space between the icon and the block content.',
+															'blockera'
+														)}
+													</p>
+													<p>
+														{__(
+															'Adjust the gap to fine-tune spacing for better visual balance and readability.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											columns="columns-2"
+											unitType="essential"
+											defaultValue={
+												attributes?.blockeraIconGap
+													?.default?.value
+											}
+											min={0}
+											onChange={(newValue, ref) => {
+												handleOnChangeAttributes(
+													'blockeraIconGap',
+													newValue,
+													{ ref }
+												);
+											}}
+											{...extensionProps.blockeraIconGap}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+							)}
+
 							<EditorFeatureWrapper
-								isActive={isShownIconGap}
-								config={blockeraIconGap}
+								isActive={isShownIconSize}
+								config={blockeraIconSize}
 							>
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
 											block,
-											'icon-gap'
+											'icon-size'
 										),
-										value: iconGap,
-										attribute: 'blockeraIconGap',
+										value: iconSize,
+										attribute: iconSizeAttributeId,
 										blockName: block.blockName,
 									}}
 								>
 									<InputControl
-										label={__('Gap', 'blockera')}
+										label={__('Size', 'blockera')}
 										labelPopoverTitle={__(
-											'Icon Gap',
+											'Icon Size',
 											'blockera'
 										)}
 										labelDescription={
 											<>
 												<p>
 													{__(
-														'Controls the space between the icon and the block content.',
+														'Sets the size of the icon used in the block.',
 														'blockera'
 													)}
 												</p>
 												<p>
 													{__(
-														'Adjust the gap to fine-tune spacing for better visual balance and readability.',
+														"By default, it inherits the block's font size, but you can customize it to be larger or smaller for better visual emphasis.",
 														'blockera'
 													)}
 												</p>
@@ -452,134 +516,78 @@ export const IconExtension: ComponentType<{
 										columns="columns-2"
 										unitType="essential"
 										defaultValue={
-											attributes?.blockeraIconGap?.default
-												?.value
+											attributes?.[iconSizeAttributeId]
+												?.default?.value
 										}
 										min={0}
 										onChange={(newValue, ref) => {
 											handleOnChangeAttributes(
-												'blockeraIconGap',
+												iconSizeAttributeId,
 												newValue,
 												{ ref }
 											);
 										}}
-										{...extensionProps.blockeraIconGap}
+										{...extensionProps.blockeraIconSize}
 									/>
 								</ControlContextProvider>
 							</EditorFeatureWrapper>
-						)}
 
-						<EditorFeatureWrapper
-							isActive={isShownIconSize}
-							config={blockeraIconSize}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'icon-size'
-									),
-									value: iconSize,
-									attribute: iconSizeAttributeId,
-									blockName: block.blockName,
-								}}
+							<EditorFeatureWrapper
+								isActive={isShownIconColor}
+								config={blockeraIconColor}
 							>
-								<InputControl
-									label={__('Size', 'blockera')}
-									labelPopoverTitle={__(
-										'Icon Size',
-										'blockera'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Sets the size of the icon used in the block.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													"By default, it inherits the block's font size, but you can customize it to be larger or smaller for better visual emphasis.",
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									columns="columns-2"
-									unitType="essential"
-									defaultValue={
-										attributes?.[iconSizeAttributeId]
-											?.default?.value
-									}
-									min={0}
-									onChange={(newValue, ref) => {
-										handleOnChangeAttributes(
-											iconSizeAttributeId,
-											newValue,
-											{ ref }
-										);
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'icon-color'
+										),
+										value: iconColor,
+										attribute: iconColorAttributeId,
+										blockName: block.blockName,
 									}}
-									{...extensionProps.blockeraIconSize}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
-
-						<EditorFeatureWrapper
-							isActive={isShownIconColor}
-							config={blockeraIconColor}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'icon-color'
-									),
-									value: iconColor,
-									attribute: iconColorAttributeId,
-									blockName: block.blockName,
-								}}
-							>
-								<ColorControl
-									label={__('Color', 'blockera')}
-									labelPopoverTitle={__(
-										'Icon Color',
-										'blockera'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the color of the icon in the block.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													"By default, it inherits the block's font color, but you can override it to match or contrast with your design.",
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									columns="columns-2"
-									controlAddonTypes={['variable']}
-									variableTypes={['color']}
-									defaultValue={
-										attributes?.[iconColorAttributeId]
-											?.default?.value
-									}
-									onChange={(newValue, ref) => {
-										handleOnChangeAttributes(
-											iconColorAttributeId,
-											newValue,
-											{ ref }
-										);
-									}}
-									{...extensionProps.blockeraIconColor}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
+								>
+									<ColorControl
+										label={__('Color', 'blockera')}
+										labelPopoverTitle={__(
+											'Icon Color',
+											'blockera'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Defines the color of the icon in the block.',
+														'blockera'
+													)}
+												</p>
+												<p>
+													{__(
+														"By default, it inherits the block's font color, but you can override it to match or contrast with your design.",
+														'blockera'
+													)}
+												</p>
+											</>
+										}
+										columns="columns-2"
+										controlAddonTypes={['variable']}
+										variableTypes={['color']}
+										defaultValue={
+											attributes?.[iconColorAttributeId]
+												?.default?.value
+										}
+										onChange={(newValue, ref) => {
+											handleOnChangeAttributes(
+												iconColorAttributeId,
+												newValue,
+												{ ref }
+											);
+										}}
+										{...extensionProps.blockeraIconColor}
+									/>
+								</ControlContextProvider>
+							</EditorFeatureWrapper>
+						</Flex>
 					</BaseControl>
 
 					<EditorFeatureWrapper
@@ -619,7 +627,12 @@ export const IconExtension: ComponentType<{
 						<BaseControl
 							columns="1-column"
 							style={{
-								'--blockera-field-gap': '8px',
+								'--blockera-field-gap': '12px',
+							}}
+							controlProps={{
+								style: {
+									'--gap': '12px',
+								},
 							}}
 						>
 							<Flex
