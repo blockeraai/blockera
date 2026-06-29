@@ -11,6 +11,6 @@
 			"weight": 0.2
 		}
 	],
-	"minMatchCharLength": 3,
-	"useExtendedSearch": false
+	"minMatchCharLength": 1,
+	"useExtendedSearch": true
 }
