@@ -84,10 +84,9 @@ const SHADE_STEP_COLUMN_STYLE: CSSProperties = {
 };
 
 const SHADE_STEP_LABEL_STYLE: CSSProperties = {
-	flex: '0 0 auto',
-	minWidth: 40,
-	fontSize: 11,
-	fontWeight: 500,
+	fontSize: 10,
+	fontWeight: 600,
+	opacity: 0.5,
 	color: 'var(--blockera-controls-label-color, #1e1e1e)',
 };
 
@@ -203,6 +202,7 @@ function GlobalStylesShadeStepColumn({
 					<ColorControl
 						{...chromelessColorFieldProps}
 						{...colorControlProps}
+						colorIndicatorSize={18}
 					/>
 				</ControlContextProvider>
 			</div>
