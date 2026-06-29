@@ -38,8 +38,11 @@ import { VarPickerSummarySlotProvider } from './var-picker-summary-slot';
 import {
 	getPopoverRoot,
 	hasNestedOverlayOpenAsideFrom,
+	isElementInsideVariablePickerSelectionTarget,
+	isElementInsideVariablePickerPopover,
 	isOtherPopoverClosing,
 	isPopoverDismissIgnoredTarget,
+	markPopoverClosing,
 	registerPopoverOpen,
 } from '../../../libs/popover/utils';
 import { PickerCategory, PickerValueItem } from '../index';
@@ -402,21 +405,52 @@ export default function ({
 	const [summarySlot, setSummarySlot] = useState<?HTMLElement>(null);
 	const isClosingRef = useRef(false);
 
+	const markVarPickerClosing = useCallback(() => {
+		markPopoverClosing(getPopoverRoot(popoverContentRef.current));
+	}, []);
+
+	const handleOnClickVar = useCallback(
+		(
+			data: Parameters<ValueAddonControlProps['handleOnClickVar']>[0],
+			options?: Parameters<ValueAddonControlProps['handleOnClickVar']>[1]
+		) => {
+			if (!options?.keepPickerOpen) {
+				markVarPickerClosing();
+			}
+
+			controlProps.handleOnClickVar(data, options);
+		},
+		[controlProps, markVarPickerClosing]
+	);
+
+	const controlPropsWithPickerClose = useMemo(
+		() => ({
+			...controlProps,
+			handleOnClickVar,
+		}),
+		[controlProps, handleOnClickVar]
+	);
+
 	const handleClose = useCallback(() => {
 		if (isClosingRef.current) {
 			return;
 		}
 		isClosingRef.current = true;
+		markVarPickerClosing();
 
 		if (onClose) {
 			onClose();
 		}
 		controlProps.setOpen('');
-	}, [controlProps, onClose]);
+	}, [controlProps, markVarPickerClosing, onClose]);
 
 	useLayoutEffect(() => {
 		registerPopoverOpen(getPopoverRoot(popoverContentRef.current));
-	}, []);
+
+		return () => {
+			markVarPickerClosing();
+		};
+	}, [markVarPickerClosing]);
 
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
@@ -445,6 +479,13 @@ export default function ({
 			}
 
 			if (isOtherPopoverClosing(popoverRoot)) {
+				return;
+			}
+
+			if (
+				isElementInsideVariablePickerSelectionTarget(event.target) ||
+				isElementInsideVariablePickerPopover(event.target)
+			) {
 				return;
 			}
 
@@ -589,19 +630,21 @@ export default function ({
 						{filteredCatalogItems.map((item) => (
 							<PickerValueItem
 								key={`${presetType}-${item.id}`}
-								value={controlProps.value}
+								value={controlPropsWithPickerClose.value}
 								data={item}
-								onClick={controlProps.handleOnClickVar}
+								onClick={
+									controlPropsWithPickerClose.handleOnClickVar
+								}
 								name={item.name}
 								type={presetType}
 								valueType="variable"
 								isCurrent={
-									controlProps.value?.settings?.id ===
-										item.id ||
+									controlPropsWithPickerClose.value?.settings
+										?.id === item.id ||
 									(hasThemeJsonPlainPresetSlug(
-										controlProps.themeJsonPlainPresetSlug
+										controlPropsWithPickerClose.themeJsonPlainPresetSlug
 									) &&
-										controlProps.themeJsonPlainPresetSlug ===
+										controlPropsWithPickerClose.themeJsonPlainPresetSlug ===
 											item.id)
 								}
 								icon={getVariableIcon({
@@ -636,11 +679,13 @@ export default function ({
 					>
 						<MemoizedVariablePickerPresetPanel
 							presetType={presetType}
-							controlProps={controlProps}
+							controlProps={controlPropsWithPickerClose}
 							catalogItems={catalogItems}
 							catalogLabel={data.label}
 							PresetPanel={PresetPanel}
-							pickerProps={controlProps.pickerProps}
+							pickerProps={
+								controlPropsWithPickerClose.pickerProps
+							}
 							omitRepeaterSectionLabel={
 								showOuterCategoryTitle &&
 								presetType !== 'width-size'
