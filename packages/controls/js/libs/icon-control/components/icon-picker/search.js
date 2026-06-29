@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { __, _n, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState, useContext, useMemo } from '@wordpress/element';
 import { SearchControl as WPSearchControl } from '@wordpress/components';
 
@@ -81,142 +81,102 @@ export default function Search({
 
 			{searchInput && (
 				<>
-					{searchInput.length < 3 ? (
+					<div
+						className={controlInnerClassNames(
+							'icon-library',
+							'library-search',
+							'is-rendered',
+							!searchInput ? 'is-empty' : ''
+						)}
+					>
 						<div
-							className={controlInnerClassNames(
-								'icon-library',
-								'library-search',
-								'is-rendered',
-								!searchInput ? 'is-empty' : ''
-							)}
+							className={controlInnerClassNames('library-header')}
 						>
+							<Icon icon="search" iconSize="24" />{' '}
+							{__('Search Result', 'blockera')}
+							<span
+								className={controlInnerClassNames(
+									'library-header__label'
+								)}
+							>
+								{__('Free', 'blockera')}
+							</span>
+						</div>
+
+						{!searchData.length ? (
 							<p
 								className={controlInnerClassNames(
 									'library-search-hint'
 								)}
 							>
-								{sprintf(
-									// translators: %d is minimum repaired characters to make search work
-									_n(
-										'Please enter at least %d more characters for icon search.',
-										'Please enter at least %d more character for icon search.',
-										searchInput.length,
-										'blockera'
-									),
-									3 - searchInput.length
+								{__('Sorry, no icons found.', 'blockera')}
+							</p>
+						) : (
+							<div
+								className={controlInnerClassNames(
+									'library-body',
+									'no-fade'
+								)}
+							>
+								{searchData}
+							</div>
+						)}
+					</div>
+
+					<div
+						className={controlInnerClassNames(
+							'icon-library',
+							'library-search',
+							'is-rendered',
+							!searchInput ? 'is-empty' : ''
+						)}
+					>
+						<div
+							className={controlInnerClassNames('library-header')}
+						>
+							<Icon icon="search" iconSize="24" />{' '}
+							{__('Search Result', 'blockera')}
+							<span
+								className={controlInnerClassNames(
+									'library-header__label'
+								)}
+							>
+								{__('Pro', 'blockera')}
+							</span>
+						</div>
+
+						{!searchData2.length ? (
+							<p
+								className={controlInnerClassNames(
+									'library-search-hint'
+								)}
+							>
+								{__('Sorry, no icons found.', 'blockera')}
+							</p>
+						) : (
+							<div
+								className={controlInnerClassNames(
+									'library-body',
+									'no-fade'
+								)}
+							>
+								{searchData2}
+							</div>
+						)}
+
+						{!searchData.length && !searchData2.length && (
+							<p
+								className={controlInnerClassNames(
+									'library-search-hint'
+								)}
+							>
+								{__(
+									'Please try a different keyword.',
+									'blockera'
 								)}
 							</p>
-						</div>
-					) : (
-						<>
-							<div
-								className={controlInnerClassNames(
-									'icon-library',
-									'library-search',
-									'is-rendered',
-									!searchInput ? 'is-empty' : ''
-								)}
-							>
-								<div
-									className={controlInnerClassNames(
-										'library-header'
-									)}
-								>
-									<Icon icon="search" iconSize="24" />{' '}
-									{__('Search Result', 'blockera')}
-									<span
-										className={controlInnerClassNames(
-											'library-header__label'
-										)}
-									>
-										{__('Free', 'blockera')}
-									</span>
-								</div>
-
-								{!searchData.length ? (
-									<p
-										className={controlInnerClassNames(
-											'library-search-hint'
-										)}
-									>
-										{__(
-											'Sorry, no icons found.',
-											'blockera'
-										)}
-									</p>
-								) : (
-									<div
-										className={controlInnerClassNames(
-											'library-body',
-											'no-fade'
-										)}
-									>
-										{searchData}
-									</div>
-								)}
-							</div>
-
-							<div
-								className={controlInnerClassNames(
-									'icon-library',
-									'library-search',
-									'is-rendered',
-									!searchInput ? 'is-empty' : ''
-								)}
-							>
-								<div
-									className={controlInnerClassNames(
-										'library-header'
-									)}
-								>
-									<Icon icon="search" iconSize="24" />{' '}
-									{__('Search Result', 'blockera')}
-									<span
-										className={controlInnerClassNames(
-											'library-header__label'
-										)}
-									>
-										{__('Pro', 'blockera')}
-									</span>
-								</div>
-
-								{!searchData2.length ? (
-									<p
-										className={controlInnerClassNames(
-											'library-search-hint'
-										)}
-									>
-										{__(
-											'Sorry, no icons found.',
-											'blockera'
-										)}
-									</p>
-								) : (
-									<div
-										className={controlInnerClassNames(
-											'library-body',
-											'no-fade'
-										)}
-									>
-										{searchData2}
-									</div>
-								)}
-
-								{!searchData.length && !searchData2.length && (
-									<p
-										className={controlInnerClassNames(
-											'library-search-hint'
-										)}
-									>
-										{__(
-											'Please try a different keyword.',
-											'blockera'
-										)}
-									</p>
-								)}
-							</div>
-						</>
-					)}
+						)}
+					</div>
 				</>
 			)}
 		</div>
