@@ -9,6 +9,7 @@ import {
 	memo,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -39,6 +40,7 @@ import {
 	hasNestedOverlayOpenAsideFrom,
 	isOtherPopoverClosing,
 	isPopoverDismissIgnoredTarget,
+	registerPopoverOpen,
 } from '../../../libs/popover/utils';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
@@ -418,6 +420,10 @@ export default function ({
 		}
 		controlProps.setOpen('');
 	}, [controlProps, onClose]);
+
+	useLayoutEffect(() => {
+		registerPopoverOpen(getPopoverRoot(popoverContentRef.current));
+	}, []);
 
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {

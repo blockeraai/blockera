@@ -26,6 +26,103 @@ export const DEFAULT_POPOVER_OFFSET = 25;
 export const VALUE_ADDON_OPENER_SELECTORS =
 	'.blockera-control-value-addon-pointer.open-value-addon, [data-cy="value-addon-btn"].open-value-addon, .blockera-control-value-addon.open-value-addon';
 
+export const VALUE_ADDON_POINTERS_SELECTOR =
+	'.blockera-control.blockera-control-value-addon-pointers';
+
+export function isElementInsideValueAddonPointers(element: Element): boolean {
+	return Boolean(
+		element.closest('.blockera-control-value-addon-pointers') ||
+		element.closest('.blockera-control-value-addon-pointer') ||
+		element.closest('[data-cy="value-addon-btn-open"]')
+	);
+}
+
+function resolveOwningPopoverForFieldTarget(target: Element): ?HTMLElement {
+	const pointersRoot = target.closest(
+		'.blockera-control-value-addon-pointers'
+	);
+	const fieldScope =
+		target.closest(POPOVER_ANCHOR_SCOPE_SELECTORS) ||
+		(pointersRoot instanceof HTMLElement
+			? pointersRoot.parentElement
+			: null);
+
+	if (!(fieldScope instanceof HTMLElement)) {
+		return null;
+	}
+
+	const fromScope = fieldScope.closest(POPOVER_ROOT_SELECTOR);
+	if (fromScope instanceof HTMLElement) {
+		return normalizePopoverRoot(fromScope);
+	}
+
+	const popovers = document.querySelectorAll(POPOVER_ROOT_SELECTOR);
+
+	for (let i = 0; i < popovers.length; i++) {
+		const popover = popovers[i];
+		if (popover instanceof HTMLElement && popover.contains(fieldScope)) {
+			return normalizePopoverRoot(popover);
+		}
+	}
+
+	return null;
+}
+
+/** True when two nodes refer to the same popover surface (including WP wrapper nesting). */
+function isSamePopoverRoot(left: ?HTMLElement, right: ?HTMLElement): boolean {
+	const normalizedLeft = normalizePopoverRoot(left);
+	const normalizedRight = normalizePopoverRoot(right);
+
+	if (
+		!(normalizedLeft instanceof HTMLElement) ||
+		!(normalizedRight instanceof HTMLElement)
+	) {
+		return normalizedLeft === normalizedRight;
+	}
+
+	if (normalizedLeft === normalizedRight) {
+		return true;
+	}
+
+	return (
+		normalizedLeft.contains(normalizedRight) ||
+		normalizedRight.contains(normalizedLeft)
+	);
+}
+
+/**
+ * Value-addon pointers live in the parent field, not inside var-picker.
+ * - Parent popover: ignore dismiss when owner matches this root.
+ * - Var-picker (nested): owner is the parent — do not ignore (allow close).
+ */
+function shouldIgnoreDismissForValueAddonPointer(
+	popoverRoot: ?HTMLElement,
+	target: Element
+): boolean {
+	const owner = resolveOwningPopoverForFieldTarget(target);
+
+	if (!owner) {
+		return true;
+	}
+
+	const normalizedRoot = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalizedRoot instanceof HTMLElement)) {
+		return false;
+	}
+
+	if (isSamePopoverRoot(owner, normalizedRoot)) {
+		return true;
+	}
+
+	// Parent keeps open when owner resolves to a nested popover in its tree.
+	if (isPopoverNestedChildOf(owner, normalizedRoot)) {
+		return true;
+	}
+
+	return false;
+}
+
 export const FOCUS_OPENER_SELECTORS =
 	'.is-focus, .is-open-popover, [data-cy="label-control"].is-open';
 
@@ -275,11 +372,19 @@ export function registerPopoverOpen(popoverRoot: ?HTMLElement): void {
 		return;
 	}
 
+	let parentRoot = lastPopoverInteractionRoot;
+
 	if (
-		lastPopoverInteractionRoot instanceof HTMLElement &&
-		lastPopoverInteractionRoot !== normalized
+		(!(parentRoot instanceof HTMLElement) || parentRoot === normalized) &&
+		lastPopoverPointerDownTarget instanceof Element
 	) {
-		linkNestedPopoverToParent(normalized, lastPopoverInteractionRoot);
+		parentRoot = resolveOwningPopoverForFieldTarget(
+			lastPopoverPointerDownTarget
+		);
+	}
+
+	if (parentRoot instanceof HTMLElement && parentRoot !== normalized) {
+		linkNestedPopoverToParent(normalized, parentRoot);
 	}
 }
 
@@ -299,10 +404,7 @@ export function unregisterPopoverRoot(popoverRoot: ?HTMLElement): void {
 
 function syncModalOpenedFromPopoverRoot(): void {
 	if (hasOpenModalOverlay()) {
-		if (
-			!(modalOpenedFromPopoverRoot instanceof HTMLElement) &&
-			lastPopoverInteractionRoot instanceof HTMLElement
-		) {
+		if (lastPopoverInteractionRoot instanceof HTMLElement) {
 			modalOpenedFromPopoverRoot = lastPopoverInteractionRoot;
 		}
 
@@ -321,10 +423,27 @@ function notePopoverPointerInteraction(target: ?EventTarget): void {
 		interactionRoot.contains(target)
 	) {
 		lastPopoverInteractionRoot = interactionRoot;
-	} else if (
-		!(target instanceof Element) ||
-		(!getPopoverRoot(target) && !isElementInsideModalOverlay(target))
-	) {
+	} else if (target instanceof Element) {
+		if (isElementInsideValueAddonPointers(target)) {
+			const owner = resolveOwningPopoverForFieldTarget(target);
+
+			if (owner instanceof HTMLElement) {
+				lastPopoverInteractionRoot = owner;
+			}
+		}
+
+		const popoverFromTarget = target.closest(POPOVER_ROOT_SELECTOR);
+
+		if (popoverFromTarget instanceof HTMLElement) {
+			lastPopoverInteractionRoot = popoverFromTarget;
+		} else if (
+			!getPopoverRoot(target) &&
+			!isElementInsideModalOverlay(target) &&
+			!isElementInsideValueAddonPointers(target)
+		) {
+			lastPopoverInteractionRoot = null;
+		}
+	} else {
 		lastPopoverInteractionRoot = null;
 	}
 
@@ -361,6 +480,7 @@ function isModalInteractionIgnoredForPopover(
  * - inside the current popover
  * - inside a nested popover opened from this popover
  * - inside a modal opened from this popover
+ * - inside value-addon pointer controls (variable / dynamic value openers)
  * - inside dropdown surfaces such as SelectControl menus
  */
 export function isPopoverDismissIgnoredTarget(
@@ -375,8 +495,16 @@ export function isPopoverDismissIgnoredTarget(
 		return true;
 	}
 
-	if (!(target instanceof HTMLElement)) {
+	if (!(target instanceof Element)) {
 		return false;
+	}
+
+	if (isElementInsideValueAddonPointers(target)) {
+		if (!(popoverRoot instanceof HTMLElement)) {
+			return true;
+		}
+
+		return shouldIgnoreDismissForValueAddonPointer(popoverRoot, target);
 	}
 
 	if (isModalInteractionIgnoredForPopover(popoverRoot, target)) {
@@ -388,7 +516,10 @@ export function isPopoverDismissIgnoredTarget(
 		return isPopoverNestedChildOf(nestedPopover, popoverRoot);
 	}
 
-	if (target.closest('.components-dropdown__content')) {
+	if (
+		target instanceof HTMLElement &&
+		target.closest('.components-dropdown__content')
+	) {
 		return true;
 	}
 
