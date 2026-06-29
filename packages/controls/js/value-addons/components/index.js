@@ -25,6 +25,7 @@ export {
 	buildVariablePickerSearchHaystack,
 	variablePickerItemMatchesSearch,
 	variablePickerHasAnySearchMatches,
+	variablePickerPopoverTypeClassName,
 	VarPickerSearchContext,
 	useVarPickerSearchContext,
 	useVariablePickerSearchQuery,

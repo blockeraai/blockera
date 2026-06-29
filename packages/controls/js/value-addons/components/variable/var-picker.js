@@ -62,6 +62,7 @@ import {
 	resolveVariablePickerRow,
 	variablePickerHasAnySearchMatches,
 	variablePickerItemMatchesSearch,
+	variablePickerPopoverTypeClassName,
 } from './var-picker-helpers';
 import {
 	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
@@ -75,14 +76,6 @@ export {
 	MISSING_VARIABLE_CAN_RECREATE_FILTER,
 	MISSING_VARIABLE_RECREATE_FILTER,
 } from './var-picker-constants';
-
-function variablePickerPopoverTypeClassName(presetType: string): string {
-	const segment = String(presetType).trim().toLowerCase();
-	if (segment === '') {
-		return '';
-	}
-	return controlInnerClassNames(`popover-variables-type-${segment}`);
-}
 
 /**
  * Global-styles preset panels usually render their own section labels. Width-size is

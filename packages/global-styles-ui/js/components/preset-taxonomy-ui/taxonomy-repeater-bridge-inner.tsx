@@ -9,11 +9,12 @@ import { useCallback, useMemo } from '@wordpress/element';
  * Blockera dependencies
  */
 import { noop } from '@blockera/utils';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterContextProvider,
 	useControlContext,
 	useVarPickerPresetContext,
+	variablePickerPopoverTypeClassName,
 } from '@blockera/controls';
 
 /**
@@ -26,6 +27,32 @@ import {
 	stripRepeaterPickerUiFields,
 } from '../variable-picker-preset-utils';
 import { useCanEditGlobalStyles } from '../use-global-styles-preset-edit';
+
+/**
+ * Resolves the variable type for taxonomy preset popover CSS modifiers.
+ * Prefers the active variable picker type; otherwise derives from control id
+ * (e.g. `color-presets-theme-taxonomy-tree` → `color`).
+ */
+function resolveTaxonomyPopoverVariableType(
+	controlId: string,
+	pickerVariableType: string | null | undefined
+): string | null {
+	if (
+		typeof pickerVariableType === 'string' &&
+		pickerVariableType.trim() !== ''
+	) {
+		return pickerVariableType.trim().toLowerCase();
+	}
+
+	const controlName = controlId.replace(/-taxonomy-tree$/, '');
+	const withoutOrigin = controlName.replace(/-presets?-[a-z]+$/, '');
+	if (withoutOrigin === controlName) {
+		return null;
+	}
+
+	const type = withoutOrigin.replace(/-preset$/, '');
+	return type !== '' ? type : null;
+}
 
 export type TaxonomyRepeaterBridgeInnerProps = {
 	controlId: string;
@@ -132,6 +159,19 @@ export function TaxonomyRepeaterBridgeInner({
 
 	const { getControlPath } = useControlContext();
 
+	const resolvedControlId = repeaterHook.controlInfo?.name ?? controlId;
+
+	const popoverClassName = useMemo(() => {
+		const variableType = resolveTaxonomyPopoverVariableType(
+			resolvedControlId,
+			pickerCtx.variableType
+		);
+		return classNames(
+			controlInnerClassNames('popover-variables'),
+			variableType ? variablePickerPopoverTypeClassName(variableType) : ''
+		);
+	}, [resolvedControlId, pickerCtx.variableType]);
+
 	const repeaterContextValue = useMemo(
 		() => ({
 			design: 'minimal',
@@ -143,7 +183,7 @@ export function TaxonomyRepeaterBridgeInner({
 			popoverTitle: __('Edit Variable', 'blockera'),
 			actionButtonsType: 'inline',
 			actionMenuButtonLabel: __('More Options', 'blockera'),
-			popoverClassName: controlInnerClassNames('popover-variables'),
+			popoverClassName,
 			maxItems: -1,
 			minItems: 0,
 			selectable: isVariablePicker,
@@ -210,6 +250,7 @@ export function TaxonomyRepeaterBridgeInner({
 			handleRepeaterRootChange,
 			handleSelectableItemActivate,
 			isVariablePicker,
+			popoverClassName,
 			repeaterHook.controlInfo?.name,
 			repeaterItemsForContext,
 			repeaterItemChildren,

@@ -8,6 +8,7 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
+import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	STORE_NAME,
 	getCustomGlobalStylePresetVariables,
@@ -27,6 +28,17 @@ export type ResolvedVariablePickerRow = {|
 	data: DynamicVariableGroup | VariableCategoryDetail,
 	effectiveType: string,
 |};
+
+/**
+ * Modifier for variable preset popovers (e.g. `blockera-control-popover-variables-type-color`).
+ */
+export function variablePickerPopoverTypeClassName(presetType: string): string {
+	const segment = String(presetType).trim().toLowerCase();
+	if (segment === '') {
+		return '';
+	}
+	return controlInnerClassNames(`popover-variables-type-${segment}`);
+}
 
 /**
  * Built-in picker keys from the control plus bootstrapped groups whose `type`
