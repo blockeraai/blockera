@@ -1,5 +1,5 @@
-@import "../../stroke-icon-preview";
-@import "../../svg-viewbox-indicator";
+@use "../../stroke-icon-preview" as *;
+@use "../../svg-viewbox-indicator" as *;
 
 .blockera-component-modal.blockera-control-icon-picker-modal {
 	max-width: 80%;

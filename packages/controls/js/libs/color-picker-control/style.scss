@@ -1,4 +1,4 @@
-@import "./components/color-pallet";
+@use "./components/color-pallet";
 
 // Wraps ColorPallet + optional locked notice. When unlocked, no layout side effects.
 .blockera-color-picker-sketch-stack {

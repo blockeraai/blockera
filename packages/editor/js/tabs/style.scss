@@ -1,5 +1,5 @@
 /* ChangeIndicator (close-confirm tab rows) — component has no side-effect style import */
-@import "../../../controls/js/libs/change-indicator/style.scss";
+@use "../../../controls/js/libs/change-indicator/style.scss";
 
 .editor-list-view-sidebar__list-view-container > .document-outline,
 .editor-list-view-sidebar__list-view-panel-content {

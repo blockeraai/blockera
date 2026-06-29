@@ -1,4 +1,4 @@
-@import "./stroke-icon-preview";
+@use "./stroke-icon-preview" as *;
 
 .blockera-control-icon {
 	> .components-drop-zone {
