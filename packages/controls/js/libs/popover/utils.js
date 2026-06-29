@@ -29,6 +29,87 @@ export const VALUE_ADDON_OPENER_SELECTORS =
 export const VALUE_ADDON_POINTERS_SELECTOR =
 	'.blockera-control.blockera-control-value-addon-pointers';
 
+export const VARIABLE_PICKER_ITEM_SELECTOR =
+	'.blockera-control-value-addon-popover-item, [data-test^="value-addon-picker-item-"]';
+
+export const VARIABLE_PICKER_POPOVER_MARKER_SELECTOR =
+	'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"]';
+
+export function isElementInsideVariablePickerSelectionTarget(
+	element: Element
+): boolean {
+	return Boolean(element.closest(VARIABLE_PICKER_ITEM_SELECTOR));
+}
+
+export function isVariablePickerSelectionInteraction(
+	target: ?EventTarget
+): boolean {
+	if (!(target instanceof Element)) {
+		return false;
+	}
+
+	return (
+		isElementInsideVariablePickerSelectionTarget(target) ||
+		isElementInsideVariablePickerPopover(target)
+	);
+}
+
+export function isElementInsideVariablePickerPopover(
+	element: Element
+): boolean {
+	return Boolean(element.closest(VARIABLE_PICKER_POPOVER_MARKER_SELECTOR));
+}
+
+function getVariablePickerPopoverRootFromTarget(target: Element): ?HTMLElement {
+	const marker = target.closest(VARIABLE_PICKER_POPOVER_MARKER_SELECTOR);
+
+	if (!(marker instanceof HTMLElement)) {
+		return null;
+	}
+
+	return normalizePopoverRoot(getPopoverRoot(marker) ?? marker);
+}
+
+/**
+ * Nested var-pickers may not share a direct parent link — never dismiss while
+ * the user is selecting inside any open var-picker surface.
+ */
+function shouldIgnoreDismissForVariablePickerInteraction(
+	popoverRoot: ?HTMLElement,
+	target: Element
+): boolean {
+	if (isElementInsideVariablePickerSelectionTarget(target)) {
+		return true;
+	}
+
+	if (!isElementInsideVariablePickerPopover(target)) {
+		return false;
+	}
+
+	const varPickerRoot = getVariablePickerPopoverRootFromTarget(target);
+
+	if (!(varPickerRoot instanceof HTMLElement)) {
+		return true;
+	}
+
+	const normalizedRoot = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalizedRoot instanceof HTMLElement)) {
+		return true;
+	}
+
+	if (isSamePopoverRoot(varPickerRoot, normalizedRoot)) {
+		return true;
+	}
+
+	if (isPopoverNestedChildOf(varPickerRoot, normalizedRoot)) {
+		return true;
+	}
+
+	// Nested var-picker without a registered parent link — still allow selection.
+	return varPickerRoot !== normalizedRoot;
+}
+
 export function isElementInsideValueAddonPointers(element: Element): boolean {
 	return Boolean(
 		element.closest('.blockera-control-value-addon-pointers') ||
@@ -481,6 +562,7 @@ function isModalInteractionIgnoredForPopover(
  * - inside a nested popover opened from this popover
  * - inside a modal opened from this popover
  * - inside value-addon pointer controls (variable / dynamic value openers)
+ * - inside variable picker selection targets (nested var-picker support)
  * - inside dropdown surfaces such as SelectControl menus
  */
 export function isPopoverDismissIgnoredTarget(
@@ -497,6 +579,10 @@ export function isPopoverDismissIgnoredTarget(
 
 	if (!(target instanceof Element)) {
 		return false;
+	}
+
+	if (shouldIgnoreDismissForVariablePickerInteraction(popoverRoot, target)) {
+		return true;
 	}
 
 	if (isElementInsideValueAddonPointers(target)) {

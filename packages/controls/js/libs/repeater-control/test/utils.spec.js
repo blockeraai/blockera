@@ -6,6 +6,7 @@ import {
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
 } from '../utils';
+import { linkNestedPopoverToParent } from '../../popover/utils';
 
 describe('Util functions', () => {
 	describe('prepValueForHeader', () => {
@@ -144,7 +145,7 @@ describe('isClickInsideOpenInspectorRepeaterPopover', () => {
 
 	it('returns true for nested Blockera popovers opened during the edit session', () => {
 		const sidebar = createInspectorSidebar();
-		createOpenRepeaterEditSession(sidebar);
+		const { popover } = createOpenRepeaterEditSession(sidebar);
 
 		const nestedPopover = document.createElement('div');
 		nestedPopover.className =
@@ -154,8 +155,36 @@ describe('isClickInsideOpenInspectorRepeaterPopover', () => {
 		nestedPopover.appendChild(nestedControl);
 		document.body.appendChild(nestedPopover);
 
+		linkNestedPopoverToParent(nestedPopover, popover);
+
 		expect(isClickInsideOpenInspectorRepeaterPopover(nestedControl)).toBe(
 			true
+		);
+	});
+
+	it('returns false for nested var-picker selections while a repeater edit popover is open', () => {
+		const sidebar = createInspectorSidebar();
+		createOpenRepeaterEditSession(sidebar);
+
+		const varPickerPopover = document.createElement('div');
+		varPickerPopover.className =
+			'blockera-component-popover blockera-control-popover-variables';
+		const varPickerContent = document.createElement('div');
+		varPickerContent.dataset.test = 'variable-picker-popover';
+		const repeaterRow = document.createElement('button');
+		repeaterRow.className = 'blockera-control-inner-repeater-group-header';
+		const variableItem = document.createElement('button');
+		variableItem.className = 'blockera-control-value-addon-popover-item';
+		varPickerContent.appendChild(repeaterRow);
+		varPickerContent.appendChild(variableItem);
+		varPickerPopover.appendChild(varPickerContent);
+		document.body.appendChild(varPickerPopover);
+
+		expect(isClickInsideOpenInspectorRepeaterPopover(repeaterRow)).toBe(
+			false
+		);
+		expect(isClickInsideOpenInspectorRepeaterPopover(variableItem)).toBe(
+			false
 		);
 	});
 
