@@ -28,4 +28,8 @@ export type ColorControlProps = {
 	 */
 	contentAlign?: 'left' | 'center' | 'right',
 	size?: ControlSize,
+	/**
+	 * Pixel size passed to `ColorIndicator` inside the color button.
+	 */
+	colorIndicatorSize?: number,
 };

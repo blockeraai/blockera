@@ -49,6 +49,7 @@ export default function ColorControl({
 	controlAddonTypes,
 	variableTypes,
 	size = 'normal',
+	colorIndicatorSize = 16,
 	//
 	...props
 }: ColorControlProps): MixedElement {
@@ -185,6 +186,7 @@ export default function ColorControl({
 					type="color"
 					value={value}
 					data-cy="color-indicator"
+					size={colorIndicatorSize}
 				/>
 
 				{buttonLabel}
