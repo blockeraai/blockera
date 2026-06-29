@@ -37,6 +37,7 @@ import {
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
 } from '../utils';
+import { isVariablePickerSelectionInteraction } from '../../popover/utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
 import type { RepeaterItemProps, RepeaterItemSize } from '../types';
@@ -500,7 +501,9 @@ const RepeaterItem = ({
 					return;
 				}
 
-				closeInspectorRepeaterPopovers();
+				if (!isVariablePickerSelectionInteraction(event?.target)) {
+					closeInspectorRepeaterPopovers();
+				}
 
 				const newItems: { [key: string]: any } = {};
 

@@ -23,6 +23,8 @@ import type { CleanupRepeaterArgs } from './types';
 import { extractNumberAndUnit } from '../input-control/utils';
 import {
 	getPopoverRoot,
+	isElementInsideVariablePickerPopover,
+	isElementInsideVariablePickerSelectionTarget,
 	isPopoverDismissIgnoredTarget,
 	INSPECTOR_SIDEBAR_SELECTORS,
 } from '../popover/utils';
@@ -332,6 +334,14 @@ function isTargetInsideRepeaterEditPopoverSurface(
 	editPopoverRoot: HTMLElement,
 	target: Element
 ): boolean {
+	// Nested var-picker selections must not be blocked as in-edit-popover clicks.
+	if (
+		isElementInsideVariablePickerPopover(target) ||
+		isElementInsideVariablePickerSelectionTarget(target)
+	) {
+		return false;
+	}
+
 	if (editPopoverRoot.contains(target)) {
 		return true;
 	}
