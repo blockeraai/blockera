@@ -5,6 +5,7 @@
  */
 import { getValueAddonRealValue } from '@blockera/controls';
 import { isStrokeIconLibrary, NativeIconLibrariesList } from '@blockera/icons';
+import { addAngle } from '@blockera/utils';
 
 /**
  * Shared attribute readers for icon feature (editor + canvas).
@@ -171,6 +172,31 @@ export const getIconTransform = (attributes: Object): string => {
 
 	return transform;
 };
+
+/**
+ * Next rotate value when cycling the toolbar/extension rotate control (+90°).
+ */
+export const getNextIconRotateValue = (
+	currentRotate: string | number
+): string | number => {
+	let newAngle =
+		currentRotate !== ''
+			? addAngle(currentRotate === '' ? 0 : currentRotate, 90)
+			: 90;
+
+	if (newAngle === 0 || newAngle === 360) {
+		newAngle = '';
+	}
+
+	return newAngle;
+};
+
+/**
+ * Toggle flip attribute between inactive ('') and active (true).
+ */
+export const getToggledIconFlipValue = (
+	currentFlip: string | boolean
+): string | boolean => (currentFlip ? '' : true);
 
 export const getIconPresentationStyle = (attributes: Object): Object => {
 	const iconColor =
