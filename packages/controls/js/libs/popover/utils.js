@@ -167,6 +167,10 @@ let closingPopoverRoot: ?HTMLElement = null;
 let sketchPickerInteractionPopoverRoot: ?HTMLElement = null;
 let closingClearTimer: ?TimeoutID = null;
 let lastPopoverPointerDownTarget: ?EventTarget = null;
+let lastPopoverInteractionRoot: ?HTMLElement = null;
+let modalOpenedFromPopoverRoot: ?HTMLElement = null;
+const nestedPopoverParentByRoot: WeakMap<HTMLElement, HTMLElement> =
+	new WeakMap();
 
 /** Marks which popover is closing so parent popovers ignore the resulting dismiss events. */
 export function markPopoverClosing(popoverRoot: ?HTMLElement): void {
@@ -213,11 +217,150 @@ export function getPopoverRootFromCloseControl(
 	return getPopoverRoot(target);
 }
 
+/** Links a portaled child popover to the parent it was opened from. */
+export function linkNestedPopoverToParent(
+	nestedRoot: ?HTMLElement,
+	parentRoot: ?HTMLElement
+): void {
+	const nested = normalizePopoverRoot(nestedRoot);
+	const parent = normalizePopoverRoot(parentRoot);
+
+	if (
+		nested instanceof HTMLElement &&
+		parent instanceof HTMLElement &&
+		nested !== parent
+	) {
+		nestedPopoverParentByRoot.set(nested, parent);
+	}
+}
+
+export function isPopoverNestedChildOf(
+	nestedRoot: ?HTMLElement,
+	ancestorRoot: ?HTMLElement
+): boolean {
+	const normalizedNested = normalizePopoverRoot(nestedRoot);
+	const normalizedAncestor = normalizePopoverRoot(ancestorRoot);
+
+	if (
+		!(normalizedNested instanceof HTMLElement) ||
+		!(normalizedAncestor instanceof HTMLElement)
+	) {
+		return false;
+	}
+
+	let current: ?HTMLElement = normalizedNested;
+
+	while (current instanceof HTMLElement) {
+		const parent = nestedPopoverParentByRoot.get(current);
+
+		if (!(parent instanceof HTMLElement)) {
+			return false;
+		}
+
+		if (parent === normalizedAncestor) {
+			return true;
+		}
+
+		current = parent;
+	}
+
+	return false;
+}
+
+/** Called when a popover mounts; links it to the last in-popover interaction. */
+export function registerPopoverOpen(popoverRoot: ?HTMLElement): void {
+	const normalized = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalized instanceof HTMLElement)) {
+		return;
+	}
+
+	if (
+		lastPopoverInteractionRoot instanceof HTMLElement &&
+		lastPopoverInteractionRoot !== normalized
+	) {
+		linkNestedPopoverToParent(normalized, lastPopoverInteractionRoot);
+	}
+}
+
+export function unregisterPopoverRoot(popoverRoot: ?HTMLElement): void {
+	const normalized = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalized instanceof HTMLElement)) {
+		return;
+	}
+
+	nestedPopoverParentByRoot.delete(normalized);
+
+	if (modalOpenedFromPopoverRoot === normalized) {
+		modalOpenedFromPopoverRoot = null;
+	}
+}
+
+function syncModalOpenedFromPopoverRoot(): void {
+	if (hasOpenModalOverlay()) {
+		if (
+			!(modalOpenedFromPopoverRoot instanceof HTMLElement) &&
+			lastPopoverInteractionRoot instanceof HTMLElement
+		) {
+			modalOpenedFromPopoverRoot = lastPopoverInteractionRoot;
+		}
+
+		return;
+	}
+
+	modalOpenedFromPopoverRoot = null;
+}
+
+function notePopoverPointerInteraction(target: ?EventTarget): void {
+	const interactionRoot = getPopoverRoot(target);
+
+	if (
+		interactionRoot instanceof HTMLElement &&
+		target instanceof Node &&
+		interactionRoot.contains(target)
+	) {
+		lastPopoverInteractionRoot = interactionRoot;
+	} else if (
+		!(target instanceof Element) ||
+		(!getPopoverRoot(target) && !isElementInsideModalOverlay(target))
+	) {
+		lastPopoverInteractionRoot = null;
+	}
+
+	syncModalOpenedFromPopoverRoot();
+}
+
+function isModalInteractionIgnoredForPopover(
+	popoverRoot: ?HTMLElement,
+	target: ?EventTarget
+): boolean {
+	if (!(target instanceof Element)) {
+		return false;
+	}
+
+	if (!isElementInsideModalOverlay(target)) {
+		return false;
+	}
+
+	const normalizedRoot = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalizedRoot instanceof HTMLElement)) {
+		return true;
+	}
+
+	if (!(modalOpenedFromPopoverRoot instanceof HTMLElement)) {
+		return false;
+	}
+
+	return modalOpenedFromPopoverRoot === normalizedRoot;
+}
+
 /**
  * Whether a pointer/focus target should keep the popover open:
  * - inside the current popover
- * - inside another popover (nested UI portaled outside the root)
- * - inside a modal opened from nested UI in the popover
+ * - inside a nested popover opened from this popover
+ * - inside a modal opened from this popover
  * - inside dropdown surfaces such as SelectControl menus
  */
 export function isPopoverDismissIgnoredTarget(
@@ -236,13 +379,13 @@ export function isPopoverDismissIgnoredTarget(
 		return false;
 	}
 
-	if (isElementInsideModalOverlay(target)) {
+	if (isModalInteractionIgnoredForPopover(popoverRoot, target)) {
 		return true;
 	}
 
 	const nestedPopover = getPopoverRoot(target);
 	if (nestedPopover instanceof HTMLElement && nestedPopover !== popoverRoot) {
-		return true;
+		return isPopoverNestedChildOf(nestedPopover, popoverRoot);
 	}
 
 	if (target.closest('.components-dropdown__content')) {
@@ -331,43 +474,11 @@ export function shouldDismissPopoverFromPointerDown(
 		return false;
 	}
 
-	if (!target || !(target instanceof Node)) {
-		return false;
-	}
-
-	if (popoverRoot.contains(target)) {
-		return false;
-	}
-
-	if (!(target instanceof HTMLElement)) {
-		return true;
-	}
-
-	if (isElementInsideModalOverlay(target)) {
-		return false;
-	}
-
-	if (target.closest('.components-dropdown__content')) {
-		return false;
-	}
-
 	if (isSketchPickerInteractionActiveFor(popoverRoot)) {
 		return false;
 	}
 
-	// Only ignore nested Blockera popover surfaces (e.g. color pickers). Generic
-	// WordPress `.components-popover` wrappers in the sidebar should still
-	// dismiss open inspector group popovers (e.g. block state selection).
-	const targetPopover = getPopoverRoot(target);
-	if (
-		targetPopover instanceof HTMLElement &&
-		targetPopover !== popoverRoot &&
-		targetPopover.classList.contains('blockera-component-popover')
-	) {
-		return false;
-	}
-
-	return true;
+	return !isPopoverDismissIgnoredTarget(popoverRoot, target);
 }
 
 /** True when a nested popover or modal should receive Escape / dismiss first. */
@@ -392,6 +503,7 @@ export function hasNestedOverlayOpenAsideFrom(
 
 function handlePopoverCloseGuardPointerDown(event: MouseEvent | TouchEvent) {
 	lastPopoverPointerDownTarget = event.target;
+	notePopoverPointerInteraction(event.target);
 
 	const root = getPopoverRootFromCloseControl(event.target);
 	if (root) {

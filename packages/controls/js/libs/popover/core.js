@@ -33,8 +33,10 @@ import {
 	isOtherPopoverClosing,
 	markPopoverClosing,
 	normalizePopoverRoot,
+	registerPopoverOpen,
 	shouldDismissPopoverFromPointerDown,
 	shouldIgnorePopoverFocusOutside,
+	unregisterPopoverRoot,
 } from './utils';
 import type { TPopoverProps } from './types';
 
@@ -105,6 +107,11 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 
 			useEffect(() => {
 				isClosingRef.current = false;
+				registerPopoverOpen(popoverRef.current);
+
+				return () => {
+					unregisterPopoverRoot(popoverRef.current);
+				};
 			}, []);
 
 			useEffect(() => {

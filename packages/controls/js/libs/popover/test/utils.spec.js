@@ -8,7 +8,9 @@ import {
 	isOtherPopoverClosing,
 	isPopoverDismissIgnoredTarget,
 	isSketchPickerInteractionActiveFor,
+	linkNestedPopoverToParent,
 	markPopoverClosing,
+	registerPopoverOpen,
 	resolvePopoverAnchorElement,
 	shouldDismissPopoverFromPointerDown,
 	shouldIgnorePopoverFocusOutside,
@@ -258,6 +260,8 @@ describe('popover offset utils', () => {
 			nestedPopover.appendChild(closeButton);
 			document.body.appendChild(nestedPopover);
 
+			linkNestedPopoverToParent(nestedPopover, parentPopover);
+
 			expect(
 				isPopoverDismissIgnoredTarget(parentPopover, closeButton)
 			).toBe(true);
@@ -276,7 +280,7 @@ describe('popover offset utils', () => {
 			);
 		});
 
-		it('isPopoverDismissIgnoredTarget keeps the popover open for nested popovers', () => {
+		it('isPopoverDismissIgnoredTarget keeps the popover open for nested popovers opened from parent', () => {
 			const rootPopover = document.createElement('div');
 			rootPopover.className = 'blockera-component-popover';
 			document.body.appendChild(rootPopover);
@@ -287,12 +291,55 @@ describe('popover offset utils', () => {
 			nestedPopover.appendChild(nestedButton);
 			document.body.appendChild(nestedPopover);
 
+			linkNestedPopoverToParent(nestedPopover, rootPopover);
+
 			expect(
 				isPopoverDismissIgnoredTarget(rootPopover, nestedButton)
 			).toBe(true);
 		});
 
-		it('isPopoverDismissIgnoredTarget keeps the popover open for modal overlays', () => {
+		it('isPopoverDismissIgnoredTarget dismisses when another unrelated popover is clicked', () => {
+			const rootPopover = document.createElement('div');
+			rootPopover.className = 'blockera-component-popover';
+			document.body.appendChild(rootPopover);
+
+			const unrelatedPopover = document.createElement('div');
+			unrelatedPopover.className = 'blockera-component-popover';
+			const unrelatedButton = document.createElement('button');
+			unrelatedPopover.appendChild(unrelatedButton);
+			document.body.appendChild(unrelatedPopover);
+
+			expect(
+				isPopoverDismissIgnoredTarget(rootPopover, unrelatedButton)
+			).toBe(false);
+		});
+
+		it('isPopoverDismissIgnoredTarget keeps the popover open for modals opened from parent', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const modalOpener = document.createElement('button');
+			popover.appendChild(modalOpener);
+			document.body.appendChild(popover);
+
+			const overlay = document.createElement('div');
+			overlay.className = 'components-modal__screen-overlay';
+			const modalButton = document.createElement('button');
+			overlay.appendChild(modalButton);
+			document.body.appendChild(overlay);
+
+			modalOpener.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+			modalButton.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+
+			expect(isPopoverDismissIgnoredTarget(popover, modalButton)).toBe(
+				true
+			);
+		});
+
+		it('isPopoverDismissIgnoredTarget does not ignore unrelated modal overlays', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
 			document.body.appendChild(popover);
@@ -304,11 +351,11 @@ describe('popover offset utils', () => {
 			document.body.appendChild(overlay);
 
 			expect(isPopoverDismissIgnoredTarget(popover, modalButton)).toBe(
-				true
+				false
 			);
 		});
 
-		it('shouldIgnorePopoverFocusOutside falls back to activeElement', () => {
+		it('shouldIgnorePopoverFocusOutside falls back to activeElement for nested child popovers', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
 			document.body.appendChild(popover);
@@ -318,6 +365,11 @@ describe('popover offset utils', () => {
 			const nestedButton = document.createElement('button');
 			nestedPopover.appendChild(nestedButton);
 			document.body.appendChild(nestedPopover);
+
+			linkNestedPopoverToParent(nestedPopover, popover);
+			nestedButton.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
 			nestedButton.focus();
 
 			const event = new FocusEvent('focusout', {
@@ -376,7 +428,7 @@ describe('popover offset utils', () => {
 			).toBe(false);
 		});
 
-		it('shouldDismissPopoverFromPointerDown ignores nested popovers', () => {
+		it('shouldDismissPopoverFromPointerDown ignores nested popovers opened from parent', () => {
 			const rootPopover = document.createElement('div');
 			rootPopover.className = 'blockera-component-popover';
 			document.body.appendChild(rootPopover);
@@ -387,6 +439,8 @@ describe('popover offset utils', () => {
 			nestedPopover.appendChild(nestedButton);
 			document.body.appendChild(nestedPopover);
 
+			linkNestedPopoverToParent(nestedPopover, rootPopover);
+
 			expect(
 				shouldDismissPopoverFromPointerDown(
 					rootPopover,
@@ -394,6 +448,29 @@ describe('popover offset utils', () => {
 					null
 				)
 			).toBe(false);
+		});
+
+		it('registerPopoverOpen links a child popover to the last in-popover interaction', () => {
+			const rootPopover = document.createElement('div');
+			rootPopover.className = 'blockera-component-popover';
+			const opener = document.createElement('button');
+			rootPopover.appendChild(opener);
+			document.body.appendChild(rootPopover);
+
+			const nestedPopover = document.createElement('div');
+			nestedPopover.className = 'blockera-component-popover';
+			const nestedButton = document.createElement('button');
+			nestedPopover.appendChild(nestedButton);
+			document.body.appendChild(nestedPopover);
+
+			opener.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+			registerPopoverOpen(nestedPopover);
+
+			expect(
+				isPopoverDismissIgnoredTarget(rootPopover, nestedButton)
+			).toBe(true);
 		});
 
 		it('shouldDismissPopoverFromPointerDown dismisses when target is only inside a WordPress popover wrapper', () => {
@@ -490,6 +567,8 @@ describe('popover offset utils', () => {
 			closeButton.dataset.test = 'close-popover';
 			nestedPopover.appendChild(closeButton);
 			document.body.appendChild(nestedPopover);
+
+			linkNestedPopoverToParent(nestedPopover, parentPopover);
 
 			const event = new FocusEvent('focusout', {
 				relatedTarget: null,

@@ -1,6 +1,7 @@
 import {
 	prepValueForHeader,
 	getArialLabelSuffix,
+	isClickInsideOpenInspectorRepeaterPopover,
 	isRepeaterPromoActive,
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
@@ -91,6 +92,109 @@ describe('Util functions', () => {
 				'this is test'
 			);
 		});
+	});
+});
+
+describe('isClickInsideOpenInspectorRepeaterPopover', () => {
+	function createInspectorSidebar() {
+		const sidebar = document.createElement('div');
+		sidebar.className = 'interface-interface-skeleton__sidebar';
+		document.body.appendChild(sidebar);
+		return sidebar;
+	}
+
+	function createOpenRepeaterEditSession(sidebar) {
+		const repeaterItem = document.createElement('div');
+		repeaterItem.className = 'blockera-control-repeater-item';
+
+		const group = document.createElement('div');
+		group.className =
+			'blockera-control blockera-control-group is-open mode-popover';
+
+		const header = document.createElement('div');
+		header.dataset.cy = 'group-control-header';
+
+		const popover = document.createElement('div');
+		popover.className =
+			'blockera-component blockera-component-popover blockera-control-group-popover';
+		popover.innerHTML =
+			'<div data-test="popover-body"><button type="button">Edit field</button></div>';
+
+		group.appendChild(header);
+		repeaterItem.appendChild(group);
+		sidebar.appendChild(repeaterItem);
+		document.body.appendChild(popover);
+
+		return {
+			popover,
+			control: popover.querySelector('button'),
+		};
+	}
+
+	afterEach(() => {
+		document.body.innerHTML = '';
+	});
+
+	it('returns true for targets inside an open repeater group edit popover', () => {
+		const sidebar = createInspectorSidebar();
+		const { control } = createOpenRepeaterEditSession(sidebar);
+
+		expect(isClickInsideOpenInspectorRepeaterPopover(control)).toBe(true);
+	});
+
+	it('returns true for nested Blockera popovers opened during the edit session', () => {
+		const sidebar = createInspectorSidebar();
+		createOpenRepeaterEditSession(sidebar);
+
+		const nestedPopover = document.createElement('div');
+		nestedPopover.className =
+			'blockera-component blockera-component-popover blockera-color-picker-popover';
+		const nestedControl = document.createElement('button');
+		nestedControl.type = 'button';
+		nestedPopover.appendChild(nestedControl);
+		document.body.appendChild(nestedPopover);
+
+		expect(isClickInsideOpenInspectorRepeaterPopover(nestedControl)).toBe(
+			true
+		);
+	});
+
+	it('returns false for unrelated WordPress popovers while a repeater edit popover is open', () => {
+		const sidebar = createInspectorSidebar();
+		createOpenRepeaterEditSession(sidebar);
+
+		const blockStatePopover = document.createElement('div');
+		blockStatePopover.className = 'components-popover';
+		const blockStateButton = document.createElement('button');
+		blockStateButton.type = 'button';
+		blockStatePopover.appendChild(blockStateButton);
+		document.body.appendChild(blockStatePopover);
+
+		expect(
+			isClickInsideOpenInspectorRepeaterPopover(blockStateButton)
+		).toBe(false);
+	});
+
+	it('returns false when no repeater edit popover session is open', () => {
+		const sidebar = createInspectorSidebar();
+		const popover = document.createElement('div');
+		popover.className =
+			'blockera-component blockera-component-popover blockera-control-group-popover';
+		const control = document.createElement('button');
+		popover.appendChild(control);
+		sidebar.appendChild(popover);
+
+		expect(isClickInsideOpenInspectorRepeaterPopover(control)).toBe(false);
+	});
+
+	it('returns false for targets outside open popovers', () => {
+		const sidebar = createInspectorSidebar();
+		createOpenRepeaterEditSession(sidebar);
+
+		const header = document.createElement('button');
+		sidebar.appendChild(header);
+
+		expect(isClickInsideOpenInspectorRepeaterPopover(header)).toBe(false);
 	});
 });
 

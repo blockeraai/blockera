@@ -31,6 +31,7 @@ import {
 	closeInspectorRepeaterPopovers,
 	getArialLabelSuffix,
 	INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT,
+	isClickInsideOpenInspectorRepeaterPopover,
 	isOpenPopoverEvent,
 	isRepeaterPromoActive,
 	shouldApplyRepeaterItemNativeStyle,
@@ -489,9 +490,13 @@ const RepeaterItem = ({
 		isOpen,
 		onOpen: handleItemOpen,
 		onClose: handleItemPopoverClose,
-		onClick: (): void | boolean => {
+		onClick: (event?: MouseEvent): void | boolean => {
 			if (item?.selectable) {
 				if (hasOpenModalOverlay()) {
+					return;
+				}
+
+				if (isClickInsideOpenInspectorRepeaterPopover(event?.target)) {
 					return;
 				}
 
@@ -594,7 +599,8 @@ const RepeaterItem = ({
 			}
 			{...(item?.isSelected
 				? {
-						onClick: mainItemGroupSharedProps.onClick,
+						onClick: (event: MouseEvent) =>
+							mainItemGroupSharedProps.onClick(event),
 					}
 				: {})}
 		>

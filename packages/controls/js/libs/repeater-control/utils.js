@@ -9,6 +9,11 @@ import { Children } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
+import {
+	controlClassNames,
+	controlInnerClassNames,
+	componentClassNames,
+} from '@blockera/classnames';
 import { convertDegToCharacter } from '@blockera/utils';
 
 /**
@@ -16,6 +21,11 @@ import { convertDegToCharacter } from '@blockera/utils';
  */
 import type { CleanupRepeaterArgs } from './types';
 import { extractNumberAndUnit } from '../input-control/utils';
+import {
+	getPopoverRoot,
+	isPopoverDismissIgnoredTarget,
+	INSPECTOR_SIDEBAR_SELECTORS,
+} from '../popover/utils';
 
 export const isOpenPopoverEvent = (
 	event: Object,
@@ -220,6 +230,154 @@ export function shouldGateRepeaterItemHeaderForPromo(
 
 export const INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT =
 	'blockera/close-inspector-repeater-popovers';
+
+const BLOCKERA_COMPONENT_POPOVER_CLASS = componentClassNames('popover')
+	.split(/\s+/)
+	.find((token) => token.includes('component-popover'));
+
+function buildClassSelector(classNamesValue: string): string {
+	return classNamesValue
+		.split(/\s+/)
+		.filter(Boolean)
+		.map((token) => `.${token}`)
+		.join('');
+}
+
+function getInspectorSidebars(doc: Document = document): Array<HTMLElement> {
+	const sidebars: Array<HTMLElement> = [];
+
+	INSPECTOR_SIDEBAR_SELECTORS.forEach((selector) => {
+		doc.querySelectorAll(selector).forEach((node) => {
+			if (node instanceof HTMLElement && !sidebars.includes(node)) {
+				sidebars.push(node);
+			}
+		});
+	});
+
+	doc.querySelectorAll('.interface-complementary-area').forEach((node) => {
+		if (node instanceof HTMLElement && !sidebars.includes(node)) {
+			sidebars.push(node);
+		}
+	});
+
+	return sidebars;
+}
+
+function getOpenRepeaterEditGroups(): Array<HTMLElement> {
+	const repeaterItemSelector = `.${controlInnerClassNames('repeater-item')}`;
+	const groupSelector = buildClassSelector(controlClassNames('group'));
+
+	return Array.from(
+		document.querySelectorAll(
+			`${repeaterItemSelector} ${groupSelector}.is-open.mode-popover`
+		)
+	).filter((node) => node instanceof HTMLElement);
+}
+
+function findActiveRepeaterGroupEditPopoverRoots(
+	sidebar: HTMLElement
+): Array<HTMLElement> {
+	if (getOpenRepeaterEditGroups().length === 0) {
+		return [];
+	}
+
+	const doc = sidebar.ownerDocument;
+	const groupPopoverSelector = `.${controlInnerClassNames('group-popover')}`;
+	const roots: Array<HTMLElement> = [];
+
+	doc.querySelectorAll(groupPopoverSelector).forEach((node) => {
+		const root = getPopoverRoot(node);
+
+		if (root instanceof HTMLElement && !roots.includes(root)) {
+			roots.push(root);
+		}
+	});
+
+	return roots;
+}
+
+/**
+ * Generic WordPress portaled popovers (e.g. block state) should not suppress
+ * selectable repeater activation while a repeater edit popover is open.
+ */
+function isUnrelatedInspectorPopover(
+	target: EventTarget,
+	editPopoverRoot: HTMLElement
+): boolean {
+	if (!(target instanceof Element)) {
+		return false;
+	}
+
+	const targetPopover = getPopoverRoot(target);
+
+	if (!(targetPopover instanceof HTMLElement)) {
+		return false;
+	}
+
+	if (targetPopover === editPopoverRoot) {
+		return false;
+	}
+
+	if (
+		BLOCKERA_COMPONENT_POPOVER_CLASS &&
+		targetPopover.classList.contains(BLOCKERA_COMPONENT_POPOVER_CLASS)
+	) {
+		return false;
+	}
+
+	return true;
+}
+
+function isTargetInsideRepeaterEditPopoverSurface(
+	editPopoverRoot: HTMLElement,
+	target: Element
+): boolean {
+	if (editPopoverRoot.contains(target)) {
+		return true;
+	}
+
+	if (
+		isPopoverDismissIgnoredTarget(editPopoverRoot, target) &&
+		!isUnrelatedInspectorPopover(target, editPopoverRoot)
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+/** Whether a pointer target is inside an open inspector edit popover surface. */
+export function isClickInsideOpenInspectorRepeaterPopover(
+	target: ?EventTarget
+): boolean {
+	if (!target || !(target instanceof Element)) {
+		return false;
+	}
+
+	const doc = target.ownerDocument;
+
+	for (const sidebar of getInspectorSidebars(doc)) {
+		const editPopoverRoots =
+			findActiveRepeaterGroupEditPopoverRoots(sidebar);
+
+		if (editPopoverRoots.length === 0) {
+			continue;
+		}
+
+		if (
+			editPopoverRoots.some((editPopoverRoot) =>
+				isTargetInsideRepeaterEditPopoverSurface(
+					editPopoverRoot,
+					target
+				)
+			)
+		) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 /** Ask all repeater rows to close any open local edit popovers. */
 export function closeInspectorRepeaterPopovers(): void {
