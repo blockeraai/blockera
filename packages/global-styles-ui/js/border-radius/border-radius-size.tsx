@@ -121,7 +121,7 @@ function BorderRadiusSizeComponent({
 				data-test="border-radius-size-input"
 				label={__('Radius', 'blockera')}
 				controlAddonTypes={[]}
-				columns="1fr 3fr"
+				columns="1.2fr 3fr"
 				min={0}
 				unitType="essential"
 				placeholder="0"

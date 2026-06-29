@@ -109,7 +109,7 @@ function BorderPresetSizeComponent({
 			}}
 		>
 			<BorderControl
-				columns="1fr 3fr"
+				columns="1.2fr 3fr"
 				controlAddonTypes={[]}
 				variableTypes={[]}
 				label={__('Border', 'blockera')}

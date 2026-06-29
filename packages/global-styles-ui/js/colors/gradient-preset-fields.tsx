@@ -104,7 +104,7 @@ function GradientPresetFieldsComponent({
 				label={label}
 				field="gradient-bar"
 				height={40}
-				columns="1fr 3fr"
+				columns="1.2fr 3fr"
 				onChange={handleGradientChange}
 			/>
 		</ControlContextProvider>

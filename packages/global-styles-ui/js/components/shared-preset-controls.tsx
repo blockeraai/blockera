@@ -448,7 +448,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 						label={__('Name', 'blockera')}
 						readOnly={presetLocked}
 						onChange={handleNameChange}
-						columns="1fr 3fr"
+						columns="1.2fr 3fr"
 						data-test="global-styles-preset-name-field"
 					>
 						<ControlContextProvider
@@ -594,7 +594,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					label={__('Description', 'blockera')}
 					disabled={presetLocked}
 					onChange={handleDescriptionChange}
-					columns="1fr 3fr"
+					columns="1.2fr 3fr"
 					data-test="global-styles-preset-description-field"
 				/>
 			</ControlContextProvider>
