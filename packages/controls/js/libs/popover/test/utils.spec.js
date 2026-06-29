@@ -9,6 +9,8 @@ import {
 	isPopoverDismissIgnoredTarget,
 	isSketchPickerInteractionActiveFor,
 	isElementInsideValueAddonPointers,
+	isElementInsideVariablePickerPopover,
+	isElementInsideVariablePickerSelectionTarget,
 	linkNestedPopoverToParent,
 	markPopoverClosing,
 	registerPopoverOpen,
@@ -425,6 +427,149 @@ describe('popover offset utils', () => {
 					null
 				)
 			).toBe(true);
+		});
+
+		it('keeps nested var-pickers open when selecting a variable item', () => {
+			const parentPopover = document.createElement('div');
+			parentPopover.className = 'blockera-component-popover';
+			document.body.appendChild(parentPopover);
+
+			const outerVarPicker = document.createElement('div');
+			outerVarPicker.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			const outerContent = document.createElement('div');
+			outerContent.dataset.test = 'variable-picker-popover';
+			outerVarPicker.appendChild(outerContent);
+			document.body.appendChild(outerVarPicker);
+
+			const presetPopover = document.createElement('div');
+			presetPopover.className = 'blockera-component-popover';
+			document.body.appendChild(presetPopover);
+
+			const innerVarPicker = document.createElement('div');
+			innerVarPicker.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			const innerContent = document.createElement('div');
+			innerContent.dataset.test = 'variable-picker-popover';
+			const variableItem = document.createElement('button');
+			variableItem.className =
+				'blockera-control-value-addon-popover-item';
+			variableItem.dataset.test = 'value-addon-picker-item-color-1';
+			innerContent.appendChild(variableItem);
+			innerVarPicker.appendChild(innerContent);
+			document.body.appendChild(innerVarPicker);
+
+			linkNestedPopoverToParent(outerVarPicker, parentPopover);
+			linkNestedPopoverToParent(presetPopover, outerVarPicker);
+			linkNestedPopoverToParent(innerVarPicker, presetPopover);
+
+			expect(
+				isElementInsideVariablePickerSelectionTarget(variableItem)
+			).toBe(true);
+			expect(
+				isPopoverDismissIgnoredTarget(outerVarPicker, variableItem)
+			).toBe(true);
+			expect(
+				isPopoverDismissIgnoredTarget(presetPopover, variableItem)
+			).toBe(true);
+			expect(
+				isPopoverDismissIgnoredTarget(parentPopover, variableItem)
+			).toBe(true);
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					outerVarPicker,
+					variableItem,
+					null
+				)
+			).toBe(false);
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					innerVarPicker,
+					variableItem,
+					null
+				)
+			).toBe(false);
+		});
+
+		it('allows variable selection when nested var-picker parent link is missing', () => {
+			const outerVarPicker = document.createElement('div');
+			outerVarPicker.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			document.body.appendChild(outerVarPicker);
+
+			const innerVarPicker = document.createElement('div');
+			innerVarPicker.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			const innerContent = document.createElement('div');
+			innerContent.dataset.test = 'variable-picker-popover';
+			const variableItem = document.createElement('button');
+			variableItem.className =
+				'blockera-control-value-addon-popover-item';
+			innerContent.appendChild(variableItem);
+			innerVarPicker.appendChild(innerContent);
+			document.body.appendChild(innerVarPicker);
+
+			expect(
+				isPopoverDismissIgnoredTarget(outerVarPicker, variableItem)
+			).toBe(true);
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					outerVarPicker,
+					variableItem,
+					null
+				)
+			).toBe(false);
+		});
+
+		it('does not treat edit-variable repeater popovers as var-picker surfaces', () => {
+			const parentPopover = document.createElement('div');
+			parentPopover.className = 'blockera-component-popover';
+			document.body.appendChild(parentPopover);
+
+			const editPopover = document.createElement('div');
+			editPopover.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			const field = document.createElement('input');
+			editPopover.appendChild(field);
+			document.body.appendChild(editPopover);
+
+			expect(isElementInsideVariablePickerPopover(field)).toBe(false);
+			expect(isPopoverDismissIgnoredTarget(parentPopover, field)).toBe(
+				false
+			);
+			expect(
+				shouldDismissPopoverFromPointerDown(parentPopover, field, null)
+			).toBe(true);
+		});
+
+		it('keeps outer var-picker open when clicking repeater rows in nested var-picker', () => {
+			const outerVarPicker = document.createElement('div');
+			outerVarPicker.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			document.body.appendChild(outerVarPicker);
+
+			const innerVarPicker = document.createElement('div');
+			innerVarPicker.className =
+				'blockera-component-popover blockera-control-popover-variables';
+			const innerContent = document.createElement('div');
+			innerContent.dataset.test = 'variable-picker-popover';
+			const repeaterRow = document.createElement('button');
+			repeaterRow.className =
+				'blockera-control-inner-repeater-group-header';
+			innerContent.appendChild(repeaterRow);
+			innerVarPicker.appendChild(innerContent);
+			document.body.appendChild(innerVarPicker);
+
+			expect(
+				isPopoverDismissIgnoredTarget(outerVarPicker, repeaterRow)
+			).toBe(true);
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					outerVarPicker,
+					repeaterRow,
+					null
+				)
+			).toBe(false);
 		});
 
 		it('isPopoverDismissIgnoredTarget keeps the popover open for Blockera modals opened from parent', () => {
