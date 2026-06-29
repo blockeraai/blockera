@@ -9,6 +9,7 @@ import {
 	useContext,
 	useRef,
 	useEffect,
+	useLayoutEffect,
 	forwardRef,
 	useCallback,
 } from '@wordpress/element';
@@ -105,7 +106,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				[onClose]
 			);
 
-			useEffect(() => {
+			useLayoutEffect(() => {
 				isClosingRef.current = false;
 				registerPopoverOpen(popoverRef.current);
 

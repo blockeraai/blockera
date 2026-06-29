@@ -8,6 +8,7 @@ import {
 	isOtherPopoverClosing,
 	isPopoverDismissIgnoredTarget,
 	isSketchPickerInteractionActiveFor,
+	isElementInsideValueAddonPointers,
 	linkNestedPopoverToParent,
 	markPopoverClosing,
 	registerPopoverOpen,
@@ -314,7 +315,119 @@ describe('popover offset utils', () => {
 			).toBe(false);
 		});
 
-		it('isPopoverDismissIgnoredTarget keeps the popover open for modals opened from parent', () => {
+		it('isPopoverDismissIgnoredTarget keeps the popover open for value-addon pointer icon targets', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const field = document.createElement('div');
+			field.className = 'blockera-field-control';
+			const pointers = document.createElement('div');
+			pointers.className =
+				'blockera-control blockera-control-value-addon-pointers';
+			const pointer = document.createElement('div');
+			pointer.className = 'blockera-control-value-addon-pointer';
+			const icon = document.createElementNS(
+				'http://www.w3.org/2000/svg',
+				'svg'
+			);
+			const path = document.createElementNS(
+				'http://www.w3.org/2000/svg',
+				'path'
+			);
+			icon.appendChild(path);
+			pointer.appendChild(icon);
+			pointers.appendChild(pointer);
+			field.appendChild(pointers);
+			popover.appendChild(field);
+			document.body.appendChild(popover);
+
+			expect(isPopoverDismissIgnoredTarget(popover, path)).toBe(true);
+			expect(
+				shouldDismissPopoverFromPointerDown(popover, path, null)
+			).toBe(false);
+		});
+
+		it('isPopoverDismissIgnoredTarget keeps the popover open for value-addon pointers', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			document.body.appendChild(popover);
+
+			const pointers = document.createElement('div');
+			pointers.className =
+				'blockera-control blockera-control-value-addon-pointers';
+			const varButton = document.createElement('button');
+			varButton.className = 'blockera-control-value-addon-pointer';
+			varButton.dataset.cy = 'value-addon-btn-open';
+			pointers.appendChild(varButton);
+			document.body.appendChild(pointers);
+
+			expect(isElementInsideValueAddonPointers(varButton)).toBe(true);
+			expect(isPopoverDismissIgnoredTarget(popover, varButton)).toBe(
+				true
+			);
+			expect(isPopoverDismissIgnoredTarget(popover, pointers)).toBe(true);
+		});
+
+		it('shouldDismissPopoverFromPointerDown ignores value-addon pointer clicks', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			document.body.appendChild(popover);
+
+			const pointers = document.createElement('div');
+			pointers.className =
+				'blockera-control blockera-control-value-addon-pointers';
+			const varButton = document.createElement('button');
+			pointers.appendChild(varButton);
+			document.body.appendChild(pointers);
+
+			expect(
+				shouldDismissPopoverFromPointerDown(popover, varButton, null)
+			).toBe(false);
+		});
+
+		it('keeps parent open but dismisses var-picker when pointer is clicked', () => {
+			const parentPopover = document.createElement('div');
+			parentPopover.className = 'blockera-component-popover';
+			const field = document.createElement('div');
+			field.className = 'blockera-field-control';
+			const pointers = document.createElement('div');
+			pointers.className =
+				'blockera-control blockera-control-value-addon-pointers';
+			const pointer = document.createElement('button');
+			pointer.className = 'blockera-control-value-addon-pointer';
+			pointers.appendChild(pointer);
+			field.appendChild(pointers);
+			parentPopover.appendChild(field);
+			document.body.appendChild(parentPopover);
+
+			const varPickerPopover = document.createElement('div');
+			varPickerPopover.className = 'blockera-component-popover';
+			document.body.appendChild(varPickerPopover);
+
+			linkNestedPopoverToParent(varPickerPopover, parentPopover);
+
+			expect(isPopoverDismissIgnoredTarget(parentPopover, pointer)).toBe(
+				true
+			);
+			expect(
+				isPopoverDismissIgnoredTarget(varPickerPopover, pointer)
+			).toBe(false);
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					parentPopover,
+					pointer,
+					null
+				)
+			).toBe(false);
+			expect(
+				shouldDismissPopoverFromPointerDown(
+					varPickerPopover,
+					pointer,
+					null
+				)
+			).toBe(true);
+		});
+
+		it('isPopoverDismissIgnoredTarget keeps the popover open for Blockera modals opened from parent', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
 			const modalOpener = document.createElement('button');
@@ -339,6 +452,59 @@ describe('popover offset utils', () => {
 			);
 		});
 
+		it('isPopoverDismissIgnoredTarget keeps the popover open for media modals opened from parent', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const mediaOpener = document.createElement('button');
+			mediaOpener.className = 'btn-choose-image';
+			popover.appendChild(mediaOpener);
+			document.body.appendChild(popover);
+
+			const mediaModal = document.createElement('div');
+			mediaModal.className = 'media-modal';
+			const mediaToolbarButton = document.createElement('button');
+			mediaToolbarButton.textContent = 'Select';
+			mediaModal.appendChild(mediaToolbarButton);
+			document.body.appendChild(mediaModal);
+
+			mediaOpener.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+			mediaToolbarButton.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+
+			expect(
+				isPopoverDismissIgnoredTarget(popover, mediaToolbarButton)
+			).toBe(true);
+		});
+
+		it('isPopoverDismissIgnoredTarget keeps the popover open for media modal backdrop clicks', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const mediaOpener = document.createElement('button');
+			mediaOpener.className = 'btn-media-library';
+			popover.appendChild(mediaOpener);
+			document.body.appendChild(popover);
+
+			const mediaModal = document.createElement('div');
+			mediaModal.className = 'media-modal';
+			document.body.appendChild(mediaModal);
+
+			const backdrop = document.createElement('div');
+			backdrop.className = 'media-modal-backdrop';
+			document.body.appendChild(backdrop);
+
+			mediaOpener.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+			backdrop.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+
+			expect(isPopoverDismissIgnoredTarget(popover, backdrop)).toBe(true);
+		});
+
 		it('isPopoverDismissIgnoredTarget does not ignore unrelated modal overlays', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
@@ -351,6 +517,22 @@ describe('popover offset utils', () => {
 			document.body.appendChild(overlay);
 
 			expect(isPopoverDismissIgnoredTarget(popover, modalButton)).toBe(
+				false
+			);
+		});
+
+		it('isPopoverDismissIgnoredTarget does not ignore unrelated media modals', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			document.body.appendChild(popover);
+
+			const mediaModal = document.createElement('div');
+			mediaModal.className = 'media-modal';
+			const mediaButton = document.createElement('button');
+			mediaModal.appendChild(mediaButton);
+			document.body.appendChild(mediaModal);
+
+			expect(isPopoverDismissIgnoredTarget(popover, mediaButton)).toBe(
 				false
 			);
 		});
