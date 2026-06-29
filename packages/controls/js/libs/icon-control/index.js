@@ -73,6 +73,7 @@ function IconControl({
 		iconContextValue,
 		parseMediaForDraft,
 		handleUseCustomIcon,
+		clearSelectedCustomIcon,
 		hasIcon,
 		commitIconAction,
 	} = useIconPickerModal({
@@ -289,6 +290,7 @@ function IconControl({
 						onClose={closeModal}
 						onParseMediaForDraft={parseMediaForDraft}
 						onUseCustomIcon={handleUseCustomIcon}
+						onClearSelectedIcon={clearSelectedCustomIcon}
 					/>
 				)}
 			</BaseControl>

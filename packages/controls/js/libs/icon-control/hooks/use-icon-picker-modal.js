@@ -40,6 +40,7 @@ type UseIconPickerModalReturn = {
 	iconContextValue: Object,
 	parseMediaForDraft: (media: Object, setDraft: (Object) => void) => void,
 	handleUseCustomIcon: (action: Object) => void,
+	clearSelectedCustomIcon: () => void,
 	hasIcon: () => boolean,
 	commitIconAction: (action: Object) => void,
 };
@@ -165,6 +166,17 @@ export function useIconPickerModal({
 		[dispatchActions]
 	);
 
+	const clearSelectedCustomIcon = useCallback(() => {
+		if (!isCustomIcon(currentIcon)) {
+			return;
+		}
+
+		const nextIcon = iconReducer(currentIcon, { type: 'DELETE_ICON' });
+
+		currentIconDispatch({ type: 'DELETE_ICON' });
+		onCommit(nextIcon);
+	}, [currentIcon, onCommit]);
+
 	const hasIcon = useCallback(() => {
 		if (isUndefined(currentIcon) || isEmpty(currentIcon)) {
 			return false;
@@ -228,6 +240,7 @@ export function useIconPickerModal({
 		iconContextValue,
 		parseMediaForDraft,
 		handleUseCustomIcon,
+		clearSelectedCustomIcon,
 		hasIcon,
 		commitIconAction: dispatchActions,
 	};

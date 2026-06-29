@@ -131,6 +131,7 @@ export const CoreIconBlockToolbar = ({
 		iconContextValue,
 		parseMediaForDraft,
 		handleUseCustomIcon,
+		clearSelectedCustomIcon,
 	} = useIconPickerModal({
 		id: `core-icon-toolbar-${clientId}`,
 		value: iconValue,
@@ -230,6 +231,7 @@ export const CoreIconBlockToolbar = ({
 						onClose={closeModal}
 						onParseMediaForDraft={parseMediaForDraft}
 						onUseCustomIcon={handleUseCustomIcon}
+						onClearSelectedIcon={clearSelectedCustomIcon}
 					/>
 				</IconPickerModalProvider>
 			)}

@@ -42,6 +42,7 @@ export default function IconPickerModal({
 	onClose = () => {},
 	onParseMediaForDraft = () => {},
 	onUseCustomIcon = () => {},
+	onClearSelectedIcon = () => {},
 }) {
 	const { currentIcon } = useContext(IconContext);
 	const instanceId = useInstanceId(IconPickerModal, 'icon-picker-modal-tabs');
@@ -119,7 +120,8 @@ export default function IconPickerModal({
 	const handleClearDraft = useCallback(() => {
 		setDraftSvgString('');
 		setDraftUploadSVG(null);
-	}, []);
+		onClearSelectedIcon();
+	}, [onClearSelectedIcon]);
 
 	const handleModalFilesDrop = useCallback(
 		(files) => {
