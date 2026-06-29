@@ -28,3 +28,11 @@ export function useCanAddCustomPresetInVariablePicker(): boolean {
 
 	return isReady !== true;
 }
+
+/**
+ * Variable picker custom preset fields (name, description, size, etc.) follow the same
+ * permissive gate as "Add New" while caps are loading.
+ */
+export function useCanEditCustomPresetFieldsInVariablePicker(): boolean {
+	return useCanAddCustomPresetInVariablePicker();
+}

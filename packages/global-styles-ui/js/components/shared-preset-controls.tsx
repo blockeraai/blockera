@@ -31,6 +31,7 @@ import {
 	ControlContextProvider,
 	Tooltip,
 	TextAreaControl,
+	useVarPickerPresetContext,
 } from '@blockera/controls';
 
 /**
@@ -42,7 +43,10 @@ import {
 	buildPresetWithDescriptionUpdate,
 	getPresetDescription,
 } from './preset-meta-utils';
-import { useCanEditGlobalStyles } from './use-global-styles-preset-edit';
+import {
+	useCanEditGlobalStyles,
+	useCanEditCustomPresetFieldsInVariablePicker,
+} from './use-global-styles-preset-edit';
 import { usePresetVariationsStorageOptional } from '../context/preset-variations-context';
 import { isNameBasedTaxonomyPreset } from './preset-taxonomy/parse-preset-name-taxonomy';
 import { resolvePresetTaxonomyEditName } from './preset-taxonomy/taxonomy-meta';
@@ -68,7 +72,15 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	children,
 }: SharedPresetControlsProps<T>) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
-	const presetLocked = !canEditGlobalStyles;
+	const canEditCustomPresetFieldsInPicker =
+		useCanEditCustomPresetFieldsInVariablePicker();
+	const pickerCtx = useVarPickerPresetContext();
+	const isVariablePicker =
+		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
+	const canEditPresetFields =
+		canEditGlobalStyles ||
+		(isVariablePicker && canEditCustomPresetFieldsInPicker);
+	const presetLocked = !canEditPresetFields;
 	const editSession = usePresetTaxonomyEditSessionOptional();
 	const storage = usePresetVariationsStorageOptional();
 	const taxonomyNameSource = storage?.taxonomyNameSource;
@@ -92,9 +104,11 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const persistedName = committedTaxonomyName ?? name;
 	const slugKey = String(slug);
 	const isCreating = variable.creatingStep === true;
-	// Buffer name/description while popover fields are mounted (or during creatingStep); flushed on unmount via edit session.
+	// Name persists live during creatingStep so repeater headers update; taxonomy sessions defer both fields.
 	const deferFieldEdits = Boolean(editSession) && !isCreating;
-	const deferFieldEditsInPopover = deferFieldEdits || isCreating;
+	const deferNameEdits = deferFieldEdits;
+	// Description stays in a local draft during create to avoid textarea/store sync fights in the picker.
+	const deferDescriptionEdits = deferFieldEdits || isCreating;
 
 	const persistedDescription = useMemo(
 		() => getPresetDescription(variable),
@@ -133,16 +147,16 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	// Sync when preset changes (e.g. navigation) or after first close (creatingStep → false).
 	useEffect(() => {
-		if (!deferFieldEditsInPopover) {
+		if (!deferNameEdits) {
 			setDraftName(persistedName);
 		}
-	}, [persistedName, deferFieldEditsInPopover]);
+	}, [persistedName, deferNameEdits]);
 
 	useEffect(() => {
-		if (!deferFieldEditsInPopover) {
+		if (!deferDescriptionEdits) {
 			setDraftDescription(persistedDescription);
 		}
-	}, [persistedDescription, deferFieldEditsInPopover]);
+	}, [persistedDescription, deferDescriptionEdits]);
 
 	useEffect(() => {
 		setVariableSlug(slug);
@@ -151,11 +165,21 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		setIsConfirmedSlugChange(false);
 	}, [name, slug, variable.creatingStep]);
 
-	useEffect(() => {
-		if (isCreating) {
-			setDraftName(persistedName);
+	const prevIsCreatingForDraftInitRef = useRef(isCreating);
+
+	// Seed drafts only when creatingStep begins — not on each live name persist.
+	useLayoutEffect(() => {
+		const enteredCreating =
+			!prevIsCreatingForDraftInitRef.current && isCreating;
+		prevIsCreatingForDraftInitRef.current = isCreating;
+
+		if (!enteredCreating) {
+			return;
 		}
-	}, [isCreating, persistedName]);
+
+		setDraftName(persistedName);
+		setDraftDescription(persistedDescription);
+	}, [isCreating, persistedName, persistedDescription]);
 
 	// Auto-lock when user edits ID back to saved slug.
 	useEffect(() => {
@@ -165,10 +189,11 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		}
 	}, [isIdEditable, hasUserEditedSinceUnlock, variableSlug, slug]);
 
-	// ID display: while creating, slug is driven by the draft name; else locked vs edit buffer.
+	// ID display: while creating, preview slug from the current name without persisting it yet.
+	const nameForSlugPreview = deferNameEdits ? draftName : persistedName;
 	let displayedSlug = slug;
 	if (isCreating) {
-		displayedSlug = normalizeVariablePresetSlug(draftName) || slug;
+		displayedSlug = normalizeVariablePresetSlug(nameForSlugPreview) || slug;
 	} else if (isIdEditable) {
 		displayedSlug = variableSlug;
 	}
@@ -187,44 +212,162 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		repeaterItems: Record<string, unknown>;
 	};
 
-	const flushPendingFieldEdits = useCallback(() => {
-		const nextName = draftNameRef.current;
-		if (nextName !== persistedName) {
+	const applyDeferredDescriptionToRow = useCallback(
+		(row: Record<string, unknown>): Record<string, unknown> => {
+			if (!deferDescriptionEdits) {
+				return row;
+			}
+
+			return buildPresetWithDescriptionUpdate(
+				row as T,
+				draftDescriptionRef.current
+			) as Record<string, unknown>;
+		},
+		[deferDescriptionEdits]
+	);
+
+	const buildPresetNameUpdateValue = useCallback(
+		(
+			nextName: string,
+			{ syncCreatingSlug = false }: { syncCreatingSlug?: boolean } = {}
+		): Record<string, unknown> => {
 			const value: Record<string, unknown> = {
-				...variable,
+				...(variable as Record<string, unknown>),
 				name: nextName,
 			};
-			if (variable.creatingStep === true) {
+
+			// Slug is derived only when finishing create; syncing it on every keystroke
+			// desyncs repeater itemId from parent slug-keyed maps and duplicates rows.
+			if (syncCreatingSlug && variable.creatingStep === true) {
 				const derivedSlug = normalizeVariablePresetSlug(nextName);
 				if (derivedSlug) {
 					value.slug = derivedSlug;
 				}
 			}
-			changeRepeaterItem({
-				onChange,
-				valueCleanup,
-				controlId,
-				repeaterId,
-				itemId,
-				value,
-			});
+
+			return applyDeferredDescriptionToRow(value);
+		},
+		[variable, applyDeferredDescriptionToRow]
+	);
+
+	const finalizeCreatingStepPersist = useCallback(() => {
+		const nextName = String(variable.name ?? draftNameRef.current ?? '');
+		const nextDescription = draftDescriptionRef.current;
+		const derivedSlug = normalizeVariablePresetSlug(nextName);
+		const oldItemId = String(itemId);
+		const shouldRekey = Boolean(derivedSlug) && derivedSlug !== oldItemId;
+
+		if (!shouldRekey) {
+			const descriptionChanged = nextDescription !== persistedDescription;
+			const slugChanged =
+				derivedSlug &&
+				String((variable as Record<string, unknown>).slug ?? '') !==
+					derivedSlug;
+
+			if (!descriptionChanged && !slugChanged) {
+				return;
+			}
 		}
 
-		const nextDescription = draftDescriptionRef.current;
-		if (nextDescription !== persistedDescription) {
+		const updatedItem = buildPresetWithDescriptionUpdate(
+			buildPresetNameUpdateValue(nextName, {
+				syncCreatingSlug: true,
+			}) as T,
+			nextDescription
+		);
+
+		if (!shouldRekey) {
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value: buildPresetWithDescriptionUpdate(
-					variable,
-					nextDescription
-				),
+				value: updatedItem,
 			});
+
+			return;
 		}
+
+		const newItems = { ...repeaterItems };
+		delete newItems[oldItemId];
+		newItems[derivedSlug] = updatedItem;
+
+		modifyControlValue({
+			controlId,
+			value: newItems,
+		});
+
+		onChange({
+			modifyControlValue,
+			controlId,
+			value: newItems,
+		});
 	}, [
+		buildPresetNameUpdateValue,
+		changeRepeaterItem,
+		controlId,
+		itemId,
+		modifyControlValue,
+		onChange,
+		persistedDescription,
+		repeaterId,
+		repeaterItems,
+		valueCleanup,
+		variable,
+	]);
+
+	const prevIsCreatingRef = useRef(isCreating);
+
+	useLayoutEffect(() => {
+		const wasCreating = prevIsCreatingRef.current;
+		prevIsCreatingRef.current = isCreating;
+
+		if (wasCreating && !isCreating) {
+			finalizeCreatingStepPersist();
+		}
+	}, [isCreating, finalizeCreatingStepPersist]);
+
+	const flushPendingFieldEdits = useCallback(() => {
+		const nextName = draftNameRef.current;
+		const nextDescription = draftDescriptionRef.current;
+		const nameChanged = nextName !== persistedName;
+		const descriptionChanged = nextDescription !== persistedDescription;
+
+		if (!nameChanged && !descriptionChanged) {
+			return;
+		}
+
+		let value: Record<string, unknown>;
+
+		if (nameChanged) {
+			value = buildPresetNameUpdateValue(nextName, {
+				syncCreatingSlug: true,
+			});
+		} else {
+			value = { ...(variable as Record<string, unknown>) };
+		}
+
+		if (descriptionChanged) {
+			value = buildPresetWithDescriptionUpdate(
+				value as T,
+				nextDescription
+			) as Record<string, unknown>;
+		} else {
+			value = applyDeferredDescriptionToRow(value);
+		}
+
+		changeRepeaterItem({
+			onChange,
+			valueCleanup,
+			controlId,
+			repeaterId,
+			itemId,
+			value,
+		});
+	}, [
+		applyDeferredDescriptionToRow,
+		buildPresetNameUpdateValue,
 		changeRepeaterItem,
 		controlId,
 		itemId,
@@ -258,8 +401,8 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		};
 	}, [editSession, slugKey]);
 
-	const displayedName = deferFieldEditsInPopover ? draftName : persistedName;
-	const displayedDescription = deferFieldEditsInPopover
+	const displayedName = deferNameEdits ? draftName : persistedName;
+	const displayedDescription = deferDescriptionEdits
 		? draftDescription
 		: persistedDescription;
 
@@ -378,7 +521,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			if (presetLocked) {
 				return;
 			}
-			if (deferFieldEditsInPopover) {
+			if (deferNameEdits) {
 				setDraftName(newValue);
 				return;
 			}
@@ -389,22 +532,19 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				controlId,
 				repeaterId,
 				itemId,
-				value: {
-					...variable,
-					name: newValue,
-				},
+				value: buildPresetNameUpdateValue(newValue),
 			});
 		},
 		[
 			presetLocked,
-			deferFieldEditsInPopover,
+			deferNameEdits,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
 			controlId,
 			repeaterId,
 			itemId,
-			variable,
+			buildPresetNameUpdateValue,
 		]
 	);
 
@@ -418,7 +558,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			if (presetLocked) {
 				return;
 			}
-			if (deferFieldEditsInPopover) {
+			if (deferDescriptionEdits) {
 				setDraftDescription(newValue);
 				return;
 			}
@@ -433,7 +573,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		},
 		[
 			presetLocked,
-			deferFieldEditsInPopover,
+			deferDescriptionEdits,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
