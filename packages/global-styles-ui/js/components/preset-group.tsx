@@ -7,10 +7,12 @@ import {
 	memo,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
 } from '@wordpress/element';
+import { useDispatch, select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -48,6 +50,8 @@ import type { VariableType } from './types.ts';
 import {
 	type PresetRepeaterValue,
 	type PresetVariablesInput,
+	isPresetRepeaterObjectValue,
+	normalizePresetRepeaterValueToIndexKeys,
 	variablesToPresetRepeaterValue,
 } from './preset-repeater-value-utils';
 import { PresetStateContainer } from './preset-state-container';
@@ -92,7 +96,7 @@ export type PresetGroupPropsType = {
 	label: string;
 	title: string;
 	controlName: string;
-	/** Theme.json preset arrays; converted to a slug-keyed repeater map internally. */
+	/** Theme.json preset arrays; converted to an index-keyed repeater map internally. */
 	variables: PresetVariablesInput;
 	origin: string | string[];
 	PresetFields: React.ElementType;
@@ -165,6 +169,7 @@ type PresetsProps = {
 	) => Record<string, unknown>;
 	injectHeaderButtonsEnd?: React.ReactNode;
 	suppressNativeSectionAddButton?: boolean;
+	useIndexRepeaterItemIds?: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -216,6 +221,7 @@ const Presets = ({
 	getDynamicDefaultRepeaterItem,
 	injectHeaderButtonsEnd,
 	suppressNativeSectionAddButton = false,
+	useIndexRepeaterItemIds = false,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -347,6 +353,11 @@ const Presets = ({
 			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
 			injectHeaderButtonsEnd={injectHeaderButtonsEnd}
 			suppressNativeSectionAddButton={suppressNativeSectionAddButton}
+			itemIdGenerator={
+				useIndexRepeaterItemIds
+					? (count: number) => String(count)
+					: undefined
+			}
 			{...props}
 		/>
 	);
@@ -374,6 +385,8 @@ export const PresetGroup = memo(function PresetGroup({
 	const { viewMode } = usePresetVariablesViewMode();
 	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const canAddCustomPresetInPicker = useCanAddCustomPresetInVariablePicker();
+	const usesIndexRepeaterItemIds = !isPresetRepeaterObjectValue(variables);
+	const repeaterStoreDispatch = useDispatch('blockera/controls/repeater');
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
 	// Outer picker category titles replace theme/default labels only; custom keeps its header + add button.
@@ -407,14 +420,30 @@ export const PresetGroup = memo(function PresetGroup({
 				}
 			}
 
+			let next = cleaned;
+
 			if (!isVariablePicker) {
-				return cleaned;
+				if (usesIndexRepeaterItemIds) {
+					next = normalizePresetRepeaterValueToIndexKeys(
+						cleaned as Record<string, unknown>
+					);
+				}
+				return next;
 			}
-			return stripIsSelectedFromRepeaterItems(
+
+			const stripped = stripIsSelectedFromRepeaterItems(
 				cleaned as Record<string, unknown>
 			);
+
+			if (usesIndexRepeaterItemIds) {
+				return normalizePresetRepeaterValueToIndexKeys(
+					stripped as Record<string, unknown>
+				);
+			}
+
+			return stripped;
 		},
-		[enableCreatingStep, isVariablePicker]
+		[enableCreatingStep, isVariablePicker, usesIndexRepeaterItemIds]
 	);
 
 	const handleRepeaterOnChange = useCallback(
@@ -683,6 +712,82 @@ export const PresetGroup = memo(function PresetGroup({
 		return next;
 	}, [origin, title, variablesForRepeater, isVariablePicker]);
 
+	useLayoutEffect(() => {
+		if (!usesIndexRepeaterItemIds) {
+			return;
+		}
+
+		const storeValue = (
+			select('blockera/controls/repeater') as {
+				getControl: (name: string) => { value?: unknown } | undefined;
+			}
+		).getControl(repeaterContextValue.name)?.value;
+
+		if (!storeValue || typeof storeValue !== 'object') {
+			return;
+		}
+
+		const storeRecord = storeValue as Record<string, unknown>;
+		const storeRawKeyCount = Object.keys(storeRecord).length;
+		const propKeyCount = Object.keys(variablesForRepeater).length;
+		const storeHasNonIndexKeys = Object.keys(storeRecord).some(
+			(key) => !/^\d+$/.test(key)
+		);
+
+		// Only repair duplicate slug/index keys — not in-flight field edits during create.
+		if (storeRawKeyCount <= propKeyCount && !storeHasNonIndexKeys) {
+			return;
+		}
+
+		const normalizedFromStore =
+			normalizePresetRepeaterValueToIndexKeys(storeRecord);
+
+		if (isEquals(normalizedFromStore, variablesForRepeater)) {
+			return;
+		}
+
+		const withUiFields: PresetRepeaterValue = { ...variablesForRepeater };
+
+		for (const [itemId, row] of Object.entries(withUiFields)) {
+			const slug = String((row as Record<string, unknown>).slug ?? '');
+
+			if (!slug) {
+				continue;
+			}
+
+			const storeRow = Object.values(storeRecord).find(
+				(candidate) =>
+					candidate &&
+					typeof candidate === 'object' &&
+					!Array.isArray(candidate) &&
+					String(
+						(candidate as Record<string, unknown>).slug ?? ''
+					) === slug
+			) as Record<string, unknown> | undefined;
+
+			if (storeRow?.isOpen === true) {
+				withUiFields[itemId] = {
+					...(row as Record<string, unknown>),
+					isOpen: true,
+				} as unknown as (typeof withUiFields)[string];
+			}
+		}
+
+		if (isEquals(withUiFields, storeValue)) {
+			return;
+		}
+
+		repeaterStoreDispatch.modifyControlValue({
+			controlId: repeaterContextValue.name,
+			value: withUiFields,
+		});
+	}, [
+		repeaterContextValue.name,
+		repeaterStoreDispatch,
+		usesIndexRepeaterItemIds,
+		variablesForRepeater,
+	]);
+
 	const labelForVariablePicker = useMemo(() => {
 		if (omitOriginRepeaterSectionLabel) {
 			return '';
@@ -847,6 +952,7 @@ export const PresetGroup = memo(function PresetGroup({
 						suppressNativeSectionAddButton={
 							useVariablePickerCustomSectionAddButton
 						}
+						useIndexRepeaterItemIds={usesIndexRepeaterItemIds}
 					/>
 				</BaseControl>
 			</ControlContextProvider>
