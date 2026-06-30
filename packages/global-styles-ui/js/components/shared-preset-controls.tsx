@@ -105,7 +105,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const slugKey = String(slug);
 	const itemIdKey = String(itemId);
 	const isCreating = variable.creatingStep === true;
-	// Name persists live during creatingStep so repeater headers update; taxonomy sessions defer both fields.
+	// Local drafts during creatingStep keep inputs stable; repeater rows still sync via changeRepeaterItem.
 	const deferFieldEdits = Boolean(editSession) && !isCreating;
 	const deferNameEdits = deferFieldEdits;
 	// Description stays in a local draft during create to avoid textarea/store sync fights in the picker.
@@ -202,16 +202,34 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch: { changeRepeaterItem },
+		dispatch: { changeRepeaterItem, modifyControlValue },
 	} = useControlContext();
 
-	const { onChange, repeaterId, valueCleanup } = useContext(
+	const { onChange, repeaterId, valueCleanup, repeaterItems } = useContext(
 		RepeaterContext
 	) as {
 		repeaterId: string;
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
+		repeaterItems: Record<string, unknown>;
 	};
+
+	const creatingNamePersistTimeoutRef = useRef<ReturnType<
+		typeof setTimeout
+	> | null>(null);
+	const CREATING_NAME_PERSIST_MS = 200;
+
+	const clearCreatingNamePersistTimeout = useCallback(() => {
+		if (creatingNamePersistTimeoutRef.current) {
+			clearTimeout(creatingNamePersistTimeoutRef.current);
+			creatingNamePersistTimeoutRef.current = null;
+		}
+	}, []);
+
+	useEffect(
+		() => clearCreatingNamePersistTimeout,
+		[clearCreatingNamePersistTimeout]
+	);
 
 	const applyDeferredDescriptionToRow = useCallback(
 		(row: Record<string, unknown>): Record<string, unknown> => {
@@ -249,8 +267,55 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		[variable, applyDeferredDescriptionToRow]
 	);
 
+	const persistCreatingNameToTheme = useCallback(
+		(nextName: string) => {
+			changeRepeaterItem({
+				onChange,
+				valueCleanup,
+				controlId,
+				repeaterId,
+				itemId,
+				value: buildPresetNameUpdateValue(nextName, {
+					syncCreatingSlug: true,
+				}),
+			});
+		},
+		[
+			buildPresetNameUpdateValue,
+			changeRepeaterItem,
+			controlId,
+			itemId,
+			onChange,
+			repeaterId,
+			valueCleanup,
+		]
+	);
+
+	const syncCreatingNameToRepeaterStore = useCallback(
+		(nextName: string) => {
+			const updatedRow = buildPresetNameUpdateValue(nextName, {
+				syncCreatingSlug: true,
+			});
+
+			modifyControlValue({
+				controlId,
+				value: {
+					...repeaterItems,
+					[itemId]: updatedRow,
+				},
+			});
+		},
+		[
+			buildPresetNameUpdateValue,
+			controlId,
+			itemId,
+			modifyControlValue,
+			repeaterItems,
+		]
+	);
+
 	const finalizeCreatingStepPersist = useCallback(() => {
-		const nextName = String(variable.name ?? draftNameRef.current ?? '');
+		const nextName = String(draftNameRef.current ?? variable.name ?? '');
 		const nextDescription = draftDescriptionRef.current;
 		const derivedSlug = normalizeVariablePresetSlug(nextName);
 		const descriptionChanged = nextDescription !== persistedDescription;
@@ -297,9 +362,14 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		prevIsCreatingRef.current = isCreating;
 
 		if (wasCreating && !isCreating) {
+			clearCreatingNamePersistTimeout();
 			finalizeCreatingStepPersist();
 		}
-	}, [isCreating, finalizeCreatingStepPersist]);
+	}, [
+		isCreating,
+		clearCreatingNamePersistTimeout,
+		finalizeCreatingStepPersist,
+	]);
 
 	const flushPendingFieldEdits = useCallback(() => {
 		const nextName = draftNameRef.current;
@@ -488,6 +558,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			if (presetLocked) {
 				return;
 			}
+
 			if (deferNameEdits) {
 				setDraftName(newValue);
 				return;
@@ -495,6 +566,18 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 			if (isCreating) {
 				setDraftName(newValue);
+				const derivedSlug = normalizeVariablePresetSlug(newValue);
+				if (derivedSlug) {
+					setVariableSlug(derivedSlug);
+				}
+
+				syncCreatingNameToRepeaterStore(newValue);
+				clearCreatingNamePersistTimeout();
+				creatingNamePersistTimeoutRef.current = setTimeout(() => {
+					persistCreatingNameToTheme(draftNameRef.current);
+				}, CREATING_NAME_PERSIST_MS);
+
+				return;
 			}
 
 			changeRepeaterItem({
@@ -503,15 +586,16 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				controlId,
 				repeaterId,
 				itemId,
-				value: buildPresetNameUpdateValue(newValue, {
-					syncCreatingSlug: isCreating,
-				}),
+				value: buildPresetNameUpdateValue(newValue),
 			});
 		},
 		[
 			presetLocked,
 			deferNameEdits,
 			isCreating,
+			clearCreatingNamePersistTimeout,
+			persistCreatingNameToTheme,
+			syncCreatingNameToRepeaterStore,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
