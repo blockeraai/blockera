@@ -158,3 +158,54 @@ export function variablesToPresetRepeaterValue(
 		)
 	);
 }
+
+/**
+ * Overlays live repeater-store rows that are mid-create so headers stay in sync
+ * while parent theme.json persist is debounced.
+ */
+export function overlayCreatingStepRowsFromRepeaterStore(
+	propsValue: PresetRepeaterValue,
+	storeValue: unknown
+): PresetRepeaterValue {
+	if (
+		storeValue === null ||
+		storeValue === undefined ||
+		typeof storeValue !== 'object' ||
+		Array.isArray(storeValue)
+	) {
+		return propsValue;
+	}
+
+	const store = storeValue as Record<string, unknown>;
+	const out: PresetRepeaterValue = { ...propsValue };
+	let changed = false;
+
+	for (const [itemId, storeRow] of Object.entries(store)) {
+		if (
+			!storeRow ||
+			typeof storeRow !== 'object' ||
+			Array.isArray(storeRow)
+		) {
+			continue;
+		}
+
+		const row = storeRow as Record<string, unknown>;
+
+		if (row.creatingStep !== true) {
+			continue;
+		}
+
+		const existing = out[itemId];
+		out[itemId] = {
+			...(existing ?? {}),
+			...row,
+			creatingStep: true,
+		} as PresetRepeaterValue[string];
+
+		if (existing !== out[itemId]) {
+			changed = true;
+		}
+	}
+
+	return changed ? out : propsValue;
+}
