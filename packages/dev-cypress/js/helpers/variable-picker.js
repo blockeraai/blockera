@@ -106,10 +106,8 @@ export function openMinWidthVariablePickerPopover() {
 export function clickVariablePickerHeaderAddCustomVariable() {
 	cy.getByDataTest('variable-picker-header-add-custom-variable', {
 		timeout: 20000,
-	})
-		.filter(':visible')
-		.first()
-		.scrollIntoView()
+	}).scrollIntoView();
+	cy.getByDataTest('variable-picker-header-add-custom-variable')
 		.should('be.visible')
 		.click({ force: true });
 
