@@ -674,7 +674,22 @@ export const registerCommands = () => {
 		}
 	);
 
+	/**
+	 * Set a color value in a Blockera color control, with resilience and improved steps.
+	 * - Smoothly scrolls into view.
+	 * - Ensures color popover is open.
+	 * - Waits for input to become enabled and interactable.
+	 * - Closes the popover after setting.
+	 *
+	 * @param {string} label - The control label.
+	 * @param {string} value - The color value to set (e.g. "#cccccc" or CSS color string).
+	 */
 	Cypress.Commands.add('setColorControlValue', (label, value) => {
+		cy.getParentContainer(label).last().scrollIntoView({
+			block: 'center',
+			inline: 'center',
+			behavior: 'auto',
+		});
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
@@ -683,38 +698,81 @@ export const registerCommands = () => {
 
 		cy.get('.blockera-color-picker-popover')
 			.last()
+			.should('exist')
 			.should('be.visible')
 			.within(() => {
-				cy.getByDataCy('color-picker-css-value').then(($input) => {
-					cy.wrap($input).setControlledInputValue(value);
-				});
-				cy.getByDataCy('color-picker-css-value').blur();
+				cy.getByDataCy('color-picker-css-value')
+					.should('be.enabled')
+					.then(($input) => {
+						cy.wrap($input).setControlledInputValue(value);
+					})
+					.blur();
 
-				cy.getByDataTest('close-popover').click({ force: true });
+				// Wait for possible UI debounce/render
+				cy.wait(100); // eslint-disable-line cypress/no-unnecessary-waiting
+
+				// Optionally double-check if color applied
+				cy.getByDataCy('color-picker-css-value').should(
+					'have.value',
+					value.includes('#') ? value : `#${value}`
+				);
+
+				// Close only if close button is visible
+				cy.getByDataTest('close-popover')
+					.should('be.visible')
+					.click({ force: true });
 			});
+		cy.get('.blockera-color-picker-popover').should('not.exist');
 	});
 
+	/**
+	 * Clears the color value in a Blockera color control.
+	 * - Smoothly scrolls the control into view and ensures it is visible.
+	 * - Opens the color popover if not open.
+	 * - Clicks the 'Reset Color (Clear)' option if available.
+	 * - Waits for the popover to close.
+	 *
+	 * @param {string} label - The control label.
+	 */
 	Cypress.Commands.add('clearColorControlValue', (label) => {
-		cy.getParentContainer(label).then(($container) => {
-			$container[0].scrollIntoView({
-				block: 'center',
-				inline: 'nearest',
-				behavior: 'auto',
+		// Scroll and ensure container visibility.
+		cy.getParentContainer(label)
+			.last()
+			.then(($container) => {
+				if ($container && $container.length > 0) {
+					$container[0].scrollIntoView({
+						block: 'center',
+						inline: 'center',
+						behavior: 'auto',
+					});
+				}
 			});
-		});
-		cy.getParentContainer(label).should('be.visible');
+		cy.getParentContainer(label).last().should('be.visible');
+
+		// Open color popover (only if not already open)
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click({ force: true });
+				cy.getByDataCy('color-btn')
+					.should('be.visible')
+					.click({ force: true });
 			});
 
+		// Ensure popover exists and is visible
 		cy.get('.blockera-color-picker-popover')
 			.last()
+			.should('exist')
 			.should('be.visible')
 			.within(() => {
-				cy.getByAriaLabel('Reset Color (Clear)').click({ force: true });
+				// Try to click reset/clear if button is available
+				cy.getByAriaLabel('Reset Color (Clear)', { timeout: 3000 })
+					.should('be.visible')
+					.click({ force: true });
 			});
+		// Wait until popover closes (clear completed)
+		cy.get('.blockera-color-picker-popover', { timeout: 1000 }).should(
+			'not.exist'
+		);
 	});
 
 	/**
