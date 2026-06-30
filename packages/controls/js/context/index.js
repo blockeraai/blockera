@@ -55,8 +55,7 @@ export const ControlContextProvider = ({
 
 			if (
 				!isUndefined(controlInfo.value) &&
-				!isEquals(control?.value, controlInfo.value) &&
-				control?.name !== controlInfo?.name
+				!isEquals(control?.value, controlInfo.value)
 			) {
 				return {
 					...control,
