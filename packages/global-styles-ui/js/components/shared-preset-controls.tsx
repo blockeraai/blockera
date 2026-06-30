@@ -103,6 +103,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	const persistedName = committedTaxonomyName ?? name;
 	const slugKey = String(slug);
+	const itemIdKey = String(itemId);
 	const isCreating = variable.creatingStep === true;
 	// Name persists live during creatingStep so repeater headers update; taxonomy sessions defer both fields.
 	const deferFieldEdits = Boolean(editSession) && !isCreating;
@@ -147,10 +148,10 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	// Sync when preset changes (e.g. navigation) or after first close (creatingStep → false).
 	useEffect(() => {
-		if (!deferNameEdits) {
+		if (!deferNameEdits && !isCreating) {
 			setDraftName(persistedName);
 		}
-	}, [persistedName, deferNameEdits]);
+	}, [persistedName, deferNameEdits, isCreating]);
 
 	useEffect(() => {
 		if (!deferDescriptionEdits) {
@@ -190,7 +191,8 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	}, [isIdEditable, hasUserEditedSinceUnlock, variableSlug, slug]);
 
 	// ID display: while creating, preview slug from the current name without persisting it yet.
-	const nameForSlugPreview = deferNameEdits ? draftName : persistedName;
+	const nameForSlugPreview =
+		deferNameEdits || isCreating ? draftName : persistedName;
 	let displayedSlug = slug;
 	if (isCreating) {
 		displayedSlug = normalizeVariablePresetSlug(nameForSlugPreview) || slug;
@@ -200,16 +202,15 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch: { changeRepeaterItem, modifyControlValue },
+		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { onChange, repeaterId, valueCleanup, repeaterItems } = useContext(
+	const { onChange, repeaterId, valueCleanup } = useContext(
 		RepeaterContext
 	) as {
 		repeaterId: string;
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
-		repeaterItems: Record<string, unknown>;
 	};
 
 	const applyDeferredDescriptionToRow = useCallback(
@@ -236,8 +237,6 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				name: nextName,
 			};
 
-			// Slug is derived only when finishing create; syncing it on every keystroke
-			// desyncs repeater itemId from parent slug-keyed maps and duplicates rows.
 			if (syncCreatingSlug && variable.creatingStep === true) {
 				const derivedSlug = normalizeVariablePresetSlug(nextName);
 				if (derivedSlug) {
@@ -254,19 +253,14 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		const nextName = String(variable.name ?? draftNameRef.current ?? '');
 		const nextDescription = draftDescriptionRef.current;
 		const derivedSlug = normalizeVariablePresetSlug(nextName);
-		const oldItemId = String(itemId);
-		const shouldRekey = Boolean(derivedSlug) && derivedSlug !== oldItemId;
+		const descriptionChanged = nextDescription !== persistedDescription;
+		const slugChanged =
+			derivedSlug &&
+			String((variable as Record<string, unknown>).slug ?? '') !==
+				derivedSlug;
 
-		if (!shouldRekey) {
-			const descriptionChanged = nextDescription !== persistedDescription;
-			const slugChanged =
-				derivedSlug &&
-				String((variable as Record<string, unknown>).slug ?? '') !==
-					derivedSlug;
-
-			if (!descriptionChanged && !slugChanged) {
-				return;
-			}
+		if (!descriptionChanged && !slugChanged) {
+			return;
 		}
 
 		const updatedItem = buildPresetWithDescriptionUpdate(
@@ -276,43 +270,22 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			nextDescription
 		);
 
-		if (!shouldRekey) {
-			changeRepeaterItem({
-				onChange,
-				valueCleanup,
-				controlId,
-				repeaterId,
-				itemId,
-				value: updatedItem,
-			});
-
-			return;
-		}
-
-		const newItems = { ...repeaterItems };
-		delete newItems[oldItemId];
-		newItems[derivedSlug] = updatedItem;
-
-		modifyControlValue({
+		changeRepeaterItem({
+			onChange,
+			valueCleanup,
 			controlId,
-			value: newItems,
-		});
-
-		onChange({
-			modifyControlValue,
-			controlId,
-			value: newItems,
+			repeaterId,
+			itemId,
+			value: updatedItem,
 		});
 	}, [
 		buildPresetNameUpdateValue,
 		changeRepeaterItem,
 		controlId,
 		itemId,
-		modifyControlValue,
 		onChange,
 		persistedDescription,
 		repeaterId,
-		repeaterItems,
 		valueCleanup,
 		variable,
 	]);
@@ -401,7 +374,8 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		};
 	}, [editSession, slugKey]);
 
-	const displayedName = deferNameEdits ? draftName : persistedName;
+	const displayedName =
+		deferNameEdits || isCreating ? draftName : persistedName;
 	const displayedDescription = deferDescriptionEdits
 		? draftDescription
 		: persistedDescription;
@@ -477,7 +451,6 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			return;
 		}
 
-		const oldItemId = String(itemId);
 		let updatedItem: T = {
 			...variable,
 			slug: newSlug,
@@ -496,19 +469,13 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			);
 		}
 
-		const newItems = { ...repeaterItems };
-		delete newItems[oldItemId];
-		newItems[newSlug] = updatedItem;
-
-		modifyControlValue({
+		changeRepeaterItem({
+			onChange,
+			valueCleanup,
 			controlId,
-			value: newItems,
-		});
-
-		onChange({
-			modifyControlValue,
-			controlId,
-			value: newItems,
+			repeaterId,
+			itemId,
+			value: updatedItem,
 		});
 
 		setIsConfirmedSlugChange(false);
@@ -526,18 +493,25 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				return;
 			}
 
+			if (isCreating) {
+				setDraftName(newValue);
+			}
+
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value: buildPresetNameUpdateValue(newValue),
+				value: buildPresetNameUpdateValue(newValue, {
+					syncCreatingSlug: isCreating,
+				}),
 			});
 		},
 		[
 			presetLocked,
 			deferNameEdits,
+			isCreating,
 			changeRepeaterItem,
 			onChange,
 			valueCleanup,
@@ -606,7 +580,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			<Flex direction="column" gap={20}>
 				<ControlContextProvider
 					value={{
-						name: `font-size-name-${slug}`,
+						name: `font-size-name-${itemIdKey}`,
 						value: displayedName,
 					}}
 				>
@@ -620,7 +594,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					>
 						<ControlContextProvider
 							value={{
-								name: `font-size-slug-${slug}`,
+								name: `font-size-slug-${itemIdKey}`,
 								value: displayedSlug,
 							}}
 						>
@@ -753,7 +727,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 			<ControlContextProvider
 				value={{
-					name: `preset-description-${slug}`,
+					name: `preset-description-${itemIdKey}`,
 					value: displayedDescription,
 				}}
 			>
@@ -808,7 +782,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 					<ControlContextProvider
 						value={{
-							name: `confirm-change-preset-slug-${slug}`,
+							name: `confirm-change-preset-slug-${itemIdKey}`,
 							value: isConfirmedSlugChange,
 						}}
 					>
