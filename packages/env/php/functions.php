@@ -18,26 +18,26 @@ if ( ! function_exists( 'blockera_get_experimental' ) ) {
 		static $blockera_experimental_config_cache = null;
 
 		if ( null === $blockera_experimental_config_cache ) {
-			$experimental_config_file = BLOCKERA_SB_PATH . 'experimental.config.json';
+			$blockera_experimental_config_file = BLOCKERA_SB_PATH . 'experimental.config.json';
 
 			### BEGIN DEV-ONLY LOCAL EXPERIMENTAL CONFIG
 			if ( defined( 'BLOCKERA_SB_MODE' ) && 'development' === BLOCKERA_SB_MODE ) {
-				$local_experimental_config_file = BLOCKERA_SB_PATH . 'local.experimental.config.json';
+				$blockera_local_experimental_config_file = BLOCKERA_SB_PATH . 'local.experimental.config.json';
 
-				if ( is_readable( $local_experimental_config_file ) ) {
-					$experimental_config_file = $local_experimental_config_file;
-				} elseif ( ! is_readable( $experimental_config_file ) ) {
+				if ( is_readable( $blockera_local_experimental_config_file ) ) {
+					$blockera_experimental_config_file = $blockera_local_experimental_config_file;
+				} elseif ( ! is_readable( $blockera_experimental_config_file ) ) {
 					$blockera_experimental_config_cache = false;
 					return false;
 				}
 			}
 			### END DEV-ONLY LOCAL EXPERIMENTAL CONFIG
 
-			if ( ! is_readable( $experimental_config_file ) ) {
+			if ( ! is_readable( $blockera_experimental_config_file ) ) {
 				$blockera_experimental_config_cache = false;
 			} else {
 				ob_start();
-				include $experimental_config_file;
+				include $blockera_experimental_config_file;
 				$blockera_experimental_config_cache = json_decode( ob_get_clean(), true );
 
 				if ( ! is_array( $blockera_experimental_config_cache ) ) {
