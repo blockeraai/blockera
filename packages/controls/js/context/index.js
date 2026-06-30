@@ -55,7 +55,11 @@ export const ControlContextProvider = ({
 
 			if (
 				!isUndefined(controlInfo.value) &&
-				!isEquals(control?.value, controlInfo.value)
+				!isEquals(control?.value, controlInfo.value) &&
+				/**
+				 * If the control has not multiple names, we don't need to update the value based on control name.
+				 */
+				!controlInfo.hasOwnProperty('hasMultipleNames')
 			) {
 				return {
 					...control,
