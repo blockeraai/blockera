@@ -562,14 +562,16 @@ export default function RepeaterControl(
 			}
 
 			const addedItemValue = newItemWithCreatingStep(value);
-			const addedItemId = resolveAddedItemId(addedItemValue);
 
 			addRepeaterItem({
 				onChange,
 				controlId,
 				repeaterId,
 				valueCleanup,
-				itemIdGenerator: () => addedItemId,
+				itemIdGenerator:
+					'function' === typeof itemIdGenerator
+						? itemIdGenerator
+						: () => resolveAddedItemId(addedItemValue),
 				value: addedItemValue,
 			});
 
@@ -582,14 +584,15 @@ export default function RepeaterControl(
 			return callback();
 		}
 
-		const addedItemId = resolveAddedItemId(defaultRepeaterItemValue);
-
 		addRepeaterItem({
 			onChange,
 			controlId,
 			repeaterId,
 			valueCleanup,
-			itemIdGenerator: () => addedItemId,
+			itemIdGenerator:
+				'function' === typeof itemIdGenerator
+					? itemIdGenerator
+					: () => resolveAddedItemId(defaultRepeaterItemValue),
 			value: defaultRepeaterItemValue,
 		});
 

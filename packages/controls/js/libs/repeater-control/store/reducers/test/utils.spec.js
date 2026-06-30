@@ -61,6 +61,21 @@ describe('generatedDetailsId() function testing ...', () => {
 describe('resolveAddedRepeaterItemId()', () => {
 	const defaultRepeaterItemValue = { isVisible: true };
 
+	it('prefers itemIdGenerator when provided', () => {
+		expect(
+			resolveAddedRepeaterItemId({
+				itemValue: { slug: 'spacing-3', name: 'Spacing 3' },
+				itemsCount: 2,
+				repeaterItems: {
+					0: { slug: 'spacing-1' },
+					1: { slug: 'spacing-2' },
+				},
+				defaultRepeaterItemValue,
+				itemIdGenerator: (count) => String(count),
+			})
+		).toBe('2');
+	});
+
 	it('prefers slug for custom preset rows so pending popover id matches parent value', () => {
 		expect(
 			resolveAddedRepeaterItemId({

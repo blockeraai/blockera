@@ -134,6 +134,10 @@ export const resolveAddedRepeaterItemId = ({
 	itemIdGenerator,
 	selectableId = false,
 }: ResolveAddedRepeaterItemIdArgs): string => {
+	if ('function' === typeof itemIdGenerator) {
+		return itemIdGenerator(itemsCount);
+	}
+
 	if (selectableId) {
 		const fromValue =
 			itemValue &&
@@ -158,10 +162,6 @@ export const resolveAddedRepeaterItemId = ({
 		}
 
 		return String(itemsCount);
-	}
-
-	if ('function' === typeof itemIdGenerator) {
-		return itemIdGenerator(itemsCount);
 	}
 
 	const resolvedItemValue = itemValue || defaultRepeaterItemValue;
