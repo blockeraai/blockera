@@ -67,7 +67,7 @@ export function generateExtensionId(
 
 	// Assume control inside innerBlock and current innerBlock inside master block!
 	if (
-		!isNormalState(getActiveMasterState(clientId, currentBlock)) &&
+		!isNormalState(getActiveMasterState(clientId, blockName)) &&
 		isInnerBlock(currentBlock)
 	) {
 		return `${blockName}/${id}/${clientId}-master-${currentBlock}${variation}-${getActiveInnerState(
@@ -85,7 +85,7 @@ export function generateExtensionId(
 
 	return `${blockName}/${id}/${clientId}-${currentBlock}${variation}-${getActiveMasterState(
 		clientId,
-		currentBlock
+		blockName
 	)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
