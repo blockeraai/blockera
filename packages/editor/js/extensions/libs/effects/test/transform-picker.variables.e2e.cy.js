@@ -56,12 +56,24 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 
 		clickVariablePickerHeaderAddCustomVariable();
 
+		cy.getParentContainer('Transforms').first().scrollIntoView({
+			block: 'center',
+			inline: 'center',
+			duration: 0,
+		});
 		cy.get('.blockera-component-popover', { timeout: 15000 })
-			.filter(':visible')
+			.last()
+			.within(() => {
+				cy.getParentContainer('Transforms').within(() => {
+					cy.getByDataCy('group-control-header').click();
+				});
+			});
+
+		cy.get('.blockera-component-popover', { timeout: 15000 })
 			.last()
 			.should('be.visible')
 			.within(() => {
-				cy.getByAriaLabel('Move-X').should('have.value', '15px');
+				cy.getByAriaLabel('Move-X').should('have.value', '15');
 			});
 	});
 
