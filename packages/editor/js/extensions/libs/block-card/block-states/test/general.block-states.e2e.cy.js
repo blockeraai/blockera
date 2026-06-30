@@ -29,15 +29,18 @@ describe('Block State E2E Test', () => {
 		cy.viewport(1440, 1025);
 
 		createPost();
+
+		cy.get('body').then(($body) => {
+			const $toggle = $body.find(
+				'[data-test="blockera-secondary-sidebar-toggle"][aria-pressed="true"]'
+			);
+			if ($toggle.length) {
+				cy.getByDataTest('blockera-secondary-sidebar-toggle').click();
+			}
+		});
 	});
 
 	const initialSetting = () => {
-		cy.get('body').then(($body) => {
-			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
-				cy.getByAriaLabel('Hide secondary sidebar').click();
-			}
-		});
-
 		appendBlocks(
 			`<!-- wp:paragraph -->
 			<p>Test</p>
