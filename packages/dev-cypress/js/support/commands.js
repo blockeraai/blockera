@@ -711,6 +711,12 @@ export const registerCommands = () => {
 				// Wait for possible UI debounce/render
 				cy.wait(100); // eslint-disable-line cypress/no-unnecessary-waiting
 
+				// Optionally double-check if color applied
+				cy.getByDataCy('color-picker-css-value').should(
+					'have.value',
+					value.includes('#') ? value : `#${value}`
+				);
+
 				// Close only if close button is visible
 				cy.getByDataTest('close-popover')
 					.should('be.visible')
