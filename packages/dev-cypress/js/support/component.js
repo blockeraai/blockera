@@ -76,6 +76,7 @@ Cypress.Commands.add(
 				value={{
 					name,
 					value,
+					hasMultipleNames: true,
 				}}
 			>
 				<WithControlDataProvider
