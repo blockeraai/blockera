@@ -1,5 +1,6 @@
 import {
 	isPresetRepeaterObjectValue,
+	normalizePresetRepeaterValueToIndexKeys,
 	variablesToPresetRepeaterValue,
 } from '../preset-repeater-value-utils';
 
@@ -35,20 +36,20 @@ describe('variablesToPresetRepeaterValue', () => {
 		expect(variablesToPresetRepeaterValue(input)).toBe(input);
 	});
 
-	it('converts preset arrays to slug-keyed repeater maps with order', () => {
+	it('converts preset arrays to index-keyed repeater maps with order', () => {
 		expect(
 			variablesToPresetRepeaterValue([
 				{ slug: 'spacing-20', name: 'Spacing 20', size: '20px' },
 				{ slug: 'spacing-40', name: 'Spacing 40', size: '40px' },
 			])
 		).toEqual({
-			'spacing-20': {
+			0: {
 				slug: 'spacing-20',
 				name: 'Spacing 20',
 				size: '20px',
 				order: 1,
 			},
-			'spacing-40': {
+			1: {
 				slug: 'spacing-40',
 				name: 'Spacing 40',
 				size: '40px',
@@ -57,7 +58,7 @@ describe('variablesToPresetRepeaterValue', () => {
 		});
 	});
 
-	it('falls back to index keys when slug and id are missing', () => {
+	it('uses index keys when slug and id are missing', () => {
 		expect(
 			variablesToPresetRepeaterValue([
 				{ name: 'Draft 1' },
@@ -66,6 +67,37 @@ describe('variablesToPresetRepeaterValue', () => {
 		).toEqual({
 			0: { name: 'Draft 1', order: 1 },
 			1: { name: 'Draft 2', order: 2 },
+		});
+	});
+});
+
+describe('normalizePresetRepeaterValueToIndexKeys', () => {
+	it('dedupes slug and index keys for the same preset row', () => {
+		expect(
+			normalizePresetRepeaterValueToIndexKeys({
+				0: { slug: 'font-size-1', name: 'One', order: 1 },
+				1: { slug: 'font-size-2', name: 'Two', order: 2 },
+				'font-size-3': {
+					slug: 'font-size-3',
+					name: 'Three',
+					order: 3,
+				},
+				2: {
+					slug: 'font-size-3',
+					name: 'Three',
+					order: 3,
+					size: '18px',
+				},
+			})
+		).toEqual({
+			0: { slug: 'font-size-1', name: 'One', order: 1 },
+			1: { slug: 'font-size-2', name: 'Two', order: 2 },
+			2: {
+				slug: 'font-size-3',
+				name: 'Three',
+				order: 3,
+				size: '18px',
+			},
 		});
 	});
 });
