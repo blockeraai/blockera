@@ -12,7 +12,7 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
-import { useDispatch, select } from '@wordpress/data';
+import { useDispatch, useSelect, select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -52,6 +52,7 @@ import {
 	type PresetVariablesInput,
 	isPresetRepeaterObjectValue,
 	normalizePresetRepeaterValueToIndexKeys,
+	overlayCreatingStepRowsFromRepeaterStore,
 	variablesToPresetRepeaterValue,
 } from './preset-repeater-value-utils';
 import { PresetStateContainer } from './preset-state-container';
@@ -544,6 +545,29 @@ export const PresetGroup = memo(function PresetGroup({
 
 	const pickerValue = pickerControlProps?.value;
 
+	const repeaterControlName = useMemo(
+		() =>
+			`${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`,
+		[origin, title, isVariablePicker]
+	);
+
+	const liveRepeaterStoreValue = useSelect(
+		(selectStore) => {
+			if (!usesIndexRepeaterItemIds || !enableCreatingStep) {
+				return undefined;
+			}
+
+			return (
+				selectStore('blockera/controls/repeater') as {
+					getControl: (
+						name: string
+					) => { value?: unknown } | undefined;
+				}
+			).getControl(repeaterControlName)?.value;
+		},
+		[enableCreatingStep, repeaterControlName, usesIndexRepeaterItemIds]
+	);
+
 	const variablesForRepeater = useMemo((): PresetRepeaterValue => {
 		const base = stripRepeaterPickerUiFields(variables);
 
@@ -563,15 +587,26 @@ export const PresetGroup = memo(function PresetGroup({
 					})
 				: withCreatingStep;
 
-		return variablesToPresetRepeaterValue(withPickerSelection);
+		const normalized = variablesToPresetRepeaterValue(withPickerSelection);
+
+		if (!usesIndexRepeaterItemIds || !enableCreatingStep) {
+			return normalized;
+		}
+
+		return overlayCreatingStepRowsFromRepeaterStore(
+			normalized,
+			liveRepeaterStoreValue
+		);
 	}, [
 		isVariablePicker,
 		variables,
 		creatingStepRevision,
 		enableCreatingStep,
+		liveRepeaterStoreValue,
 		pickerCtx.variableType,
 		origin,
 		pickerValue,
+		usesIndexRepeaterItemIds,
 	]);
 
 	const repeaterSearchFilter = useMemo(() => {
@@ -693,7 +728,7 @@ export const PresetGroup = memo(function PresetGroup({
 	} | null>(null);
 
 	const repeaterContextValue = useMemo(() => {
-		const name = `${origin}-${title.replace(/\s/g, '-').toLowerCase()}-${isVariablePicker ? 'variable-picker' : 'global-styles'}`;
+		const name = repeaterControlName;
 		const prev = stableRepeaterContextRef.current;
 
 		if (
@@ -710,7 +745,7 @@ export const PresetGroup = memo(function PresetGroup({
 		};
 		stableRepeaterContextRef.current = next;
 		return next;
-	}, [origin, title, variablesForRepeater, isVariablePicker]);
+	}, [repeaterControlName, variablesForRepeater]);
 
 	useLayoutEffect(() => {
 		if (!usesIndexRepeaterItemIds) {
@@ -721,7 +756,7 @@ export const PresetGroup = memo(function PresetGroup({
 			select('blockera/controls/repeater') as {
 				getControl: (name: string) => { value?: unknown } | undefined;
 			}
-		).getControl(repeaterContextValue.name)?.value;
+		).getControl(repeaterControlName)?.value;
 
 		if (!storeValue || typeof storeValue !== 'object') {
 			return;
@@ -778,11 +813,11 @@ export const PresetGroup = memo(function PresetGroup({
 		}
 
 		repeaterStoreDispatch.modifyControlValue({
-			controlId: repeaterContextValue.name,
+			controlId: repeaterControlName,
 			value: withUiFields,
 		});
 	}, [
-		repeaterContextValue.name,
+		repeaterControlName,
 		repeaterStoreDispatch,
 		usesIndexRepeaterItemIds,
 		variablesForRepeater,
