@@ -451,6 +451,7 @@ describe('testing control context provider and related hooks', () => {
 				value={{
 					name,
 					value,
+					skipSyncValue: true,
 				}}
 				storeName={storeName}
 			>
@@ -584,6 +585,7 @@ describe('testing control context provider and related hooks', () => {
 				value={{
 					name,
 					value,
+					skipSyncValue: true,
 				}}
 				storeName={storeName}
 			>
