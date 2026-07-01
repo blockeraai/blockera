@@ -69,7 +69,7 @@ Cypress.Commands.add(
 		value,
 		name = nanoid(),
 		onChange = handleOnChange,
-		skipSyncValue = false,
+		skipSyncValue = true,
 	}) => {
 		cy.withInspector(
 			<ControlContextProvider
