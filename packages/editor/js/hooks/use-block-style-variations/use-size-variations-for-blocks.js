@@ -345,7 +345,7 @@ function enrichSizeVariationRowsFromMerged(
 				? data.title
 				: '';
 
-		const mergedFlags =
+		const mergedFlags: Object =
 			data !== null && typeof data === 'object'
 				? {
 						blockeraVariationType: data.blockeraVariationType,
@@ -363,7 +363,7 @@ function enrichSizeVariationRowsFromMerged(
 		return {
 			...row,
 			label: metaLabel || row.label || dataLabel || dataTitle || slug,
-			...mergedFlags,
+			...(mergedFlags ? mergedFlags : {}),
 			...(isDefaultFromMeta || isDefaultFromTheme
 				? { isDefault: true }
 				: {}),
