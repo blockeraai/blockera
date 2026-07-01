@@ -57,9 +57,9 @@ export const ControlContextProvider = ({
 				!isUndefined(controlInfo.value) &&
 				!isEquals(control?.value, controlInfo.value) &&
 				/**
-				 * If the control has not multiple names, we don't need to update the value based on control name.
+				 * If the control skipSyncValue is true, we don't need to update the value based on control name.
 				 */
-				!controlInfo.hasOwnProperty('hasMultipleNames')
+				!controlInfo.hasOwnProperty('skipSyncValue')
 			) {
 				return {
 					...control,
