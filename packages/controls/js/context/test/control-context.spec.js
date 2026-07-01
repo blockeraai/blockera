@@ -634,6 +634,7 @@ describe('testing control context provider and related hooks', () => {
 				y: 20,
 			},
 			2: {
+				creatingStep: false,
 				isOpen: false,
 				order: 1,
 				x: 0,
