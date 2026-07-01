@@ -276,14 +276,19 @@ export const registerCommands = () => {
 			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
 			{ timeout: 20000 }
 		)
-			.filter(':visible')
 			.last()
-			.should('be.visible')
+			.should('be.visible');
+		cy.get(
+			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
+			{ timeout: 20000 }
+		)
+			.last()
 			.within(() => {
 				cy.get(itemSelector, { timeout: 20000 })
-					.filter(':visible')
 					.first()
-					.scrollIntoView()
+					.scrollIntoView();
+				cy.get(itemSelector, { timeout: 20000 })
+					.first()
 					.should('be.visible')
 					.click({ force: true });
 			});
