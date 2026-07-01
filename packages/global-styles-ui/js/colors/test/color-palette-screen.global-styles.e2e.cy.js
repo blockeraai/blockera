@@ -29,8 +29,12 @@ describe('Global Styles UI → Color variables screen', () => {
 		// eslint-disable-next-line cypress/unsafe-to-chain-command -- data-test is on the input itself
 		cy.getByDataTest('global-styles-preset-name-field')
 			.first()
-			.should('be.visible')
-			.clear({ force: true })
+			.should('be.visible');
+		cy.getByDataTest('global-styles-preset-name-field')
+			.first()
+			.clear({ force: true });
+		cy.getByDataTest('global-styles-preset-name-field')
+			.first()
 			.type(`e2e free cap ${unique}`, { delay: 0, force: true });
 
 		cy.realPress('Escape');
