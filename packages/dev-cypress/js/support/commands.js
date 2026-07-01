@@ -706,7 +706,11 @@ export const registerCommands = () => {
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click({ force: true });
+				cy.getByDataCy('color-btn').then(($btn) => {
+					if (!$btn.hasClass('is-focus')) {
+						cy.wrap($btn).click({ force: true });
+					}
+				});
 			});
 
 		cy.get('.blockera-color-picker-popover')
