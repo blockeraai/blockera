@@ -21,6 +21,7 @@ export type ControlInfo = {
 	block?: Object,
 	attribute?: string,
 	blockName?: string,
+	skipSyncValue?: boolean,
 	type?: 'simple' | 'nested',
 	description?: string | MixedElement | any,
 };

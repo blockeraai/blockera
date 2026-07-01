@@ -54,12 +54,13 @@ export const ControlContextProvider = ({
 			const control = getControl(controlInfo.name);
 
 			if (
-				!isUndefined(controlInfo.value) &&
-				!isEquals(control?.value, controlInfo.value) &&
+				(!isUndefined(controlInfo.value) &&
+					!isEquals(control?.value, controlInfo.value)) ||
 				/**
 				 * If the control skipSyncValue is true, we don't need to update the value based on control name.
 				 */
-				!controlInfo.hasOwnProperty('skipSyncValue')
+				!controlInfo.hasOwnProperty('skipSyncValue') ||
+				false === controlInfo.skipSyncValue
 			) {
 				return {
 					...control,
