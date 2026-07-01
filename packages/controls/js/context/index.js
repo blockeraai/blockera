@@ -53,14 +53,20 @@ export const ControlContextProvider = ({
 
 			const control = getControl(controlInfo.name);
 
+			const skipSyncValue =
+				controlInfo.hasOwnProperty('skipSyncValue') &&
+				true === controlInfo.skipSyncValue;
+
+			/**
+			 * If the control skipSyncValue is defined and true, we skip the value update based on control name.
+			 */
+			if (skipSyncValue) {
+				return control;
+			}
+
 			if (
-				(!isUndefined(controlInfo.value) &&
-					!isEquals(control?.value, controlInfo.value)) ||
-				/**
-				 * If the control skipSyncValue is true, we don't need to update the value based on control name.
-				 */
-				!controlInfo.hasOwnProperty('skipSyncValue') ||
-				false === controlInfo.skipSyncValue
+				!isUndefined(controlInfo.value) &&
+				!isEquals(control?.value, controlInfo.value)
 			) {
 				return {
 					...control,
