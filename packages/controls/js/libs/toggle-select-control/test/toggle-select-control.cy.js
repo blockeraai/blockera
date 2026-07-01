@@ -254,6 +254,7 @@ describe('toggle-select-control', () => {
 				),
 				value: 'left',
 				name,
+				skipSyncValue: false,
 			});
 
 			cy.get('[aria-checked="true"]')
