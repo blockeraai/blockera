@@ -76,7 +76,7 @@ Cypress.Commands.add(
 				value={{
 					name,
 					value,
-					hasMultipleNames: true,
+					skipSyncValue: true,
 				}}
 			>
 				<WithControlDataProvider
