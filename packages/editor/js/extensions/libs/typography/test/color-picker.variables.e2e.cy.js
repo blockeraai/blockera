@@ -36,8 +36,12 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		// eslint-disable-next-line cypress/unsafe-to-chain-command -- single input in preset name field
 		cy.getByDataTest('global-styles-preset-name-field')
 			.first()
-			.should('be.visible')
-			.clear({ force: true })
+			.should('be.visible');
+		cy.getByDataTest('global-styles-preset-name-field')
+			.first()
+			.clear({ force: true });
+		cy.getByDataTest('global-styles-preset-name-field')
+			.first()
 			.type(presetName, { delay: 0, force: true });
 
 		cy.realPress('Escape');
