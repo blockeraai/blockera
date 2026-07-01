@@ -17,7 +17,9 @@ module.exports = {
 		'/source-code-wordpress/',
 	],
 	testMatch: ['**/test/**/*.spec.js', '**/tests/**/*.spec.js'],
-	transformIgnorePatterns: ['/node_modules/(?!parsel-js|client-zip).+\\.js$'],
+	transformIgnorePatterns: [
+		'/node_modules/(?!parsel-js|client-zip|marked).+\\.js$',
+	],
 	transform: {
 		'\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
 			'<rootDir>/packages/dev-jest/js/assets-transformer.js',
