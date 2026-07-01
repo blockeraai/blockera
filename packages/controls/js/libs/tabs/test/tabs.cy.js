@@ -87,10 +87,7 @@ describe('Tabs Component testing', () => {
 			});
 
 			cy.get('button').contains('Style').click();
-			cy.getByAriaControls('styles-view').should(
-				'have.class',
-				'is-active-tab'
-			);
+			cy.getByDataTest('style-tab').should('have.class', 'is-active-tab');
 			cy.get('button').contains('General').click();
 			cy.getByDataTest('general-tab').should(
 				'have.class',
@@ -131,7 +128,7 @@ describe('Tabs Component testing', () => {
 
 			cy.get('button').contains('Style').click();
 
-			cy.getByAriaControls('styles-view').should('exist');
+			cy.getByDataTest('style-tab').should('exist');
 		});
 	});
 });
