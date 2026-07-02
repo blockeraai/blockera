@@ -503,7 +503,10 @@ export const PresetGroup = memo(function PresetGroup({
 				pickerCtx.variableType
 			);
 			controlProps.handleOnClickVar(payload as never, {
-				keepPickerOpen: row.creatingStep === true,
+				keepPickerOpen:
+					row.creatingStep === true ||
+					// Saved slug rename on the selected row (see shared-preset-controls).
+					row.__rebindBoundFeature === true,
 			});
 		},
 		[isVariablePicker, pickerCtx.variableType, origin]

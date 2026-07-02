@@ -146,7 +146,9 @@ export function TaxonomyRepeaterBridgeInner({
 				pickerCtx.variableType
 			);
 			pickerCtx.controlProps.handleOnClickVar(payload as never, {
-				keepPickerOpen: row.creatingStep === true,
+				keepPickerOpen:
+					row.creatingStep === true ||
+					row.__rebindBoundFeature === true,
 			});
 		},
 		[

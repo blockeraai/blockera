@@ -125,9 +125,14 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const draftDescriptionRef = useRef(persistedDescription);
 	draftDescriptionRef.current = draftDescription;
 
-	// ID field: locked while creating or until user clicks/focuses ID (then editable buffer).
+	// ID field: editable during creatingStep; after create, locked until user unlocks.
 	const [variableSlug, setVariableSlug] = useState(slug);
 	const [isIdEditable, setIsIdEditable] = useState(false);
+	const [hasManualSlugDuringCreating, setHasManualSlugDuringCreating] =
+		useState(false);
+	const hasManualSlugDuringCreatingRef = useRef(false);
+	const variableSlugRef = useRef(slug);
+	variableSlugRef.current = variableSlug;
 	const [isConfirmedSlugChange, setIsConfirmedSlugChange] = useState(false);
 	const [hasUserEditedSinceUnlock, setHasUserEditedSinceUnlock] =
 		useState(false);
@@ -160,11 +165,20 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	}, [persistedDescription, deferDescriptionEdits]);
 
 	useEffect(() => {
+		if (isCreating) {
+			if (!hasManualSlugDuringCreatingRef.current) {
+				setVariableSlug(slug);
+			}
+			return;
+		}
+
 		setVariableSlug(slug);
 		setIsIdEditable(false);
 		setHasUserEditedSinceUnlock(false);
 		setIsConfirmedSlugChange(false);
-	}, [name, slug, variable.creatingStep]);
+		setHasManualSlugDuringCreating(false);
+		hasManualSlugDuringCreatingRef.current = false;
+	}, [name, slug, variable.creatingStep, isCreating]);
 
 	const prevIsCreatingForDraftInitRef = useRef(isCreating);
 
@@ -180,22 +194,37 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 		setDraftName(persistedName);
 		setDraftDescription(persistedDescription);
-	}, [isCreating, persistedName, persistedDescription]);
+		setIsIdEditable(true);
+		setHasManualSlugDuringCreating(false);
+		hasManualSlugDuringCreatingRef.current = false;
+		setVariableSlug(slug);
+	}, [isCreating, persistedName, persistedDescription, slug]);
 
-	// Auto-lock when user edits ID back to saved slug.
+	// Auto-lock when user edits ID back to saved slug (not during creatingStep).
 	useEffect(() => {
+		if (isCreating) {
+			return;
+		}
 		if (isIdEditable && hasUserEditedSinceUnlock && variableSlug === slug) {
 			setIsIdEditable(false);
 			setHasUserEditedSinceUnlock(false);
 		}
-	}, [isIdEditable, hasUserEditedSinceUnlock, variableSlug, slug]);
+	}, [
+		isCreating,
+		isIdEditable,
+		hasUserEditedSinceUnlock,
+		variableSlug,
+		slug,
+	]);
 
-	// ID display: while creating, preview slug from the current name without persisting it yet.
+	// ID display: while creating, follow name until the user edits the ID directly.
 	const nameForSlugPreview =
 		deferNameEdits || isCreating ? draftName : persistedName;
 	let displayedSlug = slug;
 	if (isCreating) {
-		displayedSlug = normalizeVariablePresetSlug(nameForSlugPreview) || slug;
+		displayedSlug = hasManualSlugDuringCreating
+			? variableSlug
+			: normalizeVariablePresetSlug(nameForSlugPreview) || slug;
 	} else if (isIdEditable) {
 		displayedSlug = variableSlug;
 	}
@@ -205,16 +234,27 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		dispatch: { changeRepeaterItem, modifyControlValue },
 	} = useControlContext();
 
-	const { onChange, repeaterId, valueCleanup, repeaterItems } = useContext(
-		RepeaterContext
-	) as {
+	const {
+		onChange,
+		repeaterId,
+		valueCleanup,
+		repeaterItems,
+		onSelectableItemActivate,
+	} = useContext(RepeaterContext) as {
 		repeaterId: string;
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
 		repeaterItems: Record<string, unknown>;
+		onSelectableItemActivate?: (
+			itemId: string | number,
+			row: Record<string, unknown>
+		) => void;
 	};
 
 	const creatingNamePersistTimeoutRef = useRef<ReturnType<
+		typeof setTimeout
+	> | null>(null);
+	const creatingSlugPersistTimeoutRef = useRef<ReturnType<
 		typeof setTimeout
 	> | null>(null);
 	const CREATING_NAME_PERSIST_MS = 200;
@@ -226,9 +266,19 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		}
 	}, []);
 
+	const clearCreatingSlugPersistTimeout = useCallback(() => {
+		if (creatingSlugPersistTimeoutRef.current) {
+			clearTimeout(creatingSlugPersistTimeoutRef.current);
+			creatingSlugPersistTimeoutRef.current = null;
+		}
+	}, []);
+
 	useEffect(
-		() => clearCreatingNamePersistTimeout,
-		[clearCreatingNamePersistTimeout]
+		() => () => {
+			clearCreatingNamePersistTimeout();
+			clearCreatingSlugPersistTimeout();
+		},
+		[clearCreatingNamePersistTimeout, clearCreatingSlugPersistTimeout]
 	);
 
 	const applyDeferredDescriptionToRow = useCallback(
@@ -243,6 +293,41 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			) as Record<string, unknown>;
 		},
 		[deferDescriptionEdits]
+	);
+
+	const notifyPresetFeatureBinding = useCallback(
+		(
+			updatedRow: Record<string, unknown>,
+			{
+				rebindBoundFeature = false,
+			}: { rebindBoundFeature?: boolean } = {}
+		) => {
+			if (typeof onSelectableItemActivate !== 'function') {
+				return;
+			}
+
+			if (!isCreating && !rebindBoundFeature) {
+				return;
+			}
+
+			const row: Record<string, unknown> = {
+				...updatedRow,
+				isSelected: true,
+			};
+
+			if (isCreating) {
+				row.creatingStep = true;
+			}
+
+			if (rebindBoundFeature) {
+				// Ephemeral picker flag: keep the popover open and push the new slug onto
+				// the bound feature after a saved rename (not persisted to theme JSON).
+				row.__rebindBoundFeature = true;
+			}
+
+			onSelectableItemActivate(itemId, row);
+		},
+		[isCreating, itemId, onSelectableItemActivate]
 	);
 
 	const buildPresetNameUpdateValue = useCallback(
@@ -268,7 +353,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const persistCreatingNameToTheme = useCallback(
-		(nextName: string) => {
+		(nextName: string, { syncCreatingSlug = true } = {}) => {
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
@@ -276,7 +361,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				repeaterId,
 				itemId,
 				value: buildPresetNameUpdateValue(nextName, {
-					syncCreatingSlug: true,
+					syncCreatingSlug,
 				}),
 			});
 		},
@@ -292,9 +377,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const syncCreatingNameToRepeaterStore = useCallback(
-		(nextName: string) => {
+		(nextName: string, { syncCreatingSlug = true } = {}) => {
 			const updatedRow = buildPresetNameUpdateValue(nextName, {
-				syncCreatingSlug: true,
+				syncCreatingSlug,
 			});
 
 			modifyControlValue({
@@ -304,34 +389,103 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					[itemId]: updatedRow,
 				},
 			});
+
+			if (syncCreatingSlug) {
+				notifyPresetFeatureBinding(updatedRow);
+			}
 		},
 		[
 			buildPresetNameUpdateValue,
 			controlId,
 			itemId,
 			modifyControlValue,
+			notifyPresetFeatureBinding,
 			repeaterItems,
+		]
+	);
+
+	const syncCreatingSlugToRepeaterStore = useCallback(
+		(nextSlug: string) => {
+			const updatedRow = applyDeferredDescriptionToRow({
+				...(variable as Record<string, unknown>),
+				slug: nextSlug,
+				name: draftNameRef.current,
+			});
+
+			modifyControlValue({
+				controlId,
+				value: {
+					...repeaterItems,
+					[itemId]: updatedRow,
+				},
+			});
+
+			notifyPresetFeatureBinding(updatedRow);
+		},
+		[
+			applyDeferredDescriptionToRow,
+			controlId,
+			itemId,
+			modifyControlValue,
+			notifyPresetFeatureBinding,
+			repeaterItems,
+			variable,
+		]
+	);
+
+	const persistCreatingSlugToTheme = useCallback(
+		(nextSlug: string) => {
+			changeRepeaterItem({
+				onChange,
+				valueCleanup,
+				controlId,
+				repeaterId,
+				itemId,
+				value: applyDeferredDescriptionToRow({
+					...(variable as Record<string, unknown>),
+					slug: nextSlug,
+				}),
+			});
+		},
+		[
+			applyDeferredDescriptionToRow,
+			changeRepeaterItem,
+			controlId,
+			itemId,
+			onChange,
+			repeaterId,
+			valueCleanup,
+			variable,
 		]
 	);
 
 	const finalizeCreatingStepPersist = useCallback(() => {
 		const nextName = String(draftNameRef.current ?? variable.name ?? '');
 		const nextDescription = draftDescriptionRef.current;
+		const manualSlug = hasManualSlugDuringCreatingRef.current
+			? normalizeVariablePresetSlug(variableSlugRef.current)
+			: '';
 		const derivedSlug = normalizeVariablePresetSlug(nextName);
+		const nextSlug =
+			manualSlug ||
+			derivedSlug ||
+			String((variable as Record<string, unknown>).slug ?? '');
 		const descriptionChanged = nextDescription !== persistedDescription;
 		const slugChanged =
-			derivedSlug &&
+			nextSlug &&
 			String((variable as Record<string, unknown>).slug ?? '') !==
-				derivedSlug;
+				nextSlug;
 
 		if (!descriptionChanged && !slugChanged) {
 			return;
 		}
 
 		const updatedItem = buildPresetWithDescriptionUpdate(
-			buildPresetNameUpdateValue(nextName, {
-				syncCreatingSlug: true,
-			}) as T,
+			{
+				...(variable as Record<string, unknown>),
+				name: nextName,
+				slug: nextSlug,
+			} as T,
 			nextDescription
 		);
 
@@ -344,7 +498,6 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			value: updatedItem,
 		});
 	}, [
-		buildPresetNameUpdateValue,
 		changeRepeaterItem,
 		controlId,
 		itemId,
@@ -363,11 +516,13 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 		if (wasCreating && !isCreating) {
 			clearCreatingNamePersistTimeout();
+			clearCreatingSlugPersistTimeout();
 			finalizeCreatingStepPersist();
 		}
 	}, [
 		isCreating,
 		clearCreatingNamePersistTimeout,
+		clearCreatingSlugPersistTimeout,
 		finalizeCreatingStepPersist,
 	]);
 
@@ -452,11 +607,12 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	const slugChanged = !isCreating && isIdEditable && variableSlug !== slug;
 	const slugIsValid = isSlugValid(displayedSlug, allSlugs, slug);
-	const showUndo = isIdEditable && variableSlug !== slug;
-	const idFieldLocked = !isIdEditable;
+	const showUndo = !isCreating && isIdEditable && variableSlug !== slug;
+	const idFieldLocked = !isCreating && !isIdEditable;
 	const showMutedIdStyle = idFieldLocked;
-	// After creatingStep: locked ID uses read-only (not disabled) so click/focus can unlock; while creating, disabled blocks edits.
-	const idClickToEdit = !isIdEditable;
+	// During creatingStep the ID is directly editable; after create it unlocks on click/focus.
+	const idClickToEdit = !isCreating && !isIdEditable;
+	const idFieldEditable = isCreating || isIdEditable;
 	const allowIdUnlock = !presetLocked;
 	const slugError =
 		displayedSlug && !slugIsValid
@@ -548,6 +704,18 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			value: updatedItem,
 		});
 
+		const wasSlugChanged = slug !== newSlug;
+		// Selected row in the variable picker: rebind block settings.id to the saved slug.
+		if (
+			wasSlugChanged &&
+			isVariablePicker &&
+			(variable as Record<string, unknown>).isSelected === true
+		) {
+			notifyPresetFeatureBinding(updatedItem as Record<string, unknown>, {
+				rebindBoundFeature: true,
+			});
+		}
+
 		setIsConfirmedSlugChange(false);
 		setIsIdEditable(false);
 		setHasUserEditedSinceUnlock(false);
@@ -566,15 +734,21 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 			if (isCreating) {
 				setDraftName(newValue);
+				const shouldSyncSlugFromName =
+					!hasManualSlugDuringCreatingRef.current;
 				const derivedSlug = normalizeVariablePresetSlug(newValue);
-				if (derivedSlug) {
+				if (shouldSyncSlugFromName && derivedSlug) {
 					setVariableSlug(derivedSlug);
 				}
 
-				syncCreatingNameToRepeaterStore(newValue);
+				syncCreatingNameToRepeaterStore(newValue, {
+					syncCreatingSlug: shouldSyncSlugFromName,
+				});
 				clearCreatingNamePersistTimeout();
 				creatingNamePersistTimeoutRef.current = setTimeout(() => {
-					persistCreatingNameToTheme(draftNameRef.current);
+					persistCreatingNameToTheme(draftNameRef.current, {
+						syncCreatingSlug: shouldSyncSlugFromName,
+					});
 				}, CREATING_NAME_PERSIST_MS);
 
 				return;
@@ -606,10 +780,31 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		]
 	);
 
-	const handleIdChange = useCallback((newValue: string) => {
-		setVariableSlug(normalizeVariablePresetSlug(newValue));
-		setHasUserEditedSinceUnlock(true);
-	}, []);
+	const handleIdChange = useCallback(
+		(newValue: string) => {
+			const normalized = normalizeVariablePresetSlug(newValue);
+			setVariableSlug(normalized);
+			setHasUserEditedSinceUnlock(true);
+
+			if (!isCreating) {
+				return;
+			}
+
+			setHasManualSlugDuringCreating(true);
+			hasManualSlugDuringCreatingRef.current = true;
+			syncCreatingSlugToRepeaterStore(normalized);
+			clearCreatingSlugPersistTimeout();
+			creatingSlugPersistTimeoutRef.current = setTimeout(() => {
+				persistCreatingSlugToTheme(normalized);
+			}, CREATING_NAME_PERSIST_MS);
+		},
+		[
+			isCreating,
+			syncCreatingSlugToRepeaterStore,
+			clearCreatingSlugPersistTimeout,
+			persistCreatingSlugToTheme,
+		]
+	);
 
 	const handleDescriptionChange = useCallback(
 		(newValue: string) => {
@@ -649,7 +844,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	let idFieldHint = __('Use a–z, 0–9, and hyphens only.', 'blockera');
 	if (isCreating) {
 		idFieldHint = __(
-			'The ID matches the name until you close this preset.',
+			'Edit the ID directly while creating. Use a–z, 0–9, and hyphens only.',
 			'blockera'
 		);
 	} else if (idClickToEdit) {
@@ -723,6 +918,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 									}
 									controlAddonTypes={[]}
 									readOnly={idClickToEdit}
+									data-test="global-styles-preset-id-field"
 									onClick={
 										idClickToEdit && allowIdUnlock
 											? unlockIdField
@@ -739,7 +935,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 											: undefined
 									}
 									onChange={
-										isIdEditable ? handleIdChange : () => {}
+										idFieldEditable
+											? handleIdChange
+											: () => {}
 									}
 									columns="1fr 4fr"
 									style={{

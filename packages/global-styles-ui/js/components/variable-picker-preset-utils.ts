@@ -280,13 +280,15 @@ export function stripRepeaterPickerUiFields(items: unknown): unknown {
 			isSelected: _is,
 			selectable: _sel,
 			listViewCompactShades: _listViewCompactShades,
+			__rebindBoundFeature: _rebindBoundFeature,
 			...rest
 		} = r;
 
 		if (
 			_is === undefined &&
 			_sel === undefined &&
-			_listViewCompactShades === undefined
+			_listViewCompactShades === undefined &&
+			_rebindBoundFeature === undefined
 		) {
 			return row;
 		}
