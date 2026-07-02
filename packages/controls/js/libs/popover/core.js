@@ -236,7 +236,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				event: MouseEvent & { currentTarget: HTMLElement }
 			) {
 				event.stopPropagation();
-				dismissPopover();
+				dismissPopover({ skipMountGuard: true });
 			}
 
 			return (
