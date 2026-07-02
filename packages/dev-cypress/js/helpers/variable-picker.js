@@ -2,6 +2,7 @@
  * Shared Cypress helpers for the block editor variable picker popover.
  */
 import { createPost } from './site-navigation';
+import { getSelectedBlock, getWPDataObject } from './editor';
 
 /** Opens paragraph → Style → Font Size → variable picker popover. */
 export function openParagraphFontSizeVariablePickerPopover() {
@@ -165,6 +166,19 @@ export function assertLastVariablePickerRepeaterItemInPopoverBody() {
 }
 
 /**
+ * Visible preset edit popover (nested group popover inside the variable picker).
+ */
+export function getCustomPresetEditPopover() {
+	return cy
+		.get('.blockera-component-popover.blockera-control-group-popover', {
+			timeout: 20000,
+		})
+		.filter(':visible')
+		.last()
+		.should('be.visible');
+}
+
+/**
  * Asserts a control field value in the visible custom-preset edit popover
  * opened after header "+" add (creatingStep).
  *
@@ -179,20 +193,11 @@ export function assertCustomPresetEditPopoverFieldValue(
 		'exist'
 	);
 
-	cy.get('.blockera-component-popover.blockera-control-group-popover', {
-		timeout: 20000,
-	})
-		.filter(':visible')
-		.last()
-		.should('be.visible')
-		.within(() => {
-			cy.getParentContainer(parentLabel).within(() => {
-				cy.get('input[type="text"]').should(
-					'have.value',
-					expectedValue
-				);
-			});
+	getCustomPresetEditPopover().within(() => {
+		cy.getParentContainer(parentLabel).within(() => {
+			cy.get('input[type="text"]').should('have.value', expectedValue);
 		});
+	});
 }
 
 /**
@@ -212,12 +217,170 @@ export function assertCustomPresetEditPopoverColorValue(expectedHex) {
 		);
 	});
 
-	cy.get('.blockera-component-popover.blockera-control-group-popover', {
-		timeout: 20000,
-	})
+	getCustomPresetEditPopover();
+}
+
+/**
+ * Visible preset edit popover opened for the current creatingStep row.
+ */
+export function getCreatingStepPresetEditPopover() {
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
+
+	return getCustomPresetEditPopover();
+}
+
+/**
+ * Types into the preset ID field while creatingStep is active.
+ *
+ * @param {string} value
+ */
+export function typeCreatingStepPresetId(value) {
+	getCreatingStepPresetEditPopover().within(() => {
+		cy.getParentContainer('Name')
+			.find('.blockera-preset-id-field input', { timeout: 20000 })
+			.first()
+			.then(($input) => {
+				cy.wrap($input).setControlledInputValue(value);
+			});
+	});
+}
+
+/**
+ * @param {string} expectedId
+ */
+export function assertCreatingStepPresetId(expectedId) {
+	cy.getByDataTest('global-styles-preset-id-field', { timeout: 20000 })
+		.filter('input')
 		.filter(':visible')
 		.last()
+		.should('have.value', expectedId);
+}
+
+/** Closes the visible preset edit popover (e.g. finish creatingStep). */
+export function closeCustomPresetEditPopover() {
+	getCustomPresetEditPopover().within(() => {
+		cy.getByDataTest('close-popover').click({ force: true });
+	});
+}
+
+/** Closes the creatingStep preset edit popover while keeping the variable picker open. */
+export function closeCreatingStepPresetEditPopover() {
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'exist'
+	);
+
+	closeCustomPresetEditPopover();
+
+	cy.getByDataTest('repeater-item-creating-step', { timeout: 20000 }).should(
+		'not.exist'
+	);
+
+	cy.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
 		.should('be.visible');
+}
+
+/** Opens the edit popover for the last repeater row in the picker. */
+export function openLastVariablePickerPresetEditPopover() {
+	withinVariablePickerPopover(() => {
+		getVariablePickerLastRepeaterItem()
+			.realHover()
+			.within(() => {
+				cy.get('.blockera-control-btn-edit-item').click({
+					force: true,
+				});
+			});
+	});
+
+	getCustomPresetEditPopover().should('be.visible');
+}
+
+/** Opens the edit popover for the selected variable row in the picker. */
+export function openSelectedVariablePickerPresetEditPopover() {
+	withinVariablePickerPopover(() => {
+		cy.get('[data-cy="repeater-item"]')
+			.filter(':has(.is-selected-item)')
+			.first()
+			.realHover()
+			.within(() => {
+				cy.get('.blockera-control-btn-edit-item').click({
+					force: true,
+				});
+			});
+	});
+
+	getCustomPresetEditPopover().should('be.visible');
+}
+
+/** Unlocks the ID field in a saved preset edit popover (click-to-edit). */
+export function unlockPresetEditPopoverIdField() {
+	getCustomPresetEditPopover().within(() => {
+		cy.getParentContainer('Name')
+			.find('.blockera-preset-id-field input', { timeout: 20000 })
+			.first()
+			.click({ force: true });
+	});
+}
+
+/**
+ * Sets the preset ID in an unlocked edit popover (post-create slug change flow).
+ *
+ * @param {string} value
+ */
+export function typePresetEditPopoverId(value) {
+	getCustomPresetEditPopover().within(() => {
+		cy.getParentContainer('Name')
+			.find('.blockera-preset-id-field input', { timeout: 20000 })
+			.first()
+			.then(($input) => {
+				cy.wrap($input).setControlledInputValue(value);
+			});
+	});
+}
+
+/** Confirms the slug-change warning before saving a renamed preset ID. */
+export function confirmPresetEditPopoverSlugChange() {
+	getCustomPresetEditPopover().within(() => {
+		cy.contains(
+			'I understand that blocks using the old ID will lose their variables.'
+		).click({ force: true });
+	});
+}
+
+/** Saves name/slug edits from the preset edit popover. */
+export function savePresetEditPopoverNameAndSlug() {
+	getCustomPresetEditPopover().within(() => {
+		cy.get('.blockera-preset-save-actions__save')
+			.should('not.be.disabled')
+			.click({ force: true });
+	});
+}
+
+/** Font Size value addon must not show the missing-variable deleted state. */
+export function assertFontSizeControlVariableNotMissing() {
+	cy.getParentContainer('Font Size')
+		.first()
+		.within(() => {
+			cy.get('[data-test="value-addon-deleted"]').should('not.exist');
+			cy.contains('Missing variable').should('not.exist');
+		});
+}
+
+/**
+ * @param {string} expectedId Bound variable `settings.id`.
+ */
+export function assertSelectedBlockFontSizeVariableId(expectedId) {
+	cy.then({ timeout: 15000 }, () =>
+		getWPDataObject().then((data) => {
+			const fontSize = getSelectedBlock(data, 'blockeraFontSize');
+			expect(fontSize.isValueAddon).to.equal(true);
+			expect(fontSize.valueType).to.equal('variable');
+			expect(fontSize.settings?.id).to.equal(expectedId);
+		})
+	);
 }
 
 /**

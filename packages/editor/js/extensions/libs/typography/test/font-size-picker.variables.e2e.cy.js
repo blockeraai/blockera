@@ -16,6 +16,18 @@ import {
 	openParagraphFontSizeVariablePickerPopover,
 	scrollVariablePickerPopoverToTop,
 	withinVariablePickerPopover,
+	typeCreatingStepPresetId,
+	assertCreatingStepPresetId,
+	assertFontSizeControlVariableNotMissing,
+	assertSelectedBlockFontSizeVariableId,
+	getCreatingStepPresetEditPopover,
+	closeCreatingStepPresetEditPopover,
+	openSelectedVariablePickerPresetEditPopover,
+	unlockPresetEditPopoverIdField,
+	typePresetEditPopoverId,
+	confirmPresetEditPopoverSlugChange,
+	savePresetEditPopoverNameAndSlug,
+	getCustomPresetEditPopover,
 } from '@blockera/dev-cypress/js/helpers/variable-picker';
 
 describe('Font Size variable picker → header add custom preset', () => {
@@ -272,5 +284,79 @@ describe('Font Size variable picker → header add custom preset', () => {
 					.first()
 					.should('be.visible');
 			});
+	});
+});
+
+describe('Font Size variable picker → creatingStep preset ID', () => {
+	it('allows editing preset ID during creating step without confirmation UI', () => {
+		const customId = 'custom-create-step-id';
+
+		openParagraphFontSizeVariablePickerPopover();
+		clickVariablePickerHeaderAddCustomVariable();
+		assertCustomPresetEditPopoverFieldValue('Font Size', '16');
+
+		typeCreatingStepPresetId(customId);
+		assertCreatingStepPresetId(customId);
+
+		getCreatingStepPresetEditPopover().within(() => {
+			cy.contains('ID changed').should('not.exist');
+			cy.contains(
+				'I understand that blocks using the old ID will lose their variables.'
+			).should('not.exist');
+		});
+	});
+
+	it('rebinds the feature and hides missing state when ID changes during creating step', () => {
+		const customId = 'custom-bound-size';
+
+		openParagraphFontSizeVariablePickerPopover();
+		clickVariablePickerHeaderAddCustomVariable();
+		assertCustomPresetEditPopoverFieldValue('Font Size', '16');
+
+		typeCreatingStepPresetId(customId);
+		assertCreatingStepPresetId(customId);
+
+		assertFontSizeControlVariableNotMissing();
+		assertSelectedBlockFontSizeVariableId(customId);
+
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.should('be.visible');
+
+		getCreatingStepPresetEditPopover().should('be.visible');
+	});
+});
+
+describe('Font Size variable picker → saved preset ID rename', () => {
+	it('rebinds the bound feature after saving a renamed preset ID from the picker', () => {
+		const initialId = 'initial-bound-size';
+		const renamedId = 'renamed-bound-size';
+
+		openParagraphFontSizeVariablePickerPopover();
+		clickVariablePickerHeaderAddCustomVariable();
+
+		typeCreatingStepPresetId(initialId);
+		assertSelectedBlockFontSizeVariableId(initialId);
+		assertFontSizeControlVariableNotMissing();
+
+		closeCreatingStepPresetEditPopover();
+
+		assertFontSizeControlVariableNotMissing();
+		assertSelectedBlockFontSizeVariableId(initialId);
+
+		openSelectedVariablePickerPresetEditPopover();
+		unlockPresetEditPopoverIdField();
+		typePresetEditPopoverId(renamedId);
+
+		getCustomPresetEditPopover().within(() => {
+			cy.contains('ID changed').should('be.visible');
+		});
+
+		confirmPresetEditPopoverSlugChange();
+		savePresetEditPopoverNameAndSlug();
+
+		assertFontSizeControlVariableNotMissing();
+		assertSelectedBlockFontSizeVariableId(renamedId);
 	});
 });
