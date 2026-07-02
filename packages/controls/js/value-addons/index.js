@@ -5,7 +5,13 @@
  */
 import type { MixedElement } from 'react';
 import { select, useSelect } from '@wordpress/data';
-import { useState, useMemo, useRef } from '@wordpress/element';
+import {
+	useState,
+	useMemo,
+	useRef,
+	useCallback,
+	useEffect,
+} from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -81,7 +87,16 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 			? normalizedVariableTypes[0]
 			: undefined);
 
-	const [isOpen, setOpen] = useState('');
+	const [isOpen, setOpenState] = useState('');
+	const [isBoundVariableCreating, setIsBoundVariableCreating] =
+		useState(false);
+
+	const setOpen = useCallback((next: string) => {
+		if (next === '') {
+			setIsBoundVariableCreating(false);
+		}
+		setOpenState(next);
+	}, []);
 
 	const mergedThemeJsonFeaturesWrapped = useSelect((wpSelect) => {
 		try {
@@ -248,6 +263,32 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 				};
 	}, [inputValue]);
 
+	// Catalog can lag behind repeater updates during create/rebind; hide missing state until resolved.
+	useEffect(() => {
+		if (
+			!isBoundVariableCreating ||
+			!isValid(value) ||
+			value.valueType !== 'variable'
+		) {
+			return;
+		}
+
+		const settings = value.settings;
+		if (
+			!settings ||
+			typeof settings.type !== 'string' ||
+			settings.id === undefined ||
+			settings.id === null
+		) {
+			return;
+		}
+
+		const item = getVariable(String(settings.type), String(settings.id));
+		if (item && !isUndefined(item.value)) {
+			setIsBoundVariableCreating(false);
+		}
+	}, [isBoundVariableCreating, value, mergedThemeJsonFeaturesWrapped]);
+
 	// type is empty
 	if (isUndefined(types) || !types.length) {
 		controlPropsRef.current = null;
@@ -301,6 +342,8 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 		data: VariableItem,
 		options?: { keepPickerOpen?: boolean }
 	): void => {
+		const keepCreatingBinding = options?.keepPickerOpen === true;
+		setIsBoundVariableCreating(keepCreatingBinding);
 		const newValue = {
 			settings: {
 				...data,
@@ -319,6 +362,7 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 	};
 
 	const handleOnUnlinkVar = (): void => {
+		setIsBoundVariableCreating(false);
 		if (
 			missingPlainThemeJsonPreset &&
 			compositePlainPresetPaint !== '' &&
@@ -508,6 +552,9 @@ export const useValueAddon = (props: UseValueAddonProps): ValueAddonProps => {
 			// Bindings are by slug (`settings.id`). Renamed display names refresh via
 			// live catalog reads; changed slugs do not fall back to `settings.name`.
 			controlProps.isDeletedVar = !item || isUndefined(item.value);
+			if (isBoundVariableCreating) {
+				controlProps.isDeletedVar = false;
+			}
 		} else if (controlProps.value.valueType === 'dynamic-value') {
 			const item = getDynamicValue(
 				controlProps.value.settings.group,
