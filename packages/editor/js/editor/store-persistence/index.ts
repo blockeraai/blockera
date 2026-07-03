@@ -41,8 +41,7 @@ async function initializePersistence() {
 	// Get preloaded data from PHP (if available)
 	// WordPress passes this via wp_add_inline_script
 	const preloadedData = (window as any).blockeraEditorPersistenceData as
-		| StoreState
-		| undefined;
+		StoreState | undefined;
 
 	// Create persistence layer
 	const persistenceLayer = createPersistenceLayer<StoreState>({

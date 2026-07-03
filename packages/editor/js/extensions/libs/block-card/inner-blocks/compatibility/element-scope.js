@@ -19,11 +19,7 @@ import {
 } from './element-schema';
 
 export type ElementCompatState =
-	| 'normal'
-	| 'hover'
-	| 'focus'
-	| 'active'
-	| 'visited';
+	'normal' | 'hover' | 'focus' | 'active' | 'visited';
 
 /**
  * Read WordPress element styles for a theme.json element key (`dataCompatibilityElement`).

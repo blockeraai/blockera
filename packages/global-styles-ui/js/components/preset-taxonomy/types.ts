@@ -1,10 +1,8 @@
 export type TaxonomyGroupChildRef =
-	| { kind: 'preset'; slug: string }
-	| { kind: 'category'; slug: string };
+	{ kind: 'preset'; slug: string } | { kind: 'category'; slug: string };
 
 export type TaxonomyCategoryChildRef =
-	| { kind: 'preset'; slug: string }
-	| { kind: 'sub'; slug: string };
+	{ kind: 'preset'; slug: string } | { kind: 'sub'; slug: string };
 
 export type TaxonomySubSection<T> = {
 	slug: string;

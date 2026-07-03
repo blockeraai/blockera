@@ -215,8 +215,7 @@ export function TaxonomyRepeaterBridgeInner({
 			repeaterItemOpener: undefined,
 			repeaterItemHeader: (_props: Record<string, unknown>) => {
 				const row = _props?.item as
-					| (VariableType & { baseSlug?: string })
-					| undefined;
+					(VariableType & { baseSlug?: string }) | undefined;
 				let headerContextType: string;
 				if (row?.baseSlug) {
 					headerContextType = 'repeater';

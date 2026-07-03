@@ -21,12 +21,7 @@ export type TCssProps = {
 };
 
 export type DisplayType =
-	| 'none'
-	| 'flex'
-	| 'block'
-	| 'inline'
-	| 'inline-block'
-	| 'grid';
+	'none' | 'flex' | 'block' | 'inline' | 'inline-block' | 'grid';
 
 export type TLayoutProps = {
 	...BaseExtensionProps,

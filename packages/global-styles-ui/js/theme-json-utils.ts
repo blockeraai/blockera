@@ -237,8 +237,7 @@ export function getResolvedValue(
 		(resolvedValue as { url?: string }).url
 	) {
 		const links = tree._links as
-			| Record<string, Array<Record<string, unknown>>>
-			| undefined;
+			Record<string, Array<Record<string, unknown>>> | undefined;
 		(resolvedValue as { url: string }).url = getResolvedThemeFilePath(
 			(resolvedValue as { url: string }).url,
 			(links?.['wp:theme-file'] as Array<Record<string, unknown>>) ?? []

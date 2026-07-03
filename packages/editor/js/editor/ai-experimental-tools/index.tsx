@@ -37,12 +37,7 @@ import { getAttributesWithIds } from '../../hooks/use-attributes';
 import './style.scss';
 
 type JsonLike =
-	| null
-	| boolean
-	| number
-	| string
-	| JsonLike[]
-	| { [key: string]: JsonLike };
+	null | boolean | number | string | JsonLike[] | { [key: string]: JsonLike };
 
 type JsonBlockInput = {
 	name?: string;
@@ -381,8 +376,7 @@ export default function AIExperimentalTools(): JSX.Element {
 		const blockEditorSelect = select('core/block-editor') as any;
 		const selectedClientId =
 			(blockEditorSelect?.getSelectedBlockClientId?.() as
-				| string
-				| undefined) || '';
+				string | undefined) || '';
 		if (!selectedClientId) {
 			return '';
 		}
@@ -484,8 +478,7 @@ export default function AIExperimentalTools(): JSX.Element {
 				const blockEditorSelect = select('core/block-editor') as any;
 				const selectedClientId =
 					(blockEditorSelect?.getSelectedBlockClientId?.() as
-						| string
-						| undefined) || null;
+						string | undefined) || null;
 				if (!selectedClientId) {
 					setAiError(
 						__(

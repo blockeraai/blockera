@@ -20,8 +20,7 @@ export function useVarPickerAddWithSearchClear(
 	isSearchActive: boolean,
 	clearSearch: () => void,
 	customAddAction:
-		| VarPickerCustomAddAction
-		| { current: VarPickerCustomAddAction },
+		VarPickerCustomAddAction | { current: VarPickerCustomAddAction },
 	options: UseVarPickerAddWithSearchClearOptions = {}
 ): () => void {
 	const { captureSearchSeed } = options;

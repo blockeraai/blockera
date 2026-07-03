@@ -195,8 +195,7 @@ function useGlobalStylesBaseConfig(): [boolean, Record<string, unknown>] {
 			selectStore(
 				coreStore
 			).__experimentalGetCurrentThemeBaseGlobalStyles() as
-				| Record<string, unknown>
-				| undefined,
+				Record<string, unknown> | undefined,
 		[]
 	);
 	return [!!baseConfig, baseConfig ?? {}];

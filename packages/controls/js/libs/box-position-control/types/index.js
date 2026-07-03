@@ -6,11 +6,7 @@ import type { RepeaterControlProps } from '../../repeater-control/types';
 import type { MixedElement } from 'react';
 
 export type PositionType =
-	| 'static'
-	| 'relative'
-	| 'absolute'
-	| 'sticky'
-	| 'fixed';
+	'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 
 export type PositionControlValue = {
 	type: PositionType,

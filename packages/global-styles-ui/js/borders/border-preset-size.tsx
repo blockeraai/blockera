@@ -59,8 +59,7 @@ function BorderPresetSizeComponent({
 		valueCleanup: (value: any) => any;
 		repeaterId: string | null | undefined;
 		repeaterItems:
-			| Record<string, Array<BorderBoxDefaultPresetValue>>
-			| undefined;
+			Record<string, Array<BorderBoxDefaultPresetValue>> | undefined;
 		itemIdGenerator?: (itemId: string | number) => string;
 	};
 

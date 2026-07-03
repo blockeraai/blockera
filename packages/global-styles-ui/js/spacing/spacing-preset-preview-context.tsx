@@ -31,7 +31,6 @@ export function SpacingPresetPreviewUsageProvider({
  * Optional consumer-driven preview mode when spacing preset UI is embedded outside the variable picker.
  */
 export function useSpacingPresetPreviewUsageFromProvider():
-	| SpacingSizePresetUsage
-	| undefined {
+	SpacingSizePresetUsage | undefined {
 	return useContext(SpacingPresetPreviewUsageContext);
 }

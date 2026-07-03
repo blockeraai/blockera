@@ -5,12 +5,7 @@
 import type { RepeaterControlProps } from '../../repeater-control/types';
 
 type TRepeatTypes =
-	| 'no-repeat'
-	| 'repeat'
-	| 'repeat-x'
-	| 'repeat-y'
-	| 'round'
-	| 'space';
+	'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y' | 'round' | 'space';
 
 export type TItem = {
 	shape: { type: 'shape' | 'custom', id: string },

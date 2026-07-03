@@ -31,8 +31,7 @@ export function useGlobalSetting(
 
 	const settingValue = useMemo(() => {
 		const configToUse = configs[sourceKey] as
-			| Record<string, unknown>
-			| undefined;
+			Record<string, unknown> | undefined;
 		if (!configToUse) {
 			throw 'Unsupported source';
 		}

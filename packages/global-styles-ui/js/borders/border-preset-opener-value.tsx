@@ -107,9 +107,7 @@ function FlatBorderPresetValue({ side }: { side: BorderPresetStoredSide }) {
 				<BorderColorIndicator
 					color={
 						side.color as
-							| string
-							| Record<string, unknown>
-							| undefined
+							string | Record<string, unknown> | undefined
 					}
 				/>
 			) : null}

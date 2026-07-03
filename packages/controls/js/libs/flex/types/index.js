@@ -6,10 +6,7 @@
 import type { ControlGeneralTypes } from '../../../types';
 
 export type FlexDirectionsTypes =
-	| 'column'
-	| 'column-reverse'
-	| 'row'
-	| 'row-reverse';
+	'column' | 'column-reverse' | 'row' | 'row-reverse';
 
 export type FlexJustifyContentTypes =
 	| 'flex-start'
@@ -20,10 +17,7 @@ export type FlexJustifyContentTypes =
 	| 'space-evenly';
 
 export type FlexAlignItemsTypes =
-	| 'flex-start'
-	| 'center'
-	| 'flex-end'
-	| 'stretch';
+	'flex-start' | 'center' | 'flex-end' | 'stretch';
 
 export type FlexWrapTypes = 'nowrap' | 'wrap' | 'wrap-reverse';
 

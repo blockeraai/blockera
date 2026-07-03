@@ -174,8 +174,7 @@ function ColorGroupInner({
 	const taxonomy = usePresetTaxonomyGroupUi<Color & Record<string, unknown>>({
 		items: colors as Array<Color & Record<string, unknown>>,
 		baseItems: baseColors as
-			| Array<Color & Record<string, unknown>>
-			| undefined,
+			Array<Color & Record<string, unknown>> | undefined,
 		origin,
 		controlName,
 		suppressTaxonomyUi: flattenForColorPickerSearch || viewMode === 'list',

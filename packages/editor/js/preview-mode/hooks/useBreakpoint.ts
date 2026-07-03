@@ -51,11 +51,9 @@ interface BlockeraEditorSelect {
 export function useBreakpoint(): UseBreakpointReturn {
 	return useSelect((select) => {
 		const extensionsSelect = select('blockera/extensions') as
-			| BlockeraExtensionsSelect
-			| undefined;
+			BlockeraExtensionsSelect | undefined;
 		const editorSelect = select('blockera/editor') as
-			| BlockeraEditorSelect
-			| undefined;
+			BlockeraEditorSelect | undefined;
 
 		const breakpointId =
 			extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ??

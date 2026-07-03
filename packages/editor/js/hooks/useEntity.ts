@@ -216,26 +216,21 @@ export function useEntity(
 			if (isCurrentDocument) {
 				title =
 					(editorSelect.getEditedPostAttribute('title') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 				status =
 					(editorSelect.getEditedPostAttribute('status') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 				slug =
 					(editorSelect.getEditedPostAttribute('slug') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 				link =
 					(editorSelect.getCurrentPostAttribute('link') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 
 				// Fallback to current post object
 				if (!title || !status || !slug) {
 					const currentPost = editorSelect.getCurrentPost() as
-						| EntityRecordWithTitle
-						| undefined;
+						EntityRecordWithTitle | undefined;
 					if (currentPost) {
 						const postTitle = currentPost.title;
 						title =
@@ -310,8 +305,7 @@ export function useEntity(
 
 			// Check if post type is viewable
 			const postTypeObj = coreSelect.getPostType(postType) as
-				| PostTypeConfig
-				| undefined;
+				PostTypeConfig | undefined;
 			isViewable = postTypeObj?.viewable ?? false;
 
 			// Templates and template parts are previewable via generated URLs even though

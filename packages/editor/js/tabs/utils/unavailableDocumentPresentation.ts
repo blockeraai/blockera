@@ -7,11 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Document kinds used for unavailable-tab copy and card labels.
  */
 export type UnavailableDocumentKind =
-	| 'page'
-	| 'post'
-	| 'template'
-	| 'pattern'
-	| 'tab';
+	'page' | 'post' | 'template' | 'pattern' | 'tab';
 
 /**
  * Map entity post type to a coarse kind for messaging and card sublabels.

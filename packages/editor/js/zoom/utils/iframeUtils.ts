@@ -639,11 +639,9 @@ export function syncCanvasHeader(zoomPercent?: number): void {
 	const isZoomed = z !== 100;
 
 	const extensionsSelect = select('blockera/extensions') as
-		| BlockeraExtensionsSelect
-		| undefined;
+		BlockeraExtensionsSelect | undefined;
 	const editorSelect = select('blockera/editor') as
-		| BlockeraEditorSelect
-		| undefined;
+		BlockeraEditorSelect | undefined;
 
 	const breakpointId =
 		extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ??

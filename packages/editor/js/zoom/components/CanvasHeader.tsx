@@ -54,11 +54,9 @@ export default function CanvasHeader({
 	// Subscribes to blockera/extensions + blockera/editor; re-renders when breakpoint data changes.
 	const { breakpointId, breakpointInfo, isBase } = useSelect((select) => {
 		const extensionsSelect = select('blockera/extensions') as
-			| BlockeraExtensionsSelect
-			| undefined;
+			BlockeraExtensionsSelect | undefined;
 		const editorSelect = select('blockera/editor') as
-			| BlockeraEditorSelect
-			| undefined;
+			BlockeraEditorSelect | undefined;
 
 		const currentId =
 			extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ??

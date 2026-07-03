@@ -814,8 +814,7 @@ function ColorPresetFieldsComponent({
 	);
 
 	const shadeEditedBaselineLookup = useMemo(():
-		| Record<string, string>
-		| undefined => {
+		Record<string, string> | undefined => {
 		if (!origin || !slug || isShadeRow || !shadesSaved) {
 			return undefined;
 		}

@@ -5,12 +5,7 @@
 import type { ValueAddonReference, ValueAddonItemStatus } from '../../types';
 
 export type DynamicValueCategory =
-	| 'post'
-	| 'featured-image'
-	| 'archive'
-	| 'user'
-	| 'other'
-	| 'site';
+	'post' | 'featured-image' | 'archive' | 'user' | 'other' | 'site';
 
 export type DynamicValueTypes =
 	/**

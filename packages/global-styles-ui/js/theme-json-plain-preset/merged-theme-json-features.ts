@@ -13,8 +13,7 @@ import { wrapExperimentalFeaturesRaw } from '@blockera/data';
  * in the same wrapped shape used by variable resolution helpers.
  */
 export function useMergedThemeJsonExperimentalFeaturesWrapped():
-	| Record<string, unknown>
-	| undefined {
+	Record<string, unknown> | undefined {
 	return useSelect((wpSelect) => {
 		try {
 			const editorSettings =

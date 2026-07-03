@@ -28,7 +28,6 @@ export function ColorPresetPreviewUsageProvider({
 }
 
 export function useColorPresetPreviewUsageFromProvider():
-	| ColorPresetPreviewUsage
-	| undefined {
+	ColorPresetPreviewUsage | undefined {
 	return useContext(ColorPresetPreviewUsageContext);
 }
