@@ -19,7 +19,7 @@ jobs:
             categories: ${{ steps.set_categories.outputs.categories }}
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -47,7 +47,7 @@ jobs:
                 category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node

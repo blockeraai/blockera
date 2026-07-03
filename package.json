@@ -18,8 +18,8 @@
 		"url": "https://github.com/blockeraai/blockera/issues"
 	},
 	"engines": {
-		"node": ">=14.0.0",
-		"npm": ">=6.9.0 <=8.19.13"
+		"node": ">=20.19.0",
+		"npm": ">=10.0.0"
 	},
 	"config": {
 		"IS_GUTENBERG_PLUGIN": true,
