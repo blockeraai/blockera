@@ -9,7 +9,6 @@ import {
 	useMemo,
 	useState,
 } from '@wordpress/element';
-import type { CSSProperties } from 'react';
 import type { Color } from '@wordpress/global-styles-engine';
 
 /**
@@ -78,18 +77,6 @@ const GLOBAL_STYLES_COLOR_CONTEXT = {
 	blockName: 'global-styles',
 } as const;
 
-const SHADE_STEP_COLUMN_STYLE: CSSProperties = {
-	minWidth: 0,
-	textAlign: 'center',
-};
-
-const SHADE_STEP_LABEL_STYLE: CSSProperties = {
-	fontSize: 10,
-	fontWeight: 600,
-	opacity: 0.5,
-	color: 'var(--blockera-controls-label-color, #1e1e1e)',
-};
-
 const chromelessColorFieldProps = {
 	label: '',
 	columns: '',
@@ -137,14 +124,12 @@ function GlobalStylesShadeStepColumn({
 	name,
 	step,
 	hex,
-	stepLabel,
 	colorControlProps,
 	baselineHexByStep,
 }: {
 	name: string;
 	step: number;
 	hex: string;
-	stepLabel: string;
 	colorControlProps: {
 		size?: 'small' | 'normal' | 'input' | 'extra-small';
 		disabled?: boolean;
@@ -163,16 +148,20 @@ function GlobalStylesShadeStepColumn({
 		shadeHexDiffersFromBaseline(hex, baselineHex);
 
 	return (
-		<Flex
-			direction="column"
-			alignItems="anchor-center"
-			gap={0}
-			style={SHADE_STEP_COLUMN_STYLE}
+		<ControlContextProvider
+			value={{
+				name,
+				value: hex,
+				...GLOBAL_STYLES_COLOR_CONTEXT,
+			}}
 		>
-			<div
+			<ColorControl
+				{...chromelessColorFieldProps}
+				{...colorControlProps}
 				className={componentClassNames(
 					'global-styles-color-shade-swatch'
 				)}
+				colorIndicatorSize={18}
 			>
 				{isBaseAnchorStep ? (
 					<Icon
@@ -184,6 +173,7 @@ function GlobalStylesShadeStepColumn({
 						aria-hidden
 					/>
 				) : null}
+
 				{showEditedMarker ? (
 					<span
 						className={componentInnerClassNames(
@@ -192,22 +182,8 @@ function GlobalStylesShadeStepColumn({
 						aria-hidden
 					/>
 				) : null}
-				<ControlContextProvider
-					value={{
-						name,
-						value: hex,
-						...GLOBAL_STYLES_COLOR_CONTEXT,
-					}}
-				>
-					<ColorControl
-						{...chromelessColorFieldProps}
-						{...colorControlProps}
-						colorIndicatorSize={18}
-					/>
-				</ControlContextProvider>
-			</div>
-			<span style={SHADE_STEP_LABEL_STYLE}>{stepLabel}</span>
-		</Flex>
+			</ColorControl>
+		</ControlContextProvider>
 	);
 }
 
@@ -259,7 +235,6 @@ function GlobalStylesChromelessShadeRampRow({
 						name={controlName}
 						step={step}
 						hex={hex}
-						stepLabel={stepStr}
 						colorControlProps={colorControlProps}
 						baselineHexByStep={baselineHexByStep}
 					/>
@@ -467,25 +442,6 @@ function ColorPresetFieldsComponent({
 		);
 	}, [shadesSaved, fullItems, effectiveBaseSlug, displayRampMain]);
 
-	/** Generated preview only — not persisted until “Enable Color Shades” is on. */
-	const previewShadesMap = useMemo(() => {
-		if (shadesSaved || isShadeRow) {
-			return null;
-		}
-		const base = resolvePresetBaseHex(
-			displayRampMain,
-			colorItem,
-			effectiveBaseSlug
-		);
-		return generateColorShades(base);
-	}, [
-		shadesSaved,
-		isShadeRow,
-		colorItem,
-		displayRampMain,
-		effectiveBaseSlug,
-	]);
-
 	const {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
@@ -555,7 +511,13 @@ function ColorPresetFieldsComponent({
 	);
 
 	const handleToggleChange = (checked: boolean) => {
-		if (presetLocked || shadeConsentOpen) {
+		if (presetLocked) {
+			return;
+		}
+		if (shadeConsentOpen) {
+			if (checked) {
+				handleDiscardShadeToggle();
+			}
 			return;
 		}
 		if (checked === shadesSaved) {
@@ -852,9 +814,6 @@ function ColorPresetFieldsComponent({
 	}
 
 	const displayToggleChecked = shadeConsentOpen ? false : shadesSaved;
-	const showPreviewStack =
-		!isShadeRow && !shadesSaved && previewShadesMap !== null;
-	const showEditableShadeSteps = !isShadeRow && shadesSaved;
 
 	return (
 		<SharedPresetControls
@@ -896,6 +855,56 @@ function ColorPresetFieldsComponent({
 								onChange={handleValueChange}
 								disabled={presetLocked}
 							/>
+
+							<VariableVariationsFieldsSection>
+								{!isShadeRow ? (
+									<>
+										<VariableVariationsFieldsSlotProvider>
+											<VariableVariationsFieldsToggleSlot
+												label={__(
+													'Enable Color Shades',
+													'blockera'
+												)}
+												checked={displayToggleChecked}
+												disabled={presetLocked}
+												onChange={handleToggleChange}
+												trailing={
+													<>
+														{displayToggleChecked ? (
+															<VariableVariationsFieldsEditorSlot>
+																<GlobalStylesChromelessShadeRampRow
+																	baseSlug={
+																		effectiveBaseSlug
+																	}
+																	hexLookup={
+																		stackMap
+																	}
+																	mode="edit"
+																	disabledByLock={
+																		presetLocked
+																	}
+																	onStepChange={(
+																		step,
+																		v
+																	) =>
+																		updateShadeStepColor(
+																			step,
+																			v
+																		)
+																	}
+																	baselineHexLookup={
+																		shadeEditedBaselineLookup
+																	}
+																/>
+															</VariableVariationsFieldsEditorSlot>
+														) : null}
+													</>
+												}
+											/>
+										</VariableVariationsFieldsSlotProvider>
+									</>
+								) : null}
+							</VariableVariationsFieldsSection>
 						</BaseControl>
 					</Flex>
 				</Flex>
@@ -903,60 +912,6 @@ function ColorPresetFieldsComponent({
 				<VariableVariationsFieldsSection>
 					{!isShadeRow ? (
 						<>
-							<VariableVariationsFieldsSlotProvider>
-								<VariableVariationsFieldsToggleSlot
-									label={__(
-										'Enable Color Shades',
-										'blockera'
-									)}
-									checked={displayToggleChecked}
-									disabled={presetLocked || shadeConsentOpen}
-									onChange={handleToggleChange}
-									trailing={
-										showPreviewStack && previewShadesMap ? (
-											<VariableVariationsFieldsEditorSlot
-												style={{ opacity: 0.5 }}
-											>
-												<GlobalStylesChromelessShadeRampRow
-													baseSlug={effectiveBaseSlug}
-													hexLookup={previewShadesMap}
-													mode="preview"
-												/>
-											</VariableVariationsFieldsEditorSlot>
-										) : (
-											<>
-												{showEditableShadeSteps ? (
-													<VariableVariationsFieldsEditorSlot>
-														<GlobalStylesChromelessShadeRampRow
-															baseSlug={
-																effectiveBaseSlug
-															}
-															hexLookup={stackMap}
-															mode="edit"
-															disabledByLock={
-																presetLocked
-															}
-															onStepChange={(
-																step,
-																v
-															) =>
-																updateShadeStepColor(
-																	step,
-																	v
-																)
-															}
-															baselineHexLookup={
-																shadeEditedBaselineLookup
-															}
-														/>
-													</VariableVariationsFieldsEditorSlot>
-												) : null}
-											</>
-										)
-									}
-								/>
-							</VariableVariationsFieldsSlotProvider>
-
 							{shadeConsentOpen ? (
 								<VariableVariationsFieldsConsentSlot>
 									<NoticeControl type="warning">
