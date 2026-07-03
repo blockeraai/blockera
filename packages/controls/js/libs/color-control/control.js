@@ -50,6 +50,7 @@ export default function ColorControl({
 	variableTypes,
 	size = 'normal',
 	colorIndicatorSize = 16,
+	children,
 	//
 	...props
 }: ColorControlProps): MixedElement {
@@ -190,6 +191,8 @@ export default function ColorControl({
 				/>
 
 				{buttonLabel}
+
+				{children}
 			</Button>
 
 			{isOpen && (

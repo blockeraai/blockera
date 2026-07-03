@@ -32,6 +32,21 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-indicator');
 			cy.getByDataCy('color-label').should('have.text', 'None');
 		});
+
+		it('renders children inside the color button', () => {
+			cy.withDataProvider({
+				component: (
+					<ColorControl>
+						<span data-cy="color-control-child">Child</span>
+					</ColorControl>
+				),
+			});
+
+			cy.getByDataCy('color-btn')
+				.find('[data-cy="color-control-child"]')
+				.should('exist')
+				.and('have.text', 'Child');
+		});
 	});
 
 	context('Functional Tests', () => {
