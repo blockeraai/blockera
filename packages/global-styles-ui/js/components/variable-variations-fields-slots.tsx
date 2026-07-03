@@ -56,8 +56,8 @@ export function VariableVariationsFieldsToggleSlot({
 		<Flex
 			direction="row"
 			alignItems="center"
-			gap={0}
-			style={{ width: '100%', flexWrap: 'wrap' }}
+			gap={6}
+			style={{ width: '100%', flexWrap: 'wrap', marginTop: '5px' }}
 		>
 			<ToggleControl
 				label={label}
@@ -84,8 +84,11 @@ export function VariableVariationsFieldsEditorSlot({
 }: VariableVariationsFieldsEditorSlotProps) {
 	return (
 		<Flex
-			gap={2}
-			justifyContent="space-between"
+			className={componentInnerClassNames(
+				'editor-variable-variations-fields-wrapper'
+			)}
+			gap={0}
+			justifyContent="flex-start"
 			style={{
 				width: '100%',
 				...style,
