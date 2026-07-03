@@ -7,42 +7,39 @@
 
 	.blockera-component-base-breakpoint-icon {
 		position: absolute;
-		left: -2px;
-		top: 2px;
+		left: 50%;
+		top: -1px;
 		z-index: 2;
 		pointer-events: none;
 		stroke-width: 5px;
 		stroke: #f0f0f0;
 		paint-order: stroke;
+		transform: translateX(-50%);
 	}
 
 	.blockera-component-color-shade-edited-indicator {
 		position: absolute;
-		right: 1px;
-		top: 5px;
+		left: 50%;
+		right: initial;
+		bottom: 3px;
+		top: initial;
 		z-index: 2;
 		pointer-events: none;
 		width: 5px;
 		height: 5px;
 		border-radius: 50%;
-		background: #00a32a;
+		background: #000000;
 		box-shadow: 0 0 0 1.5px #ffffff;
+		transform: translateX(-50%);
 	}
 }
 
 .is-preset-variable-variations-picker-header {
-
 	/* Shade ramp chromeless controls (color-preset-fields) */
 	.blockera-component-global-styles-color-shade-swatch {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -5px;
 			top: -3px;
-		}
-
-		.blockera-component-color-shade-edited-indicator {
-			right: -2px;
-			top: 0;
 		}
 	}
 }
@@ -61,27 +58,5 @@
 		box-shadow:
 			inset 0 0 0 1px rgba(0, 0, 0, 0.25),
 			0 0 0 2px #ffffff;
-	}
-}
-
-.blockera-component-global-styles-color-shade-swatch--indicator-stack {
-	.blockera-component-base-breakpoint-icon {
-		left: -2px;
-		top: -1px;
-	}
-
-	.blockera-component-color-shade-edited-indicator {
-		right: -1px;
-		top: 0;
-		width: 4px;
-		height: 4px;
-		box-shadow: 0 0 0 1px #ffffff;
-	}
-}
-
-.blockera-component-global-styles-color-shade-swatch--preset-header-icon {
-	.blockera-component-base-breakpoint-icon {
-		left: -2px;
-		top: -2px;
 	}
 }
