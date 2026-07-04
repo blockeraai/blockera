@@ -6,20 +6,15 @@ import {
 	deactivateMuPlugin,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
-import { clearPresetVariablesViewModeStorage } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
 import {
 	assertColorPresetNotInVariablePicker,
 	assertColorPresetVisibleInVariablePicker,
 	clearVariablePickerSearch,
 	getWPDataObject,
-	logVariablePickerColorPresetDebugSnapshot,
 	MU_FIX,
 	openParagraphTextColorVariablePickerPopover,
 	typeInVariablePickerSearch,
 } from './e2e-variable-variations-helpers';
-
-/** TEMP: emit picker/store diagnostics on CI (see logVariablePickerColorPresetDebugSnapshot). */
-const shouldLogCiDebug = Boolean(Cypress.env('CI'));
 
 const MU = `${MU_FIX}/e2e-color-variable-picker-search.php`;
 const MU_NAME = 'e2e-color-variable-picker-search.php';
@@ -33,33 +28,17 @@ const PRESET_ON_BRAND_DISPLAY = 'On Brand';
 const PRESET_ACCENT_DISPLAY = 'Secondary Tone';
 const PRESET_NEUTRAL_DISPLAY = 'Neutral Surface';
 
-/**
- * Opens the picker and logs editor-store + DOM snapshot before assertions (CI only).
- */
-function openPickerWithCiDebug(label = 'after open') {
-	openParagraphTextColorVariablePickerPopover();
-	if (shouldLogCiDebug) {
-		logVariablePickerColorPresetDebugSnapshot(label);
-	}
-}
-
 describe('Global Styles UI → Color variable picker search', () => {
 	beforeEach(() => {
-		clearPresetVariablesViewModeStorage();
 		activateMuPlugin(MU, MU_NAME);
 	});
 
-	afterEach(function () {
-		if (shouldLogCiDebug && this.currentTest?.state === 'failed') {
-			logVariablePickerColorPresetDebugSnapshot(
-				`after failure: ${this.currentTest.title}`
-			);
-		}
+	afterEach(() => {
 		deactivateMuPlugin(MU, MU_NAME);
 	});
 
 	it('shows all fixture presets when search is empty', () => {
-		openPickerWithCiDebug('empty search');
+		openParagraphTextColorVariablePickerPopover();
 
 		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND_DISPLAY);
 		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT_DISPLAY);
@@ -67,7 +46,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('filters with multi-word AND search (bas bran)', () => {
-		openPickerWithCiDebug('bas bran');
+		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('bas bran');
 
@@ -77,7 +56,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('filters with multi-word partial search (acc sec)', () => {
-		openPickerWithCiDebug('acc sec');
+		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('acc sec');
 
@@ -87,7 +66,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('filters by CSS value fragment (aabb)', () => {
-		openPickerWithCiDebug('aabb');
+		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('aabb');
 
@@ -130,7 +109,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('clears search from the empty-state button', () => {
-		openPickerWithCiDebug('clear from empty state');
+		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('bas xyz');
 
@@ -147,7 +126,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('restores all presets after clearing search', () => {
-		openPickerWithCiDebug('restore after clear');
+		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('bas bran');
 		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
@@ -161,7 +140,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('selects a filtered preset by slug', () => {
-		openPickerWithCiDebug('select by slug');
+		openParagraphTextColorVariablePickerPopover();
 
 		typeInVariablePickerSearch('bas bran');
 
