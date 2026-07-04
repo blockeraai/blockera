@@ -192,7 +192,9 @@ export function hasExplicitPlainThemeJsonPresetStorage(
 }
 
 /**
- * Preset slug for merged-theme lookups when stored plain strings may be `resolvedCss,presetSlug`.
+ * Preset slug for merged-theme lookups when stored plain strings may be
+ * `resolvedCss,presetSlug`, a live `var(--wp--preset--…)` / `var:preset|…` token,
+ * or a bare slug.
  */
 export function plainPresetSlugFromStoredPlainPresetInput(
 	strippedPlainInput: string
@@ -201,9 +203,26 @@ export function plainPresetSlugFromStoredPlainPresetInput(
 	if (hit) {
 		return hit.slugPart;
 	}
-	return typeof strippedPlainInput === 'string'
-		? strippedPlainInput.trim()
-		: '';
+	const trimmed =
+		typeof strippedPlainInput === 'string' ? strippedPlainInput.trim() : '';
+	if (trimmed === '') {
+		return '';
+	}
+	// var:preset|color|slug
+	if (trimmed.startsWith('var:')) {
+		const parts = trimmed.split('|');
+		if (parts.length >= 3 && parts[2]) {
+			return parts[2].trim();
+		}
+	}
+	// var(--wp--preset--{type}--{slug}) or with fallback
+	const presetVarMatch = trimmed.match(
+		/^var\(\s*--wp--preset--[a-z0-9-]+--([^,)\s]+)/i
+	);
+	if (presetVarMatch && presetVarMatch[1]) {
+		return presetVarMatch[1];
+	}
+	return trimmed;
 }
 
 /** Non-empty `ValueAddonControlProps.themeJsonPlainPresetSlug` (merged theme.json preset slug). */

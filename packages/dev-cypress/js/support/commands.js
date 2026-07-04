@@ -272,18 +272,14 @@ export const registerCommands = () => {
 			`[data-variable-slug="${itemID}"]`,
 		].join(', ');
 
-		cy.get(
-			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
-			{ timeout: 20000 }
-		)
-			.last()
-			.should('be.visible');
-		cy.get(
-			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables',
-			{ timeout: 20000 }
-		)
-			.last()
+		// Prefer the picker content node (`data-test`) over outer `.popover-variables`
+		// shells — edit popovers share that class and `.last()` can miss the catalog.
+		cy.getByDataTest('variable-picker-popover', { timeout: 20000 })
+			.filter(':visible')
+			.first()
+			.should('be.visible')
 			.within(() => {
+				// Do not require :visible before scroll — long palettes keep rows off-screen.
 				cy.get(itemSelector, { timeout: 20000 })
 					.first()
 					.scrollIntoView();

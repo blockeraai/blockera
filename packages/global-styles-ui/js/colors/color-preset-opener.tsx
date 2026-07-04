@@ -228,22 +228,19 @@ export function ColorPresetOpener({
 		return filterVariationsByBase(fullItems, baseSlug).length;
 	}, [isShadeRow, itemHasShadeVariations, fullItems, baseSlug]);
 
-	const mainPresetForStack = useMemo(
-		() => ({
+	const mainPresetForStack = useMemo(() => {
+		const fullName = resolvePresetTaxonomyEditName(
+			colorItem as Record<string, unknown>,
+			taxonomyNameSource
+		);
+		return {
 			slug: baseSlug,
-			name: String(colorItem.name ?? ''),
+			name: fullName !== '' ? fullName : String(colorItem.name ?? ''),
 			color: palettePaintSource || colorItem.color,
 			type:
 				typeof colorItem.type === 'string' ? colorItem.type : undefined,
-		}),
-		[
-			baseSlug,
-			colorItem.name,
-			colorItem.color,
-			colorItem.type,
-			palettePaintSource,
-		]
-	);
+		};
+	}, [baseSlug, colorItem, taxonomyNameSource, palettePaintSource]);
 
 	const { isVariableVariationsPickerHeader } = useMemo(
 		() =>
@@ -563,7 +560,6 @@ export function ColorPresetOpener({
 				}
 				variablePickerVariationStrip={
 					<ColorShadesRepeaterItem
-						usageType="manual"
 						item={colorItem}
 						itemId={itemId}
 						inheritRepeaterPickerSelection={

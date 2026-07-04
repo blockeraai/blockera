@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
 import type { Color } from '@wordpress/global-styles-engine';
 
 /**
@@ -29,18 +28,19 @@ export function shadeVariationSlug(
 }
 
 /**
- * Human-readable label for a shade step (50–950), relative to the parent preset name.
+ * Label for a shade step (50–950): full parent variable name + step
+ * (e.g. "Neutral 200", "Design System/Neutral 200").
  */
 export function formatShadePresetName(
 	parentPresetName: string,
 	step: number | string
 ): string {
-	return sprintf(
-		/* translators: 1: parent color preset name, 2: shade step number (e.g. 600). */
-		__('%1$s - Shade %2$s', 'blockera'),
-		parentPresetName,
-		String(step)
-	);
+	const stepStr = String(step);
+	const baseLabel = parentPresetName.trim();
+	if (baseLabel === '') {
+		return stepStr;
+	}
+	return `${baseLabel} ${stepStr}`;
 }
 
 export function filterVariationsByBase(
@@ -107,20 +107,22 @@ function buildDisplayShadeRamp(
 	const ramp: Color[] = [];
 	const stackMap: ColorShadesMap | undefined = withStackMap ? {} : undefined;
 
+	const parentName = String(mainPreset.name ?? '');
 	for (const step of COLOR_SHADE_STEPS) {
 		const stepStr = String(step);
+		const shadeName = formatShadePresetName(parentName, stepStr);
 		let row: Color;
 		const stored = storedByStep.get(stepStr);
 		if (stored) {
 			row = {
 				...stored,
-				name: stepStr,
+				name: shadeName,
 			};
 		} else if (step === COLOR_SHADE_ANCHOR_STEP) {
 			row = {
 				...colorPaletteRowFromRepeaterFields({
 					slug: shadeVariationSlug(baseSlug, stepStr),
-					name: stepStr,
+					name: shadeName,
 					color: mainPreset.color ?? '#000000',
 					isVisible: true,
 				}),
@@ -130,7 +132,7 @@ function buildDisplayShadeRamp(
 			row = {
 				...colorPaletteRowFromRepeaterFields({
 					slug: shadeVariationSlug(baseSlug, stepStr),
-					name: stepStr,
+					name: shadeName,
 					color: '#000000',
 					isVisible: true,
 				}),
