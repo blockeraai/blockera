@@ -13,8 +13,9 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import type { VariableCategory } from '@blockera/data';
 import { Icon } from '@blockera/icons';
+import type { VariableCategory } from '@blockera/data';
+import { getNormalizedControlParentId } from '@blockera/data-editor';
 
 /**
  * Internal dependencies
@@ -143,7 +144,7 @@ export default function BorderRadiusControl({
 					>
 						{value.type === 'all' ? (
 							<InputControl
-								id="all"
+								id={`${getNormalizedControlParentId(id)}all`}
 								min={0}
 								unitType="essential"
 								controlAddonTypes={resolvedControlAddonTypes}
@@ -227,7 +228,7 @@ export default function BorderRadiusControl({
 						}}
 					>
 						<InputControl
-							id="topLeft"
+							id={`${getNormalizedControlParentId(id)}topLeft`}
 							min={0}
 							unitType="essential"
 							controlAddonTypes={resolvedControlAddonTypes}
@@ -246,7 +247,7 @@ export default function BorderRadiusControl({
 							size="small"
 						/>
 						<InputControl
-							id="topRight"
+							id={`${getNormalizedControlParentId(id)}topRight`}
 							min={0}
 							unitType="essential"
 							controlAddonTypes={resolvedControlAddonTypes}
@@ -265,7 +266,7 @@ export default function BorderRadiusControl({
 							size="small"
 						/>
 						<InputControl
-							id="bottomLeft"
+							id={`${getNormalizedControlParentId(id)}bottomLeft`}
 							min={0}
 							unitType="essential"
 							controlAddonTypes={resolvedControlAddonTypes}
@@ -284,7 +285,7 @@ export default function BorderRadiusControl({
 							size="small"
 						/>
 						<InputControl
-							id="bottomRight"
+							id={`${getNormalizedControlParentId(id)}bottomRight`}
 							min={0}
 							unitType="essential"
 							controlAddonTypes={resolvedControlAddonTypes}
