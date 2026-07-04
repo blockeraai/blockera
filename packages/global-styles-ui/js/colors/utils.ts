@@ -131,9 +131,23 @@ function presetSlugFromVariableLikeColorString(
 }
 
 /**
- * Normalizes repeater `color` for palette persistence. Value-addon objects become
- * `resolvedCss,presetSlug` when both resolve; strings matching variable wrappers collapse to slug-only;
- * already composite strings round-trip unchanged.
+ * True when `paint` is a live CSS custom-property reference that must be stored
+ * verbatim in theme.json palette `color` (no Blockera `,slug` suffix).
+ */
+function isLiveCssPresetVariableReference(paint: string): boolean {
+	return (
+		paint.includes('var(--wp--preset--') ||
+		paint.startsWith('var:') ||
+		paint.startsWith('var(--wp--')
+	);
+}
+
+/**
+ * Normalizes repeater `color` for palette persistence.
+ * Live `var(--wp--preset--…)` / `var:` references are stored as valid CSS only
+ * (no `,slug` suffix — that breaks generated custom properties).
+ * Literal paint + preset slug may still use composite `paint,slug` for chip UI.
+ * Variable-like strings collapse to slug-only when they are not live CSS vars.
  */
 export function normalizeRepeaterPaletteColorValue(
 	raw: unknown,
@@ -148,7 +162,15 @@ export function normalizeRepeaterPaletteColorValue(
 		if (trimmed === '') {
 			return '';
 		}
-		if (splitStoredCompositePlainPresetValue(trimmed)) {
+		const compositeHit = splitStoredCompositePlainPresetValue(trimmed);
+		if (compositeHit) {
+			// Repair legacy `var(…),slug` rows: palette color is written to CSS as-is.
+			return isLiveCssPresetVariableReference(compositeHit.realPart)
+				? compositeHit.realPart
+				: trimmed;
+		}
+		// Live CSS var() must stay as CSS; do not collapse to bare slug.
+		if (isLiveCssPresetVariableReference(trimmed)) {
 			return trimmed;
 		}
 		return (
@@ -176,6 +198,14 @@ export function normalizeRepeaterPaletteColorValue(
 				: '';
 
 		const slug = slugFromResolved ?? idFromSettings;
+
+		// Live var() is valid theme.json / CSS; appending `,slug` breaks the custom property.
+		if (
+			resolvedStr !== '' &&
+			isLiveCssPresetVariableReference(resolvedStr)
+		) {
+			return resolvedStr;
+		}
 
 		if (resolvedStr !== '' && slug !== '') {
 			return `${resolvedStr},${slug}`;
