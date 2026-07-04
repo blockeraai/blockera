@@ -15,6 +15,7 @@ import {
 	useControlContext,
 	useVarPickerPresetContext,
 	variablePickerPopoverTypeClassName,
+	variablePopoverModeClassName,
 } from '@blockera/controls';
 
 /**
@@ -170,6 +171,7 @@ export function TaxonomyRepeaterBridgeInner({
 		);
 		return classNames(
 			controlInnerClassNames('popover-variables'),
+			variablePopoverModeClassName('edit'),
 			variableType ? variablePickerPopoverTypeClassName(variableType) : ''
 		);
 	}, [resolvedControlId, pickerCtx.variableType]);

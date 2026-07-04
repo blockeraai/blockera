@@ -34,6 +34,7 @@ import {
 	useVariablePickerSearchQuery,
 	VarPickerSectionCustomAddButton,
 	variablePickerItemMatchesSearch,
+	variablePopoverModeClassName,
 } from '@blockera/controls';
 import { noop, pascalCase, isObject, isEquals } from '@blockera/utils';
 import {
@@ -315,7 +316,10 @@ const Presets = ({
 				__('No %s variable.', 'blockera'),
 				pascalCase(origin)
 			)}
-			popoverClassName={controlInnerClassNames('popover-variables')}
+			popoverClassName={classNames(
+				controlInnerClassNames('popover-variables'),
+				variablePopoverModeClassName('edit')
+			)}
 			popoverTitle={popoverTitle}
 			PromoComponent={renderPromo}
 			canAddNewItem={canAddNewItem}

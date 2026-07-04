@@ -28,6 +28,7 @@ export {
 	variablePickerItemMatchesSearch,
 	variablePickerHasAnySearchMatches,
 	variablePickerPopoverTypeClassName,
+	variablePopoverModeClassName,
 } from './var-picker-helpers';
 export {
 	VarPickerSearchContext,

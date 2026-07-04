@@ -262,7 +262,8 @@
 .blockera-component-popover.blockera-control-popover-variables {
 	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 
-	&.blockera-control-popover-variables-type-color {
+	// Width applies only to the catalog picker, not add/edit variable forms.
+	&.blockera-control-popover-variables-mode-picker.blockera-control-popover-variables-type-color {
 		.components-popover__content {
 			width: 340px;
 		}

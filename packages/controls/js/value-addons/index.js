@@ -612,6 +612,7 @@ export {
 	variablePickerItemMatchesSearch,
 	variablePickerHasAnySearchMatches,
 	variablePickerPopoverTypeClassName,
+	variablePopoverModeClassName,
 	VarPickerSearchContext,
 	useVarPickerSearchContext,
 	useVariablePickerSearchQuery,

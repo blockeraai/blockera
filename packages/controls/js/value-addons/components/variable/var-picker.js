@@ -68,6 +68,7 @@ import {
 	variablePickerHasAnySearchMatches,
 	variablePickerItemMatchesSearch,
 	variablePickerPopoverTypeClassName,
+	variablePopoverModeClassName,
 } from './var-picker-helpers';
 import {
 	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
@@ -398,6 +399,7 @@ export default function ({
 		}
 		return classNames(
 			controlInnerClassNames('popover-variables'),
+			variablePopoverModeClassName('picker'),
 			...typeClassNames
 		);
 	}, [variablePickerSectionKeys, controlVariableTypes]);

@@ -41,6 +41,14 @@ export function variablePickerPopoverTypeClassName(presetType: string): string {
 }
 
 /**
+ * Purpose of the variable popover: catalog picker vs add/edit form.
+ * e.g. `blockera-control-popover-variables-mode-picker`
+ */
+export function variablePopoverModeClassName(mode: 'picker' | 'edit'): string {
+	return controlInnerClassNames(`popover-variables-mode-${mode}`);
+}
+
+/**
  * Built-in picker keys from the control plus bootstrapped groups whose `type`
  * matches (e.g. Blocksy `blocksy-colors` when the control offers `color`).
  */
