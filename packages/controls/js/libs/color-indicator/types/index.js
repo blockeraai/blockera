@@ -52,4 +52,15 @@ export type ColorIndicatorStackProps = {
 	 * Specifies the max number of items in stack
 	 */
 	maxItems?: number,
+	/**
+	 * Stack paint order. `normal` follows DOM order; `centered` peaks z-index
+	 * at the middle item (left-middle when the count is even).
+	 */
+	displayMode?: 'normal' | 'centered',
+	/**
+	 * Overlap gap for stacked indicators (`--stack-space`). Numbers are treated
+	 * as pixels (e.g. `-10` → `-10px`). When omitted, spacing is derived from
+	 * the visible item count.
+	 */
+	space?: number | string,
 };

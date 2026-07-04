@@ -85,6 +85,7 @@
 
 .blockera-component-color-indicator-stack {
 	display: flex;
+	align-items: center;
 	--stack-space: -5px;
 
 	.blockera-component-color-indicator:not(:first-child) {
@@ -95,5 +96,15 @@
 		box-shadow:
 			inset 0 0 0 1px rgba(0, 0, 0, 0.25),
 			0 0 0 2px #ffffff;
+	}
+
+	&.color-indicator-stack--centered {
+		.blockera-component-color-indicator {
+			position: relative;
+
+			&::before {
+				display: none;
+			}
+		}
 	}
 }
