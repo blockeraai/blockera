@@ -443,7 +443,6 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 					'E2E Tax Cat Var Base'
 				)
 					.closest('[data-cy="repeater-item"]')
-					.find('[data-cy="header-values"]')
 					.find('[data-cy="color-preset-shade-stack"]')
 					.should('be.visible');
 			});

@@ -179,7 +179,6 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 					{ timeout: 20000 }
 				)
 					.closest('[data-cy="repeater-item"]')
-					.find('[data-cy="header-values"]')
 					.find('[data-cy="color-preset-shade-stack"]')
 					.should('be.visible');
 			});
