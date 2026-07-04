@@ -321,9 +321,10 @@ export function ColorPresetOpener({
 		viewMode,
 	]);
 
-	// Compact half-width rows (`meta.interface-size: small`) omit the trailing value; list view is full width.
+	// Shade accordion headers use the stack preview instead of a trailing hex.
+	// Compact half-width rows (`meta.interface-size: small`) also omit the value; list view is full width.
 	const showHexValue =
-		// shadeVariationCount === 0 &&
+		shadeVariationCount === 0 &&
 		Boolean(colorItem?.color) &&
 		!(
 			viewMode !== 'list' &&
