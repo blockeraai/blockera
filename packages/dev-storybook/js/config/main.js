@@ -21,6 +21,45 @@ const config = {
 	},
 	tags: ['autodocs'],
 	async webpackFinal(config) {
+		// Full source maps exhaust Node heap on this large dependency graph.
+		config.devtool = 'eval-cheap-module-source-map';
+
+		const pluginRoot = config.context;
+		const experimentalConfigLocalPath = [
+			pluginRoot,
+			'local.experimental.config.json',
+		].join('/');
+		let experimentalConfigResolvedPath = [
+			pluginRoot,
+			'experimental.config.json',
+		].join('/');
+
+		try {
+			require('node:fs').accessSync(experimentalConfigLocalPath);
+			experimentalConfigResolvedPath = experimentalConfigLocalPath;
+		} catch {
+			// Use default experimental.config.json.
+		}
+
+		config.resolve = {
+			...config.resolve,
+			alias: {
+				...(config.resolve?.alias || {}),
+				'@blockera/experimental-config': experimentalConfigResolvedPath,
+				'@wordpress/components/build-module/theme': [
+					pluginRoot,
+					'node_modules/@wordpress/components/build-module/theme/index.js',
+				].join('/'),
+			},
+		};
+
+		config.module.rules.unshift({
+			test: /\.m?js/,
+			resolve: {
+				fullySpecified: false,
+			},
+		});
+
 		// Remove the existing svg rule
 		config.module.rules = config.module.rules?.filter((rule) => {
 			if (rule.test && rule.test.toString().includes('svg')) {
@@ -57,6 +96,10 @@ const config = {
 				test: /packages\/.*\.svg$/,
 				issuer: /\.[jt]sx?$/,
 				use: ['@svgr/webpack'],
+			},
+			{
+				test: /\.(png|jpe?g|gif|webp)$/i,
+				type: 'asset/resource',
 			}
 		);
 

@@ -17,10 +17,7 @@ import {
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
 import { Playground } from '@blockera/dev-storybook/js/components';
-import { supports } from '../supports';
-import { attributes } from '../attributes';
-// FIXME: please fix this import!
-// import AdvancedExtensionIcon from '../icons/extension-icon';
+import { supports, attributes } from '../../shared';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';

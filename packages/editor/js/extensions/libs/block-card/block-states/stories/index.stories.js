@@ -12,10 +12,10 @@ import {
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
 import { Playground } from '@blockera/dev-storybook/js/components';
-import { BlockStyle } from '../../../../style-engine';
+import { BlockStyle } from '../../../../../style-engine';
 import StatesManager from '../components/states-manager';
-import { useAttributes } from '../../../../hooks';
-import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
+import { useAttributes } from '../../../../../hooks';
+import { WithPlaygroundStyles } from '../../../../../../../../.storybook/decorators/with-playground-styles';
 
 const { SharedDecorators } = Decorators;
 
