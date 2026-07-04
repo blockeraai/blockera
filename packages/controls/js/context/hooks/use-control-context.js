@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { useContext, useCallback, useRef } from '@wordpress/element';
 
@@ -16,6 +15,7 @@ import {
 	isObject,
 	isBoolean,
 	isUndefined,
+	isEquals,
 	mergeObject,
 } from '@blockera/utils';
 
@@ -170,8 +170,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		// eslint-disable-next-line
 	}, []);
 
-	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
-	const calculatedValue = _getCalculatedValue();
+	const calculatedValue = getCalculatedInitValue();
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
@@ -255,6 +254,33 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	});
 
 	/**
+	 * Resolve the effective control value using the same rules as ControlContextProvider.
+	 * When skipSyncValue is true, the store value wins. Otherwise controlInfo.value
+	 * is preferred when it is defined and differs from the store.
+	 *
+	 * @return {any} resolved control value before id/defaultValue preparation.
+	 */
+	function getResolvedControlValue(): any {
+		const storeValue = getControl(controlInfo.name)?.value;
+		const skipSyncValue =
+			controlInfo.hasOwnProperty('skipSyncValue') &&
+			true === controlInfo.skipSyncValue;
+
+		if (skipSyncValue) {
+			return storeValue ?? savedValue;
+		}
+
+		if (
+			!isUndefined(controlInfo.value) &&
+			!isEquals(storeValue, controlInfo.value)
+		) {
+			return controlInfo.value;
+		}
+
+		return storeValue ?? savedValue;
+	}
+
+	/**
 	 * Retrieved control value
 	 * to merge default and saved value for simple or repeater controls.
 	 *
@@ -264,7 +290,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	 */
 	function getCalculatedInitValue(currentValue: any = null): any {
 		if (isNull(currentValue)) {
-			currentValue = savedValue;
+			currentValue = getResolvedControlValue();
 		}
 
 		if (
