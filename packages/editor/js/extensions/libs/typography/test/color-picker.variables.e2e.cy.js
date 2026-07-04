@@ -3,8 +3,10 @@
  */
 import {
 	createPost,
+	getEditedGlobalStylesSetting,
 	getSelectedBlock,
 	getWPDataObject,
+	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesColorPaletteScreen,
 	redirectToFrontPage,
 	savePage,
@@ -17,6 +19,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 	const expectedSlug = 'e-2-e-color';
 	/** Default swatch for new custom presets in Global Styles (see color palette screen). */
 	const presetDefaultHex = '#000000';
+	const addDataTest = 'global-styles-preset-add-color-presets-custom';
 
 	/**
 	 * One shared custom color preset (free tier allows a single custom variable).
@@ -24,29 +27,49 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 	const seedColorPreset = () => {
 		openGlobalStylesColorPaletteScreen();
 
-		cy.addNewGlobalStylesCustomColorPreset();
-
-		// eslint-disable-next-line cypress/unsafe-to-chain-command -- last repeater row after add
-		cy.getParentContainer('Custom variables').within(() => {
-			cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
-				.last()
-				.should('be.visible');
-		});
-
-		// eslint-disable-next-line cypress/unsafe-to-chain-command -- single input in preset name field
-		cy.getByDataTest('global-styles-preset-name-field')
-			.first()
-			.should('be.visible');
-		cy.getByDataTest('global-styles-preset-name-field')
-			.first()
-			.clear({ force: true });
-		cy.getByDataTest('global-styles-preset-name-field')
-			.first()
-			.type(presetName, { delay: 0, force: true });
-
-		cy.realPress('Escape');
+		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 
 		saveSiteEditorDirtyEntities();
+
+		// Ensure the slug/name landed on the global styles entity before leaving Site Editor.
+		getEditedGlobalStylesSetting('color.palette.custom').then((rows) => {
+			const list = Array.isArray(rows) ? rows : [];
+			const row = list.find(
+				(r) => String(r?.slug ?? '') === expectedSlug
+			);
+			expect(row, `custom palette row "${expectedSlug}"`).to.exist;
+			expect(String(row.name)).to.equal(presetName);
+		});
+	};
+
+	/** Opens Text Color value-addon picker and selects the seeded custom preset. */
+	const pickSeededColorPresetInTextColor = () => {
+		cy.getParentContainer('Text Color').within(() => {
+			cy.openValueAddon();
+		});
+
+		cy.getByDataTest('variable-picker-popover', { timeout: 20000 })
+			.filter(':visible')
+			.first()
+			.should('be.visible');
+
+		// Narrow the catalog so custom rows are not buried under theme/default palettes.
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.within(() => {
+				cy.get(
+					'.blockera-control-var-picker-search input[type="search"]',
+					{
+						timeout: 20000,
+					}
+				)
+					.should('be.visible')
+					.clear({ force: true })
+					.type(presetName, { delay: 0, force: true });
+			});
+
+		cy.selectValueAddonItem(expectedSlug);
 	};
 
 	it('applies the custom preset from value addons: editor CSS, block data, and front match the default hex', () => {
@@ -59,13 +82,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		cy.getBlock('default').type('Variable color paragraph.', { delay: 0 });
 		cy.getByAriaControls('styles-view').click();
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.openValueAddon();
-		});
-
-		cy.getByDataTest('variable-picker-popover').should('be.visible');
-
-		cy.selectValueAddonItem(expectedSlug);
+		pickSeededColorPresetInTextColor();
 
 		cy.getIframeBody().within(() => {
 			cy.get('#blockera-styles-wrapper')
@@ -113,26 +130,47 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 			cy.get('[data-cy="repeater-item"]', { timeout: 15000 })
 				.last()
 				.within(() => {
-					cy.get('[data-cy="color-repeater-item-header"]').click({
-						force: true,
-					});
+					cy.get('[data-cy="color-repeater-item-header"]')
+						.first()
+						.click({ force: true });
 				});
 		});
 
-		cy.get('.components-popover', { timeout: 15000 }).should('be.visible');
-		cy.get('.components-popover').within(() => {
-			cy.getByDataCy('color-label').click({ force: true });
-		});
+		// Scope to the visible edit popover; multiple `.components-popover` nodes
+		// (and color-labels) can exist in Site Editor chrome.
+		cy.get('.components-popover')
+			.filter(':visible')
+			.last()
+			.within(() => {
+				cy.getByDataCy('color-btn').first().click({ force: true });
+			});
 
-		cy.getByDataCy('color-picker-css-value').clear({ force: true });
-		cy.getByDataCy('color-picker-css-value').type(editedHexInput, {
-			delay: 0,
-			force: true,
-		});
+		cy.get('.components-popover')
+			.filter(':visible')
+			.last()
+			.within(() => {
+				cy.getByDataCy('color-picker-css-value').clear({ force: true });
+				cy.getByDataCy('color-picker-css-value').type(editedHexInput, {
+					delay: 0,
+					force: true,
+				});
+			});
 
+		cy.realPress('Escape');
 		cy.realPress('Escape');
 
 		saveSiteEditorDirtyEntities();
+
+		getEditedGlobalStylesSetting('color.palette.custom').then((rows) => {
+			const list = Array.isArray(rows) ? rows : [];
+			const row = list.find(
+				(r) => String(r?.slug ?? '') === expectedSlug
+			);
+			expect(row, `custom palette row "${expectedSlug}"`).to.exist;
+			expect(String(row.color).toLowerCase()).to.match(
+				/#cc3344|rgb\(204,\s*51,\s*68\)/
+			);
+		});
 
 		createPost();
 
@@ -141,13 +179,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		});
 		cy.getByAriaControls('styles-view').click();
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.openValueAddon();
-		});
-
-		cy.getByDataTest('variable-picker-popover').should('be.visible');
-
-		cy.selectValueAddonItem(expectedSlug);
+		pickSeededColorPresetInTextColor();
 
 		cy.getIframeBody().within(() => {
 			cy.get('#blockera-styles-wrapper')
