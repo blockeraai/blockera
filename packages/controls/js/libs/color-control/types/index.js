@@ -1,5 +1,10 @@
 // @flow
 /**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
  * Internal dependencies
  */
 import type {
@@ -32,4 +37,8 @@ export type ColorControlProps = {
 	 * Pixel size passed to `ColorIndicator` inside the color button.
 	 */
 	colorIndicatorSize?: number,
+	/**
+	 * Optional hover tooltip on the color button. Disabled when unset/empty.
+	 */
+	tooltip?: string | MixedElement | $ReadOnlyArray<MixedElement>,
 };

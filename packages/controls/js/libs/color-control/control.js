@@ -50,6 +50,7 @@ export default function ColorControl({
 	variableTypes,
 	size = 'normal',
 	colorIndicatorSize = 16,
+	tooltip,
 	children,
 	//
 	...props
@@ -182,6 +183,8 @@ export default function ColorControl({
 				}}
 				data-cy="color-btn"
 				{...props}
+				showTooltip={Boolean(tooltip)}
+				label={tooltip}
 			>
 				<ColorIndicator
 					type="color"
