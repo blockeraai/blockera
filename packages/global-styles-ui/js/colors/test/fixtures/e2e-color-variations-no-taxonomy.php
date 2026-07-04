@@ -18,7 +18,7 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	];
 	$data['settings']['color']['palette'][] = [
 		'slug'  => 'e-2-e-var-base-shade-500',
-		'name'  => 'E2E Var Shade Base Shade 500',
+		'name'  => 'E2E Var Shade Base 500',
 		'color' => '#773311',
 	];
 	return $data;

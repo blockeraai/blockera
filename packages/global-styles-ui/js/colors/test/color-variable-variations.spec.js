@@ -46,7 +46,7 @@ const base = { slug: 'brand', name: 'Brand', color: '#627398' };
 function shadeRow(step, hex = '#111111') {
 	return {
 		slug: shadeVariationSlug('brand', step),
-		name: `Shade ${step}`,
+		name: `Brand ${step}`,
 		color: hex,
 		isVisible: true,
 	};
@@ -153,10 +153,13 @@ describe('color-palette-variations-utils', () => {
 		expect(shadeVariationSlug('x', '950')).toBe('x-shade-950');
 	});
 
-	it('formatShadePresetName includes parent name and step', () => {
-		const label = formatShadePresetName('Accent', 400);
-		expect(label).toContain('Accent');
-		expect(label).toContain('400');
+	it('formatShadePresetName is full parent name plus step', () => {
+		expect(formatShadePresetName('Neutral', 200)).toBe('Neutral 200');
+		expect(formatShadePresetName('Accent', '50')).toBe('Accent 50');
+		expect(formatShadePresetName('Design System/Neutral', 400)).toBe(
+			'Design System/Neutral 400'
+		);
+		expect(formatShadePresetName('', 500)).toBe('500');
 	});
 
 	it('filterVariationsByBase only returns shade rows for that base', () => {
@@ -232,6 +235,9 @@ describe('color-palette-variations-utils', () => {
 		expect(rows.every((r) => isShadePaletteColor(r))).toBe(true);
 		expect(rows.map((r) => r.slug).sort()).toEqual(
 			COLOR_SHADE_STEPS.map((s) => shadeVariationSlug('brand', s)).sort()
+		);
+		expect(rows.map((r) => r.name)).toEqual(
+			COLOR_SHADE_STEPS.map((s) => `Brand ${s}`)
 		);
 	});
 

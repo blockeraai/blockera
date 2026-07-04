@@ -63,7 +63,7 @@ describe('parse-preset-name-taxonomy', () => {
 	it('excludes shade slugs and renderRepeaterItem false from taxonomy', () => {
 		expect(
 			isNameBasedTaxonomyPreset({
-				name: 'Design System/Neutral/Shade 50',
+				name: 'Design System/Neutral 50',
 				slug: 'neutral-shade-50',
 				color: '#000',
 			})

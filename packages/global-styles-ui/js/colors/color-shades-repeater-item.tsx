@@ -32,7 +32,6 @@ import {
 	getDisplayShadeRamp,
 	getDisplayShadeRampWithStackMap,
 	stackValueFromShades,
-	formatShadePresetName,
 } from './color-palette-variations-utils';
 import {
 	COLOR_SHADE_ANCHOR_STEP,
@@ -41,6 +40,7 @@ import {
 } from './color-shades-generator';
 import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
+import { resolvePresetTaxonomyEditName } from '../components/preset-taxonomy/taxonomy-meta';
 import {
 	findRepeaterItemIdBySlug,
 	parsePaletteShadeSlug,
@@ -212,7 +212,6 @@ export const ColorPresetShadeStackHeader = memo(
 
 export type ColorShadesRepeaterItemComponentProps = {
 	itemId: string;
-	usageType?: 'auto' | 'manual';
 	item: VariableType | Record<string, unknown>;
 	/**
 	 * When false, nested shade rows ignore `selectable` / `isSelected` from the repeater store
@@ -222,7 +221,6 @@ export type ColorShadesRepeaterItemComponentProps = {
 };
 function ColorShadesRepeaterItemComponent({
 	item,
-	usageType = 'auto',
 	itemId: parentRepeaterItemId,
 	inheritRepeaterPickerSelection = true,
 }: ColorShadesRepeaterItemComponentProps) {
@@ -250,13 +248,21 @@ function ColorShadesRepeaterItemComponent({
 		color?: string;
 		type?: string;
 	};
-	const { fullItems } = usePresetVariationsStorage<Color>();
+	const { fullItems, taxonomyNameSource } =
+		usePresetVariationsStorage<Color>();
 
 	/** Parent row slug (base); nested shade rows receive `baseSlug` in preset fields. */
 	const parentSlug = String(colorItem.slug ?? '');
+	const parentFullName = resolvePresetTaxonomyEditName(
+		colorItem as Record<string, unknown>,
+		taxonomyNameSource
+	);
 	const mainPreset: ColorPresetShadeStackMainPreset = {
 		slug: parentSlug,
-		name: String(colorItem.name ?? ''),
+		name:
+			parentFullName !== ''
+				? parentFullName
+				: String(colorItem.name ?? ''),
 		color: colorItem.color,
 		type: typeof colorItem.type === 'string' ? colorItem.type : undefined,
 	};
@@ -297,15 +303,10 @@ function ColorShadesRepeaterItemComponent({
 				? shadeMeta.shadeStep
 				: String(variation.name ?? '');
 
-		let variationName = String(variation.name ?? '');
-		if (useListViewShadeStepLabel) {
-			variationName = shadeStepLabel;
-		} else if ('auto' === usageType) {
-			variationName = formatShadePresetName(
-				mainPreset.name,
-				variation.name
-			);
-		}
+		// Persisted and display names are the step (e.g. "200"); list view always prefers slug step.
+		const variationName = useListViewShadeStepLabel
+			? shadeStepLabel
+			: String(variation.name ?? '');
 
 		const merged = {
 			...item,

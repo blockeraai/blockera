@@ -378,19 +378,41 @@ function ColorPresetFieldsComponent({
 		);
 	}, [isAnchorShadeRow, fullItems, effectiveBaseSlug]);
 
+	/** Full parent label for shade names (includes taxonomy path when present). */
+	const shadeParentPresetName = useMemo(() => {
+		const main =
+			mainPresetRow ??
+			findMainColorPresetByBaseSlug(fullItems, effectiveBaseSlug) ??
+			colorItem;
+		const fullName = resolvePresetTaxonomyEditName(
+			main as Record<string, unknown>,
+			taxonomyNameSource
+		);
+		if (fullName !== '') {
+			return fullName;
+		}
+		return String((main as { name?: string }).name ?? colorItem.name ?? '');
+	}, [
+		mainPresetRow,
+		fullItems,
+		effectiveBaseSlug,
+		colorItem,
+		taxonomyNameSource,
+	]);
+
 	const displayRampMain = useMemo(() => {
 		if (!isShadeRow) {
 			if (isAnchorShadeRow) {
 				const main = mainPresetRow;
 				return {
 					slug: effectiveBaseSlug,
-					name: main ? String(main.name ?? '') : colorItem.name,
+					name: shadeParentPresetName,
 					color: main?.color ?? colorItem.color,
 				};
 			}
 			return {
 				slug: effectiveBaseSlug,
-				name: colorItem.name,
+				name: shadeParentPresetName,
 				color: colorItem.color,
 			};
 		}
@@ -400,7 +422,7 @@ function ColorPresetFieldsComponent({
 		);
 		return {
 			slug: effectiveBaseSlug,
-			name: main ? String(main.name ?? '') : colorItem.name,
+			name: shadeParentPresetName,
 			color: main?.color ?? colorItem.color,
 		};
 	}, [
@@ -409,7 +431,7 @@ function ColorPresetFieldsComponent({
 		fullItems,
 		effectiveBaseSlug,
 		mainPresetRow,
-		colorItem.name,
+		shadeParentPresetName,
 		colorItem.color,
 	]);
 
@@ -521,9 +543,7 @@ function ColorPresetFieldsComponent({
 				const rows = buildVariationPresetsForBase(
 					{
 						slug: effectiveBaseSlug,
-						name: String(
-							displayRampMain.name ?? colorItem.name ?? ''
-						),
+						name: shadeParentPresetName,
 					},
 					shades
 				);
@@ -538,6 +558,7 @@ function ColorPresetFieldsComponent({
 			effectiveBaseSlug,
 			colorItem,
 			displayRampMain,
+			shadeParentPresetName,
 			valueCleanup,
 		]
 	);
@@ -698,7 +719,6 @@ function ColorPresetFieldsComponent({
 				return;
 			}
 
-			const presetName = String(mainMeta?.name ?? colorItem.name);
 			const mainHex = resolvePresetBaseHex(
 				{ ...displayRampMain, color: colorForPersist },
 				{
@@ -712,7 +732,7 @@ function ColorPresetFieldsComponent({
 			);
 
 			const rebuilt = rebuildVariationsFromMainColor(
-				{ slug: effectiveBaseSlug, name: presetName },
+				{ slug: effectiveBaseSlug, name: shadeParentPresetName },
 				mainHex,
 				{
 					variablePickerType,
@@ -736,6 +756,7 @@ function ColorPresetFieldsComponent({
 			effectiveBaseSlug,
 			colorItem,
 			displayRampMain,
+			shadeParentPresetName,
 			fullItems,
 			setFullItems,
 		]
