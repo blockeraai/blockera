@@ -12,25 +12,10 @@ concurrency:
 
 jobs:
     detect_categories:
-        name: Detecting E2E Test Shards
+        name: Detecting E2E Test Categories
         runs-on: ubuntu-latest
         outputs:
-            shards: ${{ steps.set_shards.outputs.shards }}
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-
-            - name: Build test shards
-              id: set_shards
-              run: |
-                  shards=$(node .github/scripts/list-e2e-test-shards.js)
-                  echo "shards=$shards" >> $GITHUB_OUTPUT
-                  echo "Detected shards: $shards"
-
-    prepare:
-        name: Prepare Dependencies & Build
-        runs-on: ubuntu-latest
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+            categories: ${{ steps.set_categories.outputs.categories }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -38,43 +23,56 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
-            - name: Cache Cypress binary
-              uses: actions/cache@v4
-              id: cypress-cache
-              with:
-                  path: ~/.cache/Cypress
-                  key: cypress-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+            - name: Check if .pr-cypress.env.json exists
+              id: check_env_file
+              run: |
+                  if [ -f ".pr-cypress.env.json" ]; then
+                    echo "Found .pr-cypress.env.json"
+                    echo "env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "env_file=false" >> $GITHUB_ENV
+                  fi
 
-            - name: Install Cypress
-              run: npx cypress install
+            - name: List test categories
+              id: set_categories
+              run: |
+                  # Get all spec patterns from the .pr-cypress.env.json if it exists
+                  categories=$(node .github/scripts/list-e2e-test-categories.js)
 
-            - name: Install Composer Packages
-              uses: ./.github/setup-php
-              with:
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Load spec patterns from .pr-cypress.env.json
+                    spec_patterns=$(cat .pr-cypress.env.json | jq -r '.e2e.specPattern[]')
 
-            - name: Build plugin assets
-              run: npm run build
+                    # Extract category based on the first part of the filename (before the first dot) and remove ".e2e.cy.js"
+                    filtered_categories=$(echo "$spec_patterns" | \
+                      sed -E 's|.*/([^/]+)\..*|\1|' | \
+                      sed -E 's|^[^.]*\.||' | \
+                      sed -E 's|\.e2e\.cy$||' | \
+                      sort -u)
 
-            - name: Upload build artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                  name: blockera-build
-                  path: dist/
-                  retention-days: 1
-                  if-no-files-found: error
+                    # Convert filtered categories to JSON array and output
+                    filtered_categories_json=$(echo "$filtered_categories" | tr ' ' '\n' | jq -R -n '[inputs]' | jq -c '.')
+                    echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
+                    echo "Filtered categories: $filtered_categories"
+                  else
+                    # If no env file, use the original categories
+                    categories_json=$(echo $categories | jq -c '.')
+                    echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Print categories output
+              run: |
+                  echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
 
     cypress_e2e_tests:
-        name: Test (${{ matrix.shard }})
-        needs: [detect_categories, prepare]
+        name: Test
+        needs: detect_categories
         runs-on: ubuntu-latest
-        timeout-minutes: 60
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: false
-            max-parallel: 10
             matrix:
-                include: ${{ fromJson(needs.detect_categories.outputs.shards) }}
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -82,38 +80,27 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
-            - name: Cache Cypress binary
-              uses: actions/cache@v4
-              id: cypress-cache
-              with:
-                  path: ~/.cache/Cypress
-                  key: cypress-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
             - name: Install Cypress
               run: npx cypress install
 
             - name: Install Composer Packages
-              uses: ./.github/setup-php
-              with:
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
-
-            - name: Download build artifacts
-              uses: actions/download-artifact@v4
-              with:
-                  name: blockera-build
-                  path: dist/
+              run: composer install --no-dev -o --apcu-autoloader -a
 
             - name: Create required environment files
               run: |
+                  # Set the base configuration file
                   WP_ENV_CONFIG=".github/wp-env-configs/base.json"
 
-                  if [ -f ".github/wp-env-configs/${{ matrix.env }}.json" ]; then
-                    WP_ENV_CONFIG=".github/wp-env-configs/${{ matrix.env }}.json"
+                  # Check if a specific configuration exists for the category
+                  if [ -f ".github/wp-env-configs/${{ matrix.category }}.json" ]; then
+                    WP_ENV_CONFIG=".github/wp-env-configs/${{ matrix.category }}.json"
                   fi
 
+                  # Copy the selected configuration to .wp-env.json
                   cp "$WP_ENV_CONFIG" .wp-env.json
                   cat .wp-env.json
 
+                  # Create .env file
                   touch .env
                   echo APP_MODE=production >> .env
                   echo DB=wp_tests >> .env
@@ -128,20 +115,57 @@ jobs:
                   WP_VERSION=$(npx wp-env run cli wp core version)
                   echo "WordPress version: $WP_VERSION"
 
+            - name: Build wp-env app
+              run: npm run build
+
             - name: Ensure mu-plugins directory exists for Cypress tests
               run: |
                   npx wp-env run cli -- wp eval 'if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); }'
 
-            - name: Debug Matrix Shard
+            - name: Debug Matrix Category
               run: |
-                  echo "Running shard: ${{ matrix.shard }}"
-                  echo "Environment profile: ${{ matrix.env }}"
-                  echo "Categories: ${{ toJson(matrix.categories) }}"
+                  echo "Running category: ${{ matrix.category }}"
 
             - name: Run Cypress E2E Tests
-              env:
-                  SHARD_CATEGORIES: ${{ toJson(matrix.categories) }}
-              run: node .github/scripts/run-e2e-shard.js
+              run: |
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
+                    if [ -d "tests" ]; then
+                      spec_pattern="${spec_pattern},tests/**/*.${{ matrix.category }}.e2e.cy.js"
+                    fi
+                  else
+                    search_dirs="packages"
+                    if [ -d "tests" ]; then
+                      search_dirs="${search_dirs} tests"
+                    fi
+                    spec_pattern=$(find $search_dirs -type f -name "*.e2e.cy.js" ! -name "*.*.e2e.cy.js" | tr '\n' ',')
+                    spec_pattern="${spec_pattern%,}" # Remove trailing comma
+                  fi
+
+                  # If the env file exists, filter spec patterns based on .pr-cypress.env.json
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Load categories from the .pr-cypress.env.json
+                    categories_json=$(cat .pr-cypress.env.json)
+                    spec_patterns=$(echo "$categories_json" | jq -r '.e2e.specPattern[]')
+
+                    # Extract the first part of each spec pattern filename before the first dot and remove ".e2e.cy.js"
+                    filtered_categories=$(echo "$spec_patterns" | sed -E 's|.*/([^/]+)\..*|\1|' | sed -E 's|\.e2e\.cy$||' | sort -u)
+
+                    # Only run tests for filtered categories
+                    echo "Filtered categories: $filtered_categories"
+
+                    # Generate spec pattern based on filtered categories
+                    for category in $filtered_categories; do
+                      if [ "${{ matrix.category }}" == "$category" ]; then
+                        spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
+                        if [ -d "tests" ]; then
+                          spec_pattern="${spec_pattern},tests/**/*.${{ matrix.category }}.e2e.cy.js"
+                        fi
+                      fi
+                    done
+                  fi
+
+                  npm run test:e2e -- --spec "$spec_pattern"
 
             - name: Stop WordPress Environment
               run: npm run env:stop
