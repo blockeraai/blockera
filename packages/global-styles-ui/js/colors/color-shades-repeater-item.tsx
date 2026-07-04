@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import type { ComponentType, CSSProperties, ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { memo, useContext, useMemo } from '@wordpress/element';
 import type { Color } from '@wordpress/global-styles-engine';
 
@@ -11,17 +11,13 @@ import type { Color } from '@wordpress/global-styles-engine';
 import {
 	RepeaterItem,
 	RepeaterContext,
-	ColorIndicator,
+	ColorIndicatorStack,
 	normalizeVariablePickerSearchQuery,
 	usePresetVariablesViewMode,
 	useVarPickerPresetContext,
 	useVariablePickerSearchQuery,
 } from '@blockera/controls';
-import {
-	componentClassNames,
-	componentInnerClassNames,
-} from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
+import { componentInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -31,22 +27,17 @@ import {
 	filterVariationsByBase,
 	getDisplayShadeRamp,
 	getDisplayShadeRampWithStackMap,
-	stackValueFromShades,
 } from './color-palette-variations-utils';
-import {
-	COLOR_SHADE_ANCHOR_STEP,
-	COLOR_SHADE_STEPS,
-	generateColorShades,
-} from './color-shades-generator';
-import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
+import { COLOR_SHADE_ANCHOR_STEP } from './color-shades-generator';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { resolvePresetTaxonomyEditName } from '../components/preset-taxonomy/taxonomy-meta';
-import {
-	findRepeaterItemIdBySlug,
-	parsePaletteShadeSlug,
-	shadeHexDiffersFromBaseline,
-} from './utils';
+import { findRepeaterItemIdBySlug, parsePaletteShadeSlug } from './utils';
 import './style.scss';
+
+/** Compact header/category stack preview — every other step from the full ramp. */
+const COLOR_PRESET_SHADE_STACK_PREVIEW_STEPS = [
+	100, 300, 500, 700, 900,
+] as const;
 
 /** Main preset row used to build the display ramp (synthetic 500 + stored shades). */
 export type ColorPresetShadeStackMainPreset = {
@@ -58,7 +49,7 @@ export type ColorPresetShadeStackMainPreset = {
 };
 
 /**
- * Stack value for color ramp previews — full ramp from storage + anchor color.
+ * Stack value for compact color ramp previews (100/300/500/700/900).
  * Returns `null` when the base has no persisted shade variations.
  */
 export function buildColorPresetShadeStackValue(
@@ -74,26 +65,10 @@ export function buildColorPresetShadeStackValue(
 		baseSlug,
 		mainPreset
 	);
-	return stackValueFromShades(stackMap);
-}
-
-function colorIndicatorStackMarginSpace(count: number): string {
-	if (count <= 1) {
-		return '0';
-	}
-	if (count <= 2) {
-		return '-3px';
-	}
-	if (count < 4) {
-		return '-5px';
-	}
-	if (count < 6) {
-		return '-7px';
-	}
-	if (count <= 11) {
-		return '-9px';
-	}
-	return '-10px';
+	return COLOR_PRESET_SHADE_STACK_PREVIEW_STEPS.map((step) => ({
+		value: stackMap?.[String(step)] ?? '',
+		type: 'color' as const,
+	}));
 }
 
 function ColorPresetShadeStackHeaderComponent({
@@ -108,34 +83,19 @@ function ColorPresetShadeStackHeaderComponent({
 	children?: ReactNode;
 }) {
 	const { fullItems } = usePresetVariationsStorage<Color>();
-	const stackRender = useMemo(() => {
-		if (filterVariationsByBase(fullItems, baseSlug).length === 0) {
-			return null;
-		}
-		const { stackMap: hexByStep } = getDisplayShadeRampWithStackMap(
+	// ColorIndicatorStack reverses `value` for display; reverse here so LTR stays light→dark.
+	const stackValue = useMemo(() => {
+		const value = buildColorPresetShadeStackValue(
 			fullItems,
 			baseSlug,
 			mainPreset
 		);
-		const baselineHexByStep = generateColorShades(
-			resolveStoredColorForGenerateColorShades(
-				mainPreset.color,
-				mainPreset.slug,
-				{
-					variablePickerType: mainPreset.type,
-				}
-			)
-		);
-		return { hexByStep, baselineHexByStep, steps: COLOR_SHADE_STEPS };
+		return value ? [...value].reverse() : null;
 	}, [fullItems, baseSlug, mainPreset]);
 
-	if (!stackRender) {
+	if (!stackValue) {
 		return null;
 	}
-
-	const { hexByStep, baselineHexByStep, steps } = stackRender;
-	const stackSpace = colorIndicatorStackMarginSpace(steps.length);
-	const asteriskSize = size <= 14 ? '10' : '12';
 
 	return (
 		<span
@@ -147,60 +107,13 @@ function ColorPresetShadeStackHeaderComponent({
 			}}
 			data-cy="color-preset-shade-stack"
 		>
-			<div
-				className={componentClassNames(
-					'global-styles-color-shade-indicator-stack'
-				)}
-				style={
-					{
-						'--stack-space': stackSpace,
-					} as CSSProperties
-				}
-			>
-				{steps.map((step) => {
-					const stepStr = String(step);
-					const hex = hexByStep[stepStr] ?? '';
-					const isBaseAnchorStep = step === COLOR_SHADE_ANCHOR_STEP;
-					const showEditedMarker = shadeHexDiffersFromBaseline(
-						hex,
-						baselineHexByStep[stepStr]
-					);
-
-					return (
-						<span
-							key={`shade-stack-${stepStr}`}
-							className={componentClassNames(
-								'global-styles-color-shade-swatch',
-								'global-styles-color-shade-swatch--indicator-stack'
-							)}
-						>
-							{isBaseAnchorStep ? (
-								<Icon
-									icon="asterisk"
-									iconSize={asteriskSize}
-									className={componentInnerClassNames(
-										'base-breakpoint-icon'
-									)}
-									aria-hidden
-								/>
-							) : null}
-							{showEditedMarker ? (
-								<span
-									className={componentInnerClassNames(
-										'color-shade-edited-indicator'
-									)}
-									aria-hidden
-								/>
-							) : null}
-							<ColorIndicator
-								type="color"
-								value={hex || 'none'}
-								size={size}
-							/>
-						</span>
-					);
-				})}
-			</div>
+			<ColorIndicatorStack
+				value={stackValue}
+				size={size}
+				maxItems={COLOR_PRESET_SHADE_STACK_PREVIEW_STEPS.length}
+				displayMode="centered"
+				space={-7}
+			/>
 			{children}
 		</span>
 	);

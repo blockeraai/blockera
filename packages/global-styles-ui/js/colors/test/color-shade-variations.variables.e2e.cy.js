@@ -19,8 +19,8 @@ import {
 	withinThemePresetGroup,
 } from './e2e-variable-variations-helpers';
 
-/** Matches COLOR_SHADE_STEPS length in `color-shades-generator.ts` (50–950 ramp). */
-const SHADE_STACK_SWATCH_COUNT = 11;
+/** Compact stack preview steps: 100, 300, 500, 700, 900. */
+const SHADE_STACK_SWATCH_COUNT = 5;
 
 describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 	describe('global styles: flat list shade stack & variations accordion', () => {
@@ -47,7 +47,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 				)
 					.closest('[data-cy="repeater-item"]')
 					.find('[data-cy="color-preset-shade-stack"]')
-					.find('.global-styles-color-shade-swatch--indicator-stack')
+					.find('.blockera-component-color-indicator')
 					.should('have.length', SHADE_STACK_SWATCH_COUNT);
 			});
 		});
