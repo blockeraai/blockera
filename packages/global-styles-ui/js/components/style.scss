@@ -112,7 +112,8 @@
 
 .blockera-control-group.mode-accordion {
 	&.is-close.blockera-control-repeater-item-variations-group:not(
-			.blockera-preset-taxonomy-accordion
+			.blockera-preset-taxonomy-accordion,
+			.blockera-control-repeater-item-variations-group
 		) {
 		> .blockera-control-group-header {
 			padding: calc(var(--repeater-item-height) * 0.4);
