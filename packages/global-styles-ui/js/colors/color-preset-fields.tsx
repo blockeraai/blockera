@@ -124,12 +124,15 @@ function GlobalStylesShadeStepColumn({
 	name,
 	step,
 	hex,
+	tooltipLabel,
 	colorControlProps,
 	baselineHexByStep,
 }: {
 	name: string;
 	step: number;
 	hex: string;
+	/** Preset display name, or slug when name is empty. */
+	tooltipLabel: string;
 	colorControlProps: {
 		size?: 'small' | 'normal' | 'input' | 'extra-small';
 		disabled?: boolean;
@@ -147,6 +150,14 @@ function GlobalStylesShadeStepColumn({
 		baselineHexByStep !== undefined &&
 		shadeHexDiffersFromBaseline(hex, baselineHex);
 
+	const tooltipLines = [`${tooltipLabel} ${stepStr}`];
+	if (hex) {
+		tooltipLines.push(hex);
+	}
+	if (isBaseAnchorStep) {
+		tooltipLines.push(__('Base color of the shading', 'blockera'));
+	}
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -162,6 +173,18 @@ function GlobalStylesShadeStepColumn({
 					'global-styles-color-shade-swatch'
 				)}
 				colorIndicatorSize={18}
+				tooltip={tooltipLines.map((line, idx) =>
+					idx === 0 ? (
+						<b key={`shade-tooltip-${idx}`}>{line}</b>
+					) : (
+						<i
+							key={`shade-tooltip-${idx}`}
+							style={{ display: 'block' }}
+						>
+							{line}
+						</i>
+					)
+				)}
 			>
 				{isBaseAnchorStep ? (
 					<Icon
@@ -191,6 +214,7 @@ const noopGlobalStylesColor: (value?: string | undefined) => void = () => {};
 
 function GlobalStylesChromelessShadeRampRow({
 	baseSlug,
+	presetName,
 	hexLookup,
 	mode,
 	disabledByLock,
@@ -198,6 +222,8 @@ function GlobalStylesChromelessShadeRampRow({
 	baselineHexLookup,
 }: {
 	baseSlug: string;
+	/** Preset display name; falls back to `baseSlug` when empty. */
+	presetName?: string;
 	hexLookup: Record<string, string>;
 	mode: 'preview' | 'edit';
 	disabledByLock?: boolean;
@@ -205,6 +231,11 @@ function GlobalStylesChromelessShadeRampRow({
 	/** Ramp from {@link generateColorShades}; when set (edit mode), custom shades show an edited marker. */
 	baselineHexLookup?: Record<string, string>;
 }) {
+	const tooltipLabel =
+		typeof presetName === 'string' && presetName.trim() !== ''
+			? presetName.trim()
+			: baseSlug;
+
 	return (
 		<>
 			{COLOR_SHADE_STEPS.map((step) => {
@@ -235,6 +266,7 @@ function GlobalStylesChromelessShadeRampRow({
 						name={controlName}
 						step={step}
 						hex={hex}
+						tooltipLabel={tooltipLabel}
 						colorControlProps={colorControlProps}
 						baselineHexByStep={baselineHexByStep}
 					/>
@@ -875,6 +907,9 @@ function ColorPresetFieldsComponent({
 																<GlobalStylesChromelessShadeRampRow
 																	baseSlug={
 																		effectiveBaseSlug
+																	}
+																	presetName={
+																		sharedPresetName
 																	}
 																	hexLookup={
 																		stackMap
