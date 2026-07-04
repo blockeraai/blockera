@@ -266,6 +266,9 @@ export default function ColorPickerControl({
 								</Button>
 							</>
 						}
+						style={{
+							'--blockera-controls-primary-color': value,
+						}}
 					>
 						{colorValueField}
 
