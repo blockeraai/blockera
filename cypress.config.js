@@ -5,10 +5,14 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+// GitHub Actions and most CI providers set CI=true; local runs omit it.
+const isCi = Boolean(process.env.CI);
+
 let env = {
 	wpUsername: 'admin',
 	wpPassword: 'password',
 	testURL: 'http://localhost:8888',
+	muPluginActivateMaxAttempts: isCi ? 3 : 1,
 	e2e: {
 		specPattern: [
 			'packages/**/*.e2e.cy.js',
@@ -31,9 +35,6 @@ env = {
 		: {}),
 	...process.env,
 };
-
-// GitHub Actions and most CI providers set CI=true; local runs omit it.
-const isCi = Boolean(process.env.CI);
 
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);

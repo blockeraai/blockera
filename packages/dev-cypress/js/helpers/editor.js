@@ -779,6 +779,9 @@ function runMuPluginTask(action, label, taskName, taskArgs) {
  * Activate mu-plugin by copying it to wp-content/mu-plugins/ directory.
  * This function accepts a full path to the mu-plugin.php file and copies it to the mu-plugins directory.
  *
+ * On CI, retries up to `Cypress.env('muPluginActivateMaxAttempts')` times (default 1) with
+ * filesystem verification after each copy. Retry attempts force-delete the target before re-copying.
+ *
  * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
  * @param {string} [targetName] Optional target filename. If not provided, generates from path.
  * @return {Cypress.Chainable} Cypress chainable.
@@ -786,12 +789,47 @@ function runMuPluginTask(action, label, taskName, taskArgs) {
 export function activateMuPlugin(muPluginPath, targetName = null) {
 	targetName = getMuPluginTargetName(muPluginPath, targetName);
 
-	return runMuPluginTask(
-		'activateMuPlugin',
-		`${muPluginPath} -> ${targetName}`,
-		'muPluginActivate',
-		{ muPluginPath, targetName }
-	);
+	const maxAttempts = Cypress.env('muPluginActivateMaxAttempts') ?? 1;
+	const label = `${muPluginPath} -> ${targetName}`;
+
+	function activateWithRetry(attempt = 1) {
+		const force = attempt > 1;
+		const startedAt = Date.now();
+
+		return cy
+			.task('muPluginActivate', { muPluginPath, targetName, force })
+			.then((activateResult) => {
+				const activateMs = Date.now() - startedAt;
+				cy.log(
+					`[activateMuPlugin] ${label} | ${activateResult?.message || ''} (${activateMs}ms)`
+				);
+			})
+			.task('muPluginVerify', { muPluginPath, targetName })
+			.then((verifyResult) => {
+				const verifyMs = Date.now() - startedAt;
+				cy.log(
+					`[activateMuPlugin] verify ${label} | ${verifyResult?.message || ''} (${verifyMs}ms)`
+				);
+
+				if (verifyResult?.ok) {
+					return cy.wrap(verifyResult);
+				}
+
+				if (attempt >= maxAttempts) {
+					throw new Error(
+						`Mu-plugin activation failed after ${maxAttempts} attempt(s): ${verifyResult?.message || 'unknown verify error'}`
+					);
+				}
+
+				cy.log(
+					`[activateMuPlugin] verify failed (attempt ${attempt}/${maxAttempts}), retrying…`
+				);
+
+				return cy.wait(500).then(() => activateWithRetry(attempt + 1));
+			});
+	}
+
+	return activateWithRetry();
 }
 
 /**

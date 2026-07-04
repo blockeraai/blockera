@@ -90,7 +90,7 @@ function escapePhpForShell(phpCode) {
  */
 function parseWpEvalStdout(stdout) {
 	const known =
-		/(already_active|needs_copy|source_missing|installed|not_installed|deactivated|deactivate_skip)/;
+		/(already_active|needs_copy|source_missing|installed|not_installed|deactivated|deactivate_skip|verified|missing|hash_mismatch|forced_copy)/;
 	const match = String(stdout).match(known);
 
 	return match ? match[1] : String(stdout).trim();
@@ -134,9 +134,10 @@ function runWpEval(phpCode) {
 /**
  * @param {string} muPluginPath Relative to plugin root.
  * @param {string} targetName
+ * @param {boolean} [force=false] Delete existing target before copy (retry path).
  * @return {{ ok: boolean, message: string }}
  */
-function activateMuPluginOnHost(muPluginPath, targetName) {
+function activateMuPluginOnHost(muPluginPath, targetName, force = false) {
 	const sourceFile = path.join(BLOCKERA_PLUGIN_ROOT, muPluginPath);
 	const muDir = resolveWpEnvMuPluginsDir();
 	const targetFile = muDir ? path.join(muDir, targetName) : null;
@@ -151,7 +152,12 @@ function activateMuPluginOnHost(muPluginPath, targetName) {
 		);
 	}
 
+	if (force && fs.existsSync(targetFile)) {
+		fs.unlinkSync(targetFile);
+	}
+
 	if (
+		!force &&
 		fs.existsSync(targetFile) &&
 		fileHash(sourceFile) === fileHash(targetFile)
 	) {
@@ -164,7 +170,9 @@ function activateMuPluginOnHost(muPluginPath, targetName) {
 	fs.copyFileSync(sourceFile, targetFile);
 	return {
 		ok: true,
-		message: `activated:${targetFile} from:${sourceFile}`,
+		message: force
+			? `forced_copy:${targetFile} from:${sourceFile}`
+			: `activated:${targetFile} from:${sourceFile}`,
 	};
 }
 
@@ -197,9 +205,10 @@ function deactivateMuPluginOnHost(targetName) {
 /**
  * @param {string} muPluginPath Relative to plugin root.
  * @param {string} targetName
+ * @param {boolean} [force=false] Delete existing target before copy (retry path).
  * @return {{ ok: boolean, message: string }}
  */
-function activateMuPluginInContainer(muPluginPath, targetName) {
+function activateMuPluginInContainer(muPluginPath, targetName, force = false) {
 	const sourceFile = path.join(BLOCKERA_PLUGIN_ROOT, muPluginPath);
 
 	if (!fs.existsSync(sourceFile)) {
@@ -208,7 +217,15 @@ function activateMuPluginInContainer(muPluginPath, targetName) {
 		);
 	}
 
-	const activatePhp = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } if (file_exists($targetFile) && md5_file($targetFile) === md5_file($sourceFile)) { echo 'already_active'; exit(0); } file_put_contents($targetFile, file_get_contents($sourceFile)); echo file_exists($targetFile) ? 'installed' : 'not_installed';`;
+	const forcePhp = force
+		? `if (file_exists($targetFile)) { unlink($targetFile); } `
+		: '';
+	const skipIfActivePhp = force
+		? ''
+		: `if (file_exists($targetFile) && md5_file($targetFile) === md5_file($sourceFile)) { echo 'already_active'; exit(0); } `;
+	const successToken = force ? 'forced_copy' : 'installed';
+
+	const activatePhp = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } ${forcePhp}${skipIfActivePhp}file_put_contents($targetFile, file_get_contents($sourceFile)); echo file_exists($targetFile) ? '${successToken}' : 'not_installed';`;
 	const result = runWpEval(activatePhp);
 
 	if (result === 'source_missing') {
@@ -224,7 +241,7 @@ function activateMuPluginInContainer(muPluginPath, targetName) {
 		};
 	}
 
-	if (result !== 'installed') {
+	if (result !== 'installed' && result !== 'forced_copy') {
 		throw new Error(
 			`activate_verify_failed: ${targetName} (got: ${result})`
 		);
@@ -232,7 +249,106 @@ function activateMuPluginInContainer(muPluginPath, targetName) {
 
 	return {
 		ok: true,
-		message: `activated:${targetName} from:${sourceFile}`,
+		message:
+			result === 'forced_copy'
+				? `forced_copy:${targetName} from:${sourceFile}`
+				: `activated:${targetName} from:${sourceFile}`,
+	};
+}
+
+/**
+ * @param {string} muPluginPath Relative to plugin root.
+ * @param {string} targetName
+ * @return {{ ok: boolean, message: string }}
+ */
+function verifyMuPluginOnHost(muPluginPath, targetName) {
+	const sourceFile = path.join(BLOCKERA_PLUGIN_ROOT, muPluginPath);
+	const muDir = resolveWpEnvMuPluginsDir();
+	const targetFile = muDir ? path.join(muDir, targetName) : null;
+
+	if (!targetFile) {
+		return {
+			ok: false,
+			message: 'verify_failed: wp-env mu-plugins directory not found',
+		};
+	}
+
+	if (!fs.existsSync(sourceFile)) {
+		return {
+			ok: false,
+			message: `verify_failed: source not found for ${muPluginPath}`,
+		};
+	}
+
+	if (!fs.existsSync(targetFile)) {
+		return {
+			ok: false,
+			message: `missing:${targetFile}`,
+		};
+	}
+
+	if (fileHash(sourceFile) !== fileHash(targetFile)) {
+		return {
+			ok: false,
+			message: `hash_mismatch:${targetFile}`,
+		};
+	}
+
+	return {
+		ok: true,
+		message: `verified:${targetFile}`,
+	};
+}
+
+/**
+ * @param {string} muPluginPath Relative to plugin root.
+ * @param {string} targetName
+ * @return {{ ok: boolean, message: string }}
+ */
+function verifyMuPluginInContainer(muPluginPath, targetName) {
+	const sourceFile = path.join(BLOCKERA_PLUGIN_ROOT, muPluginPath);
+
+	if (!fs.existsSync(sourceFile)) {
+		return {
+			ok: false,
+			message: `verify_failed: source not found for ${muPluginPath}`,
+		};
+	}
+
+	const verifyPhp = `$sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($targetFile)) { echo 'missing'; exit(0); } if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } echo md5_file($targetFile) === md5_file($sourceFile) ? 'verified' : 'hash_mismatch';`;
+	const result = runWpEval(verifyPhp);
+
+	if (result === 'source_missing') {
+		return {
+			ok: false,
+			message: `verify_failed: source missing in container for ${muPluginPath}`,
+		};
+	}
+
+	if (result === 'missing') {
+		return {
+			ok: false,
+			message: `missing:${targetName}`,
+		};
+	}
+
+	if (result === 'hash_mismatch') {
+		return {
+			ok: false,
+			message: `hash_mismatch:${targetName}`,
+		};
+	}
+
+	if (result !== 'verified') {
+		return {
+			ok: false,
+			message: `verify_failed:${targetName} (got: ${result})`,
+		};
+	}
+
+	return {
+		ok: true,
+		message: `verified:${targetName} from:${sourceFile}`,
 	};
 }
 
@@ -277,17 +393,37 @@ module.exports = (on, config) => {
 	);
 
 	on('task', {
-		muPluginActivate({ muPluginPath, targetName }) {
+		muPluginActivate({ muPluginPath, targetName, force = false }) {
 			const resolvedTarget = getMuPluginTargetName(
 				muPluginPath,
 				targetName
 			);
 
 			if (shouldUseHostMuPlugins()) {
-				return activateMuPluginOnHost(muPluginPath, resolvedTarget);
+				return activateMuPluginOnHost(
+					muPluginPath,
+					resolvedTarget,
+					force
+				);
 			}
 
-			return activateMuPluginInContainer(muPluginPath, resolvedTarget);
+			return activateMuPluginInContainer(
+				muPluginPath,
+				resolvedTarget,
+				force
+			);
+		},
+		muPluginVerify({ muPluginPath, targetName }) {
+			const resolvedTarget = getMuPluginTargetName(
+				muPluginPath,
+				targetName
+			);
+
+			if (shouldUseHostMuPlugins()) {
+				return verifyMuPluginOnHost(muPluginPath, resolvedTarget);
+			}
+
+			return verifyMuPluginInContainer(muPluginPath, resolvedTarget);
 		},
 		muPluginDeactivate({ muPluginPath, targetName }) {
 			const resolvedTarget = getMuPluginTargetName(
