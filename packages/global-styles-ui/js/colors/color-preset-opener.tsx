@@ -321,11 +321,11 @@ export function ColorPresetOpener({
 		viewMode,
 	]);
 
-	// Shade accordion headers use the stack preview instead of a trailing hex.
-	// Compact half-width rows (`meta.interface-size: small`) also omit the value; list view is full width.
+	// Variable-picker shade accordion headers use the stack preview only (no trailing hex).
+	// Global Styles still shows the hex on those rows. Compact half-width rows omit the value.
 	const showHexValue =
-		shadeVariationCount === 0 &&
 		Boolean(colorItem?.color) &&
+		!(pickerCtx.active === true && shadeVariationCount > 0) &&
 		!(
 			viewMode !== 'list' &&
 			isPresetTaxonomyInterfaceSizeSmall(
