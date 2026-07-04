@@ -197,6 +197,116 @@ export function expandColorPresetVariationsAccordionOnPaletteScreen(
  * @param {string} presetSlug
  * @param {string} expectedName Full preset name (may use `/` segments).
  */
+/** MU fixture slugs for color-variable-picker-search E2E (TEMP CI debug). */
+export const COLOR_PICKER_SEARCH_MU_SLUGS = [
+	'e-2-e-search-on-brand',
+	'e-2-e-search-accent',
+	'e-2-e-search-neutral',
+];
+
+/**
+ * Read theme color palette rows from the editor `core` store (no assertions).
+ *
+ * @param {Window} win
+ * @return {Array<{ slug: string, name: string }>}
+ */
+export function readEditorThemeColorPaletteRows(win) {
+	const select = win.wp?.data?.select?.('core');
+	if (
+		!select ||
+		typeof select.__experimentalGetCurrentThemeBaseGlobalStyles !==
+			'function'
+	) {
+		return [];
+	}
+
+	const base = select.__experimentalGetCurrentThemeBaseGlobalStyles();
+	const settings = base?.settings ?? base ?? {};
+	const pal = settings?.color?.palette;
+	const themePalette = Array.isArray(pal?.theme)
+		? pal.theme
+		: Array.isArray(pal)
+			? pal
+			: [];
+
+	return themePalette.map((row) => ({
+		slug: String(row?.slug ?? ''),
+		name: String(row?.name ?? ''),
+	}));
+}
+
+/**
+ * TEMP CI debug — log editor store + picker DOM to Cypress command log.
+ * Remove after flaky root cause on CI is identified.
+ *
+ * @param {string} [label]
+ */
+export function logVariablePickerColorPresetDebugSnapshot(label = '') {
+	const prefix = label
+		? `[color-picker-search debug: ${label}]`
+		: '[color-picker-search debug]';
+
+	cy.window().then((win) => {
+		const viewMode = win.localStorage.getItem(
+			'blockera-variables-view-mode'
+		);
+		cy.log(`${prefix} localStorage viewMode=${viewMode ?? '(unset)'}`);
+
+		const themePalette = readEditorThemeColorPaletteRows(win);
+		const summary = themePalette
+			.map((row) => `${row.slug}:${row.name}`)
+			.join(' | ');
+		cy.log(
+			`${prefix} theme palette count=${themePalette.length}${summary ? ` rows=${summary.slice(0, 400)}` : ''}`
+		);
+
+		for (const slug of COLOR_PICKER_SEARCH_MU_SLUGS) {
+			const row = themePalette.find((r) => r.slug === slug);
+			cy.log(
+				`${prefix} fixture ${slug} => ${row ? row.name : 'MISSING in editor store'}`
+			);
+		}
+	});
+
+	cy.get('body').then(($body) => {
+		const $popover = $body
+			.find('[data-test="variable-picker-popover"]')
+			.filter(':visible')
+			.first();
+		if (!$popover.length) {
+			cy.log(`${prefix} variable-picker-popover not visible in DOM`);
+			return;
+		}
+
+		const headers = $popover
+			.find('[data-cy="color-repeater-item-header"]')
+			.toArray()
+			.map((el) => el.textContent?.trim())
+			.filter(Boolean);
+		cy.log(
+			`${prefix} picker color-repeater headers (${headers.length}): ${headers.join(' | ').slice(0, 400) || '(none)'}`
+		);
+
+		const taxonomyGroups = $popover.find(
+			'[data-test="preset-taxonomy-group-shell"]'
+		).length;
+		cy.log(`${prefix} taxonomy group shells=${taxonomyGroups}`);
+
+		const searchValue =
+			$popover
+				.find(
+					'.blockera-control-var-picker-search input[type="search"]'
+				)
+				.val() ?? '';
+		cy.log(`${prefix} search input value="${String(searchValue)}"`);
+
+		const emptyVisible = $popover
+			.find('[data-test="var-picker-search-empty"]')
+			.filter(':visible').length;
+		cy.log(`${prefix} var-picker-search-empty visible=${emptyVisible > 0}`);
+	});
+}
+
 export function assertEditorThemeBaseHasMuColorTaxonomy(
 	presetSlug,
 	expectedName
