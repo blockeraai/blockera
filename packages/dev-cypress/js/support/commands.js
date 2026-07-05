@@ -210,54 +210,6 @@ export const registerCommands = () => {
 		return cy.get(`[data-test=${selector}]`, ...args);
 	});
 
-	Cypress.Commands.add('clickOutside', () => {
-		return cy.get('body').click(0, 0);
-	});
-
-	Cypress.Commands.add(
-		'setSliderValue',
-		{ prevSubject: 'element' },
-		(subject, value) => {
-			const element = subject[0];
-
-			const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-				window.HTMLInputElement.prototype,
-				'value'
-			)?.set;
-
-			nativeInputValueSetter?.call(element, value);
-			element.dispatchEvent(new Event('input', { bubbles: true }));
-		}
-	);
-
-	/**
-	 * Sets a React-controlled `<input type="text">` value in one shot.
-	 *
-	 * Use when `cy.type()` is unsafe: e.g. parent `onChange` runs every keystroke and remounts
-	 * the node or commits invalid partial state (hex colors, mesh gradients, etc.).
-	 * Dispatches `input` then `change` so typical React handlers run once with the final string.
-	 */
-	Cypress.Commands.add(
-		'setControlledInputValue',
-		{ prevSubject: 'element' },
-		(subject, value) => {
-			const el = subject[0];
-			const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-				window.HTMLInputElement.prototype,
-				'value'
-			)?.set;
-
-			if (nativeInputValueSetter) {
-				nativeInputValueSetter.call(el, value);
-			} else {
-				el.value = value;
-			}
-			el.dispatchEvent(new Event('input', { bubbles: true }));
-			el.dispatchEvent(new Event('change', { bubbles: true }));
-			return cy.wrap(subject);
-		}
-	);
-
 	// simulate paste event
 	Cypress.Commands.add(
 		'pasteText',
@@ -737,69 +689,6 @@ export const registerCommands = () => {
 						force: true,
 					});
 				});
-		}
-	);
-
-	Cypress.Commands.add(
-		'dragValue',
-		{ prevSubject: 'element' },
-		(
-			subject,
-			type = 'vertical',
-			movement = 10,
-			threshold = 5,
-			withShift = false
-		) => {
-			// Initial mousedown
-			cy.wrap(subject[0]).trigger('mousedown', 'topLeft', {
-				which: 1,
-				force: true,
-			});
-
-			// First mousemove to exceed threshold
-			if (type === 'vertical') {
-				cy.get('body').trigger('mousemove', {
-					which: 1,
-					clientY:
-						Math.ceil(subject[0].getBoundingClientRect().top) +
-						threshold, // Exceed threshold
-				});
-
-				// Second mousemove for actual movement
-				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
-					which: 1,
-					clientY:
-						Math.ceil(subject[0].getBoundingClientRect().top) +
-						(withShift
-							? (movement - threshold + 1) * 5
-							: movement) *
-							-1,
-					shiftKey: withShift,
-				});
-			} else if (type === 'horizontal') {
-				cy.get('body').trigger('mousemove', {
-					which: 1,
-					clientX:
-						Math.ceil(subject[0].getBoundingClientRect().left) +
-						threshold,
-				});
-
-				// Second mousemove for actual movement
-				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
-					which: 1,
-					clientX:
-						Math.ceil(subject[0].getBoundingClientRect().left) +
-						(withShift ? (movement - threshold + 1) * 5 : movement),
-					shiftKey: withShift,
-				});
-			}
-
-			// Final mouseup
-			cy.get('.blockera-virtual-cursor-box').trigger('mouseup', {
-				which: 1,
-			});
-
-			return cy.wrap(subject);
 		}
 	);
 
