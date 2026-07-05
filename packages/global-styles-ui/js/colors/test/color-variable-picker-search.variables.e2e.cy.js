@@ -8,8 +8,8 @@ import {
 } from '@blockera/dev-cypress/js/helpers';
 import { clearPresetVariablesViewModeStorage } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
 import {
-	assertColorPresetNotInVariablePicker,
-	assertColorPresetVisibleInVariablePicker,
+	assertColorPresetSlugNotInVariablePicker,
+	assertColorPresetSlugVisibleInVariablePicker,
 	clearVariablePickerSearch,
 	getWPDataObject,
 	MU_FIX,
@@ -20,14 +20,15 @@ import {
 const MU = `${MU_FIX}/e2e-color-variable-picker-search.php`;
 const MU_NAME = 'e2e-color-variable-picker-search.php';
 
-const PRESET_ON_BRAND = 'Base / Primary / On Brand';
-const PRESET_ACCENT = 'Accent / Secondary Tone';
-const PRESET_NEUTRAL = 'Neutral Surface';
+const SLUG_ON_BRAND = 'e-2-e-search-on-brand';
+const SLUG_ACCENT = 'e-2-e-search-accent';
+const SLUG_NEUTRAL = 'e-2-e-search-neutral';
 
-/** Leaf labels shown in the picker when search is inactive (taxonomy display names). */
-const PRESET_ON_BRAND_DISPLAY = 'On Brand';
-const PRESET_ACCENT_DISPLAY = 'Secondary Tone';
-const PRESET_NEUTRAL_DISPLAY = 'Neutral Surface';
+/** Search queries scoped to MU fixture names/values (not theme palette). */
+const SEARCH_ON_BRAND = 'e2e bran';
+const SEARCH_ACCENT = 'e2e accent';
+const SEARCH_HEX = 'aabb';
+const SEARCH_NO_MATCH = 'e2e xyz';
 
 describe('Global Styles UI → Color variable picker search', () => {
 	beforeEach(() => {
@@ -42,49 +43,49 @@ describe('Global Styles UI → Color variable picker search', () => {
 	it('shows all fixture presets when search is empty', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND_DISPLAY);
-		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT_DISPLAY);
-		assertColorPresetVisibleInVariablePicker(PRESET_NEUTRAL_DISPLAY);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_NEUTRAL);
 	});
 
-	it('filters with multi-word AND search (bas bran)', () => {
+	it('filters with multi-word AND search (e2e bran)', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('bas bran');
+		typeInVariablePickerSearch(SEARCH_ON_BRAND);
 
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
-		assertColorPresetNotInVariablePicker(PRESET_ACCENT_DISPLAY);
-		assertColorPresetNotInVariablePicker(PRESET_NEUTRAL_DISPLAY);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugNotInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugNotInVariablePicker(SLUG_NEUTRAL);
 	});
 
-	it('filters with multi-word partial search (acc sec)', () => {
+	it('filters with multi-word partial search (e2e accent)', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('acc sec');
+		typeInVariablePickerSearch(SEARCH_ACCENT);
 
-		assertColorPresetNotInVariablePicker(PRESET_ON_BRAND);
-		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT);
-		assertColorPresetNotInVariablePicker(PRESET_NEUTRAL);
+		assertColorPresetSlugNotInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugNotInVariablePicker(SLUG_NEUTRAL);
 	});
 
 	it('filters by CSS value fragment (aabb)', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('aabb');
+		typeInVariablePickerSearch(SEARCH_HEX);
 
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
-		assertColorPresetNotInVariablePicker(PRESET_ACCENT_DISPLAY);
-		assertColorPresetNotInVariablePicker(PRESET_NEUTRAL_DISPLAY);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugNotInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugNotInVariablePicker(SLUG_NEUTRAL);
 	});
 
 	it('shows unified empty state when no presets match', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('bas xyz');
+		typeInVariablePickerSearch(SEARCH_NO_MATCH);
 
-		assertColorPresetNotInVariablePicker(PRESET_ON_BRAND);
-		assertColorPresetNotInVariablePicker(PRESET_ACCENT_DISPLAY);
-		assertColorPresetNotInVariablePicker(PRESET_NEUTRAL_DISPLAY);
+		assertColorPresetSlugNotInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugNotInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugNotInVariablePicker(SLUG_NEUTRAL);
 
 		cy.getByDataTest('variable-picker-popover')
 			.filter(':visible')
@@ -93,7 +94,9 @@ describe('Global Styles UI → Color variable picker search', () => {
 				cy.getByDataTest('var-picker-search-empty').should(
 					'be.visible'
 				);
-				cy.contains('No results for "bas xyz"').should('be.visible');
+				cy.contains(`No results for "${SEARCH_NO_MATCH}"`).should(
+					'be.visible'
+				);
 				cy.contains('Clear search').should('be.visible');
 				cy.contains('No variables match your search.').should(
 					'not.exist'
@@ -113,7 +116,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	it('clears search from the empty-state button', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('bas xyz');
+		typeInVariablePickerSearch(SEARCH_NO_MATCH);
 
 		cy.getByDataTest('variable-picker-popover')
 			.filter(':visible')
@@ -122,33 +125,33 @@ describe('Global Styles UI → Color variable picker search', () => {
 				cy.contains('button', 'Clear search').click({ force: true });
 			});
 
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND_DISPLAY);
-		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT_DISPLAY);
-		assertColorPresetVisibleInVariablePicker(PRESET_NEUTRAL_DISPLAY);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_NEUTRAL);
 	});
 
 	it('restores all presets after clearing search', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('bas bran');
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
-		assertColorPresetNotInVariablePicker(PRESET_ACCENT);
+		typeInVariablePickerSearch(SEARCH_ON_BRAND);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugNotInVariablePicker(SLUG_ACCENT);
 
 		clearVariablePickerSearch();
 
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND_DISPLAY);
-		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT_DISPLAY);
-		assertColorPresetVisibleInVariablePicker(PRESET_NEUTRAL_DISPLAY);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ACCENT);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_NEUTRAL);
 	});
 
 	it('selects a filtered preset by slug', () => {
 		openColorVariablePickerSearchTestPopover();
 
-		typeInVariablePickerSearch('bas bran');
+		typeInVariablePickerSearch(SEARCH_ON_BRAND);
 
-		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
+		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
 
-		cy.selectValueAddonItem('e-2-e-search-on-brand');
+		cy.selectValueAddonItem(SLUG_ON_BRAND);
 
 		getWPDataObject().then((data) => {
 			const fontColor = getSelectedBlock(data, 'blockeraFontColor');

@@ -7,7 +7,11 @@ import {
 	createPost,
 	getWPDataObject,
 	openGlobalStylesColorPaletteScreen,
+	closeWelcomeGuide,
+	disableGutenbergFeatures,
+	setAbsoluteBlockToolbar,
 } from '@blockera/dev-cypress/js/helpers';
+import { PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
 
 export const MU_FIX = 'packages/global-styles-ui/js/colors/test/fixtures';
 
@@ -121,6 +125,23 @@ export function assertColorPresetNotInVariablePicker(headerLabel) {
 			'[data-cy="color-repeater-item-header"]',
 			headerLabel
 		).should('not.exist');
+	});
+}
+
+/** @param {string} slug Preset slug (`data-variable-slug`). */
+export function assertColorPresetSlugVisibleInVariablePicker(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
+			.first()
+			.scrollIntoView()
+			.should('be.visible');
+	});
+}
+
+/** @param {string} slug Preset slug (`data-variable-slug`). */
+export function assertColorPresetSlugNotInVariablePicker(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`).should('not.exist');
 	});
 }
 
@@ -308,25 +329,83 @@ export function assertEditorThemeBaseHasMuColorTaxonomy(
 	});
 }
 
-/** Slug used to confirm search-fixture presets rendered in the variable picker. */
-const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_READY_SLUG = 'e-2-e-search-neutral';
+/** MU search-fixture slugs from `e2e-color-variable-picker-search.php`. */
+export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_SLUGS = [
+	'e-2-e-search-on-brand',
+	'e-2-e-search-accent',
+	'e-2-e-search-neutral',
+];
+
+/** Loads the block editor with stable localStorage for variable-picker search E2E. */
+function createPostForVariablePickerSearchE2E() {
+	const testURL = Cypress.env('testURL');
+	let path = '/wp-admin/post-new.php?post_type=post';
+
+	if (
+		(testURL.endsWith('/') && !path.startsWith('/')) ||
+		(!testURL.endsWith('/') && path.startsWith('/'))
+	) {
+		path = `${testURL}${path}`;
+	} else if (!testURL.endsWith('/') && !path.startsWith('/')) {
+		path = `${testURL}/${path}`;
+	} else if (testURL.endsWith('/') && path.startsWith('/')) {
+		path = `${testURL.slice(0, -1)}${path}`;
+	} else {
+		path = `${testURL}${path}`;
+	}
+
+	return cy
+		.visit(path, {
+			onBeforeLoad(win) {
+				win.localStorage.removeItem('blockeraEditorZoomPercent');
+				win.localStorage.removeItem(
+					PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY
+				);
+			},
+		})
+		.then(() => {
+			// eslint-disable-next-line cypress/no-unnecessary-waiting
+			cy.wait(2000);
+
+			closeWelcomeGuide();
+			disableGutenbergFeatures();
+			setAbsoluteBlockToolbar();
+
+			return getWPDataObject();
+		});
+}
+
+/** Waits until every MU search-fixture slug is visible in the open picker. */
+function waitForColorVariablePickerSearchFixtureSlugs() {
+	for (const slug of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_SLUGS) {
+		withinVariablePickerPopover(() => {
+			cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
+				.first()
+				.scrollIntoView()
+				.should('be.visible');
+		});
+	}
+}
 
 /**
- * Opens the Text Color variable picker for search-fixture E2E (same flow as shade tests).
- * Waits for the flat MU preset row so theme fixtures are rendered before assertions.
+ * Opens the Text Color variable picker for search-fixture E2E.
+ * Clears persisted view mode, then waits for all MU fixture slugs (theme-independent).
  */
 export function openColorVariablePickerSearchTestPopover() {
-	openParagraphTextColorVariablePickerPopover();
+	createPostForVariablePickerSearchE2E();
 
-	withinVariablePickerPopover(() => {
-		cy.get(
-			`[data-variable-slug="${COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_READY_SLUG}"]`,
-			{ timeout: 30000 }
-		)
-			.first()
-			.scrollIntoView()
-			.should('be.visible');
+	cy.getBlock('default').type('Color variable variations.', { delay: 0 });
+	cy.getByAriaControls('styles-view').click();
+
+	cy.getParentContainer('Text Color').within(() => {
+		cy.openValueAddon();
 	});
+
+	cy.getByDataTest('variable-picker-popover', { timeout: 20000 }).should(
+		'be.visible'
+	);
+
+	waitForColorVariablePickerSearchFixtureSlugs();
 }
 
 export { openGlobalStylesColorPaletteScreen, getWPDataObject };

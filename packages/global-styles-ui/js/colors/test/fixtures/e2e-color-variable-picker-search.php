@@ -1,6 +1,8 @@
 <?php
 /**
  * E2E theme.json layer: deterministic color presets for variable-picker search tests.
+ *
+ * Names use an `E2E Search` prefix so assertions never depend on the active theme palette.
  */
 add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	$data = $theme_json;
@@ -15,17 +17,17 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	$presets = [
 		[
 			'slug'  => 'e-2-e-search-on-brand',
-			'name'  => 'Base / Primary / On Brand',
+			'name'  => 'E2E Search / E2E Brand / E2E On Brand Leaf',
 			'color' => '#aabbcc',
 		],
 		[
 			'slug'  => 'e-2-e-search-accent',
-			'name'  => 'Accent / Secondary Tone',
+			'name'  => 'E2E Search / E2E Accent Row',
 			'color' => '#112233',
 		],
 		[
 			'slug'  => 'e-2-e-search-neutral',
-			'name'  => 'Neutral Surface',
+			'name'  => 'E2E Search Neutral Flat',
 			'color' => '#445566',
 		],
 	];
@@ -35,13 +37,13 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	}
 
 	$palette = &$data['settings']['color']['palette'];
-	$usesOriginBuckets = is_array($palette) && (
+	$uses_origin_buckets = is_array($palette) && (
 		isset($palette['theme']) ||
 		isset($palette['default']) ||
 		isset($palette['custom'])
 	);
 
-	if ($usesOriginBuckets) {
+	if ($uses_origin_buckets) {
 		if (!isset($palette['theme']) || !is_array($palette['theme'])) {
 			$palette['theme'] = [];
 		}
