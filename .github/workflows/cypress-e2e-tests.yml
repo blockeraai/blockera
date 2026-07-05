@@ -167,5 +167,14 @@ jobs:
 
                   npm run test:e2e -- --spec "$spec_pattern"
 
+            - name: Upload Cypress debug screenshots
+              uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
+              with:
+                  name: cypress-screenshots-${{ matrix.category }}
+                  path: packages/dev-cypress/js/screenshots/
+                  if-no-files-found: ignore
+                  retention-days: 7
+
             - name: Stop WordPress Environment
               run: npm run env:stop

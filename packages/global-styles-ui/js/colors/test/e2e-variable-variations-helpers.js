@@ -413,8 +413,12 @@ function waitForColorVariablePickerSearchFixtureSlugs() {
 /**
  * Opens the Text Color variable picker for search-fixture E2E.
  * Clears persisted view mode, waits for MU fixtures in the editor store, then in the picker.
+ *
+ * @param {{ skipPickerSlugWait?: boolean }} [options]
  */
-export function openColorVariablePickerSearchTestPopover() {
+export function openColorVariablePickerSearchTestPopover({
+	skipPickerSlugWait = false,
+} = {}) {
 	createPostForVariablePickerSearchE2E();
 	waitForColorVariablePickerSearchFixturesInEditorStore();
 
@@ -429,7 +433,45 @@ export function openColorVariablePickerSearchTestPopover() {
 		'be.visible'
 	);
 
-	waitForColorVariablePickerSearchFixtureSlugs();
+	if (!skipPickerSlugWait) {
+		waitForColorVariablePickerSearchFixtureSlugs();
+	}
+}
+
+/** Screenshot + CI log before first-test assertions (picker must already be open). */
+export function captureColorVariablePickerSearchDebugScreenshot() {
+	const screenshotBase = 'ci-debug/color-picker-search-before-assertions';
+
+	cy.getByDataTest('variable-picker-popover')
+		.filter(':visible')
+		.first()
+		.should('be.visible')
+		.then(($popover) => {
+			const slugs = $popover
+				.find('[data-variable-slug]')
+				.toArray()
+				.map((el) => el.getAttribute('data-variable-slug'))
+				.filter(Boolean);
+
+			cy.task(
+				'logToCi',
+				`[color-variable-picker-search] picker slugs in DOM: ${JSON.stringify(slugs)}`,
+				{ log: false }
+			);
+		});
+
+	cy.getByDataTest('variable-picker-popover')
+		.filter(':visible')
+		.first()
+		.screenshot(`${screenshotBase}-popover`);
+
+	cy.screenshot(screenshotBase, { capture: 'fullPage' });
+
+	cy.task(
+		'logToCi',
+		`[color-variable-picker-search] debug screenshots saved under packages/dev-cypress/js/screenshots/ (base: ${screenshotBase})`,
+		{ log: false }
+	);
 }
 
 export { openGlobalStylesColorPaletteScreen, getWPDataObject };
