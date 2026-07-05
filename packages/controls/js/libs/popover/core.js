@@ -23,7 +23,6 @@ import {
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { isFunction, isUndefined } from '@blockera/utils';
-import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
@@ -40,6 +39,7 @@ import {
 	unregisterPopoverRoot,
 } from './utils';
 import type { TPopoverProps } from './types';
+import { PopoverContextData } from './context';
 
 type TPopoverCoreProps = {
 	...TPopoverProps,
