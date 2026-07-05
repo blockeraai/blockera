@@ -6,6 +6,7 @@ import {
 	deactivateMuPlugin,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
+import { clearPresetVariablesViewModeStorage } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
 import {
 	assertColorPresetNotInVariablePicker,
 	assertColorPresetVisibleInVariablePicker,
@@ -30,6 +31,7 @@ const PRESET_NEUTRAL_DISPLAY = 'Neutral Surface';
 
 describe('Global Styles UI → Color variable picker search', () => {
 	beforeEach(() => {
+		clearPresetVariablesViewModeStorage();
 		return activateMuPlugin(MU, MU_NAME);
 	});
 
