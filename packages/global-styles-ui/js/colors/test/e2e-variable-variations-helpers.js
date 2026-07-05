@@ -206,6 +206,101 @@ export function expandColorPresetVariationsAccordionOnPaletteScreen(
 	});
 }
 
+/** @param {unknown} colorSettings `settings.color` from global styles config. */
+function getColorPaletteThemeRowsFromSettings(colorSettings) {
+	if (!colorSettings || typeof colorSettings !== 'object') {
+		return [];
+	}
+
+	const palette = colorSettings.palette;
+	if (Array.isArray(palette)) {
+		return palette;
+	}
+
+	if (
+		palette &&
+		typeof palette === 'object' &&
+		Array.isArray(palette.theme)
+	) {
+		return palette.theme;
+	}
+
+	return [];
+}
+
+/** Waits until core/global-styles entities needed by the variable picker are resolved. */
+export function waitForEditorGlobalStylesReady() {
+	cy.window({ timeout: 30000 }).should((win) => {
+		const select = win.wp?.data?.select?.('core');
+		expect(select, 'wp.data select(core)').to.exist;
+		expect(
+			select.hasFinishedResolution(
+				'__experimentalGetCurrentGlobalStylesId'
+			),
+			'__experimentalGetCurrentGlobalStylesId resolution'
+		).to.eq(true);
+
+		const globalStylesId =
+			select.__experimentalGetCurrentGlobalStylesId?.();
+		if (!globalStylesId) {
+			return;
+		}
+
+		const canEdit =
+			typeof select.canUser === 'function'
+				? select.canUser('update', {
+						kind: 'root',
+						name: 'globalStyles',
+						id: globalStylesId,
+					})
+				: true;
+
+		if (canEdit === true) {
+			expect(
+				select.hasFinishedResolution('getEditedEntityRecord', [
+					'root',
+					'globalStyles',
+					globalStylesId,
+				]),
+				'getEditedEntityRecord(globalStyles) resolution'
+			).to.eq(true);
+			return;
+		}
+
+		expect(
+			select.hasFinishedResolution('getEntityRecord', [
+				'root',
+				'globalStyles',
+				globalStylesId,
+				{ context: 'view' },
+			]),
+			'getEntityRecord(globalStyles) resolution'
+		).to.eq(true);
+	});
+}
+
+/**
+ * Theme palette rows the color variable picker reads (matches `useGetColors` / `resolveColorPaletteThemeRows`).
+ *
+ * @param {Window} win
+ */
+function getEditorColorPickerThemePaletteRows(win) {
+	const select = win.wp?.data?.select?.('core');
+	const baseColor =
+		select?.__experimentalGetCurrentThemeBaseGlobalStyles?.()?.settings
+			?.color ?? {};
+	const baseThemeRows = getColorPaletteThemeRowsFromSettings(baseColor);
+
+	const globalStylesId = select?.__experimentalGetCurrentGlobalStylesId?.();
+	const userColor = globalStylesId
+		? (select.getEditedEntityRecord('root', 'globalStyles', globalStylesId)
+				?.settings?.color ?? {})
+		: {};
+	const userThemeRows = getColorPaletteThemeRowsFromSettings(userColor);
+
+	return userThemeRows.length > 0 ? userThemeRows : baseThemeRows;
+}
+
 /**
  * Retries until the editor store exposes a MU theme color preset on the theme palette.
  *
@@ -226,20 +321,10 @@ export function assertEditorThemeBaseHasMuColorPreset(
 			'__experimentalGetCurrentThemeBaseGlobalStyles'
 		).to.eq('function');
 
-		const base = select.__experimentalGetCurrentThemeBaseGlobalStyles();
-		expect(base, 'theme base global styles object').to.exist;
-
-		const settings = base.settings ?? base;
-
-		const pal = settings?.color?.palette;
-		const themePalette = Array.isArray(pal?.theme)
-			? pal.theme
-			: Array.isArray(pal)
-				? pal
-				: [];
+		const themePalette = getEditorColorPickerThemePaletteRows(win);
 		expect(
 			themePalette.length > 0,
-			'settings.color.palette.theme (or palette) must list theme colors'
+			'editor theme palette rows must be available for the color picker'
 		).to.eq(true);
 
 		const row = themePalette.find(
@@ -283,11 +368,29 @@ export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS = [
 	{ slug: 'e-2-e-search-neutral', name: 'Neutral Surface' },
 ];
 
-/** Waits until all search-fixture color presets are present in the editor theme base. */
+/** Slug used to confirm the search-fixture catalog rendered in the variable picker. */
+export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_READY_SLUG =
+	'e-2-e-search-neutral';
+
+/** Waits until all search-fixture color presets are present in the editor theme palette. */
 export function waitForColorVariablePickerSearchFixturesInEditor() {
+	waitForEditorGlobalStylesReady();
+
 	for (const { slug, name } of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS) {
 		assertEditorThemeBaseHasMuColorPreset(slug, name);
 	}
+}
+
+/** Waits until a search-fixture preset row is visible in the open variable picker. */
+export function waitForColorPresetSlugInVariablePicker(
+	slug = COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_READY_SLUG
+) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
+			.first()
+			.scrollIntoView()
+			.should('be.visible');
+	});
 }
 
 /**
@@ -326,18 +429,16 @@ function createPostForColorVariablePickerSearchE2E() {
 			closeWelcomeGuide();
 			disableGutenbergFeatures();
 			setAbsoluteBlockToolbar();
+
+			return getWPDataObject();
 		});
 }
 
 /**
  * Opens the Text Color variable picker after MU search fixtures are loaded and rendered.
  * Use for `color-variable-picker-search` E2E (avoids CI race where the popover opens before theme presets hydrate).
- *
- * @param {string} [readyPresetLabel] Leaf/header label to wait for inside the popover.
  */
-export function openColorVariablePickerSearchTestPopover(
-	readyPresetLabel = 'Neutral Surface'
-) {
+export function openColorVariablePickerSearchTestPopover() {
 	createPostForColorVariablePickerSearchE2E();
 	waitForColorVariablePickerSearchFixturesInEditor();
 
@@ -353,14 +454,12 @@ export function openColorVariablePickerSearchTestPopover(
 	);
 
 	withinVariablePickerPopover(() => {
-		cy.contains(
-			'[data-cy="color-repeater-item-header"]',
-			readyPresetLabel,
-			{
-				timeout: 30000,
-			}
-		).should('be.visible');
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		}).should('be.visible');
 	});
+
+	waitForColorPresetSlugInVariablePicker();
 }
 
 export { openGlobalStylesColorPaletteScreen, getWPDataObject };

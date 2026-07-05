@@ -29,11 +29,11 @@ const PRESET_ACCENT_DISPLAY = 'Secondary Tone';
 const PRESET_NEUTRAL_DISPLAY = 'Neutral Surface';
 
 describe('Global Styles UI → Color variable picker search', () => {
-	before(() => {
+	beforeEach(() => {
 		return activateMuPlugin(MU, MU_NAME);
 	});
 
-	after(() => {
+	afterEach(() => {
 		return deactivateMuPlugin(MU, MU_NAME);
 	});
 
