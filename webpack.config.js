@@ -14,8 +14,8 @@ const packagesConfig = require('./packages/dev-tools/js/webpack/packages');
 
 const exportDefaultPackages = [];
 
-module.exports = (env, argv) => {
-	if (!argv) {
+module.exports = (env = {}, argv) => {
+	if (!argv || env?.cypress) {
 		return require(
 			path.resolve(
 				process.cwd(),
