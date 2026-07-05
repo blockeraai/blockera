@@ -7,7 +7,8 @@ import { useEffect, useState } from '@wordpress/element';
  *  dependencies
  */
 import { useValue, varExport } from '@blockera/utils';
-import { Flex, useControlContext } from '@blockera/controls';
+import Flex from '@blockera/controls/js/libs/flex';
+import { useControlContext } from '@blockera/controls/js/context/hooks';
 
 /**
  * Internal dependencies
