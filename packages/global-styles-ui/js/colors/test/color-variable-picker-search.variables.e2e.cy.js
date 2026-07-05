@@ -12,7 +12,7 @@ import {
 	clearVariablePickerSearch,
 	getWPDataObject,
 	MU_FIX,
-	openParagraphTextColorVariablePickerPopover,
+	openColorVariablePickerSearchTestPopover,
 	typeInVariablePickerSearch,
 } from './e2e-variable-variations-helpers';
 
@@ -29,16 +29,16 @@ const PRESET_ACCENT_DISPLAY = 'Secondary Tone';
 const PRESET_NEUTRAL_DISPLAY = 'Neutral Surface';
 
 describe('Global Styles UI → Color variable picker search', () => {
-	beforeEach(() => {
-		activateMuPlugin(MU, MU_NAME);
+	before(() => {
+		return activateMuPlugin(MU, MU_NAME);
 	});
 
-	afterEach(() => {
-		deactivateMuPlugin(MU, MU_NAME);
+	after(() => {
+		return deactivateMuPlugin(MU, MU_NAME);
 	});
 
 	it('shows all fixture presets when search is empty', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND_DISPLAY);
 		assertColorPresetVisibleInVariablePicker(PRESET_ACCENT_DISPLAY);
@@ -46,7 +46,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('filters with multi-word AND search (bas bran)', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('bas bran');
 
@@ -56,7 +56,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('filters with multi-word partial search (acc sec)', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('acc sec');
 
@@ -66,7 +66,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('filters by CSS value fragment (aabb)', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('aabb');
 
@@ -76,7 +76,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('shows unified empty state when no presets match', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('bas xyz');
 
@@ -109,7 +109,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('clears search from the empty-state button', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('bas xyz');
 
@@ -126,7 +126,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('restores all presets after clearing search', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('bas bran');
 		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
@@ -140,9 +140,11 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('selects a filtered preset by slug', () => {
-		openParagraphTextColorVariablePickerPopover();
+		openColorVariablePickerSearchTestPopover();
 
 		typeInVariablePickerSearch('bas bran');
+
+		assertColorPresetVisibleInVariablePicker(PRESET_ON_BRAND);
 
 		cy.selectValueAddonItem('e-2-e-search-on-brand');
 
