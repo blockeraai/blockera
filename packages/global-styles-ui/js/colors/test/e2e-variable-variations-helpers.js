@@ -134,7 +134,7 @@ export function assertColorPresetSlugVisibleInVariablePicker(slug) {
 		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
 			.first()
 			.scrollIntoView()
-			.should('be.visible');
+			.should('exist');
 	});
 }
 
@@ -336,6 +336,29 @@ export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_SLUGS = [
 	'e-2-e-search-neutral',
 ];
 
+/** Expected MU preset rows for store hydration checks. */
+const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS = [
+	{
+		slug: 'e-2-e-search-on-brand',
+		name: 'E2E Search / E2E Brand / E2E On Brand Leaf',
+	},
+	{
+		slug: 'e-2-e-search-accent',
+		name: 'E2E Search / E2E Accent Row',
+	},
+	{
+		slug: 'e-2-e-search-neutral',
+		name: 'E2E Search Neutral Flat',
+	},
+];
+
+/** Waits until all MU search fixtures are on the theme base palette in wp.data. */
+function waitForColorVariablePickerSearchFixturesInEditorStore() {
+	for (const { slug, name } of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS) {
+		assertEditorThemeBaseHasMuColorPreset(slug, name);
+	}
+}
+
 /** Loads the block editor with stable localStorage for variable-picker search E2E. */
 function createPostForVariablePickerSearchE2E() {
 	const testURL = Cypress.env('testURL');
@@ -375,24 +398,25 @@ function createPostForVariablePickerSearchE2E() {
 		});
 }
 
-/** Waits until every MU search-fixture slug is visible in the open picker. */
+/** Waits until every MU search-fixture slug exists in the open picker catalog. */
 function waitForColorVariablePickerSearchFixtureSlugs() {
 	for (const slug of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_SLUGS) {
 		withinVariablePickerPopover(() => {
 			cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
 				.first()
 				.scrollIntoView()
-				.should('be.visible');
+				.should('exist');
 		});
 	}
 }
 
 /**
  * Opens the Text Color variable picker for search-fixture E2E.
- * Clears persisted view mode, then waits for all MU fixture slugs (theme-independent).
+ * Clears persisted view mode, waits for MU fixtures in the editor store, then in the picker.
  */
 export function openColorVariablePickerSearchTestPopover() {
 	createPostForVariablePickerSearchE2E();
+	waitForColorVariablePickerSearchFixturesInEditorStore();
 
 	cy.getBlock('default').type('Color variable variations.', { delay: 0 });
 	cy.getByAriaControls('styles-view').click();

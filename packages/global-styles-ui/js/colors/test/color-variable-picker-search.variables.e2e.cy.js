@@ -31,13 +31,16 @@ const SEARCH_HEX = 'aabb';
 const SEARCH_NO_MATCH = 'e2e xyz';
 
 describe('Global Styles UI → Color variable picker search', () => {
-	beforeEach(() => {
-		clearPresetVariablesViewModeStorage();
+	before(() => {
 		return activateMuPlugin(MU, MU_NAME);
 	});
 
-	afterEach(() => {
+	after(() => {
 		return deactivateMuPlugin(MU, MU_NAME);
+	});
+
+	beforeEach(() => {
+		clearPresetVariablesViewModeStorage();
 	});
 
 	it('shows all fixture presets when search is empty', () => {

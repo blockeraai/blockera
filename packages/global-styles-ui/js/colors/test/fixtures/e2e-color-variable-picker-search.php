@@ -4,6 +4,25 @@
  *
  * Names use an `E2E Search` prefix so assertions never depend on the active theme palette.
  */
+
+use Blockera\Setup\Compatibility\JSONResolver;
+
+/**
+ * Production CI builds cache theme.json in JSONResolver per PHP-FPM worker. Clearing on each
+ * request ensures this MU layer's `blockera_theme_json_data_theme` filter runs after activation.
+ */
+add_action(
+	'plugins_loaded',
+	static function (): void {
+		if (! class_exists(JSONResolver::class)) {
+			return;
+		}
+
+		JSONResolver::clean_cached_data();
+	},
+	0
+);
+
 add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	$data = $theme_json;
 	if (!isset($data['settings'])) {
