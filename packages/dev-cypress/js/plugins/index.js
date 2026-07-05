@@ -97,6 +97,24 @@ function parseWpEvalStdout(stdout) {
 }
 
 /**
+ * CI-visible mu-plugin diagnostics (Node stdout → GitHub Actions / Cypress plugin log).
+ *
+ * @param {string} event
+ * @param {Record<string, unknown>} [details]
+ */
+function logMuPlugin(event, details = {}) {
+	const parts = [`[blockera:mu-plugin] ${event}`];
+
+	for (const [key, value] of Object.entries(details)) {
+		if (value !== undefined && value !== null && value !== '') {
+			parts.push(`${key}=${String(value)}`);
+		}
+	}
+
+	console.log(parts.join(' | '));
+}
+
+/**
  * Run PHP inside the wp-env CLI container.
  * Uses the local wp-env binary — never `npx`, which breaks inside Cypress plugin
  * processes (esbuild platform mismatch when Cypress runs x64 Node on arm64).
@@ -377,6 +395,13 @@ function shouldUseHostMuPlugins() {
 	return !process.env.CI && Boolean(resolveWpEnvMuPluginsDir());
 }
 
+/**
+ * @return {'host'|'container'}
+ */
+function getMuPluginTransport() {
+	return shouldUseHostMuPlugins() ? 'host' : 'container';
+}
+
 module.exports = (on, config) => {
 	const options = {
 		webpackOptions: require(
@@ -393,49 +418,132 @@ module.exports = (on, config) => {
 	);
 
 	on('task', {
-		muPluginActivate({ muPluginPath, targetName, force = false }) {
-			const resolvedTarget = getMuPluginTargetName(
-				muPluginPath,
-				targetName
-			);
-
-			if (shouldUseHostMuPlugins()) {
-				return activateMuPluginOnHost(
-					muPluginPath,
-					resolvedTarget,
-					force
-				);
-			}
-
-			return activateMuPluginInContainer(
-				muPluginPath,
-				resolvedTarget,
-				force
-			);
+		logToCi(message) {
+			console.log(String(message));
+			return null;
 		},
-		muPluginVerify({ muPluginPath, targetName }) {
+		muPluginActivate({
+			muPluginPath,
+			targetName,
+			force = false,
+			attempt = 1,
+			maxAttempts = 1,
+		}) {
 			const resolvedTarget = getMuPluginTargetName(
 				muPluginPath,
 				targetName
 			);
+			const transport = getMuPluginTransport();
 
-			if (shouldUseHostMuPlugins()) {
-				return verifyMuPluginOnHost(muPluginPath, resolvedTarget);
+			logMuPlugin('activate:start', {
+				transport,
+				attempt,
+				maxAttempts,
+				force,
+				source: muPluginPath,
+				target: resolvedTarget,
+				ci: Boolean(process.env.CI),
+			});
+
+			let result;
+
+			try {
+				if (transport === 'host') {
+					result = activateMuPluginOnHost(
+						muPluginPath,
+						resolvedTarget,
+						force
+					);
+				} else {
+					result = activateMuPluginInContainer(
+						muPluginPath,
+						resolvedTarget,
+						force
+					);
+				}
+			} catch (error) {
+				logMuPlugin('activate:error', {
+					transport,
+					attempt,
+					maxAttempts,
+					target: resolvedTarget,
+					error: error?.message || String(error),
+				});
+				throw error;
 			}
 
-			return verifyMuPluginInContainer(muPluginPath, resolvedTarget);
+			logMuPlugin('activate:done', {
+				transport,
+				attempt,
+				maxAttempts,
+				target: resolvedTarget,
+				ok: result?.ok,
+				message: result?.message,
+			});
+
+			return result;
+		},
+		muPluginVerify({
+			muPluginPath,
+			targetName,
+			attempt = 1,
+			maxAttempts = 1,
+		}) {
+			const resolvedTarget = getMuPluginTargetName(
+				muPluginPath,
+				targetName
+			);
+			const transport = getMuPluginTransport();
+
+			logMuPlugin('verify:start', {
+				transport,
+				attempt,
+				maxAttempts,
+				source: muPluginPath,
+				target: resolvedTarget,
+				ci: Boolean(process.env.CI),
+			});
+
+			const result =
+				transport === 'host'
+					? verifyMuPluginOnHost(muPluginPath, resolvedTarget)
+					: verifyMuPluginInContainer(muPluginPath, resolvedTarget);
+
+			logMuPlugin(result?.ok ? 'verify:ok' : 'verify:failed', {
+				transport,
+				attempt,
+				maxAttempts,
+				target: resolvedTarget,
+				message: result?.message,
+			});
+
+			return result;
 		},
 		muPluginDeactivate({ muPluginPath, targetName }) {
 			const resolvedTarget = getMuPluginTargetName(
 				muPluginPath,
 				targetName
 			);
+			const transport = getMuPluginTransport();
 
-			if (shouldUseHostMuPlugins()) {
-				return deactivateMuPluginOnHost(resolvedTarget);
-			}
+			logMuPlugin('deactivate:start', {
+				transport,
+				target: resolvedTarget,
+				ci: Boolean(process.env.CI),
+			});
 
-			return deactivateMuPluginInContainer(resolvedTarget);
+			const result =
+				transport === 'host'
+					? deactivateMuPluginOnHost(resolvedTarget)
+					: deactivateMuPluginInContainer(resolvedTarget);
+
+			logMuPlugin('deactivate:done', {
+				transport,
+				target: resolvedTarget,
+				message: result?.message,
+			});
+
+			return result;
 		},
 	});
 

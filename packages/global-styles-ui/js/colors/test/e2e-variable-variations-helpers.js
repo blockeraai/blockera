@@ -442,6 +442,12 @@ export function openColorVariablePickerSearchTestPopover() {
 	createPostForColorVariablePickerSearchE2E();
 	waitForColorVariablePickerSearchFixturesInEditor();
 
+	cy.task(
+		'logToCi',
+		'[color-variable-picker-search] MU presets confirmed in editor store; opening Text Color picker',
+		{ log: false }
+	);
+
 	cy.getBlock('default').type('Color variable variations.', { delay: 0 });
 	cy.getByAriaControls('styles-view').click();
 
@@ -459,7 +465,19 @@ export function openColorVariablePickerSearchTestPopover() {
 		}).should('be.visible');
 	});
 
+	cy.task(
+		'logToCi',
+		'[color-variable-picker-search] picker visible; waiting for fixture slug row in catalog',
+		{ log: false }
+	);
+
 	waitForColorPresetSlugInVariablePicker();
+
+	cy.task(
+		'logToCi',
+		'[color-variable-picker-search] fixture slug row visible in picker catalog',
+		{ log: false }
+	);
 }
 
 export { openGlobalStylesColorPaletteScreen, getWPDataObject };

@@ -776,6 +776,15 @@ function runMuPluginTask(action, label, taskName, taskArgs) {
 }
 
 /**
+ * Emit a line to the Cypress plugin process stdout (visible in CI job logs).
+ *
+ * @param {string} message
+ */
+function logMuPluginToCi(message) {
+	cy.task('logToCi', message, { log: false });
+}
+
+/**
  * Activate mu-plugin by copying it to wp-content/mu-plugins/ directory.
  * This function accepts a full path to the mu-plugin.php file and copies it to the mu-plugins directory.
  *
@@ -792,38 +801,64 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
 	const maxAttempts = Cypress.env('muPluginActivateMaxAttempts') ?? 1;
 	const label = `${muPluginPath} -> ${targetName}`;
 
+	logMuPluginToCi(
+		`[activateMuPlugin] start | label=${label} | maxAttempts=${maxAttempts} | ci=${Boolean(Cypress.env('CI'))}`
+	);
+	cy.log(`[activateMuPlugin] start | ${label} | maxAttempts=${maxAttempts}`);
+
 	function activateWithRetry(attempt = 1) {
 		const force = attempt > 1;
 		const startedAt = Date.now();
+		const attemptLabel = `attempt ${attempt}/${maxAttempts}`;
+
+		logMuPluginToCi(
+			`[activateMuPlugin] ${attemptLabel} | label=${label} | force=${force}`
+		);
+		cy.log(
+			`[activateMuPlugin] ${attemptLabel} | ${label} | force=${force}`
+		);
 
 		return cy
-			.task('muPluginActivate', { muPluginPath, targetName, force })
+			.task(
+				'muPluginActivate',
+				{ muPluginPath, targetName, force, attempt, maxAttempts },
+				{ log: false }
+			)
 			.then((activateResult) => {
 				const activateMs = Date.now() - startedAt;
-				cy.log(
-					`[activateMuPlugin] ${label} | ${activateResult?.message || ''} (${activateMs}ms)`
-				);
+				const activateLine = `[activateMuPlugin] ${attemptLabel} activate | ${label} | ${activateResult?.message || ''} (${activateMs}ms)`;
+				logMuPluginToCi(activateLine);
+				cy.log(activateLine);
 			})
-			.task('muPluginVerify', { muPluginPath, targetName })
+			.task(
+				'muPluginVerify',
+				{ muPluginPath, targetName, attempt, maxAttempts },
+				{ log: false }
+			)
 			.then((verifyResult) => {
 				const verifyMs = Date.now() - startedAt;
-				cy.log(
-					`[activateMuPlugin] verify ${label} | ${verifyResult?.message || ''} (${verifyMs}ms)`
-				);
+				const verifyLine = `[activateMuPlugin] ${attemptLabel} verify | ${label} | ok=${Boolean(verifyResult?.ok)} | ${verifyResult?.message || ''} (${verifyMs}ms)`;
+				logMuPluginToCi(verifyLine);
+				cy.log(verifyLine);
 
 				if (verifyResult?.ok) {
+					logMuPluginToCi(
+						`[activateMuPlugin] success | ${attemptLabel} | ${label}`
+					);
 					return cy.wrap(verifyResult);
 				}
 
 				if (attempt >= maxAttempts) {
+					const failureLine = `[activateMuPlugin] failed | exhausted ${maxAttempts} attempt(s) | ${label} | last=${verifyResult?.message || 'unknown verify error'}`;
+					logMuPluginToCi(failureLine);
 					throw new Error(
 						`Mu-plugin activation failed after ${maxAttempts} attempt(s): ${verifyResult?.message || 'unknown verify error'}`
 					);
 				}
 
-				cy.log(
-					`[activateMuPlugin] verify failed (attempt ${attempt}/${maxAttempts}), retrying…`
-				);
+				const retryLine = `[activateMuPlugin] retry | ${attemptLabel} failed verify, waiting 500ms before attempt ${attempt + 1}/${maxAttempts} | ${label}`;
+				logMuPluginToCi(retryLine);
+				cy.log(retryLine);
 
 				return cy.wait(500).then(() => activateWithRetry(attempt + 1));
 			});
