@@ -9,8 +9,10 @@ import '@10up/cypress-wp-utils';
  */
 import { registerCommands } from './commands';
 import { loginToSite, goTo } from '../helpers';
+import { registerComponentCommands } from './component-commands';
 
 registerCommands();
+registerComponentCommands();
 
 beforeEach(function () {
 	cy.viewport(1280, 900);
