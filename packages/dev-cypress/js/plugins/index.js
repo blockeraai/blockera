@@ -403,7 +403,11 @@ function getMuPluginTransport() {
 	return shouldUseHostMuPlugins() ? 'host' : 'container';
 }
 
-module.exports = (on, config) => {
+module.exports = (on, config, testingType = config.testingType || 'e2e') => {
+	if (testingType !== 'e2e') {
+		return;
+	}
+
 	const options = {
 		webpackOptions: require(
 			path.resolve(__dirname, '../webpack.config.js')

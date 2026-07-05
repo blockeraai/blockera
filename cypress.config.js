@@ -36,8 +36,9 @@ env = {
 	...process.env,
 };
 
-const setupNodeEvents = (on, config) => {
-	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
+const setupE2ENodeEvents = (on, config) => {
+	require('./packages/dev-cypress/js/plugins/index.js')(on, config, 'e2e');
+
 	//Requires and imports the main plugin function from the cypress-image-diff-js NPM package
 	const getCompareSnapshotsPlugin = require('cypress-image-diff-js/plugin');
 	//Calls the plugin's getCompareSnapshotsPlugin function, passing Cypress' on and config objects, to intialize and register the plugin with Cypress
@@ -46,11 +47,21 @@ const setupNodeEvents = (on, config) => {
 	return config;
 };
 
+const setupComponentNodeEvents = (on, config) => {
+	require('./packages/dev-cypress/js/plugins/index.js')(
+		on,
+		config,
+		'component'
+	);
+
+	return config;
+};
+
 module.exports = defineConfig({
 	chromeWebSecurity: false,
 	defaultCommandTimeout: 15000,
 	e2e: {
-		setupNodeEvents,
+		setupNodeEvents: setupE2ENodeEvents,
 		specPattern: env.e2e.specPattern,
 		excludeSpecPattern: env.e2e.excludeSpecPattern,
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
@@ -64,21 +75,25 @@ module.exports = defineConfig({
 		openMode: 0,
 		runMode: isCi ? 2 : 0,
 	},
-	coverage: true,
+	coverage: isCi,
 	screenshotOnRunFailure: false,
 	screenshotsFolder: 'packages/dev-cypress/js/screenshots',
 	videosFolder: 'packages/dev-cypress/js/videos',
 	viewportHeight: 1440,
 	viewportWidth: 2560,
 	component: {
-		setupNodeEvents,
+		setupNodeEvents: setupComponentNodeEvents,
 		devServer: {
 			framework: 'react',
 			bundler: 'webpack',
+			webpackConfig: require('./packages/dev-cypress/js/webpack.config.js'),
 		},
-		specPattern: 'packages/**/*.cy.js',
+		specPattern: 'packages/**/test/*.cy.js',
+		excludeSpecPattern: ['**/*.e2e.cy.js', '**/*.visual.cy.js'],
 		supportFile: 'packages/dev-cypress/js/support/component.js',
+		viewportHeight: 900,
+		viewportWidth: 1280,
 	},
-	numTestsKeptInMemory: 0,
+	numTestsKeptInMemory: 2,
 	experimentalMemoryManagement: true,
 });
