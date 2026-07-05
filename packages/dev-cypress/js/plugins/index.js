@@ -111,6 +111,7 @@ function logMuPlugin(event, details = {}) {
 		}
 	}
 
+	// @debug-ignore
 	console.log(parts.join(' | '));
 }
 
@@ -419,6 +420,7 @@ module.exports = (on, config) => {
 
 	on('task', {
 		logToCi(message) {
+			// @debug-ignore
 			console.log(String(message));
 			return null;
 		},

@@ -128,6 +128,23 @@ export function assertColorPresetNotInVariablePicker(headerLabel) {
 	});
 }
 
+/** @param {string} slug Preset slug (`data-variable-slug`). */
+export function assertColorPresetSlugVisibleInVariablePicker(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
+			.first()
+			.scrollIntoView()
+			.should('exist');
+	});
+}
+
+/** @param {string} slug Preset slug (`data-variable-slug`). */
+export function assertColorPresetSlugNotInVariablePicker(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`).should('not.exist');
+	});
+}
+
 /** Picker closes after a selection; reopen via the value-addon control (open or selected state). */
 export function reopenVariablePickerPopover() {
 	cy.getParentContainer('Text Color').within(() => {
@@ -146,28 +163,42 @@ export function reopenVariablePickerPopover() {
 }
 
 /** @param {string} categoryLabel */
-export function expandTaxonomyCategoryAccordionInVariablePicker(categoryLabel) {
+export function expandTaxonomyCategoryAccordionInVariablePicker(
+	categoryLabel,
+	{ groupLabel } = {}
+) {
 	cy.getByDataTest('variable-picker-popover')
 		.filter(':visible')
 		.first()
 		.within(() => {
-			cy.contains(
-				'[data-cy="taxonomy-category-header-label"]',
-				categoryLabel,
-				{
-					timeout: 20000,
-				}
-			)
-				.parents('[data-cy="control-group"]')
-				.first()
-				.then(($group) => {
-					if ($group.hasClass('is-close')) {
-						cy.wrap($group)
-							.find('.blockera-control-group-header')
-							.first()
-							.click({ force: true });
-					}
-				});
+			const expandCategory = () => {
+				cy.contains(
+					'[data-cy="taxonomy-category-header-label"]',
+					categoryLabel,
+					{ timeout: 20000 }
+				)
+					.parents('[data-cy="control-group"]')
+					.first()
+					.then(($group) => {
+						if ($group.hasClass('is-close')) {
+							cy.wrap($group)
+								.find('.blockera-control-group-header')
+								.first()
+								.click({ force: true });
+						}
+					});
+			};
+
+			if (groupLabel) {
+				cy.contains(
+					'.blockera-preset-taxonomy-group-shell',
+					groupLabel,
+					{ timeout: 20000 }
+				).within(expandCategory);
+				return;
+			}
+
+			expandCategory();
 		});
 }
 
@@ -228,77 +259,14 @@ function getColorPaletteThemeRowsFromSettings(colorSettings) {
 	return [];
 }
 
-/** Waits until core/global-styles entities needed by the variable picker are resolved. */
-export function waitForEditorGlobalStylesReady() {
-	cy.window({ timeout: 30000 }).should((win) => {
-		const select = win.wp?.data?.select?.('core');
-		expect(select, 'wp.data select(core)').to.exist;
-		expect(
-			select.hasFinishedResolution(
-				'__experimentalGetCurrentGlobalStylesId'
-			),
-			'__experimentalGetCurrentGlobalStylesId resolution'
-		).to.eq(true);
-
-		const globalStylesId =
-			select.__experimentalGetCurrentGlobalStylesId?.();
-		if (!globalStylesId) {
-			return;
-		}
-
-		const canEdit =
-			typeof select.canUser === 'function'
-				? select.canUser('update', {
-						kind: 'root',
-						name: 'globalStyles',
-						id: globalStylesId,
-					})
-				: true;
-
-		if (canEdit === true) {
-			expect(
-				select.hasFinishedResolution('getEditedEntityRecord', [
-					'root',
-					'globalStyles',
-					globalStylesId,
-				]),
-				'getEditedEntityRecord(globalStyles) resolution'
-			).to.eq(true);
-			return;
-		}
-
-		expect(
-			select.hasFinishedResolution('getEntityRecord', [
-				'root',
-				'globalStyles',
-				globalStylesId,
-				{ context: 'view' },
-			]),
-			'getEntityRecord(globalStyles) resolution'
-		).to.eq(true);
-	});
-}
-
-/**
- * Theme palette rows the color variable picker reads (matches `useGetColors` / `resolveColorPaletteThemeRows`).
- *
- * @param {Window} win
- */
-function getEditorColorPickerThemePaletteRows(win) {
+/** Theme palette rows from the theme.json base layer (where MU fixtures inject presets). */
+function getThemeBaseColorPaletteRows(win) {
 	const select = win.wp?.data?.select?.('core');
 	const baseColor =
 		select?.__experimentalGetCurrentThemeBaseGlobalStyles?.()?.settings
 			?.color ?? {};
-	const baseThemeRows = getColorPaletteThemeRowsFromSettings(baseColor);
 
-	const globalStylesId = select?.__experimentalGetCurrentGlobalStylesId?.();
-	const userColor = globalStylesId
-		? (select.getEditedEntityRecord('root', 'globalStyles', globalStylesId)
-				?.settings?.color ?? {})
-		: {};
-	const userThemeRows = getColorPaletteThemeRowsFromSettings(userColor);
-
-	return userThemeRows.length > 0 ? userThemeRows : baseThemeRows;
+	return getColorPaletteThemeRowsFromSettings(baseColor);
 }
 
 /**
@@ -321,10 +289,10 @@ export function assertEditorThemeBaseHasMuColorPreset(
 			'__experimentalGetCurrentThemeBaseGlobalStyles'
 		).to.eq('function');
 
-		const themePalette = getEditorColorPickerThemePaletteRows(win);
+		const themePalette = getThemeBaseColorPaletteRows(win);
 		expect(
 			themePalette.length > 0,
-			'editor theme palette rows must be available for the color picker'
+			'theme base palette must list theme colors (MU fixtures inject here)'
 		).to.eq(true);
 
 		const row = themePalette.find(
@@ -361,42 +329,38 @@ export function assertEditorThemeBaseHasMuColorTaxonomy(
 	});
 }
 
-/** MU search-fixture presets from `e2e-color-variable-picker-search.php`. */
-export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS = [
-	{ slug: 'e-2-e-search-on-brand', name: 'Base / Primary / On Brand' },
-	{ slug: 'e-2-e-search-accent', name: 'Accent / Secondary Tone' },
-	{ slug: 'e-2-e-search-neutral', name: 'Neutral Surface' },
+/** MU search-fixture slugs from `e2e-color-variable-picker-search.php`. */
+export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_SLUGS = [
+	'e-2-e-search-on-brand',
+	'e-2-e-search-accent',
+	'e-2-e-search-neutral',
 ];
 
-/** Slug used to confirm the search-fixture catalog rendered in the variable picker. */
-export const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_READY_SLUG =
-	'e-2-e-search-neutral';
+/** Expected MU preset rows for store hydration checks. */
+const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS = [
+	{
+		slug: 'e-2-e-search-on-brand',
+		name: 'E2E Search / E2E Brand / E2E On Brand Leaf',
+	},
+	{
+		slug: 'e-2-e-search-accent',
+		name: 'E2E Search / E2E Accent Row',
+	},
+	{
+		slug: 'e-2-e-search-neutral',
+		name: 'E2E Search Neutral Flat',
+	},
+];
 
-/** Waits until all search-fixture color presets are present in the editor theme palette. */
-export function waitForColorVariablePickerSearchFixturesInEditor() {
-	waitForEditorGlobalStylesReady();
-
+/** Waits until all MU search fixtures are on the theme base palette in wp.data. */
+function waitForColorVariablePickerSearchFixturesInEditorStore() {
 	for (const { slug, name } of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS) {
 		assertEditorThemeBaseHasMuColorPreset(slug, name);
 	}
 }
 
-/** Waits until a search-fixture preset row is visible in the open variable picker. */
-export function waitForColorPresetSlugInVariablePicker(
-	slug = COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_READY_SLUG
-) {
-	withinVariablePickerPopover(() => {
-		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
-			.first()
-			.scrollIntoView()
-			.should('be.visible');
-	});
-}
-
-/**
- * Loads the block editor with stable localStorage for variable-picker search E2E.
- */
-function createPostForColorVariablePickerSearchE2E() {
+/** Loads the block editor with stable localStorage for variable-picker search E2E. */
+function createPostForVariablePickerSearchE2E() {
 	const testURL = Cypress.env('testURL');
 	let path = '/wp-admin/post-new.php?post_type=post';
 
@@ -434,19 +398,29 @@ function createPostForColorVariablePickerSearchE2E() {
 		});
 }
 
-/**
- * Opens the Text Color variable picker after MU search fixtures are loaded and rendered.
- * Use for `color-variable-picker-search` E2E (avoids CI race where the popover opens before theme presets hydrate).
- */
-export function openColorVariablePickerSearchTestPopover() {
-	createPostForColorVariablePickerSearchE2E();
-	waitForColorVariablePickerSearchFixturesInEditor();
+/** Waits until every MU search-fixture slug exists in the open picker catalog. */
+function waitForColorVariablePickerSearchFixtureSlugs() {
+	for (const slug of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_SLUGS) {
+		withinVariablePickerPopover(() => {
+			cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
+				.first()
+				.scrollIntoView()
+				.should('exist');
+		});
+	}
+}
 
-	cy.task(
-		'logToCi',
-		'[color-variable-picker-search] MU presets confirmed in editor store; opening Text Color picker',
-		{ log: false }
-	);
+/**
+ * Opens the Text Color variable picker for search-fixture E2E.
+ * Clears persisted view mode, waits for MU fixtures in the editor store, then in the picker.
+ *
+ * @param {{ skipPickerSlugWait?: boolean }} [options]
+ */
+export function openColorVariablePickerSearchTestPopover({
+	skipPickerSlugWait = false,
+} = {}) {
+	createPostForVariablePickerSearchE2E();
+	waitForColorVariablePickerSearchFixturesInEditorStore();
 
 	cy.getBlock('default').type('Color variable variations.', { delay: 0 });
 	cy.getByAriaControls('styles-view').click();
@@ -459,23 +433,43 @@ export function openColorVariablePickerSearchTestPopover() {
 		'be.visible'
 	);
 
-	withinVariablePickerPopover(() => {
-		cy.get('.blockera-control-var-picker-search input[type="search"]', {
-			timeout: 20000,
-		}).should('be.visible');
-	});
+	if (!skipPickerSlugWait) {
+		waitForColorVariablePickerSearchFixtureSlugs();
+	}
+}
+
+/** Screenshot + CI log before first-test assertions (picker must already be open). */
+export function captureColorVariablePickerSearchDebugScreenshot() {
+	const screenshotBase = 'ci-debug/color-picker-search-before-assertions';
+
+	cy.getByDataTest('variable-picker-popover')
+		.filter(':visible')
+		.first()
+		.should('be.visible')
+		.then(($popover) => {
+			const slugs = $popover
+				.find('[data-variable-slug]')
+				.toArray()
+				.map((el) => el.getAttribute('data-variable-slug'))
+				.filter(Boolean);
+
+			cy.task(
+				'logToCi',
+				`[color-variable-picker-search] picker slugs in DOM: ${JSON.stringify(slugs)}`,
+				{ log: false }
+			);
+		});
+
+	cy.getByDataTest('variable-picker-popover')
+		.filter(':visible')
+		.first()
+		.screenshot(`${screenshotBase}-popover`);
+
+	cy.screenshot(screenshotBase, { capture: 'fullPage' });
 
 	cy.task(
 		'logToCi',
-		'[color-variable-picker-search] picker visible; waiting for fixture slug row in catalog',
-		{ log: false }
-	);
-
-	waitForColorPresetSlugInVariablePicker();
-
-	cy.task(
-		'logToCi',
-		'[color-variable-picker-search] fixture slug row visible in picker catalog',
+		`[color-variable-picker-search] debug screenshots saved under packages/dev-cypress/js/screenshots/ (base: ${screenshotBase})`,
 		{ log: false }
 	);
 }
