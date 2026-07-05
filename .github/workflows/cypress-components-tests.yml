@@ -29,5 +29,8 @@ jobs:
             - name: Install Cypress
               run: npx cypress install
 
+            - name: Build plugin assets
+              run: npm run build
+
             - name: Run Cypress Tests
               run: npm run test:ct
