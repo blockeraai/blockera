@@ -93,8 +93,22 @@ export function changeItem(state = {}, action) {
 	}
 
 	if (action?.staticType) {
+		const previousItem = clonedPrevValue[action.itemId];
+		const shouldKeepPopoverOpen =
+			previousItem?.isOpen === true ||
+			previousItem?.creatingStep === true ||
+			action.value?.isOpen === true ||
+			action.value?.creatingStep === true;
+
 		delete clonedPrevValue[action.itemId];
 		action.itemId = action.staticType;
+
+		if (shouldKeepPopoverOpen) {
+			action.value = {
+				...action.value,
+				isOpen: true,
+			};
+		}
 	}
 
 	repeaterOnChange(

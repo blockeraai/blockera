@@ -47,13 +47,16 @@ const MappedItems = (): MixedElement => {
 	delete defaultRepeaterItemValue?.isOpen;
 
 	const getStableItemKey = (
-		itemId: string | number,
-		item: { order?: number | string }
+		item: { order?: number | string },
+		sortedIndex: number
 	) => {
+		// Keep keys stable across rename-by-type: regeneratedIds assigns `order` on
+		// first type change — never fall back to itemId or the row remounts and closes
+		// the edit popover.
 		const stableSegment =
 			typeof item?.order === 'number' || typeof item?.order === 'string'
 				? `order-${item.order}`
-				: String(itemId);
+				: `order-${sortedIndex}`;
 
 		return !isUndefined(repeaterId)
 			? `${repeaterId}-repeater-item-${stableSegment}`
@@ -75,7 +78,7 @@ const MappedItems = (): MixedElement => {
 		);
 	}
 
-	return visibleRepeaterItems.map(([itemId, item]) => {
+	return visibleRepeaterItems.map(([itemId, item], sortedIndex) => {
 		const resolvedSize =
 			typeof resolveRepeaterItemSize === 'function'
 				? resolveRepeaterItemSize(String(itemId), item)
@@ -92,7 +95,7 @@ const MappedItems = (): MixedElement => {
 					actionButtonsType,
 					size: resolvedSize === 'small' ? 'small' : 'full',
 				}}
-				key={getStableItemKey(itemId, item)}
+				key={getStableItemKey(item, sortedIndex)}
 			/>
 		);
 	});

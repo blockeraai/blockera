@@ -100,6 +100,7 @@ const RepeaterItem = ({
 		disableProHints,
 		pendingOpenItemId,
 		clearPendingOpenItemId,
+		reparentPendingOpenItemId,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -155,20 +156,28 @@ const RepeaterItem = ({
 
 	const styleRef = useRef(null);
 	const itemRef = useRef(null);
+	const prevItemIdRef = useRef(itemId);
 	const scrollBehavior = useReducedMotion() ? 'auto' : 'smooth';
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
 	const [popoverContentKey, setPopoverContentKey] = useState(0);
 
-	const refreshPopoverContent = useCallback(() => {
-		setPopoverContentKey((key) => key + 1);
-	}, []);
+	const handleItemOpen = useCallback(
+		(options?: { refreshContent?: boolean }) => {
+			setOpen((currentlyOpen) => {
+				const shouldRefreshContent =
+					options?.refreshContent ?? !currentlyOpen;
 
-	const handleItemOpen = useCallback(() => {
-		setOpen(true);
-		refreshPopoverContent();
-	}, [refreshPopoverContent]);
+				if (shouldRefreshContent) {
+					setPopoverContentKey((key) => key + 1);
+				}
+
+				return true;
+			});
+		},
+		[]
+	);
 
 	const setOpenWithContentRefresh = useCallback(
 		(nextOpen: boolean) => {
@@ -208,13 +217,58 @@ const RepeaterItem = ({
 			return;
 		}
 
-		handleItemOpen();
+		const previousItemId = prevItemIdRef.current;
+		const isRenameWhileOpen = previousItemId !== itemId && isOpen;
+
+		handleItemOpen({ refreshContent: !isRenameWhileOpen });
 	}, [
 		item?.isOpen,
 		item?.creatingStep,
 		pendingOpenItemId,
 		itemId,
+		isOpen,
 		handleItemOpen,
+	]);
+
+	// Rename-by-type changes itemId while the edit popover is open — keep it open.
+	useEffect(() => {
+		const previousItemId = prevItemIdRef.current;
+
+		if (previousItemId === itemId) {
+			return;
+		}
+
+		if (isOpen) {
+			if ('function' === typeof reparentPendingOpenItemId) {
+				reparentPendingOpenItemId(previousItemId, itemId);
+			}
+
+			if (item?.isOpen !== true && item?.creatingStep !== true) {
+				changeRepeaterItem({
+					itemId,
+					value: {
+						...item,
+						isOpen: true,
+					},
+					controlId,
+					repeaterId,
+					onChange,
+					valueCleanup,
+				});
+			}
+		}
+
+		prevItemIdRef.current = itemId;
+	}, [
+		itemId,
+		isOpen,
+		item,
+		controlId,
+		repeaterId,
+		onChange,
+		valueCleanup,
+		changeRepeaterItem,
+		reparentPendingOpenItemId,
 	]);
 
 	// Preset creatingStep rows scroll into the nearest scrollable panel (e.g. variable picker).

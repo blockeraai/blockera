@@ -166,7 +166,6 @@ export default function RepeaterControl(
 		valueCleanup,
 		mergeInitialAndDefault: true,
 	});
-
 	const [count, setCount] = useState(0);
 	const [pendingOpenItemId, setPendingOpenItemId] = useState(null);
 
@@ -175,6 +174,15 @@ export default function RepeaterControl(
 			itemId === undefined || current === itemId ? null : current
 		);
 	}, []);
+
+	const reparentPendingOpenItemId = useCallback(
+		(fromItemId: string, toItemId: string) => {
+			setPendingOpenItemId((current) =>
+				current === fromItemId ? toItemId : current
+			);
+		},
+		[]
+	);
 
 	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
 
@@ -448,6 +456,7 @@ export default function RepeaterControl(
 		disableProHints,
 		pendingOpenItemId,
 		clearPendingOpenItemId,
+		reparentPendingOpenItemId,
 	};
 
 	const addNewButtonOnClick = () => {
