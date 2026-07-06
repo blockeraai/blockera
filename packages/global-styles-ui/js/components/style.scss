@@ -200,6 +200,12 @@
 				background: transparent !important;
 				visibility: hidden;
 				opacity: 0;
+				pointer-events: none !important;
+			}
+
+			.blockera-control-repeater-group-header,
+			.blockera-control-group-header {
+				pointer-events: auto;
 			}
 		}
 	}
