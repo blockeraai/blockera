@@ -97,6 +97,85 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
+		it('picker: selects persisted shade from inline strip via color indicator (no taxonomy)', () => {
+			openParagraphTextColorVariablePickerPopover();
+
+			cy.getByDataTest('variable-picker-popover').within(() => {
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Var Shade Base'
+				)
+					.find(
+						'.blockera-component-preset-variable-variations-strip'
+					)
+					.contains('[data-cy="color-repeater-item-header"]', '500')
+					.find('.blockera-component-color-indicator')
+					.first()
+					.click({ force: true });
+			});
+
+			cy.get(
+				'.blockera-component-popover.blockera-control-group-popover',
+				{
+					timeout: 1000,
+				}
+			).should('not.exist');
+
+			getWPDataObject().then((data) => {
+				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
+				expect(fontColor.settings.var).to.equal(
+					'--wp--preset--color--e-2-e-var-base-shade-500'
+				);
+			});
+		});
+
+		it('picker: selects persisted shade from inline strip (no taxonomy)', () => {
+			openParagraphTextColorVariablePickerPopover();
+
+			cy.getByDataTest('variable-picker-popover').within(() => {
+				cy.contains(
+					'[data-cy="color-repeater-item-header"]',
+					'E2E Var Shade Base'
+				).should('be.visible');
+			});
+
+			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
+
+			cy.get(
+				'.blockera-component-popover.blockera-control-group-popover',
+				{
+					timeout: 1000,
+				}
+			).should('not.exist');
+
+			getWPDataObject().then((data) => {
+				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
+				expect(fontColor.settings.var).to.equal(
+					'--wp--preset--color--e-2-e-var-base-shade-500'
+				);
+			});
+		});
+
+		it('picker: selects base slug (anchor) from inline strip (no taxonomy)', () => {
+			openParagraphTextColorVariablePickerPopover();
+
+			cy.selectValueAddonItem('e-2-e-var-base');
+
+			cy.get(
+				'.blockera-component-popover.blockera-control-group-popover',
+				{
+					timeout: 1000,
+				}
+			).should('not.exist');
+
+			getWPDataObject().then((data) => {
+				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
+				expect(fontColor.settings.var).to.equal(
+					'--wp--preset--color--e-2-e-var-base'
+				);
+			});
+		});
+
 		it('selects persisted shade slug after expanding the variations accordion', () => {
 			openParagraphTextColorVariablePickerPopover();
 
