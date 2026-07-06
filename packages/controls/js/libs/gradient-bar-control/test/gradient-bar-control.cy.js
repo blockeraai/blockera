@@ -11,8 +11,30 @@ const hexToRgb = (hex) => {
 				r: parseInt(result[1], 16),
 				g: parseInt(result[2], 16),
 				b: parseInt(result[3], 16),
-		  }
+			}
 		: null;
+};
+
+const addGradientControlPoint = () => {
+	// WP 31+ shows the inserter on hover (not click) and opens the color picker from the plus button.
+	cy.getByDataCy('gradient-bar-control')
+		.find('.components-custom-gradient-picker__gradient-bar')
+		.realHover()
+		.then(($bar) => {
+			const { width, height } = $bar[0].getBoundingClientRect();
+
+			cy.wrap($bar).realMouseMove(
+				Math.round(width / 2),
+				Math.round(height / 2)
+			);
+		});
+
+	cy.get('.components-custom-gradient-picker__insert-point-dropdown')
+		.should('be.visible')
+		.click();
+
+	cy.get('[aria-label="Color"]').click();
+	cy.get('.components-popover').clickOutside();
 };
 
 describe('gradient bar control component testing', () => {
@@ -80,10 +102,9 @@ describe('gradient bar control component testing', () => {
 		cy.withDataProvider({
 			component: <GradientBarControl label="My Label" />,
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
+			skipSyncValue: false,
 		});
-		cy.getByDataCy('gradient-bar-control').click();
-		cy.get('[aria-label="Color"]').click();
-		cy.get('.components-popover').clickOutside();
+		addGradientControlPoint();
 		cy.getByDataCy('gradient-bar-control')
 			.find('button')
 			.should('have.length', 3);
@@ -97,9 +118,7 @@ describe('gradient bar control component testing', () => {
 			),
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
 		});
-		cy.getByDataCy('gradient-bar-control').click();
-		cy.get('[aria-label="Color"]').click();
-		cy.get('.components-popover').clickOutside();
+		addGradientControlPoint();
 		cy.get('@onChangeMock').should('have.been.called');
 	});
 
@@ -111,9 +130,7 @@ describe('gradient bar control component testing', () => {
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
 		});
 
-		cy.getByDataCy('gradient-bar-control').click();
-		cy.get('[aria-label="Color"]').click();
-		cy.get('.components-popover').clickOutside();
+		addGradientControlPoint();
 	});
 
 	it('should render remove color pointer', () => {
@@ -127,16 +144,28 @@ describe('gradient bar control component testing', () => {
 			.find('button')
 			.should('have.length', 2);
 		// add new pointer
-		cy.getByDataCy('gradient-bar-control').click();
-		cy.get('[aria-label="Color"]').click();
-		cy.get('.components-popover').clickOutside();
+		addGradientControlPoint();
 		// check pointers length
 		cy.getByDataCy('gradient-bar-control')
 			.find('button')
 			.should('have.length', 3);
-		// remove new pointer
-		cy.getByDataCy('gradient-bar-control').find('button').eq(1).click();
-		cy.get('button').contains('Remove Control Point').click();
+		// remove new pointer (inserted between the two default stops)
+		cy.getByDataCy('gradient-bar-control')
+			.find('.components-custom-gradient-picker__control-point-button')
+			.then(($buttons) => {
+				const middleButton = [...$buttons].find((button) => {
+					const match = button
+						.getAttribute('aria-label')
+						?.match(/position (\d+)%/);
+					const position = match ? Number(match[1]) : -1;
+
+					return position > 0 && position < 100;
+				});
+
+				expect(middleButton, 'middle control point').to.exist;
+				cy.wrap(middleButton).click();
+			});
+		cy.contains('button', 'Remove Control Point').click();
 		// check pointers length
 		cy.getByDataCy('gradient-bar-control')
 			.find('button')
@@ -157,24 +186,25 @@ describe('gradient bar control component testing', () => {
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
 			name,
 		});
-		cy.get('button').first().click();
+		cy.getByDataCy('gradient-bar-control')
+			.find('.components-custom-gradient-picker__control-point-button')
+			.first()
+			.click();
 		cy.get('input[maxlength="9"]').then(($input) => {
-			// color input value
 			const val = $input.val();
-			// get button color value
-			cy.get('button')
+			cy.getByDataCy('gradient-bar-control')
+				.find(
+					'.components-custom-gradient-picker__control-point-button'
+				)
 				.first()
 				.invoke('attr', 'aria-label')
-				.then((classList) => {
-					// WP render colors to aria label
-					// pick color from aria label
-					const buttonAriaLabel = classList.split(' ')[9];
-
-					// convert input hex color to rgb
+				.then((ariaLabel) => {
+					const colorMatch = ariaLabel.match(/color code ([^.]+)\./);
+					const buttonColor = colorMatch?.[1] ?? '';
 					const inputRgb = hexToRgb(`#${val}`);
 
-					expect(buttonAriaLabel).to.equal(
-						`rgba(${inputRgb.r},${inputRgb.g},${inputRgb.b},1).`
+					expect(buttonColor.replace(/\s/g, '')).to.equal(
+						`rgba(${inputRgb.r},${inputRgb.g},${inputRgb.b},1)`
 					);
 				});
 		});
