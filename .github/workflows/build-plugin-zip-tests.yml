@@ -72,6 +72,8 @@ jobs:
                   cp ./package.json ./build/blockera
                   cp -r ./node_modules ./build/blockera
                   cp ./cypress.config.js ./build/blockera
+                  # Cypress webpack babel-loader resolves babel.config.js from plugin root.
+                  cp ./babel.config.js ./build/blockera
                   cp -r ./packages/dev-cypress ./build/blockera/packages
                   # Cypress webpack aliases resolve to packages/editor/.../testIds.ts; the zip
                   # extract does not include source packages, so mirror the minimal files.
