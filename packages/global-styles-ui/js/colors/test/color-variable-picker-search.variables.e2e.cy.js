@@ -35,7 +35,6 @@ describe('Global Styles UI → Color variable picker search', () => {
 		activateMuPlugin({
 			pluginPath: MU,
 			pluginName: MU_NAME,
-			log: true,
 		});
 	});
 
@@ -43,7 +42,6 @@ describe('Global Styles UI → Color variable picker search', () => {
 		return deactivateMuPlugin({
 			pluginPath: MU,
 			pluginName: MU_NAME,
-			log: true,
 		});
 	});
 
