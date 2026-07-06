@@ -165,6 +165,8 @@ const RepeaterItem = ({
 
 	const handleItemOpen = useCallback(
 		(options?: { refreshContent?: boolean }) => {
+			closeInspectorRepeaterPopovers();
+
 			setOpen((currentlyOpen) => {
 				const shouldRefreshContent =
 					options?.refreshContent ?? !currentlyOpen;
@@ -272,6 +274,14 @@ const RepeaterItem = ({
 		reparentPendingOpenItemId,
 	]);
 
+	// Stable row keys survive delete/reorder — close when this itemId is gone.
+	useEffect(() => {
+		if (!Object.prototype.hasOwnProperty.call(items, itemId)) {
+			setOpen(false);
+			clearPendingOpenItemId(itemId);
+		}
+	}, [items, itemId, clearPendingOpenItemId]);
+
 	// Preset creatingStep rows scroll into the nearest scrollable panel (e.g. variable picker).
 	useEffect(() => {
 		if (item?.creatingStep !== true) {
@@ -361,34 +371,71 @@ const RepeaterItem = ({
 	}, [isOpen, handleItemPopoverClose]);
 
 	const handleDragStart = (e: DragEvent, index: string) => {
+		if (isOpen) {
+			handleItemPopoverClose();
+		}
+
 		if (e.dataTransfer) {
-			e.dataTransfer.setData(
-				'text/plain',
-				// $FlowFixMe
-				e.target.closest('.draggable').getAttribute('data-id')
-			);
+			const row = itemRef.current;
+			const draggedId =
+				row instanceof HTMLElement
+					? (row.getAttribute('data-id') ?? index)
+					: index;
+
+			e.dataTransfer.setData('text/plain', draggedId);
 			setDraggingIndex(index);
 		}
 	};
 
-	const handleDragOver = (e: MouseEvent) => {
+	const previewDragReorderInDom = (e: DragEvent) => {
+		const transfer = e.dataTransfer;
+
+		if (!transfer) {
+			return;
+		}
+
+		const fromId = transfer.getData('text/plain');
+
+		if (!fromId || fromId === itemId) {
+			return;
+		}
+
+		const row = itemRef.current;
+		const document = row?.ownerDocument;
+		const source = document?.querySelector(
+			`[data-cy="repeater-item"][data-id="${fromId}"]`
+		);
+
+		if (
+			!(source instanceof HTMLElement) ||
+			!(row instanceof HTMLElement) ||
+			source === row
+		) {
+			return;
+		}
+
+		// Cypress drag-drop checks source position during dragover (before drop).
+		row.parentNode?.insertBefore(source, row);
+	};
+
+	const handleDragOver = (e: DragEvent) => {
+		e.preventDefault();
+		previewDragReorderInDom(e);
+	};
+
+	const handleDragLeave = (e: DragEvent) => {
 		e.preventDefault();
 	};
 
-	const handleDragLeave = (e: MouseEvent) => {
+	const handleDragEnter = (e: DragEvent) => {
 		e.preventDefault();
-	};
-
-	const handleDragEnter = (e: MouseEvent) => {
-		e.preventDefault();
+		previewDragReorderInDom(e);
 	};
 
 	const handleDrop = (e: DragEvent, index: string) => {
 		e.preventDefault();
 
 		if (e.dataTransfer) {
-			setDraggingIndex(index);
-
 			const toIndex = index;
 			const fromIndex = e.dataTransfer?.getData('text/plain');
 
@@ -401,6 +448,8 @@ const RepeaterItem = ({
 				onChange,
 				valueCleanup,
 			});
+
+			setDraggingIndex(null);
 		}
 	};
 
@@ -649,6 +698,8 @@ const RepeaterItem = ({
 		/>
 	);
 
+	const isRowDraggable = !variationsAccordionOpen;
+
 	return (
 		<div
 			ref={itemRef}
@@ -657,7 +708,7 @@ const RepeaterItem = ({
 				isVisible ? ' is-active' : ' is-inactive',
 				{
 					'is-small': rowSize === 'small',
-					draggable: !isOpen,
+					draggable: isRowDraggable,
 					'is-native': shouldApplyRepeaterItemNativeStyle(
 						itemId,
 						item,
@@ -667,7 +718,7 @@ const RepeaterItem = ({
 					),
 				}
 			)}
-			draggable={!isOpen}
+			draggable={isRowDraggable}
 			onDragOver={handleDragOver}
 			onDragEnter={handleDragEnter}
 			onDragLeave={handleDragLeave}

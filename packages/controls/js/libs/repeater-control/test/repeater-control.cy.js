@@ -703,9 +703,17 @@ describe('repeater control component testing', () => {
 					expect(value).to.be.deep.equal({
 						'first-0': { ...value['first-0'], order: 0 },
 						'second-0': { ...value['second-0'], order: 1 },
-						'second-2': { ...value['second-1'], order: 2 },
+						'second-2': {
+							...value['second-1'],
+							order: 2,
+							creatingStep: false,
+						},
 						'first-1': { ...value['first-1'], order: 3 },
-						'second-1': { ...value['second-2'], order: 4 },
+						'second-1': {
+							...value['second-2'],
+							order: 4,
+							creatingStep: false,
+						},
 					});
 				});
 			});

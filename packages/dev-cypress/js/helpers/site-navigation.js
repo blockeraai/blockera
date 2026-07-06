@@ -175,6 +175,10 @@ export function editPost({ postID = '' } = {}) {
 	goTo(`/wp-admin/post.php?post=${postID}&action=edit`).then(() => {
 		// eslint-disable-next-line
 		cy.wait(2000);
+
+		// Close welcome guide if it exists
+		closeWelcomeGuide();
+
 		disableGutenbergFeatures();
 	});
 }

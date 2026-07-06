@@ -19,7 +19,11 @@ import { useControlContext } from '../../../context';
 import { Button } from '../../';
 import ConfirmDeleteModal from './confirm-delete-modal';
 import { repeaterOnChange } from '../store/reducers/utils';
-import { getArialLabelSuffix, isRepeaterPromoActive } from '../utils';
+import {
+	getArialLabelSuffix,
+	isRepeaterPromoActive,
+	closeInspectorRepeaterPopovers,
+} from '../utils';
 
 type Props = {
 	item: Object,
@@ -75,6 +79,8 @@ export default function RepeaterPopoverTitleDelete({
 		} else if (isConfirmDeleteModalOpen) {
 			toggleConfirmDeleteModal();
 		}
+
+		closeInspectorRepeaterPopovers();
 
 		if (
 			!disableRegenerateId &&

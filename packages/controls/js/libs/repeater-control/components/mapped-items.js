@@ -50,9 +50,7 @@ const MappedItems = (): MixedElement => {
 		item: { order?: number | string },
 		sortedIndex: number
 	) => {
-		// Keep keys stable across rename-by-type: regeneratedIds assigns `order` on
-		// first type change — never fall back to itemId or the row remounts and closes
-		// the edit popover.
+		// Keep row instances stable across rename-by-type (order slot is unchanged).
 		const stableSegment =
 			typeof item?.order === 'number' || typeof item?.order === 'string'
 				? `order-${item.order}`
