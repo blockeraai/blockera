@@ -167,13 +167,29 @@ jobs:
 
                   npm run test:e2e -- --spec "$spec_pattern"
 
+            # upload-artifact@v4 skips .gitignore'd paths; Cypress writes under
+            # packages/dev-cypress/js/screenshots (gitignored). Stage copies first.
+            - name: Stage Cypress screenshots for artifact upload
+              if: ${{ !cancelled() }}
+              run: |
+                  STAGING=".github/cypress-screenshot-upload/${{ matrix.category }}"
+                  rm -rf "$STAGING"
+                  mkdir -p "$STAGING"
+                  if [ -d packages/dev-cypress/js/screenshots ]; then
+                    cp -a packages/dev-cypress/js/screenshots/. "$STAGING/"
+                    echo "Staged Cypress screenshots:"
+                    find "$STAGING" -type f -print
+                  else
+                    echo "No Cypress screenshots directory found."
+                  fi
+
             - name: Upload Cypress debug screenshots
               uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
               with:
                   name: cypress-screenshots-${{ matrix.category }}
-                  path: packages/dev-cypress/js/screenshots/
-                  if-no-files-found: ignore
+                  path: .github/cypress-screenshot-upload/${{ matrix.category }}/
+                  if-no-files-found: warn
                   retention-days: 7
 
             - name: Stop WordPress Environment
