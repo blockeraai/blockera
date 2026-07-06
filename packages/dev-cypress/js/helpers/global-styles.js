@@ -720,17 +720,17 @@ export const E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME =
  * Activates the read-only global styles MU plugin (no edit/delete `wp_global_styles`; REST writes 403).
  */
 export function activateGlobalStylesReadOnlyE2eFixture() {
-	return activateMuPlugin(
-		E2E_GLOBAL_STYLES_READ_ONLY_MU,
-		E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME
-	);
+	return activateMuPlugin({
+		pluginPath: E2E_GLOBAL_STYLES_READ_ONLY_MU,
+		pluginName: E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME,
+	});
 }
 
 export function deactivateGlobalStylesReadOnlyE2eFixture() {
-	return deactivateMuPlugin(
-		E2E_GLOBAL_STYLES_READ_ONLY_MU,
-		E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME
-	);
+	return deactivateMuPlugin({
+		pluginPath: E2E_GLOBAL_STYLES_READ_ONLY_MU,
+		pluginName: E2E_GLOBAL_STYLES_READ_ONLY_MU_NAME,
+	});
 }
 
 /**

@@ -761,16 +761,27 @@ function getMuPluginTargetName(muPluginPath, targetName = null) {
  * @param {string} label Human-readable context for the log line.
  * @param {string} taskName Cypress task name.
  * @param {object} taskArgs Task payload.
+ * @param {{ log?: boolean }} [options]
  * @return {Cypress.Chainable} Wrapped task result with stdout logged.
  */
-function runMuPluginTask(action, label, taskName, taskArgs) {
+function runMuPluginTask(
+	action,
+	label,
+	taskName,
+	taskArgs,
+	{ log = false } = {}
+) {
 	const startedAt = Date.now();
 
-	return cy.task(taskName, taskArgs).then((result) => {
+	return cy.task(taskName, taskArgs, { log: false }).then((result) => {
 		const elapsedMs = Date.now() - startedAt;
-		cy.log(
-			`[${action}] ${label} | ${result?.message || ''} (${elapsedMs}ms)`
-		);
+		const line = `[${action}] ${label} | ${result?.message || ''} (${elapsedMs}ms)`;
+
+		if (log) {
+			logMuPluginToCi(line);
+		}
+
+		cy.log(line);
 		return cy.wrap(result);
 	});
 }
@@ -791,17 +802,32 @@ function logMuPluginToCi(message) {
  * On CI, retries up to `Cypress.env('muPluginActivateMaxAttempts')` times (default 1) with
  * filesystem verification after each copy. Retry attempts force-delete the target before re-copying.
  *
- * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
- * @param {string} [targetName] Optional target filename. If not provided, generates from path.
+ * @param {object} options
+ * @param {string} options.pluginPath Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [options.pluginName] Optional target filename. If not provided, generates from path.
+ * @param {boolean} [options.log=false] Emit diagnostic lines to CI job stdout.
  * @return {Cypress.Chainable} Cypress chainable.
  */
-export function activateMuPlugin(muPluginPath, targetName = null) {
-	targetName = getMuPluginTargetName(muPluginPath, targetName);
+export function activateMuPlugin({
+	pluginPath,
+	pluginName: pluginNameInput = null,
+	log = false,
+} = {}) {
+	if (!pluginPath) {
+		throw new Error('activateMuPlugin requires pluginPath');
+	}
+
+	const targetName = getMuPluginTargetName(pluginPath, pluginNameInput);
+	const logCi = (message) => {
+		if (log) {
+			logMuPluginToCi(message);
+		}
+	};
 
 	const maxAttempts = Cypress.env('muPluginActivateMaxAttempts') ?? 1;
-	const label = `${muPluginPath} -> ${targetName}`;
+	const label = `${pluginPath} -> ${targetName}`;
 
-	logMuPluginToCi(
+	logCi(
 		`[activateMuPlugin] start | label=${label} | maxAttempts=${maxAttempts} | ci=${Boolean(Cypress.env('CI'))}`
 	);
 	cy.log(`[activateMuPlugin] start | ${label} | maxAttempts=${maxAttempts}`);
@@ -811,7 +837,7 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
 		const startedAt = Date.now();
 		const attemptLabel = `attempt ${attempt}/${maxAttempts}`;
 
-		logMuPluginToCi(
+		logCi(
 			`[activateMuPlugin] ${attemptLabel} | label=${label} | force=${force}`
 		);
 		cy.log(
@@ -821,28 +847,39 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
 		return cy
 			.task(
 				'muPluginActivate',
-				{ muPluginPath, targetName, force, attempt, maxAttempts },
+				{
+					muPluginPath: pluginPath,
+					targetName,
+					force,
+					attempt,
+					maxAttempts,
+				},
 				{ log: false }
 			)
 			.then((activateResult) => {
 				const activateMs = Date.now() - startedAt;
 				const activateLine = `[activateMuPlugin] ${attemptLabel} activate | ${label} | ${activateResult?.message || ''} (${activateMs}ms)`;
-				logMuPluginToCi(activateLine);
+				logCi(activateLine);
 				cy.log(activateLine);
 			})
 			.task(
 				'muPluginVerify',
-				{ muPluginPath, targetName, attempt, maxAttempts },
+				{
+					muPluginPath: pluginPath,
+					targetName,
+					attempt,
+					maxAttempts,
+				},
 				{ log: false }
 			)
 			.then((verifyResult) => {
 				const verifyMs = Date.now() - startedAt;
 				const verifyLine = `[activateMuPlugin] ${attemptLabel} verify | ${label} | ok=${Boolean(verifyResult?.ok)} | ${verifyResult?.message || ''} (${verifyMs}ms)`;
-				logMuPluginToCi(verifyLine);
+				logCi(verifyLine);
 				cy.log(verifyLine);
 
 				if (verifyResult?.ok) {
-					logMuPluginToCi(
+					logCi(
 						`[activateMuPlugin] success | ${attemptLabel} | ${label}`
 					);
 					return cy.wrap(verifyResult);
@@ -850,14 +887,14 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
 
 				if (attempt >= maxAttempts) {
 					const failureLine = `[activateMuPlugin] failed | exhausted ${maxAttempts} attempt(s) | ${label} | last=${verifyResult?.message || 'unknown verify error'}`;
-					logMuPluginToCi(failureLine);
+					logCi(failureLine);
 					throw new Error(
 						`Mu-plugin activation failed after ${maxAttempts} attempt(s): ${verifyResult?.message || 'unknown verify error'}`
 					);
 				}
 
 				const retryLine = `[activateMuPlugin] retry | ${attemptLabel} failed verify, waiting 500ms before attempt ${attempt + 1}/${maxAttempts} | ${label}`;
-				logMuPluginToCi(retryLine);
+				logCi(retryLine);
 				cy.log(retryLine);
 
 				return cy.wait(500).then(() => activateWithRetry(attempt + 1));
@@ -871,17 +908,28 @@ export function activateMuPlugin(muPluginPath, targetName = null) {
  * Deactivate mu-plugin by removing it from wp-content/mu-plugins/ directory.
  * This function removes the mu-plugin file that was previously activated.
  *
- * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
- * @param {string} [targetName] Optional target filename. If not provided, generates from path (must match activateMuPlugin).
+ * @param {object} options
+ * @param {string} options.pluginPath Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [options.pluginName] Optional target filename. If not provided, generates from path (must match activateMuPlugin).
+ * @param {boolean} [options.log=false] Emit diagnostic lines to CI job stdout.
  * @return {Cypress.Chainable} Cypress chainable.
  */
-export function deactivateMuPlugin(muPluginPath, targetName = null) {
-	targetName = getMuPluginTargetName(muPluginPath, targetName);
+export function deactivateMuPlugin({
+	pluginPath,
+	pluginName: pluginNameInput = null,
+	log = false,
+} = {}) {
+	if (!pluginPath) {
+		throw new Error('deactivateMuPlugin requires pluginPath');
+	}
+
+	const targetName = getMuPluginTargetName(pluginPath, pluginNameInput);
 
 	return runMuPluginTask(
 		'deactivateMuPlugin',
 		targetName,
 		'muPluginDeactivate',
-		{ muPluginPath, targetName }
+		{ muPluginPath: pluginPath, targetName },
+		{ log }
 	);
 }
