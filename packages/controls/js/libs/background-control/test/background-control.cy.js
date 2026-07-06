@@ -138,6 +138,7 @@ describe(
 							},
 							store: STORE_NAME,
 							name,
+							skipSyncValue: false,
 						});
 
 						cy.get('.blockera-component-popover', {
@@ -302,6 +303,7 @@ describe(
 						},
 						store: STORE_NAME,
 						name,
+						skipSyncValue: false,
 					});
 
 					// Wait for the popover to ensure the component is fully rendered
@@ -471,6 +473,7 @@ describe(
 						},
 						store: STORE_NAME,
 						name,
+						skipSyncValue: false,
 					});
 
 					// Wait for the popover to ensure the component is fully rendered
