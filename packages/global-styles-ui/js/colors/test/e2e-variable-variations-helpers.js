@@ -508,40 +508,4 @@ export function openColorVariablePickerSearchTestPopover() {
 	waitForColorVariablePickerSearchFixtureSlugs();
 }
 
-/** Screenshot + CI log before first-test assertions (picker must already be open). */
-export function captureColorVariablePickerSearchDebugScreenshot() {
-	const screenshotBase = 'ci-debug/color-picker-search-before-assertions';
-
-	cy.getByDataTest('variable-picker-popover')
-		.filter(':visible')
-		.first()
-		.should('be.visible')
-		.then(($popover) => {
-			const slugs = $popover
-				.find('[data-variable-slug]')
-				.toArray()
-				.map((el) => el.getAttribute('data-variable-slug'))
-				.filter(Boolean);
-
-			cy.task(
-				'logToCi',
-				`[color-variable-picker-search] picker slugs in DOM: ${JSON.stringify(slugs)}`,
-				{ log: false }
-			);
-		});
-
-	cy.getByDataTest('variable-picker-popover')
-		.filter(':visible')
-		.first()
-		.screenshot(`${screenshotBase}-popover`);
-
-	cy.screenshot(screenshotBase, { capture: 'fullPage' });
-
-	cy.task(
-		'logToCi',
-		`[color-variable-picker-search] debug screenshots saved under packages/dev-cypress/js/screenshots/ (base: ${screenshotBase})`,
-		{ log: false }
-	);
-}
-
 export { openGlobalStylesColorPaletteScreen, getWPDataObject };

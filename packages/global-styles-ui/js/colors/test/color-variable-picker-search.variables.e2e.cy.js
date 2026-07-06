@@ -10,7 +10,6 @@ import { clearPresetVariablesViewModeStorage } from '@blockera/dev-cypress/js/he
 import {
 	assertColorPresetSlugNotInVariablePicker,
 	assertColorPresetSlugVisibleInVariablePicker,
-	captureColorVariablePickerSearchDebugScreenshot,
 	clearVariablePickerSearch,
 	getWPDataObject,
 	MU_FIX,
@@ -54,8 +53,6 @@ describe('Global Styles UI → Color variable picker search', () => {
 
 	it('shows all fixture presets when search is empty', () => {
 		openColorVariablePickerSearchTestPopover();
-
-		captureColorVariablePickerSearchDebugScreenshot();
 
 		assertColorPresetSlugVisibleInVariablePicker(SLUG_ON_BRAND);
 		assertColorPresetSlugVisibleInVariablePicker(SLUG_ACCENT);
