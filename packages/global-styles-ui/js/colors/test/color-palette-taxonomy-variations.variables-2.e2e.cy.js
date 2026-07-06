@@ -126,11 +126,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-group-direct.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('renders taxonomy bridge with group header and a color row under the group', () => {
@@ -162,11 +168,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-category.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows presets inside category accordion and applies half-width class for small rows', () => {
@@ -205,11 +211,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-subcategory.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows direct row and single sub-category row after expanding parent only (no nested sub accordion)', () => {
@@ -243,11 +249,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-category-sole-sub-only.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('renders the lone preset row without a category accordion wrapper', () => {
@@ -287,11 +293,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-subsection-single-flat.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows direct row and single sub-category row without a nested accordion header', () => {
@@ -338,11 +344,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-initial-open-true.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows preset rows after expanding the category accordion', () => {
@@ -381,11 +387,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-subcategory-initial-open.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows nested preset rows after expanding parent and sub-category accordions', () => {
@@ -415,11 +421,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-category-variations.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows shade preview stack on the taxonomy base row inside an expanded category', () => {
@@ -455,11 +461,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-group-direct.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('shows group shell row and selects preset by slug', () => {
@@ -501,11 +513,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-category.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('shows grouped taxonomy in the picker, expands category, selects preset by slug', () => {
@@ -548,11 +566,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-subcategory.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('selects sub-category preset after expanding parent only (no nested sub accordion)', () => {
@@ -600,11 +624,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-category-sole-sub-only.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('omits category accordion and selects the lone preset', () => {
@@ -645,11 +675,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-subsection-single-flat.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('shows direct + single sub row without nested sub accordion header', () => {
@@ -711,11 +747,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-initial-open-true.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('shows category preset rows after expanding accordion in picker', () => {
@@ -757,11 +799,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-subcategory-initial-open.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('shows nested presets after expanding parent and sub accordions in picker', () => {
@@ -806,11 +854,17 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 			const MU_NAME = 'e2e-color-taxonomy-category-variations.php';
 
 			before(() => {
-				return activateMuPlugin(MU, MU_NAME);
+				return activateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			after(() => {
-				return deactivateMuPlugin(MU, MU_NAME);
+				return deactivateMuPlugin({
+					pluginPath: MU,
+					pluginName: MU_NAME,
+				});
 			});
 
 			it('selects base from inline shade strip without opening the variations accordion', () => {
@@ -899,11 +953,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-taxonomy-mixed-simple.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('renders taxonomy leaf and a plain theme repeater row inside Theme', () => {
@@ -942,11 +996,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows collapsed shade stack on base row when a shade slug exists in theme palette', () => {
@@ -995,11 +1049,11 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
 		before(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		after(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('selects the base color preset by slug from the Theme list in the picker', () => {

@@ -18,11 +18,17 @@ const DEFAULT_GRADIENTS_MU_NAME =
 describe('Background Image → Functionality', () => {
 	// Activate before any `createPost()` so REST base global styles include core gradients.
 	before(() => {
-		activateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
+		activateMuPlugin({
+			pluginPath: DEFAULT_GRADIENTS_MU,
+			pluginName: DEFAULT_GRADIENTS_MU_NAME,
+		});
 	});
 
 	after(() => {
-		deactivateMuPlugin(DEFAULT_GRADIENTS_MU, DEFAULT_GRADIENTS_MU_NAME);
+		deactivateMuPlugin({
+			pluginPath: DEFAULT_GRADIENTS_MU,
+			pluginName: DEFAULT_GRADIENTS_MU_NAME,
+		});
 	});
 
 	beforeEach(() => {

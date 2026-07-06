@@ -28,13 +28,19 @@ const openGroupGlobalStyles = () => {
 
 describe('Background Size → WP Compatibility (Global Styles)', () => {
 	beforeEach(() => {
-		activateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		activateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 		openSiteEditor();
 		openGroupGlobalStyles();
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		deactivateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 	});
 
 	describe('Group Block', () => {

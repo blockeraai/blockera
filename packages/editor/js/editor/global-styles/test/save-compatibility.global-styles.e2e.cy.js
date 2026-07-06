@@ -80,14 +80,20 @@ const getSavedGlobalStylesRecord = (win) => {
 
 describe('Global styles save compatibility', () => {
 	beforeEach(() => {
-		activateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		activateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 		openSiteEditor();
 		cy.openGlobalStylesPanel();
 		closeWelcomeGuide();
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		deactivateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 	});
 
 	it('hydrates empty styles.blocks from theme styles and saves only cleaned compatible block data', () => {

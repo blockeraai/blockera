@@ -21,7 +21,10 @@ const getParagraphGlobalStyles = (data) =>
 
 describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 	beforeEach(() => {
-		activateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		activateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 		openSiteEditor();
 		cy.openGlobalStylesPanel();
 		closeWelcomeGuide();
@@ -33,7 +36,10 @@ describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		deactivateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 	});
 
 	describe('Paragraph Block', () => {

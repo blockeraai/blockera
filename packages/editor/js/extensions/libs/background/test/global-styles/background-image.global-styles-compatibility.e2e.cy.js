@@ -67,7 +67,10 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 		const muPlugin = muPluginByTestTitle[this.currentTest.title];
 
 		if (muPlugin) {
-			activateMuPlugin(muPlugin.path, muPlugin.target);
+			activateMuPlugin({
+				pluginPath: muPlugin.path,
+				pluginName: muPlugin.target,
+			});
 			activeMuPlugins.set(this.currentTest.title, muPlugin);
 		}
 
@@ -79,7 +82,10 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 		const muPlugin = activeMuPlugins.get(this.currentTest.title);
 
 		if (muPlugin) {
-			deactivateMuPlugin(muPlugin.path, muPlugin.target);
+			deactivateMuPlugin({
+				pluginPath: muPlugin.path,
+				pluginName: muPlugin.target,
+			});
 			activeMuPlugins.delete(this.currentTest.title);
 		}
 	});

@@ -28,13 +28,19 @@ const openCoverGlobalStyles = () => {
 
 describe('Aspect Ratio → WP Compatibility (Global Styles)', () => {
 	beforeEach(() => {
-		activateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		activateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 		openSiteEditor();
 		openCoverGlobalStyles();
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU_PLUGIN_PATH, MU_PLUGIN_TARGET);
+		deactivateMuPlugin({
+			pluginPath: MU_PLUGIN_PATH,
+			pluginName: MU_PLUGIN_TARGET,
+		});
 	});
 
 	describe('Cover Block', () => {

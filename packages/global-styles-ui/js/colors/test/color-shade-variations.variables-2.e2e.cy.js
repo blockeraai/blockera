@@ -29,11 +29,11 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 
 		beforeEach(() => {
 			clearPresetVariablesViewModeStorage();
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('renders a full Tailwind-style shade indicator stack (one swatch per step)', () => {
@@ -90,11 +90,11 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 
 		beforeEach(() => {
 			clearPresetVariablesViewModeStorage();
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('selects persisted shade slug after expanding the variations accordion', () => {
@@ -149,11 +149,11 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 		const MU_NAME = 'e2e-color-taxonomy-category-variations.php';
 
 		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows shade stack on taxonomy base row after category expand', () => {

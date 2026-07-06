@@ -91,11 +91,17 @@ describe('Global styles permission (no update on entity → variable picker)', (
 
 	describe('Theme variables', () => {
 		beforeEach(() => {
-			activateMuPlugin(THEME_TRANSFORM_MU, THEME_TRANSFORM_MU_NAME);
+			activateMuPlugin({
+				pluginPath: THEME_TRANSFORM_MU,
+				pluginName: THEME_TRANSFORM_MU_NAME,
+			});
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(THEME_TRANSFORM_MU, THEME_TRANSFORM_MU_NAME);
+			deactivateMuPlugin({
+				pluginPath: THEME_TRANSFORM_MU,
+				pluginName: THEME_TRANSFORM_MU_NAME,
+			});
 		});
 
 		it('hides add and edit controls but still applies an existing theme transform preset', () => {
@@ -134,11 +140,17 @@ describe('Global styles permission (no update on entity → variable picker)', (
 
 	describe('Custom variables', () => {
 		beforeEach(() => {
-			activateMuPlugin(CUSTOM_TRANSFORM_MU, CUSTOM_TRANSFORM_MU_NAME);
+			activateMuPlugin({
+				pluginPath: CUSTOM_TRANSFORM_MU,
+				pluginName: CUSTOM_TRANSFORM_MU_NAME,
+			});
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(CUSTOM_TRANSFORM_MU, CUSTOM_TRANSFORM_MU_NAME);
+			deactivateMuPlugin({
+				pluginPath: CUSTOM_TRANSFORM_MU,
+				pluginName: CUSTOM_TRANSFORM_MU_NAME,
+			});
 		});
 
 		it('hides add and edit controls but still applies an existing custom transform preset', () => {

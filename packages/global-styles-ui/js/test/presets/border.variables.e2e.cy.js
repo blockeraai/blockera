@@ -15,11 +15,11 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 	const MU_NAME = 'blockera-test-gsui-preset-border.php';
 
 	beforeEach(() => {
-		activateMuPlugin(MU, MU_NAME);
+		activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU, MU_NAME);
+		deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	it('merges theme border.presets.theme from theme.json, shows in UI, persists width edit', () => {

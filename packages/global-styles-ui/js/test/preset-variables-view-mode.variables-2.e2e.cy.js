@@ -35,11 +35,11 @@ describe('Preset variables view mode (grouped/list)', () => {
 		const MU_NAME = 'e2e-color-taxonomy-mixed-simple.php';
 
 		beforeEach(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows variable count and grouped/list select with taxonomy UI by default', () => {
@@ -84,11 +84,11 @@ describe('Preset variables view mode (grouped/list)', () => {
 		const MU_NAME = 'e2e-color-taxonomy-category.php';
 
 		beforeEach(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('renders interface-size small presets as full rows in list view', () => {
@@ -115,11 +115,11 @@ describe('Preset variables view mode (grouped/list)', () => {
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
 		beforeEach(() => {
-			return activateMuPlugin(MU, MU_NAME);
+			return activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows count but hides grouped/list select when presets are flat only', () => {
@@ -136,11 +136,11 @@ describe('Preset variables view mode (grouped/list)', () => {
 		const MU_NAME = 'e2e-color-taxonomy-mixed-simple.php';
 
 		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			return deactivateMuPlugin(MU, MU_NAME);
+			return deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('shows summary row and switches to list view inside the picker', () => {

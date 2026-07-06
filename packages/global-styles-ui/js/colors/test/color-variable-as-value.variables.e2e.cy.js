@@ -120,11 +120,11 @@ function bindTargetColorToSourceVariable() {
 
 describe('Global Styles UI → color variable as value for another variable', () => {
 	beforeEach(() => {
-		activateMuPlugin(MU, MU_NAME);
+		activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU, MU_NAME);
+		deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	it('persists live var() (not var(),slug) and emits valid preset CSS in editor and front', () => {

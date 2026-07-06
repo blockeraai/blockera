@@ -23,17 +23,17 @@ describe('Background → WP Compatibility', () => {
 	describe('Paragraph Block', () => {
 		describe('Linear Gradient Background', () => {
 			before(() => {
-				activateMuPlugin(
-					DEFAULT_GRADIENTS_MU,
-					DEFAULT_GRADIENTS_MU_NAME
-				);
+				activateMuPlugin({
+					pluginPath: DEFAULT_GRADIENTS_MU,
+					pluginName: DEFAULT_GRADIENTS_MU_NAME,
+				});
 			});
 
 			after(() => {
-				deactivateMuPlugin(
-					DEFAULT_GRADIENTS_MU,
-					DEFAULT_GRADIENTS_MU_NAME
-				);
+				deactivateMuPlugin({
+					pluginPath: DEFAULT_GRADIENTS_MU,
+					pluginName: DEFAULT_GRADIENTS_MU_NAME,
+				});
 			});
 
 			it('Simple Value', () => {

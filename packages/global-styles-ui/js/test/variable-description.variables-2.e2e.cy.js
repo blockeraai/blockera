@@ -34,11 +34,11 @@ describe('Global Styles UI → variable description (theme.json meta.description
 			'Initial E2E color description from theme fixture.';
 
 		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('loads fixture description, persists edit after save and reload', () => {
@@ -113,11 +113,11 @@ describe('Global Styles UI → variable description (theme.json meta.description
 			'Initial E2E font size description from theme fixture.';
 
 		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('loads fixture description, persists edit after save and reload', () => {

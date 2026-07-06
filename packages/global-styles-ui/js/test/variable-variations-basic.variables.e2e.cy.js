@@ -22,11 +22,11 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 		const MU_NAME = 'e2e-color-variations-no-taxonomy.php';
 
 		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('exposes a Theme color row wired for variable variations (shade stack on site editor)', () => {
@@ -83,11 +83,11 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 		const MU_NAME = 'e2e-color-taxonomy-group-direct.php';
 
 		beforeEach(() => {
-			activateMuPlugin(MU, MU_NAME);
+			activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, MU_NAME);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 		});
 
 		it('loads name-based color taxonomy bridge after MU theme.json layer', () => {

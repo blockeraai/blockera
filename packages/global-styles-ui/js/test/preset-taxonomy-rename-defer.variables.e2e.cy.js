@@ -23,11 +23,11 @@ describe('Global Styles UI → preset taxonomy rename defer', () => {
 	const MU_NAME = 'e2e-preset-taxonomy-spacing-rename-defer.php';
 
 	beforeEach(() => {
-		activateMuPlugin(MU, MU_NAME);
+		activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU, MU_NAME);
+		deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	it('keeps existing group until popover closes after renaming within taxonomy', () => {
@@ -67,11 +67,17 @@ describe('Global Styles UI → flat preset promotes to grouped taxonomy after re
 
 	describe('border radius (theme)', () => {
 		beforeEach(() => {
-			activateMuPlugin(BORDER_RADIUS_MU, BORDER_RADIUS_MU_NAME);
+			activateMuPlugin({
+				pluginPath: BORDER_RADIUS_MU,
+				pluginName: BORDER_RADIUS_MU_NAME,
+			});
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(BORDER_RADIUS_MU, BORDER_RADIUS_MU_NAME);
+			deactivateMuPlugin({
+				pluginPath: BORDER_RADIUS_MU,
+				pluginName: BORDER_RADIUS_MU_NAME,
+			});
 		});
 
 		it('shows grouped layout only after closing popover when a group is added to a flat name', () => {
@@ -106,11 +112,17 @@ describe('Global Styles UI → flat preset promotes to grouped taxonomy after re
 
 	describe('box shadow (theme)', () => {
 		beforeEach(() => {
-			activateMuPlugin(SHADOW_MU, SHADOW_MU_NAME);
+			activateMuPlugin({
+				pluginPath: SHADOW_MU,
+				pluginName: SHADOW_MU_NAME,
+			});
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(SHADOW_MU, SHADOW_MU_NAME);
+			deactivateMuPlugin({
+				pluginPath: SHADOW_MU,
+				pluginName: SHADOW_MU_NAME,
+			});
 		});
 
 		it('shows grouped layout only after closing popover when a group is added to a flat name', () => {

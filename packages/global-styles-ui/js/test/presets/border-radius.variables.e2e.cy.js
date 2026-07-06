@@ -15,11 +15,11 @@ describe('Global Styles UI → border radius presets (theme.json + UI)', () => {
 	const MU_NAME = 'blockera-test-gsui-preset-border-radius.php';
 
 	beforeEach(() => {
-		activateMuPlugin(MU, MU_NAME);
+		activateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	afterEach(() => {
-		deactivateMuPlugin(MU, MU_NAME);
+		deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
 	it('merges theme radiusSizes.theme from theme.json, shows in UI, persists edits', () => {

@@ -42,11 +42,11 @@ function assertTaxonomySmoke({
 		const MU = `${FIX}/${fixture}`;
 
 		beforeEach(() => {
-			activateMuPlugin(MU, muName);
+			activateMuPlugin({ pluginPath: MU, pluginName: muName });
 		});
 
 		afterEach(() => {
-			deactivateMuPlugin(MU, muName);
+			deactivateMuPlugin({ pluginPath: MU, pluginName: muName });
 		});
 
 		it('renders grouped taxonomy tree with leaf header label', () => {
