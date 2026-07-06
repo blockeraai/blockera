@@ -156,7 +156,8 @@ function runWpEval(phpCode) {
  * @return {{ ok: boolean, message: string }}
  */
 function cleanJsonResolverThemeCache() {
-	const php = `if (class_exists('\\\\Blockera\\\\Setup\\\\Compatibility\\\\JSONResolver')) { \\\\Blockera\\\\Setup\\\\Compatibility\\\\JSONResolver::clean_cached_data(); echo 'blockera_cleaned'; } elseif (class_exists('\\\\WP_Theme_JSON_Resolver')) { \\\\WP_Theme_JSON_Resolver::clean_cached_data(); echo 'core_cleaned'; } else { echo 'skipped'; }`;
+	// Single backslashes in PHP source; JS template literals need one extra escape per `\`.
+	const php = `if (class_exists('Blockera\\Setup\\Compatibility\\JSONResolver')) { \\Blockera\\Setup\\Compatibility\\JSONResolver::clean_cached_data(); echo 'blockera_cleaned'; } elseif (class_exists('WP_Theme_JSON_Resolver')) { \\WP_Theme_JSON_Resolver::clean_cached_data(); echo 'core_cleaned'; } else { echo 'skipped'; }`;
 
 	try {
 		const result = runWpEval(php);
