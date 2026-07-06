@@ -466,6 +466,17 @@ const RepeaterItem = ({
 					return;
 				}
 
+				// Shade strip chips are nested inside this header; skip parent edit
+				// handling so child GroupControl rows can select the shade.
+				if (
+					e.target instanceof Element &&
+					e.target.closest(
+						'.blockera-component-preset-variable-variations-strip'
+					)
+				) {
+					return;
+				}
+
 				if (isFunction(customHeaderOnClick)) {
 					customHeaderOnClick(e);
 				}
@@ -483,9 +494,14 @@ const RepeaterItem = ({
 	const mainItemHeaderOpenIcon = RepeaterItemOpener && (
 		<RepeaterItemOpener {...repeaterItemActionsProps} />
 	);
-	const mainItemHeaderOpenButton = RepeaterItemOpener?.hasButton
-		? RepeaterItemOpener.hasButton(item, itemId)
-		: false;
+	const suppressPresetHeaderSettings =
+		item?.suppressPresetHeaderSettings === true;
+	const mainItemHeaderOpenButton =
+		!suppressPresetHeaderSettings && RepeaterItemOpener?.hasButton
+			? RepeaterItemOpener.hasButton(item, itemId)
+			: false;
+	const effectiveShowItemEditButton =
+		showItemEditButton && !suppressPresetHeaderSettings;
 	const mainItemInjectHeaderButtonsStart =
 		'popover' === mode ? (
 			<RepeaterItemActions
@@ -494,7 +510,7 @@ const RepeaterItem = ({
 				isVisible={repeaterItemActionsProps.isVisible}
 				setVisibility={repeaterItemActionsProps.setVisibility}
 				onOpenItemSettings={handleItemOpen}
-				showItemEditButton={showItemEditButton}
+				showItemEditButton={effectiveShowItemEditButton}
 				interactionGuard={
 					<RepeaterProItemInteractionGuard
 						item={item}
@@ -518,7 +534,7 @@ const RepeaterItem = ({
 				isVisible={repeaterItemActionsProps.isVisible}
 				setVisibility={repeaterItemActionsProps.setVisibility}
 				onOpenItemSettings={handleItemOpen}
-				showItemEditButton={showItemEditButton}
+				showItemEditButton={effectiveShowItemEditButton}
 			/>
 		);
 
