@@ -101,8 +101,13 @@ function parseWpEvalStdout(stdout) {
  *
  * @param {string} event
  * @param {Record<string, unknown>} [details]
+ * @param {boolean} [log=false]
  */
-function logMuPlugin(event, details = {}) {
+function logMuPlugin(event, details = {}, log = false) {
+	if (!log) {
+		return;
+	}
+
 	const parts = [`[blockera:mu-plugin] ${event}`];
 
 	for (const [key, value] of Object.entries(details)) {
@@ -457,6 +462,7 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 			force = false,
 			attempt = 1,
 			maxAttempts = 1,
+			log = false,
 		}) {
 			const resolvedTarget = getMuPluginTargetName(
 				muPluginPath,
@@ -464,15 +470,19 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 			);
 			const transport = getMuPluginTransport();
 
-			logMuPlugin('activate:start', {
-				transport,
-				attempt,
-				maxAttempts,
-				force,
-				source: muPluginPath,
-				target: resolvedTarget,
-				ci: Boolean(process.env.CI),
-			});
+			logMuPlugin(
+				'activate:start',
+				{
+					transport,
+					attempt,
+					maxAttempts,
+					force,
+					source: muPluginPath,
+					target: resolvedTarget,
+					ci: Boolean(process.env.CI),
+				},
+				log
+			);
 
 			let result;
 
@@ -491,24 +501,32 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 					);
 				}
 			} catch (error) {
-				logMuPlugin('activate:error', {
+				logMuPlugin(
+					'activate:error',
+					{
+						transport,
+						attempt,
+						maxAttempts,
+						target: resolvedTarget,
+						error: error?.message || String(error),
+					},
+					log
+				);
+				throw error;
+			}
+
+			logMuPlugin(
+				'activate:done',
+				{
 					transport,
 					attempt,
 					maxAttempts,
 					target: resolvedTarget,
-					error: error?.message || String(error),
-				});
-				throw error;
-			}
-
-			logMuPlugin('activate:done', {
-				transport,
-				attempt,
-				maxAttempts,
-				target: resolvedTarget,
-				ok: result?.ok,
-				message: result?.message,
-			});
+					ok: result?.ok,
+					message: result?.message,
+				},
+				log
+			);
 
 			const cacheResult = cleanJsonResolverThemeCache();
 			logMuPlugin(
@@ -517,18 +535,20 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 					transport,
 					target: resolvedTarget,
 					message: cacheResult.message,
-				}
+				},
+				log
 			);
 
 			return result;
 		},
-		cleanJsonResolverCache() {
+		cleanJsonResolverCache({ log = false } = {}) {
 			const cacheResult = cleanJsonResolverThemeCache();
 			logMuPlugin(
 				cacheResult.ok ? 'cache:cleared' : 'cache:clear_failed',
 				{
 					message: cacheResult.message,
-				}
+				},
+				log
 			);
 			return cacheResult;
 		},
@@ -537,6 +557,7 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 			targetName,
 			attempt = 1,
 			maxAttempts = 1,
+			log = false,
 		}) {
 			const resolvedTarget = getMuPluginTargetName(
 				muPluginPath,
@@ -544,53 +565,69 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 			);
 			const transport = getMuPluginTransport();
 
-			logMuPlugin('verify:start', {
-				transport,
-				attempt,
-				maxAttempts,
-				source: muPluginPath,
-				target: resolvedTarget,
-				ci: Boolean(process.env.CI),
-			});
+			logMuPlugin(
+				'verify:start',
+				{
+					transport,
+					attempt,
+					maxAttempts,
+					source: muPluginPath,
+					target: resolvedTarget,
+					ci: Boolean(process.env.CI),
+				},
+				log
+			);
 
 			const result =
 				transport === 'host'
 					? verifyMuPluginOnHost(muPluginPath, resolvedTarget)
 					: verifyMuPluginInContainer(muPluginPath, resolvedTarget);
 
-			logMuPlugin(result?.ok ? 'verify:ok' : 'verify:failed', {
-				transport,
-				attempt,
-				maxAttempts,
-				target: resolvedTarget,
-				message: result?.message,
-			});
+			logMuPlugin(
+				result?.ok ? 'verify:ok' : 'verify:failed',
+				{
+					transport,
+					attempt,
+					maxAttempts,
+					target: resolvedTarget,
+					message: result?.message,
+				},
+				log
+			);
 
 			return result;
 		},
-		muPluginDeactivate({ muPluginPath, targetName }) {
+		muPluginDeactivate({ muPluginPath, targetName, log = false }) {
 			const resolvedTarget = getMuPluginTargetName(
 				muPluginPath,
 				targetName
 			);
 			const transport = getMuPluginTransport();
 
-			logMuPlugin('deactivate:start', {
-				transport,
-				target: resolvedTarget,
-				ci: Boolean(process.env.CI),
-			});
+			logMuPlugin(
+				'deactivate:start',
+				{
+					transport,
+					target: resolvedTarget,
+					ci: Boolean(process.env.CI),
+				},
+				log
+			);
 
 			const result =
 				transport === 'host'
 					? deactivateMuPluginOnHost(resolvedTarget)
 					: deactivateMuPluginInContainer(resolvedTarget);
 
-			logMuPlugin('deactivate:done', {
-				transport,
-				target: resolvedTarget,
-				message: result?.message,
-			});
+			logMuPlugin(
+				'deactivate:done',
+				{
+					transport,
+					target: resolvedTarget,
+					message: result?.message,
+				},
+				log
+			);
 
 			return result;
 		},

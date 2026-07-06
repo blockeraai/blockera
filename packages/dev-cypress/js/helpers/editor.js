@@ -853,6 +853,7 @@ export function activateMuPlugin({
 					force,
 					attempt,
 					maxAttempts,
+					log,
 				},
 				{ log: false }
 			)
@@ -869,6 +870,7 @@ export function activateMuPlugin({
 					targetName,
 					attempt,
 					maxAttempts,
+					log,
 				},
 				{ log: false }
 			)
@@ -929,7 +931,7 @@ export function deactivateMuPlugin({
 		'deactivateMuPlugin',
 		targetName,
 		'muPluginDeactivate',
-		{ muPluginPath: pluginPath, targetName },
+		{ muPluginPath: pluginPath, targetName, log },
 		{ log }
 	);
 }
