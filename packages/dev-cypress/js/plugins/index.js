@@ -151,6 +151,28 @@ function runWpEval(phpCode) {
 }
 
 /**
+ * Bust Blockera / core theme.json static caches after MU-plugin changes (CI production builds cache per worker).
+ *
+ * @return {{ ok: boolean, message: string }}
+ */
+function cleanJsonResolverThemeCache() {
+	const php = `if (class_exists('\\\\Blockera\\\\Setup\\\\Compatibility\\\\JSONResolver')) { \\\\Blockera\\\\Setup\\\\Compatibility\\\\JSONResolver::clean_cached_data(); echo 'blockera_cleaned'; } elseif (class_exists('\\\\WP_Theme_JSON_Resolver')) { \\\\WP_Theme_JSON_Resolver::clean_cached_data(); echo 'core_cleaned'; } else { echo 'skipped'; }`;
+
+	try {
+		const result = runWpEval(php);
+		return {
+			ok: true,
+			message: result,
+		};
+	} catch (error) {
+		return {
+			ok: false,
+			message: error?.message || String(error),
+		};
+	}
+}
+
+/**
  * @param {string} muPluginPath Relative to plugin root.
  * @param {string} targetName
  * @param {boolean} [force=false] Delete existing target before copy (retry path).
@@ -487,7 +509,27 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 				message: result?.message,
 			});
 
+			const cacheResult = cleanJsonResolverThemeCache();
+			logMuPlugin(
+				cacheResult.ok ? 'cache:cleared' : 'cache:clear_failed',
+				{
+					transport,
+					target: resolvedTarget,
+					message: cacheResult.message,
+				}
+			);
+
 			return result;
+		},
+		cleanJsonResolverCache() {
+			const cacheResult = cleanJsonResolverThemeCache();
+			logMuPlugin(
+				cacheResult.ok ? 'cache:cleared' : 'cache:clear_failed',
+				{
+					message: cacheResult.message,
+				}
+			);
+			return cacheResult;
 		},
 		muPluginVerify({
 			muPluginPath,

@@ -33,7 +33,8 @@ const SEARCH_NO_MATCH = 'e2e xyz';
 
 describe('Global Styles UI → Color variable picker search', () => {
 	before(() => {
-		return activateMuPlugin(MU, MU_NAME);
+		activateMuPlugin(MU, MU_NAME);
+		cy.task('cleanJsonResolverCache', null, { log: false });
 	});
 
 	after(() => {
@@ -45,7 +46,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 	});
 
 	it('shows all fixture presets when search is empty', () => {
-		openColorVariablePickerSearchTestPopover({ skipPickerSlugWait: true });
+		openColorVariablePickerSearchTestPopover();
 
 		captureColorVariablePickerSearchDebugScreenshot();
 

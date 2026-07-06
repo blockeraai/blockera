@@ -9,6 +9,7 @@ import {
 	openGlobalStylesColorPaletteScreen,
 	closeWelcomeGuide,
 	disableGutenbergFeatures,
+	resetGlobalStylesEntityRecord,
 	setAbsoluteBlockToolbar,
 } from '@blockera/dev-cypress/js/helpers';
 import { PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
@@ -270,6 +271,34 @@ function getThemeBaseColorPaletteRows(win) {
 }
 
 /**
+ * Theme palette rows the color variable picker lists (`useGlobalSetting('color.palette.theme')`).
+ * When the user global-styles entity overrides `settings.color.palette.theme`, that layer wins over base.
+ */
+function getPickerThemeColorPaletteRows(win) {
+	const select = win.wp?.data?.select?.('core');
+	const recordId =
+		select?.__experimentalGetCurrentGlobalStylesId?.() ??
+		select?.getCurrentGlobalStylesId?.();
+
+	if (recordId) {
+		const edited = select?.getEditedEntityRecord?.(
+			'root',
+			'globalStyles',
+			recordId
+		);
+		const userRows = getColorPaletteThemeRowsFromSettings(
+			edited?.settings?.color ?? {}
+		);
+
+		if (userRows.length > 0) {
+			return userRows;
+		}
+	}
+
+	return getThemeBaseColorPaletteRows(win);
+}
+
+/**
  * Retries until the editor store exposes a MU theme color preset on the theme palette.
  *
  * @param {string} presetSlug
@@ -352,11 +381,57 @@ const COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS = [
 	},
 ];
 
-/** Waits until all MU search fixtures are on the theme base palette in wp.data. */
+/**
+ * Retries until the palette the variable picker reads includes a MU search fixture.
+ * Clears stale user-layer theme palettes left by earlier specs in the same CI run.
+ *
+ * @param {string} presetSlug
+ * @param {string} expectedName
+ */
+function assertEditorPickerThemePaletteHasMuColorPreset(
+	presetSlug,
+	expectedName
+) {
+	cy.window({ timeout: 30000 }).should((win) => {
+		const select = win.wp?.data?.select?.('core');
+		expect(select, 'wp.data select(core)').to.exist;
+
+		const themePalette = getPickerThemeColorPaletteRows(win);
+		expect(
+			themePalette.length > 0,
+			'picker theme palette must list theme colors'
+		).to.eq(true);
+
+		const row = themePalette.find(
+			(r) => String(r?.slug ?? '') === presetSlug
+		);
+		expect(
+			row,
+			`picker theme palette must include MU preset "${presetSlug}"`
+		).to.exist;
+		expect(String(row?.name ?? '')).to.eq(expectedName);
+	});
+}
+
+/** Waits until all MU search fixtures are visible to the variable picker catalog. */
 function waitForColorVariablePickerSearchFixturesInEditorStore() {
 	for (const { slug, name } of COLOR_VARIABLE_PICKER_SEARCH_FIXTURE_PRESETS) {
-		assertEditorThemeBaseHasMuColorPreset(slug, name);
+		assertEditorPickerThemePaletteHasMuColorPreset(slug, name);
 	}
+}
+
+/** Waits for global styles entity + discards persisted user palette overrides. */
+function prepareGlobalStylesForVariablePickerSearchE2E() {
+	cy.window({ timeout: 30000 }).should((win) => {
+		const select = win.wp?.data?.select?.('core');
+		const recordId =
+			select?.__experimentalGetCurrentGlobalStylesId?.() ??
+			select?.getCurrentGlobalStylesId?.();
+
+		expect(recordId, 'global styles entity id').to.exist;
+	});
+
+	return resetGlobalStylesEntityRecord();
 }
 
 /** Loads the block editor with stable localStorage for variable-picker search E2E. */
@@ -395,7 +470,8 @@ function createPostForVariablePickerSearchE2E() {
 			setAbsoluteBlockToolbar();
 
 			return getWPDataObject();
-		});
+		})
+		.then(() => prepareGlobalStylesForVariablePickerSearchE2E());
 }
 
 /** Waits until every MU search-fixture slug exists in the open picker catalog. */
@@ -412,13 +488,9 @@ function waitForColorVariablePickerSearchFixtureSlugs() {
 
 /**
  * Opens the Text Color variable picker for search-fixture E2E.
- * Clears persisted view mode, waits for MU fixtures in the editor store, then in the picker.
- *
- * @param {{ skipPickerSlugWait?: boolean }} [options]
+ * Resets user global styles, waits for MU fixtures in the picker palette, then in the DOM.
  */
-export function openColorVariablePickerSearchTestPopover({
-	skipPickerSlugWait = false,
-} = {}) {
+export function openColorVariablePickerSearchTestPopover() {
 	createPostForVariablePickerSearchE2E();
 	waitForColorVariablePickerSearchFixturesInEditorStore();
 
@@ -433,9 +505,7 @@ export function openColorVariablePickerSearchTestPopover({
 		'be.visible'
 	);
 
-	if (!skipPickerSlugWait) {
-		waitForColorVariablePickerSearchFixtureSlugs();
-	}
+	waitForColorVariablePickerSearchFixtureSlugs();
 }
 
 /** Screenshot + CI log before first-test assertions (picker must already be open). */
