@@ -34,6 +34,17 @@ export function getPresetRepeaterHeaderOnClick({
 }: GetPresetRepeaterHeaderOnClickArgs): (event: MouseEvent) => void {
 	return (event: MouseEvent) => {
 		beforeClick?.();
+		const target = event.target as Element | null;
+		const inVariationStrip = Boolean(
+			target?.closest?.(
+				'.blockera-component-preset-variable-variations-strip'
+			)
+		);
+		// Nested shade strip chips live inside the parent preset header; let child
+		// GroupControl rows handle selection instead of opening the parent edit popover.
+		if (inVariationStrip) {
+			return;
+		}
 		if (item?.selectable) {
 			return;
 		}

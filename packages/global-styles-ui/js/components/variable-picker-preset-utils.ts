@@ -280,6 +280,7 @@ export function stripRepeaterPickerUiFields(items: unknown): unknown {
 			isSelected: _is,
 			selectable: _sel,
 			listViewCompactShades: _listViewCompactShades,
+			suppressPresetHeaderSettings: _suppressPresetHeaderSettings,
 			__rebindBoundFeature: _rebindBoundFeature,
 			...rest
 		} = r;
@@ -288,6 +289,7 @@ export function stripRepeaterPickerUiFields(items: unknown): unknown {
 			_is === undefined &&
 			_sel === undefined &&
 			_listViewCompactShades === undefined &&
+			_suppressPresetHeaderSettings === undefined &&
 			_rebindBoundFeature === undefined
 		) {
 			return row;

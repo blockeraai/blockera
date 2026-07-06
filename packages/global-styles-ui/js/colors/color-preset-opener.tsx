@@ -95,7 +95,7 @@ export type ColorPresetOpenerProps = {
 	};
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 	variationsAccordionOpen: boolean;
-	/** When true (preset taxonomy rows), picker ramp chips merge repeater `selectable`. Omit on flat preset lists. */
+	/** When true, picker ramp chips merge repeater `selectable` (taxonomy rows set this explicitly). */
 	enableVariationPickerStripSelection?: boolean;
 };
 
@@ -553,6 +553,7 @@ export function ColorPresetOpener({
 						item={colorItem}
 						itemId={itemId}
 						inheritRepeaterPickerSelection={
+							pickerCtx.active === true ||
 							enableVariationPickerStripSelection === true ||
 							contextType === 'taxonomy'
 						}

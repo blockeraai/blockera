@@ -31,6 +31,7 @@ import {
 import { COLOR_SHADE_ANCHOR_STEP } from './color-shades-generator';
 import { usePresetVariationsStorage } from '../context/preset-variations-context';
 import { resolvePresetTaxonomyEditName } from '../components/preset-taxonomy/taxonomy-meta';
+import { variablePickerRowMatchesSelected } from '../components/variable-picker-preset-utils';
 import { findRepeaterItemIdBySlug, parsePaletteShadeSlug } from './utils';
 import './style.scss';
 
@@ -250,6 +251,29 @@ function ColorShadesRepeaterItemComponent({
 			Object.assign(rowItem as Record<string, unknown>, {
 				selectable: false,
 				isSelected: false,
+			});
+		}
+
+		const isColorVariablePickerStrip =
+			pickerCtx.active === true && pickerCtx.variableType === 'color';
+		if (isColorVariablePickerStrip) {
+			const controlProps =
+				pickerCtx.controlPropsRef?.current ?? pickerCtx.controlProps;
+			const pickerValue = controlProps?.value;
+			const shadeRowForSelection = {
+				...(rowItem as Record<string, unknown>),
+				slug: variationSlug,
+				id: variationSlug,
+			};
+			Object.assign(rowItem as Record<string, unknown>, {
+				selectable: true,
+				suppressPresetHeaderSettings: true,
+				isSelected: variablePickerRowMatchesSelected(
+					shadeRowForSelection,
+					'color',
+					'theme',
+					pickerValue
+				),
 			});
 		}
 

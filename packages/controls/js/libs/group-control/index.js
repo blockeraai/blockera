@@ -106,6 +106,14 @@ export default function GroupControl({
 		return isFunction(onClick) && onClick && onClick(event);
 	};
 
+	const isInsideVariationStrip = (event: MouseEvent): boolean =>
+		event.target instanceof Element &&
+		Boolean(
+			event.target.closest(
+				'.blockera-component-preset-variable-variations-strip'
+			)
+		);
+
 	const handleOnClick = (event: MouseEvent): void => {
 		event.stopPropagation();
 
@@ -121,6 +129,11 @@ export default function GroupControl({
 		}
 
 		if (!isCallbackEligible(event)) {
+			return;
+		}
+
+		// Strip shade chips select via repeater onClick — never open edit popover.
+		if (isInsideVariationStrip(event)) {
 			return;
 		}
 
