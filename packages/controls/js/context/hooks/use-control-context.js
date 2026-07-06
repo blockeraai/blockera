@@ -261,23 +261,19 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	 * @return {any} resolved control value before id/defaultValue preparation.
 	 */
 	function getResolvedControlValue(): any {
-		const storeValue = getControl(controlInfo.name)?.value;
 		const skipSyncValue =
 			controlInfo.hasOwnProperty('skipSyncValue') &&
 			true === controlInfo.skipSyncValue;
 
 		if (skipSyncValue) {
-			return storeValue ?? savedValue;
+			return savedValue;
 		}
 
-		if (
-			!isUndefined(controlInfo.value) &&
-			!isEquals(storeValue, controlInfo.value)
-		) {
+		if (!isEquals(savedValue, controlInfo.value)) {
 			return controlInfo.value;
 		}
 
-		return storeValue ?? savedValue;
+		return savedValue;
 	}
 
 	/**
