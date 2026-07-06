@@ -209,6 +209,10 @@ const RepeaterItem = ({
 
 	// New rows open the edit popover via pendingOpenItemId, creatingStep, or store isOpen.
 	useEffect(() => {
+		if (isOpen) {
+			return;
+		}
+
 		if (
 			pendingOpenItemId !== itemId &&
 			item?.isOpen !== true &&
@@ -217,10 +221,7 @@ const RepeaterItem = ({
 			return;
 		}
 
-		const previousItemId = prevItemIdRef.current;
-		const isRenameWhileOpen = previousItemId !== itemId && isOpen;
-
-		handleItemOpen({ refreshContent: !isRenameWhileOpen });
+		handleItemOpen({ refreshContent: true });
 	}, [
 		item?.isOpen,
 		item?.creatingStep,
