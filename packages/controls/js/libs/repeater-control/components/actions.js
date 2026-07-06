@@ -21,7 +21,11 @@ import { Button, Tooltip, Flex, MenuItem } from '../../';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
 import ConfirmDeleteModal from './confirm-delete-modal';
-import { getArialLabelSuffix, isRepeaterPromoActive } from '../utils';
+import {
+	getArialLabelSuffix,
+	isRepeaterPromoActive,
+	closeInspectorRepeaterPopovers,
+} from '../utils';
 
 export default function RepeaterItemActions({
 	item,
@@ -132,6 +136,8 @@ export default function RepeaterItemActions({
 		}
 
 		closeMenu(event);
+
+		closeInspectorRepeaterPopovers();
 
 		if (
 			!disableRegenerateId &&
