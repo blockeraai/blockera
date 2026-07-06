@@ -66,10 +66,8 @@
 		line-height: 1.4 !important;
 
 		&:focus {
-			border-color: var(
-				--blockera-controls-border-color-focus
-			) !important;
-			box-shadow: 0 0 0 1px var(--blockera-controls-border-color-focus) !important;
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 			outline: none !important;
 		}
 
