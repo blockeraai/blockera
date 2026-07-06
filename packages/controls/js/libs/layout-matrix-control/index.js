@@ -390,7 +390,24 @@ export default function LayoutMatrixControl({
 		? 'alignItems'
 		: 'justifyContent';
 
-	const clickTimerRef = useRef();
+	const clickTimerRef = useRef<?TimeoutID>();
+
+	const createMatrixHandlers = (
+		singleClickAction: () => void,
+		doubleClickAction: () => void
+	): ({
+		onClick: () => void,
+		onDoubleClick: () => void,
+	}) => ({
+		onClick: () => {
+			clearTimeout(clickTimerRef.current);
+			clickTimerRef.current = setTimeout(singleClickAction, 200);
+		},
+		onDoubleClick: () => {
+			clearTimeout(clickTimerRef.current);
+			doubleClickAction();
+		},
+	});
 
 	const handleDirectionChange = (nextDirection: string): void => {
 		if (
@@ -420,19 +437,6 @@ export default function LayoutMatrixControl({
 			...value,
 			...remapped,
 		});
-	};
-
-	const onClickHandler = (
-		event?: MouseEvent,
-		itemEvent?: () => void
-	): void => {
-		clearTimeout(clickTimerRef.current);
-
-		if (event?.detail === 1) {
-			clickTimerRef.current = setTimeout(onClickHandler, 100);
-		} else if (event?.detail === 2 && typeof itemEvent === 'function') {
-			itemEvent();
-		}
 	};
 
 	return (
@@ -510,22 +514,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'flex-start',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-start',
+												justifyContent: 'flex-start',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-start',
 												justifyContent: 'space-between',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -564,18 +568,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											...flexLayoutFromScreenAxes(
-												direction,
-												'flex-start',
-												'center'
-											),
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-start',
+													'center'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -591,8 +595,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -631,18 +635,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											...flexLayoutFromScreenAxes(
-												direction,
-												'flex-start',
-												'flex-end'
-											),
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-start',
+													'flex-end'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -658,8 +662,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -698,18 +702,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											...flexLayoutFromScreenAxes(
-												direction,
-												'center',
-												'flex-start'
-											),
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'center',
+													'flex-start'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -725,8 +729,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -754,22 +758,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'center',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'center',
+												justifyContent: 'center',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'space-between',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -808,18 +812,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											...flexLayoutFromScreenAxes(
-												direction,
-												'center',
-												'flex-end'
-											),
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'center',
+													'flex-end'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -835,8 +839,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -875,18 +879,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											...flexLayoutFromScreenAxes(
-												direction,
-												'flex-end',
-												'flex-start'
-											),
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-end',
+													'flex-start'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -902,8 +906,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -942,18 +946,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											...flexLayoutFromScreenAxes(
-												direction,
-												'flex-end',
-												'center'
-											),
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-end',
+													'center'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -969,8 +973,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -998,22 +1002,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'flex-end',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-end',
+												justifyContent: 'flex-end',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-end',
 												justifyContent: 'space-between',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1045,22 +1049,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1092,22 +1096,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1139,22 +1143,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'flex-start',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'flex-start',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'flex-start',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1182,22 +1186,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'center',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'center',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1225,22 +1229,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'flex-end',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'flex-end',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'flex-end',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1272,22 +1276,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-start',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'flex-start',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1315,22 +1319,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'center',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1358,22 +1362,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-end',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'flex-end',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1405,22 +1409,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-start',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-start',
 												justifyContent: 'space-around',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1448,22 +1452,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'center',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'space-around',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1491,22 +1495,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-end',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-end',
 												justifyContent: 'space-around',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}

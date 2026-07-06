@@ -17,7 +17,7 @@ export function MatrixItem({
 	normalIcon,
 	selectedIcon,
 	onClick,
-	onMouseDown,
+	onDoubleClick,
 	tooltipText = '',
 }: {
 	id: string,
@@ -25,7 +25,7 @@ export function MatrixItem({
 	normalIcon: MixedElement,
 	selectedIcon: MixedElement,
 	onClick?: () => void,
-	onMouseDown?: (event: MouseEvent) => void,
+	onDoubleClick?: () => void,
 	tooltipText?: string | MixedElement,
 }): MixedElement {
 	return (
@@ -42,7 +42,7 @@ export function MatrixItem({
 					'matrix-item-' + (selected ? 'selected' : 'normal')
 				)}
 				onClick={onClick}
-				onMouseDown={onMouseDown}
+				onDoubleClick={onDoubleClick}
 				tabIndex="0"
 				data-test={`matrix-${id}-${selected ? 'selected' : 'normal'}`}
 			>
