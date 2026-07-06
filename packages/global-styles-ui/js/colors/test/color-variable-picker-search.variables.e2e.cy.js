@@ -33,12 +33,19 @@ const SEARCH_NO_MATCH = 'e2e xyz';
 
 describe('Global Styles UI → Color variable picker search', () => {
 	before(() => {
-		activateMuPlugin(MU, MU_NAME);
-		cy.task('cleanJsonResolverCache', null, { log: false });
+		activateMuPlugin({
+			pluginPath: MU,
+			pluginName: MU_NAME,
+			log: true,
+		});
 	});
 
 	after(() => {
-		return deactivateMuPlugin(MU, MU_NAME);
+		return deactivateMuPlugin({
+			pluginPath: MU,
+			pluginName: MU_NAME,
+			log: true,
+		});
 	});
 
 	beforeEach(() => {
