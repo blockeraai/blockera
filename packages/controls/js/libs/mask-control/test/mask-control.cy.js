@@ -137,6 +137,7 @@ describe('Mask Control component testing', () => {
 				store: STORE_NAME,
 				value,
 				name,
+				skipSyncValue: false,
 			});
 
 			cy.getParentContainer('Width').within(() => {
@@ -166,6 +167,7 @@ describe('Mask Control component testing', () => {
 				store: STORE_NAME,
 				value,
 				name,
+				skipSyncValue: false,
 			});
 
 			cy.getParentContainer('Height').within(() => {
