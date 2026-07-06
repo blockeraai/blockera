@@ -854,6 +854,20 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		);
 	}
 
+	const descriptionFieldHint = (
+		<>
+			{__(
+				'Note where this variable fits in your design system.',
+				'blockera'
+			)}
+			<br />
+			{__(
+				'It helps you and the AI site generator pick the right variables for your site.',
+				'blockera'
+			)}
+		</>
+	);
+
 	return (
 		<Flex direction="column" gap={20}>
 			<Flex direction="column" gap={20}>
@@ -1014,7 +1028,31 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				}}
 			>
 				<TextAreaControl
-					label={__('Description', 'blockera')}
+					label={
+						<>
+							{__('Desc', 'blockera')}
+
+							<Tooltip text={descriptionFieldHint} delay={0}>
+								<span
+									style={{
+										cursor: 'pointer',
+										display: 'flex',
+										alignItems: 'center',
+										marginLeft: '2px',
+									}}
+								>
+									<Icon
+										icon="information"
+										iconSize="16"
+										style={{
+											fill: 'var(--blockera-controls-border-color-soft)',
+											border: 'none',
+										}}
+									/>
+								</span>
+							</Tooltip>
+						</>
+					}
 					disabled={presetLocked}
 					onChange={handleDescriptionChange}
 					columns="1.2fr 3fr"
