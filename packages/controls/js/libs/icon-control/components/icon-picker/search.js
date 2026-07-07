@@ -66,7 +66,7 @@ export default function Search({
 					query: value,
 					onClick: handleIconSelect,
 					onDoubleClick: handleLibraryIconQuickSelect,
-					limit: 49,
+					limit: 200,
 				})
 			);
 		},
