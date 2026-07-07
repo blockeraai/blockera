@@ -5,6 +5,7 @@
  */
 import { sprintf, __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
+import { createRoot } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -17,6 +18,10 @@ import {
 	iconSearch,
 	isValidIcon,
 	getIconLibraryIcons,
+	getIconLibrary,
+	getIconLibrarySearchData,
+	prepareIconSvgForStorage,
+	extractSvgMarkup,
 	NativeIconLibrariesList,
 	createStandardIconObject,
 } from '@blockera/icons';
@@ -257,14 +262,288 @@ export function readSvgFromDroppedFiles(files, onRead) {
 	reader.readAsText(file);
 }
 
+const iconSearchMetadataCache = new Map();
+
+/**
+ * Look up icon metadata (title, tags) from library search data.
+ *
+ * @param {string}      iconName   Icon id.
+ * @param {string}      library    Library id.
+ * @param {Object|null} sourceMeta Optional metadata from search results.
+ * @return {Object|null} Search metadata entry or null.
+ */
+export function getIconSearchMetadata(iconName, library, sourceMeta = null) {
+	if (sourceMeta?.iconName) {
+		return sourceMeta;
+	}
+
+	const cacheKey = `${library}:${iconName}`;
+
+	if (iconSearchMetadataCache.has(cacheKey)) {
+		return iconSearchMetadataCache.get(cacheKey);
+	}
+
+	const searchData = getIconLibrarySearchData(library);
+	const found =
+		searchData.find(
+			(item) => item.iconName === iconName && item.library === library
+		) ||
+		searchData.find((item) => item.iconName === iconName) ||
+		null;
+
+	iconSearchMetadataCache.set(cacheKey, found);
+
+	return found;
+}
+
+/**
+ * Human-readable display name for a library icon.
+ *
+ * @param {string}      iconName   Icon id.
+ * @param {string}      library    Library id.
+ * @param {Object|null} sourceMeta Optional metadata from search results.
+ * @return {string} Display name.
+ */
+export function getLibraryIconDisplayName(
+	iconName,
+	library,
+	sourceMeta = null
+) {
+	const meta = getIconSearchMetadata(iconName, library, sourceMeta);
+
+	return meta?.title || iconName;
+}
+
+/**
+ * Human-readable display name for an icon library.
+ *
+ * @param {string} library Library id.
+ * @return {string} Library display name.
+ */
+export function getLibraryDisplayName(library) {
+	const libraryInfo = getIconLibrary(library);
+
+	return libraryInfo?.[library]?.name || library;
+}
+
+/**
+ * Resolve icon size for library footer / grid previews.
+ *
+ * @param {string} library Library id.
+ * @return {number} Icon size in pixels.
+ */
+export function getLibraryIconPreviewSize(library) {
+	return [
+		'faregular',
+		'fasolid',
+		'fabrands',
+		'feather',
+		'lucide',
+		'untitledui',
+		'tabler',
+		'tabler-filled',
+	].includes(library)
+		? 18
+		: 24;
+}
+
+/**
+ * Build rich tooltip content for a library grid icon.
+ *
+ * @param {string}      iconName   Icon id.
+ * @param {string}      library    Library id.
+ * @param {Object|null} sourceMeta Optional metadata from search results.
+ * @return {Object} React tooltip content node.
+ */
+export function buildIconLibraryTooltipContent(
+	iconName,
+	library,
+	sourceMeta = null
+) {
+	const meta = getIconSearchMetadata(iconName, library, sourceMeta);
+	const name = meta?.title || iconName;
+	const tags =
+		meta?.tags && meta.tags.length > 0
+			? meta.tags.join(', ')
+			: __('—', 'blockera');
+	const libraryInfo = getIconLibrary(library);
+	const libraryName = libraryInfo?.[library]?.name || library;
+
+	return (
+		<div className={controlInnerClassNames('icon-library-tooltip')}>
+			<div
+				className={controlInnerClassNames('icon-library-tooltip__row')}
+			>
+				<span
+					className={controlInnerClassNames(
+						'icon-library-tooltip__label'
+					)}
+				>
+					{__('Name', 'blockera')}:
+				</span>{' '}
+				{name}
+			</div>
+			<div
+				className={controlInnerClassNames('icon-library-tooltip__row')}
+			>
+				<span
+					className={controlInnerClassNames(
+						'icon-library-tooltip__label'
+					)}
+				>
+					{__('ID', 'blockera')}:
+				</span>{' '}
+				{iconName}
+			</div>
+			<div
+				className={controlInnerClassNames('icon-library-tooltip__row')}
+			>
+				<span
+					className={controlInnerClassNames(
+						'icon-library-tooltip__label'
+					)}
+				>
+					{__('Library', 'blockera')}:
+				</span>{' '}
+				{libraryName}
+			</div>
+			<div
+				className={controlInnerClassNames('icon-library-tooltip__row')}
+			>
+				<span
+					className={controlInnerClassNames(
+						'icon-library-tooltip__label'
+					)}
+				>
+					{__('Tags', 'blockera')}:
+				</span>{' '}
+				{tags}
+			</div>
+		</div>
+	);
+}
+
+/**
+ * Convert a library icon to SVG markup via toSvg when available.
+ *
+ * @param {Object} iconObject Icon object from getIcon().
+ * @param {string} library    Library id.
+ * @return {string} SVG markup or empty string.
+ */
+function libraryIconToSvgMarkupFromObject(iconObject, library) {
+	if (!iconObject) {
+		return '';
+	}
+
+	const iconData = iconObject?.icon ?? iconObject;
+
+	if (iconData?.toSvg) {
+		const svg = iconData.toSvg({
+			width: 24,
+			height: 24,
+			'stroke-width': 2,
+		});
+		const markup =
+			typeof svg === 'string'
+				? svg
+				: svg?.outerHTML || svg?.toString?.() || '';
+
+		return prepareIconSvgForStorage(extractSvgMarkup(markup), library);
+	}
+
+	if (typeof iconData === 'string' && iconData.trim().startsWith('<')) {
+		return prepareIconSvgForStorage(extractSvgMarkup(iconData), library);
+	}
+
+	return '';
+}
+
+/**
+ * Convert a library icon to a sanitized SVG string (sync path when possible).
+ *
+ * @param {Object} options        Options.
+ * @param {string} options.icon   Icon id.
+ * @param {string} options.library Library id.
+ * @return {string} Sanitized SVG string or empty string.
+ */
+export function libraryIconToSvgString({ icon, library }) {
+	const iconObject = getIcon(icon, library);
+	const markup = libraryIconToSvgMarkupFromObject(iconObject, library);
+
+	if (!markup) {
+		return '';
+	}
+
+	return sanitizeRawSVGString(markup);
+}
+
+/**
+ * Convert a library icon to a sanitized SVG string, rendering off-DOM when needed.
+ *
+ * @param {Object} options        Options.
+ * @param {string} options.icon   Icon id.
+ * @param {string} options.library Library id.
+ * @return {Promise<string>} Sanitized SVG string.
+ */
+export function libraryIconToSvgStringAsync({ icon, library }) {
+	const syncResult = libraryIconToSvgString({ icon, library });
+
+	if (syncResult) {
+		return Promise.resolve(syncResult);
+	}
+
+	if (typeof document === 'undefined' || !document.body) {
+		return Promise.resolve('');
+	}
+
+	return new Promise((resolve) => {
+		const iconNode = document.createElement('span');
+		document.body.appendChild(iconNode);
+		const iconRoot = createRoot(iconNode);
+
+		iconRoot.render(<Icon icon={icon} library={library} iconSize={24} />);
+
+		window.setTimeout(() => {
+			const html = iconNode.innerHTML || '';
+			const markup = prepareIconSvgForStorage(
+				extractSvgMarkup(html),
+				library
+			);
+			const svgString = sanitizeRawSVGString(markup);
+
+			iconRoot.unmount();
+			iconNode.remove();
+			resolve(svgString);
+		}, 1);
+	});
+}
+
+/**
+ * Whether a library icon click should be ignored (Pro icons in free tier).
+ *
+ * @param {Object} event Click event from an icon grid cell.
+ * @return {boolean} True when the click targets a locked Pro icon.
+ */
+export function isProIconClickBlocked(event) {
+	let target = event?.target;
+
+	if (!target) {
+		return false;
+	}
+
+	if ('SVG' !== target.nodeName) {
+		target = target.closest('svg');
+	}
+
+	return target?.classList?.contains('blockera-is-pro-icon');
+}
+
 export function getLibraryIcons({
 	library,
 	query,
 	onClick = () => {},
+	onDoubleClick = () => {},
 	limit = 21,
-	isCurrentIcon = () => {
-		return false;
-	},
 }) {
 	let iconLibraryIcons = {};
 	const iconsStack = [];
@@ -306,6 +585,7 @@ export function getLibraryIcons({
 	);
 
 	for (const iconKey in iconLibraryIcons) {
+		const sourceMeta = iconLibraryIcons[iconKey];
 		const icon = createStandardIconObject(
 			iconKey,
 			iconLibraryIcons[iconKey]?.library
@@ -332,10 +612,7 @@ export function getLibraryIcons({
 						className={controlInnerClassNames(
 							'icon-control-icon',
 							'library-' + icon.library,
-							'icon-' + icon.iconName,
-							isCurrentIcon(icon.iconName, icon.library)
-								? 'icon-current'
-								: ''
+							'icon-' + icon.iconName
 						)}
 						aria-label={sprintf(
 							// translators: %s is icon ID in icon libraries for example arrow-left
@@ -349,8 +626,22 @@ export function getLibraryIcons({
 								library: icon.library,
 							})
 						}
+						onDoubleClick={(event) =>
+							onDoubleClick(event, {
+								type: 'UPDATE_ICON',
+								icon: icon.iconName,
+								library: icon.library,
+							})
+						}
 					>
-						<Tooltip text={icon.iconName}>
+						<Tooltip
+							text={buildIconLibraryTooltipContent(
+								icon.iconName,
+								icon.library,
+								sourceMeta
+							)}
+							width="220px"
+						>
 							<Icon
 								library={icon.library}
 								icon={icon}
@@ -385,15 +676,15 @@ export function getLibraryIcons({
  * @param {Object}   options              Options.
  * @param {Array}    options.items        Recent icon storage entries.
  * @param {Function} options.onSelect     Click handler (event, action).
+ * @param {Function} options.onDoubleSelect Double-click handler (event, action).
  * @param {Function} options.onRemove     Remove handler (id).
- * @param {Function} options.isCurrentIcon Whether icon is currently selected.
  * @return {Array} React elements.
  */
 export function buildRecentIconElements({
 	items = [],
 	onSelect = () => {},
+	onDoubleSelect = () => {},
 	onRemove = () => {},
-	isCurrentIcon = () => false,
 }) {
 	const elements = [];
 
@@ -431,10 +722,7 @@ export function buildRecentIconElements({
 							'icon-control-icon',
 							'recent-icon-item',
 							'library-' + icon.library,
-							'icon-' + icon.iconName,
-							isCurrentIcon(icon.iconName, icon.library)
-								? 'icon-current'
-								: ''
+							'icon-' + icon.iconName
 						)}
 						aria-label={sprintf(
 							// translators: %s is icon ID in icon libraries for example arrow-left
@@ -443,6 +731,13 @@ export function buildRecentIconElements({
 						)}
 						onClick={(event) =>
 							onSelect(event, {
+								type: 'UPDATE_ICON',
+								icon: icon.iconName,
+								library: icon.library,
+							})
+						}
+						onDoubleClick={(event) =>
+							onDoubleSelect(event, {
 								type: 'UPDATE_ICON',
 								icon: icon.iconName,
 								library: icon.library,
@@ -465,7 +760,13 @@ export function buildRecentIconElements({
 							showTooltip={true}
 						/>
 
-						<Tooltip text={icon.iconName}>
+						<Tooltip
+							text={buildIconLibraryTooltipContent(
+								icon.iconName,
+								icon.library
+							)}
+							width="220px"
+						>
 							<Icon
 								library={icon.library}
 								icon={icon}
