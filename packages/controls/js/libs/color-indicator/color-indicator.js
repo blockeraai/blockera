@@ -30,6 +30,7 @@ export default function ColorIndicator({
 	style,
 	title,
 	'aria-label': ariaLabel,
+	children,
 	...props
 }: ColorIndicatorProps): Node {
 	if (isObject(value) && isValidVariable(value)) {
@@ -130,6 +131,7 @@ export default function ColorIndicator({
 					{contextualColorMeta.abbrev}
 				</span>
 			) : null}
+			{children}
 		</span>
 	);
 }
