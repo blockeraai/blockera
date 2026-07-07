@@ -5,6 +5,7 @@ import {
 	isRepeaterPromoActive,
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
+	shouldPreserveRepeaterPopoverForNestedOpen,
 } from '../utils';
 import { linkNestedPopoverToParent } from '../../popover/utils';
 
@@ -224,6 +225,74 @@ describe('isClickInsideOpenInspectorRepeaterPopover', () => {
 		sidebar.appendChild(header);
 
 		expect(isClickInsideOpenInspectorRepeaterPopover(header)).toBe(false);
+	});
+});
+
+describe('shouldPreserveRepeaterPopoverForNestedOpen', () => {
+	function createParentRepeaterWithNestedRow() {
+		const parentItemRef = document.createElement('div');
+		parentItemRef.className = 'blockera-control-inner-repeater-item';
+
+		const group = document.createElement('div');
+		group.className =
+			'blockera-control blockera-control-group is-open mode-popover';
+
+		parentItemRef.appendChild(group);
+
+		const parentPopover = document.createElement('div');
+		parentPopover.className =
+			'blockera-component blockera-component-popover blockera-control-group-popover';
+		const nestedItemRef = document.createElement('div');
+		nestedItemRef.className = 'blockera-control-inner-repeater-item';
+		nestedItemRef.dataset.cy = 'repeater-item';
+		parentPopover.appendChild(nestedItemRef);
+		document.body.appendChild(parentPopover);
+
+		return { parentItemRef, nestedItemRef, parentPopover };
+	}
+
+	afterEach(() => {
+		document.body.innerHTML = '';
+	});
+
+	it('returns true when a nested row opens inside the parent edit popover', () => {
+		const { parentItemRef, nestedItemRef } =
+			createParentRepeaterWithNestedRow();
+
+		expect(
+			shouldPreserveRepeaterPopoverForNestedOpen(
+				parentItemRef,
+				nestedItemRef
+			)
+		).toBe(true);
+	});
+
+	it('returns false when the parent row is not open', () => {
+		const { parentItemRef, nestedItemRef } =
+			createParentRepeaterWithNestedRow();
+		const group = parentItemRef.querySelector('.blockera-control-group');
+		group?.classList.remove('is-open');
+
+		expect(
+			shouldPreserveRepeaterPopoverForNestedOpen(
+				parentItemRef,
+				nestedItemRef
+			)
+		).toBe(false);
+	});
+
+	it('returns false for unrelated repeater rows', () => {
+		const { parentItemRef } = createParentRepeaterWithNestedRow();
+		const siblingItemRef = document.createElement('div');
+		siblingItemRef.className = 'blockera-control-inner-repeater-item';
+		document.body.appendChild(siblingItemRef);
+
+		expect(
+			shouldPreserveRepeaterPopoverForNestedOpen(
+				parentItemRef,
+				siblingItemRef
+			)
+		).toBe(false);
 	});
 });
 
