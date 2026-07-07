@@ -185,11 +185,11 @@
 		box-sizing: border-box;
 		align-items: stretch;
 		align-self: stretch;
+		justify-content: space-between;
 		width: 100%;
 		max-width: 100%;
 		min-width: 0;
 		padding: 0 0 10px 0;
-		overflow: hidden;
 		white-space: nowrap;
 
 		> .blockera-control-repeater-item {
@@ -263,6 +263,14 @@
 	.blockera-control-header-values,
 	.blockera-control-btn-edit-item {
 		display: none;
+	}
+
+	&.is-selected-item {
+		.blockera-control-repeater-group-header {
+			.blockera-control-header-label {
+				opacity: 1;
+			}
+		}
 	}
 }
 

@@ -61,16 +61,8 @@ import {
 	splitStoredCompositePlainPresetValue,
 	resolveThemeJsonPresetScalarForGlobalStylesUi,
 } from '../theme-json-plain-preset';
-import {
-	generateColorShades,
-	COLOR_SHADE_ANCHOR_STEP,
-} from './color-shades-generator';
-import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
-import {
-	isShadePaletteColor,
-	parsePaletteShadeSlug,
-	shadeHexDiffersFromBaseline,
-} from './utils';
+import { COLOR_SHADE_ANCHOR_STEP } from './color-shades-generator';
+import { isShadePaletteColor, parsePaletteShadeSlug } from './utils';
 import {
 	resolvePresetTaxonomyDisplayName,
 	resolvePresetTaxonomyEditName,
@@ -341,46 +333,6 @@ export function ColorPresetOpener({
 		? parentBaseProp || String(shadeSlugParsed?.baseSlug ?? '') || baseSlug
 		: baseSlug;
 
-	const mainPresetHexForRamp = useMemo(() => {
-		const main = fullItems.find(
-			(c) =>
-				!isShadePaletteColor(c as Color & Record<string, unknown>) &&
-				String(c.slug ?? '') === slugForMainLookup
-		);
-		const storedRaw =
-			(typeof main?.color === 'string' ? main.color : '') ||
-			(typeof palettePaintSource === 'string'
-				? palettePaintSource
-				: '') ||
-			(typeof colorItem.color === 'string' ? colorItem.color : '');
-		const mainAsRecord = main as Color & Record<string, unknown>;
-		let variablePickerType: string | undefined;
-		if (
-			typeof mainAsRecord?.type === 'string' &&
-			mainAsRecord.type !== ''
-		) {
-			variablePickerType = mainAsRecord.type;
-		} else if (typeof colorItem.type === 'string') {
-			variablePickerType = colorItem.type;
-		}
-		return resolveStoredColorForGenerateColorShades(
-			storedRaw || undefined,
-			slugForMainLookup,
-			{ variablePickerType }
-		);
-	}, [
-		fullItems,
-		slugForMainLookup,
-		colorItem.color,
-		colorItem.type,
-		palettePaintSource,
-	]);
-
-	const baselineHexByStep = useMemo(
-		() => generateColorShades(mainPresetHexForRamp),
-		[mainPresetHexForRamp]
-	);
-
 	const shadeStepNum: number | null =
 		shadeSlugParsed !== null ? Number(shadeSlugParsed.shadeStep) : null;
 
@@ -416,43 +368,24 @@ export function ColorPresetOpener({
 			indicatorValue = palettePaintSource;
 		}
 
-		const core = indicatorValue ? (
-			<ColorIndicator
-				type={isGradient ? 'gradient' : 'color'}
-				value={indicatorValue}
-				size={18}
-			/>
-		) : (
-			<ColorIndicator type="color" value="none" size={18} />
-		);
-
 		const showBaseShadeBadge =
 			Boolean(colorItem?.color) &&
 			!isGradient &&
 			((isShadeRow && shadeStepNum === COLOR_SHADE_ANCHOR_STEP) ||
 				(!isShadeRow && shadeVariationCount > 0));
 
-		const showEditedShadeBadge =
-			Boolean(colorItem?.color) &&
-			!isGradient &&
-			isShadeRow &&
-			shadeStepNum !== null &&
-			shadeStepNum !== COLOR_SHADE_ANCHOR_STEP &&
-			shadeHexDiffersFromBaseline(
-				palettePaintSource,
-				baselineHexByStep[String(shadeStepNum)]
-			);
-
-		if (!showBaseShadeBadge && !showEditedShadeBadge) {
-			return core;
-		}
-
 		return (
-			<span
-				className={componentClassNames(
-					'global-styles-color-shade-swatch',
-					'global-styles-color-shade-swatch--preset-header-icon'
-				)}
+			<ColorIndicator
+				type={isGradient ? 'gradient' : 'color'}
+				value={indicatorValue || 'none'}
+				size={18}
+				className={
+					showBaseShadeBadge
+						? componentClassNames(
+								'global-styles-color-shade-swatch'
+							)
+						: undefined
+				}
 			>
 				{showBaseShadeBadge ? (
 					<Icon
@@ -464,16 +397,7 @@ export function ColorPresetOpener({
 						aria-hidden
 					/>
 				) : null}
-				{showEditedShadeBadge ? (
-					<span
-						className={componentInnerClassNames(
-							'color-shade-edited-indicator'
-						)}
-						aria-hidden
-					/>
-				) : null}
-				{core}
-			</span>
+			</ColorIndicator>
 		);
 	}, [
 		compositeStoredColor,
@@ -485,7 +409,6 @@ export function ColorPresetOpener({
 		isShadeRow,
 		shadeVariationCount,
 		shadeStepNum,
-		baselineHexByStep,
 	]);
 
 	let trailingHeaderValues: React.ReactNode = null;
