@@ -1,18 +1,9 @@
-/* Shade ramp chromeless controls (color-preset-fields, color-preset-opener) */
+/* Shade ramp chromeless controls (color-preset-fields) */
 .blockera-component-global-styles-color-shade-swatch {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	overflow: visible;
-
-	&.blockera-component-color-indicator {
-		flex-shrink: 0;
-
-		.blockera-component-base-breakpoint-icon {
-			top: -5px;
-		}
-	}
 
 	.blockera-component-base-breakpoint-icon {
 		position: absolute;
@@ -21,7 +12,7 @@
 		z-index: 2;
 		pointer-events: none;
 		stroke-width: 5px;
-		stroke: #ffffff;
+		stroke: #f0f0f0;
 		paint-order: stroke;
 		transform: translateX(-50%);
 	}
@@ -44,13 +35,13 @@
 }
 
 .is-preset-variable-variations-picker-header {
+	/* Shade ramp chromeless controls (color-preset-fields) */
 	.blockera-component-global-styles-color-shade-swatch {
 		.blockera-component-base-breakpoint-icon {
-			left: 50%;
-			top: -7px;
+			left: 1px;
+			top: -4px;
 			width: 14px;
 			height: 14px;
-			transform: translateX(-50%);
 		}
 	}
 }
