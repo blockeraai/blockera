@@ -5,6 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { Children } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -216,6 +217,22 @@ export function shouldGateRepeaterItemHeaderForPromo(
 	enablePromoCountOnRepeaterItemHeader: boolean,
 	isPromoActive: boolean
 ): boolean {
+	if (
+		applyFilters(
+			'blockera.repeater.shouldGateRepeaterItemHeaderForPromo',
+			false,
+			{
+				item,
+				items,
+				itemId,
+				isPromoActive,
+				enablePromoCountOnRepeaterItemHeader,
+			}
+		)
+	) {
+		return false;
+	}
+
 	if (!isPromoActive || false === item?.native) {
 		return false;
 	}
