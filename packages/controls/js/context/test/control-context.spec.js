@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-import { dispatch } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { dispatch, select } from '@wordpress/data';
 import { renderHook } from '@testing-library/react';
 
 /**
@@ -502,11 +501,21 @@ describe('testing control context provider and related hooks', () => {
 			value,
 			type: storeName,
 		});
+
+		const { removeRepeaterItem } = dispatch(storeName);
+
+		removeRepeaterItem({
+			controlId: name,
+			itemId: 1,
+		});
+
+		const storedValue = select(storeName).getControl(name).value;
+
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value,
+					value: storedValue,
 					skipSyncValue: false,
 				}}
 				storeName={storeName}
@@ -517,33 +526,19 @@ describe('testing control context provider and related hooks', () => {
 
 		const { result } = renderHook(
 			() => {
-				const {
-					controlInfo: { name: controlId },
-					value,
-					dispatch: { removeRepeaterItem },
-				} = useControlContext({
-					id: undefined,
+				return useControlContext({
 					repeater: {
 						defaultRepeaterItemValue,
 					},
 					mergeInitialAndDefault: true,
 				});
-
-				useEffect(() => {
-					removeRepeaterItem({
-						controlId,
-						itemId: 1,
-					});
-				}, []);
-
-				return value;
 			},
 			{
 				wrapper,
 			}
 		);
 
-		expect(result.current).toEqual({
+		expect(result.current.value).toEqual({
 			0: {
 				order: 0,
 				isOpen: false,
@@ -636,11 +631,21 @@ describe('testing control context provider and related hooks', () => {
 			value,
 			type: storeName,
 		});
+
+		const { cloneRepeaterItem } = dispatch(storeName);
+
+		cloneRepeaterItem({
+			controlId: name,
+			itemId: 0,
+		});
+
+		const storedValue = select(storeName).getControl(name).value;
+
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value,
+					value: storedValue,
 					skipSyncValue: false,
 				}}
 				storeName={storeName}
@@ -651,32 +656,19 @@ describe('testing control context provider and related hooks', () => {
 
 		const { result } = renderHook(
 			() => {
-				const {
-					controlInfo: { name: controlId },
-					value,
-					dispatch: { cloneRepeaterItem },
-				} = useControlContext({
+				return useControlContext({
 					repeater: {
 						defaultRepeaterItemValue,
 					},
 					mergeInitialAndDefault: true,
 				});
-
-				useEffect(() => {
-					cloneRepeaterItem({
-						controlId,
-						itemId: 0,
-					});
-				}, []);
-
-				return value;
 			},
 			{
 				wrapper,
 			}
 		);
 
-		expect(result.current).toEqual({
+		expect(result.current.value).toEqual({
 			0: {
 				isOpen: false,
 				order: 0,
