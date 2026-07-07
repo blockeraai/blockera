@@ -362,6 +362,8 @@ export function getLibraryIcons({
 										'feather',
 										'lucide',
 										'untitledui',
+										'tabler',
+										'tabler-filled',
 									].includes(icon.library)
 										? 18
 										: 24
@@ -475,6 +477,8 @@ export function buildRecentIconElements({
 										'feather',
 										'lucide',
 										'untitledui',
+										'tabler',
+										'tabler-filled',
 									].includes(icon.library)
 										? 18
 										: 24

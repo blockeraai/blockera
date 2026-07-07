@@ -25,6 +25,8 @@ import { FaSolidIcon } from './library-fasolid';
 import { FeatherIcon } from './library-feather';
 import { LucideIcon } from './library-lucide';
 import { UntitleduiIcon } from './library-untitledui';
+import { TablerIcon } from './library-tabler';
+import { TablerFilledIcon } from './library-tabler-filled';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 import type { IconProps, IconLibraryTypes } from './types';
 
@@ -74,6 +76,12 @@ export function Icon({
 
 		case 'untitledui':
 			return <UntitleduiIcon library={library} {...props} />;
+
+		case 'tabler':
+			return <TablerIcon library={library} {...props} />;
+
+		case 'tabler-filled':
+			return <TablerFilledIcon library={library} {...props} />;
 
 		default:
 			return <WPIcon library={library} {...props} />;
@@ -182,7 +190,11 @@ export function createStandardIconObject(
 		};
 	}
 
-	if (['feather', 'lucide', 'untitledui'].includes(library)) {
+	if (
+		['feather', 'lucide', 'untitledui', 'tabler', 'tabler-filled'].includes(
+			library
+		)
+	) {
 		if (
 			typeof icon === 'function' ||
 			typeof icon === 'string' ||

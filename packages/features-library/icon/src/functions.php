@@ -32,7 +32,7 @@ if ( ! function_exists('blockera_is_stroke_icon_library')) {
 	 * @return bool
 	 */
 	function blockera_is_stroke_icon_library( string $library): bool {
-		return in_array($library, [ 'feather', 'lucide', 'untitledui' ], true);
+		return in_array($library, [ 'feather', 'lucide', 'untitledui', 'tabler' ], true);
 	}
 }
 
