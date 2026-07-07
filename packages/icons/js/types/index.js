@@ -14,7 +14,9 @@ export type IconLibraryTypes =
 	| 'essentials'
 	| 'feather'
 	| 'lucide'
-	| 'untitledui';
+	| 'untitledui'
+	| 'tabler'
+	| 'tabler-filled';
 
 export type IconLibrary = {
 	id: IconLibraryTypes,

@@ -18,7 +18,7 @@ export function getIconKebabId(str: string): string {
 	});
 }
 
-const STROKE_ICON_LIBRARIES = ['feather', 'lucide', 'untitledui'];
+const STROKE_ICON_LIBRARIES = ['feather', 'lucide', 'untitledui', 'tabler'];
 
 /**
  * Stroke-based npm icon libraries (Feather, Lucide, Untitled UI).
