@@ -209,6 +209,30 @@ function getUntitleduiIconNames() {
 }
 
 /**
+ * Read icon names from a codegen icons.js map (Tabler libraries).
+ *
+ * @param {string} iconsJsPath
+ * @param {string} exportName
+ * @return {string[]}
+ */
+function getGeneratedIconsObjectNames(iconsJsPath, exportName) {
+	if (!fs.existsSync(iconsJsPath)) {
+		return [];
+	}
+
+	const content = fs.readFileSync(iconsJsPath, 'utf8');
+	const match = content.match(
+		new RegExp(`export const ${exportName}: Object = (\\{[\\s\\S]*\\});`)
+	);
+
+	if (!match) {
+		return [];
+	}
+
+	return Object.keys(JSON.parse(match[1]));
+}
+
+/**
  * @param {string} libraryId
  * @return {string[]}
  */
@@ -235,6 +259,16 @@ function getExportedIconNames(libraryId) {
 			return getLucideIconNames();
 		case 'untitledui':
 			return getUntitleduiIconNames();
+		case 'tabler':
+			return getGeneratedIconsObjectNames(
+				path.join(ICONS_JS, 'library-tabler/icons.js'),
+				'TablerIcons'
+			);
+		case 'tabler-filled':
+			return getGeneratedIconsObjectNames(
+				path.join(ICONS_JS, 'library-tabler-filled/icons.js'),
+				'TablerFilledIcons'
+			);
 		default:
 			return [];
 	}
