@@ -24,6 +24,9 @@ import {
 	sanitizeRawSVGString,
 	readSvgFromDroppedFiles,
 	isCustomIconUploadLocked,
+	getLibraryIconDisplayName,
+	getLibraryDisplayName,
+	libraryIconToSvgStringAsync,
 } from '../../utils';
 import CustomIconUploadUpgradePrompt from './custom-icon-upload-upgrade-prompt';
 import { default as Search } from './search';
@@ -44,7 +47,12 @@ export default function IconPickerModal({
 	onUseCustomIcon = () => {},
 	onClearSelectedIcon = () => {},
 }) {
-	const { currentIcon } = useContext(IconContext);
+	const {
+		currentIcon,
+		draftLibraryIcon,
+		handleUseLibraryIcon,
+		clearLibrarySelection,
+	} = useContext(IconContext);
 	const instanceId = useInstanceId(IconPickerModal, 'icon-picker-modal-tabs');
 
 	const [activeTab, setActiveTab] = useState(() => {
@@ -231,6 +239,113 @@ export default function IconPickerModal({
 		);
 	};
 
+	const hasLibraryDraft = Boolean(
+		draftLibraryIcon?.icon && draftLibraryIcon?.library
+	);
+
+	const handleCustomizeLibraryIcon = useCallback(async () => {
+		if (!hasLibraryDraft) {
+			return;
+		}
+
+		const svgString = await libraryIconToSvgStringAsync(draftLibraryIcon);
+
+		if (!svgString) {
+			return;
+		}
+
+		handleDraftChange({ svgString, uploadSVG: null });
+		setActiveTab(TAB_CUSTOM);
+	}, [hasLibraryDraft, draftLibraryIcon, handleDraftChange]);
+
+	const renderLibraryFooterStatus = () => {
+		if (!hasLibraryDraft) {
+			return (
+				<span
+					className={controlInnerClassNames(
+						'icon-picker-custom-icon-footer-status',
+						'is-empty'
+					)}
+				>
+					{__('No icon selected', 'blockera')}
+				</span>
+			);
+		}
+
+		return (
+			<span
+				className={controlInnerClassNames(
+					'icon-picker-library-footer-selection'
+				)}
+			>
+				<span
+					className={controlInnerClassNames(
+						'icon-picker-library-footer-selection-icon'
+					)}
+				>
+					<Icon
+						icon={draftLibraryIcon.icon}
+						library={draftLibraryIcon.library}
+						iconSize={20}
+					/>
+				</span>
+				<span
+					className={controlInnerClassNames(
+						'icon-picker-library-footer-selection-details'
+					)}
+				>
+					<span
+						className={controlInnerClassNames(
+							'icon-picker-library-footer-selection-name'
+						)}
+					>
+						{getLibraryIconDisplayName(
+							draftLibraryIcon.icon,
+							draftLibraryIcon.library
+						)}
+					</span>
+					<span
+						className={controlInnerClassNames(
+							'icon-picker-library-footer-selection-library'
+						)}
+					>
+						{getLibraryDisplayName(draftLibraryIcon.library)}
+					</span>
+				</span>
+			</span>
+		);
+	};
+
+	const libraryTabFooter = (
+		<Flex
+			className={controlInnerClassNames('icon-picker-custom-icon-footer')}
+			justifyContent="space-between"
+			alignItems="center"
+			gap="12px"
+		>
+			{renderLibraryFooterStatus()}
+			<Flex gap="8px">
+				<Button variant="secondary" onClick={clearLibrarySelection}>
+					{__('Clear', 'blockera')}
+				</Button>
+				<Button
+					variant="secondary"
+					disabled={!hasLibraryDraft}
+					onClick={handleCustomizeLibraryIcon}
+				>
+					{__('Customize icon', 'blockera')}
+				</Button>
+				<Button
+					variant="primary"
+					disabled={!hasLibraryDraft}
+					onClick={handleUseLibraryIcon}
+				>
+					{__('Use icon', 'blockera')}
+				</Button>
+			</Flex>
+		</Flex>
+	);
+
 	const customTabFooter = (
 		<Flex
 			className={controlInnerClassNames('icon-picker-custom-icon-footer')}
@@ -258,6 +373,14 @@ export default function IconPickerModal({
 		{ name: TAB_LIBRARY, title: __('Library', 'blockera') },
 		{ name: TAB_CUSTOM, title: __('Custom Icon', 'blockera') },
 	];
+
+	let modalTabFooter = null;
+
+	if (activeTab === TAB_CUSTOM) {
+		modalTabFooter = customTabFooter;
+	} else if (activeTab === TAB_LIBRARY) {
+		modalTabFooter = libraryTabFooter;
+	}
 
 	return (
 		<>
@@ -289,7 +412,7 @@ export default function IconPickerModal({
 				}
 				isDismissible={true}
 				onRequestClose={handleIconPickerClose}
-				actions={activeTab === TAB_CUSTOM ? customTabFooter : null}
+				actions={modalTabFooter}
 			>
 				<DropZone onFilesDrop={handleModalFilesDrop} />
 
