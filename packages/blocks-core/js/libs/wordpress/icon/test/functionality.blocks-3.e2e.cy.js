@@ -51,10 +51,13 @@ describe('core/icon Block', () => {
 
 		cy.get('.blockera-control-icon-picker-modal').should('be.visible');
 
-		cy.get('.blockera-control-icon-control-icon')
-			.not('.blockera-is-pro-icon')
-			.first()
-			.click();
+		cy.get('.blockera-control-icon-picker-modal').within(() => {
+			cy.get('.blockera-control-icon-control-icon')
+				.not('.blockera-is-pro-icon')
+				.first()
+				.click();
+			cy.contains('button', /^Use icon$/i).click();
+		});
 
 		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
 

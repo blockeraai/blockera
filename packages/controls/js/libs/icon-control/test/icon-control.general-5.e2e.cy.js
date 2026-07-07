@@ -23,12 +23,57 @@ describe('icon-control', () => {
 	});
 
 	context('Functional', () => {
+		it('should show library tab footer actions', () => {
+			cy.getByAriaLabel('Choose Icon…').first().click();
+
+			cy.get('.blockera-control-icon-picker-modal').within(() => {
+				cy.contains('No icon selected').should('be.visible');
+				cy.contains('button', /^Clear$/i).should('be.visible');
+				cy.contains('button', /^Customize icon$/i)
+					.should('be.visible')
+					.and('be.disabled');
+				cy.contains('button', /^Use icon$/i)
+					.should('be.visible')
+					.and('be.disabled');
+			});
+		});
+
+		it('should keep library modal open until Use icon is clicked', () => {
+			cy.getByAriaLabel('Choose Icon…').first().click();
+
+			cy.get('.blockera-control-icon-picker-modal').within(() => {
+				cy.getByAriaLabel('add-card Icon').first().click();
+			});
+
+			cy.get('.blockera-control-icon-picker-modal').should('be.visible');
+
+			cy.get('.blockera-control-icon-picker-modal').within(() => {
+				cy.contains('button', /^Use icon$/i).click();
+			});
+
+			cy.get('.blockera-control-icon-picker-modal').should('not.exist');
+		});
+
+		it('should switch to custom tab when Customize icon is clicked', () => {
+			cy.getByAriaLabel('Choose Icon…').first().click();
+
+			cy.get('.blockera-control-icon-picker-modal').within(() => {
+				cy.get('input[type="search"]').type('blockera');
+				cy.getByAriaLabel('blockera Icon').click();
+				cy.contains('button', /^Customize icon$/i).click();
+				cy.get('.blockera-control-icon-picker-custom-icon-tab').should(
+					'be.visible'
+				);
+			});
+		});
+
 		it('should be able to add new icon from library', () => {
 			cy.getByAriaLabel('Choose Icon…').first().click();
 
 			cy.get('.blockera-control-icon-picker-modal').within(() => {
 				cy.get('input[type="search"]').type('blockera');
 				cy.getByAriaLabel('blockera Icon').should('be.visible').click();
+				cy.contains('button', /^Use icon$/i).click();
 			});
 
 			getWPDataObject().then((data) => {
@@ -91,6 +136,7 @@ describe('icon-control', () => {
 
 			cy.get('.blockera-control-icon-picker-modal').within(() => {
 				cy.contains('button', 'Clear').click();
+				cy.get('button[aria-label="Close"]').click();
 			});
 
 			getWPDataObject().then((data) => {

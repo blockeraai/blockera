@@ -737,6 +737,23 @@ export function closeWelcomeGuide() {
 }
 
 /**
+ * Dismiss any open Blockera/Gutenberg modal (icon picker, welcome guide, etc.).
+ * Use in beforeEach/afterEach when tests may leave a screen overlay behind.
+ */
+export function dismissOpenModals() {
+	cy.get('body').then(($body) => {
+		if ($body.find('.blockera-control-icon-picker-modal').length) {
+			return cy
+				.get('.blockera-control-icon-picker-modal')
+				.find('button[aria-label="Close"]')
+				.click({ force: true });
+		}
+	});
+
+	closeWelcomeGuide();
+}
+
+/**
  * Resolve mu-plugin target filename under wp-content/mu-plugins/.
  *
  * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).

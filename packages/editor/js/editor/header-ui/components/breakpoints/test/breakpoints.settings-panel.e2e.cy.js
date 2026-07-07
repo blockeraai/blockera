@@ -5,13 +5,20 @@ import {
 	goTo,
 	createPost,
 	setDeviceType,
+	dismissOpenModals,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Breakpoints Functionalities', () => {
 	beforeEach(() => {
 		goTo('/wp-admin/admin.php?page=blockera-settings-general-settings');
 
+		dismissOpenModals();
+
 		cy.getByDataTest('update-settings').as('update');
+	});
+
+	afterEach(() => {
+		dismissOpenModals();
 	});
 
 	it('should can not add new or delete breakpoint', () => {
@@ -149,13 +156,9 @@ describe('Breakpoints Functionalities', () => {
 			});
 		});
 
-		cy.get('.blockera-control-icon-picker-modal').should('be.visible');
-		cy.get('.blockera-control-icon-picker-modal')
-			.last()
-			.within(() => {
-				cy.getByAriaLabel('add-card Icon').should('be.visible');
-				cy.getByAriaLabel('add-card Icon').click({ force: true });
-			});
+		cy.selectIconByName('add-card');
+
+		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
 	});
 });
 

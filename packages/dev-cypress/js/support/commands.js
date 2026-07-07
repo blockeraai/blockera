@@ -603,8 +603,13 @@ export const registerCommands = () => {
 		cy.get('body').then(($body) => {
 			cy.get('.blockera-control-icon-picker-modal')
 				.should('be.visible')
-				.within(clickIcon);
+				.within(() => {
+					clickIcon();
+					cy.contains('button', /^Use icon$/i).click();
+				});
 		});
+
+		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
 	});
 
 	Cypress.Commands.add(
