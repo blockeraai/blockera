@@ -469,7 +469,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 	// $FlowFixMe
 	for (const stateType: TStates in blockStates) {
-		const breakpoints = blockStates[stateType].breakpoints;
+		const breakpoints = blockStates[stateType]?.breakpoints || {};
 		const stateBreakpoints: { [key: string]: Object } = {};
 
 		// $FlowFixMe
