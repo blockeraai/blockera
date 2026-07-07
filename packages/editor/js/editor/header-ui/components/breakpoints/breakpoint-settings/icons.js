@@ -55,6 +55,6 @@ export const iconsOptions: TSelectOptions = [
 	{
 		value: 'custom',
 		label: __('Custom', 'blockera'),
-		icon: <Icon icon="custom" iconSize={24} />,
+		icon: <Icon icon="border" library="wp" iconSize={20} />,
 	},
 ];

@@ -3,11 +3,13 @@
 /**
  * External dependencies
  */
-import { dispatch } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
+import { isInnerBlock } from '../components/utils';
+import { GLOBAL_STYLES_EXTENSION_UI_CONTEXTS } from '../components/extensions-ui-context';
 import size from '../../schemas/block-supports/size-block-supports-list.json';
 import state from '../../schemas/block-supports/state-block-supports-list.json';
 import mouse from '../../schemas/block-supports/mouse-block-supports-list.json';
@@ -31,9 +33,43 @@ export const resetExtensionSettings = () => {
 	} = dispatch('blockera/extensions') || {};
 
 	setCurrentBlock('master');
+	GLOBAL_STYLES_EXTENSION_UI_CONTEXTS.forEach((uiContext) => {
+		setCurrentBlock('master', uiContext);
+	});
 	setCurrentState('normal');
 	setInnerBlockState('normal');
 	// setCurrentBreakpoint('laptop');
+};
+
+/**
+ * Reset scoped inner-block targets when entering global styles so stale
+ * navigation does not leak across style/size panel stacks.
+ */
+export const resetInnerExtensionCurrentBlocksForGlobalStyles = (): void => {
+	const getExtensionCurrentBlock = select(
+		'blockera/extensions'
+	)?.getExtensionCurrentBlock;
+
+	if (typeof getExtensionCurrentBlock !== 'function') {
+		return;
+	}
+
+	const { changeExtensionCurrentBlock: setCurrentBlock } =
+		dispatch('blockera/extensions') || {};
+
+	if (typeof setCurrentBlock !== 'function') {
+		return;
+	}
+
+	for (const uiContext of GLOBAL_STYLES_EXTENSION_UI_CONTEXTS) {
+		if (isInnerBlock(getExtensionCurrentBlock(uiContext))) {
+			setCurrentBlock('master', uiContext);
+		}
+	}
+
+	if (isInnerBlock(getExtensionCurrentBlock())) {
+		setCurrentBlock('master');
+	}
 };
 
 /**

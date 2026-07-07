@@ -1,0 +1,18 @@
+.blockera-block.wp-block-icon svg {
+	display: inline-block;
+	position: relative;
+	fill: var(--blockera--icon--color, currentColor);
+	color: var(--blockera--icon--color, inherit);
+	width: var(--blockera--icon--size, 1.33em);
+	height: var(--blockera--icon--size, 1.33em);
+	vertical-align: middle;
+	transform: rotate(var(--blockera--icon--rotate, 0deg))
+		scaleX(var(--blockera--icon--flip-horizontal, 1))
+		scaleY(var(--blockera--icon--flip-vertical, 1));
+}
+
+.blockera-block.wp-block-icon svg[fill="none"],
+.blockera-block.wp-block-icon .blockera-stroke-svg-icon svg {
+	fill: none;
+	stroke: var(--blockera--icon--color, currentColor);
+}

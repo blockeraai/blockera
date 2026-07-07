@@ -146,22 +146,25 @@ describe('ext shadow control component testing', () => {
 			cy.get('[aria-label="Add New Text Shadow"]').click();
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Vertical Distance"]')
-				.clear()
-				.type(50)
-				.should('have.value', '50');
+			cy.get('[aria-label="Vertical Distance"]').clear();
+			cy.get('[aria-label="Vertical Distance"]').type(50);
+			cy.get('[aria-label="Vertical Distance"]').should(
+				'have.value',
+				'50'
+			);
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Horizontal Distance"]')
-				.clear()
-				.type(50)
-				.should('have.value', '50');
+			cy.get('[aria-label="Horizontal Distance"]').clear();
+			cy.get('[aria-label="Horizontal Distance"]').type(50);
+			cy.get('[aria-label="Horizontal Distance"]').should(
+				'have.value',
+				'50'
+			);
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Blur Effect"]')
-				.clear()
-				.type(50)
-				.should('have.value', '50');
+			cy.get('[aria-label="Blur Effect"]').clear();
+			cy.get('[aria-label="Blur Effect"]').type(50);
+			cy.get('[aria-label="Blur Effect"]').should('have.value', '50');
 
 			cy.get('.blockera-control-color').click();
 			cy.getByDataCy('repeater-item').clickOutside();

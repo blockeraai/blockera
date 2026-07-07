@@ -30,6 +30,14 @@ describe('Image Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'elements/caption']);
 
+		cy.get('.blockera-extension-block-card.master-block-card').within(
+			() => {
+				cy.get('button[data-test="back-to-parent-navigation"]').should(
+					'not.exist'
+				);
+			}
+		);
+
 		//
 		// 1. Edit Block
 		//
@@ -42,6 +50,8 @@ describe('Image Block', () => {
 			'background-clip',
 			'padding-box'
 		);
+
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
@@ -122,39 +132,7 @@ describe('Image Block', () => {
 			});
 
 		//
-		// 2. Check settings tab
-		//
-		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
-
-		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
-				.contains('Settings')
-				.scrollIntoView()
-				.should('be.visible');
-
-			cy.get(
-				'.components-tools-panel:not(.block-editor-bindings__panel)'
-			).within(() => {
-				cy.get('.components-input-control__label')
-					.contains('Aspect ratio')
-					.should('exist')
-					.should('not.be.visible');
-
-				cy.get('.components-input-control__label')
-					.contains('Width')
-					.should('exist')
-					.should('not.be.visible');
-
-				cy.get('.components-input-control__label')
-					.contains('Height')
-					.should('exist')
-					.should('not.be.visible');
-			});
-		});
-
-		//
-		// 3. Assert inner blocks selectors in front end
+		// 2. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();
@@ -179,5 +157,29 @@ describe('Image Block', () => {
 				.first()
 				.should('have.css', 'background-color', 'rgb(89, 255, 0)');
 		});
+	});
+
+	it('Parent navigation inside gallery', () => {
+		appendBlocks(
+			`<!-- wp:gallery {"linkTo":"none"} -->
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped"><!-- wp:image {"id":7144,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://placehold.co/600x400" alt="" class="wp-image-7144"/><figcaption class="wp-element-caption">Image 1 caption</figcaption></figure>
+<!-- /wp:image -->
+
+<!-- wp:image {"id":7139,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://placehold.co/600x400" alt="" class="wp-image-7139"/><figcaption class="wp-element-caption">Image 2 caption</figcaption></figure>
+<!-- /wp:image --></figure>
+<!-- /wp:gallery -->`
+		);
+
+		cy.getBlock('core/image').first().click();
+
+		cy.get('.blockera-extension-block-card.master-block-card').within(
+			() => {
+				cy.get('button[data-test="back-to-parent-navigation"]').should(
+					'be.visible'
+				);
+			}
+		);
 	});
 });

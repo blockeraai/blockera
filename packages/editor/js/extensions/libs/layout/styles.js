@@ -228,10 +228,16 @@ export const LayoutStyles = ({
 	}
 
 	if (
-		_attributes.blockeraDisplay === 'flex' &&
+		layoutDisplay === 'flex' &&
 		_attributes?.blockeraFlexLayout !== undefined
 	) {
-		if (_attributes?.blockeraFlexLayout?.direction) {
+		const flexLayout = unwrapBlockeraAttr(_attributes?.blockeraFlexLayout);
+
+		if (
+			flexLayout &&
+			typeof flexLayout === 'object' &&
+			flexLayout?.direction
+		) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.direction',
@@ -249,9 +255,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'flex-direction':
-										_attributes.blockeraFlexLayout
-											.direction,
+									'flex-direction': flexLayout.direction,
 								},
 							},
 						],
@@ -268,23 +272,11 @@ export const LayoutStyles = ({
 			}
 		}
 
-		let changeFlexInside = false;
-
 		if (
-			_attributes?.blockeraFlexLayout?.direction === 'column' &&
-			_attributes?.blockeraFlexLayout?.alignItems &&
-			_attributes?.blockeraFlexLayout?.justifyContent &&
-			['flex-start', 'center', 'flex-end'].includes(
-				_attributes?.blockeraFlexLayout?.alignItems
-			) &&
-			['flex-start', 'center', 'flex-end'].includes(
-				_attributes?.blockeraFlexLayout?.justifyContent
-			)
+			flexLayout &&
+			typeof flexLayout === 'object' &&
+			flexLayout?.alignItems
 		) {
-			changeFlexInside = true;
-		}
-
-		if (_attributes?.blockeraFlexLayout?.alignItems) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.alignItems',
@@ -294,10 +286,6 @@ export const LayoutStyles = ({
 				),
 			});
 
-			const alignProp: string = changeFlexInside
-				? 'justify-content'
-				: 'align-items';
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -306,9 +294,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									[alignProp]:
-										_attributes.blockeraFlexLayout
-											.alignItems,
+									'align-items': flexLayout.alignItems,
 								},
 							},
 						],
@@ -319,7 +305,11 @@ export const LayoutStyles = ({
 			});
 		}
 
-		if (_attributes?.blockeraFlexLayout?.justifyContent) {
+		if (
+			flexLayout &&
+			typeof flexLayout === 'object' &&
+			flexLayout?.justifyContent
+		) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.justifyContent',
@@ -329,10 +319,6 @@ export const LayoutStyles = ({
 				),
 			});
 
-			const justifyProp: string = changeFlexInside
-				? 'align-items'
-				: 'justify-content';
-
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -341,9 +327,8 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									[justifyProp]:
-										_attributes.blockeraFlexLayout
-											.justifyContent,
+									'justify-content':
+										flexLayout.justifyContent,
 								},
 							},
 						],
@@ -356,7 +341,7 @@ export const LayoutStyles = ({
 	}
 
 	if (
-		_attributes.blockeraDisplay === 'flex' &&
+		layoutDisplay === 'flex' &&
 		isActiveField(blockeraFlexWrap) &&
 		!isEquals(
 			_attributes.blockeraFlexWrap,
@@ -402,7 +387,7 @@ export const LayoutStyles = ({
 	}
 
 	if (
-		_attributes.blockeraDisplay === 'flex' &&
+		layoutDisplay === 'flex' &&
 		isActiveField(blockeraAlignContent) &&
 		_attributes.blockeraAlignContent !==
 			attributes.blockeraAlignContent.default

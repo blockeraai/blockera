@@ -97,6 +97,29 @@ status "Generating readme.txt 📝"
 php bin/generate-readme-txt.php > readme.tmp.txt
 mv readme.tmp.txt readme.txt
 
+strip_dev_only_local_experimental_config () {
+  local input_file="$1"
+  local output_file="$2"
+
+  php -r '
+    $in = $argv[1];
+    $out = $argv[2];
+    $c = file_get_contents($in);
+    if ($c === false) { fwrite(STDERR, "Failed to read: $in\n"); exit(1); }
+    $re = "/^[ \\t]*### BEGIN DEV-ONLY LOCAL EXPERIMENTAL CONFIG\\R[\\s\\S]*?^[ \\t]*### END DEV-ONLY LOCAL EXPERIMENTAL CONFIG\\R?/m";
+    $c2 = preg_replace($re, "", $c);
+    if ($c2 === null) { fwrite(STDERR, "preg_replace failed for: $in\n"); exit(1); }
+    if (file_put_contents($out, $c2) === false) { fwrite(STDERR, "Failed to write: $out\n"); exit(1); }
+  ' "$input_file" "$output_file"
+}
+
+status "Stripping dev-only local experimental config 🧽"
+strip_dev_only_local_experimental_config "config/panel.php" "config/panel.tmp.php"
+mv "config/panel.tmp.php" "config/panel.php"
+
+strip_dev_only_local_experimental_config "packages/env/php/functions.php" "packages/env/php/functions.tmp.php"
+mv "packages/env/php/functions.tmp.php" "packages/env/php/functions.php"
+
 
 # Temporary copy some PHP files into "inc" directory.
 status "Generating inc/app.php 📝"
@@ -145,5 +168,9 @@ git checkout blockera.php
 
 # Reset `readme.txt`.
 git checkout readme.txt
+
+# Reset stripped files.
+git checkout config/panel.php
+git checkout packages/env/php/functions.php
 
 success "Done ✅ You've built Blockera! 🎉 "

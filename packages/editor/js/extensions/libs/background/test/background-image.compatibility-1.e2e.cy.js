@@ -2,11 +2,19 @@
  * Blockera dependencies
  */
 import {
+	activateMuPlugin,
 	appendBlocks,
 	createPost,
+	deactivateMuPlugin,
 	getSelectedBlock,
 	getWPDataObject,
+	waitForThemeBaseDefaultGradientPreset,
 } from '@blockera/dev-cypress/js/helpers';
+
+const DEFAULT_GRADIENTS_MU =
+	'packages/editor/js/extensions/libs/background/test/fixtures/background-default-gradients-enabled.php';
+const DEFAULT_GRADIENTS_MU_NAME =
+	'blockera-test-background-default-gradients-enabled.php';
 
 describe('Background → WP Compatibility', () => {
 	beforeEach(() => {
@@ -14,6 +22,20 @@ describe('Background → WP Compatibility', () => {
 	});
 	describe('Paragraph Block', () => {
 		describe('Linear Gradient Background', () => {
+			before(() => {
+				activateMuPlugin({
+					pluginPath: DEFAULT_GRADIENTS_MU,
+					pluginName: DEFAULT_GRADIENTS_MU_NAME,
+				});
+			});
+
+			after(() => {
+				deactivateMuPlugin({
+					pluginPath: DEFAULT_GRADIENTS_MU,
+					pluginName: DEFAULT_GRADIENTS_MU_NAME,
+				});
+			});
+
 			it('Simple Value', () => {
 				appendBlocks(
 					'<!-- wp:paragraph {"style":{"color":{"gradient":"linear-gradient(135deg,rgb(135,254,56) 1%,rgb(255,147,147) 97%)"}}} -->\n' +
@@ -101,6 +123,10 @@ describe('Background → WP Compatibility', () => {
 			});
 
 			it('Variable', () => {
+				waitForThemeBaseDefaultGradientPreset(
+					'vivid-cyan-blue-to-vivid-purple'
+				);
+
 				appendBlocks(
 					`<!-- wp:paragraph {"gradient":"vivid-cyan-blue-to-vivid-purple"} -->
 <p class="has-vivid-cyan-blue-to-vivid-purple-gradient-background has-background">Paragraph with linear gradient background (variable)</p>
@@ -130,8 +156,7 @@ describe('Background → WP Compatibility', () => {
 									id: 'vivid-cyan-blue-to-vivid-purple',
 									value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)',
 									reference: {
-										type: 'theme',
-										theme: 'Twenty Twenty-Five',
+										type: 'preset',
 									},
 									type: 'linear-gradient',
 									var: '--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple',
@@ -200,7 +225,7 @@ describe('Background → WP Compatibility', () => {
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
-						getSelectedBlock(data, 'style').gradient
+						getSelectedBlock(data, 'gradient')
 					);
 				});
 			});
@@ -351,6 +376,80 @@ describe('Background → WP Compatibility', () => {
 				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.gradient
+					);
+				});
+			});
+		});
+
+		describe('WP gradient sentinel values', () => {
+			const getNoneBackgroundItem = (blockeraBackground) => {
+				return Object.entries(blockeraBackground).find(
+					([, item]) => item?.type === 'none'
+				);
+			};
+
+			it('should map gradient "none" to none background layer', () => {
+				appendBlocks(
+					'<!-- wp:paragraph {"style":{"color":{"gradient":"none"}}} -->\n' +
+						'<p class="has-background" style="background:none">Paragraph with none gradient sentinel</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				cy.getBlock('core/paragraph').click();
+				cy.getParentContainer('Image & Gradient').as('bgContainer');
+				cy.addNewTransition();
+
+				getWPDataObject().then((data) => {
+					const blockeraBackground = getSelectedBlock(
+						data,
+						'blockeraBackground'
+					);
+					const noneEntry = getNoneBackgroundItem(blockeraBackground);
+
+					expect(noneEntry).to.not.equal(undefined);
+					expect(noneEntry[1].type).to.equal('none');
+					expect(blockeraBackground['linear-gradient-0']).to.equal(
+						undefined
+					);
+					expect(blockeraBackground['radial-gradient-0']).to.equal(
+						undefined
+					);
+				});
+
+				cy.getBlock('core/paragraph').should(($block) => {
+					expect($block.css('background-image')).to.equal('none');
+				});
+			});
+
+			it('should map gradient "transparent none" to none layer and transparent background color', () => {
+				appendBlocks(
+					'<!-- wp:paragraph {"style":{"color":{"gradient":"transparent none"}}} -->\n' +
+						'<p class="has-background" style="background:transparent none">Paragraph with transparent none gradient sentinel</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				cy.getBlock('core/paragraph').click();
+				cy.getParentContainer('Image & Gradient').as('bgContainer');
+				cy.addNewTransition();
+
+				getWPDataObject().then((data) => {
+					const blockeraBackground = getSelectedBlock(
+						data,
+						'blockeraBackground'
+					);
+					const noneEntry = getNoneBackgroundItem(blockeraBackground);
+
+					expect(noneEntry).to.not.equal(undefined);
+					expect(noneEntry[1].type).to.equal('none');
+					expect(
+						getSelectedBlock(data, 'blockeraBackgroundColor')
+					).to.equal('transparent');
+				});
+
+				cy.getBlock('core/paragraph').should(($block) => {
+					expect($block.css('background-image')).to.equal('none');
+					expect($block.css('background-color')).to.equal(
+						'rgba(0, 0, 0, 0)'
 					);
 				});
 			});

@@ -1,0 +1,114 @@
+// Theme preset taxonomy — DOM/classes mirror repeater-control (`packages/controls/js/libs/repeater-control`).
+// Section headers use `.blockera-control-header`; rows use `.blockera-control-repeater-item`; category blocks use
+// `.blockera-control-repeater-item-variations-group`. Nested `.blockera-preset-taxonomy-group-shell` breaks repeater’s
+// direct-child (`>`) selectors, so we mirror spacing here.
+
+.blockera-preset-taxonomy-accordion.blockera-control-group {
+	> .blockera-control-group-header {
+		flex-direction: row;
+
+		> .blockera-control-action-buttons.type-inline {
+			visibility: visible;
+			opacity: 1;
+
+			> *:not(.blockera-component-feature-wrapper) {
+				opacity: 1;
+				visibility: visible;
+				display: flex;
+			}
+		}
+
+		&:hover .blockera-control-header-values {
+			visibility: visible !important;
+			opacity: 1 !important;
+		}
+
+		> .blockera-control-repeater-group-header {
+			width: calc(100% - 28px) !important;
+		}
+	}
+
+	.blockera-control-repeater-group-header {
+		.blockera-control-header-label {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.blockera-control-header-values {
+			margin-left: auto;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			flex-shrink: 0;
+		}
+
+		.blockera-control-header-values:empty {
+			display: none;
+			margin: 0;
+			padding: 0;
+			min-width: 0;
+		}
+	}
+}
+
+.blockera-preset-taxonomy-tree {
+	width: 100%;
+
+	.blockera-preset-taxonomy-row
+		> .blockera-control-group
+		> .blockera-control-group-header
+		> .blockera-control-action-buttons {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		pointer-events: none !important;
+	}
+}
+
+.blockera-preset-taxonomy-repeater.blockera-control-repeater {
+	width: 100%;
+	gap: 15px;
+
+	.blockera-preset-taxonomy-group-shell > .blockera-control-header {
+		display: flex;
+		align-items: center;
+		gap: var(--gap);
+		min-height: var(--repeater-item-height);
+		justify-content: space-between;
+	}
+
+	.blockera-control-header + .blockera-preset-taxonomy-items-stack {
+		margin-top: calc(var(--repeater-gap) * -0.5);
+	}
+}
+
+.blockera-preset-taxonomy-group-shell {
+	display: flex;
+	flex-direction: column;
+	gap: var(--repeater-gap, 8px);
+}
+
+.blockera-preset-taxonomy-items-stack {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: stretch;
+	width: 100%;
+	box-sizing: border-box;
+	gap: var(--repeater-gap, 8px);
+}
+
+.blockera-preset-taxonomy-items-stack > * {
+	flex: 1 1 100%;
+	min-width: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.blockera-preset-taxonomy-items-stack
+	> .blockera-preset-taxonomy-row.blockera-preset-taxonomy-row--interface-small {
+	flex: 0 1 calc((100% - var(--repeater-gap, 8px)) / 2);
+	max-width: calc((100% - var(--repeater-gap, 8px)) / 2);
+}

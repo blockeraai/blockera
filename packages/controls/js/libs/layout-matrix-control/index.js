@@ -51,6 +51,246 @@ import MatrixSpaceBetweenEndFillIcon from './matrix/matrix-space-between-end-fil
 import MatrixStretchSpaceBetweenIcon from './matrix/matrix-stretch-space-between';
 import MatrixStretchSpaceAroundIcon from './matrix/matrix-stretch-space-around';
 
+type FlexAxisKey = 'justifyContent' | 'alignItems';
+
+const AXIS_CLASS_NAMES: { [key: FlexAxisKey]: string } = {
+	justifyContent: 'layout-matrix__justify-content',
+	alignItems: 'layout-matrix__align-items',
+};
+
+function getAxisTooltip(
+	propertyKey: FlexAxisKey,
+	propertyValue: string
+): string {
+	const cssProperty =
+		propertyKey === 'justifyContent' ? 'justify-content' : 'align-items';
+
+	if (propertyValue) {
+		return cssProperty + ': ' + propertyValue;
+	}
+
+	return cssProperty;
+}
+
+function getJustifyContentOptions(): Array<Object> {
+	return [
+		{
+			label: __('Empty', 'blockera'),
+			value: '',
+			icon: (
+				<Icon
+					icon="justify-content-empty"
+					iconSize="20"
+					data-test="layout-matrix-justify-empty"
+				/>
+			),
+		},
+		{
+			label: __('Start', 'blockera'),
+			value: 'flex-start',
+			icon: (
+				<Icon
+					icon="justify-content-start"
+					iconSize="20"
+					className="blockera-flex-justify-content-flex-start"
+					data-test="layout-matrix-justify-start"
+				/>
+			),
+		},
+		{
+			label: __('Center', 'blockera'),
+			value: 'center',
+			icon: (
+				<Icon
+					icon="justify-content-center"
+					iconSize="20"
+					data-test="layout-matrix-justify-center"
+				/>
+			),
+		},
+		{
+			label: __('End', 'blockera'),
+			value: 'flex-end',
+			icon: (
+				<Icon
+					icon="justify-content-end"
+					iconSize="20"
+					className="blockera-flex-justify-content-flex-end"
+					data-test="layout-matrix-justify-end"
+				/>
+			),
+		},
+		{
+			label: __('Space Around', 'blockera'),
+			value: 'space-around',
+			icon: (
+				<Icon
+					icon="justify-content-space-around"
+					iconSize="20"
+					data-test="layout-matrix-justify-around"
+				/>
+			),
+		},
+		{
+			label: __('Space Between', 'blockera'),
+			value: 'space-between',
+			icon: (
+				<Icon
+					icon="justify-content-space-between"
+					iconSize="20"
+					data-test="layout-matrix-justify-between"
+				/>
+			),
+		},
+	];
+}
+
+function getAlignItemsOptions(): Array<Object> {
+	return [
+		{
+			label: __('Empty', 'blockera'),
+			value: '',
+			icon: (
+				<Icon
+					icon="flex-align-empty"
+					iconSize="20"
+					data-test="layout-matrix-align-empty"
+				/>
+			),
+		},
+		{
+			label: __('Start', 'blockera'),
+			value: 'flex-start',
+			icon: (
+				<Icon
+					icon="flex-align-start"
+					iconSize="20"
+					data-test="layout-matrix-align-start"
+				/>
+			),
+		},
+		{
+			label: __('Center', 'blockera'),
+			value: 'center',
+			icon: (
+				<Icon
+					icon="flex-align-center"
+					iconSize="20"
+					data-test="layout-matrix-align-center"
+				/>
+			),
+		},
+		{
+			label: __('End', 'blockera'),
+			value: 'flex-end',
+			icon: (
+				<Icon
+					icon="flex-align-end"
+					iconSize="20"
+					data-test="layout-matrix-align-end"
+				/>
+			),
+		},
+		{
+			label: __('Stretch', 'blockera'),
+			value: 'stretch',
+			icon: (
+				<Icon
+					icon="flex-align-stretch"
+					iconSize="20"
+					data-test="layout-matrix-align-stretch"
+				/>
+			),
+		},
+	];
+}
+
+function getAxisOptions(propertyKey: FlexAxisKey): Array<Object> {
+	return propertyKey === 'justifyContent'
+		? getJustifyContentOptions()
+		: getAlignItemsOptions();
+}
+
+const SIMPLE_AXIS_VALUES: Set<string> = new Set([
+	'',
+	'flex-start',
+	'center',
+	'flex-end',
+]);
+
+/**
+ * When flex-direction toggles, preserve on-screen layout:
+ * - flex-start/center/flex-end can apply on both axes → swap properties.
+ * - stretch only exists on align-items (cross); space-* only on justify-content (main)
+ *   → keep values on the same property when direction changes.
+ */
+function remapFlexLayoutForDirectionChange(
+	alignItems: string,
+	justifyContent: string,
+	nextDirection: string
+): {
+	direction: string,
+	alignItems: string,
+	justifyContent: string,
+} {
+	const alignSimple = SIMPLE_AXIS_VALUES.has(alignItems);
+	const justifySimple = SIMPLE_AXIS_VALUES.has(justifyContent);
+
+	if (alignSimple && justifySimple) {
+		return {
+			direction: nextDirection,
+			alignItems: justifyContent,
+			justifyContent: alignItems,
+		};
+	}
+
+	return {
+		direction: nextDirection,
+		alignItems,
+		justifyContent,
+	};
+}
+
+/**
+ * Map screen vertical/horizontal alignment to stored flex properties.
+ * Row: justify = horizontal, align = vertical. Column: align = horizontal, justify = vertical.
+ */
+function flexLayoutFromScreenAxes(
+	direction: string,
+	vertical: string,
+	horizontal: string
+): {
+	alignItems: string,
+	justifyContent: string,
+} {
+	if (direction === 'column') {
+		return {
+			alignItems: horizontal,
+			justifyContent: vertical,
+		};
+	}
+
+	return {
+		alignItems: vertical,
+		justifyContent: horizontal,
+	};
+}
+
+function matchesScreenAxes(
+	direction: string,
+	alignItems: string,
+	justifyContent: string,
+	vertical: string,
+	horizontal: string
+): boolean {
+	const layout = flexLayoutFromScreenAxes(direction, vertical, horizontal);
+
+	return (
+		alignItems === layout.alignItems &&
+		justifyContent === layout.justifyContent
+	);
+}
+
 export default function LayoutMatrixControl({
 	isDirectionActive = true,
 	defaultDirection = '',
@@ -128,8 +368,6 @@ export default function LayoutMatrixControl({
 		} else {
 			matrixType = 'stretch';
 		}
-	} else if (value.alignItems === 'stretch') {
-		matrixType = 'stretch-space-around';
 	} else if (value.justifyContent === 'space-around') {
 		matrixType = 'space-around';
 	} else if (value.justifyContent === 'space-between') {
@@ -144,19 +382,61 @@ export default function LayoutMatrixControl({
 		direction = defaultDirection || defaultValue?.direction || 'row';
 	}
 
-	const clickTimerRef = useRef();
+	const isRowDirection = direction === 'row';
+	const xAxisKey: FlexAxisKey = isRowDirection
+		? 'justifyContent'
+		: 'alignItems';
+	const yAxisKey: FlexAxisKey = isRowDirection
+		? 'alignItems'
+		: 'justifyContent';
 
-	const onClickHandler = (
-		event?: MouseEvent,
-		itemEvent?: () => void
-	): void => {
-		clearTimeout(clickTimerRef.current);
+	const clickTimerRef = useRef<?TimeoutID>();
 
-		if (event?.detail === 1) {
-			clickTimerRef.current = setTimeout(onClickHandler, 100);
-		} else if (event?.detail === 2 && typeof itemEvent === 'function') {
-			itemEvent();
+	const createMatrixHandlers = (
+		singleClickAction: () => void,
+		doubleClickAction: () => void
+	): ({
+		onClick: () => void,
+		onDoubleClick: () => void,
+	}) => ({
+		onClick: () => {
+			clearTimeout(clickTimerRef.current);
+			clickTimerRef.current = setTimeout(singleClickAction, 200);
+		},
+		onDoubleClick: () => {
+			clearTimeout(clickTimerRef.current);
+			doubleClickAction();
+		},
+	});
+
+	const handleDirectionChange = (nextDirection: string): void => {
+		if (
+			!isDirectionActive ||
+			!direction ||
+			!nextDirection ||
+			direction === nextDirection
+		) {
+			return;
 		}
+
+		const remapped = remapFlexLayoutForDirectionChange(
+			value.alignItems ?? '',
+			value.justifyContent ?? '',
+			nextDirection
+		);
+
+		if (
+			remapped.alignItems === value.alignItems &&
+			remapped.justifyContent === value.justifyContent &&
+			remapped.direction === value?.direction
+		) {
+			return;
+		}
+
+		setValue({
+			...value,
+			...remapped,
+		});
 	};
 
 	return (
@@ -185,12 +465,7 @@ export default function LayoutMatrixControl({
 							},
 						]}
 						defaultValue={direction}
-						onChange={(newValue) =>
-							setValue({
-								...value,
-								direction: newValue,
-							})
-						}
+						onChange={handleDirectionChange}
 					/>
 				)}
 
@@ -239,22 +514,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'flex-start',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-start',
+												justifyContent: 'flex-start',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-start',
 												justifyContent: 'space-between',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -276,10 +551,13 @@ export default function LayoutMatrixControl({
 											)}
 										</>
 									}
-									selected={
-										value.alignItems === 'flex-start' &&
-										value.justifyContent === 'center'
-									}
+									selected={matchesScreenAxes(
+										direction,
+										value.alignItems ?? '',
+										value.justifyContent ?? '',
+										'flex-start',
+										'center'
+									)}
 									normalIcon={
 										<MatrixNormalEmptyIcon
 											direction={direction}
@@ -290,15 +568,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'center',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-start',
+													'center'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -314,8 +595,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -337,10 +618,13 @@ export default function LayoutMatrixControl({
 											)}
 										</>
 									}
-									selected={
-										value.alignItems === 'flex-start' &&
-										value.justifyContent === 'flex-end'
-									}
+									selected={matchesScreenAxes(
+										direction,
+										value.alignItems ?? '',
+										value.justifyContent ?? '',
+										'flex-start',
+										'flex-end'
+									)}
 									normalIcon={
 										<MatrixNormalEmptyIcon
 											direction={direction}
@@ -351,15 +635,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'flex-end',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-start',
+													'flex-end'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -375,8 +662,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -398,10 +685,13 @@ export default function LayoutMatrixControl({
 											)}
 										</>
 									}
-									selected={
-										value.alignItems === 'center' &&
-										value.justifyContent === 'flex-start'
-									}
+									selected={matchesScreenAxes(
+										direction,
+										value.alignItems ?? '',
+										value.justifyContent ?? '',
+										'center',
+										'flex-start'
+									)}
 									normalIcon={
 										<MatrixNormalEmptyIcon
 											direction={direction}
@@ -412,15 +702,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'flex-start',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'center',
+													'flex-start'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -436,8 +729,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -465,22 +758,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'center',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'center',
+												justifyContent: 'center',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'space-between',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -502,10 +795,13 @@ export default function LayoutMatrixControl({
 											)}
 										</>
 									}
-									selected={
-										value.alignItems === 'center' &&
-										value.justifyContent === 'flex-end'
-									}
+									selected={matchesScreenAxes(
+										direction,
+										value.alignItems ?? '',
+										value.justifyContent ?? '',
+										'center',
+										'flex-end'
+									)}
 									normalIcon={
 										<MatrixNormalEmptyIcon
 											direction={direction}
@@ -516,15 +812,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'flex-end',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'center',
+													'flex-end'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -540,8 +839,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -563,10 +862,13 @@ export default function LayoutMatrixControl({
 											)}
 										</>
 									}
-									selected={
-										value.alignItems === 'flex-end' &&
-										value.justifyContent === 'flex-start'
-									}
+									selected={matchesScreenAxes(
+										direction,
+										value.alignItems ?? '',
+										value.justifyContent ?? '',
+										'flex-end',
+										'flex-start'
+									)}
 									normalIcon={
 										<MatrixNormalEmptyIcon
 											direction={direction}
@@ -577,15 +879,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'flex-start',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-end',
+													'flex-start'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -601,8 +906,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -624,10 +929,13 @@ export default function LayoutMatrixControl({
 											)}
 										</>
 									}
-									selected={
-										value.alignItems === 'flex-end' &&
-										value.justifyContent === 'center'
-									}
+									selected={matchesScreenAxes(
+										direction,
+										value.alignItems ?? '',
+										value.justifyContent ?? '',
+										'flex-end',
+										'center'
+									)}
 									normalIcon={
 										<MatrixNormalEmptyIcon
 											direction={direction}
@@ -638,15 +946,18 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'center',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												...flexLayoutFromScreenAxes(
+													direction,
+													'flex-end',
+													'center'
+												),
+											});
+										},
+										() => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -662,8 +973,8 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -691,22 +1002,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'flex-end',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-end',
+												justifyContent: 'flex-end',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-end',
 												justifyContent: 'space-between',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -738,22 +1049,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -785,22 +1096,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -832,22 +1143,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'flex-start',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'flex-start',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'flex-start',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -875,22 +1186,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'center',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'center',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -918,22 +1229,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'stretch',
-											justifyContent: 'flex-end',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'stretch',
+												justifyContent: 'flex-end',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'flex-end',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -965,22 +1276,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-start',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'flex-start',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1008,22 +1319,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'center',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'center',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1051,22 +1362,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'space-around',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-end',
+												justifyContent: 'space-around',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'flex-end',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1098,22 +1409,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-start',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-start',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-start',
 												justifyContent: 'space-around',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1141,22 +1452,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'center',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'center',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'space-around',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 
 								<MatrixItem
@@ -1184,22 +1495,22 @@ export default function LayoutMatrixControl({
 											direction={direction}
 										/>
 									}
-									onClick={() => {
-										setValue({
-											...value,
-											alignItems: 'flex-end',
-											justifyContent: 'space-between',
-										});
-									}}
-									onMouseDown={(event: MouseEvent) => {
-										onClickHandler(event, () => {
+									{...createMatrixHandlers(
+										() => {
+											setValue({
+												...value,
+												alignItems: 'flex-end',
+												justifyContent: 'space-between',
+											});
+										},
+										() => {
 											setValue({
 												...value,
 												alignItems: 'flex-end',
 												justifyContent: 'space-around',
 											});
-										});
-									}}
+										}
+									)}
 								/>
 							</>
 						)}
@@ -1214,27 +1525,13 @@ export default function LayoutMatrixControl({
 						grow={1}
 					>
 						<Tooltip
-							text={(() => {
-								let label = '';
-								if (matrixType === 'normal') {
-									if (direction === 'row') {
-										label = 'justify-content';
-									} else {
-										label = 'align-items';
-									}
-								} else {
-									label = 'justify-content';
-								}
-
-								if (value.justifyContent) {
-									return label + ': ' + value.justifyContent;
-								}
-
-								return label;
-							})()}
+							text={getAxisTooltip(
+								xAxisKey,
+								value[xAxisKey] ?? ''
+							)}
 						>
 							<SelectControl
-								id="justifyContent"
+								id={xAxisKey}
 								label={
 									<Icon
 										icon="axis-x"
@@ -1261,115 +1558,39 @@ export default function LayoutMatrixControl({
 								style={{
 									'--gap': '0',
 								}}
-								options={[
-									{
-										label: __('Empty', 'blockera'),
-										value: '',
-										icon: (
-											<Icon
-												icon="justify-content-empty"
-												iconSize="20"
-												data-test="layout-matrix-justify-empty"
-											/>
-										),
-									},
-									{
-										label: __('Start', 'blockera'),
-										value: 'flex-start',
-										icon: (
-											<Icon
-												icon="justify-content-start"
-												iconSize="20"
-												className="blockera-flex-justify-content-flex-start"
-												data-test="layout-matrix-justify-start"
-											/>
-										),
-									},
-									{
-										label: __('Center', 'blockera'),
-										value: 'center',
-										icon: (
-											<Icon
-												icon="justify-content-center"
-												iconSize="20"
-												data-test="layout-matrix-justify-center"
-											/>
-										),
-									},
-									{
-										label: __('End', 'blockera'),
-										value: 'flex-end',
-										icon: (
-											<Icon
-												icon="justify-content-end"
-												iconSize="20"
-												className="blockera-flex-justify-content-flex-end"
-												data-test="layout-matrix-justify-end"
-											/>
-										),
-									},
-									{
-										label: __('Space Around', 'blockera'),
-										value: 'space-around',
-										icon: (
-											<Icon
-												icon="justify-content-space-around"
-												iconSize="20"
-												data-test="layout-matrix-justify-around"
-											/>
-										),
-									},
-									{
-										label: __('Space Between', 'blockera'),
-										value: 'space-between',
-										icon: (
-											<Icon
-												icon="justify-content-space-between"
-												iconSize="20"
-												data-test="layout-matrix-justify-between"
-											/>
-										),
-									},
-								]}
-								onChange={(newValue) =>
-									setValue({
-										...value,
-										justifyContent: newValue,
-									})
-								}
+								options={getAxisOptions(xAxisKey)}
+								onChange={(newValue) => {
+									if (xAxisKey === 'justifyContent') {
+										setValue({
+											...value,
+											justifyContent: newValue,
+										});
+									} else {
+										setValue({
+											...value,
+											alignItems: newValue,
+										});
+									}
+								}}
 								type="custom"
-								defaultValue={defaultValue.justifyContent}
+								defaultValue={defaultValue[xAxisKey]}
 								className={classNames(
 									'input-hide-label',
-									'layout-matrix__justify-content',
+									AXIS_CLASS_NAMES[xAxisKey],
 									'selected-item-' +
-										(value.justifyContent || 'empty')
+										(value[xAxisKey] || 'empty')
 								)}
 							/>
 						</Tooltip>
 
 						<Tooltip
-							text={(() => {
-								let label = '';
-								if (matrixType === 'normal') {
-									if (direction === 'row') {
-										label = 'align-items';
-									} else {
-										label = 'justify-content';
-									}
-								} else {
-									label = 'align-items';
-								}
-
-								if (value.alignItems) {
-									return label + ': ' + value.alignItems;
-								}
-
-								return label;
-							})()}
+							text={getAxisTooltip(
+								yAxisKey,
+								value[yAxisKey] ?? ''
+							)}
 						>
 							<SelectControl
-								id="alignItems"
+								id={yAxisKey}
 								label={
 									<Icon
 										icon="axis-y"
@@ -1394,76 +1615,27 @@ export default function LayoutMatrixControl({
 								style={{
 									'--gap': '0',
 								}}
-								options={[
-									{
-										label: __('Empty', 'blockera'),
-										value: '',
-										icon: (
-											<Icon
-												icon="flex-align-empty"
-												iconSize="20"
-												data-test="layout-matrix-align-empty"
-											/>
-										),
-									},
-									{
-										label: __('Start', 'blockera'),
-										value: 'flex-start',
-										icon: (
-											<Icon
-												icon="flex-align-start"
-												iconSize="20"
-												data-test="layout-matrix-align-start"
-											/>
-										),
-									},
-									{
-										label: __('Center', 'blockera'),
-										value: 'center',
-										icon: (
-											<Icon
-												icon="flex-align-center"
-												iconSize="20"
-												data-test="layout-matrix-align-center"
-											/>
-										),
-									},
-									{
-										label: __('End', 'blockera'),
-										value: 'flex-end',
-										icon: (
-											<Icon
-												icon="flex-align-end"
-												iconSize="20"
-												data-test="layout-matrix-align-end"
-											/>
-										),
-									},
-									{
-										label: __('Stretch', 'blockera'),
-										value: 'stretch',
-										icon: (
-											<Icon
-												icon="flex-align-stretch"
-												iconSize="20"
-												data-test="layout-matrix-align-stretch"
-											/>
-										),
-									},
-								]}
-								onChange={(newValue) =>
-									setValue({
-										...value,
-										alignItems: newValue,
-									})
-								}
+								options={getAxisOptions(yAxisKey)}
+								onChange={(newValue) => {
+									if (yAxisKey === 'justifyContent') {
+										setValue({
+											...value,
+											justifyContent: newValue,
+										});
+									} else {
+										setValue({
+											...value,
+											alignItems: newValue,
+										});
+									}
+								}}
 								type="custom"
-								defaultValue={defaultValue.alignItems}
+								defaultValue={defaultValue[yAxisKey]}
 								className={classNames(
 									'input-hide-label',
-									'layout-matrix__align-items',
+									AXIS_CLASS_NAMES[yAxisKey],
 									'selected-item-' +
-										(value.alignItems || 'empty')
+										(value[yAxisKey] || 'empty')
 								)}
 							/>
 						</Tooltip>

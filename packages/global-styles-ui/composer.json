@@ -1,0 +1,11 @@
+{
+	"name": "blockera/global-styles-ui",
+	"version": "1.0.0",
+	"description": "Blockera global styles preset UI package (JavaScript; Composer entry for monorepo installs).",
+	"license": "ISC",
+	"autoload": {
+		"files": [
+			"php/functions.php"
+		]
+	}
+}

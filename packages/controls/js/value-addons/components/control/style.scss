@@ -1,2 +1,3 @@
-@import "./value-addon-control";
-@import "./value-addon-pointer";
+@use "./value-addon-control";
+@use "./value-addon-display";
+@use "./value-addon-pointer";

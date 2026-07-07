@@ -3,46 +3,47 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
-import { useMemo, useRef } from '@wordpress/element';
+import type { ComponentType, MixedElement } from 'react';
+import { memo, useMemo, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { BlockPreview } from '@wordpress/block-editor';
+import { Slot } from '@wordpress/components';
 import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
  */
 import { isEquals } from '@blockera/utils';
+import { getVariationClassName } from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
  */
-import { getVariationClassName } from './utils';
-import { useBlockContext } from '../../../extensions/components/block-context';
 import { useBlockPreviewStyles } from '../../../hooks/use-block-preview-styles';
 
 // Same as height of InserterPreviewPanel.
 const PREVIEW_HEIGHT = 144;
 const SIDEBAR_WIDTH = 235;
 
-const BlockPreviewPanel = ({
-	name,
-	variation = '',
-	children,
-}: {
+type BlockPreviewPanelProps = {
 	name: string,
 	variation: string,
-	children?: MixedElement,
-}): MixedElement => {
-	const { getAttributes } = useBlockContext();
+	attributes?: Object,
+	variationClassPrefix?: string,
+	afterPreviewSlotName?: string,
+};
 
+const BlockPreviewPanelComponent = ({
+	name,
+	variation = '',
+	attributes: currentAttributes = {},
+	variationClassPrefix = 'is-style-',
+	afterPreviewSlotName,
+}: BlockPreviewPanelProps): MixedElement => {
 	// Memoize attributes with deep comparison to prevent unnecessary re-renders
 	// when getAttributes() returns a new object reference with the same values
 	const attributesRef = useRef(null);
 	const stableAttributesRef = useRef(null);
-
-	// Get current attributes - call on every render to get latest values
-	const currentAttributes = getAttributes();
 
 	// Compare with previous value and return stable reference if values unchanged
 	const attributes = useMemo(() => {
@@ -81,13 +82,13 @@ const BlockPreviewPanel = ({
 				...blockExample.attributes,
 				style: undefined,
 				className: variation
-					? getVariationClassName(variation)
+					? getVariationClassName(variation, variationClassPrefix)
 					: blockExample.attributes?.className,
 			},
 		};
 
 		return getBlockFromExample(name, example);
-	}, [name, blockExample, variation]);
+	}, [name, blockExample, variation, variationClassPrefix]);
 
 	// Memoize viewport calculations - only recalculate when blockExample changes
 	const { viewportWidth, minHeight } = useMemo(() => {
@@ -108,7 +109,8 @@ const BlockPreviewPanel = ({
 	const blockPreviewCssStyles = useBlockPreviewStyles(
 		blockType,
 		variation,
-		attributes
+		attributes,
+		variationClassPrefix
 	);
 
 	// Memoize CSS string - only recalculate when minHeight changes
@@ -154,7 +156,9 @@ const BlockPreviewPanel = ({
 				<div className="block-editor-inserter__preview-content-missing">
 					{__('No preview available.', 'blockera')}
 				</div>
-				{children}
+				{afterPreviewSlotName ? (
+					<Slot name={afterPreviewSlotName} />
+				) : null}
 			</div>
 		);
 	}
@@ -173,9 +177,19 @@ const BlockPreviewPanel = ({
 				minHeight={PREVIEW_HEIGHT}
 				additionalStyles={additionalStyles}
 			/>
-			{children}
+			{afterPreviewSlotName ? <Slot name={afterPreviewSlotName} /> : null}
 		</div>
 	);
 };
+
+const BlockPreviewPanel: ComponentType<BlockPreviewPanelProps> = memo(
+	BlockPreviewPanelComponent,
+	(prevProps, nextProps) =>
+		prevProps.name === nextProps.name &&
+		prevProps.variation === nextProps.variation &&
+		prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
+		prevProps.afterPreviewSlotName === nextProps.afterPreviewSlotName &&
+		isEquals(prevProps.attributes, nextProps.attributes)
+);
 
 export default BlockPreviewPanel;

@@ -66,6 +66,7 @@ export function onChangeBlockStates(
 		setCurrentBlock,
 		isMasterBlockStates,
 		currentBlockStyleVariation,
+		skipExtensionSync = false,
 	} = params;
 
 	const { getSelectedBlock } = select('core/block-editor');
@@ -89,61 +90,63 @@ export function onChangeBlockStates(
 
 	let selectedState = null;
 
-	// $FlowFixMe
-	for (const stateType: TStates in newValue) {
-		const state = newValue[stateType];
-		const setInnerBlockDetails = () => {
-			selectedState = stateType;
-			setInnerBlockState(stateType);
-			setBlockClientInnerState({
-				currentState: stateType,
-				innerBlockType: currentBlock,
-				clientId,
-			});
-		};
-		const setBlockDetails = () => {
-			selectedState = stateType;
-			setCurrentState(stateType);
-			setBlockClientMasterState({
-				currentState: stateType,
-				name,
-				clientId,
-			});
+	if (!skipExtensionSync) {
+		// $FlowFixMe
+		for (const stateType: TStates in newValue) {
+			const state = newValue[stateType];
+			const setInnerBlockDetails = () => {
+				selectedState = stateType;
+				setInnerBlockState(stateType);
+				setBlockClientInnerState({
+					currentState: stateType,
+					innerBlockType: currentBlock,
+					clientId,
+				});
+			};
+			const setBlockDetails = () => {
+				selectedState = stateType;
+				setCurrentState(stateType);
+				setBlockClientMasterState({
+					currentState: stateType,
+					name,
+					clientId,
+				});
 
-			const { getState, getInnerState } = select('blockera/editor');
-			const {
-				settings: { supportsInnerBlocks },
-			} = getState(stateType) ||
-				getInnerState(stateType) || {
-					settings: { supportsInnerBlocks: true },
-				};
+				const { getState, getInnerState } = select('blockera/editor');
+				const {
+					settings: { supportsInnerBlocks },
+				} = getState(stateType) ||
+					getInnerState(stateType) || {
+						settings: { supportsInnerBlocks: true },
+					};
 
-			if (
-				false === supportsInnerBlocks &&
-				'function' === typeof setCurrentBlock
-			) {
-				setCurrentBlock('master');
-			}
-		};
+				if (
+					false === supportsInnerBlocks &&
+					'function' === typeof setCurrentBlock
+				) {
+					setCurrentBlock('master');
+				}
+			};
 
-		if (!isMasterBlockStates && state?.isSelected) {
-			setInnerBlockDetails();
-		} else if (state?.isSelected) {
-			setBlockDetails();
-		} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
-			if (!isMasterBlockStates) {
+			if (!isMasterBlockStates && state?.isSelected) {
 				setInnerBlockDetails();
-			} else {
+			} else if (state?.isSelected) {
 				setBlockDetails();
+			} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
+				if (!isMasterBlockStates) {
+					setInnerBlockDetails();
+				} else {
+					setBlockDetails();
+				}
 			}
 		}
-	}
 
-	setBlockClientStates({
-		clientId,
-		blockType: !isMasterBlockStates ? currentBlock : name,
-		blockStates: newValue,
-	});
+		setBlockClientStates({
+			clientId,
+			blockType: !isMasterBlockStates ? currentBlock : name,
+			blockStates: newValue,
+		});
+	}
 
 	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
 		let blockStates = {};

@@ -34,6 +34,28 @@ class Width extends BaseStyleDefinition {
 		}
 
 		$this->setDeclaration($key, $value);
+
+		// core/icon uses blockeraWidth for icon size; keep SVG square when height is unset.
+		if ('core/icon' === ( $this->block['blockName'] ?? '' )) {
+			$height_setting = $this->getCurrentBreakpointSettings()['blockeraHeight'] ?? null;
+			$height_raw     = is_array($height_setting) ? ( $height_setting['value'] ?? '' ) : $height_setting;
+
+			if ('' === $height_raw || null === $height_raw) {
+				$height_config = $this->getStyleEngineConfig('blockeraHeight');
+				$height_key    = $height_config['height'] ?? 'height';
+
+				if ('' === $height_key) {
+					$height_key = 'height';
+				}
+
+				if ('stretch' === $value && 'height' === $height_key) {
+					$height_key = 'height: 100%; height: -moz-available; height: -webkit-fill-available; height';
+				}
+
+				$this->setDeclaration($height_key, $value);
+			}
+		}
+
 		$this->setCss($this->declarations);
 
 		return $this->css;

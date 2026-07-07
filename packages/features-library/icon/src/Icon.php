@@ -59,7 +59,16 @@ class Icon implements FeatureInterface {
     }
 
 	public function isBlockSupported(): bool {
-		return isset($this->block, $this->block['attrs']['blockeraIcon']);
+		if (! isset($this->block)) {
+			return false;
+		}
+
+		if ('core/icon' === ( $this->block['blockName'] ?? '' )) {
+			// Standalone core/icon SVG is injected in render_block_core/icon (see blockera_core_icon_render_frontend_html).
+			return false;
+		}
+
+		return isset($this->block['attrs']['blockeraIcon']);
     }
 
 	/**

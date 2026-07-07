@@ -20,6 +20,14 @@ export type { EditorContext } from './editorContext';
 export { openOrFocusTab } from './openOrFocusTab';
 export type { OpenOrFocusTabParams } from './openOrFocusTab';
 
+export {
+	getUnavailableDocumentKind,
+	getUnavailableModalHeaderTitle,
+	getUnavailableLeadMessage,
+	getUnavailableCardTypeLabel,
+} from './unavailableDocumentPresentation';
+export type { UnavailableDocumentKind } from './unavailableDocumentPresentation';
+
 export { ensurePostEntityAccessible } from './ensurePostEntityAccessible';
 
 export { buildTabSwitchCandidates } from './buildTabSwitchCandidates';

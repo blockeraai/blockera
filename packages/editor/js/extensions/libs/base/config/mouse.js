@@ -14,8 +14,9 @@ const blockeraCursor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Cursor', 'blockera'),
 	onNative: true,
+	onCompanion: true,
+	label: __('Cursor', 'blockera'),
 	keywords: ['cursor', 'pointer', 'mouse', 'hover'],
 };
 
@@ -23,8 +24,9 @@ const blockeraUserSelect: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('User Select', 'blockera'),
 	onNative: true,
+	onCompanion: true,
+	label: __('User Select', 'blockera'),
 	keywords: ['select', 'user-select', 'text', 'selection'],
 };
 
@@ -32,8 +34,9 @@ const blockeraPointerEvents: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Pointer Events', 'blockera'),
 	onNative: true,
+	onCompanion: true,
+	label: __('Pointer Events', 'blockera'),
 	keywords: ['pointer', 'events', 'click', 'interaction'],
 };
 

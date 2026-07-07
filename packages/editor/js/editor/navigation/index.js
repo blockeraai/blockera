@@ -3,14 +3,20 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import { type MixedElement } from 'react';
 import { useEffect, createPortal } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { getGlobalStylesPanelSelectors } from '@blockera/global-styles-ui';
+
+/**
  * Internal dependencies
  */
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 import { BlockeraGlobalStylesNavigation } from './blockera-global-styles-navigation';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Global Styles Navigation
@@ -22,13 +28,16 @@ export default function GlobalStylesNavigation({
 	className: string,
 }): MixedElement {
 	useEffect(() => {
+		const { getEntity } = select('blockera/data') || {};
+		const { version } = getEntity?.('wp') || {};
+		const { activeStyleTile } = getGlobalStylesPanelSelectors(
+			version || ''
+		);
+
 		new IntersectionObserverRenderer(
-			'.edit-site-global-styles-screen-root__active-style-tile',
+			activeStyleTile,
 			() => {
-				// Safety guard: ensure target element exists before creating portal
-				const targetElement = document.querySelector(
-					'.edit-site-global-styles-screen-root__active-style-tile'
-				);
+				const targetElement = document.querySelector(activeStyleTile);
 
 				if (!targetElement?.parentElement) {
 					return null;

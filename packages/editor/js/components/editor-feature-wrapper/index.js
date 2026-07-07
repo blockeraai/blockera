@@ -61,68 +61,94 @@ export default function EditorFeatureWrapper({
 		return <></>;
 	}
 
+	const isCompanionPlugin = applyFilters(
+		'blockera.products.isCompanionPlugin',
+		false
+	);
+
+	const renderCompanionNotice = (): Node => (
+		<FeatureWrapper type="companion" {...props}>
+			{children}
+		</FeatureWrapper>
+	);
+
+	const renderNativeNotice = (): Node => (
+		<FeatureWrapper type="native" {...props}>
+			{children}
+		</FeatureWrapper>
+	);
+
+	const renderInnerBlockNotice = (): Node => (
+		<FeatureWrapper type="inner-block" {...props}>
+			{children}
+		</FeatureWrapper>
+	);
+
+	/**
+	 * Companion gating:
+	 * - `isCompanionPlugin` is driven by products via a filter and allows the "main"
+	 *   product to disable companion notices globally.
+	 * - When the companion isn't present, we prefer showing the companion notice in
+	 *   places where we would otherwise show a limitation notice.
+	 */
+	if (feature.onCompanion && !isCompanionPlugin) {
+		return renderCompanionNotice();
+	}
+
 	if (feature.onNative) {
-		return (
-			<FeatureWrapper type="native" {...props}>
-				{children}
-			</FeatureWrapper>
-		);
+		return isCompanionPlugin
+			? renderNativeNotice()
+			: renderCompanionNotice();
 	}
 
 	if (isInnerBlock(currentBlock)) {
 		if (isBoolean(feature.onInnerBlocks) && !feature.onInnerBlocks) {
-			return (
-				<FeatureWrapper type="inner-block" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderInnerBlockNotice()
+				: renderCompanionNotice();
 		} else if (
 			isArray(feature.onInnerBlocks) &&
-			//$FlowFixMe
+			//$FlowFixMe[prop-missing]
 			!feature.onInnerBlocks.includes(currentBlock)
 		) {
-			return (
-				<FeatureWrapper type="inner-block" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderInnerBlockNotice()
+				: renderCompanionNotice();
 		}
 
 		if (
 			isBoolean(feature.onNativeOnInnerBlocks) &&
 			feature.onNativeOnInnerBlocks
 		) {
-			return (
-				<FeatureWrapper type="native" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderNativeNotice()
+				: renderCompanionNotice();
 		} else if (
 			isArray(feature.onNativeOnInnerBlocks) &&
-			//$FlowFixMe
+			//$FlowFixMe[prop-missing]
 			!feature.onNativeOnInnerBlocks.includes(currentBlock)
 		) {
-			return (
-				<FeatureWrapper type="native" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderNativeNotice()
+				: renderCompanionNotice();
 		}
 	}
 
 	if (!isNormalState(getCurrentState())) {
 		if (isBoolean(feature.onStates) && !feature.onStates) {
-			return (
+			return isCompanionPlugin ? (
 				<FeatureWrapper type="state" typeName={'normal'} {...props}>
 					{children}
 				</FeatureWrapper>
+			) : (
+				renderCompanionNotice()
 			);
 		} else if (
 			isArray(feature.onStates) &&
-			//$FlowFixMe
+			//$FlowFixMe[prop-missing]
 			!feature.onStates.includes(getCurrentState())
 		) {
-			return (
+			return isCompanionPlugin ? (
 				<FeatureWrapper
 					type="state"
 					typeName={availableStates.join(', ')}
@@ -130,31 +156,29 @@ export default function EditorFeatureWrapper({
 				>
 					{children}
 				</FeatureWrapper>
+			) : (
+				renderCompanionNotice()
 			);
 		}
 
 		if (isBoolean(feature.onNativeOnStates) && feature.onNativeOnStates) {
-			return (
-				<FeatureWrapper type="native" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderNativeNotice()
+				: renderCompanionNotice();
 		} else if (
 			isArray(feature.onNativeOnStates) &&
-			//$FlowFixMe
+			//$FlowFixMe[prop-missing]
 			!feature.onNativeOnStates.includes(getCurrentState())
 		) {
-			return (
-				<FeatureWrapper type="native" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderNativeNotice()
+				: renderCompanionNotice();
 		}
 	}
 
 	if (!isBaseBreakpoint(currentBreakpoint)) {
 		if (isBoolean(feature.onBreakpoints) && !feature.onBreakpoints) {
-			return (
+			return isCompanionPlugin ? (
 				<FeatureWrapper
 					type="breakpoint"
 					typeName={getBaseBreakpoint()}
@@ -162,13 +186,15 @@ export default function EditorFeatureWrapper({
 				>
 					{children}
 				</FeatureWrapper>
+			) : (
+				renderCompanionNotice()
 			);
 		} else if (
 			isArray(feature.onBreakpoints) &&
-			//$FlowFixMe
+			//$FlowFixMe[prop-missing]
 			!feature.onBreakpoints.includes(currentBreakpoint)
 		) {
-			return (
+			return isCompanionPlugin ? (
 				<FeatureWrapper
 					type="breakpoint"
 					typeName={getBaseBreakpoint()}
@@ -176,6 +202,8 @@ export default function EditorFeatureWrapper({
 				>
 					{children}
 				</FeatureWrapper>
+			) : (
+				renderCompanionNotice()
 			);
 		}
 
@@ -183,21 +211,17 @@ export default function EditorFeatureWrapper({
 			isBoolean(feature.onNativeOnBreakpoints) &&
 			feature.onNativeOnBreakpoints
 		) {
-			return (
-				<FeatureWrapper type="native" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderNativeNotice()
+				: renderCompanionNotice();
 		} else if (
 			isArray(feature.onNativeOnBreakpoints) &&
-			//$FlowFixMe
+			//$FlowFixMe[prop-missing]
 			!feature.onNativeOnBreakpoints.includes(currentBreakpoint)
 		) {
-			return (
-				<FeatureWrapper type="native" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return isCompanionPlugin
+				? renderNativeNotice()
+				: renderCompanionNotice();
 		}
 	}
 

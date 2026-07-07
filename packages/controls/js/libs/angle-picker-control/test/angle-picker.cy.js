@@ -167,17 +167,26 @@ describe('angle-picker-control', () => {
 					name,
 				});
 
-				cy.get(
-					'.components-angle-picker-control__angle-circle-indicator'
-				).as('indicator');
+				cy.get('.components-angle-picker-control__angle-circle').then(
+					($circle) => {
+						const rect = $circle[0].getBoundingClientRect();
+						const centerX = rect.x + rect.width / 2;
+						const centerY = rect.y + rect.height / 2;
 
-				cy.get('@indicator').trigger('mousedown', { which: 1 });
-				cy.get('@indicator').trigger('mousemove', {
-					which: 1,
-					clientX: 20,
-					clientY: 30,
-				});
-				cy.get('@indicator').trigger('mouseup');
+						cy.wrap($circle).trigger('mousedown', {
+							which: 1,
+							clientX: centerX + 20,
+							clientY: centerY,
+						});
+						cy.document().trigger('mousemove', {
+							which: 1,
+							clientX: centerX,
+							clientY: centerY - 20,
+						});
+						cy.document().trigger('mouseup');
+					}
+				);
+
 				// Angle depends on pointer position vs. the circle center; layout/viewport
 				// shifts the exact degree, so assert drag updates value and store only.
 				cy.get('input[type="number"]').should(($input) => {

@@ -85,6 +85,11 @@ export default function InputControl({
 		isValidValue = validator(value);
 	}
 
+	const normalizedVariableTypes =
+		typeof variableTypes === 'string' ? [variableTypes] : variableTypes;
+
+	const controlFieldId = propsForLabelControl.controlFieldId ?? id;
+
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
@@ -99,6 +104,19 @@ export default function InputControl({
 		variableTypes,
 		onChange: setValue,
 		size,
+		presetInterface:
+			Array.isArray(normalizedVariableTypes) &&
+			(normalizedVariableTypes.includes('spacing') ||
+				normalizedVariableTypes.includes('border-radius'))
+				? {
+						variableTypes: normalizedVariableTypes,
+						unitType,
+						id,
+						singularId,
+						attribute,
+						controlFieldId,
+					}
+				: undefined,
 	});
 
 	const labelProps = {
@@ -115,7 +133,7 @@ export default function InputControl({
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
 		...propsForLabelControl,
-		controlFieldId: propsForLabelControl.controlFieldId ?? id,
+		controlFieldId,
 	};
 
 	const extractedValue = extractNumberAndUnit(value);
@@ -128,9 +146,17 @@ export default function InputControl({
 
 	const extractedNoUnit =
 		isUndefined(extractedValue.unit) || extractedValue.unit === '';
-	const unitValue = extractedNoUnit
+	const resolvedUnitValue = extractedNoUnit
 		? pickedUnit
 		: getUnitByValue(extractedValue.unit, units);
+	const fallbackUnit = getFirstUnit(units);
+	let unitValue = { value: '', label: '', format: 'number' };
+
+	if (typeof resolvedUnitValue?.value === 'string') {
+		unitValue = resolvedUnitValue;
+	} else if (typeof fallbackUnit?.value === 'string') {
+		unitValue = fallbackUnit;
+	}
 
 	useEffect(() => {
 		// add css units
@@ -207,12 +233,12 @@ export default function InputControl({
 					size={size}
 					onVariableShortcut={
 						variableTypes && variableTypes.length > 0
-							? () => {
+							? (): void => {
 									valueAddonControlProps.setOpen(
 										'var-picker'
 									);
 								}
-							: undefined
+							: (): void => {}
 					}
 					onChange={(newValue: ContextUnitInput): void => {
 						const { inputValue, unitValue } = newValue;

@@ -35,8 +35,10 @@ export const TransformSettings = ({
 	attributes,
 	extensionConfig,
 	setIsTransformSettingsVisible,
+	anchor,
 	insidePopover = true,
 }: {
+	anchor?: ?HTMLElement,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {
@@ -101,13 +103,13 @@ export const TransformSettings = ({
 			wrapper={(children) => {
 				return (
 					<Popover
+						anchor={anchor ?? undefined}
 						title={
 							<>
 								<Icon icon="three-d" iconSize="20" />
 								{__('Transform Settings', 'blockera')}
 							</>
 						}
-						offset={35}
 						placement="left-start"
 						className={controlInnerClassNames(
 							'transform-settings-popover'

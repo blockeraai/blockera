@@ -8,14 +8,17 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 import {
 	gridChildSpansFromWPCompatibility,
 	gridChildColumnSpanToWPCompatibility,
@@ -26,8 +29,11 @@ export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.gridChildExtension.bootstrap',
-		(attributes: Object) => {
-			return gridChildSpansFromWPCompatibility({ attributes });
+		(attributes: Object, blockDetail: BlockDetail) => {
+			return sanitizeWPCompatibilityAttributes(
+				gridChildSpansFromWPCompatibility({ attributes }),
+				blockDetail
+			);
 		}
 	);
 
@@ -50,23 +56,29 @@ export const bootstrap = (): void => {
 				case 'blockeraGridChildColumnSpan':
 					// Replace `style` wholesale: deep merge would keep stale
 					// `style.layout.columnSpan` when the patch omits the key after clear.
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
-						gridChildColumnSpanToWPCompatibility({
-							newValue,
-							getAttributes,
-						}) ?? {},
-						{ forceUpdated: ['style'] }
+						{
+							...(gridChildColumnSpanToWPCompatibility({
+								newValue,
+								getAttributes,
+							}) ?? {}),
+							forceUpdated: ['style'],
+						},
+						blockDetail
 					);
 
 				case 'blockeraGridChildRowSpan':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
-						gridChildRowSpanToWPCompatibility({
-							newValue,
-							getAttributes,
-						}) ?? {},
-						{ forceUpdated: ['style'] }
+						{
+							...(gridChildRowSpanToWPCompatibility({
+								newValue,
+								getAttributes,
+							}) ?? {}),
+							forceUpdated: ['style'],
+						},
+						blockDetail
 					);
 			}
 

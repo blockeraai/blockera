@@ -16,5 +16,11 @@
 	"earlyAccessLab": {
 		"optimizeStyleGenerationOnEditor": false,
 		"optimizeStyleGenerationOnEditorStatus": "alpha"
+	},
+	"ai": {
+		"experimentalTools": false
+	},
+	"globalStylesUi": {
+		"presetTaxonomyGroupedUi": true
 	}
 }

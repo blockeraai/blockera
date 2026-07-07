@@ -27,6 +27,13 @@ export type SiteEditorPostType = (typeof SITE_EDITOR_POST_TYPES)[number];
 export const HIDE_ADMIN_BAR_ARG = 'blockera-hide-admin-bar' as const;
 
 /**
+ * Query argument that triggers an isolated template part preview page.
+ * Must match TemplatePreview::TEMPLATE_PART_PREVIEW_ARG in PHP.
+ */
+export const TEMPLATE_PART_PREVIEW_ARG =
+	'blockera-template-part-preview' as const;
+
+/**
  * Template types that use the home/front page URL for preview.
  * These templates represent the site's main entry points.
  */
@@ -37,7 +44,6 @@ export const HOME_URL_TEMPLATES = ['index', 'home', 'front-page'] as const;
  * These are structural post types that appear on multiple pages.
  */
 export const NON_PREVIEWABLE_POST_TYPES = [
-	'wp_template_part',
 	'wp_navigation',
 	'wp_block',
 ] as const;
@@ -46,6 +52,33 @@ export const NON_PREVIEWABLE_POST_TYPES = [
  * Post type for WordPress templates.
  */
 export const TEMPLATE_POST_TYPE = 'wp_template' as const;
+
+/**
+ * Post type for WordPress template parts.
+ */
+export const TEMPLATE_PART_POST_TYPE = 'wp_template_part' as const;
+
+/**
+ * Site editor post types that support autosave preview via REST.
+ * Maps post type to the wp/v2 collection slug used in autosave paths.
+ */
+export const TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE: Readonly<
+	Record<string, string>
+> = {
+	wp_template: 'templates',
+	wp_template_part: 'template-parts',
+} as const;
+
+/**
+ * Whether a post type supports template autosave preview (draft preview without publish).
+ *
+ * @param postType Post type slug.
+ */
+export function isTemplateAutosavePreviewType(
+	postType: string | null | undefined
+): boolean {
+	return !!postType && postType in TEMPLATE_AUTOSAVE_PREVIEW_REST_BASE;
+}
 
 /**
  * Parsed template slug information.

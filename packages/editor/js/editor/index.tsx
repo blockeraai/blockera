@@ -20,9 +20,13 @@ import SecondarySidebarInjector from './secondary-sidebar';
 import FooterToolbarInjector from './footer-toolbar';
 import GlobalStylesActionsForBlocks from './global-styles-actions-for-blocks';
 import AdditionalCssContextmenuObserver from './additional-css-contextmenu-observer';
+import AIExperimentalTools from './ai-experimental-tools';
 import GlobalStyles, {
 	registration as globalStylesRegistration,
 } from './global-styles';
+import './register-var-picker-global-styles-panels';
+import './register-global-styles-preset-preview-helpers';
+import { registerMissingVariableRecreateBridge } from './register-missing-variable-recreate-bridge';
 
 export const getSetupHeaderRequirements = () => {
 	const allowedUsers = applyFilters(
@@ -154,9 +158,16 @@ const editorPlugins = [
 		render: BlocksUI,
 		icon: null,
 	},
+	{
+		name: 'blockera-ai-experimental-tools',
+		render: AIExperimentalTools,
+		icon: null,
+	},
 ];
 
 export const registerBlockeraEditorInternalPlugins = () => {
+	registerMissingVariableRecreateBridge();
+
 	/**
 	 * Register all editor plugins.
 	 */

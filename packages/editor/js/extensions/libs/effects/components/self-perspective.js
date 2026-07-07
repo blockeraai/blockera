@@ -128,7 +128,11 @@ export function SelfPerspective({
 								'blockera'
 							)}
 							popoverTitle={__(
-								'Self Perspective Position',
+								'Self Perspective Origin',
+								'blockera'
+							)}
+							labelDescription={__(
+								'Chooses the perspective origin on the block. All 3D-style transforms on this block are relative to that point.',
 								'blockera'
 							)}
 							alignmentMatrixLabel={__('Self Origin', 'blockera')}

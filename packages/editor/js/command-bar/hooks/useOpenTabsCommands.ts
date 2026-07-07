@@ -14,7 +14,7 @@ import type {
 	Command,
 	CommandLoaderResult,
 } from '../utils/wrapCommandLoaderHook';
-import type { Tab } from '../../tabs/types';
+import type { DocumentInaccessibleInfo, Tab } from '../../tabs/types';
 import { getTabIcon } from '../../tabs/utils/getTabIcon';
 import { isEditorPage } from '../../utils/isEditorPage';
 
@@ -35,12 +35,7 @@ interface OpenTabsTabActions {
 		postType: string | null | undefined,
 		postId: string | number | null | undefined
 	) => Promise<unknown>;
-	onDocumentInaccessible?: (info: {
-		key: string;
-		type: string;
-		id: string | number;
-		title: string;
-	}) => void;
+	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
 }
 
 /**
@@ -151,6 +146,7 @@ function getOpenTabsCommandsLoader(
 										tab.customTitle !== ''
 											? tab.customTitle
 											: tab.title,
+									slug: tab.slug,
 								});
 								close?.();
 								return;
@@ -169,6 +165,7 @@ function getOpenTabsCommandsLoader(
 										tab.customTitle !== ''
 											? tab.customTitle
 											: tab.title,
+									slug: tab.slug,
 								});
 							}
 							close?.();
@@ -212,12 +209,7 @@ export interface UseOpenTabsCommandsParams {
 		postId: string | number | null | undefined
 	) => Promise<unknown>;
 	/** Optional handler when the tab target cannot be loaded. */
-	onDocumentInaccessible?: (info: {
-		key: string;
-		type: string;
-		id: string | number;
-		title: string;
-	}) => void;
+	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
 }
 
 /**

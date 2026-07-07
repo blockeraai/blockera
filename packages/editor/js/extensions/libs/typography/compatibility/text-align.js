@@ -5,6 +5,34 @@
  */
 import { runInsideBlockInspector } from '../../utils';
 
+function getBlockLevelTextAlign(
+	attributes: Object,
+	isParagraph: boolean
+): ?string {
+	if (isParagraph) {
+		return attributes.align;
+	}
+
+	return attributes?.style?.typography?.textAlign ?? attributes.textAlign;
+}
+
+function getBlockLevelTextAlignPatch(
+	isParagraph: boolean,
+	textAlign: ?string
+): Object {
+	if (isParagraph) {
+		return { align: textAlign };
+	}
+
+	return {
+		style: {
+			typography: {
+				textAlign,
+			},
+		},
+	};
+}
+
 export function textAlignFromWPCompatibility({
 	attributes,
 	blockId,
@@ -16,17 +44,14 @@ export function textAlignFromWPCompatibility({
 	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
-	let wpAlignAttrId = 'textAlign';
-	if (blockId === 'core/paragraph') {
-		wpAlignAttrId = 'align';
-	}
+	const isParagraph = blockId === 'core/paragraph';
 
-	// Check block-level style (insideBlockInspector) or global style context
+	// Paragraph keeps legacy `align`; other blocks use style.typography.textAlign (WP 7+).
 	const textAlign = runInsideBlockInspector(
 		insideBlockInspector,
 		editorSelectedBlockEvent
 	)
-		? attributes[wpAlignAttrId]
+		? getBlockLevelTextAlign(attributes, isParagraph)
 		: attributes?.typography?.textAlign;
 
 	// For detecting the text align changer from block editor controls
@@ -58,24 +83,19 @@ export function textAlignToWPCompatibility({
 	insideBlockInspector?: boolean,
 	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
-	// use correct id for WP data attribute
-	let wpAlignAttrId = 'textAlign';
-	if (blockId === 'core/paragraph') {
-		wpAlignAttrId = 'align';
-	}
+	const isParagraph = blockId === 'core/paragraph';
+	const insideInspector = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
 
 	if (
 		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['left', 'center', 'right'].indexOf(newValue) === -1
 	) {
-		return runInsideBlockInspector(
-			insideBlockInspector,
-			editorSelectedBlockEvent
-		)
-			? {
-					[wpAlignAttrId]: undefined,
-				}
+		return insideInspector
+			? getBlockLevelTextAlignPatch(isParagraph, undefined)
 			: {
 					typography: {
 						textAlign: undefined,
@@ -83,13 +103,8 @@ export function textAlignToWPCompatibility({
 				};
 	}
 
-	return runInsideBlockInspector(
-		insideBlockInspector,
-		editorSelectedBlockEvent
-	)
-		? {
-				[wpAlignAttrId]: newValue,
-			}
+	return insideInspector
+		? getBlockLevelTextAlignPatch(isParagraph, newValue)
 		: {
 				typography: {
 					textAlign: newValue,

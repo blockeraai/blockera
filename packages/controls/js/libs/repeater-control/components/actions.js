@@ -4,7 +4,7 @@
  */
 import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { useState, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -15,18 +15,26 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, Tooltip, Flex, MenuItem } from '../../';
 import { RepeaterContext } from '../context';
 import { useControlContext } from '../../../context';
+import { Button, Tooltip, Flex, MenuItem } from '../../';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
-import { getArialLabelSuffix, isEnabledPromote } from '../utils';
+import ConfirmDeleteModal from './confirm-delete-modal';
+import {
+	getArialLabelSuffix,
+	isRepeaterPromoActive,
+	closeInspectorRepeaterPopovers,
+} from '../utils';
 
 export default function RepeaterItemActions({
 	item,
 	itemId,
 	isVisible,
 	setVisibility,
+	interactionGuard,
+	onOpenItemSettings,
+	showItemEditButton = false,
 }: RepeaterItemActionsProps): MixedElement | null {
 	const {
 		count,
@@ -43,14 +51,22 @@ export default function RepeaterItemActions({
 		repeaterItems,
 		PromoComponent,
 		itemIdGenerator,
+		disableProHints,
 		actionButtonClone,
 		actionButtonReset,
+		actionButtonsType,
 		actionButtonDelete,
 		disableRegenerateId,
 		setDisableAddNewItem,
 		actionButtonVisibility,
-		actionButtonsType,
+		shouldConfirmDeleteModal,
+		confirmDeleteModalProps,
 	} = useContext(RepeaterContext);
+
+	const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+		useState(false);
+	const toggleConfirmDeleteModal = () =>
+		setIsConfirmDeleteModalOpen(!isConfirmDeleteModalOpen);
 
 	const itemsCount = Object.keys(repeaterItems).length;
 
@@ -107,12 +123,29 @@ export default function RepeaterItemActions({
 	}
 
 	function deleteFunction(event: MouseEvent) {
-		event.stopPropagation();
+		if (event && event?.hasOwnProperty('stopPropagation')) {
+			event.stopPropagation();
+		}
+
+		// Try to open the confirm delete modal if it is not open and shouldConfirmDeleteModal is true
+		if (!isConfirmDeleteModalOpen && shouldConfirmDeleteModal) {
+			toggleConfirmDeleteModal();
+			return;
+		} else if (isConfirmDeleteModalOpen) {
+			toggleConfirmDeleteModal();
+		}
+
 		closeMenu(event);
+
+		closeInspectorRepeaterPopovers();
 
 		if (
 			!disableRegenerateId &&
-			isEnabledPromote(PromoComponent, repeaterItems)
+			isRepeaterPromoActive(
+				PromoComponent,
+				repeaterItems,
+				disableProHints
+			)
 		) {
 			setCount(count + 1);
 			setDisableAddNewItem(true);
@@ -160,7 +193,11 @@ export default function RepeaterItemActions({
 
 			if (
 				visibleItems.length >= 1 &&
-				isEnabledPromote(PromoComponent, repeaterItems)
+				isRepeaterPromoActive(
+					PromoComponent,
+					repeaterItems,
+					disableProHints
+				)
 			) {
 				return setCount(count + 1);
 			}
@@ -193,7 +230,13 @@ export default function RepeaterItemActions({
 		event.stopPropagation();
 		closeMenu(event);
 
-		if (isEnabledPromote(PromoComponent, repeaterItems)) {
+		if (
+			isRepeaterPromoActive(
+				PromoComponent,
+				repeaterItems,
+				disableProHints
+			)
+		) {
 			setCount(count + 1);
 			setDisableAddNewItem(true);
 
@@ -226,13 +269,32 @@ export default function RepeaterItemActions({
 
 	const showReset = actionButtonReset;
 
+	const showEditItemButton =
+		showItemEditButton && 'function' === typeof onOpenItemSettings;
+
 	// If no buttons are shown, return null to avoid rendering empty container
-	if (!showVisibility && !showClone && !showDelete && !showReset) {
+	if (
+		!showVisibility &&
+		!showClone &&
+		!showDelete &&
+		!showReset &&
+		!showEditItemButton
+	) {
 		return null;
 	}
 
 	return (
 		<>
+			{interactionGuard}
+
+			{shouldConfirmDeleteModal && isConfirmDeleteModalOpen && (
+				<ConfirmDeleteModal
+					item={item}
+					handleRemoveItem={deleteFunction}
+					onClose={() => setIsConfirmDeleteModalOpen(false)}
+					confirmDeleteModalProps={confirmDeleteModalProps}
+				/>
+			)}
 			{showVisibility && (
 				<>
 					{actionButtonsType === 'menu' ? (
@@ -310,6 +372,33 @@ export default function RepeaterItemActions({
 						</Tooltip>
 					)}
 				</>
+			)}
+
+			{showEditItemButton && (
+				<Tooltip
+					text={__('Edit', 'blockera')}
+					style={{
+						'--tooltip-bg':
+							'var(--blockera-controls-primary-color)',
+					}}
+					delay={300}
+				>
+					<Button
+						className={controlInnerClassNames('btn-edit-item')}
+						noBorder={true}
+						icon={<Icon icon="pen" iconSize={20} />}
+						onClick={(event: MouseEvent) => {
+							event.stopPropagation();
+							// $FlowFixMe
+							onOpenItemSettings();
+						}}
+						aria-label={sprintf(
+							// translators: %s is the repeater item id.
+							__('Edit %s', 'blockera'),
+							getArialLabelSuffix(itemId)
+						)}
+					/>
+				</Tooltip>
 			)}
 
 			{showClone && (
@@ -427,6 +516,9 @@ export default function RepeaterItemActions({
 								className={controlInnerClassNames('btn-delete')}
 								noBorder={true}
 								icon={<Icon icon="trash" iconSize={20} />}
+								onMouseDown={(event: MouseEvent) => {
+									event.stopPropagation();
+								}}
 								onClick={deleteFunction}
 								aria-label={sprintf(
 									// translators: %s is the repeater item id. It's aria label for deleting repeater item

@@ -15,7 +15,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.getByDataCy('color-label').as('color-label');

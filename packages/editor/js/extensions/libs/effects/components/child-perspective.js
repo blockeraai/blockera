@@ -114,7 +114,11 @@ export function ChildPerspective({
 					<PositionButtonControl
 						buttonLabel={__('Child Perspective Origin', 'blockera')}
 						popoverTitle={__(
-							'Child Perspective Position',
+							'Child Perspective Origin',
+							'blockera'
+						)}
+						labelDescription={__(
+							'Defines the perspective origin for nested content. Descendant blocks use this point as their 3D transform reference.',
 							'blockera'
 						)}
 						alignmentMatrixLabel={__('Child Origin', 'blockera')}

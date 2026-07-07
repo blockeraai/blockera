@@ -12,11 +12,12 @@ import type { MixedElement } from 'react';
  */
 import {
 	Flex,
-	Tooltip,
 	MenuItem,
 	MenuGroup,
 	DropdownMenu,
 	DynamicHtmlFormatter,
+	PoweredBy,
+	getDefaultPoweredByText,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
@@ -46,51 +47,19 @@ export const BlockCardSettings = ({
 		updateBlockSections,
 	} = useBlockSections();
 
-	let text = '';
+	let text: string | MixedElement = '';
 
 	if (poweredBy) {
 		if (isActive) {
-			if (
+			const isBlockeraBlock =
 				blockName.startsWith('blockera/') ||
-				activeBlockVariation.startsWith('blockera/')
-			) {
-				text = sprintf(
-					// translators: %s is the brand name (Required)
-					__('Powered by %s', 'blockera'),
-					'{brand-name}'
-				);
+				activeBlockVariation.startsWith('blockera/');
 
-				// For backward brand name to prevent removing it
-				if (!text.includes('{brand-name}')) {
-					text = 'Powered by {brand-name}';
-				}
-			} else {
-				text = sprintf(
-					// translators: %s is the brand name (Required)
-					__('Empowered by %s', 'blockera'),
-					'{brand-name}'
-				);
-
-				// For backward brand name to prevent removing it
-				if (!text.includes('{brand-name}')) {
-					text = 'Empowered by {brand-name}';
-				}
-			}
-
-			text = DynamicHtmlFormatter({
-				text,
-				replacements: {
-					'brand-name': (
-						<Flex direction="row" alignItems="center" gap="8px">
-							<Icon
-								icon="blockera"
-								library="blockera"
-								iconSize="18"
-							/>
-							Blockera Site Builder
-						</Flex>
-					),
-				},
+			text = getDefaultPoweredByText({
+				type: isBlockeraBlock ? 'powered-by' : 'empowered-by',
+				icon: 'blockera',
+				iconLibrary: 'blockera',
+				iconSize: 18,
 			});
 		} else {
 			text = sprintf(
@@ -315,60 +284,20 @@ export const BlockCardSettings = ({
 				</DropdownMenu>
 			)}
 
-			{isActive && poweredBy && (
-				<Tooltip
-					text={
-						<Flex direction="row" alignItems="center" gap="8px">
-							{text}
-						</Flex>
-					}
-					style={{
-						'--tooltip-bg': '#0051e7',
-					}}
-					delay={200}
-				>
-					<a
-						href="https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="blockera-powered-by-icon"
-						style={{
-							'--blockera-controls-primary-color': '#0051e7',
-						}}
-					>
-						<Icon
-							library="blockera"
-							icon="blockera"
-							iconSize={18}
-						/>
-					</a>
-				</Tooltip>
-			)}
+			{isActive && poweredBy && <PoweredBy tooltipText={text} />}
 
 			{!isActive && poweredBy && (
-				<Tooltip
-					text={
+				<PoweredBy
+					tooltipText={
 						<Flex direction="row" alignItems="center" gap="8px">
 							{text}
 						</Flex>
 					}
-					style={{
-						'--tooltip-bg': '#007cba',
-					}}
-					delay={200}
-				>
-					<a
-						href="https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="blockera-powered-by-icon"
-						style={{
-							'--blockera-controls-primary-color': '#007cba',
-						}}
-					>
-						<Icon library="wp" icon="wordpress" iconSize={18} />
-					</a>
-				</Tooltip>
+					icon="wordpress"
+					iconLibrary="wp"
+					tooltipBg="#007cba"
+					primaryColor="#007cba"
+				/>
 			)}
 		</div>
 	);

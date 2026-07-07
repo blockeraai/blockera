@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -44,7 +43,11 @@ import {
 } from './compatibility/grid-attrs';
 
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -123,7 +126,7 @@ export const bootstrap = (): void => {
 				editorSelectedBlockEvent,
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -166,18 +169,19 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraSpacing':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						spacingToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraDisplay':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						displayToWPCompatibility({
 							newValue,
@@ -186,53 +190,62 @@ export const bootstrap = (): void => {
 							//$FlowFixMe
 							activeVariation: activeBlockVariation?.name,
 							getAttributes,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraGridMinimumColumnWidth':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
-						gridMinimumColumnWidthToWPCompatibility({
-							newValue,
-							blockId,
-							getAttributes,
-						}) ?? {},
-						{ forceUpdated: ['layout'] }
+						{
+							...(gridMinimumColumnWidthToWPCompatibility({
+								newValue,
+								blockId,
+								getAttributes,
+							}) ?? {}),
+							forceUpdated: ['layout'],
+						},
+						blockDetail
 					);
 
 				case 'blockeraGridColumnCount':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
-						gridColumnCountToWPCompatibility({
-							newValue,
-							blockId,
-							getAttributes,
-						}) ?? {},
-						{ forceUpdated: ['layout'] }
+						{
+							...(gridColumnCountToWPCompatibility({
+								newValue,
+								blockId,
+								getAttributes,
+							}) ?? {}),
+							forceUpdated: ['layout'],
+						},
+						blockDetail
 					);
 
 				case 'blockeraFlexWrap':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						flexWrapToWPCompatibility({
 							newValue,
 							ref,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraFlexLayout':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						flexLayoutToWPCompatibility({
 							newValue,
 							ref,
 							defaultValue:
 								blockAttributes?.blockeraFlexLayout?.default,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraGap':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						gapToWPCompatibility({
 							newValue,
@@ -241,7 +254,8 @@ export const bootstrap = (): void => {
 							blockId,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 			}
 

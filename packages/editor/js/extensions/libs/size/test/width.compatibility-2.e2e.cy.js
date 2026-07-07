@@ -495,6 +495,8 @@ describe('Width → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/image').click();
 
+			cy.getByAriaControls('styles-view').click();
+
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
@@ -551,6 +553,8 @@ describe('Width → WP Compatibility', () => {
 
 			cy.getBlock('core/image').click();
 
+			cy.getByAriaControls('styles-view').click();
+
 			cy.getParentContainer('Width');
 
 			cy.addNewTransition();
@@ -587,6 +591,8 @@ describe('Width → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('core/image').click();
+
+			cy.getByAriaControls('styles-view').click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');

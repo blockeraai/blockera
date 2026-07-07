@@ -39,3 +39,14 @@ if (! function_exists('blockera_add_icon_block_supports')) {
 		return $supports;
 	}
 }
+
+if ( ! function_exists( 'blockera_register_core_icon_navigation_hooks' ) ) {
+	/**
+	 * Register core/icon navigation listable and render context hooks.
+	 *
+	 * @return void
+	 */
+	function blockera_register_core_icon_navigation_hooks(): void {
+		blockera_core_icon_register_navigation_hooks();
+	}
+}

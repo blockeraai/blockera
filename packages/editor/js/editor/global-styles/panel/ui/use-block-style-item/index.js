@@ -5,10 +5,9 @@
  */
 import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
-import { useEntityProp, store as coreStore } from '@wordpress/core-data';
+import { useEntityProp } from '@wordpress/core-data';
 import { useCallback, useState } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
-import { store as editorStore } from '@wordpress/editor';
 import {
 	unregisterBlockStyle,
 	registerBlockStyle,
@@ -18,12 +17,17 @@ import {
 /**
  * Blockera dependencies
  */
-import { omit, mergeObject, kebabCase, cloneObject } from '@blockera/utils';
+import { omit, mergeObject, cloneObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import { getDefaultStyle } from '../utils';
+import {
+	getDefaultStyle,
+	replaceActiveSizeVariation,
+	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+	sanitizeStyleVariationId,
+} from '../utils';
 import {
 	getCalculatedNewStyle,
 	isRootStyle,
@@ -35,9 +39,10 @@ import {
 	registerStyleForBlockTypes,
 	unregisterStyleFromBlockTypes,
 	setStyleVariationBlocksInStore,
-	removeStyleVariationFromGlobalStyles,
 	markStyleAsDeletedInMetaData,
 	buildMetadataTransferForRenamedStyle,
+	buildSaveCustomizationsEffectiveItems,
+	sanitizeGlobalStylesNode,
 } from './helpers';
 import { getNormalizedStyle } from '../../context';
 import { isBaseBreakpoint } from '../../../../header-ui/components';
@@ -55,7 +60,12 @@ import {
 	type TUseBlockStyleItemProps,
 	type TUseBlockStyleItemReturn,
 } from './types';
-import { getCompatibleAttributes } from '../../../../../extensions/components/get-compatible-attributes';
+import { setBlockDynamicStylesCount } from '../use-block-styles-counter';
+import {
+	applyBlockeraSetAttributesCompatibility,
+	getCompatibleAttributes,
+} from '../../../../../extensions/components/get-compatible-attributes';
+import { VARIATION_SURFACE_STYLE } from '../../variation-surfaces';
 
 export const useBlockStyleItem = ({
 	style,
@@ -81,6 +91,8 @@ export const useBlockStyleItem = ({
 	currentBlockStyleVariation,
 	deleteStyleVariationBlocks,
 	setCurrentBlockStyleVariation,
+	skipBlockStyleRegistry = false,
+	variationSurface = VARIATION_SURFACE_STYLE,
 }: TUseBlockStyleItemProps): TUseBlockStyleItemReturn => {
 	const {
 		setBlockStyles: setGlobalBlockStyles,
@@ -137,7 +149,7 @@ export const useBlockStyleItem = ({
 
 			// Is user confirmed the change style name?
 			if (isConfirmedChangeID) {
-				editedStyle.name = kebabCase(newValue.name);
+				editedStyle.name = sanitizeStyleVariationId(newValue.name);
 				editedStyle.icon = {
 					name: 'blockera',
 					library: 'blockera',
@@ -237,25 +249,29 @@ export const useBlockStyleItem = ({
 				);
 
 				// Register new style name in block references in pervious style name.
-				registerStyleForBlockTypes(blockTypesToRegister, editedStyle);
-				setStyleVariationBlocksInStore(
-					editedStyle.name,
-					blockTypesToRegister
-				);
-
-				setTimeout(() => {
-					// Unregister previous style name of current block.
-					unregisterStyleFromBlockTypes(
-						[blockName],
-						currentStyle.name
+				if (!skipBlockStyleRegistry) {
+					registerStyleForBlockTypes(
+						blockTypesToRegister,
+						editedStyle
 					);
 					setStyleVariationBlocksInStore(
-						currentStyle.name,
-						blockTypesToRegister.filter(
-							(blockType) => blockType !== blockName
-						)
+						editedStyle.name,
+						blockTypesToRegister
 					);
-				}, 1);
+
+					setTimeout(() => {
+						unregisterStyleFromBlockTypes(
+							[blockName],
+							currentStyle.name
+						);
+						setStyleVariationBlocksInStore(
+							currentStyle.name,
+							blockTypesToRegister.filter(
+								(blockType) => blockType !== blockName
+							)
+						);
+					}, 1);
+				}
 			} else {
 				// Only update variation fields - merge with existing, don't override other customizations
 				updateBlockeraGlobalStylesMetaData(
@@ -284,6 +300,7 @@ export const useBlockStyleItem = ({
 			setBlockeraGlobalStylesMetaData,
 			getBlockeraGlobalStylesMetaData,
 			updateBlockeraGlobalStylesMetaData,
+			skipBlockStyleRegistry,
 		]
 	);
 
@@ -332,83 +349,104 @@ export const useBlockStyleItem = ({
 			setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
 
 			if ('disable-all' === actionParam) {
-				deleteStyleVariationBlocks(styleParam.name, false);
-				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
-				disabledIn.forEach((block: string) => {
-					unregisterBlockStyle(block, styleParam.name);
-					if (selectedBlockStyle === block) {
-						handleOnUsageForMultipleBlocks(styleParam, 'delete');
-					}
-				});
-				setGlobalStyles(newGlobalStyles);
-				return;
-			}
-
-			if ('enable-all' === actionParam) {
-				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
-				enabledIn.forEach((block: string) => {
-					registerBlockStyle(block, styleParam);
-					if (selectedBlockStyle === block) {
-						handleOnUsageForMultipleBlocks(styleParam, 'add');
-					}
-				});
-				validItems
-					.filter((item) => !enabledIn.includes(item.name))
-					.forEach((item) => {
-						unregisterBlockStyle(item.name, styleParam.name);
-						if (selectedBlockStyle === item.name) {
+				if (!skipBlockStyleRegistry) {
+					deleteStyleVariationBlocks(styleParam.name, false);
+					setStyleVariationBlocks(
+						styleParam.name,
+						enabledIn,
+						'manual'
+					);
+					disabledIn.forEach((block: string) => {
+						unregisterBlockStyle(block, styleParam.name);
+						if (selectedBlockStyle === block) {
 							handleOnUsageForMultipleBlocks(
 								styleParam,
 								'delete'
 							);
 						}
 					});
+				}
 				setGlobalStyles(newGlobalStyles);
 				return;
 			}
 
-			if ('single-enable' === actionParam) {
-				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
-				if (disabledIn?.length && blockTypeParam) {
-					setTimeout(() => {
-						deleteStyleVariationBlocks(
-							styleParam.name,
-							false,
-							blockTypeParam,
-							disabledIn
-						);
-					}, 5);
+			if ('enable-all' === actionParam) {
+				if (!skipBlockStyleRegistry) {
+					setStyleVariationBlocks(
+						styleParam.name,
+						enabledIn,
+						'manual'
+					);
+					enabledIn.forEach((block: string) => {
+						registerBlockStyle(block, styleParam);
+						if (selectedBlockStyle === block) {
+							handleOnUsageForMultipleBlocks(styleParam, 'add');
+						}
+					});
+					validItems
+						.filter((item) => !enabledIn.includes(item.name))
+						.forEach((item) => {
+							unregisterBlockStyle(item.name, styleParam.name);
+							if (selectedBlockStyle === item.name) {
+								handleOnUsageForMultipleBlocks(
+									styleParam,
+									'delete'
+								);
+							}
+						});
 				}
-			} else if ('single-disable' === actionParam && blockTypeParam) {
-				deleteStyleVariationBlocks(
-					styleParam.name,
-					true,
-					blockTypeParam
-				);
-				if (enabledIn?.length) {
-					setTimeout(() => {
-						setStyleVariationBlocks(
-							styleParam.name,
-							enabledIn,
-							'manual'
-						);
-					}, 5);
-				}
+				setGlobalStyles(newGlobalStyles);
+				return;
 			}
 
-			enabledIn.forEach((block: string) => {
-				if (selectedBlockStyle === block) {
-					handleOnUsageForMultipleBlocks(styleParam, 'add');
+			if (!skipBlockStyleRegistry) {
+				if ('single-enable' === actionParam) {
+					setStyleVariationBlocks(
+						styleParam.name,
+						enabledIn,
+						'manual'
+					);
+					if (disabledIn?.length && blockTypeParam) {
+						setTimeout(() => {
+							deleteStyleVariationBlocks(
+								styleParam.name,
+								false,
+								blockTypeParam,
+								disabledIn
+							);
+						}, 5);
+					}
+				} else if ('single-disable' === actionParam && blockTypeParam) {
+					deleteStyleVariationBlocks(
+						styleParam.name,
+						true,
+						blockTypeParam
+					);
+					if (enabledIn?.length) {
+						setTimeout(() => {
+							setStyleVariationBlocks(
+								styleParam.name,
+								enabledIn,
+								'manual'
+							);
+						}, 5);
+					}
 				}
-				registerBlockStyle(block, styleParam);
-			});
 
-			disabledIn.forEach((block: string) => {
-				if (selectedBlockStyle === block) {
-					handleOnUsageForMultipleBlocks(styleParam, 'delete');
-				}
-				unregisterBlockStyle(block, styleParam.name);
-			});
+				enabledIn.forEach((block: string) => {
+					if (selectedBlockStyle === block) {
+						handleOnUsageForMultipleBlocks(styleParam, 'add');
+					}
+					registerBlockStyle(block, styleParam);
+				});
+
+				disabledIn.forEach((block: string) => {
+					if (selectedBlockStyle === block) {
+						handleOnUsageForMultipleBlocks(styleParam, 'delete');
+					}
+					unregisterBlockStyle(block, styleParam.name);
+				});
+			}
 
 			setGlobalStyles(newGlobalStyles);
 		},
@@ -418,6 +456,7 @@ export const useBlockStyleItem = ({
 			setStyleVariationBlocks,
 			deleteStyleVariationBlocks,
 			handleOnUsageForMultipleBlocks,
+			skipBlockStyleRegistry,
 		]
 	);
 
@@ -428,12 +467,17 @@ export const useBlockStyleItem = ({
 			customValues?: { label: string, name: string }
 		) => {
 			const newCounter = counter + 1;
-			counterMap[blockName] = newCounter;
+			setBlockDynamicStylesCount(
+				counterMap,
+				blockName,
+				variationSurface,
+				newCounter
+			);
 			setCounter(newCounter);
 
 			const duplicateStyle = customValues
 				? {
-						name: kebabCase(customValues.name),
+						name: sanitizeStyleVariationId(customValues.name),
 						label: customValues.label,
 						icon: {
 							name: 'blockera',
@@ -446,31 +490,35 @@ export const useBlockStyleItem = ({
 						currentStyle,
 						action: 'duplicate',
 					});
-
-			const blockTypesToRegister = getBlockTypesForStyleFromStore(
-				blockName,
-				duplicateStyle.name
-			);
-
-			registerStyleForBlockTypes(blockTypesToRegister, duplicateStyle);
-			setStyleVariationBlocksInStore(
-				duplicateStyle.name,
-				blockTypesToRegister
-			);
+			const blockTypesToRegister = isRootStyle(currentStyle)
+				? [blockName]
+				: getBlockTypesForStyleFromStore(blockName, currentStyle.name);
+			if (!skipBlockStyleRegistry) {
+				registerStyleForBlockTypes(
+					blockTypesToRegister,
+					duplicateStyle
+				);
+				setStyleVariationBlocksInStore(
+					duplicateStyle.name,
+					blockTypesToRegister
+				);
+			}
 
 			setCurrentBlockStyleVariation(duplicateStyle);
 			setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 
-			const normalizedStyle = getMergedNormalizedStyleFromSources(
-				base,
-				globalStyles,
-				blockName,
-				currentStyle,
-				styles,
-				defaultStyles,
-				getNormalizedStyle
+			const normalizedStyle = sanitizeGlobalStylesNode(
+				getMergedNormalizedStyleFromSources(
+					base,
+					globalStyles,
+					blockName,
+					currentStyle,
+					styles,
+					defaultStyles,
+					getNormalizedStyle
+				)
 			);
 
 			const blocksUpdate = buildBlocksUpdateForStyle(
@@ -478,17 +526,14 @@ export const useBlockStyleItem = ({
 				duplicateStyle.name,
 				normalizedStyle
 			);
-
 			const metaDataUpdate = buildDuplicateStyleMetaDataUpdate(
 				blockName,
 				duplicateStyle,
 				blockTypesToRegister
 			);
-
 			mergeBlockeraGlobalStylesMetaData(metaDataUpdate);
 
 			const blockeraMetaData = getBlockeraGlobalStylesMetaData();
-
 			setGlobalStyles(
 				mergeObject(globalStyles, {
 					blockeraMetaData,
@@ -501,23 +546,6 @@ export const useBlockStyleItem = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[styles, blockStyles]
 	);
-
-	/** @see ./handleOnClearAllCustomizations.md for Cursor IDE instructions */
-	const handleOnClearAllCustomizations = (currentStyle: Object) => {
-		const newGlobalStyles = removeStyleVariationFromGlobalStyles(
-			globalStyles,
-			blockName,
-			currentStyle
-		);
-
-		setGlobalStyles(newGlobalStyles);
-		setGlobalBlockStyles(
-			blockName,
-			currentBlockStyleVariation?.name || 'default',
-			{}
-		);
-		setIsOpenContextMenu(false);
-	};
 
 	/** @see ./handleOnEnable.md for Cursor IDE instructions */
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
@@ -614,7 +642,9 @@ export const useBlockStyleItem = ({
 
 		setBlockStyles(newBlockStyles);
 
-		unregisterBlockStyle(blockName, currentStyleName);
+		if (!skipBlockStyleRegistry) {
+			unregisterBlockStyle(blockName, currentStyleName);
+		}
 
 		setStyles({
 			...styles,
@@ -630,10 +660,17 @@ export const useBlockStyleItem = ({
 				: {}),
 		});
 
-		deleteStyleVariationBlocks(currentStyleName, true, blockName);
+		if (!skipBlockStyleRegistry) {
+			deleteStyleVariationBlocks(currentStyleName, true, blockName);
+		}
 
 		const newCounter = counter - 1;
-		counterMap[blockName] = newCounter;
+		setBlockDynamicStylesCount(
+			counterMap,
+			blockName,
+			variationSurface,
+			newCounter
+		);
 		setCounter(newCounter);
 
 		setCurrentBlockStyleVariation(undefined);
@@ -662,8 +699,16 @@ export const useBlockStyleItem = ({
 	): void => {
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
+		const attributes = selectedBlock.attributes;
 
-		let styleAttributes = selectedBlock.attributes;
+		let styleAttributes = applyFilters(
+			'blockera.blockEdit.attributes',
+			mergeObject(
+				{ ...attributes },
+				prepareBlockeraDefaultAttributesValues(_defaultStyles)
+			),
+			args
+		);
 
 		const ignoredAttributes: Array<string> = [];
 
@@ -680,7 +725,7 @@ export const useBlockStyleItem = ({
 		styleAttributes = omit(styleAttributes, ignoredAttributes);
 
 		// Normalizing style attributes...
-		let currentStyleValue = getNormalizedStyle(
+		const blockeraStyleValue = getNormalizedStyle(
 			styleAttributes,
 			_defaultStyles
 		);
@@ -688,63 +733,55 @@ export const useBlockStyleItem = ({
 		// Run wp compatibility.
 		blockeraExtensionsBootstrap();
 
-		for (const key in currentStyleValue) {
-			currentStyleValue = {
-				...currentStyleValue,
-				/**
-				 * Filterable style value for wp compatibility reasons.
-				 * running just for setAttributes functionalities.
-				 */
-				...applyFilters(
-					'blockera.blockEdit.setAttributes',
-					getNormalizedStyle(styleAttributes, _defaultStyles),
-					key,
-					currentStyleValue[key]?.value || currentStyleValue[key],
-					{
-						action: 'normal',
-						reset: false,
-					},
-					getAttributes,
-					{
-						blockId: blockName,
-						clientId: selectedBlock.clientId,
-						innerBlocks: blockContextValue.additional.innerBlocks,
-						currentBlock: blockContextValue.currentBlock,
-						blockVariations: blockContextValue.blockVariations,
-						defaultAttributes: blockContextValue.defaultAttributes,
-						currentState: isInnerBlock(
-							blockContextValue.currentBlock
-						)
-							? blockContextValue.currentInnerBlockState
-							: blockContextValue.currentState,
-						currentBreakpoint: blockContextValue.currentBreakpoint,
-						activeBlockVariation:
-							blockContextValue.activeBlockVariation,
-						getActiveBlockVariation:
-							blockContextValue.getActiveBlockVariation,
-						currentInnerBlockState:
-							blockContextValue.currentInnerBlockState,
-						isNormalState: blockContextValue.isNormalState,
-						isMasterBlock: !isInnerBlock(
-							blockContextValue.currentBlock
-						),
-						isBaseBreakpoint: isBaseBreakpoint(
-							blockContextValue.currentBreakpoint
-						),
-						isMasterNormalState: isNormalStateOnBaseBreakpoint(
-							blockContextValue.currentState,
-							blockContextValue.currentBreakpoint
-						),
-						insideBlockInspector: false,
-					}
-				),
-			};
-		}
+		const setAttributesBlockDetail = {
+			blockId: blockName,
+			clientId: selectedBlock.clientId,
+			innerBlocks: blockContextValue.additional.innerBlocks,
+			currentBlock: blockContextValue.currentBlock,
+			blockVariations: blockContextValue.blockVariations,
+			defaultAttributes: blockContextValue.defaultAttributes,
+			currentState: isInnerBlock(blockContextValue.currentBlock)
+				? blockContextValue.currentInnerBlockState
+				: blockContextValue.currentState,
+			currentBreakpoint: blockContextValue.currentBreakpoint,
+			activeBlockVariation: blockContextValue.activeBlockVariation,
+			getActiveBlockVariation: blockContextValue.getActiveBlockVariation,
+			currentInnerBlockState: blockContextValue.currentInnerBlockState,
+			isNormalState: blockContextValue.isNormalState,
+			isMasterBlock: !isInnerBlock(blockContextValue.currentBlock),
+			isBaseBreakpoint: isBaseBreakpoint(
+				blockContextValue.currentBreakpoint
+			),
+			isMasterNormalState: isNormalStateOnBaseBreakpoint(
+				blockContextValue.currentState,
+				blockContextValue.currentBreakpoint
+			),
+			insideBlockInspector: false,
+			editorSelectedBlockEvent: 'save-customizations',
+		};
+
+		const currentStyleValue = mergeObject(
+			blockeraStyleValue,
+			applyBlockeraSetAttributesCompatibility({
+				blockeraKeys: blockeraStyleValue,
+				getBlockeraValueForKey: (featureId) =>
+					blockeraStyleValue[featureId]?.value ||
+					blockeraStyleValue[featureId],
+				getAttributes,
+				blockDetail: setAttributesBlockDetail,
+				controlRef: {
+					action: 'normal',
+					reset: false,
+				},
+			})
+		);
 
 		// Skip while not exists any changesets.
 		if (!Object.keys(currentStyleValue).length) {
 			return;
 		}
+
+		const sanitizedStyleValue = sanitizeGlobalStylesNode(currentStyleValue);
 
 		// Cloned globalStyles object.
 		let _globalStyles = cloneObject(globalStyles);
@@ -752,15 +789,17 @@ export const useBlockStyleItem = ({
 		if (isRootStyle(currentStyle)) {
 			_globalStyles = mergeObject(_globalStyles, {
 				blocks: {
-					[blockName]: currentStyleValue,
+					..._globalStyles?.blocks,
+					[blockName]: sanitizedStyleValue,
 				},
 			});
 		} else {
 			_globalStyles = mergeObject(_globalStyles, {
 				blocks: {
+					..._globalStyles?.blocks,
 					[blockName]: {
 						variations: {
-							[currentStyle.name]: currentStyleValue,
+							[currentStyle.name]: sanitizedStyleValue,
 						},
 					},
 				},
@@ -770,31 +809,41 @@ export const useBlockStyleItem = ({
 		setGlobalStyles(_globalStyles);
 		setGlobalBlockStyles(
 			blockName,
-			currentBlockStyleVariation?.name || 'default',
-			currentStyleValue
+			currentBlockStyleVariation?.name || currentStyle?.name || 'default',
+			sanitizedStyleValue
 		);
 
-		const defaultValue =
-			prepareBlockeraDefaultAttributesValues(_defaultStyles);
+		const defaultValue = buildSaveCustomizationsEffectiveItems({
+			blockName,
+			defaultStyles: _defaultStyles,
+			blockAttributesSchema: getBlockType(blockName)?.attributes || {},
+			getAttributes,
+			blockContextValue,
+			selectedBlock,
+		});
 
 		// Set the editor selected block event to save customizations.
 		setEditorSelectedBlockEvent('save-customizations');
 
-		handleOnChangeAttributes('className', `is-style-${currentStyle.name}`, {
-			effectiveItems: defaultValue,
-			shouldUpdateClassName: false,
-			ref: {
-				current: {
-					action: 'save-customizations',
+		const variationClassPrefix = skipBlockStyleRegistry
+			? BLOCK_SIZE_VARIATION_CLASS_PREFIX
+			: 'is-style-';
+
+		handleOnChangeAttributes(
+			'className',
+			`${variationClassPrefix}${currentStyle.name}`,
+			{
+				effectiveItems: defaultValue,
+				shouldUpdateClassName: false,
+				ref: {
+					current: {
+						action: 'save-customizations',
+					},
 				},
-			},
-		});
+			}
+		);
 
 		setCurrentActiveStyle(currentStyle, 'save-customizations');
-
-		setTimeout(async () => {
-			await saveAllDirtyEntities();
-		}, 1000);
 	};
 
 	/** @see ./handleOnDetachStyle.md for Cursor IDE instructions */
@@ -807,9 +856,20 @@ export const useBlockStyleItem = ({
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
 
+		let sourceClassName = selectedBlock?.attributes?.className || '';
+
+		if (skipBlockStyleRegistry) {
+			sourceClassName = replaceActiveSizeVariation(
+				sourceClassName,
+				currentStyle,
+				null,
+				'detach'
+			);
+		}
+
 		const className = generateUniqueClassName(
 			selectedBlock.clientId,
-			selectedBlock?.attributes?.className || ''
+			sourceClassName
 		);
 
 		const { baseValues, userValues } = getStyleValuesFromSources(
@@ -861,48 +921,5 @@ export const useBlockStyleItem = ({
 		handleOnSaveCustomizations,
 		handleOnUsageForMultipleBlocks,
 		handleOnSaveUsageForMultipleBlocks,
-		handleOnClearAllCustomizations,
 	};
-};
-
-/**
- * Save all dirty entities (global styles, current post, etc.) to persist to database.
- * Uses saveEditedEntityRecord - works in both site editor and post editor.
- * Uses savePost - works in post editor.
- * Saves in sequence, so the post is saved after all other entities are saved.
- *
- * @return {Promise<void>}
- */
-const saveAllDirtyEntities = async (): Promise<void> => {
-	// Save all dirty entities (global styles, current post, etc.) to persist to database.
-	try {
-		const { savePost } = dispatch(editorStore);
-		const { saveEditedEntityRecord } = dispatch(coreStore);
-		const dirtyRecords =
-			select(coreStore).__experimentalGetDirtyEntityRecords?.() || [];
-
-		const entitiesToSave = dirtyRecords.filter(
-			(record) => !(record.kind === 'root' && record.name === 'site')
-		);
-
-		if (entitiesToSave.length > 0) {
-			await Promise.all(
-				entitiesToSave.map((record, index): Promise<void> => {
-					let promiseResponse = saveEditedEntityRecord(
-						record.kind,
-						record.name,
-						record.key
-					);
-
-					if (index === entitiesToSave.length - 1) {
-						promiseResponse = savePost();
-					}
-
-					return promiseResponse;
-				})
-			);
-		}
-	} catch {
-		// Error saving - WordPress will show error notification
-	}
 };

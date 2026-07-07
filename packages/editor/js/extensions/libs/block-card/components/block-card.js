@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __, isRTL } from '@wordpress/i18n';
+import { __, isRTL, sprintf } from '@wordpress/i18n';
 import {
 	store as blockEditorStore,
 	useBlockDisplayInformation,
@@ -18,6 +18,7 @@ import { getBlockType } from '@wordpress/blocks';
  * Blockera dependencies
  */
 import {
+	classNames,
 	extensionClassNames,
 	extensionInnerClassNames,
 } from '@blockera/classnames';
@@ -33,9 +34,29 @@ import { EditableBlockName } from './editable-block-name';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
-import { BlockStyleVariations } from '../../../../editor/global-styles/panel/ui';
+import {
+	BlockStyleVariations,
+	BlockSizeVariations,
+} from '../../../../editor/global-styles/panel/ui';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../../../../editor/global-styles/panel/variation-surfaces';
+import { useBlockVariationSupport } from '../../../../editor/global-styles/panel/use-block-variation-support';
+import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
+import { isEphemeralDefaultSizeVariation } from '../../../../editor/global-styles/panel/size-variations';
+import { STORE_NAME } from '../../../../store/constants';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
 import { BlockCardSettings } from './block-card-settings';
+import { BlockCardVariationView } from './block-card-variation-view';
+import type { TStyleVariationBlockCardLabels } from '../types';
+import type { UpdateBlockEditorSettings } from '../../types';
+import { getParentListViewBlock } from '../helpers/parent-list-view-nav';
+
+const closeVariationPicker = (pickerProps: Object): void => {
+	pickerProps.setIsOpen(false);
+	pickerProps.setCurrentPreviewStyle(null);
+};
 
 export function BlockCard({
 	notice,
@@ -59,8 +80,14 @@ export function BlockCard({
 	currentInnerBlockState,
 	handleOnChangeAttributes,
 	blockStyleVariationsProps,
+	blockSizeVariationsProps = {},
 	currentBlockStyleVariation,
 	activeBlockVariation = '',
+	editorClientId,
+	handleOnClick,
+	setCurrentBlockStyleVariation,
+	variationBlockCardSlotName,
+	variationBlockCardLabels,
 }: {
 	isActive: boolean,
 	setActive: (isActive: boolean) => void,
@@ -94,7 +121,50 @@ export function BlockCard({
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 	activeBlockVariation: string,
 	blockStyleVariationsProps: Object,
+	blockSizeVariationsProps?: Object,
+	editorClientId?: string,
+	handleOnClick?: UpdateBlockEditorSettings,
+	setCurrentBlockStyleVariation?: (style: {
+		name: string,
+		label: string,
+		isDefault?: boolean,
+	}) => void,
+	variationBlockCardSlotName?: string,
+	variationBlockCardLabels?: TStyleVariationBlockCardLabels,
 }): MixedElement {
+	const {
+		variationSurface: panelVariationSurface = VARIATION_SURFACE_STYLE,
+	} = useGlobalStylesPanelContext();
+	const { hasStyleVariations, hasSizeVariations } =
+		useBlockVariationSupport(blockName);
+
+	const { selectedStyleSurfaceVariation, selectedSizeSurfaceVariation } =
+		useSelect((select) => {
+			const editorStore = select(STORE_NAME);
+
+			return {
+				selectedStyleSurfaceVariation:
+					editorStore.getSelectedBlockStyleVariation(),
+				selectedSizeSurfaceVariation:
+					editorStore.getSelectedBlockSizeVariation?.(),
+			};
+		}, []);
+
+	const isStyleSurfaceVariationActive =
+		Boolean(selectedStyleSurfaceVariation?.name) ||
+		selectedStyleSurfaceVariation?.isDefault === true;
+
+	const isSizeSurfaceVariationActive =
+		Boolean(selectedSizeSurfaceVariation?.name) ||
+		(hasSizeVariations &&
+			isEphemeralDefaultSizeVariation(selectedSizeSurfaceVariation));
+
+	const isOppositeSurfaceVariationActive =
+		!insideBlockInspector &&
+		(panelVariationSurface === VARIATION_SURFACE_STYLE
+			? isSizeSurfaceVariationActive
+			: isStyleSurfaceVariationActive);
+
 	const {
 		icon: blockIcon,
 		title: blockTitle,
@@ -127,7 +197,8 @@ export function BlockCard({
 		// Check if inner block or style variation is selected
 		const isSelected =
 			currentInnerBlock !== null ||
-			Boolean(currentBlockStyleVariation?.name);
+			Boolean(currentBlockStyleVariation?.name) ||
+			isEphemeralDefaultSizeVariation(currentBlockStyleVariation);
 
 		if (isSelected) {
 			// Add delay class instantly
@@ -144,20 +215,25 @@ export function BlockCard({
 		setHasSelectionDelay(false);
 	}, [currentInnerBlock, currentBlockStyleVariation]);
 
-	const { parentNavBlockClientId } = useSelect((select) => {
-		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
-			select(blockEditorStore);
+	const parentListViewBlock = useSelect(
+		(select) => {
+			const {
+				getBlockParents,
+				getBlockName,
+				getBlockOrder,
+				getBlockListSettings,
+			} = select(blockEditorStore);
 
-		const _selectedBlockClientId = getSelectedBlockClientId();
-
-		return {
-			parentNavBlockClientId: getBlockParentsByBlockName(
-				_selectedBlockClientId,
-				'core/navigation',
-				true
-			)[0],
-		};
-	}, []);
+			return getParentListViewBlock(
+				clientId,
+				getBlockParents,
+				getBlockName,
+				getBlockOrder,
+				getBlockListSettings
+			);
+		},
+		[clientId]
+	);
 
 	const { selectBlock } = useDispatch(blockEditorStore);
 
@@ -174,182 +250,395 @@ export function BlockCard({
 		}
 	};
 
+	const hasExclusiveInspectorVariationPickers =
+		hasStyleVariations && hasSizeVariations;
+
+	const blockInspectorVariationUI = (
+		<>
+			<div
+				data-style-variations-anchor
+				className={extensionInnerClassNames(
+					'block-card__variations-picker-anchor'
+				)}
+			>
+				{isActive && hasStyleVariations && (
+					<BlockStyleVariations
+						{...blockStyleVariationsProps}
+						variationUiSurface={VARIATION_SURFACE_STYLE}
+						clientId={clientId}
+						blockName={blockName}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						context={'inspector-controls'}
+						currentBreakpoint={currentBreakpoint}
+						closeSiblingPicker={
+							hasExclusiveInspectorVariationPickers
+								? () =>
+										closeVariationPicker(
+											blockSizeVariationsProps
+										)
+								: undefined
+						}
+					/>
+				)}
+				{isActive && hasSizeVariations && (
+					<BlockSizeVariations
+						{...blockSizeVariationsProps}
+						clientId={clientId}
+						blockName={blockName}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						context={'inspector-controls'}
+						currentBreakpoint={currentBreakpoint}
+						closeSiblingPicker={
+							hasExclusiveInspectorVariationPickers
+								? () =>
+										closeVariationPicker(
+											blockStyleVariationsProps
+										)
+								: undefined
+						}
+					/>
+				)}
+			</div>
+			<BlockVariationTransforms blockClientId={clientId} />
+		</>
+	);
+
+	const globalStylesPanelVariationUI = (() => {
+		if (panelVariationSurface === VARIATION_SURFACE_SIZE) {
+			if (!hasSizeVariations) {
+				return null;
+			}
+
+			return (
+				<BlockSizeVariations
+					{...blockSizeVariationsProps}
+					clientId={clientId}
+					blockName={blockName}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					context={'global-styles-panel'}
+					currentBreakpoint={currentBreakpoint}
+				/>
+			);
+		}
+
+		if (!hasStyleVariations) {
+			return null;
+		}
+
+		return (
+			<BlockStyleVariations
+				{...blockStyleVariationsProps}
+				variationUiSurface={VARIATION_SURFACE_STYLE}
+				clientId={clientId}
+				blockName={blockName}
+				currentBlock={currentBlock}
+				currentState={currentState}
+				context={'global-styles-panel'}
+				currentBreakpoint={currentBreakpoint}
+			/>
+		);
+	})();
+
+	const variationActionsUI = insideBlockInspector
+		? blockInspectorVariationUI
+		: globalStylesPanelVariationUI;
+
+	const showSizeVariationActions =
+		hasSizeVariations &&
+		insideBlockInspector &&
+		Array.isArray(blockSizeVariationsProps?.stylesToRender) &&
+		blockSizeVariationsProps.stylesToRender.length > 0;
+
+	const isStyleVariationSelected =
+		Boolean(currentBlockStyleVariation?.name) ||
+		(hasSizeVariations &&
+			isEphemeralDefaultSizeVariation(currentBlockStyleVariation));
+	const showStyleVariationBlockCard =
+		!insideBlockInspector && isStyleVariationSelected;
+
+	const canRenderVariationBlockCard =
+		showStyleVariationBlockCard &&
+		Boolean(currentBlockStyleVariation) &&
+		Boolean(setCurrentBlockStyleVariation) &&
+		Boolean(handleOnClick) &&
+		Boolean(variationBlockCardSlotName);
+
+	const showVariationPickerUi =
+		!showStyleVariationBlockCard && !isOppositeSurfaceVariationActive;
+
+	const isGlobalStylesVariationIdentityActive =
+		!insideBlockInspector && showStyleVariationBlockCard;
+
+	const showMasterBlockHeader =
+		insideBlockInspector ||
+		isGlobalStylesVariationIdentityActive ||
+		(panelVariationSurface === VARIATION_SURFACE_STYLE &&
+			!isOppositeSurfaceVariationActive);
+
+	const showBlockCardSettings =
+		insideBlockInspector ||
+		isGlobalStylesVariationIdentityActive ||
+		(panelVariationSurface === VARIATION_SURFACE_STYLE &&
+			!isOppositeSurfaceVariationActive &&
+			!showStyleVariationBlockCard);
+
+	const showMasterBlockCard =
+		insideBlockInspector || showMasterBlockHeader || showVariationPickerUi;
+
 	return (
 		<>
 			{notice}
-			<div
-				className={extensionClassNames('block-card', {
-					'master-block-card': true,
-					'outside-block-inspector': !insideBlockInspector,
-					'inner-block-is-selected': currentInnerBlock !== null,
-					'style-variation-is-selected': Boolean(
-						currentBlockStyleVariation?.name
-					),
-					'is-selected-delay': hasSelectionDelay,
-				})}
-				data-test={'blockera-block-card'}
-			>
-				<div className={extensionInnerClassNames('block-card__inner')}>
-					{parentNavBlockClientId && ( // This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
-						<Button
-							onClick={() => selectBlock(parentNavBlockClientId)}
-							label={__(
-								'Go to parent Navigation block',
-								'blockera'
-							)}
-							style={{ minWidth: 24, padding: 0, height: 24 }}
-							icon={
-								<Icon
-									library="wp"
-									icon={
-										isRTL()
-											? 'chevron-right'
-											: 'chevron-left'
-									}
-									size={16}
-								/>
-							}
-							size="small"
-							className="no-border"
-							data-test="back-to-parent-navigation"
-						/>
-					)}
-
-					<BlockIcon icon={blockInformation?.icon || blockIcon} />
-
-					<div
-						className={extensionInnerClassNames(
-							'block-card__content'
-						)}
-					>
-						<h2
+			{showMasterBlockCard && (
+				<div
+					className={extensionClassNames('block-card', {
+						'master-block-card': true,
+						'outside-block-inspector': !insideBlockInspector,
+						'inner-block-is-selected': currentInnerBlock !== null,
+						'style-variation-is-selected': isStyleVariationSelected,
+						'is-selected-delay': hasSelectionDelay,
+					})}
+					data-test={'blockera-block-card'}
+				>
+					{showMasterBlockHeader && (
+						<div
 							className={extensionInnerClassNames(
-								'block-card__title'
+								'block-card__inner'
 							)}
 						>
-							<Flex
-								justifyContent="center"
-								alignItems="center"
-								className={extensionInnerClassNames(
-									'block-card__title__input',
-									{
-										'inside-block-inspector':
-											insideBlockInspector,
-										'is-edited': name && name !== title,
+							{parentListViewBlock?.clientId && (
+								<Button
+									onClick={() =>
+										selectBlock(
+											parentListViewBlock.clientId
+										)
 									}
-								)}
-							>
-								<EditableBlockName
-									content={name}
-									placeholder={title}
-									onChange={handleTitleChange}
-									contentEditable={insideBlockInspector}
-								/>
-							</Flex>
-
-							{insideBlockInspector && (
-								<Breadcrumb
-									clientId={clientId}
-									blockName={blockName}
-									blockeraUnsavedData={
-										currentStateAttributes?.blockeraUnsavedData
+									label={
+										parentListViewBlock.blockName
+											? sprintf(
+													/* translators: %s: The name of the parent block. */
+													__(
+														'Go to "%s" block',
+														'blockera'
+													),
+													getBlockType(
+														parentListViewBlock.blockName
+													)?.title
+												)
+											: __(
+													'Go to parent block',
+													'blockera'
+												)
 									}
-									availableStates={availableStates}
+									style={{
+										minWidth: 24,
+										padding: 0,
+										height: 24,
+									}}
+									icon={
+										<Icon
+											library="wp"
+											icon={
+												isRTL()
+													? 'chevron-right'
+													: 'chevron-left'
+											}
+											size={16}
+										/>
+									}
+									size="small"
+									className="no-border"
+									data-test="back-to-parent-navigation"
 								/>
 							)}
-						</h2>
 
-						{(blockInformation?.description ||
-							blockDescription) && (
-							<span
+							<BlockIcon
+								icon={blockInformation?.icon || blockIcon}
+							/>
+
+							<div
 								className={extensionInnerClassNames(
-									'block-card__description'
+									'block-card__content'
 								)}
 							>
-								{blockInformation?.description ||
-									blockDescription}
-							</span>
-						)}
-					</div>
-				</div>
+								<h2
+									className={extensionInnerClassNames(
+										'block-card__title'
+									)}
+								>
+									<Flex
+										justifyContent="center"
+										alignItems="center"
+										className={extensionInnerClassNames(
+											'block-card__title__input',
+											{
+												'inside-block-inspector':
+													insideBlockInspector,
+												'is-edited':
+													name && name !== title,
+											}
+										)}
+									>
+										<EditableBlockName
+											content={name}
+											placeholder={title}
+											onChange={handleTitleChange}
+											contentEditable={
+												insideBlockInspector
+											}
+										/>
+									</Flex>
 
-				<Flex
-					gap={10}
-					direction="column"
-					style={{
-						margin: insideBlockInspector ? '0 -3px' : '0',
-					}}
-				>
-					<div
-						className={extensionInnerClassNames(
-							'block-card__actions',
-							{
-								'no-flex': !insideBlockInspector,
-							}
-						)}
-					>
-						<BlockStyleVariations
-							{...blockStyleVariationsProps}
-							clientId={clientId}
-							blockName={blockName}
-							currentBlock={currentBlock}
-							currentState={currentState}
-							context={
-								insideBlockInspector
-									? 'inspector-controls'
-									: 'global-styles-panel'
-							}
-							currentBreakpoint={currentBreakpoint}
-						/>
+									{insideBlockInspector && (
+										<Breadcrumb
+											clientId={clientId}
+											blockName={blockName}
+											blockeraUnsavedData={
+												currentStateAttributes?.blockeraUnsavedData
+											}
+											availableStates={availableStates}
+										/>
+									)}
+								</h2>
 
-						{insideBlockInspector && (
-							<BlockVariationTransforms
-								blockClientId={clientId}
-							/>
-						)}
-					</div>
-
-					<Slot name={'blockera-block-card-children'} />
-
-					<BlockCardSettings
-						blockName={blockName}
-						activeBlockVariation={activeBlockVariation}
-						isActive={isActive}
-						setActive={setActive}
-						actionsMenu={insideBlockInspector}
-						poweredBy={true}
-					/>
-
-					{children}
-
-					{isActive && insideBlockInspector && (
-						<BlockCompositePreview
-							block={{
-								clientId,
-								supports,
-								blockName,
-								setAttributes,
-								currentBlockStyleVariation,
-							}}
-							setCurrentTab={setCurrentTab}
-							blockConfig={additional}
-							onChange={handleOnChangeAttributes}
-							currentBlock={'master'}
-							currentState={currentState}
-							currentBreakpoint={currentBreakpoint}
-							currentInnerBlockState={currentInnerBlockState}
-							blockStatesProps={{
-								attributes: currentStateAttributes,
-							}}
-							availableStates={availableStates}
-							innerBlocksProps={{
-								values: currentStateAttributes.blockeraInnerBlocks,
-								innerBlocks: blockeraInnerBlocks,
-							}}
-						/>
+								{(blockInformation?.description ||
+									blockDescription) &&
+									!showStyleVariationBlockCard && (
+										<span
+											className={extensionInnerClassNames(
+												'block-card__description'
+											)}
+										>
+											{blockInformation?.description ||
+												blockDescription}
+										</span>
+									)}
+							</div>
+						</div>
 					)}
-				</Flex>
-			</div>
+
+					{isGlobalStylesVariationIdentityActive ? (
+						showBlockCardSettings && (
+							<BlockCardSettings
+								blockName={blockName}
+								activeBlockVariation={activeBlockVariation}
+								isActive={isActive}
+								setActive={setActive}
+								actionsMenu={insideBlockInspector}
+								poweredBy={true}
+							/>
+						)
+					) : (
+						<Flex
+							gap={10}
+							direction="column"
+							style={{
+								margin: insideBlockInspector ? '0 -3px' : '0',
+							}}
+						>
+							<Flex
+								className={classNames(
+									extensionInnerClassNames(
+										'block-card__actions',
+										{
+											'no-flex': !insideBlockInspector,
+										}
+									),
+									showSizeVariationActions &&
+										'justify-content-flex-start'
+								)}
+							>
+								{showVariationPickerUi && variationActionsUI}
+							</Flex>
+
+							<Slot name={'blockera-block-card-children'} />
+
+							{showBlockCardSettings && (
+								<BlockCardSettings
+									blockName={blockName}
+									activeBlockVariation={activeBlockVariation}
+									isActive={isActive}
+									setActive={setActive}
+									actionsMenu={insideBlockInspector}
+									poweredBy={true}
+								/>
+							)}
+
+							{children}
+
+							{isActive && insideBlockInspector && (
+								<BlockCompositePreview
+									block={{
+										clientId,
+										supports,
+										blockName,
+										setAttributes,
+										currentBlockStyleVariation,
+									}}
+									setCurrentTab={setCurrentTab}
+									blockConfig={additional}
+									onChange={handleOnChangeAttributes}
+									currentBlock={'master'}
+									currentState={currentState}
+									currentBreakpoint={currentBreakpoint}
+									currentInnerBlockState={
+										currentInnerBlockState
+									}
+									blockStatesProps={{
+										attributes: currentStateAttributes,
+									}}
+									availableStates={availableStates}
+									innerBlocksProps={{
+										values: currentStateAttributes.blockeraInnerBlocks,
+										innerBlocks: blockeraInnerBlocks,
+									}}
+								/>
+							)}
+						</Flex>
+					)}
+				</div>
+			)}
+
+			{canRenderVariationBlockCard &&
+				currentBlockStyleVariation &&
+				setCurrentBlockStyleVariation &&
+				handleOnClick &&
+				variationBlockCardSlotName && (
+					<BlockCardVariationView
+						clientId={editorClientId || clientId}
+						isActive={isActive}
+						blockName={blockName}
+						labels={variationBlockCardLabels}
+						slotName={variationBlockCardSlotName}
+						variationsProps={
+							panelVariationSurface === VARIATION_SURFACE_SIZE
+								? blockSizeVariationsProps
+								: blockStyleVariationsProps
+						}
+						supports={supports}
+						currentStateAttributes={currentStateAttributes}
+						additional={additional}
+						availableStates={availableStates}
+						currentInnerBlock={currentInnerBlock}
+						blockeraInnerBlocks={blockeraInnerBlocks}
+						currentBlockStyleVariation={currentBlockStyleVariation}
+						setCurrentBlockStyleVariation={
+							setCurrentBlockStyleVariation
+						}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						currentBreakpoint={currentBreakpoint}
+						currentInnerBlockState={currentInnerBlockState}
+						insideBlockInspector={insideBlockInspector}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						setAttributes={setAttributes}
+						handleOnClick={handleOnClick}
+					>
+						{children}
+					</BlockCardVariationView>
+				)}
 		</>
 	);
 }

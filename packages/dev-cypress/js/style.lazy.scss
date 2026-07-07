@@ -1,0 +1,45 @@
+// Minimal inspector playground shell for cy.withInspector / cy.withDataProvider.
+// Pre-built CSS (WP components, block-editor, controls) is imported from component.js.
+.playground__sidebar {
+	position: relative;
+	width: 280px;
+	min-height: 500px;
+	border-left: 1px solid #dddddd;
+	height: auto;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.playground__sidebar-standalone {
+	border-right: 1px solid #dddddd;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+.block-editor-block-inspector {
+	padding: 16px;
+}
+
+.components-tab-panel__tab-content {
+	padding: 0;
+}
+
+/**
+ * Our FilledPopover Styles for stories
+ */
+.story-heading {
+	margin: 0 0 5px !important;
+	font-size: 15px !important;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+
+	span {
+		margin-left: auto;
+		font-size: 12px;
+		font-weight: 500;
+		color: #a1a1a1;
+	}
+}

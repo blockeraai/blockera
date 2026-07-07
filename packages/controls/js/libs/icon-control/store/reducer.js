@@ -31,6 +31,11 @@ export function iconReducer(iconData, action) {
 				renderedIcon: '',
 			};
 
+		case 'SYNC_ICON':
+			return action.iconValue && typeof action.iconValue === 'object'
+				? { ...action.iconValue }
+				: iconData;
+
 		default:
 			return iconData;
 	}

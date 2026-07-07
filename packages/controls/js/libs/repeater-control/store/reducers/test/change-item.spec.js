@@ -229,4 +229,46 @@ describe('Change Repeater Item', function () {
 			},
 		});
 	});
+
+	it('should preserve isOpen when staticType renames an open repeater item', function () {
+		let state = {};
+
+		state = repeaterReducer(
+			state,
+			addControl({
+				value: {
+					'custom-class-0': {
+						type: 'custom-class',
+						order: 0,
+						isOpen: true,
+					},
+				},
+				name: 'TestRepeaterControl',
+			})
+		);
+
+		expect(
+			repeaterReducer(
+				state,
+				changeRepeaterItem({
+					value: { type: 'hover', order: 0, isSelected: true },
+					itemId: 'custom-class-0',
+					controlId: 'TestRepeaterControl',
+					staticType: 'hover',
+				})
+			)
+		).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: {
+					hover: {
+						type: 'hover',
+						order: 0,
+						isSelected: true,
+						isOpen: true,
+					},
+				},
+			},
+		});
+	});
 });

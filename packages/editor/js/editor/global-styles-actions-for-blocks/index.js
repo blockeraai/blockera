@@ -6,15 +6,24 @@
 import { type MixedElement } from 'react';
 import { useEffect } from '@wordpress/element';
 import { getBlockTypes } from '@wordpress/blocks';
-import { select, dispatch } from '@wordpress/data';
+import { select, dispatch, subscribe } from '@wordpress/data';
+
+/**
+ * Blockera dependencies
+ */
+import {
+	getDualGlobalStylesSelector,
+	getWordPressVersion,
+} from '@blockera/global-styles-ui/panel-override';
 
 /**
  * Internal dependencies
  */
+import { resetInnerExtensionCurrentBlocksForGlobalStyles } from '../../extensions/utils';
 import { getTargets } from '../header-ui/helpers';
 import { getBlockTypeSelector } from './side-bar-listener';
 import { sharedListenerCallback } from './listener-callback';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Global Styles Panel Activator Observer
@@ -27,64 +36,106 @@ export default function GlobalStylesActionsForBlocks({
 }: {
 	className: string,
 }): MixedElement {
-	const blockTypes = getBlockTypes();
-	const { setSelectedBlockRef, setSelectedBlockStyle } =
-		dispatch('blockera/editor');
-	const { changeExtensionCurrentBlock } = dispatch('blockera/extensions');
-
-	const { getEntity } = select('blockera/data') || {};
-	const { version } = getEntity('wp');
-	const { globalStylesPanel } = getTargets(version);
-
-	// eslint-disable-next-line react-hooks/rules-of-hooks
+	// Align extension currentBlock with WP sidebar when leaving document for global styles.
 	useEffect(() => {
-		new IntersectionObserverRenderer(globalStylesPanel.screen, null, {
-			callback: () => {
-				// Safety guard: ensure button exists before adding listener
-				const globalStylesButton = document.querySelector(
-					'button[aria-controls="edit-site:global-styles"]'
-				);
-				const postDocumentButton = document.querySelector(
-					'button[aria-controls="edit-post:document"]'
-				);
+		const GLOBAL_STYLES_AREA = 'edit-site/global-styles';
+		let previousArea =
+			select('core/interface')?.getActiveComplementaryArea?.('core') ??
+			null;
 
-				if (globalStylesButton) {
-					globalStylesButton.addEventListener('click', () => {
-						setSelectedBlockStyle('');
-						setSelectedBlockRef(undefined);
-					});
-				}
+		const unsubscribe = subscribe(() => {
+			const activeArea =
+				select('core/interface')?.getActiveComplementaryArea?.(
+					'core'
+				) ?? null;
 
-				if (postDocumentButton) {
-					postDocumentButton.addEventListener('click', () => {
-						changeExtensionCurrentBlock('master');
-					});
-				}
+			if (
+				activeArea === GLOBAL_STYLES_AREA &&
+				previousArea !== GLOBAL_STYLES_AREA
+			) {
+				resetInnerExtensionCurrentBlocksForGlobalStyles();
+			}
 
-				// Set up listeners for each block type
-				blockTypes.forEach((blockType) => {
-					// Safety guard: ensure blockType exists
-					if (!blockType) {
-						return;
-					}
+			previousArea = activeArea;
+		});
 
-					// Set up click listener for block element
-					const blockElement = document.querySelector(
-						getBlockTypeSelector(blockType.name)
+		return unsubscribe;
+	}, []);
+
+	useEffect(() => {
+		const blockTypes = getBlockTypes();
+		const { globalStylesPanel } = getTargets(getWordPressVersion());
+		const { setSelectedBlockRef, setSelectedBlockStyle } =
+			dispatch('blockera/editor') || {};
+		const { changeExtensionCurrentBlock } =
+			dispatch('blockera/extensions') || {};
+
+		const observer = new IntersectionObserverRenderer(
+			globalStylesPanel.screen,
+			null,
+			{
+				callback: () => {
+					const globalStylesButton = document.querySelector(
+						getDualGlobalStylesSelector('globalStylesSidebarButton')
+					);
+					const postDocumentButton = document.querySelector(
+						'button[aria-controls="edit-post:document"]'
 					);
 
-					if (blockElement) {
-						blockElement.addEventListener('click', () => {
-							document.body?.classList?.add(className);
-							document.body?.setAttribute('data-test', className);
-							sharedListenerCallback(blockType.name);
-						});
+					if (globalStylesButton) {
+						globalStylesButton.addEventListener(
+							'click',
+							() => {
+								setSelectedBlockStyle?.('');
+								setSelectedBlockRef?.(undefined);
+								resetInnerExtensionCurrentBlocksForGlobalStyles();
+							},
+							{ once: true }
+						);
 					}
-				});
-			},
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+
+					if (postDocumentButton) {
+						postDocumentButton.addEventListener(
+							'click',
+							() => {
+								changeExtensionCurrentBlock?.('master');
+							},
+							{ once: true }
+						);
+					}
+
+					blockTypes.forEach((blockType) => {
+						if (!blockType) {
+							return;
+						}
+
+						const blockElement = document.querySelector(
+							getBlockTypeSelector(blockType.name)
+						);
+
+						if (blockElement) {
+							blockElement.addEventListener(
+								'click',
+								() => {
+									document.body?.classList?.add(className);
+									document.body?.setAttribute(
+										'data-test',
+										className
+									);
+									sharedListenerCallback(blockType.name);
+								},
+								{ once: true }
+							);
+						}
+					});
+				},
+			}
+		);
+
+		return () => {
+			observer.destroy();
+		};
+	}, [className]);
 
 	return <></>;
 }

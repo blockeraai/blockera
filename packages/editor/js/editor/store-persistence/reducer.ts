@@ -26,8 +26,7 @@ export function getDefaults(): StoreState {
 		primarySidebarOpen: false,
 	};
 	const fromPhp = (window as any).blockeraEditorPersistenceDefaults as
-		| Partial<StoreState>
-		| undefined;
+		Partial<StoreState> | undefined;
 
 	if (!fromPhp) {
 		return base;
@@ -50,14 +49,12 @@ function getInitialState(): StoreState {
 
 	// Check for preloaded data synchronously
 	const preloadedData = (window as any).blockeraEditorPersistenceData as
-		| (StoreState & { _modified?: string })
-		| undefined;
+		(StoreState & { _modified?: string }) | undefined;
 
 	// Also check localStorage as fallback (in case preloaded data is stale)
 	// Use user-specific key to avoid conflicts when multiple users share the same browser
 	const userId = (window as any).blockeraEditorPersistenceUserId as
-		| number
-		| undefined;
+		number | undefined;
 	const localStorageKey = userId
 		? `BLOCKERA_EDITOR_PERSISTENCE_RESTORE_${userId}`
 		: 'BLOCKERA_EDITOR_PERSISTENCE_RESTORE';

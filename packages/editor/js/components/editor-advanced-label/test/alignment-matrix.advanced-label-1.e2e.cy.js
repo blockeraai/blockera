@@ -12,7 +12,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		// Set display
 		cy.getByAriaLabel('Add New Background').click();

@@ -11,7 +11,7 @@ describe('Font Size → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 	});
 
 	it('Simple value font size', () => {
@@ -64,7 +64,7 @@ describe('Font Size → Functionality', () => {
 					name: 'Small',
 					id: 'small',
 					value: '0.875rem',
-					fluid: null,
+					fluid: false,
 					reference: {
 						type: 'theme',
 						theme: 'Twenty Twenty-Five',

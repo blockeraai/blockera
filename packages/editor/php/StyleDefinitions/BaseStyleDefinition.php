@@ -479,6 +479,19 @@ abstract class BaseStyleDefinition {
         return ! empty($allowed_inner_blocks['all']);
     }
 
+	/**
+	 * Runs {@see self::css()} with a clean declaration buffer (for global style presets → CSS custom properties).
+	 *
+	 * @param array $setting Same shape as the inner `css( array $setting )` entry point.
+	 * @return array Map of selector → CSS declarations, as returned by `css()`.
+	 */
+	public function computeCssDeclarations( array $setting ): array {
+		$this->css          = array();
+		$this->declarations = array();
+
+		return $this->css( $setting );
+	}
+
     /**
 	 * Get the css rules.
 	 *
@@ -695,6 +708,152 @@ abstract class BaseStyleDefinition {
         return $this->declarations;
     }
 
+	/**
+	 * Build one declaration value for theme.json preset CSS variables (no selectors / setCss).
+	 *
+	 * @param array  $setting         Block-shaped setting; set `_blockeraGlobalPreset` for preset repeater row rules.
+	 * @param string $declaration_key Declaration key to read (e.g. transition, transform, filter, text-shadow, border).
+	 */
+	public function getPresetCssDeclarationValue( array $setting, string $declaration_key ): string {
+		$this->declarations                  = [];
+		$this->css                           = [];
+		$setting['_blockeraDeclarationOnly'] = true;
+		$this->css( $setting );
+
+		return (string) ( $this->declarations[ $declaration_key ] ?? '' );
+	}
+
+	/**
+	 * Decode legacy JSON object strings saved in variable `settings.value` (pre-structured-array releases).
+	 *
+	 * @param mixed $raw Raw `settings.value`.
+	 * @return array<string, mixed>|null Decoded associative array or null.
+	 */
+	protected static function tryDecodeLegacyVariableJsonObject( $raw ): ?array {
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return null;
+		}
+		$trim = ltrim( $raw );
+		if ( '' === $trim || '{' !== $trim[0] ) {
+			return null;
+		}
+		$decoded = json_decode( $raw, true );
+
+		return is_array( $decoded ) ? $decoded : null;
+	}
+
+	/**
+	 * Decode value-addon variable settings for repeater-style CSS (transition, transform, filter).
+	 * Supports top-level `items` (global preset var picker), structured array in `value`, or legacy JSON string.
+	 *
+	 * @param array $settings Variable payload `settings` array.
+	 * @return array<string, mixed>|null Shape with optional `declaration` and `items`.
+	 */
+	protected static function decodeVariableRepeaterSettings( array $settings ): ?array {
+		if ( isset( $settings['items'] ) && is_array( $settings['items'] ) ) {
+			return array( 'items' => $settings['items'] );
+		}
+		$raw = $settings['value'] ?? null;
+		if ( is_array( $raw ) ) {
+			return $raw;
+		}
+		if ( is_string( $raw ) && '' !== $raw ) {
+			$decoded = static::tryDecodeLegacyVariableJsonObject( $raw );
+
+			return is_array( $decoded ) ? $decoded : null;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Sorted repeater rows from stored value (raw map or `valueType: variable` + structured payload).
+	 *
+	 * Variable branch: `settings.value` may be a structured array, legacy JSON string, or scalar; global preset variables from the
+	 * picker may use `settings.items` instead. Payload may include `declaration` or `items`. The computed
+	 * CSS string is written to
+	 * `$value['settings']['value']`, then `blockera_get_value_addon_real_value( $value )` runs for the final
+	 * `var(--token, fallback)` value. When that succeeds, `$resolved_from_variable` is set and `[]` is returned.
+	 *
+	 * @param array         $value                  Value under the style key; updated in place for variable payloads.
+	 * @param callable|null $build_declaration      `function( array $sorted_rows ): string` for `items`-based CSS.
+	 * @param string|null   $resolved_from_variable Output: final declaration string when variable path resolves.
+	 * @return array<int, mixed>
+	 */
+	protected static function getSortedRepeaterRowsFromValue( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
+		$resolved_from_variable = null;
+
+		if ( ! isset( $value['valueType'] ) ) {
+			return blockera_get_sorted_repeater( $value );
+		}
+		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings'] ) || ! is_array( $value['settings'] ) ) {
+			return [];
+		}
+
+		$decoded = static::decodeVariableRepeaterSettings( $value['settings'] );
+		if ( null === $decoded ) {
+			return [];
+		}
+
+		$raw_restore = '';
+		if ( isset( $value['settings']['value'] ) && is_string( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $value['settings']['value'] ) && is_array( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
+			$raw_restore = array( 'items' => $decoded['items'] );
+		}
+
+		$declaration_string = '';
+
+		if ( array_key_exists( 'declaration', $decoded ) && '' !== $decoded['declaration'] && null !== $decoded['declaration'] ) {
+			$resolved_decl      = blockera_get_value_addon_real_value( $decoded['declaration'] );
+			$declaration_string = is_scalar( $resolved_decl ) ? (string) $resolved_decl : '';
+		} elseif ( null !== $build_declaration ) {
+			$items = $decoded['items'] ?? [];
+			if ( ! is_array( $items ) ) {
+				return [];
+			}
+			$sorted             = blockera_get_sorted_repeater( $items );
+			$declaration_string = $build_declaration( $sorted );
+		} else {
+			$items = $decoded['items'] ?? [];
+			if ( ! is_array( $items ) ) {
+				return [];
+			}
+
+			return blockera_get_sorted_repeater( $items );
+		}
+
+		if ( '' === $declaration_string ) {
+			$items = $decoded['items'] ?? [];
+			if ( ! is_array( $items ) ) {
+				return [];
+			}
+
+			return blockera_get_sorted_repeater( $items );
+		}
+
+		$value['settings']['value'] = $declaration_string;
+		$resolved_raw               = blockera_get_value_addon_real_value( $value );
+		$final                      = is_scalar( $resolved_raw ) ? (string) $resolved_raw : '';
+
+		if ( '' !== $final ) {
+			$resolved_from_variable = $final;
+
+			return [];
+		}
+
+		// Var resolution returned empty (e.g. missing token): restore payload so callers can still expand `items` row-by-row.
+		$value['settings']['value'] = $raw_restore;
+		$items                      = $decoded['items'] ?? [];
+		if ( ! is_array( $items ) ) {
+			return [];
+		}
+
+		return blockera_get_sorted_repeater( $items );
+	}
+
     /**
      * Collect all css selectors and declarations.
      *
@@ -771,7 +930,7 @@ abstract class BaseStyleDefinition {
 
 		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
 
-			return $this->block['attrs'];
+			return $this->block['attrs'] ?? [];
 		}
 
 		$block_states = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];

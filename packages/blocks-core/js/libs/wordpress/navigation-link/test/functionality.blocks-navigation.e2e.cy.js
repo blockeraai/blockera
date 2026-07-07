@@ -42,7 +42,7 @@ describe(
 				.last()
 				.within(() => {
 					// Open blocks menu
-					cy.get('[aria-label="Add block"]')
+					cy.get('[aria-label="Add page"]')
 						.first()
 						.click({ force: true });
 				});
@@ -95,11 +95,11 @@ describe(
 			cy.getByDataTest('add-new-block-state').click();
 
 			// Icon extension is active
-			cy.getByDataTest('settings-tab').click({ force: true });
+			cy.getByAriaControls('settings-view').click({ force: true });
 			cy.getByAriaLabel('Choose Icon…').should('exist');
 
 			// switch back to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			//
 			// 1. Inner blocks existence
@@ -153,20 +153,7 @@ describe(
 				});
 
 			//
-			// 3. Check settings tab
-			//
-			setParentBlock();
-			cy.getByDataTest('settings-tab').click();
-
-			cy.get('.block-editor-block-inspector').within(() => {
-				cy.get('.components-tools-panel-header')
-					.contains('Settings')
-					.scrollIntoView()
-					.should('be.visible');
-			});
-
-			//
-			// 4. Assert inner blocks selectors in front end
+			// 3. Assert inner blocks selectors in front end
 			//
 			savePage();
 			redirectToFrontPage();

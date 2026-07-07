@@ -3,7 +3,10 @@ module.exports = {
 	rootDir: '../../../',
 	preset: '@wordpress/jest-preset-default',
 	collectCoverageFrom: ['<rootDir>/packages/**/*.js'],
-	setupFiles: ['<rootDir>/packages/dev-jest/js/setup-text-encoding.js'],
+	setupFiles: [
+		'<rootDir>/packages/dev-jest/js/setup-text-encoding.js',
+		'<rootDir>/packages/dev-jest/js/setup-jsdom-css.js',
+	],
 	setupFilesAfterEnv: [
 		require.resolve('@wordpress/jest-preset-default/scripts/setup-globals.js'),
 	],
@@ -14,7 +17,9 @@ module.exports = {
 		'/source-code-wordpress/',
 	],
 	testMatch: ['**/test/**/*.spec.js', '**/tests/**/*.spec.js'],
-	transformIgnorePatterns: ['/node_modules/(?!parsel-js|client-zip).+\\.js$'],
+	transformIgnorePatterns: [
+		'/node_modules/(?!parsel-js|client-zip|marked).+\\.js$',
+	],
 	transform: {
 		'\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
 			'<rootDir>/packages/dev-jest/js/assets-transformer.js',
@@ -29,6 +34,7 @@ module.exports = {
 		},
 	},
 	moduleNameMapper: {
+		'^@blockera/experimental-config$': '<rootDir>/experimental.config.json',
 		// Force module uuid to resolve with the CJS entry point, because Jest does not support package.json.exports. See https://github.com/uuidjs/uuid/issues/451
 		uuid: require.resolve('uuid'),
 		'\\.svg$': '<rootDir>/packages/dev-jest/js/__mocks__/svg-mock.js',

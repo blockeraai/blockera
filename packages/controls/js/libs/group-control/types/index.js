@@ -22,6 +22,11 @@ export type GroupControlProps = {
 	 */
 	toggleOpenBorder?: boolean,
 	/**
+	 * When true with accordion mode + toggleOpenBorder + open state, keeps the default neutral border
+	 * instead of the primary accent border and ring.
+	 */
+	disableAccordionOpenPrimaryBorder?: boolean,
+	/**
 	 * is group open by default or not
 	 */
 	isOpen?: boolean,
@@ -31,12 +36,12 @@ export type GroupControlProps = {
 	mode: GroupControlMode,
 	popoverProps: TPopoverProps,
 	popoverTitle?: string | MixedElement,
-	/**
-	 * Offset for popover
-	 */
-	popoverOffset?: number,
 	popoverTitleButtonsRight?: string | MixedElement,
 	popoverClassName?: string,
+	/**
+	 * When set, adds `data-variable-slug` on the header for variable-picker E2E (preset repeater rows).
+	 */
+	headerVariableSlug?: string,
 	/**
 	 * Text or component to show in group header.
 	 */
@@ -67,6 +72,12 @@ export type GroupControlProps = {
 	 * @default 'inline'
 	 */
 	actionButtonsType?: 'inline' | 'menu',
+	/**
+	 * The label for action menu button.
+	 *
+	 * @default ''
+	 */
+	actionMenuButtonLabel?: string,
 	//
 	children?: string | MixedElement,
 	//

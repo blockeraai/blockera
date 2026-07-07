@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -50,6 +51,7 @@ export function InnerBlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
+	variationSurface,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -65,6 +67,7 @@ export function InnerBlockCard({
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 	insideBlockInspector: boolean,
+	variationSurface?: string,
 	handleOnChangeAttributes: (
 		attribute: string,
 		value: any,
@@ -96,6 +99,30 @@ export function InnerBlockCard({
 
 	const blockInformation = getInnerBlockDetails();
 	const { onToggle } = useBlockSection('innerBlocksConfig');
+
+	const compositePreviewBlock = useMemo(
+		() => ({
+			clientId,
+			supports,
+			blockName,
+			setAttributes,
+			currentBlockStyleVariation: {},
+		}),
+		[clientId, supports, blockName, setAttributes]
+	);
+
+	const compositeBlockStatesProps = useMemo(
+		() => ({
+			attributes: currentStateAttributes,
+			id: `block-states-${kebabCase(currentBlock)}`,
+		}),
+		[
+			currentBlock,
+			currentStateAttributes?.blockeraBlockStates,
+			currentStateAttributes?.blockeraUnsavedData?.states,
+			currentStateAttributes?.blockeraInnerBlocks,
+		]
+	);
 
 	return (
 		<div
@@ -187,6 +214,7 @@ export function InnerBlockCard({
 					name={blockName}
 					clientId={clientId}
 					insideBlockInspector={insideBlockInspector}
+					variationSurface={variationSurface}
 					availableStates={availableStates}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData
@@ -203,13 +231,10 @@ export function InnerBlockCard({
 
 				{isActive && (
 					<BlockCompositePreview
-						block={{
-							clientId,
-							supports,
-							blockName,
-							setAttributes,
-							currentBlockStyleVariation: {},
-						}}
+						block={compositePreviewBlock}
+						insideBlockInspector={true}
+						activeColorInsideBlockInspector={insideBlockInspector}
+						variationSurface={variationSurface}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}
 						currentBlock={currentBlock}
@@ -217,10 +242,7 @@ export function InnerBlockCard({
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
 						blockConfig={additional}
-						blockStatesProps={{
-							attributes: currentStateAttributes,
-							id: `block-states-${kebabCase(currentBlock)}`,
-						}}
+						blockStatesProps={compositeBlockStatesProps}
 					/>
 				)}
 			</Flex>

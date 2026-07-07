@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useMemo } from '@wordpress/element';
+import { useState, useMemo, useRef } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -56,6 +56,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	const { activeSearchMode } = useFeatureSearch();
 	const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 		useState(false);
+	const transformSettingsButtonRef = useRef(null);
 
 	/**
 	 * Check if any transform settings feature has a value different from default
@@ -253,6 +254,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 					<BaseControl columns="columns-1" controlName="transform">
 						{isTransformSettingsVisible && (
 							<TransformSettings
+								anchor={transformSettingsButtonRef.current}
 								setIsTransformSettingsVisible={
 									setIsTransformSettingsVisible
 								}
@@ -278,6 +280,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 							}
 							injectHeaderButtonsStart={
 								<Button
+									ref={transformSettingsButtonRef}
 									showTooltip={true}
 									tooltipPosition="top"
 									label={__(

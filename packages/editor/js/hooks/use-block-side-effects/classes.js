@@ -11,6 +11,8 @@ export const classes = [
 		children: [
 			'.components-panel__body .block-editor-hooks__flex-layout-justification-controls',
 			'.components-panel__body .block-editor-hooks__flex-layout-orientation-controls',
+			'.components-panel__body .block-editor-hooks__grid-layout-columns-and-rows-controls',
+			'.components-panel__body .block-editor-hooks__grid-layout-minimum-width-control',
 		],
 		childrenCheck: 'first',
 	},
@@ -29,7 +31,9 @@ export const classes = [
 			'core/latest-posts',
 			'core/loginout',
 			'core/media-text',
+			'core/navigation',
 			'core/navigation-link',
+			'core/navigation-overlay-close',
 			'core/navigation-submenu',
 			'core/page-list',
 			'core/post-author-name',
@@ -48,7 +52,6 @@ export const classes = [
 			'core/video',
 			'core/audio',
 			'core/avatar',
-			'core/image',
 			'core/file',
 			'outermost/icon-block',
 			'core/accordion',
@@ -69,6 +72,8 @@ export const classes = [
 			'core/search',
 			'core/post-navigation-link',
 			'core/post-time-to-read',
+			'core/breadcrumbs',
+			'core/icon',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
@@ -115,15 +120,6 @@ export const classes = [
 		],
 		include: ['core/gallery'],
 	},
-	// "blockera/icon" - Hide ratio, width & height
-	{
-		parent: '.components-tools-panel-item',
-		children: [
-			'.components-tools-panel-item select',
-			'.components-tools-panel-item .components-input-control__input',
-		],
-		include: ['blockera/icon'],
-	},
 	// "core/site-logo" - Remove range control for width
 	{
 		parent: '.components-tools-panel-item',
@@ -139,7 +135,7 @@ export const classes = [
 		children: [
 			'.components-tools-panel .components-tools-panel-item input[type="number"]',
 		],
-		include: ['outermost/icon-block'],
+		include: ['outermost/icon-block', 'core/icon'],
 	},
 	// "core/search" - Remove width input control
 	{

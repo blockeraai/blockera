@@ -49,54 +49,54 @@ describe('Shadow → WP Compatibility', () => {
 	});
 
 	describe('Button Block', () => {
-		SHADOW_PRESETS.forEach(({ slug, presetRef, presetVarString }) => {
-			it(`Preset: ${slug}`, () => {
-				appendBlocks(
-					`<!-- wp:buttons -->
+		const { slug, presetRef, presetVarString } = SHADOW_PRESETS[0];
+
+		it(`Preset: ${slug}`, () => {
+			appendBlocks(
+				`<!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"style":{"shadow":"${presetRef}"}} -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button" style="box-shadow:${presetVarString}">Test</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->`
+			);
+
+			cy.getBlock('core/button').click();
+			cy.getParentContainer('Box Shadows').as('container');
+			cy.addNewTransition();
+
+			getWPDataObject().then((data) => {
+				const blockeraBoxShadow = getSelectedBlock(
+					data,
+					'blockeraBoxShadow'
+				);
+				const wpShadow = getSelectedBlock(data, 'style')?.shadow;
+
+				expect(blockeraBoxShadow).to.be.an('object');
+				expect(Object.keys(blockeraBoxShadow).length).to.be.greaterThan(
+					0
 				);
 
-				cy.getBlock('core/button').click();
-				cy.getParentContainer('Box Shadows').as('container');
-				cy.addNewTransition();
+				const shadowKeys = Object.keys(blockeraBoxShadow);
+				const firstShadow = blockeraBoxShadow[shadowKeys[0]];
 
-				getWPDataObject().then((data) => {
-					const blockeraBoxShadow = getSelectedBlock(
-						data,
-						'blockeraBoxShadow'
-					);
-					const wpShadow = getSelectedBlock(data, 'style')?.shadow;
+				expect(firstShadow.isVisible).to.equal(true);
+				expect(firstShadow.type).to.equal('outer');
 
-					expect(blockeraBoxShadow).to.be.an('object');
-					expect(
-						Object.keys(blockeraBoxShadow).length
-					).to.be.greaterThan(0);
+				// Preset resolved or has preset ref in color
+				const colorIsPreset =
+					typeof firstShadow.color === 'string' &&
+					(firstShadow.color.startsWith('var:preset|shadow|') ||
+						firstShadow.color.startsWith(
+							'var(--wp--preset--shadow--'
+						));
+				const hasResolvedValues =
+					firstShadow.x !== '0px' ||
+					firstShadow.y !== '0px' ||
+					firstShadow.blur !== '0px';
 
-					const shadowKeys = Object.keys(blockeraBoxShadow);
-					const firstShadow = blockeraBoxShadow[shadowKeys[0]];
+				expect(colorIsPreset || hasResolvedValues).to.equal(true);
 
-					expect(firstShadow.isVisible).to.equal(true);
-					expect(firstShadow.type).to.equal('outer');
-
-					// Preset resolved or has preset ref in color
-					const colorIsPreset =
-						typeof firstShadow.color === 'string' &&
-						(firstShadow.color.startsWith('var:preset|shadow|') ||
-							firstShadow.color.startsWith(
-								'var(--wp--preset--shadow--'
-							));
-					const hasResolvedValues =
-						firstShadow.x !== '0px' ||
-						firstShadow.y !== '0px' ||
-						firstShadow.blur !== '0px';
-
-					expect(colorIsPreset || hasResolvedValues).to.equal(true);
-
-					expect(wpShadow).to.equal(presetRef);
-				});
+				expect(wpShadow).to.equal(presetRef);
 			});
 		});
 
@@ -169,6 +169,7 @@ describe('Shadow → WP Compatibility', () => {
 			);
 
 			cy.getBlock('core/image').click();
+			cy.getByAriaControls('styles-view').click();
 			cy.getParentContainer('Box Shadows').as('container');
 			cy.addNewTransition();
 

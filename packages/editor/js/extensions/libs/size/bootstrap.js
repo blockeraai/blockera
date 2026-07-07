@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -35,7 +34,11 @@ import {
 	fitToWPCompatibility,
 } from './compatibility/fit';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -74,7 +77,7 @@ export const bootstrap = (): void => {
 				blockId,
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -112,27 +115,29 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraWidth':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						widthToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraHeight':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						heightToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraMinHeight':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						minHeightToWPCompatibility({
 							newValue,
@@ -140,11 +145,12 @@ export const bootstrap = (): void => {
 							blockId,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraRatio':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						ratioToWPCompatibility({
 							newValue,
@@ -152,17 +158,19 @@ export const bootstrap = (): void => {
 							blockId,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraFit':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						fitToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						})
+						}),
+						blockDetail
 					);
 			}
 

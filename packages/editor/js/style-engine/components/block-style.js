@@ -6,6 +6,11 @@
 import type { MixedElement } from 'react';
 
 /**
+ * Blockera dependencies
+ */
+import { usePreviewInjectableStyles } from '@blockera/controls';
+
+/**
  * Internal dependencies
  */
 import type { BlockStyleProps } from './types';
@@ -20,6 +25,12 @@ export const BlockStyle = ({
 	isGlobalStylesWrapper = false,
 	...props
 }: BlockStyleProps): MixedElement => {
+	const previewInjectable = usePreviewInjectableStyles();
+	const extraPreviewCss =
+		typeof previewInjectable?.extraPreviewCss === 'string'
+			? previewInjectable.extraPreviewCss.trim()
+			: '';
+
 	const {
 		currentBlock,
 		currentState,
@@ -30,34 +41,49 @@ export const BlockStyle = ({
 		clientId: props.clientId,
 	});
 
-	// We should not generate styles for no blockera blocks.
-	if (!props?.attributes?.blockeraPropsId) {
+	const hasBlockeraProps = Boolean(props?.attributes?.blockeraPropsId);
+
+	// Skip unless Blockera styles apply or inspector preview CSS is active.
+	if (!hasBlockeraProps && !extraPreviewCss) {
 		return <></>;
 	}
 
-	const config = getExtensionConfig(props.blockName, currentBlock);
+	const config = hasBlockeraProps
+		? getExtensionConfig(props.blockName, currentBlock)
+		: null;
 	const shouldPrintCustomCss =
-		typeof customCss === 'string' && customCss.trim().length > 0;
+		hasBlockeraProps &&
+		typeof customCss === 'string' &&
+		customCss.trim().length > 0;
 
 	return (
 		<>
-			{shouldPrintCustomCss ? (
-				<style id={props.clientId}>{customCss}</style>
-			) : (
-				<></>
-			)}
-			<StateStyle
-				{...{
-					...props,
-					config,
-					currentState,
-					currentBlock,
-					currentBreakpoint,
-					isGlobalStylesWrapper,
-					currentInnerBlockState,
-					styleEngineConfig: props.supports?.blockeraStyleEngine,
-				}}
-			/>
+			{extraPreviewCss ? (
+				<style
+					id={`blockera-preview-inject-${props.clientId}`}
+					data-blockera-preview-inject="1"
+				>
+					{extraPreviewCss}
+				</style>
+			) : null}
+			{hasBlockeraProps && config ? (
+				<>
+					{shouldPrintCustomCss ? <style>{customCss}</style> : <></>}
+					<StateStyle
+						{...{
+							...props,
+							config,
+							currentState,
+							currentBlock,
+							currentBreakpoint,
+							isGlobalStylesWrapper,
+							currentInnerBlockState,
+							styleEngineConfig:
+								props.supports?.blockeraStyleEngine,
+						}}
+					/>
+				</>
+			) : null}
 		</>
 	);
 };

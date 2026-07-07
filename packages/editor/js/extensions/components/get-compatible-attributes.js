@@ -21,6 +21,57 @@ import {
 } from '../libs';
 import { prepareBlockeraDefaultAttributesValues } from './utils';
 
+/**
+ * Run `blockera.blockEdit.setAttributes` for each Blockera feature and accumulate
+ * WordPress compatibility output with deep merge.
+ *
+ * Multiple controls often map into the same nested WordPress object (e.g.
+ * `blockeraBorder` → `border.width` and `blockeraBorderRadius` → `border.radius`).
+ * Shallow spread or a fresh `nextState` per key drops earlier siblings — only the
+ * last processed control survives.
+ *
+ * @param {Object} params
+ * @return {Object} Accumulated WordPress compatibility attributes.
+ */
+export const applyBlockeraSetAttributesCompatibility = ({
+	blockeraKeys,
+	getBlockeraValueForKey,
+	getAttributes,
+	blockDetail,
+	controlRef = { action: 'normal', reset: false },
+}: {
+	blockeraKeys: Array<string> | Object,
+	getBlockeraValueForKey: (featureId: string) => any,
+	getAttributes: () => Object,
+	blockDetail: Object,
+	controlRef?: Object,
+}): Object => {
+	let wordpressCompatibilityAttributes = {};
+	const keys = Array.isArray(blockeraKeys)
+		? blockeraKeys
+		: Object.keys(blockeraKeys);
+
+	for (let index = 0; index < keys.length; index++) {
+		const featureId = keys[index];
+
+		if (!featureId.startsWith('blockera')) {
+			continue;
+		}
+
+		wordpressCompatibilityAttributes = applyFilters(
+			'blockera.blockEdit.setAttributes',
+			wordpressCompatibilityAttributes,
+			featureId,
+			getBlockeraValueForKey(featureId),
+			controlRef,
+			getAttributes,
+			blockDetail
+		);
+	}
+
+	return wordpressCompatibilityAttributes;
+};
+
 export const getCompatibleAttributes = ({
 	args,
 	isActive,
@@ -49,8 +100,8 @@ export const getCompatibleAttributes = ({
 		'undefined' === typeof attributes?.blockeraPropsId &&
 			availableAttributes?.blockeraPropsId
 			? mergeObject(
-					{ ...attributes },
-					prepareBlockeraDefaultAttributesValues(defaultAttributes)
+					prepareBlockeraDefaultAttributesValues(defaultAttributes),
+					{ ...attributes }
 				)
 			: { ...attributes },
 		args
@@ -90,7 +141,7 @@ export const getCompatibleAttributes = ({
 					args
 				);
 
-			if (Object.keys(blockeraInnerBlocks).length) {
+			if (Object.keys(blockeraInnerBlocks || {}).length) {
 				filteredAttributes = mergeObject(filteredAttributes, {
 					blockeraInnerBlocks: {
 						value: {

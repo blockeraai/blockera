@@ -7,6 +7,11 @@ import type { MixedElement } from 'react';
 import { createPortal } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { getDualGlobalStylesSelector } from '@blockera/global-styles-ui/panel-override/selectors';
+
+/**
  * Internal dependencies
  */
 import { BlockIcon } from '../../extensions/components/block-icon';
@@ -46,5 +51,6 @@ export const AddBlockTypeIcons = ({
 	});
 };
 
-export const sidebarSelector: string =
-	'.edit-site-block-types-search input[type="search"]';
+export const sidebarSelector: string = `${getDualGlobalStylesSelector(
+	'blockTypesSearch'
+)} input[type="search"]`;

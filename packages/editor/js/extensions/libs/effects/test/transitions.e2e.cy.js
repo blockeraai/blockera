@@ -16,9 +16,9 @@ describe('Transitions → Functionality', () => {
 		cy.getBlock('default').type('This is test paragraph', {
 			delay: 0,
 		});
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
-		cy.getParentContainer('Transitions').as('transition');
+		cy.getParentContainer('Transitions Timing').as('transition');
 
 		cy.get('@transition').within(() => {
 			cy.getByAriaLabel('Add New Transition').click();
@@ -84,7 +84,11 @@ describe('Transitions → Functionality', () => {
 		});
 
 		// promotion popover should appear
-		cy.get('.blockera-component-upgrade-prompt').should('exist');
+		cy.get('.blockera-component-upgrade-prompt')
+			.should('exist')
+			.within(() => {
+				cy.getByAriaLabel('Close').should('be.visible').click();
+			});
 
 		//Check frontend
 		savePage();

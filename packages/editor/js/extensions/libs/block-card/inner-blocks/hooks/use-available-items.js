@@ -37,7 +37,8 @@ export const useAvailableItems = ({
 	const { getAllowedBlocks, getSelectedBlock } = select('core/block-editor');
 	const { selectedBlockClientId } = useGlobalStylesPanelContext();
 
-	let allowedBlockTypes = getAllowedBlocks(selectedBlockClientId || clientId);
+	let allowedBlockTypes =
+		getAllowedBlocks(selectedBlockClientId || clientId) || [];
 	// We should use of memoizedInnerBlocks if not empty while run this hook outside of block inspector.
 	// For global styles reasons.
 	if (

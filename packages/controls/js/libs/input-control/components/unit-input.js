@@ -115,42 +115,12 @@ export function UnitInput({
 
 			// Set a timeout only for unit extraction or calculation
 			unitUpdateTimeout.current = setTimeout(() => {
-				// First check for valid number with unit
 				const match = value.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
+
 				if (match) {
-					let [, numericValue = '', unit = ''] = match;
+					const [, numericValue = '', unit = ''] = match;
 
-					// Normalize decimal value
-					const normalizedValue = normalizeDecimalValue(numericValue);
-
-					// Apply constraints
-					let constrainedValue = normalizedValue;
-					const numValue = Number(normalizedValue);
-					if (!isNaN(numValue)) {
-						if (!isEmpty(min) && numValue < Number(min)) {
-							constrainedValue = String(min);
-						}
-						if (!isEmpty(max) && numValue > Number(max)) {
-							constrainedValue = String(max);
-						}
-					}
-
-					// If there's a unit, update it
-					if (unit) {
-						unit = unit.toLowerCase();
-						const newUnitValue = getUnitByValue(unit, units);
-						if (newUnitValue) {
-							// Update both unit and numeric value
-							onChangeSelect(unit);
-							setTypedValue(constrainedValue);
-							if (typeof onChange === 'function') {
-								onChange({
-									unitValue: newUnitValue,
-									inputValue: constrainedValue,
-								});
-							}
-						}
-					}
+					applyParsedNumericAndUnit(numericValue, unit, value);
 				}
 			}, 300);
 		} else {
@@ -176,6 +146,96 @@ export function UnitInput({
 		}
 		return value.replace(/\.?0+$/, '');
 	};
+
+	const hasNumericInputPart = (numericPart: string): boolean => {
+		const normalized = normalizeDecimalValue(numericPart);
+		return normalized !== '' && normalized !== '-' && normalized !== '-0';
+	};
+
+	/**
+	 * Letter-only tokens like `asd` must not become fake unit options (no `.value` on `{}`).
+	 * Known units / CSS keywords still resolve; everything else stays freeform under `func`.
+	 */
+	const applyParsedNumericAndUnit = (
+		numericPart: string,
+		unitToken: string,
+		fullTypedValue: string
+	): void => {
+		const normalizedNumeric = normalizeDecimalValue(numericPart);
+		let constrainedValue = normalizedNumeric;
+		const numValue = Number(normalizedNumeric);
+
+		if (!isNaN(numValue)) {
+			if (!isEmpty(min) && numValue < Number(min)) {
+				constrainedValue = String(min);
+			}
+			if (!isEmpty(max) && numValue > Number(max)) {
+				constrainedValue = String(max);
+			}
+		}
+
+		const unit = unitToken.toLowerCase();
+
+		if (unit && !hasNumericInputPart(numericPart)) {
+			if (isSpecialUnit(unit)) {
+				onChangeSelect(unit);
+				setTypedValue(constrainedValue);
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue: getUnitByValue(unit, units),
+						inputValue: constrainedValue,
+					});
+				}
+				return;
+			}
+
+			const listedUnit = getUnitByValue(unit, units);
+
+			if (listedUnit?.value && !listedUnit?.notFound) {
+				onChangeSelect(unit);
+				setTypedValue(constrainedValue);
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue: listedUnit,
+						inputValue: constrainedValue,
+					});
+				}
+				return;
+			}
+
+			const funcUnit = getUnitByValue('func', units);
+
+			setTypedValue(fullTypedValue);
+			if (typeof onChange === 'function') {
+				onChange({
+					unitValue:
+						typeof funcUnit?.value === 'string'
+							? funcUnit
+							: unitValue,
+					inputValue: fullTypedValue,
+				});
+			}
+			return;
+		}
+
+		if (unit) {
+			const newUnitValue = getUnitByValue(unit, units);
+
+			if (typeof newUnitValue?.value === 'string') {
+				onChangeSelect(unit);
+				setTypedValue(constrainedValue);
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue: newUnitValue,
+						inputValue: constrainedValue,
+					});
+				}
+			}
+		}
+	};
+
+	const unitSelectValue =
+		typeof unitValue?.value === 'string' ? unitValue.value : '';
 
 	const evaluateCalculation = (value: string) => {
 		if (!isSpecialUnit(unitValue?.value) && unitValue.value !== 'func') {
@@ -250,38 +310,7 @@ export function UnitInput({
 			e.preventDefault();
 			const [, numericValue = '', unit = ''] = match;
 
-			// Normalize decimal value
-			const normalizedValue = normalizeDecimalValue(numericValue);
-
-			// Apply min/max constraints
-			let constrainedValue = normalizedValue;
-			const numValue = Number(normalizedValue);
-			if (!isNaN(numValue)) {
-				if (!isEmpty(min) && numValue < Number(min)) {
-					constrainedValue = String(min);
-				}
-				if (!isEmpty(max) && numValue > Number(max)) {
-					constrainedValue = String(max);
-				}
-			}
-
-			// Update the input value immediately
-			setTypedValue(constrainedValue);
-
-			// If there's a unit, update it
-			if (unit) {
-				const newUnitValue = getUnitByValue(unit, units);
-				if (newUnitValue) {
-					onChangeSelect(unit);
-				}
-			}
-
-			if (typeof onChange === 'function') {
-				onChange({
-					unitValue: unit ? getUnitByValue(unit, units) : unitValue,
-					inputValue: constrainedValue,
-				});
-			}
+			applyParsedNumericAndUnit(numericValue, unit, pastedText);
 		}
 	};
 
@@ -291,6 +320,10 @@ export function UnitInput({
 		}
 
 		newUnitValue = getUnitByValue(newUnitValue, units);
+
+		if (typeof newUnitValue?.value !== 'string') {
+			return;
+		}
 
 		// new unit is func
 		// then append old unit to value and show it in the input
@@ -607,15 +640,15 @@ export function UnitInput({
 					)}
 				>
 					<select
-						key={unitValue.value}
+						key={unitSelectValue}
 						disabled={disabled}
 						onChange={(e) => onChangeSelect(e.target.value)}
-						value={unitValue.value}
+						value={unitSelectValue}
 						className={controlInnerClassNames(
 							'unit-select',
-							!isSpecialUnit(unitValue.value) && 'hide-arrow',
-							'unit-length-' + unitValue.value.length,
-							'unit-' + unitValue.value
+							!isSpecialUnit(unitSelectValue) && 'hide-arrow',
+							'unit-length-' + unitSelectValue.length,
+							'unit-' + unitSelectValue
 						)}
 						aria-label={__('Select Unit', 'blockera')}
 					>
@@ -642,7 +675,7 @@ export function UnitInput({
 					</select>
 				</ConditionalWrapper>
 
-				{unitValue.value === 'func' && (
+				{unitSelectValue === 'func' && (
 					<>
 						{!['small', 'extra-small', 'input'].includes(size) && (
 							<Button
@@ -672,7 +705,6 @@ export function UnitInput({
 						{isMaximizeVisible && (
 							<Popover
 								title={__('CSS Functions and Vars', 'blockera')}
-								offset={125}
 								placement="left-start"
 								className={controlInnerClassNames(
 									'typography-popover'

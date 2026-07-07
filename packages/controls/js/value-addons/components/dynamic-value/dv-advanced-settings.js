@@ -26,15 +26,12 @@ import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({
 	controlProps,
-	popoverOffset = 25,
 }: {
 	controlProps: ValueAddonControlProps,
-	popoverOffset?: number,
 }): Element<any> {
 	return (
 		<Popover
 			title={__('Advanced Setting', 'blockera')}
-			offset={popoverOffset}
 			placement="left-start"
 			onClose={() => {
 				controlProps.setOpen('');

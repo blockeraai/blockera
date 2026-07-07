@@ -91,6 +91,9 @@ class Render {
 				continue;
 			}
 
+			$is_core_icon_icon_feature = 'core/icon' === ( $args['block']['blockName'] ?? '' )
+				&& $feature instanceof \Blockera\Feature\Icon\Icon;
+
 			$selector = blockera_get_compatible_block_css_selector(
                 blockera_get_block_type_property($args['block']['blockName'], 'selectors'),
                 'htmlEditable.root',
@@ -102,7 +105,7 @@ class Render {
                 ]
 			);
 		
-			if (empty($selector)) {
+			if (empty($selector) && ! $is_core_icon_icon_feature) {
 				continue;
 			}
 
@@ -193,6 +196,9 @@ class Render {
             ]
 		);
 
+		// One slot per supported block from pre_render_block; consume even when computed_css is empty so the queue stays aligned with render_block calls.
+		$dom_order = $this->consumeDomOrderForCurrentBlock();
+
 		// Check if blockeraComputedCss exists - if so, use cached CSS instead of generating from attributes.
 		if ( ! empty($computed_css)) {
 			$this->styles[] = $computed_css;
@@ -225,8 +231,8 @@ class Render {
 
 		// We should ensure the generated css is unique.
 		// Because maybe this generated css related to the loop blocks and we should not print duplicate css for them.
-		if (! empty($styles) && ! in_array($styles, $this->getGeneratedCSS(), true)) {
-			$this->updateGeneratedCSS($styles);
+		if (! empty($styles) && ! $this->hasGeneratedCssContent($styles)) {
+			$this->updateGeneratedCSS($styles, $dom_order);
 		}
 
 		// Enqueue block assets.
@@ -256,9 +262,7 @@ class Render {
 	 * @return void
 	 */
 	public function resetStylesProperties(): void {
-		
-		$this->styles        = [];
-		$this->inline_styles = '';
+		$this->styles = [];
 	}
 
 	/**

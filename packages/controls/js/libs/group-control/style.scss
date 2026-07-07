@@ -34,7 +34,7 @@
 			display: flex;
 			align-items: center;
 			background: #ffffff;
-			gap: -1px;
+			gap: 0;
 			padding-left: 3px;
 
 			.blockera-component-button {
@@ -81,6 +81,11 @@
 	&.is-open.toggle-open-border {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+	}
+
+	&.is-open.toggle-open-border.no-accordion-open-primary-border {
+		border-color: var(--blockera-controls-border-color);
+		box-shadow: none;
 	}
 
 	.blockera-control-group-content {

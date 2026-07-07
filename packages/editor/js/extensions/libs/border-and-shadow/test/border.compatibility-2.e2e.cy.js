@@ -8,6 +8,22 @@ import {
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
+/**
+ * Select a button block and wait for Blockera Border controls in the styles panel.
+ * Headless runs can exit code editor with the styles accordion collapsed.
+ */
+function selectButtonBlockForBorder({ last = false } = {}) {
+	const chain = last
+		? cy.getBlock('core/button').last()
+		: cy.getBlock('core/button');
+
+	chain.click({ force: last });
+
+	cy.getByAriaControls('styles-view').click();
+
+	cy.getParentContainer('Border').as('container');
+}
+
 describe('Border → WP Compatibility', () => {
 	beforeEach(() => {
 		createPost();
@@ -24,11 +40,7 @@ describe('Border → WP Compatibility', () => {
 						'<!-- /wp:buttons -->'
 				);
 
-				// Select target block
-				cy.getBlock('core/button').click();
-
-				// add alias to the feature container
-				cy.getParentContainer('Border').as('container');
+				selectButtonBlockForBorder();
 
 				cy.addNewTransition();
 
@@ -173,11 +185,7 @@ describe('Border → WP Compatibility', () => {
 						'<!-- /wp:buttons -->'
 				);
 
-				// Select target block
-				cy.getBlock('core/button').click();
-
-				// add alias to the feature container
-				cy.getParentContainer('Border').as('container');
+				selectButtonBlockForBorder();
 
 				cy.addNewTransition();
 
@@ -411,11 +419,7 @@ describe('Border → WP Compatibility', () => {
 						'<!-- /wp:buttons -->'
 				);
 
-				// Select target block
-				cy.getBlock('core/button').click();
-
-				// add alias to the feature container
-				cy.getParentContainer('Border').as('container');
+				selectButtonBlockForBorder();
 
 				cy.addNewTransition();
 
@@ -557,11 +561,7 @@ describe('Border → WP Compatibility', () => {
 						'<!-- /wp:buttons -->'
 				);
 
-				// Select target block
-				cy.getBlock('core/button').click();
-
-				// add alias to the feature container
-				cy.getParentContainer('Border').as('container');
+				selectButtonBlockForBorder();
 
 				cy.addNewTransition();
 
@@ -714,11 +714,7 @@ describe('Border → WP Compatibility', () => {
 						'<!-- /wp:buttons -->'
 				);
 
-				// Select target block
-				cy.getBlock('core/button').click();
-
-				// add alias to the feature container
-				cy.getParentContainer('Border').as('container');
+				selectButtonBlockForBorder();
 
 				cy.addNewTransition();
 
@@ -1132,12 +1128,9 @@ describe('Border → WP Compatibility', () => {
 <!-- /wp:buttons -->`
 				);
 
-				// Select target block
-				cy.getBlock('core/button').click();
+				selectButtonBlockForBorder();
 
 				cy.addNewTransition();
-
-				cy.getParentContainer('Border').as('container');
 
 				//
 				// Test 1.1: WP data to Blockera
@@ -1232,8 +1225,7 @@ describe('Border → WP Compatibility', () => {
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->`);
 
-				// Select target block
-				cy.getBlock('core/button').click();
+				selectButtonBlockForBorder({ last: true });
 
 				cy.addNewTransition();
 

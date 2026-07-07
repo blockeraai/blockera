@@ -9,7 +9,6 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import type { ControlContextRefCurrent } from '@blockera/controls';
-import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -27,7 +26,11 @@ import {
 	shadowToWPCompatibility,
 } from './compatibilities/shadow';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -55,7 +58,7 @@ export const bootstrap = (): void => {
 				editorSelectedBlockEvent,
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -93,36 +96,39 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraBorder':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						borderToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraBorderRadius':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						borderRadiusToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraBoxShadow':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						shadowToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 			}
 

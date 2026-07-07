@@ -3,13 +3,114 @@
 /**
  * Blockera dependencies
  */
-import { isBorderRadiusEmpty } from '@blockera/controls';
+import { isBorderRadiusEmpty, isValid } from '@blockera/controls';
+import {
+	getBorderRadiusVAStringFromId,
+	getValueAddonFromVarString,
+	parseVarString,
+} from '@blockera/data';
 import { isObject, isString, normalizeCssLengthValue } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { runInsideBlockInspector } from '../../utils';
+
+function isBorderRadiusPresetVarString(value: mixed): boolean {
+	return (
+		typeof value === 'string' &&
+		(value.startsWith('var:preset|border-radius') ||
+			value.startsWith('var(--wp--preset--border-radius'))
+	);
+}
+
+function resolveBorderRadiusFieldFromWP(raw: string): mixed {
+	const normalized = raw.includes('(') ? raw : normalizeCssLengthValue(raw);
+
+	if (!isBorderRadiusPresetVarString(normalized)) {
+		return normalized;
+	}
+
+	const converted = getValueAddonFromVarString(
+		normalized,
+		['border-radius'],
+		{
+			onlyVariableLike: true,
+		}
+	);
+
+	return isObject(converted) && converted.isValueAddon
+		? converted
+		: normalized;
+}
+
+function borderRadiusFieldToWP(field: mixed): string | void {
+	if (isValid(field)) {
+		return (
+			getBorderRadiusVAStringFromId(field?.settings?.id) ||
+			`var:preset|border-radius|${field?.settings?.id}`
+		);
+	}
+
+	if ('string' === typeof field && !field.endsWith('func')) {
+		return field;
+	}
+
+	return undefined;
+}
+
+/**
+ * Stable key for comparing corner values (plain length, var:preset string, or value addon).
+ */
+function borderRadiusCornerIdentity(value: mixed): string {
+	if (value === undefined || value === null || value === '') {
+		return '';
+	}
+
+	if (isValid(value)) {
+		const type = value.settings?.type || 'border-radius';
+		let id = value.settings?.id || '';
+
+		if (typeof id === 'string' && isBorderRadiusPresetVarString(id)) {
+			const parsed = parseVarString(id, 'border-radius');
+
+			if (parsed.id) {
+				id = parsed.id;
+			}
+		}
+
+		return `${type}:${id}`;
+	}
+
+	if (typeof value === 'string') {
+		if (isBorderRadiusPresetVarString(value)) {
+			const { id } = parseVarString(value, 'border-radius');
+
+			if (id) {
+				return `border-radius:${id}`;
+			}
+		}
+
+		return `literal:${value}`;
+	}
+
+	return '';
+}
+
+function areBorderRadiusCornersEqual(corners: {
+	topLeft?: mixed,
+	topRight?: mixed,
+	bottomLeft?: mixed,
+	bottomRight?: mixed,
+}): boolean {
+	const reference = borderRadiusCornerIdentity(corners.topLeft);
+
+	return (
+		borderRadiusCornerIdentity(corners.topRight) === reference &&
+		borderRadiusCornerIdentity(corners.bottomLeft) === reference &&
+		borderRadiusCornerIdentity(corners.bottomRight) === reference
+	);
+}
 
 export function borderRadiusFromWPCompatibility({
 	attributes,
@@ -42,37 +143,33 @@ export function borderRadiusFromWPCompatibility({
 				attributes.blockeraBorderRadius = {
 					value: {
 						type: 'all',
-						all,
+						all: resolveBorderRadiusFieldFromWP(all),
 					},
 				};
 			} else if (isObject(borderRadius)) {
 				const corners: {
-					topLeft?: string,
-					topRight?: string,
-					bottomLeft?: string,
-					bottomRight?: string,
+					topLeft?: mixed,
+					topRight?: mixed,
+					bottomLeft?: mixed,
+					bottomRight?: mixed,
 				} = {
-					topLeft: normalizeCssLengthValue(
+					topLeft: resolveBorderRadiusFieldFromWP(
 						borderRadius?.topLeft ?? ''
 					),
-					topRight: normalizeCssLengthValue(
+					topRight: resolveBorderRadiusFieldFromWP(
 						borderRadius?.topRight ?? ''
 					),
-					bottomLeft: normalizeCssLengthValue(
+					bottomLeft: resolveBorderRadiusFieldFromWP(
 						borderRadius?.bottomLeft ?? ''
 					),
-					bottomRight: normalizeCssLengthValue(
+					bottomRight: resolveBorderRadiusFieldFromWP(
 						borderRadius?.bottomRight ?? ''
 					),
 				};
 
-				const areCordersEqual = Object.values(corners).every(
-					(corner) => {
-						return corner === corners.topLeft;
-					}
-				);
+				const areCornersEqual = areBorderRadiusCornersEqual(corners);
 
-				if (areCordersEqual) {
+				if (areCornersEqual) {
 					attributes.blockeraBorderRadius = {
 						value: {
 							type: 'all',
@@ -130,7 +227,9 @@ export function borderRadiusToWPCompatibility({
 	}
 
 	if (newValue.type === 'all') {
-		if (!newValue?.all.endsWith('func')) {
+		const wpAllRadius = borderRadiusFieldToWP(newValue?.all);
+
+		if (wpAllRadius !== undefined) {
 			if (
 				!runInsideBlockInspector(
 					insideBlockInspector,
@@ -139,7 +238,7 @@ export function borderRadiusToWPCompatibility({
 			) {
 				return {
 					border: {
-						radius: newValue?.all,
+						radius: wpAllRadius,
 					},
 				};
 			}
@@ -147,7 +246,7 @@ export function borderRadiusToWPCompatibility({
 			return {
 				style: {
 					border: {
-						radius: newValue?.all,
+						radius: wpAllRadius,
 					},
 				},
 			};
@@ -216,39 +315,19 @@ export function borderRadiusToWPCompatibility({
 		};
 
 		if (newValue.topLeft !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.topLeft.endsWith('func')) {
-				corners.topLeft = newValue.topLeft;
-			} else {
-				corners.topLeft = undefined;
-			}
+			corners.topLeft = borderRadiusFieldToWP(newValue.topLeft);
 		}
 
 		if (newValue.topRight !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.topRight.endsWith('func')) {
-				corners.topRight = newValue.topRight;
-			} else {
-				corners.topRight = undefined;
-			}
+			corners.topRight = borderRadiusFieldToWP(newValue.topRight);
 		}
 
 		if (newValue.bottomLeft !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.bottomLeft.endsWith('func')) {
-				corners.bottomLeft = newValue.bottomLeft;
-			} else {
-				corners.bottomLeft = undefined;
-			}
+			corners.bottomLeft = borderRadiusFieldToWP(newValue.bottomLeft);
 		}
 
 		if (newValue.bottomRight !== '') {
-			// Advanced css functions not supported by core.
-			if (!newValue.bottomRight.endsWith('func')) {
-				corners.bottomRight = newValue.bottomRight;
-			} else {
-				corners.bottomRight = undefined;
-			}
+			corners.bottomRight = borderRadiusFieldToWP(newValue.bottomRight);
 		}
 
 		if (

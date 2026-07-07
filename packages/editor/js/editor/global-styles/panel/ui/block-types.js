@@ -478,32 +478,48 @@ export const BlockTypes = ({
 					gap="12px"
 					style={{ width: '100%' }}
 				>
+					<Button
+						data-test="cancel-usage-for-multiple-blocks-button"
+						variant="tertiary"
+						onClick={() => setIsOpenUsageForMultipleBlocks(false)}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
 					<Flex
+						justifyContent="flex-end"
 						alignItems="center"
 						gap="16px"
 						style={{ flexWrap: 'wrap', minWidth: 0 }}
 					>
-						{!isSaving && (
-							<Button
-								data-test="save-usage-for-multiple-blocks-button"
-								disabled={
-									!isModified &&
-									isEquals(blocksState, initBlocksState)
-								}
-								variant="primary"
-								onClick={() => {
-									setIsSaving(true);
-									setTimeout(() => {
-										handleOnSave();
-										// Clear action state.
-										setAction(null);
-										setIsOpenUsageForMultipleBlocks(false);
-									}, 10);
+						{isFreeBlockLimit && (
+							<span
+								className={classNames(
+									'blockera-usage-for-multiple-blocks-footer-meta'
+								)}
+								style={{
+									fontSize: '13px',
+									lineHeight: 1.4,
+									color: '#757575',
 								}}
 							>
-								{__('Save', 'blockera')}
-							</Button>
+								{sprintf(
+									/* translators: 1: Current number of blocks using the style, 2: Free tier maximum. */
+									__(
+										'%1$d / %2$d blocks shared (Free limit)',
+										'blockera'
+									),
+									blocksState.items.length,
+									maxSelectableBlocks
+								)}
+								{' — '}
+								{__(
+									'Unlimited blocks in the Pro version.',
+									'blockera'
+								)}
+							</span>
 						)}
+
 						{isSaving && (
 							<Button variant="primary">
 								<Animate type="loading">
@@ -529,42 +545,29 @@ export const BlockTypes = ({
 								</Animate>
 							</Button>
 						)}
-						{isFreeBlockLimit && (
-							<span
-								className={classNames(
-									'blockera-usage-for-multiple-blocks-footer-meta'
-								)}
-								style={{
-									fontSize: '13px',
-									lineHeight: 1.4,
-									color: '#757575',
+
+						{!isSaving && (
+							<Button
+								data-test="save-usage-for-multiple-blocks-button"
+								disabled={
+									!isModified &&
+									isEquals(blocksState, initBlocksState)
+								}
+								variant="primary"
+								onClick={() => {
+									setIsSaving(true);
+									setTimeout(() => {
+										handleOnSave();
+										// Clear action state.
+										setAction(null);
+										setIsOpenUsageForMultipleBlocks(false);
+									}, 10);
 								}}
 							>
-								{sprintf(
-									/* translators: 1: Current number of blocks using the style, 2: Free tier maximum. */
-									__(
-										'%1$d / %2$d blocks used (Free limit)',
-										'blockera'
-									),
-									blocksState.items.length,
-									maxSelectableBlocks
-								)}
-								{' — '}
-								{__(
-									'Unlimited blocks in the Pro version.',
-									'blockera'
-								)}
-							</span>
+								{__('Save', 'blockera')}
+							</Button>
 						)}
 					</Flex>
-
-					<Button
-						data-test="cancel-usage-for-multiple-blocks-button"
-						variant="tertiary"
-						onClick={() => setIsOpenUsageForMultipleBlocks(false)}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
 				</Flex>
 			</Fill>
 			<Fill name="usage-for-multiple-blocks-actions">
@@ -678,17 +681,34 @@ export const BlockTypes = ({
 				<UpgradePrompt
 					type="modal"
 					data-test="usage-for-multiple-blocks-upgrade-prompt"
-					heading={__('Use this style on more blocks', 'blockera')}
-					description={__(
-						'The free plan limits how many block types can use each global style variation. Upgrade to apply your design to every block you need.',
-						'blockera'
-					)}
-					featuresList={[
-						__('Unlimited blocks per style variation', 'blockera'),
-						__('All registered block types', 'blockera'),
-						__('Advanced global styles', 'blockera'),
-						__('Premium design tools', 'blockera'),
-					]}
+					lockedFeature={{
+						icon: (
+							<Icon icon="category" library="wp" iconSize={24} />
+						),
+						title: __(
+							'Share Style Variation with Other Blocks',
+							'blockera'
+						),
+						description: (
+							<Flex direction="column" gap="6px">
+								{__(
+									'Share a single style variation with other blocks',
+									'blockera'
+								)}
+								<Flex direction="row" gap="6px">
+									<span className="blockera-free-plan-hint">
+										{__('Free: Only 2 blocks', 'blockera')}
+									</span>
+									<span className="blockera-pro-plan-hint">
+										{__(
+											'Pro: Unlimited blocks',
+											'blockera'
+										)}
+									</span>
+								</Flex>
+							</Flex>
+						),
+					}}
 					isOpen={isUpgradePromptOpen}
 					onClose={() => setIsUpgradePromptOpen(false)}
 					buttonURL={UPGRADE_PRO_URL}

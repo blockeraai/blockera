@@ -168,7 +168,8 @@ export const useAttributes = (
 					_attributes,
 					attributeId,
 					newValue,
-					options
+					options,
+					blockId
 				);
 			}
 
@@ -178,8 +179,8 @@ export const useAttributes = (
 				_attributes.blockeraInnerBlocks &&
 				_attributes.blockeraInnerBlocks[currentBlock];
 
-			// check - is really changed attribute of any block type (master or one of inner blocks)?
-			if (isNormalState()) {
+			// Block-state reset clears root attributes via reducer; do not bail on unchanged blockeraBlockStates.
+			if (!resetStateAllValues && isNormalState()) {
 				// Assume block is inner block and has attributes in normal state.
 				if (
 					isInnerBlock(currentBlock) &&

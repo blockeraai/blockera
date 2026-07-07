@@ -14,7 +14,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 	});
 
 	it('should show the block type empowered icon global styles', () => {
-		cy.getByDataTest('block-style-variations').eq(1).click();
+		cy.getByDataTest('block-style-variations').eq(0).click();
 
 		getWPDataObject().then((data) => {
 			data.select('core/blocks')
@@ -47,7 +47,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 	});
 
 	it('should show the block type empowered icon global styles on searching results', () => {
-		cy.getByDataTest('block-style-variations').eq(1).click();
+		cy.getByDataTest('block-style-variations').eq(0).click();
 
 		cy.get('input[type="search"]').eq(0).type('heading');
 

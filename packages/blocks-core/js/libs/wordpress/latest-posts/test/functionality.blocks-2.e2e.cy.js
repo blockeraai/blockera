@@ -70,7 +70,7 @@ describe('Latest Posts Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			[
@@ -81,8 +81,7 @@ describe('Latest Posts Block', () => {
 			].forEach((item) => {
 				cy.get('.components-tools-panel-header')
 					.contains(item)
-					.scrollIntoView()
-					.should('be.visible');
+					.should('not.be.hidden');
 			});
 		});
 

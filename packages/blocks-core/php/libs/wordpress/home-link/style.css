@@ -23,3 +23,14 @@
 	vertical-align: text-bottom;
 	transition: inherit;
 }
+
+.wp-block-home-link[class*="blockera-has-icon-"]
+	.wp-block-navigation-item__content
+	svg[fill="none"],
+.wp-block-home-link[class*="blockera-has-icon-"]
+	.wp-block-navigation-item__content
+	.blockera-stroke-svg-icon
+	svg {
+	fill: none;
+	stroke: var(--blockera--icon--color, currentColor);
+}

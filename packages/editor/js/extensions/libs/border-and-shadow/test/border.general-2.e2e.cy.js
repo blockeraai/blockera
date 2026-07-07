@@ -11,7 +11,6 @@ describe('Border → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Border').as('container');
 	});
@@ -37,8 +36,7 @@ describe('Border → Functionality', () => {
 			});
 
 			cy.get('@container').within(() => {
-				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('div[aria-selected="false"]').eq(1).click();
+				cy.customSelectOption(1);
 			});
 
 			//Check block
@@ -136,8 +134,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div').eq(0).trigger('click');
+						cy.customSelectOption(0, { force: true });
 
 						cy.getByDataTest('border-control-color').click();
 					});
@@ -190,10 +187,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div[aria-selected="false"]')
-							.eq(1)
-							.trigger('click');
+						cy.customSelectOption(1, { force: true });
 
 						cy.getByDataTest('border-control-color').click();
 					});
@@ -250,10 +244,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div[aria-selected="false"]')
-							.eq(2)
-							.trigger('click');
+						cy.customSelectOption(2, { force: true });
 
 						cy.getByDataTest('border-control-color').click();
 					});
@@ -314,10 +305,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div[aria-selected="false"]')
-							.eq(3)
-							.trigger('click');
+						cy.customSelectOption(3, { force: true });
 
 						cy.getByDataTest('border-control-color').click();
 					});
@@ -545,8 +533,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div').eq(0).trigger('click');
+						cy.customSelectOption(0, { force: true });
 					});
 			});
 
@@ -615,10 +602,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div[aria-selected="false"]')
-							.eq(1)
-							.trigger('click');
+						cy.customSelectOption(1, { force: true });
 					});
 			});
 
@@ -706,10 +690,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div[aria-selected="false"]')
-							.eq(2)
-							.trigger('click');
+						cy.customSelectOption(2, { force: true });
 					});
 			});
 
@@ -816,10 +797,7 @@ describe('Border → Functionality', () => {
 							force: true,
 						});
 
-						cy.get('[aria-haspopup="listbox"]').trigger('click');
-						cy.get('div[aria-selected="false"]')
-							.eq(3)
-							.trigger('click');
+						cy.customSelectOption(3, { force: true });
 					});
 			});
 

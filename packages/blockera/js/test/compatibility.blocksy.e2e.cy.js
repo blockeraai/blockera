@@ -5,13 +5,14 @@ import {
 	redirectToFrontPage,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
+import { withinVariablePickerPopover } from '@blockera/dev-cypress/js/helpers/variable-picker';
 
 describe('Compatibility with Blocksy Theme', () => {
 	beforeEach(() => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 	});
 
 	it('Color variables', () => {
@@ -19,16 +20,33 @@ describe('Compatibility with Blocksy Theme', () => {
 			cy.openValueAddon();
 		});
 
-		cy.get('.blockera-component-popover')
-			.last()
-			.within(() => {
-				cy.contains('Blocksy Color Variables').should('exist');
+		withinVariablePickerPopover(() => {
+			cy.contains('Blocksy Color Variables').should('exist');
 
-				cy.contains('Color Variables').should('exist');
-			});
+			cy.contains('Color Variables').should('exist');
+			cy.contains('Color variables').should('not.exist');
 
-		// select variable
+			cy.contains('No default variable.').should('not.exist');
+			cy.contains('Black').should('not.exist');
+			cy.contains('Vivid red').should('not.exist');
+
+			cy.contains('Custom variables').should('exist');
+			cy.getByDataTest('variable-picker-section-add-color').should(
+				'exist'
+			);
+		});
+
 		cy.selectValueAddonItem('link-initial-color');
+
+		cy.getParentContainer('Text Color').within(() => {
+			cy.getByDataTest('value-addon-normal').click({ force: true });
+		});
+
+		withinVariablePickerPopover(() => {
+			cy.get(
+				'[data-cy="control-group"].is-selected-item [data-variable-slug="link-initial-color"]'
+			).should('exist');
+		});
 
 		cy.getIframeBody().within(() => {
 			cy.get('#blockera-styles-wrapper')
@@ -39,7 +57,6 @@ describe('Compatibility with Blocksy Theme', () => {
 				);
 		});
 
-		//Check store
 		getWPDataObject().then((data) => {
 			expect({
 				settings: {
@@ -61,7 +78,6 @@ describe('Compatibility with Blocksy Theme', () => {
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFontColor'));
 		});
 
-		//Check frontend
 		savePage();
 
 		redirectToFrontPage();
@@ -79,13 +95,10 @@ describe('Compatibility with Blocksy Theme', () => {
 			cy.openValueAddon();
 		});
 
-		cy.get('.blockera-component-popover')
-			.last()
-			.within(() => {
-				cy.contains('Blocksy Width Size Variables').should('exist');
-			});
+		withinVariablePickerPopover(() => {
+			cy.contains('Blocksy Width Size Variables').should('exist');
+		});
 
-		// select variable
 		cy.selectValueAddonItem('normal-container-max-width');
 
 		cy.getIframeBody().within(() => {
@@ -97,11 +110,10 @@ describe('Compatibility with Blocksy Theme', () => {
 				);
 		});
 
-		//Check store
 		getWPDataObject().then((data) => {
 			expect({
 				settings: {
-					name: 'Normal Container Max Width',
+					name: 'Normal Container',
 					id: 'normal-container-max-width',
 					value: '1290px',
 					type: 'width-size',
@@ -113,22 +125,21 @@ describe('Compatibility with Blocksy Theme', () => {
 						theme: 'blocksy',
 					},
 				},
-				name: 'Normal Container Max Width',
+				name: 'Normal Container',
 				isValueAddon: true,
 				valueType: 'variable',
-			});
-
-			//Check frontend
-			savePage();
-
-			redirectToFrontPage();
-
-			cy.get('style#blockera-inline-css')
-				.invoke('text')
-				.should(
-					'include',
-					'width: var(--theme-normal-container-max-width, 1290px)'
-				);
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraWidth'));
 		});
+
+		savePage();
+
+		redirectToFrontPage();
+
+		cy.get('style#blockera-inline-css')
+			.invoke('text')
+			.should(
+				'include',
+				'width: var(--theme-normal-container-max-width, 1290px)'
+			);
 	});
 });

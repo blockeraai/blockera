@@ -25,8 +25,29 @@ import FaSolidSearchData from '../library-fasolid/search-data.json';
 import { FaBrandsIcons } from '../library-fabrands/icons';
 import FaBrandsSearchData from '../library-fabrands/search-data.json';
 
+import { EssentialsIcons } from '../library-essentials/icons';
+import EssentialsSearchData from '../library-essentials/search-data.json';
+
+import { FeatherIcons } from '../library-feather/icons';
+import FeatherSearchData from '../library-feather/search-data.json';
+
+import { LucideIcons } from '../library-lucide/icons';
+import LucideSearchData from '../library-lucide/search-data.json';
+
+import { UntitleduiIcons } from '../library-untitledui/icons';
+import UntitleduiSearchData from '../library-untitledui/search-data.json';
+
+import { TablerIcons } from '../library-tabler/icons';
+import TablerSearchData from '../library-tabler/search-data.json';
+
+import { TablerFilledIcons } from '../library-tabler-filled/icons';
+import TablerFilledSearchData from '../library-tabler-filled/search-data.json';
+
 // Import the libraries configuration
-import searchLibraries from '../search-libraries.json';
+import searchLibraries1 from '../search-libraries.json';
+import searchLibraries2 from '../search-libraries-2.json';
+
+const searchLibraries = [...searchLibraries1, ...searchLibraries2];
 
 /**
  * Library configurations mapping
@@ -66,6 +87,36 @@ const libraryConfigs = {
 		icons: FaBrandsIcons,
 		searchData: FaBrandsSearchData,
 		name: 'Font Awesome Brands',
+	},
+	essentials: {
+		icons: EssentialsIcons,
+		searchData: EssentialsSearchData,
+		name: 'Blockera Essentials',
+	},
+	feather: {
+		icons: FeatherIcons,
+		searchData: FeatherSearchData,
+		name: 'Feather Icons',
+	},
+	lucide: {
+		icons: LucideIcons,
+		searchData: LucideSearchData,
+		name: 'Lucide Icons',
+	},
+	untitledui: {
+		icons: UntitleduiIcons,
+		searchData: UntitleduiSearchData,
+		name: 'Untitled UI Icons',
+	},
+	tabler: {
+		icons: TablerIcons,
+		searchData: TablerSearchData,
+		name: 'Tabler Icons',
+	},
+	'tabler-filled': {
+		icons: TablerFilledIcons,
+		searchData: TablerFilledSearchData,
+		name: 'Tabler Icons Filled',
 	},
 };
 

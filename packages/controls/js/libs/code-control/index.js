@@ -5,7 +5,12 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState, useRef, useCallback } from '@wordpress/element';
+import {
+	useState,
+	useRef,
+	useCallback,
+	useLayoutEffect,
+} from '@wordpress/element';
 import { Editor } from '@monaco-editor/react';
 import memoize from 'fast-memoize';
 
@@ -239,9 +244,18 @@ const CodeControl = ({
 		defaultValue,
 	});
 
+	// `defaultValue` on Monaco is only applied when a model is created; `value` is
+	// kept in sync with props (see @monaco-editor/react README). We mirror the
+	// control `value` into local state so debounced setValue() does not fight the
+	// editor while the user types, but external `value` updates still apply.
+	const [editorValue, setEditorValue] = useState(value ?? '');
 	const [showPlaceholder, setShowPlaceholder] = useState(false);
 	const editorRef = useRef(null);
 	const timeoutRef = useRef(null);
+
+	useLayoutEffect(() => {
+		setEditorValue(value ?? '');
+	}, [value]);
 
 	// Monaco applies built-in CSS formatting; we sync the formatted buffer into
 	// control state and cancel the pending debounced onChange so we do not
@@ -266,6 +280,7 @@ const CodeControl = ({
 				clearTimeout(timeoutRef.current);
 			}
 
+			setEditorValue(next);
 			setValue(next);
 		});
 	}, [setValue]);
@@ -332,17 +347,19 @@ const CodeControl = ({
 					width={width || '100%'}
 					height={height || 200}
 					defaultLanguage={lang}
-					defaultValue={value}
+					value={editorValue}
 					loading={<TextLoading text={loadingText} />}
 					onChange={(newValue) => {
-						setShowPlaceholder(newValue === '');
+						const next = newValue ?? '';
+						setEditorValue(next);
+						setShowPlaceholder(next === '');
 
 						if (timeoutRef.current) {
 							clearTimeout(timeoutRef.current);
 						}
 
 						timeoutRef.current = setTimeout(() => {
-							setValue(newValue);
+							setValue(next);
 						}, 500);
 					}}
 					theme={'blockera'}

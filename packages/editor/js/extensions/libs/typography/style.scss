@@ -1,0 +1,10 @@
+/* Block text align toolbar — match core control density (no extra dropdown padding). */
+[data-test='data-blockera-text-align-toolbar'] {
+	.components-toolbar-group.components-dropdown.components-dropdown-menu {
+		padding: 0;
+	}
+
+	.components-button.components-dropdown-menu__toggle {
+		padding: 0;
+	}
+}

@@ -6,7 +6,11 @@ import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { select } from '@wordpress/data';
 
-import { IFRAME_SELECTOR } from './constants';
+import {
+	DEFAULT_ZOOM,
+	EDITOR_ZOOM_COMPAT_STYLE_ATTR,
+	IFRAME_SELECTOR,
+} from './constants';
 import CanvasHeader from '../components/CanvasHeader';
 import { loadZoomFromStorage } from './storage';
 
@@ -73,6 +77,51 @@ export function getVisualEditorContainer(): HTMLElement | null {
 		document.querySelector('.editor-visual-editor') ||
 		document.querySelector('.edit-post-visual-editor')
 	);
+}
+
+/**
+ * Apply Blockera canvas zoom to core block-editor UI that renders in the host
+ * document while anchoring to the scaled iframe. Those Popovers do not inherit
+ * iframe scale; we inject one `<style>` that scales `.components-popover__content`
+ * with `transform: scale()` (Floating UI keeps `translate` on the Popover wrapper).
+ *
+ * Compatibility layers (add more selector groups here as needed):
+ * 1. Grid visualizer — triple `.block-editor-grid-visualizer` (core grid/style.scss).
+ * 2. Grid item resizer — triple `.block-editor-grid-item-resizer` (same Popover pattern).
+ *
+ * @param zoomPercent - Editor zoom 10–250; at {@link DEFAULT_ZOOM} the injected style is removed.
+ */
+export function editorZoomCompatibility(zoomPercent: number): void {
+	if (typeof document === 'undefined' || !document.head) {
+		return;
+	}
+
+	const selector = `style[${EDITOR_ZOOM_COMPAT_STYLE_ATTR}]`;
+	const existing = document.querySelector(selector);
+
+	if (zoomPercent === DEFAULT_ZOOM) {
+		existing?.remove();
+		return;
+	}
+
+	const scale = zoomPercent / DEFAULT_ZOOM;
+	const popoverContent = '.components-popover__content';
+
+	// Triple classes match core’s z-index / specificity hooks.
+	const gridVisualizer = `.block-editor-grid-visualizer.block-editor-grid-visualizer.block-editor-grid-visualizer ${popoverContent}`;
+	const gridItemResizer = `.block-editor-grid-item-resizer.block-editor-grid-item-resizer.block-editor-grid-item-resizer ${popoverContent}`;
+
+	const css = `${gridItemResizer},${gridVisualizer}{transform:scale(${scale});transform-origin:0 0;}`;
+
+	if (existing) {
+		existing.textContent = css;
+		return;
+	}
+
+	const style = document.createElement('style');
+	style.setAttribute(EDITOR_ZOOM_COMPAT_STYLE_ATTR, 'true');
+	style.textContent = css;
+	document.head.appendChild(style);
 }
 
 /**
@@ -590,11 +639,9 @@ export function syncCanvasHeader(zoomPercent?: number): void {
 	const isZoomed = z !== 100;
 
 	const extensionsSelect = select('blockera/extensions') as
-		| BlockeraExtensionsSelect
-		| undefined;
+		BlockeraExtensionsSelect | undefined;
 	const editorSelect = select('blockera/editor') as
-		| BlockeraEditorSelect
-		| undefined;
+		BlockeraEditorSelect | undefined;
 
 	const breakpointId =
 		extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ??

@@ -1,0 +1,47 @@
+/* Shade ramp chromeless controls (color-preset-fields) */
+.blockera-component-global-styles-color-shade-swatch {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	.blockera-component-base-breakpoint-icon {
+		position: absolute;
+		left: 50%;
+		top: -1px;
+		z-index: 2;
+		pointer-events: none;
+		stroke-width: 5px;
+		stroke: #f0f0f0;
+		paint-order: stroke;
+		transform: translateX(-50%);
+	}
+
+	.blockera-component-color-shade-edited-indicator {
+		position: absolute;
+		left: 50%;
+		right: initial;
+		bottom: 3px;
+		top: initial;
+		z-index: 2;
+		pointer-events: none;
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: #000000;
+		box-shadow: 0 0 0 1.5px #ffffff;
+		transform: translateX(-50%);
+	}
+}
+
+.is-preset-variable-variations-picker-header {
+	/* Shade ramp chromeless controls (color-preset-fields) */
+	.blockera-component-global-styles-color-shade-swatch {
+		.blockera-component-base-breakpoint-icon {
+			left: 1px;
+			top: -4px;
+			width: 14px;
+			height: 14px;
+		}
+	}
+}

@@ -5,7 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { useInstanceId } from '@wordpress/compose';
 import type { MixedElement } from 'react';
-import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
+import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -22,6 +22,7 @@ import { Button, Popover, BaseControl, NoticeControl } from '../index';
 import {
 	isColorControllableBySketchPicker,
 	validHex,
+	finalizeColorString,
 	valueCleanupColorString,
 } from './utils/css-color';
 
@@ -56,41 +57,36 @@ export default function ColorPickerControl({
 			valueCleanup,
 		});
 
+	const commitColorValue = useCallback(() => {
+		const finalized = finalizeColorString(value);
+
+		if (finalized !== value) {
+			setValue(finalized);
+		}
+	}, [value, setValue]);
+
+	const handleClose = useCallback(() => {
+		commitColorValue();
+		onClose();
+	}, [commitColorValue, onClose]);
+
+	const handlePaste = useCallback(
+		(event: {
+			preventDefault: () => void,
+			clipboardData: { getData: (type: string) => string },
+		}) => {
+			event.preventDefault();
+			const pastedText = event.clipboardData.getData('text').trim();
+			setValue(pastedText);
+		},
+		[setValue]
+	);
+
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
 	const cssValueInputId = useInstanceId(
 		ColorPickerControl,
 		'blockera-color-picker-css'
 	);
-	// Some color pickers blur the active element on drag; null relatedTarget can close the popover on focus-outside.
-	const focusOutsideSuppressionRef = useRef(false);
-
-	useEffect(() => {
-		if (!isOpen || !isPopover) {
-			return undefined;
-		}
-		const doc = typeof document !== 'undefined' ? document : null;
-		if (!doc) {
-			return undefined;
-		}
-		const onPointerDownCapture = (ev: PointerEvent) => {
-			const t = ev.target;
-			if (t instanceof Element && t.closest('.sketch-picker')) {
-				focusOutsideSuppressionRef.current = true;
-			}
-		};
-		const clearSuppression = () => {
-			focusOutsideSuppressionRef.current = false;
-		};
-		doc.addEventListener('pointerdown', onPointerDownCapture, true);
-		doc.addEventListener('pointerup', clearSuppression, true);
-		doc.addEventListener('pointercancel', clearSuppression, true);
-		return () => {
-			doc.removeEventListener('pointerdown', onPointerDownCapture, true);
-			doc.removeEventListener('pointerup', clearSuppression, true);
-			doc.removeEventListener('pointercancel', clearSuppression, true);
-			focusOutsideSuppressionRef.current = false;
-		};
-	}, [isOpen, isPopover]);
 
 	const eyeDropper: any = window?.EyeDropper ? new window.EyeDropper() : null;
 
@@ -197,6 +193,8 @@ export default function ColorPickerControl({
 				onChange={(e) => {
 					setValue(e.target.value);
 				}}
+				onPaste={handlePaste}
+				onBlur={commitColorValue}
 				autoComplete="off"
 				spellCheck={false}
 				placeholder={__(
@@ -224,13 +222,11 @@ export default function ColorPickerControl({
 				{isOpen && (
 					<Popover
 						title={popoverTitle}
-						offset={120}
 						placement={placement}
 						className={`blockera-color-picker-popover ${
 							isPopoverHidden ? 'hidden' : ''
 						}`}
-						onClose={onClose}
-						focusOutsideSuppressionRef={focusOutsideSuppressionRef}
+						onClose={handleClose}
 						titleButtonsRight={
 							<>
 								<Button
@@ -270,6 +266,9 @@ export default function ColorPickerControl({
 								</Button>
 							</>
 						}
+						style={{
+							'--blockera-controls-primary-color': value,
+						}}
 					>
 						{colorValueField}
 

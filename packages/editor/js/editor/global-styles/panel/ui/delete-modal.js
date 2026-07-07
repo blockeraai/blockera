@@ -16,7 +16,6 @@ import {
 	Button,
 	NoticeControl,
 	CheckboxControl,
-	DynamicHtmlFormatter,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
@@ -24,96 +23,40 @@ import { componentInnerClassNames } from '@blockera/classnames';
 
 export const DeleteModal = ({
 	style,
-	buttonText,
 	handleOnDelete,
 	setIsOpenDeleteModal,
+	isSizeVariationUi = false,
 }: {
 	style: Object,
-	buttonText: string,
 	handleOnDelete: (style: Object) => void,
 	setIsOpenDeleteModal: (isOpen: boolean) => void,
+	isSizeVariationUi?: boolean,
 }): MixedElement => {
 	const [isConfirmedDelete, setIsConfirmedDelete] = useState(false);
 
+	let headerTitle = isSizeVariationUi
+		? __('Delete size variation', 'blockera')
+		: __('Delete style variation', 'blockera');
+
+	if (style.label) {
+		headerTitle = sprintf(
+			/* translators: %s: The variation label. */
+			__('Delete "%s"?', 'blockera'),
+			style.label
+		);
+	}
+
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('delete-modal', {
+				'is-variation-ui-size': isSizeVariationUi,
+			})}
 			headerIcon={<Icon icon="trash" iconSize="34" />}
-			headerTitle={__('Delete style variation', 'blockera')}
+			headerTitle={headerTitle}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDeleteModal(false)}
-		>
-			<Flex direction="column" gap={40}>
-				<Flex direction="column" gap={15}>
-					<p style={{ margin: '0', color: '#1e1e1e' }}>
-						<DynamicHtmlFormatter
-							text={sprintf(
-								/* translators: %s: The style variation name. */
-								__(
-									'Are you sure you want to delete %s?',
-									'blockera'
-								),
-								'{item}'
-							)}
-							replacements={{
-								item: <strong>{buttonText}</strong>,
-							}}
-						/>
-					</p>
-
-					<p style={{ margin: '0', color: '#707070' }}>
-						{__(
-							'This will permanently delete the style and all connections to blocks using it. Those blocks will lose their styles and revert to defaults.',
-							'blockera'
-						)}
-					</p>
-				</Flex>
-
-				<Flex
-					gap={15}
-					className={componentInnerClassNames('consent-wrapper')}
-					direction="column"
-				>
-					<NoticeControl type={'error'}>
-						{__(
-							'Deleting this style variation cannot be undone. Blocks using the style variation will lose their styles unless updated manually.',
-							'blockera'
-						)}
-					</NoticeControl>
-
-					<ControlContextProvider
-						value={{
-							name: 'confirm-change-style-id',
-							value: isConfirmedDelete,
-						}}
-					>
-						<CheckboxControl
-							checkboxLabel={__(
-								'I understand and want to delete this style variation.',
-								'blockera'
-							)}
-							onChange={(newValue: boolean) =>
-								setIsConfirmedDelete(newValue)
-							}
-							isBold={true}
-						/>
-					</ControlContextProvider>
-				</Flex>
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="delete-button"
-						disabled={!isConfirmedDelete}
-						variant="primary"
-						onClick={() => {
-							handleOnDelete(style.name);
-
-							setIsOpenDeleteModal(false);
-						}}
-					>
-						{__('Delete', 'blockera')}
-					</Button>
-
+			actions={
+				<>
 					<Button
 						data-test="cancel-delete-button"
 						variant="tertiary"
@@ -124,6 +67,72 @@ export const DeleteModal = ({
 					>
 						{__('Cancel', 'blockera')}
 					</Button>
+
+					<Button
+						data-test="delete-button"
+						disabled={!isConfirmedDelete}
+						variant="primary"
+						onClick={() => {
+							handleOnDelete(style.name);
+
+							setIsOpenDeleteModal(false);
+						}}
+					>
+						{isSizeVariationUi
+							? __('Delete size variation', 'blockera')
+							: __('Delete style variation', 'blockera')}
+					</Button>
+				</>
+			}
+		>
+			<Flex direction="column" gap={30}>
+				<Flex direction="column" gap={15}>
+					<p style={{ margin: '0', color: '#1e1e1e' }}>
+						{isSizeVariationUi
+							? __(
+									'The size variation will be permanently removed from your site. Any blocks using it will lose their size preset and revert to the default size.',
+									'blockera'
+								)
+							: __(
+									'The style variation will be permanently removed from your site. Any blocks using it will lose their styling and revert to their default appearance.',
+									'blockera'
+								)}
+					</p>
+				</Flex>
+
+				<Flex
+					gap={15}
+					className={componentInnerClassNames('consent-wrapper')}
+					direction="column"
+				>
+					<NoticeControl type={'error'}>
+						{__('This action cannot be undone.', 'blockera')}
+					</NoticeControl>
+
+					<ControlContextProvider
+						value={{
+							name: 'confirm-change-style-id',
+							value: isConfirmedDelete,
+						}}
+					>
+						<CheckboxControl
+							checkboxLabel={
+								isSizeVariationUi
+									? __(
+											'I understand and want to delete this size variation.',
+											'blockera'
+										)
+									: __(
+											'I understand and want to delete this style variation.',
+											'blockera'
+										)
+							}
+							onChange={(newValue: boolean) =>
+								setIsConfirmedDelete(newValue)
+							}
+							isBold={true}
+						/>
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		</Modal>

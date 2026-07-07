@@ -2,13 +2,18 @@
  * WordPress dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-import { TextControl, Button } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { Modal } from '@blockera/controls';
+import {
+	Button,
+	ControlContextProvider,
+	Flex,
+	InputControl,
+	Modal,
+} from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -84,63 +89,95 @@ export default function RenameTabModal({
 
 	return (
 		<Modal
+			headerIcon={<Icon icon="pencil" library="wp" />}
 			headerTitle={
 				<>
-					<Icon icon="pencil" library="wp" />
-					{__('Rename Tab', 'blockera')}
+					{sprintf(
+						/* translators: %s: The tab title shown in the editor. */
+						__('Rename "%s"', 'blockera'),
+						tab.title
+					)}
 				</>
 			}
 			onRequestClose={handleClose}
 			className="blockera-tabs-rename-modal"
+			actions={
+				<div className="blockera-tabs-rename-modal-actions">
+					{tab.customTitle && (
+						<Button
+							variant="secondary"
+							isDestructive
+							onClick={handleRemoveRename}
+							style={{ marginRight: 'auto' }}
+							{...testId(
+								WORKSPACE_TABS_TEST_ID.renameModalRemoveRename
+							)}
+						>
+							{__('Remove rename', 'blockera')}
+						</Button>
+					)}
+
+					<div className="blockera-tabs-rename-modal-actions-right">
+						<Button
+							variant="tertiary"
+							onClick={handleClose}
+							{...testId(
+								WORKSPACE_TABS_TEST_ID.renameModalCancel
+							)}
+						>
+							{__('Cancel', 'blockera')}
+						</Button>
+						<Button
+							variant="primary"
+							onClick={handleSave}
+							{...testId(WORKSPACE_TABS_TEST_ID.renameModalSave)}
+						>
+							{__('Save', 'blockera')}
+						</Button>
+					</div>
+				</div>
+			}
 		>
 			<div
 				className="blockera-tabs-rename-modal-content"
 				{...testId(WORKSPACE_TABS_TEST_ID.renameModal)}
 			>
-				<TextControl
-					label={__('Custom Tab Name', 'blockera')}
-					value={customTitle}
-					onChange={setCustomTitle}
-					placeholder={actualTitle}
-					help={__(
-						'Leave empty to use the post title. This only changes the tab label and the post/page title won’t be changed.',
-						'blockera'
-					)}
-					{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
-				/>
-			</div>
-
-			<div className="blockera-tabs-rename-modal-actions">
-				{tab.customTitle && (
-					<Button
-						variant="secondary"
-						isDestructive
-						onClick={handleRemoveRename}
-						style={{ marginRight: 'auto' }}
-						{...testId(
-							WORKSPACE_TABS_TEST_ID.renameModalRemoveRename
+				<Flex direction="column" gap={20}>
+					<p style={{ margin: 0, color: '#707070' }}>
+						{__(
+							"The tab label only appears in the Blockera editor. Your post or page title won't change.",
+							'blockera'
 						)}
-					>
-						{__('Remove rename', 'blockera')}
-					</Button>
-				)}
+					</p>
 
-				<div className="blockera-tabs-rename-modal-actions-right">
-					<Button
-						variant="secondary"
-						onClick={handleClose}
-						{...testId(WORKSPACE_TABS_TEST_ID.renameModalCancel)}
+					<ControlContextProvider
+						value={{
+							name: `workspace-tab-rename-${tab.type}-${tab.id}`,
+							value: customTitle,
+						}}
 					>
-						{__('Cancel', 'blockera')}
-					</Button>
-					<Button
-						variant="primary"
-						onClick={handleSave}
-						{...testId(WORKSPACE_TABS_TEST_ID.renameModalSave)}
-					>
-						{__('Save', 'blockera')}
-					</Button>
-				</div>
+						<InputControl
+							label={__('Custom Tab Name', 'blockera')}
+							onChange={setCustomTitle}
+							placeholder={actualTitle}
+							columns="1fr 3fr"
+							{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
+						>
+							<p
+								style={{
+									margin: 0,
+									color: '#707070',
+									fontSize: '12px',
+								}}
+							>
+								{__(
+									'Leave empty to use the post title.',
+									'blockera'
+								)}
+							</p>
+						</InputControl>
+					</ControlContextProvider>
+				</Flex>
 			</div>
 		</Modal>
 	);

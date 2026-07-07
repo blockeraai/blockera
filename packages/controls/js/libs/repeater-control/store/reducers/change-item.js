@@ -9,9 +9,9 @@ import { update, prepare } from '@blockera/data-editor';
  */
 import {
 	hasRepeaterId,
-	getNewIdDetails,
 	repeaterOnChange,
-	regeneratedIds,
+	renameRepeaterItemByTypeValue,
+	shouldRenameRepeaterItemByType,
 } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
@@ -54,59 +54,61 @@ export function changeItem(state = {}, action) {
 
 	const clonedPrevValue = { ...controlInfo.value };
 
+	if (isEquals(action.value, clonedPrevValue[action.itemId])) {
+		return state;
+	}
+
 	if (
-		action.value?.type &&
-		!new RegExp(`^${action.value?.type}`, 'i').test(action.itemId) &&
-		!action?.staticType
+		shouldRenameRepeaterItemByType(
+			action.itemId,
+			action.value,
+			action.staticType
+		)
 	) {
-		delete clonedPrevValue[action.itemId];
+		const newValue = renameRepeaterItemByTypeValue(
+			controlInfo.value,
+			state,
+			{
+				...action,
+				value: {
+					...action.value,
+					isOpen: true,
+				},
+			}
+		);
 
-		let { uniqueId } = getNewIdDetails(state, action);
-
-		if ('function' === typeof action.getId) {
-			uniqueId = action.getId();
-		}
-
-		if (
-			clonedPrevValue[uniqueId] &&
-			isEquals(action.value, clonedPrevValue[uniqueId])
-		) {
+		if (null === newValue || isEquals(newValue, controlInfo.value)) {
 			return state;
 		}
 
-		repeaterOnChange(
-			regeneratedIds(
-				{
-					...clonedPrevValue,
-					[uniqueId]: { ...action.value, isOpen: true },
-				},
-				action
-			),
-			action
-		);
+		repeaterOnChange(newValue, action);
 
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: regeneratedIds(
-					{
-						...clonedPrevValue,
-						[uniqueId]: { ...action.value, isOpen: true },
-					},
-					action
-				),
+				value: newValue,
 			},
 		};
 	}
 
-	if (isEquals(action.value, clonedPrevValue[action.itemId])) {
-		return state;
-	}
-
 	if (action?.staticType) {
+		const previousItem = clonedPrevValue[action.itemId];
+		const shouldKeepPopoverOpen =
+			previousItem?.isOpen === true ||
+			previousItem?.creatingStep === true ||
+			action.value?.isOpen === true ||
+			action.value?.creatingStep === true;
+
 		delete clonedPrevValue[action.itemId];
 		action.itemId = action.staticType;
+
+		if (shouldKeepPopoverOpen) {
+			action.value = {
+				...action.value,
+				isOpen: true,
+			};
+		}
 	}
 
 	repeaterOnChange(

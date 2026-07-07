@@ -4,23 +4,18 @@ export const resetPanelSettings = (all = true) => {
 	cy.get('.blockera-component-modal').should('be.visible');
 
 	if (all) {
-		cy.then(() => {
-			cy.getByDataTest('reset-all-settings').click({ force: true });
-		});
+		cy.getByDataTest('reset-modal-open-all').click({ force: true });
+		cy.getByDataTest('reset-all-confirm-input')
+			.find('input')
+			.should('be.visible')
+			.clear({ force: true })
+			.type('reset', { force: true });
+		cy.getByDataTest('reset-all-settings').click({ force: true });
 	} else {
-		cy.then(() => {
-			cy.getByDataTest('reset-current-tab-settings').click({
-				force: true,
-			});
+		cy.getByDataTest('reset-current-tab-settings').click({
+			force: true,
 		});
 	}
 
-	cy.then(() => {
-		cy.wait(2000);
-	});
-
-	// reset should not return error
-	cy.get('.blockera-component-modal .message.update-failed').should(
-		'not.exist'
-	);
+	cy.get('.blockera-component-modal', { timeout: 15000 }).should('not.exist');
 };

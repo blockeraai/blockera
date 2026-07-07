@@ -1,0 +1,34 @@
+// Stroke-based SVG icons (fill="none" + stroke) must not inherit fill: currentColor
+// from parent UI styles — that fills closed paths and corrupts the preview.
+@mixin blockera-stroke-icon-svg-preview {
+	svg[fill="none"] {
+		fill: none;
+		stroke: currentColor;
+
+		// Accent shapes (e.g. yin-yang dots). Never use fill:unset — it inherits
+		// fill:none from the root svg. Keep inherited stroke so tiny r values match
+		// native SVG file rendering (fill + stroke halo).
+		[fill="currentColor"],
+		[fill="currentcolor"] {
+			fill: currentColor;
+		}
+
+		[fill]:not([fill="none"]):not([fill="currentColor"]):not([fill="currentcolor"]) {
+			stroke: none;
+		}
+	}
+
+	.blockera-stroke-svg-icon svg {
+		fill: none;
+		stroke: currentColor;
+
+		[fill="currentColor"],
+		[fill="currentcolor"] {
+			fill: currentColor;
+		}
+
+		[fill]:not([fill="none"]):not([fill="currentColor"]):not([fill="currentcolor"]) {
+			stroke: none;
+		}
+	}
+}

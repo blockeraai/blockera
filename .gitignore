@@ -77,6 +77,9 @@ packages/dev-cypress/js/downloads
 # Cypress videos
 packages/dev-cypress/js/videos
 
+# Cypress component-test webpack cache
+packages/dev-cypress/js/.webpack-cache
+
 # Playwright artifacts
 artifacts/
 test-results/
@@ -106,3 +109,8 @@ wordpress-develop
 
 # playwright environment variables
 playwright-env.json
+/images
+
+
+# Docs temporary for ai assistant
+docs-temp-ai/

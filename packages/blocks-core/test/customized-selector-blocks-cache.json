@@ -1,4 +1,10 @@
 {
+	"core/paragraph": {
+		"root": "p",
+		"typography": {
+			"textIndent": ".wp-block-paragraph + .wp-block-paragraph"
+		}
+	},
 	"core/image": {
 		"border": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)",
 		"shadow": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)",
@@ -6,10 +12,7 @@
 		"width": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)",
 		"object-fit": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)",
 		"box-sizing": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)",
-		"border-radius": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)",
-		"htmlEditable": {
-			"root": "&.wp-block-image :is(img, svg)"
-		}
+		"border-radius": ".wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)"
 	},
 	"core/list": {
 		"border": "ul"
@@ -54,6 +57,9 @@
 		"root": ".wp-block-button .wp-block-button__link",
 		"typography": {
 			"writingMode": ".wp-block-button"
+		},
+		"color": {
+			"root": " .wp-block-button__link"
 		},
 		"flex-child": {
 			"root": ".wp-block-button"
@@ -158,5 +164,30 @@
 		"htmlEditable": {
 			"root": " .wp-block-home-link__content"
 		}
+	},
+	"core/icon": {
+		"root": ".wp-block-icon svg",
+		"css": ".wp-block-icon",
+		"spacing": {
+			"margin": ".wp-block-icon"
+		},
+		"color": {
+			"root": "&.wp-block-icon svg"
+		},
+		"border": {
+			"root": "&.wp-block-icon svg"
+		},
+		"border-radius": {
+			"root": "&.wp-block-icon svg"
+		},
+		"width": {
+			"root": "&.wp-block-icon svg"
+		},
+		"htmlEditable": {
+			"root": "&.wp-block-icon svg"
+		}
+	},
+	"core/breadcrumbs": {
+		"layout": ".wp-block-breadcrumbs ol"
 	}
 }

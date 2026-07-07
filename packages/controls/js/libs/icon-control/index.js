@@ -5,9 +5,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
-import { applyFilters } from '@wordpress/hooks';
-import { useState, useReducer } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
+import { DropZone } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -16,21 +15,25 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
-import { isString, isEmpty, isUndefined, useLateEffect } from '@blockera/utils';
+import { Icon, prepareIconSvgForStorage } from '@blockera/icons';
+import { isString, isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
-import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { parseUploadedMediaAndSetIcon } from './helpers';
-import { sanitizeRawSVGString } from './utils';
-import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
-import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
+import {
+	isCustomIcon,
+	prepareSvgForPreviewDisplay,
+	svgHasPreservedColors,
+} from './utils';
+import { Button, BaseControl, Tooltip } from '../index';
+import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
+import CustomIconUploadUpgradePrompt from './components/icon-picker/custom-icon-upload-upgrade-prompt';
+import { useIconPickerModal } from './hooks/use-icon-picker-modal';
+import { useIconPreviewFileDrop } from './hooks/use-icon-preview-file-drop';
 
 function IconControl({
 	id,
@@ -48,7 +51,6 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
-	const { createNotice } = dispatch('core/notices');
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
 			id,
@@ -56,117 +58,55 @@ function IconControl({
 			defaultValue,
 		});
 
-	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
+	const handlePickerCommit = useCallback(
+		(nextIcon) => {
+			setValue(nextIcon);
+		},
+		[setValue]
+	);
 
-	useLateEffect(() => {
-		setValue(currentIcon);
-	}, [currentIcon]);
-
-	const [isOpenModal, setOpenModal] = useState(false);
-	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
-
-	// $FlowFixMe
-	const openModal = (event) => {
-		const target = event.target;
-		if (
-			'svg' === target.nodeName &&
-			'delete' === target.getAttribute('datatype')
-		) {
-			return;
-		}
-
-		setOpenModal(true);
-	};
-
-	const defaultIconState = {
+	const {
+		isOpenModal,
+		modalInitialTab,
+		openModal,
+		closeModal,
+		iconContextValue,
+		parseMediaForDraft,
+		handleUseCustomIcon,
+		clearSelectedCustomIcon,
+		hasIcon,
+		commitIconAction,
+	} = useIconPickerModal({
 		id,
-		currentIcon,
-		dispatch: currentIconDispatch,
-		handleIconSelect,
-	};
+		value,
+		onCommit: handlePickerCommit,
+	});
 
-	// $FlowFixMe
-	function dispatchActions(action) {
-		currentIconDispatch(action);
-		setOpenModal(false);
-	}
+	const { currentIcon } = iconContextValue;
+	const {
+		handlePreviewFilesDrop,
+		isUploadUpgradeOpen,
+		closeUploadUpgradePrompt,
+	} = useIconPreviewFileDrop({
+		onCommitSvg: commitIconAction,
+	});
 
-	function hasIcon() {
-		if (isUndefined(currentIcon) || isEmpty(currentIcon)) {
-			return false;
-		}
+	function renderSvgHtmlPreview(previewSvg: string) {
+		const preparedSvg = prepareSvgForPreviewDisplay(previewSvg);
+		const isMultiColor = svgHasPreservedColors(preparedSvg);
 
-		if ('' !== currentIcon.uploadSVG) {
-			return true;
-		}
-
-		if (
-			!isUndefined(currentIcon?.svgString) &&
-			'' !== currentIcon.svgString
-		) {
-			return true;
-		}
-
-		if (null === currentIcon.icon) {
-			return false;
-		}
-
-		return '' !== currentIcon.icon;
-	}
-
-	// $FlowFixMe
-	function handleIconSelect(event, action) {
-		event.stopPropagation();
-
-		let target = event.target;
-
-		if ('SVG' !== target.nodeName) {
-			target = target.closest('svg');
-		}
-
-		if (target?.classList?.contains('blockera-is-pro-icon')) {
-			return;
-		}
-
-		dispatchActions(action);
-	}
-
-	const onSelectSVG = (media) => {
-		if ('svg+xml' !== media.subtype) {
-			createNotice(
-				'error',
-				__('Please upload an SVG file!', 'blockera'),
-				{
-					isDismissible: true,
-				}
-			);
-			return;
-		}
-
-		parseUploadedMediaAndSetIcon(media, (svgString) => {
-			currentIconDispatch({
-				type: 'UPDATE_SVG',
-				uploadSVG: {
-					title: media.title,
-					filename: media.filename,
-					url: media.url,
-					updated: '',
-				},
-				svgString: sanitizeRawSVGString(svgString),
-			});
-		});
-	};
-
-	const mediaUploaderOpener = (event, open) => {
-		event.stopPropagation();
-		const callback = applyFilters(
-			'blockera.controls.iconControl.uploadSVG.onClick',
-			() => setIsOpenPromotion(true),
-			open
+		return (
+			<span
+				className={controlInnerClassNames(
+					'icon-preview-svg',
+					isMultiColor ? 'is-multi-color' : ''
+				)}
+				dangerouslySetInnerHTML={{
+					__html: preparedSvg,
+				}}
+			/>
 		);
-
-		callback();
-	};
+	}
 
 	function renderIcon() {
 		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
@@ -178,16 +118,28 @@ function IconControl({
 			!isEmpty(currentIcon?.renderedIcon) &&
 			isString(currentIcon?.renderedIcon)
 		) {
-			return (
-				<div
-					dangerouslySetInnerHTML={{
-						__html: atob(currentIcon.renderedIcon).replace(
-							/\s*style\s*=\s*["'][^"']*["']/g,
-							''
-						),
-					}}
-				/>
+			let previewSvg = currentIcon.svgString;
+
+			if (!previewSvg) {
+				try {
+					previewSvg = decodeURIComponent(
+						escape(atob(currentIcon.renderedIcon))
+					);
+				} catch (error) {
+					previewSvg = atob(currentIcon.renderedIcon);
+				}
+			}
+
+			if (isCustomIcon(currentIcon)) {
+				return renderSvgHtmlPreview(previewSvg);
+			}
+
+			previewSvg = prepareIconSvgForStorage(
+				previewSvg,
+				currentIcon?.library || ''
 			);
+
+			return renderSvgHtmlPreview(previewSvg);
 		}
 
 		if (
@@ -195,19 +147,9 @@ function IconControl({
 			!isEmpty(currentIcon?.svgString) &&
 			isString(currentIcon?.svgString)
 		) {
-			return (
-				<div
-					dangerouslySetInnerHTML={{
-						__html: currentIcon.svgString.replace(
-							/\s*style\s*=\s*["'][^"']*["']/g,
-							''
-						),
-					}}
-				/>
-			);
+			return renderSvgHtmlPreview(currentIcon.svgString);
 		}
 
-		// if custom uploaded svg icon url is available
 		if (
 			!isUndefined(currentIcon?.uploadSVG?.url) &&
 			!isEmpty(currentIcon?.uploadSVG?.url)
@@ -228,7 +170,7 @@ function IconControl({
 	}
 
 	return (
-		<IconContextProvider {...defaultIconState}>
+		<IconContextProvider {...iconContextValue}>
 			<BaseControl
 				label={label}
 				columns={columns}
@@ -250,18 +192,12 @@ function IconControl({
 					)}
 					onClick={openModal}
 				>
-					{isOpenPromotion && (
-						<UpgradePrompt
-							heading={__('Custom SVG Icons', 'blockera')}
-							featuresList={[
-								__('Upload custom SVG icons', 'blockera'),
-								__('Unlimited icon uploads', 'blockera'),
-								__('Unlock all icon libraries', 'blockera'),
-							]}
-							isOpen={isOpenPromotion}
-							onClose={() => setIsOpenPromotion(false)}
-						/>
-					)}
+					<DropZone onFilesDrop={handlePreviewFilesDrop} />
+
+					<CustomIconUploadUpgradePrompt
+						isOpen={isUploadUpgradeOpen}
+						onClose={closeUploadUpgradePrompt}
+					/>
 
 					{hasIcon() ? (
 						<div
@@ -292,7 +228,7 @@ function IconControl({
 									}
 									onClick={(e) => {
 										e.stopPropagation();
-										currentIconDispatch({
+										commitIconAction({
 											type: 'DELETE_ICON',
 										});
 									}}
@@ -315,23 +251,16 @@ function IconControl({
 									{labelIconLibrary}
 								</Button>
 
-								<MediaUploader
-									allowedTypes={['image/svg+xml']}
-									onSelect={onSelectSVG}
-									mode="upload"
-									render={({ open }) => (
-										<Button
-											data-cy="upload-svg-btn"
-											className="btn-upload"
-											noBorder={true}
-											onClick={(event) =>
-												mediaUploaderOpener(event, open)
-											}
-										>
-											{labelUploadSvg}
-										</Button>
-									)}
-								/>
+								<Button
+									data-cy="upload-svg-btn"
+									className="btn-upload"
+									noBorder={true}
+									onClick={(event) =>
+										openModal(event, 'custom')
+									}
+								>
+									{labelUploadSvg}
+								</Button>
 							</div>
 						</div>
 					) : (
@@ -344,32 +273,24 @@ function IconControl({
 								{labelIconLibrary}
 							</Button>
 
-							<MediaUploader
-								allowedTypes={['image/svg+xml']}
-								onSelect={onSelectSVG}
-								mode="upload"
-								render={({ open }) => (
-									<Button
-										data-cy="upload-svg-btn"
-										className="btn-choose-icon"
-										onClick={(event) =>
-											mediaUploaderOpener(event, open)
-										}
-									>
-										{labelUploadSvg}
-									</Button>
-								)}
-							/>
+							<Button
+								data-cy="upload-svg-btn"
+								className="btn-choose-icon"
+								onClick={(event) => openModal(event, 'custom')}
+							>
+								{labelUploadSvg}
+							</Button>
 						</div>
 					)}
 				</div>
 
 				{isOpenModal && (
-					<IconPickerPopover
-						isOpen={isOpenModal}
-						onClose={() => {
-							setOpenModal(false);
-						}}
+					<IconPickerModal
+						initialActiveTab={modalInitialTab}
+						onClose={closeModal}
+						onParseMediaForDraft={parseMediaForDraft}
+						onUseCustomIcon={handleUseCustomIcon}
+						onClearSelectedIcon={clearSelectedCustomIcon}
 					/>
 				)}
 			</BaseControl>

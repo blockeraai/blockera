@@ -30,9 +30,15 @@ export default function MoreFeatures({
 	className,
 	children,
 	isAnimated = false,
+	onOpenChange,
 	...props
 }: MoreFeaturesProps): Node {
 	const [isOpen, setIsOpen] = useState(_isOpen);
+
+	const toggleOpen = (nextIsOpen: boolean) => {
+		setIsOpen(nextIsOpen);
+		onOpenChange?.(nextIsOpen);
+	};
 
 	return (
 		<div
@@ -48,11 +54,11 @@ export default function MoreFeatures({
 					'more-features__button',
 					className
 				)}
-				onClick={() => setIsOpen(!isOpen)}
+				onClick={() => toggleOpen(!isOpen)}
 				tabIndex={0}
 				onKeyDown={(event) => {
 					if (event.key === 'Enter') {
-						setIsOpen(!isOpen);
+						toggleOpen(!isOpen);
 					}
 				}}
 				label={ariaLabel}

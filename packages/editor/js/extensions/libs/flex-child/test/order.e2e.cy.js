@@ -20,7 +20,7 @@ describe('Flex Child → Order', () => {
 <!-- /wp:group -->`;
 		appendBlocks(code);
 		cy.getBlock('core/paragraph').click();
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Self Order', 'base-control').should('exist');
 
@@ -49,7 +49,7 @@ describe('Flex Child → Order', () => {
 <!-- /wp:group -->`;
 		appendBlocks(code);
 		cy.getBlock('core/paragraph').click();
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		//Check block
 		cy.getBlock('core/paragraph').should('have.css', 'order', '100');
@@ -76,7 +76,7 @@ describe('Flex Child → Order', () => {
 <!-- /wp:group -->`;
 		appendBlocks(code);
 		cy.getBlock('core/paragraph').click();
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		cy.getParentContainer('Self Order', 'base-control').should('exist');
 

@@ -39,7 +39,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Gap').within(() => {
 				cy.get('input').type(43);
@@ -117,7 +117,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Gap').within(() => {
 				cy.get('input').type(43);
@@ -199,7 +199,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Flex').click();
@@ -289,7 +289,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Flex').click();
@@ -397,7 +397,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Flex').click();
@@ -446,7 +446,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Flex').click();
@@ -565,7 +565,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Flex').click();
@@ -656,7 +656,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Flex').click();
@@ -751,7 +751,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Grid').click();
@@ -820,7 +820,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByAriaLabel('Select parent block: Group').click();
 
 			// switch to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Grid').click();

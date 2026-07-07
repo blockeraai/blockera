@@ -252,6 +252,12 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 				selectedBlockStyleVariation: action.selectedBlockStyleVariation,
 			};
 			break;
+		case 'SET_SELECTED_BLOCK_SIZE_VARIATION':
+			state = {
+				...state,
+				selectedBlockSizeVariation: action.selectedBlockSizeVariation,
+			};
+			break;
 		case 'SET_STYLE_VARIATION_BLOCKS':
 			state = {
 				...state,

@@ -12,7 +12,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		// Set display
 		cy.getByAriaLabel('Flex').click();
@@ -816,17 +816,17 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
-								.breakpoints.tablet.attributes
+								?.breakpoints?.tablet?.attributes || {}
 						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.desktop.attributes
+								?.breakpoints?.desktop?.attributes
 						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.tablet.attributes
+								?.breakpoints?.tablet?.attributes || {}
 						);
 					});
 				}

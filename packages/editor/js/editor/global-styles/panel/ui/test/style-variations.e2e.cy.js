@@ -1,12 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	createPost,
-	appendBlocks,
-	getWPDataObject,
-	getSelectedBlock,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Style Variations', () => {
 	beforeEach(() => {

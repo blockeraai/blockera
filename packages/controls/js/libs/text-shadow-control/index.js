@@ -9,11 +9,12 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { UpgradePrompt, Flex } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import RepeaterItemHeader from './components/header';
@@ -53,6 +54,7 @@ export default function TextShadowControl({
 		</>
 	),
 	className,
+	withoutValueAddons = false,
 	...props
 }: TTextShadowControlProps): MixedElement {
 	return (
@@ -66,6 +68,12 @@ export default function TextShadowControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			label={label}
 			labelDescription={labelDescription}
+			{...(!withoutValueAddons
+				? {
+						controlAddonTypes: ['variable'],
+						variableTypes: ['text-shadow'],
+					}
+				: {})}
 			PromoComponent={({
 				items,
 				onClose = () => {},
@@ -77,15 +85,35 @@ export default function TextShadowControl({
 
 				return (
 					<UpgradePrompt
-						heading={__('Multiple Text Shadows', 'blockera')}
-						featuresList={[
-							__('Multiple text shadows', 'blockera'),
-							__('Advanced text shadow effects', 'blockera'),
-							__('Advanced features', 'blockera'),
-							__('Premium blocks', 'blockera'),
-						]}
+						lockedFeature={{
+							icon: <Icon icon="layers" iconSize={26} />,
+							title: __(
+								'Multiple Text Shadow Layers',
+								'blockera'
+							),
+							description: (
+								<Flex direction="column" gap="6px">
+									{__(
+										'Stack unlimited text shadow layers',
+										'blockera'
+									)}
+									<Flex direction="row" gap="6px">
+										<span className="blockera-free-plan-hint">
+											{__('Free: 1 layer', 'blockera')}
+										</span>
+										<span className="blockera-pro-plan-hint">
+											{__(
+												'Pro: Unlimited layers',
+												'blockera'
+											)}
+										</span>
+									</Flex>
+								</Flex>
+							),
+						}}
 						isOpen={isOpen}
 						onClose={onClose}
+						type="modal"
 					/>
 				);
 			}}

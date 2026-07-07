@@ -14,6 +14,7 @@ import {
 	getIconAttributes,
 	addIconClassName,
 	removeIconClassName,
+	isCoreIconBlock,
 } from '@blockera/feature-icon';
 
 /**
@@ -206,26 +207,49 @@ export const blockeraEditorFilters = () => {
 	addFilter(
 		'blockera.editor.useAttributes.beforeChangeAttributes',
 		'blockera.features.useAttributes.beforeChangeAttributes',
-		(attributes, attributeId, newValue) => {
-			if (getIconAttributes().includes(attributeId)) {
+		(attributes, attributeId, newValue, options, blockId) => {
+			if (!getIconAttributes().includes(attributeId)) {
+				return attributes;
+			}
+
+			// core/icon is a standalone icon block — no inline start/end layout class.
+			if (isCoreIconBlock(blockId)) {
 				if (attributeId === 'blockeraIcon') {
 					if (newValue?.icon || newValue?.renderedIcon) {
-						attributes = addIconClassName(attributes, {
-							blockeraIcon: newValue,
-							blockeraIconPosition:
-								attributes.blockeraIconPosition?.value,
-						});
+						attributes = addIconClassName(
+							attributes,
+							{
+								blockeraIcon: newValue,
+								blockeraIconPosition:
+									attributes.blockeraIconPosition?.value,
+							},
+							blockId
+						);
 					} else {
 						attributes = removeIconClassName(attributes);
 					}
 				}
 
-				if (attributeId === 'blockeraIconPosition') {
+				return attributes;
+			}
+
+			if (attributeId === 'blockeraIcon') {
+				if (newValue?.icon || newValue?.renderedIcon) {
 					attributes = addIconClassName(attributes, {
-						blockeraIcon: attributes.blockeraIcon,
-						blockeraIconPosition: newValue,
+						blockeraIcon: newValue,
+						blockeraIconPosition:
+							attributes.blockeraIconPosition?.value,
 					});
+				} else {
+					attributes = removeIconClassName(attributes);
 				}
+			}
+
+			if (attributeId === 'blockeraIconPosition') {
+				attributes = addIconClassName(attributes, {
+					blockeraIcon: attributes.blockeraIcon,
+					blockeraIconPosition: newValue,
+				});
 			}
 
 			return attributes;

@@ -29,6 +29,8 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 	DynamicHtmlFormatter,
+	normalizeVariablePickerSearchQuery,
+	variablePickerItemMatchesSearch,
 } from '@blockera/controls';
 import {
 	classNames,
@@ -49,13 +51,17 @@ import {
 } from '../context';
 import { AddNewStyleButton } from './add-new-style-button';
 import { useBlockStylesCounter } from './use-block-styles-counter';
+import { blockDynamicStylesCount } from './use-block-styles-picker-value';
 import { useBlockContext } from '../../../../extensions/components';
 import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
 import { PromoteGlobalStylesPremiumFeature } from './promote-global-styles-premium-feature';
-
-// Mapped block dynamic style variations counter for limitation reasons.
-const blockDynamicStylesCount: Object = {};
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
+import { useBlockVariationSupport } from '../use-block-variation-support';
+import { isVariationSurfaceEnabled } from '../block-variation-support';
 
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({
@@ -66,6 +72,7 @@ function BlockStyles({
 	setChangesets,
 	originDefaultAttributes,
 	context = 'inspector-controls',
+	pickerVariationSurface,
 }: T_BLOCK_STYLES_PROPS): MixedElement | null {
 	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 
@@ -76,7 +83,20 @@ function BlockStyles({
 		setStyle: setStyles,
 		setCurrentBlockStyleVariation,
 		currentBlockStyleVariation,
+		variationSurface: panelVariationSurface = VARIATION_SURFACE_STYLE,
 	} = useGlobalStylesPanelContext();
+	const variationSurface =
+		pickerVariationSurface !== undefined && pickerVariationSurface !== ''
+			? pickerVariationSurface
+			: panelVariationSurface;
+	const variationSupport = useBlockVariationSupport(blockName);
+	const isSurfaceEnabled = isVariationSurfaceEnabled(
+		variationSurface,
+		variationSupport,
+		VARIATION_SURFACE_STYLE,
+		VARIATION_SURFACE_SIZE
+	);
+
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
 	const [counter, setCounter] = useBlockStylesCounter({
@@ -84,6 +104,7 @@ function BlockStyles({
 		baseConfig,
 		userConfig,
 		blockDynamicStylesCount,
+		variationSurface,
 	});
 	const [blockStyles, setBlockStyles] = useState(styles.stylesToRender);
 	const [hoveredStyle, setHoveredStyle] = useState(null);
@@ -93,9 +114,41 @@ function BlockStyles({
 	const isMobileViewport = useViewportMatch('medium', '<');
 
 	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
-		'blockera.block.style.variations.globalStylesMaxItems',
+		`blockera.block.${variationSurface}.variations.globalStylesMaxItems`,
 		2
 	);
+
+	const isSizeVariationUi = variationSurface === VARIATION_SURFACE_SIZE;
+
+	let missingVariationMessage;
+	if (isSizeVariationUi) {
+		/* translators: %s: The name of the missing size variation */
+		missingVariationMessage = __(
+			'The “%s” size variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+			'blockera'
+		);
+	} else {
+		/* translators: %s: The name of the missing style variation */
+		missingVariationMessage = __(
+			'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+			'blockera'
+		);
+	}
+
+	let activeVariationFallbackMessage;
+	if (isSizeVariationUi) {
+		/* translators: %s: The name of the currently active size variation */
+		activeVariationFallbackMessage = __(
+			'This block is currently using the “%s” size instead.',
+			'blockera'
+		);
+	} else {
+		/* translators: %s: The name of the currently active style variation */
+		activeVariationFallbackMessage = __(
+			'This block is currently using the “%s” style instead.',
+			'blockera'
+		);
+	}
 
 	const handlePromotionPopover = useCallback((): boolean => {
 		let canDoAction = true;
@@ -140,6 +193,32 @@ function BlockStyles({
 			? setCurrentBlockStyleVariation
 			: fallbackSetCurrentActiveStyle;
 
+	useEffect(() => {
+		setBlockStyles((previousStyles) => {
+			const rendered = stylesToRender || [];
+
+			if (!previousStyles.length) {
+				return rendered;
+			}
+
+			// Keep optimistic rows until `stylesToRender` catches up after registerBlockStyle.
+			const renderedSet = {};
+			for (let i = 0; i < rendered.length; i++) {
+				renderedSet[rendered[i].name] = true;
+			}
+
+			const pending = [];
+			for (let i = 0; i < previousStyles.length; i++) {
+				const style = previousStyles[i];
+				if (!renderedSet[style.name]) {
+					pending.push(style);
+				}
+			}
+
+			return pending.length ? [...rendered, ...pending] : rendered;
+		});
+	}, [stylesToRender]);
+
 	// Update ref whenever hoveredStyle changes
 	useEffect(() => {
 		hoveredStyleRef.current = hoveredStyle;
@@ -161,6 +240,8 @@ function BlockStyles({
 
 			setCurrentActiveStyle(style);
 			onSelect(style);
+			setCurrentPreviewStyle(null);
+			setShowPreview(false);
 			setIsOpen(false);
 			setHoveredStyle(null);
 		},
@@ -170,6 +251,8 @@ function BlockStyles({
 			onSelect,
 			setIsOpen,
 			setHoveredStyle,
+			setCurrentPreviewStyle,
+			setShowPreview,
 		]
 	);
 
@@ -180,7 +263,10 @@ function BlockStyles({
 				return;
 			}
 
-			if (hoveredStyle === item || activeStyle?.name === item?.name) {
+			if (
+				item !== null &&
+				(hoveredStyle === item || activeStyle?.name === item?.name)
+			) {
 				setHoveredStyle(null);
 				setCurrentPreviewStyle(item);
 				return;
@@ -237,6 +323,7 @@ function BlockStyles({
 			hasChangesets: hasChangesets ?? false,
 			setChangesets: setChangesets ?? (() => {}),
 			isNotActive: isNotActive ?? false,
+			variationSurface,
 		}),
 		[
 			blockName,
@@ -258,10 +345,19 @@ function BlockStyles({
 			hasChangesets,
 			setChangesets,
 			isNotActive,
+			variationSurface,
 		]
 	);
 
-	if (!stylesToRender || stylesToRender.length === 0) {
+	if (!isSurfaceEnabled) {
+		return null;
+	}
+
+	if (
+		!stylesToRender ||
+		(stylesToRender.length === 0 &&
+			variationSurface !== VARIATION_SURFACE_SIZE)
+	) {
 		return null;
 	}
 
@@ -274,10 +370,19 @@ function BlockStyles({
 			return;
 		}
 
+		const normalizedQuery = normalizeVariablePickerSearchQuery(newValue);
 		const filtered = stylesToRender.filter((style) => {
 			const label =
 				style.label || style.name || __('Default', 'blockera');
-			return label.toLowerCase().includes(newValue.toLowerCase());
+			return variablePickerItemMatchesSearch(
+				{
+					name: label,
+					label,
+					slug: style.name,
+					id: style.name,
+				},
+				normalizedQuery
+			);
 		});
 
 		setBlockStyles(filtered);
@@ -289,9 +394,9 @@ function BlockStyles({
 				<StyleVariationsManager />
 				{isPromotionPopoverOpen && (
 					<PromoteGlobalStylesPremiumFeature
-						items={blockStyles}
 						onClose={() => setIsPromotionPopoverOpen(false)}
 						isOpen={isPromotionPopoverOpen}
+						variationSurface={variationSurface}
 					/>
 				)}
 			</BlockStylesPickerContextProvider>
@@ -303,14 +408,19 @@ function BlockStyles({
 			<SlotFillProvider>
 				<Popover
 					title={''}
-					offset={10}
 					placement="bottom-start"
-					className="variations-picker-popover"
+					className={classNames('variations-picker-popover', {
+						'is-variation-ui-size':
+							variationSurface === VARIATION_SURFACE_SIZE,
+						'is-variation-ui-style':
+							variationSurface === VARIATION_SURFACE_STYLE,
+					})}
 					onClose={() => {
 						setIsOpen(false);
 						setCurrentPreviewStyle(null);
 					}}
 					anchor={popoverAnchor}
+					offset={12}
 				>
 					<Flex
 						className={componentClassNames('block-styles')}
@@ -325,7 +435,11 @@ function BlockStyles({
 						>
 							<SearchControl
 								onChange={handleSearch}
-								placeholder={__('Search styles…', 'blockera')}
+								placeholder={
+									isSizeVariationUi
+										? __('Search sizes…', 'blockera')
+										: __('Search styles…', 'blockera')
+								}
 							/>
 						</ControlContextProvider>
 
@@ -348,18 +462,26 @@ function BlockStyles({
 							<>
 								<Flex direction="column" gap="10px">
 									<AddNewStyleButton
-										label={__(
-											'Style Variations',
-											'blockera'
-										)}
+										label={
+											variationSurface !==
+											VARIATION_SURFACE_SIZE
+												? __(
+														'Style Variations',
+														'blockera'
+													)
+												: __(
+														'Size Variations',
+														'blockera'
+													)
+										}
 									/>
 									{isPromotionPopoverOpen && (
 										<PromoteGlobalStylesPremiumFeature
-											items={blockStyles}
 											onClose={() =>
 												setIsPromotionPopoverOpen(false)
 											}
 											isOpen={isPromotionPopoverOpen}
+											variationSurface={variationSurface}
 										/>
 									)}
 
@@ -411,17 +533,19 @@ function BlockStyles({
 									</div>
 								</Flex>
 
-								<Flex direction="column" gap="8px">
-									<h2
-										className={classNames(
-											'blockera-block-styles-category'
-										)}
-									>
-										{__('Actions', 'blockera')}
-									</h2>
+								{activeStyle?.name && (
+									<Flex direction="column" gap="8px">
+										<h2
+											className={classNames(
+												'blockera-block-styles-category'
+											)}
+										>
+											{__('Actions', 'blockera')}
+										</h2>
 
-									<Slot name="block-inspector-style-actions" />
-								</Flex>
+										<Slot name="block-inspector-style-actions" />
+									</Flex>
+								)}
 							</>
 						)}
 
@@ -430,11 +554,7 @@ function BlockStyles({
 								<p>
 									<DynamicHtmlFormatter
 										text={sprintf(
-											/* translators: %s: The name of the missing style variation */
-											__(
-												'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
-												'blockera'
-											),
+											missingVariationMessage,
 											'{style}'
 										)}
 										replacements={{
@@ -450,11 +570,7 @@ function BlockStyles({
 								<p>
 									<DynamicHtmlFormatter
 										text={sprintf(
-											/* translators: %s: The name of the currently active style */
-											__(
-												'This block is currently using the “%s” style instead.',
-												'blockera'
-											),
+											activeVariationFallbackMessage,
 											'{style}'
 										)}
 										replacements={{

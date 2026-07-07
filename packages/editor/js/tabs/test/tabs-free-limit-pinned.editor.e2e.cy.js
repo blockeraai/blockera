@@ -41,6 +41,11 @@ describe('Workspace tabs: Pinned limit (free tier)', () => {
 		cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuPin).click();
 		cy.tabsExpectPinnedCount(1);
 		cy.tabsExpectUnpinnedCount(1);
+		cy.get(
+			`.blockera-tabs-bar-tabs__pinned-tabs [test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`
+		).should('contain.text', title0);
+
+		cy.get('body').type('{esc}', { force: true });
 
 		cy.get(unpinnedTabRoots).eq(0).rightclick();
 		cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuPin).click();
@@ -48,9 +53,9 @@ describe('Workspace tabs: Pinned limit (free tier)', () => {
 		cy.tabsExpectPinnedCount(1);
 		cy.tabsExpectUnpinnedCount(1);
 		cy.tabsExpectLimitUpgradePrompt({ timeout: 20000 });
-		cy.getByTestId(WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt).should(
+		cy.get('.blockera-component-upgrade-prompt').should(
 			'contain.text',
-			'More pinned tabs in Pro'
+			'Unlimited Pinned Tabs'
 		);
 	});
 });

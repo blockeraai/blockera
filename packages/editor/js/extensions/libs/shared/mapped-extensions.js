@@ -2,21 +2,22 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useMemo } from '@wordpress/element';
 import { Fragment, type MixedElement } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Button, Slot, SlotFillProvider } from '@wordpress/components';
+import { Slot, SlotFillProvider } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
 import {
+	Flex,
+	Button,
 	type TTabProps,
 	SearchControl,
 	ControlContextProvider,
-	NoticeControl,
 } from '@blockera/controls';
 import { ExtensionSlotFill } from '@blockera/features-core';
 
@@ -62,6 +63,8 @@ const STYLE_TAB_CONFIG_KEYS: Array<string> = [
 	'sizeConfig',
 	'positionConfig',
 	'effectsConfig',
+	'clickAnimationConfig',
+	'mouseConfig',
 	'customStyleConfig',
 ];
 
@@ -156,7 +159,7 @@ export const MappedExtensions = ({
 	// Must stay in sync with extension configs rendered under case 'style' (plus flex/grid child when shown).
 	const styleTabHasSearchMatches = useMemo(() => {
 		const q = searchQuery?.trim();
-		if (!q || tab.name !== 'style') {
+		if (!q || tab.name !== 'styles') {
 			return true;
 		}
 		const keysLen = STYLE_TAB_CONFIG_KEYS.length;
@@ -181,7 +184,7 @@ export const MappedExtensions = ({
 	}, [searchQuery, tab.name, settings, parentLayout.layout, gridChildConfig]);
 
 	switch (tab.name) {
-		case 'settings':
+		case 'setting':
 			activePanel.push(
 				<Fragment key={`${block.clientId}-settings-panel`}>
 					<SlotFillProvider>
@@ -309,7 +312,7 @@ export const MappedExtensions = ({
 			);
 			break;
 
-		case 'style':
+		case 'styles':
 			activePanel.push(
 				<Fragment key={`${block.clientId}-style-panel`}>
 					<SlotFillProvider>
@@ -351,52 +354,46 @@ export const MappedExtensions = ({
 							blockName: block.blockName,
 						}}
 					>
-						<div style={{ padding: '16px' }}>
+						<div className="blockera-control blockera-control-panel-body is-opened">
 							<SearchControl
 								className="search-features"
 								onChange={setSearchQuery}
-								placeholder={__('Search Features…', 'blockera')}
+								placeholder={__(
+									'Search color, text, border…',
+									'blockera'
+								)}
 							/>
 							{searchQuery?.trim() &&
 							!styleTabHasSearchMatches ? (
-								// role/aria on wrapper: NoticeControl props are not typed for a11y attrs in Flow.
-								<div
+								<Flex
+									direction="column"
+									alignItems="center"
+									justifyContent="center"
+									gap="15px"
 									className="blockera-search-features-empty"
-									role="status"
-									aria-live="polite"
-									style={{ marginTop: '20px' }}
+									style={{
+										marginTop: '20px',
+									}}
 								>
-									<NoticeControl
-										type="information"
-										field="blockera-feature-search-empty"
-									>
-										<p>
-											<strong>
-												{__(
-													'No features match your search.',
-													'blockera'
-												)}
-											</strong>
-										</p>
-										<p>
-											{__(
-												'Try a different word or check the spelling.',
+									<p style={{ margin: '0' }}>
+										{sprintf(
+											/* translators: %s: the search query */
+											__(
+												'No results for "%s"',
 												'blockera'
-											)}
-										</p>
-										<Button
-											variant="link"
-											onClick={() => setSearchQuery('')}
-											style={{
-												padding: 0,
-												height: 'auto',
-												fontSize: '12px',
-											}}
-										>
-											{__('Clear search', 'blockera')}
-										</Button>
-									</NoticeControl>
-								</div>
+											),
+											searchQuery.trim()
+										)}
+									</p>
+
+									<Button
+										variant="tertiary"
+										onClick={() => setSearchQuery('')}
+										size="small"
+									>
+										{__('Clear search', 'blockera')}
+									</Button>
+								</Flex>
 							) : null}
 						</div>
 					</ControlContextProvider>
@@ -1069,6 +1066,133 @@ export const MappedExtensions = ({
 						/>
 					</ErrorBoundary>
 
+					<SlotFillProvider>
+						<Slot name={'blockera-inspector-interactions-start'} />
+						<ExtensionSlotFill
+							{...{
+								block,
+								settings,
+								attributes,
+								useBlockSection,
+								activeSearchMode,
+								blockFeatures: additional.blockFeatures,
+								currentStateAttributes,
+								handleOnChangeSettings,
+								handleOnChangeAttributes,
+								slotName:
+									'blockera-inspector-interactions-start',
+							}}
+						/>
+					</SlotFillProvider>
+
+					<SlotFillProvider>
+						<Slot name={'blockera-inspector-interactions'} />
+						<ExtensionSlotFill
+							{...{
+								block,
+								settings,
+								attributes,
+								useBlockSection,
+								activeSearchMode,
+								blockFeatures: additional.blockFeatures,
+								currentStateAttributes,
+								handleOnChangeSettings,
+								handleOnChangeAttributes,
+								slotName: 'blockera-inspector-interactions',
+							}}
+						/>
+					</SlotFillProvider>
+
+					<ErrorBoundary
+						fallbackRender={({ error }) => (
+							<ErrorBoundaryFallback
+								isReportingErrorCompleted={
+									isReportingErrorCompleted
+								}
+								clientId={block.clientId}
+								setIsReportingErrorCompleted={
+									setIsReportingErrorCompleted
+								}
+								from={'extension'}
+								error={error}
+								configId={'mouseConfig'}
+								title={__('Mouse', 'blockera')}
+								icon={<Icon icon="extension-mouse" />}
+							/>
+						)}
+					>
+						<MouseExtension
+							block={block}
+							mouseConfig={mouseConfig}
+							extensionProps={{
+								blockeraCursor: {},
+								blockeraUserSelect: {},
+								blockeraPointerEvents: {},
+							}}
+							values={{
+								cursor: currentStateAttributes.blockeraCursor,
+								userSelect:
+									currentStateAttributes.blockeraUserSelect,
+								pointerEvents:
+									currentStateAttributes.blockeraPointerEvents,
+							}}
+							attributes={{
+								blockeraCursor: attributes.blockeraCursor,
+								blockeraUserSelect:
+									attributes.blockeraUserSelect,
+								blockeraPointerEvents:
+									attributes.blockeraPointerEvents,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
+						/>
+					</ErrorBoundary>
+
+					<ErrorBoundary
+						fallbackRender={({ error }) => (
+							<ErrorBoundaryFallback
+								isReportingErrorCompleted={
+									isReportingErrorCompleted
+								}
+								clientId={block.clientId}
+								setIsReportingErrorCompleted={
+									setIsReportingErrorCompleted
+								}
+								from={'extension'}
+								error={error}
+								configId={'clickAnimationConfig'}
+								title={__('On Click', 'blockera')}
+								icon={<Icon icon="extension-click-animation" />}
+							/>
+						)}
+					>
+						<ClickAnimationExtension
+							block={block}
+							extensionConfig={clickAnimationConfig}
+							extensionProps={{}}
+							values={{}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+						/>
+					</ErrorBoundary>
+
+					<SlotFillProvider>
+						<Slot name={'blockera-inspector-interactions-end'} />
+						<ExtensionSlotFill
+							{...{
+								block,
+								settings,
+								attributes,
+								useBlockSection,
+								activeSearchMode,
+								blockFeatures: additional.blockFeatures,
+								currentStateAttributes,
+								handleOnChangeSettings,
+								handleOnChangeAttributes,
+								slotName: 'blockera-inspector-interactions-end',
+							}}
+						/>
+					</SlotFillProvider>
+
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
 							<ErrorBoundaryFallback
@@ -1121,207 +1245,7 @@ export const MappedExtensions = ({
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
-								slotName:
-									'blockera-inspector-interactions-start',
-							}}
-						/>
-					</SlotFillProvider>
-				</Fragment>
-			);
-			break;
-
-		case 'interactions':
-			activePanel.push(
-				<Fragment key={`${block.clientId}-interactions-panel`}>
-					<SlotFillProvider>
-						<Slot name={'blockera-inspector-interactions-start'} />
-						<ExtensionSlotFill
-							{...{
-								block,
-								settings,
-								attributes,
-								useBlockSection,
-								activeSearchMode,
-								blockFeatures: additional.blockFeatures,
-								currentStateAttributes,
-								handleOnChangeSettings,
-								handleOnChangeAttributes,
-								slotName:
-									'blockera-inspector-interactions-start',
-							}}
-						/>
-					</SlotFillProvider>
-					{/* <ErrorBoundary
-								fallbackRender={({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={block.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'entranceAnimationConfig'
-													}
-													title={__(
-														'On Entrance',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-entrance-animation" />
-													}
-												/>
-										  )}
-							>
-								<EntranceAnimationExtension
-									block={block}
-									extensionConfig={entranceAnimationConfig}
-									extensionProps={{}}
-									values={{}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-								/>
-							</ErrorBoundary> */}
-
-					{/* <ErrorBoundary
-								fallbackRender={({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={block.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'scrollAnimationConfig'
-													}
-													title={__(
-														'On Scroll',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-scroll-animation" />
-													}
-												/>
-										  )}
-							>
-								<ScrollAnimationExtension
-									block={block}
-									extensionConfig={scrollAnimationConfig}
-									extensionProps={{}}
-									values={{}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-								/>
-							</ErrorBoundary> */}
-
-					<SlotFillProvider>
-						<Slot name={'blockera-inspector-interactions'} />
-						<ExtensionSlotFill
-							{...{
-								block,
-								settings,
-								attributes,
-								useBlockSection,
-								activeSearchMode,
-								blockFeatures: additional.blockFeatures,
-								currentStateAttributes,
-								handleOnChangeSettings,
-								handleOnChangeAttributes,
-								slotName: 'blockera-inspector-interactions',
-							}}
-						/>
-					</SlotFillProvider>
-
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
-								configId={'clickAnimationConfig'}
-								title={__('On Click', 'blockera')}
-								icon={<Icon icon="extension-click-animation" />}
-							/>
-						)}
-					>
-						<ClickAnimationExtension
-							block={block}
-							extensionConfig={clickAnimationConfig}
-							extensionProps={{}}
-							values={{}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
-					</ErrorBoundary>
-
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
-								configId={'mouseConfig'}
-								title={__('Mouse', 'blockera')}
-								icon={<Icon icon="extension-mouse" />}
-							/>
-						)}
-					>
-						<MouseExtension
-							block={block}
-							mouseConfig={mouseConfig}
-							extensionProps={{
-								blockeraCursor: {},
-								blockeraUserSelect: {},
-								blockeraPointerEvents: {},
-							}}
-							values={{
-								cursor: currentStateAttributes.blockeraCursor,
-								userSelect:
-									currentStateAttributes.blockeraUserSelect,
-								pointerEvents:
-									currentStateAttributes.blockeraPointerEvents,
-							}}
-							attributes={{
-								blockeraCursor: attributes.blockeraCursor,
-								blockeraUserSelect:
-									attributes.blockeraUserSelect,
-								blockeraPointerEvents:
-									attributes.blockeraPointerEvents,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
-					</ErrorBoundary>
-					<SlotFillProvider>
-						<Slot name={'blockera-inspector-interactions-end'} />
-						<ExtensionSlotFill
-							{...{
-								block,
-								settings,
-								attributes,
-								useBlockSection,
-								activeSearchMode,
-								blockFeatures: additional.blockFeatures,
-								currentStateAttributes,
-								handleOnChangeSettings,
-								handleOnChangeAttributes,
-								slotName: 'blockera-inspector-interactions-end',
+								slotName: 'blockera-inspector-styles-end',
 							}}
 						/>
 					</SlotFillProvider>

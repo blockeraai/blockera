@@ -26,7 +26,6 @@ export const StyleItemMenuContext: Object = createContext({
 	buttonText: '',
 	handleOnRename: () => {},
 	handleOnDuplicate: () => {},
-	handleOnClearAllCustomizations: () => {},
 	handleOnEnable: () => {},
 	handleOnDelete: () => {},
 	handleOnUsageForMultipleBlocks: () => {},
@@ -43,7 +42,7 @@ export const StyleItemMenuContext: Object = createContext({
 	setCurrentBlockStyleVariation: () => {},
 	blockStyles: [],
 	anchorRef: { current: null },
-	popoverOffset: 50,
+	variationAllowsMultipleBlocks: true,
 });
 
 export const useStyleItemMenuContext = (): Object => {

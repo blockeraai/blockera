@@ -30,6 +30,10 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/global-styles-ui"
+		},
+		{
+			"type": "path",
 			"url": "packages/utils"
 		},
 		{
@@ -70,10 +74,6 @@
 		},
 		{
 			"type": "path",
-			"url": "packages/blocks-library/icon"
-		},
-		{
-			"type": "path",
 			"url": "packages/blocks-core"
 		},
 		{
@@ -101,7 +101,6 @@
 		"blockera/features-core": "*",
 		"blockera/feature-icon": "*",
 		"blockera/blockera-admin": "*",
-		"blockera/block-icon": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
@@ -110,6 +109,7 @@
 		"blockera/icons": "*",
 		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
+		"blockera/global-styles-ui": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
 		"blockera/exceptions": "*",
@@ -151,10 +151,10 @@
 	},
 	"scripts": {
 		"test": "@php ./vendor/bin/phpunit",
-		"lint": "phpcs --standard=phpcs.xml",
+		"lint": "./bin/phpcs.sh --standard=phpcs.xml",
 		"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
 		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage",
-		"phpcs": "phpcs",
+		"phpcs": "./bin/phpcs.sh",
 		"phpcbf": "phpcbf"
 	},
 	"autoload-dev": {

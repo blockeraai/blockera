@@ -6,11 +6,14 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
+import {
+	BLOCKERA_STYLE_SCOPE_CLASS,
+	BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS,
+} from './apply';
 import { classes as classCombinations } from './classes';
 
 const restoreSpecificClassCombinations = (container) => {
 	classCombinations.forEach(({ parent, children }) => {
-		// If no children selectors, restore the parent element
 		if (!children) {
 			const parentElements = container.querySelectorAll(parent);
 			parentElements.forEach((parentElement) => {
@@ -20,12 +23,10 @@ const restoreSpecificClassCombinations = (container) => {
 			return;
 		}
 
-		// Convert single string to array for consistent handling
 		const childrenSelectors = Array.isArray(children)
 			? children
 			: [children];
 
-		// Restore each selector
 		for (const selector of childrenSelectors) {
 			const childElements = container.querySelectorAll(selector);
 			childElements.forEach((childElement) => {
@@ -39,17 +40,28 @@ const restoreSpecificClassCombinations = (container) => {
 	});
 };
 
-export const useBlockSideEffectsRestore = (selectedBlock) => {
-	const inspector = document.querySelector('.block-editor-block-inspector');
+/**
+ * Restores inspector DOM when switching to a non-Blockera block (see block-settings.js).
+ */
+export const useBlockSideEffectsRestore = (selectedBlock, blockName) => {
 	useEffect(() => {
+		if (selectedBlock?.name !== blockName) {
+			return;
+		}
+
+		const inspector = document.querySelector(
+			'.block-editor-block-inspector'
+		);
+
 		if (inspector) {
-			// Remove all blockera-active-block-* classes
-			const classList = inspector.classList;
-			Array.from(classList).forEach((className) => {
+			Array.from(inspector.classList).forEach((className) => {
 				if (className.startsWith('blockera-active-block-')) {
-					classList.remove(className);
+					inspector.classList.remove(className);
 				}
 			});
+
+			inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
+			inspector.classList.remove(BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS);
 		}
 
 		const inspectorTabs = document.querySelector(
@@ -59,7 +71,6 @@ export const useBlockSideEffectsRestore = (selectedBlock) => {
 			'.block-editor-block-inspector div[class^="css-"]'
 		);
 
-		// Remove not allowed class and restore visibility
 		const restoreElement = (element) => {
 			if (element) {
 				element.classList.remove('blockera-not-allowed');
@@ -68,12 +79,10 @@ export const useBlockSideEffectsRestore = (selectedBlock) => {
 			}
 		};
 
-		// Restore settings outside tabs
 		if (settingsOutsideAnyTabs.length) {
 			settingsOutsideAnyTabs.forEach((settingElement) => {
 				restoreElement(settingElement);
 
-				// Restore next sibling if it's the last setting
 				if (
 					settingsOutsideAnyTabs[
 						settingsOutsideAnyTabs.length - 1
@@ -92,11 +101,10 @@ export const useBlockSideEffectsRestore = (selectedBlock) => {
 			});
 		}
 
-		// Restore inspector tabs
 		if (inspectorTabs) {
 			restoreElement(inspectorTabs);
 			inspectorTabs.classList.remove('blockera-hide');
 			restoreSpecificClassCombinations(inspectorTabs);
 		}
-	}, [inspector, selectedBlock]);
+	}, [selectedBlock, blockName]);
 };

@@ -18,6 +18,7 @@ import type { InnerBlocks, InnerBlockType } from '../types';
 import { generateExtensionId } from '../../../utils';
 import { isInnerBlock } from '../../../../components';
 import { useMemoizedInnerBlocks, useAvailableItems } from './';
+import { useGlobalStylesPanelContext } from '../../../../../editor/global-styles/panel/context';
 
 export const useInnerBlocks = ({
 	block,
@@ -36,30 +37,46 @@ export const useInnerBlocks = ({
 	insideBlockInspector?: boolean,
 	currentBlock: 'master' | InnerBlockType | string,
 }): Object => {
+	const { extensionsUiContext: panelExtensionsUiContext } =
+		useGlobalStylesPanelContext();
+	const extensionsUiContext = insideBlockInspector
+		? undefined
+		: panelExtensionsUiContext;
+
 	// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
 	const {
 		currentBlock: currentBlockType = currentBlock,
 		getBlockInners,
 		getBlockExtensionBy,
-	} = useSelect((select) => {
-		const {
-			getBlockInners,
-			getBlockExtensionBy,
-			getExtensionCurrentBlock,
-		} = select('blockera/extensions');
+	} = useSelect(
+		(select) => {
+			const {
+				getBlockInners,
+				getBlockExtensionBy,
+				getExtensionCurrentBlock,
+			} = select('blockera/extensions');
 
-		return {
-			getBlockInners,
-			getBlockExtensionBy,
-			currentBlock: getExtensionCurrentBlock(),
-		};
-	});
+			return {
+				getBlockInners,
+				getBlockExtensionBy,
+				currentBlock: getExtensionCurrentBlock(extensionsUiContext),
+			};
+		},
+		[extensionsUiContext]
+	);
 
 	// Internal dispatchers. to use of "setCurrentBlock" and "setBlockClientInners" dispatchers of Blockera editor/extensions store api.
 	const {
-		changeExtensionCurrentBlock: setCurrentBlock,
+		changeExtensionCurrentBlock: changeExtensionCurrentBlockDispatch,
 		setBlockClientInners,
 	} = dispatch('blockera/extensions') || {};
+
+	const setCurrentBlock = useCallback(
+		(block: 'master' | InnerBlockType | string) => {
+			changeExtensionCurrentBlockDispatch(block, extensionsUiContext);
+		},
+		[changeExtensionCurrentBlockDispatch, extensionsUiContext]
+	);
 
 	// Calculation: to prepare standard values for "blockeraInnerBlocks" block attribute with set initial value for repeater by "setBlockClientInners" dispatcher.
 	const memoizedInnerBlocks = useMemoizedInnerBlocks({
@@ -132,12 +149,16 @@ export const useInnerBlocks = ({
 
 	// We should skip return contextValue when running just inside block inspector and has not any inner blocks.
 	// in global styles panel we need to static inner blocks to design them for all placements.
-	if (
+	// Blocks like core/navigation may have zero extension config but still expose allowed inner blocks via the editor.
+	const hasInnerBlockSupport =
+		innerBlocksLength > 0 ||
+		availableBlocks.length > 0 ||
+		Object.keys(value).length > 0;
+	const skipInnerBlocksContext =
 		insideBlockInspector &&
-		(!innerBlocksLength ||
-			(!availableBlocks.length && !Object.keys(value).length) ||
-			isInnerBlock(currentBlock))
-	) {
+		(!hasInnerBlockSupport || isInnerBlock(currentBlock));
+
+	if (skipInnerBlocksContext) {
 		return {};
 	}
 

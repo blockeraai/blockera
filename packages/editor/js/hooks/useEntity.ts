@@ -43,9 +43,20 @@ import type { Post, PostStatus, PostTypeConfig } from '@wordpress/core-data';
 /**
  * Internal dependencies
  */
-import { getEditorUrl, isSiteEditorPostType, isValidUrl } from './urlUtils';
+import {
+	getEditorUrl,
+	isSiteEditorPostType,
+	isValidUrl,
+	saveSiteEditorEntityForPreview,
+} from './urlUtils';
 import { useTemplatePreviewUrl } from './useTemplatePreviewUrl';
-import { TEMPLATE_POST_TYPE, NON_PREVIEWABLE_POST_TYPES } from './constants';
+import { useTemplatePartPreviewUrl } from './useTemplatePartPreviewUrl';
+import {
+	TEMPLATE_POST_TYPE,
+	TEMPLATE_PART_POST_TYPE,
+	NON_PREVIEWABLE_POST_TYPES,
+	isTemplateAutosavePreviewType,
+} from './constants';
 
 /**
  * Entity record with title that can be string or object.
@@ -92,7 +103,8 @@ export interface UseEntityReturn {
 	 * Frontend URL to view/preview this entity.
 	 * - Regular posts/pages: uses the entity's permalink
 	 * - wp_template: generates appropriate URL based on template slug (e.g., search, 404, category)
-	 * - Other site editor types (parts, nav, blocks): null (not directly previewable)
+	 * - wp_template_part: isolated preview page with only the part content
+	 * - Other site editor types (nav, blocks): null (not directly previewable)
 	 */
 	viewUrl: string | null;
 	/** viewUrl is a valid URL. */
@@ -204,26 +216,21 @@ export function useEntity(
 			if (isCurrentDocument) {
 				title =
 					(editorSelect.getEditedPostAttribute('title') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 				status =
 					(editorSelect.getEditedPostAttribute('status') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 				slug =
 					(editorSelect.getEditedPostAttribute('slug') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 				link =
 					(editorSelect.getCurrentPostAttribute('link') as
-						| string
-						| undefined) ?? null;
+						string | undefined) ?? null;
 
 				// Fallback to current post object
 				if (!title || !status || !slug) {
 					const currentPost = editorSelect.getCurrentPost() as
-						| EntityRecordWithTitle
-						| undefined;
+						EntityRecordWithTitle | undefined;
 					if (currentPost) {
 						const postTitle = currentPost.title;
 						title =
@@ -298,21 +305,20 @@ export function useEntity(
 
 			// Check if post type is viewable
 			const postTypeObj = coreSelect.getPostType(postType) as
-				| PostTypeConfig
-				| undefined;
+				PostTypeConfig | undefined;
 			isViewable = postTypeObj?.viewable ?? false;
 
-			// For wp_template, consider it "viewable" for preview purposes
-			// Templates can be previewed via generated URLs (search, 404, archive, etc.)
-			// even though they don't have traditional permalinks
+			// Templates and template parts are previewable via generated URLs even though
+			// they don't have traditional permalinks.
 			const isTemplate = postType === TEMPLATE_POST_TYPE;
-			if (isTemplate) {
+			const isTemplatePart = postType === TEMPLATE_PART_POST_TYPE;
+			if (isTemplate || isTemplatePart) {
 				isViewable = true;
 			}
 
 			// Get saveable state for current document
 			// For site editor types, check saveability even if not traditionally "viewable"
-			if (isCurrentDocument && (isViewable || isTemplate)) {
+			if (isCurrentDocument && isViewable) {
 				isSaveable = editorSelect.isEditedPostSaveable() ?? false;
 			}
 
@@ -433,10 +439,16 @@ export function useEntity(
 		entityData.slug
 	);
 
+	const { previewUrl: templatePartPreviewUrl } = useTemplatePartPreviewUrl(
+		postType,
+		postId
+	);
+
 	// Compute view URL from entity link or template preview URL
 	// - For regular post types: use the entity's link property
 	// - For wp_template: use the generated template preview URL
-	// - For other site editor types (parts, nav, blocks): return null (not previewable)
+	// - For wp_template_part: use the isolated template part preview URL
+	// - For other site editor types (nav, blocks): return null (not previewable)
 	const viewUrl = useMemo((): string | null => {
 		// Regular post types use their direct link
 		if (!isSiteEditorType) {
@@ -448,8 +460,12 @@ export function useEntity(
 			return templatePreviewUrl;
 		}
 
-		// Other site editor types (wp_template_part, wp_navigation, wp_block)
-		// don't have a single frontend page to preview
+		// wp_template_part uses an isolated preview page (theme//slug id)
+		if (postType === TEMPLATE_PART_POST_TYPE) {
+			return templatePartPreviewUrl;
+		}
+
+		// Other site editor types (wp_navigation, wp_block) are not previewable
 		if (
 			NON_PREVIEWABLE_POST_TYPES.includes(
 				postType as (typeof NON_PREVIEWABLE_POST_TYPES)[number]
@@ -459,14 +475,21 @@ export function useEntity(
 		}
 
 		return null;
-	}, [isSiteEditorType, postType, entityData.link, templatePreviewUrl]);
+	}, [
+		isSiteEditorType,
+		postType,
+		entityData.link,
+		templatePreviewUrl,
+		templatePartPreviewUrl,
+	]);
 
 	// Validate view URL
 	const hasValidViewUrl = useMemo(() => isValidUrl(viewUrl), [viewUrl]);
 
-	// Get the unstable save for preview dispatch
 	const { __unstableSaveForPreview } = useDispatch(editorStore) as {
-		__unstableSaveForPreview: () => Promise<string>;
+		__unstableSaveForPreview: (options?: {
+			forceIsAutosaveable?: boolean;
+		}) => Promise<string>;
 	};
 
 	/**
@@ -478,13 +501,26 @@ export function useEntity(
 	 * @return The view/preview URL, or null if not available.
 	 */
 	const getPreviewUrl = useCallback(async (): Promise<string | null> => {
-		// For site editor templates, __unstableSaveForPreview doesn't work
-		// because templates don't have traditional permalinks.
-		// Use our computed viewUrl directly instead.
 		if (isSiteEditorType) {
-			// For templates, if dirty, we still use our computed preview URL
-			// The template content changes don't affect the preview URL
-			// (e.g., search template always previews at ?s=X)
+			// Template autosave preview: persist edits as autosave (not publish) and
+			// open the preview_link nonce URL. Only wp_template / wp_template_part
+			// expose the autosave REST endpoint Blockera extends server-side.
+			if (
+				entityData.dirty &&
+				entityData.isCurrentDocument &&
+				postType &&
+				postId &&
+				isTemplateAutosavePreviewType(postType)
+			) {
+				const previewLink = await saveSiteEditorEntityForPreview(
+					postType,
+					postId
+				);
+
+				if (previewLink && isValidUrl(previewLink)) {
+					return previewLink;
+				}
+			}
 			return viewUrl;
 		}
 
@@ -495,7 +531,15 @@ export function useEntity(
 
 		// If not dirty, return current viewUrl
 		return viewUrl;
-	}, [entityData.dirty, __unstableSaveForPreview, viewUrl, isSiteEditorType]);
+	}, [
+		entityData.dirty,
+		entityData.isCurrentDocument,
+		__unstableSaveForPreview,
+		viewUrl,
+		isSiteEditorType,
+		postType,
+		postId,
+	]);
 
 	/**
 	 * Prefetch this entity to ensure it's loaded.

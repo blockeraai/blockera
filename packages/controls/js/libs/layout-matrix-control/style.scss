@@ -211,18 +211,6 @@
 			}
 		}
 
-		// Rotate stretch icon when align items is stretch and direction is column
-
-		.blockera-control-select.custom.layout-matrix__align-items {
-			.item-icon {
-				svg[data-test="layout-matrix-align-stretch"] {
-					transform: rotate(90deg);
-				}
-			}
-		}
-	}
-
-	&.layout-matrix__justify-content-space-between.layout-matrix__direction-column {
 		.blockera-control-select.custom.layout-matrix__align-items {
 			.item-icon {
 				svg {
@@ -230,9 +218,7 @@
 				}
 			}
 		}
-	}
 
-	&.layout-matrix__align-items-stretch.layout-matrix__direction-column {
 		.blockera-control-select.custom.layout-matrix__justify-content {
 			.item-icon {
 				svg {

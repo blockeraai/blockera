@@ -1,13 +1,3 @@
-body {
-	--blockera-controls-variations-color: #1ca120;
-	--blockera-controls-variations-color-bk: hsl(122, 70%, 37%);
-	--blockera-controls-variations-color-darker-20: color-mix(
-		in srgb,
-		var(--blockera-controls-variations-color-bk) 100%,
-		#000000 5%
-	);
-}
-
 .components-button.blockera-component-button.is-tertiary.blockera-control-style-variations-button {
 	--border-radius: var(--blockera-controls-border-radius);
 	--primary-color: var(--blockera-controls-variations-color);
@@ -113,15 +103,15 @@ body {
 		}
 
 		&:focus:not(
-		:disabled,
-		.is-variation-picker-open,
-		.is-variation-deleted
-	),
+				:disabled,
+				.is-variation-picker-open,
+				.is-variation-deleted
+			),
 		&:hover:not(
-		:disabled,
-		.is-variation-picker-open,
-		.is-variation-deleted
-	) {
+				:disabled,
+				.is-variation-picker-open,
+				.is-variation-deleted
+			) {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
 			--primary-color: var(
 				--blockera-controls-variations-color-darker-20
@@ -144,31 +134,27 @@ body {
 			}
 		}
 	}
+
+	&.is-variation-ui-size {
+		--blockera-controls-variations-color: var(
+			--blockera-controls-block-variations-size
+		);
+		--blockera-controls-variations-color-bk: var(
+			--blockera-controls-block-variations-size-bk
+		);
+		--blockera-controls-variations-color-darker-20: var(
+			--blockera-controls-block-variations-size-darker-20
+		);
+	}
 }
 
 .components-popover.blockera-component-popover.variations-picker-popover {
 	--popover-width: 260px;
-	--popover-border-color: #bdbdbd;
-	--popover-border-width: 1px;
-	--popover-height: auto;
-	--popover-radius: 3px;
-	--blockera-controls-primary-color: var(
-		--blockera-controls-variations-color
-	);
 
 	.components-popover__content {
-		border-radius: var(--popover-radius);
-		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 5px 7px #ffffff;
-		margin-left: -5px;
-
-		.blockera-component-popover-body {
-			padding: calc(var(--popover-padding) * 1.15) var(--popover-padding)
-				0 var(--popover-padding);
-
-			& > :last-child {
-				padding-bottom: calc(var(--popover-padding) * 1.2);
-			}
-		}
+		box-shadow:
+			0 3px 6px rgba(0, 0, 0, 0.25),
+			0 0 5px 7px #ffffff;
 	}
 }
 
@@ -205,11 +191,33 @@ body {
 	}
 }
 
-.blockera-component-style-variation-modal {
-	display: flex;
-	align-items: stretch;
-	height: auto !important;
-	justify-content: flex-start;
-	overflow: hidden !important;
-	max-height: none !important;
+.blockera-size-variations-animated {
+	&,
+	.the-layer-top-width,
+	.the-layer-top-bar,
+	.the-layer-left-width,
+	.the-layer-left-bar {
+		transition: var(--blockera-controls-transition);
+	}
+
+	&.is-animated,
+	&:hover {
+		.the-layer-top-width {
+			x: 11;
+			width: 8px;
+		}
+
+		.the-layer-top-bar {
+			x: 10;
+		}
+
+		.the-layer-left-width {
+			x: 9;
+		}
+
+		.the-layer-left-bar {
+			y: 11;
+			height: 8px;
+		}
+	}
 }

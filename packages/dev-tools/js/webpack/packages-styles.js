@@ -9,7 +9,7 @@ const editorIframeStyles = {};
 const styleFiles = glob.sync('./packages/**/*.scss');
 
 styleFiles.forEach((currentEntry) => {
-	const regex = new RegExp('packages\\/(\\w+(?:-\\w+|))', 'g');
+	const regex = new RegExp('packages\\/([\\w-]+)', 'g');
 
 	let m;
 

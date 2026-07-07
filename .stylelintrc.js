@@ -3,6 +3,7 @@ const wpConfig = require('@wordpress/stylelint-config');
 
 module.exports = {
 	...wpConfig,
+	plugins: [...(wpConfig.plugins || []), 'stylelint-scss'],
 	rules: {
 		...(wpConfig.rules || {}),
 		'function-url-quotes': 'always',
@@ -12,6 +13,15 @@ module.exports = {
 		'comment-empty-line-before': null,
 		'value-keyword-case': null,
 		'rule-empty-line-before': null,
+		'at-rule-no-unknown': null,
+		'scss/at-rule-no-unknown': true,
+		'at-rule-empty-line-before': [
+			'always',
+			{
+				except: ['blockless-after-blockless', 'first-nested'],
+				ignore: ['after-comment'],
+			},
+		],
 	},
 	ignoreFiles: [
 		...(wpConfig.ignoreFiles || []),

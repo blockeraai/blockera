@@ -131,7 +131,7 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	 * @param string $key            the value addon name.
 	 * @param bool   $includeContext the flag for include context data.
 	 *
-	 * @return array the registered value addon with recieved key.
+	 * @return array the registered value addon with received key.
 	 */
 	public function getRegisteredValueAddons( string $key = '', bool $includeContext = true ): array {
 
@@ -168,7 +168,7 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	/**
 	 * Set registered value addons.
 	 *
-	 * @param array $value_addons the recieved value addons stack to register.
+	 * @param array $value_addons the received value addons stack to register.
 	 */
 	public function setRegisteredValueAddons( array $value_addons = [] ): void {
 

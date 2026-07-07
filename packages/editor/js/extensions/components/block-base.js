@@ -4,10 +4,8 @@
  * External dependencies
  */
 import { ErrorBoundary } from 'react-error-boundary';
-import { SlotFillProvider, Fill } from '@wordpress/components';
 import type { Element, ComponentType, MixedElement } from 'react';
-import { select, useSelect, dispatch } from '@wordpress/data';
-import { InspectorControls } from '@wordpress/block-editor';
+import { select, dispatch } from '@wordpress/data';
 import {
 	createContext,
 	useContext,
@@ -19,11 +17,17 @@ import {
 	memo,
 	// StrictMode,
 } from '@wordpress/element';
+import { arePropsEqual } from '../../hooks/use-trace-update';
 
 /**
  * Blockera dependencies
  */
-import { BaseControlContext } from '@blockera/controls';
+import {
+	BaseControlContext,
+	BlockInjectedSlotContext,
+	PresetCanvasPreviewContext,
+	PreviewInjectableStylesContext,
+} from '@blockera/controls';
 import { useBlockFeatures } from '@blockera/features-core';
 import { isEquals, cloneObject, mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
@@ -38,17 +42,27 @@ import {
 	// useIconEffect,
 	useAttributes,
 	useInnerBlocksInfo,
-	useBlockStyleVariations,
 	useCalculateCurrentAttributes,
+	useDisplayBlockControls,
 } from '../../hooks';
+import { getBlockVariationSupport } from '../../editor/global-styles/panel/block-variation-support';
 import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../..';
 import { SideEffect } from '../libs/base';
+import { BlockeraTextAlignToolbar } from '../libs/typography/components/blockera-text-align-toolbar';
+import { BlockeraLayoutToolbar } from '../libs/layout/components/blockera-layout-toolbar';
 import { BlockPartials } from './block-partials';
-import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
+import { sanitizeBlockAttributes } from '../hooks/utils';
+import { buildPresetPreviewAttributePatch } from '../libs/preset-preview-attributes';
+import { BlockInspectorEditContent } from './block-inspector-edit-content';
+import { BlockInspectorTabSync } from './block-inspector-tab-sync';
+import { BlockBaseInspectorBundle } from './block-base-inspector-bundle';
+import { useBlockBaseStoreSelect } from './use-block-base-store-select';
+import { blockInspectorTabPersistence } from './use-sync-block-inspector-tab';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
+import { getAttributesWithIds } from '../../hooks/use-attributes';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { isVirtualBlock } from '../libs/block-card/inner-blocks/utils';
 import {
@@ -111,13 +125,12 @@ const GLOBAL_STYLES_BASE_CONTROL_COMPONENTS = {
 	AdvancedLabelControl: GlobalStylesAdvancedLabelControl,
 };
 
-export const BlockBase: ComponentType<any> = (
-	_props: Object
-): Element<any> | null => {
+const BlockBaseImpl = (_props: Object): Element<any> | null => {
 	const {
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		handleOnChangeStyleInLocalState,
+		extensionsUiContext,
 	} = useGlobalStylesPanelContext();
 	const {
 		name,
@@ -134,11 +147,64 @@ export const BlockBase: ComponentType<any> = (
 	} = _props;
 
 	const [notice, setNotice] = useState(null);
+	const [extraPreviewCss, setExtraPreviewCss] = useState('');
+	const [presetPreviewAttributePatch, setPresetPreviewAttributePatch] =
+		useState(null);
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
-	const [currentTab, setCurrentTab] = useState(
-		additional?.activeTab || 'style'
+	const inspectorTabPersistenceRef = useRef({
+		blockName: name,
+		blockVariation: '',
+	});
+
+	const [currentTab, _setCurrentTab] = useState(() => {
+		const persistedTab = blockInspectorTabPersistence.get(name, '');
+
+		// Persisted tab or Styles default for two-tab blocks; >2-tab defaults are
+		// resolved when the selected block mounts (see useSyncBlockInspectorTab).
+		return persistedTab || 'styles';
+	});
+
+	const setCurrentTab = useCallback(
+		(nextTab) => {
+			if (typeof nextTab !== 'string' || !nextTab) {
+				return;
+			}
+
+			if (insideBlockInspector) {
+				const { blockName, blockVariation } =
+					inspectorTabPersistenceRef.current;
+
+				blockInspectorTabPersistence.set(
+					blockName,
+					blockVariation,
+					nextTab
+				);
+			}
+
+			_setCurrentTab((previousTab) =>
+				previousTab === nextTab ? previousTab : nextTab
+			);
+		},
+		[insideBlockInspector]
 	);
+
+	// Match InspectorControls: mount inspector UI only for the selected block (or homogenous multi-select).
+	const displayBlockControls = useDisplayBlockControls();
+	const changesetsBridgeRef = useRef({
+		setChangesets: () => {},
+	});
+	const inspectorTabSetterRef = useRef(setCurrentTab);
+
+	inspectorTabSetterRef.current = setCurrentTab;
+
+	const setInspectorTab = useCallback((nextTab) => {
+		inspectorTabSetterRef.current(nextTab);
+	}, []);
+
+	const registerInspectorTabSetter = useCallback((setter) => {
+		inspectorTabSetterRef.current = setter;
+	}, []);
 
 	const {
 		currentBlock,
@@ -154,62 +220,17 @@ export const BlockBase: ComponentType<any> = (
 		availableAttributes,
 		activeBlockVariation,
 		getActiveBlockVariation,
-	} = useSelect(
-		(select) => {
-			const {
-				getBlockExtensionBy,
-				getActiveInnerState,
-				getActiveMasterState,
-				getExtensionCurrentBlock,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera/extensions');
+	} = useBlockBaseStoreSelect({
+		clientId,
+		name,
+		isSelected,
+		insideBlockInspector,
+	});
 
-			const currentBlock = getExtensionCurrentBlock();
-
-			////
-
-			const { getActiveBlockVariation: _getActiveBlockVariation } =
-				select('blockera/extensions');
-			const {
-				getBlockType,
-				getActiveBlockVariation,
-				getBlockVariations,
-			} = select('core/blocks');
-			const { getBlockAttributes } = select('core/block-editor');
-			const {
-				supports,
-				selectors,
-				attributes: availableAttributes,
-			} = getBlockType(name);
-
-			const { getDeviceType, getEditorSelectedBlockEvent } =
-				select('blockera/editor');
-
-			return {
-				getDeviceType,
-				currentBlock,
-				getBlockExtensionBy,
-				currentState: getActiveMasterState(clientId, name),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-				currentInnerBlockState: getActiveInnerState(
-					clientId,
-					currentBlock
-				),
-				supports,
-				selectors,
-				availableAttributes,
-				getActiveBlockVariation,
-				editorSelectedBlockEvent: getEditorSelectedBlockEvent(),
-				activeBlockVariation: getActiveBlockVariation(
-					name,
-					getBlockAttributes(clientId) || {}
-				),
-				blockVariations: name && getBlockVariations(name, 'transform'),
-				activeVariation: _getActiveBlockVariation(),
-			};
-		},
-		[clientId, name]
-	);
+	inspectorTabPersistenceRef.current = {
+		blockName: name,
+		blockVariation: activeBlockVariation?.name || '',
+	};
 
 	// Stable getter for blockera class names from all blocks' attributes (for duplicate detection).
 	// Uses select() on demand instead of useSelect to avoid subscribing to block-editor store
@@ -225,10 +246,25 @@ export const BlockBase: ComponentType<any> = (
 	const [isActive, setActive] = useState(true);
 
 	const {
-		changeExtensionCurrentBlock: setCurrentBlock,
+		changeExtensionCurrentBlock: changeExtensionCurrentBlockDispatch,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('blockera/extensions') || {};
+
+	const setCurrentBlock = useCallback(
+		(value) => {
+			const uiContext = insideBlockInspector
+				? undefined
+				: extensionsUiContext;
+
+			changeExtensionCurrentBlockDispatch(value, uiContext);
+		},
+		[
+			insideBlockInspector,
+			extensionsUiContext,
+			changeExtensionCurrentBlockDispatch,
+		]
+	);
 
 	const masterIsNormalState = useCallback(
 		(): boolean =>
@@ -438,7 +474,7 @@ export const BlockBase: ComponentType<any> = (
 		// We should update classname with unique generate classname while customizing style variation.
 		if (
 			shouldUpdateClassName &&
-			/^is-style-.*/g.test(classNameStr) &&
+			/^is-(?:style|size)-/.test(classNameStr) &&
 			!/\s/g.test(classNameStr)
 		) {
 			valueToStore.className = classNames(classNameStr, {
@@ -501,7 +537,10 @@ export const BlockBase: ComponentType<any> = (
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
 			!isEquals(compatibleAttributes, attributes) &&
-			false === insideBlockInspector
+			false === insideBlockInspector &&
+			!['save-customizations', 'detach-style'].includes(
+				editorSelectedBlockEvent
+			)
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
 			handleOnChangeStyleInLocalState(clonedAttributes);
@@ -593,17 +632,23 @@ export const BlockBase: ComponentType<any> = (
 		return sanitizedAttributes;
 	};
 
-	const blockStyleVariationsProps = useBlockStyleVariations({
-		clientId,
-		blockName: name,
-		// TODO: In the future, review all custom hooks and child components used in this block
-		// to determine which ones might alter the original `attributes` object reference directly.
-		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
-		// are properly managed or avoided (consider use of cloneObject as needed).
-		storedAttributes: cloneObject(attributes),
-		defaultAttributes: availableAttributes,
-		inGlobalStylesPanel: !insideBlockInspector,
-	});
+	const { hasStyleVariations, hasSizeVariations } = useMemo(
+		() => getBlockVariationSupport(additional),
+		[additional]
+	);
+
+	const styleVariationsConfig = useMemo(
+		() => ({
+			clientId,
+			blockName: name,
+			storedAttributes: cloneObject(attributes),
+			defaultAttributes: availableAttributes,
+			inGlobalStylesPanel: !insideBlockInspector,
+		}),
+		[clientId, name, attributes, availableAttributes, insideBlockInspector]
+	);
+
+	const usesStyleVariationHooks = hasStyleVariations || hasSizeVariations;
 
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
 		clientId,
@@ -627,9 +672,12 @@ export const BlockBase: ComponentType<any> = (
 		// are properly managed or avoided (consider use of cloneObject as needed).
 		getAttributes: () => cloneObject(attributes),
 		innerBlocks: additional?.blockeraInnerBlocks,
-		setChangesets: isSelected
-			? blockStyleVariationsProps.setChangesets
-			: () => {},
+		setChangesets: (flag: boolean) => {
+			if (insideBlockInspector && !displayBlockControls) {
+				return;
+			}
+			changesetsBridgeRef.current.setChangesets(flag);
+		},
 	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
@@ -684,6 +732,17 @@ export const BlockBase: ComponentType<any> = (
 
 	const inlineStyles = useCleanupStyles({ clientId }, [name, attributes]);
 
+	const previewInjectableStylesValue = useMemo(
+		() =>
+			insideBlockInspector
+				? {
+						extraPreviewCss,
+						setExtraPreviewCss,
+					}
+				: null,
+		[insideBlockInspector, extraPreviewCss]
+	);
+
 	const availableStates =
 		additional?.availableBlockStates || generalBlockStates;
 	const availableInnerStates = useMemo(() => {
@@ -714,21 +773,132 @@ export const BlockBase: ComponentType<any> = (
 		}
 	}, [currentBlock, availableStates, availableInnerStates]);
 
-	const blockStyleProps = {
+	const activeDeviceType = getDeviceType();
+
+	const primePresetHover = useCallback(() => {
+		if (false === insideBlockInspector) {
+			return;
+		}
+
+		const hasBlockeraPropsId = Boolean(blockAttributes?.blockeraPropsId);
+		const classNameEmpty =
+			!blockAttributes?.className ||
+			String(blockAttributes.className).trim() === '';
+
+		if (hasBlockeraPropsId && !classNameEmpty) {
+			return;
+		}
+
+		const partial: Object = {};
+
+		if (!hasBlockeraPropsId) {
+			const withId = getAttributesWithIds(
+				cloneObject(blockAttributes),
+				'blockeraPropsId',
+				false
+			);
+			if (withId.blockeraPropsId) {
+				partial.blockeraPropsId = withId.blockeraPropsId;
+			}
+		}
+
+		if (classNameEmpty && uniqueClassName) {
+			partial.className = classNames('blockera-block', {
+				[uniqueClassName]: true,
+			});
+			registerClassName(clientId, uniqueClassName);
+		}
+
+		if (Object.keys(partial).length) {
+			setBlockAttributes(partial);
+		}
+	}, [
+		clientId,
+		blockAttributes,
+		uniqueClassName,
+		setBlockAttributes,
+		insideBlockInspector,
+	]);
+
+	const setPreviewAttributePatchForContext = useCallback(
+		(patch: Object | null): void => {
+			if (!patch || !Object.keys(patch).length) {
+				setPresetPreviewAttributePatch(null);
+				return;
+			}
+
+			if (patch.blockeraBlockStates || patch.blockeraInnerBlocks) {
+				setPresetPreviewAttributePatch(patch);
+				return;
+			}
+
+			setPresetPreviewAttributePatch(
+				buildPresetPreviewAttributePatch(patch, {
+					currentBlock,
+					currentState,
+					currentBreakpoint,
+					currentInnerBlockState,
+				})
+			);
+		},
+		[currentBlock, currentState, currentBreakpoint, currentInnerBlockState]
+	);
+
+	const presetCanvasPreviewValue = useMemo(
+		() => ({
+			setPreviewAttributePatch: setPreviewAttributePatchForContext,
+			primePresetHover,
+		}),
+		[primePresetHover, setPreviewAttributePatchForContext]
+	);
+
+	const blockStyleProps = useMemo(() => {
+		const hasPresetPreviewPatch =
+			presetPreviewAttributePatch &&
+			Object.keys(presetPreviewAttributePatch).length > 0;
+
+		const mergedAttributes = hasPresetPreviewPatch
+			? mergeObject(
+					cloneObject(sanitizedAttributes),
+					presetPreviewAttributePatch
+				)
+			: sanitizedAttributes;
+		const mergedCurrentAttributes = hasPresetPreviewPatch
+			? mergeObject(
+					cloneObject(currentAttributes),
+					presetPreviewAttributePatch
+				)
+			: currentAttributes;
+
+		return {
+			clientId,
+			supports,
+			selectors,
+			additional,
+			inlineStyles,
+			attributes: mergedAttributes,
+			blockName: name,
+			currentAttributes: mergedCurrentAttributes,
+			defaultAttributes,
+			customCss: attributes?.blockeraCustomCSS?.value
+				?.replace(/(\.|#)block/gi, `#block-${clientId}`)
+				?.replace(/&/gi, `#block-${clientId}`),
+			activeDeviceType,
+		};
+	}, [
+		presetPreviewAttributePatch,
+		sanitizedAttributes,
+		currentAttributes,
 		clientId,
 		supports,
 		selectors,
 		additional,
 		inlineStyles,
-		attributes: sanitizedAttributes,
-		blockName: name,
-		currentAttributes,
+		name,
 		defaultAttributes,
-		customCss: attributes?.blockeraCustomCSS?.value
-			?.replace(/(\.|#)block/gi, `#block-${clientId}`)
-			?.replace(/&/gi, `#block-${clientId}`),
-		activeDeviceType: getDeviceType(),
-	};
+		attributes?.blockeraCustomCSS?.value,
+		activeDeviceType,
+	]);
 
 	return (
 		<BlockEditContextProvider
@@ -746,7 +916,9 @@ export const BlockBase: ComponentType<any> = (
 				additional,
 				currentBlock,
 				currentState,
-				setCurrentTab,
+				setCurrentTab: insideBlockInspector
+					? setInspectorTab
+					: setCurrentTab,
 				isNormalState,
 				setAttributes,
 				getAttributes,
@@ -768,179 +940,434 @@ export const BlockBase: ComponentType<any> = (
 				getBlockType: () => select('core/blocks').getBlockType(name),
 			}}
 		>
-			{/*<StrictMode>*/}
-			{insideBlockInspector && (
-				<InspectorControls>
-					<SideEffect
-						{...{
-							activeBlockVariation:
-								activeBlockVariation?.name || '',
-							blockName: name,
-							currentBlock,
-							currentTab,
-							currentState: isInnerBlock(currentBlock)
-								? currentInnerBlockState
-								: currentState,
-							isActive,
-						}}
-					/>
-					<SlotFillProvider>
-						<BlockPartials clientId={clientId} />
-						<BlockFillPartials
-							{...{
-								notice,
-								clientId,
-								isActive,
-								setActive,
-								currentState,
-								currentBlock,
-								availableStates,
-								currentInnerBlock,
-								currentBreakpoint,
-								BlockEditComponent,
-								blockeraInnerBlocks,
-								availableInnerStates,
-								insideBlockInspector,
-								currentInnerBlockState,
-								blockStyleVariationsProps: isSelected
-									? blockStyleVariationsProps
-									: {},
-								updateBlockEditorSettings,
-								blockProps: {
-									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "blockera" in overriding process.
-									name,
-									activeBlockVariation:
-										activeBlockVariation?.name || '',
-									clientId,
-									supports,
-									className,
-									attributes: sanitizedAttributes,
-									setAttributes,
-									defaultAttributes,
-									currentAttributes,
-									currentTab,
-									currentBlock,
-									currentState,
-									setCurrentTab,
-									currentBreakpoint,
-									blockeraInnerBlocks,
-									currentInnerBlockState,
-									handleOnChangeAttributes,
-									additional,
-									currentStateAttributes: currentAttributes,
-									...props,
-								},
-							}}
-						/>
-					</SlotFillProvider>
-				</InspectorControls>
-			)}
-
-			{!insideBlockInspector && (
-				<GlobalStylesPanelBaseControlConfigContext.Provider
-					value={{
-						name,
-						clientId,
-						getAttributesRef: getAttributes,
-					}}
+			<BlockInjectedSlotContext.Provider value={clientId}>
+				<PresetCanvasPreviewContext.Provider
+					value={presetCanvasPreviewValue}
 				>
-					<BaseControlContext.Provider
-						value={{
-							components: GLOBAL_STYLES_BASE_CONTROL_COMPONENTS,
-						}}
+					<PreviewInjectableStylesContext.Provider
+						value={previewInjectableStylesValue}
 					>
-						<SlotFillProvider>
-							<BlockPartials clientId={clientId} />
-							<BlockFillPartials
-								{...{
-									notice,
-									clientId,
-									isActive,
-									setActive,
-									currentState,
-									currentBlock,
-									availableStates,
-									currentInnerBlock,
-									currentBreakpoint,
-									BlockEditComponent,
-									blockeraInnerBlocks,
-									availableInnerStates,
-									insideBlockInspector,
-									currentInnerBlockState,
-									updateBlockEditorSettings,
-									blockStyleVariationsProps,
-									blockProps: {
-										// Sending props like exactly "edit" function props of WordPress Block.
-										// Because needs total block props in outside overriding component like "blockera" in overriding process.
-										name,
+						{/*<StrictMode>*/}
+						{insideBlockInspector && displayBlockControls && (
+							<>
+								<BlockInspectorTabSync
+									blockName={name}
+									blockVariation={
+										activeBlockVariation?.name || ''
+									}
+									inspectorClientId={clientId}
+									insideBlockInspector={insideBlockInspector}
+									currentTab={currentTab}
+									setCurrentTab={setCurrentTab}
+									onAlignedSetter={registerInspectorTabSetter}
+								/>
+								<SideEffect
+									{...{
+										clientId,
+										insideBlockInspector: true,
 										activeBlockVariation:
 											activeBlockVariation?.name || '',
-										clientId,
-										supports,
-										className,
-										attributes: sanitizedAttributes,
-										setAttributes,
-										defaultAttributes,
-										currentAttributes,
-										currentTab,
+										blockName: name,
 										currentBlock,
-										currentState,
-										setCurrentTab,
-										currentBreakpoint,
-										blockeraInnerBlocks,
-										currentInnerBlockState,
-										handleOnChangeAttributes,
-										additional,
-										currentStateAttributes:
-											currentAttributes,
-										...props,
-									},
-								}}
-							/>
-						</SlotFillProvider>
-					</BaseControlContext.Provider>
-				</GlobalStylesPanelBaseControlConfigContext.Provider>
-			)}
-
-			{insideBlockInspector && (
-				<>
-					<ErrorBoundary
-						fallbackRender={({ error }): MixedElement => (
-							<ErrorBoundaryFallback
-								{...{
-									error,
-									notice,
-									clientId,
-									setNotice,
-									from: 'style-wrapper',
-									props: blockStyleProps,
-									isReportingErrorCompleted,
-									setIsReportingErrorCompleted,
-									fallbackComponent: BlockStyle,
-								}}
-							/>
+										currentTab,
+										currentState: isInnerBlock(currentBlock)
+											? currentInnerBlockState
+											: currentState,
+										isActive,
+										availableStates: isInnerBlock(
+											currentBlock
+										)
+											? availableInnerStates
+											: availableStates,
+										blockeraUnsavedData:
+											blockAttributes?.blockeraUnsavedData,
+									}}
+								/>
+								<BlockPartials
+									insideBlockInspector
+									clientId={clientId}
+									isActive={isActive}
+									inspectorEdit={
+										<BlockInspectorEditContent
+											{...{
+												notice,
+												clientId,
+												isActive,
+												currentBlock,
+												BlockEditComponent,
+												availableStates,
+												availableInnerStates,
+												insideBlockInspector,
+												blockProps: {
+													name,
+													activeBlockVariation:
+														activeBlockVariation?.name ||
+														'',
+													clientId,
+													supports,
+													className,
+													attributes:
+														sanitizedAttributes,
+													setAttributes,
+													defaultAttributes,
+													currentAttributes,
+													currentTab,
+													currentBlock,
+													currentState,
+													setCurrentTab:
+														setInspectorTab,
+													currentBreakpoint,
+													blockeraInnerBlocks,
+													currentInnerBlockState,
+													handleOnChangeAttributes,
+													additional,
+													currentStateAttributes:
+														currentAttributes,
+													...props,
+												},
+											}}
+										/>
+									}
+								>
+									{usesStyleVariationHooks ? (
+										<BlockBaseInspectorBundle
+											changesetsBridgeRef={
+												changesetsBridgeRef
+											}
+											hasStyleVariations={
+												hasStyleVariations
+											}
+											hasSizeVariations={
+												hasSizeVariations
+											}
+											styleVariationsConfig={
+												styleVariationsConfig
+											}
+											fillPartialsProps={{
+												notice,
+												clientId,
+												isActive,
+												setActive,
+												currentState,
+												currentBlock,
+												availableStates,
+												currentInnerBlock,
+												currentBreakpoint,
+												BlockEditComponent,
+												blockeraInnerBlocks,
+												availableInnerStates,
+												insideBlockInspector,
+												currentInnerBlockState,
+												updateBlockEditorSettings,
+												blockProps: {
+													name,
+													activeBlockVariation:
+														activeBlockVariation?.name ||
+														'',
+													clientId,
+													supports,
+													className,
+													attributes:
+														sanitizedAttributes,
+													setAttributes,
+													defaultAttributes,
+													currentAttributes,
+													currentTab,
+													currentBlock,
+													currentState,
+													setCurrentTab:
+														setInspectorTab,
+													currentBreakpoint,
+													blockeraInnerBlocks,
+													currentInnerBlockState,
+													handleOnChangeAttributes,
+													additional,
+													currentStateAttributes:
+														currentAttributes,
+													...props,
+												},
+											}}
+										/>
+									) : (
+										<BlockFillPartials
+											blockStyleVariationsProps={{}}
+											blockSizeVariationsProps={{}}
+											notice={notice}
+											clientId={clientId}
+											isActive={isActive}
+											setActive={setActive}
+											currentState={currentState}
+											currentBlock={currentBlock}
+											availableStates={availableStates}
+											currentInnerBlock={
+												currentInnerBlock
+											}
+											currentBreakpoint={
+												currentBreakpoint
+											}
+											BlockEditComponent={
+												BlockEditComponent
+											}
+											blockeraInnerBlocks={
+												blockeraInnerBlocks
+											}
+											availableInnerStates={
+												availableInnerStates
+											}
+											insideBlockInspector={
+												insideBlockInspector
+											}
+											currentInnerBlockState={
+												currentInnerBlockState
+											}
+											updateBlockEditorSettings={
+												updateBlockEditorSettings
+											}
+											blockProps={{
+												name,
+												activeBlockVariation:
+													activeBlockVariation?.name ||
+													'',
+												clientId,
+												supports,
+												className,
+												attributes: sanitizedAttributes,
+												setAttributes,
+												defaultAttributes,
+												currentAttributes,
+												currentTab,
+												currentBlock,
+												currentState,
+												setCurrentTab: setInspectorTab,
+												currentBreakpoint,
+												blockeraInnerBlocks,
+												currentInnerBlockState,
+												handleOnChangeAttributes,
+												additional,
+												currentStateAttributes:
+													currentAttributes,
+												...props,
+											}}
+										/>
+									)}
+								</BlockPartials>
+							</>
 						)}
-					>
-						<StylesWrapper clientId={clientId}>
-							<Fill name={'blockera-styles-wrapper-' + clientId}>
-								<BlockStyle {...blockStyleProps} />
-							</Fill>
-						</StylesWrapper>
-					</ErrorBoundary>
-					{/*</StrictMode>*/}
 
-					<ContextualToolbarComponents />
+						{!insideBlockInspector && (
+							<GlobalStylesPanelBaseControlConfigContext.Provider
+								value={{
+									name,
+									clientId,
+									getAttributesRef: getAttributes,
+								}}
+							>
+								<BaseControlContext.Provider
+									value={{
+										components:
+											GLOBAL_STYLES_BASE_CONTROL_COMPONENTS,
+									}}
+								>
+									<BlockPartials
+										insideBlockInspector={false}
+										clientId={clientId}
+										isActive={isActive}
+									>
+										{usesStyleVariationHooks ? (
+											<BlockBaseInspectorBundle
+												changesetsBridgeRef={
+													changesetsBridgeRef
+												}
+												hasStyleVariations={
+													hasStyleVariations
+												}
+												hasSizeVariations={
+													hasSizeVariations
+												}
+												styleVariationsConfig={
+													styleVariationsConfig
+												}
+												fillPartialsProps={{
+													notice,
+													clientId,
+													isActive,
+													setActive,
+													currentState,
+													currentBlock,
+													availableStates,
+													currentInnerBlock,
+													currentBreakpoint,
+													BlockEditComponent,
+													blockeraInnerBlocks,
+													availableInnerStates,
+													insideBlockInspector,
+													currentInnerBlockState,
+													updateBlockEditorSettings,
+													blockProps: {
+														// Sending props like exactly "edit" function props of WordPress Block.
+														// Because needs total block props in outside overriding component like "blockera" in overriding process.
+														name,
+														activeBlockVariation:
+															activeBlockVariation?.name ||
+															'',
+														clientId,
+														supports,
+														className,
+														attributes:
+															sanitizedAttributes,
+														setAttributes,
+														defaultAttributes,
+														currentAttributes,
+														currentTab,
+														currentBlock,
+														currentState,
+														setCurrentTab,
+														currentBreakpoint,
+														blockeraInnerBlocks,
+														currentInnerBlockState,
+														handleOnChangeAttributes,
+														additional,
+														currentStateAttributes:
+															currentAttributes,
+														...props,
+													},
+												}}
+											/>
+										) : (
+											<BlockFillPartials
+												blockStyleVariationsProps={{}}
+												blockSizeVariationsProps={{}}
+												notice={notice}
+												clientId={clientId}
+												isActive={isActive}
+												setActive={setActive}
+												currentState={currentState}
+												currentBlock={currentBlock}
+												availableStates={
+													availableStates
+												}
+												currentInnerBlock={
+													currentInnerBlock
+												}
+												currentBreakpoint={
+													currentBreakpoint
+												}
+												BlockEditComponent={
+													BlockEditComponent
+												}
+												blockeraInnerBlocks={
+													blockeraInnerBlocks
+												}
+												availableInnerStates={
+													availableInnerStates
+												}
+												insideBlockInspector={
+													insideBlockInspector
+												}
+												currentInnerBlockState={
+													currentInnerBlockState
+												}
+												updateBlockEditorSettings={
+													updateBlockEditorSettings
+												}
+												blockProps={{
+													name,
+													activeBlockVariation:
+														activeBlockVariation?.name ||
+														'',
+													clientId,
+													supports,
+													className,
+													attributes:
+														sanitizedAttributes,
+													setAttributes,
+													defaultAttributes,
+													currentAttributes,
+													currentTab,
+													currentBlock,
+													currentState,
+													setCurrentTab,
+													currentBreakpoint,
+													blockeraInnerBlocks,
+													currentInnerBlockState,
+													handleOnChangeAttributes,
+													additional,
+													currentStateAttributes:
+														currentAttributes,
+													...props,
+												}}
+											/>
+										)}
+									</BlockPartials>
+								</BaseControlContext.Provider>
+							</GlobalStylesPanelBaseControlConfigContext.Provider>
+						)}
 
-					<BlockFeaturesInlineStyles
-						clientId={clientId}
-						className={className}
-						currentAttributes={currentAttributes}
-					/>
+						{insideBlockInspector && (
+							<>
+								<ErrorBoundary
+									fallbackRender={({
+										error,
+									}): MixedElement => (
+										<ErrorBoundaryFallback
+											{...{
+												error,
+												notice,
+												clientId,
+												setNotice,
+												from: 'style-wrapper',
+												props: blockStyleProps,
+												isReportingErrorCompleted,
+												setIsReportingErrorCompleted,
+												fallbackComponent: BlockStyle,
+											}}
+										/>
+									)}
+								>
+									<StylesWrapper>
+										<BlockStyle {...blockStyleProps} />
+									</StylesWrapper>
+								</ErrorBoundary>
+								{/*</StrictMode>*/}
 
-					{children}
-				</>
-			)}
+								<BlockeraLayoutToolbar
+									blockName={name}
+									currentAttributes={currentAttributes}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+								/>
+
+								<BlockeraTextAlignToolbar
+									blockName={name}
+									currentAttributes={currentAttributes}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+								/>
+
+								<ContextualToolbarComponents />
+
+								<BlockFeaturesInlineStyles
+									clientId={clientId}
+									className={className}
+									currentAttributes={currentAttributes}
+								/>
+
+								{children}
+							</>
+						)}
+					</PreviewInjectableStylesContext.Provider>
+				</PresetCanvasPreviewContext.Provider>
+			</BlockInjectedSlotContext.Provider>
 		</BlockEditContextProvider>
 	);
 };
+
+export const BlockBase: ComponentType<any> = memo(
+	BlockBaseImpl,
+	(prevProps: Object, nextProps: Object): boolean =>
+		arePropsEqual(prevProps, nextProps, {
+			shallowKeys: ['setAttributes', 'children', 'additional'],
+		})
+);

@@ -3,10 +3,10 @@
 /**
  * External Dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, _n } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useState, useContext } from '@wordpress/element';
+import { useState, useContext, useRef } from '@wordpress/element';
 
 /**
  * Blockera Dependencies
@@ -33,6 +33,7 @@ import { useBlockContext } from '../../extensions';
 import type { AdvancedLabelControlProps } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { useAdvancedLabelProps } from '../../hooks/use-advanced-label-props';
+import { countStatesGraphChangesetRows, getStatesGraph } from './helpers';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,
@@ -53,16 +54,17 @@ export const EditorAdvancedLabelControl = ({
 	repeaterItem,
 	resetToDefault,
 	onClick,
-	offset = 35,
 	iconPosition = 'end',
 	changesetGraphPreview,
 	changesetGraphPreviewRender,
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
+	const labelAnchorRef = useRef(null);
 
 	const {
 		getAttributes = () => {},
+		currentBlock,
 		isNormalState = () => true,
 		switchBlockState,
 		currentState,
@@ -111,10 +113,31 @@ export const EditorAdvancedLabelControl = ({
 
 	const previewObjectPickKey = singularId || controlFieldId;
 
+	const labelStatesGraph =
+		isOpenModal && isChangedValue && attribute
+			? getStatesGraph({
+					controlId: attribute,
+					blockName,
+					defaultValue,
+					path,
+					attributesRef:
+						'undefined' !== typeof getAttributesRef
+							? getAttributesRef()
+							: {},
+					isRepeaterItem: !isUndefined(repeaterItem),
+					inGlobalStylesPanel,
+					getAttributes,
+					currentBlock,
+				})
+			: [];
+
+	const changesetRowCount = countStatesGraphChangesetRows(labelStatesGraph);
+
 	return (
 		<>
 			{label && (
 				<SimpleLabelControl
+					anchorRef={labelAnchorRef}
 					label={label}
 					ariaLabel={ariaLabel}
 					labelDescription={labelDescription}
@@ -211,7 +234,7 @@ export const EditorAdvancedLabelControl = ({
 
 			{isOpenModal && (
 				<Popover
-					offset={offset}
+					anchor={labelAnchorRef.current}
 					title={
 						<>
 							<Icon icon="question-circle" iconSize="24" />
@@ -237,22 +260,18 @@ export const EditorAdvancedLabelControl = ({
 								)}
 							>
 								<Icon icon="pen-circle" iconSize="20" />
-								{__('Customization', 'blockera')}
+								{_n(
+									'Customization',
+									'Customizations',
+									changesetRowCount,
+									'blockera'
+								)}
 							</h3>
 
 							<StatesGraph
 								controlId={attribute}
-								blockName={blockName}
+								statesGraph={labelStatesGraph}
 								onClick={switchBlockState}
-								defaultValue={defaultValue}
-								path={path}
-								inGlobalStylesPanel={inGlobalStylesPanel}
-								attributesRef={
-									'undefined' !== typeof getAttributesRef
-										? getAttributesRef()
-										: {}
-								}
-								isRepeaterItem={!isUndefined(repeaterItem)}
 								changesetGraphPreview={changesetGraphPreview}
 								previewObjectPickKey={previewObjectPickKey}
 								changesetGraphPreviewRender={
@@ -476,3 +495,6 @@ export const EditorAdvancedLabelControl = ({
 		</>
 	);
 };
+
+export { renderSelectOptionChangesetPreview } from './changeset-graph/render-select-option-changeset-preview';
+export type { RenderSelectOptionChangesetPreviewArgs } from './changeset-graph/render-select-option-changeset-preview';

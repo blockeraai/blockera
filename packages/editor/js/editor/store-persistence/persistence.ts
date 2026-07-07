@@ -98,8 +98,7 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 
 	// Get user ID from window (injected by PHP) to make localStorage user-specific
 	const userId = (window as any).blockeraEditorPersistenceUserId as
-		| number
-		| undefined;
+		number | undefined;
 	const userSpecificKey = userId
 		? `${localStorageRestoreKey}_${userId}`
 		: localStorageRestoreKey;

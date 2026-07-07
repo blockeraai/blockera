@@ -12,7 +12,7 @@ import { useEffect } from '@wordpress/element';
  */
 import { getTargets } from '../header-ui/helpers';
 import { BlockGlobalStylesPanelScreen } from './panel';
-import { IntersectionObserverRenderer } from './intersection-observer-renderer';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Global Styles Panel Screen
@@ -65,3 +65,4 @@ export default function GlobalStyles({
 }
 
 export * from './registration';
+export * from './variation-filters';

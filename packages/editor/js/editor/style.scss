@@ -66,40 +66,35 @@
 	}
 }
 
-// Compatible with WordPress 6.5.2 - 6.6.1 versions.
-
 .editor-header__center,
 .edit-post-header__center,
 .edit-site-header-edit-mode__center {
-	gap: 10px;
-	align-items: center;
-
 	.editor-document-bar {
-		width: min(100%, 300px) !important;
+		width: min(100%, 330px) !important;
 	}
 }
 
-@media (min-width: 960px) {
-	.blockera-canvas-breakpoints,
-	.editor-document-bar {
-		width: min(100%, 300px) !important;
+.editor-document-bar {
+	border: 1px solid var(--blockera-controls-border-color-soft);
+	background: #ffffff;
+	overflow: hidden;
+	position: relative;
+	border-radius: var(--blockera-controls-border-radius);
+
+	.components-button:hover,
+	&:hover {
+		background: #f0f0f0 !important;
 	}
-}
 
-.blockera-control-breakpoints-popover.blockera-component-popover {
-	--popover-height: auto !important;
-}
-
-.blockera-control-breakpoints-edit-popover.blockera-component-popover {
-	--popover-height: auto;
-
-	.components-popover__content {
-		overflow: visible !important;
+	.editor-document-bar__back.components-button.has-icon.has-text {
+		height: 22px;
+		margin-left: 5px;
 	}
 }
 
 .components-panel__header.interface-complementary-area-header {
-	.edit-site-global-styles-sidebar__header-title {
+	.edit-site-global-styles-sidebar__header-title,
+	.editor-global-styles-sidebar__header-title {
 		background: #ffffff;
 		padding: 0 16px;
 		line-height: 1.2;

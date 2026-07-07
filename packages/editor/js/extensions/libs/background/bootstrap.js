@@ -17,13 +17,16 @@ import {
 	backgroundFromWPCompatibility,
 	backgroundToWPCompatibility,
 } from './compatibility/background-image';
-import { mergeObject } from '@blockera/utils';
 import {
 	backgroundColorFromWPCompatibility,
 	backgroundColorToWPCompatibility,
 } from './compatibility/background-color';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -51,7 +54,7 @@ export const bootstrap = (): void => {
 				editorSelectedBlockEvent,
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -89,25 +92,27 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraBackground':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						backgroundToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 
 				case 'blockeraBackgroundColor':
-					return mergeObject(
+					return mergeWPCompatibility(
 						nextState,
 						backgroundColorToWPCompatibility({
 							newValue,
 							ref,
 							insideBlockInspector,
 							editorSelectedBlockEvent,
-						})
+						}),
+						blockDetail
 					);
 			}
 

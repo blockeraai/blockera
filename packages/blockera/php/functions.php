@@ -221,11 +221,16 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
 
                 $settingsValue = $settings['value'];
 
+                // Structured payloads (arrays) are not valid var() fallbacks; emit token only.
+                if (is_array($settingsValue)) {
+                    return $varStr;
+                }
+
                 if ('' !== $settingsValue && $varStr !== $settingsValue) {
 
                     $prefix = "var({$var}";
 
-                    if (str_starts_with($settingsValue, $prefix)) {
+                    if (is_string($settingsValue) && str_starts_with($settingsValue, $prefix)) {
                         return $settingsValue;
                     }
 

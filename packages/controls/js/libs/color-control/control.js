@@ -23,10 +23,12 @@ import {
 	ColorIndicator,
 	ColorPickerControl,
 } from '../index';
+import { getContextualColorKeywordMeta } from '../color-indicator/get-contextual-color-keyword-meta';
 
 export default function ColorControl({
 	type = 'normal',
 	noBorder,
+	showButtonLabel = true,
 	contentAlign = 'left',
 	//
 	id,
@@ -47,9 +49,15 @@ export default function ColorControl({
 	controlAddonTypes,
 	variableTypes,
 	size = 'normal',
+	colorIndicatorSize = 16,
+	tooltip,
+	children,
 	//
 	...props
 }: ColorControlProps): MixedElement {
+	const normalizedVariableTypes =
+		typeof variableTypes === 'string' ? [variableTypes] : variableTypes;
+
 	const {
 		value,
 		setValue,
@@ -78,6 +86,14 @@ export default function ColorControl({
 		variableTypes,
 		onChange: setValue,
 		size,
+		presetInterface:
+			Array.isArray(normalizedVariableTypes) &&
+			normalizedVariableTypes.includes('color')
+				? {
+						variableTypes: normalizedVariableTypes,
+						attribute,
+					}
+				: undefined,
 	});
 
 	const labelProps = {
@@ -96,7 +112,8 @@ export default function ColorControl({
 		...propsForLabelControl,
 	};
 
-	if (isSetValueAddon()) {
+	// Keep the color picker open while typing custom CSS (e.g. currentColor).
+	if (isSetValueAddon() && !isOpen) {
 		return (
 			<BaseControl
 				columns={columns}
@@ -118,9 +135,9 @@ export default function ColorControl({
 		);
 	}
 
-	let buttonLabel: MixedElement;
+	let buttonLabel: MixedElement | void;
 
-	if (type === 'normal') {
+	if (type === 'normal' && showButtonLabel) {
 		buttonLabel = value ? (
 			<span className="color-label" data-cy="color-label">
 				{value}
@@ -131,6 +148,13 @@ export default function ColorControl({
 			</span>
 		);
 	}
+
+	// Contextual keywords (transparent, currentColor, …) have no fixed preview; keep default chrome.
+	const buttonPrimaryColor =
+		typeof value === 'string' &&
+		getContextualColorKeywordMeta(value) !== null
+			? 'var(--blockera-controls-border-color)'
+			: value;
 
 	return (
 		<BaseControl
@@ -155,18 +179,23 @@ export default function ColorControl({
 				onClick={() => setOpen(!isOpen)}
 				style={{
 					...style,
-					'--blockera-controls-primary-color': value,
+					'--blockera-controls-primary-color': buttonPrimaryColor,
 				}}
 				data-cy="color-btn"
 				{...props}
+				showTooltip={Boolean(tooltip)}
+				label={tooltip}
 			>
 				<ColorIndicator
 					type="color"
 					value={value}
 					data-cy="color-indicator"
+					size={colorIndicatorSize}
 				/>
 
 				{buttonLabel}
+
+				{children}
 			</Button>
 
 			{isOpen && (

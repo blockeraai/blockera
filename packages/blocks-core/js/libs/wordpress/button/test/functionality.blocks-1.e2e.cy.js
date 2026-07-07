@@ -29,6 +29,14 @@ describe('Button Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.get('.blockera-extension-block-card.master-block-card').within(
+			() => {
+				cy.get('button[data-test="back-to-parent-navigation"]').should(
+					'be.visible'
+				);
+			}
+		);
+
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
 
 		cy.checkBlockStatesPickerItems(
@@ -102,8 +110,7 @@ describe('Button Block', () => {
 		});
 
 		cy.getParentContainer('Border').within(() => {
-			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('div[aria-selected="false"]').eq(1).click();
+			cy.customSelectOption(1);
 		});
 
 		cy.wait(10);
@@ -126,7 +133,7 @@ describe('Button Block', () => {
 		//
 		// 2. Check settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			// block settings panel body should be hidden

@@ -1,5 +1,7 @@
 //@flow
 
+import type { MixedElement } from 'react';
+
 export type ColorIndicatorProps = {
 	/**
 	 * Specifies the value type. It creates custom indicator for types and return empty tag for invalid types. Empty type will be treated as color.
@@ -33,6 +35,10 @@ export type ColorIndicatorProps = {
 	 * Accessible label; contextual keywords set a default unless overridden.
 	 */
 	'aria-label'?: string,
+	/**
+	 * Optional overlay content (e.g. shade base-anchor badge) rendered inside the indicator.
+	 */
+	children?: MixedElement,
 };
 
 export type ColorIndicatorStackProps = {
@@ -52,4 +58,15 @@ export type ColorIndicatorStackProps = {
 	 * Specifies the max number of items in stack
 	 */
 	maxItems?: number,
+	/**
+	 * Stack paint order. `normal` follows DOM order; `centered` peaks z-index
+	 * at the middle item (left-middle when the count is even).
+	 */
+	displayMode?: 'normal' | 'centered',
+	/**
+	 * Overlap gap for stacked indicators (`--stack-space`). Numbers are treated
+	 * as pixels (e.g. `-10` → `-10px`). When omitted, spacing is derived from
+	 * the visible item count.
+	 */
+	space?: number | string,
 };

@@ -10,8 +10,12 @@ export interface LockUser {
 	id: number;
 	/** User display name. */
 	name: string;
-	/** User avatar URL. */
-	avatar: string;
+	/** User avatar URL when avatars are enabled in WordPress. */
+	avatar?: string;
+	/** User email when exposed by the lock API. */
+	email?: string;
+	/** Translated primary role label when exposed by the lock API. */
+	role?: string;
 }
 
 /**
@@ -68,6 +72,22 @@ export interface WorkspaceTabs {
 export interface TabsStorage {
 	/** Workspace ID -> WorkspaceTabs mapping. */
 	[key: string]: WorkspaceTabs;
+}
+
+/**
+ * Payload when a tab target cannot be loaded (deleted, private, missing cap, etc.).
+ */
+export interface DocumentInaccessibleInfo {
+	/** Tab key (e.g. `post-123`). */
+	key: string;
+	/** Post type (e.g. `post`, `page`, `wp_template`). */
+	type: string;
+	/** Post ID. */
+	id: string | number;
+	/** Display title for the modal. */
+	title: string;
+	/** Slug when known (templates/patterns); improves icon selection. */
+	slug?: string | null;
 }
 
 /**
@@ -228,22 +248,6 @@ export interface RenameTabModalProps {
 	onClose: () => void;
 	/** Callback when title is saved. */
 	onSave: (key: string, customTitle: string | null) => void;
-}
-
-/**
- * Tab locked modal props.
- */
-export interface TabLockedModalProps {
-	/** Whether modal is open. */
-	isOpen: boolean;
-	/** Tab that is locked. */
-	tab: Tab | null;
-	/** User who has the lock. */
-	lockUser: LockUser | null;
-	/** Callback when modal is closed. */
-	onClose: () => void;
-	/** Callback to take over the lock. */
-	onTakeover: () => Promise<void>;
 }
 
 /**

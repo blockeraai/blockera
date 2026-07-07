@@ -14,7 +14,7 @@ import {
 	AddBlockTypeIcons,
 	sidebarSelector,
 } from '../global-styles-actions-for-blocks/side-bar-listener';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Sidebar Global Styles Listeners

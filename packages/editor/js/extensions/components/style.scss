@@ -16,7 +16,7 @@
 	}
 }
 
-.blockera-not-allowed {
+.blockera-not-allowed:not(:has(.blockera-state-colors-container)) {
 	opacity: 0.5;
 	user-select: none;
 	cursor: not-allowed;
@@ -161,19 +161,19 @@
 	}
 }
 
-.blockera-block-inspector-controls-wrapper + .block-editor-block-card,
-.blockera-block-inspector-controls-wrapper
-	~ .block-editor-block-variation-transforms {
-	display: none !important;
-}
-
-// hide justification control inside layout constrained (Group Block)
-
-.block-editor-block-inspector
-	.block-editor-hooks__layout-constrained
-	.block-editor-hooks__layout-constrained-helptext
-	+ .components-base-control {
-	display: none;
+// Inspector overrides only when Blockera advanced mode is active (see BlockBase isActive).
+.blockera-block-inspector-controls-wrapper.blockera-active-block {
+	// main block card
+	& + .block-editor-block-card,
+	// pattern child block card
+	& + .block-editor-block-card + .block-editor-block-card,
+	// pattern exit button
+	& + .block-editor-block-card + .block-editor-block-card
+		+ .block-editor-block-inspector-edit-contents,
+	& + .block-editor-block-card + .block-editor-block-inspector-edit-contents,
+	& ~ .block-editor-block-variation-transforms {
+		display: none !important;
+	}
 }
 
 .search-features {
@@ -189,4 +189,73 @@
 
 .blockera-state-colors-container:empty {
 	display: none;
+}
+
+// Inner blocks: styles-only — hide WP inspector tab chrome.
+.block-editor-block-inspector.blockera-inner-block-inspector {
+	.block-editor-block-inspector__tabs [role="tablist"] {
+		display: none !important;
+	}
+}
+
+.block-editor-block-inspector {
+	.blockera-block-inspector-controls-wrapper + .block-editor-block-card {
+		display: none !important;
+	}
+}
+
+// Styles tab + Blockera active: hide core panels and keep Blockera UI.
+.block-editor-block-inspector.blockera-inspector-on-styles-tab {
+	// hide justification control inside layout constrained (Group block)
+	.block-editor-hooks__layout-constrained
+		.block-editor-hooks__layout-constrained-helptext
+		+ .components-base-control {
+		display: none;
+	}
+
+	.block-editor-block-styles {
+		display: none !important;
+	}
+
+	.block-editor-block-inspector__tabs
+		[role="tabpanel"]:not([id*="-list-view"]):not(
+			[id*="-content-view"]
+		):not([id*="-settings-view"]) {
+		// Hide all core controls in the styles tabpanel.
+		> *:not(:has(.blockera-state-colors-container)) {
+			display: none !important;
+		}
+
+		// Hide all elements after the first child of the state colors container.
+		// Elements that third party plugins add to the block inspector.
+		> div:first-child
+			> .blockera-state-colors-container
+			+ *:not(.blockera-state-colors-container) {
+			display: none !important;
+		}
+	}
+
+	// Keep inspector tabs (Blockera InspectorControls live in the styles tabpanel).
+	&.blockera-inner-block-inspector {
+		> .block-editor-block-card {
+			display: none !important;
+		}
+
+		> div:not([class^="blockera-block-inspector-controls-wrapper"]):not(
+				[class^="css-"]
+			):not(.block-editor-block-inspector__tabs) {
+			display: none !important;
+		}
+	}
+
+	&:has(.block-editor-block-inspector-edit-contents) {
+		.block-editor-block-styles {
+			display: flex !important;
+		}
+	}
+}
+
+// Set width to 100%. The width issue is result of setting position: absolute to the wrapper.
+.edit-site-global-styles-sidebar__navigator-provider {
+	width: 100%;
 }

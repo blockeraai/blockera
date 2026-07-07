@@ -62,6 +62,8 @@ describe('Gallery Block', () => {
 			'padding-box'
 		);
 
+		cy.getByAriaControls('styles-view').click();
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
@@ -138,12 +140,13 @@ describe('Gallery Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click({ force: true });
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-tools-panel-header')
 				.contains('Settings')
+				.scrollIntoView()
 				.should('be.visible');
 
 			cy.get(
@@ -152,6 +155,7 @@ describe('Gallery Block', () => {
 				cy.get('.components-input-control__label')
 					.contains('Aspect ratio')
 					.should('exist')
+					.scrollIntoView()
 					.should('not.be.visible');
 			});
 		});

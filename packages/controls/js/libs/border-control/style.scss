@@ -6,6 +6,7 @@
 	border-radius: var(--blockera-controls-border-radius);
 	gap: 0;
 	width: 100%;
+	position: relative;
 
 	&:first-child:last-child {
 		margin-left: auto;

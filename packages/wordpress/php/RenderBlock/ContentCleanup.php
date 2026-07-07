@@ -208,6 +208,11 @@ class ContentCleanup {
 			$after_attrs  = $match[4][0];
 			$position     = $match[0][1];
 
+			// Decode HTML entities from attribute value before CSS processing.
+			// Values like --separator: &quot;/&quot; must become --separator: "/" so semicolon
+			// normalization does not split inside entities such as &quot;.
+			$style_value = $this->decodeStyleAttributeValue( $style_value );
+
 			// Determine selector based on priority logic.
 			$all_attrs_combined = $before_attrs . ' ' . $after_attrs;
 			$child_class_value  = $this->extractClassAttribute( $all_attrs_combined );
@@ -969,6 +974,25 @@ class ContentCleanup {
 		$normalized = preg_replace( '/;\s*$/', ';', $normalized );
 
 		return $normalized;
+	}
+
+	/**
+	 * Decode HTML entities in a style attribute value for CSS output.
+	 *
+	 * Inline style attributes encode quotes as &quot; etc. CSS rules must use
+	 * the decoded characters; otherwise semicolon normalization breaks on entity terminators.
+	 *
+	 * @param string $style_value Raw style attribute value from HTML.
+	 *
+	 * @return string Decoded style value safe for CSS processing.
+	 */
+	protected function decodeStyleAttributeValue( string $style_value ): string {
+
+		if ( '' === $style_value || false === strpos( $style_value, '&' ) ) {
+			return $style_value;
+		}
+
+		return html_entity_decode( $style_value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 
 	/**

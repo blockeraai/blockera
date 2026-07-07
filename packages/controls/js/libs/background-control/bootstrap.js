@@ -45,6 +45,11 @@ export const backgroundComponentConfig: Object = {
 						<Icon icon="background-mesh-gradient" iconSize="18" />
 					),
 				},
+				{
+					label: __('None', 'blockera'),
+					value: 'none',
+					icon: <Icon icon="background-none" iconSize="18" />,
+				},
 			],
 			meshGradientColors: {
 				show: true,

@@ -5,7 +5,14 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { Popover as WPPopover } from '@wordpress/components';
-import { useContext, useRef, useEffect, forwardRef } from '@wordpress/element';
+import {
+	useContext,
+	useRef,
+	useEffect,
+	useLayoutEffect,
+	forwardRef,
+	useCallback,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,13 +23,23 @@ import {
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { isFunction, isUndefined } from '@blockera/utils';
-import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
  */
 import { Button } from '../button';
+import {
+	getPopoverRoot,
+	isOtherPopoverClosing,
+	markPopoverClosing,
+	normalizePopoverRoot,
+	registerPopoverOpen,
+	shouldDismissPopoverFromPointerDown,
+	shouldIgnorePopoverFocusOutside,
+	unregisterPopoverRoot,
+} from './utils';
 import type { TPopoverProps } from './types';
+import { PopoverContextData } from './context';
 
 type TPopoverCoreProps = {
 	...TPopoverProps,
@@ -40,7 +57,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				className,
 				placement = 'bottom-start',
 				resize: _resize = true,
-				shift: _shift = true,
+				shift: _shift = false,
 				flip: _flip = true,
 				animate = true,
 				closeButton = true,
@@ -49,7 +66,6 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				titleButtonsLeft = '',
 				headerRef,
 				anchor,
-				focusOutsideSuppressionRef,
 				...props
 			}: TPopoverCoreProps,
 			ref
@@ -59,13 +75,105 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 
 			const internalRef = useRef();
 			const popoverRef = ref || internalRef;
+			const ignoreFocusOutsideDuringMountRef = useRef(true);
+			const isClosingRef = useRef(false);
+
+			const dismissPopover = useCallback(
+				({
+					skipMountGuard = false,
+				}: { skipMountGuard?: boolean } = {}) => {
+					if (isClosingRef.current) {
+						return;
+					}
+
+					if (
+						!skipMountGuard &&
+						ignoreFocusOutsideDuringMountRef.current
+					) {
+						return;
+					}
+
+					const popoverRoot = normalizePopoverRoot(
+						popoverRef.current
+					);
+					if (isOtherPopoverClosing(popoverRoot)) {
+						return;
+					}
+
+					isClosingRef.current = true;
+					onClose();
+				},
+				[onClose]
+			);
+
+			useLayoutEffect(() => {
+				isClosingRef.current = false;
+				registerPopoverOpen(popoverRef.current);
+
+				return () => {
+					unregisterPopoverRoot(popoverRef.current);
+				};
+			}, []);
+
+			useEffect(() => {
+				const handlePointerDown = (event: MouseEvent) => {
+					const popoverRoot = normalizePopoverRoot(
+						popoverRef.current
+					);
+
+					if (
+						!shouldDismissPopoverFromPointerDown(
+							popoverRoot,
+							event.target,
+							anchor
+						)
+					) {
+						return;
+					}
+
+					dismissPopover({ skipMountGuard: true });
+				};
+
+				document.addEventListener('mousedown', handlePointerDown, true);
+
+				return () => {
+					document.removeEventListener(
+						'mousedown',
+						handlePointerDown,
+						true
+					);
+				};
+			}, [anchor, dismissPopover]);
 
 			useEffect(() => {
 				popoverRef.current?.focus();
-			}, [ref]);
+				// Only steal focus when the popover first mounts — not on every re-render.
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
 
-			function popoverOnFocusOutside(e: MouseEvent) {
-				if (focusOutsideSuppressionRef?.current) {
+			useEffect(() => {
+				ignoreFocusOutsideDuringMountRef.current = true;
+
+				const timer = setTimeout(() => {
+					ignoreFocusOutsideDuringMountRef.current = false;
+				}, 100);
+
+				return () => {
+					clearTimeout(timer);
+					ignoreFocusOutsideDuringMountRef.current = false;
+				};
+			}, []);
+
+			function popoverOnFocusOutside(e: FocusEvent) {
+				if (ignoreFocusOutsideDuringMountRef.current) {
+					return;
+				}
+
+				if (
+					isOtherPopoverClosing(
+						normalizePopoverRoot(popoverRef.current)
+					)
+				) {
 					return;
 				}
 
@@ -77,10 +185,9 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				];
 
 				if (
+					e.target instanceof HTMLElement &&
 					excludeClasses.filter((className) =>
-						((e.target: any): HTMLElement).classList.contains(
-							className
-						)
+						e.target.classList.contains(className)
 					).length !== 0
 				) {
 					return;
@@ -96,14 +203,40 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					return;
 				}
 
-				// Focus moved to another node still inside this popover (e.g. color pallet wrapper).
-				const related = ((e: any): FocusEvent).relatedTarget;
-				const root = popoverRef.current;
-				if (related && root && root.contains(related)) {
+				if (shouldIgnorePopoverFocusOutside(e, popoverRef.current)) {
 					return;
 				}
 
-				onClose();
+				dismissPopover();
+			}
+
+			function handlePopoverDismissFromOverlay() {
+				if (
+					isOtherPopoverClosing(
+						normalizePopoverRoot(popoverRef.current)
+					)
+				) {
+					return;
+				}
+
+				dismissPopover();
+			}
+
+			function handleCloseButtonPointerDown(
+				event: MouseEvent & { currentTarget: HTMLElement }
+			) {
+				event.stopPropagation();
+				markPopoverClosing(
+					getPopoverRoot(event.currentTarget) ??
+						normalizePopoverRoot(popoverRef.current)
+				);
+			}
+
+			function handleCloseButtonClick(
+				event: MouseEvent & { currentTarget: HTMLElement }
+			) {
+				event.stopPropagation();
+				dismissPopover({ skipMountGuard: true });
 			}
 
 			return (
@@ -114,7 +247,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 						title && 'with-header',
 						className
 					)}
-					onClose={onClose}
+					onClose={handlePopoverDismissFromOverlay}
 					onFocusOutside={
 						isFunction(onFocusOutside)
 							? onFocusOutside
@@ -127,6 +260,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					placement={placement}
 					focusOnMount={focusOnMount}
 					ref={popoverRef}
+					anchor={anchor}
 					{...props}
 				>
 					{title && (
@@ -157,9 +291,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 										'title-right-buttons'
 									)}
 								>
-									{titleButtonsRight && (
-										<>{titleButtonsRight}</>
-									)}
+									{titleButtonsRight}
 
 									{closeButton && (
 										<Button
@@ -168,7 +300,11 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 											)}
 											size="extra-small"
 											align="center"
-											onClick={onClose}
+											data-test="close-popover"
+											onMouseDown={
+												handleCloseButtonPointerDown
+											}
+											onClick={handleCloseButtonClick}
 											tabIndex="-1"
 											label={__('Close', 'blockera')}
 											aria-label={__('Close', 'blockera')}

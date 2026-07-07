@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 182,
+		"total": 183,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 79,
+		"not-supported": 80,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -819,6 +819,10 @@
 		{
 			"name": "woocommerce/coupon-code",
 			"title": "Include a coupon code to entice customers to make a purchase."
+		},
+		{
+			"name": "woocommerce/dropdown",
+			"title": "@todo complete this block title"
 		}
 	]
 }

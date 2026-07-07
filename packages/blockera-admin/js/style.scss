@@ -1,13 +1,14 @@
 @use "sass:math";
-@import "~@wordpress/base-styles/colors";
-@import "~@wordpress/base-styles/variables";
-@import "~@wordpress/base-styles/mixins";
-@import "~@wordpress/base-styles/breakpoints";
-@import "~@wordpress/base-styles/animations";
-@import "~@wordpress/base-styles/z-index";
-@import "~@wordpress/components/build-style/style";
-@import "~@blockera/controls/js/libs/switch/style.scss";
-@import "~@blockera/editor/js/editor/header-ui/components/breakpoints/breakpoint-settings/style.scss";
+@use "~@wordpress/base-styles/colors" as *;
+@use "~@wordpress/base-styles/variables" as *;
+@use "~@wordpress/base-styles/mixins" as *;
+@use "~@wordpress/base-styles/breakpoints" as *;
+@use "~@wordpress/base-styles/animations" as *;
+@use "~@wordpress/base-styles/z-index" as *;
+@use "~@wordpress/components/build-style/style" as *;
+@use "~@blockera/controls/js/libs/switch/style.scss" as *;
+@use "~@blockera/editor/js/editor/header-ui/components/breakpoints/breakpoint-settings/style.scss" as *;
+@use "../../wordpress/js/admin/components/update/style.scss" as *;
 
 .wp-admin[class*="toplevel_page_blockera-"] {
 	#wpbody-content {

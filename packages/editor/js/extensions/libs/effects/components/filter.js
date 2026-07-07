@@ -20,6 +20,9 @@ import {
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
 
+export const FILTER_PRESET_ATTRIBUTE = 'blockeraFilter';
+export const FILTER_PRESET_PREVIEW_USAGE = 'filter';
+
 export const Filter = ({
 	filter,
 	handleOnChangeAttributes,
@@ -37,7 +40,7 @@ export const Filter = ({
 			value={{
 				name: generateExtensionId(block, 'filters'),
 				value: filter,
-				attribute: 'blockeraFilter',
+				attribute: FILTER_PRESET_ATTRIBUTE,
 				blockName: block.blockName,
 			}}
 			storeName={'blockera/controls/repeater'}

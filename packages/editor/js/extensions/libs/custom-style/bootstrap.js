@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -19,7 +18,11 @@ import {
 	customCssToWPCompatibility,
 } from './compatibility/custom-css';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isInvalidCompatibilityRun } from '../utils';
+import {
+	isInvalidCompatibilityRun,
+	mergeWPCompatibility,
+	sanitizeWPCompatibilityAttributes,
+} from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -35,7 +38,7 @@ export const bootstrap = (): void => {
 				editorSelectedBlockEvent,
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
@@ -72,7 +75,7 @@ export const bootstrap = (): void => {
 				blockDetail;
 
 			if ('blockeraCustomCSS' === featureId) {
-				return mergeObject(
+				return mergeWPCompatibility(
 					nextState,
 					customCssToWPCompatibility({
 						newValue:
@@ -83,7 +86,8 @@ export const bootstrap = (): void => {
 						ref,
 						insideBlockInspector,
 						editorSelectedBlockEvent,
-					})
+					}),
+					blockDetail
 				);
 			}
 

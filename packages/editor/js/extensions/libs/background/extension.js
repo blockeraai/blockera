@@ -11,13 +11,10 @@ import type { MixedElement, ComponentType } from 'react';
 import {
 	BaseControl,
 	ColorControl,
-	SelectControl,
 	PanelBodyControl,
 	BackgroundControl,
 	ControlContextProvider,
-	NoticeControl,
 } from '@blockera/controls';
-import { checkVisibleItemLength } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -31,7 +28,7 @@ import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
 import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TBackgroundProps } from './types/background-props';
-import { Blending } from './components/blending';
+import { BackgroundClipping, Blending } from './components';
 
 export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 	block,
@@ -186,110 +183,16 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 				isActive={isShowBackgroundClip}
 				config={blockeraBackgroundClip}
 			>
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(block, 'background-clip'),
-						value: values.blockeraBackgroundClip,
-						attribute: 'blockeraBackgroundClip',
-						blockName: block.blockName,
-					}}
-				>
-					<SelectControl
-						label={__('Clipping', 'blockera')}
-						labelPopoverTitle={__(
-							'Background Clipping',
-							'blockera'
-						)}
-						labelDescription={
-							<>
-								<p>
-									{__(
-										'It defines how far the background (color or image) extends within the block.',
-										'blockera'
-									)}
-								</p>
-								<p>
-									{__(
-										'It is useful for creating special effects with backgrounds, such as having a background only within the content area or under the borders.',
-										'blockera'
-									)}
-								</p>
-								<h3>
-									<Icon icon="clip-padding" iconSize={18} />
-									{__('Clip to Padding', 'blockera')}
-								</h3>
-								<p>
-									{__(
-										'The background stops at the padding edge, not extending behind the border.',
-										'blockera'
-									)}
-								</p>
-								<h3>
-									<Icon icon="clip-content" iconSize={18} />
-									{__('Clip to Content', 'blockera')}
-								</h3>
-								<p>
-									{__(
-										'The background is applied only to the content area.',
-										'blockera'
-									)}
-								</p>
-								<h3>
-									<Icon icon="clip-text" iconSize={18} />
-									{__('Clip to Text', 'blockera')}
-								</h3>
-								<p>
-									{__(
-										'Advanced feature that allows the background to only be visible through the text of block.',
-										'blockera'
-									)}
-								</p>
-								<p>
-									{__(
-										'This creates an eye-catching effect where the text acts as a mask for the background image or video.',
-										'blockera'
-									)}
-								</p>
-								<h3>
-									<Icon icon="inherit-square" iconSize={18} />
-									{__('Inherit', 'blockera')}
-								</h3>
-								<p>
-									{__(
-										'Clipping inherit from the parent block.',
-										'blockera'
-									)}
-								</p>
-							</>
-						}
-						columns="1fr 2.5fr"
-						options={blockeraBackgroundClip?.config?.options}
-						type="custom"
-						onChange={(newValue, ref) =>
-							handleOnChangeAttributes(
-								'blockeraBackgroundClip',
-								newValue,
-								{ ref }
-							)
-						}
-						defaultValue={attributes.blockeraBackgroundClip.default}
-						{...extensionProps.blockeraBackgroundClip}
-					/>
-
-					{!checkVisibleItemLength(values.blockeraBackground) &&
-						!values.blockeraBackgroundColor &&
-						values.blockeraBackgroundClip === 'text' && (
-							<NoticeControl
-								type="error"
-								style={{ marginTop: '10px' }}
-							>
-								{__(
-									`You've applied text clipping without setting a background color or image. Make sure to add a background to the block.`,
-									'blockera'
-								)}
-							</NoticeControl>
-						)}
-				</ControlContextProvider>
+				<BackgroundClipping
+					block={block}
+					value={values.blockeraBackgroundClip}
+					backgroundItems={values.blockeraBackground}
+					backgroundColor={values.blockeraBackgroundColor}
+					onChange={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraBackgroundClip.default}
+					options={blockeraBackgroundClip?.config?.options}
+					{...extensionProps.blockeraBackgroundClip}
+				/>
 			</EditorFeatureWrapper>
 
 			<EditorFeatureWrapper

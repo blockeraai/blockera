@@ -21,13 +21,16 @@ jobs:
 
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
             - name: Install Cypress
               run: npx cypress install
+
+            - name: Build plugin assets
+              run: npm run build
 
             - name: Run Cypress Tests
               run: npm run test:ct

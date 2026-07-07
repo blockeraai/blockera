@@ -5,6 +5,12 @@ namespace Blockera\Editor;
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
+use Blockera\Editor\StyleDefinitions\Border;
+use Blockera\Editor\StyleDefinitions\BoxShadow;
+use Blockera\Editor\StyleDefinitions\Filter;
+use Blockera\Editor\StyleDefinitions\TextShadow;
+use Blockera\Editor\StyleDefinitions\Transform;
+use Blockera\Editor\StyleDefinitions\Transition;
 
 /**
  * Class StyleEngine generating css style for any state of breakpoints with any properties.
@@ -948,5 +954,125 @@ final class StyleEngine {
 		}
 
 		return $css_rules;
+	}
+
+	/**
+	 * `settings.shadow.presets` → CSS for `--wp--preset--shadow--*`.
+	 *
+	 * @param array $preset     Shadow preset.
+	 * @param array $settings   Surrounding theme.json settings (unused; signature matches WP_Theme_JSON).
+	 */
+	public static function shadowPresetValue( array $preset, array $settings = array() ): string {
+		unset( $settings );
+
+		return BoxShadow::presetToCssValue( $preset );
+	}
+
+	/**
+	 * `settings.border.presets` → CSS for `--wp--preset--border--*`.
+	 *
+	 * @param array $preset   Border box preset.
+	 * @param array $settings Unused; matches WP callback signature.
+	 */
+	public static function borderPresetValue( array $preset, array $settings = array() ): string {
+		unset( $settings );
+
+		return Border::presetToCssValue( $preset );
+	}
+
+	/**
+	 * `settings.transition.presets` → CSS for `--wp--preset--transition--*`.
+	 *
+	 * @param array $preset   Preset with `items` transition rows.
+	 * @param array $settings Unused.
+	 */
+	public static function transitionPresetValue( array $preset, array $settings = array() ): string {
+		unset( $settings );
+
+		$parts = array();
+		foreach ( blockera_get_sorted_global_preset_items( $preset ) as $row ) {
+			if ( ! ( $row['isVisible'] ?? true ) ) {
+				continue;
+			}
+			$chunk = Transition::transitionRowToCssValue( $row, true );
+			if ( '' !== $chunk ) {
+				$parts[] = $chunk;
+			}
+		}
+
+		return implode( ', ', array_filter( $parts, 'strlen' ) );
+	}
+
+	/**
+	 * `settings.transform.presets` → CSS for `--wp--preset--transform--*`.
+	 *
+	 * @param array $preset   Preset with `items` transform rows.
+	 * @param array $settings Unused.
+	 */
+	public static function transformPresetValue( array $preset, array $settings = array() ): string {
+		unset( $settings );
+
+		$parts = array();
+		foreach ( blockera_get_sorted_global_preset_items( $preset ) as $row ) {
+			if ( ! ( $row['isVisible'] ?? true ) ) {
+				continue;
+			}
+			$chunk = Transform::transformRowToCssValue( $row );
+			if ( '' !== $chunk ) {
+				$parts[] = $chunk;
+			}
+		}
+
+		return implode( ' ', array_filter( $parts, 'strlen' ) );
+	}
+
+	/**
+	 * `settings.filter.presets` (CSS filter, not duotone) → CSS for `--wp--preset--filter--*`.
+	 *
+	 * @param array $preset   Preset with `items` filter rows.
+	 * @param array $settings Unused.
+	 */
+	public static function filterPresetValue( array $preset, array $settings = array() ): string {
+		unset( $settings );
+
+		$parts = array();
+		foreach ( blockera_get_sorted_global_preset_items( $preset ) as $row ) {
+			if ( ! ( $row['isVisible'] ?? true ) ) {
+				continue;
+			}
+			$chunk = Filter::filterRowToCssValue( $row );
+			if ( '' !== $chunk ) {
+				$parts[] = $chunk;
+			}
+		}
+
+		return implode( ' ', array_filter( $parts, 'strlen' ) );
+	}
+
+	/**
+	 * `settings.textShadow.presets` → CSS for `--wp--preset--text-shadow--*`.
+	 *
+	 * @param array $preset   Preset with `items` layers.
+	 * @param array $settings Unused.
+	 */
+	public static function textShadowPresetValue( array $preset, array $settings = array() ): string {
+		unset( $settings );
+
+		if ( isset( $preset['shadow'] ) && is_string( $preset['shadow'] ) && '' !== trim( $preset['shadow'] ) ) {
+			return trim( $preset['shadow'] );
+		}
+
+		$parts = array();
+		foreach ( blockera_get_sorted_global_preset_items( $preset ) as $row ) {
+			if ( ! ( $row['isVisible'] ?? true ) ) {
+				continue;
+			}
+			$chunk = trim( TextShadow::textShadowRowToCssValue( $row ) );
+			if ( '' !== $chunk ) {
+				$parts[] = $chunk;
+			}
+		}
+
+		return implode( ', ', array_filter( $parts, 'strlen' ) );
 	}
 }

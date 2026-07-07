@@ -138,10 +138,15 @@ export const PostCommentsFrom: BlockType = {
 			icon: <Icon icon="button" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
+				dataCompatibilityElement: 'button',
 				dataCompatibility: [
 					'font-color',
 					'background-color',
 					'background-image',
+					'font-size',
+					'spacing',
+					'border',
+					'border-radius',
 				],
 			},
 		},

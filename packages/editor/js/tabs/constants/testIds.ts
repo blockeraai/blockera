@@ -73,8 +73,8 @@ export const WORKSPACE_TABS_TEST_ID = {
 	closeConfirmCloseWithoutSaving:
 		'blockera-workspace-tabs-close-confirm-close-without-saving',
 	closeConfirmCancel: 'blockera-workspace-tabs-close-confirm-cancel',
-	closeConfirmReviewTab: (tabKey: string): string =>
-		`blockera-workspace-tabs-close-confirm-review-tab--${tabKey}`,
+	closeConfirmOpenTab: (tabKey: string): string =>
+		`blockera-workspace-tabs-close-confirm-open-tab--${tabKey}`,
 
 	/** Upgrade modal when workspace tab limits are exceeded (free tier). */
 	tabsLimitUpgradePrompt: 'blockera-workspace-tabs-limit-upgrade-prompt',

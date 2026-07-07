@@ -20,10 +20,10 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import type { BoxSpacingControlProps, BoxSpacingLock } from './types';
+import { formatBoxSpacingSidesForChangesetPreview } from './box-spacing-changeset-preview';
 import {
 	boxSpacingControlDefaultValue,
 	boxSpacingValueCleanup,
-	formatBoxSpacingSidesForChangesetPreview,
 	getSmartLock,
 } from './utils';
 import {
@@ -180,6 +180,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'padding-top-bottom',
 											}}
 											id="padding.top"
 											unitType={'padding'}
@@ -236,6 +238,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'padding-left-right',
 											}}
 											id="padding.left"
 											defaultValue={prepare(
@@ -521,6 +525,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'margin-top-bottom',
 											}}
 											id="margin.top"
 											defaultValue={prepare(
@@ -573,6 +579,8 @@ export default function BoxSpacingControl({
 												changesetGraphPreview: {
 													type: 'string',
 												},
+												controlFieldId:
+													'margin-left-right',
 											}}
 											id="margin.left"
 											defaultValue={prepare(

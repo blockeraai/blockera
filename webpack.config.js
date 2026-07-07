@@ -14,8 +14,8 @@ const packagesConfig = require('./packages/dev-tools/js/webpack/packages');
 
 const exportDefaultPackages = [];
 
-module.exports = (env, argv) => {
-	if (!argv) {
+module.exports = (env = {}, argv) => {
+	if (!argv || env?.cypress) {
 		return require(
 			path.resolve(
 				process.cwd(),
@@ -113,8 +113,9 @@ module.exports = (env, argv) => {
 			'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
 			'@blockera/editor':
 				'blockeraEditor_' + blockeraPackagesVersion.editor,
-			'@blockera/block-icon':
-				'blockeraBlockIcon_' + blockeraPackagesVersion['block-icon'],
+			'@blockera/global-styles-ui':
+				'blockeraGlobalStylesUi_' +
+				blockeraPackagesVersion['global-styles-ui'],
 			'@blockera/blocks-core':
 				'blockeraBlocksCore_' + blockeraPackagesVersion['blocks-core'],
 			'@blockera/feature-icon':

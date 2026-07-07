@@ -55,6 +55,15 @@ import { default as blockTypes } from './block-types';
 import { default as blockVariations } from './block-variations';
 
 /**
+ * This plugin defines the companion (Blockera Site Builder) plugin as installed.
+ */
+addFilter(
+	'blockera.products.isCompanionPlugin',
+	'blockera/products.isCompanionPlugin',
+	() => true
+);
+
+/**
  * Registration blockera core block settings with internal definitions.
  */
 addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {

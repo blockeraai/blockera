@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { useContext, useCallback, useRef } from '@wordpress/element';
 
@@ -16,6 +15,7 @@ import {
 	isObject,
 	isBoolean,
 	isUndefined,
+	isEquals,
 	mergeObject,
 } from '@blockera/utils';
 
@@ -170,8 +170,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		// eslint-disable-next-line
 	}, []);
 
-	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
-	const calculatedValue = _getCalculatedValue();
+	const calculatedValue = getCalculatedInitValue();
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
@@ -191,7 +190,9 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			const {
 				attributes: { blockeraBlockStates },
 			} = getSelectedBlock();
-			const states = Object.keys(blockeraBlockStates);
+			const states = Object.keys(
+				blockeraBlockStates?.value || blockeraBlockStates
+			);
 			const breakpoints = Object.keys(getBreakpoints());
 			//get `blockera/controls` store or details of that
 			const { getControl } = isRepeaterControl()
@@ -224,6 +225,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				});
 			});
 
+			// When no states are present or normal state is not present, modify the control value to the default value.
+			if (!states.length || !states.includes('normal')) {
+				modify(controlInfo.name);
+			}
+
 			resetRef();
 
 			return value;
@@ -248,6 +254,29 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	});
 
 	/**
+	 * Resolve the effective control value using the same rules as ControlContextProvider.
+	 * When skipSyncValue is true, the store value wins. Otherwise controlInfo.value
+	 * is preferred when it is defined and differs from the store.
+	 *
+	 * @return {any} resolved control value before id/defaultValue preparation.
+	 */
+	function getResolvedControlValue(): any {
+		const skipSyncValue =
+			controlInfo.hasOwnProperty('skipSyncValue') &&
+			true === controlInfo.skipSyncValue;
+
+		if (skipSyncValue) {
+			return savedValue;
+		}
+
+		if (!isEquals(savedValue, controlInfo.value)) {
+			return controlInfo.value;
+		}
+
+		return savedValue;
+	}
+
+	/**
 	 * Retrieved control value
 	 * to merge default and saved value for simple or repeater controls.
 	 *
@@ -257,7 +286,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	 */
 	function getCalculatedInitValue(currentValue: any = null): any {
 		if (isNull(currentValue)) {
-			currentValue = savedValue;
+			currentValue = getResolvedControlValue();
 		}
 
 		if (
@@ -265,6 +294,10 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			isNull(currentValue) ||
 			isEmpty(currentValue)
 		) {
+			if (isRepeaterControl()) {
+				return defaultValue ?? {};
+			}
+
 			return defaultValue;
 		}
 

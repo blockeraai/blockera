@@ -6,11 +6,7 @@ import type { RepeaterControlProps } from '../../repeater-control/types';
 import type { MixedElement } from 'react';
 
 export type PositionType =
-	| 'static'
-	| 'relative'
-	| 'absolute'
-	| 'sticky'
-	| 'fixed';
+	'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 
 export type PositionControlValue = {
 	type: PositionType,
@@ -59,7 +55,6 @@ export type SideProps = {
 	setFocusSide: (side: Side | '') => void,
 	openPopover: OpenPopover,
 	setOpenPopover: (side: OpenPopover) => void,
-	popoverOffset?: number,
 };
 
 export type SideReturn = {

@@ -25,3 +25,9 @@
 		scaleX(var(--blockera--icon--flip-horizontal, 1))
 		scaleY(var(--blockera--icon--flip-vertical, 1));
 }
+
+.wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link svg[fill="none"],
+.wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link .blockera-stroke-svg-icon svg {
+	fill: none;
+	stroke: var(--blockera--icon--color, currentColor);
+}

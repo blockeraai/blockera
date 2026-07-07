@@ -19,7 +19,7 @@ import {
 	ToggleControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { controlInnerClassNames, classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -47,7 +47,6 @@ export const StyleItemMenu = (): MixedElement => {
 		buttonText,
 		handleOnRename,
 		handleOnDuplicate,
-		handleOnClearAllCustomizations,
 		handleOnUsageForMultipleBlocks,
 		handleOnSaveUsageForMultipleBlocks,
 		setIsOpenUsageForMultipleBlocks,
@@ -59,8 +58,16 @@ export const StyleItemMenu = (): MixedElement => {
 		blockStyles,
 		handlePromotionPopover,
 		anchorRef,
-		popoverOffset,
+		variationAllowsMultipleBlocks,
 	} = useStyleItemMenuContext();
+
+	const inactiveLabel = variationAllowsMultipleBlocks
+		? __('Inactive Style', 'blockera')
+		: __('Inactive Size', 'blockera');
+
+	const activeLabel = variationAllowsMultipleBlocks
+		? __('Active Style', 'blockera')
+		: __('Active Size', 'blockera');
 
 	return (
 		<>
@@ -68,8 +75,10 @@ export const StyleItemMenu = (): MixedElement => {
 				<RenameModal
 					style={style}
 					buttonText={buttonText}
+					blockStyles={blockStyles}
 					handleOnRename={handleOnRename}
 					isConfirmedChangeID={isConfirmedChangeID}
+					isSizeVariationUi={!variationAllowsMultipleBlocks}
 					setIsOpenRenameModal={setIsOpenRenameModal}
 					setIsConfirmedChangeID={setIsConfirmedChangeID}
 				/>
@@ -77,8 +86,8 @@ export const StyleItemMenu = (): MixedElement => {
 			{isOpenDeleteModal && (
 				<DeleteModal
 					style={style}
-					buttonText={buttonText}
 					handleOnDelete={handleOnDelete}
+					isSizeVariationUi={!variationAllowsMultipleBlocks}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
 				/>
 			)}
@@ -88,12 +97,13 @@ export const StyleItemMenu = (): MixedElement => {
 					buttonText={buttonText}
 					handleOnDuplicate={handleOnDuplicate}
 					isConfirmedChangeID={isConfirmedChangeID}
+					isSizeVariationUi={!variationAllowsMultipleBlocks}
 					setIsOpenDuplicateModal={setIsOpenDuplicateModal}
 					setIsConfirmedChangeID={setIsConfirmedChangeID}
 					blockStyles={blockStyles}
 				/>
 			)}
-			{isOpenUsageForMultipleBlocks && (
+			{variationAllowsMultipleBlocks && isOpenUsageForMultipleBlocks && (
 				<UsageForMultipleBlocksModal
 					style={style}
 					blockName={blockName}
@@ -114,10 +124,12 @@ export const StyleItemMenu = (): MixedElement => {
 				<Popover
 					anchor={anchorRef?.current}
 					title={''}
-					offset={popoverOffset}
 					draggable={true}
 					placement="left-start"
-					className="variations-settings-popover"
+					className={classNames('variations-settings-popover', {
+						'is-variation-ui-size': !variationAllowsMultipleBlocks,
+						'is-variation-ui-style': variationAllowsMultipleBlocks,
+					})}
 					onClose={() => {
 						setIsOpenContextMenu(false);
 					}}
@@ -141,18 +153,6 @@ export const StyleItemMenu = (): MixedElement => {
 							{__('Duplicate', 'blockera')}
 						</Button>
 
-						<Button
-							variant="link"
-							contentAlign="left"
-							className={controlInnerClassNames('menu-item')}
-							onClick={() =>
-								handleOnClearAllCustomizations(style)
-							}
-						>
-							<Icon icon="undo" iconSize="24" />
-							{__('Clear all customizations', 'blockera')}
-						</Button>
-
 						{!style?.isDefault && (
 							<Button
 								variant="link"
@@ -171,7 +171,7 @@ export const StyleItemMenu = (): MixedElement => {
 							</Button>
 						)}
 
-						{!style?.isDefault && (
+						{variationAllowsMultipleBlocks && !style?.isDefault && (
 							<Button
 								variant="link"
 								contentAlign="left"
@@ -187,7 +187,7 @@ export const StyleItemMenu = (): MixedElement => {
 								}}
 							>
 								<Icon icon="block-types" iconSize="24" />
-								{__('Use for multiple blocks', 'blockera')}
+								{__('Share with other blocks', 'blockera')}
 							</Button>
 						)}
 
@@ -228,39 +228,41 @@ export const StyleItemMenu = (): MixedElement => {
 						)}
 
 						{!style?.isDefault && (
-							<Grid
-								gridTemplateColumns="24px 1fr"
-								gap={8}
-								alignItems="center"
-								style={{
-									padding: '0 6px',
-									height: '36px',
-								}}
-							>
-								<ControlContextProvider
-									value={{
-										name: `${style.name}-toggle`,
-										value:
-											true === cachedStyle?.status ||
-											!cachedStyle.hasOwnProperty(
-												'status'
-											),
+							<div data-test={`${style.name}-active-toggle-row`}>
+								<Grid
+									gridTemplateColumns="24px 1fr"
+									gap={8}
+									alignItems="center"
+									style={{
+										padding: '0 6px',
+										height: '36px',
 									}}
 								>
-									<ToggleControl
-										labelType={'self'}
-										label={' '}
-										onChange={(value: boolean): void =>
-											handleOnEnable(value, style)
-										}
-										size="small"
-									/>
-								</ControlContextProvider>
+									<ControlContextProvider
+										value={{
+											name: `${style.name}-toggle`,
+											value:
+												true === cachedStyle?.status ||
+												!cachedStyle.hasOwnProperty(
+													'status'
+												),
+										}}
+									>
+										<ToggleControl
+											labelType={'self'}
+											label={' '}
+											onChange={(value: boolean): void =>
+												handleOnEnable(value, style)
+											}
+											size="small"
+										/>
+									</ControlContextProvider>
 
-								{false === cachedStyle?.status
-									? __('Inactive Style', 'blockera')
-									: __('Active Style', 'blockera')}
-							</Grid>
+									{false === cachedStyle?.status
+										? inactiveLabel
+										: activeLabel}
+								</Grid>
+							</div>
 						)}
 
 						{!style.isDefault && (

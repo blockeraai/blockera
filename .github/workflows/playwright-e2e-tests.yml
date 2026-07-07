@@ -19,7 +19,7 @@ jobs:
             categories: ${{ steps.set_categories.outputs.categories }}
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -47,7 +47,7 @@ jobs:
                 category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -111,7 +111,7 @@ jobs:
             - name: Verify mu-plugin fixture paths for compatibility tests
               run: |
                   # Test that mu-plugin files exist and can be copied (required for tests with activateMuPlugin in beforeEach)
-                  npx wp-env run cli -- wp eval 'foreach (["packages/editor/js/extensions/libs/background/test/global-styles/fixtures/background-color-setup-1.php","packages/blocks-core/js/libs/wordpress/group/test/global-styles/fixtures/link-inner-blocks-simple-color.php"] as $f) { $p = ABSPATH . "wp-content/plugins/blockera/" . $f; if (!file_exists($p)) { echo "Missing: " . $p; exit(1); } } echo "Mu-plugin fixtures OK";'
+                  npx wp-env run cli -- wp eval 'foreach (["packages/editor/js/extensions/libs/background/test/global-styles/fixtures/background-color-setup-1.php","packages/blocks-core/js/libs/wordpress/group/test/global-styles/fixtures/link-inner-blocks-simple-color.php","packages/editor/js/extensions/libs/block-card/inner-blocks/test/global-styles/fixtures/link-color-simple.php"] as $f) { $p = ABSPATH . "wp-content/plugins/blockera/" . $f; if (!file_exists($p)) { echo "Missing: " . $p; exit(1); } } echo "Mu-plugin fixtures OK";'
 
             - name: Wait for WordPress to be ready
               run: |

@@ -5,7 +5,13 @@
  */
 import memoize from 'fast-memoize';
 import { select, dispatch } from '@wordpress/data';
-import { useMemo, useCallback } from '@wordpress/element';
+import {
+	useMemo,
+	useCallback,
+	useRef,
+	useState,
+	useEffect,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -44,7 +50,6 @@ export const useBlockStates = ({
 	currentBlock,
 	currentState,
 	setCurrentBlock,
-	deleteCacheData,
 	availableStates,
 	// currentBreakpoint,
 	currentInnerBlockState,
@@ -232,29 +237,44 @@ export const useBlockStates = ({
 		visibilitySupport: true,
 	};
 
-	const contextValue = {
-		block,
-		value: calculatedValue,
-		blockName: block.blockName,
-		needUpdate: (next: Object): boolean => {
-			const deletedItems = deleteCacheData.get('deleted-items');
+	const deletedItemIdsRef = useRef<Array<TStates | string>>([]);
+	const [deletedItemRevision, setDeletedItemRevision] = useState(0);
+	const deleteExtensionSyncRef = useRef({
+		pending: false,
+		completed: false,
+	});
 
-			if (!deletedItems) {
-				return true;
+	useEffect(() => {
+		const pendingDeletes = deletedItemIdsRef.current.filter(
+			(deletedId) => deletedId in states
+		);
+
+		if (pendingDeletes.length !== deletedItemIdsRef.current.length) {
+			deletedItemIdsRef.current = pendingDeletes;
+			setDeletedItemRevision((revision) => revision + 1);
+		}
+	}, [states]);
+
+	const contextValue = useMemo(() => {
+		let value = calculatedValue;
+
+		if (deletedItemIdsRef.current.length) {
+			value = { ...calculatedValue };
+
+			for (const deletedId of deletedItemIdsRef.current) {
+				delete value[deletedId];
 			}
+		}
 
-			for (const key in next) {
-				if (deletedItems.includes(key)) {
-					deleteCacheData.set('deleted-items', []);
-					return false;
-				}
-			}
-
-			return true;
-		},
-		attribute: 'blockeraBlockStates',
-		name: generateExtensionId(block, id, false),
-	};
+		return {
+			block,
+			value,
+			blockName: block.blockName,
+			attribute: 'blockeraBlockStates',
+			name: generateExtensionId(block, id, false),
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- deletedItemRevision drives ref-based value filtering
+	}, [block, calculatedValue, deletedItemRevision, id]);
 
 	const valueCleanup = useCallback(
 		blockStatesValueCleanup,
@@ -268,45 +288,29 @@ export const useBlockStates = ({
 				[key: TStates]: Object,
 			}
 		): Object => {
-			// add the latest-deleted item in cache.
-			deleteCacheData.set('deleted-items', [
-				...(deleteCacheData.get('deleted-items') || []),
-				itemId,
-			]);
+			deletedItemIdsRef.current = [...deletedItemIdsRef.current, itemId];
+			setDeletedItemRevision((revision) => revision + 1);
+			deleteExtensionSyncRef.current = {
+				pending: true,
+				completed: false,
+			};
 
 			const filteredStates: {
 				[key: TStates]: Object,
 			} = {};
-			const itemsCount = Object.keys(items).length;
 
 			Object.entries(items).forEach(
 				([_itemId, _item]: [
 					TStates,
 					{ ...StateTypes, isSelected: boolean },
 				]): void => {
-					// Skip the deleted item.
 					if (_itemId === itemId) {
 						return;
 					}
 
-					// Skip the normal and hover states.
-					if (itemsCount < 3) {
-						return;
-					}
-
-					if ('normal' !== _item.type) {
-						filteredStates[_itemId] = {
-							..._item,
-							isSelected: false,
-						};
-
-						return;
-					}
-
-					// Set the selected normal state.
 					filteredStates[_itemId] = {
 						..._item,
-						isSelected: true,
+						isSelected: isNormalState(_itemId),
 					};
 				}
 			);
@@ -357,28 +361,69 @@ export const useBlockStates = ({
 
 			return filteredStates;
 		},
-		// eslint-disable-next-line
-		[clonedSavedStates]
+		[clonedSavedStates, currentBlock, onChange]
 	);
 
 	const onReset = useCallback(
-		(itemId: TStates): Object => {
+		(
+			itemId: TStates,
+			repeaterItems: { [key: TStates]: Object }
+		): Object => {
+			let mergedStates: { [key: TStates]: Object } = {
+				...(attributes?.blockeraBlockStates || {}),
+			};
+
+			if (isInnerBlock(currentBlock)) {
+				mergedStates = {
+					...(blockAttributes?.blockeraInnerBlocks?.[currentBlock]
+						?.attributes?.blockeraBlockStates || {}),
+					...mergedStates,
+				};
+			}
+
 			const filteredStates: {
 				[key: TStates]: Object,
-			} = attributes?.blockeraBlockStates || {};
+			} = {};
+			const stateKeys = new Set([...Object.keys(mergedStates), itemId]);
 
-			for (const key in attributes?.blockeraBlockStates) {
-				const breakpoints =
-					attributes?.blockeraBlockStates[key].breakpoints;
+			for (const key of stateKeys) {
+				const stateItem = mergedStates[key];
 
-				for (const breakpoint in breakpoints) {
-					if (key === itemId) {
-						filteredStates[key].breakpoints[breakpoint] = {
-							attributes: {},
-						};
-						filteredStates[key].content = '';
-					}
+				if (key !== itemId) {
+					filteredStates[key] =
+						stateItem && 'object' === typeof stateItem
+							? { ...stateItem }
+							: stateItem;
+
+					continue;
 				}
+
+				const prevBreakpoints = stateItem?.breakpoints || {};
+				const nextBreakpoints: {
+					[string]: { attributes: Object },
+				} = {};
+
+				for (const breakpoint of Object.keys(prevBreakpoints)) {
+					nextBreakpoints[breakpoint] = {
+						attributes: {},
+					};
+				}
+
+				if (!Object.keys(nextBreakpoints).length) {
+					nextBreakpoints[getBaseBreakpoint()] = {
+						attributes: {},
+					};
+				}
+
+				filteredStates[key] = {
+					...stateItem,
+					breakpoints: nextBreakpoints,
+					...(undefined !== stateItem &&
+					null !== stateItem &&
+					'content' in stateItem
+						? { content: '' }
+						: {}),
+				};
 			}
 
 			onChange('blockeraBlockStates', filteredStates, {
@@ -396,10 +441,36 @@ export const useBlockStates = ({
 				resetStateAllValues: true,
 			});
 
-			return filteredStates;
+			const nextRepeaterItems: { [key: string]: Object } = {};
+
+			for (const key of Object.keys(repeaterItems)) {
+				const persisted = filteredStates[key];
+				const isSelected = Boolean(repeaterItems[key]?.isSelected);
+
+				if (persisted) {
+					nextRepeaterItems[key] = {
+						...repeaterItems[key],
+						...persisted,
+						breakpoints: persisted.breakpoints,
+						isSelected,
+					};
+				} else {
+					nextRepeaterItems[key] = {
+						...repeaterItems[key],
+						isSelected,
+					};
+				}
+			}
+
+			return nextRepeaterItems;
 		},
 		// eslint-disable-next-line
-		[attributes?.blockeraBlockStates]
+		[
+			attributes?.blockeraBlockStates,
+			blockAttributes?.blockeraInnerBlocks,
+			currentBlock,
+			onChange,
+		]
 	);
 
 	/**
@@ -412,22 +483,19 @@ export const useBlockStates = ({
 	 */
 	const getDynamicDefaultRepeaterItem = useCallback(
 		(statesCount: number, defaultRepeaterItemValue: Object): Object => {
-			const deletedItems = deleteCacheData.get('deleted-items');
+			const deletedItems = deletedItemIdsRef.current;
 			const defaultItem = {
 				...defaultRepeaterItemValue,
 				...getStateInfo(
-					// If deletedItems has items try to add first index of that else add suitable items for statesCount value.
-					deletedItems?.length ? deletedItems[0] : statesCount,
+					deletedItems.length ? deletedItems[0] : statesCount,
 					defaultStates
 				),
 				display: true,
 			};
 
-			// If deletedItems has items try to update in-memory cache.
-			if (deletedItems?.length) {
-				deletedItems.splice(0, 1);
-
-				deleteCacheData.set('deleted-items', deletedItems);
+			if (deletedItems.length) {
+				deletedItemIdsRef.current = deletedItems.slice(1);
+				setDeletedItemRevision((revision) => revision + 1);
 			}
 
 			if (['custom-class', 'parent-class'].includes(defaultItem.type)) {
@@ -442,9 +510,34 @@ export const useBlockStates = ({
 		[]
 	);
 	const handleOnChange = useCallback(
-		(newValue: Object) =>
+		(newValue: Object) => {
+			let sanitizedValue = newValue;
+
+			if (deletedItemIdsRef.current.length) {
+				sanitizedValue = { ...newValue };
+
+				for (const deletedId of deletedItemIdsRef.current) {
+					delete sanitizedValue[deletedId];
+				}
+			}
+
+			const deleteSyncState = deleteExtensionSyncRef.current;
+			let skipExtensionSync = deleteSyncState.completed;
+
+			if (deleteSyncState.pending) {
+				deleteExtensionSyncRef.current = {
+					pending: false,
+					completed: true,
+				};
+				skipExtensionSync = false;
+
+				void Promise.resolve().then(() => {
+					deleteExtensionSyncRef.current.completed = false;
+				});
+			}
+
 			onChangeBlockStates(
-				newValue,
+				sanitizedValue,
 				{
 					block,
 					states,
@@ -459,9 +552,11 @@ export const useBlockStates = ({
 					currentBlockStyleVariation:
 						getSelectedBlockStyleVariation(),
 					isMasterBlockStates: isMasterBlockStates(id),
+					skipExtensionSync,
 				},
 				preparedStates
-			),
+			);
+		},
 		// eslint-disable-next-line
 		[currentBlock, currentInnerBlockState, currentState, id, states]
 	);

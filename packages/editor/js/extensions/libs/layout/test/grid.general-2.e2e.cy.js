@@ -37,9 +37,6 @@ function selectCanvasParagraphOpenBlockTabAndStyleTab() {
 		.click({ force: true });
 
 	cy.openDocumentSettingsSidebar('Block');
-
-	// Block card header can overlap the tab strip (fixed positioning); force the click.
-	cy.getByDataTest('style-tab', { timeout: 60000 }).click({ force: true });
 }
 
 /** Editor iframe: `#blockera-styles-wrapper` (dev-cypress `getBlockeraStylesWrapper`). */

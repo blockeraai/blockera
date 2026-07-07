@@ -101,8 +101,8 @@
 
 		&.is-focus:not(:disabled):not(.is-busy),
 		&:focus:not(:disabled):not(.is-busy) {
-			box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-primary-color, #ffffff),
+			box-shadow:
+				inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff),
 				0 0 0 1px var(--blockera-controls-background-color),
 				0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 		}
@@ -124,7 +124,8 @@
 		&[aria-disabled="true"]:active:enabled:focus:enabled,
 		&[aria-disabled="true"]:enabled:focus:enabled,
 		&[aria-disabled="true"]:focus:enabled {
-			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color),
+			box-shadow:
+				0 0 0 1px var(--blockera-controls-primary-color),
 				0 0 0 3px var(--blockera-controls-primary-color);
 		}
 
@@ -165,8 +166,8 @@
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .is-busy) {
-			box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-primary-color, #ffffff),
+			box-shadow:
+				inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff),
 				0 0 0 1px var(--blockera-controls-background-color),
 				0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 			background-color: color-mix(
@@ -186,6 +187,10 @@
 			color: var(--blockera-controls-primary-color);
 			background-color: #ffffff;
 		}
+
+		&.is-destructive {
+			--blockera-controls-primary-color: #cc1818;
+		}
 	}
 
 	&.variant-secondary-on-hover {
@@ -200,8 +205,8 @@
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .is-busy) {
-			box-shadow: inset 0 0 0 1px
-					var(--blockera-controls-primary-color, #ffffff),
+			box-shadow:
+				inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff),
 				0 0 0 1px var(--blockera-controls-background-color),
 				0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 		}
@@ -245,7 +250,8 @@
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .toggle-focus, .is-busy) {
-			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color),
+			box-shadow:
+				inset 0 0 0 1px var(--blockera-controls-primary-color),
 				0 0 0 1px var(--blockera-controls-primary-color) !important;
 			outline: 2px solid transparent !important;
 		}
@@ -284,7 +290,8 @@
 
 		&.is-focus:not(:disabled, .is-busy),
 		&:focus:not(:disabled, .no-border, .toggle-focus, .is-busy) {
-			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color),
+			box-shadow:
+				inset 0 0 0 1px var(--blockera-controls-primary-color),
 				0 0 0 1px var(--blockera-controls-primary-color) !important;
 			outline: 2px solid transparent !important;
 		}

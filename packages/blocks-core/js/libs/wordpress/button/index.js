@@ -1,18 +1,14 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { __ } from '@wordpress/i18n';
-
-/**
  * Blockera dependencies
  */
 import {
-	SharedBlockExtension,
-	generalBlockStates,
 	sharedBlockStates,
+	generalBlockStates,
+	SharedBlockExtension,
 } from '@blockera/editor';
+import { mergeObjects } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -26,6 +22,7 @@ export const Button: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	hasSizeVariations: true,
 	blockeraInnerBlocks: {
 		'elements/bold': sharedInnerBlocks['elements/bold'],
 		'elements/italic': sharedInnerBlocks['elements/italic'],
@@ -50,5 +47,124 @@ export const Button: BlockType = {
 		'blockera/elements/icon': {
 			root: '.wp-block-button__link:before,.wp-block-button__link:after',
 		},
+	},
+	supportsExtensions: (
+		blockName: string,
+		current: Object,
+		variationSurface: 'size' | 'style'
+	): Object => {
+		if (variationSurface === 'style') {
+			return current;
+		}
+
+		return mergeObjects(current, {
+			advancedSettingsConfig: {
+				status: false,
+			},
+			backgroundConfig: {
+				status: false,
+			},
+			borderAndShadowConfig: {
+				blockeraBoxShadow: {
+					status: false,
+				},
+				blockeraOutline: {
+					status: false,
+				},
+				blockeraBorder: {
+					status: false,
+				},
+			},
+			clickAnimationConfig: {
+				status: false,
+			},
+			conditionsConfig: {
+				status: false,
+			},
+			customStyleConfig: {
+				status: true,
+			},
+			effectsConfig: {
+				status: false,
+			},
+			entranceAnimationConfig: {
+				status: false,
+			},
+			flexChildConfig: {
+				status: false,
+			},
+			gridChildConfig: {
+				status: false,
+			},
+			layoutConfig: {
+				blockeraDisplay: {
+					status: false,
+				},
+				blockeraFlexLayout: {
+					status: false,
+				},
+				blockeraGap: {
+					status: false,
+				},
+				blockeraFlexWrap: {
+					status: false,
+				},
+			},
+			typographyConfig: {
+				blockeraFontFamily: {
+					status: false,
+				},
+				blockeraFontColor: {
+					status: false,
+				},
+				blockeraTextShadow: {
+					status: false,
+				},
+				blockeraTextAlign: {
+					status: false,
+				},
+				blockeraTextTransform: {
+					status: false,
+				},
+				blockeraTextDecoration: {
+					status: false,
+				},
+				blockeraDirection: {
+					status: false,
+				},
+				blockeraTextIndent: {
+					status: false,
+				},
+				blockeraTextOrientation: {
+					status: false,
+				},
+				blockeraTextColumns: {
+					status: false,
+				},
+				blockeraTextStroke: {
+					status: false,
+				},
+				blockeraWordBreak: {
+					status: false,
+				},
+				blockeraTextWrap: {
+					status: false,
+				},
+			},
+			sizeConfig: {
+				blockeraOverflow: {
+					status: false,
+				},
+			},
+			mouseConfig: {
+				status: false,
+			},
+			positionConfig: {
+				status: false,
+			},
+			scrollAnimationConfig: {
+				status: false,
+			},
+		});
 	},
 };

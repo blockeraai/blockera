@@ -51,22 +51,20 @@ describe('Block Manager Settings Testing ...', () => {
 <p></p>
 <!-- /wp:paragraph -->`);
 
-			cy.getBlock('core/paragraph').click();
-
-			cy.getByAriaLabel('Add New Background').should('not.exist');
-
-			// open inserter panel
+			// open inserter before selecting block so sidebar shows library, not block settings
 			openBlockInserter();
 
-			const selector = `.editor-block-list-item-${CSS.escape(
-				`paragraph/paragraph`
-			)}`;
+			const selector = '.editor-block-list-item-paragraph';
 
 			// should not show blockera block icon on paragraph block
 			cy.get(selector).should('be.visible');
 			cy.get(selector).within(() => {
 				cy.get('.blockera-block-icon').should('not.exist');
 			});
+
+			cy.getBlock('core/paragraph').click();
+
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 		});
 	});
 
@@ -93,22 +91,20 @@ describe('Block Manager Settings Testing ...', () => {
 <p></p>
 <!-- /wp:paragraph -->`);
 
-			cy.getBlock('core/paragraph').click();
-
-			cy.getByAriaLabel('Add New Background');
-
-			// open inserter panel
+			// open inserter before selecting block so sidebar shows library, not block settings
 			openBlockInserter();
 
-			const selector = `.editor-block-list-item-${CSS.escape(
-				`paragraph/paragraph`
-			)}`;
+			const selector = '.editor-block-list-item-paragraph';
 
 			// should show blockera block icon on paragraph block
 			cy.get(selector).should('be.visible');
 			cy.get(selector).within(() => {
 				cy.get('.blockera-block-icon').should('be.visible');
 			});
+
+			cy.getBlock('core/paragraph').click();
+
+			cy.getByAriaLabel('Add New Background').should('exist');
 		});
 	});
 

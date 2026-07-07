@@ -1,0 +1,29 @@
+---
+description: Restrict agent work to the Blockera plugin; block edits and searches in sibling plugins or themes.
+alwaysApply: true
+---
+
+# Blockera-Only Scope
+
+The primary project is the Blockera WordPress plugin at `wp-content/plugins/blockera/`.
+
+## In scope
+
+- All plugin source, tests, configs, and tooling under `wp-content/plugins/blockera/`
+- Read-only reference inside Blockera: `source-code-block-editor/`, `source-code-wordpress/`
+
+## Out of scope
+
+Do not read, edit, search, stage, or run commands against:
+
+- Other plugins in `wp-content/plugins/` (e.g. `blockera-pro`, `blockera-demo-*`, `akismet`)
+- `wp-content/themes/` and unrelated site files
+
+## Required behavior
+
+- Limit searches, reads, and edits to `wp-content/plugins/blockera/**`
+- Stage only Blockera paths in commits unless the user explicitly expands scope
+- If a task needs an out-of-scope path, ask before proceeding
+- Apply the same scope to subagents and parallel tasks
+
+Run the `blockera-only` command at session start to reinforce this scope.

@@ -7,9 +7,13 @@ import {
 	bootstrapBlocksyShareBox,
 	bootstrapBlocksySearch,
 } from './third-party/bootstraps';
-import { bootstrapSocialLinksCoreBlock } from './wordpress/bootstraps';
+import {
+	bootstrapCoreIconBlock,
+	bootstrapSocialLinksCoreBlock,
+} from './wordpress/bootstraps';
 
 export function blockeraBootstrapBlocks() {
+	bootstrapCoreIconBlock();
 	bootstrapSocialLinksCoreBlock();
 	bootstrapOutermostIconBlock();
 	bootstrapBlocksyBreadcrumbs();

@@ -53,22 +53,25 @@ export const SearchBlockTypes = ({
 				gap={'20px'}
 				className={classNames('search-block-types')}
 			>
-				<p style={{ margin: '0', color: '#707070' }}>
-					{__(
-						'Select the blocks that should use this style variation.',
-						'blockera'
-					)}
-				</p>
-				<p style={{ margin: '0', color: '#707070' }}>
-					{sprintf(
-						/* translators: %1$s: The style name. */
-						__(
-							'The selected blocks will share the same design and updates applied to "%1$s".',
+				<Flex direction={'column'} gap={'10px'}>
+					<p style={{ margin: '0', color: '#1e1e1e' }}>
+						{__(
+							'Select the blocks that should share this style variation.',
 							'blockera'
-						),
-						style.label
-					)}
-				</p>
+						)}
+					</p>
+					<p style={{ margin: '0', color: '#1e1e1e' }}>
+						{sprintf(
+							/* translators: %1$s: The style name. */
+							__(
+								'The selected blocks will share the same design and updates with "%1$s".',
+								'blockera'
+							),
+							style.label
+						)}
+					</p>
+				</Flex>
+
 				<Flex direction={'row'} gap={'10px'}>
 					<ControlContextProvider
 						value={{
@@ -131,7 +134,13 @@ export const SearchBlockTypes = ({
 							direction={'column'}
 							justifyContent={'space-between'}
 							gap="0"
-							style={{ padding: '40px 0' }}
+							style={{
+								padding: '22px',
+								background: 'rgba(0, 0, 0, 0.0392156863)',
+								borderRadius:
+									'var(--blockera-controls-border-radius)',
+								border: '1px solid var(--blockera-controls-border-color-soft)',
+							}}
 						>
 							<Icon
 								icon={'block-default'}

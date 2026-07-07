@@ -26,6 +26,7 @@ use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Blockera\Editor\PreviewButton;
+use Blockera\Editor\TemplatePreview;
 use Blockera\Editor\TabLocking;
 use Blockera\Editor\BulkActions;
 use Blockera\Editor\EditorPersistenceStore;
@@ -172,6 +173,8 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(PreviewButton::class);
 
+			$this->app->singleton(TemplatePreview::class);
+
 			$this->app->singleton(TabLocking::class);
 
 			$this->app->singleton(BulkActions::class);
@@ -218,6 +221,8 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make(Compatibility::class);
 
 		$this->app->make(PreviewButton::class);
+
+		$this->app->make(TemplatePreview::class);
 
 		$this->app->make(TabLocking::class);
 
@@ -278,11 +283,10 @@ class AppServiceProvider extends ServiceProvider {
 		 */
 		$blockera = $this->app;
 
-		// Clear the generated css and processed html at the start of content rendering.
+		// Clear the generated css at the start of content rendering.
 		// Clear the classnames registry at the start of content rendering.
 		// This ensures each page/post render starts with a clean state.
 		Render::resetGeneratedCSS();
-		Render::resetProcessedHTML();
 		Render::clearClassnamesRegistry();
 
 		// Register Query Loop context hooks.
@@ -391,7 +395,6 @@ class AppServiceProvider extends ServiceProvider {
 		blockera_add_inline_css(implode(PHP_EOL, $css));
 
 		$render_instance->resetGeneratedCSS();
-		$render_instance->resetProcessedHTML();
 		$render_instance->clearClassnamesRegistry();
 	}
 

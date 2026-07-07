@@ -1,18 +1,50 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const postcssPlugins = require('@wordpress/postcss-plugins-preset');
+
+const pluginRoot = path.resolve(__dirname, '../../..');
+const babelConfigPath = path.resolve(pluginRoot, 'babel.config.js');
+
+const experimentalConfigDefaultPath = path.resolve(
+	pluginRoot,
+	'experimental.config.json'
+);
+const experimentalConfigLocalPath = path.resolve(
+	pluginRoot,
+	'local.experimental.config.json'
+);
+const experimentalConfigResolvedPath = fs.existsSync(
+	experimentalConfigLocalPath
+)
+	? experimentalConfigLocalPath
+	: experimentalConfigDefaultPath;
+
+const isCi = Boolean(process.env.CI);
+const controlsStylesCss = path.resolve(
+	pluginRoot,
+	isCi
+		? 'dist/controls-styles/style.min.css'
+		: 'dist/controls-styles/style.css'
+);
 
 module.exports = {
 	mode: 'development',
-	entry: ['./packages/index.js'],
 	output: {
-		path: './packages/dev-cypress/js/dist',
+		path: path.resolve(__dirname, 'dist'),
 	},
-	devtool: true,
+	// Avoid filesystem cache — it breaks Cypress JIT spec chunks (spec-0 load failures).
+	devtool: false,
+	stats: 'errors-warnings',
+	optimization: {
+		splitChunks: false,
+		runtimeChunk: false,
+	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-		// Absolute path so Cypress can resolve imports from support/commands.js reliably.
 		alias: {
+			'@blockera/controls-styles-css$': controlsStylesCss,
+			'@blockera/experimental-config': experimentalConfigResolvedPath,
 			'blockera-editor-tabs-test-ids': path.resolve(
 				__dirname,
 				'../../editor/js/tabs/constants/testIds.ts'
@@ -25,25 +57,40 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			// Fix for webpack 5 fullySpecified: resolve issues with @wordpress/block-editor
-			// (diff/lib/diff/character) and @wordpress/sync (fast-deep-equal/es6)
 			{
 				test: /\.m?js/,
 				resolve: {
 					fullySpecified: false,
 				},
 			},
+			// Pre-built CSS — skip sass/postcss for faster component-test rebuilds.
 			{
-				test: /\.(css|scss)$/i,
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
+			{
+				test: /\.scss$/i,
 				use: [
 					'style-loader',
 					'css-loader',
-					'postcss-loader',
+					{
+						loader: 'postcss-loader',
+						options: {
+							postcssOptions: {
+								plugins: postcssPlugins,
+							},
+						},
+					},
 					{
 						loader: 'sass-loader',
 						options: {
-							// Prefer `dart-sass`
 							implementation: require('sass'),
+							sassOptions: {
+								silenceDeprecations: [
+									'legacy-js-api',
+									'import',
+								],
+							},
 						},
 					},
 				],
@@ -51,17 +98,12 @@ module.exports = {
 			{
 				test: /\.(js|jsx)$/,
 				exclude: /node_modules/,
-				resolve: {
-					extensions: ['.js', '.jsx'],
-				},
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: [
-							'@babel/preset-env',
-							'@babel/preset-react',
-							'@babel/preset-flow',
-						],
+						configFile: babelConfigPath,
+						cacheDirectory: true,
+						cacheCompression: false,
 					},
 				},
 			},
@@ -74,7 +116,10 @@ module.exports = {
 						presets: [
 							'@babel/preset-env',
 							'@babel/preset-typescript',
+							['@babel/preset-react', { runtime: 'automatic' }],
 						],
+						cacheDirectory: true,
+						cacheCompression: false,
 					},
 				},
 			},
@@ -82,6 +127,10 @@ module.exports = {
 				test: /packages\/.*\.svg$/,
 				issuer: /\.[jt]sx?$/,
 				use: ['@svgr/webpack'],
+			},
+			{
+				test: /\.(png|jpe?g|gif|webp|avif)$/i,
+				type: 'asset/resource',
 			},
 			{
 				test: /\.(txt|html)$/,
@@ -92,9 +141,6 @@ module.exports = {
 		],
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.join(__dirname, 'public', 'index.html'),
-		}),
 		new webpack.ProvidePlugin({
 			React: 'react',
 		}),

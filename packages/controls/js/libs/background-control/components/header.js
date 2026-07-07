@@ -70,6 +70,11 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				);
 				icon = <Icon icon="background-mesh-gradient" iconSize="18" />;
 				break;
+
+			case 'none':
+				label = __('None', 'blockera');
+				icon = <Icon icon="background-none" iconSize="18" />;
+				break;
 		}
 
 		return (

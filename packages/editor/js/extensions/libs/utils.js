@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { hasSameProps } from '@blockera/utils';
+import { hasSameProps, mergeObject } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -18,6 +18,7 @@ import type { TBlockProps } from './types';
 import { getBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock, isNormalState } from '../components/utils';
 import type { BlockDetail } from './block-card/block-states/types';
+import { STORE_NAME } from './base/store/constants';
 
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -66,7 +67,7 @@ export function generateExtensionId(
 
 	// Assume control inside innerBlock and current innerBlock inside master block!
 	if (
-		!isNormalState(getActiveMasterState(clientId, currentBlock)) &&
+		!isNormalState(getActiveMasterState(clientId, blockName)) &&
 		isInnerBlock(currentBlock)
 	) {
 		return `${blockName}/${id}/${clientId}-master-${currentBlock}${variation}-${getActiveInnerState(
@@ -84,7 +85,7 @@ export function generateExtensionId(
 
 	return `${blockName}/${id}/${clientId}-${currentBlock}${variation}-${getActiveMasterState(
 		clientId,
-		currentBlock
+		blockName
 	)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
@@ -169,3 +170,122 @@ export const runInsideBlockInspector = (
 			return insideBlockInspector;
 	}
 };
+
+/**
+ * Whether an inner block definition is registered for a block via Blockera store API.
+ *
+ * @param {string} innerBlock Inner block registry key.
+ * @param {string} blockName WordPress block name.
+ * @return {boolean} true when registered, false otherwise.
+ */
+export function isInnerBlockRegisteredForBlock(
+	innerBlock: string,
+	blockName: string
+): boolean {
+	const { getDefinition } = select(STORE_NAME);
+
+	return Boolean(getDefinition(innerBlock, blockName));
+}
+
+/**
+ * Remove blockeraInnerBlocks entries that are not registered for the current block.
+ * WordPress core attribute data in the same payload is preserved.
+ *
+ * @param {Object} result Compatibility result object.
+ * @param {string} blockName WordPress block name.
+ * @return {Object} Sanitized compatibility result.
+ */
+export function omitUnregisteredInnerBlockData(
+	result: Object,
+	blockName: string
+): Object {
+	if (!result?.blockeraInnerBlocks) {
+		return result;
+	}
+
+	const payload =
+		result.blockeraInnerBlocks?.value ?? result.blockeraInnerBlocks;
+
+	if (!payload || typeof payload !== 'object') {
+		return result;
+	}
+
+	const filtered: Object = {};
+
+	Object.keys(payload).forEach((innerBlockKey) => {
+		if (isInnerBlockRegisteredForBlock(innerBlockKey, blockName)) {
+			filtered[innerBlockKey] = payload[innerBlockKey];
+		}
+	});
+
+	if (result.blockeraInnerBlocks?.value) {
+		return {
+			...result,
+			blockeraInnerBlocks: {
+				...result.blockeraInnerBlocks,
+				value: filtered,
+			},
+		};
+	}
+
+	return {
+		...result,
+		blockeraInnerBlocks: filtered,
+	};
+}
+
+/**
+ * Merge WordPress compatibility output while omitting unregistered inner-block data.
+ *
+ * @param {Object} nextState Current attribute state.
+ * @param {Object} compatResult Compatibility function output.
+ * @param {BlockDetail} blockDetail Current block detail.
+ * @return {Object} Merged attributes.
+ */
+export function mergeWPCompatibility(
+	nextState: Object,
+	compatResult: Object,
+	blockDetail: BlockDetail
+): Object {
+	if (!compatResult) {
+		return nextState;
+	}
+
+	const sanitized = omitUnregisteredInnerBlockData(
+		compatResult,
+		blockDetail.blockId
+	);
+
+	if (!sanitized) {
+		return nextState;
+	}
+
+	const {
+		forceUpdated,
+		deletedProps,
+		...attributePatch
+	}: {
+		forceUpdated?: Array<string>,
+		deletedProps?: Array<string>,
+		...Object,
+	} = sanitized;
+
+	return mergeObject(nextState, attributePatch, {
+		forceUpdated: forceUpdated ?? [],
+		deletedProps: deletedProps ?? [],
+	});
+}
+
+/**
+ * Sanitize attributes after from-WordPress compatibility import.
+ *
+ * @param {Object} attributes Block attributes.
+ * @param {BlockDetail} blockDetail Current block detail.
+ * @return {Object} Sanitized attributes.
+ */
+export function sanitizeWPCompatibilityAttributes(
+	attributes: Object,
+	blockDetail: BlockDetail
+): Object {
+	return omitUnregisteredInnerBlockData(attributes, blockDetail.blockId);
+}

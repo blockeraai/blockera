@@ -16,6 +16,60 @@ import {
 	generalSimpleInnerBlockStates,
 } from '@blockera/editor';
 
+/**
+ * Mirrors theme.json 6.9 `styles.elements` style properties supported by inner-blocks bootstrap.
+ */
+const elementColorCompatibility = [
+	'font-color',
+	'font-color-hover',
+	'background-color',
+	'background-image',
+];
+
+const elementTypographyCompatibility = [
+	'font-family',
+	'font-size',
+	'line-height',
+	'letter-spacing',
+	'text-transform',
+	'text-decoration',
+	'text-decoration-hover',
+	'font-appearance',
+	'text-orientation',
+	'text-align',
+];
+
+const elementBorderShadowCompatibility = [
+	'border',
+	'border-radius',
+	'box-shadow',
+];
+
+const elementSpacingCompatibility = ['spacing', 'gap'];
+
+const elementDimensionsCompatibility = ['min-height', 'aspect-ratio'];
+
+const linkElementCompatibility = [
+	'font-color',
+	'font-color-hover',
+	'text-decoration',
+	'text-decoration-hover',
+];
+
+const headingElementCompatibility = [
+	...elementColorCompatibility.filter((key) => key !== 'font-color-hover'),
+	...elementTypographyCompatibility,
+];
+
+const buttonElementCompatibility = [
+	...elementColorCompatibility.filter((key) => key !== 'font-color-hover'),
+	...elementTypographyCompatibility,
+	...elementBorderShadowCompatibility,
+	...elementSpacingCompatibility,
+	...elementDimensionsCompatibility,
+	'custom-css',
+];
+
 const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/paragraph': {
@@ -38,7 +92,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			force: false,
 			dataCompatibilityElement: 'link',
-			dataCompatibility: ['font-color', 'font-color-hover'],
+			dataCompatibility: linkElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: {
@@ -66,11 +120,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 2,
 			force: false,
 			dataCompatibilityElement: 'heading',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -87,11 +137,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 1,
 			force: false,
 			dataCompatibilityElement: 'h1',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -108,11 +154,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 2,
 			force: false,
 			dataCompatibilityElement: 'h2',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -129,11 +171,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 3,
 			force: false,
 			dataCompatibilityElement: 'h3',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -150,11 +188,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 4,
 			force: false,
 			dataCompatibilityElement: 'h4',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -171,11 +205,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 5,
 			force: false,
 			dataCompatibilityElement: 'h5',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -192,11 +222,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			level: 6,
 			force: false,
 			dataCompatibilityElement: 'h6',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: headingElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: generalSimpleInnerBlockStates,
@@ -212,11 +238,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			force: false,
 			dataCompatibilityElement: 'button',
-			dataCompatibility: [
-				'font-color',
-				'background-color',
-				'background-image',
-			],
+			dataCompatibility: buttonElementCompatibility,
 			priority: 10,
 		},
 		availableBlockStates: {

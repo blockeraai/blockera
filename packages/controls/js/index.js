@@ -1,5 +1,6 @@
 // @flow
 export * from './api';
+export * from './global-styles-compat/text-shadow-css';
 export * from './libs';
 export * from './context';
 export type * from './types';

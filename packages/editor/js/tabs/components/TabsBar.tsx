@@ -31,9 +31,15 @@ import {
 	useCallback,
 	memo,
 	useMemo,
+	createPortal,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { displayShortcut } from '@wordpress/keycodes';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex, UpgradePrompt } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -42,7 +48,6 @@ import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
 import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
-import { UpgradePrompt } from '@blockera/controls';
 import type {
 	Tab as TabType,
 	LockUser,
@@ -786,31 +791,76 @@ const TabsBar = memo(function TabsBar({
 	const limitPromotionContent = useMemo(() => {
 		if (limitExceededType === 'pinned') {
 			return {
-				heading: __('More pinned tabs in Pro', 'blockera'),
-				featuresList: [
-					__('Unlimited pinned tabs', 'blockera'),
-					__('Faster access to key documents', 'blockera'),
-					__('Power-user tab workflows', 'blockera'),
-				],
+				lockedFeature: {
+					title: __('Unlimited Pinned Tabs', 'blockera'),
+					description: (
+						<Flex direction="column" gap="6px">
+							{__('Pin as many tabs as you need', 'blockera')}
+
+							<Flex direction="row" gap="6px">
+								<span className="blockera-free-plan-hint">
+									{__('Free: 1 tab', 'blockera')}
+								</span>
+								<span className="blockera-pro-plan-hint">
+									{__('Pro: Unlimited tabs', 'blockera')}
+								</span>
+							</Flex>
+						</Flex>
+					),
+				},
 			};
 		}
 
 		if (limitExceededType === 'regular') {
 			return {
-				heading: __('More open tabs in Pro', 'blockera'),
-				featuresList: [
-					__('Unlimited regular tabs', 'blockera'),
-					__('Keep larger editing sessions open', 'blockera'),
-					__('Boost multi-document productivity', 'blockera'),
-				],
+				lockedFeature: {
+					title: __('Unlimited Open Tabs', 'blockera'),
+					description: (
+						<Flex direction="column" gap="6px">
+							{__(
+								'Keep as many documents open as you need',
+								'blockera'
+							)}
+
+							<Flex direction="row" gap="6px">
+								<span className="blockera-free-plan-hint">
+									{__('Free: 3 tabs', 'blockera')}
+								</span>
+								<span className="blockera-pro-plan-hint">
+									{__('Pro: Unlimited tabs', 'blockera')}
+								</span>
+							</Flex>
+						</Flex>
+					),
+				},
 			};
 		}
 
 		return null;
 	}, [limitExceededType]);
 
+	const limitUpgradePrompt =
+		limitPromotionContent && limitExceededType
+			? createPortal(
+					<UpgradePrompt
+						key={limitExceededType}
+						lockedFeature={limitPromotionContent.lockedFeature}
+						isOpen
+						onClose={onCloseLimitPromotion}
+						type="modal"
+						shouldCloseOnClickOutside={false}
+						disableHintsText={false}
+						data-test={
+							WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt
+						}
+					/>,
+					document.body
+				)
+			: null;
+
 	return (
 		<>
+			{limitUpgradePrompt}
 			<div className="blockera-tabs-bar" ref={tabsBarRef}>
 				<DndContext
 					sensors={sensors}
@@ -943,24 +993,6 @@ const TabsBar = memo(function TabsBar({
 							/>
 						</div>
 					</Tooltip>
-
-					{limitPromotionContent && (
-						<UpgradePrompt
-							heading={limitPromotionContent.heading}
-							featuresList={limitPromotionContent.featuresList}
-							isOpen={!!limitExceededType}
-							onClose={onCloseLimitPromotion}
-							type="modal"
-							placement="bottom-end"
-							offset={12}
-							anchor={addTabButtonAnchorRef.current ?? undefined}
-							disableHintsText={false}
-							{...({
-								'data-test':
-									WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
-							} as Record<string, string>)}
-						/>
-					)}
 				</div>
 			</div>
 

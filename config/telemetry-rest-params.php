@@ -1,4 +1,14 @@
 <?php
+/**
+ * Blockera telemetry REST params config.
+ *
+ * @package Blockera
+ */
+
+// direct access is not allowed.
+if (! defined('ABSPATH')) {
+    exit;
+}
 
 return [
 	/**

@@ -1,25 +1,38 @@
 import { setDeviceType } from '@blockera/dev-cypress/js/helpers';
 
+const isBreakpointPreviewActive = (device) => {
+	const normalized = device.trim().toLowerCase();
+	const $iframe = Cypress.$('iframe[name="editor-canvas"]').first();
+
+	if (!$iframe.length) {
+		return false;
+	}
+
+	return $iframe.hasClass(`blockera-breakpoint-${normalized}`);
+};
+
 /**
  * Set the device type for the editor.
  *
- * @param {string} device the device type.
+ * @param {string} device the device type label (e.g. Desktop, Tablet).
  *
  * @return {void}
  */
 export function setDevice(device) {
-	if ('desktop' !== device) {
-		if (
-			!Cypress.$('iframe[name="editor-canvas"]')
-				.find('body')
-				.hasClass(`is-${device}-preview`)
-		) {
-			setDeviceType('Desktop');
-			setDeviceType(device);
+	const normalized = device.trim().toLowerCase();
 
-			return;
-		}
+	if (normalized === 'desktop') {
+		setDeviceType('Desktop');
+		return;
 	}
 
-	setDeviceType('Desktop');
+	if (!isBreakpointPreviewActive(normalized)) {
+		setDeviceType('Desktop');
+		setDeviceType(device);
+	}
+
+	cy.get('iframe[name="editor-canvas"]').should(
+		'have.class',
+		`blockera-breakpoint-${normalized}`
+	);
 }

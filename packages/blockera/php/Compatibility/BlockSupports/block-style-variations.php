@@ -84,41 +84,111 @@ if (! function_exists('blockera_register_block_style_variations_from_theme_json_
 	}
 }
 
-if (! function_exists('blockera_render_block_style_variation_support_styles')) {
+if ( ! function_exists( 'blockera_get_block_size_variation_name_from_class' ) ) {
 	/**
-	 * Renders the block style variation's styles.
+	 * Size variation slug tokens (`is-size-{slug}`), mirroring Blockera editor / JS.
 	 *
-	 * In the case of nested blocks with variations applied, we want the parent
-	 * variation's styles to be rendered before their descendants. This solves the
-	 * issue of a block type being styled in both the parent and descendant: we want
-	 * the descendant style to take priority, and this is done by loading it after,
-	 * in the DOM order. This is why the variation stylesheet generation is in a
-	 * different filter.
-	 *
-	 * @since 6.6.0
-	 * @access private
-	 *
-	 * @param array $parsed_block The parsed block.
-	 *
-	 * @return array The parsed block with block style variation classname added.
+	 * @param string $class_string Block className attribute.
+	 * @return array|null Numeric list of slug strings, or null.
 	 */
-	function blockera_render_block_style_variation_support_styles( $parsed_block ) {
-		$classes    = $parsed_block['attrs']['className'] ?? null;
-		$variations = blockera_get_block_style_variation_name_from_class( $classes );
+	function blockera_get_block_size_variation_name_from_class( $class_string ) {
+		if ( ! is_string( $class_string ) ) {
+			return null;
+		}
 
-		if ( ! $variations ) {
+		preg_match_all( '/\bis-size-(\S+)\b/', $class_string, $matches );
+
+		return ! empty( $matches[1] ) ? $matches[1] : null;
+	}
+}
+
+if ( ! function_exists( 'blockera_collect_block_variation_render_jobs' ) ) {
+	/**
+	 * Build ordered render jobs for theme.json-backed variation CSS (`is-style-*` then `is-size-*`).
+	 *
+	 * @param string|null $classes Block className.
+	 * @return array<int, array{ slug_candidates: string[], class_prefix: string, style_handle: string }>
+	 */
+	function blockera_collect_block_variation_render_jobs( $classes ) {
+		$class_string = is_string( $classes ) ? $classes : '';
+		$jobs         = array();
+
+		$slug_filter = static function ( $slug ) {
+			return ! preg_match( '/--\d+$/', $slug );
+		};
+
+		$style_raw = blockera_get_block_style_variation_name_from_class( $class_string );
+		if ( ! empty( $style_raw ) ) {
+			$style_slugs = array_values( array_filter( $style_raw, $slug_filter ) );
+			if ( ! empty( $style_slugs ) ) {
+				$already_instanced = false;
+				foreach ( $style_slugs as $slug ) {
+					if ( preg_match( '/\bis-style-' . preg_quote( $slug, '/' ) . '--\d+\b/', $class_string ) ) {
+						$already_instanced = true;
+						break;
+					}
+				}
+				if ( ! $already_instanced ) {
+					$jobs[] = array(
+						'slug_candidates' => $style_slugs,
+						'class_prefix'    => 'is-style-',
+						'style_handle'    => 'block-style-variation-styles',
+					);
+				}
+			}
+		}
+
+		$size_raw = blockera_get_block_size_variation_name_from_class( $class_string );
+		if ( ! empty( $size_raw ) ) {
+			$size_slugs = array_values( array_filter( $size_raw, $slug_filter ) );
+			if ( ! empty( $size_slugs ) ) {
+				$already_instanced = false;
+				foreach ( $size_slugs as $slug ) {
+					if ( preg_match( '/\bis-size-' . preg_quote( $slug, '/' ) . '--\d+\b/', $class_string ) ) {
+						$already_instanced = true;
+						break;
+					}
+				}
+				if ( ! $already_instanced ) {
+					$jobs[] = array(
+						'slug_candidates' => $size_slugs,
+						'class_prefix'    => 'is-size-',
+						'style_handle'    => 'block-size-variation-styles',
+					);
+				}
+			}
+		}
+
+		return $jobs;
+	}
+}
+
+if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_styles' ) ) {
+	/**
+	 * Emits scoped CSS for one theme variation surface (style or size) and appends instance className.
+	 *
+	 * @param array    $parsed_block    Parsed block.
+	 * @param string[] $variations      Candidate slugs (theme.json keys).
+	 * @param string   $class_prefix    `is-style-` or `is-size-`.
+	 * @param string   $style_handle    Inline style handle.
+	 * @return array Parsed block (possibly modified).
+	 */
+	function blockera_render_one_block_theme_variation_support_styles( $parsed_block, array $variations, $class_prefix, $style_handle ) {
+		if ( empty( $variations ) || empty( $parsed_block['blockName'] ) ) {
 			return $parsed_block;
 		}
 
 		$tree       = JSONResolver::get_merged_data();
 		$theme_json = $tree->get_raw_data();
 
-		// Only the first block style variation with data is supported.
 		$variation_data = array();
-		foreach ( $variations as $variation ) {
-			$variation_data = $theme_json['styles']['blocks'][ $parsed_block['blockName'] ]['variations'][ $variation ] ?? array();
+		$variation      = '';
 
-			if ( ! empty( $variation_data ) ) {
+		foreach ( $variations as $candidate ) {
+			$candidate_data = $theme_json['styles']['blocks'][ $parsed_block['blockName'] ]['variations'][ $candidate ] ?? array();
+			if ( ! empty( $candidate_data ) ) {
+				$variation_data = $candidate_data;
+				$variation      = $candidate;
 				break;
 			}
 		}
@@ -127,94 +197,245 @@ if (! function_exists('blockera_render_block_style_variation_support_styles')) {
 			return $parsed_block;
 		}
 
-		/*
-		* Recursively resolve any ref values with the appropriate value within the
-		* theme_json data.
-		*/
 		wp_resolve_block_style_variation_ref_values( $variation_data, $theme_json );
 
-		$variation_instance = wp_unique_id( $variation . '--' );
-		$class_name         = "is-style-$variation_instance";
-		$updated_class_name = $parsed_block['attrs']['className'] . " $class_name";
+		$cache_sig                                       = md5( $parsed_block['blockName'] . '|' . $variation . '|' . $class_prefix . '|' . blockera_get_global_styles_cache_hash() );
+		$placeholder_instance                            = 'bvars' . substr( md5( 'blockera_var_ph|' . $cache_sig ), 0, 24 );
+		$can_style_cache                                 = function_exists( 'blockera_get_global_styles_cache_hash' ) && ! wp_is_development_mode( 'theme' );
+		$cache_wp_key                                    = 'bss_' . $cache_sig;
+		$variation_styles_tpl                            = '';
+		static $blockera_variation_support_style_runtime = array();
 
-		/*
-		* Even though block style variations are effectively theme.json partials,
-		* they can't be processed completely as though they are.
-		*
-		* Block styles support custom selectors to direct specific types of styles
-		* to inner elements. For example, borders on Image block's get applied to
-		* the inner `img` element rather than the wrapping `figure`.
-		*
-		* The following relocates the "root" block style variation styles to
-		* under an appropriate blocks property to leverage the preexisting style
-		* generation for simple block style variations. This way they get the
-		* custom selectors they need.
-		*
-		* The inner elements and block styles for the variation itself are
-		* still included at the top level but scoped by the variation's selector
-		* when the stylesheet is generated.
-		*/
-		$elements_data = $variation_data['elements'] ?? array();
-		$blocks_data   = $variation_data['blocks'] ?? array();
-		unset( $variation_data['elements'] );
-		unset( $variation_data['blocks'] );
-
-		_wp_array_set(
-			$blocks_data,
-			array( $parsed_block['blockName'], 'variations', $variation_instance ),
-			$variation_data
-		);
-
-		$config = array(
-			'version' => JSON::LATEST_SCHEMA,
-			'styles'  => array(
-				'elements' => $elements_data,
-				'blocks'   => $blocks_data,
-			),
-		);
-
-		// Turn off filter that excludes block nodes. They are needed here for the variation's inner block types.
-		if ( ! is_admin() ) {
-			remove_filter( 'wp_theme_json_get_style_nodes', 'wp_filter_out_block_nodes' );
+		if ( $can_style_cache ) {
+			$cached_tpl = blockera_get_cache()->getTransientCache( $cache_wp_key );
+			if ( is_string( $cached_tpl ) && '' !== $cached_tpl ) {
+				$variation_styles_tpl = $cached_tpl;
+			} elseif ( isset( $blockera_variation_support_style_runtime[ $cache_wp_key ] ) ) {
+				$variation_styles_tpl = $blockera_variation_support_style_runtime[ $cache_wp_key ];
+			}
 		}
 
-		// Temporarily prevent variation instance from being sanitized while processing theme.json.
-		$styles_registry = WP_Block_Styles_Registry::get_instance();
-		$styles_registry->register( $parsed_block['blockName'], array( 'name' => $variation_instance ) );
+		if ( '' === $variation_styles_tpl ) {
+			$scope_instance = $placeholder_instance;
 
-		$variation_theme_json = new JSON( $config, 'blocks' );
-		$variation_styles     = $variation_theme_json->get_stylesheet(
-			array( 'styles' ),
-			array( 'custom' ),
-			array(
-				'include_block_style_variations' => true,
-				'skip_root_layout_styles'        => true,
-				'scope'                          => ".$class_name",
-			)
-		);
+			$elements_data = $variation_data['elements'] ?? array();
+			$blocks_data   = $variation_data['blocks'] ?? array();
+			unset( $variation_data['elements'], $variation_data['blocks'] );
 
-		// Clean up temporary block style now instance styles have been processed.
-		$styles_registry->unregister( $parsed_block['blockName'], $variation_instance );
+			_wp_array_set(
+				$blocks_data,
+				array( $parsed_block['blockName'], 'variations', $scope_instance ),
+				$variation_data
+			);
 
-		// Restore filter that excludes block nodes.
-		if ( ! is_admin() ) {
-			add_filter( 'wp_theme_json_get_style_nodes', 'wp_filter_out_block_nodes' );
+			$config = array(
+				'version' => JSON::LATEST_SCHEMA,
+				'styles'  => array(
+					'elements' => $elements_data,
+					'blocks'   => $blocks_data,
+				),
+			);
+
+			if ( ! is_admin() ) {
+				remove_filter( 'wp_theme_json_get_style_nodes', 'wp_filter_out_block_nodes' );
+			}
+
+			$styles_registry = WP_Block_Styles_Registry::get_instance();
+			$styles_registry->register( $parsed_block['blockName'], array( 'name' => $scope_instance ) );
+
+			$class_name_scope     = $class_prefix . $scope_instance;
+			$variation_theme_json = new JSON( $config, 'blocks', $class_prefix );
+			$built_styles         = $variation_theme_json->get_stylesheet(
+				array( 'styles' ),
+				array( 'custom' ),
+				array(
+					'include_block_style_variations' => true,
+					'skip_root_layout_styles'        => false,
+					'scope'                          => '.' . $class_name_scope,
+				)
+			);
+			JSON::set_style_variation_prefix( 'is-style-' );
+
+			$styles_registry->unregister( $parsed_block['blockName'], $scope_instance );
+
+			if ( ! is_admin() ) {
+				add_filter( 'wp_theme_json_get_style_nodes', 'wp_filter_out_block_nodes' );
+			}
+
+			$variation_styles_tpl = is_string( $built_styles ) ? $built_styles : '';
+
+			if ( '' !== $variation_styles_tpl && $can_style_cache ) {
+				blockera_get_cache()->setTransientCache( $cache_wp_key, $variation_styles_tpl, DAY_IN_SECONDS );
+				$blockera_variation_support_style_runtime[ $cache_wp_key ] = $variation_styles_tpl;
+			}
 		}
 
-		if ( empty( $variation_styles ) ) {
+		if ( '' === $variation_styles_tpl ) {
 			return $parsed_block;
 		}
 
-		wp_register_style( 'block-style-variation-styles', false, array( 'wp-block-library', 'global-styles' ) );
-		wp_add_inline_style( 'block-style-variation-styles', $variation_styles );
+		$variation_instance = wp_unique_id( $variation . '--' );
+		$class_name         = $class_prefix . $variation_instance;
 
-		/*
-		* Add variation instance class name to block's className string so it can
-		* be enforced in the block markup via render_block filter.
-		*/
+		$placeholder_class_full = '.' . $class_prefix . $placeholder_instance;
+		$real_scope_full        = '.' . $class_name;
+		$variation_styles       = str_replace( $placeholder_class_full, $real_scope_full, $variation_styles_tpl );
+
+		$current_class_name = isset( $parsed_block['attrs']['className'] ) ? (string) $parsed_block['attrs']['className'] : '';
+		$updated_class_name = trim( $current_class_name . ' ' . $class_name );
+
+		wp_register_style( $style_handle, false, array( 'wp-block-library', 'global-styles' ) );
+		wp_add_inline_style( $style_handle, $variation_styles );
+
 		_wp_array_set( $parsed_block, array( 'attrs', 'className' ), $updated_class_name );
 
 		return $parsed_block;
+	}
+}
+
+if (! function_exists('blockera_render_block_style_variation_support_styles')) {
+	/**
+	 * Renders theme.json-backed variation CSS for blocks carrying `is-style-*` or `is-size-*` classes.
+	 *
+	 * In the case of nested blocks with variations applied, we want the parent
+	 * variation's styles to be rendered before their descendants. This solves the
+	 * issue of a block type being styled in both the parent and descendant: we want
+	 * the descendant style to take priority, and this is done by loading it after,
+	 * in the DOM order. This is why the variation stylesheet generation is in a
+	 * different filter.
+	 *
+	 * Style surface output is attached to `block-style-variation-styles`; size surface
+	 * to `block-size-variation-styles` (Blockera `is-size-{slug}`). Scoped stylesheet
+	 * text is reused via {@see blockera_get_cache()} transients (plus a request-static
+	 * fallback) keyed by block name, slug, prefix, and {@see blockera_get_global_styles_cache_hash()};
+	 * theme development mode disables that cache.
+	 *
+	 * @since 6.6.0
+	 * @access private
+	 *
+	 * @param array $parsed_block The parsed block.
+	 *
+	 * @return array The parsed block with variation instance classes added when generated.
+	 */
+	function blockera_render_block_style_variation_support_styles( $parsed_block ) {
+		$classes = $parsed_block['attrs']['className'] ?? '';
+
+		foreach ( blockera_collect_block_variation_render_jobs( $classes ) as $job ) {
+			$parsed_block = blockera_render_one_block_theme_variation_support_styles(
+				$parsed_block,
+				$job['slug_candidates'],
+				$job['class_prefix'],
+				$job['style_handle']
+			);
+		}
+
+		return $parsed_block;
+	}
+}
+
+if ( ! function_exists( 'blockera_render_block_style_variation_class_name' ) ) {
+	/**
+	 * Applies variation instance classes from {@see render_block_data} onto the rendered block wrapper.
+	 *
+	 * Core only handles `is-style-*--{id}` ({@see wp_render_block_style_variation_class_name}). Blockera also
+	 * emits scoped CSS for size variations via `is-size-*--{id}`; those must be added here.
+	 *
+	 * @param string $block_content Full block markup.
+	 * @param array  $block         Parsed block (after `render_block_data`), includes `attrs.className`.
+	 * @return string Filtered markup.
+	 */
+	function blockera_render_block_style_variation_class_name( $block_content, $block ) {
+		if ( ! $block_content || empty( $block['attrs']['className'] ) ) {
+			return $block_content;
+		}
+
+		$class_string = $block['attrs']['className'];
+
+		preg_match_all( '/\bis-style-\S+?--\d+\b/', $class_string, $style_instances );
+		preg_match_all( '/\bis-size-\S+?--\d+\b/', $class_string, $size_instances );
+
+		$to_apply = array_values(
+			array_unique(
+				array_merge(
+					$style_instances[0] ?? array(),
+					$size_instances[0] ?? array()
+				)
+			)
+		);
+
+		if ( empty( $to_apply ) ) {
+			return $block_content;
+		}
+
+		$updated = preg_replace_callback(
+			'/<(?!!)([\w:-]+)(\s([^>]*?))?(\/\s*)?>/',
+			static function ( $m ) use ( $to_apply ) {
+				$tag       = $m[1];
+				$attrs_str = isset( $m[3] ) ? $m[3] : '';
+				$slash     = isset( $m[4] ) ? trim( $m[4] ) : '';
+
+				if ( preg_match( '/\bclass\s*=\s*"([^"]*)"/', $attrs_str, $cm ) ) {
+					$pieces = preg_split( '/\s+/', trim( $cm[1] ), -1, PREG_SPLIT_NO_EMPTY );
+					foreach ( $to_apply as $class_token ) {
+						if ( ! in_array( $class_token, $pieces, true ) ) {
+							$pieces[] = $class_token;
+						}
+					}
+					$new_attrs = preg_replace(
+						'/\bclass\s*=\s*"[^"]*"/',
+						'class="' . esc_attr( implode( ' ', $pieces ) ) . '"',
+						$attrs_str,
+						1
+					);
+				} elseif ( preg_match( "/\bclass\s*=\s*'([^']*)'/", $attrs_str, $cm ) ) {
+					$pieces = preg_split( '/\s+/', trim( $cm[1] ), -1, PREG_SPLIT_NO_EMPTY );
+					foreach ( $to_apply as $class_token ) {
+						if ( ! in_array( $class_token, $pieces, true ) ) {
+							$pieces[] = $class_token;
+						}
+					}
+					$new_attrs = preg_replace(
+						"/\bclass\s*=\s*'[^']*'/",
+						'class="' . esc_attr( implode( ' ', $pieces ) ) . '"',
+						$attrs_str,
+						1
+					);
+				} else {
+					$class_attr = 'class="' . esc_attr( implode( ' ', $to_apply ) ) . '"';
+					$trimmed    = trim( $attrs_str );
+					$new_attrs  = '' === $trimmed ? $class_attr : $class_attr . ' ' . $trimmed;
+				}
+
+				$new_attrs = trim( $new_attrs );
+				$open      = '<' . $tag;
+				if ( '' !== $new_attrs ) {
+					$open .= ' ' . $new_attrs;
+				}
+				if ( '' !== $slash ) {
+					$open .= ' ' . $slash;
+				}
+				$open .= '>';
+
+				return $open;
+			},
+			$block_content,
+			1
+		);
+
+		return is_string( $updated ) ? $updated : $block_content;
+	}
+}
+
+if ( ! function_exists( 'blockera_enqueue_block_size_variation_styles' ) ) {
+	/**
+	 * Prints registered inline CSS for `block-size-variation-styles` when that handle was used.
+	 *
+	 * Mirrors {@see wp_enqueue_block_style_variation_styles} for the style surface handle.
+	 */
+	function blockera_enqueue_block_size_variation_styles(): void {
+		if ( wp_style_is( 'block-size-variation-styles', 'registered' ) ) {
+			wp_enqueue_style( 'block-size-variation-styles' );
+		}
 	}
 }
 
@@ -251,5 +472,111 @@ if (! function_exists('blockera_get_block_style_variation_name_from_class')) {
 		}
 
 		return $matches[1] ?? null;
+	}
+}
+
+if ( ! function_exists( 'blockera_apply_render_block_data_to_wp_block_subtree' ) ) {
+	/**
+	 * Applies {@see 'render_block_data'} to a block and all descendants, depth-first.
+	 *
+	 * WordPress only runs that filter in {@see render_block()} and in the parent {@see WP_Block::render()}
+	 * loop over inners. Some core blocks (e.g. `core/navigation`, `core/navigation-link`, `core/navigation-submenu`)
+	 * call `$inner->render()` directly without the usual pass. Nested blocks (e.g. `core/page-list` inside a
+	 * submenu) then miss style variations unless this path runs. Blocks that re-enter {@see WP_Block::render()}
+	 * and run the same filter again on a child are expected to be safe for Block style variation processing
+	 * (see idempotency in {@see blockera_render_block_style_variation_support_styles}; instance classes are
+	 * applied to markup in {@see blockera_render_block_style_variation_class_name}).
+	 *
+	 * @param \WP_Block      $block        Block node.
+	 * @param \WP_Block|null $parent_block Parent, for filters that use the third argument.
+	 */
+	function blockera_apply_render_block_data_to_wp_block_subtree( WP_Block $block, $parent_block = null ) {
+		$source         = $block->parsed_block;
+		$filtered_block = apply_filters( 'render_block_data', $source, $source, $parent_block );
+
+		$block->parsed_block = $filtered_block;
+		$block->refresh_parsed_block_dependents();
+
+		if ( empty( $block->inner_blocks ) ) {
+			return;
+		}
+
+		foreach ( $block->inner_blocks as $child ) {
+			if ( $child instanceof WP_Block ) {
+				blockera_apply_render_block_data_to_wp_block_subtree( $child, $block );
+			}
+		}
+	}
+}
+
+if ( ! function_exists( 'blockera_apply_render_block_data_to_inner_block_list' ) ) {
+	/**
+	 * Runs {@see blockera_apply_render_block_data_to_wp_block_subtree()} for each top-level block in a list.
+	 *
+	 * Use from any integration that loads or replaces a {@see \WP_Block_List} and then renders with
+	 * {@see WP_Block::render()} without going through {@see render_block()}. That matches WordPress core’s
+	 * `block_core_navigation_render_inner_blocks` pattern; this helper is the generic Blockera hook point for
+	 * the same (plugins can call it from their own `apply_filters` for custom inner block lists).
+	 *
+	 * @param \Traversable|array $inner_blocks Iterable of {@see \WP_Block} instances.
+	 * @param \WP_Block|null     $parent_block Optional parent of this list.
+	 * @return \Traversable|array
+	 */
+	function blockera_apply_render_block_data_to_inner_block_list( $inner_blocks, $parent_block = null ) {
+		foreach ( $inner_blocks as $block ) {
+			if ( $block instanceof WP_Block ) {
+				blockera_apply_render_block_data_to_wp_block_subtree( $block, $parent_block );
+			}
+		}
+
+		return $inner_blocks;
+	}
+}
+
+if ( ! function_exists( 'blockera_apply_render_block_data_to_parsed_block_subtree' ) ) {
+	/**
+	 * Applies {@see 'render_block_data'} to every node in a parsed block *array* tree.
+	 *
+	 * Use when code builds {@see \WP_Block} from a parsed array and calls `->render()` without
+	 * {@see render_block()} (e.g. custom loop blocks). The optional `$parent_block` is passed to filters;
+	 * for deep trees without a real parent instance, `null` is common.
+	 *
+	 * @param array          $parsed_block Unmodified parsed block (will be replaced by filter output).
+	 * @param \WP_Block|null $parent_block  Parent for filters.
+	 * @return array
+	 */
+	function blockera_apply_render_block_data_to_parsed_block_subtree( array $parsed_block, $parent_block = null ) {
+		$source       = $parsed_block;
+		$parsed_block = apply_filters( 'render_block_data', $parsed_block, $source, $parent_block );
+
+		if ( ! empty( $parsed_block['innerBlocks'] ) && is_array( $parsed_block['innerBlocks'] ) ) {
+			foreach ( $parsed_block['innerBlocks'] as $i => $inner ) {
+				if ( is_array( $inner ) && ! empty( $inner['blockName'] ) ) {
+					$parsed_block['innerBlocks'][ $i ] = blockera_apply_render_block_data_to_parsed_block_subtree( $inner, $parent_block );
+				}
+			}
+		}
+
+		return $parsed_block;
+	}
+}
+
+if ( ! function_exists( 'blockera_navigation_inner_blocks_apply_render_block_data' ) ) {
+	/**
+	 * Ensures block style variation (and other) render_block_data filters run for Navigation inner blocks.
+	 *
+	 * When a Navigation block loads inner blocks from a linked `wp_navigation` post or from the core
+	 * fallback, those blocks are rendered via {@see WP_Block::render()} without the parent loop that
+	 * runs {@see 'render_block_data'} first. Nested items (e.g. `core/page-list` under
+	 * `core/navigation-submenu` / `core/navigation-link`) also need the subtree pass because those
+	 * submenus render inners with manual `->render()` calls. Delegates to
+	 * {@see blockera_apply_render_block_data_to_inner_block_list()}.
+	 *
+	 * @param \WP_Block_List $inner_blocks Inner blocks returned for the Navigation block.
+	 *
+	 * @return \WP_Block_List
+	 */
+	function blockera_navigation_inner_blocks_apply_render_block_data( $inner_blocks ) {
+		return blockera_apply_render_block_data_to_inner_block_list( $inner_blocks, null );
 	}
 }

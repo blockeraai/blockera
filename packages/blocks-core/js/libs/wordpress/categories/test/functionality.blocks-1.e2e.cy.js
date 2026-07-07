@@ -38,15 +38,11 @@ describe('Categories Block', () => {
 		//
 		// 1.0. Check icon extension & inner block
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.getByAriaLabel('Choose Icon…').click();
 
-		cy.get('[data-wp-component="Popover"]')
-			.last()
-			.within(() => {
-				cy.getByAriaLabel('add-card Icon').click();
-			});
+		cy.selectIconByName('add-card');
 
 		// switch by advanced icon settings button from extension
 		cy.getByAriaLabel('Advanced Icon Settings').click();
@@ -62,7 +58,7 @@ describe('Categories Block', () => {
 		setParentBlock();
 
 		// switch back to style tab
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 
 		//
 		// 1.1. Block Styles
@@ -136,7 +132,7 @@ describe('Categories Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {

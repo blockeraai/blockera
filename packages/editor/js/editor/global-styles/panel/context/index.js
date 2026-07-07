@@ -4,11 +4,13 @@
  * External dependencies
  */
 import {
-	createContext,
-	useContext,
-	useState,
 	useMemo,
+	useState,
+	useEffect,
+	useContext,
 	useCallback,
+	useRef,
+	createContext,
 } from '@wordpress/element';
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
@@ -18,7 +20,8 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isEquals, mergeObject } from '@blockera/utils';
+import { useGlobalStylesContext } from '@blockera/global-styles-ui';
+import { isEmpty, isEquals, mergeObject, setImmutably } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -29,7 +32,27 @@ import { STORE_NAME } from '../../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../../store/constants';
 import { sanitizeDefaultAttributes } from '../../../../extensions/hooks/utils';
 import { ignoreBlockeraAttributeKeysRegExp } from '../../../../extensions/libs';
+import { registerBlockExtensionsSupports } from '../../../../extensions/libs/base';
 import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
+import { STORE_NAME as EXTENSIONS_STORE_NAME } from '../../../../extensions/libs/base/store/constants';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
+import {
+	mergeBlockVariationsTrees,
+	attachSizeVariationPersistenceKeys,
+	isVariationScopedStyleEdit,
+} from '../size-variations';
+import {
+	getBlockVariationSupport,
+	blockUsesSharedRootStyleVariation,
+} from '../block-variation-support';
+import { getExtensionsUiContext } from '../../../../extensions/components/extensions-ui-context';
+import { useResetBlockStateToNormal } from '../../../../extensions/libs/block-card/block-states/hooks';
+import { useStableBlockeraUnsavedData } from '../stable-blockera-unsaved-data';
+import { createGlobalStylesPanelActiveColorStore } from '../global-styles-panel-active-color-store';
+import { GlobalStylesPanelActiveColorShell } from '../global-styles-panel-active-color-shell';
 
 // Helper functions
 export const getBlockAttributes = (name: string): Object => {
@@ -38,9 +61,11 @@ export const getBlockAttributes = (name: string): Object => {
 		getBlockTypeAttributes,
 		getSharedBlockAttributes,
 	} = select(STORE_NAME) || {};
+	const { getExtensions } = select(EXTENSIONS_STORE_NAME);
 
 	const blockeraOverrideBlockTypeAttributes = getBlockTypeAttributes(name);
 	return {
+		blockExtensions: getExtensions(name),
 		blockExtension: getBlockExtensionBy('targetBlock', name),
 		blockeraOverrideBlockAttributes: isEmpty(
 			blockeraOverrideBlockTypeAttributes
@@ -48,6 +73,19 @@ export const getBlockAttributes = (name: string): Object => {
 			? getSharedBlockAttributes()
 			: blockeraOverrideBlockTypeAttributes,
 	};
+};
+
+const registerDefaultBlockExtensionsSupports = (
+	blockName: string,
+	blockExtension?: Object
+): Object => {
+	if ('function' === typeof blockExtension?.registerExtensions) {
+		blockExtension.registerExtensions(blockName);
+	} else {
+		registerBlockExtensionsSupports(blockName);
+	}
+
+	return select(EXTENSIONS_STORE_NAME).getExtensions(blockName);
 };
 
 const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
@@ -66,6 +104,10 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 		}
 
 		if (!ignoreBlockeraAttributeKeysRegExp().test(key)) {
+			if (styles[key] === undefined) {
+				continue;
+			}
+
 			// Exclude the Block original core attributes is object and contains all values are undefined.
 			if (
 				'object' === typeof styles[key] &&
@@ -82,7 +124,7 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 		}
 
 		// Process all keys if has not default property.
-		if (!defaultStyles[key]?.hasOwnProperty('default')) {
+		if (!defaultStyles?.[key]?.hasOwnProperty('default')) {
 			if (!styles[key]?.hasOwnProperty('value')) {
 				cleanStyles[key] = {
 					value: styles[key],
@@ -130,6 +172,32 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 };
 
 /**
+ * Block types that share a style variation (see styleVariationBlocks in the editor store).
+ * Always includes the block currently being edited in the global styles panel.
+ *
+ * @param {Function} getStyleVariationBlocks store selector bound to variation name.
+ * @param {string} variationName
+ * @param {string} currentBlockName
+ * @return {Array<string>} Distinct block names that use this variation, including the current block.
+ */
+const getBlockTypesForStyleVariation = (
+	getStyleVariationBlocks: (string) => mixed,
+	variationName: string,
+	currentBlockName: string
+): Array<string> => {
+	const registered = getStyleVariationBlocks(variationName);
+	const list: Array<string> = [];
+	if (Array.isArray(registered)) {
+		for (const item of registered) {
+			if (typeof item === 'string') {
+				list.push(item);
+			}
+		}
+	}
+	return [...new Set([...list, currentBlockName])];
+};
+
+/**
  * Normalizing style for any variations of block.
  *
  * @param {Object} newStyle the new style to normalizing.
@@ -171,10 +239,18 @@ export const GlobalStylesPanelContext: Object = createContext({
 	setStyleVariationBlocks: () => {},
 	setStyles: () => {},
 	styles: {},
+	variationSurface: VARIATION_SURFACE_STYLE,
+	extensionsUiContext: undefined,
+	usesSharedRootStyleVariation: false,
+	baseConfig: {},
+	userConfig: {},
 	statesManagerHandleOnChangeRef: {
 		current: null,
 	},
 });
+
+export const GlobalStylesPanelActiveColorStoreContext: Object =
+	createContext(null);
 
 export const GlobalStylesPanelContextConsumer = ({
 	children,
@@ -193,14 +269,30 @@ export const GlobalStylesPanelContextProvider = ({
 	const {
 		className,
 		selectedBlockClientId,
-		resetBlockStateToNormal,
 		blockType: { name, attributes },
 		statesManagerHandleOnChangeRef,
+		variationSurface = VARIATION_SURFACE_STYLE,
 	} = value;
+
+	const extensionsUiContext = getExtensionsUiContext(false, variationSurface);
+	const resetBlockStateToNormal = useResetBlockStateToNormal({
+		clientId: selectedBlockClientId || '',
+		blockName: name,
+		statesManagerHandleOnChangeRef,
+		extensionsUiContext,
+	});
 
 	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
 		() => getBlockAttributes(name),
 		[name]
+	);
+
+	const usesSharedRootStyleVariation = useMemo(
+		() =>
+			blockUsesSharedRootStyleVariation(
+				getBlockVariationSupport(blockExtension)
+			),
+		[blockExtension]
 	);
 
 	const originDefaultAttributes = useMemo(() => {
@@ -213,12 +305,69 @@ export const GlobalStylesPanelContextProvider = ({
 		});
 	}, [originDefaultAttributes]);
 
-	const { getSelectedBlockStyleVariation } = select(EDITOR_STORE_NAME);
+	const { getSelectedBlockStyleVariation, getSelectedBlockSizeVariation } =
+		select(EDITOR_STORE_NAME);
 	const { getStyleVariationBlocks } = select(EDITOR_STORE_NAME);
-	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
+	const {
+		setBlockStyles,
+		setSelectedBlockStyleVariation,
+		setSelectedBlockSizeVariation,
+	} = dispatch(EDITOR_STORE_NAME);
 
-	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
-		useState(getSelectedBlockStyleVariation());
+	const [currentBlockStyleVariation, setCurrentBlockStyleVariationState] =
+		useState(() =>
+			variationSurface === VARIATION_SURFACE_SIZE
+				? getSelectedBlockSizeVariation()
+				: getSelectedBlockStyleVariation()
+		);
+
+	const setCurrentBlockStyleVariation = useCallback(
+		(variation: Object | void) => {
+			setCurrentBlockStyleVariationState(variation);
+
+			if (variationSurface === VARIATION_SURFACE_SIZE) {
+				setSelectedBlockSizeVariation(variation);
+				return;
+			}
+
+			setSelectedBlockStyleVariation(variation);
+		},
+		[
+			variationSurface,
+			setSelectedBlockStyleVariation,
+			setSelectedBlockSizeVariation,
+		]
+	);
+
+	useEffect(() => {
+		if (blockExtension?.supportsExtensions) {
+			const baseBlockExtensions = registerDefaultBlockExtensionsSupports(
+				name,
+				blockExtension
+			);
+
+			if (variationSurface === VARIATION_SURFACE_SIZE) {
+				registerBlockExtensionsSupports(
+					name,
+					blockExtension.supportsExtensions(
+						name,
+						baseBlockExtensions,
+						VARIATION_SURFACE_SIZE
+					)
+				);
+			} else {
+				registerBlockExtensionsSupports(
+					name,
+					blockExtension.supportsExtensions(
+						name,
+						baseBlockExtensions,
+						VARIATION_SURFACE_STYLE
+					)
+				);
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlockStyleVariation]);
 
 	const fallbackClientId = name.replace('/', '-');
 	const clientId = currentBlockStyleVariation?.name
@@ -234,7 +383,12 @@ export const GlobalStylesPanelContextProvider = ({
 	);
 
 	let prefixParts: Array<string> = [];
-	if (currentBlockStyleVariation && !currentBlockStyleVariation?.isDefault) {
+	if (
+		isVariationScopedStyleEdit(
+			currentBlockStyleVariation,
+			usesSharedRootStyleVariation
+		)
+	) {
 		prefixParts = ['variations', currentBlockStyleVariation.name].concat(
 			prefixParts
 		);
@@ -249,6 +403,8 @@ export const GlobalStylesPanelContextProvider = ({
 			defaultStylesValue,
 		}
 	);
+
+	const { setUserConfig } = useGlobalStylesContext();
 
 	const getStyle = useCallback(
 		() => ({
@@ -281,21 +437,140 @@ export const GlobalStylesPanelContextProvider = ({
 
 	const handleOnChangeStyle = useCallback(
 		(newStyle: Object) => {
-			setStyle(getNormalizedStyle(newStyle, defaultStyles));
+			const normalized = getNormalizedStyle(newStyle, defaultStyles);
+			const mergedVariationsSnapshot = mergeBlockVariationsTrees(
+				baseConfig || {},
+				userConfig || {},
+				name
+			);
+
+			let payload = normalized;
+
+			if (
+				variationSurface === VARIATION_SURFACE_SIZE &&
+				isVariationScopedStyleEdit(
+					currentBlockStyleVariation,
+					usesSharedRootStyleVariation
+				) &&
+				currentBlockStyleVariation?.name
+			) {
+				payload = attachSizeVariationPersistenceKeys(
+					normalized,
+					currentBlockStyleVariation.name,
+					mergedVariationsSnapshot
+				);
+			}
+
+			const isVariationScopedEdit = isVariationScopedStyleEdit(
+				currentBlockStyleVariation,
+				usesSharedRootStyleVariation
+			);
+
+			if (isVariationScopedEdit && currentBlockStyleVariation?.name) {
+				const variationName = currentBlockStyleVariation.name;
+				const targetBlocks = getBlockTypesForStyleVariation(
+					getStyleVariationBlocks,
+					variationName,
+					name
+				);
+
+				if (targetBlocks.length > 1) {
+					setUserConfig((currentConfig: Object) => {
+						return targetBlocks.reduce(
+							(acc: Object, blockName: string) =>
+								setImmutably(
+									acc,
+									`styles.blocks.${blockName}.variations.${variationName}`.split(
+										'.'
+									),
+									payload
+								),
+							currentConfig
+						);
+					});
+					return;
+				}
+			}
+
+			setStyle(payload);
 		},
-		[setStyle, defaultStyles]
+		[
+			setStyle,
+			setUserConfig,
+			defaultStyles,
+			currentBlockStyleVariation,
+			getStyleVariationBlocks,
+			name,
+			variationSurface,
+			baseConfig,
+			userConfig,
+			usesSharedRootStyleVariation,
+		]
 	);
+
 	const handleOnChangeStyleInLocalState = useCallback(
 		(newStyle: Object): void => {
-			setBlockStyles(
-				name,
-				currentBlockStyleVariation?.isDefault
-					? 'default'
-					: currentBlockStyleVariation?.name || 'default',
-				getNormalizedStyle(newStyle, defaultStyles)
+			const normalized = getNormalizedStyle(newStyle, defaultStyles);
+			const mergedVariationsSnapshot = mergeBlockVariationsTrees(
+				baseConfig || {},
+				userConfig || {},
+				name
 			);
+
+			let payload = normalized;
+
+			if (
+				variationSurface === VARIATION_SURFACE_SIZE &&
+				isVariationScopedStyleEdit(
+					currentBlockStyleVariation,
+					usesSharedRootStyleVariation
+				) &&
+				currentBlockStyleVariation?.name
+			) {
+				payload = attachSizeVariationPersistenceKeys(
+					normalized,
+					currentBlockStyleVariation.name,
+					mergedVariationsSnapshot
+				);
+			}
+
+			const styleVariationArg = currentBlockStyleVariation?.isDefault
+				? 'default'
+				: currentBlockStyleVariation?.name || 'default';
+			const variationArg = styleVariationArg;
+
+			const shouldFanOutAcrossBlocks = isVariationScopedStyleEdit(
+				currentBlockStyleVariation,
+				usesSharedRootStyleVariation
+			);
+
+			if (shouldFanOutAcrossBlocks) {
+				const targetBlocks = getBlockTypesForStyleVariation(
+					getStyleVariationBlocks,
+					variationArg,
+					name
+				);
+
+				for (const blockName of targetBlocks) {
+					setBlockStyles(blockName, variationArg, payload);
+				}
+
+				return;
+			}
+
+			setBlockStyles(name, variationArg, payload);
 		},
-		[name, setBlockStyles, currentBlockStyleVariation, defaultStyles]
+		[
+			name,
+			setBlockStyles,
+			currentBlockStyleVariation,
+			defaultStyles,
+			getStyleVariationBlocks,
+			variationSurface,
+			baseConfig,
+			userConfig,
+			usesSharedRootStyleVariation,
+		]
 	);
 
 	const memoizedBlockBaseProps = useMemo(
@@ -322,33 +597,79 @@ export const GlobalStylesPanelContextProvider = ({
 		]
 	);
 
+	const blockeraUnsavedDataForActiveColor = useStableBlockeraUnsavedData(
+		style?.blockeraUnsavedData
+	);
+
+	const activeColorStoreRef = useRef(null);
+	if (!activeColorStoreRef.current) {
+		activeColorStoreRef.current = createGlobalStylesPanelActiveColorStore();
+	}
+
+	const contextValue = useMemo(
+		() => ({
+			style,
+			getStyle,
+			setStyle,
+			baseConfig,
+			userConfig,
+			defaultStyles,
+			fallbackClientId,
+			variationSurface,
+			extensionsUiContext,
+			usesSharedRootStyleVariation,
+			childrenComponent,
+			getNormalizedStyle,
+			selectedBlockClientId,
+			memoizedBlockBaseProps,
+			getStyleVariationBlocks,
+			resetBlockStateToNormal,
+			currentBlockStyleVariation,
+			setCurrentBlockStyleVariation,
+			handleOnChangeStyleInLocalState,
+			statesManagerHandleOnChangeRef: statesManagerHandleOnChangeRef || {
+				current: null,
+			},
+		}),
+		[
+			style,
+			getStyle,
+			setStyle,
+			baseConfig,
+			userConfig,
+			defaultStyles,
+			fallbackClientId,
+			variationSurface,
+			extensionsUiContext,
+			usesSharedRootStyleVariation,
+			childrenComponent,
+			selectedBlockClientId,
+			memoizedBlockBaseProps,
+			getStyleVariationBlocks,
+			resetBlockStateToNormal,
+			currentBlockStyleVariation,
+			setCurrentBlockStyleVariation,
+			statesManagerHandleOnChangeRef,
+			handleOnChangeStyleInLocalState,
+		]
+	);
+
 	return (
-		<GlobalStylesPanelContext.Provider
-			value={{
-				style,
-				getStyle,
-				setStyle,
-				baseConfig,
-				userConfig,
-				defaultStyles,
-				fallbackClientId,
-				childrenComponent,
-				getNormalizedStyle,
-				selectedBlockClientId,
-				memoizedBlockBaseProps,
-				getStyleVariationBlocks,
-				resetBlockStateToNormal,
-				currentBlockStyleVariation,
-				setCurrentBlockStyleVariation,
-				handleOnChangeStyleInLocalState,
-				statesManagerHandleOnChangeRef:
-					statesManagerHandleOnChangeRef || {
-						current: null,
-					},
-			}}
+		<GlobalStylesPanelActiveColorStoreContext.Provider
+			value={activeColorStoreRef.current}
 		>
-			{children}
-		</GlobalStylesPanelContext.Provider>
+			<GlobalStylesPanelActiveColorShell
+				store={activeColorStoreRef.current}
+				blockName={name}
+				fallbackClientId={fallbackClientId}
+				variationSurface={variationSurface}
+				blockeraUnsavedData={blockeraUnsavedDataForActiveColor}
+			>
+				<GlobalStylesPanelContext.Provider value={contextValue}>
+					{children}
+				</GlobalStylesPanelContext.Provider>
+			</GlobalStylesPanelActiveColorShell>
+		</GlobalStylesPanelActiveColorStoreContext.Provider>
 	);
 };
 
@@ -359,6 +680,9 @@ type UseGlobalStylesPanelContextReturnType = {
 	},
 	userConfig: Object,
 	baseConfig: Object,
+	variationSurface: 'size' | 'style',
+	extensionsUiContext?: string,
+	usesSharedRootStyleVariation: boolean,
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
 	getStyle: () => Object,

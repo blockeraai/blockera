@@ -5,97 +5,136 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import {
-	__experimentalNavigation as Navigation,
-	__experimentalNavigationItem as NavigationItem,
-	__experimentalNavigationMenu as NavigationMenu,
-} from '@wordpress/components';
-import { useEffect, useState, useCallback } from '@wordpress/element';
+import { Navigator, useNavigator } from '@wordpress/components';
+import { useLayoutEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
+import { Icon } from '@blockera/icons';
+import { Flex } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
+import {
+	getDualGlobalStylesSelector,
+	navigateToGlobalStylesPath,
+	BLOCKERA_NAVIGATION_OVERRIDE_CLASS,
+	BLOCKERA_NAVIGATION_PANEL_CLASS,
+} from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
  */
+import { NavItemScreen } from './nav-item-screen';
 import { OtherNavigation } from './other-navigation';
 import { GeneralNavigation } from './general-navigation';
-import { GlobalStylesNavigation } from './global-styles-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
+
+export const initPath = '/';
+export const wpRootSelector: string = getDualGlobalStylesSelector('screenRoot');
+export const overrideClassname = BLOCKERA_NAVIGATION_OVERRIDE_CLASS;
+export const blockeraAdditionalPanelClassname = 'blockera-customized-panel';
+export const blockeraNavPanelClassname = BLOCKERA_NAVIGATION_PANEL_CLASS;
+
+function PathSync() {
+	const { location } = useNavigator();
+	const path = location?.path ?? '/';
+
+	useLayoutEffect(() => {
+		const root = document.querySelector(wpRootSelector);
+		if (!root) {
+			return;
+		}
+
+		if (path === '/css') {
+			root.classList.add(overrideClassname);
+		} else {
+			root.classList.remove(overrideClassname);
+		}
+
+		const panelPaths = [
+			'/spacing',
+			'/shadows',
+			'/borders',
+			'/border-radius',
+			'/text-shadows',
+			'/transforms',
+			'/transitions',
+			'/filters',
+		];
+
+		if (panelPaths.includes(path)) {
+			root.classList.add(blockeraNavPanelClassname);
+		} else {
+			root.classList.remove(blockeraNavPanelClassname);
+		}
+
+		const navPanelClassname = '.blockera-navigation-panel';
+
+		if (document?.querySelector(navPanelClassname)) {
+			setTimeout(() => {
+				// $FlowFixMe
+				document.querySelector(navPanelClassname).style.display =
+					'block';
+			}, 10);
+		}
+	}, [path]);
+
+	return null;
+}
 
 export const BlockeraGlobalStylesNavigation = ({
 	className,
 }: {
 	className: string,
 }): MixedElement => {
-	const [backButton, setBackButton] = useState(null);
-	const [isOpenCustomCss, setIsOpenCustomCss] = useState(false);
-	const openCallback = (action: 'open-custom-css-panel') => {
-		setTimeout(() => {
-			setBackButton(
-				document.querySelector('.blockera-extension-back-navigation')
-			);
-		}, 100);
-		document
-			.querySelector('.edit-site-global-styles-screen-root')
-			?.classList?.add('is-open-blockera-navigation');
-
-		switch (action) {
-			case 'open-custom-css-panel':
-				setIsOpenCustomCss(true);
-				break;
-			default:
-				break;
-		}
-	};
 	const closeCallback = useCallback(() => {
 		document
-			.querySelector('.edit-site-global-styles-screen-root')
-			?.classList?.remove('is-open-blockera-navigation');
-
-		if (isOpenCustomCss) {
-			setIsOpenCustomCss(false);
-		}
-	}, [isOpenCustomCss]);
-
-	useEffect(() => {
-		if (backButton) {
-			backButton.addEventListener('click', closeCallback);
-		}
-	}, [backButton, closeCallback]);
+			.querySelector(wpRootSelector)
+			?.classList?.remove(overrideClassname);
+		document
+			.querySelector(wpRootSelector)
+			?.classList?.remove(blockeraNavPanelClassname);
+	}, []);
 
 	return (
 		<div className="blockera-block-inspector-controls-wrapper">
-			<Navigation className={extensionClassNames('navigation')}>
-				<NavigationMenu
-					className={extensionClassNames('navigation-category')}
+			<Navigator
+				initialPath={initPath}
+				className={extensionClassNames('navigation')}
+			>
+				<PathSync />
+
+				<NavItemScreen
+					path={initPath}
+					className={extensionClassNames('navigation-categories')}
 				>
-					<NavigationItem
-						item="variations"
-						onClick={() =>
-							document
-								.querySelector('button[id="/variations"]')
-								?.click()
-						}
-						className={extensionClassNames('navigation-item')}
-						navigateToMenu="variations"
-						title={__('Browse styles', 'blockera')}
-					/>
-				</NavigationMenu>
+					<div className={extensionClassNames('navigation-category')}>
+						<Navigator.Button
+							path={`${initPath}variations`}
+							onClick={() =>
+								navigateToGlobalStylesPath('/variations')
+							}
+						>
+							<Flex
+								alignItems="center"
+								justifyContent="space-between"
+								className={extensionClassNames(
+									'navigation-item'
+								)}
+							>
+								{__('Browse styles', 'blockera')}
+								<Icon icon="chevron-right" library="wp" />
+							</Flex>
+						</Navigator.Button>
+					</div>
+					<GeneralNavigation className={className} />
+					<DesignSystemNavigation />
+					<OtherNavigation />
+				</NavItemScreen>
 
-				<DesignSystemNavigation />
-
-				<GeneralNavigation />
-
-				<GlobalStylesNavigation className={className} />
-
-				<OtherNavigation
-					openCallback={openCallback}
-					isOpenCustomCss={isOpenCustomCss}
-				/>
-			</Navigation>
+				<DesignSystemNavigation.Screens closeCallback={closeCallback} />
+				<OtherNavigation.Screens closeCallback={closeCallback} />
+			</Navigator>
 		</div>
 	);
 };

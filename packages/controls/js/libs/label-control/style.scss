@@ -220,7 +220,7 @@
 		var(--blockera-controls-primary-color) 100%,
 		#000000 4%
 	);
-	--publisher-controls-primary-color: var(
+	--blockera-controls-primary-color: var(
 		--blockera-controls-inner-blocks-color
 	);
 }
@@ -235,7 +235,7 @@
 	--popover-border-color: #272c31;
 	--popover-header-bg-color: #272c31;
 	--popover-header-color: #ffffff;
-	--popover-header-shadow-color: #00000058;
+	--popover-header-border-color: #272c31;
 
 	.blockera-component-button.blockera-component-button.is-tertiary {
 		color: #a5aab0;
@@ -251,10 +251,6 @@
 			--blockera-controls-border-color: #acb1b5 !important;
 			box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color) !important;
 		}
-	}
-
-	.blockera-component-popover-body {
-		padding: 18px;
 	}
 
 	.blockera-control-label-section {
@@ -330,19 +326,18 @@
 	}
 
 	.blockera-control-label-section + .blockera-control-label-section {
-		padding-top: 25px;
+		padding-top: 10px;
 		margin-top: 25px;
-		border-top: 1px solid #282d32;
+		border-top: 1px solid var(--popover-header-border-color);
 	}
 
 	.blockera-control-label-section:last-child {
 		h3.blockera-control-label-section-title {
 			position: sticky;
-			top: 40px;
+			top: calc(var(--popover-padding) * -1);
 			background-color: var(--popover-bg-color);
 			padding: 10px 0 10px 0;
 			z-index: 1;
-			margin: -15px 0 -10px;
 		}
 	}
 
@@ -448,6 +443,8 @@
 				display: flex;
 				align-items: center;
 				flex-shrink: 0;
+				font-size: 11px;
+				font-weight: 600;
 			}
 
 			.blockera-control-states-changes-item__preview-string {
@@ -458,6 +455,11 @@
 				font-size: 11px;
 				font-weight: 600;
 				color: inherit;
+			}
+
+			.blockera-control-states-changes-item__preview-value-addon {
+				max-width: 140px;
+				min-width: 0;
 			}
 
 			&::after {

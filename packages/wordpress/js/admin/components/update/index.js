@@ -3,12 +3,16 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
-import { Animate, Spinner } from '@wordpress/components';
+import { Animate, Spinner, TextControl } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
-import { useContext, useState } from '@wordpress/element';
+import {
+	createInterpolateElement,
+	useContext,
+	useState,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -23,6 +27,8 @@ import { classNames } from '@blockera/classnames';
 import { TabsContext } from '../';
 import { type TabsProps } from '../tabs/types';
 import { SettingsContext } from '../../context';
+
+const RESET_ALL_CONFIRM_PHRASE = 'reset';
 
 const statuses = {
 	saved: {
@@ -61,13 +67,36 @@ export const Update = ({
 	tab: TabsProps,
 	slugSettings: any,
 }): MixedElement | null => {
-	const slug = tab.settingSlug;
 	const { settings, setSettings, hasUpdate, setHasUpdates } =
 		useContext(TabsContext);
 	const [status, setStatus] = useState(statuses.saved);
 	const [resetModalOpen, setResetModalOpen] = useState(false);
+	const [resetModalStep, setResetModalStep] = useState('tab');
+	const [resetConfirmInput, setResetConfirmInput] = useState('');
 	const { defaultSettings } = useContext(SettingsContext);
+
+	const closeResetModal = (): void => {
+		setResetModalOpen(false);
+		setResetModalStep('tab');
+		setResetConfirmInput('');
+	};
+
+	const openResetModal = (): void => {
+		setResetModalStep('tab');
+		setResetConfirmInput('');
+		setResetModalOpen(true);
+	};
+
+	const resetAllPhraseMatches =
+		resetConfirmInput.trim().toLowerCase() === RESET_ALL_CONFIRM_PHRASE;
 	const { saveEntityRecord } = dispatch(coreStore);
+
+	if (!tab.settingSlug) {
+		return null;
+	}
+
+	const slug: string = tab.settingSlug;
+
 	const updateButton =
 		'saving' === status.name
 			? __('Updating…', 'blockera')
@@ -106,7 +135,7 @@ export const Update = ({
 			const isResetAction = ['reset', 'reset-all'].includes(type);
 			if (isResetAction) {
 				setStatus(statuses.reset);
-				setResetModalOpen(false);
+				closeResetModal();
 
 				if ('reset-all' === type) {
 					setSettings(defaultSettings);
@@ -176,8 +205,9 @@ export const Update = ({
 				<Button
 					data-test={'reset-settings'}
 					className="reset-settings__save-button"
-					onClick={() => setResetModalOpen(true)}
+					onClick={openResetModal}
 					variant={'tertiary'}
+					isDestructive={true}
 				>
 					{__('Reset Settings', 'blockera')}
 				</Button>
@@ -199,71 +229,189 @@ export const Update = ({
 
 			{resetModalOpen && (
 				<Modal
-					className="blockera-settings-reset-modal"
-					headerTitle={__('Reset Settings', 'blockera')}
+					headerIcon={
+						'all' === resetModalStep ? (
+							<Icon icon={'warning'} iconSize={22} />
+						) : (
+							<Icon icon={'undo'} />
+						)
+					}
+					className={classNames(
+						'blockera-settings-reset-modal',
+						'tab' === resetModalStep
+							? 'blockera-settings-reset-modal--tab'
+							: 'blockera-settings-reset-modal--all'
+					)}
+					headerTitle={
+						'tab' === resetModalStep
+							? sprintf(
+									/* translators: %s: Settings tab title, e.g. "General Settings". */
+									__('Reset %s?', 'blockera'),
+									tab.title
+								)
+							: __('Reset All Settings?', 'blockera')
+					}
 					size="small"
-					onRequestClose={() => setResetModalOpen(false)}
+					onRequestClose={closeResetModal}
+					actions={
+						<Flex
+							direction={'row'}
+							justifyContent={'space-between'}
+							alignItems={'center'}
+							style={{ width: '100%' }}
+						>
+							{'resetting' === status.name ? (
+								<Spinner />
+							) : (
+								<span />
+							)}
+
+							<Flex
+								direction={'row'}
+								gap={8}
+								justifyContent={'flex-end'}
+							>
+								<Button
+									data-test={'cancel-reset-action'}
+									isTertiary
+									variant={'tertiary'}
+									onClick={closeResetModal}
+								>
+									{__('Cancel', 'blockera')}
+								</Button>
+
+								{'tab' === resetModalStep ? (
+									<Button
+										data-test={'reset-current-tab-settings'}
+										variant={'primary'}
+										className={
+											'blockera-settings-reset-modal__btn-reset-tab'
+										}
+										disabled={'resetting' === status.name}
+										onClick={() => onUpdate('reset')}
+									>
+										{__('Reset tab', 'blockera')}
+									</Button>
+								) : (
+									<Button
+										data-test={'reset-all-settings'}
+										variant={'primary'}
+										className={
+											'blockera-settings-reset-modal__btn-reset-all'
+										}
+										disabled={
+											!resetAllPhraseMatches ||
+											'resetting' === status.name
+										}
+										onClick={() => onUpdate('reset-all')}
+									>
+										{__('Reset everything', 'blockera')}
+									</Button>
+								)}
+							</Flex>
+						</Flex>
+					}
 				>
-					<p>
-						{__(
-							'Resetting will restore all configured settings on the current tab to their default values.',
-							'blockera'
-						)}
-					</p>
+					{'tab' === resetModalStep ? (
+						<>
+							<p className="blockera-settings-reset-modal__lead">
+								{createInterpolateElement(
+									__(
+										'All <tab /> on this tab will return to their defaults. Other tabs are unaffected.',
+										'blockera'
+									),
+									{
+										tab: <strong>{tab.title}</strong>,
+									}
+								)}
+							</p>
 
-					<p>
-						{__(
-							'To restore all plugin settings, choose Reset All.',
-							'blockera'
-						)}
-					</p>
+							<p className="blockera-settings-reset-modal__muted">
+								{__(
+									'This action cannot be undone.',
+									'blockera'
+								)}
+							</p>
 
-					<Flex
-						direction={'row'}
-						justifyContent={'space-between'}
-						style={{ marginTop: '40px' }}
-					>
-						<Flex
-							direction={'row'}
-							justifyContent={'space-between'}
-						>
-							<Button
-								data-test={'reset-current-tab-settings'}
-								isPrimary
-								variant={'primary'}
-								onClick={() => onUpdate('reset')}
+							<Flex
+								direction="row"
+								gap={8}
+								className="blockera-settings-reset-modal__link-row"
 							>
-								{__('Reset', 'blockera')}
-							</Button>
-							<Button
-								data-test={'reset-all-settings'}
-								isSecondary
-								variant={'secondary'}
-								onClick={() => onUpdate('reset-all')}
-							>
-								{__('Reset All', 'blockera')}
-							</Button>
-							{'resetting' === status.name && <Spinner />}
-						</Flex>
-						<Flex
-							direction={'row'}
-							justifyContent={'space-between'}
-						>
-							<Button
-								data-test={'cancel-reset-action'}
-								isTertiary
-								variant={'tertiary'}
-								onClick={() => setResetModalOpen(false)}
-							>
-								{__('Cancel', 'blockera')}
-							</Button>
-						</Flex>
-					</Flex>
+								{__('Need to reset all settings?', 'blockera')}{' '}
+								<Button
+									type="button"
+									variant="link"
+									data-test={'reset-modal-open-all'}
+									className="blockera-settings-reset-modal__link-to-all"
+									onClick={() => {
+										setResetModalStep('all');
+										setResetConfirmInput('');
+									}}
+									disabled={'resetting' === status.name}
+								>
+									{__('Reset all →', 'blockera')}
+								</Button>
+							</Flex>
+						</>
+					) : (
+						<>
+							<p className="blockera-settings-reset-modal__lead">
+								{createInterpolateElement(
+									__(
+										'This resets <all /> across every tab. <lost /> and cannot be recovered.',
+										'blockera'
+									),
+									{
+										all: (
+											<strong>
+												{__('all settings', 'blockera')}
+											</strong>
+										),
+										lost: (
+											<strong>
+												{__(
+													'All configuration will be lost',
+													'blockera'
+												)}
+											</strong>
+										),
+									}
+								)}
+							</p>
+							<p className="blockera-settings-reset-modal__confirm-label">
+								{createInterpolateElement(
+									__(
+										'To confirm, type <code /> below:',
+										'blockera'
+									),
+									{
+										code: (
+											<code className="blockera-settings-reset-modal__confirm-token">
+												reset
+											</code>
+										),
+									}
+								)}
+							</p>
+							<div data-test={'reset-all-confirm-input'}>
+								<TextControl
+									value={resetConfirmInput}
+									onChange={setResetConfirmInput}
+									placeholder={RESET_ALL_CONFIRM_PHRASE}
+									autoComplete="off"
+									__next40pxDefaultSize
+									__nextHasNoMarginBottom
+									className="blockera-settings-reset-modal__confirm-input"
+								/>
+							</div>
+						</>
+					)}
 
 					{'error' === status.name && (
 						<div
 							className="message update-failed"
-							style={{ marginTop: '40px' }}
+							style={{ marginTop: '24px' }}
 						>
 							{status.label}
 						</div>

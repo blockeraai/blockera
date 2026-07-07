@@ -103,7 +103,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					}
 					columns="columns-2"
 					min={0}
-					range={true}
 					unitType="outline"
 					onChange={(offset, ref) =>
 						changeRepeaterItem({

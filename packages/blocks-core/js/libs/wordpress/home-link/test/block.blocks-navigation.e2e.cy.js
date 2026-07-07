@@ -41,7 +41,7 @@ describe(
 				.last()
 				.within(() => {
 					// Open blocks menu
-					cy.get('[aria-label="Add block"]')
+					cy.get('[aria-label="Add page"]')
 						.first()
 						.click({ force: true });
 				});
@@ -99,11 +99,11 @@ describe(
 			);
 
 			// Icon extension is active
-			cy.getByDataTest('settings-tab').click({ force: true });
+			cy.getByAriaControls('settings-view').click({ force: true });
 			cy.getByAriaLabel('Choose Icon…').should('be.visible');
 
 			// switch back to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			//
 			// 1. Inner blocks existence

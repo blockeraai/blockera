@@ -22,6 +22,13 @@ import type {
 	TBreakpoint,
 } from '../../../../extensions/libs/block-card/block-states/types';
 import type { InnerBlockType } from '../../../../extensions/libs/block-card/inner-blocks/types';
+import { useGlobalStylesPanelContext } from '../context';
+import { useBlockVariationSupport } from '../use-block-variation-support';
+import { isVariationSurfaceEnabled } from '../block-variation-support';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from '../variation-surfaces';
 
 type TBlockStyleVariations = {
 	clientId: string,
@@ -55,6 +62,8 @@ type TBlockStyleVariations = {
 	currentPreviewStyle: Object,
 	setCurrentPreviewStyle: (style: Object) => void,
 	blockeraGlobalStylesMetaData: Object,
+	variationUiSurface?: string,
+	closeSiblingPicker?: () => void,
 };
 
 export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
@@ -82,11 +91,45 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	isHovered,
 	setIsHovered,
 	setCurrentPreviewStyle,
+	variationUiSurface,
+	closeSiblingPicker,
 }: TBlockStyleVariations): MixedElement => {
+	const { variationSurface = VARIATION_SURFACE_STYLE } =
+		useGlobalStylesPanelContext();
+
+	const uiSurface =
+		variationUiSurface !== undefined && variationUiSurface !== ''
+			? variationUiSurface
+			: variationSurface;
+	const variationSupport = useBlockVariationSupport(blockName);
+
+	if (
+		!isVariationSurfaceEnabled(
+			uiSurface,
+			variationSupport,
+			VARIATION_SURFACE_STYLE,
+			VARIATION_SURFACE_SIZE
+		)
+	) {
+		return <></>;
+	}
+
+	const accentDefault =
+		uiSurface === VARIATION_SURFACE_SIZE
+			? 'var(--blockera-controls-block-variations-size)'
+			: 'var(--blockera-controls-block-variations-style)';
+
+	if (!['global-styles-panel', 'inspector-controls'].includes(context)) {
+		return <></>;
+	}
+
 	if (
 		!stylesToRender ||
-		stylesToRender.length === 0 ||
-		!['global-styles-panel', 'inspector-controls'].includes(context)
+		(stylesToRender.length === 0 &&
+			!(
+				context === 'global-styles-panel' &&
+				uiSurface === VARIATION_SURFACE_SIZE
+			))
 	) {
 		return <></>;
 	}
@@ -96,9 +139,10 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		!isBaseBreakpoint(currentBreakpoint) ||
 		currentState !== 'normal';
 
-	const activeStyleId = currentActiveStyle?.isDefault
+	const styleActiveId = currentActiveStyle?.isDefault
 		? 'default'
 		: currentActiveStyle?.name || 'default';
+	const activeStyleId = styleActiveId;
 
 	if ('global-styles-panel' === context) {
 		return (
@@ -107,6 +151,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				isNotActive={false}
 				blockName={blockName}
 				styles={memoizedStyles}
+				pickerVariationSurface={uiSurface}
 			/>
 		);
 	}
@@ -120,7 +165,9 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					{
 						'blockera-control-is-not-active': isNotActive,
 						'is-variation-picker-open': isOpen,
-						'is-variation-deleted': isDeletedStyle ? true : false,
+						'is-variation-deleted': isDeletedStyle,
+						'is-variation-ui-size':
+							uiSurface === VARIATION_SURFACE_SIZE,
 					}
 				)}
 				onClick={(event: MouseEvent) => {
@@ -128,8 +175,17 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 						setIsOpen(false);
 						setIsHovered(false);
 					} else {
-						// $FlowFixMe
-						setPopoverAnchor(event.currentTarget); // the <button> element itself
+						closeSiblingPicker?.();
+						// $FlowFixMe — currentTarget is the variations button (HTMLElement).
+						const button: HTMLElement = event.currentTarget;
+						const anchor =
+							'inspector-controls' === context
+								? (button.closest(
+										'[data-style-variations-anchor]'
+									) ?? button)
+								: button;
+						// $FlowFixMe — hook stores HTMLElement anchor; prop type is stale.
+						setPopoverAnchor(anchor);
 						setIsOpen(true);
 					}
 				}}
@@ -151,7 +207,11 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					data-test="style-variations-button-icon"
 				>
 					<Icon
-						icon="style-variations-animated"
+						icon={
+							uiSurface === VARIATION_SURFACE_SIZE
+								? 'size-variations-animated'
+								: 'style-variations-animated'
+						}
 						iconSize={24}
 						isAnimated={isOpen || isHovered}
 					/>
@@ -169,18 +229,24 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				>
 					{buttonText}
 
-					<ChangeIndicator
-						isChanged={hasChangesets}
-						isAnimated={true}
-						primaryColor={
-							activeStyleId === 'default' ? '#1ca120' : '#ffffff'
-						}
-						size={'5'}
-						outlineSize={activeStyleId === 'default' ? '1.5' : '0'}
-						style={{
-							opacity: '0.8',
-						}}
-					/>
+					{uiSurface !== VARIATION_SURFACE_SIZE && (
+						<ChangeIndicator
+							isChanged={hasChangesets}
+							isAnimated={true}
+							primaryColor={
+								activeStyleId === 'default'
+									? accentDefault
+									: '#ffffff'
+							}
+							size={'5'}
+							outlineSize={
+								activeStyleId === 'default' ? '1.5' : '0'
+							}
+							style={{
+								opacity: '0.8',
+							}}
+						/>
+					)}
 
 					<Icon icon="more-vertical-small" iconSize={24} />
 				</Flex>
@@ -190,8 +256,13 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				<BlockStyles
 					blockName={blockName}
 					originDefaultAttributes={originDefaultAttributes}
-					hasChangesets={hasChangesets}
+					hasChangesets={
+						uiSurface === VARIATION_SURFACE_SIZE
+							? false
+							: hasChangesets
+					}
 					setChangesets={setChangesets}
+					pickerVariationSurface={uiSurface}
 					styles={{
 						onSelect,
 						setIsOpen,
@@ -209,3 +280,12 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		</>
 	);
 };
+
+export const BlockSizeVariations: ComponentType<TBlockStyleVariations> = (
+	props: TBlockStyleVariations
+): MixedElement => (
+	<BlockStyleVariations
+		{...props}
+		variationUiSurface={VARIATION_SURFACE_SIZE}
+	/>
+);

@@ -23,6 +23,12 @@ import { staticKeys, defaultBlockStates } from './constants';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { StyleVariationStylesRenderer } from './style-variation-styles-renderer';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
+import {
+	isSizeVariationEntry,
+	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+} from '../global-styles/panel/size-variations';
+
+const DEFAULT_STYLE_VARIATION_CLASS_PREFIX = 'is-style-';
 
 /**
  * Renders global styles for a single block type.
@@ -67,24 +73,56 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 			});
 		}, [validBlockGlobalStyles, stablePropsId]);
 
-		// Memoize variation entries, filtering out disabled styles (early return like style-item.js)
-		const variations = useMemo(() => {
-			return blockGlobalStyles?.variations || {};
-		}, [blockGlobalStyles]);
+		const variationSlices = useMemo(() => {
+			const variationsSrc = blockGlobalStyles?.variations;
+			const variationsBase =
+				variationsSrc && typeof variationsSrc === 'object'
+					? variationsSrc
+					: {};
 
-		const variationEntries = useMemo(() => {
-			return Object.entries(variations).filter(
-				([variationName]) =>
+			const entries = [];
+			for (const [variationName, data] of Object.entries(
+				variationsBase
+			)) {
+				if (
 					!isVariationDisabled(blockeraMetaData, name, variationName)
-			);
-		}, [variations, blockeraMetaData, name]);
+				) {
+					entries.push([variationName, data]);
+				}
+			}
 
-		// Early return if no styles to render
+			const styleSurface = [];
+			const sizeSurface = [];
+			for (const entry of entries) {
+				const data = entry[1];
+				if (!isSizeVariationEntry(data)) {
+					styleSurface.push(entry);
+				} else if (data?.blockeraIsDefaultVariation !== true) {
+					sizeSurface.push(entry);
+				}
+			}
+
+			return {
+				variations: variationsBase,
+				variationEntries: entries,
+				styleSurfaceVariationEntries: styleSurface,
+				sizeSurfaceVariationEntries: sizeSurface,
+			};
+		}, [blockGlobalStyles, blockeraMetaData, name]);
+
+		const variations = variationSlices.variations;
+		const styleSurfaceVariationEntries =
+			variationSlices.styleSurfaceVariationEntries;
+		const sizeSurfaceVariationEntries =
+			variationSlices.sizeSurfaceVariationEntries;
+
+		const hasVariations = variationSlices.variationEntries.length > 0;
+
 		const hasSanitizedStyles =
 			sanitizedBlockGlobalStyles &&
 			Object.keys(sanitizedBlockGlobalStyles).length > 0;
-		const hasVariations = variationEntries.length > 0;
 
+		// Early return if no styles to render
 		if (!hasSanitizedStyles && !hasVariations) {
 			return null;
 		}
@@ -111,18 +149,38 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 							{...{ ...blockType, sanitizedBlockGlobalStyles }}
 						/>
 					)}
-				{variationEntries.map(([variationName], variationIndex) => (
-					<StyleVariationStylesRenderer
-						{...{
-							blockType,
-							variationName,
-							blockeraMetaData,
-							variationGlobalStyles:
-								variations[variationName] || {},
-						}}
-						key={`${name}-${variationName}-${variationIndex}`}
-					/>
-				))}
+				{styleSurfaceVariationEntries.map(
+					([variationName], variationIndex) => (
+						<StyleVariationStylesRenderer
+							{...{
+								blockType,
+								variationName,
+								blockeraMetaData,
+								variationGlobalStyles:
+									variations[variationName] || {},
+								variationClassPrefix:
+									DEFAULT_STYLE_VARIATION_CLASS_PREFIX,
+							}}
+							key={`${name}-style-${variationName}-${variationIndex}`}
+						/>
+					)
+				)}
+				{sizeSurfaceVariationEntries.map(
+					([variationName], variationIndex) => (
+						<StyleVariationStylesRenderer
+							{...{
+								blockType,
+								variationName,
+								blockeraMetaData,
+								variationGlobalStyles:
+									variations[variationName] || {},
+								variationClassPrefix:
+									BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+							}}
+							key={`${name}-size-${variationName}-${variationIndex}`}
+						/>
+					)
+				)}
 			</>
 		);
 	}

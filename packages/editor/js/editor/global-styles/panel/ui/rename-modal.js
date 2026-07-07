@@ -3,9 +3,9 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useState, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -17,23 +17,35 @@ import {
 	InputControl,
 	NoticeControl,
 	CheckboxControl,
+	DynamicHtmlFormatter,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { kebabCase } from '@blockera/utils';
 import { componentInnerClassNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import {
+	BLOCK_SIZE_VARIATION_CLASS_PREFIX,
+	sanitizeStyleVariationId,
+} from './utils';
 
 export const RenameModal = ({
 	style,
 	buttonText,
+	blockStyles,
 	handleOnRename,
 	isConfirmedChangeID,
 	setIsOpenRenameModal,
 	setIsConfirmedChangeID,
+	isSizeVariationUi = false,
 }: {
 	style: Object,
 	buttonText: string,
+	blockStyles: Array<Object>,
 	isConfirmedChangeID: boolean,
+	isSizeVariationUi?: boolean,
 	setIsOpenRenameModal: (isOpen: boolean) => void,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	handleOnRename: (
@@ -43,22 +55,125 @@ export const RenameModal = ({
 }): MixedElement => {
 	const [styleName, setStyleName] = useState(buttonText);
 	const [styleID, setStyleID] = useState(style.name);
+	const [duplicateIdError, setDuplicateIdError] = useState('');
+
+	const checkDuplicateId = useCallback(
+		(id: string) => {
+			if (!id || id === style.name) {
+				setDuplicateIdError('');
+				return;
+			}
+
+			const blockLabel =
+				blockStyles.find((s) => s.name === id)?.label || null;
+
+			if (blockLabel !== null) {
+				setDuplicateIdError(
+					<>
+						<p style={{ fontWeight: '500' }}>
+							{sprintf(
+								/* translators: %s: The block name. */
+								__('Already in use by "%s".', 'blockera'),
+								blockLabel
+							)}
+						</p>
+						<p>{__('Try a different ID.', 'blockera')}</p>
+					</>
+				);
+			} else {
+				setDuplicateIdError('');
+			}
+		},
+		[blockStyles, style.name]
+	);
+
+	const handleIdChange = (newValue: string) => {
+		const kebabValue = sanitizeStyleVariationId(newValue);
+		setStyleID(kebabValue);
+		checkDuplicateId(kebabValue);
+	};
+
+	const isSaveDisabled =
+		!!duplicateIdError ||
+		(styleID === style.name
+			? styleName === buttonText
+			: !isConfirmedChangeID || !styleID.trim());
+	const variationClassPrefix = isSizeVariationUi
+		? BLOCK_SIZE_VARIATION_CLASS_PREFIX
+		: 'is-style-';
+
+	let headerTitle = isSizeVariationUi
+		? __('Rename size variation', 'blockera')
+		: __('Rename style variation', 'blockera');
+
+	if (style.label) {
+		headerTitle = sprintf(
+			/* translators: %s: The variation label. */
+			__('Rename "%s"', 'blockera'),
+			style.label
+		);
+	}
 
 	return (
 		<Modal
-			className={componentInnerClassNames('style-variation-modal')}
+			className={componentInnerClassNames('style-variation-modal', {
+				'is-variation-ui-size': isSizeVariationUi,
+			})}
 			headerIcon={<Icon icon="pen" iconSize="34" />}
-			headerTitle={__('Rename style variation', 'blockera')}
+			headerTitle={headerTitle}
 			isDismissible={true}
-			onRequestClose={() => setIsOpenRenameModal(false)}
+			onRequestClose={() => {
+				setIsOpenRenameModal(false);
+				setDuplicateIdError('');
+			}}
+			actions={
+				<>
+					<Button
+						data-test="cancel-rename-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsOpenRenameModal(false);
+							setIsConfirmedChangeID(false);
+							setDuplicateIdError('');
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="save-rename-button"
+						disabled={isSaveDisabled}
+						variant="primary"
+						onClick={() => {
+							if (duplicateIdError) {
+								return;
+							}
+
+							handleOnRename(
+								{ label: styleName, name: styleID },
+								style
+							);
+
+							setIsOpenRenameModal(false);
+						}}
+					>
+						{__('Save', 'blockera')}
+					</Button>
+				</>
+			}
 		>
 			<Flex direction="column" gap={40}>
 				<Flex direction="column" gap={25}>
 					<p style={{ margin: '0', color: '#707070' }}>
-						{__(
-							'Adjust the name and ID of this style variation to keep your styles organized and consistent.',
-							'blockera'
-						)}
+						{isSizeVariationUi
+							? __(
+									"The name is just a label and can be changed freely. Change the ID only if you haven't used this size on any block yet.",
+									'blockera'
+								)
+							: __(
+									"The name is just a label and can be changed freely. Change the ID only if you haven't used this style on any block yet.",
+									'blockera'
+								)}
 					</p>
 
 					<Flex direction="column" gap={20}>
@@ -85,31 +200,82 @@ export const RenameModal = ({
 						>
 							<InputControl
 								label={__('ID', 'blockera')}
-								onChange={(newValue: string) =>
-									setStyleID(
-										kebabCase(newValue.toLowerCase().trim())
-									)
-								}
+								onChange={handleIdChange}
 								columns="1fr 3fr"
 								style={{ position: 'relative' }}
 							>
+								{duplicateIdError && (
+									<NoticeControl type={'error'}>
+										{duplicateIdError}
+									</NoticeControl>
+								)}
+
+								{styleID !== style.name && (
+									<NoticeControl type={'warning'}>
+										<p style={{ fontWeight: '500' }}>
+											{__(
+												'ID changed — existing blocks will break',
+												'blockera'
+											)}
+										</p>
+										<p>
+											<DynamicHtmlFormatter
+												text={sprintf(
+													/* translators: %1$s: Old class selector snippet. %2$s: New class selector snippet. */
+													__(
+														'Blocks currently use %1$s. After saving, update them to use %2$s manually.',
+														'blockera'
+													),
+													'{old}',
+													'{new}'
+												)}
+												replacements={{
+													old: (
+														<code
+															style={{
+																fontWeight:
+																	'500',
+															}}
+														>
+															{
+																variationClassPrefix
+															}
+															{style.name}
+														</code>
+													),
+													new: (
+														<code>
+															{
+																variationClassPrefix
+															}
+															{styleID}
+														</code>
+													),
+												}}
+											/>
+										</p>
+									</NoticeControl>
+								)}
+
 								<p
 									style={{
-										margin: '5px 0 0',
+										margin: '0',
 										color: '#707070',
-										'font-style': 'italic',
-										'font-size': '13px',
+										'font-size': '12px',
 									}}
 								>
 									{__(
-										'Use a–z, 0–9, and hyphens only.',
+										'Lowercase letters, numbers, and hyphens only. Used as the CSS class name.',
 										'blockera'
 									)}
 								</p>
 
 								{styleID !== style.name && (
 									<Button
-										onClick={() => setStyleID(style.name)}
+										onClick={() => {
+											setStyleID(style.name);
+											setDuplicateIdError('');
+										}}
 										variant="tertiary"
 										icon={
 											<Icon icon="undo" iconSize="16" />
@@ -142,12 +308,6 @@ export const RenameModal = ({
 						className={componentInnerClassNames('consent-wrapper')}
 						direction="column"
 					>
-						<NoticeControl type={'warning'}>
-							{__(
-								'Changing the style variation ID will break existing connections. Blocks using the old ID will lose their styles unless updated manually.',
-								'blockera'
-							)}
-						</NoticeControl>
 						<ControlContextProvider
 							value={{
 								name: 'confirm-change-style-id',
@@ -155,10 +315,17 @@ export const RenameModal = ({
 							}}
 						>
 							<CheckboxControl
-								checkboxLabel={__(
-									'I accept that blocks using the old ID will lose their styles.',
-									'blockera'
-								)}
+								checkboxLabel={
+									isSizeVariationUi
+										? __(
+												'I understand that blocks using the old ID will lose their size.',
+												'blockera'
+											)
+										: __(
+												'I understand that blocks using the old ID will lose their styles.',
+												'blockera'
+											)
+								}
 								onChange={(newValue: boolean) =>
 									setIsConfirmedChangeID(newValue)
 								}
@@ -167,39 +334,6 @@ export const RenameModal = ({
 						</ControlContextProvider>
 					</Flex>
 				)}
-
-				<Flex justifyContent="space-between">
-					<Button
-						data-test="save-rename-button"
-						disabled={
-							styleID === style.name
-								? styleName === buttonText
-								: !isConfirmedChangeID
-						}
-						variant="primary"
-						onClick={() => {
-							handleOnRename(
-								{ label: styleName, name: styleID },
-								style
-							);
-
-							setIsOpenRenameModal(false);
-						}}
-					>
-						{__('Save', 'blockera')}
-					</Button>
-
-					<Button
-						data-test="cancel-rename-button"
-						variant="tertiary"
-						onClick={() => {
-							setIsOpenRenameModal(false);
-							setIsConfirmedChangeID(false);
-						}}
-					>
-						{__('Cancel', 'blockera')}
-					</Button>
-				</Flex>
 			</Flex>
 		</Modal>
 	);

@@ -10,22 +10,30 @@ import { PanelBody, Popover, SlotFillProvider } from '@wordpress/components';
 /**
  *  dependencies
  */
-import { ControlContextProvider, STORE_NAME } from '@blockera/controls';
+import { STORE_NAME } from '@blockera/controls/js/store';
+import { ControlContextProvider } from '@blockera/controls/js/context';
 
 /**
  * Internal dependencies
  */
-import { registerCommands } from './commands';
+import { registerComponentCommands } from './component-commands';
 
 /**
- * Style dependencies
+ * Style dependencies — pre-built CSS (no sass recompilation on rebuild).
  */
-import '../../../../.storybook/styles/style.lazy.scss';
+import '@wordpress/components/build-style/style.css';
+import '@wordpress/block-editor/build-style/style.css';
+import '@blockera/controls-styles-css';
+import '../style.lazy.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
 import { controlReducer } from '@blockera/controls/js/store/reducers/control-reducer';
 import { modifyControlValue } from '@blockera/controls/js/store/actions';
 
-registerCommands();
+registerComponentCommands();
+
+beforeEach(() => {
+	cy.viewport(1280, 900);
+});
 
 Cypress.Commands.add('mount', mount);
 
@@ -69,6 +77,7 @@ Cypress.Commands.add(
 		value,
 		name = nanoid(),
 		onChange = handleOnChange,
+		skipSyncValue = true,
 	}) => {
 		cy.withInspector(
 			<ControlContextProvider
@@ -76,6 +85,7 @@ Cypress.Commands.add(
 				value={{
 					name,
 					value,
+					skipSyncValue,
 				}}
 			>
 				<WithControlDataProvider

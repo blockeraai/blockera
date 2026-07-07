@@ -41,6 +41,7 @@ export const AddNewStyleButton = ({
 		setCurrentActiveStyle,
 		handlePromotionPopover,
 		setCurrentBlockStyleVariation,
+		variationSurface,
 	} = useBlockStylesPickerContext();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
@@ -101,6 +102,7 @@ export const AddNewStyleButton = ({
 						setCurrentBlockStyleVariation
 					}
 					setCurrentActiveStyle={setCurrentActiveStyle}
+					variationSurface={variationSurface}
 					isOpen={isModalOpen}
 					setIsOpen={setIsModalOpen}
 					counter={counter}

@@ -151,9 +151,9 @@ describe('Avatar Block', () => {
 			});
 
 		cy.get('@borderContainer').within(() => {
-			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('div[aria-selected="false"]').eq(1).click();
+			cy.customSelectOption(1);
 		});
+
 		cy.getBlock('core/avatar')
 			.first()
 			.within(() => {
@@ -180,7 +180,7 @@ describe('Avatar Block', () => {
 		//
 		// 2.0. Settings tab
 		//
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			// the range slide for image size should be hidden

@@ -5,7 +5,6 @@
  */
 import { useSelect } from '@wordpress/data';
 import { type MixedElement, type ComponentType } from 'react';
-import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { memo, useState, useMemo } from '@wordpress/element';
 
@@ -34,6 +33,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			isStyleVariation = false,
 			sanitizedBlockGlobalStyles,
 			attributes: defaultAttributes,
+			variationClassPrefix = 'is-style-',
 		} = blockType;
 		const [notice, setNotice] = useState(null);
 		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
@@ -115,6 +115,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 				isStyleVariation,
 				inlineStyles: [],
 				styleVariationName,
+				variationClassPrefix,
 				isGlobalStylesWrapper: true,
 				defaultAttributes: defaultStyles,
 				clientId,
@@ -128,17 +129,12 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 				name,
 				isStyleVariation,
 				styleVariationName,
+				variationClassPrefix,
 				defaultStyles,
 				clientId,
 				activeDeviceType,
 				currentAttributes,
 			]
-		);
-
-		// Memoize fill name to avoid repeated string concatenation
-		const fillName = useMemo(
-			() => 'blockera-global-styles-wrapper-' + name,
-			[name]
 		);
 
 		// Early return if no styles to render
@@ -171,10 +167,8 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 				)}
 			>
 				{renderInPortal ? (
-					<StylesWrapper clientId={name} isGlobalStylesWrapper={true}>
-						<Fill name={fillName}>
-							<BlockStyle {...blockStyleProps} />
-						</Fill>
+					<StylesWrapper isGlobalStylesWrapper={true}>
+						<BlockStyle {...blockStyleProps} />
 					</StylesWrapper>
 				) : (
 					<BlockStyle {...blockStyleProps} />
@@ -187,8 +181,9 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 		return (
 			prevProps.name === nextProps.name &&
 			prevProps.styleVariationName === nextProps.styleVariationName &&
+			prevProps.variationClassPrefix === nextProps.variationClassPrefix &&
 			prevProps.isStyleVariation === nextProps.isStyleVariation &&
-			prevProps.renderInPortal === nextProps.renderInPortal &&
+			// prevProps.renderInPortal === nextProps.renderInPortal &&
 			isEquals(
 				prevProps.sanitizedBlockGlobalStyles,
 				nextProps.sanitizedBlockGlobalStyles

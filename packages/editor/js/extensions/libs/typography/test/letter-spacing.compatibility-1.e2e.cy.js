@@ -5,7 +5,6 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
-	openMoreFeaturesControl,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -24,9 +23,6 @@ describe('Letter Spacing → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('core/paragraph').click();
-
-			// Open more settings
-			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Letters').as('container');
 

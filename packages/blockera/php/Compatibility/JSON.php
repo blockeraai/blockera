@@ -8,6 +8,13 @@ use Blockera\Editor\StyleEngine;
 class JSON extends \WP_Theme_JSON {
 
 	/**
+	 * The prefix for block style variations.
+	 *
+	 * @var string
+	 */
+	private static string $style_variation_prefix = 'is-style-';
+
+	/**
 	 * Store features support list.
 	 *
 	 * @var array $supports Features support list.
@@ -15,17 +22,235 @@ class JSON extends \WP_Theme_JSON {
 	private static array $supports;
 
 	/**
+	 * Extra settings paths allowed in theme.json sanitization (global-styles-ui preset extensions).
+	 *
+	 * @var array<string, mixed>
+	 */
+	private const BLOCKERA_VALID_SETTINGS_EXTENSION = array(
+		'dimensions' => array(
+			'dimensionSizes' => null,
+		),
+		'layout'     => array(
+			'widthSizes' => null,
+		),
+		'border'     => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'transition' => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'transform'  => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'filter'     => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+		'textShadow' => array(
+			'presets'        => null,
+			'defaultPresets' => null,
+		),
+	);
+
+	/**
+	 * Preset metadata: core (WP_Theme_JSON) plus paths aligned with packages/global-styles-ui (see theme-json-preset-data.ts).
+	 * CSS values for Blockera-specific presets are resolved via {@see StyleEngine} callbacks, not in this class.
+	 *
+	 * @var array<int, array<string, mixed>>
+	 */
+	const PRESETS_METADATA = array(
+		array(
+			'path'              => array( 'dimensions', 'aspectRatios' ),
+			'prevent_override'  => array( 'dimensions', 'defaultAspectRatios' ),
+			'use_default_names' => false,
+			'value_key'         => 'ratio',
+			'css_vars'          => '--wp--preset--aspect-ratio--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'aspect-ratio' ),
+		),
+		array(
+			'path'              => array( 'color', 'palette' ),
+			'prevent_override'  => array( 'color', 'defaultPalette' ),
+			'use_default_names' => false,
+			'value_key'         => 'color',
+			'css_vars'          => '--wp--preset--color--$slug',
+			'classes'           => array(
+				'.has-$slug-color'            => 'color',
+				'.has-$slug-background-color' => 'background-color',
+				'.has-$slug-border-color'     => 'border-color',
+			),
+			'properties'        => array( 'color', 'background-color', 'border-color' ),
+		),
+		array(
+			'path'              => array( 'color', 'gradients' ),
+			'prevent_override'  => array( 'color', 'defaultGradients' ),
+			'use_default_names' => false,
+			'value_key'         => 'gradient',
+			'css_vars'          => '--wp--preset--gradient--$slug',
+			'classes'           => array( '.has-$slug-gradient-background' => 'background' ),
+			'properties'        => array( 'background' ),
+		),
+		array(
+			'path'              => array( 'color', 'duotone' ),
+			'prevent_override'  => array( 'color', 'defaultDuotone' ),
+			'use_default_names' => false,
+			'value_func'        => null,
+			'css_vars'          => null,
+			'classes'           => array(),
+			'properties'        => array( 'filter' ),
+		),
+		array(
+			'path'              => array( 'typography', 'fontSizes' ),
+			'prevent_override'  => array( 'typography', 'defaultFontSizes' ),
+			'use_default_names' => true,
+			'value_func'        => 'wp_get_typography_font_size_value',
+			'css_vars'          => '--wp--preset--font-size--$slug',
+			'classes'           => array( '.has-$slug-font-size' => 'font-size' ),
+			'properties'        => array( 'font-size' ),
+		),
+		array(
+			'path'              => array( 'typography', 'fontFamilies' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_key'         => 'fontFamily',
+			'css_vars'          => '--wp--preset--font-family--$slug',
+			'classes'           => array( '.has-$slug-font-family' => 'font-family' ),
+			'properties'        => array( 'font-family' ),
+		),
+		array(
+			'path'              => array( 'spacing', 'spacingSizes' ),
+			'prevent_override'  => array( 'spacing', 'defaultSpacingSizes' ),
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--spacing--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'padding', 'margin' ),
+		),
+		array(
+			'path'              => array( 'layout', 'widthSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--width-size--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'width', 'min-width', 'max-width', 'height', 'min-height', 'max-height' ),
+		),
+		array(
+			'path'              => array( 'shadow', 'presets' ),
+			'prevent_override'  => array( 'shadow', 'defaultPresets' ),
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'shadowPresetValue' ),
+			'css_vars'          => '--wp--preset--shadow--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'box-shadow' ),
+		),
+		array(
+			'path'              => array( 'border', 'radiusSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--border-radius--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'border-radius' ),
+		),
+		array(
+			'path'              => array( 'dimensions', 'dimensionSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--dimension--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'min-height' ),
+		),
+		array(
+			'path'              => array( 'border', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'borderPresetValue' ),
+			'css_vars'          => '--wp--preset--border--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'border' ),
+		),
+		array(
+			'path'              => array( 'transition', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'transitionPresetValue' ),
+			'css_vars'          => '--wp--preset--transition--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'transition' ),
+		),
+		array(
+			'path'              => array( 'transform', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'transformPresetValue' ),
+			'css_vars'          => '--wp--preset--transform--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'transform' ),
+		),
+		array(
+			'path'              => array( 'filter', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'filterPresetValue' ),
+			'css_vars'          => '--wp--preset--filter--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'filter' ),
+		),
+		array(
+			'path'              => array( 'textShadow', 'presets' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_func'        => array( StyleEngine::class, 'textShadowPresetValue' ),
+			'css_vars'          => '--wp--preset--text-shadow--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'text-shadow' ),
+		),
+	);
+
+	/**
+	 * Set the prefix for block style variations.
+	 *
+	 * @param string $prefix The prefix for block style variations.
+	 * @return void
+	 */
+	public static function set_style_variation_prefix( string $prefix ): void {
+		self::$style_variation_prefix = $prefix;
+	}
+
+	/**
+	 * Merged valid settings schema for sanitization (core + Blockera global-styles-ui preset groups).
+	 *
+	 * @return array<string, mixed>
+	 */
+	protected static function get_valid_settings_schema(): array {
+		static $schema = null;
+		if ( null !== $schema ) {
+			return $schema;
+		}
+		$schema = array_replace_recursive( \WP_Theme_JSON::VALID_SETTINGS, self::BLOCKERA_VALID_SETTINGS_EXTENSION );
+
+		return $schema;
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array  $data The data to construct the JSON with.
 	 * @param string $origin The origin of the data.
 	 */
-	public function __construct( array $data = array(), string $origin = 'theme') {
+	public function __construct( array $data = array(), string $origin = 'theme', string $style_variation_prefix = 'is-style-') {
+		self::$style_variation_prefix = $style_variation_prefix;
+
 		parent::__construct($data, $origin);
 
 		global $blockera_block_supports;
 
-		$this->setSupports($blockera_block_supports);
+		$this->set_supports($blockera_block_supports);
 	}
 
 	/**
@@ -34,7 +259,7 @@ class JSON extends \WP_Theme_JSON {
 	 * @param array $supports Features support list.
 	 * @return void
 	 */
-	public function setSupports( array $supports): void {
+	public function set_supports( array $supports): void {
 		self::$supports = $supports;
 	}
 
@@ -116,7 +341,7 @@ class JSON extends \WP_Theme_JSON {
          * inner `blocks`, the overall schema will be generated in multiple passes.
          */
         foreach ($valid_block_names as $block) {
-            $schema_settings_blocks[ $block ]           = static::VALID_SETTINGS;
+            $schema_settings_blocks[ $block ]           = static::get_valid_settings_schema();
             $schema_styles_blocks[ $block ]             = $styles_non_top_level;
             $schema_styles_blocks[ $block ]['elements'] = $schema_styles_elements;
         }
@@ -154,7 +379,7 @@ class JSON extends \WP_Theme_JSON {
         $schema['styles']                                 = $styles_non_top_level;
         $schema['styles']['blocks']                       = $schema_styles_blocks;
         $schema['styles']['elements']                     = $schema_styles_elements;
-        $schema['settings']                               = static::VALID_SETTINGS;
+        $schema['settings']                               = static::get_valid_settings_schema();
         $schema['settings']['blocks']                     = $schema_settings_blocks;
         $schema['settings']['typography']['fontFamilies'] = static::schema_in_root_and_per_origin(static::FONT_FAMILY_SCHEMA);
 
@@ -252,7 +477,15 @@ class JSON extends \WP_Theme_JSON {
 				[
 					'block' => [
 						'blockName' => $block_metadata['name'],
-						'attrs' => array_diff_key($node, array_flip([ 'variations' ])),
+						'attrs' => array_diff_key(
+							$node,
+							array_flip(
+								array_merge(
+									array( 'variations' ),
+									\blockera_get_block_styles_metadata_keys()
+								)
+							)
+						),
 					],
 					'fallbackSelector' => $block_metadata['selector'],
 					'isGlobalStyle' => true,
@@ -264,16 +497,21 @@ class JSON extends \WP_Theme_JSON {
 
 		// 2. Generate css rules for the block style variations.
         if (! empty($block_metadata['variations'])) {
-            foreach ($block_metadata['variations'] as $key => $style_variation) {
+			foreach ($block_metadata['variations'] as $key => $style_variation) {
 				$style_variation_node           = _wp_array_get( $this->theme_json, $style_variation['path'], array() );
 				$clean_style_variation_selector = trim( $style_variation['selector'] );
+
+				$variation_attrs_for_styles = array_diff_key(
+					$style_variation_node,
+					array_flip( \blockera_get_block_style_variation_metadata_style_keys() )
+				);
 
 				$style_engine = Blockera::getInstance()->make(
 					StyleEngine::class,
 					[
 						'block' => [
 							'blockName' => $block_metadata['name'],
-							'attrs' => $style_variation_node,
+							'attrs' => $variation_attrs_for_styles,
 						],
 						'fallbackSelector' => $clean_style_variation_selector,
 						'isGlobalStyle' => true,
@@ -287,6 +525,40 @@ class JSON extends \WP_Theme_JSON {
 
         return $block_rules;
     }
+
+	/**
+	 * Generates a selector for a block style variation.
+	 *
+	 * @since 6.5.0
+	 *
+	 * @param string $variation_name Name of the block style variation.
+	 * @param string $block_selector CSS selector for the block.
+	 * @return string Block selector with block style variation selector added to it.
+	 */
+	protected static function get_block_style_variation_selector( $variation_name, $block_selector ) {
+		$variation_class = sprintf('.%s%s', self::$style_variation_prefix, $variation_name);
+
+		if ( ! $block_selector ) {
+			return $variation_class;
+		}
+
+		$limit          = 1;
+		$selector_parts = explode( ',', $block_selector );
+		$result         = array();
+
+		foreach ( $selector_parts as $part ) {
+			$result[] = preg_replace_callback(
+				'/((?::\([^)]+\))?\s*)([^\s:]+)/',
+				function ( $matches ) use ( $variation_class ) {
+					return $matches[1] . $matches[2] . $variation_class;
+				},
+				$part,
+				$limit
+			);
+		}
+
+		return implode( ',', $result );
+	}
 
 	/**
      * Returns the stylesheet that results of processing

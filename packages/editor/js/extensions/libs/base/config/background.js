@@ -36,6 +36,7 @@ const blockeraBackgroundClip: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Background Clipping', 'blockera'),
 	keywords: ['background', 'clip', 'clipping', 'mask'],
 	config: {
@@ -84,6 +85,7 @@ const blockeraBlendMode: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
+	onCompanion: true,
 	label: __('Blending Mode', 'blockera'),
 	keywords: ['blend', 'blending', 'mode', 'mix', 'overlay'],
 };

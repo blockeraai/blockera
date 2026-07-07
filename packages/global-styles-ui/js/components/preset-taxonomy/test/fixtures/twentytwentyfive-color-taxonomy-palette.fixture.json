@@ -1,0 +1,123 @@
+{
+	"$comment": "Manual snapshot of taxonomy-named rows from wp-content/themes/twentytwentyfive/theme.json (settings.color.palette). Excludes flat accents and Design System shade rows. Update this file when the theme taxonomy palette changes.",
+	"palette": [
+		{
+			"color": "#d51313",
+			"name": "Base / Primary",
+			"slug": "primary",
+			"meta": {
+				"description": "Base primary color."
+			}
+		},
+		{
+			"color": "#1d86ef",
+			"name": "Base / Neutral",
+			"slug": "neutral",
+			"meta": {
+				"description": "Base neutral color."
+			}
+		},
+		{
+			"color": "#ffffff",
+			"name": "Base / White",
+			"slug": "white",
+			"meta": {
+				"interface-size": "small",
+				"description": "White color."
+			}
+		},
+		{
+			"color": "#000000",
+			"name": "Base / Black",
+			"slug": "black",
+			"meta": {
+				"interface-size": "small",
+				"description": "Black color."
+			}
+		},
+		{
+			"color": "primary-shade-900",
+			"name": "Text / Primary / Color",
+			"slug": "text-primary",
+			"meta": {
+				"interface-size": "small",
+				"description": "Primary text color."
+			}
+		},
+		{
+			"color": "white",
+			"name": "Text / Primary / On Brand",
+			"slug": "text-primary_on-brand",
+			"meta": {
+				"interface-size": "small",
+				"description": "Primary text color on brand."
+			}
+		},
+		{
+			"color": "neutral-shade-200",
+			"name": "Text / Placeholder",
+			"slug": "text-placeholder",
+			"meta": {
+				"description": "Placeholder text color."
+			}
+		},
+		{
+			"color": "white",
+			"name": "Text / White",
+			"slug": "text-white",
+			"meta": {
+				"interface-size": "small",
+				"description": "White text color."
+			}
+		},
+		{
+			"color": "black",
+			"name": "Text / Black",
+			"slug": "text-black",
+			"meta": {
+				"interface-size": "small",
+				"description": "Black text color."
+			}
+		},
+		{
+			"color": "#00ff00",
+			"name": "Status/Success",
+			"slug": "success",
+			"meta": {
+				"description": "Primary Success color."
+			}
+		},
+		{
+			"color": "#00fff0",
+			"name": "Status/Success/Border",
+			"slug": "success-border",
+			"meta": {
+				"description": "Primary Success border color."
+			}
+		},
+		{
+			"color": "#ff0000",
+			"name": "Status/Error",
+			"slug": "error",
+			"meta": {
+				"description": "Primary Error color."
+			}
+		},
+		{
+			"color": "#ffff00",
+			"name": "Status/Warning",
+			"slug": "warning",
+			"meta": {
+				"description": "Primary Warning color."
+			}
+		},
+		{
+			"color": "#0000ff",
+			"name": "Status/Info",
+			"slug": "info",
+			"meta": {
+				"description": "Primary Info color."
+			}
+		}
+	]
+}

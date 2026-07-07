@@ -9,13 +9,13 @@ import '@10up/cypress-wp-utils';
  */
 import { registerCommands } from './commands';
 import { loginToSite, goTo } from '../helpers';
+import { registerComponentCommands } from './component-commands';
 
 registerCommands();
+registerComponentCommands();
 
 beforeEach(function () {
-	// run these tests as if in a desktop
-	// browser with a 720p monitor
-	cy.viewport(1280, 720);
+	cy.viewport(1280, 900);
 
 	if (!Cypress.env('isLogin')) {
 		cy.login();

@@ -30,6 +30,7 @@ export default function PositionButtonControl({
 	singularId,
 	buttonLabel,
 	popoverTitle = __('Setting', 'blockera'),
+	popoverPlacement = 'left-start',
 	alignmentMatrixLabel = __('Position', 'blockera'),
 	id,
 	onChange,
@@ -109,8 +110,7 @@ export default function PositionButtonControl({
 				<Popover
 					design="highlight"
 					title={popoverTitle}
-					offset={121}
-					placement="left"
+					placement={popoverPlacement}
 					className={controlInnerClassNames('position-popover')}
 					onClose={() => {
 						setIsPopoverActive(false);
@@ -121,6 +121,7 @@ export default function PositionButtonControl({
 						repeaterItem={repeaterItem}
 						id={id}
 						label={alignmentMatrixLabel}
+						labelDescription={labelDescription}
 						columns={
 							alignmentMatrixLabel ? 'columns-2' : 'columns-1'
 						}

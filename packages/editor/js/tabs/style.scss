@@ -1,3 +1,6 @@
+/* ChangeIndicator (close-confirm tab rows) — component has no side-effect style import */
+@use "../../../controls/js/libs/change-indicator/style.scss";
+
 .editor-list-view-sidebar__list-view-container > .document-outline,
 .editor-list-view-sidebar__list-view-panel-content {
 	padding: 10px !important;
@@ -773,8 +776,11 @@
 }
 
 /* Close Tab Confirmation Dialog */
-.blockera-tabs-close-confirm-dialog .components-modal__content {
-	padding: 24px;
+.blockera-tabs-close-confirm-dialog {
+	.blockera-component-modal__header-icon {
+		--blockera-controls-primary-color: #c78016;
+		--blockera-controls-primary-color-darker-20: #a7690e;
+	}
 }
 
 .blockera-tabs-close-confirm-content {
@@ -791,10 +797,6 @@
 	color: #1e1e1e;
 }
 
-.blockera-tabs-close-confirm-tab-title strong {
-	font-weight: 600;
-}
-
 .blockera-tabs-close-confirm-tabs-list {
 	margin: 10px 0 20px;
 	display: flex;
@@ -805,31 +807,85 @@
 .blockera-tabs-close-confirm-tab-item {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: flex-start;
 	font-size: 13px;
 	color: #1e1e1e;
-	gap: 12px;
+	gap: 8px;
 	box-shadow: 0 0 0 1px var(--blockera-controls-border-color-soft);
-	border-radius: 2px;
-	padding: 6px 12px;
+	border-radius: 3px;
+	padding: 8px 12px;
 	transition: var(--blockera-controls-transition);
+	min-height: 48px;
 }
 
 .blockera-tabs-close-confirm-tab-item:hover {
 	box-shadow: 0 0 0 1px var(--blockera-controls-border-color);
 }
 
-.blockera-tabs-close-confirm-tab-title {
-	font-weight: 500;
+.blockera-tabs-close-confirm-tab-indicator-column {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 15px;
+	align-self: stretch;
+}
+
+.blockera-tabs-close-confirm-tab-main {
 	flex: 1;
+	min-width: 0;
+	align-self: stretch;
+	display: flex;
+	align-items: center;
+}
+
+.blockera-tabs-close-confirm-tab-heading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+}
+
+.blockera-tabs-close-confirm-tab-type-icon {
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	color: #1e1e1e;
+}
+
+.blockera-tabs-close-confirm-tab-type-icon svg {
+	fill: currentColor;
+	width: 20px;
+	height: 20px;
+}
+
+.blockera-tabs-close-confirm-tab-title {
+	display: block;
+	font-weight: 600;
+	margin: 0;
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	margin: 0;
 }
 
-.blockera-tabs-close-confirm-review-button {
+.blockera-tabs-close-confirm-tab-trailing {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	padding-top: 2px;
+	align-self: stretch;
+}
+
+.blockera-tabs-close-confirm-current-tab {
+	font-size: 12px;
+	line-height: 1.4;
+	color: #50575e;
+	white-space: nowrap;
+}
+
+.blockera-tabs-close-confirm-open-tab-button {
 	flex-shrink: 0;
 }
 
@@ -840,16 +896,12 @@
 }
 
 /* Rename modal styling */
-.blockera-tabs-rename-modal-content {
-	padding: 16px 0;
-}
-
 .blockera-tabs-rename-modal-actions {
 	display: flex;
+	width: 100%;
 	justify-content: flex-end;
 	align-items: center;
 	gap: 10px;
-	margin-top: 16px;
 }
 
 .blockera-tabs-rename-modal-actions-right {
@@ -1067,70 +1119,182 @@ body:not(.blockera-tabs-add-tab-mode)
 /**
  * Tab Locked Modal styling
  */
-.blockera-tabs-locked-modal .components-modal__content {
-	padding: 24px;
+.blockera-tabs-locked-modal {
+	.blockera-component-modal__header-icon {
+		--blockera-controls-primary-color: #cc1818;
+		--blockera-controls-primary-color-darker-20: #cc1818;
+	}
 }
 
-.blockera-tabs-locked-modal__avatar {
-	width: 64px;
-	height: 64px;
+.blockera-tabs-locked-modal-body {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.blockera-tabs-locked-modal__lead {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.55;
+	color: #1e1e1e;
+}
+
+.blockera-tabs-locked-modal__lead strong {
+	font-weight: 600;
+}
+
+.blockera-tabs-locked-modal__profile {
+	background: #f5f5f5;
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color-soft);
+	border-radius: 3px;
+	padding: 8px 12px;
+}
+
+.blockera-tabs-locked-modal__profile-inner {
+	min-width: 0;
+}
+
+.blockera-tabs-locked-modal__profile-avatar-img {
+	width: 56px;
+	height: 56px;
 	border-radius: 50%;
 	flex-shrink: 0;
 	object-fit: cover;
 }
 
-.blockera-tabs-locked-modal__content {
+.blockera-tabs-locked-modal__profile-initials {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	background: #d8cff7;
+	color: #1e1e1e;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: 0.02em;
+}
+
+.blockera-tabs-locked-modal__profile-text {
+	min-width: 0;
 	flex: 1;
 }
 
-.blockera-tabs-locked-modal__content p {
-	margin: 0 0 12px 0;
-	font-size: 14px;
-	line-height: 1.5;
+.blockera-tabs-locked-modal__profile-name {
+	font-size: 15px;
+	font-weight: 600;
 	color: #1e1e1e;
+	line-height: 1.35;
 }
 
-.blockera-tabs-locked-modal__content p:last-of-type {
-	margin-bottom: 20px;
-	color: #50575e;
+.blockera-tabs-locked-modal__profile-sub {
+	margin-top: 4px;
 	font-size: 13px;
+	line-height: 1.4;
+	color: #646970;
 }
 
-.blockera-tabs-locked-modal__buttons {
-	margin-top: 16px;
-}
-
-.blockera-tabs-locked-modal__buttons .components-button {
-	min-height: 36px;
+.blockera-tabs-locked-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
 }
 
 /**
  * Tab unavailable (missing / inaccessible document) modal
  */
+.blockera-tabs-unavailable-modal {
+	.blockera-component-modal__header-icon {
+		--blockera-controls-primary-color: #cc1818;
+		--blockera-controls-primary-color-darker-20: #cc1818;
+	}
+}
+
 .blockera-tabs-unavailable-modal .components-modal__content {
 	padding: 24px;
 }
 
-.blockera-tabs-unavailable-modal__content p {
-	margin: 0 0 12px 0;
+.blockera-tabs-unavailable-modal__lead {
+	margin: 0 0 16px 0;
 	font-size: 14px;
 	line-height: 1.5;
 	color: #1e1e1e;
 }
 
-.blockera-tabs-unavailable-modal__label {
-	margin-bottom: 16px;
+.blockera-tabs-unavailable-modal__card {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin: 0 0 18px 0;
+	background: #f5f5f5;
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color-soft);
+	border-radius: 3px;
+	padding: 12px;
+}
+
+.blockera-tabs-unavailable-modal__card-icon-wrap {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	background: #ffffff;
+	color: #1e1e1e;
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color-soft);
+	border-radius: 3px;
+	padding: 12px;
+}
+
+.blockera-tabs-unavailable-modal__card-text {
+	min-width: 0;
+}
+
+.blockera-tabs-unavailable-modal__card-title {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.35;
+	color: #1e1e1e;
+	text-decoration: line-through;
 	word-break: break-word;
 }
 
-.blockera-tabs-unavailable-modal__content p:last-of-type {
-	margin-bottom: 20px;
-	color: #50575e;
+.blockera-tabs-unavailable-modal__card-type {
+	margin-top: 4px;
 	font-size: 13px;
+	line-height: 1.35;
+	color: #757575;
+}
+
+.blockera-tabs-unavailable-modal__note {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin: 0 0 20px 0;
+	font-size: 13px;
+	line-height: 1.45;
+	color: #8e9197;
+}
+
+.blockera-tabs-unavailable-modal__note-icon {
+	flex-shrink: 0;
+	margin-top: 1px;
+	color: currentColor;
+
+	svg {
+		fill: currentColor;
+	}
+}
+
+.blockera-tabs-unavailable-modal__note-text {
+	min-width: 0;
 }
 
 .blockera-tabs-unavailable-modal__buttons {
-	margin-top: 8px;
+	margin-top: 4px;
 }
 
 .blockera-tabs-unavailable-modal__buttons .components-button {

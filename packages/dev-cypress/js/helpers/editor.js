@@ -1,3 +1,8 @@
+/**
+ * Blockera dependencies
+ */
+import { mergeObject } from '@blockera/utils';
+
 function getIframeDocument(containerClass) {
 	return cy
 		.get(containerClass + ' iframe')
@@ -94,21 +99,55 @@ export function getSelectedBlockStyle(data, name, variation = 'default') {
 /**
  * Get the WordPress globalStyles entity record.
  *
+ * For `styles`, the default `merged` mode layers Blockera's merged theme + user
+ * styles when available, otherwise merges WordPress theme base global styles
+ * (parity with Playwright / registration.js).
+ *
  * @param {*} data the @wordpress/data package object.
  * @param {*} prop the property of record. like style, settings, etc.
  * @param {*} innerField the inner property name in record[prop] object.
+ * @param {'merged'|'original'} [type='merged'] Use `original` for the raw edited entity only.
  *
- * @returns anythings.
+ * @return anythings.
  */
-export function getEditedGlobalStylesRecord(data, prop, innerField) {
+export function getEditedGlobalStylesRecord(
+	data,
+	prop,
+	innerField,
+	type = 'merged'
+) {
 	const { __experimentalGetCurrentGlobalStylesId } = data.select('core');
 	const { getEditedEntityRecord } = data.select('core');
 
-	const record = getEditedEntityRecord(
+	let record = getEditedEntityRecord(
 		'root',
 		'globalStyles',
 		__experimentalGetCurrentGlobalStylesId()
 	);
+
+	if ('styles' === prop && 'merged' === type) {
+		const coreSelect = data.select('core');
+		const blockeraMergedStyles = data
+			.select('blockera/editor')
+			?.getGlobalStyles?.()?.userStyles?.styles;
+
+		if (
+			blockeraMergedStyles &&
+			'object' === typeof blockeraMergedStyles &&
+			Object.keys(blockeraMergedStyles).length
+		) {
+			record = mergeObject(record, {
+				styles: blockeraMergedStyles,
+			});
+		} else {
+			const baseConfig =
+				coreSelect.__experimentalGetCurrentThemeBaseGlobalStyles?.();
+
+			if (baseConfig && 'object' === typeof baseConfig) {
+				record = mergeObject(mergeObject({}, baseConfig), record);
+			}
+		}
+	}
 
 	if (prop) {
 		if (innerField) {
@@ -151,6 +190,41 @@ export function getBlockeraEntity(data, field) {
 	return data.select('blockera/data').getEntity('blockera')[field];
 }
 
+/**
+ * Persist all dirty entity records (e.g. global styles) from the site or post editor.
+ * Mirrors the multi-entity save flow used when clicking Save in the editor UI.
+ *
+ * @return {Cypress.Chainable} Resolves when WordPress `saveEditedEntityRecord` calls complete.
+ */
+export function saveSiteEditorDirtyEntities() {
+	return cy.window().then((win) => {
+		const select = win.wp.data.select('core');
+		const dispatch = win.wp.data.dispatch('core');
+		const getDirty = select.__experimentalGetDirtyEntityRecords;
+
+		if (typeof getDirty !== 'function') {
+			throw new Error(
+				'wp.data.select("core").__experimentalGetDirtyEntityRecords is not available'
+			);
+		}
+
+		const dirtyRecords = getDirty() || [];
+		const entitiesToSave = dirtyRecords.filter(
+			(record) => !(record.kind === 'root' && record.name === 'site')
+		);
+
+		return Promise.all(
+			entitiesToSave.map((record) =>
+				dispatch.saveEditedEntityRecord(
+					record.kind,
+					record.name,
+					record.key
+				)
+			)
+		);
+	});
+}
+
 export function getBlockClientId(data) {
 	return data.select('core/block-editor').getSelectedBlock().clientId;
 }
@@ -170,10 +244,13 @@ export function openBlockInserter(selector = false) {
 	}
 	return cy.get('body').then(($body) => {
 		const secondarySidebar = $body.find(
-			'[aria-label="Show secondary sidebar"]'
+			'[data-test="blockera-secondary-sidebar-toggle"]:not(.is-pressed)'
 		);
+
 		if (secondarySidebar.length > 0) {
-			return cy.get('[aria-label="Show secondary sidebar"]').click();
+			return cy
+				.get('[data-test="blockera-secondary-sidebar-toggle"]')
+				.click();
 		}
 		return cy;
 	});
@@ -256,8 +333,9 @@ export function addBlockToPost(
 	 * Instead of intercepting we can await known dom elements that appear only when search results are present.
 	 * This should correct a race condition in CI.
 	 */
-	if (!blockInserterSelector)
+	if (!blockInserterSelector) {
 		cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
+	}
 
 	let targetClassName = '';
 
@@ -659,66 +737,218 @@ export function closeWelcomeGuide() {
 }
 
 /**
+ * Dismiss any open Blockera/Gutenberg modal (icon picker, welcome guide, etc.).
+ * Use in beforeEach/afterEach when tests may leave a screen overlay behind.
+ */
+export function dismissOpenModals() {
+	cy.get('body').then(($body) => {
+		if ($body.find('.blockera-control-icon-picker-modal').length) {
+			return cy
+				.get('.blockera-control-icon-picker-modal')
+				.find('button[aria-label="Close"]')
+				.click({ force: true });
+		}
+	});
+
+	closeWelcomeGuide();
+}
+
+/**
+ * Resolve mu-plugin target filename under wp-content/mu-plugins/.
+ *
+ * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string|null} targetName Optional target filename.
+ * @return {string} Target filename under wp-content/mu-plugins/.
+ */
+function getMuPluginTargetName(muPluginPath, targetName = null) {
+	if (targetName) {
+		return targetName;
+	}
+	// e.g. "block-query-title" from "tests/fixtures/block-query-title/mu-plugin.php"
+	const pathParts = muPluginPath.split('/');
+	const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
+	return `blockera-test-${folderName}.php`;
+}
+
+/**
+ * Run mu-plugin activate/deactivate via Node cy.task (host filesystem).
+ * Avoids `cy.exec` + Docker, which can hang for 60s inside Cypress/Electron.
+ *
+ * @param {string} action Short label (e.g. activateMuPlugin).
+ * @param {string} label Human-readable context for the log line.
+ * @param {string} taskName Cypress task name.
+ * @param {object} taskArgs Task payload.
+ * @param {{ log?: boolean }} [options]
+ * @return {Cypress.Chainable} Wrapped task result with stdout logged.
+ */
+function runMuPluginTask(
+	action,
+	label,
+	taskName,
+	taskArgs,
+	{ log = false } = {}
+) {
+	const startedAt = Date.now();
+
+	return cy.task(taskName, taskArgs, { log: false }).then((result) => {
+		const elapsedMs = Date.now() - startedAt;
+		const line = `[${action}] ${label} | ${result?.message || ''} (${elapsedMs}ms)`;
+
+		if (log) {
+			logMuPluginToCi(line);
+		}
+
+		cy.log(line);
+		return cy.wrap(result);
+	});
+}
+
+/**
+ * Emit a line to the Cypress plugin process stdout (visible in CI job logs).
+ *
+ * @param {string} message
+ */
+function logMuPluginToCi(message) {
+	cy.task('logToCi', message, { log: false });
+}
+
+/**
  * Activate mu-plugin by copying it to wp-content/mu-plugins/ directory.
  * This function accepts a full path to the mu-plugin.php file and copies it to the mu-plugins directory.
  *
- * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
- * @param {string} [targetName] Optional target filename. If not provided, generates from path.
- * @returns {Cypress.Chainable} Cypress chainable.
+ * On CI, retries up to `Cypress.env('muPluginActivateMaxAttempts')` times (default 1) with
+ * filesystem verification after each copy. Retry attempts force-delete the target before re-copying.
+ *
+ * @param {object} options
+ * @param {string} options.pluginPath Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [options.pluginName] Optional target filename. If not provided, generates from path.
+ * @param {boolean} [options.log=false] Emit diagnostic lines to CI job stdout.
+ * @return {Cypress.Chainable} Cypress chainable.
  */
-export function activateMuPlugin(muPluginPath, targetName = null) {
-	// Generate target filename if not provided
-	// Extract a unique name from the path (e.g., "block-query-title" from "tests/fixtures/block-query-title/mu-plugin.php")
-	const pathParts = muPluginPath.split('/');
-	if (!targetName) {
-		const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
-		targetName = `blockera-test-${folderName}.php`;
+export function activateMuPlugin({
+	pluginPath,
+	pluginName: pluginNameInput = null,
+	log = false,
+} = {}) {
+	if (!pluginPath) {
+		throw new Error('activateMuPlugin requires pluginPath');
 	}
 
-	// Build PHP code to copy mu-plugin to mu-plugins directory
-	// Use wp eval to execute PHP code directly without creating temp files
-	const phpCode = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/blockera/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($sourceFile)) { $content = file_get_contents($sourceFile); file_put_contents($targetFile, $content); }`;
+	const targetName = getMuPluginTargetName(pluginPath, pluginNameInput);
+	const logCi = (message) => {
+		if (log) {
+			logMuPluginToCi(message);
+		}
+	};
 
-	// Escape single quotes for shell: ' becomes '\''
-	// Use single quotes in shell command to preserve $ signs in PHP
-	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
+	const maxAttempts = Cypress.env('muPluginActivateMaxAttempts') ?? 1;
+	const label = `${pluginPath} -> ${targetName}`;
 
-	// Execute PHP code directly using wp eval
-	// Use ignoreFailures=true to prevent test failure if file doesn't exist
-	return cy.wpCli(
-		`wp eval '${escapedPhpCode}'`,
-		true, // ignoreFailures = true - don't fail if file doesn't exist
-		true // skipEscaping = true - we've already escaped
+	logCi(
+		`[activateMuPlugin] start | label=${label} | maxAttempts=${maxAttempts} | ci=${Boolean(Cypress.env('CI'))}`
 	);
+	cy.log(`[activateMuPlugin] start | ${label} | maxAttempts=${maxAttempts}`);
+
+	function activateWithRetry(attempt = 1) {
+		const force = attempt > 1;
+		const startedAt = Date.now();
+		const attemptLabel = `attempt ${attempt}/${maxAttempts}`;
+
+		logCi(
+			`[activateMuPlugin] ${attemptLabel} | label=${label} | force=${force}`
+		);
+		cy.log(
+			`[activateMuPlugin] ${attemptLabel} | ${label} | force=${force}`
+		);
+
+		return cy
+			.task(
+				'muPluginActivate',
+				{
+					muPluginPath: pluginPath,
+					targetName,
+					force,
+					attempt,
+					maxAttempts,
+					log,
+				},
+				{ log: false }
+			)
+			.then((activateResult) => {
+				const activateMs = Date.now() - startedAt;
+				const activateLine = `[activateMuPlugin] ${attemptLabel} activate | ${label} | ${activateResult?.message || ''} (${activateMs}ms)`;
+				logCi(activateLine);
+				cy.log(activateLine);
+			})
+			.task(
+				'muPluginVerify',
+				{
+					muPluginPath: pluginPath,
+					targetName,
+					attempt,
+					maxAttempts,
+					log,
+				},
+				{ log: false }
+			)
+			.then((verifyResult) => {
+				const verifyMs = Date.now() - startedAt;
+				const verifyLine = `[activateMuPlugin] ${attemptLabel} verify | ${label} | ok=${Boolean(verifyResult?.ok)} | ${verifyResult?.message || ''} (${verifyMs}ms)`;
+				logCi(verifyLine);
+				cy.log(verifyLine);
+
+				if (verifyResult?.ok) {
+					logCi(
+						`[activateMuPlugin] success | ${attemptLabel} | ${label}`
+					);
+					return cy.wrap(verifyResult);
+				}
+
+				if (attempt >= maxAttempts) {
+					const failureLine = `[activateMuPlugin] failed | exhausted ${maxAttempts} attempt(s) | ${label} | last=${verifyResult?.message || 'unknown verify error'}`;
+					logCi(failureLine);
+					throw new Error(
+						`Mu-plugin activation failed after ${maxAttempts} attempt(s): ${verifyResult?.message || 'unknown verify error'}`
+					);
+				}
+
+				const retryLine = `[activateMuPlugin] retry | ${attemptLabel} failed verify, waiting 500ms before attempt ${attempt + 1}/${maxAttempts} | ${label}`;
+				logCi(retryLine);
+				cy.log(retryLine);
+
+				return cy.wait(500).then(() => activateWithRetry(attempt + 1));
+			});
+	}
+
+	return activateWithRetry();
 }
 
 /**
  * Deactivate mu-plugin by removing it from wp-content/mu-plugins/ directory.
  * This function removes the mu-plugin file that was previously activated.
  *
- * @param {string} muPluginPath Full path to the mu-plugin.php file (relative to plugin root).
- * @param {string} [targetName] Optional target filename. If not provided, generates from path (must match activateMuPlugin).
- * @returns {Cypress.Chainable} Cypress chainable.
+ * @param {object} options
+ * @param {string} options.pluginPath Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [options.pluginName] Optional target filename. If not provided, generates from path (must match activateMuPlugin).
+ * @param {boolean} [options.log=false] Emit diagnostic lines to CI job stdout.
+ * @return {Cypress.Chainable} Cypress chainable.
  */
-export function deactivateMuPlugin(muPluginPath, targetName = null) {
-	// Generate target filename if not provided (must match activateMuPlugin logic)
-	const pathParts = muPluginPath.split('/');
-	if (!targetName) {
-		const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
-		targetName = `blockera-test-${folderName}.php`;
+export function deactivateMuPlugin({
+	pluginPath,
+	pluginName: pluginNameInput = null,
+	log = false,
+} = {}) {
+	if (!pluginPath) {
+		throw new Error('deactivateMuPlugin requires pluginPath');
 	}
 
-	// Build PHP code to remove mu-plugin from mu-plugins directory
-	const phpCode = `$targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($targetFile)) { unlink($targetFile); }`;
+	const targetName = getMuPluginTargetName(pluginPath, pluginNameInput);
 
-	// Escape single quotes for shell: ' becomes '\''
-	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
-
-	// Execute PHP code directly using wp eval
-	// Use ignoreFailures=true to prevent test failure if file doesn't exist
-	return cy.wpCli(
-		`wp eval '${escapedPhpCode}'`,
-		true, // ignoreFailures = true - don't fail if file doesn't exist
-		true // skipEscaping = true - we've already escaped
+	return runMuPluginTask(
+		'deactivateMuPlugin',
+		targetName,
+		'muPluginDeactivate',
+		{ muPluginPath: pluginPath, targetName, log },
+		{ log }
 	);
 }

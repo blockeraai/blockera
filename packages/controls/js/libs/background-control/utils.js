@@ -10,6 +10,9 @@ export function getBackgroundItemBGProperty(
 	item: TDefaultRepeaterItemValue
 ): string {
 	switch (item.type) {
+		case 'none':
+			return '';
+
 		case 'image':
 			if (!item.image) {
 				return '';

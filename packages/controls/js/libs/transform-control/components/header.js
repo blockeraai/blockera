@@ -2,13 +2,14 @@
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -30,7 +31,7 @@ const RepeaterItemHeader = ({
 	setOpen: (state: boolean) => void,
 	children: any,
 	isOpenPopoverEvent: (event: MouseEvent) => boolean,
-}) => {
+}): MixedElement => {
 	let label, icon, value;
 
 	switch (item.type) {

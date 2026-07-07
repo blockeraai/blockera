@@ -1,0 +1,324 @@
+// ID field: gray while locked (creating or click-to-edit) or disabled; normal when editing.
+.blockera-preset-id-field {
+	position: relative;
+
+	&.is-id-readonly-muted {
+		.blockera-control-input input.blockera-control-input-tag:disabled,
+		.blockera-control-input .blockera-control-input-tag:disabled,
+		.blockera-control-input input.blockera-control-input-tag:read-only,
+		.blockera-control-input .blockera-control-input-tag:read-only {
+			background-color: #f0f0f0;
+			border-color: #dcdcde;
+			color: #1e1e1e;
+			opacity: 1;
+			-webkit-text-fill-color: #1e1e1e;
+		}
+
+		// Post–creating: click / focus opens edit mode.
+		.blockera-control-input input.blockera-control-input-tag:read-only,
+		.blockera-control-input .blockera-control-input-tag:read-only {
+			cursor: pointer;
+		}
+
+		.blockera-control-input input.blockera-control-input-tag:disabled,
+		.blockera-control-input .blockera-control-input-tag:disabled {
+			cursor: not-allowed;
+		}
+	}
+}
+
+// Variable preview
+.global-styles-variable-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100px;
+	border-radius: 2px;
+	overflow: hidden;
+	border: 1px solid var(--blockera-controls-border-color-extra-soft);
+	background: #ffffff;
+	margin-bottom: 10px;
+	pointer-events: none;
+	user-select: none;
+	font-weight: 500;
+}
+
+// Box-shadow draws outside the tile; base preview uses overflow:hidden which would clip it.
+.global-styles-variable-preview.global-styles-shadow-preview {
+	overflow: visible;
+}
+
+// Text-shadow extends past glyph bounds; same clipping concern as box-shadow.
+.global-styles-variable-preview.global-styles-text-shadow-preview {
+	overflow: visible;
+}
+
+.blockera-global-styles-subtitle {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 0;
+}
+
+// Preset repeater + variable picker: selected row (`is-selected-item` on group).
+.blockera-global-styles-preset-repeater.blockera-control-repeater
+	.blockera-control-repeater-item {
+	.blockera-control-group.blockera-control-repeater-item-group.is-selected-item {
+		position: relative;
+		border-color: var(--blockera-controls-primary-color);
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			background: var(--blockera-controls-primary-color);
+			opacity: 0.09;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		& > .blockera-control-group-header {
+			position: relative;
+			z-index: 1;
+		}
+
+		.blockera-control-repeater-group-header .blockera-control-header-label {
+			color: var(--blockera-controls-primary-color);
+			font-weight: 600;
+		}
+
+		.blockera-control-action-buttons {
+			background: transparent !important;
+
+			button {
+				&.components-button.blockera-component-button.is-tertiary.no-border:hover {
+					background: transparent !important;
+				}
+			}
+
+			&:hover {
+				background: transparent !important;
+			}
+		}
+	}
+}
+
+.blockera-component.blockera-component-flex.blockera-component-preset-variable-variations-strip {
+	.blockera-control-group-header {
+		padding: 0 calc(var(--repeater-gap) * 0.11) !important;
+	}
+}
+
+.blockera-control-group.mode-accordion {
+	&.is-close.blockera-control-repeater-item-variations-group:not(
+			.blockera-preset-taxonomy-accordion,
+			.blockera-control-repeater-item-variations-group
+		) {
+		> .blockera-control-group-header {
+			padding: calc(var(--repeater-item-height) * 0.4);
+		}
+
+		.blockera-control-group-header:has(
+			.is-preset-variable-variations-picker-header
+		) {
+			.blockera-control-action-buttons.type-inline {
+				align-items: end;
+				height: 35% !important;
+
+				.blockera-component-button {
+					width: 20px;
+					height: 20px;
+				}
+
+				.blockera-control-btn-edit-item {
+					visibility: hidden;
+					opacity: 0;
+				}
+			}
+		}
+	}
+
+	&.is-open.blockera-control-repeater-item-variations-group:not(
+			.blockera-preset-taxonomy-accordion
+		) {
+		> .blockera-control-group-header {
+			padding-top: calc(var(--repeater-item-height) * 0.4);
+		}
+
+		.blockera-control-group-header:has(
+			.is-preset-variable-variations-picker-header
+		) {
+			.blockera-control-action-buttons.type-inline {
+				.blockera-control-btn-edit-item {
+					visibility: hidden;
+					opacity: 0;
+				}
+			}
+		}
+	}
+}
+
+// Variable picker: color preset header embeds nested shade repeater rows — override fixed
+// `--repeater-item-height` header height from repeater-control without breaking nested items.
+.blockera-global-styles-preset-repeater.blockera-control-repeater
+	.blockera-control-repeater-item
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header,
+.blockera-preset-taxonomy-tree
+	.blockera-control-repeater-item
+	.mode-accordion
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header {
+	height: auto;
+	min-height: calc(var(--repeater-item-height) - 2px);
+	align-items: flex-start;
+
+	> .blockera-component-flex {
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	// Nested shade rows: stretch + min-width 0 so the picker header cannot grow past the popover.
+	// Column axis comes from Flex `direction="column"` (inline style wins over CSS).
+	.blockera-component-flex.blockera-component-preset-variable-variations-strip {
+		box-sizing: border-box;
+		align-items: stretch;
+		align-self: stretch;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		padding: 0 0 10px 0;
+		overflow: hidden;
+		white-space: nowrap;
+
+		> .blockera-control-repeater-item {
+			min-width: 0;
+			max-width: 100%;
+
+			.blockera-control-action-buttons {
+				background: transparent !important;
+				visibility: hidden;
+				opacity: 0;
+				pointer-events: none !important;
+			}
+
+			.blockera-control-repeater-group-header,
+			.blockera-control-group-header {
+				pointer-events: auto;
+			}
+		}
+	}
+}
+
+.blockera-preset-taxonomy-tree
+	.blockera-control-repeater-item
+	.mode-popover
+	.blockera-control-repeater-item-header-holder {
+	width: 100%;
+}
+
+// Same context: avoid stacked borders around the parent row and nested shade repeater groups.
+.blockera-global-styles-preset-repeater.blockera-control-repeater
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header
+	.blockera-control-group,
+.blockera-preset-taxonomy-tree
+	.blockera-control-repeater-item
+	.mode-accordion
+	.blockera-control-repeater-group-header.is-preset-variable-variations-picker-header
+	.blockera-control-group {
+	border: none;
+	box-shadow: none;
+
+	&.is-hovered,
+	&:hover {
+		border: none;
+		box-shadow: none;
+
+		.blockera-control-repeater-group-header {
+			.blockera-control-header-label {
+				opacity: 1;
+			}
+		}
+	}
+
+	&.is-open {
+		border: none;
+		box-shadow: none;
+	}
+
+	.blockera-control-repeater-group-header {
+		flex-direction: column;
+		gap: 2px;
+		height: auto;
+
+		.blockera-control-header-label {
+			font-weight: 600;
+			font-size: 10px;
+			opacity: 0.5;
+			transition: var(--blockera-controls-transition);
+		}
+	}
+
+	.blockera-control-header-values,
+	.blockera-control-btn-edit-item {
+		display: none;
+	}
+}
+
+.blockera-component-popover.blockera-control-popover-variables {
+	--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+
+	// Width applies only to the catalog picker, not add/edit variable forms.
+	&.blockera-control-popover-variables-mode-picker.blockera-control-popover-variables-type-color {
+		.components-popover__content {
+			width: 340px;
+		}
+	}
+}
+
+.blockera-component-editor-variable-variations-fields-wrapper {
+	.blockera-control-color.blockera-control-color {
+		z-index: 1;
+		transition: all 0.1s linear 0s !important;
+
+		&:hover {
+			z-index: 10 !important;
+			background: transparent !important;
+			transform: scale(1.25);
+		}
+
+		.blockera-component-color-indicator {
+			outline: 2px solid #ffffff;
+		}
+
+		&:nth-child(6) {
+			z-index: 8;
+		}
+
+		&:nth-child(7) {
+			z-index: 7;
+		}
+
+		&:nth-child(8) {
+			z-index: 6;
+		}
+
+		&:nth-child(9) {
+			z-index: 5;
+		}
+
+		&:nth-child(10) {
+			z-index: 4;
+		}
+
+		&:nth-child(11) {
+			z-index: 3;
+		}
+	}
+
+	.blockera-control-color:not(:first-child) {
+		margin-left: -10px;
+		background: transparent;
+	}
+}

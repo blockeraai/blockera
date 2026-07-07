@@ -9,7 +9,7 @@ import memoize from 'fast-memoize';
  * Blockera dependencies
  */
 import { prepare, update } from '@blockera/data-editor';
-import { isObject, isInteger, isString } from '@blockera/utils';
+import { isEquals, isObject, isInteger, isString } from '@blockera/utils';
 
 /**
  * has limitation in action?
@@ -111,6 +111,145 @@ export const getNewIdDetails = (
 		itemsCount,
 		uniqueId: `${value.type}-${itemsCount}`,
 	};
+};
+
+type ResolveAddedRepeaterItemIdArgs = {
+	itemValue: ?Object,
+	itemsCount: number,
+	repeaterItems: Object,
+	defaultRepeaterItemValue: Object,
+	itemIdGenerator?: (count: number) => string,
+	selectableId?: boolean,
+};
+
+/**
+ * Resolve the repeater item id for a newly added row so it matches pending popover
+ * open state and slug-keyed preset values (e.g. global-styles custom presets).
+ */
+export const resolveAddedRepeaterItemId = ({
+	itemValue,
+	itemsCount,
+	repeaterItems,
+	defaultRepeaterItemValue,
+	itemIdGenerator,
+	selectableId = false,
+}: ResolveAddedRepeaterItemIdArgs): string => {
+	if ('function' === typeof itemIdGenerator) {
+		return itemIdGenerator(itemsCount);
+	}
+
+	if (selectableId) {
+		const fromValue =
+			itemValue &&
+			typeof itemValue === 'object' &&
+			(itemValue.slug ?? itemValue.type);
+		if (
+			fromValue !== null &&
+			fromValue !== undefined &&
+			String(fromValue) !== ''
+		) {
+			return String(fromValue);
+		}
+
+		const fromDefault =
+			defaultRepeaterItemValue?.slug ?? defaultRepeaterItemValue?.type;
+		if (
+			fromDefault !== null &&
+			fromDefault !== undefined &&
+			String(fromDefault) !== ''
+		) {
+			return String(fromDefault);
+		}
+
+		return String(itemsCount);
+	}
+
+	const resolvedItemValue = itemValue || defaultRepeaterItemValue;
+	const slug = resolvedItemValue?.slug;
+
+	if (slug !== null && slug !== undefined && String(slug) !== '') {
+		return String(slug);
+	}
+
+	if (!resolvedItemValue?.type) {
+		return String(itemsCount);
+	}
+
+	const typeCount = countPropertiesWithPattern(
+		repeaterItems || {},
+		new RegExp(`^${resolvedItemValue.type}`, 'i')
+	);
+
+	return `${resolvedItemValue.type}-${typeCount}`;
+};
+
+/**
+ * Whether a repeater item should be renamed when its type no longer matches itemId.
+ *
+ * @param {string} itemId The current repeater item id.
+ * @param {Object} value The repeater item value.
+ * @param {string|void} staticType Optional fixed id override.
+ * @return {boolean} True when rename-by-type should run.
+ */
+export const shouldRenameRepeaterItemByType = (
+	itemId: string,
+	value: Object,
+	staticType?: string
+): boolean => {
+	return Boolean(
+		value?.type &&
+		!new RegExp(`^${value.type}`, 'i').test(itemId) &&
+		!staticType
+	);
+};
+
+/**
+ * Rename a repeater item key to match its type value.
+ *
+ * @param {Object} controlValue The repeater control value.
+ * @param {Object} state The repeater store state.
+ * @param {Object} action The rename action params.
+ * @return {Object|null} The renamed value, unchanged value on duplicate, or null when skipped.
+ */
+export const renameRepeaterItemByTypeValue = (
+	controlValue: Object,
+	state: Object,
+	action: Object
+): ?Object => {
+	if (
+		!shouldRenameRepeaterItemByType(
+			action.itemId,
+			action.value,
+			action.staticType
+		)
+	) {
+		return null;
+	}
+
+	const clonedPrevValue = { ...controlValue };
+
+	delete clonedPrevValue[action.itemId];
+
+	let { uniqueId } = getNewIdDetails(state, action);
+
+	if ('function' === typeof action.getId) {
+		uniqueId = action.getId();
+	}
+
+	if (
+		clonedPrevValue[uniqueId] &&
+		isEquals(action.value, clonedPrevValue[uniqueId])
+	) {
+		return controlValue;
+	}
+
+	return regeneratedIds(
+		{
+			...clonedPrevValue,
+			[uniqueId]: action.value,
+		},
+		action
+	);
 };
 
 export const repeaterOnChange = (

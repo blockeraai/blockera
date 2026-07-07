@@ -41,6 +41,14 @@ describe('Accordion Item Block', () => {
 			'elements/panel',
 		]);
 
+		cy.get('.blockera-extension-block-card.master-block-card').within(
+			() => {
+				cy.get('button[data-test="back-to-parent-navigation"]').should(
+					'be.visible'
+				);
+			}
+		);
+
 		//
 		// 1. Edit Block
 		//
@@ -125,7 +133,7 @@ describe('Accordion Item Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {

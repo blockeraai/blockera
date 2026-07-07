@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { Icon, Button } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import type { MixedElement, ComponentType } from 'react';
 import { chevronUp, chevronDown } from '@wordpress/icons';
 import { useRef, forwardRef, useState, useEffect } from '@wordpress/element';
@@ -22,7 +23,7 @@ import {
  */
 import { useUpdateEffect } from './utils';
 import { ChangeIndicator, ConditionalWrapper } from '../../index';
-import { PoweredBy } from './components/powered-by';
+import { PoweredBy } from '../powered-by';
 import type { PanelBodyControlProps } from './types';
 
 const PanelBodyControl: ComponentType<PanelBodyControlProps> = forwardRef(
@@ -78,7 +79,19 @@ const PanelBodyControl: ComponentType<PanelBodyControlProps> = forwardRef(
 			>
 				{children}
 
-				{showPoweredBy && <PoweredBy />}
+				{showPoweredBy && (
+					<PoweredBy
+						preText={__('Powered by', 'blockera')}
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'right',
+							paddingTop: '14px',
+							marginBottom: '-5px',
+						}}
+					/>
+				)}
 			</PanelBody>
 		);
 	}

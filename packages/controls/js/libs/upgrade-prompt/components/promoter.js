@@ -10,134 +10,136 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import {
-	componentInnerClassNames,
 	componentClassNames,
+	componentInnerClassNames,
 } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import type {
+	LockedFeatureSpec,
+	ProHighlightSpec,
+	UpgradePromptProductId,
+} from '../types';
+import { getSiteEditorDefaultProHighlights } from '../products/blockera-site-editor';
 import Flex from '../../flex';
-import { default as Logo } from '../icons/logo.svg';
+import { UpgradePromptChromeLeft } from './upgrade-prompt-chrome';
+import { getUpgradePromptProductChrome } from '../products';
+import { UpgradePromptContent } from './upgrade-prompt-content';
 
 export const Promoter = ({
+	showTopbar = true,
+	product = 'blockera-site-editor',
 	design = 'light',
-	icon = <Logo />,
-	heading = __('It’s a PRO Feature', 'blockera'),
-	description = (
-		<p>{__('Elevate Your Design with Premium Features:', 'blockera')}</p>
-	),
-	featuresList = [
-		__('All responsive breakpoints', 'blockera'),
-		__('All block states', 'blockera'),
-		__('Advanced features', 'blockera'),
-		__('Premium blocks', 'blockera'),
-	],
+	lockedFeature,
+	proHighlights: proHighlightsProp,
+	heading,
+	description,
+	icon,
 	disableHintsText = __(
 		'You can disable the Pro hints in the settings panel.',
 		'blockera'
 	),
-	buttonURL = 'https://blockera.ai/products/site-builder/upgrade/',
-	buttonText = __('Upgrade to PRO', 'blockera'),
-	buttonTarget = '_blank',
+	buttonURL,
+	buttonText,
+	buttonTarget,
 	style,
 	...props
 }: {
-	design?: 'light' | 'dark',
-	icon?: string | MixedElement,
+	product?: UpgradePromptProductId,
+	design?: 'light' | 'dark' | 'minimal',
+	lockedFeature?: ?LockedFeatureSpec,
+	proHighlights?: Array<ProHighlightSpec>,
 	heading?: string,
 	description?: string | MixedElement,
-	disableHintsText?: string | MixedElement,
-	featuresList?: Array<string>,
+	icon?: string | MixedElement,
+	disableHintsText?: string | MixedElement | false,
 	buttonURL?: string,
 	buttonText?: string,
 	buttonTarget?: string,
 	style?: Object,
+	showTopbar?: boolean,
 }): MixedElement => {
+	const { OfferPill } = getUpgradePromptProductChrome(product);
+
+	const showcase: ?LockedFeatureSpec =
+		lockedFeature && lockedFeature.title ? lockedFeature : null;
+
+	const proHighlights =
+		proHighlightsProp && proHighlightsProp.length > 0
+			? proHighlightsProp
+			: getSiteEditorDefaultProHighlights();
+
+	const promoterHeadline = heading;
+
 	return (
 		<Flex
-			className={componentClassNames('promoter', 'design-' + design)}
+			className={componentClassNames(
+				'promoter',
+				'upgrade-prompt-promoter-card',
+				'design-' + design
+			)}
 			direction="column"
-			alignItems="center"
-			justifyContent="center"
-			gap={'20px'}
+			alignItems="stretch"
+			justifyContent="flex-start"
+			gap="0"
 			style={style}
 			{...props}
 		>
-			{icon && (
-				<div className={componentInnerClassNames('promoter__image')}>
-					{icon}
+			{showTopbar && (
+				<div
+					className={componentInnerClassNames(
+						'upgrade-prompt-promoter-card__topbar'
+					)}
+				>
+					{showcase ? (
+						<UpgradePromptChromeLeft
+							featureLockedLabel={showcase.title}
+						/>
+					) : (
+						<div
+							className={componentInnerClassNames(
+								'upgrade-prompt-promoter-card__brand'
+							)}
+						>
+							<span
+								className={componentInnerClassNames(
+									'upgrade-prompt-chrome__pro-badge'
+								)}
+							>
+								PRO
+							</span>
+							<span
+								className={componentInnerClassNames(
+									'upgrade-prompt-promoter-card__brand-text'
+								)}
+							>
+								{heading ||
+									__('Upgrade to Blockera Pro', 'blockera')}
+							</span>
+						</div>
+					)}
+					<OfferPill />
 				</div>
 			)}
 
-			{heading && (
-				<h3 className={componentInnerClassNames('promoter__heading')}>
-					{heading}
-				</h3>
-			)}
-
-			<Flex
-				direction="column"
-				alignItems="center"
-				justifyContent="center"
-				gap={'10px'}
+			<div
+				className={componentInnerClassNames(
+					'upgrade-prompt-promoter-card__body'
+				)}
 			>
-				{description && (
-					<div
-						className={componentInnerClassNames(
-							'promoter__description'
-						)}
-					>
-						{description}
-					</div>
-				)}
-
-				{featuresList.length > 0 && (
-					<ul className={componentInnerClassNames('promoter__list')}>
-						{featuresList.map((feature, index) => (
-							<li key={index}>
-								<Icon icon="check" iconSize="20" />
-								{feature}
-							</li>
-						))}
-					</ul>
-				)}
-			</Flex>
-
-			<Flex
-				direction="column"
-				alignItems="center"
-				justifyContent="center"
-				gap={'10px'}
-				style={{ width: '100%' }}
-			>
-				{buttonURL && (
-					<a
-						className={componentInnerClassNames(
-							'promoter__button',
-							'components-button',
-							'blockera-component-button',
-							'is-primary'
-						)}
-						href={buttonURL}
-						target={buttonTarget}
-						rel="noreferrer"
-					>
-						{buttonText}
-					</a>
-				)}
-
-				{disableHintsText && (
-					<div
-						className={componentInnerClassNames(
-							'promoter__description disable-pro-hints'
-						)}
-					>
-						{disableHintsText}
-					</div>
-				)}
-			</Flex>
+				<UpgradePromptContent
+					design={design}
+					lockedFeature={showcase}
+					proHighlights={proHighlights}
+					promoterHeadline={promoterHeadline}
+					disableHintsText={disableHintsText}
+					buttonURL={buttonURL}
+					buttonText={buttonText}
+					buttonTarget={buttonTarget}
+				/>
+			</div>
 		</Flex>
 	);
 };

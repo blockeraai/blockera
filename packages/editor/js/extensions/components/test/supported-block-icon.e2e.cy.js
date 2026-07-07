@@ -1,9 +1,5 @@
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import {
-	addBlockToPost,
-	appendBlocks,
-	openBlockInserter,
-} from '@blockera/dev-cypress/js/helpers/editor';
+import { openBlockInserter } from '@blockera/dev-cypress/js/helpers/editor';
 
 describe('Supported Block Indicator Icon', () => {
 	beforeEach(() => {
@@ -13,9 +9,7 @@ describe('Supported Block Indicator Icon', () => {
 	it('Show supported block icon on block inserter (Paragraph Block)', () => {
 		openBlockInserter();
 
-		const selector = `.editor-block-list-item-${CSS.escape(
-			`paragraph/paragraph`
-		)}`;
+		const selector = `.editor-block-list-item-paragraph`;
 
 		// should show blockera block icon on paragraph block
 		cy.get(selector).should('be.visible');

@@ -8,6 +8,7 @@ import { select } from '@wordpress/data';
 import { Fill } from '@wordpress/components';
 import type { ComponentType, Element } from 'react';
 import { useEffect, useState, useMemo } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -20,13 +21,20 @@ import { unregisterControl } from '@blockera/controls';
 import {
 	BlockCard,
 	InnerBlockCard,
-	StyleVariationBlockCard,
+	PatternBlockCard,
+	usePatternEditSection,
+	DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
 } from '../libs/block-card';
 import { isInnerBlock } from './utils';
+import { isEphemeralDefaultSizeVariation } from '../../editor/global-styles/panel/size-variations';
 import StateContainer from './state-container';
 import { FeatureSearchContextProvider } from './feature-search-context';
 import { filterSettingsBySearch } from '../libs/base/utils/search-features';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
+import {
+	VARIATION_SURFACE_SIZE,
+	SIZE_VARIATION_BLOCK_CARD_SLOT_NAME,
+} from '../../editor/global-styles/panel/variation-surfaces';
 
 const excludedControls = ['canvas-editor'];
 
@@ -48,12 +56,34 @@ export const BlockFillPartials: ComponentType<any> = ({
 	currentInnerBlockState,
 	updateBlockEditorSettings,
 	blockStyleVariationsProps,
+	blockSizeVariationsProps = {},
 }): Element<any> => {
 	const {
 		fallbackClientId,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
+		variationSurface,
+		usesSharedRootStyleVariation = false,
 	} = useGlobalStylesPanelContext();
+
+	const variationCardSlotName =
+		variationSurface === VARIATION_SURFACE_SIZE
+			? SIZE_VARIATION_BLOCK_CARD_SLOT_NAME
+			: DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME;
+
+	const variationCardLabels =
+		variationSurface === VARIATION_SURFACE_SIZE
+			? {
+					closeTooltip: __('Close Size Variation', 'blockera'),
+					closeButtonDataTest: 'Close Size Variation',
+					settingsTooltip: __('Size Variation Settings', 'blockera'),
+					settingsButtonDataTest: 'Size Variation Settings',
+					rootDataTest: 'blockera-size-variation-block-card',
+				}
+			: {
+					settingsTooltip: __('Style Variation Settings', 'blockera'),
+					settingsButtonDataTest: 'Style Variation Settings',
+				};
 
 	const [searchQuery, setSearchQuery] = useState('');
 
@@ -105,6 +135,8 @@ export const BlockFillPartials: ComponentType<any> = ({
 		[searchQuery]
 	);
 
+	const patternSectionClientId = usePatternEditSection(clientId);
+
 	return (
 		<>
 			<Fill name={`blockera-block-card-content-${clientId}`}>
@@ -118,11 +150,8 @@ export const BlockFillPartials: ComponentType<any> = ({
 							blockProps.attributes?.blockeraUnsavedData
 						}
 						insideBlockInspector={insideBlockInspector}
-						availableStates={
-							isInnerBlock(currentBlock)
-								? availableInnerStates
-								: availableStates
-						}
+						variationSurface={variationSurface}
+						availableStates={availableStates}
 					>
 						<BlockCard
 							isActive={isActive}
@@ -131,9 +160,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 							blockStyleVariationsProps={
 								blockStyleVariationsProps
 							}
+							blockSizeVariationsProps={blockSizeVariationsProps}
 							setCurrentTab={blockProps.setCurrentTab}
 							insideBlockInspector={insideBlockInspector}
 							clientId={fallbackClientId}
+							editorClientId={clientId}
 							blockName={blockProps.name}
 							innerBlocks={blockeraInnerBlocks}
 							currentInnerBlock={currentInnerBlock}
@@ -156,41 +187,18 @@ export const BlockFillPartials: ComponentType<any> = ({
 							activeBlockVariation={
 								blockProps?.activeBlockVariation || ''
 							}
+							handleOnClick={updateBlockEditorSettings}
+							setCurrentBlockStyleVariation={
+								setCurrentBlockStyleVariation
+							}
+							variationBlockCardSlotName={variationCardSlotName}
+							variationBlockCardLabels={variationCardLabels}
 						/>
-
-						{Boolean(currentBlockStyleVariation?.name) && (
-							<StyleVariationBlockCard
-								insideBlockInspector={insideBlockInspector}
-								isActive={isActive}
-								clientId={clientId}
-								blockName={blockProps.name}
-								handleOnClick={updateBlockEditorSettings}
-								currentBlock={'master'}
-								currentState={currentState}
-								availableStates={availableStates}
-								currentBreakpoint={currentBreakpoint}
-								currentInnerBlock={currentInnerBlock}
-								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={blockProps.attributes}
-								additional={blockProps.additional}
-								blockeraInnerBlocks={blockeraInnerBlocks}
-								supports={blockProps.supports}
-								setAttributes={blockProps.setAttributes}
-								handleOnChangeAttributes={
-									blockProps.handleOnChangeAttributes
-								}
-								setCurrentBlockStyleVariation={
-									setCurrentBlockStyleVariation
-								}
-								currentBlockStyleVariation={
-									currentBlockStyleVariation
-								}
-							/>
-						)}
 
 						{isInnerBlock(currentBlock) && (
 							<InnerBlockCard
 								insideBlockInspector={insideBlockInspector}
+								variationSurface={variationSurface}
 								isActive={isActive}
 								clientId={clientId}
 								activeBlock={currentBlock}
@@ -218,6 +226,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 
 				{insideBlockInspector && (
 					<>
+						{patternSectionClientId && (
+							<PatternBlockCard
+								patternClientId={patternSectionClientId}
+							/>
+						)}
 						<BlockCard
 							isActive={isActive}
 							setActive={setActive}
@@ -233,6 +246,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 							blockStyleVariationsProps={
 								blockStyleVariationsProps
 							}
+							blockSizeVariationsProps={blockSizeVariationsProps}
 							currentBreakpoint={currentBreakpoint}
 							currentInnerBlockState={currentInnerBlockState}
 							currentStateAttributes={blockProps.attributes}
@@ -254,6 +268,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 						{isInnerBlock(currentBlock) && (
 							<InnerBlockCard
 								insideBlockInspector={insideBlockInspector}
+								variationSurface={variationSurface}
 								isActive={isActive}
 								clientId={clientId}
 								activeBlock={currentBlock}
@@ -279,26 +294,12 @@ export const BlockFillPartials: ComponentType<any> = ({
 					</>
 				)}
 			</Fill>
-			{insideBlockInspector && isActive && (
-				<Fill name={`blockera-block-edit-content-${clientId}`}>
-					<FeatureSearchContextProvider value={searchContextValue}>
-						<BlockEditComponent
-							{...{
-								...blockProps,
-								insideBlockInspector,
-							}}
-							availableStates={
-								isInnerBlock(currentBlock)
-									? availableInnerStates
-									: availableStates
-							}
-						/>
-					</FeatureSearchContextProvider>
-				</Fill>
-			)}
-
 			{!insideBlockInspector &&
-				currentBlockStyleVariation?.name &&
+				(Boolean(currentBlockStyleVariation?.name) ||
+					(usesSharedRootStyleVariation &&
+						isEphemeralDefaultSizeVariation(
+							currentBlockStyleVariation
+						))) &&
 				isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<FeatureSearchContextProvider

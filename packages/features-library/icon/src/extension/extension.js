@@ -5,8 +5,8 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 import type { MixedElement, ComponentType } from 'react';
-import { createRoot, useCallback } from '@wordpress/element';
-import { dispatch } from '@wordpress/data';
+import { useCallback } from '@wordpress/element';
+import { dispatch, useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -28,12 +28,28 @@ import { extensionClassNames } from '@blockera/classnames';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
 import { isEquals, addAngle, isEmpty, isUndefined } from '@blockera/utils';
 import { generateExtensionId } from '@blockera/editor/js/extensions/libs/utils';
+import { STORE_NAME as EXTENSIONS_CONFIG_STORE_NAME } from '@blockera/editor/js/extensions/libs/base/store/constants';
 import { default as EditorFeatureWrapper } from '@blockera/editor/js/components/editor-feature-wrapper';
 
 /**
  * Internal dependencies
  */
 import type { TIconProps } from './types/icon-extension-props';
+import {
+	getIconColorAttributeId,
+	getIconSizeAttributeId,
+	isStandaloneIconBlock,
+} from '../helpers';
+import {
+	decodeRenderedIcon,
+	getResolvedIconColorValue,
+	hasBlockeraIconValue,
+} from '../icon-attribute-utils';
+import {
+	CORE_ICON_EMPTY_RENDERED_ICON,
+	encodeIconMarkup,
+	renderLibraryIconMarkup,
+} from '../icon-render-utils';
 
 export const IconExtension: ComponentType<{
 	...TIconProps,
@@ -51,17 +67,7 @@ export const IconExtension: ComponentType<{
 		blockeraIconFlipHorizontal,
 		blockeraIconFlipVertical,
 	},
-	currentStateAttributes: {
-		blockeraIcon: icon,
-		blockeraIconGap: iconGap,
-		blockeraIconSize: iconSize,
-		blockeraIconLink: iconLink,
-		blockeraIconColor: iconColor,
-		blockeraIconPosition: iconPosition,
-		blockeraIconRotate: iconRotate,
-		blockeraIconFlipHorizontal: iconFlipHorizontal,
-		blockeraIconFlipVertical: iconFlipVertical,
-	},
+	currentStateAttributes,
 	handleOnChangeAttributes,
 	extensionProps = {
 		blockeraIcon: {},
@@ -82,77 +88,63 @@ export const IconExtension: ComponentType<{
 		dispatch('blockera/extensions') || {};
 	const { initialOpen, onToggle } = useBlockSection('iconConfig');
 	const blockName = block.activeBlockVariation?.name || block?.blockName;
+	const showInlineIconLayout = !isStandaloneIconBlock(blockName);
+	const registeredIconConfig = useSelect(
+		(select) => {
+			const { getExtension } = select(EXTENSIONS_CONFIG_STORE_NAME) || {};
 
-	const encodeIcon = useCallback(
-		(iconHTML: string, { hasInlineStyle = false, color } = {}) => {
-			if (hasInlineStyle) {
-				// Apply inline styles based on iconState
-				const iconDoc = new DOMParser().parseFromString(
-					iconHTML,
-					'text/html'
-				);
-				const svgElement = iconDoc.querySelector('svg');
-
-				if (svgElement) {
-					// Apply color
-					if (color) {
-						svgElement.style.color = color;
-						svgElement.style.fill = color;
-					}
-
-					iconHTML = svgElement.outerHTML;
-				}
-			}
-
-			return {
-				encodedIcon: btoa(unescape(encodeURIComponent(iconHTML))),
-				icon: encodeURIComponent(iconHTML),
-			};
+			return 'function' === typeof getExtension
+				? getExtension('iconConfig', blockName)
+				: null;
 		},
-		[]
+		[blockName]
 	);
+	const resolvedIconSizeConfig =
+		registeredIconConfig?.blockeraIconSize || blockeraIconSize;
+	const resolvedIconColorConfig =
+		registeredIconConfig?.blockeraIconColor || blockeraIconColor;
+	const iconSizeAttributeId = getIconSizeAttributeId(resolvedIconSizeConfig);
+	const iconColorAttributeId = getIconColorAttributeId(
+		resolvedIconColorConfig
+	);
+
+	const {
+		blockeraIcon: icon,
+		blockeraIconGap: iconGap,
+		blockeraIconLink: iconLink,
+		blockeraIconPosition: iconPosition,
+		blockeraIconRotate: iconRotate,
+		blockeraIconFlipHorizontal: iconFlipHorizontal,
+		blockeraIconFlipVertical: iconFlipVertical,
+	} = currentStateAttributes;
+	const iconSize =
+		currentStateAttributes[iconSizeAttributeId] ??
+		('blockeraIconSize' !== iconSizeAttributeId
+			? currentStateAttributes.blockeraIconSize
+			: undefined);
+	const iconColor =
+		currentStateAttributes[iconColorAttributeId] ??
+		('blockeraIconColor' !== iconColorAttributeId
+			? currentStateAttributes.blockeraIconColor
+			: undefined);
 
 	const renderIcon = useCallback(
 		async (newValue, effectiveItems = {}) => {
-			const iconNode = document.createElement('span');
-			document
-				.querySelector('.blockera-temp-icon-wrapper')
-				?.append(iconNode);
-			const iconRoot = createRoot(iconNode);
-
 			const color = !isUndefined(effectiveItems?.blockeraIconColor?.value)
-				? effectiveItems?.blockeraIconColor?.value
-				: iconColor?.value || iconColor;
-			iconRoot.render(
-				<Icon
-					style={{
-						color,
-						fill: color,
-						width: iconSize ? iconSize : '1em',
-						height: iconSize ? iconSize : '1em',
-						...(iconPosition === 'start' && {
-							marginRight: iconGap,
-						}),
-						...(iconPosition === 'end' && {
-							marginLeft: iconGap,
-						}),
-					}}
-					xmlns="http://www.w3.org/2000/svg"
-					icon={newValue.icon}
-					library={newValue.library}
-					uploadSVG={newValue.uploadSVG}
-				/>
-			);
+				? getResolvedIconColorValue(
+						effectiveItems.blockeraIconColor.value,
+						{ blockName }
+					)
+				: getResolvedIconColorValue(iconColor, { blockName });
 
-			return new Promise((resolve) => {
-				setTimeout(() => {
-					const renderedIcon = encodeIcon(iconNode?.innerHTML || '');
-					resolve(renderedIcon);
-					iconRoot.unmount();
-				}, 1);
+			return renderLibraryIconMarkup(newValue, {
+				iconColor: color,
+				iconSize: iconSize ? iconSize : '1em',
+				iconGap,
+				iconPosition,
 			});
 		},
-		[iconColor, iconSize, iconGap, iconPosition, encodeIcon]
+		[iconColor, iconSize, iconGap, iconPosition, blockName]
 	);
 
 	const handleOnChangeAttributesIcon = useCallback(
@@ -164,44 +156,18 @@ export const IconExtension: ComponentType<{
 			if (newValue.icon) {
 				const renderedIcon = await renderIcon(newValue, effectiveItems);
 
-				if (blockName === 'blockera/icon') {
-					handleOnChangeAttributes(
-						'blockeraIcon',
-						{
-							...newValue,
-							renderedIcon: renderedIcon.encodedIcon,
-						},
-						{
-							ref,
-							effectiveItems: {
-								...effectiveItems,
-								url:
-									'data:image/svg+xml;utf8,' +
-									renderedIcon.icon,
-								alt: sprintf(
-									// translators: %s is the icon name.
-									__('%s Icon', 'blockera'),
-									newValue.icon.replaceAll('-', ' ')
-								),
-							},
-						}
-					);
-				} else {
-					handleOnChangeAttributes(
-						'blockeraIcon',
-						{
-							...newValue,
-							renderedIcon: renderedIcon.encodedIcon,
-						},
-						{ ref, effectiveItems }
-					);
-				}
-			} else if (
-				(newValue.uploadSVG && newValue.svgString) ||
-				!isEmpty(effectiveItems)
-			) {
+				// core/icon `icon` attribute sync is handled in blocks-core icon bootstrap.
+				handleOnChangeAttributes(
+					'blockeraIcon',
+					{
+						...newValue,
+						renderedIcon: renderedIcon.encodedIcon,
+					},
+					{ ref, effectiveItems }
+				);
+			} else if (newValue.svgString || !isEmpty(effectiveItems)) {
 				if (!newValue.hasOwnProperty('svgString')) {
-					newValue.svgString = atob(icon.renderedIcon);
+					newValue.svgString = decodeRenderedIcon(icon.renderedIcon);
 				}
 
 				applyFilters(
@@ -210,7 +176,12 @@ export const IconExtension: ComponentType<{
 						ref,
 						newValue,
 						blockName,
-						encodeIcon,
+						encodeIcon: encodeIconMarkup,
+						isIconBlock:
+							isStandaloneIconBlock(blockName) ||
+							String(attributes?.className || '').includes(
+								'wp-block-icon-blockera'
+							),
 						effectiveItems: {
 							...effectiveItems,
 							blockeraIconColor: {
@@ -224,19 +195,19 @@ export const IconExtension: ComponentType<{
 						handleOnChangeAttributes,
 					}
 				);
-			} else if (blockName === 'blockera/icon') {
+			} else if (isStandaloneIconBlock(blockName)) {
 				const emptyIcon = {
 					icon: '',
 					library: '',
-					renderedIcon:
-						'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgogIDxwYXRoIGQ9Ik01LjEyMzIxMjE2LDEzLjU0Njg3ODUgTDUuMDczNzAwNzgsMTMuNjMzNjI0OCBDNC44MzA3NzM4MywxNC4xMzIyMDY2IDUuMjE4OTIwMjcsMTQuNzM1MjE1NSA1Ljc5MTEzNjkyLDE0LjY4MjU4NzYgTDEwLjI2MjQ3MTUsMTQuMjcwNTQ5IEw5LjgyOTMzODY2LDIxLjcyMjc5MTkgQzkuNzg1OTcwMjEsMjIuNDY4Njc1OSAxMC43NDQ3ODYyLDIyLjc5Mzc2NjkgMTEuMTU0NDQ0OCwyMi4xNzIwNzUzIEwxOC44NzY3OTMyLDEwLjQ1Mjc1NTMgTDE4LjkyNjMwNDYsMTAuMzY2MDA1OSBDMTkuMTY5MjI5NSw5Ljg2NzQwNjc2IDE4Ljc4MTA0NDksOS4yNjQzOTE1IDE4LjIwODgxNTIsOS4zMTcwNTkxOCBMMTMuNzM2NTYzLDkuNzI4NDc0NDggTDE0LjE3MDY2MTEsMi4yNzcyMDgxNCBDMTQuMjE0MDI5MiwxLjUzMTMyOTYgMTMuMjU1MjI0OCwxLjIwNjIzNDg5IDEyLjg0NTU2MDYsMS44Mjc5MTYxNCBMNS4xMjMyMTIxNiwxMy41NDY4Nzg1IFogTTEyLjU2NzU5MjUsNC44ODk1MTk2MSBMMTIuMjQyNTcyNSwxMC40OTIxMTk2IEwxMi4yNDI5OTI1LDEwLjU4NjU4MjIgQzEyLjI3MDI1MjEsMTAuOTg5NDk2OCAxMi42MjE0MTk2LDExLjMwMjIzOTYgMTMuMDMwODg2MiwxMS4yNjQ1NTI1IEwxNi44MzEyOTQxLDEwLjkxNDA0MjggTDExLjQzMTQ0MiwxOS4xMDk1MDM4IEwxMS43NTc0MjcyLDEzLjUwNzg4MDQgTDExLjc1NzAwNzUsMTMuNDEzNDIxOCBDMTEuNzI5NzUxLDEzLjAxMDUyMzUgMTEuMzc4NjEyNCwxMi42OTc3ODUgMTAuOTY5MTYxMSwxMi43MzU0NDMxIEw3LjE2Nzc0MDMyLDEzLjA4NDk4MDYgTDEyLjU2NzU5MjUsNC44ODk1MTk2MSBaIj48L3BhdGg+Cjwvc3ZnPg==',
+					renderedIcon: CORE_ICON_EMPTY_RENDERED_ICON,
+					svgString: '',
+					uploadSVG: '',
 				};
 
 				handleOnChangeAttributes('blockeraIcon', emptyIcon, {
 					ref,
 					effectiveItems: {
 						...effectiveItems,
-						url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M5.12321216,13.5468785 L5.07370078,13.6336248 C4.83077383,14.1322066 5.21892027,14.7352155 5.79113692,14.6825876 L10.2624715,14.270549 L9.82933866,21.7227919 C9.78597021,22.4686759 10.7447862,22.7937669 11.1544448,22.1720753 L18.8767932,10.4527553 L18.9263046,10.3660059 C19.1692295,9.86740676 18.7810449,9.2643915 18.2088152,9.31705918 L13.736563,9.72847448 L14.1706611,2.27720814 C14.2140292,1.5313296 13.2552248,1.20623489 12.8455606,1.82791614 L5.12321216,13.5468785 Z M12.5675925,4.88951961 L12.2425725,10.4921196 L12.2429925,10.5865822 C12.2702521,10.9894968 12.6214196,11.3022396 13.0308862,11.2645525 L16.8312941,10.9140428 L11.431442,19.1095038 L11.7574272,13.5078804 L11.7570075,13.4134218 C11.729751,13.0105235 11.3786124,12.697785 10.9691611,12.7354431 L7.16774032,13.0849806 L12.5675925,4.88951961 Z"></path></svg>',
 						blockeraIconColor: {
 							value: '',
 						},
@@ -247,6 +218,8 @@ export const IconExtension: ComponentType<{
 					icon: '',
 					library: '',
 					renderedIcon: '',
+					svgString: '',
+					uploadSVG: '',
 				};
 
 				handleOnChangeAttributes('blockeraIcon', emptyIcon, {
@@ -254,14 +227,7 @@ export const IconExtension: ComponentType<{
 				});
 			}
 		},
-		[
-			icon,
-			blockName,
-			renderIcon,
-			encodeIcon,
-			handleOnChangeAttributes,
-			iconColor,
-		]
+		[icon, blockName, renderIcon, handleOnChangeAttributes, iconColor]
 	);
 
 	// Icon is not available in inner blocks.
@@ -287,12 +253,12 @@ export const IconExtension: ComponentType<{
 	const isShownIconSize = isShowField(
 		blockeraIconSize,
 		iconSize,
-		attributes?.blockeraIconSize?.default?.value
+		attributes?.[iconSizeAttributeId]?.default?.value
 	);
 	const isShownIconColor = isShowField(
 		blockeraIconColor,
 		iconColor,
-		attributes?.blockeraIconColor?.default?.value
+		attributes?.[iconColorAttributeId]?.default?.value
 	);
 	const isShownIconLink = isShowField(
 		blockeraIconLink,
@@ -360,266 +326,268 @@ export const IconExtension: ComponentType<{
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
 
-			{icon?.renderedIcon && (
+			{hasBlockeraIconValue(icon) && (
 				<>
 					<BaseControl
 						label={__('Style', 'blockera')}
 						columns="1fr 180px"
 					>
-						<EditorFeatureWrapper
-							isActive={isShownIconPosition}
-							config={blockeraIconPosition}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'icon-position'
-									),
-									value: iconPosition,
-									attribute: 'blockeraIconPosition',
-									blockName: block.blockName,
-								}}
-							>
-								<ToggleSelectControl
-									label={__('Position', 'blockera')}
-									labelPopoverTitle={__(
-										'Icon Position',
-										'blockera'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Sets the placement of the icon within the block.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'You can choose to display the icon on the left or right side of the block content, allowing better alignment with your layout and design needs.',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									columns="columns-2"
-									options={[
-										{
-											label: __('Start', 'blockera'),
-											value: 'start',
-											icon: (
-												<Icon
-													icon="icon-position-left"
-													iconSize="18"
-												/>
+						<Flex direction="column" gap="12px">
+							{showInlineIconLayout && (
+								<EditorFeatureWrapper
+									isActive={isShownIconPosition}
+									config={blockeraIconPosition}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'icon-position'
 											),
-										},
-										{
-											label: __('End', 'blockera'),
-											value: 'end',
-											icon: (
-												<Icon
-													icon="icon-position-right"
-													iconSize="18"
-												/>
-											),
-										},
-									]}
-									isDeselectable={true}
-									defaultValue={
-										attributes?.blockeraIconPosition
-											?.default?.value
-									}
-									onChange={(newValue, ref) => {
-										handleOnChangeAttributes(
-											'blockeraIconPosition',
-											newValue,
-											{ ref }
-										);
-									}}
-									{...extensionProps.blockeraIconPosition}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
-
-						<EditorFeatureWrapper
-							isActive={isShownIconGap}
-							config={blockeraIconGap}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'icon-gap'
-									),
-									value: iconGap,
-									attribute: 'blockeraIconGap',
-									blockName: block.blockName,
-								}}
-							>
-								<InputControl
-									label={__('Gap', 'blockera')}
-									labelPopoverTitle={__(
-										'Icon Gap',
-										'blockera'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Controls the space between the icon and the block content.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Adjust the gap to fine-tune spacing for better visual balance and readability.',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									columns="columns-2"
-									unitType="essential"
-									defaultValue={
-										attributes?.blockeraIconGap?.default
-											?.value
-									}
-									min={0}
-									onChange={(newValue, ref) => {
-										handleOnChangeAttributes(
-											'blockeraIconGap',
-											newValue,
-											{ ref }
-										);
-									}}
-									{...extensionProps.blockeraIconGap}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
-
-						<EditorFeatureWrapper
-							isActive={isShownIconSize}
-							config={blockeraIconSize}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'icon-size'
-									),
-									value: iconSize,
-									attribute: 'blockeraIconSize',
-									blockName: block.blockName,
-								}}
-							>
-								<InputControl
-									label={__('Size', 'blockera')}
-									labelPopoverTitle={__(
-										'Icon Size',
-										'blockera'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Sets the size of the icon used in the block.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													"By default, it inherits the block's font size, but you can customize it to be larger or smaller for better visual emphasis.",
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									columns="columns-2"
-									unitType="essential"
-									defaultValue={
-										attributes?.blockeraIconSize?.default
-											?.value
-									}
-									min={0}
-									onChange={(newValue, ref) => {
-										handleOnChangeAttributes(
-											'blockeraIconSize',
-											newValue,
-											{ ref }
-										);
-									}}
-									{...extensionProps.blockeraIconSize}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
-
-						<EditorFeatureWrapper
-							isActive={isShownIconColor}
-							config={blockeraIconColor}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'icon-color'
-									),
-									value: iconColor,
-									attribute: 'blockeraIconColor',
-									blockName: block.blockName,
-								}}
-							>
-								<ColorControl
-									label={__('Color', 'blockera')}
-									labelPopoverTitle={__(
-										'Icon Color',
-										'blockera'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the color of the icon in the block.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													"By default, it inherits the block's font color, but you can override it to match or contrast with your design.",
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									columns="columns-2"
-									defaultValue={
-										attributes?.blockeraIconColor?.default
-											?.value
-									}
-									onChange={(newValue, ref) => {
-										if (blockName === 'blockera/icon') {
-											handleOnChangeAttributesIcon(
-												icon,
-												ref,
+											value: iconPosition,
+											attribute: 'blockeraIconPosition',
+											blockName: block.blockName,
+										}}
+									>
+										<ToggleSelectControl
+											label={__('Position', 'blockera')}
+											labelPopoverTitle={__(
+												'Icon Position',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Sets the placement of the icon within the block.',
+															'blockera'
+														)}
+													</p>
+													<p>
+														{__(
+															'You can choose to display the icon on the left or right side of the block content, allowing better alignment with your layout and design needs.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											columns="columns-2"
+											options={[
 												{
-													blockeraIconColor: {
-														value: newValue,
-													},
-												}
-											);
-										} else {
+													label: __(
+														'Start',
+														'blockera'
+													),
+													value: 'start',
+													icon: (
+														<Icon
+															icon="icon-position-left"
+															iconSize="18"
+														/>
+													),
+												},
+												{
+													label: __(
+														'End',
+														'blockera'
+													),
+													value: 'end',
+													icon: (
+														<Icon
+															icon="icon-position-right"
+															iconSize="18"
+														/>
+													),
+												},
+											]}
+											isDeselectable={true}
+											defaultValue={
+												attributes?.blockeraIconPosition
+													?.default?.value
+											}
+											onChange={(newValue, ref) => {
+												handleOnChangeAttributes(
+													'blockeraIconPosition',
+													newValue,
+													{ ref }
+												);
+											}}
+											{...extensionProps.blockeraIconPosition}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+							)}
+
+							{showInlineIconLayout && (
+								<EditorFeatureWrapper
+									isActive={isShownIconGap}
+									config={blockeraIconGap}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'icon-gap'
+											),
+											value: iconGap,
+											attribute: 'blockeraIconGap',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											label={__('Gap', 'blockera')}
+											labelPopoverTitle={__(
+												'Icon Gap',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Controls the space between the icon and the block content.',
+															'blockera'
+														)}
+													</p>
+													<p>
+														{__(
+															'Adjust the gap to fine-tune spacing for better visual balance and readability.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											columns="columns-2"
+											unitType="essential"
+											defaultValue={
+												attributes?.blockeraIconGap
+													?.default?.value
+											}
+											min={0}
+											onChange={(newValue, ref) => {
+												handleOnChangeAttributes(
+													'blockeraIconGap',
+													newValue,
+													{ ref }
+												);
+											}}
+											{...extensionProps.blockeraIconGap}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+							)}
+
+							<EditorFeatureWrapper
+								isActive={isShownIconSize}
+								config={blockeraIconSize}
+							>
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'icon-size'
+										),
+										value: iconSize,
+										attribute: iconSizeAttributeId,
+										blockName: block.blockName,
+									}}
+								>
+									<InputControl
+										label={__('Size', 'blockera')}
+										labelPopoverTitle={__(
+											'Icon Size',
+											'blockera'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Sets the size of the icon used in the block.',
+														'blockera'
+													)}
+												</p>
+												<p>
+													{__(
+														"By default, it inherits the block's font size, but you can customize it to be larger or smaller for better visual emphasis.",
+														'blockera'
+													)}
+												</p>
+											</>
+										}
+										columns="columns-2"
+										unitType="essential"
+										defaultValue={
+											attributes?.[iconSizeAttributeId]
+												?.default?.value
+										}
+										min={0}
+										onChange={(newValue, ref) => {
 											handleOnChangeAttributes(
-												'blockeraIconColor',
+												iconSizeAttributeId,
 												newValue,
 												{ ref }
 											);
-										}
+										}}
+										{...extensionProps.blockeraIconSize}
+									/>
+								</ControlContextProvider>
+							</EditorFeatureWrapper>
+
+							<EditorFeatureWrapper
+								isActive={isShownIconColor}
+								config={blockeraIconColor}
+							>
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'icon-color'
+										),
+										value: iconColor,
+										attribute: iconColorAttributeId,
+										blockName: block.blockName,
 									}}
-									{...extensionProps.blockeraIconColor}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
+								>
+									<ColorControl
+										label={__('Color', 'blockera')}
+										labelPopoverTitle={__(
+											'Icon Color',
+											'blockera'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Defines the color of the icon in the block.',
+														'blockera'
+													)}
+												</p>
+												<p>
+													{__(
+														"By default, it inherits the block's font color, but you can override it to match or contrast with your design.",
+														'blockera'
+													)}
+												</p>
+											</>
+										}
+										columns="columns-2"
+										controlAddonTypes={['variable']}
+										variableTypes={['color']}
+										defaultValue={
+											attributes?.[iconColorAttributeId]
+												?.default?.value
+										}
+										onChange={(newValue, ref) => {
+											handleOnChangeAttributes(
+												iconColorAttributeId,
+												newValue,
+												{ ref }
+											);
+										}}
+										{...extensionProps.blockeraIconColor}
+									/>
+								</ControlContextProvider>
+							</EditorFeatureWrapper>
+						</Flex>
 					</BaseControl>
 
 					<EditorFeatureWrapper
@@ -659,7 +627,12 @@ export const IconExtension: ComponentType<{
 						<BaseControl
 							columns="1-column"
 							style={{
-								'--blockera-field-gap': '8px',
+								'--blockera-field-gap': '12px',
+							}}
+							controlProps={{
+								style: {
+									'--gap': '12px',
+								},
 							}}
 						>
 							<Flex
@@ -788,7 +761,7 @@ export const IconExtension: ComponentType<{
 								</Button>
 							</Flex>
 
-							{blockName !== 'blockera/icon' && (
+							{!isStandaloneIconBlock(blockName) && (
 								<Button
 									showTooltip={true}
 									tooltipPosition="top"

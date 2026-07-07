@@ -3,10 +3,17 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { InspectorControls } from '@wordpress/block-editor';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 import { doAction } from '@wordpress/hooks';
-import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
+import {
+	useMemo,
+	useState,
+	useEffect,
+	useCallback,
+	useRef,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -19,18 +26,47 @@ import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import type { Props } from './types';
-import { STORE_NAME } from '../base/store/constants';
+import { registerBlockExtensionsSupports } from '../base';
+import { STORE_NAME as EXTENSIONS_CONFIG_STORE_NAME } from '../base/store/constants';
+import { STORE_NAME as BLOCK_EXTENSIONS_STORE_NAME } from '../../store/constants';
 import { resetExtensionSettings } from '../../utils';
 import { isInnerBlock } from '../../components/utils';
 import { MappedExtensions } from './mapped-extensions';
-import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
 import { filterSettingsBySearch } from '../base/utils/search-features';
 import { useFeatureSearch } from '../../components/feature-search-context';
 import { useGlobalStylesPanelContext } from '../../../editor/global-styles/panel/context';
+import {
+	getExtensionsUiContext as getScopedExtensionsUiContext,
+	INSPECTOR_UI_CONTEXT,
+} from '../../components/extensions-ui-context';
+import { getBlockInspectorGroup } from '../../../hooks/use-block-side-effects/utils';
 
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
+
+const getExtensionsUiContext = (
+	insideBlockInspector: boolean,
+	variationSurface?: string
+): string => {
+	if (insideBlockInspector) {
+		return INSPECTOR_UI_CONTEXT;
+	}
+
+	return (
+		getScopedExtensionsUiContext(false, variationSurface) ||
+		'global-styles-style'
+	);
+};
+
+/** Properties ignored when comparing extension supports to persisted cache. */
+const EXTENSIONS_CACHE_OMIT_PROPS = [
+	'status',
+	'label',
+	'show',
+	'force',
+	'config',
+];
 
 const omitDeep = (obj: Object, props: Array<string>): Object => {
 	if (Array.isArray(obj)) {
@@ -49,8 +85,16 @@ const omitDeep = (obj: Object, props: Array<string>): Object => {
 };
 
 // Function to remove 'label' property from each extension's config item
-// Memoized cache for extensionsWithoutLabel results
-const _extensionsWithoutLabelCache = new WeakMap<Object, Object>();
+// Memoized cache for extensionsWithoutLabel results (reset when extensions change).
+let _extensionsWithoutLabelCache: WeakMap<Object, Object> = new WeakMap();
+
+/**
+ * Clears in-memory extensions-without-label memoization.
+ * Call when the extensions constant changes (e.g. variation-surface gating).
+ */
+export const clearExtensionsWithoutLabelCache = (): void => {
+	_extensionsWithoutLabelCache = new WeakMap();
+};
 
 /**
  * Removes 'label' property from each extension's config item.
@@ -100,6 +144,53 @@ const extensionsWithoutLabel = (extensionsObj: Object): Object => {
 	return newExtensions;
 };
 
+const registerDefaultBlockExtensionsSupports = (
+	blockName: string,
+	blockExtension?: Object
+): Object => {
+	if ('function' === typeof blockExtension?.registerExtensions) {
+		blockExtension.registerExtensions(blockName);
+	} else {
+		registerBlockExtensionsSupports(blockName);
+	}
+
+	return select(EXTENSIONS_CONFIG_STORE_NAME).getExtensions(blockName);
+};
+
+const registerBlockExtensionsSupportsForUiContext = ({
+	blockName,
+	blockExtension,
+	variationSurface,
+}: {
+	blockName: string,
+	blockExtension?: Object,
+	variationSurface?: 'size' | 'style',
+}): void => {
+	const supportsExtensions =
+		'function' === typeof blockExtension?.supportsExtensions
+			? blockExtension.supportsExtensions
+			: null;
+
+	registerDefaultBlockExtensionsSupports(blockName, blockExtension);
+
+	if (!supportsExtensions) {
+		return;
+	}
+
+	const baseExtensions = select(EXTENSIONS_CONFIG_STORE_NAME).getExtensions(
+		blockName
+	);
+
+	registerBlockExtensionsSupports(
+		blockName,
+		supportsExtensions(
+			blockName,
+			baseExtensions,
+			variationSurface || 'style'
+		)
+	);
+};
+
 const getTabs = (
 	insideBlockInspector: boolean,
 	currentBlock: string
@@ -108,21 +199,16 @@ const getTabs = (
 		...(!isInnerBlock(currentBlock) && insideBlockInspector
 			? [
 					{
-						name: 'settings',
+						name: 'setting',
 						title: __('General', 'blockera'),
 						className: 'settings-tab',
 					},
 				]
 			: []),
 		{
-			name: 'style',
+			name: 'styles',
 			title: __('Styles', 'blockera'),
 			className: 'style-tab',
-		},
-		{
-			name: 'interactions',
-			title: __('Animations', 'blockera'),
-			className: 'interactions-tab',
 		},
 	];
 };
@@ -145,8 +231,9 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	currentInnerBlockState,
 	handleOnChangeAttributes,
 	...props
-}: Props): MixedElement => {
-	const { currentBlockStyleVariation } = useGlobalStylesPanelContext();
+}: Props): MixedElement | Array<MixedElement> => {
+	const { currentBlockStyleVariation, variationSurface } =
+		useGlobalStylesPanelContext();
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	useEffect(() => {
@@ -158,9 +245,32 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 
 	const { version } = select('blockera/data').getEntity('blockera');
 
-	const { updateExtension } = useDispatch(STORE_NAME);
-	const { getExtensions } = select(STORE_NAME);
-	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
+	const { updateExtension } = useDispatch(EXTENSIONS_CONFIG_STORE_NAME);
+	const { getExtensions } = select(EXTENSIONS_CONFIG_STORE_NAME);
+	const { getBlockExtensionBy } = select(BLOCK_EXTENSIONS_STORE_NAME) || {};
+	const blockExtension = getBlockExtensionBy('targetBlock', props.name);
+	const extensionsUiContext = getExtensionsUiContext(
+		insideBlockInspector,
+		variationSurface
+	);
+	const [, setExtensionsConfigRevision] = useState(0);
+	const cacheKey = [
+		cacheKeyPrefix,
+		getNormalizedCacheVersion(version),
+		extensionsUiContext,
+	].join('_');
+
+	useEffect(() => {
+		registerBlockExtensionsSupportsForUiContext({
+			blockName: props.name,
+			blockExtension,
+			variationSurface,
+		});
+
+		clearExtensionsWithoutLabelCache();
+		setExtensionsConfigRevision((revision) => revision + 1);
+	}, [blockExtension, props.name, variationSurface, extensionsUiContext]);
+
 	let extensions = getExtensions(props.name);
 	const { getBlockType } = select('core/blocks');
 	const blockType = getBlockType(props.name);
@@ -169,10 +279,22 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			mergeObject(extensions, blockType.supports?.blockExtensions || {}),
 		[extensions, blockType.supports?.blockExtensions]
 	);
-	const _extensionsWithoutLabel = useMemo(
-		() => extensionsWithoutLabel(cloneObject(extensions)),
-		[extensions]
-	);
+
+	const previousExtensionsRef = useRef<?Object>(null);
+
+	const _extensionsWithoutLabel = useMemo(() => {
+		if (
+			null !== previousExtensionsRef.current &&
+			!isEquals(previousExtensionsRef.current, extensions)
+		) {
+			clearExtensionsWithoutLabelCache();
+		}
+
+		previousExtensionsRef.current = extensions;
+
+		return extensionsWithoutLabel(cloneObject(extensions));
+	}, [extensions]);
+
 	const cacheData = useMemo(() => {
 		let localCache = getItem(cacheKey) || {};
 
@@ -184,9 +306,11 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 
 		// If cache data doesn't equal extensions, update cache
 		// Compare cache and _extensionsWithoutLabel, ignoring specific properties
-		const omitProps = ['status', 'label', 'show', 'force', 'config'];
-		const cacheOmitted = omitDeep(cache, omitProps);
-		const extensionsOmitted = omitDeep(_extensionsWithoutLabel, omitProps);
+		const cacheOmitted = omitDeep(cache, EXTENSIONS_CACHE_OMIT_PROPS);
+		const extensionsOmitted = omitDeep(
+			_extensionsWithoutLabel,
+			EXTENSIONS_CACHE_OMIT_PROPS
+		);
 
 		if (!isEquals(cacheOmitted, extensionsOmitted)) {
 			cache = _extensionsWithoutLabel;
@@ -205,8 +329,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		}
 
 		return cache;
-		// eslint-disable-next-line
-	}, [cacheKey, props.name]);
+	}, [cacheKey, props.name, _extensionsWithoutLabel]);
 	const supports = useMemo(() => {
 		if (!cacheData) {
 			setItem(
@@ -276,6 +399,11 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
 
 	const [settings, setSettings] = useState(supports);
+
+	useEffect(() => {
+		setSettings(supports);
+	}, [supports]);
+
 	const { searchQuery, activeSearchMode } = useFeatureSearch();
 	// Filter settings based on search query
 	const filteredSettings = useMemo(
@@ -373,7 +501,65 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		/>
 	);
 
-	const displayBlockControls = useDisplayBlockControls();
+	const tabs = getTabs(insideBlockInspector, currentBlock);
+	const isInnerBlockTarget = isInnerBlock(currentBlock);
+	const stylesTab =
+		tabs.find((tab) => 'styles' === tab.name) || tabs[0] || null;
+
+	useEffect(() => {
+		if (
+			!isInnerBlockTarget ||
+			!stylesTab ||
+			currentTab === stylesTab.name
+		) {
+			return;
+		}
+
+		setCurrentTab(stylesTab.name);
+	}, [currentTab, isInnerBlockTarget, setCurrentTab, stylesTab]);
+
+	const shouldHideTabChrome = tabs.length <= 1 || isInnerBlockTarget;
+
+	const renderTabsOrPanel = () => {
+		if (shouldHideTabChrome) {
+			return stylesTab ? Panel(stylesTab) : null;
+		}
+
+		return (
+			<Tabs
+				tabs={tabs}
+				design="modern"
+				getPanel={Panel}
+				activeTab={currentTab}
+				orientation="horizontal"
+				setCurrentTab={setCurrentTab}
+				className="block-inspector-tabs"
+			/>
+		);
+	};
+
+	if (insideBlockInspector) {
+		const inspectorTabs =
+			isInnerBlockTarget && stylesTab ? [stylesTab] : tabs;
+
+		return inspectorTabs.map((tab) => (
+			<InspectorControls
+				key={tab.name}
+				group={getBlockInspectorGroup(tab.name)}
+			>
+				<StateContainer
+					name={props.name}
+					clientId={props.clientId}
+					insideBlockInspector={insideBlockInspector}
+					availableStates={availableStates}
+					blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+					variationSurface={variationSurface}
+				>
+					{Panel(tab)}
+				</StateContainer>
+			</InspectorControls>
+		));
+	}
 
 	return (
 		<StateContainer
@@ -382,29 +568,9 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			insideBlockInspector={insideBlockInspector}
 			availableStates={availableStates}
 			blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+			variationSurface={variationSurface}
 		>
-			{displayBlockControls && insideBlockInspector && (
-				<Tabs
-					design="modern"
-					orientation="horizontal"
-					tabs={getTabs(insideBlockInspector, currentBlock)}
-					activeTab={currentTab}
-					setCurrentTab={setCurrentTab}
-					className="block-inspector-tabs"
-					getPanel={Panel}
-				/>
-			)}
-			{!displayBlockControls && !insideBlockInspector && (
-				<Tabs
-					design="modern"
-					orientation="horizontal"
-					tabs={getTabs(insideBlockInspector, currentBlock)}
-					activeTab={currentTab}
-					setCurrentTab={setCurrentTab}
-					className="block-inspector-tabs"
-					getPanel={Panel}
-				/>
-			)}
+			{!insideBlockInspector && renderTabsOrPanel()}
 			{children}
 		</StateContainer>
 	);

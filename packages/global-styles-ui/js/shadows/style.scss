@@ -1,0 +1,9 @@
+// Preset panel override rules live in panel-override/styles.scss.
+
+// Inline swatch: box-shadow paints outside the 12×12 tile; default repeater header height clips it.
+.blockera-control-repeater-group-header.blockera-shadow-preset-opener-header {
+	height: auto;
+	min-height: calc(var(--repeater-item-height, 30px) - 2px);
+	overflow: visible;
+	align-items: center;
+}

@@ -57,8 +57,9 @@ export const subscribeToBlockSelection = (): (() => void) => {
 		) {
 			// Update the previously selected block ID
 			previouslySelectedBlockClientId = selectedBlock.clientId;
-			// Reset the selected block style variation to undefined.
+			// Reset the selected block style/size variation to undefined.
 			blockeraDispatch.setSelectedBlockStyleVariation(undefined);
+			blockeraDispatch.setSelectedBlockSizeVariation(undefined);
 			// Set the selected block style to the newly selected block's style.
 			blockeraDispatch.setSelectedBlockStyle(selectedBlock.name);
 			// Set the selected block ref to the global styles panel if it's not already set.

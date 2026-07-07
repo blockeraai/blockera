@@ -7,7 +7,7 @@ import {
 } from '@wordpress/block-editor';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useViewportMatch } from '@wordpress/compose';
-import { useCallback, useRef } from '@wordpress/element';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { store as preferencesStore } from '@wordpress/preferences';
 import { ESCAPE } from '@wordpress/keycodes';
 import { store as editorStore } from '@wordpress/editor';
@@ -16,6 +16,13 @@ import { store as editorStore } from '@wordpress/editor';
  * Internal dependencies
  */
 import { store as blockeraEditorStore } from '../../store-persistence';
+import InserterCategoryPanelCloseButton from './InserterCategoryPanelCloseButton';
+
+interface InserterRemountState {
+	tab: string | undefined;
+	filterValue: string;
+	category: undefined;
+}
 
 /**
  * Inserter library panel component that displays the block inserter.
@@ -89,12 +96,69 @@ export default function InserterLibraryPanel() {
 
 	const { setIsInserterOpened } = useDispatch(editorStore) as any;
 	const libraryRef = useRef<HTMLDivElement>(null);
+	const [libraryKey, setLibraryKey] = useState(0);
+	const [inserterRemountState, setInserterRemountState] =
+		useState<InserterRemountState | null>(null);
 
 	const closeInserterSidebar = useCallback(() => {
 		toggleSecondarySidebar();
 		setIsInserterOpened?.(false);
 		inserterSidebarToggleRef?.current?.focus();
 	}, [inserterSidebarToggleRef, setIsInserterOpened, toggleSecondarySidebar]);
+
+	const closeCategoryPanel = useCallback(() => {
+		const root = libraryRef.current;
+
+		if (!root) {
+			return;
+		}
+
+		const selectedTabButton = root.querySelector(
+			'.block-editor-tabbed-sidebar__tab[aria-selected="true"]'
+		);
+		const activeTabId = selectedTabButton?.id?.split('-').pop();
+		const searchInput = root.querySelector(
+			'.block-editor-inserter__search input'
+		) as HTMLInputElement | null;
+		const filterValue = searchInput?.value ?? inserter.filterValue ?? '';
+
+		setInserterRemountState({
+			tab: activeTabId ?? inserter.tab,
+			filterValue,
+			category: undefined,
+		});
+		setLibraryKey((currentKey) => currentKey + 1);
+
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				const remountedRoot = libraryRef.current;
+				const categoryTabList = remountedRoot?.querySelector(
+					'.block-editor-inserter__category-tablist'
+				);
+				const firstCategoryTab =
+					categoryTabList?.querySelector('button');
+
+				if (firstCategoryTab instanceof HTMLElement) {
+					firstCategoryTab.focus();
+				}
+			});
+		});
+	}, [inserter.filterValue, inserter.tab]);
+
+	// Remount state is only needed for the initial render after close.
+	useEffect(() => {
+		if (inserterRemountState === null) {
+			return;
+		}
+
+		const frameId = requestAnimationFrame(() => {
+			setInserterRemountState(null);
+		});
+
+		return () => {
+			cancelAnimationFrame(frameId);
+		};
+	}, [libraryKey, inserterRemountState]);
 
 	const closeInserterOnEscape = useCallback(
 		(event: KeyboardEvent) => {
@@ -111,6 +175,14 @@ export default function InserterLibraryPanel() {
 		return null;
 	}
 
+	const initialTab = inserterRemountState?.tab ?? inserter.tab;
+	const initialCategory =
+		inserterRemountState !== null
+			? inserterRemountState.category
+			: inserter.category;
+	const initialFilterValue =
+		inserterRemountState?.filterValue ?? inserter.filterValue;
+
 	return (
 		<div
 			className="blockera-combined-sidebar__inserter"
@@ -118,16 +190,22 @@ export default function InserterLibraryPanel() {
 		>
 			<div className="editor-inserter-sidebar__content">
 				<InserterLibrary
+					key={libraryKey}
 					showMostUsedBlocks={showMostUsedBlocks}
 					showInserterHelpPanel
 					shouldFocusBlock={isMobileViewport}
 					rootClientId={blockSectionRootClientId}
 					onSelect={inserter.onSelect}
-					__experimentalInitialTab={inserter.tab}
-					__experimentalInitialCategory={inserter.category}
-					__experimentalFilterValue={inserter.filterValue}
+					__experimentalInitialTab={initialTab}
+					__experimentalInitialCategory={initialCategory}
+					__experimentalFilterValue={initialFilterValue}
 					ref={libraryRef}
 					onClose={closeInserterSidebar}
+				/>
+				<InserterCategoryPanelCloseButton
+					containerRef={libraryRef}
+					observerKey={libraryKey}
+					onCloseCategoryPanel={closeCategoryPanel}
 				/>
 			</div>
 		</div>

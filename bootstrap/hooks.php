@@ -48,14 +48,26 @@ function blockera_after_setup_theme() {
 	remove_filter( 'render_block', array( 'WP_Duotone', 'render_duotone_support' ), 10, 3 );
 	remove_action( 'init', 'register_block_core_template_part' );
 	remove_filter( 'render_block_data', 'wp_render_block_style_variation_support_styles', 10, 2 );
+	remove_filter( 'render_block', 'wp_render_block_style_variation_class_name', 10, 2 );
 	remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
+	remove_action( 'enqueue_block_editor_assets', 'wp_enqueue_global_styles_css_custom_properties' );
 
 	// Replace with your own implementation.
 	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_global_styles' );
 	add_action( 'wp_footer', 'blockera_enqueue_global_styles', 1 );
+	add_action( 'enqueue_block_editor_assets', 'blockera_enqueue_global_styles_css_custom_properties' );
 	add_filter( 'render_block', array( BlockeraDuotone::class, 'render_duotone_support' ), 10, 3 );
 	add_action( 'init', 'blockera_register_block_core_template_part' );
 	add_filter( 'render_block_data', 'blockera_render_block_style_variation_support_styles', 10, 2 );
+	add_filter( 'render_block', 'blockera_render_block_style_variation_class_name', 10, 2 );
+	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_block_size_variation_styles', 1 );
+	// Replaced wp_navigation / fallback / nested submenu inners: full subtree; extensions may reuse blockera_apply_render_block_data_to_inner_block_list() the same way.
+	add_filter( 'block_core_navigation_render_inner_blocks', 'blockera_navigation_inner_blocks_apply_render_block_data', 5 );
 	add_filter( 'render_block', 'blockera_render_layout_support_flag', 10, 2 );
 	add_filter('_get_block_templates_files', 'blockera_get_block_templates', PHP_INT_MAX, 3);
+
+	// Core wp_get_global_settings() omits Blockera-only presets; merge JSONResolver output for the editor.
+	add_filter( 'block_editor_settings_all', 'blockera_merge_block_editor_experimental_features', 100, 1 );
+	// Canvas iframe does not load enqueue_block_editor_assets; inject preset CSS variables into resolved assets.
+	add_filter( 'block_editor_settings_all', 'blockera_append_global_styles_variables_to_resolved_iframe_assets', 101, 1 );
 }

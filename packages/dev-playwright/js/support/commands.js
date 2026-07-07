@@ -11,8 +11,7 @@ const { getIframeBody } = require('../utils/editor');
 const { loginToSite, goTo } = require('../utils/site-navigation');
 
 test.beforeEach(async ({ page }) => {
-	// Run these tests as if in a desktop browser with a 720p monitor
-	await page.setViewportSize({ width: 1280, height: 720 });
+	await page.setViewportSize({ width: 1280, height: 900 });
 
 	// Login if not already logged in
 	// Note: In Playwright, authentication is typically handled via storageState
@@ -599,16 +598,11 @@ async function setColorControlValue(page, label, value) {
 	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
-	const popover = page.locator('[data-wp-component="Popover"]').last();
+	const popover = page.locator('.blockera-color-picker-popover').last();
 	await popover.locator('[data-cy="color-picker-css-value"]').clear();
-	await popover
-		.locator('[data-cy="color-picker-css-value"]')
-		.fill(value + ' ');
-
-	const closeButton = popover.locator('[aria-label="Close"]');
-	if ((await closeButton.count()) > 0) {
-		await closeButton.click({ force: true });
-	}
+	await popover.locator('[data-cy="color-picker-css-value"]').fill(value);
+	await popover.locator('[data-cy="color-picker-css-value"]').blur();
+	await popover.locator('[data-test="close-popover"]').click({ force: true });
 }
 
 /**
@@ -622,7 +616,7 @@ async function clearColorControlValue(page, label) {
 	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
-	const popover = page.locator('[data-wp-component="Popover"]').last();
+	const popover = page.locator('.blockera-color-picker-popover').last();
 	await popover.locator('[aria-label="Reset Color (Clear)"]').click();
 
 	// After clearing the color, wait for 50ms to ensure the color is cleared.
@@ -650,8 +644,22 @@ async function clickValueAddonButton(page, container = null) {
  * @return {Promise<void>}
  */
 async function selectValueAddonItem(page, itemID) {
-	// Click on value addon with item ID.
-	await page.locator(`[data-cy="va-item-${itemID}"]`).dispatchEvent('click');
+	const itemSelector = [
+		`[data-test="value-addon-picker-item-${itemID}"]`,
+		`[data-cy="va-item-${itemID}"]`,
+		`[data-cy="group-control-header"][data-variable-slug="${itemID}"]`,
+		`[data-variable-slug="${itemID}"]`,
+	].join(', ');
+
+	const popover = page
+		.locator(
+			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables'
+		)
+		.filter({ visible: true })
+		.first();
+
+	await popover.waitFor({ state: 'visible', timeout: 15000 });
+	await popover.locator(itemSelector).first().dispatchEvent('click');
 }
 
 /**
@@ -967,7 +975,7 @@ async function openSettingsPanel(page) {
  * @return {Promise<void>}
  */
 async function addNewTransition(page) {
-	const container = await getParentContainer(page, 'Transitions');
+	const container = await getParentContainer(page, 'Transitions Timing');
 	await container.locator('[aria-label="Add New Transition"]').click();
 }
 /**

@@ -35,11 +35,31 @@ import {
 	useBlockStylesPickerContext,
 	StyleItemMenuContextProvider,
 } from '../context';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+	SIZE_VARIATION_BLOCK_CARD_SLOT_NAME,
+} from '../variation-surfaces';
+import {
+	getStyleVariationBlockCardSlotNames,
+	DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
+} from '../../../../extensions/libs/block-card';
 
 export const StyleItem = ({
 	style,
 	inGlobalStylesPanel = false,
-}: $Shape<T_STYLE_ITEM_PROPS>): MixedElement => {
+	dragSortBindings,
+}: $Shape<
+	T_STYLE_ITEM_PROPS & {
+		dragSortBindings?: {
+			setNodeRef: (node: HTMLElement | null) => void,
+			attributes: Object,
+			listeners: Object,
+			isDragging?: boolean,
+			style?: Object,
+		},
+	},
+>): MixedElement => {
 	const pickerContext = useBlockStylesPickerContext();
 	const {
 		blockName,
@@ -57,6 +77,7 @@ export const StyleItem = ({
 		originDefaultAttributes,
 		hasChangesets,
 		setChangesets,
+		variationSurface: pickerVariationSurface,
 	} = pickerContext;
 	const {
 		defaultStyles,
@@ -68,7 +89,15 @@ export const StyleItem = ({
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		setStyle: setStyleData = () => {},
+		variationSurface: panelVariationSurface = VARIATION_SURFACE_STYLE,
 	} = useGlobalStylesPanelContext();
+
+	const variationSurface =
+		pickerVariationSurface !== undefined &&
+		pickerVariationSurface !== null &&
+		pickerVariationSurface !== ''
+			? pickerVariationSurface
+			: panelVariationSurface;
 	const initializedCachedStyle = useSelect(
 		(select) => {
 			const storeSelect = select(BLOCKERA_EDITOR_STORE);
@@ -120,27 +149,32 @@ export const StyleItem = ({
 		);
 	}, [cachedStyle, style]);
 
+	const isSizeVariationUi = variationSurface === VARIATION_SURFACE_SIZE;
+
+	const styleVariationBlockCardSlots = useMemo(
+		() =>
+			getStyleVariationBlockCardSlotNames(
+				isSizeVariationUi
+					? SIZE_VARIATION_BLOCK_CARD_SLOT_NAME
+					: DEFAULT_STYLE_VARIATION_BLOCK_CARD_SLOT_NAME,
+				style.name
+			),
+		[style.name, isSizeVariationUi]
+	);
+
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
 	const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 	const [isOpenDuplicateModal, setIsOpenDuplicateModal] = useState(false);
 	const [isOpenUsageForMultipleBlocks, setIsOpenUsageForMultipleBlocks] =
 		useState(false);
-	const [isOpenBlockCardContextMenu, setIsOpenBlockCardContextMenu] =
-		useState(false);
-	const [isOpenBlockCardRenameModal, setIsOpenBlockCardRenameModal] =
-		useState(false);
-	const [isOpenBlockCardDeleteModal, setIsOpenBlockCardDeleteModal] =
-		useState(false);
-	const [isOpenBlockCardDuplicateModal, setIsOpenBlockCardDuplicateModal] =
-		useState(false);
-	const [
-		isOpenBlockCardUsageForMultipleBlocks,
-		setIsOpenBlockCardUsageForMultipleBlocks,
-	] = useState(false);
 
 	const styleItemContextMenuAnchorRef = useRef(null);
-	const blockCardContextMenuAnchorRef = useRef(null);
+
+	const setStyleItemRef = (node: HTMLElement | null) => {
+		styleItemContextMenuAnchorRef.current = node;
+		dragSortBindings?.setNodeRef?.(node);
+	};
 
 	const {
 		handleOnEnable,
@@ -153,7 +187,6 @@ export const StyleItem = ({
 		handleOnSaveCustomizations,
 		handleOnUsageForMultipleBlocks,
 		handleOnSaveUsageForMultipleBlocks,
-		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		style,
 		counter,
@@ -176,19 +209,11 @@ export const StyleItem = ({
 		deleteStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
+		skipBlockStyleRegistry: isSizeVariationUi,
+		variationSurface,
 	});
 
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
-
-	const primarySidebarWidth = useSelect((select) => {
-		return (
-			Number(
-				select('blockera/editor-persistence')
-					.getPrimarySidebarWidth()
-					.replace('px', '')
-			) - 50
-		);
-	}, []);
 
 	// Must read via the `select` argument so useSelect subscribes to the store.
 	// Calling context's getStyleVariationBlocks here (global styles path) bypasses
@@ -274,20 +299,31 @@ export const StyleItem = ({
 
 		const blocksList = formatBlockTitlesList(blocksListItems);
 
+		const lead = isSizeVariationUi
+			? sprintf(
+					/* translators: %d: number of blocks using this size variation */
+					_n(
+						'This size variation is shared with %d block.',
+						'This size variation is shared with %d blocks.',
+						count,
+						'blockera'
+					),
+					count
+				)
+			: sprintf(
+					/* translators: %d: number of blocks using this style variation */
+					_n(
+						'This style variation is shared with %d block.',
+						'This style variation is shared with %d blocks.',
+						count,
+						'blockera'
+					),
+					count
+				);
+
 		return (
 			<>
-				<div>
-					{sprintf(
-						/* translators: %d: number of blocks */
-						_n(
-							'This style variation is used for %d block.',
-							'This style variation is used for %d blocks.',
-							count,
-							'blockera'
-						),
-						count
-					)}
-				</div>
+				<div>{lead}</div>
 				<div>
 					{sprintf(
 						/* translators: %s: comma-separated block titles */
@@ -297,7 +333,7 @@ export const StyleItem = ({
 				</div>
 			</>
 		);
-	}, [activeInBlocks]);
+	}, [activeInBlocks, isSizeVariationUi]);
 
 	// When not in global styles panel,
 	// skip rendering if style is disabled.
@@ -309,7 +345,7 @@ export const StyleItem = ({
 		return <></>;
 	}
 
-	const isActive: boolean = activeStyle.name === style.name;
+	const isActive: boolean = activeStyle?.name === style.name;
 	const defaultStyle = getDefaultStyle(blockStyles);
 
 	const openUsageForMultipleBlocksModal = (event: any) => {
@@ -343,14 +379,17 @@ export const StyleItem = ({
 			return;
 		}
 
-		setIsOpenBlockCardContextMenu(false);
-		setIsOpenBlockCardUsageForMultipleBlocks(true);
+		setIsOpenUsageForMultipleBlocks(true);
 	};
 
 	const renderUsageAcrossBlocksControl = (
 		openModal: (event: any) => void,
 		variant: 'list-row' | 'block-card'
 	): MixedElement | null => {
+		if (isSizeVariationUi) {
+			return null;
+		}
+
 		if (style?.isDefault) {
 			return null;
 		}
@@ -407,12 +446,12 @@ export const StyleItem = ({
 			);
 		}
 
-		// Category shortcut to "Use for multiple blocks" — only for users who can manage it.
+		// Category shortcut to "Share with other blocks" — only for users who can manage it.
 		if (!isUserCanSaveCustomizations) {
 			return null;
 		}
 
-		const useForBlocksLabel = __('Use for multiple blocks', 'blockera');
+		const useForBlocksLabel = __('Share with other blocks', 'blockera');
 		// Match `.blockera-style-item-multiple-blocks__item` svg rules: mb-icon-size − 4px.
 		const categoryIconSize = variant === 'block-card' ? '18' : '14';
 
@@ -448,23 +487,29 @@ export const StyleItem = ({
 	};
 
 	let blockCardAfterPreviewMultipleBlocks: MixedElement | null = null;
-	const blockCardUsageControl = renderUsageAcrossBlocksControl(
-		openBlockCardUsageForMultipleBlocksModal,
-		'block-card'
-	);
-	if (blockCardUsageControl) {
-		blockCardAfterPreviewMultipleBlocks = (
-			<div className="blockera-style-item-multiple-blocks--block-card-row">
-				{blockCardUsageControl}
-			</div>
+	if (!isSizeVariationUi) {
+		const blockCardUsageControl = renderUsageAcrossBlocksControl(
+			openBlockCardUsageForMultipleBlocksModal,
+			'block-card'
 		);
+		if (blockCardUsageControl) {
+			blockCardAfterPreviewMultipleBlocks = (
+				<div className="blockera-style-item-multiple-blocks--block-card-row">
+					{blockCardUsageControl}
+				</div>
+			);
+		}
 	}
 
 	return (
 		<>
 			<div
+				ref={setStyleItemRef}
 				role="button"
 				tabIndex={0}
+				style={dragSortBindings?.style}
+				{...(dragSortBindings?.attributes || {})}
+				{...(dragSortBindings?.listeners || {})}
 				className={classNames(
 					'block-editor-block-styles__item__button',
 					{
@@ -472,7 +517,6 @@ export const StyleItem = ({
 							inGlobalStylesPanel && !currentBlockStyleVariation
 								? false
 								: isActive,
-						'is-focus': isOpenBlockCardContextMenu,
 						'is-enabled':
 							!cachedStyle?.hasOwnProperty('status') ||
 							true === cachedStyle?.status,
@@ -563,13 +607,17 @@ export const StyleItem = ({
 					}
 
 					if (inGlobalStylesPanel) {
-						// Navigate to the block style variation customization panel when clicked in global styles context.
 						resetBlockStateToNormal();
 
-						const { setSelectedBlockStyleVariation } =
-							dispatch('blockera/editor');
+						const editorDispatch = dispatch(BLOCKERA_EDITOR_STORE);
 
-						setSelectedBlockStyleVariation(style);
+						if (variationSurface === VARIATION_SURFACE_SIZE) {
+							editorDispatch.setSelectedBlockSizeVariation(style);
+							setCurrentActiveStyle(style);
+							return setCurrentBlockStyleVariation(style);
+						}
+
+						editorDispatch.setSelectedBlockStyleVariation(style);
 						setCurrentActiveStyle(style);
 						return setCurrentBlockStyleVariation(style);
 					}
@@ -592,12 +640,17 @@ export const StyleItem = ({
 					}
 
 					if (inGlobalStylesPanel) {
-						// Navigate to the block style variation customization panel when Enter is pressed in global styles context.
+						resetBlockStateToNormal();
 
-						const { setSelectedBlockStyleVariation } =
-							dispatch('blockera/editor');
+						const editorDispatch = dispatch(BLOCKERA_EDITOR_STORE);
 
-						setSelectedBlockStyleVariation(style);
+						if (variationSurface === VARIATION_SURFACE_SIZE) {
+							editorDispatch.setSelectedBlockSizeVariation(style);
+							setCurrentActiveStyle(style);
+							return setCurrentBlockStyleVariation(style);
+						}
+
+						editorDispatch.setSelectedBlockStyleVariation(style);
 						setCurrentActiveStyle(style);
 						return setCurrentBlockStyleVariation(style);
 					}
@@ -624,33 +677,74 @@ export const StyleItem = ({
 						isActive && <Icon icon="pen" iconSize="18" />}
 
 					<Flex
-						gap={4}
+						gap={0}
 						alignItems={'center'}
 						style={{ marginLeft: 'auto' }}
 					>
+						{renderUsageAcrossBlocksControl(
+							openUsageForMultipleBlocksModal,
+							'list-row'
+						)}
+
 						{defaultStyle && style.isDefault && (
 							<Tooltip
-								text={__(
-									'Default style variation used globally for all blocks',
-									'blockera'
-								)}
+								text={
+									isSizeVariationUi ? (
+										<>
+											<h5>
+												{__(
+													'The base size variation',
+													'blockera'
+												)}
+											</h5>
+											<p>
+												{__(
+													'Applied when no other size preset is selected for this block type.',
+													'blockera'
+												)}
+											</p>
+										</>
+									) : (
+										<>
+											<h5>
+												{__(
+													'The base style variation',
+													'blockera'
+												)}
+											</h5>
+											<p>
+												{__(
+													'Used by default when no variation is selected. Other variations styles inherit from it.',
+													'blockera'
+												)}
+											</p>
+										</>
+									)
+								}
+								style={{
+									'--tooltip-width': '300px',
+								}}
 							>
-								<Icon
-									icon="asterisk"
-									iconSize="16"
-									style={{
-										opacity: '0.4',
-									}}
-								/>
+								<span className="blockera-style-item-main-variation-badge">
+									<Icon icon="asterisk" iconSize="16" />
+									{__('Base', 'blockera')}
+								</span>
 							</Tooltip>
 						)}
 
 						{false === cachedStyle?.status && (
 							<Tooltip
-								text={__(
-									'This style variation is disabled',
-									'blockera'
-								)}
+								text={
+									isSizeVariationUi
+										? __(
+												'This size variation is disabled',
+												'blockera'
+											)
+										: __(
+												'This style variation is disabled',
+												'blockera'
+											)
+								}
 								style={{
 									'--tooltip-bg': !isActive
 										? '#e20b0b'
@@ -664,26 +758,22 @@ export const StyleItem = ({
 										color: !isActive
 											? '#e20b0b'
 											: 'currentColor',
+										marginLeft: '4px',
 									}}
 								/>
 							</Tooltip>
 						)}
 
-						{renderUsageAcrossBlocksControl(
-							openUsageForMultipleBlocksModal,
-							'list-row'
-						)}
-
-						{style.icon && (
+						{style.icon?.name === 'blockera' && (
 							<Tooltip
 								text={
-									style.icon.name === 'blockera'
+									isSizeVariationUi
 										? __(
-												'Style variation added or customized by Blockera',
+												'Size variation added or customized by Blockera',
 												'blockera'
 											)
 										: __(
-												'Style variation from theme or block editor',
+												'Style variation added or customized by Blockera',
 												'blockera'
 											)
 								}
@@ -694,12 +784,9 @@ export const StyleItem = ({
 									iconSize="18"
 									style={{
 										opacity: '0.4',
-										'margin-right':
-											isUserCanSaveCustomizations
-												? '-4px'
-												: '6px',
 										position: 'relative',
 										'z-index': '10',
+										marginLeft: '4px',
 									}}
 								/>
 							</Tooltip>
@@ -707,18 +794,16 @@ export const StyleItem = ({
 
 						{isUserCanSaveCustomizations && (
 							<span
-								ref={styleItemContextMenuAnchorRef}
 								className="context-menu-trigger style-item-context-menu-anchor"
 								data-test={`open-${style.name}-contextmenu`}
 								data-anchor="style-item-context-menu"
+								onClick={() => {
+									setIsOpenContextMenu(true);
+								}}
 							>
 								<Icon
 									icon="more-vertical"
 									iconSize="20"
-									onClick={() => {
-										setIsOpenBlockCardContextMenu(false);
-										setIsOpenContextMenu(true);
-									}}
 									style={{
 										opacity: '0.4',
 									}}
@@ -731,7 +816,6 @@ export const StyleItem = ({
 				<StyleItemMenuContextProvider
 					value={{
 						anchorRef: styleItemContextMenuAnchorRef,
-						popoverOffset: 50,
 						blockTitle: getBlockType(blockName).title,
 						style,
 						counter,
@@ -745,7 +829,6 @@ export const StyleItem = ({
 						buttonText,
 						handleOnRename,
 						handleOnDuplicate,
-						handleOnClearAllCustomizations,
 						handleOnEnable,
 						handleOnDelete,
 						handleOnUsageForMultipleBlocks,
@@ -761,6 +844,8 @@ export const StyleItem = ({
 						setIsOpenContextMenu,
 						setCurrentBlockStyleVariation,
 						blockStyles,
+						variationAllowsMultipleBlocks:
+							variationSurface !== VARIATION_SURFACE_SIZE,
 					}}
 				>
 					<StyleItemMenu />
@@ -769,47 +854,54 @@ export const StyleItem = ({
 
 			{isActive && (
 				<Fill name="block-inspector-style-actions">
-					<Button
-						disabled={
-							false === cachedStyle?.status ||
-							!hasChangesets ||
-							!isUserCanSaveCustomizations
-						}
-						className={classNames('action-save-customizations', {
-							'action-disabled': false,
-						})}
-						variant="tertiary"
-						onClick={() => {
-							handleOnSaveCustomizations(
-								style,
-								originDefaultAttributes
-							);
-
-							if ('function' === typeof setChangesets) {
-								setChangesets(false);
+					{!isSizeVariationUi && (
+						<Button
+							disabled={
+								false === cachedStyle?.status ||
+								!hasChangesets ||
+								!isUserCanSaveCustomizations
 							}
-						}}
-						size="input"
-						data-test={'save-customizations'}
-						style={{
-							gap: '4px',
-							padding: '2px 0',
-							'letter-spacing': '-0.2px',
-						}}
-					>
-						<Icon icon="save" iconSize="18" />
+							className={classNames(
+								'action-save-customizations',
+								{
+									'action-disabled': false,
+								}
+							)}
+							variant="tertiary"
+							onClick={() => {
+								handleOnSaveCustomizations(
+									style,
+									originDefaultAttributes
+								);
 
-						{__('Save Changes to Style Variation', 'blockera')}
+								if ('function' === typeof setChangesets) {
+									setChangesets(false);
+								}
+							}}
+							size="input"
+							data-test={'save-customizations'}
+							style={{
+								gap: '4px',
+								padding: '2px 0',
+								'letter-spacing': '-0.2px',
+							}}
+						>
+							<Icon icon="save" iconSize="18" />
 
-						{hasChangesets && (
-							<ChangeIndicator
-								isChanged={hasChangesets}
-								isAnimated={true}
-								primaryColor={'#1ca120'}
-								size={'5'}
-							/>
-						)}
-					</Button>
+							{__('Save Changes to Style Variation', 'blockera')}
+
+							{hasChangesets && (
+								<ChangeIndicator
+									isChanged={hasChangesets}
+									isAnimated={true}
+									primaryColor={
+										'var(--blockera-controls-block-variations-style)'
+									}
+									size={'5'}
+								/>
+							)}
+						</Button>
+					)}
 
 					<Flex gap="8px" justifyContent="space-between">
 						<Button
@@ -833,7 +925,9 @@ export const StyleItem = ({
 						>
 							<Icon icon="unlink" iconSize="18" />
 
-							{__('Detach Style', 'blockera')}
+							{isSizeVariationUi
+								? __('Detach Size', 'blockera')
+								: __('Detach Style', 'blockera')}
 						</Button>
 
 						<Button
@@ -870,89 +964,7 @@ export const StyleItem = ({
 				</Fill>
 			)}
 
-			<Fill
-				name={`blockera-style-variation-block-card-menu-${style.name}`}
-			>
-				{isUserCanSaveCustomizations && (
-					<Flex alignItems={'center'} gap={0}>
-						{false === cachedStyle?.status && (
-							<Icon
-								icon="eye-hide"
-								iconSize="20"
-								style={{
-									color: '#e20b0b',
-									cursor: 'initial',
-								}}
-							/>
-						)}
-
-						<span
-							ref={blockCardContextMenuAnchorRef}
-							className="context-menu-trigger block-card-context-menu-anchor"
-							data-test={`open-${style.name}-block-card-contextmenu`}
-							data-anchor="block-card-context-menu"
-						>
-							<Icon
-								iconSize="20"
-								icon="more-vertical"
-								onClick={() => {
-									setIsOpenContextMenu(false);
-									setIsOpenBlockCardContextMenu(true);
-								}}
-							/>
-						</span>
-
-						<StyleItemMenuContextProvider
-							value={{
-								anchorRef: blockCardContextMenuAnchorRef,
-								popoverOffset: primarySidebarWidth,
-								blockTitle: getBlockType(blockName).title,
-								style,
-								counter,
-								handlePromotionPopover,
-								isOpenDeleteModal: isOpenBlockCardDeleteModal,
-								setIsOpenDeleteModal:
-									setIsOpenBlockCardDeleteModal,
-								isOpenDuplicateModal:
-									isOpenBlockCardDuplicateModal,
-								setIsOpenDuplicateModal:
-									setIsOpenBlockCardDuplicateModal,
-								blockName,
-								setCounter,
-								buttonText,
-								handleOnRename,
-								handleOnDuplicate,
-								handleOnClearAllCustomizations,
-								handleOnEnable,
-								handleOnDelete,
-								handleOnUsageForMultipleBlocks,
-								handleOnSaveUsageForMultipleBlocks,
-								isConfirmedChangeID,
-								setIsOpenUsageForMultipleBlocks:
-									setIsOpenBlockCardUsageForMultipleBlocks,
-								isOpenUsageForMultipleBlocks:
-									isOpenBlockCardUsageForMultipleBlocks,
-								setIsConfirmedChangeID,
-								cachedStyle,
-								isOpenRenameModal: isOpenBlockCardRenameModal,
-								setIsOpenRenameModal:
-									setIsOpenBlockCardRenameModal,
-								isOpenContextMenu: isOpenBlockCardContextMenu,
-								setIsOpenContextMenu:
-									setIsOpenBlockCardContextMenu,
-								setCurrentBlockStyleVariation,
-								blockStyles,
-							}}
-						>
-							<StyleItemMenu />
-						</StyleItemMenuContextProvider>
-					</Flex>
-				)}
-			</Fill>
-
-			<Fill
-				name={`blockera-style-variation-block-card-after-preview-${style.name}`}
-			>
+			<Fill name={styleVariationBlockCardSlots.afterPreview}>
 				{blockCardAfterPreviewMultipleBlocks}
 			</Fill>
 		</>

@@ -13,11 +13,12 @@ import {
 	controlClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { UpgradePrompt } from '../';
+import { UpgradePrompt, Flex } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import RepeaterItemHeader from './components/header';
@@ -44,6 +45,7 @@ export default function TransformControl({
 	label,
 	labelDescription,
 	className,
+	withoutValueAddons = false,
 	...props
 }: TransformControlProps): MixedElement {
 	function valueCleanup(value: any | Object): any | Object {
@@ -90,7 +92,7 @@ export default function TransformControl({
 				'popover-transform-control'
 			)}
 			popoverTitle={popoverTitle || __('2D & 3D Transforms', 'blockera')}
-			label={label || __('2D & 3D Transforms', 'blockera')}
+			label={label || __('Transforms', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transform', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
@@ -98,6 +100,12 @@ export default function TransformControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			valueCleanup={valueCleanup}
 			id={'transform'}
+			{...(!withoutValueAddons
+				? {
+						controlAddonTypes: ['variable'],
+						variableTypes: ['transform'],
+					}
+				: {})}
 			PromoComponent={({
 				items,
 				onClose = () => {},
@@ -109,15 +117,35 @@ export default function TransformControl({
 
 				return (
 					<UpgradePrompt
-						heading={__('Multiple 2D & 3D Transforms', 'blockera')}
-						featuresList={[
-							__('Multiple transforms', 'blockera'),
-							__('Advanced transform effects', 'blockera'),
-							__('Advanced features', 'blockera'),
-							__('Premium blocks', 'blockera'),
-						]}
+						lockedFeature={{
+							icon: <Icon icon="layers" iconSize={26} />,
+							title: __(
+								'Multiple 2D & 3D Transform Layers',
+								'blockera'
+							),
+							description: (
+								<Flex direction="column" gap="6px">
+									{__(
+										'Stack unlimited transform layers',
+										'blockera'
+									)}
+									<Flex direction="row" gap="6px">
+										<span className="blockera-free-plan-hint">
+											{__('Free: 1 layer', 'blockera')}
+										</span>
+										<span className="blockera-pro-plan-hint">
+											{__(
+												'Pro: Unlimited layers',
+												'blockera'
+											)}
+										</span>
+									</Flex>
+								</Flex>
+							),
+						}}
 						isOpen={isOpen}
 						onClose={onClose}
+						type="modal"
 					/>
 				);
 			}}

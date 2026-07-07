@@ -8,6 +8,19 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
+import { getVariableRepeaterItemsFromSettings } from '../../value-addon-variable-payload';
+
+function wrapCssVarIfVariable(field, cssValue) {
+	if (
+		'variable' === field?.valueType &&
+		field?.settings?.var &&
+		cssValue !== '' &&
+		cssValue !== undefined
+	) {
+		return `var(${field.settings.var}, ${cssValue})`;
+	}
+	return cssValue;
+}
 
 export function FilterGenerator(id, props, options) {
 	const isBackdrop = 'blockeraBackdropFilter' === id;
@@ -22,7 +35,20 @@ export function FilterGenerator(id, props, options) {
 		return '';
 	}
 
-	const value = getSortedRepeater(attributes[_id])
+	const filterAttr = attributes?.[_id];
+	let filterValue = filterAttr;
+
+	if ('variable' === filterValue?.valueType) {
+		const rawFilter = getVariableRepeaterItemsFromSettings(
+			filterValue?.settings
+		);
+		const filterRows = Array.isArray(rawFilter) ? rawFilter : [];
+		filterValue = filterRows.map((f, i) => [`${f.type}-${i}`, f]);
+	} else {
+		filterValue = getSortedRepeater(filterValue);
+	}
+
+	const value = filterValue
 		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;
@@ -42,10 +68,12 @@ export function FilterGenerator(id, props, options) {
 		})
 		?.filter((item) => null !== item);
 
+	const filterCss = wrapCssVarIfVariable(filterAttr, value?.join(' '));
+
 	return createCssDeclarations({
 		options,
 		properties: {
-			[property]: value?.join(' '),
+			[property]: filterCss,
 		},
 	});
 }

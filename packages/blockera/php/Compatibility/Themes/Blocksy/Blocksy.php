@@ -89,7 +89,7 @@ class Blocksy {
 		return array_merge(
             [
 				[
-					'name'      => __('Normal Container Max Width', 'blockera'),
+					'name'      => __('Normal Container', 'blockera'),
 					'id'        => 'normal-container-max-width',
 					'value'     => blocksy_get_theme_mod( 'maxSiteWidth', 1290 ) . 'px',
 					'type'      => 'width-size',
@@ -102,7 +102,7 @@ class Blocksy {
 					],
 				],
 				[
-					'name'      => __('Narrow Container Max Width', 'blockera'),
+					'name'      => __('Narrow Container', 'blockera'),
 					'id'        => 'narrow-container-max-width',
 					'value'     => blocksy_get_theme_mod( 'narrowContainerWidth', 750 ) . 'px',
 					'type'      => 'width-size',
@@ -337,6 +337,10 @@ class Blocksy {
 					'group'     => 'blocksy-colors',
 					'var'       => '--theme-heading-1-color',
 					'label'     => __( 'Heading 1', 'blockera' ),
+					'reference' => [
+						'type' => 'theme',
+						'theme' => 'blocksy',
+					],
 				],
 				[
 					'name'      => __('Heading 2', 'blockera'),
@@ -346,6 +350,10 @@ class Blocksy {
 					'group'     => 'blocksy-colors',
 					'var'       => '--theme-heading-2-color',
 					'label'     => __( 'Heading 2', 'blockera' ),
+					'reference' => [
+						'type' => 'theme',
+						'theme' => 'blocksy',
+					],
 				],
 				[
 					'name'      => __('Heading 3', 'blockera'),
@@ -355,6 +363,10 @@ class Blocksy {
 					'group'     => 'blocksy-colors',
 					'var'       => '--theme-heading-3-color',
 					'label'     => __( 'Heading 3', 'blockera' ),
+					'reference' => [
+						'type' => 'theme',
+						'theme' => 'blocksy',
+					],
 				],
 				[
 					'name'      => __('Heading 4', 'blockera'),
@@ -364,6 +376,10 @@ class Blocksy {
 					'group'     => 'blocksy-colors',
 					'var'       => '--theme-heading-4-color',
 					'label'     => __( 'Heading 4', 'blockera' ),
+					'reference' => [
+						'type' => 'theme',
+						'theme' => 'blocksy',
+					],
 				],
 				[
 					'name'      => __('Heading 5', 'blockera'),
@@ -373,6 +389,10 @@ class Blocksy {
 					'group'     => 'blocksy-colors',
 					'var'       => '--theme-heading-5-color',
 					'label'     => __( 'Heading 5', 'blockera' ),
+					'reference' => [
+						'type' => 'theme',
+						'theme' => 'blocksy',
+					],
 				],
 				[
 					'name'      => __('Heading 6', 'blockera'),
@@ -382,6 +402,10 @@ class Blocksy {
 					'group'     => 'blocksy-colors',
 					'var'       => '--theme-heading-6-color',
 					'label'     => __( 'Heading 6', 'blockera' ),
+					'reference' => [
+						'type' => 'theme',
+						'theme' => 'blocksy',
+					],
 				],
             ],
             $items,

@@ -35,6 +35,8 @@ describe('Social Links Block', () => {
 		// Select target block
 		selectBlock('Social Icons');
 
+		cy.getByAriaControls('styles-view').click();
+
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
@@ -135,7 +137,7 @@ describe('Social Links Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaControls('settings-view').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {

@@ -11,7 +11,6 @@ import {
 	useMemo,
 	createPortal,
 } from '@wordpress/element';
-import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -72,17 +71,14 @@ const getTargetContainer = (): HTMLElement | null => {
  * Uses IntersectionObserver to detect when the target container is available.
  *
  * @param {Object} props Component props
- * @param {string} props.clientId Unique identifier for the block/client
  * @param {MixedElement} props.children Content to render in the portal
  * @param {boolean} props.isGlobalStylesWrapper Whether this is for global styles
  * @return {MixedElement} The rendered component
  */
 export const StylesWrapper = ({
 	children,
-	clientId,
 	isGlobalStylesWrapper = false,
 }: {
-	clientId: string,
 	children: MixedElement,
 	isGlobalStylesWrapper?: boolean,
 }): MixedElement => {
@@ -215,14 +211,7 @@ export const StylesWrapper = ({
 
 	return (
 		<Observer ancestors={observerConfig}>
-			{entry &&
-				createPortal(
-					<SlotFillProvider>
-						<Slot name={`${slotName}-${clientId}`} />
-						{children}
-					</SlotFillProvider>,
-					entry
-				)}
+			{entry && createPortal(children, entry)}
 		</Observer>
 	);
 };

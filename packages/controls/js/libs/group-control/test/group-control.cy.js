@@ -2,8 +2,31 @@
 
 import { useState } from 'react';
 import GroupControl from '..';
-import { default as AccordionCustomOpenIcon } from '../stories/icons/accordion-custom-open-icon';
-import { default as AccordionCustomCloseIcon } from '../stories/icons/accordion-custom-close-icon';
+
+function AccordionCustomOpenIcon({}) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			width="24"
+			height="24"
+			data-cy="minus-svg"
+		>
+			<path d="M7 11.5h10V13H7z"></path>
+		</svg>
+	);
+}
+
+function AccordionCustomCloseIcon({}) {
+	return (
+		<svg width="24" height="24" viewBox="0 0 24 24" data-cy="plus-svg">
+			<path
+				d="M17 11.3333H12.6667V7H11.3333V11.3333H7V12.6667H11.3333V17H12.6667V12.6667H17V11.3333Z"
+				fill="black"
+			/>
+		</svg>
+	);
+}
 
 const Component = (props) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks

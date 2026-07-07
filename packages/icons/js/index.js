@@ -1,3 +1,12 @@
+export {
+	isStrokeIconLibrary,
+	isStrokeSvgMarkup,
+	isSvgFillAccentValue,
+	isSvgFillAccentElement,
+	prepareIconSvgForStorage,
+	extractSvgMarkup,
+	getIconKebabId,
+} from './helpers';
 export { Icon, getIcon, isValidIcon, createStandardIconObject } from './icon';
 export {
 	isValidIconLibrary,
@@ -5,6 +14,6 @@ export {
 	getIconLibraryIcons,
 	getIconLibrarySearchData,
 } from './icon-library';
-export { iconSearch } from './icon-search';
+export { iconSearch, prepareIconSearchQuery } from './icon-search';
 export { default as IconLibrariesList } from './search-libraries.json';
 export { default as NativeIconLibrariesList } from './search-libraries-2.json';

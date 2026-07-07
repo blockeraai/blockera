@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import React, { type MixedElement } from 'react';
+import React, { type MixedElement, useRef } from 'react';
 
 /**
  * Blockera dependencies
@@ -20,17 +20,18 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { Button, Popover, DropdownMenu } from '../';
+import { hasOpenModalOverlay } from '../modal/overlay-utils';
 import type { GroupControlProps } from './types';
 
 export default function GroupControl({
 	design = 'minimal',
 	toggleOpenBorder = false,
+	disableAccordionOpenPrimaryBorder = false,
 	isOpen = false,
 	//
 	mode = 'popover',
 	popoverProps,
 	popoverTitle,
-	popoverOffset = 35,
 	popoverTitleButtonsRight,
 	popoverClassName,
 	//
@@ -42,6 +43,7 @@ export default function GroupControl({
 	injectHeaderButtonsEnd,
 	actionButtonsType = 'inline',
 	actionMenuButtonLabel = __('More Options', 'blockera'),
+	headerVariableSlug,
 	//
 	children = 'Content...',
 	//
@@ -50,6 +52,8 @@ export default function GroupControl({
 	onOpen: fnOnOpen = () => {},
 	onClick = () => {},
 }: GroupControlProps): MixedElement {
+	const groupHeaderRef = useRef<?HTMLElement>(null);
+
 	const getHeaderOpenIcon = (): MixedElement | string => {
 		if (headerOpenIcon) {
 			return headerOpenIcon;
@@ -102,10 +106,34 @@ export default function GroupControl({
 		return isFunction(onClick) && onClick && onClick(event);
 	};
 
+	const isInsideVariationStrip = (event: MouseEvent): boolean =>
+		event.target instanceof Element &&
+		Boolean(
+			event.target.closest(
+				'.blockera-component-preset-variable-variations-strip'
+			)
+		);
+
 	const handleOnClick = (event: MouseEvent): void => {
 		event.stopPropagation();
 
+		if (hasOpenModalOverlay()) {
+			return;
+		}
+
+		if (
+			event.target instanceof Element &&
+			event.target.closest(`.${controlInnerClassNames('action-buttons')}`)
+		) {
+			return;
+		}
+
 		if (!isCallbackEligible(event)) {
+			return;
+		}
+
+		// Strip shade chips select via repeater onClick — never open edit popover.
+		if (isInsideVariationStrip(event)) {
 			return;
 		}
 
@@ -119,15 +147,24 @@ export default function GroupControl({
 				'design-' + design,
 				'mode-' + mode,
 				isOpen ? 'is-open' : 'is-close',
-				toggleOpenBorder ? 'toggle-open-border' : '',
+				toggleOpenBorder && !disableAccordionOpenPrimaryBorder
+					? 'toggle-open-border'
+					: '',
+				disableAccordionOpenPrimaryBorder && mode === 'accordion'
+					? 'no-accordion-open-primary-border'
+					: '',
 				className
 			)}
 			data-cy="control-group"
 			aria-label={'group-control'}
 		>
 			<div
+				ref={groupHeaderRef}
 				className={controlInnerClassNames('group-header')}
 				data-cy="group-control-header"
+				{...(headerVariableSlug
+					? { 'data-variable-slug': headerVariableSlug }
+					: {})}
 				onClick={handleOnClick}
 			>
 				{(injectHeaderButtonsStart ||
@@ -220,7 +257,6 @@ export default function GroupControl({
 
 			{mode === 'popover' && isOpen && (
 				<Popover
-					offset={popoverOffset}
 					placement="left-start"
 					className={controlInnerClassNames(
 						'group-popover',
@@ -228,6 +264,7 @@ export default function GroupControl({
 					)}
 					title={popoverTitle || header}
 					titleButtonsRight={popoverTitleButtonsRight}
+					anchor={groupHeaderRef.current ?? undefined}
 					onClose={() => {
 						onClose();
 					}}

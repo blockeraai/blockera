@@ -32,6 +32,21 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-indicator');
 			cy.getByDataCy('color-label').should('have.text', 'None');
 		});
+
+		it('renders children inside the color button', () => {
+			cy.withDataProvider({
+				component: (
+					<ColorControl>
+						<span data-cy="color-control-child">Child</span>
+					</ColorControl>
+				),
+			});
+
+			cy.getByDataCy('color-btn')
+				.find('[data-cy="color-control-child"]')
+				.should('exist')
+				.and('have.text', 'Child');
+		});
 	});
 
 	context('Functional Tests', () => {
@@ -75,6 +90,24 @@ describe('Color Control', () => {
 				.then(() => {
 					expect(getControlValue(name)).to.be.equal('#dddddd');
 				});
+		});
+
+		it('normalizes 3-digit hex shorthand without hash', () => {
+			cy.withDataProvider({
+				component: <ColorControl />,
+				value: '',
+				name,
+			});
+
+			cy.getByDataCy('color-btn').click();
+			cy.getByDataCy('color-picker-css-value').clear();
+			cy.getByDataCy('color-picker-css-value').type('ccc');
+			cy.getByDataCy('color-picker-css-value').blur();
+
+			cy.getByDataCy('color-label').contains('#cccccc');
+			cy.then(() => {
+				expect(getControlValue(name)).to.be.equal('#cccccc');
+			});
 		});
 
 		it('renders None as color label when color gets remove from color-picker', () => {

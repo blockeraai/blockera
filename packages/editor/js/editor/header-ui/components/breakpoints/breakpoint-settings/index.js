@@ -17,14 +17,16 @@ import {
 	controlClassNames,
 } from '@blockera/classnames';
 import {
+	Flex,
 	BaseControl,
-	RepeaterControl,
 	UpgradePrompt,
+	RepeaterControl,
 	cleanupRepeaterItem,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control/default-item-value';
 import { STORE_NAME as REPEATER_STORE_NAME } from '@blockera/controls/js/libs/repeater-control/store/constants';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -98,7 +100,6 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 							id="breakpoints"
 							mode={'accordion'}
 							disableRegenerateId={false}
-							isNativeSupport={true}
 							popoverTitle={(itemId, item) => {
 								if (getBaseBreakpoint() === itemId) {
 									return item.label;
@@ -155,28 +156,46 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 							}): MixedElement | null => {
 								return (
 									<UpgradePrompt
-										heading={__(
-											'Advanced Breakpoints',
-											'blockera'
-										)}
-										featuresList={[
-											__(
-												'7 responsive breakpoints',
+										lockedFeature={{
+											icon: (
+												<Icon
+													icon="responsive-breakpoints"
+													iconSize={22}
+												/>
+											),
+											title: __(
+												'Advanced & Custom Breakpoints',
 												'blockera'
 											),
-											__(
-												'Edit breakpoint settings',
-												'blockera'
+											description: (
+												<Flex
+													direction="column"
+													gap="6px"
+												>
+													{__(
+														'Get 7 breakpoints and customize any of them or add your own',
+														'blockera'
+													)}
+													<Flex
+														direction="column"
+														gap="6px"
+													>
+														<span className="blockera-free-plan-hint">
+															{__(
+																'Free: 3 breakpoints',
+																'blockera'
+															)}
+														</span>
+														<span className="blockera-pro-plan-hint">
+															{__(
+																'Pro: 7 breakpoints + custom breakpoints',
+																'blockera'
+															)}
+														</span>
+													</Flex>
+												</Flex>
 											),
-											__(
-												'New custom breakpoints',
-												'blockera'
-											),
-											__(
-												'Design for any screen size',
-												'blockera'
-											),
-										]}
+										}}
 										isOpen={isOpen}
 										onClose={onClose}
 										type="modal"

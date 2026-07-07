@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { mergeObject, isUndefined } from '@blockera/utils';
+import { isUndefined } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -29,15 +29,64 @@ import {
 	elementNormalBackgroundFromWPCompatibility,
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
-import { getBaseBreakpoint } from '../../../../editor/header-ui';
-import { isResetRef } from '../../utils';
+import {
+	elementGenericFromWPCompatibility,
+	elementGenericToWPCompatibility,
+} from './compatibility/element-generic';
+import { resolveInnerBlockCompatGateKey } from './compatibility/element-schema';
+import {
+	INNER_BLOCK_COMPAT_REGISTRY,
+	SPECIAL_INNER_BLOCK_COMPAT_KEYS,
+	getRegistryEntryForSetAttributes,
+} from './compatibility/registry';
+import {
+	isResetRef,
+	mergeWPCompatibility,
+	runInsideBlockInspector,
+	sanitizeWPCompatibilityAttributes,
+} from '../../utils';
+import {
+	getBlockeraInnerBlockItem,
+	hasDataCompatibility,
+	isInnerBlockRegisteredForBlock,
+	resolveDataCompatibilityElement,
+} from './utils';
+import {
+	elementDataHasStyleData,
+	getInnerBlockAttributesForState,
+} from './compatibility/element-scope';
+
+const getInnerBlockAttributes = (
+	attributes: Object,
+	innerBlock: string
+): Object =>
+	getBlockeraInnerBlockItem(attributes, innerBlock)?.attributes || {};
+
+const hasElementStyles = (
+	attributes: Object,
+	dataCompatibilityElement: string,
+	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style'
+): boolean => {
+	const useStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+
+	const elementData = useStyle
+		? attributes?.style?.elements?.[dataCompatibilityElement]
+		: attributes?.elements?.[dataCompatibilityElement];
+
+	return elementDataHasStyleData(elementData);
+};
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
-		'blockera.blockEdit.sizeExtension.bootstrap',
+		'blockera.blockEdit.innerBlocksExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const {
+				blockId,
 				innerBlocks,
 				insideBlockInspector,
 				editorSelectedBlockEvent,
@@ -52,34 +101,41 @@ export const bootstrap = (): void => {
 			}
 
 			Object.keys(innerBlocks).forEach((innerBlock) => {
+				if (!isInnerBlockRegisteredForBlock(innerBlock, blockId)) {
+					return;
+				}
+
 				const dataCompatibilityElement =
-					innerBlocks[innerBlock]?.settings
-						?.dataCompatibilityElement || innerBlock;
+					resolveDataCompatibilityElement(innerBlocks, innerBlock);
+
+				const dataCompatibility =
+					innerBlocks[innerBlock]?.settings?.dataCompatibility;
 
 				if (
-					(!attributes?.style?.elements?.[dataCompatibilityElement] &&
-						!attributes?.elements?.[dataCompatibilityElement]) ||
-					isUndefined(
-						innerBlocks[innerBlock]?.settings?.dataCompatibility
+					!hasElementStyles(
+						attributes,
+						dataCompatibilityElement,
+						insideBlockInspector,
+						editorSelectedBlockEvent
 					) ||
-					innerBlocks[innerBlock]?.settings?.dataCompatibility
-						?.length === 0
+					isUndefined(dataCompatibility) ||
+					dataCompatibility.length === 0
 				) {
 					return;
 				}
+
+				const innerBlockAttributes = getInnerBlockAttributes(
+					attributes,
+					innerBlock
+				);
 
 				//
 				// Normal font color
 				//
 				if (
-					innerBlocks[
-						innerBlock
-					]?.settings?.dataCompatibility.includes('font-color')
+					hasDataCompatibility(innerBlocks, innerBlock, 'font-color')
 				) {
-					if (
-						!attributes?.blockeraInnerBlocks['elements/link']
-							?.attributes?.blockeraFontColor
-					) {
+					if (!innerBlockAttributes?.blockeraFontColor) {
 						const newAttributes =
 							elementNormalFontColorFromWPCompatibility({
 								innerBlock,
@@ -90,7 +146,11 @@ export const bootstrap = (): void => {
 							});
 
 						if (newAttributes) {
-							attributes = mergeObject(attributes, newAttributes);
+							attributes = mergeWPCompatibility(
+								attributes,
+								newAttributes,
+								blockDetail
+							);
 						}
 					}
 				}
@@ -99,16 +159,18 @@ export const bootstrap = (): void => {
 				// Hover font color
 				//
 				if (
-					innerBlocks[
-						innerBlock
-					]?.settings?.dataCompatibility.includes('font-color-hover')
+					hasDataCompatibility(
+						innerBlocks,
+						innerBlock,
+						'font-color-hover'
+					)
 				) {
-					if (
-						!attributes?.blockeraInnerBlocks['elements/link']
-							?.attributes?.blockeraBlockStates?.hover
-							?.breakpoints[getBaseBreakpoint()]?.attributes
-							?.blockeraFontColor
-					) {
+					const hoverAttributes = getInnerBlockAttributesForState(
+						innerBlockAttributes,
+						'hover'
+					);
+
+					if (!hoverAttributes?.blockeraFontColor) {
 						const newAttributes =
 							elementHoverFontColorFromWPCompatibility({
 								innerBlock,
@@ -119,7 +181,11 @@ export const bootstrap = (): void => {
 							});
 
 						if (newAttributes) {
-							attributes = mergeObject(attributes, newAttributes);
+							attributes = mergeWPCompatibility(
+								attributes,
+								newAttributes,
+								blockDetail
+							);
 						}
 					}
 				}
@@ -133,15 +199,13 @@ export const bootstrap = (): void => {
 				// Background Color
 				//
 				if (
-					innerBlocks[
-						innerBlock
-					]?.settings?.dataCompatibility.includes('background-color')
+					hasDataCompatibility(
+						innerBlocks,
+						innerBlock,
+						'background-color'
+					)
 				) {
-					if (
-						!attributes.blockeraInnerBlocks[innerBlock] ||
-						!attributes.blockeraInnerBlocks[innerBlock]?.attributes
-							?.blockeraBackgroundColor
-					) {
+					if (!innerBlockAttributes?.blockeraBackgroundColor) {
 						bgAttributes =
 							elementNormalBackgroundColorFromWPCompatibility({
 								innerBlock,
@@ -152,7 +216,11 @@ export const bootstrap = (): void => {
 							});
 
 						if (bgAttributes) {
-							attributes = mergeObject(attributes, bgAttributes);
+							attributes = mergeWPCompatibility(
+								attributes,
+								bgAttributes,
+								blockDetail
+							);
 						}
 					}
 				}
@@ -162,15 +230,13 @@ export const bootstrap = (): void => {
 				//
 				if (
 					!bgAttributes &&
-					innerBlocks[
-						innerBlock
-					]?.settings?.dataCompatibility.includes('background-image')
+					hasDataCompatibility(
+						innerBlocks,
+						innerBlock,
+						'background-image'
+					)
 				) {
-					if (
-						!attributes.blockeraInnerBlocks[innerBlock] ||
-						!attributes.blockeraInnerBlocks[innerBlock]?.attributes
-							?.blockeraBackground
-					) {
+					if (!innerBlockAttributes?.blockeraBackground) {
 						bgAttributes =
 							elementNormalBackgroundFromWPCompatibility({
 								innerBlock,
@@ -181,19 +247,55 @@ export const bootstrap = (): void => {
 							});
 
 						if (bgAttributes) {
-							attributes = mergeObject(attributes, bgAttributes);
+							attributes = mergeWPCompatibility(
+								attributes,
+								bgAttributes,
+								blockDetail
+							);
 						}
 					}
 				}
+
+				//
+				// Other extension mirrors (typography, border, spacing, shadow, …)
+				//
+				INNER_BLOCK_COMPAT_REGISTRY.forEach((entry) => {
+					if (
+						SPECIAL_INNER_BLOCK_COMPAT_KEYS.includes(entry.key) ||
+						!dataCompatibility.includes(
+							resolveInnerBlockCompatGateKey(entry.key)
+						)
+					) {
+						return;
+					}
+
+					const newAttributes = elementGenericFromWPCompatibility({
+						innerBlock,
+						attributes,
+						dataCompatibilityElement,
+						insideBlockInspector,
+						editorSelectedBlockEvent,
+						entry,
+						blockId,
+					});
+
+					if (newAttributes) {
+						attributes = mergeWPCompatibility(
+							attributes,
+							newAttributes,
+							blockDetail
+						);
+					}
+				});
 			});
 
-			return attributes;
+			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
 		}
 	);
 
 	addFilter(
 		'blockera.blockEdit.setAttributes',
-		'blockera.blockEdit.sizeExtension.bootstrap.setAttributes',
+		'blockera.blockEdit.innerBlocksExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
@@ -217,6 +319,7 @@ export const bootstrap = (): void => {
 			blockDetail: BlockDetail
 		): Object => {
 			const {
+				blockId,
 				isBaseBreakpoint,
 				isMasterBlock,
 				currentState,
@@ -246,9 +349,13 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			const element =
-				innerBlocks[currentBlock]?.settings?.dataCompatibilityElement ||
-				currentBlock;
+			const dataCompatibilityElement = resolveDataCompatibilityElement(
+				innerBlocks,
+				currentBlock
+			);
+
+			const dataCompatibility =
+				innerBlocks[currentBlock]?.settings?.dataCompatibility;
 
 			//
 			// Normal font color
@@ -256,19 +363,18 @@ export const bootstrap = (): void => {
 			if (
 				currentState === 'normal' &&
 				featureId === 'blockeraFontColor' &&
-				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
-					'font-color'
-				)
+				hasDataCompatibility(innerBlocks, currentBlock, 'font-color')
 			) {
-				return mergeObject(
+				return mergeWPCompatibility(
 					nextState,
 					elementNormalFontColorToWPCompatibility({
-						element,
+						element: dataCompatibilityElement,
 						newValue,
 						ref,
 						insideBlockInspector,
 						editorSelectedBlockEvent,
-					})
+					}),
+					blockDetail
 				);
 			}
 
@@ -278,19 +384,22 @@ export const bootstrap = (): void => {
 			if (
 				currentState === 'hover' &&
 				featureId === 'blockeraFontColor' &&
-				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
+				hasDataCompatibility(
+					innerBlocks,
+					currentBlock,
 					'font-color-hover'
 				)
 			) {
-				return mergeObject(
+				return mergeWPCompatibility(
 					nextState,
 					elementHoverFontColorToWPCompatibility({
-						element,
+						element: dataCompatibilityElement,
 						newValue,
 						ref,
 						insideBlockInspector,
 						editorSelectedBlockEvent,
-					})
+					}),
+					blockDetail
 				);
 			}
 
@@ -300,52 +409,85 @@ export const bootstrap = (): void => {
 			if (
 				currentState === 'normal' &&
 				featureId === 'blockeraBackgroundColor' &&
-				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
+				hasDataCompatibility(
+					innerBlocks,
+					currentBlock,
 					'background-color'
 				)
 			) {
-				return mergeObject(
+				return mergeWPCompatibility(
 					nextState,
 					elementNormalBackgroundColorToWPCompatibility({
-						element,
+						element: dataCompatibilityElement,
 						newValue,
 						ref,
 						getAttributes,
+						innerBlock: currentBlock,
 						insideBlockInspector,
 						editorSelectedBlockEvent,
-					})
+					}),
+					blockDetail
 				);
 			}
+
 			//
 			// Normal background image
 			//
-			else if (
+			if (
 				currentState === 'normal' &&
 				featureId === 'blockeraBackground' &&
-				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
+				hasDataCompatibility(
+					innerBlocks,
+					currentBlock,
 					'background-image'
 				)
 			) {
 				const attrs = getAttributes();
+				const innerBlockAttributes = getInnerBlockAttributes(
+					attrs,
+					currentBlock
+				);
 
-				// Item has BG color
-				if (
-					!isUndefined(attrs.blockeraInnerBlocks[currentBlock]) &&
-					attrs.blockeraInnerBlocks[currentBlock]?.attributes
-						?.blockeraBackgroundColor
-				) {
+				if (innerBlockAttributes?.blockeraBackgroundColor) {
 					return nextState;
 				}
 
-				return mergeObject(
+				return mergeWPCompatibility(
 					nextState,
 					elementNormalBackgroundToWPCompatibility({
-						element,
+						element: dataCompatibilityElement,
 						newValue,
 						ref,
 						insideBlockInspector,
 						editorSelectedBlockEvent,
-					})
+					}),
+					blockDetail
+				);
+			}
+
+			//
+			// Registry-backed extension mirrors
+			//
+			const registryEntry = getRegistryEntryForSetAttributes(
+				featureId,
+				currentState,
+				dataCompatibility,
+				INNER_BLOCK_COMPAT_REGISTRY
+			);
+
+			if (registryEntry) {
+				return mergeWPCompatibility(
+					nextState,
+					elementGenericToWPCompatibility({
+						dataCompatibilityElement,
+						newValue,
+						ref,
+						insideBlockInspector,
+						editorSelectedBlockEvent,
+						entry: registryEntry,
+						blockId,
+					}),
+					blockDetail
 				);
 			}
 

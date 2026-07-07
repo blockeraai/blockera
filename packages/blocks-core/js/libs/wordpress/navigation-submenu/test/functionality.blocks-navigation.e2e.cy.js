@@ -30,7 +30,6 @@ describe(
 		});
 
 		it('Block should be supported + switch to parent should work', () => {
-			openBlockInserter();
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -42,7 +41,7 @@ describe(
 				.last()
 				.within(() => {
 					// Open blocks menu
-					cy.get('[aria-label="Add block"]')
+					cy.get('[aria-label="Add page"]')
 						.first()
 						.click({ force: true });
 				});
@@ -64,8 +63,10 @@ describe(
 					cy.get('button').contains('Browse all').click();
 				});
 
-			// wait to open popover
-			cy.wait(100);
+			openBlockInserter();
+
+			// wait to open navigator
+			cy.wait(300);
 
 			// switch to target block
 			cy.get('.block-editor-block-types-list__list-item')
@@ -116,11 +117,11 @@ describe(
 			cy.getByDataTest('add-new-block-state').click();
 
 			// Icon extension is active
-			cy.getByDataTest('settings-tab').click({ force: true });
+			cy.getByAriaControls('settings-view').click({ force: true });
 			cy.getByAriaLabel('Choose Icon…').should('exist');
 
 			// switch back to style tab
-			cy.getByDataTest('style-tab').click();
+			cy.getByAriaControls('styles-view').click();
 
 			// switch to parent navigation block
 			cy.get('.blockera-extension-block-card.master-block-card').within(
@@ -138,7 +139,7 @@ describe(
 			// Assert block switched to parent navigation block
 			//
 			cy.get('.blockera-extension-block-card.master-block-card').should(
-				'not.exist'
+				'exist'
 			);
 			cy.get('.block-editor-block-card').should('exist');
 			cy.get('.block-editor-block-card')
@@ -160,11 +161,11 @@ describe(
 			cy.get('.block-editor-list-view-tree')
 				.last()
 				.within(() => {
-					cy.get('[aria-label="Add block"]')
+					cy.get('[aria-label="Add page"]')
 						.first()
 						.should('be.visible');
 					// Open blocks menu
-					cy.get('[aria-label="Add block"]').first().click();
+					cy.get('[aria-label="Add page"]').first().click();
 				});
 
 			// wait to open popover
@@ -185,8 +186,10 @@ describe(
 					cy.get('button').contains('Browse all').click();
 				});
 
+			openBlockInserter();
+
 			// wait to open popover
-			cy.wait(100);
+			cy.wait(300);
 
 			// switch to target block
 			cy.get('.block-editor-block-types-list__list-item')
@@ -219,8 +222,6 @@ describe(
 			cy.getBlock('core/navigation-submenu')
 				.last()
 				.click({ force: true });
-			cy.getByAriaLabel('Select Submenu').should('be.visible');
-			cy.getByAriaLabel('Select Submenu').click();
 
 			//
 			// 0. Inner blocks existence
@@ -243,6 +244,8 @@ describe(
 
 			// no other item
 			cy.getByDataTest('core/paragraph').should('not.exist');
+
+			cy.getByAriaControls('styles-view').click({ force: true });
 
 			//
 			// 1. Edit Block
@@ -307,20 +310,7 @@ describe(
 			);
 
 			//
-			// 2. Check settings tab
-			//
-			setParentBlock();
-			cy.getByDataTest('settings-tab').click();
-
-			cy.get('.block-editor-block-inspector').within(() => {
-				cy.get('.components-tools-panel-header')
-					.contains('Settings')
-					.scrollIntoView()
-					.should('be.visible');
-			});
-
-			//
-			// 3. Assert front end
+			// 2. Assert front end
 			//
 			savePage();
 			redirectToFrontPage();

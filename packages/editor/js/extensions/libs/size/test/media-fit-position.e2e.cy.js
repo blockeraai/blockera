@@ -14,7 +14,7 @@ describe('Media Fit Position → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		cy.getByAriaControls('styles-view').click();
 	});
 
 	it('should update object-position correctly, when add value', () => {

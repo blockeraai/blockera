@@ -18,6 +18,12 @@ export type CheckboxControlProps = {
 	 */
 	checkboxLabel: string | MixedElement,
 	/**
+	 * Description for checkbox.
+	 *
+	 * @default ""
+	 */
+	description?: string | MixedElement,
+	/**
 	 * Whether to make the checkbox label bold.
 	 *
 	 * @default false

@@ -16,6 +16,11 @@ import {
 } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { queryActiveGlobalStylesNavigatorScreen } from '@blockera/global-styles-ui/panel-override/selectors';
+
+/**
  * Internal dependencies
  */
 import App from './app';
@@ -24,6 +29,11 @@ import { STORE_NAME } from '../../../store/constants';
 import bootstrapScripts from '../../../extensions/scripts';
 import { subscribeToBlockSelection } from './subscribe-unsubscribe';
 import { useResetBlockStateToNormal } from '../../../extensions/libs/block-card/block-states/hooks';
+import {
+	VARIATION_SURFACE_SIZE,
+	VARIATION_SURFACE_STYLE,
+} from './variation-surfaces';
+import { useBlockVariationSupport } from './use-block-variation-support';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
@@ -38,9 +48,13 @@ export const BlockGlobalStylesPanelScreen = ({
 	const {
 		setSelectedBlockRef,
 		setSelectedBlockStyle,
+		setSelectedBlockSizeVariation,
 		setSelectedBlockStyleVariation,
 	} = dispatch(STORE_NAME);
-	const statesManagerHandleOnChangeRef = useRef<
+	const styleStatesManagerHandleOnChangeRef = useRef<
+		((value: Object) => void) | null,
+	>(null);
+	const sizeStatesManagerHandleOnChangeRef = useRef<
 		((value: Object) => void) | null,
 	>(null);
 	const blocks = getBlocks();
@@ -50,8 +64,15 @@ export const BlockGlobalStylesPanelScreen = ({
 	const [blockType, setBlockType] = useState(
 		getBlockType(selectedBlockStyle)
 	);
-	const screenElement = document.querySelector(screen);
+	const screenElement =
+		queryActiveGlobalStylesNavigatorScreen() ??
+		document.querySelector(screen);
 	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
+	const globalStylesBlockName =
+		selectedBlockStyle || selectedBlock?.name || blockType?.name;
+	const { hasSizeVariations } = useBlockVariationSupport(
+		globalStylesBlockName
+	);
 
 	const memoizedSelectedBlock = useMemo(() => {
 		// Prevent of expensive calculation if selected block is already set.
@@ -95,7 +116,8 @@ export const BlockGlobalStylesPanelScreen = ({
 	const resetBlockStateToNormal = useResetBlockStateToNormal({
 		clientId: (selectedBlock || memoizedSelectedBlock)?.clientId || '',
 		blockName: selectedBlockStyle || '',
-		statesManagerHandleOnChangeRef,
+		statesManagerHandleOnChangeRef: styleStatesManagerHandleOnChangeRef,
+		resetAllGlobalStylesSurfaces: true,
 	});
 
 	useBackButton({
@@ -104,7 +126,8 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockStyle,
 		resetBlockStateToNormal,
 		setSelectedBlockStyleVariation,
-		statesManagerHandleOnChangeRef,
+		setSelectedBlockSizeVariation,
+		statesManagerHandleOnChangeRef: styleStatesManagerHandleOnChangeRef,
 		className: bodySupportingClassname,
 	});
 
@@ -140,6 +163,17 @@ export const BlockGlobalStylesPanelScreen = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, hasBlockeraExtensions]);
 
+	const sharedAppBaseProps = useMemo(
+		() => ({
+			selectedBlockClientId: {
+				...(selectedBlock ? { ...selectedBlock } : {}),
+				...(memoizedSelectedBlock ? { ...memoizedSelectedBlock } : {}),
+			}.clientId,
+			blockType,
+		}),
+		[selectedBlock, memoizedSelectedBlock, blockType]
+	);
+
 	if (!hasBlockeraExtensions) {
 		return <></>;
 	}
@@ -155,21 +189,38 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	screenElement?.classList.add('has-blockera-extensions');
 
+	if (!screenElement) {
+		return <></>;
+	}
+
 	return createPortal(
 		<div className={className}>
-			<App
-				selectedBlockClientId={
-					{
-						...(selectedBlock ? { ...selectedBlock } : {}),
-						...(memoizedSelectedBlock
-							? { ...memoizedSelectedBlock }
-							: {}),
-					}.clientId
+			<div
+				className={
+					hasSizeVariations
+						? 'blockera-global-styles-panel-stack has-dual-variation-surfaces'
+						: 'blockera-global-styles-panel-stack'
 				}
-				blockType={blockType}
-				resetBlockStateToNormal={resetBlockStateToNormal}
-				statesManagerHandleOnChangeRef={statesManagerHandleOnChangeRef}
-			/>
+			>
+				<App
+					{...sharedAppBaseProps}
+					statesManagerHandleOnChangeRef={
+						styleStatesManagerHandleOnChangeRef
+					}
+					variationSurface={VARIATION_SURFACE_STYLE}
+				/>
+				{hasSizeVariations && (
+					<aside className="blockera-global-styles-panel-aside">
+						<App
+							{...sharedAppBaseProps}
+							statesManagerHandleOnChangeRef={
+								sizeStatesManagerHandleOnChangeRef
+							}
+							variationSurface={VARIATION_SURFACE_SIZE}
+						/>
+					</aside>
+				)}
+			</div>
 		</div>,
 		screenElement
 	);

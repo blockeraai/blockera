@@ -8,13 +8,22 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined, union } from '@blockera/utils';
+import {
+	isEmpty,
+	isUndefined,
+	union,
+	getEditorDocumentElement,
+} from '@blockera/utils';
 
 /**
  
  * Internal dependencies
  */
 import { replaceVariablesValue } from './utils';
+import {
+	getSelectorWithRootBody,
+	getExtractedSelectorFromRootBody,
+} from './root-body-selector-helpers';
 import type { NormalizedSelectorProps } from './types';
 import { getBlockCSSSelector } from './get-block-css-selector';
 import { isInnerBlock, isNormalState } from '../extensions/components/utils';
@@ -224,16 +233,10 @@ export const getNormalizedSelector = (
 
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
-		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&
-		if (/^{{UNIQUE_CLASSNAME}}&/.test(selector)) {
-			return selector.replace(
-				/^{{UNIQUE_CLASSNAME}}&/,
-				'{{UNIQUE_CLASSNAME}}'
-			);
-		}
+		const trimmed = selector.trim();
 
-		// Handle selectors starting with &&
-		if (selector.trim().startsWith('&&')) {
+		// Handle && before single & (&& also starts with &).
+		if (trimmed.startsWith('&&')) {
 			isProcessedSelector = true;
 			// Extract the first part of the root selector (everything before the first space)
 			const extractedFirstPart =
@@ -243,17 +246,37 @@ export const getNormalizedSelector = (
 				? getSelectorWithRootBody(extractedFirstPart)
 				: extractedFirstPart;
 
-			return `${rootFirstPart}${selector.trim().substring(2)}`;
+			return `${rootFirstPart}${trimmed.substring(2)}`;
+		}
+
+		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&& (both ampersands → one classname)
+		if (/^{{UNIQUE_CLASSNAME}}&&/.test(trimmed)) {
+			isProcessedSelector = true;
+
+			return trimmed.replace(
+				/^{{UNIQUE_CLASSNAME}}&&/,
+				'{{UNIQUE_CLASSNAME}}'
+			);
+		}
+
+		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&
+		if (/^{{UNIQUE_CLASSNAME}}&/.test(trimmed)) {
+			isProcessedSelector = true;
+
+			return trimmed.replace(
+				/^{{UNIQUE_CLASSNAME}}&/,
+				'{{UNIQUE_CLASSNAME}}'
+			);
 		}
 
 		// Handle selectors starting with &
-		if (selector.trim().startsWith('&')) {
+		if (trimmed.startsWith('&')) {
 			isProcessedSelector = true;
 
-			return `${rootSelector}${selector.trim().substring(1)}`;
+			return `${rootSelector}${trimmed.substring(1)}`;
 		}
 
-		return selector.trim();
+		return trimmed;
 	};
 
 	// Helper to generate the appropriate selector string based on various states.
@@ -261,8 +284,12 @@ export const getNormalizedSelector = (
 		const innerStateType = getInnerState();
 		const masterStateType = getMasterState();
 
-		// If selector contains root selector, set root selector to empty string to avoid duplicate selectors.
-		if (-1 !== selector.indexOf(rootSelector)) {
+		// Ampersand patterns already inlined the root (& = full, && = first part only).
+		// Also skip re-appending when the selector already contains the full root.
+		if (
+			isProcessedSelector ||
+			(-1 !== selector.indexOf(rootSelector) && !fromInnerBlock)
+		) {
 			rootSelector = '';
 		}
 
@@ -456,16 +483,7 @@ export const getNormalizedSelector = (
 		.join(', ');
 };
 
-export const getSelectorWithRootBody = (
-	selector: string,
-	withHTML: boolean = true
-): string => {
-	return `${withHTML ? 'html:root' : ':root'} body :where(${selector})`;
-};
-
-export const getExtractedSelectorFromRootBody = (selector: string): string => {
-	return selector.replace(/^html:root body :where\((.*)\)$/, '$1');
-};
+export { getSelectorWithRootBody, getExtractedSelectorFromRootBody };
 
 export const getCompatibleBlockCssSelector = ({
 	state,
@@ -481,6 +499,7 @@ export const getCompatibleBlockCssSelector = ({
 	suffixClass = '',
 	fallbackSupportId,
 	styleVariationName,
+	variationClassPrefix = 'is-style-',
 	isStyleVariation = false,
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
@@ -682,9 +701,63 @@ export const getCompatibleBlockCssSelector = ({
 		selectors: blockSelectors,
 	});
 
-	if (selector && selector.trim()) {
+	const blockTypeRoot = getBlockCSSSelector(
+		{
+			name: blockName,
+			supports,
+			selectors: blockSelectors,
+		},
+		'root',
+		{
+			fallback: true,
+		}
+	);
+	const blockSlug = blockName.replace('core/', '').replace('/', '-');
+	const blockPartPattern = new RegExp(
+		`\\.\\bwp-block-${blockSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`
+	);
+	const blockPartMatch = selector?.match(blockPartPattern);
+	const trimmedSelector = selector?.trim();
+	const blockPart = blockPartMatch?.[0];
+	const $shouldPreferBlockTypeRootSelector =
+		shouldPreferBlockTypeRootSelector(
+			trimmedSelector,
+			blockTypeRoot,
+			blockPart
+		);
+	let preferredRoot =
+		blockPart &&
+		trimmedSelector &&
+		blockTypeRoot &&
+		$shouldPreferBlockTypeRootSelector
+			? preferBlockTypeRootSelector(
+					trimmedSelector,
+					blockTypeRoot,
+					blockPart
+				)
+			: null;
+
+	// If the preferredRoot is null and the root contains selector, we should prefer the root.
+	if (!preferredRoot && $shouldPreferBlockTypeRootSelector) {
+		preferredRoot = selector
+			?.split(',')
+			.reduce((unique: Array<string>, s: string) => {
+				const item = blockTypeRoot?.includes(s.trim())
+					? blockTypeRoot
+					: '';
+				if (item && !unique.includes(item)) {
+					unique.push(item);
+				}
+				return unique;
+			}, [])
+			?.join(',');
+	}
+
+	const registrationSelector = preferredRoot ?? selector;
+
+	if (registrationSelector && registrationSelector.trim()) {
 		if (isStyleVariation && styleVariationName) {
-			register(selector, {
+			register(registrationSelector, {
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
 					if ('default' === styleVariationName) {
@@ -695,44 +768,62 @@ export const getCompatibleBlockCssSelector = ({
 					}
 					const blockType =
 						select('core/blocks')?.getBlockType(blockName);
-					const selectorConstant = getBlockCSSSelector(
-						blockType,
+					const blockClassSelector = `.wp-block-${blockName
+						.replace('core/', '')
+						.replace('/', '-')}`;
+					const variationRootSelector = getBlockCSSSelector(
+						{
+							...(blockType || {}),
+							selectors: blockSelectors,
+						},
 						'root',
 						{ fallback: true }
 					);
+					const selectorConstant =
+						blockClassSelector || variationRootSelector || '';
 
+					const variationClass = `${variationClassPrefix}${styleVariationName}`;
 					let selectorWithStyle = generatedSelector;
-					// Handle case when selector contains child combinator.
 					if (
-						selectorConstant &&
-						generatedSelector.includes(' ') &&
-						generatedSelector.includes(selectorConstant)
+						variationRootSelector &&
+						blockClassSelector &&
+						stripTrailingPseudos(generatedSelector).trim() ===
+							blockClassSelector &&
+						variationRootSelector !== blockClassSelector &&
+						variationRootSelector.includes(blockClassSelector)
 					) {
-						selectorWithStyle = generatedSelector.replace(
-							selectorConstant,
-							`${selectorConstant}.is-style-${styleVariationName}`
-						);
+						selectorWithStyle =
+							variationRootSelector +
+							extractTrailingPseudos(generatedSelector);
 					}
-					// Handle case when selector does not contain child combinator.
-					else {
-						selectorWithStyle = `${generatedSelector}.is-style-${styleVariationName}`;
-					}
+
+					selectorWithStyle = appendStyleVariationClassToSelector(
+						selectorWithStyle,
+						variationClass,
+						selectorConstant
+					);
 
 					return getSelectorWithRootBody(selectorWithStyle, false);
 				},
 			});
 		} else if (isGlobalStylesWrapper) {
 			// Normalizing selector before registration for global styles purposes.
-			register(selector, {
+			register(registrationSelector, {
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
 					return getSelectorWithRootBody(generatedSelector, false);
 				},
 			});
 		} else if (isInnerBlock(currentBlock)) {
-			register(selector);
+			register(registrationSelector);
 		} else {
-			register(appendRootBlockCssSelector(selector, rootSelector));
+			register(
+				appendRootBlockCssSelector(registrationSelector, rootSelector, {
+					clientId,
+					blockName,
+					className,
+				})
+			);
 		}
 	} else {
 		register(rootSelector);
@@ -848,48 +939,537 @@ export function prepareBlockCssSelector(params: {
 	return selector;
 }
 
+const PSEUDO_CLASS_FUNCTIONS_END_PATTERN = /:(\w+(?:-\w+)*)\s*\([^)]+\)$/;
+
+/**
+ * Remove trailing pseudo-classes and pseudo-elements from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string} The selector base without trailing pseudo tokens.
+ */
+const stripTrailingPseudos = (selector: string): string => {
+	let result = selector;
+	let previous;
+
+	do {
+		previous = result;
+
+		if (PSEUDO_CLASS_FUNCTIONS_END_PATTERN.test(result)) {
+			result = result.replace(PSEUDO_CLASS_FUNCTIONS_END_PATTERN, '');
+			continue;
+		}
+
+		result = result.replace(/(?:::?[a-zA-Z-]+)$/, '');
+	} while (previous !== result && result !== '');
+
+	return result;
+};
+
+/**
+ * Extract trailing pseudo-classes and pseudo-elements from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string} Trailing pseudo tokens (e.g. ":hover:focus" or "::before").
+ */
+const extractTrailingPseudos = (selector: string): string => {
+	const base = stripTrailingPseudos(selector);
+
+	if (base.length >= selector.length) {
+		return '';
+	}
+
+	return selector.slice(base.length);
+};
+
+/**
+ * Append a style variation class before trailing pseudo selectors.
+ *
+ * @param {string} selector The css selector.
+ * @param {string} variationClass The variation class token (e.g. "is-style-outline").
+ * @param {string} selectorConstant Optional block class to target in compound selectors.
+ * @return {string} The selector with variation class appended.
+ */
+const appendStyleVariationClassToSelector = (
+	selector: string,
+	variationClass: string,
+	selectorConstant: string = ''
+): string => {
+	if (!selector?.trim() || !variationClass?.trim()) {
+		return selector;
+	}
+
+	const variationToken = variationClass.startsWith('.')
+		? variationClass
+		: `.${variationClass}`;
+
+	if (selector.includes(',')) {
+		return selector
+			.split(',')
+			.map((branch) =>
+				appendStyleVariationClassToSelector(
+					branch.trim(),
+					variationClass,
+					selectorConstant
+				)
+			)
+			.join(', ');
+	}
+
+	const selectorPseudos = extractTrailingPseudos(selector);
+	let base = stripTrailingPseudos(selector);
+
+	if (base.includes(variationToken)) {
+		return base + selectorPseudos;
+	}
+
+	if (
+		selectorConstant &&
+		base.includes(' ') &&
+		base.includes(selectorConstant)
+	) {
+		base = base.replace(
+			selectorConstant,
+			`${selectorConstant}${variationToken}`
+		);
+	} else {
+		base = `${base}${variationToken}`;
+	}
+
+	return base + selectorPseudos;
+};
+
+/**
+ * Extract style and size variation classes from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string[]} Ordered variation class tokens.
+ */
+const extractBlockVariationClasses = (selector: string): Array<string> => {
+	const variations: Array<string> = [];
+	const styleMatches = selector.match(/\.is-style-[^\s,.#\[:]+/g);
+
+	if (styleMatches) {
+		variations.push(...styleMatches);
+	}
+
+	const sizeMatches = selector.match(/\.is-size-[^\s,.#\[:]+/g);
+
+	if (sizeMatches) {
+		variations.push(...sizeMatches);
+	}
+
+	return [...new Set(variations)];
+};
+
+/**
+ * Remove style and size variation classes from a selector.
+ *
+ * @param {string} selector The css selector.
+ * @return {string} The selector without variation classes.
+ */
+const stripBlockVariationClasses = (selector: string): string => {
+	return selector
+		.replace(/\.is-style-[^\s,.#\[:]+/g, '')
+		.replace(/\.is-size-[^\s,.#\[:]+/g, '');
+};
+
+/**
+ * Append missing variation classes after a block part.
+ *
+ * @param {string} selector The css selector.
+ * @param {string} part The block class part to append after.
+ * @param {string[]} variations Variation class tokens to append.
+ * @return {string} The selector with missing variations appended.
+ */
+const appendVariationsAfterPart = (
+	selector: string,
+	part: string,
+	variations: Array<string>
+): string => {
+	if (!variations.length) {
+		return selector;
+	}
+
+	const missing = variations.filter(
+		(variation) => !selector.includes(variation)
+	);
+
+	if (!missing.length) {
+		return selector;
+	}
+
+	return selector.replace(part, `${part}${missing.join('')}`);
+};
+
+/**
+ * Check whether a selector includes trailing pseudo-classes or pseudo-elements.
+ *
+ * @param {string} selector The css selector.
+ * @return {boolean} True when trailing pseudo tokens are present.
+ */
+const hasTrailingPseudoClasses = (selector: string): boolean =>
+	'' !== extractTrailingPseudos(selector);
+
+/**
+ * Check whether a selector includes block style or size variation classes.
+ *
+ * @param {string} selector The css selector.
+ * @return {boolean} True when variation classes are present.
+ */
+const hasBlockVariationClasses = (selector: string): boolean =>
+	0 < extractBlockVariationClasses(selector).length;
+
+/**
+ * Validate whether the block type root can be preferred for a prepared selector.
+ *
+ * Normalizes trailing pseudos and variation classes before checking containment.
+ * When the selector carries variation classes, every token must also exist on
+ * the block type root so mismatched style/size pairs do not prefer the wrong root.
+ *
+ * @param {string} trimmedSelector The prepared support selector.
+ * @param {string} blockTypeRoot   The block type root selector.
+ * @param {string} blockPart       The matched wp-block class part.
+ * @return {boolean} True when preferBlockTypeRootSelector should run.
+ */
+const shouldPreferBlockTypeRootSelector = (
+	trimmedSelector?: string,
+	blockTypeRoot?: string,
+	blockPart?: string
+): boolean => {
+	if (!trimmedSelector || !blockTypeRoot || !blockPart) {
+		return false;
+	}
+
+	if (!blockTypeRoot?.trim() || !blockPart?.trim()) {
+		return false;
+	}
+
+	if (!trimmedSelector.includes(blockPart)) {
+		return false;
+	}
+
+	const selectorBase = stripBlockVariationClasses(
+		stripTrailingPseudos(trimmedSelector)
+	);
+	const rootBase = stripBlockVariationClasses(
+		stripTrailingPseudos(blockTypeRoot)
+	);
+
+	const rootContainsPreparedSelector =
+		blockTypeRoot.endsWith(trimmedSelector) ||
+		('' !== selectorBase && rootBase.endsWith(selectorBase));
+
+	if (!rootContainsPreparedSelector) {
+		return false;
+	}
+
+	if (
+		hasTrailingPseudoClasses(trimmedSelector) &&
+		!selectorBase.includes(blockPart)
+	) {
+		return false;
+	}
+
+	if (hasBlockVariationClasses(trimmedSelector)) {
+		const selectorVariations =
+			extractBlockVariationClasses(trimmedSelector);
+		const rootVariations = extractBlockVariationClasses(blockTypeRoot);
+
+		return selectorVariations.every((variation) =>
+			rootVariations.includes(variation)
+		);
+	}
+
+	return true;
+};
+
+/**
+ * Prefer block type root when it already contains the prepared support selector.
+ *
+ * Mirrors {@see \Blockera\Utils\Utils::preferContainedRootSelector()}.
+ *
+ * @param {string} preparedSelector The prepared support selector.
+ * @param {string} blockTypeRoot The block type root selector.
+ * @param {string} blockPart The matched block class part (e.g. ".wp-block-button").
+ * @param {{wrap?: (selector: string) => string}} args Optional arguments.
+ * @return {string | null} The preferred selector, or null when root does not already contain the target.
+ */
+const preferBlockTypeRootSelector = (
+	preparedSelector: string,
+	blockTypeRoot: string,
+	blockPart: string,
+	args: {
+		wrap?: (selector: string) => string,
+	} = {}
+): ?string => {
+	if (!blockTypeRoot?.trim() || !blockPart?.trim()) {
+		return null;
+	}
+
+	if (
+		!shouldPreferBlockTypeRootSelector(
+			preparedSelector,
+			blockTypeRoot,
+			blockPart
+		)
+	) {
+		return null;
+	}
+
+	const selectorPseudos = extractTrailingPseudos(preparedSelector);
+	const rootBase = stripBlockVariationClasses(
+		stripTrailingPseudos(blockTypeRoot)
+	);
+	const variations = extractBlockVariationClasses(blockTypeRoot);
+
+	let merged = '' !== rootBase ? rootBase : blockTypeRoot;
+	merged = appendVariationsAfterPart(merged, blockPart, variations);
+
+	if (args.wrap && 'function' === typeof args.wrap) {
+		merged = args.wrap(merged);
+	}
+
+	return merged + selectorPseudos;
+};
+
+/**
+ * Resolve template tokens in a root selector for DOM class comparison.
+ *
+ * @param {string} root      The root selector (may include template tokens).
+ * @param {string} className The blockera unique class name.
+ * @param {string} clientId  The block client id.
+ * @return {string} The resolved root selector.
+ */
+const resolveRootSelectorForDomCheck = (
+	root: string,
+	className: string,
+	clientId: string
+): string => {
+	const normalizedClassName = className?.replace(/\s/g, '.') || '';
+	const uniqueSelector = normalizedClassName
+		? `.${normalizedClassName}`
+		: `#block-${clientId}`;
+
+	return root
+		.replace(/{{UNIQUE_CLASSNAME}}/g, uniqueSelector)
+		.replace(/{{className}}/g, uniqueSelector);
+};
+
+/**
+ * Extract class names from a css selector string.
+ *
+ * @param {string} selector The css selector.
+ * @return {string[]} Class names without the leading dot.
+ */
+const extractClassNamesFromCssSelector = (selector: string): Array<string> => {
+	const matches = selector.match(/\.[a-zA-Z0-9_-]+/g);
+
+	if (!matches) {
+		return [];
+	}
+
+	return matches.map((classToken) => classToken.slice(1));
+};
+
+/**
+ * Check whether class names referenced by the selector exist on the block wrapper.
+ *
+ * Selectors without class tokens (e.g. ` li::before`) pass automatically.
+ * Leading-space selectors that target inner nodes (e.g. archives list root
+ * ` .wp-block-archives-list`) fail when those classes are not on the wrapper.
+ *
+ * @param {string}      selector     The prepared support selector.
+ * @param {HTMLElement} blockElement The `#block-{clientId}` wrapper element.
+ * @return {boolean} True when selector classes are present on the wrapper.
+ */
+const selectorClassesExistOnBlockElement = (
+	selector: string,
+	blockElement: HTMLElement
+): boolean => {
+	const selectorClasses = extractClassNamesFromCssSelector(selector.trim());
+
+	if (!selectorClasses.length) {
+		return true;
+	}
+
+	return selectorClasses.some((selectorClass) =>
+		blockElement.classList.contains(selectorClass)
+	);
+};
+
+/**
+ * Check whether the editor block wrapper element carries every class from root.
+ *
+ * @param {HTMLElement} blockElement The `#block-{clientId}` wrapper element.
+ * @param {string}      root         The root selector.
+ * @param {string}      className    The blockera unique class name.
+ * @param {string}      clientId     The block client id.
+ * @param {string}      selector     The prepared support selector.
+ * @return {boolean} True when root and selector classes match the wrapper element.
+ */
+const blockWrapperElementContainsRootClasses = (
+	blockElement: HTMLElement,
+	root: string,
+	className: string,
+	clientId: string,
+	selector: string
+): boolean => {
+	const resolvedRoot = resolveRootSelectorForDomCheck(
+		root,
+		className,
+		clientId
+	);
+
+	const rootClasses = extractClassNamesFromCssSelector(resolvedRoot);
+
+	if (!rootClasses.length) {
+		return false;
+	}
+
+	const rootClassesMatch = rootClasses.every((rootClass) =>
+		blockElement.classList.contains(rootClass)
+	);
+
+	if (!rootClassesMatch) {
+		return false;
+	}
+
+	return selectorClassesExistOnBlockElement(selector, blockElement);
+};
+
+/**
+ * Decide whether a leading-space selector targets a descendant of the block wrapper
+ * that is itself the styled root (WordPress `data-type` wrapper with matching classes).
+ *
+ * Mirrors the PHP child-selector trim behavior for blocks like `core/list` where the
+ * wrapper is `.wp-block-list` and inner selectors look like ` li::before`.
+ *
+ * @param {Object} params            Parameters.
+ * @param {string} params.selector   The prepared support selector.
+ * @param {string} params.root       The blockera root selector.
+ * @param {string} params.blockName  The block type name (e.g. `core/list`).
+ * @param {string} params.clientId   The block client id.
+ * @param {string} params.className  The blockera unique class name.
+ * @return {boolean} True when the selector leading space should be trimmed.
+ */
+const shouldTrimLeadingSpaceForBlockWrapperRoot = ({
+	selector,
+	root,
+	blockName,
+	clientId,
+	className,
+}: {
+	selector: string,
+	root: string,
+	blockName: string,
+	clientId: string,
+	className: string,
+}): boolean => {
+	if (!selector.startsWith(' ') || selector.split(' ').length > 2) {
+		return false;
+	}
+
+	if (!clientId || !blockName || !root?.trim()) {
+		return false;
+	}
+
+	const blockElement = getEditorDocumentElement()?.querySelector(
+		`#block-${clientId}`
+	);
+
+	if (!blockElement) {
+		return false;
+	}
+
+	if (blockElement.getAttribute('data-type') !== blockName) {
+		return false;
+	}
+
+	return blockWrapperElementContainsRootClasses(
+		blockElement,
+		root,
+		className,
+		clientId,
+		selector
+	);
+};
+
 /**
  * Appending received root css selector into base block css selector.
  *
  * @param {string} selector the prepared block css selector order by support identifier or query.
  * @param {string} root the root block css selector.
+ * @param {{clientId?: string, blockName?: string, className?: string}} context Optional block context for DOM checks.
  * @return {string} The css selector with include received root selector.
  */
-const appendRootBlockCssSelector = (selector: string, root: string): string => {
+const appendRootBlockCssSelector = (
+	selector: string,
+	root: string,
+	context: {
+		clientId?: string,
+		blockName?: string,
+		className?: string,
+	} = {}
+): string => {
 	// Assume received selector is invalid.
 	if (!selector || isEmpty(selector.trim())) {
 		return root;
 	}
 
+	let normalizedSelector = selector;
+	let trimmedLeadingSpaceForBlockWrapper = false;
+
+	if (
+		shouldTrimLeadingSpaceForBlockWrapperRoot({
+			selector,
+			root,
+			blockName: context.blockName || '',
+			clientId: context.clientId || '',
+			className: context.className || '',
+		})
+	) {
+		normalizedSelector = selector.trimStart();
+		trimmedLeadingSpaceForBlockWrapper = true;
+	}
+
+	// Descendant element selectors inside the block wrapper root (e.g. `li::before`).
+	if (
+		trimmedLeadingSpaceForBlockWrapper &&
+		!/\bwp-block-/.test(normalizedSelector.split(/[\s>+~]/)[0])
+	) {
+		return `${root}${normalizedSelector}`;
+	}
+
 	// Assume received selector is another reference to root, so we should concat together.
-	const matches = /(wp-block[a-z-_A-Z]+)/g.exec(selector);
+	const matches = /(wp-block[a-z-_A-Z]+)/g.exec(normalizedSelector);
 	if (matches) {
 		// If selector contains a direct child combinator (>), append root after the selector
 		// Example: ".wp-block-foo > .child" becomes ".wp-block-foo > .child.wp-block-bar"
-		if (/\s>\s(\w|\.|#)/.test(selector)) {
-			return `${selector}${root}, ${root}${selector}`;
+		if (/\s>\s(\w|\.|#)/.test(normalizedSelector)) {
+			return `${normalizedSelector}${root}, ${root}${normalizedSelector}`;
 		}
 
 		// If selector starts with a space, append root before the selector to handle cases like:
 		// " .wp-block-foo" becomes ".wp-block-bar .wp-block-foo"
-		if (selector.startsWith(' ')) {
-			return `${root}${selector}`;
+		if (normalizedSelector.startsWith(' ')) {
+			return `${root}${normalizedSelector}`;
 		}
 
 		const subject = matches[0];
 		const regexp = new RegExp('.\\b' + subject + '\\b', 'gi');
 
-		return selector.replace(regexp, `${root}.${subject}`);
+		return normalizedSelector.replace(regexp, `${root}.${subject}`);
 	}
 
 	// If selector has combinators (space, >, +, ~) or starts with a-z html tag name,
 	// and not starts with space,
 	if (
-		!selector.startsWith(' ') &&
-		(/[\s>+~]/.test(selector) || /^[a-z]/.test(selector))
+		!normalizedSelector.startsWith(' ') &&
+		(/[\s>+~]/.test(normalizedSelector) ||
+			/^[a-z]/.test(normalizedSelector))
 	) {
-		return `${selector}${root}`;
+		return `${normalizedSelector}${root}`;
 	}
 
-	return `${root}${selector}`;
+	return `${root}${normalizedSelector}`;
 };

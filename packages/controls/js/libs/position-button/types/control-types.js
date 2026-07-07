@@ -3,6 +3,7 @@
  * Internal dependencies
  */
 import type { ControlGeneralTypes, ControlSize } from '../../../types';
+import type { PopoverPlacement } from '../../popover/types';
 
 export type TPositionButtonProps = {
 	...ControlGeneralTypes,
@@ -12,6 +13,12 @@ export type TPositionButtonProps = {
 	 * Label for popover
 	 */
 	popoverTitle?: string,
+	/**
+	 * Placement of the popover
+	 *
+	 * @default "left-start"
+	 */
+	popoverPlacement?: PopoverPlacement,
 	/**
 	 * Label for field alignment-matrix. If you pass empty value the field will not be added and simple control will be rendered
 	 *

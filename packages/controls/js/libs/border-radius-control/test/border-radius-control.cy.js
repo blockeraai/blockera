@@ -345,6 +345,7 @@ describe('border-radius-control component testing', () => {
 						all: '10px',
 					},
 				],
+				skipSyncValue: false,
 			});
 
 			cy.get('input').should('have.value', '10');

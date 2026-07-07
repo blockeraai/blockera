@@ -5,13 +5,20 @@ import {
 	goTo,
 	createPost,
 	setDeviceType,
+	dismissOpenModals,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Breakpoints Functionalities', () => {
 	beforeEach(() => {
 		goTo('/wp-admin/admin.php?page=blockera-settings-general-settings');
 
+		dismissOpenModals();
+
 		cy.getByDataTest('update-settings').as('update');
+	});
+
+	afterEach(() => {
+		dismissOpenModals();
 	});
 
 	it('should can not add new or delete breakpoint', () => {
@@ -20,7 +27,9 @@ describe('Breakpoints Functionalities', () => {
 		cy.get('.blockera-component-upgrade-prompt')
 			.eq(0)
 			.within(() => {
-				cy.get('a').contains('Upgrade to PRO').should('be.visible');
+				cy.get('a')
+					.contains(/upgrade/i)
+					.should('be.visible');
 
 				cy.getByAriaLabel('Close').should('be.visible').click();
 			});
@@ -130,29 +139,26 @@ describe('Breakpoints Functionalities', () => {
 		});
 	});
 
-	// @debug-ignore
-	it.skip('should allow changing breakpoint icon with custom icon field', () => {
+	it('should allow changing breakpoint icon with custom icon field', () => {
 		cy.getByDataTest('tablet').should('be.visible');
 		cy.getByDataTest('tablet').click();
 
-		cy.get('.components-popover').eq(1).should('be.visible');
-		cy.get('.components-popover')
-			.eq(1)
-			.within(() => {
-				cy.getParentContainer('Icon').within(() => {
-					cy.get('button').click();
-					cy.get('div[role="listbox"').contains('Custom').click();
-					cy.getByAriaLabel('Icon Library').click({ force: true });
-				});
+		cy.getByDataTest('tablet').within(() => {
+			cy.getParentContainer('Icon').within(() => {
+				cy.get('button').click();
+				cy.get('div[role="listbox"')
+					.contains('Custom')
+					.click({ force: true });
 			});
 
-		cy.get('.components-popover').eq(2).should('be.visible');
-		cy.get('.components-popover')
-			.eq(2)
-			.within(() => {
-				cy.getByAriaLabel('add-card Icon').should('be.visible');
-				cy.getByAriaLabel('add-card Icon').click();
+			cy.getByAriaLabel('Choose Icon…').click({
+				force: true,
 			});
+		});
+
+		cy.selectIconByName('add-card');
+
+		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
 	});
 });
 

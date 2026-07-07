@@ -1,5 +1,5 @@
 import { SelectControl } from '../..';
-import InheritIcon from '../stories/icons/inherit';
+import InheritIcon from './icons-inherit';
 import { select } from '@wordpress/data';
 import { modifyControlValue } from '../../../store/actions';
 import { controlReducer } from '../../../store/reducers/control-reducer';

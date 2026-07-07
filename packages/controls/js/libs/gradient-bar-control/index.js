@@ -51,6 +51,11 @@ export default function GradientBarControl({
 		onChange,
 	});
 
+	const normalizedVariableTypes =
+		typeof variableTypes === 'string'
+			? [variableTypes]
+			: variableTypes || [];
+
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
@@ -63,6 +68,14 @@ export default function GradientBarControl({
 			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
 		onChange: setValue,
+		presetInterface:
+			normalizedVariableTypes.includes('linear-gradient') ||
+			normalizedVariableTypes.includes('radial-gradient')
+				? {
+						variableTypes: normalizedVariableTypes,
+						attribute,
+					}
+				: undefined,
 	});
 
 	const labelProps = {

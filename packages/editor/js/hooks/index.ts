@@ -48,7 +48,7 @@ export type { PrefetchEntityFunction } from './usePrefetchEntity';
 // Legacy hooks (JavaScript/Flow files - maintained for compatibility)
 // ============================================================================
 export { useAttributes } from './use-attributes';
-export { useTraceUpdate } from './use-trace-update';
+export { useTraceUpdate, arePropsEqual } from './use-trace-update';
 export { useBlocksStore } from './use-blocks-store';
 export { useEditorStore } from './use-editor-store';
 export { useStoreSelectors } from './use-store-selectors';

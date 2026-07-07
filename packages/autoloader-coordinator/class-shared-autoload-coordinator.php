@@ -3,9 +3,9 @@
 namespace Blockera\SharedAutoload;
 
 use Composer\Autoload\ClassLoader;
-use Dotenv\Dotenv;
 
-if (! \defined('ABSPATH')) {
+// direct access is not allowed.
+if (! defined('ABSPATH')) {
     exit;
 }
 

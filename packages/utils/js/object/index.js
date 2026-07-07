@@ -11,6 +11,23 @@ import { copy } from 'fastest-json-copy';
 import { getCamelCase } from '../string';
 import { isObject } from '../is';
 
+// Dot-path segments such as "0" or "1" must be coerced to numbers for array access.
+const NUMERIC_KEY_PATTERN = /\d+/;
+
+/**
+ * Resolve a path segment to an object access key.
+ *
+ * @param {string} key Path segment from a dot-separated property path.
+ * @return {string | number} Numeric segment as number, otherwise the original key.
+ */
+const toAccessKey = (key: string): string | number => {
+	if (NUMERIC_KEY_PATTERN.test(key)) {
+		return Number(key);
+	}
+
+	return key;
+};
+
 /**
  * Return a new object with the specified keys omitted.
  *
@@ -20,12 +37,21 @@ import { isObject } from '../is';
  * @return {Object} Object with omitted keys.
  */
 export function omit(object: Object, keys: Array<string>): Object {
-	// Create a deep copy of the object to avoid mutating the original object.
-	const clonedObject = copy(object);
+	if (!keys.length) {
+		return copy(object);
+	}
 
-	return Object.fromEntries(
-		Object.entries(clonedObject).filter(([key]) => !keys.includes(key))
-	);
+	const keysSet = new Set(keys);
+	const clonedObject = copy(object);
+	const result: { [key: string]: any } = {};
+
+	for (const key in clonedObject) {
+		if (clonedObject.hasOwnProperty(key) && !keysSet.has(key)) {
+			result[key] = clonedObject[key];
+		}
+	}
+
+	return result;
 }
 
 /**
@@ -40,7 +66,7 @@ export function omitWithPattern(object: Object, pattern: Object): Object {
 	const result: { [key: string]: any } = {};
 
 	for (const key in object) {
-		if (object?.hasOwnProperty(key) && !pattern.test(key)) {
+		if (object.hasOwnProperty(key) && !pattern.test(key)) {
 			result[key] = object[key];
 		}
 	}
@@ -62,14 +88,21 @@ export function include(
 	keys: Array<string>,
 	deletePrefixSuffix: string = ''
 ): Object {
-	// Create a deep copy of the object to avoid mutating the original object.
-	const clonedObject = copy(object);
+	if (!keys.length) {
+		return {};
+	}
 
-	return Object.fromEntries(
-		Object.entries(clonedObject)
-			.filter(([key]) => keys.includes(key))
-			.map((item) => [getCamelCase(item[0], deletePrefixSuffix), item[1]])
-	);
+	const keysSet = new Set(keys);
+	const clonedObject = copy(object);
+	const result: { [key: string]: any } = {};
+
+	for (const key in clonedObject) {
+		if (clonedObject.hasOwnProperty(key) && keysSet.has(key)) {
+			result[getCamelCase(key, deletePrefixSuffix)] = clonedObject[key];
+		}
+	}
+
+	return result;
 }
 
 /**
@@ -80,14 +113,11 @@ export function include(
  */
 export const deletePropertyByPath = (obj: Object, path: string): Object => {
 	const keys = path.split('.');
+	const lastIndex = keys.length - 1;
 	let current = obj;
 
-	for (let i = 0; i < keys.length - 1; i++) {
-		let key: string | number = keys[i];
-
-		if ('string' === typeof key && /\d+/.test(key)) {
-			key = Number(key);
-		}
+	for (let i = 0; i < lastIndex; i++) {
+		const key = toAccessKey(keys[i]);
 
 		if (!current[key]) {
 			return; // Property doesn't exist, nothing to delete
@@ -96,16 +126,58 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 		current = current[key];
 	}
 
-	let key: string | number = keys[keys.length - 1];
-
-	if ('string' === typeof key && /\d+/.test(key)) {
-		key = Number(key);
-	}
-
-	delete current[key];
+	delete current[toAccessKey(keys[lastIndex])];
 
 	return obj;
 };
+
+/**
+ * Internal recursive merge. `forceUpdated` keys are shallow-replaced instead of
+ * deep-merged; `deletedProps` keys are removed when the source value is undefined.
+ *
+ * @param {Object} target the target object.
+ * @param {Object} source the new source to merge with target object.
+ * @param {Set<string>} forceUpdatedSet the keys to force update.
+ * @param {Set<string>} deletedPropsSet the keys to delete when undefined.
+ */
+function mergeObjectDeep(
+	target: Object,
+	source: Object,
+	forceUpdatedSet: Set<string>,
+	deletedPropsSet: Set<string>
+): Object {
+	if (!isObject(source)) {
+		return { ...target };
+	}
+
+	const result = { ...target };
+
+	for (const key in source) {
+		if (!source.hasOwnProperty(key)) {
+			continue;
+		}
+
+		if (forceUpdatedSet.has(key) && source[key] && isObject(source[key])) {
+			result[key] = { ...source[key] }; // Clone to prevent reference mutation
+		} else if (isObject(source[key])) {
+			if (!result[key] || !isObject(result[key])) {
+				result[key] = {};
+			}
+			result[key] = mergeObjectDeep(
+				result[key],
+				source[key],
+				forceUpdatedSet,
+				deletedPropsSet
+			);
+		} else if (undefined === source[key] && deletedPropsSet.has(key)) {
+			delete result[key];
+		} else {
+			result[key] = source[key];
+		}
+	}
+
+	return result;
+}
 
 /**
  * Deep merge two objects.
@@ -122,38 +194,14 @@ export function mergeObject(
 		deletedProps: Array<string>,
 	}
 ): Object {
-	if (!isObject(source)) {
-		return { ...target };
-	}
-
 	const { forceUpdated = [], deletedProps = [] } = args || {};
 
-	const result = { ...target }; // Create a clone of the target object
-
-	Object.keys(source).forEach((key) => {
-		if (
-			forceUpdated.includes(key) &&
-			source[key] &&
-			isObject(source[key])
-		) {
-			result[key] = { ...source[key] }; // Clone to prevent reference mutation
-		} else if (isObject(source[key])) {
-			if (!result[key] || !isObject(result[key])) {
-				result[key] = {};
-			}
-			result[key] = mergeObject(result[key], source[key], args); // Merge recursively
-		} else {
-			if (undefined === source[key] && deletedProps.includes(key)) {
-				delete result[key];
-
-				return;
-			}
-
-			result[key] = source[key];
-		}
-	});
-
-	return result;
+	return mergeObjectDeep(
+		target,
+		source,
+		new Set(forceUpdated),
+		new Set(deletedProps)
+	);
 }
 
 /**
@@ -170,22 +218,30 @@ export function mergeObjects(
 		return target;
 	}
 
-	const result = { ...target }; // Create a clone of the target object
+	const result = { ...target };
 
-	sources.forEach((_source) => {
-		if (isObject(_source)) {
-			Object.keys(_source).forEach((key) => {
-				if (isObject(_source[key])) {
-					if (!result[key] || !isObject(result[key])) {
-						result[key] = {};
-					}
-					result[key] = mergeObjects(result[key], _source[key]); // Merge recursively
-				} else {
-					result[key] = _source[key];
-				}
-			});
+	for (let sourceIndex = 0; sourceIndex < sources.length; sourceIndex++) {
+		const _source = sources[sourceIndex];
+
+		if (!isObject(_source)) {
+			continue;
 		}
-	});
+
+		for (const key in _source) {
+			if (!_source.hasOwnProperty(key)) {
+				continue;
+			}
+
+			if (isObject(_source[key])) {
+				if (!result[key] || !isObject(result[key])) {
+					result[key] = {};
+				}
+				result[key] = mergeObjects(result[key], _source[key]);
+			} else {
+				result[key] = _source[key];
+			}
+		}
+	}
 
 	return result;
 }
@@ -201,19 +257,13 @@ export function hasInvolvesSomeItems(
 	obj: Object,
 	props: Array<string>
 ): boolean {
-	const statuses: { [key: string]: boolean } = {};
-
 	for (let i = 0; i < props.length; i++) {
-		if (!obj.hasOwnProperty(props[i])) {
-			statuses[props[i]] = false;
-
-			continue;
+		if (obj.hasOwnProperty(props[i])) {
+			return true;
 		}
-
-		statuses[props[i]] = true;
 	}
 
-	return Object.values(statuses).includes(true);
+	return false;
 }
 
 /**
@@ -230,6 +280,30 @@ export function cloneObject(obj: Object): Object {
 }
 
 /**
+ * Resolve the priority value used for sorting.
+ * Walks `paths` (e.g. `['settings']`) then reads `.priority` on the resolved node.
+ *
+ * @param {Object} value Object entry value to read priority from.
+ * @param {Array<string>} paths Nested keys leading to the priority field.
+ * @param {number} fallbackPriority Priority used when the resolved value is missing or zero.
+ * @return {number} Resolved priority for sort comparison.
+ */
+const getSortPriority = (
+	value: Object,
+	paths: Array<string>,
+	fallbackPriority: number
+): number => {
+	let current = value;
+
+	for (let index = 0; index < paths.length; index++) {
+		current = current?.[paths[index]];
+	}
+
+	// Use `||` so explicit `0` falls back — matches legacy sort behavior.
+	return current?.priority || fallbackPriority;
+};
+
+/**
  * Sort an object by priority.
  *
  * @param {Object} obj the object to sort.
@@ -243,21 +317,21 @@ export const getSortedObject = (
 	priorityPath: string,
 	fallbackPriority: number = 0
 ): Object => {
-	const paths = priorityPath?.split('.');
+	const paths = priorityPath ? priorityPath.split('.') : [];
+	const entries = Object.entries(obj);
 
-	return Object.fromEntries(
-		Object.entries(obj).sort(([, a], [, b]) => {
-			for (let index = 0; index < (paths?.length || 0); index++) {
-				const key = paths[index];
+	if (!entries.length) {
+		return {};
+	}
 
-				a = a[key];
-				b = b[key];
-			}
+	// Precompute priorities once — avoids re-walking nested paths on every sort comparison.
+	const sortedEntries = entries
+		.map((entry) => ({
+			entry,
+			priority: getSortPriority(entry[1], paths, fallbackPriority),
+		}))
+		.sort((a, b) => a.priority - b.priority)
+		.map(({ entry }) => entry);
 
-			return (
-				(a?.priority || fallbackPriority) -
-				(b?.priority || fallbackPriority)
-			);
-		})
-	);
+	return Object.fromEntries(sortedEntries);
 };

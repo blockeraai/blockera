@@ -269,6 +269,7 @@ class BlockeraTest extends AppTestCase {
 		// Use call_user_func to avoid linter issues with WordPress functions
 		if (function_exists('wp_cache_delete')) {
 			call_user_func('wp_cache_delete', 'wp_get_global_stylesheet', 'theme_json');
+			call_user_func('wp_cache_delete', 'blockera_wp_get_global_stylesheet', 'theme_json');
 			call_user_func('wp_cache_delete', 'wp_get_global_stylesheet_for_rendering', 'theme_json');
 		}
 	}

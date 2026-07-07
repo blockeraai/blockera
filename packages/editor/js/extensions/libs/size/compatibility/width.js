@@ -92,6 +92,21 @@ export function widthFromWPCompatibility({
 			}
 
 			return attributes;
+
+		case 'core/icon':
+			if (attributes?.blockeraWidth?.value) {
+				return attributes;
+			}
+
+			if (attributes?.style?.dimensions?.width !== undefined) {
+				attributes.blockeraWidth = {
+					value: resolveDimensionValueFromWP(
+						attributes.style.dimensions.width
+					),
+				};
+			}
+
+			return attributes;
 	}
 
 	return attributes;
@@ -281,6 +296,40 @@ export function widthToWPCompatibility({
 
 			return {
 				width: newValue,
+			};
+
+		case 'core/icon':
+			if ('reset' === ref?.current?.action) {
+				return {
+					style: {
+						dimensions: {
+							width: undefined,
+						},
+					},
+				};
+			}
+
+			if (
+				newValue === '' ||
+				isUndefined(newValue) ||
+				isSpecialUnit(newValue) ||
+				!isString(newValue)
+			) {
+				return {
+					style: {
+						dimensions: {
+							width: undefined,
+						},
+					},
+				};
+			}
+
+			return {
+				style: {
+					dimensions: {
+						width: newValue,
+					},
+				},
 			};
 	}
 

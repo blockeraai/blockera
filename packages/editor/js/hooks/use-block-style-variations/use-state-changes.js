@@ -20,17 +20,20 @@ import {
 	getBlockAttributes,
 } from '../../editor/global-styles/panel/context';
 import { prepareBlockeraDefaultAttributesValues } from '../../extensions/components/utils';
+import { isVariationScopedStyleEdit } from '../../editor/global-styles/panel/size-variations';
 
 export const useStateChanges = ({
 	blockName,
 	storedAttributes,
 	defaultAttributes,
 	currentBlockStyleVariation,
+	usesSharedRootStyleVariation = false,
 }: {
 	blockName: string,
 	storedAttributes: Object,
 	defaultAttributes: Object,
 	currentBlockStyleVariation: Object,
+	usesSharedRootStyleVariation?: boolean,
 }): Object => {
 	const { blockeraOverrideBlockAttributes } = useMemo(
 		() => getBlockAttributes(blockName),
@@ -45,13 +48,12 @@ export const useStateChanges = ({
 	);
 	let prefixParts: Array<string> = [];
 	if (
-		currentBlockStyleVariation &&
-		!currentBlockStyleVariation?.isDefault &&
-		currentBlockStyleVariation?.name
+		isVariationScopedStyleEdit(
+			currentBlockStyleVariation,
+			usesSharedRootStyleVariation
+		)
 	) {
-		prefixParts = ['variations', currentBlockStyleVariation.name].concat(
-			prefixParts
-		);
+		prefixParts = ['variations', currentBlockStyleVariation.name];
 	}
 	const prefix = prefixParts.join('.');
 	const [style] = useGlobalStyle(prefix, blockName, 'all', {
@@ -97,7 +99,8 @@ export const useStateChanges = ({
 			return;
 		}
 		setChangesets(initializedValue);
-	}, [initializedValue, hasChangesets]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- Only need to run when initializedValue changes.
+	}, [initializedValue]);
 
 	return {
 		hasChangesets,

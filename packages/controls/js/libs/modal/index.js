@@ -9,15 +9,20 @@ import { Modal as WPModal } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { componentClassNames } from '@blockera/classnames';
+import {
+	componentClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import Flex from '../flex';
 import type { ModalProps } from './type';
 
 export default function Modal({
 	children,
+	actions,
 	headerIcon,
 	headerTitle,
 	className,
@@ -30,7 +35,16 @@ export default function Modal({
 			title={
 				headerTitle ? (
 					<>
-						{headerIcon}
+						{headerIcon && (
+							<span
+								className={componentInnerClassNames(
+									'modal__header-icon'
+								)}
+							>
+								{headerIcon}
+							</span>
+						)}
+
 						{headerTitle}
 					</>
 				) : null
@@ -42,6 +56,11 @@ export default function Modal({
 			{...props}
 		>
 			{children}
+			{actions !== undefined && actions !== null && actions !== false && (
+				<Flex className={componentInnerClassNames('modal__actions')}>
+					{actions}
+				</Flex>
+			)}
 		</WPModal>
 	);
 }

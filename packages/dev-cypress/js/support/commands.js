@@ -40,27 +40,6 @@ export const registerCommands = () => {
 	});
 
 	/**
-	 * Starting in Cypress 13.3.0 Unhandled Exceptions now cause tests to fail.
-	 * Sometimes unhandled exceptions occur in Core that do not affect the UX created by blockera.
-	 * We discard unhandled exceptions and pass the test as long as assertions continue expectedly.
-	 */
-	Cypress.on('uncaught:exception', () => {
-		// returning false here prevents Cypress from failing the test.
-		return false;
-	});
-
-	/**
-	 * useful custom commands for selecting elements for testing
-	 */
-	Cypress.Commands.add('getByDataCy', (selector, ...args) => {
-		return cy.get(`[data-cy="${selector}"]`, ...args);
-	});
-
-	Cypress.Commands.add('getByDataTest', (selector, ...args) => {
-		return cy.get(`[data-test="${selector}"]`, ...args);
-	});
-
-	/**
 	 * Types into a Blockera input that exposes `data-test` on the native input (e.g. layout grid controls).
 	 * Replaces the current value via select-all to work with number and unit fields.
 	 */
@@ -78,49 +57,6 @@ export const registerCommands = () => {
 				.blur();
 		}
 	);
-
-	Cypress.Commands.add('getByDataId', (selector, ...args) => {
-		return cy.get(`[data-id="${selector}"]`, ...args);
-	});
-
-	Cypress.Commands.add('getByTestId', (selector, ...args) => {
-		return cy.get(`[test-id="${selector}"]`, ...args);
-	});
-
-	Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
-		const fallbackLabel = args[0];
-
-		if (fallbackLabel) {
-			delete args[0];
-
-			return cy.get(
-				`[aria-label="${selector}"], [aria-label="${fallbackLabel}"]`,
-				...args
-			);
-		}
-
-		const regexp = /\bSelect\b\s\w+/i;
-
-		if (
-			regexp.exec(selector) &&
-			!Cypress.$(`[aria-label="${selector}"]`).length
-		) {
-			const parsedSelector = selector.split(' ');
-			const parsedLabel = selector.split(':');
-
-			if (parsedLabel?.length > 1) {
-				return cy.get(
-					`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`
-				);
-			}
-
-			return cy.get(
-				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`
-			);
-		}
-
-		return cy.get(`[aria-label="${selector}"]`, ...args);
-	});
 
 	/**
 	 * Dispatch `primaryShift` + physical key (matches @wordpress/keycodes `isKeyboardEvent`).
@@ -164,33 +100,47 @@ export const registerCommands = () => {
 		});
 	});
 
-	// get parent container to have isolate aria for testing
-	Cypress.Commands.add(
-		'getParentContainer',
-		(ariaLabel, parentsDataCy = 'base-control') => {
-			return cy
-				.get(`[aria-label="${ariaLabel}"]`, { timeout: 20000 })
-				.closest(`[data-cy=${parentsDataCy}]`);
-		}
-	);
-
 	// get block by name for testing
 	Cypress.Commands.add('getBlock', (blockName, blockTag = '') => {
 		// by passing default it clicks on editor that creates a paragraph block
 		if (blockName === 'default') {
 			if (Cypress.$('iframe[name="editor-canvas"]').length) {
-				cy.getIframeBody()
-					.find(`[aria-label="Add default block"]`)
-					.click();
-				blockName = 'core/paragraph';
-				return cy
-					.getIframeBody()
-					.find(`[data-type="${blockName}"]`)
-					.eq(0);
+				return cy.getIframeBody().then((body) => {
+					const $paragraph = Cypress.$(body).find(
+						'[data-type="core/paragraph"]'
+					);
+
+					if ($paragraph.length) {
+						return cy.wrap($paragraph.first());
+					}
+
+					return cy
+						.getIframeBody()
+						.find(`[aria-label="Add default block"]`, {
+							timeout: 20000,
+						})
+						.click()
+						.then(() =>
+							cy
+								.getIframeBody()
+								.find('[data-type="core/paragraph"]')
+								.first()
+						);
+				});
 			}
-			cy.getByAriaLabel('Add default block').click();
-			blockName = 'core/paragraph';
-			return cy.get(`[data-type="${blockName}"]`).eq(0);
+
+			return cy.get('body').then(($body) => {
+				const $paragraph = $body.find('[data-type="core/paragraph"]');
+
+				if ($paragraph.length) {
+					return cy.wrap($paragraph.first());
+				}
+
+				return cy
+					.getByAriaLabel('Add default block', { timeout: 20000 })
+					.click()
+					.then(() => cy.get('[data-type="core/paragraph"]').first());
+			});
 		}
 
 		if (Cypress.$('iframe[name="editor-canvas"]').length) {
@@ -213,86 +163,52 @@ export const registerCommands = () => {
 	});
 
 	// Open Value Addon Popover
-	Cypress.Commands.add('openValueAddon', () => {
-		cy.getByDataCy('value-addon-btn-open').click({
+	Cypress.Commands.add('openValueAddon', (eq = 0) => {
+		cy.getByDataCy('value-addon-btn-open').eq(eq).click({
 			force: true,
 		});
 	});
 
 	// Remove Value Addon Popover
-	Cypress.Commands.add('removeValueAddon', () => {
-		cy.getByDataCy('value-addon-btn-remove').click({
+	Cypress.Commands.add('removeValueAddon', (eq = 0) => {
+		cy.getByDataCy('value-addon-btn-remove').eq(eq).click({
 			force: true,
 		});
 	});
 
-	// Select Value Addon Popover
+	// Select a variable row in the variable picker.
+	// value-addons catalog rows: PickerValueItem (`va-item-*`, `value-addon-picker-item-*`).
+	// global-styles-ui preset repeaters: GroupControl header (`group-control-header` + `data-variable-slug`).
 	Cypress.Commands.add('selectValueAddonItem', (itemID) => {
-		cy.getByDataCy('va-item-' + itemID).click({
-			force: true,
-		});
+		const itemSelector = [
+			`[data-test="value-addon-picker-item-${itemID}"]`,
+			`[data-cy="va-item-${itemID}"]`,
+			`[data-cy="group-control-header"][data-variable-slug="${itemID}"]`,
+			`[data-variable-slug="${itemID}"]`,
+		].join(', ');
+
+		// Prefer the picker content node (`data-test`) over outer `.popover-variables`
+		// shells — edit popovers share that class and `.last()` can miss the catalog.
+		cy.getByDataTest('variable-picker-popover', { timeout: 20000 })
+			.filter(':visible')
+			.first()
+			.should('be.visible')
+			.within(() => {
+				// Do not require :visible before scroll — long palettes keep rows off-screen.
+				cy.get(itemSelector, { timeout: 20000 })
+					.first()
+					.scrollIntoView();
+				cy.get(itemSelector, { timeout: 20000 })
+					.first()
+					.should('be.visible')
+					.click({ force: true });
+			});
 	});
 
 	// for testing
 	Cypress.Commands.add('test gite', (selector, ...args) => {
 		return cy.get(`[data-test=${selector}]`, ...args);
 	});
-
-	Cypress.Commands.add('multiClick', (selector, count, ...args) => {
-		let counter = 0;
-		while (counter !== count) {
-			cy.get(selector, ...args).click({ force: true });
-			counter += 1;
-		}
-	});
-
-	Cypress.Commands.add('clickOutside', () => {
-		return cy.get('body').click(0, 0);
-	});
-
-	Cypress.Commands.add(
-		'setSliderValue',
-		{ prevSubject: 'element' },
-		(subject, value) => {
-			const element = subject[0];
-
-			const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-				window.HTMLInputElement.prototype,
-				'value'
-			)?.set;
-
-			nativeInputValueSetter?.call(element, value);
-			element.dispatchEvent(new Event('input', { bubbles: true }));
-		}
-	);
-
-	/**
-	 * Sets a React-controlled `<input type="text">` value in one shot.
-	 *
-	 * Use when `cy.type()` is unsafe: e.g. parent `onChange` runs every keystroke and remounts
-	 * the node or commits invalid partial state (hex colors, mesh gradients, etc.).
-	 * Dispatches `input` then `change` so typical React handlers run once with the final string.
-	 */
-	Cypress.Commands.add(
-		'setControlledInputValue',
-		{ prevSubject: 'element' },
-		(subject, value) => {
-			const el = subject[0];
-			const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-				window.HTMLInputElement.prototype,
-				'value'
-			)?.set;
-
-			if (nativeInputValueSetter) {
-				nativeInputValueSetter.call(el, value);
-			} else {
-				el.value = value;
-			}
-			el.dispatchEvent(new Event('input', { bubbles: true }));
-			el.dispatchEvent(new Event('change', { bubbles: true }));
-			return cy.wrap(subject);
-		}
-	);
 
 	// simulate paste event
 	Cypress.Commands.add(
@@ -374,6 +290,20 @@ export const registerCommands = () => {
 		cy.get('[role="listbox"]').within(() => {
 			cy.contains(item).click({ force: true });
 		});
+	});
+
+	/**
+	 * Select an option from CustomSelectControl (Ariakit listbox) by index.
+	 * Prefer this over aria-selected selectors; use inside `.within()` to scope.
+	 *
+	 * @param {number} index Zero-based index of the [role="option"] item.
+	 * @param {{ force?: boolean }} [options]
+	 */
+	Cypress.Commands.add('customSelectOption', (index = 0, options = {}) => {
+		const { force = false } = options;
+
+		cy.get('[aria-haspopup="listbox"]').click({ force });
+		cy.get('div[role="option"]').eq(index).click({ force });
 	});
 
 	Cypress.Commands.add('openAccordion', (accordionHeading) =>
@@ -611,35 +541,75 @@ export const registerCommands = () => {
 				cy.getByDataCy('color-btn').click({ force: true });
 			});
 
-		cy.get('[data-wp-component="Popover"]')
+		cy.get('.blockera-color-picker-popover')
 			.last()
+			.should('be.visible')
 			.within(() => {
-				cy.get('[data-cy="color-picker-css-value"]')
-					.click({ force: true })
-					.type('{selectall}' + value + ' ', { delay: 0 })
-					.then(() => {
-						if (Cypress.$(`[aria-label="Close"]`).length) {
-							// close popover
-							Cypress.$(`[aria-label="Close"]`)[0].click({
-								force: true,
-							});
-						}
-					});
+				cy.getByDataCy('color-picker-css-value').then(($input) => {
+					cy.wrap($input).setControlledInputValue(value);
+				});
+				cy.getByDataCy('color-picker-css-value').blur();
+
+				cy.getByDataTest('close-popover').click({ force: true });
 			});
 	});
 
 	Cypress.Commands.add('clearColorControlValue', (label) => {
+		cy.getParentContainer(label).then(($container) => {
+			$container[0].scrollIntoView({
+				block: 'center',
+				inline: 'nearest',
+				behavior: 'auto',
+			});
+		});
+		cy.getParentContainer(label).should('be.visible');
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click();
+				cy.getByDataCy('color-btn').then(($btn) => {
+					if (!$btn.hasClass('is-focus')) {
+						cy.wrap($btn).click({ force: true });
+					}
+				});
 			});
 
-		cy.get('[data-wp-component="Popover"]')
+		cy.get('.blockera-color-picker-popover')
 			.last()
+			.should('be.visible')
 			.within(() => {
-				cy.getByAriaLabel('Reset Color (Clear)').click();
+				cy.getByAriaLabel('Reset Color (Clear)').click({ force: true });
 			});
+	});
+
+	/**
+	 * Select an icon from the open Blockera icon library picker by icon id.
+	 * Open the picker first (e.g. cy.getByAriaLabel('Choose Icon…').click()).
+	 *
+	 * Library icons use aria-label="{iconName} Icon" on
+	 * `.blockera-control-icon-control-icon` (see icon-control/utils.js).
+	 *
+	 * @param {string} iconName Icon library id, e.g. "add-card" or "blockera".
+	 */
+	Cypress.Commands.add('selectIconByName', (iconName) => {
+		const ariaLabel = `${iconName} Icon`;
+
+		const clickIcon = () => {
+			cy.get('.blockera-control-icon-control-icon')
+				.filter(`[aria-label="${ariaLabel}"]`)
+				.first()
+				.click();
+		};
+
+		cy.get('body').then(($body) => {
+			cy.get('.blockera-control-icon-picker-modal')
+				.should('be.visible')
+				.within(() => {
+					clickIcon();
+					cy.contains('button', /^Use icon$/i).click();
+				});
+		});
+
+		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
 	});
 
 	Cypress.Commands.add(
@@ -724,69 +694,6 @@ export const registerCommands = () => {
 						force: true,
 					});
 				});
-		}
-	);
-
-	Cypress.Commands.add(
-		'dragValue',
-		{ prevSubject: 'element' },
-		(
-			subject,
-			type = 'vertical',
-			movement = 10,
-			threshold = 5,
-			withShift = false
-		) => {
-			// Initial mousedown
-			cy.wrap(subject[0]).trigger('mousedown', 'topLeft', {
-				which: 1,
-				force: true,
-			});
-
-			// First mousemove to exceed threshold
-			if (type === 'vertical') {
-				cy.get('body').trigger('mousemove', {
-					which: 1,
-					clientY:
-						Math.ceil(subject[0].getBoundingClientRect().top) +
-						threshold, // Exceed threshold
-				});
-
-				// Second mousemove for actual movement
-				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
-					which: 1,
-					clientY:
-						Math.ceil(subject[0].getBoundingClientRect().top) +
-						(withShift
-							? (movement - threshold + 1) * 5
-							: movement) *
-							-1,
-					shiftKey: withShift,
-				});
-			} else if (type === 'horizontal') {
-				cy.get('body').trigger('mousemove', {
-					which: 1,
-					clientX:
-						Math.ceil(subject[0].getBoundingClientRect().left) +
-						threshold,
-				});
-
-				// Second mousemove for actual movement
-				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
-					which: 1,
-					clientX:
-						Math.ceil(subject[0].getBoundingClientRect().left) +
-						(withShift ? (movement - threshold + 1) * 5 : movement),
-					shiftKey: withShift,
-				});
-			}
-
-			// Final mouseup
-			cy.get('.blockera-virtual-cursor-box').trigger('mouseup', {
-				which: 1,
-			});
-
-			return cy.wrap(subject);
 		}
 	);
 
@@ -970,15 +877,56 @@ export const registerCommands = () => {
 	});
 
 	Cypress.Commands.add('addNewTransition', () => {
-		cy.getParentContainer('Transitions').as('transition');
+		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
+			'transition'
+		);
 
 		cy.get('@transition').within(() => {
 			cy.getByAriaLabel('Add New Transition').click();
 		});
 	});
 
+	/**
+	 * Global Styles → Color variables: add a row in the custom color preset repeater
+	 * (`getOriginVariablesLabel( 'custom' )` + PresetGroup title → aria labels).
+	 * Same pattern as `addNewTransition`: `getParentContainer`, then add via aria-label.
+	 */
+	Cypress.Commands.add('addNewGlobalStylesCustomColorPreset', () => {
+		cy.getParentContainer('Custom variables').as(
+			'globalStylesCustomColorPresetGroup'
+		);
+
+		cy.get('@globalStylesCustomColorPresetGroup').within(() => {
+			cy.getByAriaLabel('Add New Color').click({ force: true });
+		});
+	});
+
+	/**
+	 * Global Styles → any custom preset repeater: click add via `data-test` on PresetGroup
+	 * (`global-styles-preset-add-${controlName}`).
+	 */
+	Cypress.Commands.add(
+		'addNewGlobalStylesCustomPresetByDataTest',
+		(dataTest) => {
+			cy.getParentContainer('Custom variables').within(() => {
+				cy.getByDataTest(dataTest).click({ force: true });
+			});
+		}
+	);
+
+	/** Variable picker header “+” (single-type custom preset add). */
+	Cypress.Commands.add('clickVariablePickerHeaderAddCustomVariable', () => {
+		cy.getByDataTest('variable-picker-header-add-custom-variable', {
+			timeout: 20000,
+		})
+			.should('be.visible')
+			.click({ force: true });
+	});
+
 	Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
-		cy.getParentContainer('Transitions').as('transition');
+		cy.getParentContainer(['Transitions Timing', 'Transitions']).as(
+			'transition'
+		);
 		cy.get('@transition').within(() => {
 			cy.getByDataCy('group-control-header').click();
 		});
@@ -1268,7 +1216,7 @@ export const registerCommands = () => {
 	/**
 	 * Creates draft posts via REST while the block editor is loaded (`wp.apiFetch`).
 	 * @param {number} count How many drafts to create.
-	 * @returns {Cypress.Chainable<number[]>} Numeric post IDs.
+	 * @return {Cypress.Chainable<number[]>} Numeric post IDs.
 	 */
 	Cypress.Commands.add('tabsCreateDraftPostsViaRest', (count) => {
 		return cy.window().then((win) => {
@@ -1555,10 +1503,13 @@ export const registerCommands = () => {
 	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 20000 }`.
 	 */
 	Cypress.Commands.add('tabsExpectLimitUpgradePrompt', (options = {}) => {
-		cy.getByTestId(
-			WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
+		const id = WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt;
+		cy.get(
+			`[data-test="${id}"], [test-id="${id}"], .blockera-component-upgrade-prompt`,
 			options
-		).should('be.visible');
+		)
+			.should('exist')
+			.should('be.visible');
 	});
 
 	/**
@@ -1605,5 +1556,29 @@ export const registerCommands = () => {
 	Cypress.Commands.add('previewExpectOverlayClosed', () => {
 		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay).should('not.exist');
 		cy.get('body').should('not.have.class', 'blockera-preview-mode-open');
+	});
+
+	Cypress.Commands.add('setMonacoEditorValue', (value) => {
+		cy.get('.monaco-editor').click();
+		cy.get('.monaco-editor textarea').clear({ force: true });
+		cy.window().then((win) => {
+			const monaco = win.monaco;
+			const fallbackEditor = monaco.editor.getModels
+				? monaco.editor.getModels()[0]
+				: null;
+			const editor = monaco.editor.getEditors
+				? monaco.editor.getEditors()[0]
+				: fallbackEditor;
+			if (editor && typeof editor.setValue === 'function') {
+				editor.setValue(value);
+			} else if (monaco.editor.getModels) {
+				const model = monaco.editor.getModels()[0];
+				if (model && typeof model.setValue === 'function') {
+					model.setValue(value);
+				}
+			} else {
+				throw new Error('Unable to access Monaco editor in the test.');
+			}
+		});
 	});
 };

@@ -1,45 +1,50 @@
+.blockera-popover-anchor-resolver {
+	display: block;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
 .blockera-component-popover {
 	position: relative;
-	--popover-overflow: visible;
+	--popover-overflow: auto;
 	--popover-min-height: auto;
 	--popover-height: 430px;
 	--popover-width: 282px;
 	--popover-header-height: 42px;
 	--popover-color: #1e1e1e;
 	--popover-bg-color: #ffffff;
-	--popover-border-color: var(--blockera-controls-primary-color);
-	--popover-border-width: 2px;
+	--popover-border-color: var(--blockera-controls-border-color);
+	--popover-border-width: 1px;
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
-	--popover-header-shadow-color: #00000029;
+	--popover-header-border-color: var(
+		--blockera-controls-border-color-extra-soft
+	);
 	--popover-header-btn-color: #1e1e1e;
 	--popover-header-btn-border-color: var(
 		--blockera-controls-border-color-soft
 	);
-	--popover-padding: 16px;
-	--popover-radius: 3px;
-	overflow: var(--popover-overflow) !important;
-	background: transparent;
+	--popover-padding: 18px;
+	--popover-radius: 0;
 	color: var(--popover-color);
-	border-radius: none;
+	border-radius: 0;
 
 	.components-popover__content {
 		padding: 0;
 		border: var(--popover-border-width) solid var(--popover-border-color);
+		border-top: 2px solid var(--blockera-controls-primary-color);
 		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
 		min-width: var(--popover-width);
 		width: var(--popover-width);
 		position: relative;
-		min-height: auto;
-		height: auto;
-		overflow: auto !important;
-		background-color: var(--popover-bg-color);
 		border-radius: var(--popover-radius);
 	}
 
 	.blockera-component-popover-header {
 		padding: 0 var(--popover-padding);
-		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
+		border-bottom: 1px solid var(--popover-header-border-color);
 		position: sticky;
 		top: 0;
 		left: 0;
@@ -54,7 +59,8 @@
 		color: var(--popover-header-color);
 		font-size: 13px;
 		z-index: 6;
-		border-radius: var(--popover-radius) var(--popover-radius) 0 0;
+		/* Isolate stacking so title row / sticky chrome do not paint above button clusters. */
+		isolation: isolate;
 
 		svg {
 			fill: currentColor;
@@ -73,6 +79,9 @@
 			display: flex;
 			gap: 6px;
 			flex-direction: row;
+			flex-shrink: 0;
+			position: relative;
+			z-index: 1;
 
 			&.title-right-buttons {
 				margin-left: auto;
@@ -90,17 +99,19 @@
 	.blockera-component-popover-body {
 		padding: calc(var(--popover-padding) * 1.33) var(--popover-padding) 0
 			var(--popover-padding);
-		min-height: calc(
-			var(--popover-min-height) - var(--popover-header-height)
-		);
-		max-height: calc(var(--popover-height) - var(--popover-header-height));
-		overflow: var(--popover-overflow) !important;
 		background-color: var(--popover-bg-color);
 		z-index: 1;
 		position: relative;
+		isolation: isolate;
+
+		/* First body child above sibling stacking so controls stay clickable (replaces layout spacer). */
+		& > *:first-child {
+			position: relative;
+			z-index: 1;
+		}
 
 		& > :last-child {
-			padding-bottom: var(--popover-padding);
+			padding-bottom: calc(var(--popover-padding) * 1.33);
 		}
 
 		.blockera-component-breakpoint-icon {
@@ -114,12 +125,13 @@
 	--popover-border-width: 1px;
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
-	--popover-header-shadow-color: #00000029;
+	--popover-header-border-color: var(
+		--blockera-controls-border-color-extra-soft
+	);
 	--popover-header-btn-color: #1e1e1e;
 	--popover-header-btn-border-color: var(
 		--blockera-controls-border-color-soft
 	);
-	overflow: var(--popover-overflow) !important;
 	background-color: var(--popover-bg-color);
 	color: var(--popover-color);
 	border: none;
