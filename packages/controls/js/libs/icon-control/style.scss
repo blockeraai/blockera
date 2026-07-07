@@ -265,7 +265,7 @@
 	transition: all 0.2s ease;
 	text-align: center;
 
-	&:hover {
+	&:hover:not(.icon-current) {
 		color: var(--blockera-controls-primary-color);
 
 		svg {
