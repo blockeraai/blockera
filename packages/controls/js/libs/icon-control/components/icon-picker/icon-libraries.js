@@ -28,6 +28,12 @@ const DEFAULT_LIBRARIES = {
 	untitledui: {
 		lazyLoad: true,
 	},
+	tabler: {
+		lazyLoad: true,
+	},
+	'tabler-filled': {
+		lazyLoad: true,
+	},
 	faregular: {
 		lazyLoad: true,
 	},
