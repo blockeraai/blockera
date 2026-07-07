@@ -1,5 +1,7 @@
 //@flow
 
+import type { MixedElement } from 'react';
+
 export type ColorIndicatorProps = {
 	/**
 	 * Specifies the value type. It creates custom indicator for types and return empty tag for invalid types. Empty type will be treated as color.
@@ -33,6 +35,10 @@ export type ColorIndicatorProps = {
 	 * Accessible label; contextual keywords set a default unless overridden.
 	 */
 	'aria-label'?: string,
+	/**
+	 * Optional overlay content (e.g. shade base-anchor badge) rendered inside the indicator.
+	 */
+	children?: MixedElement,
 };
 
 export type ColorIndicatorStackProps = {
