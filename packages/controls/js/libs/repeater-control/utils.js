@@ -27,6 +27,7 @@ import {
 	isElementInsideVariablePickerSelectionTarget,
 	isPopoverDismissIgnoredTarget,
 	INSPECTOR_SIDEBAR_SELECTORS,
+	POPOVER_ROOT_SELECTOR,
 } from '../popover/utils';
 
 export const isOpenPopoverEvent = (
@@ -389,13 +390,72 @@ export function isClickInsideOpenInspectorRepeaterPopover(
 	return false;
 }
 
+/**
+ * Whether this open repeater row should stay open while a nested repeater row
+ * inside its edit popover is opening (nested repeaters portal row headers into
+ * the parent popover body).
+ */
+export function shouldPreserveRepeaterPopoverForNestedOpen(
+	itemRef: ?HTMLElement,
+	openingFrom: ?HTMLElement
+): boolean {
+	if (
+		!(itemRef instanceof HTMLElement) ||
+		!(openingFrom instanceof HTMLElement)
+	) {
+		return false;
+	}
+
+	const groupSelector = buildClassSelector(controlClassNames('group'));
+	const openGroup = itemRef.querySelector(
+		`${groupSelector}.is-open.mode-popover`
+	);
+
+	if (!(openGroup instanceof HTMLElement)) {
+		return false;
+	}
+
+	const groupPopoverClassTokens = controlInnerClassNames('group-popover')
+		.split(/\s+/)
+		.filter(Boolean);
+
+	for (const node of document.querySelectorAll(POPOVER_ROOT_SELECTOR)) {
+		if (!(node instanceof HTMLElement)) {
+			continue;
+		}
+
+		if (
+			!groupPopoverClassTokens.every((token) =>
+				node.classList.contains(token)
+			)
+		) {
+			continue;
+		}
+
+		if (node.contains(openingFrom)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 /** Ask all repeater rows to close any open local edit popovers. */
-export function closeInspectorRepeaterPopovers(): void {
+export function closeInspectorRepeaterPopovers(
+	openingFrom?: ?HTMLElement
+): void {
 	if (typeof document === 'undefined') {
 		return;
 	}
 
 	document.dispatchEvent(
-		new CustomEvent(INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT)
+		new CustomEvent(INSPECTOR_REPEATER_POPOVER_CLOSE_EVENT, {
+			detail: {
+				openingFrom:
+					openingFrom instanceof HTMLElement
+						? openingFrom
+						: undefined,
+			},
+		})
 	);
 }

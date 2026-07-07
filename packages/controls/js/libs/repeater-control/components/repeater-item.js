@@ -36,6 +36,7 @@ import {
 	isRepeaterPromoActive,
 	shouldApplyRepeaterItemNativeStyle,
 	shouldGateRepeaterItemHeaderForPromo,
+	shouldPreserveRepeaterPopoverForNestedOpen,
 } from '../utils';
 import { isVariablePickerSelectionInteraction } from '../../popover/utils';
 import Flex from '../../flex';
@@ -165,7 +166,12 @@ const RepeaterItem = ({
 
 	const handleItemOpen = useCallback(
 		(options?: { refreshContent?: boolean }) => {
-			closeInspectorRepeaterPopovers();
+			const row =
+				itemRef.current instanceof HTMLElement
+					? itemRef.current
+					: undefined;
+
+			closeInspectorRepeaterPopovers(row);
 
 			setOpen((currentlyOpen) => {
 				const shouldRefreshContent =
@@ -349,8 +355,22 @@ const RepeaterItem = ({
 	]);
 
 	useEffect(() => {
-		const closeOpenPopover = () => {
+		const closeOpenPopover = (event: Event) => {
 			if (!isOpen) {
+				return;
+			}
+
+			const openingFrom =
+				event instanceof CustomEvent
+					? event.detail?.openingFrom
+					: undefined;
+
+			if (
+				shouldPreserveRepeaterPopoverForNestedOpen(
+					itemRef.current,
+					openingFrom
+				)
+			) {
 				return;
 			}
 
