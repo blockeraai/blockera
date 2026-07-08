@@ -47,19 +47,22 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
-
-            - name: Install Composer dependencies
-              uses: ramsey/composer-install@v2
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
               with:
-                  custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
+                  php-version: '7.4'
+                  coverage: none
 
-            - name: Build Plugin Zip File
-              uses: ./.github/build-plugin-zip
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: npm
 
             - uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.BLOCKERABOT_PAT }}'
+                  install-script: 'npm ci --legacy-peer-deps --prefer-offline --no-audit'
+                  build-script: 'bundle-size:build'
+                  clean-script: 'bundle-size:clean'
                   pattern: '{dist/**/*.min.js,dist/**/*.min.css,blockera.zip,packages/**/*.php,!**/test/**,!**/tests/**,packages/php/**/*.json,packages/js/**/*.json,packages/**/*.svg}'
