@@ -2,6 +2,7 @@
 
 namespace Blockera\Http;
 
+use Blockera\Data\Cache\Cache;
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -84,25 +85,7 @@ class Routes {
 			return;
 		}
 
-		// Resolve CacheSystem from container, with fallback to helper function if not bound yet.
-		$cache = null;
-		if ( static::$app->bound('CacheSystem') ) {
-			try {
-				$cache = static::$app->make('CacheSystem');
-			} catch ( \Exception $e ) {
-				// Fallback to helper function if container resolution fails.
-				$cache = null;
-			}
-		}
-
-		// Use helper function as fallback if container doesn't have the binding.
-		if ( null === $cache && function_exists('blockera_get_cache') ) {
-			$cache = blockera_get_cache();
-		}
-
-		if ( null !== $cache ) {
-			$controller->setCacheInstance( $cache );
-		}
+		$controller->setCacheInstance( self::$app->make( Cache::class, [ 'product_id' => 'blockera' ] ) );
 
 		$isRegister = register_rest_route(
 			$controller->getNameSpace() . self::$version,

@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -26,16 +27,8 @@ describe('Verse Block', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		cy.checkBlockCardItems(['normal', 'hover']);
-
-		cy.checkBlockStatesPickerItems([
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		//
 		// 1. Edit Block

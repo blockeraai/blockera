@@ -8,12 +8,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
+import { updateConfig } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
-
-/**
- * Internal dependencies
- */
-import { updateConfig } from '../editor-store-helpers';
 
 export const backgroundComponentConfig: Object = {
 	blockeraBackground: {
@@ -44,11 +40,6 @@ export const backgroundComponentConfig: Object = {
 					icon: (
 						<Icon icon="background-mesh-gradient" iconSize="18" />
 					),
-				},
-				{
-					label: __('None', 'blockera'),
-					value: 'none',
-					icon: <Icon icon="background-none" iconSize="18" />,
 				},
 			],
 			meshGradientColors: {

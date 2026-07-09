@@ -5,8 +5,6 @@ const webpack = require('webpack');
 const dotenv = require('dotenv');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const fs = require('fs');
 const { join, resolve } = require('path');
 
 /**
@@ -71,20 +69,6 @@ const scssLoaders = ({ isLazy }) => [
 
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production';
-	const pluginRoot = resolve(__dirname, '..', '..', '..', '..');
-
-	const experimentalConfigDefaultPath = resolve(
-		pluginRoot,
-		'experimental.config.json'
-	);
-	const experimentalConfigLocalPath = resolve(
-		pluginRoot,
-		'local.experimental.config.json'
-	);
-	const experimentalConfigResolvedPath =
-		!isProduction && fs.existsSync(experimentalConfigLocalPath)
-			? experimentalConfigLocalPath
-			: experimentalConfigDefaultPath;
 
 	return {
 		mode: argv.mode,
@@ -102,13 +86,6 @@ module.exports = (env, argv) => {
 		},
 		module: {
 			rules: [
-				// Handle CSS files with ?raw query parameter (import as raw string)
-				// This must come BEFORE the default CSS rules
-				{
-					test: /\.css$/i,
-					resourceQuery: /raw/,
-					type: 'asset/source',
-				},
 				...defaultConfig.module.rules,
 				{
 					test: /\.lazy\.scss$/,
@@ -120,33 +97,10 @@ module.exports = (env, argv) => {
 					issuer: /\.[jt]sx?$/,
 					use: ['@svgr/webpack'],
 				},
-				{
-					test: /\.(txt|html)$/,
-					type: 'asset/source',
-				},
 			],
 		},
 		plugins: [
 			new DependencyExtractionWebpackPlugin({ injectPolyfill: true }),
-			new CopyPlugin({
-				patterns: [
-					{
-						// __dirname is packages/dev-tools/js/webpack; go up 3 levels to packages, then into editor
-						from: resolve(
-							__dirname,
-							'..',
-							'..',
-							'..',
-							'editor',
-							'js',
-							'preview-mode',
-							'header',
-							'style.css'
-						),
-						to: 'dist/editor/preview-header.css',
-					},
-				],
-			}),
 			new MiniCssExtractPlugin({
 				filename: isProduction
 					? './dist/[name]/style.min.css'
@@ -157,22 +111,6 @@ module.exports = (env, argv) => {
 				'process.env': JSON.stringify(process.env),
 			}),
 		].filter(Boolean),
-		resolve: {
-			...defaultConfig.resolve,
-			alias: {
-				...(defaultConfig.resolve?.alias || {}),
-				'@blockera/experimental-config': experimentalConfigResolvedPath,
-			},
-			extensions: [
-				'.tsx',
-				'.ts',
-				...(defaultConfig.resolve?.extensions || [
-					'.jsx',
-					'.js',
-					'.json',
-				]),
-			],
-		},
 		optimization: {
 			minimize: isProduction,
 			minimizer: [
@@ -184,7 +122,7 @@ module.exports = (env, argv) => {
 			? {}
 			: {
 					devtool: 'source-map',
-				}),
+			  }),
 		externals: argv.externals,
 	};
 };

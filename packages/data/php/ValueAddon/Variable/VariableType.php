@@ -36,13 +36,6 @@ class VariableType extends ValueAddonType implements HasGroupTypes {
 			'width-size',
 			'linear-gradient',
 			'radial-gradient',
-			'shadow',
-			'text-shadow',
-			'border-radius',
-			'border',
-			'transition',
-			'transform',
-			'filter',
 		];
 	}
 

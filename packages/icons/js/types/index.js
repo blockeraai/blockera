@@ -10,21 +10,13 @@ export type IconLibraryTypes =
 	| 'brands'
 	| 'faregular'
 	| 'fasolid'
-	| 'fabrands'
-	| 'essentials'
-	| 'feather'
-	| 'lucide'
-	| 'untitledui'
-	| 'tabler'
-	| 'tabler-filled';
+	| 'fabrands';
 
 export type IconLibrary = {
 	id: IconLibraryTypes,
 	name: string,
 	icon: MixedElement,
 	count: number,
-	author: string,
-	link: string,
 };
 
 export type UploadSVGProps = {

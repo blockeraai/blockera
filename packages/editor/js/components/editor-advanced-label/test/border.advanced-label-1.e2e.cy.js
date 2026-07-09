@@ -1,9 +1,10 @@
 import {
-	createPost,
-	setBlockState,
-	setDeviceType,
 	getWPDataObject,
 	getSelectedBlock,
+	createPost,
+	setBlockState,
+	addBlockState,
+	setDeviceType,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Border Control label testing (Border Line)', () => {
@@ -11,10 +12,10 @@ describe('Border Control label testing (Border Line)', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 
 		// Alias
-		cy.getParentContainer('Border').within(() => {
+		cy.getParentContainer('Border Line').within(() => {
 			cy.getByDataTest('border-control-width').as('border-width');
 			cy.getByDataTest('border-control-color')
 				.children()
@@ -27,7 +28,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state',
 			'not-have'
 		);
@@ -38,7 +39,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label after set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state'
 		);
 
@@ -53,7 +54,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state'
 		);
 
@@ -61,7 +62,7 @@ describe('Border Control label testing (Border Line)', () => {
 		cy.get('@border-width').should('have.value', '5');
 
 		// Assert state graph
-		cy.checkStateGraph('Border And Shadow', 'Border', {
+		cy.checkStateGraph('Border And Shadow', 'Border Line', {
 			desktop: ['Normal'],
 		});
 	});
@@ -75,18 +76,18 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		cy.setColorControlValue('Border', 'ccc');
+		cy.setColorControlValue('Border Line', 'ccc');
 
 		// Assert label after set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-secondary-state'
 		);
 		// Assert control
@@ -104,7 +105,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-other-state'
 		);
 
@@ -116,7 +117,7 @@ describe('Border Control label testing (Border Line)', () => {
 		);
 
 		// Assert state graph
-		cy.checkStateGraph('Border And Shadow', 'Border', {
+		cy.checkStateGraph('Border And Shadow', 'Border Line', {
 			desktop: ['Hover'],
 		});
 	});
@@ -127,12 +128,12 @@ describe('Border Control label testing (Border Line)', () => {
 		 */
 		// Set value
 		cy.get('@border-width').type(5);
-		cy.setColorControlValue('Border', 'ccc');
+		cy.setColorControlValue('Border Line', 'ccc');
 
 		// Assert label
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state'
 		);
 
@@ -140,7 +141,7 @@ describe('Border Control label testing (Border Line)', () => {
 		cy.get('@border-width').clear();
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state'
 		);
 
@@ -152,7 +153,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state'
 		);
 
@@ -162,7 +163,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label after set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-secondary-state'
 		);
 
@@ -175,7 +176,7 @@ describe('Border Control label testing (Border Line)', () => {
 		);
 
 		// Assert state graph
-		cy.checkStateGraph('Border And Shadow', 'Border', {
+		cy.checkStateGraph('Border And Shadow', 'Border Line', {
 			desktop: ['Normal', 'Hover'],
 		});
 	});
@@ -185,7 +186,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state',
 			'not-have'
 		);
@@ -196,7 +197,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label after set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state'
 		);
 
@@ -211,7 +212,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-other-state'
 		);
 
@@ -219,7 +220,7 @@ describe('Border Control label testing (Border Line)', () => {
 		cy.get('@border-width').should('have.value', '');
 
 		// Assert state graph
-		cy.checkStateGraph('Border And Shadow', 'Border', {
+		cy.checkStateGraph('Border And Shadow', 'Border Line', {
 			tablet: ['Normal'],
 		});
 	});
@@ -233,7 +234,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-normal-state',
 			'not-have'
 		);
@@ -244,7 +245,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label after set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-secondary-state'
 		);
 		// Assert control
@@ -258,7 +259,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-other-state'
 		);
 
@@ -273,7 +274,7 @@ describe('Border Control label testing (Border Line)', () => {
 		// Assert label
 		cy.checkLabelClassName(
 			'Border And Shadow',
-			'Border',
+			'Border Line',
 			'changed-in-other-state'
 		);
 
@@ -281,7 +282,7 @@ describe('Border Control label testing (Border Line)', () => {
 		cy.get('@border-width').should('have.value', '', { force: true });
 
 		// Assert state graph
-		cy.checkStateGraph('Border And Shadow', 'Border', {
+		cy.checkStateGraph('Border And Shadow', 'Border Line', {
 			tablet: ['Hover'],
 		});
 	});
@@ -306,12 +307,16 @@ describe('Border Control label testing (Border Line)', () => {
 
 		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in normal/tablet', () => {
 			// Reset to normal
-			cy.resetBlockeraAttribute('Border And Shadow', 'Border', 'reset');
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-normal-state'
 			);
 
@@ -319,7 +324,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', 5);
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				tablet: ['Hover'],
 				desktop: ['Hover', 'Normal'],
 			});
@@ -336,12 +341,16 @@ describe('Border Control label testing (Border Line)', () => {
 		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in hover/tablet', () => {
 			setBlockState('Hover');
 			// Reset to normal
-			cy.resetBlockeraAttribute('Border And Shadow', 'Border', 'reset');
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-normal-state'
 			);
 
@@ -349,7 +358,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', 5);
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				tablet: ['Normal'],
 				desktop: ['Hover', 'Normal'],
 			});
@@ -366,12 +375,16 @@ describe('Border Control label testing (Border Line)', () => {
 		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in normal/desktop', () => {
 			setDeviceType('Desktop');
 			// Reset to default
-			cy.resetBlockeraAttribute('Border And Shadow', 'Border', 'reset');
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-other-state'
 			);
 
@@ -379,7 +392,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				tablet: ['Normal', 'Hover'],
 				desktop: ['Hover'],
 			});
@@ -396,12 +409,16 @@ describe('Border Control label testing (Border Line)', () => {
 		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in hover/desktop', () => {
 			setBlockState('Hover');
 			// Reset to normal
-			cy.resetBlockeraAttribute('Border And Shadow', 'Border', 'reset');
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-secondary-state',
 				'not-have'
 			);
@@ -410,7 +427,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '5');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				tablet: ['Normal'],
 				desktop: ['Normal', 'Hover'],
 			});
@@ -459,7 +476,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Reset All
 			cy.resetBlockeraAttribute(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'reset-all'
 			);
 
@@ -470,7 +487,7 @@ describe('Border Control label testing (Border Line)', () => {
 					// Assert label
 					cy.checkLabelClassName(
 						'Border And Shadow',
-						'Border',
+						'Border Line',
 						'changed-in-normal-state',
 						'not-have'
 					);
@@ -479,14 +496,14 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					cy.checkStateGraph('Border And Shadow', 'Border', {});
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Hover/Tablet
 					setBlockState('Hover');
 					// Assert label
 					cy.checkLabelClassName(
 						'Border And Shadow',
-						'Border',
+						'Border Line',
 						'changed-in-secondary-state',
 						'not-have'
 					);
@@ -495,14 +512,14 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					cy.checkStateGraph('Border And Shadow', 'Border', {});
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Hover/Desktop
 					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Border And Shadow',
-						'Border',
+						'Border Line',
 						'changed-in-secondary-state',
 						'not-have'
 					);
@@ -511,14 +528,14 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					cy.checkStateGraph('Border And Shadow', 'Border', {});
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
 						'Border And Shadow',
-						'Border',
+						'Border Line',
 						'changed-in-normal-state',
 						'not-have'
 					);
@@ -527,7 +544,7 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					cy.checkStateGraph('Border And Shadow', 'Border', {});
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
@@ -567,7 +584,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-normal-state'
 			);
 
@@ -575,7 +592,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Normal'],
 			});
 
@@ -585,7 +602,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-normal-state'
 			);
 
@@ -593,7 +610,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Normal'],
 			});
 
@@ -602,7 +619,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-normal-state'
 			);
 
@@ -610,7 +627,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Normal'],
 			});
 
@@ -619,7 +636,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-normal-state'
 			);
 
@@ -627,7 +644,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Normal'],
 			});
 
@@ -663,7 +680,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-secondary-state'
 			);
 
@@ -671,7 +688,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '15');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Hover'],
 			});
 
@@ -681,7 +698,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-other-state'
 			);
 
@@ -689,7 +706,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Hover'],
 			});
 
@@ -698,7 +715,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-other-state'
 			);
 
@@ -706,7 +723,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Hover'],
 			});
 
@@ -715,7 +732,7 @@ describe('Border Control label testing (Border Line)', () => {
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
-				'Border',
+				'Border Line',
 				'changed-in-other-state'
 			);
 
@@ -723,7 +740,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border', {
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
 				desktop: ['Hover'],
 			});
 

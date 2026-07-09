@@ -38,7 +38,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 					isOpenPopoverEvent(event, '.shape-icon') && setOpen(!isOpen)
 				}
 				aria-label={sprintf(
-					// translators: %d: The item number (1-based index)
+					// translators: it's the aria label for repeater item
 					__('Item %d', 'blockera'),
 					itemId + 1
 				)}

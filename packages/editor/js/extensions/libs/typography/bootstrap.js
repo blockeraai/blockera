@@ -9,6 +9,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import type { ControlContextRefCurrent } from '@blockera/controls';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -46,10 +47,6 @@ import {
 	letterSpacingToWPCompatibility,
 } from './compatibility/letter-spacing';
 import {
-	textIndentFromWPCompatibility,
-	textIndentToWPCompatibility,
-} from './compatibility/text-indent';
-import {
 	textOrientationFromWPCompatibility,
 	textOrientationToWPCompatibility,
 } from './compatibility/text-orientation';
@@ -58,34 +55,24 @@ import {
 	fontColorToWPCompatibility,
 } from './compatibility/font-color';
 import type { BlockDetail } from '../block-card/block-states/types';
-import {
-	isInvalidCompatibilityRun,
-	mergeWPCompatibility,
-	sanitizeWPCompatibilityAttributes,
-} from '../utils';
-import {
-	registerHideCoreTextAlignToolbarDom,
-	registerHideCoreTextAlignToolbarSupports,
-} from './hide-core-text-align-toolbar';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
-	registerHideCoreTextAlignToolbarSupports();
-	registerHideCoreTextAlignToolbarDom();
-
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			//
 			// Font Family
 			//
 			attributes = fontFamilyFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -93,8 +80,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontSizeFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -102,8 +87,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = lineHeightFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -112,8 +95,6 @@ export const bootstrap = (): void => {
 			attributes = textAlignFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -121,8 +102,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = textDecorationFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -130,8 +109,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontAppearanceFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -139,8 +116,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = textTransformFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -148,17 +123,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = letterSpacingFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
-			});
-
-			//
-			// Text Indent
-			//
-			attributes = textIndentFromWPCompatibility({
-				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -166,8 +130,6 @@ export const bootstrap = (): void => {
 			//
 			attributes = textOrientationFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			//
@@ -175,11 +137,9 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontColorFromWPCompatibility({
 				attributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
-			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
+			return attributes;
 		}
 	);
 
@@ -207,8 +167,7 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
@@ -216,138 +175,96 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraFontFamily':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						fontFamilyToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraFontAppearance':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						fontAppearanceToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraFontSize':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						fontSizeToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraLineHeight':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						lineHeightToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraTextAlign':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						textAlignToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraTextDecoration':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						textDecorationToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraTextTransform':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						textTransformToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraLetterSpacing':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						letterSpacingToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
-					);
-
-				case 'blockeraTextIndent':
-					return mergeWPCompatibility(
-						nextState,
-						textIndentToWPCompatibility({
-							newValue,
-							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraTextOrientation':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						textOrientationToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraFontColor':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						fontColorToWPCompatibility({
 							newValue,
 							ref,
 							getAttributes,
 							blockDetail,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 			}
 

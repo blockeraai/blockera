@@ -1,15 +1,27 @@
 .components-popover.blockera-component-popover.blockera-states-picker-popover {
-	--popover-width: calc(var(--blockera-primary-sidebar-width, 280px) - 42px);
+	--popover-width: 260px;
+    --popover-border-color: #bdbdbd;
+    --popover-border-width: 1px;
+    --popover-height: auto;
+    --popover-radius: 3px;
 
 	.components-popover__content {
 		border-radius: var(--popover-radius);
-		box-shadow:
-			0 3px 6px rgba(0, 0, 0, 0.25),
-			0 0 4px 8px #ffffff;
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 4px 8px #ffffff;
+		margin-right: -5px;
+
+		.blockera-component-popover-body {
+			padding: calc(var(--popover-padding) * 1.15) var(--popover-padding) 0 var(--popover-padding);
+
+			& > :last-child {
+				padding-bottom: calc(var(--popover-padding) * 1.2);
+			}
+		}
 	}
 }
 
 .blockera-block-inserter {
+
 	.is-item {
 		border: 1px solid var(--blockera-controls-border-color);
 		border-radius: var(--blockera-controls-border-radius);
@@ -21,11 +33,7 @@
 	}
 
 	.blockera-block-features-category {
-		color: color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 100%,
-			#000000 10%
-		);
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 10%);
 		font-size: 12px;
 		font-weight: 500;
 		margin: 0;
@@ -46,6 +54,7 @@
 	}
 
 	.blockera-features-types {
+
 		.blockera-feature-type {
 			--item-height: 30px;
 			--icon-size: 16px;
@@ -70,17 +79,9 @@
 
 			&:focus,
 			&:hover {
-				color: color-mix(
-					in srgb,
-					var(--blockera-controls-primary-color) 100%,
-					#000000 20%
-				);
+				color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 				border-color: var(--blockera-controls-primary-color);
-				background: color-mix(
-					in srgb,
-					var(--blockera-controls-primary-color) 4%,
-					#ffffff 100%
-				);
+				background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
 			}
 
 			.blockera-feature-icon {
@@ -129,18 +130,15 @@
 	}
 
 	&.blockera-block-inserter-types-state {
-		--blockera-controls-primary-color: var(
-			--blockera-controls-states-color
-		);
+		--blockera-controls-primary-color: var(--blockera-controls-states-color);
 	}
 
 	&.blockera-block-inserter-types-element,
 	&.blockera-block-inserter-types-inner-block {
-		--blockera-controls-primary-color: var(
-			--blockera-controls-inner-blocks-color
-		);
+		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
 
 		.blockera-features-types {
+
 			.blockera-feature-type {
 				justify-content: flex-start;
 				gap: 3px;
@@ -148,11 +146,4 @@
 			}
 		}
 	}
-}
-
-.not-allowed {
-	opacity: 0.5;
-	pointer-events: none;
-	cursor: not-allowed;
-	user-select: none;
 }

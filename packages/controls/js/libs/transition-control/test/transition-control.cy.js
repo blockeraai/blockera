@@ -117,10 +117,7 @@ describe('transition control component testing', () => {
 
 			cy.get('button[aria-label="Add New Transition"]').click();
 
-			cy.get('.blockera-component-upgrade-prompt')
-				.find('a')
-				.contains(/upgrade/i)
-				.should('be.visible');
+			cy.getByDataTest('popover-body').contains('Upgrade to PRO');
 
 			//Check data provider value
 			cy.get('body').then(() => {

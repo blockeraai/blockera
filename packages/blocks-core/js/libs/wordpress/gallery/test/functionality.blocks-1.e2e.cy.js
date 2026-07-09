@@ -62,8 +62,6 @@ describe('Gallery Block', () => {
 			'padding-box'
 		);
 
-		cy.getByAriaControls('styles-view').click();
-
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
@@ -89,7 +87,7 @@ describe('Gallery Block', () => {
 		cy.getBlock('core/gallery')
 			.first()
 			.within(() => {
-				cy.get('.wp-block-image')
+				cy.get('.wp-block-image img')
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 			});
@@ -140,24 +138,13 @@ describe('Gallery Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click({ force: true });
+		cy.getByDataTest('settings-tab').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
+			cy.get('.components-panel__body-title button')
 				.contains('Settings')
-				.scrollIntoView()
 				.should('be.visible');
-
-			cy.get(
-				'.components-tools-panel:not(.block-editor-bindings__panel)'
-			).within(() => {
-				cy.get('.components-input-control__label')
-					.contains('Aspect ratio')
-					.should('exist')
-					.scrollIntoView()
-					.should('not.be.visible');
-			});
 		});
 
 		//
@@ -174,7 +161,7 @@ describe('Gallery Block', () => {
 
 		cy.get('.blockera-block.wp-block-gallery').within(() => {
 			// image inner block
-			cy.get('.wp-block-image')
+			cy.get('.wp-block-image img')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 

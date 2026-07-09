@@ -1,20 +1,23 @@
 .save-settings__save-button {
+
 	&.blockera-settings-has-update {
+
 		&:before {
-			content: "";
+			content: '';
 			background: #ffffff;
 			width: 5px;
 			height: 5px;
 			display: block;
 			margin-right: 8px;
 			border-radius: 5px;
-			animation: saveButtonUpdateAnimation 1300ms infinite;
+    		animation: saveButtonUpdateAnimation 1300ms infinite;
 			animation-delay: 500ms;
 		}
 	}
 }
 
 #blockera-admin-settings-container {
+
 	.message.update-failed {
 		color: #ff0000;
 
@@ -26,82 +29,12 @@
 
 @keyframes saveButtonUpdateAnimation {
 	0% {
-		opacity: 1;
+		opacity:1;
 	}
-	50% {
-		opacity: 0;
+	50%{
+		opacity:0;
 	}
 	100% {
-		opacity: 1;
-	}
-}
-
-/* Reset settings modal (may render in a portal outside #blockera-admin-settings-container). */
-.blockera-component.blockera-component-modal.blockera-settings-reset-modal {
-	--blockera-controls-primary-color: #b32d2e;
-	--blockera-controls-primary-color-darker-20: #8a2425;
-
-	.message.update-failed {
-		color: var(--blockera-controls-primary-color);
-	}
-
-	.blockera-settings-reset-modal__lead {
-		margin: 0 0 12px;
-		font-size: 14px;
-		line-height: 1.55;
-	}
-
-	.blockera-settings-reset-modal__muted {
-		margin: 0 0 20px;
-		font-size: 14px;
-		line-height: 1.5;
-		color: var(--blockera-controls-primary-color);
-	}
-
-	.blockera-settings-reset-modal__link-row {
-		margin: 0 0 8px;
-		font-size: 14px;
-	}
-
-	.blockera-settings-reset-modal__link-to-all.components-button.is-link {
-		color: var(--blockera-controls-primary-color);
-		text-decoration: underline;
-		font-weight: 500;
-		vertical-align: baseline;
-		height: auto;
-		padding: 0;
-		min-height: 0;
-
-		&:hover:not(:disabled) {
-			color: var(--blockera-controls-primary-color-darker-20);
-		}
-
-		&:disabled {
-			opacity: 0.5;
-		}
-	}
-
-	.blockera-settings-reset-modal__confirm-label {
-		margin: 0 0 8px;
-		font-size: 14px;
-		line-height: 1.5;
-		color: #1e1e1e;
-	}
-
-	.blockera-settings-reset-modal__confirm-token {
-		display: inline-block;
-		padding: 1px 6px;
-		margin: 0 2px;
-		font-size: 13px;
-		font-family: ui-monospace, monospace;
-		font-weight: 600;
-		color: #1e1e1e;
-		background: #fde8e8;
-		border-radius: 3px;
-	}
-
-	.blockera-settings-reset-modal__confirm-input {
-		margin-bottom: 0;
-		--wp-components-color-accent: var(--blockera-controls-primary-color);
+		opacity:1;
 	}
 }

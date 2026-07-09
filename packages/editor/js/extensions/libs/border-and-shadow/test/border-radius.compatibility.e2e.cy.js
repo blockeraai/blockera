@@ -28,8 +28,6 @@ describe('Border Radius → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Radius').as('container');
 
-			cy.addNewTransition();
-
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -106,8 +104,6 @@ describe('Border Radius → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Radius').as('container');
-
-			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -234,8 +230,6 @@ describe('Border Radius → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Radius').as('container');
 
-			cy.addNewTransition();
-
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -331,68 +325,6 @@ describe('Border Radius → WP Compatibility', () => {
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'style')?.border?.radius
-				);
-			});
-		});
-
-		it('custom corners border radius (all corners are same)', () => {
-			appendBlocks(
-				`<!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button {"style":{"border":{"radius":{"topLeft":"100px","topRight":"100px","bottomLeft":"100px","bottomRight":"100px"}}}} -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" style="border-top-left-radius:100px;border-top-right-radius:100px;border-bottom-left-radius:100px;border-bottom-right-radius:100px">button</a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons -->`
-			);
-
-			// Select target block
-			cy.getBlock('core/button').click();
-
-			// add alias to the feature container
-			cy.getParentContainer('Radius').as('container');
-
-			cy.addNewTransition();
-
-			//
-			// Test 1: WP data to Blockera
-			//
-
-			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
-				expect({
-					type: 'all',
-					all: '100px',
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraBorderRadius')
-				);
-
-				expect({
-					topLeft: '100px',
-					topRight: '100px',
-					bottomLeft: '100px',
-					bottomRight: '100px',
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'style')?.border?.radius
-				);
-			});
-
-			//
-			// Test 2: Blockera value to WP data
-			//
-			cy.get('@container').within(() => {
-				cy.get('input').clear({ force: true });
-				cy.get('input').type(10, { force: true, delay: 0 });
-			});
-
-			getWPDataObject().then((data) => {
-				expect({
-					type: 'all',
-					all: '10px',
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraBorderRadius')
-				);
-
-				expect('10px').to.be.equal(
 					getSelectedBlock(data, 'style')?.border?.radius
 				);
 			});

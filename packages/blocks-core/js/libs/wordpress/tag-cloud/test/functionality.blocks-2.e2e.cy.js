@@ -24,12 +24,7 @@ describe('Tag Cloud Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.checkBlockCardItems([
-			'normal',
-			'hover',
-			'elements/tag-link',
-			'elements/tag-link-count',
-		]);
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/tag-link']);
 
 		//
 		// 1. Edit Block
@@ -78,7 +73,7 @@ describe('Tag Cloud Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {

@@ -20,37 +20,27 @@ export const renderPositionIcon = ({
 	left,
 	defaultValue,
 }: TRenderPositionIcon): any => {
-	if ((!top || !left) && !defaultValue?.top && !defaultValue?.left) {
+	if ((!top || !left) && !defaultValue?.top && !defaultValue?.left)
 		return <OriginCustom data-test="position-icon-custom" />;
-	}
 
-	if (top === '0%' && left === '0%') {
+	if (top === '0%' && left === '0%')
 		return <OriginTopLeft data-test="position-icon-top-left" />;
-	}
-	if (top === '0%' && left === '50%') {
+	if (top === '0%' && left === '50%')
 		return <OriginTopCenter data-test="position-icon-top-center" />;
-	}
-	if (top === '0%' && left === '100%') {
+	if (top === '0%' && left === '100%')
 		return <OriginTopRight data-test="position-icon-top-right" />;
-	}
-	if (top === '50%' && left === '0%') {
+	if (top === '50%' && left === '0%')
 		return <OriginCenterLeft data-test="position-icon-center-left" />;
-	}
-	if (top === '50%' && left === '50%') {
+	if (top === '50%' && left === '50%')
 		return <OriginCenter data-test="position-icon-center-center" />;
-	}
-	if (top === '50%' && left === '100%') {
+	if (top === '50%' && left === '100%')
 		return <OriginCenterRight data-test="position-icon-center-right" />;
-	}
-	if (top === '100%' && left === '0%') {
+	if (top === '100%' && left === '0%')
 		return <OriginBottomLeft data-test="position-icon-bottom-left" />;
-	}
-	if (top === '100%' && left === '50%') {
+	if (top === '100%' && left === '50%')
 		return <OriginBottomCenter data-test="position-icon-bottom-center" />;
-	}
-	if (top === '100%' && left === '100%') {
+	if (top === '100%' && left === '100%')
 		return <OriginBottomRight data-test="position-icon-bottom-right" />;
-	}
 
 	return <OriginCustom data-test="position-icon-custom" />;
 };

@@ -3,6 +3,7 @@ import {
 	getSelectedBlock,
 	createPost,
 	setBlockState,
+	addBlockState,
 	setDeviceType,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -11,13 +12,13 @@ describe('Range Control label testing (Opacity)', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+		cy.getByDataTest('style-tab').click();
 	});
 
 	const setOpacityValue = (value) => {
-		cy.getParentContainer('Opacity').within(() => {
-			cy.get('input[type="text"]').clear();
-			cy.get('input[type="text"]').type(value, { force: true, delay: 0 });
-		});
+		cy.getParentContainer('Opacity').within(() =>
+			cy.get('input[type="range"]').setSliderValue(value)
+		);
 	};
 
 	const checkOpacityValue = (value) => {

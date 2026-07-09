@@ -121,7 +121,7 @@ describe('Transform Control', () => {
 				});
 
 				cy.get('[aria-label~="Item"]').click();
-				cy.get('[aria-label="Scale"]').first().click();
+				cy.get('[aria-label="Scale"]').click();
 
 				cy.get('input[type="text"]').clear();
 				cy.get('input[type="text"]').type('150');

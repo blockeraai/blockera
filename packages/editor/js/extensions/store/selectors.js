@@ -14,7 +14,7 @@ import { isString } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../../editor/header-ui';
+import { getBaseBreakpoint } from '../../canvas-editor';
 import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
 import type {
 	TBreakpoint,
@@ -263,21 +263,9 @@ export function hasBlockExtensionSupport(
  *
  * @return {"master"|"heading"|"paragraph"|"icon"|"button"|*|string} The inner block type or master.
  */
-export function getExtensionCurrentBlock(
-	{ blockExtensions }: Object,
-	uiContext?: string
-): 'master' | InnerBlockType {
-	if (uiContext) {
-		const scopedBlock =
-			blockExtensions?.currentBlockByUiContext?.[uiContext];
-
-		if (undefined !== scopedBlock) {
-			return scopedBlock;
-		}
-
-		return 'master';
-	}
-
+export function getExtensionCurrentBlock({
+	blockExtensions,
+}: Object): 'master' | InnerBlockType {
 	return blockExtensions?.currentBlock || 'master';
 }
 

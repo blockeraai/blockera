@@ -5,7 +5,7 @@
  *
  * @return {string} UUID.
  */
-export const generateUuid4 = (): string => {
+export const generateUuid4 = () => {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
 		/[xy]/g,
 		function (c) {

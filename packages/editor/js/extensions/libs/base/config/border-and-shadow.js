@@ -14,21 +14,17 @@ const blockeraBoxShadow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onCompanion: true,
 	cssGenerators: {},
-	label: __('Box Shadows', 'blockera'),
-	keywords: ['shadow', 'box shadow', 'drop shadow', 'inset', 'outset'],
+	label: __('Box Shadow', 'blockera'),
 };
 
 const blockeraOutline: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	onNative: true,
-	onCompanion: true,
 	cssGenerators: {},
 	label: __('Outline', 'blockera'),
-	keywords: ['outline', 'border', 'stroke'],
+	onNative: true,
 };
 
 const blockeraBorder: FeatureConfig = {
@@ -37,18 +33,6 @@ const blockeraBorder: FeatureConfig = {
 	status: true,
 	cssGenerators: {},
 	label: __('Border', 'blockera'),
-	keywords: [
-		'border',
-		'stroke',
-		'outline',
-		'border top',
-		'border bottom',
-		'border left',
-		'border right',
-		'border color',
-		'border style',
-		'border width',
-	],
 };
 
 const blockeraBorderRadius: FeatureConfig = {
@@ -57,11 +41,9 @@ const blockeraBorderRadius: FeatureConfig = {
 	status: true,
 	cssGenerators: {},
 	label: __('Border Radius', 'blockera'),
-	keywords: ['border', 'radius', 'rounded', 'corner'],
 };
 
 export const borderAndShadowConfig = {
-	status: true,
 	initialOpen: true,
 	blockeraBorder,
 	blockeraBorderRadius,

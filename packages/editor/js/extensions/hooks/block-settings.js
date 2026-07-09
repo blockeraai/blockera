@@ -9,20 +9,23 @@ import {
 } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
+import {
+	memo,
+	useMemo,
+	useState,
+	useEffect,
+	createElement,
+} from '@wordpress/element';
+import { SlotFillProvider, Slot } from '@wordpress/components';
+import { ErrorBoundary } from 'react-error-boundary';
 import { applyFilters } from '@wordpress/hooks';
-import { useMemo, useEffect, createElement } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { useBugReporter } from '@blockera/telemetry';
-import {
-	omit,
-	isEmpty,
-	isObject,
-	isFunction,
-	mergeObject,
-} from '@blockera/utils';
+import { BaseControlContext } from '@blockera/controls';
+import { isEmpty, isObject, isFunction, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,41 +35,23 @@ import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
 } from '../libs';
-import { STORE_NAME } from '../store/constants';
-import { useStoreSelectors, useBlockSideEffectsRestore } from '../../hooks';
-import { sanitizeDefaultAttributes } from './utils';
-import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
-import { BlockIcon } from '../components';
-import { Edit } from '../components/block-edit';
 import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../components';
-import { getIgnoredAttributesForSchema } from '../components/utils';
-import bootstrapScripts from '../scripts';
-import {
-	CORE_ICON_BLOCK_NAME,
-	CORE_ICON_LINK_ATTRIBUTES,
-} from '@blockera/blocks-core/js/libs/wordpress/icon/compatibility/link-attributes';
+import { STORE_NAME } from '../store/constants';
+import { useStoreSelectors, useBlockSideEffectsRestore } from '../../hooks';
+import { sanitizeDefaultAttributes } from './utils';
+import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
+import { BlockApp, BlockBase, BlockIcon, BlockPortals } from '../components';
 
-/**
- * React 19 memo()/forwardRef components are objects ($$typeof), not plain functions.
- */
-const isBlockCanvasEdit = (value: any): boolean =>
-	isFunction(value) ||
-	(isObject(value) && value !== null && typeof value.$$typeof === 'symbol');
-
-export const useSharedBlockSideEffect = (blockName: string): void => {
+const useSharedBlockSideEffect = (): void => {
 	const {
 		blockEditor: { getSelectedBlock },
 	} = useStoreSelectors();
 	const selectedBlock = getSelectedBlock();
 
 	useEffect(() => {
-		if (selectedBlock?.name !== blockName) {
-			return;
-		}
-
 		const blockCard = document.querySelector('.block-editor-block-card');
 
 		if (blockCard) {
@@ -88,16 +73,16 @@ export const useSharedBlockSideEffect = (blockName: string): void => {
 		if (tabs) {
 			tabs.style.display = 'block';
 		}
-	}, [selectedBlock, blockName]);
+	}, [selectedBlock]);
 
-	useBlockSideEffectsRestore(selectedBlock, blockName);
+	useBlockSideEffectsRestore(selectedBlock);
 };
 
 const EdiBlockWithoutExtensions = ({
 	settings,
 	...props
 }: Object): MixedElement => {
-	useSharedBlockSideEffect(settings.name);
+	useSharedBlockSideEffect();
 
 	return createElement(settings.edit, props);
 };
@@ -108,8 +93,6 @@ type extraArguments = {
 	unsupportedBlocks: Array<string>,
 	allowedPostTypes: Array<string>,
 };
-
-const registeredBlockTypes = new Map<string, Object>();
 
 /**
  * Filters registered WordPress block type settings, extending block settings with settings and block name.
@@ -124,10 +107,6 @@ export default function withBlockSettings(
 	name: Object,
 	args: extraArguments
 ): Object {
-	if (registeredBlockTypes.has(name)) {
-		return registeredBlockTypes.get(name);
-	}
-
 	const { getBlockExtensionBy } = select(STORE_NAME) || {};
 	const { getExtension } = select('blockera/extensions/config');
 
@@ -146,53 +125,46 @@ export default function withBlockSettings(
 		);
 	}
 
-	let result = {};
-
 	if (blockExtension && isBlockTypeExtension(blockExtension)) {
-		result = mergeBlockSettings(settings, blockExtension, args);
-		registeredBlockTypes.set(name, result);
-
-		return result;
+		return mergeBlockSettings(settings, blockExtension, args);
 	}
 
-	result = {
+	return {
 		...settings,
-		edit: (props: Object): MixedElement => (
+		edit: (props) => (
 			<EdiBlockWithoutExtensions {...{ ...props, settings }} />
 		),
 	};
-
-	registeredBlockTypes.set(name, result);
-
-	return result;
 }
 
-export const ErrorBoundaryFallback: ComponentType<Object> = ({
-	error,
-	from,
-	setNotice,
-	fallbackComponent,
-	props,
-	clientId,
-	...rest
-}: Object): MixedElement => {
-	useBugReporter({
+export const ErrorBoundaryFallback: ComponentType<Object> = memo(
+	({
 		error,
-		...rest,
-	});
+		from,
+		setNotice,
+		fallbackComponent,
+		props,
+		clientId,
+		...rest
+	}: Object): MixedElement => {
+		useBugReporter({
+			error,
+			...rest,
+		});
 
-	return (
-		<FallbackUI
-			{...rest}
-			from={from}
-			id={clientId}
-			error={error}
-			setNotice={setNotice}
-			fallbackComponentProps={props}
-			fallbackComponent={fallbackComponent}
-		/>
-	);
-};
+		return (
+			<FallbackUI
+				{...rest}
+				from={from}
+				id={clientId}
+				error={error}
+				setNotice={setNotice}
+				fallbackComponentProps={props}
+				fallbackComponent={fallbackComponent}
+			/>
+		);
+	}
+);
 
 /**
  * Merge settings of block type.
@@ -368,38 +340,107 @@ function mergeBlockSettings(
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
-	let overrideAttributes = !settings.attributes?.blockeraPropsId
-		? mergeObject(
-				sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
-				sanitizeDefaultAttributes(settings.attributes)
-			)
-		: sanitizeDefaultAttributes(settings.attributes);
+	const Edit = (props: Object): MixedElement => {
+		const baseContextValue = useMemo(
+			() => ({
+				components: {
+					FeatureWrapper: EditorFeatureWrapper,
+					AdvancedLabelControl: EditorAdvancedLabelControl,
+				},
+			}),
+			[]
+		);
 
-	if (CORE_ICON_BLOCK_NAME === settings.name) {
-		const typeSpecificAttrs = getBlockTypeAttributes(settings.name);
-		const linkAttrs: Object = {};
+		if (isFunction(additional?.edit) && isAvailableBlock()) {
+			// eslint-disable-next-line
+			const attributes = useMemo(() => {
+				const { content, ...attributes } = props.attributes;
 
-		for (const key of ['href', 'linkTarget', 'rel']) {
-			if (typeSpecificAttrs?.[key]) {
-				linkAttrs[key] = typeSpecificAttrs[key];
-			}
+				return attributes;
+			}, [props.attributes]);
+
+			const defaultAttributes = !settings.attributes?.blockeraPropsId
+				? mergeObject(
+						blockeraOverrideBlockAttributes,
+						settings.attributes
+				  )
+				: settings.attributes;
+
+			const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useState(false);
+
+			return (
+				<ErrorBoundary
+					fallbackRender={({ error }) => (
+						<ErrorBoundaryFallback
+							{...{
+								props,
+								error,
+								from: 'root',
+								clientId: props.clientId,
+								isReportingErrorCompleted,
+								setIsReportingErrorCompleted,
+								fallbackComponent: settings.edit,
+							}}
+						/>
+					)}
+				>
+					<BaseControlContext.Provider value={baseContextValue}>
+						<BlockApp
+							{...{
+								attributes,
+								additional,
+								name: props.name,
+								clientId: props.clientId,
+								className: props?.className,
+								setAttributes: props.setAttributes,
+								originDefaultAttributes: defaultAttributes,
+								defaultAttributes: sanitizeDefaultAttributes(
+									defaultAttributes,
+									{ defaultWithoutValue: true }
+								),
+							}}
+						>
+							<BlockBase>
+								<SlotFillProvider>
+									<Slot name={'blockera-block-before'} />
+
+									<BlockPortals
+										blockId={`#block-${props.clientId}`}
+										mainSlot={'blockera-block-slot'}
+										slots={
+											// slot selectors is feature on configuration block to create custom slots for anywhere.
+											// we can add slotSelectors property on block configuration to handle custom preview of block.
+											additional?.slotSelectors || {}
+										}
+									/>
+
+									<Slot name={'blockera-block-after'} />
+								</SlotFillProvider>
+							</BlockBase>
+						</BlockApp>
+					</BaseControlContext.Provider>
+					{settings.edit(props)}
+				</ErrorBoundary>
+			);
 		}
 
-		overrideAttributes = mergeObject(
-			sanitizeDefaultAttributes(
-				Object.keys(linkAttrs).length
-					? linkAttrs
-					: CORE_ICON_LINK_ATTRIBUTES
-			),
-			overrideAttributes
-		);
-	}
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useSharedBlockSideEffect();
+
+		return settings.edit(props);
+	};
 
 	return {
 		...settings,
-		styles: [...(settings?.styles || []), ...(additional?.styles || [])],
 		// Sanitizing attributes to convert all array values to object.
-		attributes: overrideAttributes,
+		attributes: !settings.attributes?.blockeraPropsId
+			? mergeObject(
+					sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
+					sanitizeDefaultAttributes(settings.attributes)
+			  )
+			: sanitizeDefaultAttributes(settings.attributes),
 		supports: mergeObject(settings.supports, additional.supports),
 		selectors: mergeObject(settings.selectors, additional.selectors),
 		transforms: {
@@ -407,71 +448,7 @@ function mergeBlockSettings(
 			...(additional?.transforms || {}),
 		},
 		variations: getVariations(),
-		edit: (props) => {
-			const { attributes, ...rest } = props;
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const ignoredAttributes = useMemo(
-				() => getIgnoredAttributesForSchema(overrideAttributes),
-				[]
-			);
-
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const stableAdditional = useMemo(() => {
-				return additional;
-			}, []);
-
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const baseContextValue = useMemo(
-				() => ({
-					components: {
-						FeatureWrapper: EditorFeatureWrapper,
-						AdvancedLabelControl: EditorAdvancedLabelControl,
-					},
-				}),
-				[]
-			);
-
-			const selectedBlock =
-				select('core/block-editor').getSelectedBlock();
-
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			useEffect(() => {
-				if (!selectedBlock) {
-					return;
-				}
-				// On rendering the block settings, we can bootstrap all scripts.
-				bootstrapScripts();
-			}, [selectedBlock]);
-
-			if (isFunction(additional?.edit) && isAvailableBlock()) {
-				// Optional canvasEdit replaces core block canvas (e.g. core/icon → CoreIconCanvasEdit).
-				const CoreBlockEdit = isBlockCanvasEdit(additional?.canvasEdit)
-					? additional.canvasEdit
-					: settings.edit;
-
-				return (
-					<>
-						<Edit
-							{...rest}
-							baseContextValue={baseContextValue}
-							attributes={omit(attributes, ignoredAttributes)}
-							settings={settings}
-							additional={stableAdditional}
-							isAvailableBlock={isAvailableBlock}
-							blockeraOverrideBlockAttributes={
-								blockeraOverrideBlockAttributes
-							}
-						/>
-						{createElement(CoreBlockEdit, props)}
-					</>
-				);
-			}
-
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			useSharedBlockSideEffect(settings.name);
-
-			return settings.edit(props);
-		},
+		edit: Edit,
 		deprecated: !isAvailableBlock()
 			? settings?.deprecated
 			: [
@@ -489,7 +466,7 @@ function mergeBlockSettings(
 						},
 					},
 					...(settings?.deprecated || []),
-				].filter(isObject),
+			  ].filter(isObject),
 		icon: !isAvailableBlock() ? (
 			settings?.icon
 		) : (

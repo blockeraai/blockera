@@ -230,22 +230,18 @@ describe('box-border-control component testing', () => {
 
 			cy.getByDataCy('color-btn').eq(1).as('right-color-button');
 			cy.get('@right-color-button').click();
-			cy.get('[data-cy="color-picker-css-value"]').clear({
-				force: true,
-			});
-			cy.get('[data-cy="color-picker-css-value"]').type('b0da3b', {
-				delay: 0,
-			});
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('b0da3b ');
 
 			cy.get('@right-color-button')
 				.should('have.attr', 'style')
 				.should('include', 'b0da3b');
 
-			//Check data provider value (hex may be stored with or without #)
+			//Check data provider value
 			cy.get('@right-color-button').then(() => {
-				const raw = getControlValue(name).right.color;
-				const normalized = raw?.startsWith?.('#') ? raw.slice(1) : raw;
-				expect(normalized.toLowerCase()).to.equal('b0da3b');
+				expect('#b0da3b').to.be.equal(
+					getControlValue(name).right.color
+				);
 			});
 		});
 
@@ -258,21 +254,18 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			// CustomSelectControl (Ariakit) uses listbox/option roles, not ul/li.
 			cy.get('button[aria-haspopup="listbox"]')
 				.eq(2)
 				.as('bottom-style-button');
 			cy.get('@bottom-style-button').click();
-			cy.get('[role="listbox"]:visible')
-				.find('[role="option"]')
-				.last()
-				.click();
+			cy.get('ul').get('li').eq(3).click();
 
 			cy.get('@bottom-style-button').click();
-			cy.get('[role="listbox"]:visible')
-				.find('[role="option"]')
-				.last()
-				.should('have.attr', 'aria-selected', 'true');
+			cy.get('ul')
+				.get('li')
+				.eq(3)
+				.should('have.attr', 'aria-selected')
+				.should('be.equal', 'true');
 
 			//Check data provider value
 			cy.get('@bottom-style-button').then(() => {

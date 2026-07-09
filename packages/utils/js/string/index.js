@@ -52,16 +52,5 @@ export function getSmallHash(bigHash: string): string {
 		hash = hash & hash; // Convert to 32bit integer
 	}
 
-	// Convert to base-36 string
-	let _hash = hash.toString(36);
-
-	// Prevent of starting with a hyphen.
-	if (_hash.startsWith('-')) {
-		// Generate a random number between 10 and 99.
-		const randomNumber = Math.floor(Math.random() * 90) + 10;
-		// Add a random number to the hash to prevent of starting with a hyphen.
-		_hash = `${_hash.slice(1)}${randomNumber}`;
-	}
-
-	return _hash;
+	return hash.toString(36); // Convert to base-36 string
 }

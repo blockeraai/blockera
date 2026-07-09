@@ -16,8 +16,7 @@ export type VariableCategory =
 export type VariableItem = {
 	name: string,
 	id: string,
-	/** Scalar CSS token or structured preset payload (e.g. `{ items }`, border box). */
-	value: mixed,
+	value: string,
 	fluid?: {
 		min?: string,
 		max?: string,

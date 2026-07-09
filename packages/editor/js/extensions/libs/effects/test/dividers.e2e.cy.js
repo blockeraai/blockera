@@ -16,7 +16,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			createPost();
 
 			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-			cy.getByAriaControls('styles-view').click();
+			cy.getByDataTest('style-tab').click();
 
 			cy.getParentContainer('Shape Dividers').as('dividers');
 		});
@@ -123,13 +123,8 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('[data-cy="color-picker-css-value"]').clear({
-						force: true,
-					});
-					cy.get('[data-cy="color-picker-css-value"]').type(
-						'cecece',
-						{ delay: 0 }
-					);
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('cecece ');
 				});
 
 			//Check block
@@ -314,13 +309,8 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('[data-cy="color-picker-css-value"]').clear({
-						force: true,
-					});
-					cy.get('[data-cy="color-picker-css-value"]').type(
-						'cecece',
-						{ delay: 0 }
-					);
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('cecece ');
 				});
 
 			//Check block

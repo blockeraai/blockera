@@ -14,7 +14,7 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/text'   => [
-					'root' => ':is(span,a).ct-about-me-name',
+					'root' => '.ct-about-me-name span, .ct-about-me-name a',
 				],
 				'blockera/elements/icons'   => [
 					'root' => '.ct-icon-container',

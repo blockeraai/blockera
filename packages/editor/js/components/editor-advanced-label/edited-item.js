@@ -18,9 +18,6 @@ import { Icon } from '@blockera/icons';
 import { isInnerBlock } from '../../extensions';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import type { TStates } from '../../extensions/libs/block-card/block-states/types';
-import StateChangePreview, {
-	type StateGraphPreviewConfig,
-} from './state-change-preview';
 
 export default function EditedItem({
 	state,
@@ -29,10 +26,6 @@ export default function EditedItem({
 	breakpointLabel,
 	current = false,
 	onClick = () => {},
-	previewConfig,
-	previewValue,
-	previewObjectPickKey,
-	changesetGraphPreviewRender,
 	...props
 }: {
 	state: TStates,
@@ -41,10 +34,6 @@ export default function EditedItem({
 	breakpointLabel: string,
 	current: boolean,
 	onClick: () => void,
-	previewConfig?: void | null | StateGraphPreviewConfig,
-	previewValue?: mixed,
-	previewObjectPickKey?: ?string,
-	changesetGraphPreviewRender?: ?(value: mixed) => mixed,
 }): MixedElement {
 	const {
 		currentState,
@@ -89,7 +78,7 @@ export default function EditedItem({
 			>
 				{label}
 
-				{current ? (
+				{current && (
 					<Icon
 						icon="pen"
 						iconSize="18"
@@ -97,7 +86,7 @@ export default function EditedItem({
 							'states-changes-item-current'
 						)}
 					/>
-				) : null}
+				)}
 
 				<Icon
 					library="wp"
@@ -107,30 +96,6 @@ export default function EditedItem({
 						'states-changes-item__edit-icon'
 					)}
 				/>
-
-				{(previewConfig || changesetGraphPreviewRender) && (
-					<div
-						className={controlInnerClassNames(
-							'states-changes-item__end'
-						)}
-					>
-						<div
-							className={controlInnerClassNames(
-								'states-changes-item__preview'
-							)}
-							data-test="state-graph-row-preview"
-						>
-							<StateChangePreview
-								previewConfig={previewConfig}
-								value={previewValue}
-								objectPickKey={previewObjectPickKey}
-								changesetGraphPreviewRender={
-									changesetGraphPreviewRender
-								}
-							/>
-						</div>
-					</div>
-				)}
 			</div>
 		</ConditionalWrapper>
 	);

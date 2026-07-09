@@ -7,7 +7,7 @@
 			"id": "blockeraFontFamily",
 			"definition": "FontFamily",
 			"css-property": "font-family",
-			"fallback": ["font-size", "typography"],
+			"fallback": ["font-size"],
 			"description": "Support for \"blockeraFontFamily\" value."
 		},
 		"blockeraFontAppearance": {
@@ -15,7 +15,7 @@
 			"id": "blockeraFontAppearance",
 			"definition": "FontWeight",
 			"css-property": "font-weight",
-			"fallback": ["font-size", "typography"],
+			"fallback": ["font-size"],
 			"description": "Support for \"blockeraFontAppearance\" value."
 		},
 		"blockeraTextShadow": {
@@ -23,7 +23,7 @@
 			"id": "blockeraTextShadow",
 			"definition": "TextShadow",
 			"css-property": "text-shadow",
-			"fallback": ["text-shadow", "typography", "root"],
+			"fallback": ["text-shadow"],
 			"description": "Support for \"blockeraTextShadow\" value."
 		},
 		"blockeraFontColor": {
@@ -50,7 +50,7 @@
 			"id": "blockeraDirection",
 			"definition": "Direction",
 			"css-property": "direction",
-			"fallback": ["direction", "typography", "root"],
+			"fallback": ["direction", "typography"],
 			"description": "Support for \"blockeraDirection\" value, this is mirror for WordPress block core \"direction\" support."
 		},
 		"blockeraTextAlign": {
@@ -58,7 +58,7 @@
 			"id": "blockeraTextAlign",
 			"definition": "TextAlign",
 			"css-property": "text-align",
-			"fallback": ["text-align", "typography", "root"],
+			"fallback": ["text-align", "typography"],
 			"description": "Support for \"blockeraTextAlign\" value, this is mirror for WordPress block core \"align\" support."
 		},
 		"blockeraWordBreak": {
@@ -114,7 +114,7 @@
 			"id": "blockeraLetterSpacing",
 			"definition": "LetterSpacing",
 			"css-property": "letter-spacing",
-			"fallback": ["letter-spacing", "typography"],
+			"fallback": ["typography"],
 			"description": "Support for \"blockeraLetterSpacing\" value, this is mirror for WordPress block core \"letter-spacing\" support."
 		},
 		"blockeraTextDecoration": {
@@ -130,7 +130,7 @@
 			"id": "blockeraTextOrientation",
 			"definition": "TextOrientation",
 			"css-property": "text-orientation",
-			"fallback": ["typography.writingMode", "typography", "root"],
+			"fallback": ["typography.writingMode", "typography"],
 			"description": "Support for \"blockeraTextOrientation\" value."
 		},
 		"blockeraTextStroke": {

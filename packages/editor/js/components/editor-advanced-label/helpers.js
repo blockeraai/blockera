@@ -26,74 +26,28 @@ import {
 	getStatesGraphNodes,
 	type StateGraphItem,
 } from './selector';
-import { getBaseBreakpoint } from '../..';
-import { isInnerBlock } from '../../extensions';
+import { getBaseBreakpoint } from '../../canvas-editor';
+import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
-
-/**
- * Resolve control path for state graph rows. Base "normal" nodes use
- * sanitizeBlockAttributes(), so `blockeraFoo` may be a primitive while
- * `path` is still `blockeraFoo.value` — plain prepare() returns undefined.
- */
-const resolveGraphPathValue = (
-	path: null | string,
-	controlId: string,
-	attrs: Object
-): any => {
-	if (!path) {
-		return attrs[controlId];
-	}
-
-	const pathUnderControl =
-		path.indexOf(controlId + '.') === 0
-			? path.slice(controlId.length + 1)
-			: null;
-
-	let resolved = prepare(path, attrs);
-	if ('undefined' === typeof resolved) {
-		resolved = prepare(path, attrs[controlId]);
-	}
-	if ('undefined' === typeof resolved && pathUnderControl) {
-		resolved = prepare(pathUnderControl, attrs[controlId]);
-	}
-	if (
-		'undefined' === typeof resolved &&
-		pathUnderControl === 'value' &&
-		!isObject(attrs[controlId])
-	) {
-		resolved = attrs[controlId];
-	}
-
-	return resolved;
-};
 
 export const getStatesGraph = ({
 	controlId,
 	blockName,
 	defaultValue,
 	path,
-	attributesRef,
 	isRepeaterItem,
-	inGlobalStylesPanel = false,
-	getAttributes,
-	currentBlock,
 }: {
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
 	path: null | string,
-	attributesRef?: Object,
 	isRepeaterItem: Boolean,
-	inGlobalStylesPanel: boolean,
-	getAttributes: () => Object,
-	// From BlockEditContext; widened for Flow (runtime matches isInnerBlock contract).
-	currentBlock: any,
 }): Array<LabelStates> => {
-	const blockStates = controlId
-		? getStatesGraphNodes(attributesRef, inGlobalStylesPanel)
-		: [];
+	const blockStates = controlId ? getStatesGraphNodes() : [];
 
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const { getAttributes = () => {}, currentBlock } = useBlockContext();
 	const attributes = sanitizeBlockAttributes(getAttributes());
 
 	const { getBlockType } = select('core/blocks');
@@ -145,11 +99,24 @@ export const getStatesGraph = ({
 									return null;
 								}
 
-								const value = resolveGraphPathValue(
-									path,
-									controlId,
-									state.attributes
-								);
+								let value;
+
+								if (path) {
+									const preparedValueWithPath = prepare(
+										path,
+										state.attributes
+									);
+									value =
+										'undefined' ===
+										typeof preparedValueWithPath
+											? prepare(
+													path,
+													state.attributes[controlId]
+											  )
+											: preparedValueWithPath;
+								} else {
+									value = state.attributes[controlId];
+								}
 
 								if (isUndefined(value) && isRepeaterItem) {
 									return null;
@@ -178,11 +145,15 @@ export const getStatesGraph = ({
 									}
 								}
 
-								const rootValue = resolveGraphPathValue(
+								const preparedValueFromRoot = prepare(
 									path,
-									controlId,
 									attributes
 								);
+
+								const rootValue =
+									'undefined' === typeof preparedValueFromRoot
+										? prepare(path, attributes[controlId])
+										: preparedValueFromRoot;
 
 								if (
 									('normal' !== state.type ||
@@ -205,7 +176,6 @@ export const getStatesGraph = ({
 								return {
 									...state,
 									id: _index,
-									resolvedControlValue: value,
 								};
 							}
 						)
@@ -237,41 +207,4 @@ export const getStatesGraph = ({
 			// $FlowFixMe
 			.filter((item: null | StateGraph) => null !== item)
 	);
-};
-
-/**
- * Count visible changeset rows (matches StatesGraph / EditedItem rows).
- */
-export const countStatesGraphChangesetRows = (
-	statesGraph: Array<LabelStates>
-): number => {
-	let count = 0;
-
-	for (const state of statesGraph) {
-		if ('undefined' === typeof state?.graph) {
-			continue;
-		}
-
-		if (isEmpty(state.graph.states)) {
-			continue;
-		}
-
-		const renderedStates: Array<string> = [];
-
-		for (const _state of state.graph.states) {
-			const stateType = _state?.type;
-			if ('undefined' === typeof stateType) {
-				continue;
-			}
-
-			if (renderedStates.includes(stateType)) {
-				continue;
-			}
-
-			renderedStates.push(stateType);
-			count++;
-		}
-	}
-
-	return count;
 };

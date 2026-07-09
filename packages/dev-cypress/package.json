@@ -5,7 +5,7 @@
 	"main": "js/index.js",
 	"keywords": [
 		"Blockera",
-		"Cypress"
+		"Storybook"
 	],
 	"author": "The Blockera Contributers",
 	"license": "ISC",

@@ -2,12 +2,6 @@
 /**
  * Configure block attributes.
  *
- * Optional `changesetGraphPreview` (per attribute): client-only metadata for the editor
- * advanced-label state graph. Not part of WordPress block attribute schema.
- * Shape: array with `type` (editor-recognized preview kind; unknown = no preview).
- * For `type` = color, optional `indicatorType` maps to ColorIndicator (`color`, `gradient`, `image`, or '').
- * For `type` = string, the resolved control value is shown as text in the changeset graph.
- *
  * @package blockera/packages/blocks/php/attributes/block.php
  */
 
@@ -36,21 +30,15 @@ return [
 		],
 	],
 	'blockeraBackgroundColor'           => [
-		'type'              => 'object',
-		'default'           => [
+		'type'    => 'object',
+		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'color',
 		],
 	],
 	'blockeraBackgroundClip'            => [
 		'type'    => 'object',
 		'default' => [
 			'value' => 'none',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	// Block states.
@@ -113,17 +101,14 @@ return [
 	'blockeraCustomCSS'                 => [
 		'type'    => 'object',
 		'default' => [
-			'value' => "& {\n    \n}\n",
+			'value' => ".block {\n    \n}\n",
 		],
 	],
 	// Effects.
 	'blockeraOpacity'                   => [
-		'type'                  => 'object',
-		'default'               => [
+		'type'    => 'object',
+		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraTransform'                 => [
@@ -136,9 +121,6 @@ return [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraTransformSelfOrigin'       => [
@@ -153,17 +135,11 @@ return [
 		'default' => [
 			'value' => 'visible',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraTransformChildPerspective' => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraTransformChildOrigin'      => [
@@ -202,9 +178,6 @@ return [
 		'default' => [
 			'value' => 'normal',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraDivider'                   => [
 		'type'    => 'object',
@@ -225,17 +198,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraFlexChildGrow'             => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraFlexChildShrink'           => [
@@ -243,17 +210,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraFlexChildBasis'            => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraFlexChildAlign'            => [
@@ -261,45 +222,17 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraFlexChildOrder'            => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraFlexChildOrderCustom'      => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
-	],
-	// Grid Child.
-	'blockeraGridChildColumnSpan'       => [
-		'type'    => 'object',
-		'default' => [
-			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
-	],
-	'blockeraGridChildRowSpan'          => [
-		'type'    => 'object',
-		'default' => [
-			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	// Icon.
@@ -319,17 +252,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraIconGap'                   => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraIconSize'                  => [
@@ -337,17 +264,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraIconColor'                 => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'color',
 		],
 	],
 	'blockeraIconRotate'                => [
@@ -387,9 +308,6 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraFlexLayout'                => [
 		'type'    => 'object',
@@ -426,27 +344,6 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
-	],
-	'blockeraGridMinimumColumnWidth'    => [
-		'type'    => 'object',
-		'default' => [
-			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
-	],
-	'blockeraGridColumnCount'           => [
-		'type'    => 'object',
-		'default' => [
-			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	// Mouse.
 	'blockeraCursor'                    => [
@@ -454,26 +351,17 @@ return [
 		'default' => [
 			'value' => 'default',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraUserSelect'                => [
 		'type'    => 'object',
 		'default' => [
 			'value' => 'auto',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraPointerEvents'             => [
 		'type'    => 'object',
 		'default' => [
 			'value' => 'auto',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	// Position.
@@ -496,9 +384,6 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	// Scroll animation.
 	'blockeraScrollAnimation'           => [
@@ -513,17 +398,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraMinWidth'                  => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraMaxWidth'                  => [
@@ -531,17 +410,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraHeight'                    => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraMinHeight'                 => [
@@ -549,26 +422,17 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraMaxHeight'                 => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraOverflow'                  => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraRatio'                     => [
@@ -591,9 +455,6 @@ return [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraFitPosition'               => [
@@ -638,9 +499,6 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraFontAppearance'            => [
 		'type'    => 'object',
@@ -656,17 +514,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'color',
-		],
 	],
 	'blockeraFontSize'                  => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraLineHeight'                => [
@@ -674,17 +526,11 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraTextAlign'                 => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraTextDecoration'            => [
@@ -692,26 +538,17 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraTextTransform'             => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraDirection'                 => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraTextShadow'                => [
@@ -725,26 +562,17 @@ return [
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraWordSpacing'               => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraTextIndent'                => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
-		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
 		],
 	],
 	'blockeraTextOrientation'           => [
@@ -781,17 +609,13 @@ return [
 		'default' => [
 			'value' => 'normal',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 	'blockeraTextWrap'                  => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',
 		],
-		'changesetGraphPreview' => [
-			'type' => 'string',
-		],
 	],
 ];
+
+

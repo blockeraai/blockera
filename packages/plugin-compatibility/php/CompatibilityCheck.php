@@ -242,7 +242,7 @@ class CompatibilityCheck {
 				}
 
 				// Schedule one-time redirect to compatibility page.
-				if (blockera_is_admin() && current_user_can('update_plugins')) {
+				if (is_admin() && current_user_can('update_plugins')) {
 					if (! get_transient($this->cache_key)) {
 						set_transient($this->cache_key, 1, 60);
 					}
@@ -266,12 +266,15 @@ class CompatibilityCheck {
 	 * @return bool true if plugin is installed, false otherwise.
 	 */
 	protected function isPluginInstalled(): bool {
+		
+		if (! function_exists('get_plugins')) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 
-		$plugin_slug = $this->compatible_with_slug;
-
-		$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_slug . '.php';
-
-		$this->is_installed_third_party_plugin = file_exists( $plugin_file );
+		$all_plugins = get_plugins();
+		$plugin_base = $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+		
+		$this->is_installed_third_party_plugin = array_key_exists($plugin_base, $all_plugins);
 
 		return $this->is_installed_third_party_plugin;
 	}

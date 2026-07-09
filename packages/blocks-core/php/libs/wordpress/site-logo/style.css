@@ -1,3 +1,0 @@
-:where(.blockera-block.wp-block-site-logo :is(img, a)) {
-	transition: inherit;
-}

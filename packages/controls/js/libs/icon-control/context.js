@@ -16,16 +16,6 @@ const IconContext = createContext({
 	isCurrentIcon: () => {
 		return false;
 	},
-	draftLibraryIcon: null,
-	isDraftLibraryIcon: () => {
-		return false;
-	},
-	handleUseLibraryIcon: () => {},
-	handleLibraryIconQuickSelect: () => {},
-	clearLibrarySelection: () => {},
-	recentIcons: [],
-	removeRecentIcon: () => {},
-	clearRecentIcons: () => {},
 });
 
 const IconContextProvider = ({ children, ...props }) => {

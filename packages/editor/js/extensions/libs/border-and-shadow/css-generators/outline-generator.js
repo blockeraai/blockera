@@ -1,7 +1,7 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
+import { getValueAddonRealValue } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -20,7 +20,7 @@ export function OutlineGenerator(id, props, options) {
 		offset: [],
 	};
 
-	getSortedRepeater(attributes?.blockeraOutline)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraOutline)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return null;
 		}

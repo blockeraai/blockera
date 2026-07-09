@@ -10,13 +10,70 @@
 	}
 }
 
+.blockera-block-card-wrapper {
+
+	.blockera-dropdown-menu {
+		position: absolute;
+		top: 0;
+		right: 0;
+
+		.blockera-powered-by-icon {
+			position: absolute;
+			top: 16px;
+			right: 38px;
+			z-index: 2;
+			color: #1e1e1e;
+			fill: currentColor;
+			display: flex;
+			width: 24px;
+			height: 24px;
+			align-items: center;
+			justify-content: center;
+			transition: 100ms ease-in-out;
+			border-radius: var(--blockera-controls-border-radius);
+			opacity: 0.2;
+			--blockera-controls-primary-color: #0051e7;
+
+			&:hover {
+				opacity: 1;
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+
+		.components-dropdown-menu {
+			position: absolute;
+			right: 12px;
+			padding: 0;
+			margin: 0;
+			top: 16px;
+			z-index: 1;
+
+			.components-button.has-icon {
+			    justify-content: center;
+				min-width: 24px;
+				height: 24px;
+				padding: 0;
+			}
+		}
+	}
+}
+
 .blockera-block-menu-item {
+
 	span.components-menu-item__item {
 		display: block;
 	}
 }
 
-.blockera-not-allowed:not(:has(.blockera-state-colors-container)) {
+.blockera-block-menu-item-selected {
+	color: var(--blockera-controls-primary-color);
+
+	&:hover {
+		color: inherit !important;
+	}
+}
+
+.blockera-not-allowed {
 	opacity: 0.5;
 	user-select: none;
 	cursor: not-allowed;
@@ -48,21 +105,20 @@
 // Block inserter
 
 .block-editor-inserter__panel-content {
+
 	--blockera-block-icon-opacity: 0.2;
 	--blockera-block-icon-opacity-hover: 0.8;
 	--blockera-block-icon-opacity-strong: 0.5;
 
 	.blockera-block-icon {
 		display: block !important;
-		top: 15%;
-		right: 20%;
+		top: 15px;
+		right: 20px;
 		margin-right: -7px;
 	}
 
 	.editor-block-list-item-image\/blockera\/icon {
-		--blockera-block-icon-opacity: var(
-			--blockera-block-icon-opacity-strong
-		);
+		--blockera-block-icon-opacity: var(--blockera-block-icon-opacity-strong);
 
 		.blockera-block-icon {
 			fill: var(--blockera-controls-primary-color) !important;
@@ -78,6 +134,7 @@
 	}
 
 	.block-editor-block-types-list__list-item:hover {
+
 		.blockera-block-icon.blockera-cube-icon {
 			opacity: 0;
 		}
@@ -108,7 +165,7 @@
 
 // Editor block manager
 
-.block-editor-block-manager__checklist .block-editor-block-icon {
+.editor-block-manager__checklist .block-editor-block-icon {
 	position: relative;
 
 	.blockera-block-icon.blockera-main-icon {
@@ -126,6 +183,7 @@
 }
 
 .block-editor-block-switcher__container {
+
 	.components-menu-item__button {
 		position: relative;
 
@@ -135,7 +193,7 @@
 			--icon-size: 20px;
 			top: 50%;
 			margin-top: -10px;
-			right: 5px;
+    		right: 5px;
 			background: #ffffff;
 			border-radius: 50%;
 			border: 2px solid #ffffff;
@@ -150,6 +208,7 @@
 		}
 
 		&:hover {
+
 			.blockera-block-icon.blockera-cube-icon {
 				opacity: 0;
 			}
@@ -161,101 +220,13 @@
 	}
 }
 
-// Inspector overrides only when Blockera advanced mode is active (see BlockBase isActive).
-.blockera-block-inspector-controls-wrapper.blockera-active-block {
-	// main block card
-	& + .block-editor-block-card,
-	// pattern child block card
-	& + .block-editor-block-card + .block-editor-block-card,
-	// pattern exit button
-	& + .block-editor-block-card + .block-editor-block-card
-		+ .block-editor-block-inspector-edit-contents,
-	& + .block-editor-block-card + .block-editor-block-inspector-edit-contents,
-	& ~ .block-editor-block-variation-transforms {
-		display: none !important;
-	}
+.blockera-block-inspector-controls-wrapper + .block-editor-block-card,
+.blockera-block-inspector-controls-wrapper ~ .block-editor-block-variation-transforms {
+	display: none !important;
 }
 
-.search-features {
-	.components-input-control__container {
-		background-color: #ffffff;
-	}
+// hide justification control inside layout constrained (Group Block)
 
-	input:focus {
-		outline: none !important;
-		border: none !important;
-	}
-}
-
-.blockera-state-colors-container:empty {
+.block-editor-block-inspector .block-editor-hooks__layout-constrained .block-editor-hooks__layout-constrained-helptext + .components-base-control {
 	display: none;
-}
-
-// Inner blocks: styles-only — hide WP inspector tab chrome.
-.block-editor-block-inspector.blockera-inner-block-inspector {
-	.block-editor-block-inspector__tabs [role="tablist"] {
-		display: none !important;
-	}
-}
-
-.block-editor-block-inspector {
-	.blockera-block-inspector-controls-wrapper + .block-editor-block-card {
-		display: none !important;
-	}
-}
-
-// Styles tab + Blockera active: hide core panels and keep Blockera UI.
-.block-editor-block-inspector.blockera-inspector-on-styles-tab {
-	// hide justification control inside layout constrained (Group block)
-	.block-editor-hooks__layout-constrained
-		.block-editor-hooks__layout-constrained-helptext
-		+ .components-base-control {
-		display: none;
-	}
-
-	.block-editor-block-styles {
-		display: none !important;
-	}
-
-	.block-editor-block-inspector__tabs
-		[role="tabpanel"]:not([id*="-list-view"]):not(
-			[id*="-content-view"]
-		):not([id*="-settings-view"]) {
-		// Hide all core controls in the styles tabpanel.
-		> *:not(:has(.blockera-state-colors-container)) {
-			display: none !important;
-		}
-
-		// Hide all elements after the first child of the state colors container.
-		// Elements that third party plugins add to the block inspector.
-		> div:first-child
-			> .blockera-state-colors-container
-			+ *:not(.blockera-state-colors-container) {
-			display: none !important;
-		}
-	}
-
-	// Keep inspector tabs (Blockera InspectorControls live in the styles tabpanel).
-	&.blockera-inner-block-inspector {
-		> .block-editor-block-card {
-			display: none !important;
-		}
-
-		> div:not([class^="blockera-block-inspector-controls-wrapper"]):not(
-				[class^="css-"]
-			):not(.block-editor-block-inspector__tabs) {
-			display: none !important;
-		}
-	}
-
-	&:has(.block-editor-block-inspector-edit-contents) {
-		.block-editor-block-styles {
-			display: flex !important;
-		}
-	}
-}
-
-// Set width to 100%. The width issue is result of setting position: absolute to the wrapper.
-.edit-site-global-styles-sidebar__navigator-provider {
-	width: 100%;
 }

@@ -10,7 +10,7 @@ import { prepare } from '@blockera/data-editor';
  */
 import DotEnv from './dotenv';
 import type { ExperimentalType } from './types';
-import experimentalConfig from '@blockera/experimental-config';
+import experimentalConfig from '../../../experimental.config.json';
 
 export class ExperimentalEnv extends DotEnv {
 	get(supportQuery: string): any {

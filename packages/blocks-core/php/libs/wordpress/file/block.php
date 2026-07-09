@@ -14,12 +14,8 @@ return array_merge(
 			$args['selectors'] ?? [],
 			(array) array_merge(
 				blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			),
-			[
-				'blockera/core/button' => [
-					'root' => '.wp-element-button',
-				],
-			]
+				blockera_load( 'inners.button', dirname( __DIR__ ) ),
+			)
 		),
 	]
 );

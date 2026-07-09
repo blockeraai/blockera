@@ -37,19 +37,6 @@ describe('Details Block', () => {
 			'core/paragraph',
 		]);
 
-		cy.checkBlockStatesPickerItems([
-			'elements/title',
-			'elements/title-icon',
-			'core/paragraph',
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
-
 		//
 		// 1. Edit Block
 		//
@@ -128,7 +115,7 @@ describe('Details Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {

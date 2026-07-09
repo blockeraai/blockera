@@ -35,11 +35,9 @@ describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
 <!-- /wp:blocksy/query -->
 		`);
 
-		cy.getBlock('blocksy/query').click({ force: true });
+		cy.getBlock('blocksy/query').click();
 
-		cy.getByAriaLabel('Select parent block: Advanced Posts').click({
-			force: true,
-		});
+		cy.getByAriaLabel('Select parent block: Advanced Posts').click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
@@ -57,8 +55,6 @@ describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
 			'background-clip',
 			'border-box'
 		);
-
-		cy.wait(500);
 
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');

@@ -505,7 +505,7 @@ describe('Inner Blocks label testing', () => {
 								// Assert control
 								cy.get('@color-label').should(
 									'include.text',
-									'bbb'
+									'ccc'
 								);
 
 								// Assert state graph
@@ -676,7 +676,7 @@ describe('Inner Blocks label testing', () => {
 						);
 
 						// Assert control
-						cy.get('@color-label').should('include.text', 'bbb');
+						cy.get('@color-label').should('include.text', 'ccc');
 
 						// Assert state graph
 						cy.checkStateGraph('Typography', 'Text Color', {

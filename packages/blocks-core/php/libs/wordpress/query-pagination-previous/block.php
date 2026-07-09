@@ -13,7 +13,6 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'root' => '.wp-block-query-pagination-previous',
 				'blockera/elements/arrow' => [
 					'root' => '.wp-block-query-pagination-previous-arrow',
 				],

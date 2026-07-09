@@ -9,6 +9,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import type { ControlContextRefCurrent } from '@blockera/controls';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -18,29 +19,26 @@ import {
 	positionToWPCompatibility,
 } from './compatibility/position';
 import type { BlockDetail } from '../block-card/block-states/types';
-import {
-	isInvalidCompatibilityRun,
-	mergeWPCompatibility,
-	sanitizeWPCompatibilityAttributes,
-} from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.positionExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			if (blockId === 'core/group') {
 				attributes = positionFromWPCompatibility({
 					attributes,
-					insideBlockInspector,
-					editorSelectedBlockEvent,
 				});
 			}
 
-			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
+			return attributes;
 		}
 	);
 
@@ -69,23 +67,19 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
 
 			if (featureId === 'blockeraPosition' && blockId === 'core/group') {
-				return mergeWPCompatibility(
+				return mergeObject(
 					nextState,
 					positionToWPCompatibility({
 						newValue,
 						ref,
-						insideBlockInspector,
-						editorSelectedBlockEvent,
-					}),
-					blockDetail
+					})
 				);
 			}
 

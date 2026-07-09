@@ -36,12 +36,10 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 			// Switch to parent block
 			cy.getByAriaLabel('Select Group').click();
 
-			cy.addNewTransition();
-
 			// Assert WP element value
 			getWPDataObject().then((data) => {
 				expect('#ff6868').to.be.equal(
-					getSelectedBlock(data, 'style')?.elements.button?.color
+					getSelectedBlock(data, 'style')?.elements['button']?.color
 						?.text
 				);
 			});
@@ -83,7 +81,7 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('#666666').to.be.equal(
-					getSelectedBlock(data, 'style')?.elements.button?.color
+					getSelectedBlock(data, 'style')?.elements['button']?.color
 						?.text
 				);
 			});
@@ -103,7 +101,7 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'style')?.elements.button?.color
+					getSelectedBlock(data, 'style')?.elements['button']?.color
 						?.text
 				);
 			});
@@ -128,12 +126,10 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 			// Switch to parent block
 			cy.getByAriaLabel('Select Group').click();
 
-			cy.addNewTransition();
-
 			// Assert WP data
 			getWPDataObject().then((data) => {
 				expect('var:preset|color|accent-3').to.be.equal(
-					getSelectedBlock(data, 'style')?.elements.button?.color
+					getSelectedBlock(data, 'style')?.elements['button']?.color
 						?.text
 				);
 			});
@@ -205,7 +201,7 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('var:preset|color|contrast').to.be.equal(
-					getSelectedBlock(data, 'style')?.elements.button?.color
+					getSelectedBlock(data, 'style')?.elements['button']?.color
 						?.text
 				);
 			});
@@ -227,7 +223,7 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'style')?.elements.button?.color
+					getSelectedBlock(data, 'style')?.elements['button']?.color
 						?.text
 				);
 			});
@@ -255,13 +251,11 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 				// Switch to parent block
 				cy.getByAriaLabel('Select Group').click();
 
-				cy.addNewTransition();
-
 				// Assert WP element value
 				getWPDataObject().then((data) => {
 					expect('#ffcaca').to.be.equal(
-						getSelectedBlock(data, 'style')?.elements.button?.color
-							?.background
+						getSelectedBlock(data, 'style')?.elements['button']
+							?.color?.background
 					);
 				});
 
@@ -304,8 +298,8 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
-						getSelectedBlock(data, 'style')?.elements.button?.color
-							?.background
+						getSelectedBlock(data, 'style')?.elements['button']
+							?.color?.background
 					);
 				});
 
@@ -325,8 +319,8 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
-						getSelectedBlock(data, 'style')?.elements.button?.color
-							?.background
+						getSelectedBlock(data, 'style')?.elements['button']
+							?.color?.background
 					);
 				});
 			});
@@ -350,13 +344,11 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 				// Switch to parent block
 				cy.getByAriaLabel('Select Group').click();
 
-				cy.addNewTransition();
-
 				// Assert WP element value
 				getWPDataObject().then((data) => {
 					expect('var:preset|color|accent-3').to.be.equal(
-						getSelectedBlock(data, 'style')?.elements.button?.color
-							?.background
+						getSelectedBlock(data, 'style')?.elements['button']
+							?.color?.background
 					);
 				});
 
@@ -429,8 +421,8 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect('var:preset|color|contrast').to.be.equal(
-						getSelectedBlock(data, 'style')?.elements.button?.color
-							?.background
+						getSelectedBlock(data, 'style')?.elements['button']
+							?.color?.background
 					);
 				});
 
@@ -452,8 +444,8 @@ describe('Group Block → Button Inner Block → WP Data Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
-						getSelectedBlock(data, 'style')?.elements.button?.color
-							?.background
+						getSelectedBlock(data, 'style')?.elements['button']
+							?.color?.background
 					);
 				});
 			});

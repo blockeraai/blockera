@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../../type';
+import type { BlockType } from '../../type';
 
 export const PostCommentsFrom: BlockType = {
 	name: 'blockeraPostCommentsForm',
@@ -138,15 +138,10 @@ export const PostCommentsFrom: BlockType = {
 			icon: <Icon icon="button" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
-				dataCompatibilityElement: 'button',
 				dataCompatibility: [
 					'font-color',
 					'background-color',
 					'background-image',
-					'font-size',
-					'spacing',
-					'border',
-					'border-radius',
 				],
 			},
 		},

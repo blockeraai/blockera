@@ -54,12 +54,12 @@ export const Inserter = ({
 
 			{isOpenPicker && popoverAnchor && (
 				<Popover
+					offset={12}
 					placement="bottom-end"
 					onClose={() => setOpenPicker(false)}
 					title=""
 					className={classNames('blockera-states-picker-popover')}
 					anchor={popoverAnchor}
-					offset={12}
 				>
 					<AvailableBlocks onClick={callback} />
 				</Popover>

@@ -5,7 +5,7 @@
  */
 import { getBaseBreakpoint } from '@blockera/editor';
 import { mergeObject } from '@blockera/utils';
-import { getColorVAFromVarString } from '@blockera/data';
+import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 export function bgColorStateFromWPCompatibility({
@@ -27,21 +27,12 @@ export function bgColorStateFromWPCompatibility({
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (
-		attributes?.[propertyCustom] &&
-		attributes?.[propertyCustom] !== defaultValue
-	) {
+	if (attributes?.[propertyCustom] !== defaultValue) {
 		color = attributes?.[propertyCustom];
 	}
 
-	if (
-		!color &&
-		attributes?.[property] &&
-		attributes?.[property] !== defaultValue
-	) {
-		color = getColorVAFromVarString(
-			`var:preset|color|${attributes?.[property]}`
-		);
+	if (!color && attributes?.[property] !== defaultValue) {
+		color = getColorVAFromIdString(attributes?.[property]);
 	}
 
 	if (color) {
@@ -70,19 +61,6 @@ export function bgColorStateFromWPCompatibility({
 					},
 				},
 			},
-		});
-	}
-
-	// If the property and propertyCustom are the same as the default value,
-	// remove the property and propertyCustom because keeping them creates other problems
-	// as they are general and used for other settings.
-	if (
-		attributes?.[property] === defaultValue &&
-		attributes?.[propertyCustom] === defaultValue
-	) {
-		return mergeObject(attributes, {
-			[property]: undefined,
-			[propertyCustom]: undefined,
 		});
 	}
 

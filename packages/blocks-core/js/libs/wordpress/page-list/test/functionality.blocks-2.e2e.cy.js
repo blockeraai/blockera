@@ -7,6 +7,7 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
+	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -25,11 +26,11 @@ describe('Page List Block', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		// Icon extension is active
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 		cy.getByAriaLabel('Choose Icon…').should('be.visible');
 
 		// switch back to style tab
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 
 		cy.checkBlockCardItems([
 			'normal',
@@ -108,7 +109,7 @@ describe('Page List Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-tools-panel-header')

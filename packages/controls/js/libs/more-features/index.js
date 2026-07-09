@@ -29,16 +29,9 @@ export default function MoreFeatures({
 	ariaLabel = __('More features', 'blockera'),
 	className,
 	children,
-	isAnimated = false,
-	onOpenChange,
 	...props
 }: MoreFeaturesProps): Node {
 	const [isOpen, setIsOpen] = useState(_isOpen);
-
-	const toggleOpen = (nextIsOpen: boolean) => {
-		setIsOpen(nextIsOpen);
-		onOpenChange?.(nextIsOpen);
-	};
 
 	return (
 		<div
@@ -54,11 +47,11 @@ export default function MoreFeatures({
 					'more-features__button',
 					className
 				)}
-				onClick={() => toggleOpen(!isOpen)}
+				onClick={() => setIsOpen(!isOpen)}
 				tabIndex={0}
 				onKeyDown={(event) => {
 					if (event.key === 'Enter') {
-						toggleOpen(!isOpen);
+						setIsOpen(!isOpen);
 					}
 				}}
 				label={ariaLabel}
@@ -72,10 +65,7 @@ export default function MoreFeatures({
 
 				{label}
 
-				<ChangeIndicator
-					isChanged={isChanged}
-					isAnimated={isAnimated}
-				/>
+				<ChangeIndicator isChanged={isChanged} />
 			</Button>
 
 			{isOpen && (

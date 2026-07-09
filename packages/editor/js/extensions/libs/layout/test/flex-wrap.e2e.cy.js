@@ -10,7 +10,7 @@ describe('Flex Wrap → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Display').within(() => {
 			cy.getByAriaLabel('Flex').click();
@@ -18,8 +18,6 @@ describe('Flex Wrap → Functionality', () => {
 	});
 
 	it('functionality of flex-wrap', () => {
-		cy.openFeatureMoreSettings('more-layout-settings');
-		cy.selectFeature('Flex Children Wrap');
 		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});

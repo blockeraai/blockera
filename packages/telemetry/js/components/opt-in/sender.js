@@ -5,30 +5,19 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 
-type SenderOptions = {
-	shareUsageData?: boolean,
-	emailUpdates?: boolean,
-	handleError?: (error: Object) => void,
-	handleResponse?: (response: Object) => void,
-};
-
-export const sender = (prompt: 'ALLOW' | 'SKIP', options?: SenderOptions) => {
-	const {
-		shareUsageData = true,
-		emailUpdates = true,
-		handleError = () => {},
-		handleResponse = () => {},
-	} = options || {};
-
-	const data: Object = {
+export const sender = (
+	prompt: 'ALLOW' | 'SKIP',
+	debugParams?: {
+		handleError: (error: Object) => void,
+		handleResponse: (response: Object) => void,
+	}
+) => {
+	const { handleError = () => {}, handleResponse = () => {} } =
+		debugParams || {};
+	const data = {
 		'opt-in-agreed': prompt,
 		action: 'telemetry-opt-in-status',
 	};
-
-	if ('ALLOW' === prompt) {
-		data.share_usage_data = shareUsageData;
-		data.email_updates = emailUpdates;
-	}
 
 	apiFetch.use(apiFetch.createNonceMiddleware(window.blockeraNonceField));
 	apiFetch({

@@ -1,41 +1,14 @@
-// Portal host is only as tall as the card; without this, position:sticky cannot pin
-// against the inspector scroll area and the whole host scrolls away.
-.block-editor-block-inspector
-	> .blockera-block-inspector-controls-wrapper:has(
-		.blockera-block-card-sticky-sentinel
-	) {
-	display: contents;
-}
-
-.blockera-global-styles-panel-aside {
-	.blockera-block-card-wrapper {
-		&.is-sticky-active {
-			border-top: none;
-		}
-	}
-}
-
 .blockera-block-card-wrapper {
+
 	&.is-sticky-active {
 		position: sticky;
 		top: 0;
 		z-index: 9999;
-		transition:
-			box-shadow 0.075s ease,
-			border 0.075s ease;
-		border-top: 1px solid transparent;
+		transition: box-shadow 0.075s ease;
 
 		&.is-stuck {
-			box-shadow:
-				0 1px 0 #cbcbcb,
-				0 11px 11px -6px rgba(0, 0, 0, 0.16);
-			border-top-color: var(--blockera-panel-tabs-tab-border-color);
+			box-shadow: 0 1px 0 #cbcbcb, 0 11px 11px -6px rgba(0, 0, 0, 0.16);
 		}
-	}
-
-	&:has(.blockera-extension-pattern-block-card),
-	&:has(.block-card--inner-block) {
-		border-top: 1px solid #f6f6f6;
 	}
 }
 
@@ -43,9 +16,9 @@
 	height: 1px; /* Minimal height so it doesn't affect layout */
 	visibility: hidden; /* Keep it invisible */
 	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
 	pointer-events: none;
 }
 

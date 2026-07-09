@@ -1,24 +1,29 @@
 .blockera-control.blockera-control-inner-blocks-repeater {
-	display: inline-flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
 	margin-bottom: 6px;
-	--repeater-gap: 3px;
+	--repeater-gap: 6px;
 	--repeater-item-height: 26px;
 
 	.blockera-control-repeater-item {
 		width: max-content;
 		--icon-size: 16px;
 
+		.blockera-control-group {
+			border-style: dashed;
+		}
+
+		.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
+			border-style: solid;
+		}
+
 		.blockera-control-group-header {
-			padding: 0 5px;
+			padding: 0 5px 0 3px;
 
 			.blockera-control-repeater-group-header {
 				gap: 1px;
-				letter-spacing: -0.3px;
-				font-size: 12px;
-				font-weight: 500;
 
 				.blockera-control-header-icon {
 					min-width: 16px;
@@ -27,6 +32,7 @@
 		}
 
 		.blockera-control-header-icon {
+
 			.block-editor-block-icon {
 				display: inline-block;
 			}
@@ -47,10 +53,9 @@
 		}
 	}
 
+
 	& > .blockera-control-repeater-item {
-		--blockera-controls-primary-color: var(
-			--blockera-controls-inner-blocks-color
-		);
+		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
 	}
 
 	.blockera-control-group.mode-nothing.is-selected-item {
@@ -64,24 +69,12 @@
 	}
 
 	.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
-		background: color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 4%,
-			#ffffff 100%
-		);
+		background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
 		border-color: var(--blockera-controls-primary-color);
-		color: color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 100%,
-			#000000 20%
-		);
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 
 		.blockera-control-header-label {
-			color: color-mix(
-				in srgb,
-				var(--blockera-controls-primary-color) 100%,
-				#000000 20%
-			);
+			color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 		}
 	}
 }

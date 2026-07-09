@@ -6,6 +6,5 @@ export const defaultItemValue = {
 	deletable: true,
 	isSelected: false,
 	selectable: false,
-	hasVariations: false,
 	visibilitySupport: true,
 };

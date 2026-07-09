@@ -25,16 +25,13 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/item-containers' => [
-					'root' => 'li.wp-block-social-link',
-					'layout' => 'li.wp-block-social-link .wp-block-social-link-anchor',
-					// flex child should be the same as the root.
-					'flex-child' => 'li.wp-block-social-link',
+					'root' => '.wp-block-social-link',
 				],
 				'blockera/elements/item-icons'      => [
-					'root' => ':where(svg)',
+					'root' => '.wp-block-social-link svg',
 				],
 				'blockera/elements/item-names'      => [
-					'root' => ':where(.wp-block-social-link .wp-block-social-link-label)',
+					'root' => '.wp-block-social-link .wp-block-social-link-label',
 				],
 			]
 		),

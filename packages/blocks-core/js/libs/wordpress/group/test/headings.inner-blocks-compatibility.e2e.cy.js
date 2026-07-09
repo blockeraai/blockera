@@ -49,8 +49,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					// Switch to parent block
 					cy.getByAriaLabel('Select Group').click();
 
-					cy.addNewTransition();
-
 					// Assert WP element value
 					getWPDataObject().then((data) => {
 						expect('#ff6868').to.be.equal(
@@ -146,8 +144,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 						// Switch to parent block
 						cy.getByAriaLabel('Select Group').click();
-
-						cy.addNewTransition();
 
 						// Assert WP data
 						getWPDataObject().then((data) => {
@@ -279,8 +275,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						// Switch to parent block
 						cy.getByAriaLabel('Select Group').click();
 
-						cy.addNewTransition();
-
 						// Assert WP element value
 						getWPDataObject().then((data) => {
 							expect('#ffcaca').to.be.equal(
@@ -379,8 +373,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 							// Switch to parent block
 							cy.getByAriaLabel('Select Group').click();
-
-							cy.addNewTransition();
 
 							// Assert WP element value
 							getWPDataObject().then((data) => {

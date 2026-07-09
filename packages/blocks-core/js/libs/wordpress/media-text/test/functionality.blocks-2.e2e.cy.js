@@ -76,7 +76,7 @@ describe('Media Text Block', () => {
 		cy.getBlock('core/media-text')
 			.first()
 			.within(() => {
-				cy.get('.wp-block-media-text__media')
+				cy.get('.wp-block-media-text__media > img')
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 			});
@@ -89,7 +89,7 @@ describe('Media Text Block', () => {
 		// 3. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-tools-panel-header')
@@ -112,7 +112,7 @@ describe('Media Text Block', () => {
 
 		cy.get('.blockera-block.wp-block-media-text').within(() => {
 			// image inner block
-			cy.get('.wp-block-media-text__media')
+			cy.get('.wp-block-media-text__media > img')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 		});

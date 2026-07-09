@@ -24,17 +24,11 @@
 		font-size: 12px;
 
 		.blockera-control-action-buttons {
-			svg {
-				fill: currentcolor;
-			}
-		}
-
-		.blockera-control-action-buttons.type-inline {
 			z-index: 1;
 			display: flex;
 			align-items: center;
 			background: #ffffff;
-			gap: 0;
+			gap: -1px;
 			padding-left: 3px;
 
 			.blockera-component-button {
@@ -50,26 +44,6 @@
 				}
 			}
 		}
-
-		.blockera-control-action-buttons.type-menu {
-			z-index: 1;
-			display: flex;
-			align-items: center;
-			background: #ffffff;
-			gap: -1px;
-
-			.blockera-control-dropdown-menu {
-				.components-button.components-dropdown-menu__toggle {
-					min-width: auto;
-					padding: 0;
-					height: auto;
-					--wp-components-color-accent: var(
-						--blockera-controls-primary-color
-					);
-					color: currentColor;
-				}
-			}
-		}
 	}
 
 	.blockera-control-group-content {
@@ -78,14 +52,10 @@
 }
 
 .blockera-control-group.mode-accordion {
+
 	&.is-open.toggle-open-border {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-	}
-
-	&.is-open.toggle-open-border.no-accordion-open-primary-border {
-		border-color: var(--blockera-controls-border-color);
-		box-shadow: none;
 	}
 
 	.blockera-control-group-content {
@@ -96,6 +66,7 @@
 }
 
 .blockera-control-group.mode-popover {
+
 	&.is-open {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
@@ -103,6 +74,7 @@
 }
 
 .blockera-control-group.mode-nothing {
+
 	&.is-selected-item {
 		border-color: var(--blockera-controls-primary-color);
 

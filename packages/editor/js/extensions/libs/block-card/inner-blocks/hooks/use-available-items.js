@@ -14,14 +14,13 @@ import { isString, mergeObject, getSortedObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { isBlock, isElement } from '../utils';
+import { isBlock, isElement } from '../helpers';
 import type {
 	InnerBlocks,
 	AvailableItems,
 	InnerBlockType,
 	InnerBlockModel,
 } from '../types';
-import { useGlobalStylesPanelContext } from '../../../../../editor/global-styles/panel/context';
 
 export const useAvailableItems = ({
 	clientId,
@@ -29,29 +28,13 @@ export const useAvailableItems = ({
 	getBlockInners,
 	reservedInnerBlocks,
 	memoizedInnerBlocks,
-	insideBlockInspector = true,
 	setBlockClientInners,
 }: AvailableItems): { blocks: InnerBlocks, elements: InnerBlocks } => {
 	// External selectors. to access registered block types on WordPress blocks store api.
 	const { getBlockType } = select('core/blocks');
 	const { getAllowedBlocks, getSelectedBlock } = select('core/block-editor');
-	const { selectedBlockClientId } = useGlobalStylesPanelContext();
-
-	let allowedBlockTypes =
-		getAllowedBlocks(selectedBlockClientId || clientId) || [];
-	// We should use of memoizedInnerBlocks if not empty while run this hook outside of block inspector.
-	// For global styles reasons.
-	if (
-		!allowedBlockTypes.length &&
-		!insideBlockInspector &&
-		Object.keys(memoizedInnerBlocks).length
-	) {
-		allowedBlockTypes = Object.values(memoizedInnerBlocks);
-	}
-	const { innerBlocks, attributes } = getSelectedBlock() || {
-		innerBlocks: [],
-		attributes: {},
-	};
+	const allowedBlockTypes = getAllowedBlocks(clientId);
+	const { innerBlocks, attributes } = getSelectedBlock();
 
 	return useMemo(() => {
 		const forces: Array<InnerBlockModel> = [];
@@ -86,7 +69,6 @@ export const useAvailableItems = ({
 
 				// Skip customized or registered inner blocks.
 				if (
-					blockType &&
 					!memoizedInnerBlocks[blockType?.name] &&
 					!forces.find(isRegistered) &&
 					!blocks.find(isRegistered)
@@ -111,7 +93,7 @@ export const useAvailableItems = ({
 			: {
 					forcesItems: forces,
 					customizedInnerBlocks: innerBlocks,
-				};
+			  };
 
 		// Appending forces into repeater state.
 		if (forces.length) {

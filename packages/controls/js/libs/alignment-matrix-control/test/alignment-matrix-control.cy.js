@@ -48,11 +48,12 @@ describe('alignment-matrix control', () => {
 			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			specialPoints.forEach((top, rowIdx) => {
-				cy.get('@inputTop').focus().clear().type(String(top));
+				// select all then type instead of clear to prevent input catch value from default
+				cy.get('@inputTop').type(`{selectall}${top}`);
 
 				specialPoints.forEach((left, colIdx) => {
 					// 1. should select correct point on matrix when entering corresponding values in inputs
-					cy.get('@inputLeft').focus().clear().type(String(left));
+					cy.get('@inputLeft').type(`{selectall}${left}`);
 
 					// visual & data assertion
 					cy.getByDataTest('matrix-item')
@@ -61,8 +62,8 @@ describe('alignment-matrix control', () => {
 							rowIdx === 0
 								? colIdx
 								: rowIdx === 1
-									? rowIdx * 2 + 1 + colIdx
-									: rowIdx * 2 + 2 + colIdx
+								? rowIdx * 2 + 1 + colIdx
+								: rowIdx * 2 + 2 + colIdx
 						)
 						.should('have.class', 'selected')
 						.then(() => {
@@ -77,15 +78,11 @@ describe('alignment-matrix control', () => {
 					// 2. should de-select active point by adding 1 to current value of inputs
 
 					if (left === 100) {
-						cy.get('@inputLeft')
-							.focus()
-							.clear()
-							.type(String(left - 1));
+						cy.get('@inputLeft').type(`{selectall}${left - 1}`);
 					} else {
-						cy.get('@inputLeft')
-							.focus()
-							.clear()
-							.type(String(left === 0 ? left + 1 : left - 1));
+						cy.get('@inputLeft').type(
+							`{selectall}${left === 0 ? left + 1 : left - 1}`
+						);
 					}
 
 					// visual assertion is enough
@@ -95,8 +92,8 @@ describe('alignment-matrix control', () => {
 							rowIdx === 0
 								? colIdx
 								: rowIdx === 1
-									? rowIdx * 2 + 1 + colIdx
-									: rowIdx * 2 + 2 + colIdx
+								? rowIdx * 2 + 1 + colIdx
+								: rowIdx * 2 + 2 + colIdx
 						)
 						.should('not.have.class', 'selected');
 				});

@@ -27,10 +27,9 @@ describe('Post Author Block', () => {
 		cy.checkBlockCardItems([
 			'normal',
 			'hover',
-			'elements/avatar',
+			'core/avatar',
 			'elements/byline',
 			'elements/author',
-			'elements/biography',
 		]);
 
 		//
@@ -57,9 +56,9 @@ describe('Post Author Block', () => {
 		);
 
 		//
-		// 1.1. elements/avatar inner block
+		// 1.1. core/avatar inner block
 		//
-		setInnerBlock('elements/avatar');
+		setInnerBlock('core/avatar');
 
 		cy.checkBlockCardItems(['normal', 'hover'], true);
 
@@ -116,10 +115,10 @@ describe('Post Author Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
+			cy.get('.components-panel__body-title button')
 				.contains('Settings')
 				.scrollIntoView()
 				.should('be.visible');
@@ -138,7 +137,7 @@ describe('Post Author Block', () => {
 		);
 
 		cy.get('.blockera-block.wp-block-post-author').within(() => {
-			// elements/avatar inner block
+			// core/avatar inner block
 			cy.get('.wp-block-post-author__avatar > img')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');

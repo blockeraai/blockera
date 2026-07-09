@@ -9,7 +9,7 @@ import type { ControlGeneralTypes } from '../../../types';
 export type TNativeOption = {
 	label: string,
 	value: string,
-	icon?: Element<any> | '',
+	icon?: Element<any>,
 	type?: string,
 	disabled?: boolean,
 	className?: string,

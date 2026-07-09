@@ -12,7 +12,7 @@ describe('Input Control label testing (Width)', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	describe('Changed state testing...', () => {

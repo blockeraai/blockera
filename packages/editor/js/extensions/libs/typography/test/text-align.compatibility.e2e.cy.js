@@ -2,10 +2,11 @@
  * Blockera dependencies
  */
 import {
-	createPost,
 	appendBlocks,
-	getWPDataObject,
 	getSelectedBlock,
+	getWPDataObject,
+	openMoreFeaturesControl,
+	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Align → WP Compatibility', () => {
@@ -24,9 +25,10 @@ describe('Text Align → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
-			cy.getParentContainer('Text Align').as('container');
+			// Open more settings
+			openMoreFeaturesControl('More typography settings');
 
-			cy.addNewTransition();
+			cy.getParentContainer('Text Align').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -103,9 +105,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to left
 			//
-			cy.get(
-				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
-			).click();
+			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
 			//
@@ -124,9 +124,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to center
 			//
-			cy.get(
-				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
-			).click();
+			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
 
 			//
@@ -145,9 +143,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to center
 			//
-			cy.get(
-				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
-			).click();
+			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
 			//
@@ -168,7 +164,7 @@ describe('Text Align → WP Compatibility', () => {
 	describe('Heading Block', () => {
 		it('in heading the attribute is textAlign', () => {
 			appendBlocks(
-				`<!-- wp:heading {"level":1,"fontSize":"x-large","style":{"typography":{"textAlign":"center"}}} -->
+				`<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"x-large"} -->
 <h1 class="wp-block-heading has-text-align-center has-x-large-font-size">A commitment to innovation and sustainability</h1>
 <!-- /wp:heading -->`
 			);
@@ -176,9 +172,10 @@ describe('Text Align → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/heading').click();
 
-			cy.getParentContainer('Text Align').as('container');
+			// Open more settings
+			openMoreFeaturesControl('More typography settings');
 
-			cy.addNewTransition();
+			cy.getParentContainer('Text Align').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -191,7 +188,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('center').to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
+					getSelectedBlock(data, 'textAlign')
 				);
 			});
 
@@ -210,7 +207,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('right').to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
+					getSelectedBlock(data, 'textAlign')
 				);
 			});
 
@@ -226,7 +223,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
+					getSelectedBlock(data, 'textAlign')
 				);
 			});
 
@@ -245,14 +242,14 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
+					getSelectedBlock(data, 'textAlign')
 				);
 			});
 		});
 
 		it('Changing align from block toolbar affects the Blockera text align', () => {
 			appendBlocks(
-				`<!-- wp:heading {"level":1,"fontSize":"x-large","style":{"typography":{"textAlign":"center"}}} -->
+				`<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"x-large"} -->
 <h1 class="wp-block-heading has-text-align-center has-x-large-font-size">A commitment to innovation and sustainability</h1>
 <!-- /wp:heading -->`
 			);
@@ -263,9 +260,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			// Change align to left
 			//
-			cy.get(
-				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
-			).click();
+			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
 			//
@@ -278,17 +273,13 @@ describe('Text Align → WP Compatibility', () => {
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
 
-				expect('left').to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
-				);
+				expect('left').to.be.equal(getSelectedBlock(data, 'textAlign'));
 			});
 
 			//
 			// Change align to center
 			//
-			cy.get(
-				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
-			).click();
+			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(1).click();
 
 			//
@@ -302,16 +293,14 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('center').to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
+					getSelectedBlock(data, 'textAlign')
 				);
 			});
 
 			//
 			// Change align to center
 			//
-			cy.get(
-				'[data-test="data-blockera-text-align-toolbar"] button[aria-label="Align text"]'
-			).click();
+			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(2).click();
 
 			//
@@ -325,7 +314,7 @@ describe('Text Align → WP Compatibility', () => {
 				);
 
 				expect('right').to.be.equal(
-					getSelectedBlock(data, 'style')?.typography?.textAlign
+					getSelectedBlock(data, 'textAlign')
 				);
 			});
 		});

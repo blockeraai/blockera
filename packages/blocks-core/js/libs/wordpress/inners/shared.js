@@ -10,65 +10,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
-import {
-	generalInnerBlockStates,
-	sharedBlockStates,
-	generalSimpleInnerBlockStates,
-} from '@blockera/editor';
-
-/**
- * Mirrors theme.json 6.9 `styles.elements` style properties supported by inner-blocks bootstrap.
- */
-const elementColorCompatibility = [
-	'font-color',
-	'font-color-hover',
-	'background-color',
-	'background-image',
-];
-
-const elementTypographyCompatibility = [
-	'font-family',
-	'font-size',
-	'line-height',
-	'letter-spacing',
-	'text-transform',
-	'text-decoration',
-	'text-decoration-hover',
-	'font-appearance',
-	'text-orientation',
-	'text-align',
-];
-
-const elementBorderShadowCompatibility = [
-	'border',
-	'border-radius',
-	'box-shadow',
-];
-
-const elementSpacingCompatibility = ['spacing', 'gap'];
-
-const elementDimensionsCompatibility = ['min-height', 'aspect-ratio'];
-
-const linkElementCompatibility = [
-	'font-color',
-	'font-color-hover',
-	'text-decoration',
-	'text-decoration-hover',
-];
-
-const headingElementCompatibility = [
-	...elementColorCompatibility.filter((key) => key !== 'font-color-hover'),
-	...elementTypographyCompatibility,
-];
-
-const buttonElementCompatibility = [
-	...elementColorCompatibility.filter((key) => key !== 'font-color-hover'),
-	...elementTypographyCompatibility,
-	...elementBorderShadowCompatibility,
-	...elementSpacingCompatibility,
-	...elementDimensionsCompatibility,
-	'custom-css',
-];
+import { generalInnerBlockStates, sharedBlockStates } from '@blockera/editor';
 
 const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -92,7 +34,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			force: false,
 			dataCompatibilityElement: 'link',
-			dataCompatibility: linkElementCompatibility,
+			dataCompatibility: ['font-color', 'font-color-hover'],
 			priority: 10,
 		},
 		availableBlockStates: {
@@ -114,118 +56,133 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('Headings', 'blockera'),
 		description: __('All heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading" iconSize="20" />,
+		icon: <Icon icon="heading" library="wp" iconSize="20" />,
 		settings: {
 			// because "core/heading" block default value for "level" attribute is "2".
 			level: 2,
 			force: false,
 			dataCompatibilityElement: 'heading',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-1': {
 		name: 'core/heading',
-		shortLabel: 'H1',
-		label: __('H1 Headings', 'blockera'),
+		label: __('Headings: H1', 'blockera'),
 		description: __('All H1 heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading-level-1" iconSize="20" />,
+		icon: <Icon icon="heading-level-1" library="wp" iconSize="20" />,
 		settings: {
 			level: 1,
 			force: false,
 			dataCompatibilityElement: 'h1',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-2': {
 		name: 'core/heading',
-		shortLabel: 'H2',
-		label: __('H2 Headings', 'blockera'),
+		label: __('Headings: H2', 'blockera'),
 		description: __('All H2 heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading-level-2" iconSize="20" />,
+		icon: <Icon icon="heading-level-2" library="wp" iconSize="20" />,
 		settings: {
 			level: 2,
 			force: false,
 			dataCompatibilityElement: 'h2',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-3': {
 		name: 'core/heading',
-		shortLabel: 'H3',
-		label: __('H3 Headings', 'blockera'),
+		label: __('Headings: H3', 'blockera'),
 		description: __('All H3 heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading-level-3" iconSize="20" />,
+		icon: <Icon icon="heading-level-3" library="wp" iconSize="20" />,
 		settings: {
 			level: 3,
 			force: false,
 			dataCompatibilityElement: 'h3',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-4': {
 		name: 'core/heading',
-		shortLabel: 'H4',
-		label: __('H4 Headings', 'blockera'),
+		label: __('Headings: H4', 'blockera'),
 		description: __('All H4 heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading-level-4" iconSize="20" />,
+		icon: <Icon icon="heading-level-4" library="wp" iconSize="20" />,
 		settings: {
 			level: 4,
 			force: false,
 			dataCompatibilityElement: 'h4',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-5': {
 		name: 'core/heading',
-		shortLabel: 'H5',
-		label: __('H5 Headings', 'blockera'),
+		label: __('Headings: H5', 'blockera'),
 		description: __('All H5 heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading-level-5" iconSize="20" />,
+		icon: <Icon icon="heading-level-5" library="wp" iconSize="20" />,
 		settings: {
 			level: 5,
 			force: false,
 			dataCompatibilityElement: 'h5',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-6': {
 		name: 'core/heading',
-		shortLabel: 'H6',
-		label: __('H6 Headings', 'blockera'),
+		label: __('Headings: H6', 'blockera'),
 		description: __('All H6 heading tag elements.', 'blockera'),
-		icon: <Icon icon="block-heading-level-6" iconSize="20" />,
+		icon: <Icon icon="heading-level-6" library="wp" iconSize="20" />,
 		settings: {
 			level: 6,
 			force: false,
 			dataCompatibilityElement: 'h6',
-			dataCompatibility: headingElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/button.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../buttons/test/block.cy.e2e.inner-blocks.js
@@ -238,20 +195,12 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			force: false,
 			dataCompatibilityElement: 'button',
-			dataCompatibility: buttonElementCompatibility,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 			priority: 10,
-		},
-		availableBlockStates: {
-			...generalInnerBlockStates,
-			focus: {
-				...generalInnerBlockStates.focus,
-				force: true,
-			},
-			active: {
-				...sharedBlockStates.active,
-				force: true,
-			},
-			visited: sharedBlockStates.visited,
 		},
 	},
 	// Functionality tests: ../packages/gallery/test/block.inner-blocks.e2e.cy.js
@@ -264,50 +213,6 @@ const sharedInnerBlocks: InnerBlocks = {
 			force: false,
 			priority: 10,
 		},
-		availableBlockStates: generalSimpleInnerBlockStates,
-	},
-	'elements/bold': {
-		name: 'elements/bold',
-		label: __('Bold', 'blockera'),
-		description: __('All bold text (strong or b) tags.', 'blockera'),
-		icon: <Icon icon="format-bold" library="wp" iconSize="20" />,
-		availableBlockStates: generalSimpleInnerBlockStates,
-	},
-	'elements/italic': {
-		name: 'elements/italic',
-		label: __('Italic', 'blockera'),
-		description: __('All italic text (em or i) tags.', 'blockera'),
-		icon: <Icon icon="format-italic" library="wp" iconSize="20" />,
-		availableBlockStates: generalSimpleInnerBlockStates,
-	},
-	'elements/kbd': {
-		name: 'elements/kbd',
-		shortLabel: 'KBD',
-		label: __('Keyboard Inputs', 'blockera'),
-		description: __('All keyboard input (kbd) tags.', 'blockera'),
-		icon: <Icon icon="button" library="wp" iconSize="20" />,
-		availableBlockStates: generalSimpleInnerBlockStates,
-	},
-	'elements/code': {
-		name: 'elements/code',
-		label: __('Inline Code', 'blockera'),
-		description: __('All inline code tags.', 'blockera'),
-		icon: <Icon icon="html-tag-attribute" iconSize="20" />,
-		availableBlockStates: generalSimpleInnerBlockStates,
-	},
-	'elements/span': {
-		name: 'elements/span',
-		label: __('Span', 'blockera'),
-		description: __('All span tags.', 'blockera'),
-		icon: <Icon icon="html-tag-attribute" iconSize="20" />,
-		availableBlockStates: generalSimpleInnerBlockStates,
-	},
-	'elements/mark': {
-		name: 'elements/mark',
-		label: __('Highlight', 'blockera'),
-		description: __('All highlighted text (mark) elements.', 'blockera'),
-		icon: <Icon icon="highlight" iconSize="22" />,
-		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 };
 

@@ -2,10 +2,7 @@
 /**
  * Internal dependencies
  */
-import type {
-	ControlGeneralTypes,
-	ControlValueAddonTypes,
-} from '../../../types';
+import type { ControlGeneralTypes } from '../../../types';
 
 export type BorderControlBorderStyle = 'solid' | 'dashed' | 'dotted' | 'double';
 
@@ -17,7 +14,6 @@ export type TDefaultValue = {
 
 export type BorderControlProps = {
 	...ControlGeneralTypes,
-	...ControlValueAddonTypes,
 	/**
 	 * Indicates border-line icons direction
 	 */

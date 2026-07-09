@@ -57,12 +57,12 @@ class TestHelpers extends \WP_UnitTestCase {
 		$this->assertEquals(
 			[
 				'desktop'          => '',
-				'tablet'           => '@media screen and (max-width: 991px) and (min-width: 768px)',
-				'mobile-landscape' => '@media screen and (max-width: 767px) and (min-width: 479px)',
-				'mobile'           => '@media screen and (max-width: 478px) and (min-width: 0px)',
+				'tablet'           => '@media screen and (max-width: 991px)',
+				'mobile-landscape' => '@media screen and (max-width: 767px)',
+				'mobile'           => '@media screen and (max-width: 478px)',
 				'2xl-desktop'      => '@media screen and (min-width: 1920px)',
-				'xl-desktop'       => '@media screen and (max-width: 1919px) and (min-width: 1440px)',
-				'l-desktop'        => '@media screen and (max-width: 1439px) and (min-width: 1280px)',
+				'xl-desktop'       => '@media screen and (min-width: 1440px)',
+				'l-desktop'        => '@media screen and (min-width: 1280px)',
 			],
 			blockera_get_css_media_queries(blockera_core_config('breakpoints.list'))
 		);
@@ -320,8 +320,9 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+		$optimizeStyleGeneration = blockera_get_experimental(['earlyAccessLab', 'optimizeStyleGeneration']);
 
-		$this->assertEquals( '.my-root.wp-block-my-block', $result );
+		$this->assertEquals( $optimizeStyleGeneration ? '.my-root.wp-block-my-block' : '.my-root.wp-block-my-block, .wp-block-my-block.my-root', $result );
 	}
 
 	public function testSelectorWithBlockNameAndOtherClasses() {
@@ -331,8 +332,9 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+		$optimizeStyleGeneration = blockera_get_experimental(['earlyAccessLab', 'optimizeStyleGeneration']);
 
-		$this->assertEquals( '.my-root.wp-block-my-block.other-class', $result );
+		$this->assertEquals( $optimizeStyleGeneration ? '.my-root.wp-block-my-block.other-class' : '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
 	}
 
 	public function testSelectorWithTagName() {
@@ -355,336 +357,6 @@ class TestHelpers extends \WP_UnitTestCase {
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
 		$this->assertEquals( '.my-root.my-class', $result );
-	}
-
-	public function testSelectorWithBlockNameWhenRootAlreadyContainsTarget() {
-
-		$selector = '.wp-block-my-block:hover:focus';
-		$root     = '.my-root.wp-block-my-block.is-style-outline.is-size-small';
-		$args     = [ 'block-name' => 'my-block' ];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.my-root.wp-block-my-block.is-style-outline.is-size-small:hover:focus',
-			$result
-		);
-	}
-
-	public function testSelectorWithBlockNameWhenRootContainsTargetWithOnlyStyleVariation() {
-
-		$selector = '.wp-block-my-block:hover';
-		$root     = '.my-root.wp-block-my-block.is-style-outline';
-		$args     = [ 'block-name' => 'my-block' ];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals( '.my-root.wp-block-my-block.is-style-outline:hover', $result );
-	}
-
-	public function testPseudoOnlySelectorUsesRootBlockPartAndConcatenatesSelector() {
-
-		$selector = '::before';
-		$root     = '.my-root.wp-block-my-block.is-style-outline';
-		$args     = [ 'block-name' => 'my-block' ];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals( '.my-root.wp-block-my-block.is-style-outline::before', $result );
-	}
-
-	public function testPseudoOnlySelectorWithChildCompoundUsesRootAndConcatenatesSelector() {
-
-		$selector = ' :where(li)::marker';
-		$root     = '.my-root.wp-block-page-list.is-style-outline';
-		$args     = [ 'block-name' => 'page-list' ];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals( '.my-root.wp-block-page-list.is-style-outline :where(li)::marker', $result );
-	}
-
-	public function testPseudoOnlySelectorFallsBackWhenRootHasNoBlockPart() {
-
-		$selector = '::before';
-		$root     = '.my-root';
-		$args     = [ 'block-name' => 'my-block', 'block-type' => 'master' ];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals( '.my-root::before', $result );
-	}
-
-	public function testListItemRootSelectorMatchesParentListBlockClassSegment() {
-
-		$selector = '::marker';
-		$root     = '.blockera-block.blockera-block--abc';
-		$args     = [
-			'block-name' => 'list-item',
-			'block-type' => 'master',
-			'root'       => '.wp-block-list > li',
-		];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.wp-block-list > li.blockera-block.blockera-block--abc::marker',
-			$result
-		);
-	}
-
-	public function testListItemMasterBlockCompoundSelectorAppendsRootOnLastCompound() {
-
-		$selector = '.wp-block-list > li';
-		$root     = '.blockera-block.blockera-block--abc';
-		$args     = [
-			'block-name' => 'list-item',
-			'block-type' => 'master',
-			'root'       => '.wp-block-list > li',
-		];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.wp-block-list > li.blockera-block.blockera-block--abc',
-			$result
-		);
-	}
-
-	public function testListItemRootSelectorAppendsVariationsOnLastCompoundForPseudoOnly() {
-
-		$selector = '::marker';
-		$root     = '.blockera-block.blockera-block--abc.is-style-x';
-		$args     = [
-			'block-name' => 'list-item',
-			'block-type' => 'master',
-			'root'       => '.wp-block-list > li',
-		];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.wp-block-list > li.blockera-block.blockera-block--abc.is-style-x::marker',
-			$result
-		);
-	}
-
-	public function testListItemPreferredRootReappendsVariationsOnBlockTypeRoot() {
-
-		$selector = '::marker';
-		$root     = '.wp-block-list > li.is-style-x';
-		$args     = [
-			'block-name' => 'list-item',
-			'block-type' => 'master',
-			'root'       => '.wp-block-list > li',
-		];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.wp-block-list > li.is-style-x::marker',
-			$result
-		);
-	}
-
-	public function testListItemUsesCanonicalBlockClassWhenPresentOnRoot() {
-
-		$selector = '::before';
-		$root     = '.blockera-block.blockera-block--abc.wp-block-list-item.is-style-outline';
-		$args     = [
-			'block-name' => 'list-item',
-			'block-type' => 'master',
-			'root'       => '.wp-block-list > li',
-		];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.blockera-block.blockera-block--abc.wp-block-list-item.is-style-outline::before',
-			$result
-		);
-	}
-
-	public function testListBlockStillMatchesWpBlockListClass() {
-
-		$selector = ' li:not([class*="blockera-has-icon-"])::before';
-		$root     = '.blockera-block.wp-block-list.is-style-outline';
-		$args     = [
-			'block-name' => 'list',
-			'block-type' => 'master',
-			'root'       => '.wp-block-list',
-		];
-
-		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
-
-		$this->assertEquals(
-			'.blockera-block.wp-block-list.is-style-outline li:not([class*="blockera-has-icon-"])::before',
-			$result
-		);
-	}
-
-	public function testListItemInnerBlockLinkSelectorScopesToUniqueClass() {
-
-		$result = blockera_get_inner_block_state_selector(
-			'a:not(.wp-element-button)',
-			[
-				'block-name'               => 'core/list-item',
-				'block-type'               => 'elements/link',
-				'root'                     => '.wp-block-list > li',
-				'blockera-unique-selector' => '.blockera-block.blockera-block--abc',
-				'pseudo-class'             => 'normal',
-				'inner-pseudo-class'       => 'normal',
-			]
-		);
-
-		$this->assertSame(
-			'html:root body :where(.wp-block-list > li.blockera-block.blockera-block--abc) a:not(.wp-element-button)',
-			$result
-		);
-	}
-
-	public function testListItemBackgroundClipSelectorAppendsUniqueClassOnLastCompound(): void {
-
-		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );
-		$unique    = '.blockera-block.blockera-block--abc';
-
-		$result = blockera_get_compatible_block_css_selector(
-			$selectors,
-			'blockeraBackgroundClip',
-			[
-				'block-type'               => 'master',
-				'block-name'               => 'core/list-item',
-				'pseudo-class'             => 'normal',
-				'inner-pseudo-class'       => 'normal',
-				'breakpoint'               => 'desktop',
-				'root'                     => $selectors['root'] ?? null,
-				'blockera-unique-selector' => $unique,
-			]
-		);
-
-		$this->assertSame(
-			".wp-block-list > li{$unique}",
-			$result
-		);
-	}
-
-	public function testTableInnerBlockHeaderCellsBackgroundColorSelectorScopesToWrapperClass(): void {
-
-		$selectors = blockera_get_block_type_property( 'core/table', 'selectors' );
-		$unique    = '.blockera-block.blockera-block--abc';
-
-		$result = blockera_get_compatible_block_css_selector(
-			$selectors,
-			'blockeraBackgroundColor',
-			[
-				'block-type'               => 'elements/header-cells',
-				'block-name'               => 'core/table',
-				'pseudo-class'             => 'normal',
-				'inner-pseudo-class'       => 'normal',
-				'breakpoint'               => 'desktop',
-				'root'                     => $selectors['root'] ?? null,
-				'blockera-unique-selector' => $unique,
-			]
-		);
-
-		$this->assertSame(
-			"html:root body :where(.wp-block-table{$unique} > table) thead th",
-			$result
-		);
-	}
-
-	public function testTableBackgroundClipSelectorAppendsUniqueClassOnWrapperCompound(): void {
-
-		$selectors = blockera_get_block_type_property( 'core/table', 'selectors' );
-		$unique    = '.blockera-block.blockera-block--abc';
-
-		$result = blockera_get_compatible_block_css_selector(
-			$selectors,
-			'blockeraBackgroundClip',
-			[
-				'block-type'               => 'master',
-				'block-name'               => 'core/table',
-				'pseudo-class'             => 'normal',
-				'inner-pseudo-class'       => 'normal',
-				'breakpoint'               => 'desktop',
-				'root'                     => $selectors['root'] ?? null,
-				'blockera-unique-selector' => $unique,
-			]
-		);
-
-		$this->assertSame(
-			".blockera-block.blockera-block--abc.wp-block-table > table",
-			$result
-		);
-	}
-
-	public function testListItemInnerBlockLinkBackgroundColorSelectorScopesToUniqueClass(): void {
-
-		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );
-		$unique    = '.blockera-block.blockera-block--abc';
-
-		$result = blockera_get_compatible_block_css_selector(
-			$selectors,
-			'blockeraBackgroundColor',
-			[
-				'block-type'               => 'elements/link',
-				'block-name'               => 'core/list-item',
-				'pseudo-class'             => 'normal',
-				'inner-pseudo-class'       => 'normal',
-				'breakpoint'               => 'desktop',
-				'root'                     => $selectors['root'] ?? null,
-				'blockera-unique-selector' => $unique,
-			]
-		);
-
-		$this->assertSame(
-			"html:root body :where(.wp-block-list > li{$unique}) a:not(.wp-element-button)",
-			$result
-		);
-	}
-
-	/**
-	 * Paragraph inner span must not run append_root for blockeraFontColor.
-	 * str_replace('p', ...) would corrupt [data-rich-text-placeholder].
-	 */
-	public function testInnerBlockSpanFontColorSelectorSkipsAppendRoot(): void {
-
-		$selectors = array_merge(
-			$this->selectors,
-			[
-				'root'                   => 'p',
-				'blockera/elements/span' => [
-					'root' => 'span:not([data-rich-text-placeholder])',
-				],
-			]
-		);
-
-		register_block_type(
-			'core/paragraph',
-			[
-				'selectors' => $selectors,
-			]
-		);
-
-		$result = blockera_get_compatible_block_css_selector(
-			$selectors,
-			'blockeraFontColor',
-			[
-				'block-name'               => 'core/paragraph',
-				'fallback'                 => [ 'color.text', 'color', 'typography' ],
-				'block-type'               => 'elements/span',
-				'blockera-unique-selector' => '.blockera-block.blockera-block--phggmy',
-				'root'                     => 'p',
-				'pseudo-class'             => 'normal',
-				'inner-pseudo-class'       => 'normal',
-				'breakpoint'               => 'desktop',
-			]
-		);
-
-		$this->assertSame(
-			'html:root body :where(p) span:not([data-rich-text-placeholder])',
-			$result
-		);
 	}
 
 	/**
@@ -768,7 +440,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		];
 
 		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
-		$this->assertEquals( 'html:root body :where(.container):active .element:hover', $result );
+		$this->assertEquals( '.container:active .element:hover', $result );
 	}
 
 	public function testCssSelectorFormatWithoutPseudoClasses() {
@@ -777,7 +449,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args            = [];
 
 		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
-		$this->assertEquals( 'html:root body :where(.container) .element', $result );
+		$this->assertEquals( '.container .element', $result );
 	}
 
 	public function testCssSelectorFormatWithAmpersandInPickedSelector() {
@@ -788,7 +460,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		];
 
 		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
-		$this->assertEquals( 'html:root body :where(.container).element:hover', $result );
+		$this->assertEquals( '.container.element:hover', $result );
 	}
 
 	public function testCssSelectorFormatFallbackWhenParentRootMissing() {
@@ -797,7 +469,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args            = [];
 
 		$result = blockera_get_css_selector_format( '.fallback', $picked_selector, $args );
-		$this->assertEquals( 'html:root body :where(.fallback) .element', $result );
+		$this->assertEquals( '.fallback .element', $result );
 	}
 
 	public function testCssSelectorFormatEmptySelectors() {
@@ -828,9 +500,9 @@ class TestHelpers extends \WP_UnitTestCase {
     public function testBasicSelectorFormatting() {
         $cases = [
             // [root, picked, args, expected]
-            ['.block', '.item', [], 'html:root body :where(.block) .item'],
+            ['.block', '.item', [], '.block .item'],
             ['', '.item', [], '.item'],
-            ['.block', '.item, .other', [], 'html:root body :where(.block) .item, html:root body :where(.block) .other'],
+            ['.block', '.item, .other', [], '.block .item, .block .other'],
         ];
 
         foreach ($cases as [$root, $picked, $args, $expected]) {
@@ -849,25 +521,25 @@ class TestHelpers extends \WP_UnitTestCase {
                 '.block', 
                 '.item', 
                 ['pseudo_class' => 'hover'], 
-                'html:root body :where(.block) .item:hover'
+                '.block .item:hover'
             ],
             [
                 '.block', 
                 '.blockera__item, .blockera__other', 
                 ['pseudo_class' => 'active'], 
-                'html:root body :where(.block) .blockera__item:active, html:root body :where(.block) .blockera__other:active'
+                '.block .blockera__item:active, .block .blockera__other:active'
             ],
 			[
 				'.block',
 				'&:before',
 				['pseudo_class' => 'hover'],
-				'html:root body :where(.block):hover::before'
+				'.block:hover::before'
 			],
 			[
 				'.block',
 				'.blockera-icon:before',
 				['pseudo_class' => 'hover'],
-				'html:root body :where(.block) .blockera-icon:hover::before'
+				'.block .blockera-icon:hover::before'
 			]
         ];
 
@@ -887,19 +559,19 @@ class TestHelpers extends \WP_UnitTestCase {
                 '.block', 
                 '.item', 
                 ['parent_pseudo_class' => 'hover'], 
-                'html:root body :where(.block):hover .item'
+                '.block:hover .item'
             ],
             [
                 '.block', 
                 '.blockera-item', 
                 ['parent_pseudo_class' => 'focus'], 
-                'html:root body :where(.block):focus .blockera-item'
+                '.block:focus .blockera-item'
             ],
             [
                 '.block', 
                 '.blockera__item, .blockera__other', 
                 ['parent_pseudo_class' => 'active'], 
-                'html:root body :where(.block):active .blockera__item, html:root body :where(.block):active .blockera__other'
+                '.block:active .blockera__item, .block:active .blockera__other'
             ],
         ];
 
@@ -922,7 +594,7 @@ class TestHelpers extends \WP_UnitTestCase {
                     'pseudo_class' => 'focus',
                     'parent_pseudo_class' => 'hover'
                 ], 
-                'html:root body :where(.block):hover .item:focus'
+                '.block:hover .item:focus'
             ],
             [
                 '.block', 
@@ -931,7 +603,7 @@ class TestHelpers extends \WP_UnitTestCase {
                     'pseudo_class' => 'active',
                     'parent_pseudo_class' => 'focus'
                 ], 
-                'html:root body :where(.block):focus .blockera-item:active'
+                '.block:focus .blockera-item:active'
             ],
         ];
 
@@ -939,6 +611,15 @@ class TestHelpers extends \WP_UnitTestCase {
             $result = blockera_get_css_selector_format($root, $picked, $args);
             $this->assertEquals($expected, $result, "Failed formatting with both pseudo classes for root: $root, picked: $picked");
         }
+    }
+
+    /**
+     * Test invalid selector cases
+     */
+    public function testInvalidSelectors() {
+        $this->expectException(BaseException::class);
+        $this->expectExceptionMessage('Invalid &item selector!');
+        blockera_get_css_selector_format('.block', '&item', []);
     }
 
     /**
@@ -951,37 +632,37 @@ class TestHelpers extends \WP_UnitTestCase {
                 '.block-class .child', 
                 '&& item', 
                 [], 
-                'html:root body :where(.block-class) item'
+                '.block-class item'
             ],
             [
                 '.block-class.modifier .child', 
                 '&& .item', 
                 [], 
-                'html:root body :where(.block-class.modifier) .item'
+                '.block-class.modifier .item'
             ],
             [
-                '.block-class .sub-class',
+                '.block-class .sub-class', 
                 '&&:first-child', 
                 [], 
-                'html:root body :where(.block-class):first-child'
+                '.block-class:first-child'
             ],
             [
                 '.block-class .items', 
                 '&&.active, .normal', 
                 [], 
-                'html:root body :where(.block-class).active, html:root body :where(.block-class .items) .normal'
+                '.block-class.active, .block-class .items .normal'
             ],
             [
                 '.complex-class.with-modifier .child', 
                 '&& .item', 
                 ['pseudo_class' => 'hover'], 
-                'html:root body :where(.complex-class.with-modifier) .item:hover'
+                '.complex-class.with-modifier .item:hover'
             ],
             [
                 '.parent-block .child-block', 
                 '&& > .item, .other-item', 
                 [], 
-                'html:root body :where(.parent-block) > .item, html:root body :where(.parent-block .child-block) .other-item'
+                '.parent-block > .item, .parent-block .child-block .other-item'
             ],
         ];
 
@@ -990,25 +671,4 @@ class TestHelpers extends \WP_UnitTestCase {
             $this->assertEquals($expected, $result, "Failed formatting with && pattern for root: $root, picked: $picked");
         }
     }
-
-	/**
-	 * @dataProvider dataProviderGetCssSelectorFormat
-	 */
-	public function testGetCssSelectorFormat(string $picked_selector, string $expected)	{
-		$root_selector = '.blockera-block';
-		$args = [];
-		$result = blockera_get_css_selector_format($root_selector, $picked_selector, $args);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function dataProviderGetCssSelectorFormat() {
-		return [
-			[ '.wp-block-sample:is(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:is(.a, .b)' ],
-			[ '.wp-block-sample:not(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:not(.a, .b)' ],
-			[ '.wp-block-sample:has(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:has(.a, .b)' ],
-			[ '.wp-block-sample:host(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:host(.a, .b)' ],
-			[ '.wp-block-sample:host-context(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:host-context(.a, .b)' ],
-			[ '.wp-block-sample:any(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:any(.a, .b)' ],
-		];
-	}
 }

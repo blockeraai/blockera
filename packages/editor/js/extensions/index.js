@@ -9,10 +9,9 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import {
-	setupCanvasSettings,
 	store as editorStore,
+	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
-	registerBlockeraGlobalStylesMetaData,
 } from '../';
 
 /**
@@ -29,14 +28,14 @@ import {
 // Exports
 export * from './api';
 export * from './libs';
-export { default as applyHooks, withBlockSettings } from './hooks';
 export {
-	isInnerBlock,
+	default as applyHooks,
+	withBlockSettings,
 	BlockEditContext,
 	useBlockContext,
 	BlockEditContextProvider,
-	bootstrapBlockAppSettings,
-} from './components';
+} from './hooks';
+export { isInnerBlock } from './components';
 export { store as extensionsStore } from './store';
 
 export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
@@ -51,12 +50,11 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		...(window[packageName]?.editor || {}),
 		init: outsideDefinitions,
 		select: select(editorStore?.name),
-		registerBlockeraGlobalStylesMetaData,
 		unstableBootstrapServerSideBreakpointDefinitions,
 		unstableBootstrapBlockStatesDefinitions,
 	};
 
-	setupCanvasSettings({
+	registerCanvasEditorSettings({
 		zoom: '100%',
 		width: '100%',
 		height: '100%',

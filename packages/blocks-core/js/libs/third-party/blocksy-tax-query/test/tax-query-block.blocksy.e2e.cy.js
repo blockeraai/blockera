@@ -33,11 +33,9 @@ describe('Blocksy → Advanced Taxonomies (Tax Query) Block → Block support', 
 <!-- /wp:blocksy/tax-query -->
 		`);
 
-		cy.getBlock('blocksy/tax-query').click({ force: true });
+		cy.getBlock('blocksy/tax-query').click();
 
-		cy.getByAriaLabel('Select parent block: Advanced Taxonomies').click({
-			force: true,
-		});
+		cy.getByAriaLabel('Select parent block: Advanced Taxonomies').click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
@@ -59,8 +57,6 @@ describe('Blocksy → Advanced Taxonomies (Tax Query) Block → Block support', 
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
-
-		cy.wait(500);
 
 		cy.getBlock('blocksy/tax-query').should(
 			'have.css',

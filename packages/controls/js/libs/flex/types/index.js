@@ -6,7 +6,10 @@
 import type { ControlGeneralTypes } from '../../../types';
 
 export type FlexDirectionsTypes =
-	'column' | 'column-reverse' | 'row' | 'row-reverse';
+	| 'column'
+	| 'column-reverse'
+	| 'row'
+	| 'row-reverse';
 
 export type FlexJustifyContentTypes =
 	| 'flex-start'
@@ -17,16 +20,15 @@ export type FlexJustifyContentTypes =
 	| 'space-evenly';
 
 export type FlexAlignItemsTypes =
-	'flex-start' | 'center' | 'flex-end' | 'stretch';
+	| 'flex-start'
+	| 'center'
+	| 'flex-end'
+	| 'stretch';
 
 export type FlexWrapTypes = 'nowrap' | 'wrap' | 'wrap-reverse';
 
 export type FlexProps = {
 	...ControlGeneralTypes,
-	/**
-	 * The onClick function is called when the flex container is clicked.
-	 */
-	onClick?: () => void,
 	/**
 	 * The flex-direction sets how flex items are placed in the flex container
 	 * defining the main axis and the direction (normal or reversed).

@@ -8,6 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
+import { mergeObject } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -34,19 +35,18 @@ import {
 	fitToWPCompatibility,
 } from './compatibility/fit';
 import type { BlockDetail } from '../block-card/block-states/types';
-import {
-	isInvalidCompatibilityRun,
-	mergeWPCompatibility,
-	sanitizeWPCompatibilityAttributes,
-} from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			attributes = widthFromWPCompatibility({
 				attributes,
@@ -61,15 +61,11 @@ export const bootstrap = (): void => {
 			attributes = minHeightFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = ratioFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = fitFromWPCompatibility({
@@ -77,7 +73,7 @@ export const bootstrap = (): void => {
 				blockId,
 			});
 
-			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
+			return attributes;
 		}
 	);
 
@@ -106,8 +102,7 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
@@ -115,62 +110,53 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'blockeraWidth':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						widthToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraHeight':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						heightToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraMinHeight':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						minHeightToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraRatio':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						ratioToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraFit':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						fitToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-						blockDetail
+						})
 					);
 			}
 

@@ -19,31 +19,6 @@ export function addRepeaterItem({
 	};
 }
 
-export function renameRepeaterItemByType({
-	ref,
-	value,
-	getId,
-	itemId,
-	controlId,
-	onChange,
-	staticType,
-	valueCleanup,
-	repeaterId = null,
-}) {
-	return {
-		ref,
-		value,
-		getId,
-		itemId,
-		onChange,
-		controlId,
-		staticType,
-		repeaterId,
-		valueCleanup,
-		type: 'RENAME_REPEATER_ITEM_BY_TYPE',
-	};
-}
-
 export function changeRepeaterItem({
 	ref,
 	value,
@@ -139,25 +114,6 @@ export function cloneRepeaterItem({
 		overrideItem,
 		itemIdGenerator,
 		type: 'CLONE_REPEATER_ITEM',
-	};
-}
-
-export function resetRepeaterItem({
-	itemId,
-	defaultValue,
-	onChange,
-	controlId,
-	valueCleanup,
-	repeaterId = null,
-}) {
-	return {
-		itemId,
-		defaultValue: defaultValue ?? {},
-		onChange,
-		controlId,
-		repeaterId,
-		valueCleanup,
-		type: 'RESET_REPEATER_ITEM',
 	};
 }
 

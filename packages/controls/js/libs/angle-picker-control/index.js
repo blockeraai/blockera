@@ -32,7 +32,6 @@ export default function AnglePickerControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns,
@@ -69,7 +68,6 @@ export default function AnglePickerControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	return (

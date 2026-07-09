@@ -1,32 +1,44 @@
 /**
+ * External dependencies
+ */
+import { useEffect, memo } from '@wordpress/element';
+
+/**
  * Internal dependencies
  */
 import { useBlockSideEffects } from '../../../../hooks';
 
-export const SideEffect = ({
-	clientId = '',
-	blockName,
-	currentBlock,
-	currentTab,
-	currentState,
-	isActive,
-	activeBlockVariation,
-	insideBlockInspector = true,
-	availableStates,
-	blockeraUnsavedData,
-}) => {
-	useBlockSideEffects({
-		clientId,
-		activeBlockVariation,
+export const SideEffect = memo(
+	({
 		blockName,
 		currentBlock,
-		isActive,
 		currentTab,
 		currentState,
-		insideBlockInspector,
-		availableStates,
-		blockeraUnsavedData,
-	});
+		isActive,
+		activeBlockVariation,
+	}) => {
+		useEffect(() => {
+			const tabs = document.querySelector(
+				'.block-editor-block-inspector .block-editor-block-inspector__tabs div:first-child'
+			);
 
-	return null;
-};
+			if (tabs && isActive) {
+				tabs.style.display = 'none';
+			} else if (tabs) {
+				tabs.style = {};
+			}
+			// eslint-disable-next-line
+		}, [isActive]);
+
+		useBlockSideEffects({
+			activeBlockVariation,
+			blockName,
+			currentBlock,
+			isActive,
+			currentTab,
+			currentState,
+		});
+
+		return null;
+	}
+);

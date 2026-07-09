@@ -33,7 +33,7 @@ describe('Clone Repeater Item', function () {
 				value: {
 					0: { x: 10 },
 					1: { x: 12 },
-					2: { x: 12, creatingStep: false, order: 1 },
+					2: { x: 12, order: 1 },
 				},
 			},
 		});
@@ -71,7 +71,7 @@ describe('Clone Repeater Item', function () {
 					x: {
 						0: { x: 10, order: 0 },
 						1: { x: 12, order: 1 },
-						2: { x: 12, creatingStep: false, order: 2 },
+						2: { x: 12, order: 2 },
 					},
 				},
 			},
@@ -118,7 +118,7 @@ describe('Clone Repeater Item', function () {
 								z: {
 									0: { x: 10, order: 0 },
 									1: { x: 12, order: 1 },
-									2: { x: 12, creatingStep: false, order: 2 },
+									2: { x: 12, order: 2 },
 								},
 							},
 						],
@@ -271,7 +271,7 @@ describe('Clone Repeater Item', function () {
 				0: { x: 10, order: 0 },
 				1: { x: 12, order: 1 },
 				2: { x: 12, order: 2 },
-				3: { x: 12, creatingStep: false, order: 3 },
+				3: { x: 12, order: 3 },
 			},
 		});
 	});

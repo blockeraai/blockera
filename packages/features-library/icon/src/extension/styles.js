@@ -1,39 +1,15 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { select } from '@wordpress/data';
-
-/**
  * Blockera dependencies
  */
-import { getValueAddonRealValue } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
-import { STORE_NAME as EXTENSIONS_CONFIG_STORE_NAME } from '@blockera/editor/js/extensions/libs/base/store/constants';
 import type { CssRule } from '@blockera/editor/js/style-engine/types';
 import { isActiveField } from '@blockera/editor/js/extensions/api/utils';
 import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
 import { getBlockSupportFallback } from '@blockera/editor/js/extensions/utils';
 import { computedCssDeclarations } from '@blockera/editor/js/style-engine/utils';
 import { getCompatibleBlockCssSelector } from '@blockera/editor/js/style-engine/get-compatible-block-css-selector';
-
-import { prepareIconSvgForStorage } from '@blockera/icons';
-
-import {
-	DEFAULT_ICON_COLOR_ATTRIBUTE,
-	DEFAULT_ICON_SIZE_ATTRIBUTE,
-	getIconColorAttributeId,
-	getIconSizeAttributeId,
-} from '../helpers';
-import {
-	getBlockeraIconValue,
-	getClassNameFromAttributes,
-	getCustomIconSvgSource,
-	decodeRenderedIcon,
-	isCustomUploadedIcon,
-	svgHasPreservedColors,
-} from '../icon-attribute-utils';
 
 export const IconStyles = ({
 	state,
@@ -60,11 +36,6 @@ export const IconStyles = ({
 		blockeraIconFlipVertical,
 		// blockeraIconLink,
 	} = config.iconConfig;
-	const { getExtension } = select(EXTENSIONS_CONFIG_STORE_NAME) || {};
-	const registeredIconConfig =
-		'function' === typeof getExtension
-			? getExtension('iconConfig', blockName)
-			: null;
 	const blockProps = {
 		state,
 		attributes: currentBlockAttributes,
@@ -109,73 +80,31 @@ export const IconStyles = ({
 			),
 		});
 
-		const iconValue = getBlockeraIconValue({
-			blockeraIcon: currentBlockAttributes.blockeraIcon,
-		});
-		const isCustomIcon = isCustomUploadedIcon(iconValue);
-		const className = getClassNameFromAttributes(currentBlockAttributes);
-		const isIconBlockVariation =
-			className.includes('wp-block-icon-blockera') ||
-			blockName === 'core/icon';
-		const svgForCssUrl = isCustomIcon
-			? getCustomIconSvgSource(iconValue)
-			: prepareIconSvgForStorage(
-					getCustomIconSvgSource(iconValue) ||
-						decodeRenderedIcon(iconValue?.renderedIcon),
-					iconValue?.library || ''
-				);
-		const hasPreservedColors = svgHasPreservedColors(svgForCssUrl);
-
-		// Standalone icon blocks render inline SVG, not CSS mask.
-		if (!isIconBlockVariation) {
-			const iconUrlValue = `url("data:image/svg+xml,${encodeURIComponent(
-				svgForCssUrl
-			)}")`;
-			const iconUrlProperties = hasPreservedColors
-				? {
-						'--blockera--icon--url': iconUrlValue,
-						// Editor canvas: render full-color SVG via background-image, not mask.
-						'--blockera--icon--bg-image': iconUrlValue,
-						'--blockera--icon--mask-image': 'none',
-						'--blockera--icon--editor-icon-bg': 'transparent',
-					}
-				: {
-						'--blockera--icon--url': iconUrlValue,
-						// Reset inherited multi-color vars from ancestor list blocks.
-						'--blockera--icon--bg-image': 'none',
-						'--blockera--icon--mask-image': iconUrlValue,
-						'--blockera--icon--editor-icon-bg':
-							'var(--blockera--icon--color, currentColor)',
-					};
-
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraIcon: [
-							{
-								...staticDefinitionParams,
-								properties: iconUrlProperties,
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIcon: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--url': `url("data:image/svg+xml,${encodeURIComponent(
+									atob(
+										currentBlockAttributes.blockeraIcon
+											?.renderedIcon || ''
+									)
+								)}")`,
 							},
-						],
-					},
-					blockProps,
-					pickedSelector
-				),
-			});
-		}
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
 	}
 
-	const iconSizeAttributeId = getIconSizeAttributeId(
-		registeredIconConfig?.blockeraIconSize || blockeraIconSize
-	);
-	const iconColorAttributeId = getIconColorAttributeId(
-		registeredIconConfig?.blockeraIconColor || blockeraIconColor
-	);
-
-	// When size maps to another attribute (e.g. blockeraWidth on core/icon), the size extension owns CSS.
 	if (
-		iconSizeAttributeId === DEFAULT_ICON_SIZE_ATTRIBUTE &&
 		isActiveField(blockeraIconSize) &&
 		currentBlockAttributes.blockeraIconSize !==
 			attributes.blockeraIconSize.default
@@ -245,50 +174,39 @@ export const IconStyles = ({
 		});
 	}
 
-	// When color maps to another attribute (e.g. blockeraFontColor on core/icon), typography owns CSS.
-	if (iconColorAttributeId === DEFAULT_ICON_COLOR_ATTRIBUTE) {
-		const resolvedIconColor = getValueAddonRealValue(
-			currentBlockAttributes.blockeraIconColor,
-			{ blockName }
-		);
-		const defaultIconColor = getValueAddonRealValue(
-			attributes.blockeraIconColor.default,
-			{ blockName }
-		);
+	if (
+		isActiveField(blockeraIconColor) &&
+		currentBlockAttributes.blockeraIconColor !==
+			attributes.blockeraIconColor.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconColor',
+			support: 'blockeraIconColor',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconColor'
+			),
+		});
 
-		if (
-			isActiveField(blockeraIconColor) &&
-			resolvedIconColor !== defaultIconColor
-		) {
-			const pickedSelector = getCompatibleBlockCssSelector({
-				...sharedParams,
-				query: 'blockeraIconColor',
-				support: 'blockeraIconColor',
-				fallbackSupportId: getBlockSupportFallback(
-					blockSupports,
-					'blockeraIconColor'
-				),
-			});
-
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraIconColor: [
-							{
-								...staticDefinitionParams,
-								properties: {
-									'--blockera--icon--color':
-										resolvedIconColor,
-								},
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconColor: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--color':
+									currentBlockAttributes.blockeraIconColor,
 							},
-						],
-					},
-					blockProps,
-					pickedSelector
-				),
-			});
-		}
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
 	}
 
 	if (

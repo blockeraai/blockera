@@ -5,11 +5,49 @@
 import { isEquals, isEmpty, cloneObject } from '@blockera/utils';
 
 /**
- * Internal dependencies
+ * Internal Dependencies
  */
+import { isValid } from '../../value-addons/utils';
+import { extractNumberAndUnit } from '../input-control/utils';
 import type { TDefaultValue } from './types';
 
-export const boxSpacingControlDefaultValue: TDefaultValue = {
+export function fixLabelText(value: Object | string): any {
+	if (value === '') {
+		return '-';
+	}
+
+	if (isValid(value)) {
+		//$FlowFixMe
+		return <b>{value?.settings?.name ?? 'VAR'}</b>;
+	}
+
+	const extracted = extractNumberAndUnit(value);
+
+	if (extracted.value === '' && extracted.unit === '') {
+		return '-';
+	}
+
+	switch (extracted.unit) {
+		case 'func':
+			return <b>CSS</b>;
+
+		case 'px':
+			return extracted.value !== '' ? extracted.value : '0';
+
+		case 'auto':
+			return <b>AUTO</b>;
+
+		default:
+			return (
+				<>
+					{extracted.value !== '' ? extracted.value : '0'}
+					<i>{extracted.unit}</i>
+				</>
+			);
+	}
+}
+
+export const boxPositionControlDefaultValue: TDefaultValue = {
 	margin: {
 		top: '',
 		right: '',
@@ -26,7 +64,7 @@ export const boxSpacingControlDefaultValue: TDefaultValue = {
 
 // value clean up for removing extra values to prevent saving extra data!
 export function boxSpacingValueCleanup(value: Object): Object {
-	if (isEquals(value, boxSpacingControlDefaultValue)) {
+	if (isEquals(value, boxPositionControlDefaultValue)) {
 		return value;
 	}
 
@@ -49,7 +87,7 @@ export function boxSpacingValueCleanup(value: Object): Object {
 	});
 
 	if (isEmpty(updatedValue)) {
-		return boxSpacingControlDefaultValue;
+		return boxPositionControlDefaultValue;
 	}
 
 	return updatedValue;
@@ -57,7 +95,7 @@ export function boxSpacingValueCleanup(value: Object): Object {
 
 // get smart lock for padding and margin
 export function getSmartLock(value: any, side: 'padding' | 'margin'): string {
-	let smartLock = 'none'; // default lock type is expanded
+	let smartLock = '';
 	const sideValue = value[side];
 
 	// Check if all values are empty (null, undefined, or empty string)
@@ -69,28 +107,23 @@ export function getSmartLock(value: any, side: 'padding' | 'margin'): string {
 	].every((v) => v === '');
 
 	if (allEmpty) {
-		return 'simple';
+		return '';
 	}
 
-	const isEqualsLeftRight = isEquals(sideValue.left, sideValue.right);
-	const isEqualsTopBottom = isEquals(sideValue.top, sideValue.bottom);
-
-	if (isEqualsLeftRight) {
-		if (sideValue.left !== '') {
-			smartLock = 'left-right';
-		} else {
-			smartLock = 'empty';
-		}
+	if (isEquals(sideValue.left, sideValue.right) && sideValue.left !== '') {
+		smartLock = 'horizontal';
 	}
 
-	if (isEqualsTopBottom) {
-		if (smartLock === 'left-right' || smartLock === 'empty') {
-			smartLock = 'simple';
+	if (isEquals(sideValue.top, sideValue.bottom) && sideValue.top !== '') {
+		if (smartLock === 'horizontal') {
+			if (isEquals(sideValue.top, sideValue.left)) {
+				smartLock = 'all';
+			} else {
+				smartLock = 'vertical-horizontal';
+			}
 		} else {
-			smartLock = 'expanded';
+			smartLock = 'vertical';
 		}
-	} else {
-		smartLock = 'expanded';
 	}
 
 	return smartLock;

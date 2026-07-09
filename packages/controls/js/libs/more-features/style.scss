@@ -16,9 +16,7 @@
 		-webkit-user-select: none;
 		user-select: none;
 		width: 100%;
-		--blockera-controls-border-color: var(
-			--blockera-controls-border-color-soft
-		);
+		--blockera-controls-border-color: var(--blockera-controls-border-color-soft);
 
 		svg {
 			fill: currentColor;
@@ -42,6 +40,7 @@
 	}
 
 	&.is-open {
+
 		.blockera-component-more-features__button {
 			color: var(--blockera-controls-primary-color) !important;
 			margin-bottom: 10px;

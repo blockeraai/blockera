@@ -14,7 +14,7 @@ describe('Height → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('should update height when adding value', () => {
@@ -35,7 +35,7 @@ describe('Height → Functionality', () => {
 		//Check frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('p.blockera-block').should('have.css', 'height', '80px');
+		cy.get('.blockera-block').should('have.css', 'height', '80px');
 	});
 
 	it('variable value', () => {
@@ -53,7 +53,7 @@ describe('Height → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'height: var(--wp--style--global--content-size, 645px)'
+					'height: var(--wp--style--global--content-size)'
 				);
 		});
 
@@ -85,7 +85,7 @@ describe('Height → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'height: var(--wp--style--global--content-size, 645px)'
+				'height: var(--wp--style--global--content-size)'
 			);
 	});
 });

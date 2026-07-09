@@ -17,25 +17,7 @@ return array_merge(
 					'root' => 'a:not(.wp-element-button)',
 				],
 				'blockera/elements/arrow' => [
-					'root' => ':is(.wp-block-post-navigation-link__arrow-previous,.wp-block-post-navigation-link__arrow-next)',
-				],
-				'blockera/elements/bold' => [
-					'root' => ':is(strong,b)',
-				],
-				'blockera/elements/italic' => [
-					'root' => ':is(em,i)',
-				],
-				'blockera/elements/kbd' => [
-					'root' => 'kbd',
-				],
-				'blockera/elements/code' => [
-					'root' => 'code',
-				],
-				'blockera/elements/span' => [
-					'root' => 'span:not([data-rich-text-placeholder],.wp-block-post-navigation-link__arrow-previous,.wp-block-post-navigation-link__arrow-next)',
-				],
-				'blockera/elements/mark' => [
-					'root' => ':is(mark,mark[class])',
+					'root' => '.wp-block-post-navigation-link__arrow-previous',
 				],
 			]
 		),

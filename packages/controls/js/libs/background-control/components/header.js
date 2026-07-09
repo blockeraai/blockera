@@ -70,11 +70,6 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				);
 				icon = <Icon icon="background-mesh-gradient" iconSize="18" />;
 				break;
-
-			case 'none':
-				label = __('None', 'blockera');
-				icon = <Icon icon="background-none" iconSize="18" />;
-				break;
 		}
 
 		return (
@@ -84,7 +79,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 					isOpenPopoverEvent(event) && setOpen(!isOpen)
 				}
 				aria-label={sprintf(
-					// translators: %s: The item number (1-based index)
+					// translators: it's the aria label for repeater item
 					__('Item %s', 'blockera'),
 					itemId + 1
 				)}

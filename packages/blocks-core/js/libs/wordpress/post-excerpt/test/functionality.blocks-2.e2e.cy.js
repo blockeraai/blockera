@@ -3,8 +3,9 @@
  */
 import {
 	savePage,
-	editPost,
+	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	setParentBlock,
 	redirectToFrontPage,
@@ -12,46 +13,7 @@ import {
 
 describe('Post Excerpt Block', () => {
 	beforeEach(() => {
-		// Step 1: Create a post and get its ID
-		const postType = 'post';
-		const postTitle = 'Test Post for Post Excerpt';
-		const postStatus = 'publish';
-		const postDate = '2024-12-01 12:00:00';
-
-		cy.wpCli(
-			`wp post create --post_type=${postType} --post_title='${postTitle}' --post_status=${postStatus} --post_date='${postDate}'`
-		).then((result) => {
-			// Extract post ID from stdout message like "Success: Created post 22."
-			const match = result.stdout.match(/post (\d+)/);
-			const postId = match ? parseInt(match[1], 10) : NaN;
-
-			if (isNaN(postId)) {
-				throw new Error(
-					`Failed to get post ID from output: ${result.stdout}`
-				);
-			}
-
-			// Step 2: Update post excerpt
-			const excerptText =
-				'This is a test <a href="#a">link</a> element. It include <strong>strong</strong>, <em>italic</em> , <span>span</span>, <kbd>CMD + K</kbd> key, <code>const $akbar</code> inline code and <mark style="background-color:#dfdfdf" class="has-inline-color">highlight</mark> elements.';
-
-			// Escape single quotes for shell when using single quotes
-			// Single quotes preserve everything literally except single quotes themselves
-			const escapedExcerpt = excerptText.replace(/'/g, "'\\''");
-
-			// Use wpCli with skipEscaping=true and single quotes
-			// This avoids wpCli escaping the double quotes in the HTML
-			cy.wpCli(
-				`wp post update ${postId} --post_excerpt='${escapedExcerpt}'`,
-				false,
-				true
-			).then(() => {
-				// Step 3: Edit the post
-				cy.setScreenshotViewport('desktop');
-
-				editPost({ postID: postId });
-			});
-		});
+		createPost();
 	});
 
 	it('Functionality + Inner blocks', () => {
@@ -63,18 +25,13 @@ describe('Post Excerpt Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.checkBlockCardItems(['normal', 'hover', 'elements/read-more-link']);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		cy.checkBlockStatesPickerItems([
-			'elements/link',
-			'elements/read-more-link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
+
+		// no other item
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
@@ -101,9 +58,9 @@ describe('Post Excerpt Block', () => {
 		);
 
 		//
-		// 1.1. elements/read-more-link inner block
+		// 1.1. elements/link inner block
 		//
-		setInnerBlock('elements/read-more-link');
+		setInnerBlock('elements/link');
 
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
@@ -113,7 +70,7 @@ describe('Post Excerpt Block', () => {
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		cy.getBlock('core/post-excerpt').within(() => {
-			cy.get('a.wp-block-post-excerpt__more-link').should(
+			cy.get('a').should(
 				'have.css',
 				'background-color',
 				'rgb(255, 0, 0)'
@@ -124,7 +81,7 @@ describe('Post Excerpt Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-tools-panel-header')
@@ -146,7 +103,7 @@ describe('Post Excerpt Block', () => {
 		);
 
 		cy.get('.wp-block-post-excerpt.blockera-block').within(() => {
-			cy.get('a.wp-block-post-excerpt__more-link').should(
+			cy.get('a').should(
 				'have.css',
 				'background-color',
 				'rgb(255, 0, 0)'

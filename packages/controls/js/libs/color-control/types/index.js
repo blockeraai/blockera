@@ -1,10 +1,5 @@
 // @flow
 /**
- * External dependencies
- */
-import type { MixedElement } from 'react';
-
-/**
  * Internal dependencies
  */
 import type {
@@ -25,20 +20,8 @@ export type ColorControlProps = {
 	 */
 	noBorder?: boolean,
 	/**
-	 * When false (with `type` `normal`), hides the hex / “None” text next to the swatch so only `ColorIndicator` shows.
-	 */
-	showButtonLabel?: boolean,
-	/**
 	 * It is useful for buttons with specified width and allows you to align the content to `left` or `right`. By default, it's `center` and handled by flex justify-content property.
 	 */
 	contentAlign?: 'left' | 'center' | 'right',
 	size?: ControlSize,
-	/**
-	 * Pixel size passed to `ColorIndicator` inside the color button.
-	 */
-	colorIndicatorSize?: number,
-	/**
-	 * Optional hover tooltip on the color button. Disabled when unset/empty.
-	 */
-	tooltip?: string | MixedElement | $ReadOnlyArray<MixedElement>,
 };

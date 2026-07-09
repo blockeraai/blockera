@@ -105,7 +105,7 @@
 			"id": "blockeraFitPosition",
 			"definition": "ObjectPosition",
 			"css-property": "object-position",
-			"fallback": ["object-position", "object-fit", "dimensions"],
+			"fallback": ["object-position", "dimensions"],
 			"description": "Support for \"blockeraFitPosition\" value, this is mirror for WordPress block core \"object-position\" support."
 		},
 		"blockeraBoxSizing": {

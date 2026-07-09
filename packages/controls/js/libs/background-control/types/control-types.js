@@ -46,12 +46,7 @@ export type TMeshGradientProps = {
 };
 
 export type TDefaultRepeaterItemValue = {
-	type:
-		| 'image'
-		| 'linear-gradient'
-		| 'radial-gradient'
-		| 'mesh-gradient'
-		| 'none',
+	type: 'image' | 'linear-gradient' | 'radial-gradient' | 'mesh-gradient',
 	...TImageProps,
 	...TLinearGradientProps,
 	...TRadialGradientProps,

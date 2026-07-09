@@ -7,10 +7,7 @@ import type { MixedElement } from 'react';
 /**
  * Internal dependencies
  */
-import type {
-	ControlGeneralTypes,
-	ControlValueAddonTypes,
-} from '../../../types';
+import type { ControlGeneralTypes } from '../../../types';
 import type { GroupControlMode } from '../../group-control/types';
 import type { TPopoverProps } from '../../popover/types';
 
@@ -19,9 +16,6 @@ export type RepeaterItemActionsProps = {
 	itemId: string,
 	isVisible: boolean,
 	setVisibility: (state: boolean) => void,
-	onOpenItemSettings?: () => void,
-	showItemEditButton?: boolean,
-	interactionGuard?: MixedElement,
 };
 
 type ID = string | number;
@@ -29,17 +23,10 @@ type ID = string | number;
 export type RepeaterControlProps = {
 	...Object,
 	...ControlGeneralTypes,
-	...ControlValueAddonTypes,
 	/**
 	 * Repeater identifier.
 	 */
 	id: string,
-	/**
-	 * Can repeater add new item?
-	 *
-	 * @default true
-	 */
-	canAddNewItem?: boolean,
 	/**
 	 * Repeater children.
 	 */
@@ -71,28 +58,13 @@ export type RepeaterControlProps = {
 	 */
 	mode?: GroupControlMode,
 	/**
+	 * Specifies that repeater item should use native or not.
+	 */
+	isNativeSupport?: boolean,
+	/**
 	 * Flag for support selectable repeater items or not.
 	 */
 	selectable?: boolean,
-	/**
-	 * After a selectable row is activated, called with the resolved item snapshot.
-	 */
-	onSelectableItemActivate?: (itemId: string, item: Object) => void,
-	/**
-	 * When provided, only repeater rows for which this returns true are rendered (e.g. variable picker search).
-	 */
-	shouldRenderRepeaterItem?: (itemId: string, item: Object) => boolean,
-	/**
-	 * Row layout size; defaults to full width when omitted.
-	 */
-	resolveRepeaterItemSize?: (
-		itemId: string,
-		item: Object
-	) => 'full' | 'small',
-	/**
-	 * When true, selectable rows show an edit control to open item settings (e.g. popover).
-	 */
-	showItemEditButton?: boolean,
 	/**
 	 * Is support external inserter component?
 	 */
@@ -108,16 +80,11 @@ export type RepeaterControlProps = {
 	/**
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
 	 */
-	popoverTitle?: string,
+	popoverTitle?: string | MixedElement,
 	/**
 	 * Specifies the popover title right buttons if `mode` was `popover`.
 	 */
 	popoverTitleButtonsRight?: string | MixedElement,
-	/**
-	 * When true and `popoverTitleButtonsRight` is omitted, the repeater wires the
-	 * built-in popover delete control next to the close button.
-	 */
-	showPopoverTitleDelete?: boolean,
 	/**
 	 * Specifies the button label for adding new repeater item.
 	 */
@@ -151,34 +118,11 @@ export type RepeaterControlProps = {
 	 */
 	minItems?: number,
 	/**
-	 * When true and the repeater has no items, shows a muted empty-state message.
-	 *
-	 * @default false
-	 */
-	showNoItemsMessage?: boolean,
-	/**
-	 * Custom content for the empty state. Ignored when `showNoItemsMessage` is false.
-	 */
-	noItemsMessage?: string | MixedElement,
-	/**
 	 * Specifies the add button should be shown for repeater items.
 	 *
 	 * @default true
 	 */
 	actionButtonAdd?: boolean,
-	/**
-	 * When provided, exposes the repeater "add new" action for external UI (e.g. variable picker header).
-	 * Return a cleanup function from the callback to unregister.
-	 */
-	onRegisterAddNewAction?: (
-		action: {
-			onClick: () => void,
-			label: string,
-			dataTest?: string,
-			canAdd: boolean,
-			disabled?: boolean,
-		} | null
-	) => (() => void) | void,
 	/**
 	 * Specifies the visibility or activation control should be shown for repeater items.
 	 *
@@ -198,29 +142,6 @@ export type RepeaterControlProps = {
 	 */
 	actionButtonClone?: boolean,
 	/**
-	 * Specifies reset control should be shown for repeater items.
-	 *
-	 * @default false
-	 */
-	actionButtonReset?: boolean,
-	/**
-	 * When true, removing a repeater item opens ConfirmDeleteModal before deletion runs.
-	 *
-	 * @default false
-	 */
-	shouldConfirmDeleteModal?: boolean,
-	/**
-	 * When `shouldConfirmDeleteModal` is true, optional copy for the confirmation modal (header, grey warning, error notice, checkbox, primary button).
-	 * Omitted keys fall back to the generic “item” strings in `ConfirmDeleteModal`.
-	 */
-	confirmDeleteModalProps?: $ReadOnly<{
-		headerTitle?: string,
-		warningText?: string,
-		errorNoticeText?: string,
-		confirmCheckboxLabel?: string,
-		deleteButtonLabel?: string,
-	}>,
-	/**
 	 * A placeholder that you can use inject items at the beginning of header buttons.
 	 */
 	injectHeaderButtonsStart?: MixedElement | null | string,
@@ -228,17 +149,6 @@ export type RepeaterControlProps = {
 	 * A placeholder that you can use inject items after header buttons.
 	 */
 	injectHeaderButtonsEnd?: MixedElement | null | string,
-	/**
-	 * When true, the native section "+" inserter is hidden (e.g. variable picker uses a registered context button).
-	 */
-	suppressNativeSectionAddButton?: boolean,
-	/**
-	 * When true, promotional repeater state (`count`) increments on repeater item header
-	 * clicks (including custom `repeaterItemHeader`), when promo conditions apply.
-	 *
-	 * @default true
-	 */
-	enablePromoCountOnRepeaterItemHeader?: boolean,
 	/**
 	 * Header component for each repeater item
 	 */
@@ -252,19 +162,9 @@ export type RepeaterControlProps = {
 	 */
 	repeaterItemChildren?: MixedElement | any,
 	/**
-	 * Optional content rendered below the item body inside a column Flex (e.g. breakpoint/state variations).
-	 */
-	repeaterItemVariations?: MixedElement | any,
-	/**
 	 * It sets the default value of repeater. Please note for defining the value of repeater items you have to use `defaultRepeaterItemValue`
 	 */
 	defaultValue?: Array<Object> | [],
-	/**
-	 * When true, new items from "Add new" include `creatingStep: true` until the item is closed once.
-	 *
-	 * @default false
-	 */
-	enableCreatingStep?: boolean,
 	/**
 	 * It sets the default of each repeater item.
 	 */
@@ -277,13 +177,9 @@ export type RepeaterControlProps = {
 		defaultRepeaterItemValue: Object
 	) => Object,
 	/**
-	 * The handle on delete received from outside.
+	 * The handle on delete recieved from outside.
 	 */
 	onDelete?: (itemId: string, items: Object) => Object,
-	/**
-	 * The handle on reset item received from outside.
-	 */
-	onReset?: (itemId: string, items: Object) => Object,
 	/**
 	 * The override repeater item before modify current item.
 	 */
@@ -320,26 +216,12 @@ export type TRepeaterDefaultStateProps = {
 	getControlPath: (controlID: string, childControlId: string) => string,
 	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	popoverTitle: string | MixedElement,
+	popoverOffset?: number,
 };
-
-export type RepeaterItemSize = 'full' | 'small';
 
 export type RepeaterItemProps = {
 	item: Object,
 	itemId: string,
-	/**
-	 * When false, skips the Details accordion and renders the main row without variations
-	 * even if `repeaterItemVariations` is set on context.
-	 *
-	 * @default true
-	 */
-	showVariations?: boolean,
-	/**
-	 * Row layout size; full width by default.
-	 *
-	 * @default 'full'
-	 */
-	size?: RepeaterItemSize,
 };
 
 export type CleanupRepeaterArgs = {

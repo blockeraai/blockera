@@ -22,8 +22,6 @@ export type CalculatedAdvancedLabelProps = {
 export type AdvancedLabelHookProps = {
 	...AdvancedLabelControlProps,
 	value: any,
-	blockName: string,
-	clientId: string,
 	defaultValue: any,
 	currentState?: TStates,
 	isNormalState: boolean,

@@ -8,42 +8,65 @@ class Gap extends BaseStyleDefinition {
 
 	use WithDisplayValueTrait;
 
-	protected function css( array $setting): array {
-		$cssProperty = $setting['type'] ?? null;
-		if (null === $cssProperty || 'gap' !== $cssProperty || ! isset($setting[ $cssProperty ]) || empty($setting[ $cssProperty ])) {
-			return [];
-		}
+    protected function css( array $setting): array {
 
-		$gap = $setting['gap'];
+        $declaration = [];
+		
+		$selectorSuffix = '';
 
+        $cssProperty = $setting['type'];
+
+        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'gap' !== $cssProperty) {
+
+            return $declaration;
+        }
+		
 		// Current block display (even the default).
 		$display = $this->getDisplayValue();
 
 		// Current block gap type.
-		$gapType = isset($this->config['gap-type']) && '' !== $this->config['gap-type'] ? $this->config['gap-type'] : 'gap';
-
-		// Add suffix to selector based on gap type.
-		$selectorSuffix = '';
-		if ('margin' === $gapType) {
-			$selectorSuffix = '.is-layout-constrained > * + *';
-		} elseif ('gap-and-margin' === $gapType && 'flex' !== $display && 'grid' !== $display) {
-			$selectorSuffix = '.is-layout-constrained > * + *';
+		$gapType = 'gap';
+		if (! empty($this->config['gap-type'])) {
+			$gapType = $this->config['gap-type'];
 		}
 
-		$hasSuffix       = '' !== $selectorSuffix;
-		$importantSuffix = $hasSuffix ? ' !important' : '';
+		// Add suffix to selector based on gap type.
+		switch ($gapType) {
+			case 'margin':
+				$selectorSuffix = ' > * + *';
+				break;
 
-		if (isset($gap['lock']) && $gap['lock']) {
-			if (isset($gap['gap']) && '' !== $gap['gap']) {
-				$this->declarations[ $hasSuffix ? 'margin-block-start' : 'gap' ] = blockera_get_value_addon_real_value($gap['gap']) . $importantSuffix;
+			case 'gap-and-margin':
+				if ('flex' !== $display && 'grid' !== $display) {
+					$selectorSuffix = ' > * + *';
+				}
+				break;
+		}
+
+		$gap                     = $setting['gap'];
+		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+
+		if ($gap['lock']) {
+
+			$prop = $selectorSuffix ? 'margin-block-start' : 'gap';
+
+			if ($gap['gap']) {
+
+				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['gap']) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' ));
 			}
 		} else {
-			if (isset($gap['rows']) && '' !== $gap['rows']) {
-				$this->declarations[ $hasSuffix ? 'margin-block-start' : 'row-gap' ] = blockera_get_value_addon_real_value($gap['rows']) . $importantSuffix;
+
+			if ($gap['rows']) {
+
+				$prop = $selectorSuffix ? 'margin-block-start' : 'row-gap';
+
+				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['rows']) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' ));
 			}
 
-			if (isset($gap['columns']) && '' !== $gap['columns']) {
-				$this->declarations[ $hasSuffix ? 'margin-block-start' : 'column-gap' ] = blockera_get_value_addon_real_value($gap['columns']) . $importantSuffix;
+			if ($gap['columns']) {
+				$prop = $selectorSuffix ? 'margin-block-start' : 'column-gap';
+
+				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['columns']) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' ));
 			}
 		}
 
@@ -51,19 +74,27 @@ class Gap extends BaseStyleDefinition {
 		 * If gap type is `gap-and-margin` and the current display is flex or grid
 		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
 		 */
-		if ('gap-and-margin' === $gapType) {
-			if ('flex' === $display || 'grid' === $display || '' === $display) {
-				if ('' === $display) {
-					$this->setCss($this->declarations, 'margin-block-start', '.is-layout-constrained > * + *');
-					unset($this->declarations['margin-block-start']);
-				} else {
-					$this->setCss([ 'margin-block-start' => '0 !important' ], 'margin-block-start', '.is-layout-constrained > * + *');
-				}
+		if (
+			'gap-and-margin' === $gapType &&
+			( 'flex' === $display || 'grid' === $display || '' === $display )
+		) {
+
+			$this->setCss(
+				'' === $display ? $this->declarations : [
+					'margin-block-start' => '0' . ( $optimizeStyleGeneration ? ' !important' : '' ),
+				],
+				'margin-block-start',
+				' > * + *'
+			);
+
+			// Remove margin-block-start because if display is empty, the gap will be applied with margin-block-start in previous step.
+			if ('' === $display) {
+				unset($this->declarations['margin-block-start']);
 			}
 		}
 
 		$this->setCss($this->declarations);
 
-		return $this->css;
-	}
+        return $this->css;
+    }
 }

@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useRef, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -15,7 +15,7 @@ import { Popover } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { More, Supports, ToggleAllButton } from './components';
+import { More, Supports } from './components';
 
 export const ExtensionSettings = ({
 	buttonLabel = __('More Settings', 'blockera'),
@@ -29,7 +29,6 @@ export const ExtensionSettings = ({
 	update: (settings: Object) => void,
 }): MixedElement => {
 	const [isOpen, setIsOpen] = useState(false);
-	const settingsButtonRef = useRef(null);
 
 	const defaults: { [key: string]: Object } = {};
 	const tools: { [key: string]: Object } = {};
@@ -52,10 +51,7 @@ export const ExtensionSettings = ({
 	});
 
 	const hasItems = (stack: Object): boolean =>
-		0 !==
-		Object.keys(stack).filter(
-			(key) => key !== 'initialOpen' && key !== 'status'
-		).length;
+		0 !== Object.keys(stack).filter((key) => key !== 'initialOpen').length;
 
 	if (!hasItems(tools)) {
 		return <></>;
@@ -64,7 +60,6 @@ export const ExtensionSettings = ({
 	return (
 		<>
 			<More
-				ref={settingsButtonRef}
 				label={buttonLabel}
 				onClick={(): void => setIsOpen(!isOpen)}
 				isOpen={isOpen}
@@ -72,7 +67,7 @@ export const ExtensionSettings = ({
 
 			{isOpen && (
 				<Popover
-					anchor={settingsButtonRef.current}
+					offset={20}
 					title={title}
 					placement={'left-start'}
 					closeButton={true}
@@ -81,21 +76,11 @@ export const ExtensionSettings = ({
 					focusOnMount={true}
 				>
 					<div className={'settings-category'}>
-						<div className={'settings-category__header'}>
-							<span className={'settings-category__title'}>
-								{hasItems(defaults)
-									? __('Additional Features', 'blockera')
-									: __('Features', 'blockera')}
-							</span>
-
-							{hasItems(defaults) && (
-								<ToggleAllButton
-									tools={tools}
-									update={update}
-									features={features}
-								/>
-							)}
-						</div>
+						<span className={'settings-category__title'}>
+							{hasItems(defaults)
+								? __('Additional Features', 'blockera')
+								: __('Features', 'blockera')}
+						</span>
 
 						<div className={'settings-category__items'}>
 							<Supports

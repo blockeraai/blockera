@@ -4,13 +4,13 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useDispatch, useSelect, select as dataSelect } from '@wordpress/data';
-import { createContext } from '@wordpress/element';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { createContext, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { isEquals, isUndefined } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -38,49 +38,45 @@ export const ControlContextProvider = ({
 	storeName = STORE_NAME,
 	...props
 }: ControlContextProviderProps): MixedElement | null => {
-	if (!dataSelect(storeName).getControl(controlInfo.name)) {
-		// $FlowFixMe
-		registerControl({
+	// $FlowFixMe
+	registerControl({
+		...{
 			...controlInfo,
-			type: storeName,
-		});
-	}
+			needUpdate: controlInfo?.needUpdate || (() => true),
+		},
+		type: storeName,
+	});
 
 	//Prepare control status and value!
 	const { status, value } = useSelect(
 		(select) => {
 			const { getControl } = select(storeName);
 
-			const control = getControl(controlInfo.name);
-
-			const skipSyncValue =
-				controlInfo.hasOwnProperty('skipSyncValue') &&
-				true === controlInfo.skipSyncValue;
-
-			/**
-			 * If the control skipSyncValue is defined and true, we skip the value update based on control name.
-			 */
-			if (skipSyncValue) {
-				return control;
-			}
-
-			if (
-				!isUndefined(controlInfo.value) &&
-				!isEquals(control?.value, controlInfo.value)
-			) {
-				return {
-					...control,
-					value: controlInfo.value,
-				};
-			}
-
-			return control;
+			return getControl(controlInfo.name);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[controlInfo]
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
+
+	// Assume control has side effect from parent components ...
+	useEffect(() => {
+		if (
+			controlInfo?.needUpdate &&
+			!controlInfo.needUpdate(controlInfo.value)
+		) {
+			return;
+		}
+
+		if (!isEquals(controlInfo.value, value)) {
+			dispatch.modifyControlValue({
+				controlId: controlInfo.name,
+				value: controlInfo.value,
+			});
+		}
+		// eslint-disable-next-line
+	}, [controlInfo]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
@@ -100,20 +96,3 @@ export const ControlContextProvider = ({
 export * from './types';
 export { BaseControlContext } from './base-control-context';
 export { useControlContext, useControlEffect } from './hooks';
-export {
-	PreviewInjectableStylesContext,
-	usePreviewInjectableStyles,
-} from './preview-injectable-styles-context';
-export {
-	BlockInjectedSlotContext,
-	useBlockInjectedSlotClientId,
-} from './block-injected-slot-context';
-export {
-	PresetCanvasPreviewContext,
-	usePresetCanvasPreview,
-} from './preset-canvas-preview-context';
-export {
-	PopoverActiveColorStyleContext,
-	PopoverActiveColorStyleProvider,
-	usePopoverActiveColorStyle,
-} from './popover-active-color-style-context';

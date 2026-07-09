@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 183,
+		"total": 178,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 80,
+		"not-supported": 75,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -803,26 +803,6 @@
 		{
 			"name": "woocommerce/product-filter-taxonomy",
 			"title": "Enable customers to filter the product collection by selecting one or more taxonomy terms, such as categories, brands, or tags."
-		},
-		{
-			"name": "woocommerce/add-to-cart-with-options-variation-description",
-			"title": "Variation Description"
-		},
-		{
-			"name": "woocommerce/category-title",
-			"title": "Displays the current category title and lets permitted users edit it."
-		},
-		{
-			"name": "woocommerce/category-description",
-			"title": "Displays the current category description."
-		},
-		{
-			"name": "woocommerce/coupon-code",
-			"title": "Include a coupon code to entice customers to make a purchase."
-		},
-		{
-			"name": "woocommerce/dropdown",
-			"title": "@todo complete this block title"
 		}
 	]
 }

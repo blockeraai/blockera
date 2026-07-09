@@ -18,181 +18,6 @@ if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_is_valid_breakpoint_px' ) ) {
-
-	/**
-	 * Check if a breakpoint media value is a usable pixel value.
-	 *
-	 * @param string $value The breakpoint min/max value.
-	 *
-	 * @return bool
-	 */
-	function blockera_is_valid_breakpoint_px( string $value ): bool {
-
-		if ( '' === $value || false !== strpos( $value, 'func' ) ) {
-			return false;
-		}
-
-		$numeric = preg_replace( '/[^0-9]/', '', $value );
-
-		return '' !== $numeric && is_numeric( $numeric );
-	}
-}
-
-if ( ! function_exists( 'blockera_parse_breakpoint_px' ) ) {
-
-	/**
-	 * Parse a breakpoint pixel value into an integer.
-	 *
-	 * @param string $value The breakpoint min/max value.
-	 *
-	 * @return int
-	 */
-	function blockera_parse_breakpoint_px( string $value ): int {
-
-		return (int) preg_replace( '/[^0-9]/', '', $value ) ? (int) preg_replace( '/[^0-9]/', '', $value ) : 0;
-	}
-}
-
-if ( ! function_exists( 'blockera_format_breakpoint_px' ) ) {
-
-	/**
-	 * Format an integer pixel value for breakpoint media queries.
-	 *
-	 * @param int $value The pixel value.
-	 *
-	 * @return string
-	 */
-	function blockera_format_breakpoint_px( int $value ): string {
-
-		return $value . 'px';
-	}
-}
-
-if ( ! function_exists( 'blockera_resolve_breakpoint_media_settings' ) ) {
-
-	/**
-	 * Resolve min/max media settings for all non-base breakpoints.
-	 *
-	 * Explicit min/max pairs are kept as-is. Missing bounds are inferred from
-	 * neighboring breakpoints so each range is as specific as possible.
-	 *
-	 * @param array $breakpoints The configured breakpoints.
-	 *
-	 * @return array<string, array{min: string, max: string}>
-	 */
-	function blockera_resolve_breakpoint_media_settings( array $breakpoints): array {
-
-		$resolved = [];
-		$items    = [];
-
-		foreach ( $breakpoints as $breakpoint ) {
-			if ( empty( $breakpoint['type'] ) || ! empty( $breakpoint['base'] ) ) {
-				continue;
-			}
-
-			$items[] = $breakpoint;
-		}
-
-		foreach ( $items as $breakpoint ) {
-			$min = $breakpoint['settings']['min'] ?? '';
-			$max = $breakpoint['settings']['max'] ?? '';
-
-			if ( $min && $max ) {
-				$resolved[ $breakpoint['type'] ] = [
-					'min' => $min,
-					'max' => $max,
-				];
-			}
-		}
-
-		$max_only = array_values(
-			array_filter(
-				$items,
-				function ( array $breakpoint ) use ( $resolved ): bool {
-					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
-						return false;
-					}
-
-					$max = $breakpoint['settings']['max'] ?? '';
-					$min = $breakpoint['settings']['min'] ?? '';
-
-					return blockera_is_valid_breakpoint_px( $max ) && ! $min;
-				}
-			)
-		);
-
-		usort(
-			$max_only,
-			function ( array $a, array $b ): int {
-				return blockera_parse_breakpoint_px( $b['settings']['max'] ?? '' ) - blockera_parse_breakpoint_px( $a['settings']['max'] ?? '' );
-			}
-		);
-
-		foreach ( $max_only as $index => $breakpoint ) {
-			$next = $max_only[ $index + 1 ] ?? null;
-			$min  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['max'] ?? '' ) )
-				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['max'] ) + 1 )
-				: blockera_format_breakpoint_px( 0 );
-
-			$resolved[ $breakpoint['type'] ] = [
-				'min' => $min,
-				'max' => $breakpoint['settings']['max'] ?? '',
-			];
-		}
-
-		$min_only = array_values(
-			array_filter(
-				$items,
-				function ( array $breakpoint ) use ( $resolved ): bool {
-					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
-						return false;
-					}
-
-					$min = $breakpoint['settings']['min'] ?? '';
-					$max = $breakpoint['settings']['max'] ?? '';
-
-					return blockera_is_valid_breakpoint_px( $min ) && ! $max;
-				}
-			)
-		);
-
-		usort(
-			$min_only,
-			function ( array $a, array $b ): int {
-				return blockera_parse_breakpoint_px( $a['settings']['min'] ?? '' ) - blockera_parse_breakpoint_px( $b['settings']['min'] ?? '' );
-			}
-		);
-
-		foreach ( $min_only as $index => $breakpoint ) {
-			$next = $min_only[ $index + 1 ] ?? null;
-			$max  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['min'] ?? '' ) )
-				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['min'] ) - 1 )
-				: '';
-
-			$resolved[ $breakpoint['type'] ] = [
-				'min' => $breakpoint['settings']['min'] ?? '',
-				'max' => $max,
-			];
-		}
-
-		foreach ( $items as $breakpoint ) {
-			$type = $breakpoint['type'];
-			$min  = $breakpoint['settings']['min'] ?? '';
-			$max  = $breakpoint['settings']['max'] ?? '';
-
-			if ( ! isset( $resolved[ $type ] ) && ( $min || $max ) ) {
-				$resolved[ $type ] = [
-					'min' => $min ? $min : '',
-					'max' => $max ? $max : '',
-				];
-			}
-		}
-
-		return $resolved;
-	}
-}
-
 if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 
 	/**
@@ -204,8 +29,7 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 	 */
 	function blockera_get_css_media_queries( array $breakpoints): array {
 
-		$queries        = [];
-		$media_settings = blockera_resolve_breakpoint_media_settings( $breakpoints );
+		$queries = [];
 
 		foreach ( $breakpoints as $breakpoint ) {
 
@@ -215,14 +39,8 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 				continue;
 			}
 
-			if ( ! empty( $breakpoint['base'] ) ) {
-				$queries[ $breakpoint['type'] ] = '';
+			[ 'min' => $min, 'max' => $max ] = $breakpoint['settings'];
 
-				continue;
-			}
-
-			$min   = $media_settings[ $breakpoint['type'] ]['min'] ?? '';
-			$max   = $media_settings[ $breakpoint['type'] ]['max'] ?? '';
 			$media = '';
 
 			if ( $min && $max ) {
@@ -295,7 +113,6 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 	 */
 	function blockera_get_inner_block_state_selector( string $selector, array $args = [] ): string {
 
-		$is_global_style             = $args['is-global-style'] ?? false;
 		$master_block_state          = $args['pseudo-class'] ?? 'normal';
 		$pseudo_class                = $args['inner-pseudo-class'] ?? 'normal';
 		$current_state_has_selectors = $args['current_state_has_selectors'] ?? false;
@@ -310,58 +127,11 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 			true
 		) ? '' : $master_block_state;
 
-		// Create root selector.
-		$root = ! isset($args['root']) || empty($args['root']) ? $args['blockera-unique-selector'] : $args['root'];
-
-		// If the selector starts with a space, we should add the blockera unique selector to the selector.
-		if (str_starts_with($root, ' ')) {
-			$root = $args['blockera-unique-selector'] . $root;
-		}
-
-		/*
-		 * Compound block-type roots (e.g. `.wp-block-list > li`, `.wp-block-table > table`) describe
-		 * element shape only. Inner block styles must scope to the blockera unique class on the
-		 * compound that actually carries `className` in rendered HTML:
-		 * - core/list-item: unique class on the child `li`
-		 * - core/table: unique class on the wrapper figure (`.wp-block-table`)
-		 */
-		$unique_selector = $args['blockera-unique-selector'] ?? '';
-		if (
-			'' !== trim( $unique_selector )
-			&& ! str_contains( $root, $unique_selector )
-			&& preg_match( '/\s>\s/', $root )
-		) {
-			$block_name = (string) ( $args['block-name'] ?? '' );
-
-			if ( blockera_compound_root_classes_on_wrapper(
-				[
-					'root'            => $root,
-					'full-block-name' => $block_name,
-					'block-name'      => str_replace( [ 'core/', '/' ], [ '', '-' ], $block_name ),
-				]
-			) ) {
-				$compound_parts = preg_split( '/\s>\s/', $root, 2 );
-				$wrapper        = trim( (string) ( $compound_parts[0] ?? '' ) );
-				$child          = trim( (string) ( $compound_parts[1] ?? '' ) );
-
-				$root = $wrapper . $unique_selector . ( '' !== $child ? ' > ' . $child : '' );
-			} else {
-				$parts = preg_split( '/(?:::|:)/', $root, 2 );
-				$root  = $parts[0] . $unique_selector;
-			}
-		}
-
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
 
-			$parsedValue = [ $selector ];
-
-			// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
-			// These functions can contain multiple selectors separated by commas, which should not be split.
-			if (! preg_match( blockera_regex_pseudo_class_functions_pattern(), $selector, $matches ) ) {
-				
-				$parsedValue = explode( ',', trim( $selector ) );
-			}
+			// Handle multiple selector where separated with comma.
+			$parsedValue = explode( ',', trim( $selector ) );
 
 			// Assume current selector is multiple.
 			if ( count( $parsedValue ) > 1 ) {
@@ -370,12 +140,12 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 				return implode(
 					', ',
 					array_map(
-						static function ( string $item ) use ( $root, $args, $parent_pseudo_class, $is_global_style, $pseudo_class, $current_state_has_selectors ): string {
+						static function ( string $item ) use ( $args, $parent_pseudo_class, $pseudo_class, $current_state_has_selectors ): string {
 
 							return blockera_get_css_selector_format(
-								$root,
+								$args['root'] ?? $args['blockera-unique-selector'] ?? '',
 								trim( $item ),
-								compact( 'pseudo_class', 'parent_pseudo_class', 'is_global_style', 'current_state_has_selectors' )
+								compact( 'pseudo_class', 'parent_pseudo_class', 'current_state_has_selectors' )
 							);
 						},
 						$parsedValue
@@ -386,25 +156,26 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 
 				// Add pseudo custom css class as suffix into selectors value for current key.
 				return blockera_get_css_selector_format(
-					$root,
+					$args['root'] ?? $args['blockera-unique-selector'] ?? '',
 					$selector,
-					compact( 'pseudo_class', 'parent_pseudo_class', 'is_global_style', 'current_state_has_selectors' )
+					compact( 'pseudo_class', 'parent_pseudo_class', 'current_state_has_selectors' )
 				);
 			}
 		}
 
 		// inner block in normal state.
 		if ( $master_block_state ) {
+
 			// Add pseudo custom css class as suffix into selectors value for current key.
 			return blockera_get_css_selector_format(
-				$root,
+				$args['root'] ?? $args['blockera-unique-selector'] ?? '',
 				$selector,
-				compact( 'parent_pseudo_class', 'is_global_style', 'current_state_has_selectors' )
+				compact( 'parent_pseudo_class', 'current_state_has_selectors' )
 			);
 		}
 
 		return trim(
-			sprintf( '%s %s', trim( $root ), $selector )
+			sprintf( '%s %s', trim( $args['root'] ?? $args['blockera-unique-selector'] ?? '', ), $selector )
 		);
 	}
 }
@@ -460,29 +231,6 @@ if ( ! function_exists( 'blockera_get_master_block_state_selector' ) ) {
 					', ',
 					array_map(
 						static function ( string $item ) use ( $pseudo_class, $args ): string {
-							// Imagine the item is a pseudo-class function like :is(), :where(), :not(), etc.
-							// We should not add blockera pseudo classes suffix to the item at the end of string.
-							// It should add as a suffix to the root selector.
-							if (preg_match(blockera_regex_pseudo_class_functions_pattern(false), $item)) {
-
-								if (! empty($args['current_state_has_selectors'])) {
-									return $item;
-								}
-
-								$extract = explode(' ', $item);
-
-								if (1 < count($extract)) {
-									$extract[0] = blockera_set_selector_pseudo_class($extract[0], $pseudo_class);
-
-									return implode(' ', $extract);
-								}
-
-								return $item;
-							}
-
-							if (str_ends_with($item, ')')) {
-								return $item;
-							}
 
 							return ! empty($args['current_state_has_selectors']) ? $item : blockera_set_selector_pseudo_class( $item, $pseudo_class );
 						},
@@ -537,22 +285,27 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 	/**
 	 * Get css selector valid and standard format.
 	 *
-	 * @param string $root   the root selector.
+	 * @param string $root_selector   the root selector.
 	 * @param string $picked_selector the picked selector.
 	 * @param array  $args            the extra arguments to format css selector.
 	 *
 	 * @throws BaseException Exception for invalid selector.
 	 * @return string the standard formatted css selector.
 	 */
-	function blockera_get_css_selector_format( string $root, string $picked_selector, array $args ): string {
+	function blockera_get_css_selector_format( string $root_selector, string $picked_selector, array $args ): string {
+
+		if ( str_starts_with( $picked_selector, '&' ) && ! str_starts_with( $picked_selector, '&&' ) && ! preg_match( '/^\.|:/', substr( $picked_selector, 1 ) ) ) {
+
+			throw new BaseException( "Invalid {$picked_selector} selector!", 500 );
+		}
 
 		$pseudo_class                = $args['pseudo_class'] ?? '';
-		$is_global_style             = $args['is_global_style'] ?? false;
 		$parent_pseudo_class         = $args['parent_pseudo_class'] ?? '';
 		$current_state_has_selectors = $args['current_state_has_selectors'] ?? false;
 		// Pre-calculate reused values.
 		$has_parent_pseudo = ! empty( $parent_pseudo_class );
 		$has_pseudo        = ! empty( $pseudo_class );
+		$root              = trim( $root_selector );
 		$root_first_part   = '';
 		
 		// Get the first part of root selector for && pattern.
@@ -560,62 +313,29 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			$root_parts      = explode( ' ', $root );
 			$root_first_part = $root_parts[0];
 		}
-
-		$formatted_selectors = [];
-		$selectors           = [ $picked_selector ];
-
-		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
-		// These functions can contain multiple selectors separated by commas, which should not be split.
-		if ( ! preg_match( blockera_regex_pseudo_class_functions_pattern(), $picked_selector, $matches ) ) {
 		
-			// Split the selector by commas.
-			$selectors = explode( ', ', $picked_selector );
-		}
-
-		foreach ($selectors as $selector) {
-			$new_selector = blockera_process_ampersand_selector_char($selector);
-			$needs_space  = ! str_starts_with($selector, '&') && ! empty($root);
-
+		$formatted_selectors = [];
+		foreach (explode( ', ', $picked_selector ) as $selector) {
+			$selector    = trim($selector);
+			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
+			
 			// Handle && pattern.
 			if ( str_starts_with( $selector, '&&' ) ) {
-
-				if (! empty(trim($root))) {
-					// Set specificities for root selector.
-					if ($is_global_style) {
-						$new_selector = ":root body :where($root_first_part)$new_selector";
-					} else {
-						$new_selector = "html:root body :where($root_first_part)$new_selector";
-					}
-				} else {
-					$new_selector = $new_selector;
-				}
-
-				$merged_selector = $new_selector . 
+				$selector        = $root_first_part . substr( $selector, 2 );
+				$merged_selector = $selector . 
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol($pseudo_class) . $pseudo_class : '' );
 
-				$formatted_selectors[] = blockera_create_standard_selector($new_selector, $pseudo_class, compact('merged_selector', 'has_pseudo'));
+				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'has_pseudo'));
 			} else {
-				$merged_selector = $new_selector .
+				$merged_selector = blockera_process_ampersand_selector_char($selector) .
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
 
-				if (! empty($root)) {
-					// Set specificities for root selector.
-					if ($is_global_style) {
-						$origin_selector = ":root body :where($root)" . 
-						( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
-						( $needs_space ? ' ' : '' ) .
-						$merged_selector;
-					} else {
-						$origin_selector = "html:root body :where($root)" . 
-						( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
-						( $needs_space ? ' ' : '' ) .
-						$merged_selector;
-					}
-				} else {
-					$origin_selector = ( $needs_space ? ' ' : '' ) . $merged_selector;
-				}
+				$origin_selector = $root . 
+					( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
+					( $needs_space ? ' ' : '' ) .
+					$merged_selector;
 
-				$formatted_selectors[] = blockera_create_standard_selector($new_selector, $pseudo_class, compact('merged_selector', 'origin_selector', 'has_pseudo'));
+				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'origin_selector', 'has_pseudo'));
 			}
 		}
 
@@ -643,7 +363,7 @@ if (! function_exists('blockera_create_standard_selector')) {
 
 		if (preg_match('/:(before|after)$/', $selector, $matches) && $has_pseudo) {
 			$pseudo_element = $matches[1];
-			$selector       = str_replace($matches[0], '', $selector);
+			$selector       = blockera_process_ampersand_selector_char(str_replace($matches[0], '', $selector));
 			$new_selector   = $selector . blockera_get_state_symbol( $pseudo_state ) . $pseudo_state . blockera_get_state_symbol( $pseudo_element ) . $pseudo_element;
 			
 			return str_replace($merged_selector, $new_selector, $origin_selector);
@@ -656,7 +376,7 @@ if (! function_exists('blockera_create_standard_selector')) {
 if ( ! function_exists( 'blockera_process_ampersand_selector_char' ) ) {
 
 	/**
-	 * Process ampersand selector character.
+	 * Create standard css selector with processing by '&' character.
 	 *
 	 * @param string $selector The selector to process.
 	 *
@@ -664,21 +384,9 @@ if ( ! function_exists( 'blockera_process_ampersand_selector_char' ) ) {
 	 */
 	function blockera_process_ampersand_selector_char( string $selector ): string {
 
-		// Remove the leading and trailing whitespace from the selector.
-		// We imagine the selector is already trimmed. because it should be starts with single or double ampersand character.
-		$selector = trim( $selector );
-
-		// Handle && pattern.
-		// It should be removed the double ampersand character and return the new selector.
-		if (str_starts_with( $selector, '&&' )) {
-			return substr( $selector, 2 );
-		}
-
-		// Handle & pattern.
-		// It should be removed the ampersand character and return the new selector.
-		return str_starts_with( $selector, '&' )
-			? substr( $selector, 1 )
-			: $selector;
+		return str_starts_with( trim( $selector ), '&' )
+			? substr( trim( $selector ), 1 )
+			: trim( $selector );
 	}
 }
 
@@ -694,45 +402,6 @@ if ( ! function_exists( 'blockera_is_inner_block' ) ) {
 	function blockera_is_inner_block( string $block_type ): bool {
 
 		return 'master' !== $block_type;
-	}
-}
-
-if ( ! function_exists( 'blockera_update_dynamic_inner_selectors' ) ) {
-	/**
-	 * Update dynamic inner selectors.
-	 *
-	 * @param array $selectors The selectors to update.
-	 * @param array $args The arguments to update the selectors.
-	 *
-	 * @return array the updated selectors.
-	 */
-	function blockera_update_dynamic_inner_selectors( array $selectors, array $args ): array {
-
-		$additional_selectors     = blockera_get_block_type($args['block-type'])->selectors;
-		$additional_root_selector = $additional_selectors['root'] ?? '';
-
-		if (empty($additional_root_selector)) {
-
-			$additional_root_selector = blockera_generate_block_root_selector($args['block-type']);
-		}
-
-		// Ensure the additional root selector is set.
-		$additional_selectors['root'] = $additional_root_selector;
-
-		// Create the inner selector id.
-		$inner_selector_id = blockera_append_selector_prefix($args['block-type']);
-
-		// If the inner selector id exists, merge the additional selectors with the existing selectors.
-		// Otherwise, create a new inner selector id with the additional selectors.
-		if (isset($selectors[ $inner_selector_id ])) {
-
-			$selectors[ $inner_selector_id ] = array_merge($additional_selectors, $selectors[ $inner_selector_id ]);
-		} else {
-
-			$selectors[ $inner_selector_id ] = $additional_selectors;
-		}
-
-		return $selectors;
 	}
 }
 
@@ -758,28 +427,14 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$current_state_has_selectors = false;
 
-		if (blockera_is_inner_block($args['block-type']) && $args['block-type'] !== $args['block-name'] && blockera_is_valid_block_type($args['block-type'])) {
-
-			$selectors = blockera_update_dynamic_inner_selectors($selectors, $args);
-		}
-
 		if ( ! empty( $args['block-type'] ) && isset($cloned_block_type) ) {
 
 			if (blockera_is_inner_block( $args['block-type'] )) {
 
-				$block_selector_id = blockera_append_selector_prefix($args['block-type']);
-
 				if (! empty($args['inner-pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['inner-pseudo-class'], $args['breakpoint'])) {
-
-					// The inner block type selectors reference.
-					// Only set the selectors if the pseudo class is valid.
-					if (isset($selectors[ $block_selector_id ]) && blockera_is_valid_css_pseudo_class($args['inner-pseudo-class'])) {
-						$selectors = $selectors[ $block_selector_id ];
-					}
 
 					$selector_id = blockera_append_selector_prefix( 'states/' . $args['inner-pseudo-class'] );
 
-					// Fallback way to create selectors reference for inner block type in pseudo state.
 					if (isset($selectors[ $selector_id ])) {
 
 						$cloned_block_type->selectors = $selectors[ $selector_id ];
@@ -792,7 +447,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 					}
 				} else {
 
-					$selector_id = $block_selector_id;
+					$selector_id = blockera_append_selector_prefix($args['block-type']);
 
 					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
 				}
@@ -800,60 +455,23 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 				$selector_id = blockera_append_selector_prefix( 'states/' . $args['pseudo-class'] );
 
-				// Hard code for before and after pseudo classes.
-				// If the pseudo class is before or after, and not set the specific selector config for them.
-				// We should set the selectors to the root because them are not supported specific selector config per feature id.
-				if (in_array($args['pseudo-class'], [ 'before', 'after' ], true)) {
-					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? ( isset($selectors['root']) ? [ 'root' => $selectors['root'] ] : [] );
-				} else {
-					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
-				}
-
-				$current_state_has_selectors = isset($selectors[ $selector_id ]);
+				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+				$current_state_has_selectors  = isset($selectors[ $selector_id ]);
 			}
 		}
 
 		$args['current_state_has_selectors'] = $current_state_has_selectors;
-
-		// Calculate the fallback status.
-		$has_fallback = ! empty( $args['fallback'] );
-		// Check if the feature id contains 'htmlEditable'.
-		$feature_is_html_editable = str_contains($feature_id, 'htmlEditable');
+		$has_fallback                        = ! empty( $args['fallback'] );
 
 		// Ensure the block type is not null and the block type name starts with 'core/'.
 		if (isset($cloned_block_type) && ( str_starts_with($block_type->name, 'core/') || isset($cloned_block_type->selectors['root']) )) {
 
-			// By default, the fallback is calculated in $has_fallback variable while feature id does not 'htmlEditable'.
-			// Because the htmlEditable feature id is used to generate the html editable selector.
-			// And the html editable selector is not used to generate the css selector.
-			// So we need to disable the fallback for the html editable feature id.
-			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $feature_is_html_editable ? ! $has_fallback : false);
+			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $has_fallback);
 
-			if (! $selector && $has_fallback && ! $feature_is_html_editable) {
+			if (! $selector && $has_fallback) {
 
-				if ( is_array($args['fallback']) ) {
-					// Try to get the first fallback that is not empty.
-					foreach ($args['fallback'] as $fallback) {
-						$selector = wp_get_block_css_selector($cloned_block_type, $fallback, false);
-
-						if ($selector) {
-							break;
-						}
-					}
-				} else {
-					$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
-				}
-
-				// If no fallback is found, try to get the feature id with fallback forced.
-				if (! $selector) {
-					$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, true);
-				}
+				$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
 			}
-		}
-
-		// If the feature is "htmlEditable" and no selector is found, return an empty string.
-		if ($feature_is_html_editable && ! $selector) {
-			return '';
 		}
 
 		// Imagine the current block is master!
@@ -861,147 +479,29 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 			// Re-Generate picked css selector to handle current block state!
 			$selector = blockera_get_master_block_state_selector( $selector ?? $args['blockera-unique-selector'] ?? '', $args );
+
 		} else {
-			// We should create selector by :is() pseudo class.
-			// if the selector id starts with 'blockera/core/' and the selector is not set in the parent block type selectors.
-			// This is a special case for the core/paragraph block which is a required tag name as a fallback selector in pseudo class.
-			if ( isset($selector_id) && str_starts_with($selector_id, 'blockera/core/') && ! isset($block_type->selectors[ $selector_id ])) {
-				if ('core/paragraph' === $args['block-type']) {
-					$selector = sprintf(':is(%s, p)', $selector);
-				}
-			}
 
 			// Re-Generate picked css selector to handle current inner block state!
 			$selector = blockera_get_inner_block_state_selector( $selector ?? '', $args );
 		}
 
 		// We not needs append blockera root block css selector into inners selector.
-		// because it's already appended in the inner block selector.
-		if (
-			! $feature_id
-			|| str_starts_with( $feature_id, 'blockera/' )
-			|| ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) )
-		) {
+		// Like => current $selector value is one of feature id of "elements/link" inner block selectors.
+		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) ) {
 
 			return ! empty( $selector ) ? $selector : $args['blockera-unique-selector'];
 		}
 
-		$root = $args['blockera-unique-selector'];
-
 		return blockera_append_root_block_css_selector(
 			$selector,
-			$root,
+			$args['blockera-unique-selector'],
 			[
 				'root'=> $args['root'] ?? '',
 				'block-type' => $args['block-type'],
-				'is-global-style' => $args['is-global-style'] ?? false,
 				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
-				'full-block-name' => $args['block-name'],
 			]
 		);
-	}
-}
-
-if ( ! function_exists( 'blockera_is_valid_css_pseudo_class' ) ) {
-	/**
-	 * Check if the pseudo class is valid.
-	 *
-	 * @param string $pseudo_class The pseudo class to check.
-	 *
-	 * @return bool true on success, false on otherwise!
-	 */
-	function blockera_is_valid_css_pseudo_class( string $pseudo_class ): bool {
-
-		static $valid_pseudo_classes = null;
-
-		if ( null === $valid_pseudo_classes ) {
-			$valid_pseudo_classes = [
-				// Pseudo-elements.
-				'before'                => true,
-				'after'                 => true,
-				'first-letter'          => true,
-				'first-line'            => true,
-				'selection'             => true,
-				'backdrop'              => true,
-				'placeholder'           => true,
-				'marker'                => true,
-				'spelling-error'        => true,
-				'grammar-error'         => true,
-				'file-selector-button'  => true,
-				// Pseudo-classes.
-				'hover'                 => true,
-				'active'                => true,
-				'focus'                 => true,
-				'focus-visible'         => true,
-				'focus-within'          => true,
-				'visited'               => true,
-				'link'                  => true,
-				'target'                => true,
-				'target-within'         => true,
-				'scope'                 => true,
-				'current'               => true,
-				'past'                  => true,
-				'future'                => true,
-				'playing'               => true,
-				'paused'                => true,
-				'seeking'               => true,
-				'buffering'             => true,
-				'stalled'               => true,
-				'muted'                 => true,
-				'volume-locked'         => true,
-				'autofill'              => true,
-				'enabled'               => true,
-				'disabled'              => true,
-				'read-only'             => true,
-				'read-write'            => true,
-				'placeholder-shown'     => true,
-				'default'               => true,
-				'checked'               => true,
-				'indeterminate'         => true,
-				'blank'                 => true,
-				'valid'                 => true,
-				'invalid'               => true,
-				'in-range'              => true,
-				'out-of-range'          => true,
-				'required'              => true,
-				'optional'              => true,
-				'user-valid'            => true,
-				'user-invalid'          => true,
-				'root'                  => true,
-				'empty'                 => true,
-				'first-child'           => true,
-				'last-child'            => true,
-				'only-child'            => true,
-				'first-of-type'         => true,
-				'last-of-type'          => true,
-				'only-of-type'          => true,
-				'nth-child'             => true,
-				'nth-last-child'        => true,
-				'nth-of-type'           => true,
-				'nth-last-of-type'      => true,
-				'nth-col'               => true,
-				'nth-last-col'          => true,
-				'is'                    => true,
-				'not'                   => true,
-				'where'                 => true,
-				'has'                   => true,
-				'dir'                   => true,
-				'lang'                  => true,
-				'any-link'              => true,
-				'local-link'            => true,
-				'host'                  => true,
-				'host-context'          => true,
-				'fullscreen'            => true,
-				'modal'                 => true,
-				'picture-in-picture'    => true,
-				'popover-open'          => true,
-				'defined'               => true,
-				'left'                  => true,
-				'right'                 => true,
-			];
-		}
-
-		return isset( $valid_pseudo_classes[ $pseudo_class ] );
 	}
 }
 
@@ -1017,258 +517,23 @@ if ( ! function_exists( 'blockera_append_css_selector_suffix' ) ) {
 	 */
 	function blockera_append_css_selector_suffix( string $selector, string $suffix ): string {
 
-		$selector_trimmed = trim( $selector );
-        $suffix_trimmed   = trim( $suffix );
+		if ( empty( trim( $selector ) ) || empty( trim( $suffix ) ) ) {
 
-        if ( '' === $selector_trimmed || '' === $suffix_trimmed ) {
-
-            return $selector;
-        }
-
-        $selectors = explode( ',', $selector_trimmed );
-        $result    = [];
-
-        foreach ( $selectors as $item ) {
-
-            $result[] = trim( $item ) . $suffix_trimmed;
-        }
-
-        return implode( ', ', $result );
-    }
-}
-
-if ( ! function_exists( 'blockera_is_pseudo_only_block_selector' ) ) {
-
-	/**
-	 * Check whether a selector is pseudo-only (no block class compound).
-	 *
-	 * @param string $selector The css selector.
-	 *
-	 * @return bool
-	 */
-	function blockera_is_pseudo_only_block_selector( string $selector ): bool {
-
-		if ( preg_match( '/\.\bwp-block-/', $selector ) ) {
-			return false;
-		}
-
-		return (bool) preg_match( '/^[\s>+~]*(?:::|:)/', $selector );
-	}
-}
-
-if ( ! function_exists( 'blockera_get_block_name_segments' ) ) {
-
-	/**
-	 * Build progressively shorter block name segments for smart wp-block matching.
-	 *
-	 * Example: `list-item` => [ 'list-item', 'list' ].
-	 *
-	 * @param string $block_name The block type slug (without `core/`).
-	 *
-	 * @return string[] Ordered from most specific to least specific.
-	 */
-	function blockera_get_block_name_segments( string $block_name ): array {
-
-		$segments = [ $block_name ];
-		$parts    = explode( '-', $block_name );
-
-		while ( count( $parts ) > 1 ) {
-			array_pop( $parts );
-			$segments[] = implode( '-', $parts );
-		}
-
-		return $segments;
-	}
-}
-
-if ( ! function_exists( 'blockera_get_block_css_part_pattern' ) ) {
-
-	/**
-	 * Build a regex pattern for a wp-block class part segment.
-	 *
-	 * @param string $block_name_segment The block name segment.
-	 *
-	 * @return string The regex pattern.
-	 */
-	function blockera_get_block_css_part_pattern( string $block_name_segment ): string {
-
-		return '/\.\b' . preg_quote( 'wp-block-' . $block_name_segment, '/' ) . '\b(?!\w+|-|_)/';
-	}
-}
-
-if ( ! function_exists( 'blockera_resolve_block_css_part' ) ) {
-
-	/**
-	 * Resolve the wp-block class part for the current block type.
-	 *
-	 * Tries the full block name first, then shorter hyphen segments so blocks like
-	 * `core/list-item` can match `.wp-block-list` inside `.wp-block-list > li`.
-	 *
-	 * @param string $selector The prepared support selector.
-	 * @param string $root     The blockera unique root selector.
-	 * @param array  $args     The append arguments.
-	 *
-	 * @return string|null The resolved block class part, or null when not found.
-	 */
-	function blockera_resolve_block_css_part( string $selector, string $root, array $args ): ?string {
-
-		$block_name = $args['block-name'] ?? '';
-
-		if ( '' === trim( $block_name ) ) {
-			return null;
-		}
-
-		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
-			$part_pattern = blockera_get_block_css_part_pattern( $segment );
-
-			if ( preg_match( $part_pattern, $selector, $selector_match ) ) {
-				return $selector_match[0];
-			}
-		}
-
-		if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
-			return null;
-		}
-
-		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
-			$part_pattern = blockera_get_block_css_part_pattern( $segment );
-
-			foreach ( [ $root, $args['root'] ?? '' ] as $source ) {
-				if ( '' === trim( $source ) ) {
-					continue;
-				}
-
-				if ( preg_match( $part_pattern, $source, $source_match ) ) {
-					return $source_match[0];
-				}
-			}
-		}
-
-		return null;
-	}
-}
-
-if ( ! function_exists( 'blockera_get_prefer_source_for_block_part' ) ) {
-
-	/**
-	 * Pick the variation-free source selector for pseudo-only block part merging.
-	 *
-	 * Priority:
-	 * 1. Blockera root without variations when it already contains the resolved wp-block part.
-	 * 2. Block type root from `$args['root']` without variations (e.g. `.wp-block-list > li`).
-	 * 3. Blockera root without variations as a fallback.
-	 *
-	 * Non pseudo-only selectors are returned unchanged.
-	 *
-	 * @param string $selector   The prepared support selector.
-	 * @param string $root       The blockera unique root selector.
-	 * @param string $block_part The resolved wp-block class part.
-	 * @param array  $args       The append arguments.
-	 *
-	 * @return string
-	 */
-	function blockera_get_prefer_source_for_block_part( string $selector, string $root, string $block_part, array $args ): string {
-
-		if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
 			return $selector;
 		}
 
-		$root_without_variations = \Blockera\Utils\Utils::stripBlockVariationClasses(
-			\Blockera\Utils\Utils::stripTrailingPseudos( $root )
+		$selectors = explode( ',', $selector );
+
+		return implode(
+			', ',
+			array_map(
+				function ( string $item ) use ( $suffix ): string {
+
+					return trim( $item ) . $suffix;
+				},
+				$selectors
+			)
 		);
-
-		if ( '' !== trim( $root ) && str_contains( $root, $block_part ) ) {
-			return $root_without_variations;
-		}
-
-		$block_type_root = $args['root'] ?? '';
-
-		if ( '' !== trim( $block_type_root ) && str_contains( $block_type_root, $block_part ) ) {
-			return \Blockera\Utils\Utils::stripBlockVariationClasses(
-				\Blockera\Utils\Utils::stripTrailingPseudos( $block_type_root )
-			);
-		}
-
-		return $root_without_variations;
-	}
-}
-
-if ( ! function_exists( 'blockera_root_contains_block_part' ) ) {
-
-	/**
-	 * Check whether a root selector already includes a resolved wp-block class part.
-	 *
-	 * @param string $root       The root selector.
-	 * @param string $block_part The resolved wp-block class part.
-	 *
-	 * @return bool
-	 */
-	function blockera_root_contains_block_part( string $root, string $block_part ): bool {
-
-		return '' !== trim( $root ) && '' !== trim( $block_part ) && str_contains( $root, $block_part );
-	}
-}
-
-if ( ! function_exists( 'blockera_compound_root_classes_on_wrapper' ) ) {
-
-	/**
-	 * Whether Blockera unique classes live on the wrapper (first compound) of a `>` root.
-	 *
-	 * Blocks like core/table use `.wp-block-table > table` for visual styles but render
-	 * `className` on the figure (`.wp-block-table`), with spacing selectors targeting that wrapper.
-	 * core/list-item is the opposite: classes belong on the last compound (`li`).
-	 *
-	 * @param array $args The append arguments (expects `root` block-type root and `block-name`).
-	 *
-	 * @return bool
-	 */
-	function blockera_compound_root_classes_on_wrapper( array $args ): bool {
-
-		$block_type_root = trim( (string) ( $args['root'] ?? '' ) );
-
-		if ( ! preg_match( '/\s>\s/', $block_type_root ) ) {
-			return false;
-		}
-
-		$block_name = (string) ( $args['full-block-name'] ?? $args['block-name'] ?? '' );
-
-		if ( '' === $block_name ) {
-			return false;
-		}
-
-		if ( ! str_contains( $block_name, '/' ) ) {
-			$block_name = 'core/' . $block_name;
-		}
-
-		$wrapper_parts = preg_split( '/\s>\s/', $block_type_root, 2 );
-		$wrapper       = trim( (string) ( $wrapper_parts[0] ?? '' ) );
-
-		if ( '' === $wrapper ) {
-			return false;
-		}
-
-		$selectors          = blockera_get_block_type_property( $block_name, 'selectors' ) ?? [];
-		$spacing_candidates = [];
-
-		if ( isset( $selectors['spacing'] ) ) {
-			$spacing_candidates[] = is_array( $selectors['spacing'] )
-				? ( $selectors['spacing']['root'] ?? '' )
-				: $selectors['spacing'];
-		}
-
-		if ( isset( $selectors['blockeraBoxSpacing'] ) ) {
-			$spacing_candidates[] = is_array( $selectors['blockeraBoxSpacing'] )
-				? ( $selectors['blockeraBoxSpacing']['root'] ?? '' )
-				: $selectors['blockeraBoxSpacing'];
-		}
-
-		foreach ( $spacing_candidates as $candidate ) {
-			if ( is_string( $candidate ) && trim( $candidate ) === $wrapper ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 }
 
@@ -1291,24 +556,10 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
-		$wrap_with_global_style = static function ( string $selector ) use ( $args, $root ) {
-			if (isset($args['is-global-style']) && $args['is-global-style']) {
-				return ":root body :where($root)";
-			}
-
-			return $selector;
-		};
-
 		// We should remove the ampersand character from beginning of the selector if it exists, because it's a indicate root selector and we provided it in next process.
 		if (preg_match( '/^&[^\s|^&]/', $selector )) {
 			
 			$selector = substr( $selector, 1 );
-		}
-
-		// If root is the same as selector or selector contains root string, we should remove the root.
-		if ($root === $selector || str_contains($selector, $root)) {
-
-			$root = '';
 		}
 
 		$is_child_selector = false;
@@ -1319,113 +570,21 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$is_child_selector = true;
 		}
 
-		$variations              = \Blockera\Utils\Utils::extractBlockVariationClasses( $root );
-		$block_part              = blockera_resolve_block_css_part( $selector, $root, $args );
-		$is_pseudo_only_selector = blockera_is_pseudo_only_block_selector( $selector );
+		$preg_quote = preg_quote( $args['block-name'], '/' );
+		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume received selector is another reference to root, so we should concat together.
-		if ( null !== $block_part ) {
-			$resolved_block_part = $block_part;
-			$prefer_source       = blockera_get_prefer_source_for_block_part( $selector, $root, $block_part, $args );
-			$preferred_root      = null;
+		if ( preg_match( $pattern, $selector, $matches ) ) {
 
-			/*
-			 * Pseudo-only selectors (e.g. `::marker`, `::before`) have no wp-block compound of their own.
-			 *
-			 * 1. Pick a variation-free preferred root via blockera_get_prefer_source_for_block_part().
-			 * 2. When variations exist, re-append them on the full preferred root (not only the resolved
-			 *    wp-block class segment). Example: `.wp-block-list > li.is-style-x`, not `.wp-block-list.is-style-x > li` when the $is_pseudo_only_selector is true.
-			 * 3. If the blockera root already contains the resolved wp-block part, the varied preferred root
-			 *    is final. Otherwise compound child selectors append the root on the last compound (list-item);
-			 *    simple selectors merge the blockera prefix via modifySelectorPos().
-			 * 4. Without variations, preferContainedRootSelector() handles roots that already contain the target.
-			 */
-			if ( $is_pseudo_only_selector && ! empty( $variations ) ) {
-				$prefer_source = \Blockera\Utils\Utils::appendVariationsToSelector(
-					$prefer_source,
-					$prefer_source,
-					$variations
-				);
-				$variations    = [];
-
-				if ( blockera_root_contains_block_part( $root, $resolved_block_part ) ) {
-					$preferred_root = $prefer_source;
-				}
-			} else {
-				$preferred_root = \Blockera\Utils\Utils::preferContainedRootSelector(
-					$prefer_source,
-					$root,
-					$block_part,
-					[
-						'wrap' => $wrap_with_global_style,
-					]
-				);
-			}
-
-			if ( null !== $preferred_root ) {
-				return $is_pseudo_only_selector ? $preferred_root . $selector : $preferred_root;
-			}
-
-			/*
-			 * Compound selectors with a direct child combinator (`>`).
-			 *
-			 * - core/list-item (`.wp-block-list > li`): classes live on the child `li`.
-			 * - core/table (`.wp-block-table > table`): classes live on the wrapper figure.
-			 */
-			if ( preg_match( '/\s>\s/', $prefer_source ) ) {
-				/*
-				 * Pseudo-only selectors (e.g. `::marker`): prefer_source may already include variation
-				 * classes while $root carries them too — use the block-type compound root as base.
-				 */
-				$compound_source = $prefer_source;
-				if (
-					$is_pseudo_only_selector
-					&& isset( $args['root'] )
-					&& preg_match( '/\s>\s/', (string) $args['root'] )
-				) {
-					$compound_source = (string) $args['root'];
-				}
-
-				if ( blockera_compound_root_classes_on_wrapper( $args ) ) {
-					$merged_selector = $wrap_with_global_style(
-						\Blockera\Utils\Utils::modifySelectorPos(
-							$prefer_source,
-							$resolved_block_part,
-							[
-								'prefix'     => $root,
-								'suffix'     => '',
-								'variations' => $variations,
-							]
-						)
-					);
-
-					return $is_pseudo_only_selector ? $merged_selector . $selector : $merged_selector;
-				}
-
-				$parts         = preg_split( '/(?:::|:)/', $compound_source, 2 );
-				$base          = $parts[0];
-				$inline_pseudo = isset( $parts[1] )
-					? ( str_contains( $compound_source, '::' ) ? '::' : ':' ) . $parts[1]
-					: '';
-
-				$merged_selector = $wrap_with_global_style( "{$base}{$root}" ) . $inline_pseudo;
-
-				return $is_pseudo_only_selector ? $merged_selector . $selector : $merged_selector;
-			}
-
-			$merged_selector = $wrap_with_global_style(
-				\Blockera\Utils\Utils::modifySelectorPos(
-					$prefer_source,
-					$resolved_block_part,
-					[
-						'prefix'     => $root,
-						'suffix'     => '',
-						'variations' => $variations,
-					]
-				)
+			// Appending blockera root unique css selector into picked your selector.
+			return \Blockera\Utils\Utils::modifySelectorPos(
+				$selector,
+				$matches[0],
+				[
+					'prefix' => $root,
+					'suffix' => blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) ? '' : $root,
+				]
 			);
-
-			return $is_pseudo_only_selector ? $merged_selector . $selector : $merged_selector;
 		}
 
 		// Handle cases where selector and root are identical or when dealing with inner blocks.
@@ -1435,11 +594,11 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			if (isset($args['root']) && ! str_starts_with($args['root'], ' ')) {
 
 				// Replace the custom root with itself plus the standard root selector.
-				return $wrap_with_global_style( str_replace($args['root'], "{$args['root']}{$root}", $selector) );
+				return str_replace($args['root'], "{$args['root']}{$root}", $selector);
 			}
 
 			// Return selector unchanged if no custom root.
-			return $wrap_with_global_style("{$root} {$selector}");
+			return "{$root} {$selector}";
 		}
 
 		// If selector is a child of root or starts with a tag name and should not start with a space because it's a child selector and we should not add it before the root.
@@ -1450,22 +609,11 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$base   = $parts[0];
 			$pseudo = isset($parts[1]) ? ( strpos($selector, '::') !== false ? '::' : ':' ) . $parts[1] : '';
 
-			// If the style is global style for block, we should append the selector to the root body for specificity reasons.
-			if (isset($args['is-global-style']) && $args['is-global-style']) {
-				return "{$wrap_with_global_style($root)}{$pseudo}";
-			}
-			
-			// Return selector with root for block level style.
-			return "{$wrap_with_global_style("{$base}{$root}")}{$pseudo}";
-		}
-
-		// If root contains selector, we should return the root.
-		if ( str_contains( $root, $selector ) ) {
-			return $wrap_with_global_style($root);
+			return "{$base}{$root}{$pseudo}";
 		}
 
 		// If selector started with dot or any other classname of child elements, we imagine it's other classname of root or child of root.
-		return $wrap_with_global_style("{$root}{$selector}");
+		return "{$root}{$selector}";
 	}
 }
 
@@ -1652,84 +800,73 @@ if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 	 * @return string the normalized css selector.
 	 */
 	function blockera_get_normalized_selector( string $selector ): string {
+
 		$selectors = explode( ' ', $selector );
-		$result    = '';
-		$count     = count( $selectors );
-		
-		for ( $i = 0; $i < $count; $i++ ) {
-			$_selector = $selectors[ $i ];
-			
-			// Ignore external selectors (early exit for performance).
-			if ( false === strpos( $_selector, 'blockera-block' ) ) {
-				continue;
-			}
-			
-			$_selector = trim( $_selector );
-			
-			// Empty after trim, skip.
-			if ( '' === $_selector ) {
-				continue;
-			}
-			
-			// Add dot prefix if not present.
-			if ( '.' !== $_selector[0] ) {
-				$result .= '.' . $_selector;
-			} else {
-				$result .= $_selector;
-			}
-		}
-		
-		return $result;
+
+		return trim(
+			implode(
+				'',
+				array_map(
+					function ( string $_selector ): string {
+
+						// ignore external selectors.
+						if ( false === strpos( $_selector, 'blockera-block' ) ) {
+
+							return '';
+						}
+
+						$_selector = trim( $_selector );
+
+						if ( ! empty( $_selector ) && '.' === $_selector[0] ) {
+
+							return $_selector;
+						}
+
+						return '.' . $_selector;
+					},
+					$selectors
+				)
+			)
+		);
 	}
 }
 
 if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
 
 	/**
-	 * Get blockera base breakpoint from entities or config.
+	 * Get blockera base breakpoint from config.
 	 *
-	 * Optimized to use in-memory entities first to avoid database reads.
-	 * Falls back to config if entities are not available.
-	 * 
 	 * FIXME: refactor this function to solve base breakpoint with read of database.
 	 *
 	 * @return string the base breakpoint name.
 	 */
 	function blockera_get_base_breakpoint(): string {
 
-		// Static cache to avoid repeated processing.
-		static $cached_base_breakpoint = null;
+		$breakpoints = blockera_core_config( 'breakpoints' );
+		$base        = $breakpoints['base'];
 
-		if ( null !== $cached_base_breakpoint ) {
+		if ( ! is_string( $base ) ) {
 
-			return $cached_base_breakpoint;
+			return $base;
 		}
 
-		$base_breakpoint = null;
-		$breakpoints     = blockera_core_config( 'breakpoints' );
+		$prepared_breakpoints = array_filter(
+			$breakpoints['list'],
+			function ( array $breakpoint ): bool {
 
-		if ( ! empty( $breakpoints['base'] ) && is_string( $breakpoints['base'] ) ) {
-
-			// Fast path: base is directly specified as string.
-			$base_breakpoint = $breakpoints['base'];
-
-		} elseif ( ! empty( $breakpoints['list'] ) && is_array( $breakpoints['list'] ) ) {
-
-			// Search through list for base breakpoint.
-			foreach ( $breakpoints['list'] as $breakpoint ) {
-
-				if ( ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] ) && ! empty( $breakpoint['type'] ) ) {
-
-					$base_breakpoint = $breakpoint['type'];
-					break;
-				}
+				return ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] );
 			}
+		);
+
+		$base = array_shift( $prepared_breakpoints );
+
+		if ( empty( $prepared_breakpoints ) || ! $base || empty( $base['type'] ) ) {
+
+			// fallback breakpoint.
+			return 'desktop';
 		}
 
-		// Fallback to default if not found.
-		$cached_base_breakpoint = $base_breakpoint ? $base_breakpoint : 'desktop';
-
-		return $cached_base_breakpoint;
+		return $base['type'];
 	}
 }
 
@@ -1754,17 +891,11 @@ if (! function_exists('blockera_get_available_block_supports')) {
 	 * @return array the block supports.
 	 */
 	function blockera_get_available_block_supports(): array {
-		// Static cache to avoid repeated file I/O and JSON parsing within the same request.
-		static $cached_supports = null;
-
-		if ( null !== $cached_supports ) {
-			return $cached_supports;
-		}
-
 		$supports = [];
 		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
 
-		foreach ( $files as $support_file ) {			
+		foreach ($files as $support_file) {
+
 			ob_start();
 
 			require $support_file;
@@ -1779,9 +910,7 @@ if (! function_exists('blockera_get_available_block_supports')) {
 			$supports[ $support['title'] ] = $support;
 		}
 
-		$cached_supports = $supports;
-
-		return blockera_add_icon_block_supports($supports);
+		return $supports;
 	}
 }
 
@@ -1844,14 +973,19 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 	 */
 	function blockera_get_sanitize_block_attributes( array $attributes ): array {
 
-		$result = [];
+		return array_map(
+			static function ( $attribute ) {
 
-		foreach ( $attributes as $key => $attribute ) {
-			// Maintain exact behavior: check is_array() first, then isset() for 'value' key.
-			$result[ $key ] = ( is_array( $attribute ) && isset( $attribute['value'] ) ) ? $attribute['value'] : $attribute;
-		}
-		
-		return $result;
+				if ( is_array( $attribute ) && isset( $attribute['value'] ) ) {
+
+					return $attribute['value'];
+				}
+
+				return $attribute;
+
+			},
+			$attributes
+		);
 	}
 }
 
@@ -1932,37 +1066,5 @@ if (! function_exists('blockera_sort_breakpoints')) {
         );
 
 		return $breakpointsArray;
-	}
-}
-
-if (! function_exists('blockera_is_valid_block_type')) {
-
-	/**
-	 * Check if the block type is registered.
-	 *
-	 * @param string $block_type the block type.
-	 *
-	 * @return bool true if the block type is valid, false otherwise.
-	 */
-	function blockera_is_valid_block_type( string $block_type ): bool {
-
-		return (bool) blockera_get_block_type($block_type);
-	}
-}
-
-if (! function_exists('blockera_generate_block_root_selector')) {
-
-	/**
-	 * Generate block root selector.
-	 *
-	 * @param string $block_type the block type.
-	 *
-	 * @return string the block root selector.
-	 */
-	function blockera_generate_block_root_selector( string $block_type ): string {
-
-		$prefix = '.wp-block-';
-
-		return $prefix . str_replace('/', '-', str_replace('core/', '', $block_type));
 	}
 }

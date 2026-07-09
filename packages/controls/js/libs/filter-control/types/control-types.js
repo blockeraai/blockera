@@ -34,10 +34,5 @@ export type TItem = {
 
 export type FilterControlProps = {
 	...RepeaterControlProps,
-	/**
-	 * When true, does not pass variable / value-addon support to the repeater
-	 * (`controlAddonTypes`, `variableTypes`).
-	 */
-	withoutValueAddons?: boolean,
 	defaultRepeaterItemValue?: TItem,
 };

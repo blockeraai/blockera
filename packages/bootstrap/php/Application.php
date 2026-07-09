@@ -208,10 +208,7 @@ abstract class Application {
      * @return void
      */
     public function registerConfiguredProviders() { 
-		foreach ($this->service_providers as $name => $serviceProvider) {
-			$providerClass = is_string($serviceProvider) ? $serviceProvider : get_class($serviceProvider);
-			$this->registerProviders( $providerClass, $name);
-        }
+        array_map([ $this, 'registerProviders' ], $this->service_providers, array_keys($this->service_providers));
     }
 
     /**
@@ -220,9 +217,13 @@ abstract class Application {
      * @return void
      */
     public function bootstrap() { 
-        foreach ($this->service_providers as $service_provider) {
-            $service_provider->boot();
-        }
+        array_map(
+            static function ( ServiceProvider $service_provider) {
+
+                $service_provider->boot();
+            },
+            $this->service_providers
+        );
     }
 
     /**
@@ -801,13 +802,6 @@ abstract class Application {
     protected function resolve( $abstract, $parameters = [], $raiseEvents = true) {
          $abstract = $this->getAlias($abstract);
 
-        // Optimize: Check for singleton instance early if no parameters (common hot path).
-        // This avoids unnecessary contextual concrete lookup for the most frequent case.
-        $hasParams = count($parameters) > 0;
-        if (! $hasParams && isset($this->instances[ $abstract ])) {
-            return $this->instances[ $abstract ];
-        }
-
         // First we'll fire any event handlers which handle the "before" resolving of
         // specific types. This gives some hooks the chance to add various extends
         // calls to change the resolution of objects that they're interested in.
@@ -817,7 +811,7 @@ abstract class Application {
 
         $concrete = $this->getContextualConcrete($abstract);
 
-        $needsContextualBuild = $hasParams || $concrete !== null;
+        $needsContextualBuild = ! empty($parameters) || ! is_null($concrete);
 
         // If an instance of the type is currently being managed as a singleton we'll
         // just return an existing instance instead of instantiating new instances
@@ -828,7 +822,7 @@ abstract class Application {
 
         $this->with[] = $parameters;
 
-        if ($concrete === null) {
+        if (is_null($concrete)) {
             $concrete = $this->getConcrete($abstract);
         }
 
@@ -844,12 +838,8 @@ abstract class Application {
         // If we defined any extenders for this type, we'll need to spin through them
         // and apply them to the object being built. This allows for the extension
         // of services, such as changing configuration or decorating the object.
-        // Optimize: Cache getExtenders result and check if empty before iterating.
-        $extenders = $this->getExtenders($abstract);
-        if (! empty($extenders)) {
-            foreach ($extenders as $extender) {
-                $object = $extender($object, $this);
-            }
+        foreach ($this->getExtenders($abstract) as $extender) {
+            $object = $extender($object, $this);
         }
 
         // If the requested type is registered as a singleton we'll want to cache off
@@ -897,34 +887,22 @@ abstract class Application {
      * @return \Closure|string|array|null
      */
     protected function getContextualConcrete( $abstract) {
-		// Optimize: Cache findInContextualBindings result and use strict comparison
-		$binding = $this->findInContextualBindings($abstract);
-		if ($binding !== null) {
+		if (! is_null($binding = $this->findInContextualBindings($abstract))) {
             return $binding;
 		}
 
         // Next we need to see if a contextual binding might be bound under an alias of the
         // given abstract type. So, we will need to check if any aliases exist with this
         // type and then spin through them and check for contextual bindings on these.
-		// Optimize: Use isset() instead of empty() for faster array key check
-		if (! isset($this->abstractAliases[ $abstract ])) {
-			return null;
+		if (empty($this->abstractAliases[ $abstract ])) {
+			return;
 		}
 
-		$aliases = $this->abstractAliases[ $abstract ];
-		// Optimize: Early exit if aliases array is empty
-		if (count($aliases) === 0) {
-			return null;
-		}
-
-		foreach ($aliases as $alias) {
-			$binding = $this->findInContextualBindings($alias);
-			if ($binding !== null) {
+		foreach ($this->abstractAliases[ $abstract ] as $alias) {
+			if (! is_null($binding = $this->findInContextualBindings($alias))) {
 				return $binding;
 			}
 		}
-		
-		return null;
     }
 
     /**
@@ -961,11 +939,8 @@ abstract class Application {
          // If the concrete type is actually a Closure, we will just execute it and
         // hand back the results of the functions, which allows functions to be
         // used as resolvers for more fine-tuned resolution of these objects.
-        // Optimize: Early return for Closure (most common case for bound services)
         if ($concrete instanceof Closure) {
-            // Optimize: Cache getLastParameterOverride result
-            $params = $this->getLastParameterOverride();
-            return $concrete($this, $params);
+            return $concrete($this, $this->getLastParameterOverride());
         }
 
         try {
@@ -988,8 +963,7 @@ abstract class Application {
         // If there are no constructors, that means there are no dependencies then
         // we can just resolve the instances of the objects right away, without
         // resolving any other types or dependencies out of these containers.
-        // Optimize: Use strict comparison instead of is_null()
-        if ($constructor === null) {
+        if (is_null($constructor)) {
             array_pop($this->buildStack);
 
             return new $concrete();
@@ -1260,24 +1234,11 @@ abstract class Application {
      * @return void
      */
     protected function fireBeforeResolvingCallbacks( $abstract, $parameters = []) {
-         // Optimize: Early exit if no global callbacks
-        if (! empty($this->globalBeforeResolvingCallbacks)) {
-            $this->fireBeforeCallbackArray($abstract, $parameters, $this->globalBeforeResolvingCallbacks);
-        }
+         $this->fireBeforeCallbackArray($abstract, $parameters, $this->globalBeforeResolvingCallbacks);
 
-        // Optimize: Early exit if no type-specific callbacks
-        if (empty($this->beforeResolvingCallbacks)) {
-            return;
-        }
-
-        // Optimize: Cache array access and use direct iteration
-        $callbacks = $this->beforeResolvingCallbacks;
-        foreach ($callbacks as $type => $typeCallbacks) {
-            // Optimize: Check exact match first (faster than is_subclass_of)
-            if ($type === $abstract) {
-                $this->fireBeforeCallbackArray($abstract, $parameters, $typeCallbacks);
-            } elseif (is_subclass_of($abstract, $type)) {
-                $this->fireBeforeCallbackArray($abstract, $parameters, $typeCallbacks);
+        foreach ($this->beforeResolvingCallbacks as $type => $callbacks) {
+            if ($type === $abstract || is_subclass_of($abstract, $type)) {
+                $this->fireBeforeCallbackArray($abstract, $parameters, $callbacks);
             }
         }
     }
@@ -1304,19 +1265,12 @@ abstract class Application {
      * @return void
      */
     protected function fireResolvingCallbacks( $abstract, $object) {
-         // Optimize: Early exit if no global callbacks
-        if (! empty($this->globalResolvingCallbacks)) {
-            $this->fireCallbackArray($object, $this->globalResolvingCallbacks);
-        }
+         $this->fireCallbackArray($object, $this->globalResolvingCallbacks);
 
-        // Optimize: Early exit if no type-specific callbacks
-        if (! empty($this->resolvingCallbacks)) {
-            // Optimize: Only call getCallbacksForType if there are callbacks to process
-            $typeCallbacks = $this->getCallbacksForType($abstract, $object, $this->resolvingCallbacks);
-            if (! empty($typeCallbacks)) {
-                $this->fireCallbackArray($object, $typeCallbacks);
-            }
-        }
+        $this->fireCallbackArray(
+            $object,
+            $this->getCallbacksForType($abstract, $object, $this->resolvingCallbacks)
+        );
 
         $this->fireAfterResolvingCallbacks($abstract, $object);
     }
@@ -1329,21 +1283,12 @@ abstract class Application {
      * @return void
      */
     protected function fireAfterResolvingCallbacks( $abstract, $object) {
-         // Optimize: Early exit if no global callbacks
-        if (! empty($this->globalAfterResolvingCallbacks)) {
-            $this->fireCallbackArray($object, $this->globalAfterResolvingCallbacks);
-        }
+         $this->fireCallbackArray($object, $this->globalAfterResolvingCallbacks);
 
-        // Optimize: Early exit if no type-specific callbacks
-        if (empty($this->afterResolvingCallbacks)) {
-            return;
-        }
-
-        // Optimize: Only call getCallbacksForType if there are callbacks to process
-        $typeCallbacks = $this->getCallbacksForType($abstract, $object, $this->afterResolvingCallbacks);
-        if (! empty($typeCallbacks)) {
-            $this->fireCallbackArray($object, $typeCallbacks);
-        }
+        $this->fireCallbackArray(
+            $object,
+            $this->getCallbacksForType($abstract, $object, $this->afterResolvingCallbacks)
+        );
     }
 
     /**
@@ -1355,27 +1300,11 @@ abstract class Application {
      * @return array
      */
     protected function getCallbacksForType( $abstract, $object, array $callbacksPerType) {
-         // Optimize: Pre-allocate array with estimated size to reduce reallocations
-        $results = [];
-        $count = 0;
+         $results = [];
 
         foreach ($callbacksPerType as $type => $callbacks) {
-            // Optimize: Check exact match first (faster than instanceof)
-            if ($type === $abstract) {
-                // Optimize: Use array_merge only when needed, otherwise direct append
-                if ($count === 0) {
-                    $results = $callbacks;
-                } else {
-                    $results = array_merge($results, $callbacks);
-                }
-                $count += count($callbacks);
-            } elseif ($object instanceof $type) {
-                if ($count === 0) {
-                    $results = $callbacks;
-                } else {
-                    $results = array_merge($results, $callbacks);
-                }
-                $count += count($callbacks);
+            if ($type === $abstract || $object instanceof $type) {
+                $results = array_merge($results, $callbacks);
             }
         }
 
@@ -1390,12 +1319,7 @@ abstract class Application {
      * @return void
      */
     protected function fireCallbackArray( $object, array $callbacks) {
-		// Optimize: Early exit if empty array (foreach handles this, but explicit is faster)
-        if (empty($callbacks)) {
-            return;
-        }
-        
-        foreach ($callbacks as $callback) {
+		foreach ($callbacks as $callback) {
             $callback($object, $this);
 		}
     }

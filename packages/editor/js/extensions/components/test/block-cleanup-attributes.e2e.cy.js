@@ -33,10 +33,8 @@ describe('BlockBase testing ...', () => {
 	});
 
 	it('should exists blockeraPropsId, blockeraCompatId, blockeraFontColor, and blockera classnames values on selected block when changed text-color control', () => {
-		cy.getByAriaControls('styles-view').click();
-
 		// Set value.
-		cy.setColorControlValue('Text Color', 'aaaaaa');
+		cy.setColorControlValue('Text Color', 'aaa');
 
 		getWPDataObject().then((data) => {
 			const blockAttributes = getSelectedBlock(data)?.attributes;

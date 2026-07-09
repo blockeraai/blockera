@@ -1,4 +1,3 @@
-/* Icon style */
 .blockera-block.wp-block-categories[class*="blockera-has-icon-"] {
 	padding-left: 10px;
 }
@@ -11,37 +10,21 @@
 }
 
 .blockera-block.wp-block-categories[class*="blockera-has-icon-"] li::before {
-	content: "";
+	content: '';
 	display: inline-block;
-	background-color: var(
-		--blockera--icon--editor-icon-bg,
-		var(--blockera--icon--color, currentColor)
-	);
-	background-image: var(--blockera--icon--bg-image, none);
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center;
-	-webkit-mask-image: var(
-		--blockera--icon--mask-image,
-		var(--blockera--icon--url)
-	);
-	-webkit-mask-position: center;
-	-webkit-mask-repeat: no-repeat;
-	-webkit-mask-size: contain;
-	mask-image: var(--blockera--icon--mask-image, var(--blockera--icon--url));
-	mask-position: center;
-	mask-repeat: no-repeat;
+	background-color: var(--blockera--icon--color, currentColor);
+	mask: var(--blockera--icon--url) no-repeat center;
 	mask-size: contain;
+	-webkit-mask: var(--blockera--icon--url) no-repeat center;
+	-webkit-mask-size: contain;
 	width: var(--blockera--icon--size, 1em);
 	height: var(--blockera--icon--size, 1em);
-	transform: rotate(var(--blockera--icon--rotate, 0deg))
-		scaleX(var(--blockera--icon--flip-horizontal, 1))
-		scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 	align-self: center;
 }
 
 /* Hide the default marker */
 .blockera-block.wp-block-categories[class*="blockera-has-icon-"] li::marker {
-	content: "";
+	content: '';
 	display: none;
 }

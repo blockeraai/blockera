@@ -12,7 +12,7 @@ describe('Text Orientation → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 
 		openMoreFeaturesControl('More typography settings');
 	});
@@ -21,7 +21,9 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 1
 		//
-		cy.getByAriaLabel('Vertical LR Mixed').click();
+		cy.getByAriaLabel(
+			'Text will display vertically from left to right with a mixed orientation'
+		).click();
 
 		//Check block
 		cy.getBlock('core/paragraph')
@@ -38,7 +40,9 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 2
 		//
-		cy.getByAriaLabel('Vertical RL Mixed').click();
+		cy.getByAriaLabel(
+			'Text will display vertically from right to left with a mixed orientation'
+		).click();
 
 		//Check block
 		cy.getBlock('core/paragraph')
@@ -55,7 +59,9 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 3
 		//
-		cy.getByAriaLabel('Vertical LR Upright').click();
+		cy.getByAriaLabel(
+			'Text will appear vertically from left to right with an upright orientation'
+		).click();
 
 		//Check block
 		cy.getBlock('core/paragraph')
@@ -72,7 +78,9 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 4
 		//
-		cy.getByAriaLabel('Vertical RL Upright').click();
+		cy.getByAriaLabel(
+			'Text will appear vertically from right to left with an upright orientation'
+		).click();
 
 		//Check block
 		cy.getBlock('core/paragraph')
@@ -104,7 +112,9 @@ describe('Text Orientation → Functionality', () => {
 		});
 
 		// Switch to style 1
-		cy.getByAriaLabel('Vertical LR Mixed').click();
+		cy.getByAriaLabel(
+			'Text will display vertically from left to right with a mixed orientation'
+		).click();
 
 		//Check frontend
 		savePage();

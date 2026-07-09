@@ -17,48 +17,20 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { renderSelectOptionChangesetPreview } from '../../../../components';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-
-function getBlockeraTextTransformSelectOptions(iconSize: number = 18): any {
-	return [
-		{
-			label: __('Capitalize', 'blockera'),
-			value: 'capitalize',
-			icon: <Icon icon="text-transform-capitalize" iconSize={iconSize} />,
-		},
-		{
-			label: __('Lowercase', 'blockera'),
-			value: 'lowercase',
-			icon: <Icon icon="text-transform-lowercase" iconSize={iconSize} />,
-		},
-		{
-			label: __('Uppercase', 'blockera'),
-			value: 'uppercase',
-			icon: <Icon icon="text-transform-uppercase" iconSize={iconSize} />,
-		},
-		{
-			label: __('None', 'blockera'),
-			value: 'initial',
-			icon: <Icon library="wp" icon="close-small" iconSize={iconSize} />,
-		},
-	];
-}
 
 export const TextTransform = ({
 	block,
 	value,
 	onChange,
 	defaultValue,
-	labelProps: labelPropsFromExtension,
 	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
 	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
-	labelProps?: Object,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -134,8 +106,51 @@ export const TextTransform = ({
 						</p>
 					</>
 				}
-				columns="1fr 2.5fr"
-				options={getBlockeraTextTransformSelectOptions()}
+				columns="columns-1"
+				className="control-first label-center small-gap"
+				options={[
+					{
+						label: __('Capitalize', 'blockera'),
+						value: 'capitalize',
+						icon: (
+							<Icon
+								icon="text-transform-capitalize"
+								iconSize="18"
+							/>
+						),
+					},
+					{
+						label: __('Lowercase', 'blockera'),
+						value: 'lowercase',
+						icon: (
+							<Icon
+								icon="text-transform-lowercase"
+								iconSize="18"
+							/>
+						),
+					},
+					{
+						label: __('Uppercase', 'blockera'),
+						value: 'uppercase',
+						icon: (
+							<Icon
+								icon="text-transform-uppercase"
+								iconSize="18"
+							/>
+						),
+					},
+					{
+						label: __('None', 'blockera'),
+						value: 'initial',
+						icon: (
+							<Icon
+								library="wp"
+								icon="close-small"
+								iconSize="18"
+							/>
+						),
+					},
+				]}
 				isDeselectable={true}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
@@ -144,19 +159,6 @@ export const TextTransform = ({
 					})
 				}
 				{...props}
-				labelProps={{
-					...labelPropsFromExtension,
-					changesetGraphPreviewRender: (resolved: mixed) =>
-						renderSelectOptionChangesetPreview({
-							value: resolved,
-							getOptions: (iconSize) =>
-								getBlockeraTextTransformSelectOptions(iconSize),
-							showIcon: true,
-							showLabel: false,
-							iconSize: 16,
-							emptyValueMeansNoPreview: true,
-						}),
-				}}
 			/>
 		</ControlContextProvider>
 	);

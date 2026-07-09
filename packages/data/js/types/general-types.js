@@ -11,7 +11,12 @@
  * preset → variables that come from editor (custom or editor variables)
  */
 export type ValueAddonReferenceType =
-	'core' | 'core-pro' | 'custom' | 'plugin' | 'theme' | 'preset';
+	| 'core'
+	| 'core-pro'
+	| 'custom'
+	| 'plugin'
+	| 'theme'
+	| 'preset';
 
 export type ValueAddonReference = {
 	type: ValueAddonReferenceType,

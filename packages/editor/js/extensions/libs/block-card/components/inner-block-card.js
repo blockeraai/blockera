@@ -7,7 +7,6 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
-import { useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -47,11 +46,9 @@ export function InnerBlockCard({
 	currentBreakpoint,
 	availableStates,
 	additional,
-	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
-	variationSurface,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -66,8 +63,6 @@ export function InnerBlockCard({
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
-	insideBlockInspector: boolean,
-	variationSurface?: string,
 	handleOnChangeAttributes: (
 		attribute: string,
 		value: any,
@@ -100,40 +95,13 @@ export function InnerBlockCard({
 	const blockInformation = getInnerBlockDetails();
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 
-	const compositePreviewBlock = useMemo(
-		() => ({
-			clientId,
-			supports,
-			blockName,
-			setAttributes,
-			currentBlockStyleVariation: {},
-		}),
-		[clientId, supports, blockName, setAttributes]
-	);
-
-	const compositeBlockStatesProps = useMemo(
-		() => ({
-			attributes: currentStateAttributes,
-			id: `block-states-${kebabCase(currentBlock)}`,
-		}),
-		[
-			currentBlock,
-			currentStateAttributes?.blockeraBlockStates,
-			currentStateAttributes?.blockeraUnsavedData?.states,
-			currentStateAttributes?.blockeraInnerBlocks,
-		]
-	);
-
 	return (
 		<div
 			className={extensionClassNames(
 				'block-card',
-				'block-card--inner-block',
-				{
-					'separator-shadow': !insideBlockInspector,
-				}
+				'block-card--inner-block'
 			)}
-			data-test={'blockera-inner-block-card'}
+			data-test={'blockera-block-card'}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
 				<BlockIcon icon={blockInformation?.icon} />
@@ -155,6 +123,7 @@ export function InnerBlockCard({
 						>
 							{blockInformation?.label}
 						</span>
+
 						<Breadcrumb
 							clientId={clientId}
 							blockName={blockName}
@@ -165,30 +134,21 @@ export function InnerBlockCard({
 							}
 						/>
 
-						<div
-							className={extensionInnerClassNames(
-								'block-card__settings'
-							)}
-						>
-							<Tooltip text={__('Close Inner Block', 'blockera')}>
-								<Icon
-									className={extensionInnerClassNames(
-										'block-card__close'
-									)}
-									library="wp"
-									icon="close-small"
-									iconSize="24"
-									data-test={'Close Inner Block'}
-									onClick={() => {
-										onToggle(true, 'switch-to-parent');
-										handleOnClick(
-											'current-block',
-											'master'
-										);
-									}}
-								/>
-							</Tooltip>
-						</div>
+						<Tooltip text={__('Close Inner Block', 'blockera')}>
+							<Icon
+								className={extensionInnerClassNames(
+									'block-card__close'
+								)}
+								library="wp"
+								icon="close-small"
+								iconSize="24"
+								data-test={'Close Inner Block'}
+								onClick={() => {
+									onToggle(true, 'switch-to-parent');
+									handleOnClick('current-block', 'master');
+								}}
+							/>
+						</Tooltip>
 					</h2>
 
 					{blockInformation?.description && (
@@ -211,10 +171,6 @@ export function InnerBlockCard({
 				}}
 			>
 				<StateContainer
-					name={blockName}
-					clientId={clientId}
-					insideBlockInspector={insideBlockInspector}
-					variationSurface={variationSurface}
 					availableStates={availableStates}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData
@@ -231,10 +187,12 @@ export function InnerBlockCard({
 
 				{isActive && (
 					<BlockCompositePreview
-						block={compositePreviewBlock}
-						insideBlockInspector={true}
-						activeColorInsideBlockInspector={insideBlockInspector}
-						variationSurface={variationSurface}
+						block={{
+							clientId,
+							supports,
+							blockName,
+							setAttributes,
+						}}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}
 						currentBlock={currentBlock}
@@ -242,7 +200,10 @@ export function InnerBlockCard({
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
 						blockConfig={additional}
-						blockStatesProps={compositeBlockStatesProps}
+						blockStatesProps={{
+							attributes: currentStateAttributes,
+							id: `block-states-${kebabCase(currentBlock)}`,
+						}}
 					/>
 				)}
 			</Flex>

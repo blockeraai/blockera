@@ -49,29 +49,22 @@ function DividerGenerator(attributes) {
 		properties.position = 'absolute';
 		properties.left = '0px';
 
-		if (item.onFront) {
-			properties['z-index'] = '1000';
-		} else {
-			properties['z-index'] = '1';
-		}
+		if (item.onFront) properties['z-index'] = '1000';
+		else properties['z-index'] = '1';
 
 		switch (item.position) {
 			case 'top':
 				{
 					properties.top = '0px';
-					if (item.flip) {
-						properties.transform = 'scaleX(-1)';
-					}
+					if (item.flip) properties.transform = 'scaleX(-1)';
 				}
 				break;
 			case 'bottom':
 				{
 					properties.bottom = '0px';
-					if (item.flip) {
+					if (item.flip)
 						properties.transform = 'scaleX(-1) rotate(180deg)';
-					} else {
-						properties.transform = 'rotate(180deg)';
-					}
+					else properties.transform = 'rotate(180deg)';
 				}
 				break;
 		}

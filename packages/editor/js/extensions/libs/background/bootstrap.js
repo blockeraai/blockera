@@ -17,44 +17,36 @@ import {
 	backgroundFromWPCompatibility,
 	backgroundToWPCompatibility,
 } from './compatibility/background-image';
+import { mergeObject } from '@blockera/utils';
 import {
 	backgroundColorFromWPCompatibility,
 	backgroundColorToWPCompatibility,
 } from './compatibility/background-color';
 import type { BlockDetail } from '../block-card/block-states/types';
-import {
-	isInvalidCompatibilityRun,
-	mergeWPCompatibility,
-	sanitizeWPCompatibilityAttributes,
-} from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.backgroundExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const {
-				blockId,
-				blockAttributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
-			} = blockDetail;
+			const { blockId, blockAttributes } = blockDetail;
+
+			if (isBlockNotOriginalState(blockDetail)) {
+				return attributes;
+			}
 
 			attributes = backgroundFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
 			attributes = backgroundColorFromWPCompatibility({
 				attributes,
 				blockAttributes,
-				insideBlockInspector,
-				editorSelectedBlockEvent,
 			});
 
-			return sanitizeWPCompatibilityAttributes(attributes, blockDetail);
+			return attributes;
 		}
 	);
 
@@ -87,32 +79,23 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			const { insideBlockInspector, editorSelectedBlockEvent } =
-				blockDetail;
-
 			switch (featureId) {
 				case 'blockeraBackground':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						backgroundToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 
 				case 'blockeraBackgroundColor':
-					return mergeWPCompatibility(
+					return mergeObject(
 						nextState,
 						backgroundColorToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector,
-							editorSelectedBlockEvent,
-						}),
-						blockDetail
+						})
 					);
 			}
 

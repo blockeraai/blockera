@@ -1,5 +1,8 @@
-.blockera-control-attributes {
-	// Intentionally minimal.
-	// This file exists to satisfy shared style bundles (Storybook/Cypress CT).
-}
+.blockera-control.blockera-control-attributes-popover {
+	overflow: visible;
 
+	.components-popover__content,
+	.blockera-component-popover-body {
+		overflow: visible !important;
+	}
+}

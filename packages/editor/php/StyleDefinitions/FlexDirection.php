@@ -10,48 +10,51 @@ class FlexDirection extends BaseStyleDefinition {
 
     protected function css( array $setting): array {
 
-		if (! isset($setting['type'])) {
-			return [];
+        $declaration = [];
+        $cssProperty = $setting['type'];
+
+        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'flex-direction' !== $cssProperty) {
+
+            return $declaration;
+        }
+		
+		$item             = $setting['flex-direction'];
+		$changeFlexInside = false;
+
+		// Current block display (even the default).
+		$display = $this->getDisplayValue();
+
+		if ('flex' !== $display) {
+			return $declaration;
 		}
 
-		$cssProperty = $setting['type'];
+		if (isset($item['alignItems']) && $item['direction']) {
 
-		if ('' === $cssProperty || 'flex-direction' !== $cssProperty) {
-			return [];
+			$this->setDeclaration($cssProperty, $item['direction']);
 		}
 
-		if (! isset($setting[ $cssProperty ])) {
-			return [];
-		}
-
-		$item = $setting['flex-direction'];
-		if (! is_array($item)) {
-			return [];
-		}
-
-		$display_list = [
-			'flex' => true,
-			'grid' => true,
+		$normalItems = [
+			'flex-start' => true,
+			'center'     => true,
+			'flex-end'   => true,
 		];
 
-		if (! isset($display_list[ $this->getDisplayValue() ])) {
-			return [];
+		if (isset($item['alignItems'], $item['direction'], $item['justifyContent']) && 'column' === $item['direction'] && isset($normalItems[ $item['alignItems'] ]) && isset($normalItems[ $item['justifyContent'] ])
+		) {
+			$changeFlexInside = true;
 		}
 
-		$direction      = $item['direction'] ?? null;
-		$alignItems     = $item['alignItems'] ?? null;
-		$justifyContent = $item['justifyContent'] ?? null;
+		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
-		if (null !== $direction && '' !== $direction) {
-			$this->declarations[ $cssProperty ] = $direction;
+		if (isset($item['alignItems']) && $item['alignItems']) {
+			$prop = $changeFlexInside ? 'justify-content' : 'align-items';
+
+			$this->setDeclaration($prop, $item['alignItems'] . ( $optimizeStyleGeneration && 'align-items' === $prop ? ' !important' : '' ));
 		}
 
-		if (null !== $alignItems && '' !== $alignItems) {
-			$this->declarations['align-items'] = $alignItems . ' !important';
-		}
-
-		if (null !== $justifyContent && '' !== $justifyContent) {
-			$this->declarations['justify-content'] = $justifyContent . ' !important';
+		if (isset($item['justifyContent']) && $item['justifyContent']) {
+			$prop = $changeFlexInside ? 'align-items' : 'justify-content';
+			$this->setDeclaration($prop, $item['justifyContent'] . ( $optimizeStyleGeneration && 'justify-content' === $prop ? ' !important' : '' ));
 		}
 
 		$this->setCss($this->declarations);

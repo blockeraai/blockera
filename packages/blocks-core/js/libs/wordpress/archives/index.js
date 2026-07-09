@@ -14,7 +14,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../../type';
+import type { BlockType } from '../../type';
 
 export const Archives: BlockType = {
 	name: 'blockeraArchives',
@@ -62,12 +62,5 @@ export const Archives: BlockType = {
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
-	},
-	selectors: {
-		/**
-		 * Change the root selector to the list element of the archives block in the editor.
-		 * By doing this we can have exact style of block in editor and front end.
-		 */
-		root: ' .wp-block-archives-list.wp-block-archives',
 	},
 };

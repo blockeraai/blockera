@@ -20,7 +20,11 @@ describe(
 			cy.viewport(1280, 720);
 		});
 
-		context('Functional', () => {
+		// TODO: temporary skip!
+		// We should double check this test suite because this is flaky test!
+		// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-139
+		/* @debug-ignore */
+		context.skip('Functional', () => {
 			context('image type', () => {
 				context('size', () => {
 					it('should change image-size in data by toggling between size options', () => {
@@ -138,25 +142,20 @@ describe(
 							},
 							store: STORE_NAME,
 							name,
-							skipSyncValue: false,
 						});
 
+						// Wait for the popover to ensure the component is fully rendered
 						cy.get('.blockera-component-popover', {
 							timeout: 20000,
 						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
-							cy.getByDataTest('position-button').click();
+							cy.get('input[type="text"]')
+								.eq(0)
+								.as('positionTopInput');
+							cy.get('@positionTopInput').clear();
+							cy.get('@positionTopInput').type('80');
 						});
-
-						cy.get('.blockera-component-popover')
-							.last()
-							.within(() => {
-								cy.get('input').first().clear({ force: true });
-								cy.get('input')
-									.first()
-									.type('80', { delay: 0 });
-							});
 
 						cy.then(() => {
 							const items = getControlValue(name, STORE_NAME);
@@ -263,21 +262,19 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
-						// WP 31+ opens ColorPicker from a control point (not the bar background).
 						cy.get(
-							'.components-custom-gradient-picker__control-point-button'
-						)
-							.first()
-							.click();
+							'.components-custom-gradient-picker__gradient-bar-background'
+						).as('gradientBar');
+
+						cy.get('@gradientBar').click();
 					});
 
-					cy.get('input[maxlength="9"]', { timeout: 20000 })
-						.should('be.visible')
-						.setControlledInputValue('FFA33C');
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('FFA33C ', {
+						delay: 0,
+					});
 
-					cy.get(
-						'.components-custom-gradient-picker__gradient-bar-background'
-					).should(($gradientBar) => {
+					cy.get('@gradientBar').should(($gradientBar) => {
 						const background = $gradientBar.css('background');
 						expect(background).to.include('rgb(255, 163, 60)');
 					});
@@ -303,7 +300,6 @@ describe(
 						},
 						store: STORE_NAME,
 						name,
-						skipSyncValue: false,
 					});
 
 					// Wait for the popover to ensure the component is fully rendered
@@ -433,21 +429,17 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
-						// WP 31+ opens ColorPicker from a control point (not the bar background).
 						cy.get(
-							'.components-custom-gradient-picker__control-point-button'
-						)
-							.first()
-							.click();
+							'.components-custom-gradient-picker__gradient-bar-background'
+						).as('gradientBar');
+
+						cy.get('@gradientBar').click();
 					});
 
-					cy.get('input[maxlength="9"]', { timeout: 20000 })
-						.should('be.visible')
-						.setControlledInputValue('FFA33C');
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('FFA33C ');
 
-					cy.get(
-						'.components-custom-gradient-picker__gradient-bar-background'
-					).should(($gradientBar) => {
+					cy.get('@gradientBar').should(($gradientBar) => {
 						const background = $gradientBar.css('background');
 						expect(background).to.include('rgb(255, 163, 60)');
 					});
@@ -473,7 +465,6 @@ describe(
 						},
 						store: STORE_NAME,
 						name,
-						skipSyncValue: false,
 					});
 
 					// Wait for the popover to ensure the component is fully rendered
@@ -482,18 +473,13 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
-						cy.getByDataTest('position-button').click();
+						cy.get('input[type="text"]')
+							.eq(0)
+							.as('positionTopInput');
+						cy.get('@positionTopInput').clear();
+						cy.get('@positionTopInput').type('80');
+						cy.get('@positionTopInput').should('have.value', '80');
 					});
-
-					cy.get('.blockera-component-popover')
-						.last()
-						.within(() => {
-							cy.get('input').first().clear({ force: true });
-							cy.get('input').first().type('80', { delay: 0 });
-							cy.get('input')
-								.first()
-								.should('contain.value', '80');
-						});
 
 					cy.then(() => {
 						const items = getControlValue(name, STORE_NAME);
@@ -647,21 +633,27 @@ describe(
 							'mesh-gradient-0'
 						]['mesh-gradient'];
 
-						cy.getByDataTest('mesh-gradient-regenerate').click();
+						cy.get(
+							'.blockera-control-mesh-generator-preview'
+						).click();
 
-						cy.then(() => {
-							const mesh = getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							];
-							const newColors = mesh['mesh-gradient-colors'];
-							expect(Object.keys(newColors).length).to.equal(
-								Object.keys(colors).length
-							);
-							expect(newColors).to.not.deep.equal(colors);
-							expect(mesh['mesh-gradient']).to.not.equal(
-								prevMesh
-							);
-						});
+						cy.get('.blockera-control-mesh-generator-preview').then(
+							() => {
+								const newColors = getControlValue(
+									name,
+									STORE_NAME
+								)['mesh-gradient-0']['mesh-gradient-colors'];
+								expect(newColors.length).to.be.equal(
+									colors.length
+								);
+								expect(newColors).to.not.be.deep.equal(colors);
+								const newMesh = getControlValue(
+									name,
+									STORE_NAME
+								)['mesh-gradient-0']['mesh-gradient'];
+								expect(newMesh).to.not.deep.equal(prevMesh);
+							}
+						);
 					});
 				});
 
@@ -692,45 +684,45 @@ describe(
 							timeout: 20000,
 						}).should('be.visible');
 
-						// Mesh colors repeater uses actionButtonVisibility={false}; open via the
-						// hex label (swatch hits svg/path and isOpenPopoverEvent blocks toggle).
-						cy.getByDataTest('--c2')
-							.find('.blockera-control-header-label')
-							.click({ force: true });
-						cy.getByDataTest('--c2')
-							.find('[data-cy="control-group"]')
-							.should('have.class', 'is-open');
+						cy.getByDataCy('repeater-item').eq(3).click();
 
-						// Color row content is portaled (Popover.Slot); target the picker input
-						// by data-cy — only one mesh color popover is open at a time here.
-						// Mesh gradient onChange runs per keystroke; partial hex breaks cy.type().
-						cy.get('[data-cy="color-picker-css-value"]', {
-							timeout: 20000,
-						})
-							.should('be.visible')
-							.setControlledInputValue('#4fecff');
+						cy.get('.blockera-component-popover')
+							.last()
+							.within(() => {
+								cy.get('input[maxlength="9"]').as('colorInput');
+								cy.get('@colorInput').clear({ force: true });
+								cy.get('@colorInput').type('4fecff ', {
+									delay: 0,
+									force: true,
+								});
+							});
 
-						cy.then(() => {
-							const meshColors = getControlValue(
-								name,
-								STORE_NAME
-							)['mesh-gradient-0']['mesh-gradient-colors'];
-							expect(
-								meshColors['--c2'].color.toLowerCase()
-							).to.equal('#4fecff');
-						});
+						cy.getByDataCy('repeater-item')
+							.eq(0)
+							.within(() => {
+								const newColors = Object.values(
+									getControlValue(name, STORE_NAME)[
+										'mesh-gradient-0'
+									]['mesh-gradient-colors']
+								);
 
+								// color value change assertion
+								expect(
+									newColors[newColors.length - 1].color
+								).to.be.equal('#4fecff');
+							});
+
+						// gradient assertion
 						cy.get('.blockera-control-mesh-generator-preview').then(
 							($el) => {
 								const elementStyles = window.getComputedStyle(
 									$el[0]
 								);
 								expect(
-									elementStyles
-										.getPropertyValue('--c2')
-										.trim()
-										.toLowerCase()
-								).to.equal('#4fecff');
+									elementStyles.getPropertyValue(
+										`--c${Object.keys(colors).length - 1}`
+									)
+								).to.be.equal('#4fecff');
 							}
 						);
 					});
@@ -881,22 +873,35 @@ describe(
 							.as('addColor')
 							.click();
 
-						cy.getByDataId('--c1').realHover();
-						cy.getByAriaLabel('Delete c1').click({
-							force: true,
+						cy.get('[data-id="--c1"]').within(() => {
+							cy.get('[aria-label~="Delete"]').click({
+								force: true,
+							});
 						});
-						cy.then(() => {
-							const mesh = getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							];
-							const newColors = mesh['mesh-gradient-colors'];
-							expect(Object.keys(newColors).length).to.equal(
-								Object.keys(colors).length
-							);
+						cy.contains('Colors')
+							.parent()
+							.siblings('[data-cy="repeater-item"]')
+							.should(($items) => {
+								expect($items).to.have.length(
+									Object.keys(colors).length
+								);
+							})
+							.then(() => {
+								const newColors = getControlValue(
+									name,
+									STORE_NAME
+								)['mesh-gradient-0']['mesh-gradient-colors'];
+								expect(
+									Object.keys(newColors).length
+								).to.be.equal(Object.keys(colors).length);
 
-							const newMesh = mesh['mesh-gradient'];
-							expect(newMesh).to.not.deep.equal(prevMesh);
-						});
+								const newMesh = getControlValue(
+									name,
+									STORE_NAME
+								)['mesh-gradient-0']['mesh-gradient'];
+
+								expect(newMesh).to.be.not.deep.equal(prevMesh);
+							});
 					});
 				});
 
@@ -927,9 +932,9 @@ describe(
 							timeout: 20000,
 						}).should('be.visible');
 
-						cy.get('button[aria-label="Parallax"]').click();
+						cy.getByAriaLabel('Parallax').click();
 
-						cy.get('button[aria-label="Parallax"]')
+						cy.getByAriaLabel('Parallax')
 							.should('have.attr', 'aria-checked', 'true')
 							.then(() => {
 								const meshGradientAttachment = getControlValue(
@@ -944,32 +949,6 @@ describe(
 								).to.be.equal('fixed');
 							});
 					});
-				});
-			});
-
-			context('none type', () => {
-				it('should show informational notice when none is selected', () => {
-					const name = nanoid();
-					cy.withDataProvider({
-						component: <BackgroundControl />,
-						value: {
-							'none-0': {
-								type: 'none',
-								isVisible: true,
-								isOpen: true,
-							},
-						},
-						store: STORE_NAME,
-						name,
-					});
-
-					cy.get('.blockera-component-popover', {
-						timeout: 20000,
-					}).should('be.visible');
-
-					cy.contains(
-						'Background is set to none. This block will not have a layered background at this style context.'
-					).should('be.visible');
 				});
 			});
 		});

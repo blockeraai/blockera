@@ -1,3 +1,4 @@
+
 .blockera-control-border-radius {
 	display: flex;
 	flex-direction: column;
@@ -5,16 +6,13 @@
 
 	.blockera-control-border-header {
 		display: grid;
-		gap: 8px;
+		gap: 0;
 		align-items: center;
 		justify-content: flex-end;
-		grid-template-columns: 1fr 2fr;
+		grid-template-columns: 1fr 158px;
 
 		.blockera-control-input {
-			width: 100% !important;
-			width: -moz-available !important;
-			width: -webkit-fill-available !important;
-			width: stretch !important;
+			width: 122px;
 		}
 	}
 

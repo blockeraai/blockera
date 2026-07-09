@@ -17,7 +17,6 @@ import {
 	EffectsStyles,
 	PositionStyles,
 	FlexChildStyles,
-	GridChildStyles,
 	BackgroundStyles,
 	TypographyStyles,
 	BlockStatesStyles,
@@ -33,36 +32,8 @@ import type {
 	TStates,
 } from '../extensions/libs/block-card/block-states/types';
 import { appendBlockeraPrefix } from './utils';
-import { getBaseBreakpoint, isBaseBreakpoint } from '../editor/header-ui';
-import { isBlock } from '../extensions/libs/block-card/inner-blocks/utils';
 import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
-import background from '../schemas/block-supports/background-block-supports-list.json';
-import border from '../schemas/block-supports/border-block-supports-list.json';
-import boxShadow from '../schemas/block-supports/box-shadow-block-supports-list.json';
-import divider from '../schemas/block-supports/divider-block-supports-list.json';
-import effects from '../schemas/block-supports/effects-block-supports-list.json';
-import layout from '../schemas/block-supports/layout-block-supports-list.json';
-import mouse from '../schemas/block-supports/mouse-block-supports-list.json';
-import outline from '../schemas/block-supports/outline-block-supports-list.json';
-import position from '../schemas/block-supports/position-block-supports-list.json';
-import size from '../schemas/block-supports/size-block-supports-list.json';
-import spacing from '../schemas/block-supports/spacing-block-supports-list.json';
-import typography from '../schemas/block-supports/typography-block-supports-list.json';
-
-const blockeraSupports = {
-	...(background?.supports || {}),
-	...(border?.supports || {}),
-	...(boxShadow?.supports || {}),
-	...(divider?.supports || {}),
-	...(effects?.supports || {}),
-	...(layout?.supports || {}),
-	...(mouse?.supports || {}),
-	...(outline?.supports || {}),
-	...(position?.supports || {}),
-	...(size?.supports || {}),
-	...(spacing?.supports || {}),
-	...(typography?.supports || {}),
-};
+import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
 
 const appendStyles = ({
 	settings,
@@ -82,7 +53,6 @@ const appendStyles = ({
 			EffectsStyles,
 			PositionStyles,
 			FlexChildStyles,
-			GridChildStyles,
 			TypographyStyles,
 			BackgroundStyles,
 			BlockStatesStyles,
@@ -113,66 +83,10 @@ export const getComputedCssProps = ({
 		params.defaultAttributes
 	);
 
-	const updateBlockSelectors = (currentBlock: string): Object => {
-		if (!isBlock({ name: currentBlock })) {
-			return selectors;
-		}
-
-		const { getBlockType } = select('core/blocks') || {};
-		const { selectors: currentBlockSelectors } = getBlockType(
-			currentBlock
-		) || {
-			selectors: {},
-		};
-
-		if (!currentBlockSelectors.hasOwnProperty('root')) {
-			selectors = {
-				...selectors,
-				// $FlowFixMe
-				[currentBlock]: {
-					...(selectors?.[currentBlock] || {}),
-					root:
-						'.wp-block-' +
-						currentBlock.replace('core/', '').replace('/', '-'),
-				},
-			};
-		}
-
-		for (const supportId in currentBlockSelectors) {
-			if ('root' === supportId) {
-				selectors = {
-					...selectors,
-					// $FlowFixMe
-					[currentBlock]: {
-						...(selectors?.[currentBlock] || {}),
-						root: currentBlockSelectors[supportId],
-					},
-				};
-				continue;
-			}
-			if (!selectors?.[currentBlock]?.[supportId]) {
-				selectors = {
-					...selectors,
-					// $FlowFixMe
-					[currentBlock]: {
-						...(selectors?.[currentBlock] || {}),
-						[supportId]: currentBlockSelectors[supportId],
-					},
-				};
-			}
-		}
-
-		return selectors;
-	};
-
 	states.forEach((state: TStates | string): void => {
 		const calculatedProps = {
 			...params,
 			state,
-			supports: {
-				...blockeraSupports,
-				...params.supports,
-			},
 			selectors,
 			blockName,
 		};
@@ -186,16 +100,13 @@ export const getComputedCssProps = ({
 			attributes,
 			masterState,
 		}: Object) => {
-			const { blockeraBlockStates = {}, ...restAttributes } = attributes;
-
-			for (const stateType in blockeraBlockStates) {
-				const stateItem = blockeraBlockStates[stateType];
+			for (const stateType in attributes?.blockeraBlockStates || {}) {
+				const stateItem = attributes?.blockeraBlockStates[stateType];
 
 				if (!validateBlockStates(stateItem)) {
 					continue;
 				}
 
-				selectors = updateBlockSelectors(blockType);
 				const breakpoints = stateItem.breakpoints;
 
 				const {
@@ -207,38 +118,13 @@ export const getComputedCssProps = ({
 
 				let currentStateHasSelectors = false;
 				let calculatedSelectors =
-					selectors[appendBlockeraPrefix(blockType)] ||
-					selectors[blockType] ||
-					{};
+					selectors[appendBlockeraPrefix(blockType)] || {};
 
-				if (!isNormalState(stateType) && hasContent) {
-					currentStateHasSelectors = Boolean(
-						calculatedSelectors?.[
-							appendBlockeraPrefix(`states/${stateType}`)
-						] || false
-					);
-					calculatedSelectors =
-						calculatedSelectors?.[
-							appendBlockeraPrefix(`states/${stateType}`)
-						] ||
-						(calculatedSelectors.hasOwnProperty('root')
-							? { root: calculatedSelectors.root }
-							: {}) ||
-						selectors?.[
-							appendBlockeraPrefix(`states/${stateType}`)
-						] ||
-						(selectors.hasOwnProperty('root')
-							? { root: selectors.root }
-							: {}) ||
-						{};
-				} else if (
+				if (
 					!isNormalState(stateType) &&
 					selectors[appendBlockeraPrefix(`states/${stateType}`)]
 				) {
 					calculatedSelectors =
-						calculatedSelectors[
-							appendBlockeraPrefix(`states/${stateType}`)
-						] ||
 						selectors[appendBlockeraPrefix(`states/${stateType}`)];
 					currentStateHasSelectors = true;
 				}
@@ -264,8 +150,6 @@ export const getComputedCssProps = ({
 											content: stateItem?.content || '',
 										},
 									},
-									className:
-										params?.attributes?.className || '',
 								},
 							},
 							disabledStyles,
@@ -294,15 +178,6 @@ export const getComputedCssProps = ({
 								selectors: calculatedSelectors,
 								attributes: {
 									...defaultAttributes,
-									...(!hasContent
-										? {
-												...(params?.attributes
-													?.blockeraInnerBlocks?.[
-													blockType
-												]?.attributes || {}),
-												...restAttributes,
-											}
-										: {}),
 									...breakpointItem?.attributes,
 									...(hasContent
 										? {
@@ -313,10 +188,8 @@ export const getComputedCssProps = ({
 															'',
 													},
 												},
-											}
+										  }
 										: {}),
-									className:
-										params?.attributes?.className || '',
 								},
 								currentBlock: blockType,
 								device: breakpointType,
@@ -338,8 +211,6 @@ export const getComputedCssProps = ({
 				return;
 			}
 
-			selectors = updateBlockSelectors(blockType);
-
 			generateCssStyleForInnerBlocksInPseudoStates({
 				blockType,
 				attributes,
@@ -353,18 +224,10 @@ export const getComputedCssProps = ({
 						state: 'normal',
 						masterState,
 						selectors:
-							selectors[appendBlockeraPrefix(blockType)] ||
-							selectors[blockType] ||
-							{},
+							selectors[appendBlockeraPrefix(blockType)] || {},
 						attributes: {
 							...defaultAttributes,
-							...(getBaseBreakpoint() === device
-								? params?.attributes?.blockeraInnerBlocks?.[
-										blockType
-									]?.attributes || {}
-								: {}),
 							...attributes,
-							className: params?.attributes?.className || '',
 						},
 						currentBlock: blockType,
 						device,
@@ -410,28 +273,7 @@ export const getComputedCssProps = ({
 		let calculatedSelectors = calculatedProps.selectors;
 		let currentStateHasSelectors = false;
 
-		const {
-			settings: { hasContent },
-		} = getState(state) ||
-			getInnerState(state) || {
-				settings: { hasContent: false },
-			};
-
-		if (!isNormalState(state) && hasContent) {
-			calculatedSelectors =
-				calculatedProps.selectors?.[
-					appendBlockeraPrefix(`states/${state}`)
-				] ||
-				(calculatedProps.selectors.hasOwnProperty('root')
-					? { root: calculatedProps.selectors.root }
-					: {}) ||
-				{};
-			currentStateHasSelectors = Boolean(
-				calculatedProps.selectors?.[
-					appendBlockeraPrefix(`states/${state}`)
-				]
-			);
-		} else if (
+		if (
 			!isNormalState(state) &&
 			calculatedProps.selectors[appendBlockeraPrefix(`states/${state}`)]
 		) {
@@ -443,6 +285,13 @@ export const getComputedCssProps = ({
 		}
 
 		if (validateBlockStates(stateItem)) {
+			const {
+				settings: { hasContent },
+			} = getState(state) ||
+				getInnerState(state) || {
+					settings: { hasContent: false },
+				};
+
 			if (
 				hasContent &&
 				!Object.keys(stateItem?.breakpoints || {})?.length &&
@@ -494,7 +343,7 @@ export const getComputedCssProps = ({
 							selectors: calculatedSelectors,
 							attributes: {
 								...defaultAttributes,
-								...(hasContent ? {} : params.attributes),
+								...params.attributes,
 								...breakpoint?.attributes,
 								...(hasContent
 									? {
@@ -506,7 +355,7 @@ export const getComputedCssProps = ({
 														'',
 												},
 											},
-										}
+									  }
 									: {}),
 							},
 							currentBlock: 'master',

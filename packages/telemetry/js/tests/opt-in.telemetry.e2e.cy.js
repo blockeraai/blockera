@@ -11,16 +11,16 @@ describe('Opt-in Telemetry', () => {
 
 	it('should show opt-in popup while after dashboard page is loaded', () => {
 		// Verify popup is shown
-		cy.getByDataTest('opt-in-modal-content').should('be.visible');
+		cy.getByDataTest('thank-you-heading').should('be.visible');
 	});
 
-	it('should while clicking on save preferences opt-in status should be set to ALLOW and close modal', () => {
-		cy.getByDataTest('save-preferences').click();
-		cy.getByDataTest('opt-in-modal-content').should('not.exist');
+	it('should while clicking on allow and continue button opt-in status should be set to ALLOW and close modal', () => {
+		cy.getByDataTest('allow-and-continue').click();
+		cy.getByDataTest('thank-you-heading').should('not.exist');
 	});
 
-	it('should while clicking on maybe later opt-in status should be set to SKIP and close popup', () => {
-		cy.getByDataTest('maybe-later').click();
-		cy.getByDataTest('opt-in-modal-content').should('not.exist');
+	it('should while clicking on skip and continue button opt-in status should be set to SKIP and close popup', () => {
+		cy.getByDataTest('skip-and-continue').click();
+		cy.getByDataTest('thank-you-heading').should('not.exist');
 	});
 });

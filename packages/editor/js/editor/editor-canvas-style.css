@@ -1,6 +1,0 @@
-/**
- * Reduce margin top for post title wrapper in visual editor
- */
-.editor-visual-editor__post-title-wrapper.edit-post-visual-editor__post-title-wrapper {
-	margin-top: 2.5rem !important;
-}

@@ -30,8 +30,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -110,8 +108,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -233,8 +229,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -313,8 +307,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -436,8 +428,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -516,8 +506,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -639,8 +627,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -723,8 +709,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -827,13 +811,11 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customInputIconColorFocus')
 					);
 
-					expect(
+					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/button'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
-					).to.satisfy(
-						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -851,8 +833,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -932,8 +912,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -1055,8 +1033,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -1148,8 +1124,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -1261,13 +1235,11 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 						)
 					);
 
-					expect(
+					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/button'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraBackgroundColor
-					).to.satisfy(
-						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -1285,8 +1257,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -1366,8 +1336,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -1489,8 +1457,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -1569,8 +1535,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -1692,8 +1656,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -1776,8 +1738,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/search').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -1880,13 +1840,11 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customDropdownTextHoverColor')
 					);
 
-					expect(
+					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/result-link'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
-					).to.satisfy(
-						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -1894,7 +1852,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 	});
 
 	it('Block card + CSS selectors in editor and front-end', () => {
-		appendBlocks(`<!-- wp:blocksy/search {"blockeraPropsId":"dfee254f-5b83-4635-a1cb-24d74b99f8eb","blockeraCompatId":"1819181054","blockeraBackgroundColor":{"value":"#c4ceff"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraInnerBlocks":{"value":{"elements/input":{"attributes":{"blockeraBackgroundColor":"#ffc6c6"}},"elements/button":{"attributes":{"blockeraBackgroundColor":"#ff5757"}}}},"blockeraSpacing":{"value":{"padding":{"top":"27px","bottom":"27px"}}},"className":"blockera-block blockera-block-domykq2","style":{"color":{"background":"#c4ceff"},"spacing":{"padding":{"top":"27px","right":"","bottom":"27px","left":""}}}} -->
+		appendBlocks(`<!-- wp:blocksy/search {"blockeraPropsId":"dfee254f-5b83-4635-a1cb-24d74b99f8eb","blockeraCompatId":"1819181054","blockeraBackgroundColor":{"value":"#c4ceff"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraInnerBlocks":{"value":{"elements/input":{"attributes":{"blockeraBackgroundColor":"#ffc6c6"}},"elements/button":{"attributes":{"blockeraBackgroundColor":"#ff5757"}}}},"blockeraSpacing":{"value":{"padding":{"top":"27px","bottom":"27px"}}},"className":"blockera-block blockera-block\u002d\u002domykq2","style":{"color":{"background":"#c4ceff"},"spacing":{"padding":{"top":"27px","right":"","bottom":"27px","left":""}}}} -->
 <div>Blocksy: Search Block</div>
 <!-- /wp:blocksy/search -->`);
 
@@ -1911,8 +1869,6 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 			'elements/result-dropdown',
 			'elements/result-link',
 		]);
-
-		cy.addNewTransition();
 
 		//
 		//  1. Assert inner blocks selectors in editor
@@ -1966,13 +1922,13 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block.ct-search-box').within(() => {
-			cy.get('.ct-search-form').should(
-				'have.css',
-				'background-clip',
-				'padding-box'
-			);
+		cy.get('.blockera-block .ct-search-form').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
+		cy.get('.blockera-block').within(() => {
 			cy.get('.ct-search-form input').should(
 				'have.css',
 				'background-color',

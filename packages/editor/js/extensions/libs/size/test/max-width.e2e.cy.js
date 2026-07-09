@@ -14,14 +14,14 @@ describe('Max Width → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('simple value - should update max-width when adding value', () => {
 		// activate min width
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Width');
 
-		cy.getParentContainer('Max Width').within(() => {
+		cy.getParentContainer('Max').within(() => {
 			cy.get('input').type(200);
 		});
 
@@ -40,7 +40,7 @@ describe('Max Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p.blockera-block').should('have.css', 'max-width', '200px');
+		cy.get('.blockera-block').should('have.css', 'max-width', '200px');
 	});
 
 	it('variable value', () => {
@@ -48,7 +48,7 @@ describe('Max Width → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Width');
 
 		// open value addon
-		cy.getParentContainer('Max Width').within(() => {
+		cy.getParentContainer('Max').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -61,7 +61,7 @@ describe('Max Width → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'max-width: var(--wp--style--global--content-size, 645px)'
+					'max-width: var(--wp--style--global--content-size)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Max Width → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'max-width: var(--wp--style--global--content-size, 645px)'
+				'max-width: var(--wp--style--global--content-size)'
 			);
 	});
 });

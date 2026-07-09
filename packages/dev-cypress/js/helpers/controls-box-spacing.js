@@ -4,32 +4,16 @@
  * @param {string}  side   	Name of the panel to open
  * @param {string}  value   The value to type
  */
-export function setBoxSpacingSide(side, value, variable = false) {
+export function setBoxSpacingSide(side, value) {
 	openBoxSpacingSide(side);
 
-	if (variable) {
-		cy.get(`.blockera-control.spacing-` + side)
-			.scrollIntoView()
-			.within(($element) => {
-				const openBtn = Cypress.$($element).find(
-					'.blockera-control-value-addon-pointers.active-addon-pointers [data-cy="value-addon-btn-open"]'
-				);
-
-				if (openBtn.length > 0) {
-					cy.clickValueAddonButton();
-				} else {
-					cy.openValueAddon();
-				}
-			});
-
-		cy.selectValueAddonItem(value);
-	} else {
-		cy.get(`input[data-test="${side}"]`).clear({ force: true });
-		cy.get(`input[data-test="${side}"]`).type(value, {
-			delay: 0,
-			force: true,
+	cy.get('[data-wp-component="Popover"]')
+		.last()
+		.within(() => {
+			cy.get('input[type=text]').clear({ force: true });
+			cy.get('input[type=text]').clear({ force: true });
+			cy.get('input[type=text]').type(value, { delay: 0, force: true });
 		});
-	}
 }
 
 /**
@@ -37,18 +21,15 @@ export function setBoxSpacingSide(side, value, variable = false) {
  *
  * @param {string}  side   	Name of the panel to open
  */
-export function clearBoxSpacingSide(side, variable = false) {
+export function clearBoxSpacingSide(side) {
 	openBoxSpacingSide(side);
 
-	if (variable) {
-		cy.get(`.blockera-control.spacing-` + side)
-			.scrollIntoView()
-			.within(() => {
-				cy.removeValueAddon();
-			});
-	} else {
-		cy.get(`input[data-test="${side}"]`).clear({ force: true });
-	}
+	cy.get('[data-wp-component="Popover"]')
+		.last()
+		.within(() => {
+			cy.get('input[type=text]').clear({ force: true });
+			cy.get('input[type=text]').clear({ force: true });
+		});
 }
 
 /**
@@ -56,32 +37,19 @@ export function clearBoxSpacingSide(side, variable = false) {
  *
  * @param {string}  side   Name of the panel to open
  */
-export function openBoxSpacingSide(side) {
-	const sideType = side.includes('padding') ? 'padding' : 'margin';
-
-	const edgesList = [
-		`${sideType}-top`,
-		`${sideType}-right`,
-		`${sideType}-bottom`,
-		`${sideType}-left`,
-	];
-
-	const lockedEdgesList = [
-		`${sideType}-top-bottom`,
-		`${sideType}-left-right`,
-	];
-
-	cy.get(
-		`.blockera-field-box-spacing-${sideType} button[data-test="${sideType}-lock"]`
-	).then((element) => {
-		if (edgesList.includes(side)) {
-			if (!element.hasClass('is-toggled')) {
-				element.click();
-			}
-		} else if (lockedEdgesList.includes(side)) {
-			if (element.hasClass('is-toggled')) {
-				element.click();
-			}
-		}
-	});
+export function openBoxSpacingSide(side, element = 'label') {
+	if (element === 'label') {
+		cy.get(
+			`[data-cy="box-spacing-${side}"] [data-cy="label-control"]`
+		).click();
+	} else if (element === 'shape') {
+		cy.get(`[data-cy="box-spacing-control"]`).within(() => {
+			cy.get(`path.blockera-control-spacing-shape-side.side-${side}`)
+				.trigger('mouseover', { force: true })
+				.trigger('mousedown', { force: true })
+				.wait(100)
+				.trigger('mouseup', { force: true })
+				.trigger('click', { force: true });
+		});
+	}
 }

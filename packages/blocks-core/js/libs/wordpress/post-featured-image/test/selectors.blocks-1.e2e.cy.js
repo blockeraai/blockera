@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -40,7 +41,7 @@ describe('Featured Image Block → Selectors test', () => {
 		//
 		// Border
 		//
-		cy.getParentContainer('Border').as('borderContainer');
+		cy.getParentContainer('Border Line').as('borderContainer');
 		cy.get('@borderContainer').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
@@ -53,16 +54,13 @@ describe('Featured Image Block → Selectors test', () => {
 		cy.getByDataTest('popover-body')
 			.first()
 			.within(() => {
-				cy.get('[data-cy="color-picker-css-value"]').clear({
-					force: true,
-				});
-				cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
-					delay: 0,
-				});
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type('37e6d4 ');
 			});
 
 		cy.get('@borderContainer').within(() => {
-			cy.customSelectOption(1);
+			cy.get('[aria-haspopup="listbox"]').click();
+			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
 		cy.getBlock('core/post-featured-image')
 			.first()
@@ -131,12 +129,8 @@ describe('Featured Image Block → Selectors test', () => {
 		cy.getByDataTest('popover-body')
 			.last()
 			.within(() => {
-				cy.get('[data-cy="color-picker-css-value"]').clear({
-					force: true,
-				});
-				cy.get('[data-cy="color-picker-css-value"]').type('c5eef0ab', {
-					delay: 0,
-				});
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type('c5eef0ab ');
 			});
 		cy.getBlock('core/post-featured-image')
 			.first()
@@ -177,12 +171,8 @@ describe('Featured Image Block → Selectors test', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.get('[data-cy="color-picker-css-value"]').clear({
-					force: true,
-				});
-				cy.get('[data-cy="color-picker-css-value"]').type('cccccc', {
-					delay: 0,
-				});
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type('cccccc ');
 			});
 
 		cy.getBlock('core/post-featured-image')

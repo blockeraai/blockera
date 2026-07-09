@@ -61,34 +61,7 @@ class OptInController extends RestController {
 				throw new BaseException( __( 'Your successfully skipped opt-in to Blockera Info!', 'blockera' ), 200 );
 			}
 
-			$share_usage_data = array_key_exists( 'share_usage_data', $params )
-				? filter_var( $params['share_usage_data'], FILTER_VALIDATE_BOOLEAN )
-				: true;
-			$email_updates    = array_key_exists( 'email_updates', $params )
-				? filter_var( $params['email_updates'], FILTER_VALIDATE_BOOLEAN )
-				: true;
-
-			if ( ! $share_usage_data && ! $email_updates ) {
-
-				if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
-
-					$updated = update_option( $option_key, 'SKIP' );
-
-					if ( ! $updated ) {
-
-						throw new BaseException( __( 'Server Error, please try again.', 'blockera' ), 500 );
-					}
-				}
-
-				throw new BaseException( __( 'Your successfully skipped opt-in to Blockera Info!', 'blockera' ), 200 );
-			}
-
-			if ( $share_usage_data ) {
-
-				return $this->register( $option_key, $email_updates );
-			}
-
-			return $this->registerEmailUpdatesOnly( $option_key );
+			return $this->register( $option_key );
 
 		} catch ( BaseException $exception ) {
 
@@ -150,14 +123,13 @@ class OptInController extends RestController {
 	/**
 	 * Registration user and site data.
 	 *
-	 * @param string $option_key   the opt-in status option key.
-	 * @param bool   $email_updates whether to register the install for product email updates (Make webhook on API).
+	 * @param string $option_key the opt-in status option key.
 	 *
 	 * @throws BindingResolutionException|BaseException The exception fired on binding resolution or invalid response.
 	 *
 	 * @return \WP_REST_Response the instance of \WP_REST_Response.
 	 */
-	protected function register( string $option_key, bool $email_updates = true ): \WP_REST_Response {
+	protected function register( string $option_key ): \WP_REST_Response {
 
 		$user_id = get_option( Config::getOptionKeys( 'user_id' ) );
 		$token   = get_option( Config::getOptionKeys( 'token' ) );
@@ -231,12 +203,7 @@ class OptInController extends RestController {
 					'Accept'        => 'application/json',
 					'Authorization' => 'Bearer ' . $token,
 				],
-				'body'    => array_merge(
-					compact( 'user_id', 'metadata', 'url', 'name', 'description' ),
-					[
-						'subscribe_product_updates' => $email_updates,
-					]
-				),
+				'body'    => compact( 'user_id', 'metadata', 'url', 'name', 'description' ),
 			]
 		);
 
@@ -274,78 +241,6 @@ class OptInController extends RestController {
 				'success' => true,
 				'data'    => [
 					'message' => __( 'Congratulation 🎉', 'blockera' ),
-				],
-			],
-			200
-		);
-	}
-
-	/**
-	 * Register the current user for product email updates only (no telemetry token stored locally).
-	 *
-	 * @param string $option_key the opt-in status option key.
-	 *
-	 * @throws BindingResolutionException|BaseException The exception fired on binding resolution or invalid response.
-	 *
-	 * @return \WP_REST_Response the instance of \WP_REST_Response.
-	 */
-	protected function registerEmailUpdatesOnly( string $option_key ): \WP_REST_Response {
-
-		/**
-		 * @var DebugDataProvider $debug_data_provider the instance of DebugDataProvider class.
-		 */
-		$debug_data_provider = $this->app->make( DebugDataProvider::class );
-		$metadata            = $debug_data_provider->getSiteData();
-		$url                 = $metadata['wp-core']['fields']['site_url']['value'];
-
-		$result = $this->sender->post(
-			Config::getServerURL( '/auth/register' ),
-			[
-				'sslverify'      => true,
-				'stream_context' => [
-					'ssl' => [
-						'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
-					],
-				],
-				'headers'        => [
-					'Accept' => 'application/json',
-				],
-				'body'           => array_merge(
-					$this->getUserDetails(),
-					[
-						'site_url'                  => $url,
-						'subscribe_product_updates' => true,
-						'product_updates_source'    => 'opt_in_email_only',
-					]
-				),
-			]
-		);
-
-		if ( is_wp_error( $result ) ) {
-
-			throw new BaseException( $result->get_error_message(), 500 );
-		}
-
-		$response = $this->sender->getResponseBody( $result );
-
-		$this->handleServerError( $response );
-
-		if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
-
-			$updated = update_option( $option_key, 'SKIP' );
-
-			if ( ! $updated ) {
-
-				throw new BaseException( __( 'Server Error, please try again.', 'blockera' ), 500 );
-			}
-		}
-
-		return new \WP_REST_Response(
-			[
-				'code'    => 200,
-				'success' => true,
-				'data'    => [
-					'message' => __( 'Preferences saved.', 'blockera' ),
 				],
 			],
 			200

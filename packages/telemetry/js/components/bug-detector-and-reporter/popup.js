@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __, isRTL, sprintf } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { serialize } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
@@ -20,7 +20,6 @@ import {
 	ToggleControl,
 	BlockeraLoading,
 	ControlContextProvider,
-	DynamicHtmlFormatter,
 } from '@blockera/controls';
 import { componentClassNames } from '@blockera/classnames';
 
@@ -108,92 +107,122 @@ export const Popup = ({
 
 	let body: MixedElement = <></>;
 
-	let modalTitle = '';
-	let modalIcon: MixedElement = <></>;
-	let modalActions: MixedElement = <></>;
-	let modalStyle: Record<string, string> = {};
-
 	if (optInStatus === 'ALLOW') {
-		modalTitle =
-			0 === reportedCount || !window[id]?.isReported
-				? __('Bug reported automatically', 'blockera')
-				: __('Bug already reported!', 'blockera');
-		modalIcon = <Icon icon={'check-circle'} />;
-		modalStyle = {
-			'--blockera-controls-primary-color': '#00A20B',
-			'--blockera-controls-primary-color-darker-20': '#008F0A',
-		};
-
 		body = (
 			<Flex
-				data-test="successfully-reported-bug"
+				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
 				gap={30}
+				style={{
+					'--blockera-controls-primary-color': '#00A20B',
+					'--blockera-controls-primary-color-darker-20': '#008F0A',
+				}}
 			>
+				<Flex direction="column" gap={15}>
+					<Icon
+						icon={'check-circle'}
+						iconSize={50}
+						style={{
+							fill: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+
+					<h3
+						data-test="successfully-reported-bug"
+						style={{
+							fontSize: 26,
+							fontWeight: 600,
+							lineHeight: 1.5,
+							margin: 0,
+						}}
+					>
+						{0 === reportedCount || !window[id]?.isReported
+							? __('Bug reported automatically', 'blockera')
+							: __('Bug already reported!', 'blockera')}
+					</h3>
+				</Flex>
+
 				<Flex direction={'column'} gap={10}>
 					<p style={{ margin: 0 }}>
 						{0 === reportedCount || !window[id]?.isReported
 							? __(
 									'You’re already enrolled in our bug reporting program, so we’ve automatically logged this issue.',
 									'blockera'
-								)
+							  )
 							: __(
 									'It looks like this issue has been reported before.',
 									'blockera'
-								)}
+							  )}
 					</p>
 					<p style={{ margin: 0 }}>
 						{0 === reportedCount || !window[id]?.isReported
 							? __(
 									'We’ll review it and get in touch if we need any additional details.',
 									'blockera'
-								)
+							  )
 							: __(
 									'No further action is needed. We’ll keep you updated if we have any new information.',
 									'blockera'
-								)}
+							  )}
 					</p>
+				</Flex>
+
+				<Flex justifyContent={'space-between'}>
+					<Flex>
+						<Button
+							variant={'primary'}
+							onClick={() => setIsOpenPopup(false)}
+						>
+							{__('Close', 'blockera')}
+						</Button>
+
+						<Button
+							onClick={() => {
+								setIsReportingErrorCompleted(false);
+								setIsEnabledManuallyReporting(true);
+							}}
+							variant={'tertiary'}
+							target={blockeraCommunityUrl}
+						>
+							{__('Also, Report manually', 'blockera')}
+						</Button>
+					</Flex>
 				</Flex>
 			</Flex>
 		);
-
-		modalActions = (
-			<>
-				<Button
-					variant={'primary'}
-					onClick={() => setIsOpenPopup(false)}
-				>
-					{__('Close', 'blockera')}
-				</Button>
-
-				<Button
-					onClick={() => {
-						setIsReportingErrorCompleted(false);
-						setIsEnabledManuallyReporting(true);
-					}}
-					variant={'tertiary'}
-					target={blockeraCommunityUrl}
-				>
-					{__('Also, Report manually', 'blockera')}
-				</Button>
-			</>
-		);
 	} else if (['', 'SKIP'].includes(optInStatus)) {
-		modalTitle = __('Help us fix this issue', 'blockera');
-		modalIcon = <Icon icon={'flag'} />;
-		modalStyle = {
-			'--blockera-controls-primary-color': '#e20b0b',
-			'--blockera-controls-primary-color-darker-20': '#b30808',
-		};
-
 		body = (
 			<Flex
 				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
 				gap={40}
+				style={{
+					'--blockera-controls-primary-color': '#e20b0b',
+					'--blockera-controls-primary-color-darker-20': '#b30808',
+				}}
 			>
 				<Flex direction="column" gap={30}>
 					<Flex direction="column" gap={15}>
+						<Icon
+							icon={'flag'}
+							iconSize={50}
+							style={{
+								fill: '#e20b0b',
+							}}
+						/>
+
+						<h3
+							data-test="opting-in-and-reporting-bug"
+							style={{
+								fontSize: 26,
+								fontWeight: 600,
+								lineHeight: 1.5,
+								margin: 0,
+							}}
+						>
+							{__('Help us fix this issue', 'blockera')}
+						</h3>
+
 						<p style={{ margin: 0 }}>
 							{__(
 								'We’ve detected an error and need your help to resolve it. Would you like to send us the report automatically or handle it yourself?',
@@ -248,93 +277,93 @@ export const Popup = ({
 						</Flex>
 					</Flex>
 				</Flex>
-			</Flex>
-		);
 
-		modalActions = (
-			<>
-				<Button
-					variant={'tertiary'}
-					onClick={() => setIsOpenPopup(false)}
-				>
-					{__('Close', 'blockera')}
-				</Button>
-
-				<Button
-					variant={'secondary'}
-					onClick={() => {
-						setIsReportingErrorCompleted(false);
-						setIsEnabledManuallyReporting(true);
-					}}
-					target={blockeraCommunityUrl}
-				>
-					{__('Report Manually', 'blockera')}
-				</Button>
-
-				<Button
-					data-test="send-report-automatically"
-					variant={'primary'}
-					disabled={!isChecked}
-					onClick={() => {
-						setState({
-							...state,
-							isLoading: true,
-						});
-						sender('ALLOW', {
-							shareUsageData: true,
-							emailUpdates: true,
-							handleResponse: (response) => {
-								window.blockeraOptInStatus = response.success
-									? 'ALLOW'
-									: '';
-								if (response.success) {
-									if ('function' === typeof handleReport) {
-										handleReport((status) => {
-											setOptInStatus(
-												'ALLOW' === status
-													? 'ALLOW'
-													: ''
-											);
-											setIsEnabledManuallyReporting(
-												'ALLOW' === status
-													? false
-													: true
-											);
-										});
-									}
-								} else {
-									setState({
-										...state,
-										isReported: true,
-										isLoading: false,
-									});
-
-									setIsReportingErrorCompleted(false);
-								}
-							},
-							handleError: () => {
-								window.blockeraOptInStatus = '';
-								setOptInStatus('');
-
-								setIsOpenPopup(false);
+				<Flex justifyContent={'space-between'}>
+					<Flex>
+						<Button
+							data-test="send-report-automatically"
+							variant={'primary'}
+							disabled={!isChecked}
+							onClick={() => {
 								setState({
 									...state,
-									isReported: true,
-									isLoading: false,
+									isLoading: true,
 								});
+								sender('ALLOW', {
+									handleResponse: (response) => {
+										window.blockeraOptInStatus =
+											response.success ? 'ALLOW' : '';
+										if (response.success) {
+											if (
+												'function' ===
+												typeof handleReport
+											) {
+												handleReport((status) => {
+													setOptInStatus(
+														'ALLOW' === status
+															? 'ALLOW'
+															: ''
+													);
+													setIsEnabledManuallyReporting(
+														'ALLOW' === status
+															? false
+															: true
+													);
+												});
+											}
+										} else {
+											setState({
+												...state,
+												isReported: true,
+												isLoading: false,
+											});
 
+											setIsReportingErrorCompleted(false);
+										}
+									},
+									handleError: () => {
+										window.blockeraOptInStatus = '';
+										setOptInStatus('');
+
+										setIsOpenPopup(false);
+										setState({
+											...state,
+											isReported: true,
+											isLoading: false,
+										});
+
+										setIsReportingErrorCompleted(false);
+										setIsEnabledManuallyReporting(true);
+									},
+								});
+							}}
+							style={{
+								opacity: isChecked ? '1' : '0.3',
+							}}
+						>
+							{__('Send Report Automatically', 'blockera')}
+						</Button>
+
+						<Button
+							variant={'secondary'}
+							onClick={() => {
 								setIsReportingErrorCompleted(false);
 								setIsEnabledManuallyReporting(true);
-							},
-						});
-					}}
-					style={{
-						opacity: isChecked ? '1' : '0.3',
-					}}
-				>
-					{__('Send Report Automatically', 'blockera')}
-				</Button>
-			</>
+							}}
+							target={blockeraCommunityUrl}
+						>
+							{__('Report Manually', 'blockera')}
+						</Button>
+					</Flex>
+
+					<Button
+						variant={'tertiary'}
+						onClick={() => setIsOpenPopup(false)}
+					>
+						{__('Close', 'blockera')}
+					</Button>
+				</Flex>
+			</Flex>
 		);
 	}
 
@@ -356,33 +385,53 @@ export const Popup = ({
 			...(window?.blockeraTelemetryDebugData || {}),
 		};
 
-		modalTitle = isReportingErrorCompleted
-			? __('Oops! Report submission failed!', 'blockera')
-			: __('Report bug manually', 'blockera');
-		modalIcon = <Icon icon={'tools'} />;
-		modalStyle = {
-			'--blockera-controls-primary-color': '#e20b0b',
-			'--blockera-controls-primary-color-darker-20': '#b30808',
-		};
-
 		body = (
 			<Flex
-				data-test="manually-reporting-bug"
+				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
 				gap={40}
+				style={{
+					'--blockera-controls-primary-color': '#e20b0b',
+					'--blockera-controls-primary-color-darker-20': '#b30808',
+				}}
 			>
 				<Flex direction="column" gap={30}>
 					<Flex direction="column" gap={15}>
+						<Icon
+							icon={'tools'}
+							iconSize={50}
+							style={{
+								fill: '#e20b0b',
+							}}
+						/>
+
+						<h3
+							data-test="manually-reporting-bug"
+							style={{
+								fontSize: 26,
+								fontWeight: 600,
+								lineHeight: 1.5,
+								margin: 0,
+							}}
+						>
+							{isReportingErrorCompleted
+								? __(
+										'Oops! Report submission failed!',
+										'blockera'
+								  )
+								: __('Report bug manually', 'blockera')}
+						</h3>
+
 						<p style={{ margin: 0 }}>
 							{isReportingErrorCompleted
 								? __(
 										'Something went wrong when trying to log your bug. Follow the manual submission process below to share the necessary info.',
 										'blockera'
-									)
+								  )
 								: __(
 										'If you’d prefer not to send the data automatically, please submit a manual report by following these steps:',
 										'blockera'
-									)}
+								  )}
 						</p>
 					</Flex>
 
@@ -408,9 +457,9 @@ export const Popup = ({
 											fontWeight: 600,
 										}}
 									>
-										{__('1.', 'blockera')}{' '}
+										{__('1.', 'blockera')}
 									</strong>
-									{__('Copy the bug details', 'blockera')}
+									{__(' Copy the bug details', 'blockera')}
 								</p>
 
 								{false === canNotCopyToClipboard && (
@@ -512,50 +561,30 @@ export const Popup = ({
 									fontWeight: 600,
 								}}
 							>
-								{__('2.', 'blockera')}{' '}
+								{__('2.', 'blockera')}
 							</strong>
 
-							<DynamicHtmlFormatter
-								text={sprintf(
-									// translators: %1$s: support email link placeholder, %2$s: bug ticket link placeholder.
-									__(
-										'Send an email to %1$s or %2$s.',
-										'blockera'
-									),
-									'{support-email}',
-									'{bug-ticket}'
-								)}
-								replacements={{
-									'support-email': (
-										<a
-											href="mailto:support@blockera.ai"
-											style={{
-												color: 'var(--blockera-controls-primary-color)',
-											}}
-										>
-											{__(
-												'support@blockera.ai',
-												'blockera'
-											)}
-										</a>
-									),
-									'bug-ticket': (
-										<a
-											href={blockeraCommunityUrl}
-											target="_blank"
-											rel="noreferrer"
-											style={{
-												color: 'var(--blockera-controls-primary-color)',
-											}}
-										>
-											{__(
-												'create a bug ticket',
-												'blockera'
-											)}
-										</a>
-									),
+							{__(' Send en email to ', 'blockera')}
+
+							<a
+								href="mailto:support@blockera.ai"
+								style={{
+									color: 'var(--blockera-controls-primary-color)',
 								}}
-							/>
+							>
+								{__('support@blockera.ai', 'blockera')}
+							</a>
+							{__(' or ', 'blockera')}
+							<a
+								href={blockeraCommunityUrl}
+								target="_blank"
+								rel="noreferrer"
+								style={{
+									color: 'var(--blockera-controls-primary-color)',
+								}}
+							>
+								{__('create a bug ticket', 'blockera')}
+							</a>
 						</p>
 
 						<p
@@ -569,32 +598,30 @@ export const Popup = ({
 									fontWeight: 600,
 								}}
 							>
-								{__('3.', 'blockera')}{' '}
+								{__('3.', 'blockera')}
 							</strong>
 							{__(
-								'Stay tuned. We’ll review your report and reach out if we need more information.',
+								' Stay tuned. We’ll review your report and reach out if we need more information.',
 								'blockera'
 							)}
 						</p>
 					</Flex>
 				</Flex>
-			</Flex>
-		);
 
-		modalActions = (
-			<>
-				<Button
-					variant={'primary'}
-					onClick={() => {
-						setIsOpenPopup(false);
-						if (isReportingErrorCompleted) {
-							setIsEnabledManuallyReporting(false);
-						}
-					}}
-				>
-					{__('Close', 'blockera')}
-				</Button>
-			</>
+				<Flex justifyContent={'space-between'}>
+					<Button
+						variant={'primary'}
+						onClick={() => {
+							setIsOpenPopup(false);
+							if (isReportingErrorCompleted) {
+								setIsEnabledManuallyReporting(false);
+							}
+						}}
+					>
+						{__('Close', 'blockera')}
+					</Button>
+				</Flex>
+			</Flex>
 		);
 	}
 
@@ -602,16 +629,5 @@ export const Popup = ({
 		return <></>;
 	}
 
-	return (
-		<Modal
-			isDismissible={false}
-			headerTitle={modalTitle}
-			headerIcon={modalIcon}
-			actions={modalActions}
-			className="blockera-bug-reporting-modal"
-			style={modalStyle}
-		>
-			{body}
-		</Modal>
-	);
+	return <Modal isDismissible={false}>{body}</Modal>;
 };

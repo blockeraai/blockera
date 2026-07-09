@@ -22,8 +22,7 @@
 		"node": ">=12"
 	},
 	"dependencies": {
-		"@monaco-editor/react": "^4.7.0",
-		"paper": "^0.12.17"
+		"@monaco-editor/react": "^4.7.0"
 	},
 	"main": "js/index.js"
 }

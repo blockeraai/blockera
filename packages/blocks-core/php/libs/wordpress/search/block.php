@@ -22,9 +22,6 @@ return array_merge(
 				'blockera/elements/button' => [
 					'root' => '.wp-block-search__button',
 				],
-				'blockeraBorderRadius' => [
-					'root' => '.wp-block-search,.wp-block-search :where(.wp-block-search__input,.wp-block-search__button)',
-				],
 			]
 		),
 	]

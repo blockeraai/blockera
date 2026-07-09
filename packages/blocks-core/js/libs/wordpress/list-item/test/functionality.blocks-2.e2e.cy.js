@@ -16,7 +16,7 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:list -->
-<ul class="wp-block-list"><!-- wp:list-item -->
+<ul><!-- wp:list-item -->
 <li>item 1 <a href="#">link is here</a></li>
 <!-- /wp:list-item -->
 
@@ -32,25 +32,6 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		cy.checkBlockCardItems(['normal', 'hover', 'marker']);
-
-		cy.checkBlockStatesPickerItems([
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-			'elements/item',
-		]);
-
-		cy.get('.blockera-extension-block-card.master-block-card').within(
-			() => {
-				cy.get('button[data-test="back-to-parent-navigation"]').should(
-					'be.visible'
-				);
-			}
-		);
 
 		//
 		// 1. Edit Block

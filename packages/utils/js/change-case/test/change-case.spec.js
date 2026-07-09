@@ -116,15 +116,6 @@ describe('String Conversion Functions', () => {
 		it('should handle empty string', () => {
 			expect(kebabCase('')).toBe('');
 		});
-
-		it('should preserve trailing hyphen when suffixCharacters is set', () => {
-			expect(kebabCase('style-', { suffixCharacters: '-' })).toBe(
-				'style-'
-			);
-			expect(kebabCase('style-1', { suffixCharacters: '-' })).toBe(
-				'style-1'
-			);
-		});
 	});
 
 	describe('dotCase', () => {

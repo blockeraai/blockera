@@ -33,18 +33,6 @@ describe('Pullquote Block', () => {
 			'core/paragraph',
 		]);
 
-		cy.checkBlockStatesPickerItems([
-			'elements/citation',
-			'core/paragraph',
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
-
 		//
 		// 1. Edit Block
 		//

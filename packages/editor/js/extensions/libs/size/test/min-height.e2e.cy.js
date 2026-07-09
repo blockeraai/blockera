@@ -14,14 +14,14 @@ describe('Min Height → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('simple value - should update min-height when adding value', () => {
 		// activate min height
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
-		cy.getParentContainer('Min Height').within(() => {
+		cy.getParentContainer('Min').within(() => {
 			cy.get('input').type(10);
 		});
 
@@ -40,7 +40,7 @@ describe('Min Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p.blockera-block').should('have.css', 'min-height', '10px');
+		cy.get('.blockera-block').should('have.css', 'min-height', '10px');
 	});
 
 	it('variable value', () => {
@@ -48,7 +48,7 @@ describe('Min Height → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
 		// open value addon
-		cy.getParentContainer('Min Height').within(() => {
+		cy.getParentContainer('Min').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -61,7 +61,7 @@ describe('Min Height → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'min-height: var(--wp--style--global--content-size, 645px)'
+					'min-height: var(--wp--style--global--content-size)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Min Height → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'min-height: var(--wp--style--global--content-size, 645px)'
+				'min-height: var(--wp--style--global--content-size)'
 			);
 	});
 });

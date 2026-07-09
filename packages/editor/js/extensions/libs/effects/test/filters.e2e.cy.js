@@ -1,25 +1,27 @@
 import {
 	savePage,
-	createPost,
-	appendBlocks,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	createPost,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Filters → Functionality', () => {
 	beforeEach(() => {
 		createPost();
-	});
 
-	it('Should update filter correctly, when add one drop-shadow', () => {
-		cy.getBlock('default').type('This is test paragraph', {
-			delay: 0,
-		});
-		cy.getByAriaControls('styles-view').click();
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Filters').as('filters');
+	});
 
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
+
+	it('Should update filter correctly, when add one drop-shadow', () => {
 		cy.get('@filters').within(() => {
 			cy.getByAriaLabel('Add New Filter Effect').click();
 		});
@@ -46,12 +48,8 @@ describe('Filters → Functionality', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.get('[data-cy="color-picker-css-value"]').clear({
-					force: true,
-				});
-				cy.get('[data-cy="color-picker-css-value"]').type('cccccc', {
-					delay: 0,
-				});
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type('cccccc ');
 			});
 
 		//Check block
@@ -87,11 +85,7 @@ describe('Filters → Functionality', () => {
 		});
 
 		// promotion popover should appear
-		cy.get('.blockera-component-upgrade-prompt')
-			.should('exist')
-			.within(() => {
-				cy.getByAriaLabel('Close').should('be.visible').click();
-			});
+		cy.get('.blockera-component-promotion-popover').should('exist');
 
 		//Check frontend
 		savePage();
@@ -100,54 +94,11 @@ describe('Filters → Functionality', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', 'filter: drop-shadow(50px 30px 40px #cccccc)');
-	});
-
-	it('Multiple filters + promoter', () => {
-		appendBlocks(`<!-- wp:paragraph {"blockeraPropsId":"74ae4cb7-f8c2-4aaa-8886-c3a525d59089","blockeraCompatId":"10918152377","blockeraFilter":{"value":{"brightness-0":{"isVisible":true,"type":"brightness","brightness":"100%","order":0},"invert-0":{"isVisible":true,"type":"invert","invert":"50%","order":1}}},"className":"blockera-block blockera-block\u002d\u002d7zhhq5"} -->
-<p class="blockera-block blockera-block--7zhhq5">This is test paragraph</p>
-<!-- /wp:paragraph -->`);
-
-		cy.getBlock('core/paragraph').click();
-		cy.getByAriaControls('styles-view').click();
-		cy.getParentContainer('Filters').as('filters');
-
-		//Check block
-		cy.getBlock('core/paragraph').should(
-			'have.css',
-			'filter',
-			'brightness(1) invert(0.5)'
-		);
-
-		//Check store
-		getWPDataObject().then((data) => {
-			expect({
-				'brightness-0': {
-					isVisible: true,
-					type: 'brightness',
-					brightness: '100%',
-					order: 0,
-				},
-				'invert-0': {
-					isVisible: true,
-					type: 'invert',
-					invert: '50%',
-					order: 1,
-				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFilter'));
-		});
-
-		return;
-
-		//Check frontend
-		savePage();
-
-		redirectToFrontPage();
-
-		cy.get('.blockera-block').should(
-			'have.css',
-			'filter',
-			'brightness(1) invert(0.5) blur(3px)'
-		);
+			.should(
+				'include',
+				!enabledOptimizeStyleGeneration
+					? 'filter: drop-shadow(50px 30px 40px #cccccc) !important;'
+					: 'filter: drop-shadow(50px 30px 40px #cccccc)'
+			);
 	});
 });

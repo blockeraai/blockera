@@ -14,8 +14,8 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from './types';
+import { getBaseBreakpoint } from '../../../../canvas-editor';
 import { isNormalState } from '../../../components/utils';
-import { getBaseBreakpoint } from '../../../../editor/header-ui';
 
 /**
  * Is normal state on base breakpoint?
@@ -58,27 +58,9 @@ export function onChangeBlockStates(
 		newValue = onChangeValue?.value;
 	}
 
-	const {
-		block,
-		currentBlock,
-		getStateInfo,
-		getBlockStates,
-		setCurrentBlock,
-		isMasterBlockStates,
-		currentBlockStyleVariation,
-		skipExtensionSync = false,
-	} = params;
-
+	const { currentBlock, getStateInfo, getBlockStates, isMasterBlockStates } =
+		params;
 	const { getSelectedBlock } = select('core/block-editor');
-	const { name, clientId } = currentBlockStyleVariation?.name
-		? {
-				name: block?.blockName,
-				clientId: block?.clientId,
-			}
-		: getSelectedBlock() || {
-				name: block?.blockName,
-				clientId: block?.clientId,
-			};
 
 	const {
 		setBlockClientStates,
@@ -90,67 +72,53 @@ export function onChangeBlockStates(
 
 	let selectedState = null;
 
-	if (!skipExtensionSync) {
-		// $FlowFixMe
-		for (const stateType: TStates in newValue) {
-			const state = newValue[stateType];
-			const setInnerBlockDetails = () => {
-				selectedState = stateType;
-				setInnerBlockState(stateType);
-				setBlockClientInnerState({
-					currentState: stateType,
-					innerBlockType: currentBlock,
-					clientId,
-				});
-			};
-			const setBlockDetails = () => {
-				selectedState = stateType;
-				setCurrentState(stateType);
-				setBlockClientMasterState({
-					currentState: stateType,
-					name,
-					clientId,
-				});
+	// $FlowFixMe
+	for (const stateType: TStates in newValue) {
+		const state = newValue[stateType];
+		const setInnerBlockDetails = () => {
+			selectedState = stateType;
+			setInnerBlockState(stateType);
+			setBlockClientInnerState({
+				currentState: stateType,
+				innerBlockType: currentBlock,
+				clientId: getSelectedBlock()?.clientId,
+			});
+		};
+		const setBlockDetails = () => {
+			selectedState = stateType;
+			setCurrentState(stateType);
+			setBlockClientMasterState({
+				currentState: stateType,
+				name: getSelectedBlock()?.name,
+				clientId: getSelectedBlock()?.clientId,
+			});
+		};
 
-				const { getState, getInnerState } = select('blockera/editor');
-				const {
-					settings: { supportsInnerBlocks },
-				} = getState(stateType) ||
-					getInnerState(stateType) || {
-						settings: { supportsInnerBlocks: true },
-					};
-
-				if (
-					false === supportsInnerBlocks &&
-					'function' === typeof setCurrentBlock
-				) {
-					setCurrentBlock('master');
-				}
-			};
-
-			if (!isMasterBlockStates && state?.isSelected) {
+		if (!isMasterBlockStates && state?.isSelected) {
+			setInnerBlockDetails();
+		} else if (state?.isSelected) {
+			setBlockDetails();
+		} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
+			if (!isMasterBlockStates) {
 				setInnerBlockDetails();
-			} else if (state?.isSelected) {
+			} else {
 				setBlockDetails();
-			} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
-				if (!isMasterBlockStates) {
-					setInnerBlockDetails();
-				} else {
-					setBlockDetails();
-				}
 			}
 		}
-
-		setBlockClientStates({
-			clientId,
-			blockType: !isMasterBlockStates ? currentBlock : name,
-			blockStates: newValue,
-		});
 	}
+
+	setBlockClientStates({
+		clientId: getSelectedBlock()?.clientId,
+		blockType: !isMasterBlockStates
+			? currentBlock
+			: getSelectedBlock()?.name,
+		blockStates: newValue,
+	});
 
 	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
 		let blockStates = {};
 		const { modifyControlValue, controlId } = onChangeValue;
+		const { clientId, name } = getSelectedBlock();
 
 		blockStates = getBlockStates(
 			clientId,

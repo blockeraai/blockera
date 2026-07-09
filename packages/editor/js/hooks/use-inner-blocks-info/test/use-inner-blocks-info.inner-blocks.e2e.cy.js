@@ -15,7 +15,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.getByDataCy('color-label').as('color-label');
@@ -50,7 +50,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// Set "Link" Inner Block as current block.
 			setInnerBlock('elements/link');
 			// Set value.
-			cy.setColorControlValue('Text Color', 'aaaaaa');
+			cy.setColorControlValue('Text Color', 'aaa');
 			// set "Hover" state on paragraph.
 			setBlockState('Hover');
 			// Set value.

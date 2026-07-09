@@ -8,7 +8,7 @@ import { combineReducers } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { omit, mergeObject, isEquals } from '@blockera/utils';
+import { omit, mergeObject } from '@blockera/utils';
 
 /**
  * Key block types by their name.
@@ -77,16 +77,6 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				...keyBlockExtensionsByName(action.blockExtensions),
 			};
 		case 'CHANGE_CURRENT_BLOCK':
-			if (action.uiContext) {
-				return {
-					...state,
-					currentBlockByUiContext: {
-						...(state.currentBlockByUiContext || {}),
-						[action.uiContext]: action.currentBlock,
-					},
-				};
-			}
-
 			return {
 				...state,
 				currentBlock: action.currentBlock,
@@ -134,51 +124,6 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 					innerBlocks: action.inners,
 				},
 			};
-		case 'SYNC_BLOCK_STATES_AFTER_DELETE': {
-			const {
-				clientId,
-				blockName,
-				innerBlockType,
-				blockStates,
-				blockType,
-				currentState,
-			} = action;
-
-			const existingClientState = state[clientId] || {};
-			const existingBlockStates =
-				existingClientState[blockType + '-block-states'];
-
-			if (
-				state.currentStateType === currentState &&
-				state.currentInnerBlockState === currentState &&
-				existingClientState[blockName + '-active-state'] ===
-					currentState &&
-				isEquals(existingBlockStates, blockStates) &&
-				(!innerBlockType ||
-					'master' === innerBlockType ||
-					existingClientState[innerBlockType + '-active-state'] ===
-						currentState)
-			) {
-				return state;
-			}
-
-			const clientState = {
-				...existingClientState,
-				[blockType + '-block-states']: blockStates,
-				[blockName + '-active-state']: currentState,
-			};
-
-			if (innerBlockType && 'master' !== innerBlockType) {
-				clientState[innerBlockType + '-active-state'] = currentState;
-			}
-
-			return {
-				...state,
-				currentStateType: currentState,
-				currentInnerBlockState: currentState,
-				[clientId]: clientState,
-			};
-		}
 		case 'REGISTER_SHARED_BLOCK_ATTRIBUTES':
 			return {
 				...state,

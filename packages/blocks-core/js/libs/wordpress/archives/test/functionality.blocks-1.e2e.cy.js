@@ -7,6 +7,7 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
+	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -49,9 +50,11 @@ describe('Archives Block', () => {
 			cy.customSelect('Clip to Padding');
 		});
 
-		cy.getBlock('core/archives')
-			.first()
-			.should('have.css', 'background-clip', 'padding-box');
+		cy.getBlock('core/archives').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/item
@@ -130,7 +133,7 @@ describe('Archives Block', () => {
 		//
 		setParentBlock();
 
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			// block settings panel body should be visible

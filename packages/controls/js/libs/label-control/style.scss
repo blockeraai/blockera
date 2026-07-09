@@ -3,7 +3,7 @@
 	align-items: center;
 	height: var(--blockera-controls-input-height);
 	z-index: 10;
-	position: relative;
+    position: relative;
 }
 
 .blockera-control-label {
@@ -12,16 +12,15 @@
 	line-height: 1;
 	display: flex;
 	align-items: center;
-	height: auto;
+	height: 20px;
 	min-height: 20px;
 	border-radius: var(--blockera-controls-border-radius);
 	letter-spacing: -0.2px;
 	transition: all 75ms ease-in;
-	white-space: wrap;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 	position: relative;
 	user-select: none;
-	word-break: break-word;
-	overflow-wrap: break-word;
 
 	.blockera-control-help-icon,
 	.blockera-control-reset-icon {
@@ -29,6 +28,7 @@
 		position: absolute;
 		opacity: 0;
 		visibility: hidden;
+		right: -19px;
 		top: 50%;
 		transition: all 100ms linear;
 		transform: translateY(-50%) scale(0.5);
@@ -38,27 +38,9 @@
 		}
 	}
 
-	svg:not(.blockera-control-help-icon, .blockera-control-reset-icon) {
-		fill: currentColor;
-		fill: color-mix(in srgb, currentColor 100%, #000000 15%);
-	}
-
-	&.label-icon-end {
-		.blockera-control-help-icon,
-		.blockera-control-reset-icon {
-			right: -19px;
-		}
-	}
-
-	&.label-icon-start {
-		.blockera-control-help-icon,
-		.blockera-control-reset-icon {
-			left: -19px;
-		}
-	}
-
 	&.show-help,
 	&.show-reset {
+
 		.blockera-control-help-icon,
 		.blockera-control-reset-icon {
 			transform: translateY(-50%) scale(1);
@@ -68,6 +50,7 @@
 	}
 
 	&:hover:not(.show-reset) {
+
 		.blockera-control-reset-icon {
 			transform: translateY(-50%) scale(1);
 			opacity: 1;
@@ -76,19 +59,19 @@
 	}
 
 	&:hover:not(.show-help) {
+
 		.blockera-control-help-icon {
-			animation:
-				blockera-label-control-animation-bounce 0.1s 1,
-				blockera-label-control-animation 0.8s infinite;
+			animation: blockera-label-control-animation-bounce 0.1s 1, blockera-label-control-animation 0.8s infinite;
 			animation-delay: 400ms, 700ms;
 			animation-fill-mode: forwards, forwards;
 		}
 	}
 
 	&:hover {
+
 		.blockera-control-reset-icon:hover {
 			transform: translateY(-50%) scale(1.25);
-			color: #e20b0b;
+			color: #e20000;
 			fill: currentColor;
 		}
 	}
@@ -100,6 +83,7 @@
 }
 
 @keyframes blockera-label-control-animation {
+
 	0% {
 		transform: translateY(-50%) scale(1);
 		opacity: 1;
@@ -120,6 +104,7 @@
 }
 
 @keyframes blockera-label-control-animation-bounce {
+
 	0% {
 		transform: translateY(-50%) scale(0.5);
 		opacity: 0;
@@ -133,6 +118,7 @@
 	}
 }
 
+
 .blockera-control-label.changed-in-other-state,
 .blockera-control-label.changed-in-normal-state,
 .blockera-control-label.changed-in-secondary-state {
@@ -141,88 +127,38 @@
 	outline-offset: 0 !important;
 }
 
-.blockera-field:not(.label-center)
-	> .blockera-field-label
-	> .blockera-control-label.changed-in-other-state,
-.blockera-field:not(.label-center)
-	> .blockera-field-label
-	> .blockera-control-label.changed-in-normal-state,
-.blockera-field:not(.label-center)
-	> .blockera-field-label
-	> .blockera-control-label.changed-in-secondary-state {
+.blockera-field:not(.label-center) > .blockera-field-label > .blockera-control-label.changed-in-other-state,
+.blockera-field:not(.label-center) > .blockera-field-label > .blockera-control-label.changed-in-normal-state,
+.blockera-field:not(.label-center) > .blockera-field-label > .blockera-control-label.changed-in-secondary-state {
 	transform: translateX(-3px);
 }
 
 .blockera-control-label.changed-in-other-state {
-	background: color-mix(
-		in srgb,
-		var(--blockera-controls-primary-color) 4%,
-		#ffffff 100%
-	);
-	box-shadow: 0 0 0 1px
-		color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 40%,
-			#ffffff 100%
-		);
-	--blockera-controls-primary-color: #6a6868;
-	color: #1e1e1e;
+	background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%);
+    --blockera-controls-primary-color: #6a6868;
+    color: #1e1e1e;
 }
 
 .blockera-control-label.changed-in-normal-state {
-	background: color-mix(
-		in srgb,
-		var(--blockera-controls-primary-color) 4%,
-		#ffffff 100%
-	);
-	box-shadow: 0 0 0 1px
-		color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 40%,
-			#ffffff 100%
-		);
-	color: var(--blockera-controls-primary-color);
-	--blockera-controls-primary-color: var(
-		--blockera-controls-primary-color-bk
-	);
+	background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%);
+    color: var(--blockera-controls-primary-color);
+	--blockera-controls-primary-color: var(--blockera-controls-primary-color-bk);
 }
 
 .blockera-control-label.changed-in-secondary-state {
-	background: color-mix(
-		in srgb,
-		var(--blockera-controls-primary-color) 4%,
-		#ffffff 100%
-	);
-	box-shadow: 0 0 0 1px
-		color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
-	color: color-mix(
-		in srgb,
-		var(--blockera-controls-primary-color) 100%,
-		#000000 4%
-	);
-	--blockera-controls-primary-color: var(--blockera-controls-states-color);
+	background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
+    color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 4%);
+    --blockera-controls-primary-color: var(--blockera-controls-states-color);
 }
 
 .blockera-control-label.changed-in-inner-normal-state {
-	background: color-mix(
-		in srgb,
-		var(--blockera-controls-primary-color) 4%,
-		#ffffff 100%
-	);
-	box-shadow: 0 0 0 1px
-		color-mix(
-			in srgb,
-			var(--blockera-controls-primary-color) 40%,
-			#ffffff 100%
-		);
-	color: color-mix(
-		in srgb,
-		var(--blockera-controls-primary-color) 100%,
-		#000000 4%
-	);
-	--blockera-controls-primary-color: var(
-		--blockera-controls-inner-blocks-color
-	);
+	background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%);
+    color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 4%);
+	--publisher-controls-primary-color: var(--blockera-controls-inner-blocks-color);
 }
 
 .blockera-label-control-popover {
@@ -235,7 +171,7 @@
 	--popover-border-color: #272c31;
 	--popover-header-bg-color: #272c31;
 	--popover-header-color: #ffffff;
-	--popover-header-border-color: #272c31;
+	--popover-header-shadow-color: #00000058;
 
 	.blockera-component-button.blockera-component-button.is-tertiary {
 		color: #a5aab0;
@@ -251,6 +187,10 @@
 			--blockera-controls-border-color: #acb1b5 !important;
 			box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color) !important;
 		}
+	}
+
+	.blockera-component-popover-body {
+		padding: 18px;
 	}
 
 	.blockera-control-label-section {
@@ -326,19 +266,9 @@
 	}
 
 	.blockera-control-label-section + .blockera-control-label-section {
-		padding-top: 10px;
+		padding-top: 25px;
 		margin-top: 25px;
-		border-top: 1px solid var(--popover-header-border-color);
-	}
-
-	.blockera-control-label-section:last-child {
-		h3.blockera-control-label-section-title {
-			position: sticky;
-			top: calc(var(--popover-padding) * -1);
-			background-color: var(--popover-bg-color);
-			padding: 10px 0 10px 0;
-			z-index: 1;
-		}
+		border-top: 1px solid #282d32;
 	}
 
 	.blockera-control-states-changes {
@@ -400,21 +330,16 @@
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			gap: 5px;
+			gap: 10px;
 			padding: 0 6px 0 12px;
 			border: 1px solid var(--blockera-controls-border-color);
-			background-color: var(--popover-bg-color, #1c2024);
+			background-color: #272c31;
 			color: #ffffff;
 			border-radius: var(--blockera-controls-border-radius);
 			font-size: 12px;
 			position: relative;
-			font-weight: 500;
-			transition: all 0.1s linear;
 
-			&.is-current-active-item {
-				color: var(--blockera-controls-primary-color);
-				background-color: var(--popover-header-bg-color, #272c31);
-			}
+			transition: all 0.1s linear;
 
 			&:not(.is-current-active-item) {
 				cursor: pointer;
@@ -429,52 +354,28 @@
 				}
 			}
 
-			.blockera-control-states-changes-item__end {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				gap: 8px;
-				margin-left: auto;
-				margin-right: 0;
-				flex-shrink: 0;
-			}
-
-			.blockera-control-states-changes-item__preview {
-				display: flex;
-				align-items: center;
-				flex-shrink: 0;
-				font-size: 11px;
-				font-weight: 600;
-			}
-
-			.blockera-control-states-changes-item__preview-string {
-				max-width: 100px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				font-size: 11px;
-				font-weight: 600;
-				color: inherit;
-			}
-
-			.blockera-control-states-changes-item__preview-value-addon {
-				max-width: 140px;
-				min-width: 0;
-			}
-
 			&::after {
 				content: "";
-				width: calc(var(--item-padding) - 12px);
+				width: calc(var(--item-padding) - 11px);
 				height: 1px;
 				border-top: 1px dashed var(--blockera-controls-border-color);
 				position: absolute;
-				right: calc(100% + 1px);
+				right: 100%;
 				top: 50%;
 				transform: translateY(-50%);
 			}
 
+			.blockera-control-states-changes-item-current {
+				margin-left: auto;
+			}
+
 			.blockera-control-states-changes-item__edit-icon {
 				opacity: 0;
+				margin-left: auto;
+				transition: all 0.1s linear;
+				position: absolute;
+				right: 5px;
+    			top: 5px;
 			}
 		}
 	}

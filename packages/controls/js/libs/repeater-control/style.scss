@@ -8,11 +8,8 @@
 	& > .blockera-control-header {
 		display: flex;
 		align-items: center;
-		gap: var(--gap);
 		min-height: var(--repeater-item-height);
-		justify-content: space-between;
-		flex-grow: 1;
-		width: 100%;
+		justify-content: center;
 	}
 
 	.blockera-control-repeater-item {
@@ -23,15 +20,15 @@
 			padding: 0 calc(var(--repeater-item-height) * 0.4);
 		}
 
-		&.is-inactive,
-		&.is-native {
-			.blockera-control-group-header
-				> *:not(.blockera-control-action-buttons) {
+		&.is-inactive {
+
+			.blockera-control-group-header > *:not(.blockera-control-action-buttons) {
 				opacity: 0.5 !important;
 				user-select: none;
 			}
 
 			.blockera-control-action-buttons {
+
 				.blockera-control-btn-visibility {
 					color: #c70000 !important;
 				}
@@ -39,27 +36,12 @@
 		}
 	}
 
-	&:has(> .blockera-control-repeater-item.is-small) {
-		flex-flow: row wrap;
-
-		> .blockera-control-repeater-item {
-			flex: 1 1 100%;
-			min-width: 0;
-			max-width: 100%;
-			box-sizing: border-box;
-
-			&.is-small {
-				flex: 0 1 calc((100% - var(--repeater-gap)) / 2);
-				max-width: calc((100% - var(--repeater-gap)) / 2);
-			}
-		}
-	}
-
-	.blockera-control-header:not(:last-child) {
-		margin-bottom: calc(var(--repeater-gap) * -0.5);
+	.blockera-control-header + .blockera-control-repeater-item {
+		margin-top: calc(var(--repeater-gap) * -0.5);
 	}
 
 	.blockera-control-group-header {
+
 		.blockera-control-repeater-group-header {
 			display: flex;
 			gap: 8px;
@@ -108,156 +90,53 @@
 					}
 				}
 			}
+
 		}
 
-		.blockera-control-action-buttons.type-inline {
+		.blockera-control-action-buttons {
 			position: absolute;
 			top: 0;
+			bottom: 0;
 			right: 5px;
+			opacity: 0;
+			visibility: hidden;
 			display: flex;
 			align-items: center;
 			background: #ffffff;
 			gap: -1px;
 			padding-left: 3px;
 
-			> *:not(.blockera-component-feature-wrapper) {
-				opacity: 0;
-				visibility: hidden;
-				display: none;
-			}
-
 			.blockera-component-button {
 				margin-right: -3px;
 
 				&.blockera-control-btn-visibility {
+
 					&:hover {
-						color: #e20b0b;
-					}
-				}
-			}
-
-			.blockera-component-feature-wrapper.feature-wrapper.feature-wrapper--repeater-upgrade {
-				margin-right: -3px;
-			}
-		}
-
-		.blockera-control-action-buttons.type-menu {
-			display: flex;
-			align-items: center;
-			padding: 0;
-			order: 100;
-			margin: 0 calc(var(--repeater-item-height) * -0.35) 0
-				calc(var(--repeater-item-height) * -0.35);
-			background: transparent;
-		}
-	}
-
-	.blockera-control-group {
-		.blockera-control-action-buttons.type-menu {
-			margin: 0 -8px 0 -10px;
-		}
-
-		&:not(.is-selected-item) {
-			.blockera-control-action-buttons.type-menu {
-				.blockera-control-dropdown-menu {
-					.components-button.components-dropdown-menu__toggle {
-						opacity: 0.5;
-
-						&:hover,
-						&.is-opened {
-							color: var(
-								--blockera-controls-primary-color
-							) !important;
-							opacity: 1 !important;
-						}
-					}
-				}
-			}
-		}
-
-		&.is-selected-item {
-			.blockera-control-action-buttons.type-menu {
-				.blockera-control-dropdown-menu {
-					.components-button.components-dropdown-menu__toggle {
-						opacity: 1;
-
-						&:hover,
-						&.is-opened {
-							color: currentColor !important;
-							opacity: 1 !important;
-						}
+						color: #c70000;
 					}
 				}
 			}
 		}
 	}
 
-	.blockera-control-repeater-item.is-inactive
-		.blockera-control-group-header
-		.blockera-control-action-buttons.type-menu {
-		.blockera-control-dropdown-menu {
-			.components-button.components-dropdown-menu__toggle {
-				opacity: 1;
-			}
-		}
+	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
+	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
+		opacity: 1;
+		visibility: visible;
 	}
 
-	.blockera-control-group.is-open
-		.blockera-control-action-buttons.type-menu:not(:empty),
-	.blockera-control-group.is-hovered
-		.blockera-control-action-buttons.type-menu:not(:empty),
-	.blockera-control-group-header:hover
-		.blockera-control-action-buttons.type-menu:not(:empty) {
-		.blockera-control-dropdown-menu {
-			.components-button.components-dropdown-menu__toggle {
-				opacity: 1;
-			}
-		}
-	}
-
-	.blockera-control-group.is-hovered
-		.blockera-control-action-buttons.type-inline:not(:empty),
-	.blockera-control-group-header:hover
-		.blockera-control-action-buttons.type-inline:not(:empty) {
-		> *:not(.blockera-component-feature-wrapper) {
-			opacity: 1;
-			visibility: visible;
-			display: flex;
-		}
-	}
-
-	.blockera-control-group.is-hovered
-		.blockera-control-action-buttons.type-inline:not(:empty)
-		+ .blockera-control-repeater-item-header-holder
-		.blockera-control-repeater-group-header
-		.blockera-control-header-values,
-	.blockera-control-group-header:hover
-		.blockera-control-action-buttons.type-inline:not(:empty)
-		+ .blockera-control-repeater-item-header-holder
-		.blockera-control-repeater-group-header
-		.blockera-control-header-values {
+	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values,
+	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
 		opacity: 0;
 		visibility: hidden;
 	}
 
-	.blockera-control-repeater-add-item-trigger {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		vertical-align: middle;
-	}
-
 	.blockera-control-repeater-header-action-buttons {
+		margin-left: auto;
 		display: flex;
-		justify-content: flex-end;
 		flex-direction: row;
-		flex-grow: 1;
-		gap: var(--gap);
+		gap: 10px;
 		font-size: 12px;
-		align-self: stretch;
-		align-items: center;
-		max-width: 71.43%;
-		max-width: 53%;
 
 		.blockera-control-btn-add {
 			padding: 0 !important;
@@ -272,125 +151,10 @@
 		}
 	}
 
-	&.blockera-control-box-shadow
-		.blockera-control-repeater-header-action-buttons {
-		max-width: 64.5%;
-	}
-
-	&.blockera-control-transform
-		.blockera-control-repeater-header-action-buttons {
-		max-width: 66%;
-	}
-
 	.blockera-control-repeater-items-container {
+
 		&:empty {
 			display: none;
-		}
-	}
-
-	// FeatureWrapper native visuals in header actions (no root user-select / ::after overlay).
-	.blockera-component-feature-wrapper.feature-wrapper.feature-wrapper--repeater-upgrade {
-		position: relative;
-		align-self: center;
-		flex: 0 0 auto;
-		display: flex;
-		align-items: center;
-		user-select: auto !important;
-		-webkit-user-select: auto !important;
-
-		&::after {
-			display: none !important;
-			content: none !important;
-		}
-
-		min-width: calc(var(--locked-size) + 6px);
-
-		&.show-text-on-hover:hover {
-			min-width: 140px;
-		}
-
-		.blockera-component-feature-wrapper__notice {
-			position: relative !important;
-			top: auto !important;
-			left: auto !important;
-			right: auto !important;
-			bottom: auto !important;
-			padding: 0 !important;
-			min-height: var(--locked-size);
-			width: max-content;
-			max-width: none;
-		}
-
-		.blockera-component-feature-wrapper__notice__icons {
-			position: relative !important;
-			top: auto !important;
-			right: auto !important;
-			transform: none !important;
-		}
-
-		.blockera-component-feature-wrapper__notice__text {
-			position: relative !important;
-			top: auto !important;
-			right: auto !important;
-			transform: none !important;
-			height: var(--locked-size);
-		}
-	}
-
-	.blockera-component-feature-wrapper.feature-wrapper.feature-wrapper--repeater-upgrade-menu {
-		user-select: auto !important;
-		-webkit-user-select: auto !important;
-
-		&::after {
-			display: none !important;
-			content: none !important;
-		}
-
-		.blockera-component-feature-wrapper__notice {
-			position: relative !important;
-			top: auto !important;
-			left: auto !important;
-			right: auto !important;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			min-height: auto;
-			padding: 0 !important;
-		}
-
-		.blockera-component-feature-wrapper__notice__icons {
-			position: relative !important;
-			top: auto !important;
-			right: auto !important;
-			transform: none !important;
-		}
-
-		.blockera-component-feature-wrapper__notice__text {
-			position: relative !important;
-			top: auto !important;
-			right: auto !important;
-			transform: none !important;
-			opacity: 1 !important;
-			height: auto !important;
-			padding: 0 !important;
-			background: transparent !important;
-		}
-	}
-
-	.blockera-control-repeater__no-items {
-		box-sizing: border-box;
-		width: 100%;
-		padding: 12px 14px;
-		border-radius: var(--blockera-controls-border-radius);
-		background: var(--blockera-controls-fill-color);
-		color: #1e1e1e;
-		font-size: 12px;
-		line-height: 1.4;
-		text-align: center;
-		text-transform: lowercase;
-
-		&::first-letter {
-			text-transform: uppercase;
 		}
 	}
 
@@ -420,6 +184,7 @@
 		}
 
 		.blockera-control-repeater-header-action-buttons {
+
 			.blockera-control-btn-add {
 				padding: 0 10px 0 3px !important;
 				width: auto;
@@ -451,16 +216,6 @@
 	margin-top: -8px;
 }
 
-.components-panel__body-title
-	+ .blockera-control-repeater.design-large:last-child {
+.components-panel__body-title + .blockera-control-repeater.design-large:last-child {
 	margin-bottom: -5px;
-}
-
-.blockera-component-feature-wrapper {
-	.blockera-component-feature-wrapper__notice {
-		.repeater-item-interaction-guard-icons,
-		.repeater-item-interaction-guard-text {
-			top: 2% !important;
-		}
-	}
 }

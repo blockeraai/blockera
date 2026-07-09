@@ -1,5 +1,6 @@
-.blockera-control-outline {
-	// Intentionally minimal.
-	// This file exists to satisfy shared style bundles (Storybook/Cypress CT).
-}
+.blockera-component-popover.blockera-component-popover-outline-control {
 
+	.components-popover__content {
+		overflow: visible !important;
+	}
+}

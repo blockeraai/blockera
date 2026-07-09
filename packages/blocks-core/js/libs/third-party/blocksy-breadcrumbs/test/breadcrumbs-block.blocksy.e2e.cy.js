@@ -28,8 +28,6 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/breadcrumbs').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -106,8 +104,6 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/breadcrumbs').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -227,8 +223,6 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/breadcrumbs').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -305,8 +299,6 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/breadcrumbs').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -426,8 +418,6 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/breadcrumbs').first().click();
 
-				cy.addNewTransition();
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -508,8 +498,6 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/breadcrumbs').first().click();
-
-				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -611,13 +599,12 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'customLinkHoverColor')
 					);
-					expect(
+
+					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/links'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
-					).to.satisfy(
-						(color) => color === undefined || color === ''
 					);
 				});
 			});

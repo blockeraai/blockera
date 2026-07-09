@@ -16,9 +16,6 @@ return array_merge(
 				'blockera/elements/tag-link' => [
 					'root' => 'a.tag-cloud-link',
 				],
-				'blockera/elements/tag-link-count' => [
-					'root' => '.tag-link-count',
-				],
 			]
 		),
 	]

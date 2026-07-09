@@ -1,0 +1,27 @@
+.blockera-component-tabs.block-inspector-tabs {
+
+	.blockera-component-tabs__list {
+		z-index: 1;
+		position: relative;
+		border-top: 1px solid #e0e0e0;
+
+		.blockera-component-tabs__list__item {
+
+			&:hover {
+				background-color: #ffffff;
+			}
+
+			&:not(.is-active-tab)::after {
+				content: "";
+				position: absolute;
+				bottom: 0;
+				left: -1px;
+				right: -1px;
+				height: 1px;
+				background-color: var(--blockera-tab-panel-context-color);
+				display: block;
+				z-index: 1;
+			}
+		}
+	}
+}

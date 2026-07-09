@@ -82,16 +82,6 @@ export function LabelDescription(): MixedElement {
 					'blockera'
 				)}
 			</p>
-			<h3>
-				<Icon icon="background-none" iconSize="18" />
-				{__('None', 'blockera')}
-			</h3>
-			<p>
-				{__(
-					'Removes layered backgrounds for this style context (state, breakpoint, etc.), so the block has no background image or gradient override.',
-					'blockera'
-				)}
-			</p>
 		</>
 	);
 }

@@ -8,17 +8,16 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { hasSameProps, mergeObject } from '@blockera/utils';
+import { hasSameProps } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
-import { getBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock, isNormalState } from '../components/utils';
 import type { BlockDetail } from './block-card/block-states/types';
-import { STORE_NAME } from './base/store/constants';
+import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
 
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -45,7 +44,7 @@ export function arrayEquals(a: Array<any>, b: Array<any>): boolean {
  * @return {string} retrieved extension standard identifier.
  */
 export function generateExtensionId(
-	{ blockName, clientId, currentBlockStyleVariation }: TBlockProps,
+	{ blockName, clientId }: TBlockProps,
 	id: string,
 	flag: boolean = true
 ): string {
@@ -57,35 +56,32 @@ export function generateExtensionId(
 	} = select('blockera/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
-	const variation = currentBlockStyleVariation?.name
-		? `-${currentBlockStyleVariation?.name}`
-		: '';
 
 	if (!flag) {
-		return `${blockName}/${id}/${clientId}-${currentBlock}${variation}`;
+		return `${blockName}/${id}/${clientId}-${currentBlock}`;
 	}
 
 	// Assume control inside innerBlock and current innerBlock inside master block!
 	if (
-		!isNormalState(getActiveMasterState(clientId, blockName)) &&
+		!isNormalState(getActiveMasterState(clientId, currentBlock)) &&
 		isInnerBlock(currentBlock)
 	) {
-		return `${blockName}/${id}/${clientId}-master-${currentBlock}${variation}-${getActiveInnerState(
+		return `${blockName}/${id}/${clientId}-master-${currentBlock}-${getActiveInnerState(
 			clientId,
 			currentBlock
 		)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 	// Assume master block in normal state and current control inside inner block.
 	if (isInnerBlock(currentBlock)) {
-		return `${blockName}/${id}/${clientId}-${currentBlock}${variation}-${getActiveInnerState(
+		return `${blockName}/${id}/${clientId}-${currentBlock}-${getActiveInnerState(
 			clientId,
 			currentBlock
 		)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 
-	return `${blockName}/${id}/${clientId}-${currentBlock}${variation}-${getActiveMasterState(
+	return `${blockName}/${id}/${clientId}-${currentBlock}-${getActiveMasterState(
 		clientId,
-		blockName
+		currentBlock
 	)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
@@ -139,153 +135,6 @@ export function isBlockNotOriginalState(blockInfo: BlockDetail): boolean {
  *
  * @return {boolean} true on success, false on otherwise!
  */
-export function isInvalidCompatibilityRun(
-	blockInfo: BlockDetail,
-	ref: ControlContextRefCurrent
-): boolean {
-	if (['reset', 'reset_all_states'].includes(ref?.action)) {
-		return false;
-	}
-
+export function isInvalidCompatibilityRun(blockInfo: BlockDetail): boolean {
 	return isBlockNotOriginalState(blockInfo);
-}
-
-/**
- * Decide to run inside block inspector or not!
- *
- * @param {boolean} insideBlockInspector the flag to indicate app run inside block inspector.
- * @param {'save-customizations' | 'detach-style'| undefined} event the selected block occurred event.
- *
- * @return {boolean} true on success, false otherwise.
- */
-export const runInsideBlockInspector = (
-	insideBlockInspector: boolean,
-	event?: 'save-customizations' | 'detach-style'
-): boolean => {
-	switch (event) {
-		case 'save-customizations':
-		case 'detach-style':
-			return false;
-		default:
-			return insideBlockInspector;
-	}
-};
-
-/**
- * Whether an inner block definition is registered for a block via Blockera store API.
- *
- * @param {string} innerBlock Inner block registry key.
- * @param {string} blockName WordPress block name.
- * @return {boolean} true when registered, false otherwise.
- */
-export function isInnerBlockRegisteredForBlock(
-	innerBlock: string,
-	blockName: string
-): boolean {
-	const { getDefinition } = select(STORE_NAME);
-
-	return Boolean(getDefinition(innerBlock, blockName));
-}
-
-/**
- * Remove blockeraInnerBlocks entries that are not registered for the current block.
- * WordPress core attribute data in the same payload is preserved.
- *
- * @param {Object} result Compatibility result object.
- * @param {string} blockName WordPress block name.
- * @return {Object} Sanitized compatibility result.
- */
-export function omitUnregisteredInnerBlockData(
-	result: Object,
-	blockName: string
-): Object {
-	if (!result?.blockeraInnerBlocks) {
-		return result;
-	}
-
-	const payload =
-		result.blockeraInnerBlocks?.value ?? result.blockeraInnerBlocks;
-
-	if (!payload || typeof payload !== 'object') {
-		return result;
-	}
-
-	const filtered: Object = {};
-
-	Object.keys(payload).forEach((innerBlockKey) => {
-		if (isInnerBlockRegisteredForBlock(innerBlockKey, blockName)) {
-			filtered[innerBlockKey] = payload[innerBlockKey];
-		}
-	});
-
-	if (result.blockeraInnerBlocks?.value) {
-		return {
-			...result,
-			blockeraInnerBlocks: {
-				...result.blockeraInnerBlocks,
-				value: filtered,
-			},
-		};
-	}
-
-	return {
-		...result,
-		blockeraInnerBlocks: filtered,
-	};
-}
-
-/**
- * Merge WordPress compatibility output while omitting unregistered inner-block data.
- *
- * @param {Object} nextState Current attribute state.
- * @param {Object} compatResult Compatibility function output.
- * @param {BlockDetail} blockDetail Current block detail.
- * @return {Object} Merged attributes.
- */
-export function mergeWPCompatibility(
-	nextState: Object,
-	compatResult: Object,
-	blockDetail: BlockDetail
-): Object {
-	if (!compatResult) {
-		return nextState;
-	}
-
-	const sanitized = omitUnregisteredInnerBlockData(
-		compatResult,
-		blockDetail.blockId
-	);
-
-	if (!sanitized) {
-		return nextState;
-	}
-
-	const {
-		forceUpdated,
-		deletedProps,
-		...attributePatch
-	}: {
-		forceUpdated?: Array<string>,
-		deletedProps?: Array<string>,
-		...Object,
-	} = sanitized;
-
-	return mergeObject(nextState, attributePatch, {
-		forceUpdated: forceUpdated ?? [],
-		deletedProps: deletedProps ?? [],
-	});
-}
-
-/**
- * Sanitize attributes after from-WordPress compatibility import.
- *
- * @param {Object} attributes Block attributes.
- * @param {BlockDetail} blockDetail Current block detail.
- * @return {Object} Sanitized attributes.
- */
-export function sanitizeWPCompatibilityAttributes(
-	attributes: Object,
-	blockDetail: BlockDetail
-): Object {
-	return omitUnregisteredInnerBlockData(attributes, blockDetail.blockId);
 }

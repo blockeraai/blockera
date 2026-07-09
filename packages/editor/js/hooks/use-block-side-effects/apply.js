@@ -1,49 +1,18 @@
 /**
  * External dependencies
  */
-import { useLayoutEffect, useRef } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { classes as classCombinations } from './classes';
-import {
-	getEffectiveInspectorTab,
-	getSettingsOutsideInspectorTabs,
-	getSettingsTabPanel,
-	getWordPressSettingsTabPanel,
-	isInspectorTabChrome,
-	isSettingsInspectorTab,
-	isStylesInspectorTab,
-	observeInspectorTabLists,
-	resolveInspectorRoot,
-} from './utils';
-import { useShouldRenderBlockInspectorCardPortal } from '../../extensions/libs/block-card';
-import { useBlockInspectorContainer } from '../../extensions/components/use-block-inspector-container';
-import { isInnerBlock } from '../../extensions/components/utils';
-import {
-	applyBlockeraActiveColorStyle,
-	clearBlockeraActiveColorStyle,
-} from '../../extensions/components/blockera-active-color';
-import { useBlockeraActiveColor } from '../../extensions/components/use-blockera-active-color';
-
-const INSPECTOR_TABS_SELECTOR = '.block-editor-block-inspector__tabs';
-export const BLOCKERA_STYLE_SCOPE_CLASS = 'blockera-inspector-on-styles-tab';
-export const BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS =
-	'blockera-inner-block-inspector';
-
-/** Prevents a deselected block cleanup pass from clearing a newer selection. */
-let activeInspectorSideEffectsOwnerClientId = null;
 
 const handleSpecificClassCombinations = (
 	container,
 	blockName,
 	activeBlockVariation
 ) => {
-	if (!container) {
-		return;
-	}
-
 	classCombinations.forEach(
 		({ parent, children, exclude, include, childrenCheck }) => {
 			if (
@@ -62,12 +31,11 @@ const handleSpecificClassCombinations = (
 				return;
 			}
 
+			// no children selectors, then hide the parent element
 			if (!children) {
-				container.querySelectorAll(parent).forEach((parentElement) => {
-					if (isInspectorTabChrome(parentElement)) {
-						return;
-					}
+				const parentElements = container.querySelectorAll(parent);
 
+				parentElements.forEach((parentElement) => {
 					parentElement.classList.add('blockera-hidden');
 					parentElement.style.display = 'none';
 				});
@@ -75,406 +43,199 @@ const handleSpecificClassCombinations = (
 				return;
 			}
 
+			// Convert single string to array for consistent handling
 			const childrenSelectors = Array.isArray(children)
 				? children
 				: [children];
 
+			// Try each selector until we find a match
 			for (const selector of childrenSelectors) {
 				const childElements = container.querySelectorAll(selector);
 				let childParentFound = false;
 
 				if (childElements.length > 0) {
+					// Found a match, hide the parent and break the loop
 					childElements.forEach((childElement) => {
+						// If childrenCheck is 'first' or not defined, only process the first element
 						if (childrenCheck !== 'all' && childParentFound) {
 							return;
 						}
 
 						const parentElement = childElement.closest(parent);
 
-						if (
-							!parentElement ||
-							isInspectorTabChrome(parentElement)
-						) {
-							return;
+						if (parentElement) {
+							parentElement.classList.add('blockera-hidden');
+							parentElement.style.display = 'none';
+							childParentFound = true;
 						}
-
-						parentElement.classList.add('blockera-hidden');
-						parentElement.style.display = 'none';
-						childParentFound = true;
 					});
 
-					break;
+					break; // Exit the loop after finding and handling the first match
 				}
 			}
 		}
 	);
-};
-
-const restoreSpecificClassCombinations = (container) => {
-	if (!container) {
-		return;
-	}
-
-	classCombinations.forEach(({ parent, children }) => {
-		if (!children) {
-			container.querySelectorAll(parent).forEach((parentElement) => {
-				if (isInspectorTabChrome(parentElement)) {
-					return;
-				}
-
-				parentElement.classList.remove('blockera-hidden');
-				parentElement.style.removeProperty('display');
-			});
-
-			return;
-		}
-
-		const childrenSelectors = Array.isArray(children)
-			? children
-			: [children];
-
-		for (const selector of childrenSelectors) {
-			container.querySelectorAll(selector).forEach((childElement) => {
-				const parentElement = childElement.closest(parent);
-
-				if (parentElement && !isInspectorTabChrome(parentElement)) {
-					parentElement.classList.remove('blockera-hidden');
-					parentElement.style.removeProperty('display');
-				}
-			});
-		}
-	});
-};
-
-const clearBlockeraInspectorClasses = (inspector) => {
-	if (!inspector) {
-		return;
-	}
-
-	Array.from(inspector.classList).forEach((className) => {
-		if (className.startsWith('blockera-active-block-')) {
-			inspector.classList.remove(className);
-		}
-	});
-};
-
-const clearLegacyInspectorTabStyles = (inspector) => {
-	const inspectorTabs = inspector?.querySelector(INSPECTOR_TABS_SELECTOR);
-
-	if (!inspectorTabs) {
-		return;
-	}
-
-	inspectorTabs.style.removeProperty('display');
-	inspectorTabs.classList.remove('blockera-hide', 'blockera-not-allowed');
-	inspectorTabs.removeAttribute('data-test');
-};
-
-const isBlockeraInspectorControl = (element) =>
-	Boolean(element?.closest('.blockera-block-inspector-controls-wrapper'));
-
-const setWordPressSettingsAvailability = (
-	settingElement,
-	currentState,
-	notAllowedClass
-) => {
-	if (
-		!settingElement ||
-		isInspectorTabChrome(settingElement) ||
-		isBlockeraInspectorControl(settingElement)
-	) {
-		return;
-	}
-
-	settingElement.setAttribute('data-test', 'blockera-availability');
-
-	if ('normal' === currentState) {
-		settingElement.classList.remove(notAllowedClass);
-		return;
-	}
-
-	settingElement.classList.add(notAllowedClass);
-};
-
-const applyWordPressSettingsAvailability = ({
-	inspector,
-	effectiveTab,
-	currentState,
-	isActive,
-	insideBlockInspector,
-	hasNestedTabs,
-	notAllowedClass,
-}) => {
-	if (!insideBlockInspector || !isActive) {
-		return;
-	}
-
-	if (hasNestedTabs) {
-		const settingsPanel = getWordPressSettingsTabPanel(inspector);
-
-		if (settingsPanel) {
-			settingsPanel
-				.querySelectorAll(
-					'.components-tools-panel, .components-panel__body'
-				)
-				.forEach((settingElement) => {
-					setWordPressSettingsAvailability(
-						settingElement,
-						currentState,
-						notAllowedClass
-					);
-				});
-		}
-
-		return;
-	}
-
-	const settingsOutsideAnyTabs = getSettingsOutsideInspectorTabs(inspector);
-
-	settingsOutsideAnyTabs.forEach((settingElement) => {
-		if (isInspectorTabChrome(settingElement)) {
-			return;
-		}
-
-		if (isSettingsInspectorTab(effectiveTab) || !isActive) {
-			setWordPressSettingsAvailability(
-				settingElement,
-				currentState,
-				notAllowedClass
-			);
-			return;
-		}
-
-		setWordPressSettingsAvailability(
-			settingElement,
-			currentState,
-			notAllowedClass
-		);
-	});
-};
-
-const applyBlockSideEffects = ({
-	activeBlockVariation,
-	blockName,
-	currentTab,
-	currentBlock,
-	currentState,
-	isActive,
-	insideBlockInspector,
-	inspector,
-}) => {
-	if (!inspector) {
-		return;
-	}
-
-	const isInnerBlockTarget =
-		insideBlockInspector && isActive && isInnerBlock(currentBlock);
-	const effectiveTab = isInnerBlockTarget
-		? 'style'
-		: getEffectiveInspectorTab({ currentTab });
-	const notAllowedClass = 'blockera-not-allowed';
-	const hasNestedTabs = Boolean(
-		inspector.querySelector(INSPECTOR_TABS_SELECTOR)
-	);
-
-	clearBlockeraInspectorClasses(inspector);
-	clearLegacyInspectorTabStyles(inspector);
-
-	if (isActive) {
-		inspector.classList.add(
-			'blockera-active-block-' +
-				blockName.replaceAll('/', '-') +
-				(activeBlockVariation
-					? '-' + activeBlockVariation.replaceAll('/', '-')
-					: '')
-		);
-	}
-
-	const showBlockeraStylePanels =
-		insideBlockInspector && isActive && isStylesInspectorTab(effectiveTab);
-
-	inspector.classList.toggle(
-		BLOCKERA_STYLE_SCOPE_CLASS,
-		showBlockeraStylePanels
-	);
-
-	inspector.classList.toggle(
-		BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS,
-		isInnerBlockTarget
-	);
-
-	// E2E: pseudo states lock WP origin panels (e.g. Advanced → blockera-not-allowed).
-	applyWordPressSettingsAvailability({
-		inspector,
-		effectiveTab,
-		currentState,
-		isActive,
-		insideBlockInspector,
-		hasNestedTabs,
-		notAllowedClass,
-	});
-
-	// Settings tab: hide duplicate WP panels (class rules), never touch tab chrome.
-	if (
-		insideBlockInspector &&
-		isActive &&
-		isSettingsInspectorTab(effectiveTab)
-	) {
-		const settingsScope = getSettingsTabPanel(inspector) || inspector;
-
-		handleSpecificClassCombinations(
-			settingsScope,
-			blockName,
-			activeBlockVariation
-		);
-	}
-};
-
-const clearInspectorBlockeraSideEffects = (inspector) => {
-	if (!inspector) {
-		return;
-	}
-
-	clearBlockeraInspectorClasses(inspector);
-	clearLegacyInspectorTabStyles(inspector);
-	clearBlockeraActiveColorStyle(inspector);
-	inspector.classList.remove(BLOCKERA_STYLE_SCOPE_CLASS);
-	inspector.classList.remove(BLOCKERA_INNER_BLOCK_INSPECTOR_CLASS);
 };
 
 export const useBlockSideEffects = ({
-	clientId = '',
 	activeBlockVariation,
 	blockName,
 	currentBlock,
 	currentTab,
 	currentState,
 	isActive,
-	insideBlockInspector = false,
-	availableStates,
-	blockeraUnsavedData,
 }) => {
-	const inspectorContainer = useBlockInspectorContainer();
-	const settingsScopeRef = useRef(null);
-	const shouldApplyInspectorEffects = useShouldRenderBlockInspectorCardPortal(
-		insideBlockInspector ? clientId : ''
-	);
-	const canApplySideEffects =
-		!insideBlockInspector || shouldApplyInspectorEffects;
-	const { activeColor, variationCssVars } = useBlockeraActiveColor({
-		name: blockName,
-		clientId,
-		availableStates,
-		blockeraUnsavedData,
-		insideBlockInspector,
-	});
+	useEffect(() => {
+		const inspector = document.querySelector(
+			'.block-editor-block-inspector'
+		);
 
-	useLayoutEffect(() => {
-		const inspector = resolveInspectorRoot({
-			insideBlockInspector,
-			inspectorContainer,
-		});
-
-		const runEffects = () => {
-			const nextInspector = resolveInspectorRoot({
-				insideBlockInspector,
-				inspectorContainer,
-			});
-
-			if (!nextInspector) {
-				return;
-			}
-
-			// Leaving settings tab: undo class-rule hides before the next apply pass.
-			if (settingsScopeRef.current) {
-				restoreSpecificClassCombinations(settingsScopeRef.current);
-				settingsScopeRef.current = null;
-			}
-
-			// Content-only pattern: leave core inspector untouched until "Edit pattern".
-			if (insideBlockInspector && !canApplySideEffects) {
-				if (activeInspectorSideEffectsOwnerClientId === clientId) {
-					activeInspectorSideEffectsOwnerClientId = null;
+		if (inspector) {
+			const classList = inspector.classList;
+			Array.from(classList).forEach((className) => {
+				if (className.startsWith('blockera-active-block-')) {
+					classList.remove(className);
 				}
-
-				clearInspectorBlockeraSideEffects(nextInspector);
-				return;
-			}
-
-			if (insideBlockInspector && isActive) {
-				activeInspectorSideEffectsOwnerClientId = clientId;
-			}
-
-			applyBlockSideEffects({
-				activeBlockVariation,
-				blockName,
-				currentTab,
-				currentBlock,
-				currentState,
-				isActive,
-				insideBlockInspector,
-				inspector: nextInspector,
 			});
 
-			if (insideBlockInspector && isActive && canApplySideEffects) {
-				applyBlockeraActiveColorStyle(
-					nextInspector,
-					activeColor,
-					variationCssVars
-				);
+			inspector.classList.add(
+				'blockera-active-block-' +
+					blockName.replaceAll('/', '-') +
+					(activeBlockVariation
+						? '-' + activeBlockVariation.replaceAll('/', '-')
+						: '')
+			);
+		}
+
+		// The original WordPress Block Tabs wrapper element.
+		const inspectorTabs = document.querySelector(
+			'.block-editor-block-inspector__tabs'
+		);
+
+		// The settings Nodes which outside of settings and styles tab on original version of WordPress Core Blocks.
+		const settingsOutsideAnyTabs = document.querySelectorAll(
+			'.block-editor-block-inspector div[class^="css-"]'
+		);
+
+		const notAllowedClass = 'blockera-not-allowed';
+
+		const setClassList = (settingElement) => {
+			settingElement.setAttribute('data-test', 'blockera-availability');
+
+			if ('normal' === currentState) {
+				settingElement.classList.remove(notAllowedClass);
 			} else {
-				clearBlockeraActiveColorStyle(nextInspector);
-			}
-
-			const effectiveTab = isInnerBlock(currentBlock)
-				? 'style'
-				: getEffectiveInspectorTab({ currentTab });
-
-			if (
-				insideBlockInspector &&
-				isActive &&
-				isSettingsInspectorTab(effectiveTab)
-			) {
-				settingsScopeRef.current =
-					getSettingsTabPanel(nextInspector) || nextInspector;
+				settingElement.classList.add(notAllowedClass);
 			}
 		};
 
-		runEffects();
+		// Assume current block has not any block tabs.
+		if (!inspectorTabs) {
+			// We should handle other settings with show && hide functions.
+			if (settingsOutsideAnyTabs.length) {
+				const show = (settingElement) => {
+					settingElement.style = {};
+					setClassList(settingElement);
 
-		const tabObservers =
-			canApplySideEffects && inspector
-				? observeInspectorTabLists(inspector, runEffects)
-				: [];
+					if (
+						settingsOutsideAnyTabs[
+							settingsOutsideAnyTabs.length - 1
+						] === settingElement
+					) {
+						if (settingElement?.nextElementSibling) {
+							settingElement.nextElementSibling.style = {};
+							setClassList(settingElement.nextElementSibling);
+						} else if (settingElement?.nextSibling) {
+							settingElement.nextSibling.style = {};
+							setClassList(settingElement.nextSibling);
+						}
+					}
+				};
+				const hide = (settingElement) => {
+					settingElement.style.display = 'none';
+					setClassList(settingElement);
 
-		return () => {
-			tabObservers.forEach((observer) => observer.disconnect());
+					if (
+						settingsOutsideAnyTabs[
+							settingsOutsideAnyTabs.length - 1
+						] === settingElement
+					) {
+						if (settingElement?.nextElementSibling) {
+							settingElement.nextElementSibling.style.display =
+								'none';
+							setClassList(settingElement.nextElementSibling);
+						} else if (settingElement?.nextSibling) {
+							settingElement.nextSibling.style.display = 'none';
+							setClassList(settingElement.nextSibling);
+						}
+					}
+				};
 
-			if (settingsScopeRef.current) {
-				restoreSpecificClassCombinations(settingsScopeRef.current);
-				settingsScopeRef.current = null;
+				if ('settings' === currentTab || !isActive) {
+					settingsOutsideAnyTabs.forEach(show);
+				} else {
+					settingsOutsideAnyTabs.forEach(hide);
+				}
 			}
 
-			if (
-				inspector &&
-				activeInspectorSideEffectsOwnerClientId === clientId
-			) {
-				activeInspectorSideEffectsOwnerClientId = null;
-				clearInspectorBlockeraSideEffects(inspector);
+			settingsOutsideAnyTabs.forEach((tab) => {
+				handleSpecificClassCombinations(
+					tab,
+					blockName,
+					activeBlockVariation
+				);
+			});
+
+			return;
+		}
+
+		setClassList(inspectorTabs);
+
+		// Handle specific class combinations in both inspectorTabs and settingsOutsideAnyTabs
+		if (inspectorTabs) {
+			if ('settings' === currentTab) {
+				setTimeout(() => {
+					handleSpecificClassCombinations(
+						inspectorTabs,
+						blockName,
+						activeBlockVariation
+					);
+				}, 30);
+			} else {
+				handleSpecificClassCombinations(
+					inspectorTabs,
+					blockName,
+					activeBlockVariation
+				);
 			}
-		};
+		}
+
+		if ('settings' === currentTab && currentBlock === 'master') {
+			inspectorTabs.style = {};
+			inspectorTabs.classList.remove('blockera-hide');
+			return;
+		}
+
+		if (currentBlock !== 'master') {
+			inspectorTabs.style.display = 'none';
+			inspectorTabs.classList.add('blockera-hide');
+			return;
+		}
+
+		if (!isActive) {
+			inspectorTabs.style = {};
+			inspectorTabs.classList.remove('blockera-hide');
+			return;
+		}
+
+		inspectorTabs.style.display = 'none';
+		inspectorTabs.classList.add('blockera-hide');
 	}, [
-		activeBlockVariation,
-		activeColor,
 		blockName,
-		canApplySideEffects,
-		clientId,
-		currentTab,
 		currentBlock,
+		currentTab,
 		currentState,
-		insideBlockInspector,
-		inspectorContainer,
 		isActive,
-		variationCssVars,
+		activeBlockVariation,
 	]);
 };

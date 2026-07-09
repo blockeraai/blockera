@@ -22,8 +22,10 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isElement } from '../../block-card/inner-blocks/utils';
-import { getVirtualInnerBlockDescription } from '../../block-card/inner-blocks/helpers';
+import {
+	isElement,
+	getVirtualInnerBlockDescription,
+} from '../../block-card/inner-blocks/helpers';
 import { CategorizedItems } from './categorized-items';
 import type { TCategoriesProps } from '../types/categories';
 import { search } from '../search-items'; // TODO: Import getNormalizedCssSelector helper from appropriate location to enable custom-class state rendering when search has no results!
@@ -51,7 +53,6 @@ export const Categories = ({
 	setBlockState,
 	getBlockInners,
 	setCurrentBlock,
-	doingSwitchToInner,
 	setBlockClientInners,
 }: TCategoriesProps): MixedElement => {
 	// const [customSelector, setCustomSelector] = useState(
@@ -383,7 +384,6 @@ export const Categories = ({
 							{...categorizedItemsProps}
 							items={categorizedStates[category]}
 							category={category}
-							doingSwitchToInner={doingSwitchToInner}
 							title={
 								<>
 									{categoryTitle}
@@ -411,7 +411,6 @@ export const Categories = ({
 					itemType={'element'}
 					items={elements}
 					category={'elements'}
-					doingSwitchToInner={doingSwitchToInner}
 					title={
 						<>
 							{__('Virtual Inner Blocks', 'blockera')}
@@ -446,7 +445,6 @@ export const Categories = ({
 						items={blocks}
 						category={slug}
 						key={`${slug}-${index}`}
-						doingSwitchToInner={doingSwitchToInner}
 					/>
 				)
 			)}

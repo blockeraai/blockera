@@ -48,7 +48,7 @@ function handleActionIncludeRepeaterId(
 		'function' === typeof action.itemIdGenerator
 			? {
 					[action.itemIdGenerator(itemsCount)]: newValue,
-				}
+			  }
 			: { [itemsCount + '']: newValue }
 	);
 }

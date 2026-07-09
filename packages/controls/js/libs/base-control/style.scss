@@ -21,14 +21,10 @@
 		&:empty {
 			display: none;
 		}
-
-		&:hover {
-			z-index: 100;
-		}
 	}
 
 	&.small-gap .blockera-field-label .blockera-control-label {
-		min-height: 18px;
+		min-height: initial;
 	}
 
 	&.label-center .blockera-field-label {
@@ -61,6 +57,7 @@
 		order: 1;
 	}
 
+
 	&.columns-custom,
 	&.columns-1 {
 		display: grid;
@@ -91,22 +88,19 @@
 
 	code,
 	kbd {
-		padding: 2px 4px !important;
-		margin: 0 1px !important;
-		background: #def0fb !important;
-		color: var(--blockera-controls-color) !important;
-		border-radius: var(--blockera-controls-border-radius) !important;
-		font-size: 90% !important;
+		padding: 2px 4px;
+		margin: 0 1px;
+		background: #def0fb;
+		color: var(--blockera-controls-color);
+		border-radius: var(--blockera-controls-border-radius);
+		font-size: 90%;
 	}
 }
 
-*:not(.blockera-field):not(.blockera-component-flex):not(
-		.blockera-component-grid
-	):not(.blockera-control-repeater) {
+*:not(.blockera-field):not(.blockera-component-flex):not(.blockera-component-grid):not(.blockera-control-repeater) {
+
 	& > .blockera-field + .blockera-component-feature-wrapper,
-	&
-		> .blockera-component-feature-wrapper
-		+ .blockera-component-feature-wrapper,
+	& > .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
 	& > .blockera-control-notice + .blockera-field,
 	& > .blockera-component-feature-wrapper + .blockera-field,
 	& > .blockera-field + .blockera-field {

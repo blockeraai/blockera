@@ -33,7 +33,7 @@ describe('Blocksy → Tax Template Block → Block support', () => {
 <!-- /wp:blocksy/tax-query -->
 		`);
 
-		cy.getBlock('blocksy/tax-template').click({ force: true });
+		cy.getBlock('blocksy/tax-template').click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
@@ -55,8 +55,6 @@ describe('Blocksy → Tax Template Block → Block support', () => {
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
-
-		cy.wait(500);
 
 		cy.getBlock('blocksy/tax-template').should(
 			'have.css',

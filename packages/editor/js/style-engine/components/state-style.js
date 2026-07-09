@@ -20,6 +20,7 @@ import { getComputedCssProps } from '../get-computed-css-props';
 /**
  * Internal dependencies
  */
+import { Style } from './style';
 import { MediaQuery } from './media-query';
 import type { StateStyleProps } from './types';
 import { combineDeclarations } from '../utils';
@@ -92,64 +93,63 @@ export const StateStyle = (
 		states.push(states.splice(0, 1)[0]);
 	}
 
-	return useMemo(() => {
-		const devicesCssStyles: { [key: TBreakpoint]: Array<string> } = {};
-		const sortedBreakpoints: Object = sortBreakpoints(breakpoints);
+	const devicesCssStyles: { [key: TBreakpoint]: Array<MixedElement> } = {};
+	const sortedBreakpoints = sortBreakpoints(breakpoints);
 
-		for (const name in sortedBreakpoints) {
-			const breakpoint = sortedBreakpoints[name];
-			const { type } = breakpoint;
+	for (const name in sortedBreakpoints) {
+		const breakpoint = sortedBreakpoints[name];
+		const { type } = breakpoint;
 
-			const combinedDeclarations = combineDeclarations(
-				getComputedCssProps({
-					...props,
-					states,
-					currentBreakpoint: type,
-				}),
-				props.inlineStyles
-			);
+		const combinedDeclarations = combineDeclarations(
+			getComputedCssProps({
+				...props,
+				states,
+				currentBreakpoint: type,
+			}),
+			props.inlineStyles
+		);
 
-			const stylesheet: Array<string> = combinedDeclarations.map(
-				({ selector, declarations }: Object): string =>
-					`${selector}{${declarations.join('')}}`
-			);
+		const stylesheet = combinedDeclarations.map(
+			(
+				{ selector, declarations }: Object,
+				index: number
+			): MixedElement => (
+				<Style
+					key={`${type}-${index}-style`}
+					selector={selector}
+					cssDeclaration={declarations}
+				/>
+			)
+		);
 
-			if (!stylesheet.length) {
-				continue;
-			}
-
-			if (devicesCssStyles[type]) {
-				devicesCssStyles[type] = mergeObject(
-					devicesCssStyles[type],
-					stylesheet
-				);
-
-				continue;
-			}
-
-			devicesCssStyles[type] = stylesheet;
+		if (!stylesheet.length) {
+			continue;
 		}
 
-		return Object.entries(devicesCssStyles).map(
-			(
-				[type, stylesheet]: [TBreakpoint, Array<string>],
-				i: number
-			): MixedElement => {
-				if (!stylesheet.length) {
-					return <></>;
-				}
+		if (devicesCssStyles[type]) {
+			devicesCssStyles[type] = mergeObject(
+				devicesCssStyles[type],
+				stylesheet
+			);
 
-				return (
-					<MediaQuery
-						key={`${type}-${i}-media-query`}
-						breakpoint={type}
-						clientId={props.clientId}
-						declarations={stylesheet.join('')}
-					/>
-				);
-			}
-		);
-	}, [props, breakpoints, states]);
+			continue;
+		}
+
+		devicesCssStyles[type] = stylesheet;
+	}
+
+	return Object.entries(devicesCssStyles).map(
+		(
+			[type, stylesheet]: [TBreakpoint, Array<MixedElement>],
+			i: number
+		): MixedElement => {
+			return (
+				<MediaQuery key={`${type}-${i}-media-query`} breakpoint={type}>
+					{stylesheet}
+				</MediaQuery>
+			);
+		}
+	);
 };
 
 /**
@@ -166,13 +166,13 @@ const sortBreakpoints = (breakpointsObj: {
 	[key: string]: TBreakpoint,
 }): Array<TBreakpoint> => {
 	// Helper function to parse a pixel value string (e.g., "1920px") into an integer.
-	const parsePx = (value: string): number => parseInt(value, 10) || 0;
+	const parsePx = (value) => parseInt(value, 10) || 0;
 
 	// Convert the breakpoints object into an array of its values to make it sortable.
 	const breakpointsArray = Object.values(breakpointsObj);
 
 	// Sort the array using a custom comparison function.
-	breakpointsArray.sort((a: Object, b: Object) => {
+	breakpointsArray.sort((a, b) => {
 		const aIsMin = !!a.settings?.min;
 		const bIsMin = !!b.settings?.min;
 		const aIsBase = !a.settings?.min && !a.settings?.max;

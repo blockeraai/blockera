@@ -20,16 +20,8 @@
 	width: 100%;
 	text-align: inherit;
 
-	&.active-value-addon {
-		flex-grow: 1;
-	}
-
 	&.value-addon-with-icon {
 		grid-template-columns: 20px auto;
-
-		&:has(.blockera-control-item-name:empty) {
-			grid-template-columns: 20px;
-		}
 	}
 
 	&.type-variable {
@@ -69,10 +61,6 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-
-		&:empty {
-			display: none;
-		}
 	}
 
 	.blockera-control-item-icon {
@@ -87,11 +75,5 @@
 
 	&.value-addon-size-small {
 		font-size: 11px;
-	}
-}
-
-.blockera-control-repeater.repeater-value-addon {
-	& > span:empty {
-		display: none;
 	}
 }

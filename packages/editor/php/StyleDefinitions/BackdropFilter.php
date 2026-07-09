@@ -8,51 +8,85 @@ class BackdropFilter extends BaseStyleDefinition implements Repeater {
 
     protected function css( array $setting): array {
 
-        $cssProperty = $setting['type'] ?? '';
+        $declaration = [];
+        $cssProperty = $setting['type'];
 
-        if ( 'backdrop-filter' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
-            return [];
+        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'backdrop-filter' !== $cssProperty) {
+
+            return $declaration;
         }
 
-        $backdropFilters = blockera_get_sorted_repeater( $setting[ $cssProperty ] );
-        
-        if ( empty( $backdropFilters ) ) {
-            return [];
-        }
+        $filteredBackdropFilters = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
 
-        $declarations = &$this->declarations;
-        $propKey      = 'backdrop-filter';
-        $existing     = $declarations[ $propKey ] ?? '';
-        $filters      = [];
+		if (empty($filteredBackdropFilters)) {
+			
+			return $declaration;
+		}
 
-        foreach ( $backdropFilters as $filterSetting ) {
-            if ( ! isset( $filterSetting['type'], $filterSetting['isVisible'] ) || ! $filterSetting['isVisible'] ) {
-                continue;
-            }
+        $this->setBackdropFilter($filteredBackdropFilters[0]);
 
-            $type = $filterSetting['type'];
-            
-            if ( 'drop-shadow' === $type ) {
-                $filters[] = 'drop-shadow(' 
-                    . blockera_get_value_addon_real_value( $filterSetting['drop-shadow-x'] ) . ' '
-                    . blockera_get_value_addon_real_value( $filterSetting['drop-shadow-y'] ) . ' '
-                    . blockera_get_value_addon_real_value( $filterSetting['drop-shadow-blur'] ) . ' '
-                    . blockera_get_value_addon_real_value( $filterSetting['drop-shadow-color'] ) . ')';
-            } else {
-                $filters[] = $type . '(' . blockera_get_value_addon_real_value( $filterSetting[ $type ] ) . ')';
-            }
-        }
-
-        if ( $filters ) {
-            $declarations[ $propKey ] = $existing ? $existing . ' ' . implode( ' ', $filters ) : implode( ' ', $filters );
-            $this->setCss( $declarations );
-        }
+        $this->setCss($this->declarations);
 
         return $this->css;
     }
 
+    /**
+     * Check if the setting is valid.
+     *
+     * @param array $setting The setting.
+     *
+     * @return bool true if the setting is valid, false otherwise.
+     */
     public function isValidSetting( array $setting): bool {
 
-        return isset( $setting['type'], $setting['isVisible'] ) && $setting['isVisible'];
+        if (empty($setting['type'])) {
+
+            return false;
+        }
+
+        return ! empty($setting['isVisible']);
+    }
+
+    /**
+     * Setup backdrop filter style properties into stack properties.
+     *
+     * @param array $setting the backdrop filter setting.
+     *
+     * @return void
+     */
+    protected function setBackdropFilter( array $setting): void {
+
+		if ( 'drop-shadow' === $setting['type'] ) {
+			$filter =
+				sprintf(
+					'drop-shadow(%s %s %s %s)',
+					blockera_get_value_addon_real_value( $setting['drop-shadow-x'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-y'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-color'] )
+				);
+		} else {
+			$filter =
+				sprintf(
+					'%s(%s)',
+					$setting['type'],
+					blockera_get_value_addon_real_value( $setting[ $setting['type'] ] ),
+				);
+		}
+
+		if ( $filter ) {
+			if ( ! empty( $this->declarations['backdrop-filter'] ) ) {
+				$this->setDeclaration(
+					'backdrop-filter',
+					sprintf(
+						'%s %s',
+						$this->declarations['backdrop-filter'],
+						$filter
+					)
+				);
+			} else {
+				$this->setDeclaration( 'backdrop-filter', $filter );
+			}
+		}
     }
 }

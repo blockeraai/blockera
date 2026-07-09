@@ -20,11 +20,7 @@ import { getVariable, STORE_NAME } from '@blockera/data';
  * Internal dependencies
  */
 import { Tooltip } from '../../../';
-import {
-	hasThemeJsonPlainPresetSlug,
-	isAddonUiActive,
-	isValid,
-} from '../../utils';
+import { isValid } from '../../utils';
 import { ValueAddonPointer } from './index';
 import type { ValueAddonControlProps } from './types';
 import { default as EmptyIcon } from '../../icons/empty.svg';
@@ -48,7 +44,7 @@ export default function ({
 		if (controlProps.value.valueType === 'variable') {
 			if (controlProps.isDeletedVar) {
 				isDeleted = true;
-				label = __('Missing variable', 'blockera');
+				label = __('Missing Variable', 'blockera');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getVariable(
@@ -67,7 +63,7 @@ export default function ({
 		} else if (controlProps.value.valueType === 'dynamic-value') {
 			if (controlProps.isDeletedDV) {
 				isDeleted = true;
-				label = __('Missing item', 'blockera');
+				label = __('Missing Item', 'blockera');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getDynamicValue(
@@ -81,85 +77,32 @@ export default function ({
 				icon = getDynamicValueIcon(controlProps.value?.settings?.type);
 			}
 		}
-	} else if (
-		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug)
-	) {
-		if (controlProps.isDeletedPlainThemeJsonPreset) {
-			isDeleted = true;
-			label = __('Missing variable', 'blockera');
-			icon = <DeletedIcon />;
-		} else {
-			label = controlProps.themeJsonPlainPresetSlug || '';
-			icon = getVariableIcon({
-				type:
-					controlProps.themeJsonPlainPresetVariableType ||
-					controlProps.variableTypes?.[0] ||
-					'color',
-				value:
-					controlProps.themeJsonPlainPresetCompositePaint !==
-						undefined &&
-					controlProps.themeJsonPlainPresetCompositePaint !== ''
-						? controlProps.themeJsonPlainPresetCompositePaint
-						: undefined,
-				presetSlug: controlProps.themeJsonPlainPresetSlug,
-				themeJsonResolutionBlockName:
-					controlProps.themeJsonResolutionBlockName,
-				themeJsonResolutionPresetCssVarInfix:
-					controlProps.themeJsonResolutionPresetCssVarInfix,
-			});
-		}
 	}
 
 	let isIconActive = true;
 	if (controlProps.size === 'small') {
-		isIconActive = !isAddonUiActive(
-			controlProps.value,
-			controlProps.themeJsonPlainPresetSlug
-		);
-	}
-
-	const isVariable =
-		controlProps.value?.valueType === 'variable' ||
-		controlProps.isOpen.startsWith('var-') ||
-		hasThemeJsonPlainPresetSlug(controlProps.themeJsonPlainPresetSlug);
-
-	let tooltipColor = '';
-
-	if (isVariable) {
-		if (isDeleted) {
-			tooltipColor = '#e20b0b';
-		} else {
-			tooltipColor = 'var(--blockera-value-addon-var-color)';
-		}
-	} else if (isDeleted) {
-		tooltipColor = '#e20b0b';
-	} else {
-		tooltipColor = 'var(--blockera-value-addon-dv-color)';
+		isIconActive = !isValid(controlProps.value);
 	}
 
 	return (
 		<>
 			<Tooltip
 				text={
-					isVariable
+					controlProps.value?.valueType === 'variable'
 						? __('Change variable', 'blockera')
 						: __('Change dynamic value', 'blockera')
 				}
 				style={{
-					'--tooltip-bg': tooltipColor,
+					'--tooltip-bg':
+						controlProps.value?.valueType === 'variable'
+							? 'var(--blockera-value-addon-var-color)'
+							: 'var(--blockera-value-addon-dv-color)',
 				}}
-				delay={400}
 			>
 				<button
 					className={controlClassNames(
 						'value-addon',
-						'type-' +
-							(controlProps.value?.valueType ||
-								(hasThemeJsonPlainPresetSlug(
-									controlProps.themeJsonPlainPresetSlug
-								)
-									? 'variable'
-									: 'unknown')),
+						'type-' + (controlProps.value?.valueType || 'unknown'),
 						'value-addon-size-' + controlProps.size,
 						isIconActive && 'value-addon-with-icon',
 						isDeleted && 'type-deleted',
@@ -167,24 +110,9 @@ export default function ({
 							'open-value-addon type-variable',
 						controlProps.isOpen.startsWith('dv-') &&
 							'open-value-addon type-dynamic-value',
-						controlProps.isActive && 'active-value-addon',
 						classNames
 					)}
 					onClick={(event) => {
-						if (
-							hasThemeJsonPlainPresetSlug(
-								controlProps.themeJsonPlainPresetSlug
-							)
-						) {
-							controlProps.setOpen(
-								controlProps.isDeletedPlainThemeJsonPreset
-									? 'var-deleted'
-									: 'var-picker'
-							);
-							event.preventDefault();
-							return;
-						}
-
 						switch (controlProps.value?.valueType) {
 							case 'variable':
 								controlProps.setOpen(
@@ -201,9 +129,6 @@ export default function ({
 						}
 					}}
 					data-cy="value-addon-btn"
-					data-test={
-						isDeleted ? 'value-addon-deleted' : 'value-addon-normal'
-					}
 					{...props}
 				>
 					{isIconActive && (
@@ -217,7 +142,6 @@ export default function ({
 					</span>
 				</button>
 			</Tooltip>
-
 			<ValueAddonPointer controlProps={controlProps} />
 		</>
 	);

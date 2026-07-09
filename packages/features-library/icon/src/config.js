@@ -26,8 +26,8 @@ export const icon = {
 						description: __('The icon element.', 'blockera'),
 						icon: (
 							<Icon
-								icon="thunder"
-								library="essentials"
+								icon="star-filled"
+								library="wp"
 								iconSize="20"
 							/>
 						),

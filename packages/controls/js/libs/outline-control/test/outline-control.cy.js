@@ -248,23 +248,12 @@ describe('outline control component testing', () => {
 			cy.getByDataTest('popover-body')
 				.last()
 				.within(() => {
-					cy.get('[data-cy="color-picker-css-value"]').clear({
-						force: true,
-					});
-					cy.get('[data-cy="color-picker-css-value"]').type(
-						'ad2dcc',
-						{ delay: 0 }
-					);
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('ad2dcc ');
 				});
 
-			// CustomSelectControl (Ariakit) uses listbox/option roles, not ul/li.
-			cy.getByDataTest('border-control-component')
-				.find('[aria-haspopup="listbox"]')
-				.click();
-			cy.get('[role="listbox"]:visible')
-				.find('[role="option"]')
-				.eq(2)
-				.click();
+			cy.get('.blockera-control-border-color-wrapper').next().click();
+			cy.get('ul').get('li').eq(2).click();
 
 			cy.getByDataTest('outline-offset-input').clear();
 			cy.getByDataTest('outline-offset-input').type(5);
@@ -278,11 +267,9 @@ describe('outline control component testing', () => {
 				.should('have.attr', 'style')
 				.should('include', '#ad2dcc');
 
-			cy.getByDataTest('border-control-component')
-				.find('[aria-haspopup="listbox"]')
-				.click();
-			cy.get('[role="listbox"]:visible')
-				.find('[role="option"]')
+			cy.get('.blockera-control-border-color-wrapper').next().click();
+			cy.get('ul')
+				.get('li')
 				.eq(2)
 				.should('have.attr', 'aria-selected', 'true');
 

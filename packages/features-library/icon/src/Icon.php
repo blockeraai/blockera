@@ -7,11 +7,10 @@ use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Core\Traits\Singleton;
 use Blockera\Features\Core\Traits\ApplicationTrait;
 use Blockera\Features\Core\Contracts\FeatureInterface;
-use Blockera\Features\Core\Traits\FeatureBlockStoreTrait;
 
 class Icon implements FeatureInterface {
 
-    use Singleton, ApplicationTrait, FeatureBlockStoreTrait;
+    use Singleton, ApplicationTrait;
 
 	/**
 	 * Store the configuration.
@@ -50,25 +49,28 @@ class Icon implements FeatureInterface {
     }
 
     public function boot(): void {
+
+		add_filter(
+            'blockera.render.block.supports',
+            function( $supports, $app) {
+				ob_start();
+
+				include __DIR__ . '/icon-block-supports-list.json';
+			
+				$supports['icon'] = json_decode(ob_get_clean(), true);
+
+				return $supports;
+			},
+            10,
+            2
+        );
+
         $this->edit_block_html = new EditBlockHTML( $this->config['blocks'] ?? [] );
     }
 
     public function isEnabled(): bool {
         
 		return true;
-    }
-
-	public function isBlockSupported(): bool {
-		if (! isset($this->block)) {
-			return false;
-		}
-
-		if ('core/icon' === ( $this->block['blockName'] ?? '' )) {
-			// Standalone core/icon SVG is injected in render_block_core/icon (see blockera_core_icon_render_frontend_html).
-			return false;
-		}
-
-		return isset($this->block['attrs']['blockeraIcon']);
     }
 
 	/**

@@ -30,7 +30,6 @@ export default function MediaImageControl({
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns,
@@ -66,7 +65,6 @@ export default function MediaImageControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	return (
@@ -87,7 +85,7 @@ export default function MediaImageControl({
 					<Tooltip
 						text={__('Delete image', 'blockera')}
 						style={{
-							'--tooltip-bg': '#e20b0b',
+							'--tooltip-bg': '#e20000',
 						}}
 						delay={300}
 					>

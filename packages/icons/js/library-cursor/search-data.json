@@ -6,12 +6,6 @@
 		"tags": ["alias", "link", "shortcut", "reference", "pointer"]
 	},
 	{
-		"iconName": "auto",
-		"title": "Auto",
-		"library": "cursor",
-		"tags": ["auto", "automatic", "default", "cursor", "pointer"]
-	},
-	{
 		"iconName": "cell",
 		"title": "Cell",
 		"library": "cursor",

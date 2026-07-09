@@ -39,10 +39,6 @@ export type FeatureConfig = {
 	 */
 	onNative?: boolean,
 	/**
-	 * on companion plugin settings?
-	 */
-	onCompanion?: boolean,
-	/**
 	 * on blockera block states?
 	 */
 	onStates?: boolean | Array<string>,
@@ -66,8 +62,4 @@ export type FeatureConfig = {
 	 * on native blockera inner blocks?
 	 */
 	onNativeOnInnerBlocks?: boolean | Array<string>,
-	/**
-	 * Keywords for searching features. Array of strings for search functionality.
-	 */
-	keywords?: Array<string> | string,
 };

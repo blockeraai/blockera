@@ -1,96 +1,21 @@
 .blockera-component.blockera-component-modal {
-	--modal-gap: 24px;
-	--modal-header-height: 60px;
-	--modal-line-color: #e5e8ed;
 
 	.components-modal__header {
-		border-bottom: 1px solid var(--modal-line-color);
-		height: var(--modal-header-height);
-		padding: calc(var(--modal-gap) - 10px) var(--modal-gap);
-		background-color: #ffffff;
-		z-index: 100;
+		height: auto;
 
 		.components-modal__header-heading {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
+			flex-direction: column;
 			gap: 10px;
-			font-size: 1.1rem;
 		}
 
 		& + * {
-			margin-top: var(--modal-header-height);
-		}
-
-		.blockera-component-modal__header-icon {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 30px;
-			height: 30px;
-			background: color-mix(
-				in srgb,
-				var(--blockera-controls-primary-color) 10%,
-				transparent
-			);
-			border-radius: 50%;
-			position: relative;
-
-			svg:first-child {
-				fill: var(--blockera-controls-primary-color);
-				width: 24px;
-				height: 24px;
-			}
-
-			svg:nth-child(2) {
-				position: absolute;
-				bottom: -4px;
-				right: -4px;
-				width: 14px;
-				height: 14px;
-				fill: #ffffff;
-				background-color: var(--blockera-controls-primary-color);
-				border-radius: 50%;
-				outline: 2px solid #ffffff;
-			}
+			margin-top: 40px;
 		}
 	}
 
 	.components-modal__content {
 		margin-top: 0;
 		overflow: auto;
-		padding: var(--modal-gap);
+		padding: 32px 32px 32px;
 	}
-
-	.blockera-component-modal__actions {
-		flex-direction: row;
-		justify-content: flex-end;
-		gap: 8px;
-		padding: calc(var(--modal-gap) - 10px) var(--modal-gap)
-			calc(var(--modal-gap) - 10px);
-		margin: var(--modal-gap) calc(var(--modal-gap) * -1)
-			calc(var(--modal-gap) * -1);
-		border-top: 1px solid var(--modal-line-color);
-		background: #ffffff;
-	}
-
-	&.blockera-component-delete-modal {
-		--blockera-controls-primary-color: #e20b0b;
-		--blockera-controls-primary-color-darker-20: #b30808;
-		max-width: 450px;
-	}
-
-	&.blockera-component-ai-experimental-tools-modal {
-		max-width: 600px;
-	}
-
-	.components-modal__children-container {
-		flex-grow: 1;
-		display: flex;
-		flex-direction: column;
-	}
-}
-
-.components-modal__screen-overlay {
-	z-index: 1000000;
 }

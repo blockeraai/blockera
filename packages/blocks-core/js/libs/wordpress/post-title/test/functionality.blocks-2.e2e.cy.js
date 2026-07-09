@@ -4,6 +4,7 @@
 import {
 	savePage,
 	createPost,
+	openInserter,
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
@@ -26,15 +27,9 @@ describe('Post Title Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 
-		cy.checkBlockStatesPickerItems([
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
@@ -82,10 +77,10 @@ describe('Post Title Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
+			cy.get('.components-panel__body-title button')
 				.contains('Settings')
 				.scrollIntoView()
 				.should('be.visible');

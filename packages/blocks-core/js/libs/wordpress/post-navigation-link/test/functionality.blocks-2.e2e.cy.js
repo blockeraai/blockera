@@ -6,7 +6,6 @@ import {
 	createPost,
 	appendBlocks,
 	setInnerBlock,
-	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -27,21 +26,6 @@ describe('Post Navigation Link Block', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		cy.checkBlockCardItems(['normal', 'hover', 'elements/arrow']);
-
-		cy.checkBlockStatesPickerItems([
-			'states/hover',
-			'states/focus',
-			'states/active',
-			'states/visited',
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-			'elements/arrow',
-		]);
 
 		//
 		// 1. Edit Block
@@ -108,21 +92,7 @@ describe('Post Navigation Link Block', () => {
 		});
 
 		//
-		// 2. Check settings tab
-		//
-		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
-
-		// layout settings should be hidden
-		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
-				.contains('Settings')
-				.scrollIntoView()
-				.should('be.visible');
-		});
-
-		//
-		// 3. Assert inner blocks selectors in front end
+		// 2. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

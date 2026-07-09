@@ -8,11 +8,10 @@ import { useSelect, select, dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../../editor/header-ui';
 import type { ExtensionsStoreType } from './ExtensionsStoreType';
 import { isInnerBlock } from '../../extensions/components/utils';
-import { getExtensionsUiContext } from '../../extensions/components/extensions-ui-context';
 import { STORE_NAME } from '../../extensions/libs/base/store/constants';
+import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 /**
@@ -47,63 +46,41 @@ export function getExtensionConfig(
 
 export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 	const {
+		config,
 		getBlockExtensionBy,
 		currentBlock = 'master',
 		currentState = 'normal',
 		currentInnerBlockState = 'normal',
 		currentBreakpoint = getBaseBreakpoint(),
-	} = useSelect(
-		(select) => {
-			const { getSelectedBlock } = select('core/block-editor');
-			const selected = getSelectedBlock();
-			// Prefer the block instance passed into this hook (e.g. BlockStyle,
-			// feature wrappers). Using only getSelectedBlock() breaks canvas CSS when
-			// another block stays selected — common after programmatic insert (AI/JSON).
-			const { name, clientId } =
-				typeof props?.clientId === 'string' &&
-				props.clientId !== '' &&
-				typeof props?.name === 'string'
-					? { name: props.name, clientId: props.clientId }
-					: selected || props || {};
-			const {
-				getBlockExtensionBy,
-				getActiveInnerState,
-				getActiveMasterState,
-				getExtensionCurrentBlock,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera/extensions');
+	} = useSelect((select) => {
+		const { getSelectedBlock } = select('core/block-editor');
+		const { name, clientId } = getSelectedBlock() || props || {};
+		const {
+			getBlockExtensionBy,
+			getActiveInnerState,
+			getActiveMasterState,
+			getExtensionCurrentBlock,
+			getExtensionCurrentBlockStateBreakpoint,
+		} = select('blockera/extensions');
 
-			const currentBlock = getExtensionCurrentBlock(
-				props?.extensionsUiContext ??
-					(props?.variationSurface
-						? getExtensionsUiContext(false, props.variationSurface)
-						: undefined)
-			);
+		const currentBlock = getExtensionCurrentBlock();
 
-			return {
-				currentBlock,
-				getBlockExtensionBy,
-				currentState: getActiveMasterState(clientId, name),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-				currentInnerBlockState: getActiveInnerState(
-					clientId,
-					currentBlock
-				),
-			};
-		},
-		[
-			props?.name,
-			props?.clientId,
-			props?.variationSurface,
-			props?.extensionsUiContext,
-		]
-	);
+		return {
+			currentBlock,
+			getBlockExtensionBy,
+			config: getExtensionConfig(name, currentBlock),
+			currentState: getActiveMasterState(clientId, name),
+			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+			currentInnerBlockState: getActiveInnerState(clientId, currentBlock),
+		};
+	});
 
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
 	);
 
 	return {
+		config,
 		currentState,
 		currentBlock,
 		currentBreakpoint,

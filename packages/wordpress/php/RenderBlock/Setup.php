@@ -91,13 +91,23 @@ class Setup {
      * @return array the registered block arguments.
      */
     public function registerBlock( array $args, string $block_type): array {
-        if (! isset($this->available_blocks[ $block_type ])) {
+
+        if (! in_array($block_type, $this->available_blocks, true)) {
+
             return $args;
         }
 
         // Merging blockera shared block attributes.
-        $sharedAttributes   = blockera_get_shared_block_attributes();
-        $args['attributes'] = array_merge($args['attributes'] ?? [], $sharedAttributes);
+        $args = array_merge(
+            $args,
+            [
+                'attributes' => array_merge(
+                    $args['attributes'] ?? [],
+                    blockera_get_shared_block_attributes()
+                ),
+            ]
+        );
+
         return $this->getCustomizedBlock($block_type, $args);
     }
 
@@ -110,11 +120,20 @@ class Setup {
      * @return array the customized block type arguments.
      */
     public function getCustomizedBlock( string $block_type, array $args): array {
+
         $this->setBlockDirectoryPath($block_type);
-        $blockFile = $this->plugin_path . 'blockera/blocks-core/php/' . $this->block_dir_path . '/block.php';
-        if (false === file_exists($blockFile)) {
+
+        $blockFile = sprintf(
+            '%1$sblockera/blocks-core/php/%2$s/block.php',
+            $this->plugin_path,
+            $this->getBlockDirectoryPath()
+        );
+
+        if (! file_exists($blockFile)) {
+
             return $args;
         }
+
         return require $blockFile;
     }
 
@@ -136,31 +155,30 @@ class Setup {
      * @return void
      */
     public function setBlockDirectoryPath( string $blockType): void {
-        $parsedName = explode('/', $blockType, 3);
-        
-		if (! isset($parsedName[1])) {
+
+        $parsedName = explode('/', $blockType);
+
+        if (count($parsedName) < 2) {
+
             $this->block_dir_path = $blockType;
+
             return;
         }
 
-        $prefix = $parsedName[0];
-        
-		// WordPress Core Blocks.
-        if ('core' === $prefix) {
-            $this->block_dir_path = 'libs/wordpress/' . $parsedName[1];
-            return;
-        }
+        switch ($parsedName[0]) {
 
-        if ('woocommerce' === $prefix) {
-            $this->block_dir_path = 'libs/woocommerce/' . $parsedName[1];
-            return;
+            // WordPress Core Blocks.
+            case 'core':
+                $this->block_dir_path = sprintf('libs/wordpress/%s', $parsedName[1]);
+                break;
+            case 'woocommerce':
+                $this->block_dir_path = sprintf('libs/woocommerce/%s', $parsedName[1]);
+                break;
+			case 'blocksy':
+				$this->block_dir_path = sprintf( 'libs/third-party/%s', str_replace( '/', '-', $blockType ) );
+				break;
+                // TODO: Implements other blocks in this here ...
         }
-
-        if ('blocksy' === $prefix) {
-            $this->block_dir_path = 'libs/third-party/' . str_replace('/', '-', $blockType);
-            return;
-        }
-        // TODO: Implements other blocks in this here ...
     }
 
 }

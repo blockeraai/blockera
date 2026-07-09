@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { useContext, useCallback, useRef } from '@wordpress/element';
 
@@ -15,7 +16,6 @@ import {
 	isObject,
 	isBoolean,
 	isUndefined,
-	isEquals,
 	mergeObject,
 } from '@blockera/utils';
 
@@ -170,7 +170,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		// eslint-disable-next-line
 	}, []);
 
-	const calculatedValue = getCalculatedInitValue();
+	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
+	const calculatedValue = _getCalculatedValue();
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
@@ -190,9 +191,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			const {
 				attributes: { blockeraBlockStates },
 			} = getSelectedBlock();
-			const states = Object.keys(
-				blockeraBlockStates?.value || blockeraBlockStates
-			);
+			const states = Object.keys(blockeraBlockStates);
 			const breakpoints = Object.keys(getBreakpoints());
 			//get `blockera/controls` store or details of that
 			const { getControl } = isRepeaterControl()
@@ -205,7 +204,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					: getActiveMasterState(
 							clientId,
 							getExtensionCurrentBlock()
-						);
+					  );
 				const controlName = controlInfo.name.replace(
 					currentState,
 					state
@@ -224,11 +223,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					modify(name);
 				});
 			});
-
-			// When no states are present or normal state is not present, modify the control value to the default value.
-			if (!states.length || !states.includes('normal')) {
-				modify(controlInfo.name);
-			}
 
 			resetRef();
 
@@ -254,29 +248,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	});
 
 	/**
-	 * Resolve the effective control value using the same rules as ControlContextProvider.
-	 * When skipSyncValue is true, the store value wins. Otherwise controlInfo.value
-	 * is preferred when it is defined and differs from the store.
-	 *
-	 * @return {any} resolved control value before id/defaultValue preparation.
-	 */
-	function getResolvedControlValue(): any {
-		const skipSyncValue =
-			controlInfo.hasOwnProperty('skipSyncValue') &&
-			true === controlInfo.skipSyncValue;
-
-		if (skipSyncValue) {
-			return savedValue;
-		}
-
-		if (!isEquals(savedValue, controlInfo.value)) {
-			return controlInfo.value;
-		}
-
-		return savedValue;
-	}
-
-	/**
 	 * Retrieved control value
 	 * to merge default and saved value for simple or repeater controls.
 	 *
@@ -286,7 +257,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	 */
 	function getCalculatedInitValue(currentValue: any = null): any {
 		if (isNull(currentValue)) {
-			currentValue = getResolvedControlValue();
+			currentValue = savedValue;
 		}
 
 		if (
@@ -294,10 +265,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			isNull(currentValue) ||
 			isEmpty(currentValue)
 		) {
-			if (isRepeaterControl()) {
-				return defaultValue ?? {};
-			}
-
 			return defaultValue;
 		}
 
@@ -346,18 +313,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 		if (!isUndefined(prep)) {
 			return prep;
-		}
-
-		// `prepare` only traverses objects/arrays. When it cannot resolve `id`, a scalar
-		// saved value may still be the control's whole value (flat / legacy storage while
-		// the control still declares a nested `id`). Prefer that scalar over defaultValue.
-		const scalarType = typeof currentValue;
-		if (
-			scalarType === 'string' ||
-			scalarType === 'number' ||
-			scalarType === 'boolean'
-		) {
-			return currentValue;
 		}
 
 		return defaultValue;
@@ -499,14 +454,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		setValue: (value, _ref = undefined) => {
 			setValue(value, _ref || ref);
 
-			// Keep store in sync with what onChange receives (valueCleanup output). Nested
-			// controls (e.g. ColorPicker inside ColorControl) otherwise overwrite a cleaned
-			// value with the raw input on the second modifyValue call.
-			const storeValue =
-				typeof valueCleanup === 'function'
-					? valueCleanup(value)
-					: value;
-			modifyValue(storeValue);
+			modifyValue(value);
 
 			resetRef();
 		},

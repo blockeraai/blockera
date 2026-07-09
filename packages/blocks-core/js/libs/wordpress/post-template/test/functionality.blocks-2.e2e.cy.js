@@ -26,20 +26,12 @@ describe('Post Template Block', () => {
 		// Select target block
 		cy.getBlock('core/post-template').click({ force: true });
 
+		cy.get('button[aria-label="Post Template"]').click();
+
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		cy.checkBlockCardItems(['normal', 'hover']);
-
-		cy.checkBlockStatesPickerItems([
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
 
 		//
 		// 1. Edit Block
@@ -89,7 +81,7 @@ describe('Post Template Block', () => {
 		// 2. Check settings tab
 		//
 		setParentBlock();
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-panel__body-title button')

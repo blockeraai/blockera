@@ -17,19 +17,3 @@ export function regexMatch(
 		m.forEach(callback);
 	}
 }
-
-/**
- * Get the parent normalized id of a control.
- *
- * @param {string} id The id of the control.
- * @return {string} The parent normalized id of the control.
- */
-export function getNormalizedControlParentId(id?: string = ''): string {
-	const _id = id || '';
-
-	if (!_id) {
-		return '';
-	}
-
-	return `${_id}.`;
-}

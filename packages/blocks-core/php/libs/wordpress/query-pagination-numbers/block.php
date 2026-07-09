@@ -12,10 +12,7 @@ return array_merge(
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			blockera_load( 'inners.numbers', dirname( __DIR__ ) ),
-			[
-				'root' => '.wp-block-query-pagination-numbers',
-			]
+			blockera_load( 'inners.numbers', dirname( __DIR__ ) )
 		),
 	]
 );

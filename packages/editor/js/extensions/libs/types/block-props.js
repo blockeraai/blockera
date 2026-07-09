@@ -6,5 +6,4 @@ export type TBlockProps = {
 	blockName: string,
 	attributes: Object,
 	setAttributes: (attributes: Object) => void,
-	currentBlockStyleVariation: Object,
 };

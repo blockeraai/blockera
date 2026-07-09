@@ -20,108 +20,93 @@ const blockeraOpacity: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Opacity', 'blockera'),
-	keywords: ['opacity', 'transparent', 'transparency', 'alpha'],
 };
 
 const blockeraTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onCompanion: true,
 	label: __('Transforms', 'blockera'),
-	keywords: ['transform', 'rotate', 'scale', 'skew', 'translate'],
 };
 
 const blockeraTransformSelfPerspective: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
-	onCompanion: true,
-	showInSettings: false,
 	label: __('Self Perspective', 'blockera'),
-	keywords: ['transform', 'self', 'perspective', '3d'],
+	showInSettings: false,
+	onNative: true,
 };
 
 const blockeraBackfaceVisibility: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
-	onCompanion: true,
-	showInSettings: false,
 	label: __('Backface Visibility', 'blockera'),
-	keywords: ['backface', 'visibility', 'transform', '3d'],
+	showInSettings: false,
+	onNative: true,
 };
 
 const blockeraTransformChildPerspective: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
-	onCompanion: true,
-	showInSettings: false,
 	label: __('Child Visibility', 'blockera'),
-	keywords: ['child', 'perspective', 'transform', '3d'],
+	showInSettings: false,
+	onNative: true,
 };
 
 const blockeraTransition: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onCompanion: true,
 	label: __('Transitions', 'blockera'),
-	keywords: ['transition', 'animation', 'ease', 'duration'],
 };
 
 const blockeraFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onCompanion: true,
 	label: __('Filters', 'blockera'),
-	keywords: ['filter', 'blur', 'brightness', 'contrast', 'saturate'],
 };
 
 const blockeraBackdropFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onCompanion: true,
 	label: __('Backdrop Filters', 'blockera'),
-	keywords: ['backdrop', 'filter', 'blur', 'frosted', 'glass'],
+};
+
+const blockeraBlendMode: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Blending Mode', 'blockera'),
 };
 
 let blockeraDivider: FeatureConfig | false = false;
 
-if (experimental().get('editor.extensions.effectsExtension.divider')) {
+if (experimental().get('editor.extensions.effectsExtension.divider'))
 	blockeraDivider = {
 		show: true,
 		force: false,
 		status: true,
-		onStates: false,
-		onCompanion: true,
 		label: __('Shape Dividers', 'blockera'),
-		keywords: ['divider', 'shape', 'separator', 'wave'],
+		onStates: false,
 	};
-}
 
 let blockeraMask: FeatureConfig | false = false;
 
-if (experimental().get('editor.extensions.effectsExtension.mask')) {
+if (experimental().get('editor.extensions.effectsExtension.mask'))
 	blockeraMask = {
 		show: true,
 		force: false,
 		status: true,
-		onStates: false,
-		onCompanion: true,
 		label: __('Image Mask', 'blockera'),
-		keywords: ['mask', 'image', 'clip', 'shape'],
+		onStates: false,
 	};
-}
 
 export const effectsConfig = {
-	status: true,
 	initialOpen: true,
 	blockeraOpacity,
 	blockeraTransform,
@@ -133,4 +118,5 @@ export const effectsConfig = {
 	blockeraBackdropFilter,
 	blockeraDivider,
 	blockeraMask,
+	blockeraBlendMode,
 };

@@ -25,6 +25,7 @@ export type TEffectsExtensionConfig = {
 	blockeraTransition: FeatureConfig,
 	blockeraFilter: FeatureConfig,
 	blockeraBackdropFilter: FeatureConfig,
+	blockeraBlendMode: FeatureConfig,
 	blockeraDivider: FeatureConfig,
 	blockeraMask: FeatureConfig,
 };
@@ -36,6 +37,7 @@ export type TEffectsProps = {
 		blockeraTransform: Array<Object>,
 		blockeraTransition: Array<Object>,
 		blockeraFilter: Array<Object>,
+		blockeraBlendMode: string,
 		blockeraBackdropFilter: Array<Object>,
 		blockeraTransformSelfPerspective: string,
 		blockeraTransformSelfOrigin: {
@@ -63,6 +65,7 @@ export type TEffectsProps = {
 		blockeraTransition: Object,
 		blockeraFilter: Object,
 		blockeraBackdropFilter: Object,
+		blockeraBlendMode: Object,
 		blockeraDivider: Object,
 		blockeraMask: Object,
 	},

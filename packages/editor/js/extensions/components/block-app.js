@@ -4,7 +4,9 @@
  * External dependencies
  */
 import {
+	memo,
 	useMemo,
+	useEffect,
 	useContext,
 	useCallback,
 	createContext,
@@ -15,11 +17,13 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import { updateItem } from '@blockera/storage';
+import { setItem, getItem, updateItem, freshItem } from '@blockera/storage';
 
 /**
  * Internal dependencies
  */
+import { propsAreEqual } from './utils';
+import * as sections from '../libs/base/config';
 import type {
 	BlockSection,
 	BlockSections,
@@ -27,24 +31,99 @@ import type {
 	BlockAppContextType,
 } from './types';
 import { getNormalizedCacheVersion } from '../helpers';
-import { defaultValue, cacheKeyPrefix } from './initializer';
-import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
+const cacheKeyPrefix = 'BLOCKERA_EDITOR_SETTINGS';
+
+const defaultValue = {
+	blockSections: {
+		expandAll: false,
+		focusMode: false,
+		defaultMode: true,
+		collapseAll: false,
+	},
+	sections: {},
+};
 
 const BlockAppContext = createContext(defaultValue);
 
-export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
+export const BlockAppContextProvider = ({
+	children,
+	...props
+}: Object): MixedElement => {
+	const { setBlockAppSettings } = useDispatch('blockera/editor');
 	const { blockAppSettings } = useSelect((select) => ({
 		blockAppSettings: select('blockera/editor').getBlockAppSettings(),
 	}));
-	const memoizedContextValue = useMemo(
-		() => ({
-			settings: blockAppSettings,
-		}),
-		[blockAppSettings]
+
+	const calculatedSections = useMemo(
+		() =>
+			Object.fromEntries(
+				Object.entries(sections).map(([key, value]) => [
+					key,
+					{
+						initialOpen: value.initialOpen,
+					},
+				])
+			),
+		[]
 	);
 
+	const currentBlock = useSelect((select) =>
+		select('blockera/extensions').getExtensionCurrentBlock()
+	);
+	const { version, selectedBlockClientId } = useSelect(
+		(select) => ({
+			selectedBlockClientId:
+				select('core/block-editor').getSelectedBlock()?.clientId,
+			version: select('blockera/data').getEntity('blockera')?.version,
+		}),
+		[]
+	); // Empty dependency array since we only need this once on mount
+
+	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
+
+	useEffect(() => {
+		const isEditMode = selectedBlockClientId === props?.clientId;
+
+		if (!isEditMode) {
+			return;
+		}
+
+		const cacheData = getItem(cacheKey);
+		const initialState = {
+			...defaultValue,
+			sections: {
+				master: calculatedSections,
+				[currentBlock]: calculatedSections,
+			},
+			focusedSection: 'spacingConfig',
+		};
+
+		if (!cacheData) {
+			freshItem(cacheKey, cacheKeyPrefix);
+			setItem(cacheKey, initialState);
+			setBlockAppSettings(initialState);
+
+			return;
+		}
+
+		setItem(cacheKey, cacheData);
+		setBlockAppSettings(cacheData);
+	}, [
+		cacheKey,
+		currentBlock,
+		props?.clientId,
+		calculatedSections,
+		setBlockAppSettings,
+		selectedBlockClientId,
+	]);
+
 	return (
-		<BlockAppContext.Provider value={memoizedContextValue}>
+		<BlockAppContext.Provider
+			value={{
+				props,
+				settings: blockAppSettings,
+			}}
+		>
 			{children}
 		</BlockAppContext.Provider>
 	);
@@ -55,16 +134,10 @@ export const useBlockAppContext = (): BlockAppContextType =>
 
 export const useBlockSection = (sectionId: string): BlockSection => {
 	const { settings } = useBlockAppContext();
-	const { extensionsUiContext } = useGlobalStylesPanelContext();
-	const { currentBlock, version } = useSelect(
-		(select) => ({
-			currentBlock: select(
-				'blockera/extensions'
-			).getExtensionCurrentBlock(extensionsUiContext),
-			version: select('blockera/data').getEntity('blockera')?.version,
-		}),
-		[extensionsUiContext]
-	);
+	const { currentBlock, version } = useSelect((select) => ({
+		currentBlock: select('blockera/extensions').getExtensionCurrentBlock(),
+		version: select('blockera/data').getEntity('blockera')?.version,
+	}));
 	const { blockSections, sections, focusedSection } = settings;
 	const { collapseAll, focusMode } = blockSections;
 	const section = (sections[currentBlock] || sections.master)[sectionId];
@@ -108,7 +181,7 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 									initialOpen: isOpen,
 								},
 							},
-						},
+					  },
 			};
 
 			if (
@@ -160,16 +233,10 @@ export const useBlockSections = (): BlockSections => {
 	const { settings } = useBlockAppContext();
 	const { blockSections, sections, focusedSection } = settings;
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
-	const { extensionsUiContext } = useGlobalStylesPanelContext();
-	const { currentBlock, version } = useSelect(
-		(select) => ({
-			currentBlock: select(
-				'blockera/extensions'
-			).getExtensionCurrentBlock(extensionsUiContext),
-			version: select('blockera/data').getEntity('blockera')?.version,
-		}),
-		[extensionsUiContext]
-	);
+	const { currentBlock, version } = useSelect((select) => ({
+		currentBlock: select('blockera/extensions').getExtensionCurrentBlock(),
+		version: select('blockera/data').getEntity('blockera')?.version,
+	}));
 	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 
 	const updateBlockSections = useCallback(
@@ -228,8 +295,13 @@ export const useBlockSections = (): BlockSections => {
 	};
 };
 
-export const BlockApp: ComponentType<any> = ({
-	children,
-}: BlockBaseProps): MixedElement => {
-	return <BlockAppContextProvider>{children}</BlockAppContextProvider>;
-};
+export const BlockApp: ComponentType<any> = memo(
+	({ children, ...props }: BlockBaseProps): MixedElement => {
+		return (
+			<BlockAppContextProvider {...props}>
+				{children}
+			</BlockAppContextProvider>
+		);
+	},
+	propsAreEqual
+);

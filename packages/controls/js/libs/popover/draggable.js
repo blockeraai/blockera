@@ -20,9 +20,7 @@ export function DraggablePopover(props: TPopoverProps): MixedElement {
 
 	useEffect(() => {
 		const header = headerRef.current;
-		if (!header) {
-			return;
-		}
+		if (!header) return;
 
 		const handleMouseDown = (e: MouseEvent) => {
 			setIsDragging(true);
@@ -30,9 +28,7 @@ export function DraggablePopover(props: TPopoverProps): MixedElement {
 		};
 
 		const handleMouseMove = (e: MouseEvent) => {
-			if (!isDragging) {
-				return;
-			}
+			if (!isDragging) return;
 
 			const deltaX = e.clientX - lastMousePos.current.x;
 			const deltaY = e.clientY - lastMousePos.current.y;

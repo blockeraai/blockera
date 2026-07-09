@@ -1,20 +1,16 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 109,
-		"supported": 94,
-		"soft-supported": 109,
-		"not-supported": 0,
-		"no-need-to-support": 15
+		"total": 94,
+		"supported": 79,
+		"soft-supported": 93,
+		"not-supported": 1,
+		"no-need-to-support": 14
 	},
 	"supported": [
 		{
 			"name": "core/paragraph",
 			"title": "Paragraph"
-		},
-		{
-			"name": "core/icon",
-			"title": "Icon"
 		},
 		{
 			"name": "core/image",
@@ -55,10 +51,6 @@
 		{
 			"name": "core/buttons",
 			"title": "Buttons"
-		},
-		{
-			"name": "core/breadcrumbs",
-			"title": "Breadcrumbs"
 		},
 		{
 			"name": "core/categories",
@@ -198,16 +190,8 @@
 			"title": "Post Navigation Link"
 		},
 		{
-			"name": "core/navigation",
-			"title": "Navigation"
-		},
-		{
 			"name": "core/navigation-submenu",
 			"title": "Submenu"
-		},
-		{
-			"name": "core/navigation-overlay-close",
-			"title": "Navigation Overlay Close"
 		},
 		{
 			"name": "core/post-terms",
@@ -342,50 +326,6 @@
 		{
 			"name": "core/tag-cloud",
 			"title": "Tag Cloud"
-		},
-		{
-			"name": "core/post-time-to-read",
-			"title": "Time to Read"
-		},
-		{
-			"name": "core/math",
-			"title": "Math"
-		},
-		{
-			"name": "core/accordion",
-			"title": "Accordion"
-		},
-		{
-			"name": "core/accordion-item",
-			"title": "Accordion Item"
-		},
-		{
-			"name": "core/accordion-heading",
-			"title": "Accordion Heading"
-		},
-		{
-			"name": "core/accordion-panel",
-			"title": "Accordion Panel"
-		},
-		{
-			"name": "core/post-comments-count",
-			"title": "Comments Count"
-		},
-		{
-			"name": "core/post-comments-link",
-			"title": "Comments Link"
-		},
-		{
-			"name": "core/term-template",
-			"title": "Term Template"
-		},
-		{
-			"name": "core/term-name",
-			"title": "Term Name"
-		},
-		{
-			"name": "core/term-count",
-			"title": "Term Count"
 		}
 	],
 	"no-need-to-support": [
@@ -458,12 +398,13 @@
 			"name": "core/page-list-item",
 			"title": "Page List Item",
 			"note": "This block is not selectable and there is no ui for it for user and we do not need to support it."
-		},
-		{
-			"name": "core/terms-query",
-			"title": "Terms Query",
-			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		}
 	],
-	"not-supported": []
+	"not-supported": [
+		{
+			"name": "core/navigation",
+			"title": "Navigation",
+			"note": "Advanced editor setting panel compatibility needed."
+		}
+	]
 }

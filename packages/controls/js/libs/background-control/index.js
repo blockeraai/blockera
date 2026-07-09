@@ -10,12 +10,11 @@ import { __ } from '@wordpress/i18n';
  */
 import { isObject } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { UpgradePrompt, Flex } from '../';
+import { PromotionPopover } from '../';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
@@ -110,12 +109,6 @@ export default function BackgroundControl({
 		for (const [itemId, item] of Object.entries(value)) {
 			const cleanedItem: Object = cleanupRepeaterItem({ ...item });
 
-			// Preserve all type-specific fields so users can switch back from none.
-			if (item?.type === 'none') {
-				cleanedValue[itemId] = cleanedItem;
-				continue;
-			}
-
 			if (item?.type !== 'image') {
 				delete cleanedItem.image;
 				delete cleanedItem['image-size'];
@@ -175,33 +168,16 @@ export default function BackgroundControl({
 				}
 
 				return (
-					<UpgradePrompt
-						lockedFeature={{
-							icon: <Icon icon="layers" iconSize={26} />,
-							title: __('Multiple Background Layers', 'blockera'),
-							description: (
-								<Flex direction="column" gap="6px">
-									{__(
-										'Stack unlimited background layers',
-										'blockera'
-									)}
-									<Flex direction="row" gap="6px">
-										<span className="blockera-free-plan-hint">
-											{__('Free: 1 layer', 'blockera')}
-										</span>
-										<span className="blockera-pro-plan-hint">
-											{__(
-												'Pro: Unlimited layers',
-												'blockera'
-											)}
-										</span>
-									</Flex>
-								</Flex>
-							),
-						}}
+					<PromotionPopover
+						heading={__('Multiple Backgrounds', 'blockera')}
+						featuresList={[
+							__('Multiple backgrounds', 'blockera'),
+							__('All background types', 'blockera'),
+							__('Advanced mesh gradient', 'blockera'),
+							__('Advanced background settings', 'blockera'),
+						]}
 						isOpen={isOpen}
 						onClose={onClose}
-						type="modal"
 					/>
 				);
 			}}

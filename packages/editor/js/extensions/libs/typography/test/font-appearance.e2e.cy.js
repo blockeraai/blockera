@@ -12,7 +12,7 @@ describe('Font Appearance → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('simple value', () => {
@@ -22,11 +22,7 @@ describe('Font Appearance → Functionality', () => {
 
 		//Check block
 		cy.getBlock('core/paragraph').should('have.css', 'font-weight', '800');
-		cy.getBlock('core/paragraph').should(
-			'have.css',
-			'font-style',
-			'normal'
-		);
+		cy.getBlock('core/paragraph').should('have.css', 'font-style', 'normal');
 
 		//Check store
 		getWPDataObject().then((data) => {

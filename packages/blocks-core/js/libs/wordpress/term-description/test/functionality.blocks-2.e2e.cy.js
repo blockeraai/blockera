@@ -2,9 +2,12 @@
  * Blockera dependencies
  */
 import {
+	// savePage,
 	createPost,
 	appendBlocks,
 	setInnerBlock,
+	openInserter,
+	// redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Term Description Block', () => {
@@ -23,15 +26,8 @@ describe('Term Description Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 
-		cy.checkBlockStatesPickerItems([
-			'elements/link',
-			'elements/bold',
-			'elements/italic',
-			'elements/kbd',
-			'elements/code',
-			'elements/span',
-			'elements/mark',
-		]);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		//
 		// 1. Edit Block

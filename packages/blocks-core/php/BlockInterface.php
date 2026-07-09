@@ -36,11 +36,11 @@ interface BlockInterface {
 	/**
 	 * Enqueue the block assets.
 	 * 
-	 * @param string      $base_path The base path of the plugin.
-	 * @param string|null $asset_context The asset context (e.g., 'block', 'feature', 'blocks-core'). If null, uses stored context.
-	 * @param string|null $library_name The library name (e.g., 'WordPress', 'woocommerce'). Used only for 'blocks-core' context.
+	 * @param string $base_path The base path of the plugin.
+	 * @param string $base_url The base url of the plugin.
+	 * @param string $version The version of the plugin.
 	 *
 	 * @return void
 	 */
-	public function enqueueAssets( string $base_path, $asset_context = null, $library_name = null): void;
+	public function enqueueAssets( string $base_path, string $base_url, string $version): void;
 }

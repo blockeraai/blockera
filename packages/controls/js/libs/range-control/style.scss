@@ -1,8 +1,11 @@
 .blockera-control-range {
+
 	&.is-disabled {
+
 		pointer-events: none;
 		user-select: none;
 		opacity: 0.5;
+
 	}
 
 	span:not(.components-simple-tooltip) {
@@ -14,6 +17,7 @@
 	}
 
 	.components-range-control__thumb-wrapper {
+
 		box-shadow: 0 0 0 2px #ffffff;
 
 		& > span {

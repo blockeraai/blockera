@@ -5,6 +5,7 @@ namespace Blockera\Feature\Icon;
 use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
 use Blockera\Utils\Adapters\DomParser;
+use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
@@ -53,21 +54,23 @@ class EditBlockHTML implements EditableBlockHTML {
      */
     public function htmlManipulate( string $html, array $data): string {
         [
+			'app'          => $app,
             'block'        => $block,
         ] = $data;
 
-		if (! $this->isValidBlock($block, $html) && 'core/icon' !== $block['blockName']) {
+		if (! $this->isValidBlock($block, $html) && 'core/image' !== $block['blockName']) {
 			return $html;
 		}
 
-		// Enqueue the feature assets.
-		$this->enqueueAssets($data['plugin_base_path'], 'feature');
+		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
+			$this->setContext('feature');
+			$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
-		if ('core/icon' === $block['blockName']) {
-			if (blockera_core_icon_has_renderable_blockera_icon($block)) {
-				return $this->replaceCoreIconSvg($html, $block, $data);
-			}
+			return $app->make(IconBlock::class)->render($html, $this, $data);
 		}
+
+		$this->setContext('feature');
+		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
         $blockElement = $this->findBlockElement($data);
 
@@ -75,194 +78,23 @@ class EditBlockHTML implements EditableBlockHTML {
             return $html;
         }
 
-		// Get the root element from the DOM.
-        $rootElement = $this->dom->find('*', 0);
-
-		// Clean up the block element html before appending anything.
+        $original_html           = $blockElement->outerhtml;
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
-		// Append icon to the block element if it has inner content.
-		$blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+        $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
 
-		try {
-			// Clean up the block element html after appending icon.
-			return $this->cleanupBlockElementHTML($rootElement->outerhtml);
-		} catch (\Exception $e) {
-			// If traversal fails, return the current element's outer HTML.
-			return $blockElement->outerhtml;
-		}
+        return str_replace($original_html, $blockElement->outerhtml, $html);
     }
 
 	/**
-	 * Replace core/icon SVG markup with Blockera-rendered icon output.
+	 * Validate the block.
 	 *
-	 * @param string $html  The block html.
-	 * @param array  $block The block data.
-	 * @param array  $data  The manipulation context.
+	 * @param array  $block The block.
+	 * @param string $html The html.
 	 *
-	 * @return string
+	 * @return boolean true on success, false otherwise.
 	 */
-	protected function replaceCoreIconSvg( string $html, array $block, array $data): string {
-		$value     = blockera_resolve_core_icon_blockera_icon_value($block);
-		$ariaLabel = $block['attrs']['ariaLabel'] ?? '';
-
-		$iconArgs = [];
-
-		if (! empty($ariaLabel)) {
-			$iconArgs['role']  = 'img';
-			$iconArgs['title'] = $ariaLabel;
-		}
-
-		$iconHTML = $this->getIconHTML($value, $iconArgs);
-
-		if (empty($iconHTML)) {
-			return $html;
-		}
-
-		$iconHTML = $this->applyCoreIconPresentationStyles($iconHTML, $block, $ariaLabel);
-		$iconHTML = blockera_core_icon_wrap_with_link($iconHTML, $block);
-
-		// Seeded/empty core output: inject via string (dom parser is unreliable on empty wrappers).
-		if (! str_contains($html, '<svg')) {
-			return $this->injectCoreIconIntoWrapperHtml($html, $iconHTML, $block);
-		}
-
-		$dom = $data['dom'] ?? null;
-
-		if (empty($dom) && ! empty($data['app'])) {
-			$dom = $data['app']->dom_parser::str_get_html($html);
-		}
-
-		if (! $dom) {
-			return $this->injectCoreIconIntoWrapperHtml($html, $iconHTML, $block);
-		}
-
-		$this->dom = $dom;
-
-		$svgElement  = $this->dom->findOne('.wp-block-icon svg');
-		$iconWrapper = $this->dom->findOne('.wp-block-icon');
-
-		if ($svgElement && 'svg' !== strtolower($svgElement->tag ?? '')) {
-			$svgElement = null;
-		}
-
-		if (! $svgElement && ! $iconWrapper) {
-			return $this->injectCoreIconIntoWrapperHtml($html, $iconHTML, $block);
-		}
-
-		if ($svgElement && 'svg' === strtolower($svgElement->tag ?? '')) {
-			$svgElement->outerhtml = $iconHTML;
-		} elseif ($iconWrapper) {
-			$iconWrapper->innerhtml = $iconHTML;
-		} else {
-			return $this->injectCoreIconIntoWrapperHtml($html, $iconHTML, $block);
-		}
-
-		try {
-			$rootElement = $this->dom->find('*', 0);
-
-			return blockera_core_icon_apply_wrapper_classes(
-				$this->cleanupBlockElementHTML($rootElement->outerhtml),
-				$block
-			);
-		} catch (\Exception $e) {
-			return blockera_core_icon_apply_wrapper_classes($this->dom->outerhtml, $block);
-		}
-	}
-
-	/**
-	 * Apply size/color/transform and a11y attributes to core/icon SVG markup.
-	 *
-	 * @param string $iconHTML  SVG markup.
-	 * @param array  $block     Block data.
-	 * @param string $ariaLabel Core aria label attribute.
-	 *
-	 * @return string
-	 */
-	protected function applyCoreIconPresentationStyles( string $iconHTML, array $block, string $ariaLabel): string {
-		$properties = [];
-
-		$iconSize = blockera_get_icon_size_attr_value($block);
-
-		if (! empty($iconSize)) {
-			$properties['width']  = $iconSize;
-			$properties['height'] = $iconSize;
-		}
-
-		$iconColor = blockera_get_icon_color_attr_value($block);
-
-		if ('' !== $iconColor) {
-			$properties['color'] = $iconColor;
-
-			$icon_value = blockera_get_blockera_icon_attr_value($block);
-			$library    = $icon_value['library'] ?? '';
-
-			if (! blockera_is_stroke_icon_library($library) && ! blockera_is_stroke_svg_markup($iconHTML)) {
-				$properties['fill'] = $iconColor;
-			}
-		}
-
-		$transform = blockera_build_icon_transform($block);
-
-		if ('' !== $transform) {
-			$properties['transform'] = $transform;
-		}
-
-		if (! empty($properties)) {
-			$cssString = implode(
-				'; ',
-				array_map(
-					static function ( $property, $propertyValue) {
-						return $property . ': ' . $propertyValue;
-					},
-					array_keys($properties),
-					$properties
-				)
-			);
-
-			$iconHTML = str_replace('style="width: 1em; height: 1em;"', '', $iconHTML);
-			$iconHTML = $this->updateStyleAttribute($iconHTML, 'svg', $cssString);
-		}
-
-		if (empty($ariaLabel)) {
-			$iconHTML = preg_replace('/\s*role="img"/i', '', $iconHTML);
-			$iconHTML = preg_replace(
-				'/<svg/i',
-				'<svg aria-hidden="true" focusable="false"',
-				$iconHTML,
-				1
-			);
-		}
-
-		return $iconHTML;
-	}
-
-	/**
-	 * Inject SVG into a core/icon wrapper div without relying on the DOM parser.
-	 *
-	 * @param string $html     Original block HTML.
-	 * @param string $iconHTML SVG markup to inject.
-	 * @param array  $block    The block data.
-	 *
-	 * @return string
-	 */
-	protected function injectCoreIconIntoWrapperHtml( string $html, string $iconHTML, array $block): string {
-		if (preg_match('/(<div\b[^>]*\bwp-block-icon\b[^>]*>)\s*<\/div>/i', $html, $matches)) {
-			$html = $matches[1] . $iconHTML . '</div>';
-		} elseif (preg_match('/(<div\b[^>]*>)\s*<\/div>/i', $html, $matches)) {
-			$html = $matches[1] . $iconHTML . '</div>';
-		} else {
-			$html = sprintf(
-				'<div class="%s">%s</div>',
-				esc_attr(implode(' ', blockera_core_icon_get_wrapper_class_names($block))),
-				$iconHTML
-			);
-		}
-
-		return blockera_core_icon_apply_wrapper_classes($html, $block);
-	}
-
 	protected function isValidBlock( array $block, string $html): bool {
-
+		
 		if (empty($block['blockName'])) {
 			return false;
 		}
@@ -278,7 +110,7 @@ class EditBlockHTML implements EditableBlockHTML {
 		}
 
 		$iconSupport = $blockType->supports['blockFeatures']['icon'];
-
+		
 		if (! empty($iconSupport['status']) && ! empty($iconSupport['htmlEditable']['status'])) {
 			return true;
 		}
@@ -371,12 +203,15 @@ class EditBlockHTML implements EditableBlockHTML {
 		$properties   = [];
 
 		// Handle icon size.
-		$iconSizeValue        = blockera_get_icon_size_attr_value($block);
-		$properties['width']  = ! empty($iconSizeValue) ? $iconSizeValue : '1.33em';
-		$properties['height'] = ! empty($iconSizeValue) ? $iconSizeValue : '1.33em';
+		$properties['width']  = $block['attrs']['blockeraIconSize']['value'] ?? '1.33em';
+		$properties['height'] = $block['attrs']['blockeraIconSize']['value'] ?? '1.33em';
 
         // Handle icon position and gap.
 		$properties[ 'start' === $iconPosition ? 'margin-right' : 'margin-left' ] = $block['attrs']['blockeraIconGap']['value'] ?? '0.5em';
+
+        // Handle icon color.
+		$properties['fill']  = 'currentColor';
+		$properties['color'] = $block['attrs']['blockeraIconColor']['value'] ?? 'inherit';
 
 		// Handle icon rotate.
 		$rotate = $block['attrs']['blockeraIconRotate']['value'] ?? '';
@@ -488,85 +323,36 @@ class EditBlockHTML implements EditableBlockHTML {
      *
      * @return string The icon html.
      */
-	/**
-	 * Decode blockeraIcon.renderedIcon (matches editor btoa(unescape(encodeURIComponent(svg)))).
-	 *
-	 * @param mixed $encoded Encoded icon payload.
-	 *
-	 * @return string
-	 */
-	protected function decodeRenderedIconInput( $encoded): string {
-		if (! is_string($encoded)) {
-			return '';
-		}
-
-		$encoded = trim($encoded);
-
-		if ('' === $encoded) {
-			return '';
-		}
-
-		if (str_starts_with($encoded, '<')) {
-			return $encoded;
-		}
-
-		$binary = base64_decode($encoded, true);
-
-		if (false === $binary || '' === $binary) {
-			$binary = base64_decode($encoded);
-		}
-
-		if (false === $binary || '' === $binary) {
-			return '';
-		}
-
-		if (function_exists('mb_convert_encoding')) {
-			$utf8 = mb_convert_encoding($binary, 'UTF-8', 'ISO-8859-1');
-
-			if (is_string($utf8) && '' !== $utf8) {
-				return $utf8;
-			}
-		}
-
-		return $binary;
-	}
-
     public function getIconHTML( array $value, array $args = [
 		'title' => '',
 		'role' => '',
 	]): string {
-		$icon           = isset($value['icon']) ? (string) $value['icon'] : '';
-		$library        = isset($value['library']) ? (string) $value['library'] : '';
-		$renderedIcon   = $value['renderedIcon'] ?? '';
-		$is_custom_icon = '' === $icon && '' === $library;
+        [
+            'icon'    => $icon,
+            'library' => $library,
+            'renderedIcon' => $renderedIcon,
+        ] = $value;
 
-		$title = isset($args['title']) ? (string) $args['title'] : '';
-		$role  = isset($args['role']) ? (string) $args['role'] : '';
-
-		$iconHTML = '';
+		[
+			'title' => $title,
+			'role' => $role,
+		] = $args;
 
 		if (! empty($renderedIcon)) {
-			$iconHTML = $this->decodeRenderedIconInput($renderedIcon);
+            $renderedIcon = base64_decode($renderedIcon);
 
-			// Fix serialized xmlns quirks from the block editor (e.g. xmlns:default).
-			if ('' !== $iconHTML && 1 === preg_match('/\w"\w/', $iconHTML, $matches)) {
-				$replacement = str_replace('"', '" ', $matches[0]);
-				$iconHTML    = str_replace($matches[0], $replacement, $iconHTML);
-			}
+            preg_match('/\w"\w/', $renderedIcon, $matches);
 
-			if (! $is_custom_icon) {
-				$iconHTML = blockera_normalize_stroke_icon_svg($iconHTML, $library);
-			}
-		}
+            if (! empty($matches)) {
+                $replacement  = str_replace('"', '" ', $matches[0]);
+                $renderedIcon = str_replace($matches[0], $replacement, $renderedIcon);
+            }
 
-		if ('' === $iconHTML && '' !== $icon && '' !== $library) {
-			if ('wp' === $library) {
-				$iconHTML = blockera_get_wp_icon_registry_svg(blockera_to_core_icon_attribute($icon));
-			} else {
-				$iconData = IconsManager::getIcon($icon, $library);
-				$iconHTML = is_array($iconData) ? (string) ( $iconData['icon'] ?? '' ) : '';
-			}
-		}
+            $iconHTML = $renderedIcon;
+        } else {
+            $iconData = IconsManager::getIcon($icon, $library);
+            $iconHTML = $iconData['icon'] ?? '';
+        }
 
         if (empty($iconHTML)) {
             return '';
@@ -617,7 +403,7 @@ class EditBlockHTML implements EditableBlockHTML {
 				if (preg_match('/\bstyle\s*=\s*["\']([^"\']*)["\']/i', $attributes, $styleMatch)) {
 					// Style attribute exists, append new style to existing one.
 					$existingStyle = $styleMatch[1];
-					$updatedStyle  = rtrim($existingStyle, '; ') . '; ' . $newStyle;
+					$updatedStyle  = $existingStyle . '; ' . $newStyle;
                 
 					// Replace the existing style attribute.
 					return preg_replace(

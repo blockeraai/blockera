@@ -19,20 +19,17 @@ import type { CheckboxControlProps } from './types';
 
 export default function CheckboxControl({
 	checkboxLabel,
-	description,
 	//
 	id,
 	label,
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns,
 	defaultValue = false,
 	onChange,
 	field = 'checkbox',
-	isBold = false,
 	//
 	className,
 	...props
@@ -63,7 +60,6 @@ export default function CheckboxControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	return (
@@ -74,13 +70,10 @@ export default function CheckboxControl({
 			{...labelProps}
 		>
 			<WPCheckboxControl
-				className={controlClassNames('checkbox', className, {
-					'is-bold': isBold,
-				})}
+				className={controlClassNames('checkbox', className)}
 				checked={value}
 				onChange={setValue}
 				label={checkboxLabel}
-				help={description}
 				{...props}
 				aria-checked={value}
 			/>

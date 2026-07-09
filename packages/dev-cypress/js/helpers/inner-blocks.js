@@ -2,7 +2,6 @@ import { getSelectedBlock } from './editor';
 import { openInserter } from './block-states';
 
 export function setParentBlock() {
-	cy.get('.blockera-extension-block-card__close').should('be.visible');
 	cy.get('.blockera-extension-block-card__close').click();
 }
 
@@ -13,7 +12,7 @@ export function setInnerBlock(blockType) {
 				.length > 0
 		) {
 			cy.getByDataId(blockType).within(() => {
-				cy.get('span').click({ force: true });
+				cy.get('span:nth-child(2)').click({ force: true });
 			});
 		} else {
 			openInserter();
@@ -46,14 +45,4 @@ export function getBlockTypeInnerBlocksStore(data) {
 
 export function search(term) {
 	cy.getByDataId('search bar').type(term, { delay: 0 });
-}
-
-export function checkSelectedInnerBlock(blockTitle, exist = true) {
-	if (exist) {
-		cy.getByDataTest('blockera-inner-block-card')
-			.contains(blockTitle)
-			.should('exist');
-	} else {
-		cy.getByDataTest('blockera-inner-block-card').should('not.exist');
-	}
 }

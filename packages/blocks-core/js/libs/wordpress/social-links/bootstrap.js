@@ -1,5 +1,3 @@
-// @flow
-
 /**
  * External dependencies
  */
@@ -9,7 +7,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
-import type { ControlContextRef } from '@blockera/controls';
+import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
 
 /**
  * Internal dependencies
@@ -22,7 +20,6 @@ import {
 	normalIconBackgroundColorFromWPCompatibility,
 	normalIconBackgroundColorToWPCompatibility,
 } from './compatibility/icon-background-color';
-import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 
 export const bootstrapSocialLinksCoreBlock = (): void => {
 	addFilter(
@@ -31,7 +28,10 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId } = blockDetail;
 
-			if (blockId !== 'core/social-links') {
+			if (
+				blockId !== 'core/social-links' ||
+				isBlockNotOriginalState(blockDetail)
+			) {
 				return attributes;
 			}
 
@@ -98,6 +98,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				isMasterBlock,
 				currentState,
 				currentBlock,
+				innerBlocks,
 			} = blockDetail;
 
 			if (
@@ -119,6 +120,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				return mergeObject(
 					nextState,
 					normalIconColorToWPCompatibility({
+						element: currentBlock,
 						newValue,
 						ref,
 					})
@@ -136,6 +138,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				return mergeObject(
 					nextState,
 					normalIconBackgroundColorToWPCompatibility({
+						element: currentBlock,
 						newValue,
 						ref,
 					})

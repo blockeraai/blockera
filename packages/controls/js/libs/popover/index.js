@@ -2,70 +2,70 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { PopoverCore } from './core';
 import { DraggablePopover } from './draggable';
-import { usePopoverActiveColorStyle } from '../../context';
-import { useInspectorPopoverOffset } from './use-inspector-popover-offset';
-import { DEFAULT_POPOVER_OFFSET } from './utils';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
 	draggable = true,
-	style,
-	anchor,
-	placement = 'bottom-start',
-	offset = DEFAULT_POPOVER_OFFSET,
 	...props
 }: TPopoverProps): MixedElement {
-	const activeColorStyle = usePopoverActiveColorStyle();
-	const [fallbackAnchor, setFallbackAnchor] = useState(null);
+	const { getSelectedBlock = () => ({ name: '', clientId: '' }) } =
+		select('core/block-editor') || {};
+	const { name, clientId } = getSelectedBlock() || {};
 
-	const computedOffset = useInspectorPopoverOffset({
-		explicitAnchor: anchor,
-		fallbackAnchor,
-		placement,
-		inspectorGap: offset,
-	});
-
-	const mergedStyle = {
-		...activeColorStyle,
-		...(style || {}),
+	const {
+		getActiveInnerState = () => 'normal',
+		getActiveMasterState = () => 'normal',
+		getExtensionCurrentBlock = () => 'master',
+	} = select('blockera/extensions') || {};
+	const { getState } = select('blockera/editor') || {
+		getState: () => ({ settings: { color: '#cc0000' } }),
 	};
 
-	const popoverProps = {
-		...props,
-		// Keep floating-ui anchored like before: only consumer-provided anchors.
-		// Resolved openers are used for offset math only so draggable transforms
-		// are not overridden by continuous anchor repositioning.
-		anchor: anchor ?? undefined,
-		placement,
-		offset: computedOffset,
-		style: mergedStyle,
-	};
+	let activeColor = getState(getActiveMasterState(clientId, name))?.settings
+		?.color;
 
-	const popoverElement =
-		draggable && props?.title ? (
-			<DraggablePopover {...popoverProps} />
-		) : (
-			<PopoverCore {...popoverProps} />
+	if (
+		'master' !== getExtensionCurrentBlock() &&
+		'normal' === getActiveInnerState(clientId, getExtensionCurrentBlock())
+	) {
+		activeColor = '#cc0000';
+	} else if ('master' !== getExtensionCurrentBlock()) {
+		activeColor = getState(
+			getActiveInnerState(clientId, getExtensionCurrentBlock())
+		)?.settings?.color;
+	}
+
+	useEffect(() => {
+		const container = document.querySelector(
+			'.components-popover__fallback-container'
 		);
 
-	return (
-		<>
-			{!anchor && (
-				<span
-					ref={setFallbackAnchor}
-					className="blockera-popover-anchor-resolver"
-					aria-hidden="true"
-				/>
-			)}
-			{popoverElement}
-		</>
+		if (container) {
+			container.style.setProperty('color', 'inherit');
+			container.style.setProperty(
+				'--blockera-controls-primary-color',
+				activeColor
+			);
+			container.style.setProperty(
+				'--blockera-tab-panel-active-color',
+				activeColor
+			);
+		}
+		// eslint-disable-next-line
+	}, []);
+
+	return draggable && props?.title ? (
+		<DraggablePopover {...props} />
+	) : (
+		<PopoverCore {...props} />
 	);
 }

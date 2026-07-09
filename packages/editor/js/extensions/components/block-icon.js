@@ -17,7 +17,7 @@ export const BlockIcon = ({
 	defaultIcon,
 }: {
 	name: string,
-	defaultIcon?: Object,
+	defaultIcon: Object,
 }): MixedElement => {
 	const normalizedName = name.replace('core/', '').replace('-', ' ');
 	const capitalizedName = getPascalCase(normalizedName);
@@ -49,7 +49,7 @@ export const BlockIcon = ({
 				}}
 			/>
 
-			{defaultIcon && <WPBlockIcon icon={defaultIcon} />}
+			<WPBlockIcon icon={defaultIcon} />
 		</>
 	);
 };

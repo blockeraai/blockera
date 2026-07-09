@@ -20,21 +20,6 @@ import {
 import { generateExtensionId } from '../../utils';
 import type { THandleOnChangeAttributes } from '../../types';
 
-export const BORDER_RADIUS_PRESET_ATTRIBUTE = 'blockeraBorderRadius';
-export const BORDER_RADIUS_PRESET_PREVIEW_USAGE_ALL = 'all';
-export const BORDER_RADIUS_PRESET_PREVIEW_USAGE_TOP_LEFT = 'topLeft';
-export const BORDER_RADIUS_PRESET_PREVIEW_USAGE_TOP_RIGHT = 'topRight';
-export const BORDER_RADIUS_PRESET_PREVIEW_USAGE_BOTTOM_LEFT = 'bottomLeft';
-export const BORDER_RADIUS_PRESET_PREVIEW_USAGE_BOTTOM_RIGHT = 'bottomRight';
-
-export const BORDER_RADIUS_PRESET_PREVIEW_USAGES = [
-	BORDER_RADIUS_PRESET_PREVIEW_USAGE_ALL,
-	BORDER_RADIUS_PRESET_PREVIEW_USAGE_TOP_LEFT,
-	BORDER_RADIUS_PRESET_PREVIEW_USAGE_TOP_RIGHT,
-	BORDER_RADIUS_PRESET_PREVIEW_USAGE_BOTTOM_LEFT,
-	BORDER_RADIUS_PRESET_PREVIEW_USAGE_BOTTOM_RIGHT,
-];
-
 export const BorderRadius = ({
 	block,
 	borderRadius,
@@ -52,7 +37,7 @@ export const BorderRadius = ({
 			value={{
 				name: generateExtensionId(block, 'border-radius'),
 				value: borderRadius,
-				attribute: BORDER_RADIUS_PRESET_ATTRIBUTE,
+				attribute: 'blockeraBorderRadius',
 				blockName: block.blockName,
 			}}
 		>

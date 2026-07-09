@@ -9,13 +9,13 @@ import '@10up/cypress-wp-utils';
  */
 import { registerCommands } from './commands';
 import { loginToSite, goTo } from '../helpers';
-import { registerComponentCommands } from './component-commands';
 
 registerCommands();
-registerComponentCommands();
 
 beforeEach(function () {
-	cy.viewport(1280, 900);
+	// run these tests as if in a desktop
+	// browser with a 720p monitor
+	cy.viewport(1280, 720);
 
 	if (!Cypress.env('isLogin')) {
 		cy.login();
@@ -35,15 +35,6 @@ Cypress.Commands.add('login', (user = '', pass = '') => {
 		loginToSite();
 	});
 });
-
-const BLOCKERA_DELAY_EXPECTED_TIME = 1000;
-
-Cypress.Commands.add(
-	'waitForAssertValue',
-	(time = BLOCKERA_DELAY_EXPECTED_TIME) => {
-		cy.wait(time);
-	}
-);
 
 Cypress.Commands.add('logout', () => {
 	goTo('/wp-login.php?loggedout=true&wp_lang=en_US', true).then(() => {

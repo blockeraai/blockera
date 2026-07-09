@@ -21,14 +21,12 @@ export const LetterSpacing = ({
 	value,
 	onChange,
 	defaultValue = '',
-	activeSearchMode,
 	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
-	activeSearchMode: boolean,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -40,12 +38,8 @@ export const LetterSpacing = ({
 			}}
 		>
 			<InputControl
-				columns={activeSearchMode ? '1fr 2.5fr' : '2fr 2fr'}
-				label={
-					activeSearchMode
-						? __('Letters Spacing', 'blockera')
-						: __('Letters', 'blockera')
-				}
+				columns="2fr 2.6fr"
+				label={__('Letters', 'blockera')}
 				labelPopoverTitle={__('Letters Spacing', 'blockera')}
 				labelDescription={
 					<>

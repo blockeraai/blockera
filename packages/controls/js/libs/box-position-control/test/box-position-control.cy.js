@@ -10,20 +10,6 @@ import BoxPositionControl from '../index';
 import { getControlValue } from '../../../store/selectors';
 import { absolutePositionValues } from './data/absolute-position-values';
 
-/**
- * CustomSelectControl (@wordpress/components / Ariakit) renders a listbox with
- * [role="option"] items, not ul/li.
- */
-const selectBoxPositionType = (label) => {
-	cy.get('[data-cy="box-position-control"]')
-		.find('[aria-haspopup="listbox"]')
-		.click();
-	cy.get('[role="listbox"]:visible')
-		.find('[role="option"]')
-		.contains(label)
-		.click();
-};
-
 describe('box position control component testing', () => {
 	beforeEach(() => {
 		// run these tests as if in a desktop
@@ -61,7 +47,8 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			selectBoxPositionType('Relative');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
 
 			// Check data provider value!
 			cy.then(() => {
@@ -82,7 +69,8 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			selectBoxPositionType('Relative');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
 			cy.get('@onChangeMock').should('have.been.called');
 
 			// Check data provider value!
@@ -114,7 +102,8 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			selectBoxPositionType('Relative');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
 
 			// Check data provider value!
 			cy.then(() => {
@@ -151,7 +140,8 @@ describe('box position control component testing', () => {
 				),
 				name,
 			});
-			selectBoxPositionType('Relative');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
 
 			cy.get(
 				'span[aria-label="Top Position"][data-cy="label-control"]'
@@ -241,7 +231,8 @@ describe('box position control component testing', () => {
 				),
 				name,
 			});
-			selectBoxPositionType('Relative');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
 
 			const positions = [
 				'Top Position',
@@ -294,7 +285,8 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			selectBoxPositionType('Relative');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
 
 			// add top position
 			cy.get(
@@ -376,7 +368,8 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			selectBoxPositionType('Absolute');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Absolute').click();
 
 			// check absolute top left
 			cy.getByDataCy('absolute-top-left').click();
@@ -478,7 +471,8 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			selectBoxPositionType('Sticky');
+			cy.get('.blockera-control-select').click();
+			cy.get('ul > li').contains('Sticky').click();
 
 			// check sticky to top
 			cy.getByDataCy('stick-to-top').click();

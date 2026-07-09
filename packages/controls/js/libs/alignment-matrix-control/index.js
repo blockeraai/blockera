@@ -29,7 +29,6 @@ export default function AlignmentMatrixControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
-	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = {
 		top: '50%',
@@ -45,7 +44,6 @@ export default function AlignmentMatrixControl({
 	const {
 		value,
 		setValue,
-		getId,
 		attribute,
 		blockName,
 		resetToDefault,
@@ -69,7 +67,6 @@ export default function AlignmentMatrixControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
-		...propsForLabelControl,
 	};
 
 	if (!inputFields) {
@@ -142,7 +139,7 @@ export default function AlignmentMatrixControl({
 					>
 						<InputControl
 							columns="columns-2"
-							id={getId(id, 'top')}
+							id={`${id}.top`}
 							label={__('Top', 'blockera')}
 							min={0}
 							max={100}
@@ -161,7 +158,7 @@ export default function AlignmentMatrixControl({
 
 						<InputControl
 							columns="columns-2"
-							id={getId(id, 'left')}
+							id={`${id}.left`}
 							label={__('Left', 'blockera')}
 							min={0}
 							max={100}

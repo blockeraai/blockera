@@ -1,36 +1,17 @@
-/* Icon style */
-.wp-block-home-link[class*="blockera-has-icon-"]
-	.wp-block-navigation-item__content {
+.wp-block-home-link[class*="blockera-has-icon-"] .wp-block-navigation-item__content {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
 }
 
-.wp-block-home-link[class*="blockera-has-icon-"]
-	.wp-block-navigation-item__content
-	svg {
+.wp-block-home-link[class*="blockera-has-icon-"] .wp-block-navigation-item__content svg {
 	display: inline-block;
 	position: relative;
-	fill: var(--blockera--icon--color, currentColor);
-	color: var(--blockera--icon--color, inherit);
+	background: var(--blockera--icon--color);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
 	margin: auto 0;
 	align-self: center;
-	transform: rotate(var(--blockera--icon--rotate, 0deg))
-		scaleX(var(--blockera--icon--flip-horizontal, 1))
-		scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 	vertical-align: text-bottom;
-	transition: inherit;
-}
-
-.wp-block-home-link[class*="blockera-has-icon-"]
-	.wp-block-navigation-item__content
-	svg[fill="none"],
-.wp-block-home-link[class*="blockera-has-icon-"]
-	.wp-block-navigation-item__content
-	.blockera-stroke-svg-icon
-	svg {
-	fill: none;
-	stroke: var(--blockera--icon--color, currentColor);
 }

@@ -1,8 +1,6 @@
 ## Unreleased
 
 ### Improvements
-- Color indicator: contextual CSS color keywords (such as transparent, currentColor, and inherit) now use a striped swatch with a short badge instead of a misleading solid fill.
-- Color picker: added a color value field for hex, rgb(), named colors, and CSS variables, with a more compact saturation area in the sketch panel.
 - Enhance the design of the image uploader control.
 - Enhance the design of the icon control.
 - Box spacing control improved to detect lock for horizontal or vertical based on value for blocks.
@@ -10,13 +8,8 @@
 - Border radius control design and UX improvement.
 - Tooltip control design improvement.
 - Features Labels: design improved.
-- Flex Layout Control: improve design and tooltips to show corresponding CSS values on hover.
-- Tabs Control: improved performance when switching between tabs for a smoother experience.
-- Code Control: Add Prettify button to code control to reformat CSS codes.
 
 ### Bug Fixes
-- Color picker: fixed a stray "#" being added when typing CSS keywords such as `currentColor` (incomplete hex-like prefixes no longer force a hash unless you type one).
-- Color picker: fixed hex input being rewritten while typing (for example six-digit colors turning into the wrong value).
 - Fixed an issue where icons weren't updating properly when changed.
 - Fixed variable picker design issue while variable names were too long.
 - Fixed extra horizontal scrollbar while opening variable picker.

@@ -10,7 +10,7 @@ import type {
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 export type NormalizedSelectorProps = {
-	query?: Array<string> | string,
+	query?: string,
 	state: TStates,
 	clientId: string,
 	support?: string,
@@ -21,13 +21,8 @@ export type NormalizedSelectorProps = {
 	suffixClass?: string,
 	device?: TBreakpoint,
 	blockSelectors: Object,
-	styleVariationName?: string,
-	/** Global style variation class segment before slug: `is-style-` (default) or `is-size-`. */
-	variationClassPrefix?: string,
 	fallbackSupportId?: string | Array<string>,
 	styleEngineConfig?: Object,
-	isStyleVariation?: boolean,
-	isGlobalStylesWrapper?: boolean,
 	activeDeviceType?: TBreakpoint,
 	currentStateHasSelectors?: boolean,
 	currentBlock: 'master' | InnerBlockType | string,

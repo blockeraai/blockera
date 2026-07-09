@@ -109,7 +109,7 @@ const App = () => {
 
 					<h1>
 						{sprintf(
-							// translators: %s: The product name (a theme or plugin name)
+							// translators: it's the product name (a theme or plugin name)
 							__('Update Required for %s', 'blockera'),
 							blockeraPluginRequiredName
 						)}
@@ -127,25 +127,25 @@ const App = () => {
 						<p>
 							{requiredPluginType === 'free'
 								? sprintf(
-										// translators: %s: The product name (a theme or plugin name)
+										// translators: it's the product name (a theme or plugin name)
 										__(
 											'Your %s plugin is out of date and the Pro plugin has been temporarily deactivated.',
 											'blockera'
 										),
 										blockeraPluginRequiredPluginSlug
-									)
+								  )
 								: sprintf(
-										// translators: %s: The product name (a theme or plugin name)
+										// translators: it's the product name (a theme or plugin name)
 										__(
 											'Your %s plugin is out of date and has been temporarily deactivated.',
 											'blockera'
 										),
 										blockeraPluginRequiredPluginSlug
-									)}
+								  )}
 						</p>
 						<p>
 							{sprintf(
-								// translators: 1: The product type (Free or Pro), 2: The product type (Free or Pro)
+								// translators: it's the product name (a theme or plugin name)
 								__(
 									'Your %1$s version is older than the %2$s version you just installed and needs to be updated.',
 									'blockera'
@@ -174,7 +174,7 @@ const App = () => {
 						</svg>
 
 						{sprintf(
-							// translators: %s: The product type (Free or Pro)
+							// translators: it's the product type (Free or Pro)
 							__('Required %s Version:', 'blockera'),
 							requiredPluginType === 'pro'
 								? __('Pro', 'blockera')
@@ -198,7 +198,7 @@ const App = () => {
 						</svg>
 
 						{sprintf(
-							// translators: %s: The product type (Free or Pro)
+							// translators: it's the product type (Free or Pro)
 							__('Current %s Version:', 'blockera'),
 							requiredPluginType === 'pro'
 								? __('Pro', 'blockera')
@@ -235,7 +235,7 @@ const App = () => {
 								href={`${window.location.origin}/wp-admin/update-core.php`}
 							>
 								{sprintf(
-									// translators: %s: The plugin name
+									// translators: it's the plugin name
 									__(
 										'Install or Update %s Plugin',
 										'blockera'

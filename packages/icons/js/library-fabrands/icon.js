@@ -17,7 +17,7 @@ import { FaBrandsIcons } from './icons';
 export function FaBrandsIcon({
 	library = 'fabrands',
 	style = {},
-	iconSize = 20,
+	iconSize = 24,
 	icon,
 	...props
 }) {
@@ -34,8 +34,13 @@ export function FaBrandsIcon({
 	}
 
 	if (iconSize) {
-		style.width = `${iconSize}px`;
-		style.height = `${iconSize}px`;
+		if (!props?.width) {
+			style.width = `${iconSize}px`;
+		}
+
+		if (!props?.height) {
+			style.height = `${iconSize}px`;
+		}
 	}
 
 	if (!FaBrandsIcons[icon.iconName]) {

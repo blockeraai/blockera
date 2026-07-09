@@ -59,7 +59,12 @@ export type GridAlignContent =
 	| 'space-between';
 
 export type GridAlignItems =
-	'' | 'end' | 'start' | 'center' | 'stretch' | 'baseline';
+	| ''
+	| 'end'
+	| 'start'
+	| 'center'
+	| 'stretch'
+	| 'baseline';
 
 export type GridJustifyItems = '' | 'start' | 'center' | 'end' | 'stretch';
 

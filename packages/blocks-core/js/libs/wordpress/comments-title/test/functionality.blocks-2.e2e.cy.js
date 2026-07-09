@@ -55,13 +55,12 @@ describe('Comments Title Block', () => {
 		//
 		// 2. Check settings tab
 		//
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-tools-panel-header')
+			cy.get('.components-panel__body-title button')
 				.contains('Settings')
-				.scrollIntoView()
 				.should('be.visible');
 		});
 

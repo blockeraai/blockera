@@ -11,11 +11,11 @@ describe('Font Size → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('Simple value font size', () => {
-		cy.getParentContainer('Font Size').within(() => {
+		cy.getParentContainer('Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
 				force: true,
@@ -37,11 +37,11 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p.blockera-block').should('have.css', 'font-size', '10px');
+		cy.get('.blockera-block').should('have.css', 'font-size', '10px');
 	});
 
 	it('Variable value', () => {
-		cy.getParentContainer('Font Size').within(() => {
+		cy.getParentContainer('Size').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -53,7 +53,7 @@ describe('Font Size → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'font-size: var(--wp--preset--font-size--small, 0.875rem)'
+					'font-size: var(--wp--preset--font-size--small)'
 				);
 		});
 
@@ -64,7 +64,7 @@ describe('Font Size → Functionality', () => {
 					name: 'Small',
 					id: 'small',
 					value: '0.875rem',
-					fluid: false,
+					fluid: null,
 					reference: {
 						type: 'theme',
 						theme: 'Twenty Twenty-Five',
@@ -87,7 +87,7 @@ describe('Font Size → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'font-size: var(--wp--preset--font-size--small, 0.875rem)'
+				'font-size: var(--wp--preset--font-size--small)'
 			);
 	});
 });

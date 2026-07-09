@@ -14,7 +14,7 @@ describe('Width → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('simple value - should update width when adding value', () => {
@@ -37,7 +37,7 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p.blockera-block').should('have.css', 'width', '100px');
+		cy.get('.blockera-block').should('have.css', 'width', '100px');
 	});
 
 	it('variable value', () => {
@@ -55,7 +55,7 @@ describe('Width → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'width: var(--wp--style--global--content-size, 645px)'
+					'width: var(--wp--style--global--content-size)'
 				);
 		});
 
@@ -85,9 +85,6 @@ describe('Width → Functionality', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should(
-				'include',
-				'width: var(--wp--style--global--content-size, 645px)'
-			);
+			.should('include', 'width: var(--wp--style--global--content-size)');
 	});
 });

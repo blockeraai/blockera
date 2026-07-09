@@ -5,102 +5,102 @@ namespace Blockera\Bootstrap\Traits;
 trait AssetsLoaderTrait {
 
 	/**
-	 * Store the asset context for backward compatibility.
+	 * Store the context.
 	 *
-	 * @var string|null $asset_context the asset context.
+	 * @var string $context the context.
 	 */
-	protected $asset_context = null;
+	protected string $context;
 
 	/**
-	 * Set the asset context (for backward compatibility with interfaces).
+	 * Store the sub context.
 	 *
-	 * @param string $context the asset context.
+	 * @var string $sub_context the sub context.
+	 */
+	protected string $sub_context;
+
+	/**
+	 * Set the context.
+	 *
+	 * @param string $context the context.
 	 * 
 	 * @return void
 	 */
 	public function setContext( string $context): void {
-		$this->asset_context = $context;
+
+		$this->context = $context;
 	}
 
 	/**
-	 * Enqueue assets for the given context.
+	 * Set the sub context.
 	 *
-	 * @param string      $base_path The base path of the plugin.
-	 * @param string|null $asset_context The asset context (e.g., 'block', 'feature', 'blocks-core'). If null, uses stored context.
-	 * @param string|null $library_name The library name (e.g., 'wordpress', 'woocommerce'). Used only for 'blocks-core' context.
+	 * @param string $sub_context the sub context.
 	 *
 	 * @return void
 	 */
-	public function enqueueAssets( string $base_path, $asset_context = null, $library_name = null): void {
-		static $cache = [];
+	public function setSubContext( string $sub_context): void {
 
-		// Use provided context or fall back to stored context.
-		$context = $asset_context ?? $this->asset_context;
+		$this->sub_context = $sub_context;
+	}
 
-		if (empty($context)) {
-			return;
-		}
-
-		$id = $this->getId();
-		$cache_key = $context . '|' . ($library_name ?? '') . '|' . $id;
-
-		if (isset($cache[$cache_key])) {
-			return;
-		}
+	/**
+	 * Enqueue the block assets.
+	 *
+	 * @param string $base_path The base path of the plugin.
+	 * @param string $base_url The base url of the plugin.
+	 * @param string $version The version of the plugin.
+	 *
+	 * @return void
+	 */
+	public function enqueueAssets( string $base_path, string $base_url, string $version): void {
 
 		$subdirectory = '/src/';
 
-		switch ($context) {
+		switch ($this->context) {
 			case 'blocks-core':
-				if (empty($library_name)) {
-					return;
-				}
-				$subdirectory = '/php/libs/' . $library_name . '/';
-				$context_path = $base_path . $context . $subdirectory . $id . '/';
+				$subdirectory = '/php/libs/' . $this->sub_context . '/';
+				$context_path = $base_path . $this->context . $subdirectory . $this->getId() . '/';
+				$context_url  = $base_url . $this->context . $subdirectory . $this->getId() . '/';
 				break;
 
 			default:
 				$subdirectory = '/src/';
-				$context_path = $base_path . $context . '-' . $id . '/' . $subdirectory;
+				$context_path = $base_path . $this->context . '-' . $this->getId() . '/' . $subdirectory;
+				$context_url  = $base_url . $this->context . '-' . $this->getId() . '/' . $subdirectory;
 		}
 
 		$css_file_path = $context_path . 'style.css';
 		$js_file_path  = $context_path . 'script.js';
 
-		// Determine handle.
-		$handle = 'blockera-block' . '-' . $id;
-		
-		// Check if the CSS and JS files exist.
-		$css_exists = file_exists($css_file_path);
-		$js_exists  = file_exists($js_file_path);
+		if (file_exists($css_file_path)) {
 
-		if ($css_exists || $js_exists) {
-			$filesystem = blockera_get_filesystem();
-
-			// Adding inline styles to the stylesheet.
-			if ($css_exists) {
-				wp_register_style($handle, false);
-				wp_add_inline_style($handle, $filesystem->get_contents($css_file_path));
-				wp_enqueue_style($handle);
-			}
-
-			// Adding inline scripts to the script.
-			if ($js_exists) {
-				wp_register_script($handle, false);
-				wp_add_inline_script($handle, $filesystem->get_contents($js_file_path));
-				wp_enqueue_script($handle);
-			}
+			wp_enqueue_style(
+				'blockera-' . $this->context . '-' . $this->getId() . '-style',
+				$context_url . 'style.css',
+				[],
+				$version
+			);
 		}
 
-		$cache[$cache_key] = true;
+		if (file_exists($js_file_path)) {
+			wp_enqueue_script(
+				'blockera-' . $this->context . '-' . $this->getId() . '-script',
+				$context_url . 'script.js',
+				[],
+				$version,
+				[
+					'in_footer' => true,
+				]
+			);
+		}
 	}
 
 	/**
-	 * Get the block/feature id.
+	 * Get the block id.
 	 *
-	 * @return string the block/feature id.
+	 * @return string the block id.
 	 */
 	public function getId(): string {
+
 		return $this->id;
 	}
 }

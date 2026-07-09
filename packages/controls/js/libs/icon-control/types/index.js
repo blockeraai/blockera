@@ -1,21 +1,21 @@
 // @flow
 
-import type { ControlGeneralTypes } from '../../../types';
-
 export type IconControlProps = {
-	...ControlGeneralTypes,
+	label: string,
+	columns: string,
+	field: string,
 	/**
 	 * Choose label
 	 */
-	labelChoose?: string,
+	labelChoose: string,
 	/**
 	 * Open icon library label
 	 */
-	labelIconLibrary?: string,
+	labelIconLibrary: string,
 	/**
 	 * upload svg label
 	 */
-	labelUploadSvg?: string,
+	labelUploadSvg: string,
 	/**
 	 * It sets the control default value if the value not provided.
 	 * By using it the control will not fire onChange event for this default value on control first render,
@@ -25,5 +25,7 @@ export type IconControlProps = {
 		library: string,
 		uploadSVG: string | Element | Object,
 	},
-	onChange?: (data: any) => void,
+	onChange: () => void,
+	//
+	className: string,
 };

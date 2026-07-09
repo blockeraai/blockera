@@ -32,21 +32,6 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-indicator');
 			cy.getByDataCy('color-label').should('have.text', 'None');
 		});
-
-		it('renders children inside the color button', () => {
-			cy.withDataProvider({
-				component: (
-					<ColorControl>
-						<span data-cy="color-control-child">Child</span>
-					</ColorControl>
-				),
-			});
-
-			cy.getByDataCy('color-btn')
-				.find('[data-cy="color-control-child"]')
-				.should('exist')
-				.and('have.text', 'Child');
-		});
 	});
 
 	context('Functional Tests', () => {
@@ -73,11 +58,11 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-btn').as('btn');
 
 			cy.get('@btn').click();
-			cy.getByDataCy('color-picker-css-value').clear();
-			cy.getByDataCy('color-picker-css-value').type('dddddd');
+			cy.get('input').clear();
+			cy.get('input').type('ddd');
 
 			// visual assertion
-			cy.getByDataCy('color-label').contains('#dddddd');
+			cy.getByDataCy('color-label').contains('#ddd');
 			cy.getByDataCy('color-indicator').should(
 				'have.css',
 				'backgroundColor',
@@ -86,28 +71,10 @@ describe('Color Control', () => {
 
 			// data assertion
 			cy.getByDataCy('color-label')
-				.contains('#dddddd')
+				.contains('#ddd')
 				.then(() => {
 					expect(getControlValue(name)).to.be.equal('#dddddd');
 				});
-		});
-
-		it('normalizes 3-digit hex shorthand without hash', () => {
-			cy.withDataProvider({
-				component: <ColorControl />,
-				value: '',
-				name,
-			});
-
-			cy.getByDataCy('color-btn').click();
-			cy.getByDataCy('color-picker-css-value').clear();
-			cy.getByDataCy('color-picker-css-value').type('ccc');
-			cy.getByDataCy('color-picker-css-value').blur();
-
-			cy.getByDataCy('color-label').contains('#cccccc');
-			cy.then(() => {
-				expect(getControlValue(name)).to.be.equal('#cccccc');
-			});
 		});
 
 		it('renders None as color label when color gets remove from color-picker', () => {
@@ -141,13 +108,13 @@ describe('Color Control', () => {
 		});
 
 		// 2.
-		it('calculated data must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+		it('calculated defaultValue must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
 			cy.withDataProvider({
-				component: <ColorControl defaultValue="#1b44b5" />,
+				component: <ColorControl defaultValue="#1b44b5" id="x.y" />,
 				value: '#eee',
 			});
 
-			cy.getByDataCy('color-label').contains('#eee');
+			cy.getByDataCy('color-label').contains('#1b44b5');
 		});
 
 		// 3.

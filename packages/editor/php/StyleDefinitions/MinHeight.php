@@ -2,11 +2,12 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\Traits\WidthDefinitionTrait;
+use Blockera\Editor\StyleDefinitions\Contracts\StandardDefinition;
+use Blockera\Editor\StyleDefinitions\Traits\SimpleDefinitionTrait;
 
-class MinHeight extends BaseStyleDefinition {
+class MinHeight extends BaseStyleDefinition implements StandardDefinition {
 
-    use WidthDefinitionTrait;
+    use SimpleDefinitionTrait;
 
     public function getCssProperty(): string {
 

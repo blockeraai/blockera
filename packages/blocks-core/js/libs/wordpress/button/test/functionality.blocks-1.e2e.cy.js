@@ -29,39 +29,7 @@ describe('Button Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.get('.blockera-extension-block-card.master-block-card').within(
-			() => {
-				cy.get('button[data-test="back-to-parent-navigation"]').should(
-					'be.visible'
-				);
-			}
-		);
-
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
-
-		cy.checkBlockStatesPickerItems(
-			[
-				'states/hover',
-				'states/focus',
-				'states/focus-within',
-				'states/visited',
-				'states/active',
-				'states/first-child',
-				'states/last-child',
-				'states/only-child',
-				'states/empty',
-				'states/before',
-				'states/after',
-				'elements/bold',
-				'elements/italic',
-				'elements/kbd',
-				'elements/code',
-				'elements/span',
-				'elements/mark',
-				'elements/icon',
-			],
-			true
-		);
 
 		//
 		// 1. Block Styles
@@ -93,7 +61,7 @@ describe('Button Block', () => {
 		//
 		// 1.2. Border Line
 		//
-		cy.getParentContainer('Border').within(() => {
+		cy.getParentContainer('Border Line').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
 				force: true,
@@ -103,17 +71,14 @@ describe('Button Block', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('[data-cy="color-picker-css-value"]').clear({ force: true });
-			cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
-				delay: 0,
-			});
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('37e6d4 ');
 		});
 
-		cy.getParentContainer('Border').within(() => {
-			cy.customSelectOption(1);
+		cy.getParentContainer('Border Line').within(() => {
+			cy.get('[aria-haspopup="listbox"]').click();
+			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
-
-		cy.wait(10);
 
 		// Check block
 		// Border should be added to inner element and not to button root tag
@@ -133,7 +98,7 @@ describe('Button Block', () => {
 		//
 		// 2. Check settings tab
 		//
-		cy.getByAriaControls('settings-view').click();
+		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
 			// block settings panel body should be hidden

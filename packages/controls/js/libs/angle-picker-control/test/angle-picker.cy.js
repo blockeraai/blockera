@@ -167,33 +167,24 @@ describe('angle-picker-control', () => {
 					name,
 				});
 
-				cy.get('.components-angle-picker-control__angle-circle').then(
-					($circle) => {
-						const rect = $circle[0].getBoundingClientRect();
-						const centerX = rect.x + rect.width / 2;
-						const centerY = rect.y + rect.height / 2;
+				cy.get(
+					'.components-angle-picker-control__angle-circle-indicator'
+				).as('indicator');
 
-						cy.wrap($circle).trigger('mousedown', {
-							which: 1,
-							clientX: centerX + 20,
-							clientY: centerY,
-						});
-						cy.document().trigger('mousemove', {
-							which: 1,
-							clientX: centerX,
-							clientY: centerY - 20,
-						});
-						cy.document().trigger('mouseup');
-					}
-				);
-
-				// Angle depends on pointer position vs. the circle center; layout/viewport
-				// shifts the exact degree, so assert drag updates value and store only.
-				cy.get('input[type="number"]').should(($input) => {
-					const v = Number($input.val());
-					expect(v).to.not.equal(0);
-					expect(getControlValue(name)).to.equal(v);
+				cy.get('@indicator').trigger('mousedown', { which: 1 });
+				cy.get('@indicator').trigger('mousemove', {
+					which: 1,
+					clientX: 20,
+					clientY: 30,
 				});
+				cy.get('@indicator').trigger('mouseup');
+				// visual assertion
+				cy.get('input[type="number"]')
+					.should('have.value', 278)
+					.then(() => {
+						// data assertion
+						expect(getControlValue(name)).to.be.equal(278);
+					});
 			});
 		});
 	});
@@ -209,15 +200,14 @@ describe('angle-picker-control', () => {
 			cy.get('input[type="number"]').should('have.value', '45');
 		});
 
-		// 2. Scalar root value + nested `id`: path does not apply; saved scalar wins (see
-		// use-control-context getCalculatedInitValue + control-context.spec.js).
-		it('retrieved data must be value, when defaultValue(ok) && id(nested) && value(root scalar)', () => {
+		// 2.
+		it('retrieved data must be defaultValue, when defaultValue(ok) && id(!ok) && value(ok)', () => {
 			cy.withDataProvider({
 				component: <AnglePickerControl defaultValue="45" id="x.y" />,
 				value: '90',
 			});
 
-			cy.get('input[type="number"]').should('have.value', '90');
+			cy.get('input[type="number"]').should('have.value', '45');
 		});
 
 		// 3.

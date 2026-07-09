@@ -1,0 +1,14 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "text-shadow",
+	"supports": {
+		"blockeraTextShadow": {
+			"status": true,
+			"id": "blockeraTextShadow",
+			"definition": "TextShadow",
+			"css-property": "text-shadow",
+			"fallback": ["text-shadow"],
+			"description": "Support for \"blockeraTextShadow\" value."
+		}
+	}
+}

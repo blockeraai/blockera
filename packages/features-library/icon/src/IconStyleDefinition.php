@@ -28,42 +28,13 @@ class IconStyleDefinition extends BaseStyleDefinition {
         $value = $setting[ $cssProperty ];
 
 		switch ($cssProperty) {
-			case '--blockera--icon--url':
-				$decoded_svg = '';
+			case '--blockera--icon--url':				
+				$svg = $value['renderedIcon'];
 
-				if (! empty($value['svgString']) && is_string($value['svgString'])) {
-					$decoded_svg = $value['svgString'];
-				} elseif (! empty($value['renderedIcon'])) {
-					$decoded_svg = RenderedIconCodec::decode($value['renderedIcon']);
-				}
-
-				if ('' !== $decoded_svg) {
-					$library        = isset($value['library']) ? (string) $value['library'] : '';
-					$icon_slug      = isset($value['icon']) ? (string) $value['icon'] : '';
-					$is_custom_icon = '' === $library && '' === $icon_slug;
-
-					if (! $is_custom_icon) {
-						$decoded_svg = blockera_normalize_stroke_icon_svg($decoded_svg, $library);
-					}
-
+				if (! empty($svg)) {
+					$decoded_svg = base64_decode($svg);
 					$encoded_svg = rawurlencode($decoded_svg);
-					$icon_url    = 'url("data:image/svg+xml,' . $encoded_svg . '")';
-
-					$this->setDeclaration('--blockera--icon--url', $icon_url);
-
-					if (blockera_svg_has_preserved_colors($decoded_svg)) {
-						$this->setDeclaration('--blockera--icon--bg-image', $icon_url);
-						$this->setDeclaration('--blockera--icon--mask-image', 'none');
-						$this->setDeclaration('--blockera--icon--editor-icon-bg', 'transparent');
-					} else {
-						// Reset inherited multi-color vars from ancestor list blocks.
-						$this->setDeclaration('--blockera--icon--bg-image', 'none');
-						$this->setDeclaration('--blockera--icon--mask-image', $icon_url);
-						$this->setDeclaration(
-							'--blockera--icon--editor-icon-bg',
-							'var(--blockera--icon--color, currentColor)'
-						);
-					}
+					$this->setDeclaration('--blockera--icon--url', 'url("data:image/svg+xml,' . $encoded_svg . '")');
 				}
 				break;
 
@@ -79,13 +50,6 @@ class IconStyleDefinition extends BaseStyleDefinition {
 				$this->setDeclaration($cssProperty, '-1');
 				break;
 				
-			case '--blockera--icon--color':
-				$this->setDeclaration(
-					$cssProperty,
-					blockera_get_value_addon_real_value($value)
-				);
-				break;
-
 			default:
 				$this->setDeclaration($cssProperty, $value);
 				break;

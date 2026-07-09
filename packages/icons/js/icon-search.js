@@ -19,24 +19,6 @@ import { type IconLibraryTypes } from './types';
 
 const searchConfig = require('./search-config.json');
 
-/**
- * Escape Fuse.js extended-search operators in user input.
- * Spaces are preserved so multi-word queries use AND semantics (e.g. "fli v").
- *
- * @param {string} query Raw search input.
- * @return {string} Query safe for Fuse extended search.
- */
-export function prepareIconSearchQuery(query: string): string {
-	const trimmed = query.trim();
-
-	if (!trimmed) {
-		return '';
-	}
-
-	// Extended-search reserved characters (whitespace is intentionally excluded).
-	return trimmed.replace(/[|\\'"=!:^$]/g, '\\$&');
-}
-
 export function iconSearch({
 	query,
 	library = 'all',
@@ -57,7 +39,7 @@ export function iconSearch({
 			getIconLibrariesSearchIndex(library)
 		);
 
-		let result = fuse.search(prepareIconSearchQuery(query));
+		let result = fuse.search(query);
 
 		if (!result?.length) {
 			return [];
@@ -70,9 +52,8 @@ export function iconSearch({
 		const finalResult = {};
 
 		const iconRegistration = (foundItem: Object) => {
-			if (foundItem?.item?.iconName) {
+			if (foundItem?.item?.iconName)
 				finalResult[foundItem.item.iconName] = foundItem.item;
-			}
 		};
 
 		result.forEach(iconRegistration);

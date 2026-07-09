@@ -43,14 +43,6 @@
 			"inner-blocks": {
 				"all": true
 			}
-		},
-		"blockeraBlendMode": {
-			"status": true,
-			"id": "blockeraBlendMode",
-			"definition": "MixBlendMode",
-			"css-property": "mix-blend-mode",
-			"fallback": ["mix-blend-mode", "background"],
-			"description": "Support for \"blockeraBlendMode\" value."
 		}
 	}
 }

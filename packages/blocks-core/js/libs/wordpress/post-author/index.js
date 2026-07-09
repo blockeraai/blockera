@@ -15,14 +15,14 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../../type';
+import type { BlockType } from '../../type';
 
 export const PostAuthor: BlockType = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
 	blockeraInnerBlocks: {
-		'elements/avatar': {
-			name: 'elements/avatar',
+		'core/avatar': {
+			name: 'core/avatar',
 			type: 'avatar',
 			label: __('Avatar', 'blockera'),
 			description: __(
@@ -48,23 +48,8 @@ export const PostAuthor: BlockType = {
 			name: 'elements/author',
 			type: 'author',
 			label: __('Author Name', 'blockera'),
-			shortLabel: __('Name', 'blockera'),
 			description: __('The post author name element.', 'blockera'),
 			icon: <Icon icon="block-post-author-name" iconSize="20" />,
-			settings: {
-				force: true,
-			},
-		},
-		'elements/biography': {
-			name: 'elements/biography',
-			type: 'biography',
-			label: __('Author Biography', 'blockera'),
-			shortLabel: __('Biography', 'blockera'),
-			description: __(
-				'The post author biography text element.',
-				'blockera'
-			),
-			icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
 			},

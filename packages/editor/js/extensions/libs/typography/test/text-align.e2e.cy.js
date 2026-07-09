@@ -1,9 +1,10 @@
 import {
 	savePage,
-	createPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
+	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Align → Functionality', () => {
@@ -11,10 +12,12 @@ describe('Text Align → Functionality', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByAriaControls('styles-view').click();
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('simple value', () => {
+		openMoreFeaturesControl('More typography settings');
+
 		// center align
 		cy.getByAriaLabel('Center').click();
 

@@ -1,11 +1,11 @@
 // @flow
 
 export * from './utils';
-export { SpacingStyles, LayoutStyles, LayoutExtension } from './layout';
+export { LayoutStyles, LayoutExtension } from './layout';
 export { FlexChildStyles, FlexChildExtension } from './flex-child';
-export { GridChildStyles, GridChildExtension } from './grid-child';
 export { SizeStyles, SizeExtension } from './size';
 export { PositionStyles, PositionExtension } from './position';
+export { SpacingStyles, SpacingExtension } from './spacing';
 export { BackgroundStyles, BackgroundExtension } from './background';
 export {
 	BorderAndShadowStyles,
@@ -28,6 +28,3 @@ export { registerInnerBlockExtensionsSupports } from './block-card/inner-blocks'
 
 export { blockeraExtensionsBootstrap } from './bootstrap';
 export * from './block-card/block-states';
-export * from './preset-preview-attributes';
-export * from './preset-preview-inference';
-export { joinTransformCssFromRepeaterMap } from './effects/transform-repeater-to-css';

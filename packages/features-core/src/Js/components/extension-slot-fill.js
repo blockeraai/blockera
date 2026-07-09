@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { type MixedElement } from 'react';
 import { useMemo } from '@wordpress/element';
 import { Fill } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
@@ -22,9 +21,7 @@ import type { TExtensionSlotFillProps } from '../types';
 import { default as featuresLibrary } from '../../features';
 import { default as featuresSchemas } from '../../features-config';
 
-export const ExtensionSlotFill = (
-	props: TExtensionSlotFillProps
-): MixedElement => {
+export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
 	const { getBlockType } = select('core/blocks');
@@ -146,7 +143,6 @@ export const ExtensionSlotFill = (
 					return (
 						<Fill name={slotName} key={`${id}-${index}`}>
 							<Component
-								activeSearchMode={props.activeSearchMode}
 								{...extensionProps}
 								key={`${id}-${index}`}
 							/>

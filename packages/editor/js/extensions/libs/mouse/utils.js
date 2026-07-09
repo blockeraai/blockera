@@ -18,12 +18,12 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('Auto', 'blockera'),
 					value: 'auto',
-					icon: <Icon library="cursor" icon="auto" />,
+					icon: <Icon library="cursor" icon="pointer" />,
 				},
 				{
 					label: __('Default', 'blockera'),
 					value: 'default',
-					icon: <Icon library="cursor" icon="auto" />,
+					icon: <Icon library="cursor" icon="pointer" />,
 				},
 				{
 					label: __('none', 'blockera'),
