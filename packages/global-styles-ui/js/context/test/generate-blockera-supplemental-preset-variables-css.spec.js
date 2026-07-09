@@ -1,0 +1,48 @@
+import { generateBlockeraSupplementalPresetVariablesCss } from '../generate-blockera-supplemental-preset-variables-css';
+
+describe('generateBlockeraSupplementalPresetVariablesCss', () => {
+	it('emits line-height preset variables from merged settings', () => {
+		const css = generateBlockeraSupplementalPresetVariablesCss({
+			typography: {
+				lineHeights: {
+					custom: [{ slug: 'relaxed', size: '1.8', isVisible: true }],
+				},
+			},
+		});
+
+		expect(css).toContain('--wp--preset--line-height--relaxed: 1.8');
+	});
+
+	it('returns empty string when no supplemental presets exist', () => {
+		expect(
+			generateBlockeraSupplementalPresetVariablesCss({
+				typography: {
+					fontSizes: { theme: [{ slug: 'small', size: '14px' }] },
+				},
+			})
+		).toBe('');
+	});
+
+	it('emits border preset variables from merged settings', () => {
+		const css = generateBlockeraSupplementalPresetVariablesCss({
+			border: {
+				presets: {
+					custom: [
+						{
+							slug: 'accent',
+							border: {
+								width: '1px',
+								style: 'solid',
+								color: '#112233',
+							},
+						},
+					],
+				},
+			},
+		});
+
+		expect(css).toContain(
+			'--wp--preset--border--accent: 1px solid #112233'
+		);
+	});
+});
