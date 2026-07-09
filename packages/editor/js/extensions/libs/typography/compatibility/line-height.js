@@ -3,7 +3,12 @@
 /**
  * Blockera dependencies
  */
+import { isValid } from '@blockera/controls';
 import { normalizeCssLengthValue } from '@blockera/utils';
+import {
+	getLineHeightVAFromVarString,
+	getLineHeightVAStringFromId,
+} from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -18,22 +23,36 @@ export function lineHeightFromWPCompatibility({
 	attributes: Object,
 	insideBlockInspector?: boolean,
 	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
-}): Object | false {
-	// Check block-level style (insideBlockInspector) or global style context
-	const lineHeight = runInsideBlockInspector(
-		insideBlockInspector,
-		editorSelectedBlockEvent
-	)
-		? attributes?.style?.typography?.lineHeight
-		: attributes?.typography?.lineHeight;
+}): Object {
+	if (attributes?.blockeraLineHeight?.value === '') {
+		const lineHeight = runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? attributes?.style?.typography?.lineHeight
+			: attributes?.typography?.lineHeight;
 
-	if (
-		attributes?.blockeraLineHeight?.value === '' &&
-		lineHeight !== undefined
-	) {
-		attributes.blockeraLineHeight = {
-			value: normalizeCssLengthValue(lineHeight, ''),
-		};
+		if (lineHeight) {
+			const lineHeightVar = getLineHeightVAFromVarString(lineHeight);
+
+			if (
+				lineHeightVar &&
+				typeof lineHeightVar === 'object' &&
+				lineHeightVar.isValueAddon
+			) {
+				attributes.blockeraLineHeight = {
+					value: lineHeightVar,
+				};
+
+				return attributes;
+			}
+
+			attributes.blockeraLineHeight = {
+				value: normalizeCssLengthValue(lineHeight, ''),
+			};
+
+			return attributes;
+		}
 	}
 
 	return attributes;
@@ -65,6 +84,29 @@ export function lineHeightToWPCompatibility({
 			: {
 					typography: {
 						lineHeight: undefined,
+					},
+				};
+	}
+
+	if (isValid(newValue)) {
+		const lineHeightPreset = getLineHeightVAStringFromId(
+			newValue?.settings?.id
+		);
+
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? {
+					style: {
+						typography: {
+							lineHeight: lineHeightPreset,
+						},
+					},
+				}
+			: {
+					typography: {
+						lineHeight: lineHeightPreset,
 					},
 				};
 	}
