@@ -45,6 +45,8 @@ export {
 } from './context/preset-variations-context';
 export { getVariationClassName } from './theme-json-utils';
 export { useGlobalSetting, useGlobalStyle } from './context/global-style-hooks';
+export { mergeBlockeraSettingsIntoExperimentalFeatures } from './context/merge-blockera-experimental-features';
+export { BlockEditorExperimentalFeaturesSync } from './context/block-editor-experimental-features-sync';
 
 export { Borders } from './borders';
 export { Filters } from './filters';
