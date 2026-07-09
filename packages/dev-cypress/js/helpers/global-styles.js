@@ -424,6 +424,29 @@ export function openGlobalStylesFontSizesVariablesScreen(
 }
 
 /**
+ * Typography → Line height variables (design-system line height presets).
+ *
+ * @param {{ reset?: boolean }} options
+ */
+export function openGlobalStylesLineHeightsVariablesScreen(
+	{ reset } = { reset: true }
+) {
+	openGlobalStylesTypographyFlow({ reset });
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	cy.contains('.blockera-typography-hub button', 'Line height variables')
+		.scrollIntoView()
+		.should('exist')
+		.click({ force: true });
+
+	return cy
+		.get('.blockera-line-height-editor', { timeout: 20000 })
+		.should('be.visible');
+}
+
+/**
  * Colors → Linear gradient variables screen.
  *
  * @param {{ reset?: boolean }} options
