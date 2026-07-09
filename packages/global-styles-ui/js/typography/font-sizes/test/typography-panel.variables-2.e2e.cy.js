@@ -16,10 +16,10 @@ function openFontSizeVariablesScreen() {
 	openGlobalStylesTypographyFlow();
 
 	cy.contains(
-		'.blockera-font-size-hub button',
+		'.blockera-typography-hub button',
 		'Font size variables'
 	).scrollIntoView();
-	cy.contains('.blockera-font-size-hub button', 'Font size variables')
+	cy.contains('.blockera-typography-hub button', 'Font size variables')
 		.should('be.visible')
 		.click({ force: true });
 
@@ -34,18 +34,18 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 
 		cy.get('button[id="/typography"]').should('exist');
 
-		cy.get('.blockera-font-size-hub').should('have.length', 1);
+		cy.get('.blockera-typography-hub').should('have.length', 1);
 	});
 
 	it('does not mount duplicate font size preset rows while the list screen is present', () => {
 		openGlobalStylesTypographyFlow();
 
-		cy.get('.blockera-font-size-hub').should('have.length', 1);
+		cy.get('.blockera-typography-hub').should('have.length', 1);
 
 		// eslint-disable-next-line cypress/no-unnecessary-waiting
 		cy.wait(400);
 
-		cy.get('.blockera-font-size-hub').should('have.length', 1);
+		cy.get('.blockera-typography-hub').should('have.length', 1);
 	});
 
 	it('hides native WordPress font size presets entry while Blockera override is active', () => {
@@ -65,7 +65,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		);
 
 		cy.contains(
-			'.blockera-font-size-hub button',
+			'.blockera-typography-hub button',
 			'Font size variables'
 		).click({ force: true });
 
@@ -137,7 +137,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			.first()
 			.click({ force: true });
 
-		cy.get('.blockera-font-size-hub').should('exist');
+		cy.get('.blockera-typography-hub').should('exist');
 	});
 
 	it('ScreenHeader back runs onBack (clears cleanup + inspector-active, returns to list)', () => {
@@ -146,10 +146,10 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
 
 		cy.contains(
-			'.blockera-font-size-hub button',
+			'.blockera-typography-hub button',
 			'Font size variables'
 		).scrollIntoView();
-		cy.contains('.blockera-font-size-hub button', 'Font size variables')
+		cy.contains('.blockera-typography-hub button', 'Font size variables')
 			.should('be.visible')
 			.click({ force: true });
 
@@ -176,7 +176,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			timeout: 4000,
 		}).should('not.exist');
 
-		cy.contains('.blockera-font-size-hub', 'Font size variables', {
+		cy.contains('.blockera-typography-hub', 'Font size variables', {
 			timeout: 4000,
 		}).should('exist');
 	});

@@ -397,7 +397,7 @@ export function openGlobalStylesTypographyFlow({ reset } = { reset: false }) {
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-font-size-hub', { timeout: 20000 }).should('exist');
+	cy.get('.blockera-typography-hub', { timeout: 20000 }).should('exist');
 }
 
 /**
@@ -413,7 +413,7 @@ export function openGlobalStylesFontSizesVariablesScreen(
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
 
-	cy.contains('.blockera-font-size-hub button', 'Font size variables')
+	cy.contains('.blockera-typography-hub button', 'Font size variables')
 		.scrollIntoView()
 		.should('exist')
 		.click({ force: true });

@@ -56,7 +56,8 @@ export { BorderRadius } from './border-radius';
 
 /** Preset editor bodies (theme / default / custom), for reuse outside full navigation shells. */
 export { SpacingPresetContent } from './spacing';
-export { FontSizesPresetContent } from './font-sizes';
+export { FontSizesPresetContent } from './typography/font-sizes';
+export { LineHeightsPresetContent } from './typography/line-heights';
 export { BordersPresetContent } from './borders';
 export { BorderRadiusPresetContent } from './border-radius';
 export { FiltersPresetContent } from './filters';
@@ -85,7 +86,7 @@ export {
 } from './components/recreate-missing-variable-preset';
 
 export { colorsPanelHandler } from './colors/colors-panel-handler';
-export { typographyPanelHandler } from './font-sizes/typography-panel-handler';
+export { typographyPanelHandler } from './typography/typography-panel-handler';
 export { shadowsPanelHandler } from './shadows/shadows-panel-handler';
 
 export {

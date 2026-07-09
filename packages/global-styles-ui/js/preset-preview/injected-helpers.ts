@@ -42,6 +42,9 @@ export type GlobalStylesPresetPreviewHelpers = {
 	getGlobalStylesFontSizePresetPreviewAttributes: (
 		size: string | null | undefined
 	) => Record<string, unknown>;
+	getGlobalStylesLineHeightPresetPreviewAttributes: (
+		size: string | null | undefined
+	) => Record<string, unknown>;
 	getGlobalStylesColorPresetPreviewAttributes: (
 		variable: {
 			color?: string;
@@ -173,6 +176,14 @@ export function getGlobalStylesFontSizePresetPreviewAttributes(
 ): Record<string, unknown> {
 	return (
 		injected?.getGlobalStylesFontSizePresetPreviewAttributes?.(size) ?? {}
+	);
+}
+
+export function getGlobalStylesLineHeightPresetPreviewAttributes(
+	size: string | null | undefined
+): Record<string, unknown> {
+	return (
+		injected?.getGlobalStylesLineHeightPresetPreviewAttributes?.(size) ?? {}
 	);
 }
 

@@ -58,6 +58,9 @@ const METADATA_EXTRA_BY_INFIX: Record<
 	'font-size': {
 		classes: [{ classSuffix: 'font-size', propertyName: 'font-size' }],
 	},
+	'line-height': {
+		classes: [{ classSuffix: 'line-height', propertyName: 'line-height' }],
+	},
 	'font-family': {
 		classes: [{ classSuffix: 'font-family', propertyName: 'font-family' }],
 	},
@@ -133,5 +136,6 @@ export const STYLE_PATH_TO_CSS_VAR_INFIX: Record<string, string> = {
 	'color.gradient': 'gradient',
 	shadow: 'shadow',
 	'typography.fontSize': 'font-size',
+	'typography.lineHeight': 'line-height',
 	'typography.fontFamily': 'font-family',
 };

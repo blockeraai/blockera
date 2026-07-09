@@ -19,6 +19,7 @@ export type RecreateMissingVariableResult =
 
 const CUSTOM_PRESET_PATH_BY_TYPE: Record<string, string> = {
 	'font-size': 'settings.typography.fontSizes.custom',
+	'line-height': 'settings.typography.lineHeights.custom',
 	color: 'settings.color.palette.custom',
 	spacing: 'settings.spacing.spacingSizes.custom',
 	'width-size': 'settings.layout.widthSizes.custom',

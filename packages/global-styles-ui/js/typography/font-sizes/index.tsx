@@ -3,11 +3,10 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import {
-	Navigator,
 	__experimentalView as View,
 	__experimentalSpacer as Spacer,
 } from '@wordpress/components';
-import { memo, useMemo, useCallback, createPortal } from '@wordpress/element';
+import { memo, useMemo, useCallback } from '@wordpress/element';
 import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 
 /**
@@ -36,32 +35,11 @@ import {
 	PresetTaxonomyGroupLayout,
 	PresetVariablesScreenToolbar,
 	buildVisiblePresetOriginSets,
-} from '../components';
+} from '../../components';
 import { FontSize } from './font-size';
-import FontSizesScreen from './font-sizes-screen';
-import { useGlobalSetting } from '../context/global-style-hooks';
-import { type VariableType } from '../components/types';
+import { useGlobalSetting } from '../../context/global-style-hooks';
+import { type VariableType } from '../../components/types';
 import { FontSizePresetOpener } from './font-size-preset-opener';
-import { NavItemScreen } from '../navigation/nav-item-screen';
-import {
-	useOverrideNavigator,
-	BLOCKERA_FONT_SIZE_PRESET_INSPECTOR_ACTIVE_CLASS,
-	disablePresetInspectorCleanup,
-	enablePresetInspectorCleanup,
-} from '../panel-override';
-
-const onBack = () => {
-	disablePresetInspectorCleanup(
-		BLOCKERA_FONT_SIZE_PRESET_INSPECTOR_ACTIVE_CLASS
-	);
-};
-
-const onClick = (event: Event) => {
-	enablePresetInspectorCleanup(
-		BLOCKERA_FONT_SIZE_PRESET_INSPECTOR_ACTIVE_CLASS,
-		event
-	);
-};
 
 interface FontSizeGroupProps {
 	label: string;
@@ -371,7 +349,11 @@ export function FontSizesPresetContent() {
 	);
 }
 
-function FontSizesEditorScreenShell() {
+export function FontSizesEditorScreen({
+	onBackHandler,
+}: {
+	onBackHandler: () => void;
+}) {
 	return (
 		<Flex
 			direction="column"
@@ -380,7 +362,7 @@ function FontSizesEditorScreenShell() {
 			style={{ paddingBottom: '10px' }}
 		>
 			<ScreenHeader
-				onBack={onBack}
+				onBack={onBackHandler}
 				title={__('Font Size Variables', 'blockera')}
 				description={__(
 					'Create and edit font size variables used for typography across the site.',
@@ -398,29 +380,3 @@ function FontSizesEditorScreenShell() {
 		</Flex>
 	);
 }
-
-function FontSizes({ screenSelector }: { screenSelector: string }) {
-	useOverrideNavigator({ panel: 'typography' });
-
-	const target = document.querySelector(screenSelector);
-
-	if (!target) {
-		return null;
-	}
-
-	return createPortal(
-		<div className="blockera-block-inspector-controls-wrapper">
-			<Navigator initialPath="/">
-				<NavItemScreen path="/">
-					<FontSizesScreen onClick={onClick} />
-				</NavItemScreen>
-				<NavItemScreen path="/typography/font-sizes">
-					<FontSizesEditorScreenShell />
-				</NavItemScreen>
-			</Navigator>
-		</div>,
-		target
-	);
-}
-
-export default FontSizes;

@@ -16,6 +16,7 @@ const GLOBAL_STYLES_NAME = 'globalStyles';
 /** Edited-entity `settings.*` dot paths for custom preset arrays. */
 export const MISSING_VARIABLE_CUSTOM_PRESET_PATH = {
 	'font-size': 'typography.fontSizes.custom',
+	'line-height': 'typography.lineHeights.custom',
 	color: 'color.palette.custom',
 	spacing: 'spacing.spacingSizes.custom',
 	'width-size': 'layout.widthSizes.custom',
@@ -293,6 +294,7 @@ export function assertRecreatePresetHasStoredValue(variableType, slug) {
 				case 'spacing':
 				case 'width-size':
 				case 'font-size':
+				case 'line-height':
 					expect(String(row.size ?? '').trim()).to.not.equal('');
 					break;
 				default:
