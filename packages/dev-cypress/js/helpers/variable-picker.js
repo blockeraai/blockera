@@ -4,6 +4,24 @@
 import { createPost } from './site-navigation';
 import { getSelectedBlock, getWPDataObject } from './editor';
 
+/** Opens paragraph → Style → Line Height → variable picker popover. */
+export function openParagraphLineHeightVariablePickerPopover() {
+	createPost();
+
+	cy.getBlock('default').type('Variable picker header add.', { delay: 0 });
+	cy.getByAriaControls('styles-view').click();
+
+	cy.getParentContainer('Line Height').within(() => {
+		cy.openValueAddon();
+	});
+
+	return cy
+		.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
+		.should('be.visible');
+}
+
 /** Opens paragraph → Style → Font Size → variable picker popover. */
 export function openParagraphFontSizeVariablePickerPopover() {
 	createPost();
@@ -357,6 +375,30 @@ export function savePresetEditPopoverNameAndSlug() {
 			.should('not.be.disabled')
 			.click({ force: true });
 	});
+}
+
+/** Line Height value addon must not show the missing-variable deleted state. */
+export function assertLineHeightControlVariableNotMissing() {
+	cy.getParentContainer('Line Height')
+		.first()
+		.within(() => {
+			cy.get('[data-test="value-addon-deleted"]').should('not.exist');
+			cy.contains('Missing variable').should('not.exist');
+		});
+}
+
+/**
+ * @param {string} expectedId Bound variable `settings.id`.
+ */
+export function assertSelectedBlockLineHeightVariableId(expectedId) {
+	cy.then({ timeout: 15000 }, () =>
+		getWPDataObject().then((data) => {
+			const lineHeight = getSelectedBlock(data, 'blockeraLineHeight');
+			expect(lineHeight.isValueAddon).to.equal(true);
+			expect(lineHeight.valueType).to.equal('variable');
+			expect(lineHeight.settings?.id).to.equal(expectedId);
+		})
+	);
 }
 
 /** Font Size value addon must not show the missing-variable deleted state. */
