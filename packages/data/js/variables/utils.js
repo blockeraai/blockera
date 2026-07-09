@@ -1,11 +1,11 @@
 // @flow
 
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
-import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import type { ValueAddon } from '../types/value-addon';
 import { isObject, isString } from '@blockera/utils';
-import { isValid } from '@blockera/controls/js/value-addons/utils';
+import { isValueAddonShape } from './value-addon-shape';
 
 /**
  * Internal dependencies
@@ -81,7 +81,7 @@ export function generateAttributeVarStringFromVA(
 		return valueAddon;
 	}
 
-	if (isValid(valueAddon)) {
+	if (isValueAddonShape(valueAddon)) {
 		//$FlowFixMe
 		let _reference: string = valueAddon?.settings?.reference?.type;
 

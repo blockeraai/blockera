@@ -83,6 +83,16 @@ export {
 	serializeGlobalStylePresetItemValue,
 } from './preset-variable-picker-payload';
 export {
+	isValueAddonShape,
+	resolveStoredScalarForCssDeclaration,
+} from './value-addon-shape';
+export { textShadowPresetItemsToCss } from './text-shadow-preset-css';
+export {
+	CSS_VAR_INFIX_TO_PRESET_VARIABLE_TYPE,
+	globalStylePresetSerializedValueToCss,
+	resolveThemeJsonPresetCssDeclarationValue,
+} from './theme-json-preset-css-declaration-value';
+export {
 	normalizePresetSize,
 	normalizeFontSizeFluid,
 	normalizeFontSizeThemeJsonPreset,
