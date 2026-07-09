@@ -70,7 +70,7 @@ export function lineHeightToWPCompatibility({
 	}
 
 	// Advanced css functions and units not supported by core.
-	if (newValue.endsWith('func')) {
+	if ('string' === typeof newValue && newValue.endsWith('func')) {
 		newValue = undefined;
 	}
 
