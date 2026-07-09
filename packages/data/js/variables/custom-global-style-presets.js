@@ -411,6 +411,9 @@ export const getCustomGlobalStylePresetVariables: (
 		case 'font-size':
 			return mapFontSizesCustom(features?.typography?.fontSizes?.custom);
 
+		case 'line-height':
+			return mapSpacingCustom(features?.typography?.lineHeights?.custom);
+
 		case 'linear-gradient':
 			return mapGradientsCustom(features?.color?.gradients?.custom, (g) =>
 				g.startsWith('linear-gradient')

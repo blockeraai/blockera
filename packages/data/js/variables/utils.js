@@ -18,6 +18,7 @@ import { getSpacingVAFromVarString } from './spacing';
 import type { VariableCategory } from './types';
 import { getBorderRadiusVAFromVarString } from './border-radius';
 import { getWidthSizeVAFromVarString } from './width-size';
+import { getLineHeightVAFromVarString } from './line-height';
 
 export function generateVariableString({
 	reference,
@@ -214,6 +215,7 @@ function getVAFromVarStringByType(): {
 			'width-size': getWidthSizeVAFromVarString,
 			color: getColorVAFromVarString,
 			'font-size': getFontSizeVAFromVarString,
+			'line-height': getLineHeightVAFromVarString,
 			'border-radius': getBorderRadiusVAFromVarString,
 			gradient: getGradientVAFromVarString,
 		};
@@ -239,6 +241,7 @@ function inferVariableCategoryFromCssVarValue(
 		[/^var\(--wp--style--global--(?:content-size|wide-size)/, 'width-size'],
 		[/^var\(--wp--preset--color--/, 'color'],
 		[/^var\(--wp--preset--font-size--/, 'font-size'],
+		[/^var\(--wp--preset--line-height--/, 'line-height'],
 		[/^var\(--wp--preset--gradient--/, 'gradient'],
 		[/^var\(--wp--preset--border-radius--/, 'border-radius'],
 		[/^var\(--wp--preset--text-shadow--/, 'text-shadow'],

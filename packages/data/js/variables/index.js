@@ -36,6 +36,14 @@ export {
 	getFontSizeVAFromVarString,
 } from './font-size';
 export {
+	getLineHeights,
+	getLineHeightBy,
+	getLineHeight,
+	getLineHeightVAStringFromId,
+	getLineHeightVAFromIdString,
+	getLineHeightVAFromVarString,
+} from './line-height';
+export {
 	getSpacings,
 	getSpacingBy,
 	getSpacing,

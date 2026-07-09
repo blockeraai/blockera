@@ -53,6 +53,10 @@ class JSON extends \WP_Theme_JSON {
 			'presets'        => null,
 			'defaultPresets' => null,
 		),
+		'typography' => array(
+			'lineHeights'        => null,
+			'defaultLineHeights' => null,
+		),
 	);
 
 	/**
@@ -110,6 +114,15 @@ class JSON extends \WP_Theme_JSON {
 			'css_vars'          => '--wp--preset--font-size--$slug',
 			'classes'           => array( '.has-$slug-font-size' => 'font-size' ),
 			'properties'        => array( 'font-size' ),
+		),
+		array(
+			'path'              => array( 'typography', 'lineHeights' ),
+			'prevent_override'  => array( 'typography', 'defaultLineHeights' ),
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--line-height--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'line-height' ),
 		),
 		array(
 			'path'              => array( 'typography', 'fontFamilies' ),

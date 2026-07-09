@@ -111,6 +111,11 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'font-size',
 		},
 		{
+			path: ['typography', 'lineHeights'],
+			valueKey: 'size',
+			cssVarInfix: 'line-height',
+		},
+		{
 			path: ['typography', 'fontFamilies'],
 			valueKey: 'fontFamily',
 			cssVarInfix: 'font-family',
@@ -482,6 +487,7 @@ export function normalizeThemeJsonPresetLeafForScalarUi(
 			}
 			return '';
 		case 'font-size':
+		case 'line-height':
 		case 'spacing':
 		case 'border-radius':
 		case 'dimension':
