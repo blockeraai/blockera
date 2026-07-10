@@ -667,7 +667,6 @@ if ( ! function_exists('blockera_get_icon_color_attr_value')) {
 	}
 }
 
-
 if ( ! function_exists( 'blockera_icon_block_uses_html_editable_rendering' ) ) {
 	/**
 	 * Whether the block injects icons as inline SVG on the frontend (EditBlockHTML path).
@@ -811,8 +810,9 @@ if ( ! function_exists('blockera_core_icon_render_frontend_html')) {
 	/**
 	 * Replace core/icon frontend markup with Blockera-managed SVG output.
 	 *
-	 * Runs on render_block_core/icon so icon rendering does not depend on blockeraPropsId
-	 * or the full Blockera render_block CSS pipeline.
+	 * Hooked on `render_block` (priority 10) so markup exists before Blockera's style
+	 * pipeline at priority 900. WP applies `render_block` before `render_block_{name}`,
+	 * so `render_block_core/icon` would run too late for CSS generation.
 	 *
 	 * @param string $html       HTML from WordPress core/icon render (may be empty).
 	 * @param array  $attributes Block attributes.
@@ -888,13 +888,19 @@ if ( ! function_exists('blockera_core_icon_register_navigation_hooks')) {
 			3
 		);
 
+		// Must run on `render_block` before Blockera styles (priority 900). WP fires
+		// `render_block` before `render_block_{name}`, so core/icon injection on the
+		// block-specific filter would leave HTML empty during CSS generation.
 		add_filter(
-			'render_block_core/icon',
+			'render_block',
 			static function ( $html, $parsed_block ): string {
-				// WP passes the parsed block array (attrs live under `attrs`), not flat attributes.
+				if ('core/icon' !== ( $parsed_block['blockName'] ?? '' )) {
+					return is_string($html) ? $html : '';
+				}
+
 				$attrs = is_array($parsed_block['attrs'] ?? null)
 					? $parsed_block['attrs']
-					: ( is_array($parsed_block) ? $parsed_block : [] );
+					: [];
 
 				return blockera_core_icon_render_frontend_html(
 					is_string($html) ? $html : '',
@@ -906,14 +912,16 @@ if ( ! function_exists('blockera_core_icon_register_navigation_hooks')) {
 		);
 
 		add_filter(
-			'render_block_core/icon',
-			static function ( $html ) {
-				blockera_core_icon_set_navigation_child_render(false);
+			'render_block',
+			static function ( $html, $parsed_block ) {
+				if ('core/icon' === ( $parsed_block['blockName'] ?? '' )) {
+					blockera_core_icon_set_navigation_child_render(false);
+				}
 
 				return $html;
 			},
 			999,
-			1
+			2
 		);
 	}
 }
