@@ -199,6 +199,10 @@ p.blockera-block.blockera-block-3 {
 	background-color: #00000024;
 }
 
+.blockera-block-3 :where(.blockera-block-3-child-1) {
+	background-color: #dfdfdf;
+}
+
 .blockera-block.blockera-block-4.wp-block-group {
 	background-color: #deedc7;
 	display: flex !important;
