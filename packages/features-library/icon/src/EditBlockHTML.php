@@ -343,6 +343,9 @@ class EditBlockHTML implements EditableBlockHTML {
             );
         }
 
+		// DomParser/libxml may lowercase SVG attrs; keep the canonical camelCase name.
+		$html = preg_replace( '/\bviewbox=/i', 'viewBox=', $html ) ?? $html;
+
         return $html;
     }
 
