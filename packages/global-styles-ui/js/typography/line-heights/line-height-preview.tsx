@@ -28,12 +28,16 @@ function LineHeightPreview({ lineHeight }: LineHeightPreviewProps) {
 	const previewStyle: CSSProperties = {
 		lineHeight: lineHeight.size,
 		fontFamily,
-		color: 'var(--blockera-controls-primary-color)',
+		'background-color':
+			'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, #fff 100%)',
+		display: 'inline-block',
+		width: '100%',
+		textAlign: 'center',
 	};
 
 	return (
-		<VariablePreview type="line-height" style={previewStyle}>
-			{__('Aa', 'blockera')}
+		<VariablePreview type="line-height">
+			<span style={previewStyle}>{__('Aa', 'blockera')}</span>
 		</VariablePreview>
 	);
 }
