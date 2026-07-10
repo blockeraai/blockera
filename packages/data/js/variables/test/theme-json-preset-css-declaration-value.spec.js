@@ -25,6 +25,18 @@ describe('resolveThemeJsonPresetCssDeclarationValue', () => {
 		).toBe('2px solid #336699');
 	});
 
+	it('defaults empty border style to solid when width and color are set', () => {
+		expect(
+			resolveThemeJsonPresetCssDeclarationValue(
+				{
+					slug: 'border-1',
+					border: { width: '10px', style: '', color: '#d53a3a' },
+				},
+				'border'
+			)
+		).toBe('10px solid #d53a3a');
+	});
+
 	it('prefers canonical text-shadow string', () => {
 		expect(
 			resolveThemeJsonPresetCssDeclarationValue(

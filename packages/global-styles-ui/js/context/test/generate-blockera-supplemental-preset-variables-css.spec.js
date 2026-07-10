@@ -45,4 +45,27 @@ describe('generateBlockeraSupplementalPresetVariablesCss', () => {
 			'--wp--preset--border--accent: 1px solid #112233'
 		);
 	});
+
+	it('defaults empty border style to solid in preset variables CSS', () => {
+		const css = generateBlockeraSupplementalPresetVariablesCss({
+			border: {
+				presets: {
+					custom: [
+						{
+							slug: 'border-1',
+							border: {
+								width: '10px',
+								style: '',
+								color: '#d53a3a',
+							},
+						},
+					],
+				},
+			},
+		});
+
+		expect(css).toContain(
+			'--wp--preset--border--border-1: 10px solid #d53a3a'
+		);
+	});
 });

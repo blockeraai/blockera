@@ -107,19 +107,14 @@ function borderSerializedValueToCss(serialized: mixed): string {
 	}
 	const border = (serialized: Object);
 	const width = String(border.width ?? '').trim();
-	const style = String(border.style ?? '').trim();
+	if (!width) {
+		return '';
+	}
+	// Match Border::sideToCssShorthand / box-border-generator: width without style → solid.
+	const style = String(border.style ?? '').trim() || 'solid';
 	const color = resolveBorderColorString(border.color);
-	const parts: Array<string> = [];
-	if (width) {
-		parts.push(width);
-	}
-	if (style) {
-		parts.push(style);
-	}
-	if (color) {
-		parts.push(color);
-	}
-	return parts.join(' ');
+
+	return color ? `${width} ${style} ${color}` : `${width} ${style}`;
 }
 
 function transitionItemsToCss(items: mixed): string {
