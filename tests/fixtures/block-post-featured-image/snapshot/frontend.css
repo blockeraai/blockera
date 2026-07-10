@@ -98,10 +98,10 @@
 }
 
 .blockera-block-1 {
-	aspect-ratio: 9/16;
-	width: 300px;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+	aspect-ratio: 9/16;
+	width: 300px;
 }
