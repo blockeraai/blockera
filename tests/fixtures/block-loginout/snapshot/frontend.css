@@ -42,18 +42,8 @@ html:root body :where(.blockera-block.blockera-block-1) .login-remember label {
 	padding: 5px 10px 5px 10px;
 }
 
-html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-button__link {
 	color: #4d0000;
-	display: block !important;
-	width: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: stretch;
-	height: 30px;
-	background-color: #dd4b4b;
-	border: 1px solid #00000045;
-	border-radius: 5px;
-	transition: all 500ms ease 0ms;
 }
 
 html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) {
@@ -78,6 +68,19 @@ html:root body :where(.blockera-block.blockera-block-1) form::after {
 	padding: 5px 10px 5px 10px;
 	border-radius: 5px;
 	background-color: #00000036;
+}
+
+html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary {
+	display: block !important;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	height: 30px;
+	background-color: #dd4b4b;
+	border: 1px solid #00000045;
+	border-radius: 5px;
+	transition: all 500ms ease 0ms;
 }
 
 html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary:hover {
