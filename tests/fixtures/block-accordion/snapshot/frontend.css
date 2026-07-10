@@ -43,7 +43,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordi
 	background-color: #ff1515;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-item) {
 		border-radius: 10px;
 	}

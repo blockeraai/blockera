@@ -1,3 +1,23 @@
+:where(body) {
+	margin: 0;
+}
+
+.wp-site-blocks > .alignleft {
+	float: left;
+	margin-right: 2em;
+}
+
+.wp-site-blocks > .alignright {
+	float: right;
+	margin-left: 2em;
+}
+
+.wp-site-blocks > .aligncenter {
+	justify-content: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 :root :where(p.is-style-akbar--1){
 	background-color: #eeeeee;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
@@ -8,6 +28,26 @@
 	line-height: 1.2;
 	font-size: 20px;
 	background-color: #eeeeee;
+}
+
+:where(body) {
+	margin: 0;
+}
+
+.wp-site-blocks > .alignleft {
+	float: left;
+	margin-right: 2em;
+}
+
+.wp-site-blocks > .alignright {
+	float: right;
+	margin-left: 2em;
+}
+
+.wp-site-blocks > .aligncenter {
+	justify-content: center;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 :root :where(.is-style-text-annotation--2 a:where(:not(.wp-element-button))){
