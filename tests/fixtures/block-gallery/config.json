@@ -8,6 +8,10 @@
 		{
 			"search": "data-wp-context=\"\\{&quot;imageId&quot;:&quot;[^&]+&quot;\\}\"",
 			"replace": "data-wp-context=\"{&quot;imageId&quot;:&quot;image-id&quot;}\""
+		},
+		{
+			"search": "data-wp-context=\"\\{&quot;galleryId&quot;:&quot;[^&]+&quot;\\}\"",
+			"replace": "data-wp-context=\"{&quot;galleryId&quot;:&quot;gallery-id&quot;}\""
 		}
 	]
 }
