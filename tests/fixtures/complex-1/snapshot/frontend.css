@@ -94,7 +94,7 @@ html:root body :where(.blockera-block.blockera-block--1) .wp-block-list:hover {
 	color: #512600;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block--1) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 		color: #34d200;
 	}

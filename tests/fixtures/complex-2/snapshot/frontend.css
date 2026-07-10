@@ -24,7 +24,7 @@
 	margin-block-start: 0 !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-group {
 		flex-direction: column;
 		gap: 20px;
@@ -52,7 +52,7 @@ p.blockera-block.blockera-block-4 {
 	text-align: right;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-4 {
 		flex: 1 1 0%;
 		text-align: center;
@@ -68,7 +68,7 @@ p.blockera-block.blockera-block-4 {
 	padding: 40px 30px 20px 30px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-5.wp-block-columns {
 		gap: 50px;
 		padding: 60px 30px 20px 30px;
@@ -124,7 +124,7 @@ html:root body :where(.blockera-block.blockera-block-9) a:not(.wp-element-button
 	overflow: hidden;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-10.wp-block-column {
 		flex-basis: 150px !important;
 		border-radius: 10px;
@@ -145,7 +145,7 @@ html:root body :where(.blockera-block.blockera-block-9) a:not(.wp-element-button
 	text-align: right;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-11.wp-block-heading {
 		text-align: center;
 		padding: 13px 0 13px 0;
@@ -167,7 +167,7 @@ html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-butto
 	color: #fcfcfc;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-12 {
 		text-align: center;
 	}
@@ -178,8 +178,8 @@ html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-butto
 	background-color: #5577ff;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: flex-end !important;
-	align-items: center !important;
+	align-items: flex-end !important;
+	justify-content: center !important;
 	gap: 10px;
 	padding: 20px 20px 20px 20px;
 	margin-left: -30px !important;
@@ -189,7 +189,7 @@ html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-butto
 	margin-block-start: 0 !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-13.wp-block-column {
 		min-height: 500px;
 		padding: 20px 20px 20px 20px;

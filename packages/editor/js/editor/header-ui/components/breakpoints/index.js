@@ -263,7 +263,9 @@ export const BreakpointsUI = ({
 			}
 		};
 
-		window.addEventListener('message', handleMessage, { once: true });
+		// Persist for the effect lifetime — `{ once: true }` was consumed by
+		// unrelated window messages before the canvas header close click.
+		window.addEventListener('message', handleMessage);
 		return () => window.removeEventListener('message', handleMessage);
 	}, [handleOnClick]);
 

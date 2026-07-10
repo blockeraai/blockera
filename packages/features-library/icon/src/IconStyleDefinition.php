@@ -29,6 +29,15 @@ class IconStyleDefinition extends BaseStyleDefinition {
 
 		switch ($cssProperty) {
 			case '--blockera--icon--url':
+				// Inline SVG blocks inject <svg> via EditBlockHTML / core/icon render; URL vars are editor-only.
+				$block_name = $this->block['blockName'] ?? '';
+				if (
+					'core/icon' === $block_name
+					|| blockera_icon_block_uses_html_editable_rendering( $block_name )
+				) {
+					break;
+				}
+
 				$decoded_svg = '';
 
 				if (! empty($value['svgString']) && is_string($value['svgString'])) {
@@ -49,16 +58,17 @@ class IconStyleDefinition extends BaseStyleDefinition {
 					$encoded_svg = rawurlencode($decoded_svg);
 					$icon_url    = 'url("data:image/svg+xml,' . $encoded_svg . '")';
 
+					// Keep --url as the single SVG payload; mask/bg reference it (no duplicated data URL).
 					$this->setDeclaration('--blockera--icon--url', $icon_url);
 
 					if (blockera_svg_has_preserved_colors($decoded_svg)) {
-						$this->setDeclaration('--blockera--icon--bg-image', $icon_url);
+						$this->setDeclaration('--blockera--icon--bg-image', 'var(--blockera--icon--url)');
 						$this->setDeclaration('--blockera--icon--mask-image', 'none');
 						$this->setDeclaration('--blockera--icon--editor-icon-bg', 'transparent');
 					} else {
 						// Reset inherited multi-color vars from ancestor list blocks.
 						$this->setDeclaration('--blockera--icon--bg-image', 'none');
-						$this->setDeclaration('--blockera--icon--mask-image', $icon_url);
+						$this->setDeclaration('--blockera--icon--mask-image', 'var(--blockera--icon--url)');
 						$this->setDeclaration(
 							'--blockera--icon--editor-icon-bg',
 							'var(--blockera--icon--color, currentColor)'

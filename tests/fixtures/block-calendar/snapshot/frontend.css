@@ -60,7 +60,7 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:activ
 	background-color: #00067c;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-calendar {
 		border-radius: 10px;
 	}
@@ -82,7 +82,7 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:activ
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-calendar::before {
 		border-radius: 10px;
 		content: "Before";
@@ -100,7 +100,7 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:activ
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-calendar::after {
 		border-radius: 10px;
 		content: "After";

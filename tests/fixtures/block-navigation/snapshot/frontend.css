@@ -3,7 +3,6 @@
 	border: 1px solid #00000036;
 	border-radius: 5px;
 	transition: all 500ms ease 0ms;
-	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20data-prefix%3D%22fas%22%20data-icon%3D%22house-chimney%22%20class%3D%22svg-inline--fa%20fa-house-chimney%20%22%20role%3D%22img%22%20viewBox%3D%220%200%20512%20512%22%20aria-hidden%3D%22true%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20style%3D%22width%3A%2020px%3B%20height%3A%2020px%3B%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M234.2%208.6c12.3-11.4%2031.3-11.4%2043.5%200L368%2092.3%20368%2080c0-17.7%2014.3-32%2032-32l32%200c17.7%200%2032%2014.3%2032%2032l0%20101.5%2037.8%2035.1c9.6%209%2012.8%2022.9%208%2035.1S493.2%20272%20480%20272l-16%200%200%20176c0%2035.3-28.7%2064-64%2064l-288%200c-35.3%200-64-28.7-64-64l0-176-16%200c-13.2%200-25-8.1-29.8-20.3s-1.6-26.2%208-35.1l224-208zM240%20320c-26.5%200-48%2021.5-48%2048l0%2096%20128%200%200-96c0-26.5-21.5-48-48-48l-32%200z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--size: 14px;
 	--blockera--icon--color: #ff0000;
 	--blockera--icon--rotate: 270deg;
@@ -24,7 +23,6 @@
 	border: 1px solid #00000036;
 	border-radius: 5px;
 	transition: all 200ms ease 0ms;
-	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20data-prefix%3D%22fas%22%20data-icon%3D%22house-chimney%22%20class%3D%22svg-inline--fa%20fa-house-chimney%20%22%20role%3D%22img%22%20viewBox%3D%220%200%20512%20512%22%20aria-hidden%3D%22true%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20style%3D%22width%3A%2020px%3B%20height%3A%2020px%3B%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M234.2%208.6c12.3-11.4%2031.3-11.4%2043.5%200L368%2092.3%20368%2080c0-17.7%2014.3-32%2032-32l32%200c17.7%200%2032%2014.3%2032%2032l0%20101.5%2037.8%2035.1c9.6%209%2012.8%2022.9%208%2035.1S493.2%20272%20480%20272l-16%200%200%20176c0%2035.3-28.7%2064-64%2064l-288%200c-35.3%200-64-28.7-64-64l0-176-16%200c-13.2%200-25-8.1-29.8-20.3s-1.6-26.2%208-35.1l224-208zM240%20320c-26.5%200-48%2021.5-48%2048l0%2096%20128%200%200-96c0-26.5-21.5-48-48-48l-32%200z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--size: 14px;
 	padding: 2px 10px 2px 10px;
 	font-weight: 600;
@@ -136,7 +134,6 @@ html:root body :where(.blockera-block.blockera-block-5.wp-block-navigation-link:
 	border: 1px solid #00000045;
 	border-radius: 10px;
 	transition: all 300ms ease 0ms;
-	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M4%2020h8v-1.5H4V20zM18.9%203.5c-.6-.6-1.5-.6-2.1%200l-7.2%207.2c-.4-.1-.7%200-1.1.1-.5.2-1.5.7-1.9%202.2-.4%201.7-.8%202.2-1.1%202.7-.1.1-.2.3-.3.4l-.6%201.1H6c2%200%203.4-.4%204.7-1.4.8-.6%201.2-1.4%201.3-2.3%200-.3%200-.5-.1-.7L19%205.7c.5-.6.5-1.6-.1-2.2zM9.7%2014.7c-.7.5-1.5.8-2.4%201%20.2-.5.5-1.2.8-2.3.2-.6.4-1%20.8-1.1.5-.1%201%20.1%201.3.3.2.2.3.5.2.8%200%20.3-.1.9-.7%201.3z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	padding: 4px 15px 4px 15px;
 	font-weight: 700;
 	font-style: normal;
@@ -269,7 +266,6 @@ html:root body :where(.blockera-block.blockera-block-8.wp-block-navigation-subme
 .blockera-block.blockera-block-10.wp-block-navigation-submenu:is(li) {
 	background-color: #b6ffc0;
 	border-radius: 5px;
-	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M13.969%204.39A5.088%205.088%200%200%200%2012%204C9.2%204%207%206.2%207%209v2.5c0%201.353-.17%202.368-.976%203-.267.209-.602.376-1.024.5v1h14v-1c-.422-.124-.757-.291-1.024-.5-.806-.632-.976-1.647-.976-3V11c-.53%200-1.037-.103-1.5-.29v.79c0%20.93.066%201.98.515%202.897l.053.103H7.932l.053-.103c.449-.917.515-1.967.515-2.897V9c0-1.972%201.528-3.5%203.5-3.5.43%200%20.838.072%201.214.206.167-.488.425-.933.755-1.316Zm-3.961%2013.618c0-.176.023-.346.065-.508h3.854A1.996%201.996%200%200%201%2012%2020a1.991%201.991%200%200%201-1.992-1.992Z%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%227%22%20r%3D%222.5%22%3E%3C%2Fcircle%3E%3C%2Fsvg%3E");
 	--blockera--icon--size: 20px;
 	position: relative;
 	z-index: 10;
@@ -289,6 +285,46 @@ html:root body :where(.blockera-block.blockera-block-10.wp-block-navigation-subm
 	background-color: #3dff32;
 }
 
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li) {
+	background-color: #ffd6d6;
+	width: 100%;
+	padding: 10px 10px 10px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) :is(strong, b) {
+	background-color: #d9d900;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) :is(em, i) {
+	background-color: #ff3e3e;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) kbd {
+	background-color: #72ff27;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) code {
+	background-color: #1b95ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) span:not([data-rich-text-placeholder], .wp-block-navigation-item__label, .wp-block-navigation__submenu-icon) {
+	background-color: #0060ff;
+	color: #f6eded;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) :is(mark, mark[class]) {
+	background-color: #ff06c9;
+}
+
+.blockera-block-11 {
+	background-color: #ffd6d6;
+	background-color: #ffd6d6;
+}
+
+.blockera-block-11 {
+	background-color: #ffd6d6;
+}
+
 .blockera-block-10 {
 	background-color: #b6ffc0;
 	background-color: #b6ffc0;
@@ -306,10 +342,10 @@ html:root body :where(.blockera-block.blockera-block-10.wp-block-navigation-subm
 
 .blockera-block-8 {
 	background-color: #ffcece;
-	background-color: #ffcece;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
 	font-weight: 600;
+	background-color: #ffcece;
 }
 
 .blockera-block-8 {

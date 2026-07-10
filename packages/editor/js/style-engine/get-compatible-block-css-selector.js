@@ -1433,11 +1433,12 @@ const appendRootBlockCssSelector = (
 	}
 
 	// Descendant element selectors inside the block wrapper root (e.g. `li::before`).
+	// Keep a descendant combinator between root and the trimmed child selector.
 	if (
 		trimmedLeadingSpaceForBlockWrapper &&
 		!/\bwp-block-/.test(normalizedSelector.split(/[\s>+~]/)[0])
 	) {
-		return `${root}${normalizedSelector}`;
+		return `${root} ${normalizedSelector}`;
 	}
 
 	// Assume received selector is another reference to root, so we should concat together.

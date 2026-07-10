@@ -64,7 +64,9 @@ jobs:
 
         env:
             WP_ENV_PHP_VERSION: ${{ matrix.php }}
-            WP_ENV_CORE: ${{ matrix.wordpress == '' && 'WordPress/WordPress' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
+            # Empty matrix.wordpress = latest stable release (same as local .wp-env / base.json).
+            # Do not use WordPress/WordPress (GitHub trunk) — trunk drifts from snapshot baselines.
+            WP_ENV_CORE: ${{ matrix.wordpress == '' && 'https://wordpress.org/wordpress-latest.zip' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
 
         steps:
             - name: Checkout Repository

@@ -281,6 +281,55 @@ if ( ! function_exists( 'blockera_append_selector_prefix' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_is_bare_html_element_selector' ) ) {
+
+	/**
+	 * Whether a selector is a bare HTML element tag (e.g. `p`, `h1`).
+	 *
+	 * @param string $selector The selector to check.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_bare_html_element_selector( string $selector ): bool {
+
+		return (bool) preg_match( '/^[a-z][a-z0-9-]*$/i', trim( $selector ) );
+	}
+}
+
+if ( ! function_exists( 'blockera_merge_unique_selector_into_inner_block_root' ) ) {
+
+	/**
+	 * Scope an inner-block root to the Blockera unique class.
+	 *
+	 * @param string $root             The block-type root selector.
+	 * @param string $unique_selector  The Blockera unique class selector.
+	 * @param array  $args             Selector arguments.
+	 *
+	 * @return string
+	 */
+	function blockera_merge_unique_selector_into_inner_block_root( string $root, string $unique_selector, array $args ): string {
+
+		if ( blockera_is_bare_html_element_selector( $root ) ) {
+			return $unique_selector;
+		}
+
+		$block_part = blockera_resolve_block_css_part( $root, $unique_selector, $args );
+
+		if ( null !== $block_part ) {
+			return \Blockera\Utils\Utils::modifySelectorPos(
+				$root,
+				$block_part,
+				[
+					'prefix' => $unique_selector,
+					'suffix' => '',
+				]
+			);
+		}
+
+		return $unique_selector;
+	}
+}
+
 if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 
 	/**
@@ -319,35 +368,42 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 		}
 
 		/*
-		 * Compound block-type roots (e.g. `.wp-block-list > li`, `.wp-block-table > table`) describe
-		 * element shape only. Inner block styles must scope to the blockera unique class on the
-		 * compound that actually carries `className` in rendered HTML:
-		 * - core/list-item: unique class on the child `li`
-		 * - core/table: unique class on the wrapper figure (`.wp-block-table`)
+		 * Block-type roots (e.g. `p`, `.wp-block-button .wp-block-button__link`, `.wp-block-list > li`)
+		 * describe element shape only. Inner block styles must scope to the blockera unique class on
+		 * the instance being edited:
+		 * - bare tags (core/paragraph `p`): use the unique class as the :where() root
+		 * - compound `>` roots: unique class on wrapper or last compound (list-item, table)
+		 * - class/descendant roots: merge unique class into the wp-block segment (core/button, etc.)
 		 */
 		$unique_selector = $args['blockera-unique-selector'] ?? '';
-		if (
-			'' !== trim( $unique_selector )
-			&& ! str_contains( $root, $unique_selector )
-			&& preg_match( '/\s>\s/', $root )
-		) {
-			$block_name = (string) ( $args['block-name'] ?? '' );
+		if ( '' !== trim( $unique_selector ) && ! str_contains( $root, $unique_selector ) ) {
+			if ( preg_match( '/\s>\s/', $root ) ) {
+				$block_name = (string) ( $args['block-name'] ?? '' );
 
-			if ( blockera_compound_root_classes_on_wrapper(
-				[
-					'root'            => $root,
-					'full-block-name' => $block_name,
-					'block-name'      => str_replace( [ 'core/', '/' ], [ '', '-' ], $block_name ),
-				]
-			) ) {
-				$compound_parts = preg_split( '/\s>\s/', $root, 2 );
-				$wrapper        = trim( (string) ( $compound_parts[0] ?? '' ) );
-				$child          = trim( (string) ( $compound_parts[1] ?? '' ) );
+				if ( blockera_compound_root_classes_on_wrapper(
+					[
+						'root'            => $root,
+						'full-block-name' => $block_name,
+						'block-name'      => str_replace( [ 'core/', '/' ], [ '', '-' ], $block_name ),
+					]
+				) ) {
+					$compound_parts = preg_split( '/\s>\s/', $root, 2 );
+					$wrapper        = trim( (string) ( $compound_parts[0] ?? '' ) );
+					$child          = trim( (string) ( $compound_parts[1] ?? '' ) );
 
-				$root = $wrapper . $unique_selector . ( '' !== $child ? ' > ' . $child : '' );
+					$root = $wrapper . $unique_selector . ( '' !== $child ? ' > ' . $child : '' );
+				} else {
+					$parts = preg_split( '/(?:::|:)/', $root, 2 );
+					$root  = $parts[0] . $unique_selector;
+				}
 			} else {
-				$parts = preg_split( '/(?:::|:)/', $root, 2 );
-				$root  = $parts[0] . $unique_selector;
+				$root = blockera_merge_unique_selector_into_inner_block_root(
+					$root,
+					$unique_selector,
+					[
+						'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ?? '' ) ),
+					]
+				);
 			}
 		}
 

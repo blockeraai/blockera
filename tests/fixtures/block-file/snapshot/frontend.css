@@ -68,7 +68,7 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-element-button {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-file::before {
 		display: inline-block !important;
 		content: "Before";
@@ -87,7 +87,7 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-element-button {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-file::after {
 		display: inline-block !important;
 		content: "After";
@@ -136,7 +136,7 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-element-button:activ
 	background-color: #805603;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-file {
 		flex-direction: column;
 		align-items: stretch !important;
@@ -202,7 +202,7 @@ html:root body :where(.blockera-block.blockera-block-4) .wp-element-button {
 	border-radius: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-file {
 		flex-direction: column;
 		align-items: stretch !important;

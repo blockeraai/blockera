@@ -81,8 +81,10 @@ class Cache {
 			throw new \Exception( __( 'Key is required on setMetaCache method', 'blockera' ) );
 		}
 
+		// update_post_meta() always wp_unslash()es the value. Slash first so backslashes
+		// from serialize_block_attributes() (e.g. \u002d for "--" in className) survive.
 		// update_post_meta returns int|bool; cast to bool for consistency.
-		return (bool) update_post_meta( $post_id, $this->getCacheKey( $key ), $cache );
+		return (bool) update_post_meta( $post_id, $this->getCacheKey( $key ), wp_slash( $cache ) );
 	}
 
 	/**

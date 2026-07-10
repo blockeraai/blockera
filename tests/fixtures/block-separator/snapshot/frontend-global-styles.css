@@ -243,7 +243,6 @@ body{
 
 a:where(:not(.wp-element-button)){
 	color: currentColor;
-	text-decoration: underline;
 }
 
 :root :where(a:where(:not(.wp-element-button)):hover){
