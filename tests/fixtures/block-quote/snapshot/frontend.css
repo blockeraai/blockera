@@ -54,10 +54,6 @@ html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element
 	background-color: #00acff;
 }
 
-.blockera-block-1 :where(.blockera-block-1-child-1) {
-	background-color: #dfdfdf;
-}
-
 .blockera-block.blockera-block-2.wp-block-quote {
 	background-color: #ffdcdc;
 }
