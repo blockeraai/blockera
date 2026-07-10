@@ -99,17 +99,6 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 
 }
 
-:where(.blockera-block.blockera-block-1) {
-	border-color: #00a80e;
-	border-width: 2px;
-	border-radius: 10px;
-	background-color: #c8ffb1;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
 .blockera-block.blockera-block-2.wp-block-social-links {
 	background-color: #ffd6d6;
 	border-radius: 10px;
@@ -147,21 +136,6 @@ html:root body :where(.blockera-block.blockera-block-2) li.wp-block-social-link:
 	background-color: #ff0000;
 }
 
-:where(.blockera-block.blockera-block-2) {
-	border-radius: 10px;
-	background-color: #ffd6d6;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
-:where(.blockera-block.blockera-block-2 li.wp-social-link.wp-social-link-wordpress) {
-	background-color: #000000;
-}
-
-:where(.blockera-block.blockera-block-2 li.wp-social-link.wp-social-link-whatsapp) {
-	background-color: #000000;
-}
 html:root body :where(.blockera-block.blockera-block-3) svg {
 	display: block !important;
 	background-color: #b11a1a;
