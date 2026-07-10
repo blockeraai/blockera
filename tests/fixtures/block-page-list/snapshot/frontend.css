@@ -158,6 +158,9 @@ html:root body :where(.blockera-block.blockera-block-1) :where(li)::after {
 
 .blockera-block.blockera-block-2.wp-block-page-list {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%28255%2C%20163%2C%20163%29%3B%20fill%3A%20rgb%28255%2C%20163%2C%20163%29%3B%20width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M6%205V18.5911L12%2013.8473L18%2018.5911V5H6Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+	--blockera--icon--bg-image: var(--blockera--icon--url);
+	--blockera--icon--mask-image: none;
+	--blockera--icon--editor-icon-bg: transparent;
 	--blockera--icon--color: #ffa3a3;
 	--blockera--icon--rotate: 270deg;
 	--blockera--icon--flip-vertical: -1;
@@ -183,6 +186,9 @@ html:root body :where(.blockera-block.blockera-block-2) :where(li.current-menu-i
 
 .blockera-block.blockera-block-3.wp-block-page-list {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%28255%2C%200%2C%200%29%3B%20fill%3A%20rgb%28255%2C%200%2C%200%29%3B%20width%3A%2024px%3B%20height%3A%2024px%3B%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M8.95%2011.25H4v1.5h4.95v4.5H13V18c0%201.1.9%202%202%202h3c1.1%200%202-.9%202-2v-3c0-1.1-.9-2-2-2h-3c-1.1%200-2%20.9-2%202v.75h-2.55v-7.5H13V9c0%201.1.9%202%202%202h3c1.1%200%202-.9%202-2V6c0-1.1-.9-2-2-2h-3c-1.1%200-2%20.9-2%202v.75H8.95v4.5ZM14.5%2015v3c0%20.3.2.5.5.5h3c.3%200%20.5-.2.5-.5v-3c0-.3-.2-.5-.5-.5h-3c-.3%200-.5.2-.5.5Zm0-6V6c0-.3.2-.5.5-.5h3c.3%200%20.5.2.5.5v3c0%20.3-.2.5-.5.5h-3c-.3%200-.5-.2-.5-.5Z%22%20clip-rule%3D%22evenodd%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+	--blockera--icon--bg-image: var(--blockera--icon--url);
+	--blockera--icon--mask-image: none;
+	--blockera--icon--editor-icon-bg: transparent;
 	--blockera--icon--gap: 30px;
 	--blockera--icon--size: 24px;
 	--blockera--icon--color: #ff0000;
