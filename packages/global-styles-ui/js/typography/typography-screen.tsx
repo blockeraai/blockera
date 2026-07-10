@@ -34,7 +34,7 @@ function TypographyScreen({
 			gap={'12px'}
 			className="blockera-typography-panel blockera-typography-hub"
 		>
-			<Subtitle level={3}>{__('Typography', 'blockera')}</Subtitle>
+			<Subtitle level={3}>{__('Variables', 'blockera')}</Subtitle>
 
 			<ItemGroup isBordered isSeparated>
 				<NavigationButtonAsItem
