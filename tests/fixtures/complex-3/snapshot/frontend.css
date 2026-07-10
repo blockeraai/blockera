@@ -16,8 +16,8 @@
 	box-shadow: 15px 15px 0 0 #5577ff;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
-	align-items: flex-end !important;
+	align-items: center !important;
+	justify-content: flex-end !important;
 	gap: 20px;
 	flex-wrap: nowrap !important;
 	padding: 20px 30px 20px 30px;
@@ -58,7 +58,7 @@ p.blockera-block.blockera-block-4 {
 	letter-spacing: 0;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-4 {
 		min-width: fit-content;
 		font-size: 1em;
@@ -102,11 +102,11 @@ p.blockera-block.blockera-block-5 {
 	margin-block-start: 0 !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-7.wp-block-group {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 	}
 
 }
@@ -155,8 +155,8 @@ html:root body :where(.blockera-block.blockera-block-11) a:not(.wp-element-butto
 	border-radius: 15px;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
 	align-items: center !important;
+	justify-content: center !important;
 	width: 30%;
 	padding: 10px 10px 10px 10px;
 }
@@ -178,8 +178,8 @@ html:root body :where(.blockera-block.blockera-block-13) a:not(.wp-element-butto
 	flex-grow: 1;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
-	align-items: flex-end !important;
+	align-items: center !important;
+	justify-content: flex-end !important;
 	padding: 10px 10px 10px 10px;
 	margin-right: 50px !important;
 	font-weight: 1000;
@@ -232,7 +232,7 @@ html:root body :where(.blockera-block.blockera-block-16) :where(p) {
 	width: 50%;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-16) :where(p) {
 		width: 100%;
 		width: -moz-available;
@@ -268,11 +268,11 @@ html:root body :where(.blockera-block.blockera-block-18) :where(p) {
 	margin-bottom: 20px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-18.wp-block-group {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 	}
 
 }

@@ -84,7 +84,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 	padding: 5px 10px 5px 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-pullquote {
 		flex-direction: column;
 		align-items: stretch !important;
@@ -94,8 +94,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 
 	html:root body :where(.blockera-block.blockera-block-2) cite {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 20px;
 		border-radius: 10px;
 	}
@@ -136,7 +136,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-pullquote::before {
 		width: 100%;
 		width: -moz-available;
@@ -156,7 +156,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-pullquote::after {
 		width: 100%;
 		width: -moz-available;

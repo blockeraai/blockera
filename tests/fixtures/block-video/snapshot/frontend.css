@@ -18,7 +18,7 @@ html:root body :where(.blockera-block.blockera-block-1) figcaption.wp-element-ca
 	border-radius: 31px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1 video {
 		aspect-ratio: 16/9;
 		object-fit: cover;
@@ -58,7 +58,7 @@ html:root body :where(.blockera-block.blockera-block-1):hover figcaption.wp-elem
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-video::before {
 		margin-bottom: 0;
 		border-radius: 5px;
@@ -76,7 +76,7 @@ html:root body :where(.blockera-block.blockera-block-1):hover figcaption.wp-elem
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-video::after {
 		margin-top: 0;
 		border-radius: 5px;

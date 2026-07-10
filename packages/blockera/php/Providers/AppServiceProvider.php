@@ -307,8 +307,14 @@ class AppServiceProvider extends ServiceProvider {
 		add_filter(
 			'render_block',
 			static function( string $html, array $block) use ( $blockera, $render_instance): string {
-				// Fast empty check without full trim.
-				if ('' === ltrim($html) || 'core/null' === $block['blockName']) {
+				if ('core/null' === ( $block['blockName'] ?? '' )) {
+					return $html;
+				}
+
+				// Skip empty markup unless this is a Blockera-supported block.
+				// Some blocks (e.g. core/icon) may still be empty here when a later
+				// same-filter callback injects HTML; styles must still be emitted.
+				if ('' === ltrim($html) && ! blockera_is_supported_block($block)) {
 					return $html;
 				}
 

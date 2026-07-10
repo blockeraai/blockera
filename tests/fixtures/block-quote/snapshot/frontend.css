@@ -54,10 +54,6 @@ html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element
 	background-color: #00acff;
 }
 
-.blockera-block-1 :where(.blockera-block-1-child-1) {
-	background-color: #dfdfdf;
-}
-
 .blockera-block.blockera-block-2.wp-block-quote {
 	background-color: #ffdcdc;
 }
@@ -128,7 +124,7 @@ html:root body :where(.blockera-block.blockera-block-2) cite::after {
 	border-radius: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-quote {
 		border-top: 10px solid #ff0000;
 		border-left: 0px solid;
@@ -152,8 +148,8 @@ html:root body :where(.blockera-block.blockera-block-2) cite::after {
 	html:root body :where(.blockera-block.blockera-block-2) cite {
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 		padding: 15px 15px 15px 15px;
 		border-radius: 10px;

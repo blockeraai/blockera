@@ -18,7 +18,7 @@
 	height: 120px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure {
 		padding: 20px 20px 20px 20px;
 	}
@@ -44,7 +44,7 @@
 	border-radius: 100px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover,
 	.blockera-block.blockera-block-1.wp-block-audio audio:hover {
 		border-radius: 10px;
@@ -72,7 +72,7 @@
 	height: 36px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-audio {
 		display: flex !important;
 		flex-direction: column;
@@ -101,7 +101,7 @@
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-audio::before {
 		align-self: flex-end;
 		border-radius: 10px;
@@ -119,7 +119,7 @@
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-audio::after {
 		border-radius: 10px;
 		content: "After";
@@ -174,7 +174,7 @@ html:root body :where(.blockera-block.blockera-block-4) figcaption {
 	justify-content: center !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure,
 	.blockera-block.blockera-block-4.wp-block-audio audio {
 		border-radius: 10px;
@@ -194,7 +194,7 @@ html:root body :where(.blockera-block.blockera-block-4):hover figcaption {
 	background-color: #1a9480;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure:hover {
 		background-color: #5adfc9;
 	}

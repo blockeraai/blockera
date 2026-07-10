@@ -543,6 +543,26 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 	}
 
+	public function testParagraphInnerBlockLinkSelectorScopesToUniqueClass() {
+
+		$result = blockera_get_inner_block_state_selector(
+			'a:not(.wp-element-button)',
+			[
+				'block-name'               => 'core/paragraph',
+				'block-type'               => 'elements/link',
+				'root'                     => 'p',
+				'blockera-unique-selector' => '.blockera-block.blockera-block-7',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+			]
+		);
+
+		$this->assertSame(
+			'html:root body :where(.blockera-block.blockera-block-7) a:not(.wp-element-button)',
+			$result
+		);
+	}
+
 	public function testListItemBackgroundClipSelectorAppendsUniqueClassOnLastCompound(): void {
 
 		$selectors = blockera_get_block_type_property( 'core/list-item', 'selectors' );
@@ -644,10 +664,9 @@ class TestHelpers extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Paragraph inner span must not run append_root for blockeraFontColor.
-	 * str_replace('p', ...) would corrupt [data-rich-text-placeholder].
+	 * Paragraph inner span must scope to the blockera unique class, not the bare `p` tag.
 	 */
-	public function testInnerBlockSpanFontColorSelectorSkipsAppendRoot(): void {
+	public function testInnerBlockSpanFontColorSelectorScopesToUniqueClass(): void {
 
 		$selectors = array_merge(
 			$this->selectors,
@@ -682,7 +701,69 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 
 		$this->assertSame(
-			'html:root body :where(p) span:not([data-rich-text-placeholder])',
+			'html:root body :where(.blockera-block.blockera-block--phggmy) span:not([data-rich-text-placeholder])',
+			$result
+		);
+	}
+
+	/**
+	 * Paragraph inner link must scope to the blockera unique class, not the bare `p` tag.
+	 */
+	public function testParagraphInnerBlockLinkFontColorSelectorScopesToUniqueClass(): void {
+
+		$selectors = array_merge(
+			blockera_get_block_type_property( 'core/paragraph', 'selectors' ) ?? [],
+			[
+				'root' => 'p',
+			]
+		);
+
+		$result = blockera_get_compatible_block_css_selector(
+			$selectors,
+			'blockeraFontColor',
+			[
+				'block-name'               => 'core/paragraph',
+				'fallback'                 => [ 'color.text', 'color', 'typography' ],
+				'block-type'               => 'elements/link',
+				'blockera-unique-selector' => '.blockera-block.blockera-block-7',
+				'root'                     => 'p',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+				'breakpoint'               => 'desktop',
+			]
+		);
+
+		$this->assertSame(
+			'html:root body :where(.blockera-block.blockera-block-7) a:not(.wp-element-button)',
+			$result
+		);
+	}
+
+	/**
+	 * Button inner bold must merge the blockera unique class into the wp-block root.
+	 */
+	public function testButtonInnerBlockBoldBackgroundColorSelectorScopesToUniqueClass(): void {
+
+		$selectors = blockera_get_block_type_property( 'core/button', 'selectors' );
+		$unique    = '.blockera-block.blockera-block--abc';
+		$root      = '.wp-block-button .wp-block-button__link';
+
+		$result = blockera_get_compatible_block_css_selector(
+			$selectors,
+			'blockeraBackgroundColor',
+			[
+				'block-type'               => 'elements/bold',
+				'block-name'               => 'core/button',
+				'pseudo-class'             => 'normal',
+				'inner-pseudo-class'       => 'normal',
+				'breakpoint'               => 'desktop',
+				'root'                     => $root,
+				'blockera-unique-selector' => $unique,
+			]
+		);
+
+		$this->assertSame(
+			"html:root body :where({$unique}.wp-block-button .wp-block-button__link) :is(strong,b)",
 			$result
 		);
 	}

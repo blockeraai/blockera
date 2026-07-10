@@ -17,12 +17,3 @@ p.blockera-block.blockera-block--2 {
 .blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
 	margin-block-start: 20px !important;
 }
-
-.blockera-block-wrapper :where(.blockera-block-wrapper-child-1) {
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
-}
-
-.blockera-block-wrapper :where(.blockera-block-wrapper-child-2) {
-	background-color: #b6fd9f;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
-}

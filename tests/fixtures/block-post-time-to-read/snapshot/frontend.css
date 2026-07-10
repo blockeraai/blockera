@@ -40,11 +40,11 @@
 	font-size: 16px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-post-time-to-read {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 	}
 
 }
@@ -78,11 +78,11 @@
 	font-size: 16px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-post-time-to-read {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 	}
 
 }
@@ -95,7 +95,7 @@
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-post-time-to-read::after {
 		align-self: stretch;
 		content: "After";
@@ -111,7 +111,7 @@
 	content: "before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-post-time-to-read::before {
 		align-self: stretch;
 		content: "before";

@@ -76,7 +76,7 @@ html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-butto
 	color: #3b14fe;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-12 {
 		font-size: 15px;
 	}

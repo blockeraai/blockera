@@ -86,7 +86,7 @@ html:root body :where(.blockera-block.blockera-block-2) a::after {
 	padding: 5px 10px 5px 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-archives {
 		border-radius: 10px;
 		padding: 20px 20px 20px 20px;
@@ -95,8 +95,8 @@ html:root body :where(.blockera-block.blockera-block-2) a::after {
 
 	html:root body :where(.blockera-block.blockera-block-2) a {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		align-self: stretch;
 		border-radius: 10px;
 		gap: 10px;
@@ -105,8 +105,8 @@ html:root body :where(.blockera-block.blockera-block-2) a::after {
 
 	html:root body :where(.blockera-block.blockera-block-2) li {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		border-radius: 10px;
 	}
 
@@ -154,7 +154,7 @@ html:root body :where(.blockera-block.blockera-block-2):hover li::marker {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-archives::before {
 		border-radius: 10px;
 		content: "Before";
@@ -170,7 +170,7 @@ html:root body :where(.blockera-block.blockera-block-2):hover li::marker {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-archives::after {
 		border-radius: 10px;
 		content: "After";
@@ -190,7 +190,7 @@ html:root body :where(.blockera-block.blockera-block-3) a {
 	padding-left: 20px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-archives {
 		background-color: #c3dbff;
 	}

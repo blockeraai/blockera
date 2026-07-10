@@ -37,7 +37,7 @@ html:root body :where(.blockera-block.blockera-block-2) figcaption {
 	background-color: #dbfac2;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-embed {
 		padding-right: 10px;
 		padding-left: 0;

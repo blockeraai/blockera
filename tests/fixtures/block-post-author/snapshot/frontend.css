@@ -41,7 +41,7 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-block-post-author__n
 	transition: all 500ms ease 0ms;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) .wp-block-post-author__avatar {
 		order: 100;
 	}
@@ -69,8 +69,8 @@ html:root body :where(.blockera-block.blockera-block-1):hover .wp-block-post-aut
 	background-color: #efefef;
 	border-radius: 10px;
 	flex-direction: column;
-	justify-content: center !important;
-	align-items: flex-start !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
 	gap: 10px;
 	padding: 20px 20px 20px 20px;
 }
@@ -148,11 +148,11 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-post-author__n
 	display: flex !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-author {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		text-align: center;
 		gap: 20px;
 	}
@@ -224,11 +224,11 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-post-author__a
 	border: 2px solid #eb6666;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-post-author {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 15px;
 	}
 

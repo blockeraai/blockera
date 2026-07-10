@@ -21,7 +21,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	background-color: #0000001a;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-group {
 		flex-direction: column;
 		align-items: stretch !important;
@@ -153,8 +153,8 @@ html:root body :where(.blockera-block.blockera-block-5) :where(p) {
 	background-color: #bad2a1;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
 	align-items: center !important;
+	justify-content: center !important;
 	gap: 40px;
 	flex-wrap: nowrap !important;
 	align-content: space-between;
@@ -210,7 +210,7 @@ p.blockera-block.blockera-block-14 {
 	display: none !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-14 {
 		display: block !important;
 	}

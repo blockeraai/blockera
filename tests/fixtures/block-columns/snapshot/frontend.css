@@ -118,7 +118,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	padding: 20px 20px 20px 20px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-column {
 		order: -1;
 	}
@@ -192,7 +192,7 @@ html:root body :where(.blockera-block.blockera-block-8) :is(mark, mark[class]) {
 	background-color: #fa00b7;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-8.wp-block-column {
 		order: -1;
 	}
@@ -278,7 +278,7 @@ html:root body :where(.blockera-block.blockera-block-15) .wp-block-column {
 	padding: 10px 10px 10px 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-15.wp-block-columns {
 		display: flex !important;
 		flex-direction: column;
@@ -304,7 +304,7 @@ html:root body :where(.blockera-block.blockera-block-16) .wp-block-column {
 	flex-basis: 150px !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-17.wp-block-column {
 		flex-grow: 0;
 	}

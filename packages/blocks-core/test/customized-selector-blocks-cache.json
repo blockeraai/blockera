@@ -169,7 +169,8 @@
 		"root": ".wp-block-icon svg",
 		"css": ".wp-block-icon",
 		"spacing": {
-			"margin": ".wp-block-icon"
+			"margin": "&.wp-block-icon",
+			"padding": "&.wp-block-icon"
 		},
 		"color": {
 			"root": "&.wp-block-icon svg"

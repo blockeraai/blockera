@@ -58,7 +58,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element
 	display: inline-block !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button))::after {
 		padding: 10px 5px 10px 5px;
 		content: "After";
@@ -115,7 +115,7 @@ html:root body :where(.blockera-block.blockera-block-1):hover :where(a:not(.wp-e
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-latest-posts::after {
 		align-self: stretch;
 		text-align: center;
