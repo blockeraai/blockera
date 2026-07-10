@@ -88,20 +88,9 @@ html:root body :where(.blockera-block.blockera-block-1):hover :where(:is(h1, h2,
 
 }
 
-:where(.blockera-block.blockera-block-1) {
-	border-color: #ff6600;
-	border-width: 6px;
-	border-radius: 20px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+.blockera-block-1 {
 	aspect-ratio: 1;
 	min-height: unset;
-}
-
-:where(.blockera-block.blockera-block-1 span.wp-block-cover__background.has-background-dim) {
-	background-color: #615131;
 }
 
 .blockera-block.blockera-block-2.wp-block-heading {
@@ -110,10 +99,6 @@ html:root body :where(.blockera-block.blockera-block-1):hover :where(:is(h1, h2,
 
 .blockera-block.blockera-block-2.wp-block-heading:hover {
 	background-color: #48c068;
-}
-
-:where(.blockera-block.blockera-block-2) {
-	background-color: #88eaa2;
 }
 
 p.blockera-block.blockera-block-3 {
@@ -128,10 +113,6 @@ p.blockera-block.blockera-block-4 {
 
 p.blockera-block.blockera-block-4:hover {
 	background-color: #45c739;
-}
-
-:where(.blockera-block.blockera-block-4) {
-	background-color: #68be61;
 }
 
 .blockera-block.blockera-block-5.wp-block-cover {
@@ -192,12 +173,4 @@ p.blockera-block.blockera-block-4:hover {
 		content: "After";
 	}
 
-}
-
-:where(.blockera-block.blockera-block-5) {
-	border-radius: 10px;
-}
-
-:where(.blockera-block.blockera-block-5 span.wp-block-cover__background.has-background-dim) {
-	background-color: #615131;
 }
