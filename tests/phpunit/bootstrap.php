@@ -11,6 +11,7 @@ define('BLOCKERA_SB_TESTING', true);
 switch_theme('twentytwentyfive');
 
 blockera_add_icon_style_definitions();
+blockera_register_core_icon_navigation_hooks();
 
 global $blockera_block_supports;
 $blockera_block_supports = blockera_get_available_block_supports();
