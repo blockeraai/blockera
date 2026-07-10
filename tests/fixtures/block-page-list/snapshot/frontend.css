@@ -100,8 +100,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(li)::after {
 
 	html:root body :where(.blockera-block.blockera-block-1) :where(li) {
 		flex-direction: column;
-		justify-content: center !important;
-		align-items: flex-start !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-1) :where(a) {

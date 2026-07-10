@@ -191,8 +191,8 @@ html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-4.wp-block-buttons {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 		border-radius: 10px;
 	}

@@ -81,8 +81,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 
 	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)) {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::after {

@@ -55,8 +55,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	.blockera-block.blockera-block-2.wp-block-read-more {
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 20px;
 		width: 100%;
 		width: -moz-available;

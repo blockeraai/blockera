@@ -19,8 +19,8 @@
 @media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-site-tagline {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 		padding: 30px 30px 30px 30px;
 		border-radius: 140px;

@@ -95,8 +95,8 @@ html:root body :where(.blockera-block.blockera-block-2) a::after {
 
 	html:root body :where(.blockera-block.blockera-block-2) a {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		align-self: stretch;
 		border-radius: 10px;
 		gap: 10px;
@@ -105,8 +105,8 @@ html:root body :where(.blockera-block.blockera-block-2) a::after {
 
 	html:root body :where(.blockera-block.blockera-block-2) li {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		border-radius: 10px;
 	}
 

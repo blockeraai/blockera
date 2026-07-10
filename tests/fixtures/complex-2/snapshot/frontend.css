@@ -178,8 +178,8 @@ html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-butto
 	background-color: #5577ff;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: flex-end !important;
-	align-items: center !important;
+	align-items: flex-end !important;
+	justify-content: center !important;
 	gap: 10px;
 	padding: 20px 20px 20px 20px;
 	margin-left: -30px !important;

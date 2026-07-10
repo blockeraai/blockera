@@ -94,8 +94,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 
 	html:root body :where(.blockera-block.blockera-block-2) cite {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 20px;
 		border-radius: 10px;
 	}

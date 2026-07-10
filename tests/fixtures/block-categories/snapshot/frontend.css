@@ -73,8 +73,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 
 	html:root body :where(.blockera-block.blockera-block-1) li.cat-item::before {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		content: "Before";
 		border-radius: 10px;
 	}
@@ -105,8 +105,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a {
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 	}
 

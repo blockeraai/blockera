@@ -91,8 +91,8 @@ html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-eleme
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 		padding: 5px 10px 5px 10px;
 		margin-top: 20px;

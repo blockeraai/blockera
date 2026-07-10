@@ -153,8 +153,8 @@ html:root body :where(.blockera-block.blockera-block-5) :where(p) {
 	background-color: #bad2a1;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
 	align-items: center !important;
+	justify-content: center !important;
 	gap: 40px;
 	flex-wrap: nowrap !important;
 	align-content: space-between;

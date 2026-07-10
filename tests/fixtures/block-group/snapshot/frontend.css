@@ -227,8 +227,8 @@ html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 @media screen and (max-width: 991px) and (min-width: 768px) {
 	.blockera-block.blockera-block-4.wp-block-group {
 		flex-direction: column;
-		justify-content: flex-start !important;
-		align-items: flex-end !important;
+		align-items: flex-start !important;
+		justify-content: flex-end !important;
 		height: 300px;
 	}
 
@@ -237,8 +237,8 @@ html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 @media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-group {
 		flex-direction: column;
-		justify-content: flex-end !important;
-		align-items: center !important;
+		align-items: flex-end !important;
+		justify-content: center !important;
 		height: 400px;
 	}
 

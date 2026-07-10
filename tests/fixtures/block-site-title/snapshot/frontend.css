@@ -78,16 +78,16 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 		padding: 20px 20px 20px 20px;
 		border-radius: 10px;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 20px;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 		align-self: stretch;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 		padding: 10px 10px 10px 10px;
 	}

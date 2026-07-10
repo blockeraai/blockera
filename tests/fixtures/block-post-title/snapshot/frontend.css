@@ -68,8 +68,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	.blockera-block.blockera-block-3.wp-block-post-title {
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 		border-radius: 10px;
 	}

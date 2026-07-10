@@ -93,11 +93,11 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-post-terms__se
 	display: none !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-terms {
 		flex-direction: column;
-		justify-content: center !important;
-		align-items: flex-start !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-2) a {

@@ -104,8 +104,8 @@ html:root body :where(.blockera-block.blockera-block-7) a:not(.wp-element-button
 	background-color: #213fbe;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
-	align-items: flex-end !important;
+	align-items: center !important;
+	justify-content: flex-end !important;
 	gap: 20px;
 	flex-wrap: wrap !important;
 	position: relative;

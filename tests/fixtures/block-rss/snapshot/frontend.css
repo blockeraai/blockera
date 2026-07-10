@@ -152,15 +152,15 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-block-rss__item-exce
 
 	html:root body :where(.blockera-block.blockera-block-1) .wp-block-rss__item-author {
 		flex-direction: column;
-		justify-content: center !important;
-		align-items: flex-start !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
 		gap: 10px;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-1) .wp-block-rss__item-publish-date {
 		flex-direction: column;
-		justify-content: center !important;
-		align-items: flex-start !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
 		gap: 10px;
 	}
 

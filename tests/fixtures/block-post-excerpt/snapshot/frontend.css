@@ -133,8 +133,8 @@ html:root body :where(.blockera-block.blockera-block-1) a.wp-block-post-excerpt_
 	border-radius: 10px;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
 	align-items: center !important;
+	justify-content: center !important;
 	gap: 0;
 	padding: 20px 20px 20px 20px;
 	font-weight: 600;

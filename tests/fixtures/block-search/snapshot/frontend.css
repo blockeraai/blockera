@@ -109,8 +109,8 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-search__button
 @media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-search {
 		flex-direction: column;
-		justify-content: center !important;
-		align-items: flex-start !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
 		box-sizing: border-box;
 	}
 
@@ -149,8 +149,8 @@ html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-search__
 @media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-search:hover {
 		flex-direction: column;
-		justify-content: center !important;
-		align-items: flex-start !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-search__label {

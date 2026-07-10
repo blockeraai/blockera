@@ -138,8 +138,8 @@ p.blockera-block.blockera-block-4:hover {
 	border-radius: 10px;
 	display: flex !important;
 	flex-direction: column;
-	justify-content: center !important;
 	align-items: center !important;
+	justify-content: center !important;
 	gap: 30px;
 }
 

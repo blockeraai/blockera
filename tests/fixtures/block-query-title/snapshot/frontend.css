@@ -29,8 +29,8 @@
 @media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-query-title {
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 20px;
 		padding: 35px 35px 35px 35px;
 	}

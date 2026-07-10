@@ -297,8 +297,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 	}
 
@@ -685,8 +685,8 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 	}
 

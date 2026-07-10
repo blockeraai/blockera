@@ -13,8 +13,8 @@
 	.blockera-block.blockera-block-1.wp-block-heading {
 		display: flex !important;
 		flex-direction: column;
-		justify-content: center !important;
 		align-items: center !important;
+		justify-content: center !important;
 		gap: 20px;
 		border-radius: 10px;
 		padding: 30px 30px 30px 30px;
