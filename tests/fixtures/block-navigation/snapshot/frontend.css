@@ -285,6 +285,46 @@ html:root body :where(.blockera-block.blockera-block-10.wp-block-navigation-subm
 	background-color: #3dff32;
 }
 
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li) {
+	background-color: #ffd6d6;
+	width: 100%;
+	padding: 10px 10px 10px 10px;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) :is(strong, b) {
+	background-color: #d9d900;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) :is(em, i) {
+	background-color: #ff3e3e;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) kbd {
+	background-color: #72ff27;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) code {
+	background-color: #1b95ff;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) span:not([data-rich-text-placeholder], .wp-block-navigation-item__label, .wp-block-navigation__submenu-icon) {
+	background-color: #0060ff;
+	color: #f6eded;
+}
+
+html:root body :where(.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li)) :is(mark, mark[class]) {
+	background-color: #ff06c9;
+}
+
+.blockera-block-11 {
+	background-color: #ffd6d6;
+	background-color: #ffd6d6;
+}
+
+.blockera-block-11 {
+	background-color: #ffd6d6;
+}
+
 .blockera-block-10 {
 	background-color: #b6ffc0;
 	background-color: #b6ffc0;
@@ -302,10 +342,10 @@ html:root body :where(.blockera-block.blockera-block-10.wp-block-navigation-subm
 
 .blockera-block-8 {
 	background-color: #ffcece;
-	background-color: #ffcece;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
 	font-weight: 600;
+	background-color: #ffcece;
 }
 
 .blockera-block-8 {
