@@ -242,7 +242,7 @@ html:root body :where(.blockera-block.blockera-block-8.wp-block-query-pagination
 	padding: 20px 20px 20px 20px;
 }
 
-html:root body :where(.blockera-block.blockera-block-10) :is(.wp-block-paragraph, p) {
+html:root body :where(.blockera-block.blockera-block-10) :is(p, p) {
 	background-color: #ff7a7a;
 }
 
