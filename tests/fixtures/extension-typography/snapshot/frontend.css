@@ -201,7 +201,7 @@ p.blockera-block.blockera-block-36 {
 	column-gap: 20px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-36 {
 		column-count: initial;
 	}
@@ -216,7 +216,7 @@ p.blockera-block.blockera-block-37 {
 	column-rule-width: 2px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-37 {
 		column-count: initial;
 	}
@@ -231,7 +231,7 @@ p.blockera-block.blockera-block-38 {
 	column-rule-width: 1px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	p.blockera-block.blockera-block-38 {
 		column-count: initial;
 	}

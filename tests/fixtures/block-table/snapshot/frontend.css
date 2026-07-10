@@ -122,7 +122,7 @@ html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-eleme
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-table::before {
 		border-radius: 10px;
 		content: "Before";
@@ -138,7 +138,7 @@ html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-eleme
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-table::after {
 		border-radius: 10px;
 		content: "After";

@@ -34,7 +34,7 @@ html:root body :where(.blockera-block.blockera-block-1) ol li:last-child span[ar
 	border: 2px solid #d00000;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-breadcrumbs ol {
 		flex-direction: column;
 		align-items: stretch !important;
@@ -56,7 +56,7 @@ html:root body :where(.blockera-block.blockera-block-1) ol li:last-child span[ar
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-breadcrumbs::before {
 		margin-bottom: 20px;
 		content: "Before";
@@ -74,7 +74,7 @@ html:root body :where(.blockera-block.blockera-block-1) ol li:last-child span[ar
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-breadcrumbs::after {
 		margin-top: 20px;
 		content: "After";

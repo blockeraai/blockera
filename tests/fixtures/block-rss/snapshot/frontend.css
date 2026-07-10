@@ -136,7 +136,7 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-block-rss__item-exce
 	border-radius: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) .wp-block-rss__item::before {
 		width: 100%;
 		width: -moz-available;

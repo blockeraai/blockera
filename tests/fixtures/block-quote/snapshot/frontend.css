@@ -128,7 +128,7 @@ html:root body :where(.blockera-block.blockera-block-2) cite::after {
 	border-radius: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-quote {
 		border-top: 10px solid #ff0000;
 		border-left: 0px solid;

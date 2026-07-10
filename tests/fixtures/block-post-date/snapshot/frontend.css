@@ -84,7 +84,7 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 	gap: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-post-date {
 		flex-direction: column;
 		justify-content: center !important;
@@ -115,7 +115,7 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-post-date::before {
 		align-self: stretch;
 		content: "Before";
@@ -130,7 +130,7 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-post-date::after {
 		width: 100%;
 		width: -moz-available;

@@ -59,7 +59,7 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	border-radius: 50px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-categories {
 		padding: 20px 20px 20px 20px;
 		border-radius: 10px;
@@ -119,7 +119,7 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-categories::before {
 		border-radius: 10px;
 		content: "Before";
@@ -136,7 +136,7 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-categories::after {
 		border-radius: 10px;
 		content: "After";

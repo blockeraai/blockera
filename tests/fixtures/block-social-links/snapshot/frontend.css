@@ -35,7 +35,7 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 	gap: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link .wp-block-social-link-anchor {
 		gap: 30px;
 	}
@@ -74,7 +74,7 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-social-links::before {
 		border-radius: 5px;
 		content: "Before";
@@ -90,7 +90,7 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-social-links::after {
 		border-radius: 5px;
 		flex: 1 1 0%;
@@ -179,7 +179,7 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-social-link-la
 	margin-left: 20px !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-social-link {
 		order: -1;
 	}

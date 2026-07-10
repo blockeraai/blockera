@@ -70,7 +70,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	border-radius: 5px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-author-name {
 		flex-direction: column;
 		align-items: stretch !important;
@@ -111,7 +111,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-author-name::before {
 		width: 100%;
 		width: -moz-available;
@@ -131,7 +131,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-author-name::after {
 		box-sizing: border-box;
 		width: 50%;

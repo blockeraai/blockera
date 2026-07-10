@@ -134,7 +134,7 @@ html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block
 	margin-left: 0.5em;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4-1.wp-block-button {
 		align-self: stretch;
 	}
@@ -145,7 +145,7 @@ html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block
 	flex: 1 1 0%;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4-2.wp-block-button {
 		align-self: flex-start;
 		flex: 1 1 0%;

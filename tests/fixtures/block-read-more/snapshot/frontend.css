@@ -51,7 +51,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	font-size: 18px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-read-more {
 		display: flex !important;
 		flex-direction: column;
@@ -74,7 +74,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-read-more::before {
 		align-self: stretch;
 		content: "Before";
@@ -90,7 +90,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-read-more::after {
 		width: 100%;
 		width: -moz-available;

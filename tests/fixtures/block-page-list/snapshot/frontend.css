@@ -93,7 +93,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(li)::after {
 	flex: 1 1 0%;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-page-list {
 		gap: 20px;
 	}

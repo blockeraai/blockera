@@ -10,7 +10,7 @@
 	padding: 10px 10px 10px 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-post-comments-count {
 		border-radius: 10px;
 	}
@@ -24,7 +24,7 @@
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-post-comments-count::before {
 		border-radius: 10px;
 		content: "Before";
@@ -39,7 +39,7 @@
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-post-comments-count::after {
 		border-radius: 10px;
 		content: "After";
@@ -90,7 +90,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	border-radius: 50px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-comments-link {
 		border-radius: 10px;
 		display: flex !important;
@@ -133,7 +133,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-comments-link::before {
 		border-radius: 10px;
 		align-self: flex-end;
@@ -150,7 +150,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-comments-link::after {
 		border-radius: 10px;
 		align-self: center;
@@ -174,7 +174,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	padding: 20px 20px 20px 20px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-comments {
 		border-radius: 10px;
 	}
@@ -192,7 +192,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-comments::before {
 		border-radius: 10px;
 		content: "Before";
@@ -277,7 +277,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-comments::after {
 		border-radius: 10px;
 		content: "After";
@@ -291,7 +291,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	padding: 10px 10px 10px 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-comments-title {
 		text-align: center;
 		border-radius: 10px;
@@ -316,7 +316,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-comments-title::before {
 		border-radius: 10px;
 		content: "Before";
@@ -332,7 +332,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-comments-title::after {
 		border-radius: 10px;
 		content: "After";
@@ -356,7 +356,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	margin-bottom: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-5.wp-block-comment-template {
 		border-radius: 10px;
 	}
@@ -421,7 +421,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	flex: 0 1 auto;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-6-1.wp-block-column {
 		flex: 1 1 0%;
 		display: flex !important;
@@ -440,7 +440,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	margin-bottom: 10px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-6.wp-block-columns {
 		border-radius: 10px;
 	}
@@ -486,7 +486,7 @@ html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element
 	color: #ffffff;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-8.wp-block-comment-author-name {
 		border-radius: 10px;
 		gap: 10px;
@@ -504,7 +504,7 @@ html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-8.wp-block-comment-author-name::before {
 		border-radius: 10px;
 		align-self: flex-end;
@@ -521,7 +521,7 @@ html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-8.wp-block-comment-author-name::after {
 		border-radius: 10px;
 		align-self: flex-start;
@@ -555,7 +555,7 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	text-decoration: initial;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-9.wp-block-comment-date {
 		border-radius: 10px;
 		display: flex !important;
@@ -574,7 +574,7 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-9.wp-block-comment-date::before {
 		border-radius: 10px;
 		content: "Before";
@@ -590,7 +590,7 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-9.wp-block-comment-date::after {
 		border-radius: 10px;
 		content: "After";
@@ -617,7 +617,7 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	font-size: 18px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-11.wp-block-comment-content {
 		border-radius: 10px;
 	}
@@ -632,7 +632,7 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-11.wp-block-comment-content::before {
 		border-radius: 10px;
 		content: "Before";
@@ -648,7 +648,7 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-11.wp-block-comment-content::after {
 		border-radius: 10px;
 		content: "After";
@@ -680,7 +680,7 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 	text-transform: uppercase;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-12.wp-block-comment-reply-link {
 		border-radius: 10px;
 		display: flex !important;
@@ -700,7 +700,7 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-12.wp-block-comment-reply-link::before {
 		align-self: flex-start;
 		border-radius: 10px;
@@ -717,7 +717,7 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-12.wp-block-comment-reply-link::after {
 		align-self: stretch;
 		border-radius: 10px;
@@ -758,7 +758,7 @@ html:root body :where(.blockera-block.blockera-block-13) .wp-block-comments-pagi
 	background-color: #ffbdbd;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-13.wp-block-comments-pagination {
 		border-radius: 10px;
 	}
@@ -781,7 +781,7 @@ html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagina
 	border-radius: 30px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-14.wp-block-comments-pagination-previous {
 		border-radius: 10px;
 		display: flex !important;
@@ -806,7 +806,7 @@ html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagina
 	content: "→";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-14.wp-block-comments-pagination-previous::before {
 		border-radius: 10px;
 		content: "→";
@@ -822,7 +822,7 @@ html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagina
 	content: "←";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-14.wp-block-comments-pagination-previous::after {
 		border-radius: 10px;
 		content: "←";
@@ -884,7 +884,7 @@ html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagina
 	background-color: #87e260;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers {
 		border-radius: 10px;
 		flex: 1 1 0%;
@@ -908,7 +908,7 @@ html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagina
 	content: "→";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers::before {
 		border-radius: 10px;
 		content: "→";
@@ -924,7 +924,7 @@ html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagina
 	content: "←";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers::after {
 		border-radius: 10px;
 		flex: 1 1 0%;
@@ -1120,7 +1120,7 @@ html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::a
 	border-radius: 50px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-17.wp-block-post-comments-form {
 		border-radius: 10px;
 	}
@@ -1217,7 +1217,7 @@ html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::a
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-17.wp-block-post-comments-form::before {
 		border-radius: 10px;
 		content: "Before";
@@ -1233,7 +1233,7 @@ html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::a
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-17.wp-block-post-comments-form::after {
 		border-radius: 10px;
 		content: "After";

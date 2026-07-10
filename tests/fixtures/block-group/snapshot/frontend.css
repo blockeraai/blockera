@@ -11,7 +11,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	background-color: #d0ca8a;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-group {
 		display: flex !important;
 		flex-direction: row;
@@ -39,7 +39,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-group::before {
 		margin-bottom: 0;
 		content: "Before";
@@ -54,7 +54,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-group::after {
 		margin-top: 0;
 		content: "After";
@@ -224,7 +224,7 @@ html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 	border-radius: 10px;
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 991px) and (min-width: 768px) {
 	.blockera-block.blockera-block-4.wp-block-group {
 		flex-direction: column;
 		justify-content: flex-start !important;
@@ -234,7 +234,7 @@ html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-4.wp-block-group {
 		flex-direction: column;
 		justify-content: flex-end !important;

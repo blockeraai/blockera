@@ -53,7 +53,7 @@ html:root body :where(.blockera-block.blockera-block-1) a:hover {
 	color: #ffffff;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-post-terms {
 		display: flex !important;
 		flex-wrap: wrap !important;
@@ -175,7 +175,7 @@ html:root body :where(.blockera-block.blockera-block-3) a::after {
 	background-color: #0000003d;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-post-terms {
 		flex-direction: column;
 	}

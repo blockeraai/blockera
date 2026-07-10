@@ -33,7 +33,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	background-color: #ff64ff;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-verse {
 		border-radius: 5px;
 	}
@@ -52,7 +52,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-verse::before {
 		width: 100%;
 		width: -moz-available;
@@ -73,7 +73,7 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-verse::after {
 		margin-top: 10px;
 		width: 100%;

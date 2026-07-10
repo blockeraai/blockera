@@ -13,7 +13,7 @@ html:root body :where(.blockera-block.blockera-block-1).wp-block-image :is(img, 
 	border: 3px solid #ff1515;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-image {
 		display: flex !important;
 		flex-direction: column;
@@ -32,7 +32,7 @@ html:root body :where(.blockera-block.blockera-block-1).wp-block-image :is(img, 
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-image::before {
 		border-radius: 40px;
 		content: "Before";
@@ -48,7 +48,7 @@ html:root body :where(.blockera-block.blockera-block-1).wp-block-image :is(img, 
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-image::after {
 		align-self: stretch;
 		border-radius: 50px;
@@ -80,7 +80,7 @@ html:root body :where(.blockera-block.blockera-block-2):is(.has-custom-border, :
 	color: #ff3737;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 		max-width: 250px !important;
 		width: 100%;
@@ -113,7 +113,7 @@ html:root body :where(.blockera-block.blockera-block-3):is(.has-custom-border, :
 	order: -1;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 		width: 200px;
 		aspect-ratio: 1;

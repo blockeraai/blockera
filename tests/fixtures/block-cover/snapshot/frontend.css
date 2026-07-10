@@ -22,7 +22,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(:is(h1, h2, h3, h
 	transition: all 500ms ease 0ms;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-cover {
 		aspect-ratio: 4/3;
 		display: flex !important;
@@ -63,7 +63,7 @@ html:root body :where(.blockera-block.blockera-block-1):hover :where(:is(h1, h2,
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-cover::before {
 		align-self: stretch;
 		text-align: center;
@@ -80,7 +80,7 @@ html:root body :where(.blockera-block.blockera-block-1):hover :where(:is(h1, h2,
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-cover::after {
 		align-self: flex-start;
 		content: "After";
@@ -158,7 +158,7 @@ p.blockera-block.blockera-block-4:hover {
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-5.wp-block-cover::before {
 		flex: 1 1 0%;
 		align-self: flex-start;
@@ -185,7 +185,7 @@ p.blockera-block.blockera-block-4:hover {
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-5.wp-block-cover::after {
 		flex: 0 1 auto;
 		align-self: stretch;

@@ -9,7 +9,7 @@
 	text-transform: uppercase;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-heading {
 		display: flex !important;
 		flex-direction: column;
@@ -30,7 +30,7 @@
 	content: "Before:";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-heading::before {
 		align-self: stretch;
 		border-radius: 5px;
@@ -48,7 +48,7 @@
 	content: ":after";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-1.wp-block-heading::after {
 		border-radius: 5px;
 		padding-right: 30px;
@@ -136,7 +136,7 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	color: #493500;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-heading {
 		border-radius: 5px;
 	}

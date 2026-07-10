@@ -65,7 +65,7 @@ html:root body :where(.blockera-block.blockera-block-10) :is(.wp-block-paragraph
 	background-color: #ff7a7a;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-10.wp-block-query-no-results {
 		display: flex !important;
 		flex-direction: column;
@@ -82,7 +82,7 @@ html:root body :where(.blockera-block.blockera-block-10) :is(.wp-block-paragraph
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-10.wp-block-query-no-results::before {
 		width: 100%;
 		width: -moz-available;
@@ -100,7 +100,7 @@ html:root body :where(.blockera-block.blockera-block-10) :is(.wp-block-paragraph
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-10.wp-block-query-no-results::after {
 		align-self: flex-end;
 		content: "After";
@@ -204,7 +204,7 @@ html:root body :where(.blockera-block.blockera-block-14) .wp-block-post-time-to-
 	content: "Content Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-16.wp-block-post-content::before {
 		width: 100%;
 		width: -moz-available;
@@ -225,7 +225,7 @@ html:root body :where(.blockera-block.blockera-block-14) .wp-block-post-time-to-
 	content: "Content After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-16.wp-block-post-content::after {
 		width: 100%;
 		width: -moz-available;

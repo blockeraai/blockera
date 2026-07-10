@@ -106,7 +106,7 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-search__button
 	color: #ffffff;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-search {
 		flex-direction: column;
 		justify-content: center !important;
@@ -146,7 +146,7 @@ html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-search__
 	border-radius: 70px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-search:hover {
 		flex-direction: column;
 		justify-content: center !important;
@@ -209,7 +209,7 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label:
 	background-color: #00000045;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-search {
 		display: flex !important;
 		flex-direction: column;
@@ -241,7 +241,7 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label:
 	content: "Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-search::before {
 		align-self: flex-end;
 		content: "Before";
@@ -257,7 +257,7 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label:
 	content: "After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-3.wp-block-search::after {
 		align-self: center;
 		content: "After";

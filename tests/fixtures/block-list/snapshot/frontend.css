@@ -11,7 +11,7 @@ html:root body :where(.blockera-block.blockera-block-1) :where(li) {
 	border-radius: 20px;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) :where(li) {
 		border-radius: 5px;
 	}
@@ -47,7 +47,7 @@ html:root body :where(.wp-block-list > li.blockera-block.blockera-block-4) a:not
 	color: #ffffff;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.wp-block-list > li.blockera-block.blockera-block-4 {
 		background-color: #8cc764;
 		--blockera--icon--color: #307700;
@@ -157,7 +157,7 @@ ul.blockera-block.blockera-block-8:hover {
 	content: "List Before";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-8.wp-block-list::before {
 		order: -1;
 		border-radius: 30px;
@@ -178,7 +178,7 @@ ul.blockera-block.blockera-block-8:hover {
 	content: "List After";
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-8.wp-block-list::after {
 		border-radius: 20px;
 		text-align: center;
@@ -202,7 +202,7 @@ ul.blockera-block.blockera-block-8:hover {
 	order: 100;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.wp-block-list > li.blockera-block.blockera-block-10 {
 		order: -1;
 	}

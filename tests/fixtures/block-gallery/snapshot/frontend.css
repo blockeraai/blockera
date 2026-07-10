@@ -59,7 +59,7 @@ html:root body :where(.blockera-block.blockera-block-1) > figcaption::after {
 	display: inline-block !important;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-1) > figcaption {
 		flex-direction: column;
 		justify-content: center !important;
@@ -151,7 +151,7 @@ html:root body :where(.blockera-block.blockera-block-5) > figcaption {
 	font-style: normal;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-5.wp-block-gallery {
 		flex-direction: row;
 		align-items: center !important;
@@ -185,7 +185,7 @@ html:root body :where(.blockera-block.blockera-block-6) > figcaption:hover {
 	background-color: #00000026;
 }
 
-@media screen and (max-width: 478px) {
+@media screen and (max-width: 478px) and (min-width: 0px) {
 	html:root body :where(.blockera-block.blockera-block-6) > figcaption {
 		flex: 1 1 0%;
 	}
