@@ -667,6 +667,41 @@ if ( ! function_exists('blockera_get_icon_color_attr_value')) {
 	}
 }
 
+
+if ( ! function_exists( 'blockera_icon_block_uses_html_editable_rendering' ) ) {
+	/**
+	 * Whether the block injects icons as inline SVG on the frontend (EditBlockHTML path).
+	 *
+	 * Matches EditBlockHTML::isValidBlock(): icon feature enabled, htmlEditable on,
+	 * and an htmlEditable selector configured on the block type.
+	 *
+	 * @param string $block_name Registered block name (e.g. core/button).
+	 *
+	 * @return bool
+	 */
+	function blockera_icon_block_uses_html_editable_rendering( string $block_name): bool {
+		if ( '' === $block_name ) {
+			return false;
+		}
+
+		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $block_name );
+
+		if ( ! $block_type ) {
+			return false;
+		}
+
+		$icon_support = $block_type->supports['blockFeatures']['icon'] ?? [];
+
+		if ( empty( $icon_support['status'] ) || empty( $icon_support['htmlEditable']['status'] ) ) {
+			return false;
+		}
+
+		$html_editable_root = blockera_get_block_type_property( $block_name, 'selectors' )['htmlEditable']['root'] ?? '';
+
+		return '' !== $html_editable_root;
+	}
+}
+
 if ( ! function_exists('blockera_block_has_icon')) {
 	/**
 	 * Check if the block has an icon.
