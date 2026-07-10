@@ -161,6 +161,7 @@ export default function CanvasHeader({
 			end={isZoomed || showResetBreakpointToBase ? undefined : <span />}
 			onClose={handleClose}
 			dataBlockeraZoomHeader={true}
+			closeButtonTestId="blockera-canvas-header-close"
 		/>
 	);
 }
