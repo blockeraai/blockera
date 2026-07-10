@@ -288,14 +288,6 @@ html:root body :where(.blockera-block.blockera-block-5) :is(mark, mark[class]) {
 	background-color: #20d4df;
 }
 
-.blockera-block-5 :where(.blockera-block-5-child-1) {
-	background-color: #dfdfdf;
-}
-
-.blockera-block-3 :where(.blockera-block-3-child-1) {
-	background-color: #dfdfdf;
-}
-
 .blockera-block.blockera-block-wrapper.wp-block-group {
 	display: flex !important;
 	flex-direction: column;
