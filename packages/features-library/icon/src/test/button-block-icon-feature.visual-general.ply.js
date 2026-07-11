@@ -17,7 +17,6 @@ const {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
-	getByDataTest,
 	getByAriaLabel,
 	getBlock,
 	getParentContainer,
@@ -26,6 +25,12 @@ const {
 const { deSelectBlock } = require('@blockera/dev-playwright/js/utils/editor');
 
 const failures = [];
+
+/** WordPress block-inspector tab (Blockera no longer renders data-test settings/style tabs). */
+const getInspectorTab = (page, name) =>
+	page.locator(
+		`.block-editor-block-inspector__tabs [role="tab"][aria-label="${name}"]`
+	);
 
 test.describe('Button Block → Icon Feature', () => {
 	// Configure snapshot directory for this test
@@ -74,7 +79,7 @@ test.describe('Button Block → Icon Feature', () => {
 		//
 		const firstButton = await getBlock(page, 'core/button');
 		await firstButton.first().click();
-		await getByDataTest(page, 'settings-tab').click();
+		await getInspectorTab(page, 'Settings').click();
 
 		await getByAriaLabel(page, 'Choose Icon…').click();
 
@@ -87,7 +92,7 @@ test.describe('Button Block → Icon Feature', () => {
 		//
 		const secondButton = await getBlock(page, 'core/button');
 		await secondButton.nth(1).click();
-		await getByDataTest(page, 'settings-tab').click();
+		await getInspectorTab(page, 'Settings').click();
 
 		// set icon
 		await getByAriaLabel(page, 'Choose Icon…').click();
@@ -115,7 +120,7 @@ test.describe('Button Block → Icon Feature', () => {
 		//
 		const thirdButton = await getBlock(page, 'core/button');
 		await thirdButton.nth(2).click();
-		await getByDataTest(page, 'settings-tab').click();
+		await getInspectorTab(page, 'Settings').click();
 
 		// set icon
 		await getByAriaLabel(page, 'Choose Icon…').click();
@@ -132,7 +137,7 @@ test.describe('Button Block → Icon Feature', () => {
 			)
 		).toBeVisible();
 
-		await getByDataTest(page, 'style-tab').click();
+		await getInspectorTab(page, 'Styles').click();
 		await setColorControlValue(page, 'BG Color', '0065FE');
 		await page.waitForTimeout(1000);
 

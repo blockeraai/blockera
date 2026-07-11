@@ -17,16 +17,20 @@ const {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
-	getByDataTest,
 	getByAriaLabel,
 	getBlock,
 	getParentContainer,
-	getByDataId,
 	setColorControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 const { deSelectBlock } = require('@blockera/dev-playwright/js/utils/editor');
 
 const failures = [];
+
+/** WordPress block-inspector tab (Blockera no longer renders data-test settings/style tabs). */
+const getInspectorTab = (page, name) =>
+	page.locator(
+		`.block-editor-block-inspector__tabs [role="tab"][aria-label="${name}"]`
+	);
 
 test.describe('List Block → Icon Feature', () => {
 	// Configure snapshot directory for this test
@@ -76,7 +80,7 @@ test.describe('List Block → Icon Feature', () => {
 		const listBlock = await getBlock(page, 'core/list');
 		await listBlock.first().click();
 		await getByAriaLabel(page, 'Select List').click();
-		await getByDataTest(page, 'settings-tab').click();
+		await getInspectorTab(page, 'Settings').click();
 
 		await getByAriaLabel(page, 'Choose Icon…').click();
 
@@ -109,7 +113,7 @@ test.describe('List Block → Icon Feature', () => {
 		//
 		const listItem1 = await getBlock(page, 'core/list-item');
 		await listItem1.nth(1).click();
-		await getByDataTest(page, 'settings-tab').click();
+		await getInspectorTab(page, 'Settings').click();
 
 		// set icon
 		await getByAriaLabel(page, 'Choose Icon…').click();
@@ -134,7 +138,7 @@ test.describe('List Block → Icon Feature', () => {
 		//
 		const listItem2 = await getBlock(page, 'core/list-item');
 		await listItem2.last().click();
-		await getByDataTest(page, 'settings-tab').click();
+		await getInspectorTab(page, 'Settings').click();
 
 		// set icon
 		await getByAriaLabel(page, 'Choose Icon…').click();
@@ -158,7 +162,7 @@ test.describe('List Block → Icon Feature', () => {
 			innerBlockCard2.locator('[data-id="hover"]')
 		).not.toBeVisible();
 
-		await getByDataTest(page, 'style-tab').click();
+		await getInspectorTab(page, 'Styles').click();
 
 		await setColorControlValue(page, 'BG Color', '0065FE');
 		await page.waitForTimeout(1000);
