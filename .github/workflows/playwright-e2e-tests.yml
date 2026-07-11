@@ -12,7 +12,7 @@ concurrency:
 
 env:
     # Fixture folders per visual-snapshots matrix job. Change here to retune parallelism.
-    VISUAL_SNAPSHOT_BATCH_SIZE: '20'
+    VISUAL_SNAPSHOT_BATCH_SIZE: '15'
 
 jobs:
     detect_categories:
