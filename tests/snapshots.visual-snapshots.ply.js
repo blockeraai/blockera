@@ -25,8 +25,27 @@ const {
 } = require('@blockera/dev-playwright/js/utils/responsive');
 
 /**
+ * Optional CI batch list from `VISUAL_SNAPSHOT_FIXTURES` (comma-separated folder names).
+ * Set by GitHub Actions matrix jobs; local runs leave this unset to exercise all fixtures.
+ */
+function getEnvFixtureList() {
+	const raw = process.env.VISUAL_SNAPSHOT_FIXTURES;
+
+	if (!raw || !raw.trim()) {
+		return null;
+	}
+
+	return new Set(
+		raw
+			.split(',')
+			.map((name) => name.trim())
+			.filter(Boolean)
+	);
+}
+
+/**
  * Optional PR allowlist from `.pr-playwright.env.json` → `visualSnapshotFixtures`.
- * Missing key or empty array → run all fixtures.
+ * Missing key or empty array → run all fixtures (unless CI env list is set).
  */
 function getVisualSnapshotFixtureAllowlist() {
 	const prEnvPath = path.join(__dirname, '..', '.pr-playwright.env.json');
@@ -54,6 +73,14 @@ function getVisualSnapshotFixtureAllowlist() {
 }
 
 /**
+ * Resolve which fixture folders are allowed for this run.
+ * CI env list wins (already batched + allowlist-filtered); otherwise PR allowlist; else all.
+ */
+function getFixtureFilter() {
+	return getEnvFixtureList() || getVisualSnapshotFixtureAllowlist();
+}
+
+/**
  * Load all test fixtures from tests/fixtures directory
  */
 function loadFixtures() {
@@ -64,11 +91,12 @@ function loadFixtures() {
 		return sections;
 	}
 
-	const allowlist = getVisualSnapshotFixtureAllowlist();
+	const allowlist = getFixtureFilter();
 	const fixtureFolders = fs
 		.readdirSync(fixturesDir, { withFileTypes: true })
 		.filter((dirent) => dirent.isDirectory())
-		.map((dirent) => dirent.name);
+		.map((dirent) => dirent.name)
+		.sort();
 
 	for (const sectionId of fixtureFolders) {
 		if (allowlist && !allowlist.has(sectionId)) {
