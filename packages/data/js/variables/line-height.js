@@ -14,12 +14,18 @@ import { isBlockTheme, isString, isObject, isUndefined } from '@blockera/utils';
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
-import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
-import { getBlockeraExperimentalFeatures } from '../blockera-settings-paths';
-import { generateVariableString, getBlockEditorSettings } from './index';
-import { normalizePresetSize } from './normalize-preset-sizes';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
+import { normalizePresetSize } from './normalize-preset-sizes';
+import { generateVariableString, getBlockEditorSettings } from './index';
+import { getBlockeraExperimentalFeatures } from '../blockera-settings-paths';
+import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
+import {
+	PRESET_ORIGIN_REFERENCE,
+	CUSTOM_ORIGIN_REFERENCE,
+	getThemeVariableReference,
+	mergeVariableItemsBySlug,
+} from './merge-global-style-simple-presets';
 
 export const getLineHeights = (): Array<VariableItem> => {
 	if (isBlockTheme()) {
