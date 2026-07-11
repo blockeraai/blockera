@@ -7,13 +7,10 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings'])) {
 		$data['settings'] = [];
 	}
-	if (!isset($data['settings']['blockera'])) {
-		$data['settings']['blockera'] = [];
+	if (!isset($data['settings']['blockeraBorder'])) {
+		$data['settings']['blockeraBorder'] = [];
 	}
-	if (!isset($data['settings']['blockera']['blockeraBorder'])) {
-		$data['settings']['blockera']['blockeraBorder'] = [];
-	}
-	$data['settings']['blockera']['blockeraBorder']['presets'][] = [
+	$data['settings']['blockeraBorder']['presets'][] = [
 		'slug'   => 'e-2-e-taxonomy-border',
 		'name'   => 'E2E Group / Tiny',
 		'border' => [

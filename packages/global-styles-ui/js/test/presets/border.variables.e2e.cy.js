@@ -48,12 +48,12 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting(
-			'blockera.blockeraBorder.presets.theme'
-		).then((rows) => {
-			const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
-			expect(row.border.width).to.eq('6px');
-		});
+		getEditedGlobalStylesSetting('blockeraBorder.presets.theme').then(
+			(rows) => {
+				const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
+				expect(row.border.width).to.eq('6px');
+			}
+		);
 
 		savePage();
 
@@ -66,12 +66,12 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 			'E2E Theme Border'
 		);
 
-		getEditedGlobalStylesSetting(
-			'blockera.blockeraBorder.presets.theme'
-		).then((rows) => {
-			const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
-			expect(row.border.width).to.eq('6px');
-		});
+		getEditedGlobalStylesSetting('blockeraBorder.presets.theme').then(
+			(rows) => {
+				const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
+				expect(row.border.width).to.eq('6px');
+			}
+		);
 
 		cy.contains(
 			'.blockera-borders-presets [data-cy="border-preset-repeater-item-header"]',
