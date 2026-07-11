@@ -181,7 +181,7 @@ jobs:
                   test_files=()
 
                   # Visual snapshot batches: synthetic categories visual-snapshots-1..N map to the
-                  # single visual.screen-shots.ply.js file with an explicit fixture list.
+                  # single visual.block-screenshots.ply.js file with an explicit fixture list.
                   if [[ "${{ matrix.category }}" =~ ^visual-snapshots-([0-9]+)$ ]]; then
                     batch_num="${BASH_REMATCH[1]}"
                     fixtures_csv=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" \
@@ -196,7 +196,7 @@ jobs:
                       exit 0
                     fi
 
-                    test_files+=("tests/visual.screen-shots.ply.js")
+                    test_files+=("tests/visual.block-screenshots.ply.js")
                   # When .pr-playwright.env.json exists, run only the listed files for this category.
                   elif [ -f ".pr-playwright.env.json" ]; then
                     while IFS= read -r pattern; do
