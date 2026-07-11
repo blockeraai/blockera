@@ -168,7 +168,7 @@ function resolveTextShadowPreset(presetReference: string): ?string {
 		}
 
 		const textShadowFeatures =
-			settings?.__experimentalFeatures?.blockera?.blockeraTextShadow;
+			settings?.__experimentalFeatures?.blockeraTextShadow;
 		if (textShadowFeatures?.presets) {
 			const themePresets = textShadowFeatures.presets.theme || [];
 			const defaultPresets = textShadowFeatures.presets.default || [];
