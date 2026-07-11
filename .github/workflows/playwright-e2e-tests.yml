@@ -10,6 +10,10 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
+env:
+    # Fixture folders per visual-snapshots matrix job. Change here to retune parallelism.
+    VISUAL_SNAPSHOT_BATCH_SIZE: '20'
+
 jobs:
     detect_categories:
         name: Detecting Playwright E2E Test Categories
@@ -38,10 +42,25 @@ jobs:
               id: set_categories
               run: |
                   categories=$(node .github/scripts/list-playwright-test-categories.js)
+                  visual_batches=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" node .github/scripts/list-visual-snapshot-batches.js)
+
+                  # Expand the single "visual-snapshots" category into parallel batch categories
+                  # (visual-snapshots-1, visual-snapshots-2, …) so fixture folders run concurrently.
+                  expand_visual_batches() {
+                    local input_json="$1"
+                    echo "$input_json" | jq -c --argjson batches "$visual_batches" '
+                      if index("visual-snapshots") then
+                        (map(select(. != "visual-snapshots")) + $batches) | unique | sort
+                      else
+                        .
+                      end
+                    '
+                  }
 
                   if [ "${{ env.env_file }}" == "true" ]; then
                     # Derive matrix categories from the PR-scoped testMatch file list.
                     # name.category.ply.js → category; name.ply.js → general-1
+                    # visual-snapshots → expanded to visual-snapshots-N batches (allowlist-aware).
                     filtered_categories=$(jq -r '.testMatch[]' .pr-playwright.env.json | while read -r pattern; do
                       [ -z "$pattern" ] && continue
                       base=$(basename "$pattern" .ply.js)
@@ -53,10 +72,12 @@ jobs:
                     done | sort -u)
 
                     filtered_categories_json=$(echo "$filtered_categories" | jq -R -n '[inputs]' | jq -c '.')
+                    filtered_categories_json=$(expand_visual_batches "$filtered_categories_json")
                     echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
-                    echo "Filtered categories: $filtered_categories"
+                    echo "Filtered categories: $filtered_categories_json"
                   else
-                    categories_json=$(echo $categories | jq -c '.')
+                    categories_json=$(echo "$categories" | jq -c '.')
+                    categories_json=$(expand_visual_batches "$categories_json")
                     echo "categories=$categories_json" >> $GITHUB_OUTPUT
                   fi
 
@@ -159,8 +180,25 @@ jobs:
               run: |
                   test_files=()
 
+                  # Visual snapshot batches: synthetic categories visual-snapshots-1..N map to the
+                  # single snapshots.visual-snapshots.ply.js file with an explicit fixture list.
+                  if [[ "${{ matrix.category }}" =~ ^visual-snapshots-([0-9]+)$ ]]; then
+                    batch_num="${BASH_REMATCH[1]}"
+                    fixtures_csv=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" \
+                      node .github/scripts/list-visual-snapshot-batches.js --batch "$batch_num" --fixtures-csv)
+
+                    echo "Visual snapshot batch ${batch_num}"
+                    echo "VISUAL_SNAPSHOT_FIXTURES=${fixtures_csv}"
+                    export VISUAL_SNAPSHOT_FIXTURES="$fixtures_csv"
+
+                    if [ -z "$fixtures_csv" ]; then
+                      echo "No fixtures in batch ${batch_num}; skipping."
+                      exit 0
+                    fi
+
+                    test_files+=("tests/snapshots.visual-snapshots.ply.js")
                   # When .pr-playwright.env.json exists, run only the listed files for this category.
-                  if [ -f ".pr-playwright.env.json" ]; then
+                  elif [ -f ".pr-playwright.env.json" ]; then
                     while IFS= read -r pattern; do
                       [ -z "$pattern" ] && continue
 
@@ -169,6 +207,11 @@ jobs:
                         file_category="${base#*.}"
                       else
                         file_category="general-1"
+                      fi
+
+                      # Batched visual-snapshots-* jobs are handled above; skip the raw category match.
+                      if [ "$file_category" = "visual-snapshots" ]; then
+                        continue
                       fi
 
                       if [ "$file_category" != "${{ matrix.category }}" ]; then
