@@ -7,11 +7,11 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings'])) {
 		$data['settings'] = [];
 	}
-	if (!isset($data['settings']['transform'])) {
-		$data['settings']['transform'] = [];
+	if (!isset($data['settings']['blockera']['blockeraTransform'])) {
+		$data['settings']['blockera']['blockeraTransform'] = [];
 	}
-	$data['settings']['transform']['defaultPresets'] = true;
-	$data['settings']['transform']['presets'][] = [
+	$data['settings']['blockera']['blockeraTransform']['defaultPresets'] = true;
+	$data['settings']['blockera']['blockeraTransform']['presets'][] = [
 		'slug'  => 'e-2-e-taxonomy-transform',
 		'name'  => 'E2E Group / Tiny',
 		'items' => [

@@ -7,11 +7,11 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings'])) {
 		$data['settings'] = [];
 	}
-	if (!isset($data['settings']['textShadow'])) {
-		$data['settings']['textShadow'] = [];
+	if (!isset($data['settings']['blockera']['blockeraTextShadow'])) {
+		$data['settings']['blockera']['blockeraTextShadow'] = [];
 	}
-	$data['settings']['textShadow']['defaultPresets'] = true;
-	$data['settings']['textShadow']['presets'][] = [
+	$data['settings']['blockera']['blockeraTextShadow']['defaultPresets'] = true;
+	$data['settings']['blockera']['blockeraTextShadow']['presets'][] = [
 		'slug'       => 'e-2-e-taxonomy-text-shadow',
 		'name'       => 'E2E Group / Tiny',
 		'textShadow' => '1px 1px 2px rgba(0, 0, 0, 0.4)',

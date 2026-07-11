@@ -48,7 +48,9 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting('border.presets.theme').then((rows) => {
+		getEditedGlobalStylesSetting(
+			'blockera.blockeraBorder.presets.theme'
+		).then((rows) => {
 			const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
 			expect(row.border.width).to.eq('6px');
 		});
@@ -64,7 +66,9 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 			'E2E Theme Border'
 		);
 
-		getEditedGlobalStylesSetting('border.presets.theme').then((rows) => {
+		getEditedGlobalStylesSetting(
+			'blockera.blockeraBorder.presets.theme'
+		).then((rows) => {
 			const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
 			expect(row.border.width).to.eq('6px');
 		});

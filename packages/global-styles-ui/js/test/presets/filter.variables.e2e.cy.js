@@ -55,7 +55,9 @@ describe('Global Styles UI → filter presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting('filter.presets.theme').then((rows) => {
+		getEditedGlobalStylesSetting(
+			'blockera.blockeraFilter.presets.theme'
+		).then((rows) => {
 			const row = rows.find((r) => r.slug === 'e-2-e-theme-filter');
 			expect(row.items[0].blur).to.eq('7px');
 		});
@@ -71,7 +73,9 @@ describe('Global Styles UI → filter presets (theme.json + UI)', () => {
 			'E2E Theme Filter'
 		);
 
-		getEditedGlobalStylesSetting('filter.presets.theme').then((rows) => {
+		getEditedGlobalStylesSetting(
+			'blockera.blockeraFilter.presets.theme'
+		).then((rows) => {
 			const row = rows.find((r) => r.slug === 'e-2-e-theme-filter');
 			expect(row.items[0].blur).to.eq('7px');
 		});
