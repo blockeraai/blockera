@@ -3,7 +3,10 @@
  * Playwright e2e test
  */
 const { goTo } = require('@blockera/dev-playwright/js/utils/helpers');
-const { test } = require('@blockera/dev-playwright/js/support/commands');
+const {
+	test,
+	expect,
+} = require('@blockera/dev-playwright/js/support/commands');
 
 const failures = [];
 
@@ -43,7 +46,7 @@ test.describe('Blockera Dashboard → Visual Test', () => {
 		});
 
 		try {
-			await expect(entryContent).toHaveScreenshot(`dashboard.png`, {
+			await expect(body).toHaveScreenshot(`dashboard.png`, {
 				threshold: 0.02,
 			});
 		} catch (error) {
