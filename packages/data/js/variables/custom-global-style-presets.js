@@ -10,6 +10,7 @@ import { select } from '@wordpress/data';
  */
 import type { ValueAddonReference } from '../types';
 import type { VariableItem } from './types';
+import { getBlockeraExperimentalFeatures } from '../blockera-settings-paths';
 import {
 	normalizeFontSizeFluid,
 	normalizePresetSize,
@@ -308,7 +309,9 @@ export function getMergedGlobalStylePresetVariables(
 		}
 
 		case 'text-shadow': {
-			const presets = features?.textShadow?.presets;
+			const presets =
+				getBlockeraExperimentalFeatures(features)?.blockeraTextShadow
+					?.presets;
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
@@ -334,7 +337,9 @@ export function getMergedGlobalStylePresetVariables(
 		}
 
 		case 'border': {
-			const presets = features?.border?.presets;
+			const presets =
+				getBlockeraExperimentalFeatures(features)?.blockeraBorder
+					?.presets;
 
 			return mergePresetLayers(
 				mapBorderBoxPresets,
@@ -347,7 +352,9 @@ export function getMergedGlobalStylePresetVariables(
 		}
 
 		case 'transition': {
-			const presets = features?.transition?.presets;
+			const presets =
+				getBlockeraExperimentalFeatures(features)?.blockeraTransition
+					?.presets;
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
@@ -360,7 +367,9 @@ export function getMergedGlobalStylePresetVariables(
 		}
 
 		case 'transform': {
-			const presets = features?.transform?.presets;
+			const presets =
+				getBlockeraExperimentalFeatures(features)?.blockeraTransform
+					?.presets;
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
@@ -373,7 +382,9 @@ export function getMergedGlobalStylePresetVariables(
 		}
 
 		case 'filter': {
-			const presets = features?.filter?.presets;
+			const presets =
+				getBlockeraExperimentalFeatures(features)?.blockeraFilter
+					?.presets;
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
@@ -406,13 +417,19 @@ export const getCustomGlobalStylePresetVariables: (
 			return mapSpacingCustom(features?.spacing?.spacingSizes?.custom);
 
 		case 'width-size':
-			return mapSpacingCustom(features?.layout?.widthSizes?.custom);
+			return mapSpacingCustom(
+				getBlockeraExperimentalFeatures(features)?.blockeraWidthSizes
+					?.custom
+			);
 
 		case 'font-size':
 			return mapFontSizesCustom(features?.typography?.fontSizes?.custom);
 
 		case 'line-height':
-			return mapSpacingCustom(features?.typography?.lineHeights?.custom);
+			return mapSpacingCustom(
+				getBlockeraExperimentalFeatures(features)?.blockeraLineHeights
+					?.custom
+			);
 
 		case 'linear-gradient':
 			return mapGradientsCustom(features?.color?.gradients?.custom, (g) =>
@@ -433,7 +450,8 @@ export const getCustomGlobalStylePresetVariables: (
 
 		case 'text-shadow':
 			return mapItemsArrayPresets(
-				features?.textShadow?.presets?.custom,
+				getBlockeraExperimentalFeatures(features)?.blockeraTextShadow
+					?.presets?.custom,
 				'shadow',
 				customOriginRef
 			);
@@ -447,28 +465,32 @@ export const getCustomGlobalStylePresetVariables: (
 
 		case 'border':
 			return mapBorderBoxPresets(
-				features?.border?.presets?.custom,
+				getBlockeraExperimentalFeatures(features)?.blockeraBorder
+					?.presets?.custom,
 				undefined,
 				customOriginRef
 			);
 
 		case 'transition':
 			return mapItemsArrayPresets(
-				features?.transition?.presets?.custom,
+				getBlockeraExperimentalFeatures(features)?.blockeraTransition
+					?.presets?.custom,
 				undefined,
 				customOriginRef
 			);
 
 		case 'transform':
 			return mapItemsArrayPresets(
-				features?.transform?.presets?.custom,
+				getBlockeraExperimentalFeatures(features)?.blockeraTransform
+					?.presets?.custom,
 				undefined,
 				customOriginRef
 			);
 
 		case 'filter':
 			return mapItemsArrayPresets(
-				features?.filter?.presets?.custom,
+				getBlockeraExperimentalFeatures(features)?.blockeraFilter
+					?.presets?.custom,
 				undefined,
 				customOriginRef
 			);

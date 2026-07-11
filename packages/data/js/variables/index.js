@@ -11,6 +11,15 @@ export const getBlockEditorSettings = (): Object => {
 };
 
 export {
+	BLOCKERA_SETTINGS_ROOT,
+	BLOCKERA_SETTINGS_PROPERTY,
+	BLOCKERA_GLOBAL_SETTING_PATH,
+	BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH,
+	BLOCKERA_PRESET_METADATA_PATHS,
+	getBlockeraExperimentalFeatures,
+} from '../blockera-settings-paths';
+
+export {
 	getLinearGradients,
 	getLinearGradientBy,
 	getLinearGradient,

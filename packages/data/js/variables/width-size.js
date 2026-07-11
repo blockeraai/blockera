@@ -18,15 +18,17 @@ import { STORE_NAME } from '../store';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 import { generateVariableString, parseVarString } from './utils';
-import { CUSTOM_ORIGIN_REFERENCE } from './merge-global-style-simple-presets';
+import { getBlockeraExperimentalFeatures } from '../blockera-settings-paths';
 import { normalizePresetSize } from './normalize-preset-sizes';
+import { CUSTOM_ORIGIN_REFERENCE } from './merge-global-style-simple-presets';
 
 export const getWidthSizes = (): Array<VariableItem> | [] => {
 	const reference = {
 		type: 'preset',
 	};
 
-	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
+	const features = getBlockEditorSettings()?.__experimentalFeatures;
+	const layout = features?.layout;
 
 	const items = [];
 
@@ -52,7 +54,8 @@ export const getWidthSizes = (): Array<VariableItem> | [] => {
 		});
 	}
 
-	const customWidthSizes = layout?.widthSizes?.custom;
+	const customWidthSizes =
+		getBlockeraExperimentalFeatures(features)?.blockeraWidthSizes?.custom;
 	if (Array.isArray(customWidthSizes)) {
 		for (const raw of customWidthSizes) {
 			if (!raw || raw.slug === undefined || raw.slug === null) {

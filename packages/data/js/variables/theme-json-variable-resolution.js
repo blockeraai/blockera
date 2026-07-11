@@ -111,7 +111,7 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'font-size',
 		},
 		{
-			path: ['typography', 'lineHeights'],
+			path: ['blockera', 'blockeraLineHeights'],
 			valueKey: 'size',
 			cssVarInfix: 'line-height',
 		},
@@ -126,7 +126,7 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'spacing',
 		},
 		{
-			path: ['layout', 'widthSizes'],
+			path: ['blockera', 'blockeraWidthSizes'],
 			valueKey: 'size',
 			cssVarInfix: 'width-size',
 		},
@@ -136,7 +136,7 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'border-radius',
 		},
 		{
-			path: ['dimensions', 'dimensionSizes'],
+			path: ['blockera', 'blockeraDimensionSizes'],
 			valueKey: 'size',
 			cssVarInfix: 'dimension',
 		},
