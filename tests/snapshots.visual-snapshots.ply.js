@@ -64,6 +64,7 @@ function getVisualSnapshotFixtureAllowlist() {
 
 		return new Set(allowlist);
 	} catch (error) {
+		// @debug-ignore
 		console.warn(
 			'Failed to read visualSnapshotFixtures from .pr-playwright.env.json:',
 			error.message
