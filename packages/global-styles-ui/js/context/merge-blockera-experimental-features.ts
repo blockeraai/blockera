@@ -4,14 +4,9 @@
  * Keep in sync with PHP {@see blockera_merge_settings_into_experimental_features}.
  */
 
-const BLOCKERA_ONLY_TOP_KEYS = [
-	'transition',
-	'transform',
-	'filter',
-	'textShadow',
-] as const;
+import { BLOCKERA_SETTINGS_ROOT } from '@blockera/data';
 
-const RECURSIVE_MERGE_KEYS = [
+const CORE_RECURSIVE_MERGE_KEYS = [
 	'shadow',
 	'border',
 	'dimensions',
@@ -19,6 +14,18 @@ const RECURSIVE_MERGE_KEYS = [
 	'layout',
 	'spacing',
 	'color',
+] as const;
+
+const BLOCKERA_WHOLESALE_REPLACE_KEYS = [
+	'blockeraBorder',
+	'blockeraLineHeights',
+	'blockeraDefaultLineHeights',
+	'blockeraWidthSizes',
+	'blockeraTransition',
+	'blockeraTransform',
+	'blockeraFilter',
+	'blockeraTextShadow',
+	'blockeraDimensionSizes',
 ] as const;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -56,20 +63,41 @@ export function mergeBlockeraSettingsIntoExperimentalFeatures(
 ): Record<string, unknown> {
 	const next = { ...currentFeatures };
 
-	for (const key of BLOCKERA_ONLY_TOP_KEYS) {
-		if (key in blockeraSettings) {
-			next[key] = blockeraSettings[key];
+	const blockeraSlice = blockeraSettings[BLOCKERA_SETTINGS_ROOT];
+	if (isPlainObject(blockeraSlice)) {
+		const existing: Record<string, unknown> = isPlainObject(
+			next[BLOCKERA_SETTINGS_ROOT]
+		)
+			? {
+					...(next[BLOCKERA_SETTINGS_ROOT] as Record<
+						string,
+						unknown
+					>),
+				}
+			: {};
+
+		for (const key of BLOCKERA_WHOLESALE_REPLACE_KEYS) {
+			if (key in blockeraSlice) {
+				existing[key] = blockeraSlice[key];
+			}
 		}
+
+		next[BLOCKERA_SETTINGS_ROOT] = existing;
 	}
 
-	for (const key of RECURSIVE_MERGE_KEYS) {
+	for (const key of CORE_RECURSIVE_MERGE_KEYS) {
 		const value = blockeraSettings[key];
-		if (isPlainObject(value)) {
-			const existing = isPlainObject(next[key])
-				? (next[key] as Record<string, unknown>)
-				: {};
-			next[key] = arrayReplaceRecursive(existing, value);
+		if (!isPlainObject(value)) {
+			continue;
 		}
+
+		const existing = isPlainObject(next[key])
+			? (next[key] as Record<string, unknown>)
+			: {};
+		next[key] = arrayReplaceRecursive(
+			existing,
+			value as Record<string, unknown>
+		);
 	}
 
 	if (isPlainObject(blockeraSettings.blocks)) {

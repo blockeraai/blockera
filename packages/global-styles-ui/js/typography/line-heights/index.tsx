@@ -16,7 +16,10 @@ import {
 	PresetVariablesViewModeProvider,
 	PRESET_VARIABLES_SECTION_GAP,
 } from '@blockera/controls';
-import { normalizeSizeThemeJsonPreset } from '@blockera/data';
+import {
+	normalizeSizeThemeJsonPreset,
+	BLOCKERA_GLOBAL_SETTING_PATH,
+} from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 
 /**
@@ -146,30 +149,30 @@ const LineHeightGroup = memo(LineHeightGroupComponent);
 
 export function LineHeightsPresetContent() {
 	const [themeLineHeights, setThemeLineHeights] = useGlobalSetting(
-		'typography.lineHeights.theme'
+		BLOCKERA_GLOBAL_SETTING_PATH.LINE_HEIGHTS_THEME
 	);
 
 	const [baseThemeLineHeights] = useGlobalSetting(
-		'typography.lineHeights.theme',
+		BLOCKERA_GLOBAL_SETTING_PATH.LINE_HEIGHTS_THEME,
 		'',
 		'base'
 	);
 	const [defaultLineHeights, setDefaultLineHeights] = useGlobalSetting(
-		'typography.lineHeights.default'
+		BLOCKERA_GLOBAL_SETTING_PATH.LINE_HEIGHTS_DEFAULT
 	);
 
 	const [baseDefaultLineHeights] = useGlobalSetting(
-		'typography.lineHeights.default',
+		BLOCKERA_GLOBAL_SETTING_PATH.LINE_HEIGHTS_DEFAULT,
 		'',
 		'base'
 	);
 
 	const [customLineHeights = [], setCustomLineHeights] = useGlobalSetting(
-		'typography.lineHeights.custom'
+		BLOCKERA_GLOBAL_SETTING_PATH.LINE_HEIGHTS_CUSTOM
 	);
 
 	const [defaultLineHeightsEnabled] = useGlobalSetting(
-		'typography.defaultLineHeights'
+		BLOCKERA_GLOBAL_SETTING_PATH.DEFAULT_LINE_HEIGHTS
 	);
 
 	const convertRepeaterValueToArray = useCallback(

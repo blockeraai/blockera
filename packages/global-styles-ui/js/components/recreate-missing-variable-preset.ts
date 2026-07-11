@@ -2,6 +2,7 @@
  * Blockera dependencies
  */
 import { setImmutably } from '@blockera/utils';
+import { BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -19,17 +20,17 @@ export type RecreateMissingVariableResult =
 
 const CUSTOM_PRESET_PATH_BY_TYPE: Record<string, string> = {
 	'font-size': 'settings.typography.fontSizes.custom',
-	'line-height': 'settings.typography.lineHeights.custom',
+	'line-height': BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH['line-height'],
 	color: 'settings.color.palette.custom',
 	spacing: 'settings.spacing.spacingSizes.custom',
-	'width-size': 'settings.layout.widthSizes.custom',
+	'width-size': BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH['width-size'],
 	'border-radius': 'settings.border.radiusSizes.custom',
-	border: 'settings.border.presets.custom',
+	border: BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH.border,
 	shadow: 'settings.shadow.presets.custom',
-	'text-shadow': 'settings.textShadow.presets.custom',
-	transform: 'settings.transform.presets.custom',
-	transition: 'settings.transition.presets.custom',
-	filter: 'settings.filter.presets.custom',
+	'text-shadow': BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH['text-shadow'],
+	transform: BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH.transform,
+	transition: BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH.transition,
+	filter: BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH.filter,
 	'linear-gradient': 'settings.color.gradients.custom',
 	'radial-gradient': 'settings.color.gradients.custom',
 };

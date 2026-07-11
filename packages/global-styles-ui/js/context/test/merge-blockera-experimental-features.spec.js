@@ -1,7 +1,7 @@
 import { mergeBlockeraSettingsIntoExperimentalFeatures } from '../merge-blockera-experimental-features';
 
 describe('mergeBlockeraSettingsIntoExperimentalFeatures', () => {
-	it('overlays typography.lineHeights without dropping core typography keys', () => {
+	it('overlays blockera line heights without dropping core typography keys', () => {
 		const current = {
 			typography: {
 				fontSizes: {
@@ -11,11 +11,11 @@ describe('mergeBlockeraSettingsIntoExperimentalFeatures', () => {
 		};
 
 		const blockera = {
-			typography: {
-				lineHeights: {
+			blockera: {
+				blockeraLineHeights: {
 					custom: [{ slug: 'relaxed', size: '1.8' }],
 				},
-				defaultLineHeights: true,
+				blockeraDefaultLineHeights: true,
 			},
 		};
 
@@ -28,19 +28,27 @@ describe('mergeBlockeraSettingsIntoExperimentalFeatures', () => {
 			fontSizes: {
 				theme: [{ slug: 'small', size: '14px' }],
 			},
-			lineHeights: {
+		});
+		expect(merged.blockera).toEqual({
+			blockeraLineHeights: {
 				custom: [{ slug: 'relaxed', size: '1.8' }],
 			},
-			defaultLineHeights: true,
+			blockeraDefaultLineHeights: true,
 		});
 	});
 
-	it('replaces Blockera-only top-level preset groups', () => {
+	it('merges Blockera-only preset groups under settings.blockera', () => {
 		const merged = mergeBlockeraSettingsIntoExperimentalFeatures(
-			{ transition: { presets: { old: true } } },
-			{ transition: { presets: { theme: [] } } }
+			{ blockera: { blockeraTransition: { presets: { old: true } } } },
+			{
+				blockera: {
+					blockeraTransition: { presets: { theme: [] } },
+				},
+			}
 		);
 
-		expect(merged.transition).toEqual({ presets: { theme: [] } });
+		expect(merged.blockera.blockeraTransition).toEqual({
+			presets: { theme: [] },
+		});
 	});
 });

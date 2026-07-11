@@ -4,6 +4,7 @@
 import {
 	THEME_JSON_PRESET_METADATA_BASE,
 	resolveThemeJsonPresetCssDeclarationValue,
+	BLOCKERA_PRESET_METADATA_PATHS,
 } from '@blockera/data';
 
 /**
@@ -27,23 +28,23 @@ const BLOCKERA_ONLY_PRESET_ROWS: Array<{
 	cssVarInfix: string;
 }> = [
 	{
-		path: ['border', 'presets'],
+		path: [...BLOCKERA_PRESET_METADATA_PATHS.BORDER_PRESETS],
 		cssVarInfix: 'border',
 	},
 	{
-		path: ['transition', 'presets'],
+		path: [...BLOCKERA_PRESET_METADATA_PATHS.TRANSITION_PRESETS],
 		cssVarInfix: 'transition',
 	},
 	{
-		path: ['transform', 'presets'],
+		path: [...BLOCKERA_PRESET_METADATA_PATHS.TRANSFORM_PRESETS],
 		cssVarInfix: 'transform',
 	},
 	{
-		path: ['filter', 'presets'],
+		path: [...BLOCKERA_PRESET_METADATA_PATHS.FILTER_PRESETS],
 		cssVarInfix: 'filter',
 	},
 	{
-		path: ['textShadow', 'presets'],
+		path: [...BLOCKERA_PRESET_METADATA_PATHS.TEXT_SHADOW_PRESETS],
 		cssVarInfix: 'text-shadow',
 	},
 ];
@@ -119,7 +120,7 @@ function collectPresetDeclarations(
 
 /**
  * CSS custom properties for Blockera / extended theme.json preset paths that
- * core `generateGlobalStyles` does not emit (e.g. `typography.lineHeights`).
+ * core `generateGlobalStyles` does not emit (e.g. `blockera.blockeraLineHeights`).
  *
  * Parity target: variables slice of {@see blockera_get_global_stylesheet()}.
  */
