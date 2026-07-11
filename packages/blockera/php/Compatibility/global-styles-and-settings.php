@@ -1,5 +1,6 @@
 <?php
 
+use Blockera\Setup\Compatibility\BlockeraSettingsPaths;
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
@@ -608,7 +609,7 @@ if ( ! function_exists( 'blockera_merge_settings_into_experimental_features' ) )
 	/**
 	 * Overlays Blockera global-styles-ui settings onto block editor `__experimentalFeatures`.
 	 *
-	 * Mirrors preset paths managed by `useGlobalSetting` (typography.lineHeights, layout.widthSizes, etc.)
+	 * Mirrors preset paths managed by `useGlobalSetting` (`blockera.blockeraLineHeights`, `blockera.blockeraWidthSizes`, etc.)
 	 * so variable pickers and canvas CSS vars stay aligned with the Site Editor globalStyles entity.
 	 *
 	 * @param array $experimental_features Reference to current __experimentalFeatures.
@@ -618,38 +619,10 @@ if ( ! function_exists( 'blockera_merge_settings_into_experimental_features' ) )
 		array &$experimental_features,
 		array $blockera_settings
 	): void {
-		$blockera_only_top = array( 'transition', 'transform', 'filter', 'textShadow' );
-		foreach ( $blockera_only_top as $key ) {
-			if ( isset( $blockera_settings[ $key ] ) ) {
-				$experimental_features[ $key ] = $blockera_settings[ $key ];
-			}
-		}
-
-		foreach (
-			array(
-				'shadow',
-				'border',
-				'dimensions',
-				'typography',
-				'layout',
-				'spacing',
-				'color',
-			) as $key
-		) {
-			if ( isset( $blockera_settings[ $key ] ) && is_array( $blockera_settings[ $key ] ) ) {
-				$experimental_features[ $key ] = array_replace_recursive(
-					(array) ( $experimental_features[ $key ] ?? array() ),
-					$blockera_settings[ $key ]
-				);
-			}
-		}
-
-		if ( isset( $blockera_settings['blocks'] ) && is_array( $blockera_settings['blocks'] ) ) {
-			$experimental_features['blocks'] = array_replace_recursive(
-				(array) ( $experimental_features['blocks'] ?? array() ),
-				$blockera_settings['blocks']
-			);
-		}
+		BlockeraSettingsPaths::merge_into_experimental_features(
+			$experimental_features,
+			$blockera_settings
+		);
 	}
 }
 
@@ -658,8 +631,8 @@ if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) 
 	 * Merges Blockera extended global settings into the block editor's __experimentalFeatures.
 	 *
 	 * Core {@see wp_get_global_settings()} uses {@see WP_Theme_JSON_Resolver} and {@see WP_Theme_JSON},
-	 * whose sanitization drops Blockera-only preset groups (transition, transform, filter, textShadow,
-	 * typography.lineHeights, layout.widthSizes, extended border/shadow/dimensions, and block-level entries).
+	 * whose sanitization drops Blockera-only preset groups under `settings.blockera`
+	 * (line heights, width sizes, border lines, transitions, transforms, filters, text shadows, etc.).
 	 * The editor still needs those for variable pickers and parity with {@see blockera_get_global_stylesheet()}.
 	 *
 	 * Initial load only: Site Editor live edits are mirrored by
