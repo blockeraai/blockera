@@ -31,9 +31,21 @@ const config = defineConfig({
 	...baseConfig,
 	// Flaky = failed a run then passed on retry; must not fail CI unless explicitly opted in.
 	failOnFlakyTests: false,
-	// Always write/regenerate Playwright screenshot baselines (toHaveScreenshot).
-	// CLI can still override (e.g. --update-snapshots=none).
-	updateSnapshots: 'all',
+	// Compare screenshots by default. `updateSnapshots: 'all'` made CI rewrite baselines
+	// ("is re-generated, writing actual") and always pass instead of failing on diffs.
+	// - CI: never update (fail on mismatch)
+	// - Local: only create missing baselines
+	// - Intentional refresh: UPDATE_SNAPSHOTS=1 or `npx playwright test --update-snapshots`
+	updateSnapshots: (() => {
+		if (
+			process.env.UPDATE_SNAPSHOTS === '1' ||
+			process.env.UPDATE_SNAPSHOTS === 'all'
+		) {
+			return 'all';
+		}
+
+		return process.env.CI ? 'none' : 'missing';
+	})(),
 	testDir: './',
 	testMatch: prPlaywrightEnv.testMatch ?? '**/*.ply.js',
 	...(Array.isArray(prPlaywrightEnv.testIgnore) &&
