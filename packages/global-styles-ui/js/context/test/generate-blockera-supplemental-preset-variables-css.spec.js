@@ -3,10 +3,8 @@ import { generateBlockeraSupplementalPresetVariablesCss } from '../generate-bloc
 describe('generateBlockeraSupplementalPresetVariablesCss', () => {
 	it('emits line-height preset variables from merged settings', () => {
 		const css = generateBlockeraSupplementalPresetVariablesCss({
-			blockera: {
-				blockeraLineHeights: {
-					custom: [{ slug: 'relaxed', size: '1.8', isVisible: true }],
-				},
+			blockeraLineHeights: {
+				custom: [{ slug: 'relaxed', size: '1.8', isVisible: true }],
 			},
 		});
 
@@ -25,20 +23,18 @@ describe('generateBlockeraSupplementalPresetVariablesCss', () => {
 
 	it('emits border preset variables from merged settings', () => {
 		const css = generateBlockeraSupplementalPresetVariablesCss({
-			blockera: {
-				blockeraBorder: {
-					presets: {
-						custom: [
-							{
-								slug: 'accent',
-								border: {
-									width: '1px',
-									style: 'solid',
-									color: '#112233',
-								},
+			blockeraBorder: {
+				presets: {
+					custom: [
+						{
+							slug: 'accent',
+							border: {
+								width: '1px',
+								style: 'solid',
+								color: '#112233',
 							},
-						],
-					},
+						},
+					],
 				},
 			},
 		});
@@ -50,20 +46,18 @@ describe('generateBlockeraSupplementalPresetVariablesCss', () => {
 
 	it('defaults empty border style to solid in preset variables CSS', () => {
 		const css = generateBlockeraSupplementalPresetVariablesCss({
-			blockera: {
-				blockeraBorder: {
-					presets: {
-						custom: [
-							{
-								slug: 'border-1',
-								border: {
-									width: '10px',
-									style: '',
-									color: '#d53a3a',
-								},
+			blockeraBorder: {
+				presets: {
+					custom: [
+						{
+							slug: 'border-1',
+							border: {
+								width: '10px',
+								style: '',
+								color: '#d53a3a',
 							},
-						],
-					},
+						},
+					],
 				},
 			},
 		});

@@ -120,7 +120,7 @@ function collectPresetDeclarations(
 
 /**
  * CSS custom properties for Blockera / extended theme.json preset paths that
- * core `generateGlobalStyles` does not emit (e.g. `blockera.blockeraLineHeights`).
+ * core `generateGlobalStyles` does not emit (e.g. `blockeraLineHeights`).
  *
  * Parity target: variables slice of {@see blockera_get_global_stylesheet()}.
  */

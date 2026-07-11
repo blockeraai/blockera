@@ -4,7 +4,7 @@
  * Keep in sync with PHP {@see blockera_merge_settings_into_experimental_features}.
  */
 
-import { BLOCKERA_SETTINGS_ROOT } from '@blockera/data';
+import { BLOCKERA_SETTINGS_KEYS } from '@blockera/data';
 
 const CORE_RECURSIVE_MERGE_KEYS = [
 	'shadow',
@@ -14,18 +14,6 @@ const CORE_RECURSIVE_MERGE_KEYS = [
 	'layout',
 	'spacing',
 	'color',
-] as const;
-
-const BLOCKERA_WHOLESALE_REPLACE_KEYS = [
-	'blockeraBorder',
-	'blockeraLineHeights',
-	'blockeraDefaultLineHeights',
-	'blockeraWidthSizes',
-	'blockeraTransition',
-	'blockeraTransform',
-	'blockeraFilter',
-	'blockeraTextShadow',
-	'blockeraDimensionSizes',
 ] as const;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -63,26 +51,10 @@ export function mergeBlockeraSettingsIntoExperimentalFeatures(
 ): Record<string, unknown> {
 	const next = { ...currentFeatures };
 
-	const blockeraSlice = blockeraSettings[BLOCKERA_SETTINGS_ROOT];
-	if (isPlainObject(blockeraSlice)) {
-		const existing: Record<string, unknown> = isPlainObject(
-			next[BLOCKERA_SETTINGS_ROOT]
-		)
-			? {
-					...(next[BLOCKERA_SETTINGS_ROOT] as Record<
-						string,
-						unknown
-					>),
-				}
-			: {};
-
-		for (const key of BLOCKERA_WHOLESALE_REPLACE_KEYS) {
-			if (key in blockeraSlice) {
-				existing[key] = blockeraSlice[key];
-			}
+	for (const key of BLOCKERA_SETTINGS_KEYS) {
+		if (key in blockeraSettings) {
+			next[key] = blockeraSettings[key];
 		}
-
-		next[BLOCKERA_SETTINGS_ROOT] = existing;
 	}
 
 	for (const key of CORE_RECURSIVE_MERGE_KEYS) {

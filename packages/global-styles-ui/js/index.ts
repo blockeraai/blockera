@@ -46,7 +46,8 @@ export {
 export { getVariationClassName } from './theme-json-utils';
 export { useGlobalSetting, useGlobalStyle } from './context/global-style-hooks';
 export {
-	BLOCKERA_SETTINGS_ROOT,
+	BLOCKERA_SETTINGS_PROPERTY,
+	BLOCKERA_SETTINGS_KEYS,
 	BLOCKERA_GLOBAL_SETTING_PATH,
 	BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH,
 } from '@blockera/data';

@@ -11,12 +11,10 @@ describe('mergeBlockeraSettingsIntoExperimentalFeatures', () => {
 		};
 
 		const blockera = {
-			blockera: {
-				blockeraLineHeights: {
-					custom: [{ slug: 'relaxed', size: '1.8' }],
-				},
-				blockeraDefaultLineHeights: true,
+			blockeraLineHeights: {
+				custom: [{ slug: 'relaxed', size: '1.8' }],
 			},
+			blockeraDefaultLineHeights: true,
 		};
 
 		const merged = mergeBlockeraSettingsIntoExperimentalFeatures(
@@ -29,25 +27,21 @@ describe('mergeBlockeraSettingsIntoExperimentalFeatures', () => {
 				theme: [{ slug: 'small', size: '14px' }],
 			},
 		});
-		expect(merged.blockera).toEqual({
-			blockeraLineHeights: {
-				custom: [{ slug: 'relaxed', size: '1.8' }],
-			},
-			blockeraDefaultLineHeights: true,
+		expect(merged.blockeraLineHeights).toEqual({
+			custom: [{ slug: 'relaxed', size: '1.8' }],
 		});
+		expect(merged.blockeraDefaultLineHeights).toBe(true);
 	});
 
-	it('merges Blockera-only preset groups under settings.blockera', () => {
+	it('merges Blockera-only preset groups as flat settings keys', () => {
 		const merged = mergeBlockeraSettingsIntoExperimentalFeatures(
-			{ blockera: { blockeraTransition: { presets: { old: true } } } },
+			{ blockeraTransition: { presets: { old: true } } },
 			{
-				blockera: {
-					blockeraTransition: { presets: { theme: [] } },
-				},
+				blockeraTransition: { presets: { theme: [] } },
 			}
 		);
 
-		expect(merged.blockera.blockeraTransition).toEqual({
+		expect(merged.blockeraTransition).toEqual({
 			presets: { theme: [] },
 		});
 	});
