@@ -7,7 +7,7 @@
  *
  * Preset reading is anchored at `__experimentalFeatures` (already merged by
  * core: theme.json defaults + theme + user). Blockera-only presets live under
- * `__experimentalFeatures.blockera.*`.
+ * `__experimentalFeatures.blockera*` flat keys.
  * `blockGap` is resolved separately via `styles.spacing.blockGap` and its preset
  * reference is dereferenced against the spacing-size map we just built.
  */
