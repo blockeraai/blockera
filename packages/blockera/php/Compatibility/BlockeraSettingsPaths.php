@@ -9,8 +9,6 @@ namespace Blockera\Setup\Compatibility;
  */
 final class BlockeraSettingsPaths {
 
-	public const ROOT = 'blockera';
-
 	public const BORDER               = 'blockeraBorder';
 	public const LINE_HEIGHTS         = 'blockeraLineHeights';
 	public const DEFAULT_LINE_HEIGHTS = 'blockeraDefaultLineHeights';
@@ -22,38 +20,53 @@ final class BlockeraSettingsPaths {
 	public const DIMENSION_SIZES      = 'blockeraDimensionSizes';
 
 	/**
+	 * @return list<string>
+	 */
+	public static function setting_keys(): array {
+		return array(
+			self::BORDER,
+			self::LINE_HEIGHTS,
+			self::DEFAULT_LINE_HEIGHTS,
+			self::WIDTH_SIZES,
+			self::TRANSITION,
+			self::TRANSFORM,
+			self::FILTER,
+			self::TEXT_SHADOW,
+			self::DIMENSION_SIZES,
+		);
+	}
+
+	/**
 	 * Valid settings schema extension for {@see JSON::get_valid_settings_schema()}.
 	 *
 	 * @return array<string, mixed>
 	 */
 	public static function valid_settings_extension(): array {
 		return array(
-			self::ROOT => array(
-				self::BORDER          => array(
-					'presets'        => null,
-					'defaultPresets' => null,
-				),
-				self::LINE_HEIGHTS    => null,
-				self::DEFAULT_LINE_HEIGHTS => null,
-				self::WIDTH_SIZES     => null,
-				self::TRANSITION      => array(
-					'presets'        => null,
-					'defaultPresets' => null,
-				),
-				self::TRANSFORM       => array(
-					'presets'        => null,
-					'defaultPresets' => null,
-				),
-				self::FILTER          => array(
-					'presets'        => null,
-					'defaultPresets' => null,
-				),
-				self::TEXT_SHADOW     => array(
-					'presets'        => null,
-					'defaultPresets' => null,
-				),
-				self::DIMENSION_SIZES => null,
+			self::BORDER          => array(
+				'presets'        => null,
+				'defaultPresets' => null,
 			),
+			self::LINE_HEIGHTS    => null,
+			self::DEFAULT_LINE_HEIGHTS => null,
+			self::WIDTH_SIZES     => null,
+			self::TRANSITION      => array(
+				'presets'        => null,
+				'defaultPresets' => null,
+			),
+			self::TRANSFORM       => array(
+				'presets'        => null,
+				'defaultPresets' => null,
+			),
+			self::FILTER          => array(
+				'presets'        => null,
+				'defaultPresets' => null,
+			),
+			self::TEXT_SHADOW     => array(
+				'presets'        => null,
+				'defaultPresets' => null,
+			),
+			self::DIMENSION_SIZES => null,
 		);
 	}
 
@@ -65,28 +78,10 @@ final class BlockeraSettingsPaths {
 		array &$experimental_features,
 		array $blockera_settings
 	): void {
-		if ( isset( $blockera_settings[ self::ROOT ] ) && is_array( $blockera_settings[ self::ROOT ] ) ) {
-			$existing = (array) ( $experimental_features[ self::ROOT ] ?? array() );
-
-			foreach (
-				array(
-					self::BORDER,
-					self::LINE_HEIGHTS,
-					self::DEFAULT_LINE_HEIGHTS,
-					self::WIDTH_SIZES,
-					self::TRANSITION,
-					self::TRANSFORM,
-					self::FILTER,
-					self::TEXT_SHADOW,
-					self::DIMENSION_SIZES,
-				) as $key
-			) {
-				if ( array_key_exists( $key, $blockera_settings[ self::ROOT ] ) ) {
-					$existing[ $key ] = $blockera_settings[ self::ROOT ][ $key ];
-				}
+		foreach ( self::setting_keys() as $key ) {
+			if ( array_key_exists( $key, $blockera_settings ) ) {
+				$experimental_features[ $key ] = $blockera_settings[ $key ];
 			}
-
-			$experimental_features[ self::ROOT ] = $existing;
 		}
 
 		$core_merge_keys = array( 'shadow', 'border', 'dimensions', 'typography', 'layout', 'spacing', 'color' );
