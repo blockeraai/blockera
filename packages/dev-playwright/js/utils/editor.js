@@ -532,10 +532,12 @@ async function savePage(page) {
 		await snackbarSaveButton.click();
 	}
 
-	await page.waitForSelector(
-		'.components-snackbar, .components-notice.is-success',
-		{ timeout: 10000 }
-	);
+	// Use .first() — save can surface multiple snackbars (e.g. draft + published),
+	// and waitForSelector fails in strict mode when more than one matches.
+	await page
+		.locator('.components-snackbar, .components-notice.is-success')
+		.first()
+		.waitFor({ state: 'visible', timeout: 10000 });
 }
 
 /**
