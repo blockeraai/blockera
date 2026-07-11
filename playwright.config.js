@@ -10,6 +10,7 @@ const baseConfig = require('@wordpress/scripts/config/playwright.config.js');
  * Internal dependencies
  */
 const envPath = path.resolve(__dirname, './playwright.env.json');
+const prEnvPath = path.resolve(__dirname, './.pr-playwright.env.json');
 
 // If env file exists, load it into process.env.
 if (fs.existsSync(envPath)) {
@@ -20,6 +21,12 @@ if (fs.existsSync(envPath)) {
 	};
 }
 
+// Optional PR-scoped filter (committed on feature branches only; see check-pr-config-files.yml).
+let prPlaywrightEnv = {};
+if (fs.existsSync(prEnvPath)) {
+	prPlaywrightEnv = require(prEnvPath);
+}
+
 const config = defineConfig({
 	...baseConfig,
 	// Flaky = failed a run then passed on retry; must not fail CI unless explicitly opted in.
@@ -28,7 +35,11 @@ const config = defineConfig({
 	// CLI can still override (e.g. --update-snapshots=none).
 	updateSnapshots: 'all',
 	testDir: './',
-	testMatch: '**/*.ply.js',
+	testMatch: prPlaywrightEnv.testMatch ?? '**/*.ply.js',
+	...(Array.isArray(prPlaywrightEnv.testIgnore) &&
+	prPlaywrightEnv.testIgnore.length
+		? { testIgnore: prPlaywrightEnv.testIgnore }
+		: {}),
 	reporter: process.env.CI
 		? [
 				['list'], // Shows test names and progress in real-time

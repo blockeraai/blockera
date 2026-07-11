@@ -24,12 +24,41 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Check if .pr-playwright.env.json exists
+              id: check_env_file
+              run: |
+                  if [ -f ".pr-playwright.env.json" ]; then
+                    echo "Found .pr-playwright.env.json"
+                    echo "env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: List test categories
               id: set_categories
               run: |
                   categories=$(node .github/scripts/list-playwright-test-categories.js)
-                  categories_json=$(echo $categories | jq -c '.')
-                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Derive matrix categories from the PR-scoped testMatch file list.
+                    # name.category.ply.js → category; name.ply.js → general-1
+                    filtered_categories=$(jq -r '.testMatch[]' .pr-playwright.env.json | while read -r pattern; do
+                      [ -z "$pattern" ] && continue
+                      base=$(basename "$pattern" .ply.js)
+                      if [[ "$base" == *.* ]]; then
+                        echo "${base#*.}"
+                      else
+                        echo "general-1"
+                      fi
+                    done | sort -u)
+
+                    filtered_categories_json=$(echo "$filtered_categories" | jq -R -n '[inputs]' | jq -c '.')
+                    echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
+                    echo "Filtered categories: $filtered_categories"
+                  else
+                    categories_json=$(echo $categories | jq -c '.')
+                    echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                  fi
 
             - name: Print categories output
               run: |
@@ -128,70 +157,97 @@ jobs:
 
             - name: Run Playwright E2E Tests
               run: |
-                  # Determine test pattern based on category
-                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                  test_files=()
+
+                  # When .pr-playwright.env.json exists, run only the listed files for this category.
+                  if [ -f ".pr-playwright.env.json" ]; then
+                    while IFS= read -r pattern; do
+                      [ -z "$pattern" ] && continue
+
+                      base=$(basename "$pattern" .ply.js)
+                      if [[ "$base" == *.* ]]; then
+                        file_category="${base#*.}"
+                      else
+                        file_category="general-1"
+                      fi
+
+                      if [ "$file_category" != "${{ matrix.category }}" ]; then
+                        continue
+                      fi
+
+                      if [ -f "$pattern" ]; then
+                        test_files+=("$pattern")
+                      else
+                        echo "Warning: listed file not found: $pattern"
+                      fi
+                    done < <(jq -r '.testMatch[]' .pr-playwright.env.json)
+
+                    # Apply optional testIgnore entries from the PR config.
+                    if jq -e '.testIgnore | type == "array" and length > 0' .pr-playwright.env.json >/dev/null 2>&1; then
+                      ignore_files=$(jq -r '.testIgnore[]' .pr-playwright.env.json)
+                      filtered_files=()
+                      for file in "${test_files[@]}"; do
+                        skip=false
+                        while IFS= read -r ignore; do
+                          [ -z "$ignore" ] && continue
+                          if [ "$file" = "$ignore" ]; then
+                            skip=true
+                            break
+                          fi
+                        done <<< "$ignore_files"
+                        if [ "$skip" = false ]; then
+                          filtered_files+=("$file")
+                        fi
+                      done
+                      test_files=("${filtered_files[@]}")
+                    fi
+                  elif [ "${{ matrix.category }}" != "general-1" ]; then
                     # Run tests matching the category pattern
                     # e.g., tests/e2e/specs/**/*.blocks-1.ply.js
                     test_patterns=()
-                    
+
                     # Check tests/e2e/specs directory for .ply.js files
                     if find tests/e2e/specs -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("tests/e2e/specs/**/*.${{ matrix.category }}.ply.js")
                     fi
-                    
+
                     # Check tests directory for .ply.js files
                     if find tests -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("tests/**/*.${{ matrix.category }}.ply.js")
                     fi
-                    
+
                     # Check packages directory for .ply.js files
                     if find packages -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("packages/**/*.${{ matrix.category }}.ply.js")
                     fi
-                  else
-                    # Run general tests (files without category in name)
-                    # Find files that match *.ply.js but not *.*.ply.js
-                    # Directly collect file paths instead of using glob patterns
-                    test_files=()
-                    
-                    # Find general files in tests/e2e/specs directory
-                    while IFS= read -r -d '' file; do
-                      test_files+=("$file")
-                    done < <(find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
-                    
-                    # Find general files in packages directory
-                    while IFS= read -r -d '' file; do
-                      test_files+=("$file")
-                    done < <(find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
-                    
-                    # Find general files in tests directory (excluding tests/e2e/specs to avoid duplicates)
-                    while IFS= read -r -d '' file; do
-                      test_files+=("$file")
-                    done < <(find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" ! -path "tests/e2e/specs/*" -print0 2>/dev/null)
-                  fi
 
-                  if [ "${{ matrix.category }}" != "general-1" ]; then
                     # Expand glob patterns to actual file paths to avoid regex conversion issues
-                    test_files=()
                     for pattern in "${test_patterns[@]}"; do
-                      # Convert glob pattern to find command
-                      # Replace ** with find's recursive search
                       if [[ "$pattern" == *"**"* ]]; then
-                        # Extract base directory and filename pattern
-                        # Pattern format: tests/**/*.visual.ply.js
                         base_dir=$(echo "$pattern" | sed -E 's|/\*\*.*||')
                         file_pattern=$(echo "$pattern" | sed -E 's|.*\*\*/||')
-                        # Find matching files recursively
                         while IFS= read -r -d '' file; do
                           test_files+=("$file")
                         done < <(find "$base_dir" -type f -name "$file_pattern" -print0 2>/dev/null)
                       else
-                        # For non-glob patterns, check if file exists
                         if [ -f "$pattern" ]; then
                           test_files+=("$pattern")
                         fi
                       fi
                     done
+                  else
+                    # Run general tests (files without category in name)
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
+
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
+
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" ! -path "tests/e2e/specs/*" -print0 2>/dev/null)
                   fi
 
                   if [ ${#test_files[@]} -eq 0 ]; then
@@ -200,10 +256,8 @@ jobs:
                   fi
 
                   echo "Running tests for category: ${{ matrix.category }}"
-                  if [ "${{ matrix.category }}" != "general-1" ]; then
-                    echo "Test patterns: ${test_patterns[*]}"
-                  fi
-                  echo "Found ${#test_files[@]} test file(s)"
+                  echo "Found ${#test_files[@]} test file(s):"
+                  printf '  %s\n' "${test_files[@]}"
 
                   # Run Playwright tests with actual file paths
                   test_exit_code=0
