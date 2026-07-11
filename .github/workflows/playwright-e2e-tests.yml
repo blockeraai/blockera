@@ -11,7 +11,7 @@ concurrency:
     cancel-in-progress: true
 
 env:
-    # Fixture folders per visual-snapshots matrix job. Change here to retune parallelism.
+    # Fixture folders per block-screenshots matrix job. Change here to retune parallelism.
     VISUAL_SNAPSHOT_BATCH_SIZE: '15'
 
 jobs:
@@ -44,13 +44,13 @@ jobs:
                   categories=$(node .github/scripts/list-playwright-test-categories.js)
                   visual_batches=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" node .github/scripts/list-visual-snapshot-batches.js)
 
-                  # Expand the single "visual-snapshots" category into parallel batch categories
-                  # (visual-snapshots-1, visual-snapshots-2, …) so fixture folders run concurrently.
+                  # Expand the single "block-screenshots" category into parallel batch categories
+                  # (block-screenshots-1, block-screenshots-2, …) so fixture folders run concurrently.
                   expand_visual_batches() {
                     local input_json="$1"
                     echo "$input_json" | jq -c --argjson batches "$visual_batches" '
-                      if index("visual-snapshots") then
-                        (map(select(. != "visual-snapshots")) + $batches) | unique | sort
+                      if index("block-screenshots") then
+                        (map(select(. != "block-screenshots")) + $batches) | unique | sort
                       else
                         .
                       end
@@ -60,7 +60,7 @@ jobs:
                   if [ "${{ env.env_file }}" == "true" ]; then
                     # Derive matrix categories from the PR-scoped testMatch file list.
                     # name.category.ply.js → category; name.ply.js → general-1
-                    # visual-snapshots → expanded to visual-snapshots-N batches (allowlist-aware).
+                    # block-screenshots → expanded to block-screenshots-N batches (allowlist-aware).
                     filtered_categories=$(jq -r '.testMatch[]' .pr-playwright.env.json | while read -r pattern; do
                       [ -z "$pattern" ] && continue
                       base=$(basename "$pattern" .ply.js)
@@ -180,9 +180,9 @@ jobs:
               run: |
                   test_files=()
 
-                  # Visual snapshot batches: synthetic categories visual-snapshots-1..N map to the
+                  # Visual snapshot batches: synthetic categories block-screenshots-1..N map to the
                   # single visual.block-screenshots.ply.js file with an explicit fixture list.
-                  if [[ "${{ matrix.category }}" =~ ^visual-snapshots-([0-9]+)$ ]]; then
+                  if [[ "${{ matrix.category }}" =~ ^block-screenshots-([0-9]+)$ ]]; then
                     batch_num="${BASH_REMATCH[1]}"
                     fixtures_csv=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" \
                       node .github/scripts/list-visual-snapshot-batches.js --batch "$batch_num" --fixtures-csv)
@@ -209,8 +209,8 @@ jobs:
                         file_category="general-1"
                       fi
 
-                      # Batched visual-snapshots-* jobs are handled above; skip the raw category match.
-                      if [ "$file_category" = "visual-snapshots" ]; then
+                      # Batched block-screenshots-* jobs are handled above; skip the raw category match.
+                      if [ "$file_category" = "block-screenshots" ]; then
                         continue
                       fi
 

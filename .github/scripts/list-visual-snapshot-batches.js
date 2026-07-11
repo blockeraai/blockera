@@ -3,9 +3,9 @@
  * Discover visual snapshot fixture folders and split them into CI matrix batches.
  *
  * Usage:
- *   node list-visual-snapshot-batches.js              # categories JSON: ["visual-snapshots-1", ...]
+ *   node list-visual-snapshot-batches.js              # categories JSON: ["block-screenshots-1", ...]
  *   node list-visual-snapshot-batches.js --batch 1    # fixtures JSON for batch N: ["block-buttons", ...]
- *   node list-visual-snapshot-batches.js --map        # { "visual-snapshots-1": [...], ... }
+ *   node list-visual-snapshot-batches.js --map        # { "block-screenshots-1": [...], ... }
  *   node list-visual-snapshot-batches.js --fixtures-csv --batch 1  # comma-separated names
  *
  * Env:
@@ -18,7 +18,8 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 const FIXTURES_DIR = path.join(ROOT, 'tests', 'fixtures');
 const PR_ENV_PATH = path.join(ROOT, '.pr-playwright.env.json');
-const CATEGORY_PREFIX = 'visual-snapshots-';
+// Must match the category suffix of tests/visual.block-screenshots.ply.js
+const CATEGORY_PREFIX = 'block-screenshots-';
 
 function getBatchSize() {
 	const raw = process.env.VISUAL_SNAPSHOT_BATCH_SIZE;
@@ -120,7 +121,7 @@ function chunkFixtures(fixtures, batchSize) {
 		batches.push(fixtures.slice(i, i + batchSize));
 	}
 
-	// Always emit at least one batch category when the visual-snapshots suite is requested,
+	// Always emit at least one batch category when the block-screenshots suite is requested,
 	// even if the allowlist is empty after filtering (job can no-op cleanly).
 	if (batches.length === 0) {
 		batches.push([]);
