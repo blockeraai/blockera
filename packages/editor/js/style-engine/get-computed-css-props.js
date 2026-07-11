@@ -346,6 +346,32 @@ export const getComputedCssProps = ({
 				masterState,
 			});
 
+			const isBaseDevice = getBaseBreakpoint() === device;
+			const baseInnerAttrs =
+				params?.attributes?.blockeraInnerBlocks?.[blockType]
+					?.attributes || {};
+			const mergedInnerAttrs = {
+				...defaultAttributes,
+				// Only merge full base inner attrs on the base breakpoint so we do
+				// not re-emit every base declaration into responsive media queries.
+				...(isBaseDevice ? baseInnerAttrs : {}),
+				...attributes,
+				className: params?.attributes?.className || '',
+			};
+
+			// Mirror PHP WithDisplayValueTrait: non-base breakpoints often set
+			// flex/grid layout without repeating blockeraDisplay. Pass the base
+			// display for layout gates only (do not put it on attributes or
+			// display: would be re-emitted into the media query).
+			const attrsHaveDisplay =
+				attributes?.blockeraDisplay !== undefined &&
+				attributes?.blockeraDisplay !== null &&
+				attributes?.blockeraDisplay !== '';
+			const inheritedDisplay =
+				!isBaseDevice && !attrsHaveDisplay
+					? baseInnerAttrs?.blockeraDisplay
+					: undefined;
+
 			stylesStack.push(
 				appendStyles({
 					settings: {
@@ -356,16 +382,8 @@ export const getComputedCssProps = ({
 							selectors[appendBlockeraPrefix(blockType)] ||
 							selectors[blockType] ||
 							{},
-						attributes: {
-							...defaultAttributes,
-							...(getBaseBreakpoint() === device
-								? params?.attributes?.blockeraInnerBlocks?.[
-										blockType
-									]?.attributes || {}
-								: {}),
-							...attributes,
-							className: params?.attributes?.className || '',
-						},
+						attributes: mergedInnerAttrs,
+						inheritedDisplay,
 						currentBlock: blockType,
 						device,
 					},
