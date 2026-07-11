@@ -57,7 +57,7 @@ function getAllowlist() {
 }
 
 /**
- * Same eligibility rules as tests/snapshots.visual-snapshots.ply.js:
+ * Same eligibility rules as tests/visual.screen-shots.ply.js:
  * directory with input.html, optional config.screenshot !== false.
  */
 function listEligibleFixtures() {
