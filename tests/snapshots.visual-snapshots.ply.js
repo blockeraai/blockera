@@ -25,10 +25,33 @@ const {
 } = require('@blockera/dev-playwright/js/utils/responsive');
 
 /**
- * Optionally limit runs to one fixture folder under tests/fixtures (e.g. '1').
- * Set to `null` to run all fixtures.
+ * Optional PR allowlist from `.pr-playwright.env.json` → `visualSnapshotFixtures`.
+ * Missing key or empty array → run all fixtures.
  */
-const VISUAL_ONLY_SECTION = null;
+function getVisualSnapshotFixtureAllowlist() {
+	const prEnvPath = path.join(__dirname, '..', '.pr-playwright.env.json');
+
+	if (!fs.existsSync(prEnvPath)) {
+		return null;
+	}
+
+	try {
+		const prEnv = JSON.parse(fs.readFileSync(prEnvPath, 'utf8'));
+		const allowlist = prEnv.visualSnapshotFixtures;
+
+		if (!Array.isArray(allowlist) || allowlist.length === 0) {
+			return null;
+		}
+
+		return new Set(allowlist);
+	} catch (error) {
+		console.warn(
+			'Failed to read visualSnapshotFixtures from .pr-playwright.env.json:',
+			error.message
+		);
+		return null;
+	}
+}
 
 /**
  * Load all test fixtures from tests/fixtures directory
@@ -41,13 +64,14 @@ function loadFixtures() {
 		return sections;
 	}
 
+	const allowlist = getVisualSnapshotFixtureAllowlist();
 	const fixtureFolders = fs
 		.readdirSync(fixturesDir, { withFileTypes: true })
 		.filter((dirent) => dirent.isDirectory())
 		.map((dirent) => dirent.name);
 
 	for (const sectionId of fixtureFolders) {
-		if (VISUAL_ONLY_SECTION && sectionId !== VISUAL_ONLY_SECTION) {
+		if (allowlist && !allowlist.has(sectionId)) {
 			continue;
 		}
 		const sectionDir = path.join(fixturesDir, sectionId);
