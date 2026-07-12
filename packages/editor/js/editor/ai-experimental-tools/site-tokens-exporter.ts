@@ -478,7 +478,7 @@ export function buildSiteTokensJson({
 
 	// border-line — Blockera border presets ({ slug, name, border })
 	for (const item of flattenThemeCustomLayers<any>(
-		blockera?.blockeraBorder?.presets
+		f?.border?.blockeraBorder?.presets
 	)) {
 		if (!item || typeof item !== 'object') {
 			continue;
