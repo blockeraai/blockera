@@ -111,7 +111,7 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'font-size',
 		},
 		{
-			path: ['blockeraLineHeights'],
+			path: ['typography', 'blockeraLineHeights'],
 			valueKey: 'size',
 			cssVarInfix: 'line-height',
 		},

@@ -337,9 +337,7 @@ export function getMergedGlobalStylePresetVariables(
 		}
 
 		case 'border': {
-			const presets =
-				getBlockeraExperimentalFeatures(features)?.blockeraBorder
-					?.presets;
+			const presets = features?.border?.blockeraBorder?.presets;
 
 			return mergePresetLayers(
 				mapBorderBoxPresets,
@@ -427,8 +425,7 @@ export const getCustomGlobalStylePresetVariables: (
 
 		case 'line-height':
 			return mapSpacingCustom(
-				getBlockeraExperimentalFeatures(features)?.blockeraLineHeights
-					?.custom
+				features?.typography?.blockeraLineHeights?.custom
 			);
 
 		case 'linear-gradient':
@@ -465,8 +462,7 @@ export const getCustomGlobalStylePresetVariables: (
 
 		case 'border':
 			return mapBorderBoxPresets(
-				getBlockeraExperimentalFeatures(features)?.blockeraBorder
-					?.presets?.custom,
+				features?.border?.blockeraBorder?.presets?.custom,
 				undefined,
 				customOriginRef
 			);

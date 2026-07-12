@@ -18,7 +18,6 @@ import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 import { normalizePresetSize } from './normalize-preset-sizes';
 import { generateVariableString, getBlockEditorSettings } from './index';
-import { getBlockeraExperimentalFeatures } from '../blockera-settings-paths';
 import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
 import {
 	PRESET_ORIGIN_REFERENCE,
@@ -29,10 +28,9 @@ import {
 
 export const getLineHeights = (): Array<VariableItem> => {
 	if (isBlockTheme()) {
-		const blockera = getBlockeraExperimentalFeatures(
-			getBlockEditorSettings()?.__experimentalFeatures
-		);
-		const lineHeightsRoot = blockera?.blockeraLineHeights;
+		const lineHeightsRoot =
+			getBlockEditorSettings()?.__experimentalFeatures?.typography
+				?.blockeraLineHeights;
 
 		if (!isUndefined(lineHeightsRoot)) {
 			const themeRef = getThemeVariableReference();
