@@ -609,7 +609,7 @@ if ( ! function_exists( 'blockera_merge_settings_into_experimental_features' ) )
 	/**
 	 * Overlays Blockera global-styles-ui settings onto block editor `__experimentalFeatures`.
 	 *
-	 * Mirrors preset paths managed by `useGlobalSetting` (`blockeraLineHeights`, `blockeraWidthSizes`, etc.)
+	 * Mirrors preset paths managed by `useGlobalSetting` (`typography.blockeraLineHeights`, `blockeraWidthSizes`, etc.)
 	 * so variable pickers and canvas CSS vars stay aligned with the Site Editor globalStyles entity.
 	 *
 	 * @param array $experimental_features Reference to current __experimentalFeatures.
@@ -631,8 +631,8 @@ if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) 
 	 * Merges Blockera extended global settings into the block editor's __experimentalFeatures.
 	 *
 	 * Core {@see wp_get_global_settings()} uses {@see WP_Theme_JSON_Resolver} and {@see WP_Theme_JSON},
-	 * whose sanitization drops Blockera-only preset groups under flat `settings.blockera*` keys
-	 * (line heights, width sizes, border lines, transitions, transforms, filters, text shadows, etc.).
+	 * whose sanitization drops Blockera-only preset groups (`typography.blockeraLineHeights`,
+	 * flat `settings.blockera*` keys, `border.blockeraBorder`, etc.).
 	 * The editor still needs those for variable pickers and parity with {@see blockera_get_global_stylesheet()}.
 	 *
 	 * Initial load only: Site Editor live edits are mirrored by

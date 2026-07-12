@@ -78,8 +78,8 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'font-size' ),
 		),
 		array(
-			'path'              => array( 'blockeraLineHeights' ),
-			'prevent_override'  => array( 'blockeraDefaultLineHeights' ),
+			'path'              => array( 'typography', 'blockeraLineHeights' ),
+			'prevent_override'  => array( 'typography', 'blockeraDefaultLineHeights' ),
 			'use_default_names' => true,
 			'value_key'         => 'size',
 			'css_vars'          => '--wp--preset--line-height--$slug',
@@ -141,7 +141,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'min-height' ),
 		),
 		array(
-			'path'              => array( 'blockeraBorder', 'presets' ),
+			'path'              => array( 'border', 'blockeraBorder', 'presets' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
 			'value_func'        => array( StyleEngine::class, 'borderPresetValue' ),

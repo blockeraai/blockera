@@ -9,24 +9,24 @@ namespace Blockera\Setup\Compatibility;
  */
 final class BlockeraSettingsPaths {
 
-	public const BORDER               = 'blockeraBorder';
+	public const WIDTH_SIZES     = 'blockeraWidthSizes';
+	public const TRANSITION      = 'blockeraTransition';
+	public const TRANSFORM       = 'blockeraTransform';
+	public const FILTER          = 'blockeraFilter';
+	public const TEXT_SHADOW     = 'blockeraTextShadow';
+	public const DIMENSION_SIZES = 'blockeraDimensionSizes';
+
 	public const LINE_HEIGHTS         = 'blockeraLineHeights';
 	public const DEFAULT_LINE_HEIGHTS = 'blockeraDefaultLineHeights';
-	public const WIDTH_SIZES          = 'blockeraWidthSizes';
-	public const TRANSITION           = 'blockeraTransition';
-	public const TRANSFORM            = 'blockeraTransform';
-	public const FILTER               = 'blockeraFilter';
-	public const TEXT_SHADOW          = 'blockeraTextShadow';
-	public const DIMENSION_SIZES      = 'blockeraDimensionSizes';
+	public const BORDER               = 'blockeraBorder';
 
 	/**
+	 * Flat Blockera-only keys at the `settings` root.
+	 *
 	 * @return list<string>
 	 */
 	public static function setting_keys(): array {
 		return array(
-			self::BORDER,
-			self::LINE_HEIGHTS,
-			self::DEFAULT_LINE_HEIGHTS,
 			self::WIDTH_SIZES,
 			self::TRANSITION,
 			self::TRANSFORM,
@@ -43,12 +43,16 @@ final class BlockeraSettingsPaths {
 	 */
 	public static function valid_settings_extension(): array {
 		return array(
-			self::BORDER          => array(
-				'presets'        => null,
-				'defaultPresets' => null,
+			'typography'          => array(
+				self::LINE_HEIGHTS         => null,
+				self::DEFAULT_LINE_HEIGHTS => null,
 			),
-			self::LINE_HEIGHTS    => null,
-			self::DEFAULT_LINE_HEIGHTS => null,
+			'border'              => array(
+				self::BORDER => array(
+					'presets'        => null,
+					'defaultPresets' => null,
+				),
+			),
 			self::WIDTH_SIZES     => null,
 			self::TRANSITION      => array(
 				'presets'        => null,
