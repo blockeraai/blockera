@@ -50,6 +50,39 @@ export function withinVariablePickerPopover(fn) {
 		.within(fn);
 }
 
+/**
+ * Counts preset repeater rows in the visible variable picker.
+ * Returns 0 when theme/default/custom origins are empty (Cypress `.its('length')` fails on empty sets).
+ *
+ * @return {Cypress.Chainable<number>}
+ */
+export function getVariablePickerRepeaterItemCount() {
+	return cy
+		.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
+		.should('be.visible')
+		.then(($popover) => $popover.find('[data-cy="repeater-item"]').length);
+}
+
+/**
+ * Asserts the visible picker gained one repeater row after a custom-add action.
+ *
+ * @param {number} beforeCount Row count before add.
+ */
+export function assertVariablePickerRepeaterItemCountIncreasedByOne(
+	beforeCount
+) {
+	cy.getByDataTest('variable-picker-popover')
+		.filter(':visible')
+		.first()
+		.should(($popover) => {
+			expect($popover.find('[data-cy="repeater-item"]').length).to.eq(
+				beforeCount + 1
+			);
+		});
+}
+
 /** Returns the visible variable picker popover body (scroll/content container). */
 export function getVariablePickerPopoverBody() {
 	return cy
