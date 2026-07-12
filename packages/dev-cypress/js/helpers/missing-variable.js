@@ -16,12 +16,12 @@ const GLOBAL_STYLES_NAME = 'globalStyles';
 /** Edited-entity `settings.*` dot paths for custom preset arrays. */
 export const MISSING_VARIABLE_CUSTOM_PRESET_PATH = {
 	'font-size': 'typography.fontSizes.custom',
-	'line-height': 'blockeraLineHeights.custom',
+	'line-height': 'typography.blockeraLineHeights.custom',
 	color: 'color.palette.custom',
 	spacing: 'spacing.spacingSizes.custom',
 	'width-size': 'blockeraWidthSizes.custom',
 	'border-radius': 'border.radiusSizes.custom',
-	border: 'blockeraBorder.presets.custom',
+	border: 'border.blockeraBorder.presets.custom',
 	shadow: 'shadow.presets.custom',
 	'text-shadow': 'blockeraTextShadow.presets.custom',
 	transform: 'blockeraTransform.presets.custom',

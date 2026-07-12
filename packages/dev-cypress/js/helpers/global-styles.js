@@ -322,7 +322,7 @@ export function openGlobalStylesShadowsScreen({ reset } = { reset: true }) {
 		.should('be.visible');
 }
 
-/** Border box presets (`settings.border.presets.custom`). */
+/** Border box presets (`settings.border.blockeraBorder.presets.custom`). */
 export function openGlobalStylesBordersScreen({ reset } = { reset: true }) {
 	return openGlobalStylesDesignSystemPresetScreen({
 		panelButtonId: 'borders',

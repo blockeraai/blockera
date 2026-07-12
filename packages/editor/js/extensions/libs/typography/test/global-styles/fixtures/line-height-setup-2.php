@@ -9,16 +9,19 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings'])) {
 		$data['settings'] = [];
 	}
-	if (!isset($data['settings']['blockeraLineHeights'])) {
-		$data['settings']['blockeraLineHeights'] = [];
+	if (!isset($data['settings']['typography'])) {
+		$data['settings']['typography'] = [];
+	}
+	if (!isset($data['settings']['typography']['blockeraLineHeights'])) {
+		$data['settings']['typography']['blockeraLineHeights'] = [];
 	}
 
-	$data['settings']['blockeraLineHeights'][] = [
+	$data['settings']['typography']['blockeraLineHeights'][] = [
 		'slug' => 'relaxed',
 		'name' => 'Relaxed',
 		'size' => '1.6',
 	];
-	$data['settings']['blockeraLineHeights'][] = [
+	$data['settings']['typography']['blockeraLineHeights'][] = [
 		'slug' => 'tight',
 		'name' => 'Tight',
 		'size' => '1.2',

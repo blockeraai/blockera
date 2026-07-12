@@ -7,10 +7,13 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings'])) {
 		$data['settings'] = [];
 	}
-	if (!isset($data['settings']['blockeraBorder'])) {
-		$data['settings']['blockeraBorder'] = [];
+	if (!isset($data['settings']['border'])) {
+		$data['settings']['border'] = [];
 	}
-	$data['settings']['blockeraBorder']['presets'][] = [
+	if (!isset($data['settings']['border']['blockeraBorder'])) {
+		$data['settings']['border']['blockeraBorder'] = [];
+	}
+	$data['settings']['border']['blockeraBorder']['presets'][] = [
 		'slug'   => 'e-2-e-theme-border',
 		'name'   => 'E2E Theme Border',
 		'border' => [
