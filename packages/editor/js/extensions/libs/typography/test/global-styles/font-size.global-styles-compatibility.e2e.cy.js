@@ -104,6 +104,13 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 			it('Variable Value', () => {
 				cy.getParentContainer('Font Size').as('container');
 
+				// Wait until theme presets from the fixture resolve into the control.
+				cy.get('@container').within(() => {
+					cy.getByDataCy('value-addon-btn', { timeout: 20000 })
+						.should('be.visible')
+						.and('contain', 'Large');
+				});
+
 				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 

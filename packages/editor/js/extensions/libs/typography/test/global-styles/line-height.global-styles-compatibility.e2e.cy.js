@@ -105,6 +105,13 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 			it('Variable Value', () => {
 				cy.getParentContainer('Line Height').as('container');
 
+				// Wait until theme presets from the fixture resolve into the control.
+				cy.get('@container').within(() => {
+					cy.getByDataCy('value-addon-btn', { timeout: 20000 })
+						.should('be.visible')
+						.and('contain', 'Relaxed');
+				});
+
 				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 
