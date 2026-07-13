@@ -162,6 +162,7 @@ const RepeaterItem = ({
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
+	const prevHasVariationsRef = useRef(item?.hasVariations === true);
 	const [popoverContentKey, setPopoverContentKey] = useState(0);
 
 	const handleItemOpen = useCallback(
@@ -216,6 +217,17 @@ const RepeaterItem = ({
 	}, [draggingIndex, itemId]);
 
 	// New rows open the edit popover via pendingOpenItemId, creatingStep, or store isOpen.
+	useEffect(() => {
+		const hadVariations = prevHasVariationsRef.current;
+		const hasVariationsNow = item?.hasVariations === true;
+
+		if (!hadVariations && hasVariationsNow) {
+			setVariationsAccordionOpen(false);
+		}
+
+		prevHasVariationsRef.current = hasVariationsNow;
+	}, [item?.hasVariations]);
+
 	useEffect(() => {
 		if (isOpen) {
 			return;
