@@ -106,9 +106,11 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 				cy.getParentContainer('Line Height').as('container');
 
 				// Wait until theme presets from the fixture resolve into the control.
+				// Use exist (not visible): site-editor sidebar uses position:fixed and
+				// can clip Line Height below the fold even after scrollIntoView.
 				cy.get('@container').within(() => {
 					cy.getByDataCy('value-addon-btn', { timeout: 20000 })
-						.should('be.visible')
+						.should('exist')
 						.and('contain', 'Relaxed');
 				});
 
