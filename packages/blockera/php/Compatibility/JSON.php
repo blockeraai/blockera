@@ -22,40 +22,6 @@ class JSON extends \WP_Theme_JSON {
 	private static array $supports;
 
 	/**
-	 * Extra settings paths allowed in theme.json sanitization (global-styles-ui preset extensions).
-	 *
-	 * @var array<string, mixed>
-	 */
-	private const BLOCKERA_VALID_SETTINGS_EXTENSION = array(
-		'dimensions' => array(
-			'dimensionSizes' => null,
-		),
-		'layout'     => array(
-			'widthSizes' => null,
-		),
-		'border'     => array(
-			'presets'        => null,
-			'defaultPresets' => null,
-		),
-		'transition' => array(
-			'presets'        => null,
-			'defaultPresets' => null,
-		),
-		'transform'  => array(
-			'presets'        => null,
-			'defaultPresets' => null,
-		),
-		'filter'     => array(
-			'presets'        => null,
-			'defaultPresets' => null,
-		),
-		'textShadow' => array(
-			'presets'        => null,
-			'defaultPresets' => null,
-		),
-	);
-
-	/**
 	 * Preset metadata: core (WP_Theme_JSON) plus paths aligned with packages/global-styles-ui (see theme-json-preset-data.ts).
 	 * CSS values for Blockera-specific presets are resolved via {@see StyleEngine} callbacks, not in this class.
 	 *
@@ -112,6 +78,15 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'font-size' ),
 		),
 		array(
+			'path'              => array( 'typography', 'blockeraLineHeights' ),
+			'prevent_override'  => array( 'typography', 'blockeraDefaultLineHeights' ),
+			'use_default_names' => true,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--line-height--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'line-height' ),
+		),
+		array(
 			'path'              => array( 'typography', 'fontFamilies' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
@@ -130,7 +105,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'padding', 'margin' ),
 		),
 		array(
-			'path'              => array( 'layout', 'widthSizes' ),
+			'path'              => array( 'blockeraWidthSizes' ),
 			'prevent_override'  => false,
 			'use_default_names' => true,
 			'value_key'         => 'size',
@@ -157,7 +132,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'border-radius' ),
 		),
 		array(
-			'path'              => array( 'dimensions', 'dimensionSizes' ),
+			'path'              => array( 'blockeraDimensionSizes' ),
 			'prevent_override'  => false,
 			'use_default_names' => true,
 			'value_key'         => 'size',
@@ -166,7 +141,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'min-height' ),
 		),
 		array(
-			'path'              => array( 'border', 'presets' ),
+			'path'              => array( 'border', 'blockeraBorder', 'presets' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
 			'value_func'        => array( StyleEngine::class, 'borderPresetValue' ),
@@ -175,7 +150,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'border' ),
 		),
 		array(
-			'path'              => array( 'transition', 'presets' ),
+			'path'              => array( 'blockeraTransition', 'presets' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
 			'value_func'        => array( StyleEngine::class, 'transitionPresetValue' ),
@@ -184,7 +159,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'transition' ),
 		),
 		array(
-			'path'              => array( 'transform', 'presets' ),
+			'path'              => array( 'blockeraTransform', 'presets' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
 			'value_func'        => array( StyleEngine::class, 'transformPresetValue' ),
@@ -193,7 +168,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'transform' ),
 		),
 		array(
-			'path'              => array( 'filter', 'presets' ),
+			'path'              => array( 'blockeraFilter', 'presets' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
 			'value_func'        => array( StyleEngine::class, 'filterPresetValue' ),
@@ -202,7 +177,7 @@ class JSON extends \WP_Theme_JSON {
 			'properties'        => array( 'filter' ),
 		),
 		array(
-			'path'              => array( 'textShadow', 'presets' ),
+			'path'              => array( 'blockeraTextShadow', 'presets' ),
 			'prevent_override'  => false,
 			'use_default_names' => false,
 			'value_func'        => array( StyleEngine::class, 'textShadowPresetValue' ),
@@ -232,7 +207,10 @@ class JSON extends \WP_Theme_JSON {
 		if ( null !== $schema ) {
 			return $schema;
 		}
-		$schema = array_replace_recursive( \WP_Theme_JSON::VALID_SETTINGS, self::BLOCKERA_VALID_SETTINGS_EXTENSION );
+		$schema = array_replace_recursive(
+			\WP_Theme_JSON::VALID_SETTINGS,
+			BlockeraSettingsPaths::valid_settings_extension()
+		);
 
 		return $schema;
 	}

@@ -90,7 +90,11 @@ if (! function_exists('blockera_editor_wp_theme_json_data_theme')) {
 			$initialized = true;
 		}
 
-		return Blockera\Setup\Compatibility\JSONResolver::get_theme_data();
+		// Return JSONData (extends WP_Theme_JSON_Data) so core keeps Blockera's JSON instance
+		// instead of re-wrapping get_data() in core WP_Theme_JSON (which strips Blockera presets).
+		$theme = Blockera\Setup\Compatibility\JSONResolver::get_theme_data();
+
+		return new Blockera\Setup\Compatibility\JSONData( $theme->get_raw_data(), 'theme' );
 	}
 }
 

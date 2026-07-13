@@ -12,6 +12,8 @@ import {
 	assertLastVariablePickerRepeaterItemInPopoverBody,
 	getVariablePickerLastRepeaterItem,
 	getVariablePickerPopoverBody,
+	getVariablePickerRepeaterItemCount,
+	assertVariablePickerRepeaterItemCountIncreasedByOne,
 	makeVariablePickerPopoverBodyScrollable,
 	openParagraphFontSizeVariablePickerPopover,
 	scrollVariablePickerPopoverToTop,
@@ -53,26 +55,18 @@ describe('Font Size variable picker → header add custom preset', () => {
 			cy.openValueAddon();
 		});
 
-		cy.getByDataTest('variable-picker-popover')
-			.filter(':visible')
-			.first()
-			.should('be.visible')
-			.find('[data-cy="repeater-item"]')
-			.its('length')
-			.then((beforeCount) => {
-				cy.getByDataTest('variable-picker-section-add-font-size', {
-					timeout: 20000,
-				})
-					.filter(':visible')
-					.first()
-					.scrollIntoView()
-					.should('be.visible')
-					.click({ force: true });
+		getVariablePickerRepeaterItemCount().then((beforeCount) => {
+			cy.getByDataTest('variable-picker-section-add-font-size', {
+				timeout: 20000,
+			})
+				.filter(':visible')
+				.first()
+				.scrollIntoView()
+				.should('be.visible')
+				.click({ force: true });
 
-				cy.getByDataTest('variable-picker-popover')
-					.find('[data-cy="repeater-item"]')
-					.should('have.length', beforeCount + 1);
-			});
+			assertVariablePickerRepeaterItemCountIncreasedByOne(beforeCount);
+		});
 
 		cy.getByDataTest('repeater-item-creating-step', {
 			timeout: 20000,
@@ -107,40 +101,29 @@ describe('Font Size variable picker → header add custom preset', () => {
 
 		openParagraphFontSizeVariablePickerPopover();
 
-		cy.getByDataTest('variable-picker-popover')
-			.filter(':visible')
-			.first()
-			.should('be.visible')
-			.find('[data-cy="repeater-item"]')
-			.its('length')
-			.then((beforeCount) => {
-				cy.get(
-					'.blockera-control-var-picker-search input[type="search"]',
-					{
-						timeout: 20000,
-					}
-				)
-					.should('be.visible')
-					.clear({ force: true })
-					.type(searchSeed, { delay: 0, force: true });
+		getVariablePickerRepeaterItemCount().then((beforeCount) => {
+			cy.get('.blockera-control-var-picker-search input[type="search"]', {
+				timeout: 20000,
+			})
+				.should('be.visible')
+				.clear({ force: true })
+				.type(searchSeed, { delay: 0, force: true });
 
-				cy.getByDataTest(
-					'variable-picker-search-empty-add-custom-variable',
-					{ timeout: 20000 }
-				)
-					.should('be.visible')
-					.click({ force: true });
+			cy.getByDataTest(
+				'variable-picker-search-empty-add-custom-variable',
+				{ timeout: 20000 }
+			)
+				.should('be.visible')
+				.click({ force: true });
 
-				cy.get(
-					'.blockera-control-var-picker-search input[type="search"]'
-				).should('have.value', '');
+			cy.get(
+				'.blockera-control-var-picker-search input[type="search"]'
+			).should('have.value', '');
 
-				cy.getByDataTest('var-picker-search-empty').should('not.exist');
+			cy.getByDataTest('var-picker-search-empty').should('not.exist');
 
-				cy.getByDataTest('variable-picker-popover')
-					.find('[data-cy="repeater-item"]')
-					.should('have.length', beforeCount + 1);
-			});
+			assertVariablePickerRepeaterItemCountIncreasedByOne(beforeCount);
+		});
 
 		cy.getByDataTest('repeater-item-creating-step', {
 			timeout: 20000,
@@ -214,19 +197,11 @@ describe('Font Size variable picker → header add custom preset', () => {
 			cy.openValueAddon();
 		});
 
-		cy.getByDataTest('variable-picker-popover')
-			.filter(':visible')
-			.first()
-			.should('be.visible')
-			.find('[data-cy="repeater-item"]')
-			.its('length')
-			.then((beforeCount) => {
-				clickVariablePickerHeaderAddCustomVariable();
+		getVariablePickerRepeaterItemCount().then((beforeCount) => {
+			clickVariablePickerHeaderAddCustomVariable();
 
-				cy.getByDataTest('variable-picker-popover')
-					.find('[data-cy="repeater-item"]')
-					.should('have.length', beforeCount + 1);
-			});
+			assertVariablePickerRepeaterItemCountIncreasedByOne(beforeCount);
+		});
 
 		cy.getByDataTest('repeater-item-creating-step', {
 			timeout: 20000,

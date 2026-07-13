@@ -51,7 +51,7 @@ describe('Global Styles UI → transition presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting('transition.presets.theme').then(
+		getEditedGlobalStylesSetting('blockeraTransition.presets.theme').then(
 			(rows) => {
 				const row = rows.find((r) => r.slug === 'e-2-e-theme-trans');
 				expect(String(row.items[0].duration)).to.match(/450/);
@@ -69,7 +69,7 @@ describe('Global Styles UI → transition presets (theme.json + UI)', () => {
 			'E2E Theme Transition'
 		);
 
-		getEditedGlobalStylesSetting('transition.presets.theme').then(
+		getEditedGlobalStylesSetting('blockeraTransition.presets.theme').then(
 			(rows) => {
 				const row = rows.find((r) => r.slug === 'e-2-e-theme-trans');
 				expect(String(row.items[0].duration)).to.match(/450/);

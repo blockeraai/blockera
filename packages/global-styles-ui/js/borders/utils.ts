@@ -22,7 +22,7 @@ export type BorderBoxPreset = {
 };
 
 /**
- * Border box presets: `settings.border.presets.{theme|default|custom}`.
+ * Border box presets: `settings.border.blockeraBorder.presets.{theme|default|custom}`.
  * `settings.custom` is reserved for CSS custom properties in theme.json — do not store presets there.
  */
 

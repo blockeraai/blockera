@@ -9,6 +9,9 @@ import {
 const FONT_SIZE_INSPECTOR_ACTIVE_CLASS =
 	'blockera-font-size-preset-inspector-active';
 
+const LINE_HEIGHT_INSPECTOR_ACTIVE_CLASS =
+	'blockera-line-height-preset-inspector-active';
+
 const NAVIGATOR_SCREEN_SELECTOR =
 	'.edit-site-global-styles-sidebar__navigator-screen, .global-styles-ui-sidebar__navigator-screen';
 
@@ -16,14 +19,30 @@ function openFontSizeVariablesScreen() {
 	openGlobalStylesTypographyFlow();
 
 	cy.contains(
-		'.blockera-font-size-hub button',
+		'.blockera-typography-hub button',
 		'Font size variables'
 	).scrollIntoView();
-	cy.contains('.blockera-font-size-hub button', 'Font size variables')
+	cy.contains('.blockera-typography-hub button', 'Font size variables')
 		.should('be.visible')
 		.click({ force: true });
 
 	cy.get('.blockera-font-size-editor', { timeout: 15000 }).should(
+		'be.visible'
+	);
+}
+
+function openLineHeightVariablesScreen() {
+	openGlobalStylesTypographyFlow();
+
+	cy.contains(
+		'.blockera-typography-hub button',
+		'Line height variables'
+	).scrollIntoView();
+	cy.contains('.blockera-typography-hub button', 'Line height variables')
+		.should('be.visible')
+		.click({ force: true });
+
+	cy.get('.blockera-line-height-editor', { timeout: 15000 }).should(
 		'be.visible'
 	);
 }
@@ -34,18 +53,18 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 
 		cy.get('button[id="/typography"]').should('exist');
 
-		cy.get('.blockera-font-size-hub').should('have.length', 1);
+		cy.get('.blockera-typography-hub').should('have.length', 1);
 	});
 
 	it('does not mount duplicate font size preset rows while the list screen is present', () => {
 		openGlobalStylesTypographyFlow();
 
-		cy.get('.blockera-font-size-hub').should('have.length', 1);
+		cy.get('.blockera-typography-hub').should('have.length', 1);
 
 		// eslint-disable-next-line cypress/no-unnecessary-waiting
 		cy.wait(400);
 
-		cy.get('.blockera-font-size-hub').should('have.length', 1);
+		cy.get('.blockera-typography-hub').should('have.length', 1);
 	});
 
 	it('hides native WordPress font size presets entry while Blockera override is active', () => {
@@ -54,6 +73,13 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		cy.contains('button', 'Font size variables').scrollIntoView();
 		cy.contains('button', 'Font size variables').should('be.visible');
 		cy.contains('button', 'Font size presets').should('exist');
+	});
+
+	it('shows line height variables entry on typography hub', () => {
+		openGlobalStylesTypographyFlow();
+
+		cy.contains('button', 'Line height variables').scrollIntoView();
+		cy.contains('button', 'Line height variables').should('be.visible');
 	});
 
 	it('applies cleanup + inspector-active DOM when opening font size variables', () => {
@@ -65,7 +91,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		);
 
 		cy.contains(
-			'.blockera-font-size-hub button',
+			'.blockera-typography-hub button',
 			'Font size variables'
 		).click({ force: true });
 
@@ -137,7 +163,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			.first()
 			.click({ force: true });
 
-		cy.get('.blockera-font-size-hub').should('exist');
+		cy.get('.blockera-typography-hub').should('exist');
 	});
 
 	it('ScreenHeader back runs onBack (clears cleanup + inspector-active, returns to list)', () => {
@@ -146,10 +172,10 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		cy.get(`.${FONT_SIZE_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
 
 		cy.contains(
-			'.blockera-font-size-hub button',
+			'.blockera-typography-hub button',
 			'Font size variables'
 		).scrollIntoView();
-		cy.contains('.blockera-font-size-hub button', 'Font size variables')
+		cy.contains('.blockera-typography-hub button', 'Font size variables')
 			.should('be.visible')
 			.click({ force: true });
 
@@ -176,7 +202,7 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 			timeout: 4000,
 		}).should('not.exist');
 
-		cy.contains('.blockera-font-size-hub', 'Font size variables', {
+		cy.contains('.blockera-typography-hub', 'Font size variables', {
 			timeout: 4000,
 		}).should('exist');
 	});
@@ -196,5 +222,123 @@ describe('Global Styles → Typography panel (DOM + observer)', () => {
 		});
 
 		cy.get('body').should('not.have.class', TYPOGRAPHY_OVERRIDE_CLASS);
+	});
+
+	it('applies cleanup + inspector-active DOM when opening line height variables', () => {
+		openGlobalStylesTypographyFlow();
+
+		cy.get('body').should(
+			'not.have.class',
+			'blockera-cleanup-screen-styles'
+		);
+
+		cy.contains(
+			'.blockera-typography-hub button',
+			'Line height variables'
+		).click({ force: true });
+
+		cy.get('.blockera-line-height-editor').should('be.visible');
+
+		cy.get('body').should('have.class', 'blockera-cleanup-screen-styles');
+
+		cy.get(`.${LINE_HEIGHT_INSPECTOR_ACTIVE_CLASS}`).should('exist');
+	});
+
+	it('keeps the typography override body class while on the line height variables screen', () => {
+		openLineHeightVariablesScreen();
+
+		cy.get('body').should('have.class', TYPOGRAPHY_OVERRIDE_CLASS);
+	});
+
+	it('shows the line height variables shell with header copy after navigation', () => {
+		openLineHeightVariablesScreen();
+
+		cy.get('.blockera-line-height-editor')
+			.contains('Line Height Variables')
+			.should('be.visible');
+
+		cy.get('.blockera-line-height-editor')
+			.contains(
+				'Create and edit line height variables used for typography across the site.'
+			)
+			.should('be.visible');
+	});
+
+	it('renders the line height variables editor with custom preset group', () => {
+		openLineHeightVariablesScreen();
+
+		cy.get('.blockera-line-height-editor-groups').should('be.visible');
+
+		cy.get('.blockera-line-height-editor')
+			.contains('Custom')
+			.should('be.visible');
+
+		cy.getByDataTest(
+			'global-styles-preset-add-line-height-presets-custom'
+		).should('be.visible');
+	});
+
+	it('does not zero out Blockera Spacer padding on the line height variables screen', () => {
+		openLineHeightVariablesScreen();
+
+		cy.get('body').should('have.class', 'blockera-cleanup-screen-styles');
+
+		cy.get('.blockera-line-height-editor .components-spacer').should(
+			($spacer) => {
+				const paddingLeft = parseFloat($spacer.css('padding-left'));
+				expect(paddingLeft).to.be.greaterThan(0);
+			}
+		);
+	});
+
+	it('hides native WordPress font size presets editor while on the line height variables screen', () => {
+		openLineHeightVariablesScreen();
+
+		cy.get(NAVIGATOR_SCREEN_SELECTOR).within(() => {
+			cy.contains('Font size presets').should('not.be.visible');
+		});
+
+		cy.get('.blockera-line-height-editor').should('be.visible');
+	});
+
+	it('ScreenHeader back runs onBack for line height (clears cleanup + inspector-active, returns to list)', () => {
+		openGlobalStylesTypographyFlow();
+
+		cy.get(`.${LINE_HEIGHT_INSPECTOR_ACTIVE_CLASS}`).should('not.exist');
+
+		cy.contains(
+			'.blockera-typography-hub button',
+			'Line height variables'
+		).scrollIntoView();
+		cy.contains('.blockera-typography-hub button', 'Line height variables')
+			.should('be.visible')
+			.click({ force: true });
+
+		cy.get('.blockera-line-height-editor', { timeout: 10000 }).should(
+			'be.visible'
+		);
+		cy.get('body', { timeout: 4000 }).should(
+			'have.class',
+			'blockera-cleanup-screen-styles'
+		);
+
+		cy.get('.blockera-line-height-editor')
+			.find('button[data-wp-component="Navigator.BackButton"]')
+			.first()
+			.should('exist')
+			.click({ force: true });
+
+		cy.get('body', { timeout: 4000 }).should(
+			'not.have.class',
+			'blockera-cleanup-screen-styles'
+		);
+
+		cy.get(`.${LINE_HEIGHT_INSPECTOR_ACTIVE_CLASS}`, {
+			timeout: 4000,
+		}).should('not.exist');
+
+		cy.contains('.blockera-typography-hub', 'Line height variables', {
+			timeout: 4000,
+		}).should('exist');
 	});
 });

@@ -67,6 +67,7 @@ function blockera_after_setup_theme() {
 	add_filter('_get_block_templates_files', 'blockera_get_block_templates', PHP_INT_MAX, 3);
 
 	// Core wp_get_global_settings() omits Blockera-only presets; merge JSONResolver output for the editor.
+	// Site Editor live preset edits (useGlobalSetting) are mirrored by BlockEditorExperimentalFeaturesSync (useEffect + updateEditorSettings).
 	add_filter( 'block_editor_settings_all', 'blockera_merge_block_editor_experimental_features', 100, 1 );
 	// Canvas iframe does not load enqueue_block_editor_assets; inject preset CSS variables into resolved assets.
 	add_filter( 'block_editor_settings_all', 'blockera_append_global_styles_variables_to_resolved_iframe_assets', 101, 1 );

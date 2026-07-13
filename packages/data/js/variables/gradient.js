@@ -9,8 +9,8 @@ import { default as memoize } from 'fast-memoize';
  * Blockera dependencies
  */
 import { isString, isObject } from '@blockera/utils';
-import { isValid } from '@blockera/controls/js/value-addons/utils';
-import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import type { ValueAddon } from '../types/value-addon';
+import { isValueAddonShape } from './value-addon-shape';
 
 /**
  * Internal dependencies
@@ -142,7 +142,7 @@ export const getGradientVAFromIdString: (value: string) => ValueAddon | string =
 export const getGradientType: (value: string | ValueAddon) => string = memoize(
 	function (value: string | ValueAddon): string {
 		//$FlowFixMe
-		if (isValid(value)) {
+		if (isValueAddonShape(value)) {
 			//$FlowFixMe
 			return value?.settings?.type;
 		}

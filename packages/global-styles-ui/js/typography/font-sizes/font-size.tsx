@@ -25,10 +25,10 @@ import {
  */
 import type { DefaultPresetValue } from '.';
 import FontSizePreview from './font-size-preview';
-import { SharedPresetControls } from '../components';
-import { useGlobalSetting } from '../context/global-style-hooks';
-import { type VariableType } from '../components/types';
-import { getAllVariableSlugs as getAllFontSizeSlugs } from '../components/utils';
+import { SharedPresetControls } from '../../components';
+import { useGlobalSetting } from '../../context/global-style-hooks';
+import { type VariableType } from '../../components/types';
+import { getAllVariableSlugs as getAllFontSizeSlugs } from '../../components/utils';
 
 function FontSizeComponent({
 	origin,

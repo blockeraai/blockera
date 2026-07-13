@@ -4,7 +4,7 @@
  * Blockera dependencies
  */
 import { isObject, isString } from '@blockera/utils';
-import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import type { ValueAddon } from '../types/value-addon';
 
 /**
  * Internal dependencies

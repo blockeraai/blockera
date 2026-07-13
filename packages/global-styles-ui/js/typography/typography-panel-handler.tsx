@@ -1,13 +1,13 @@
 /**
  * Internal dependencies
  */
-import FontSizes from '.';
+import Typography from '.';
 import { createGlobalStylesPanelHandler } from '../panel-override';
 
 export const typographyPanelHandler = createGlobalStylesPanelHandler({
 	panel: 'typography',
 	wpNavigationPath: '/typography',
-	Component: FontSizes,
-	componentSelector: '.blockera-font-size-panel',
-	whileNotExistSelectors: ['.blockera-font-size-hub'],
+	Component: Typography,
+	componentSelector: '.blockera-typography-panel',
+	whileNotExistSelectors: ['.blockera-typography-hub'],
 });

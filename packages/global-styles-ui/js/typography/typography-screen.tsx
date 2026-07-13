@@ -19,27 +19,43 @@ import { Flex } from '@blockera/controls';
  */
 import { Subtitle, NavigationButtonAsItem } from '../components';
 
-interface FontSizesScreenProps {
-	onClick: (event: Event) => void;
+interface TypographyScreenProps {
+	onFontSizesClick: (event: Event) => void;
+	onLineHeightsClick: (event: Event) => void;
 }
 
-function FontSizesScreen({ onClick }: FontSizesScreenProps) {
+function TypographyScreen({
+	onFontSizesClick,
+	onLineHeightsClick,
+}: TypographyScreenProps) {
 	return (
 		<Flex
 			direction="column"
 			gap={'12px'}
-			className="blockera-font-size-panel blockera-font-size-hub"
+			className="blockera-typography-panel blockera-typography-hub"
 		>
-			<Subtitle level={3}>{__('Font Sizes', 'blockera')}</Subtitle>
+			<Subtitle level={3}>{__('Variables', 'blockera')}</Subtitle>
 
 			<ItemGroup isBordered isSeparated>
 				<NavigationButtonAsItem
 					path="/typography/font-sizes"
-					onClick={onClick}
+					onClick={onFontSizesClick}
 				>
 					<HStack direction="row">
 						<FlexItem>
 							{__('Font size variables', 'blockera')}
+						</FlexItem>
+						<Icon icon={isRTL() ? chevronLeft : chevronRight} />
+					</HStack>
+				</NavigationButtonAsItem>
+
+				<NavigationButtonAsItem
+					path="/typography/line-heights"
+					onClick={onLineHeightsClick}
+				>
+					<HStack direction="row">
+						<FlexItem>
+							{__('Line height variables', 'blockera')}
 						</FlexItem>
 						<Icon icon={isRTL() ? chevronLeft : chevronRight} />
 					</HStack>
@@ -49,4 +65,4 @@ function FontSizesScreen({ onClick }: FontSizesScreenProps) {
 	);
 }
 
-export default FontSizesScreen;
+export default TypographyScreen;

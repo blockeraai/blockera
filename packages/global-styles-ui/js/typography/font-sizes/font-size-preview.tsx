@@ -8,8 +8,8 @@ import { getComputedFluidTypographyValue } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import { VariablePreview } from '../components/variable-preview';
-import { useGlobalStyle } from '../context/global-style-hooks';
+import { VariablePreview } from '../../components/variable-preview';
+import { useGlobalStyle } from '../../context/global-style-hooks';
 
 interface FontSizePreviewProps {
 	fontSize: FontSize;

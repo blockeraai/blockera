@@ -31,6 +31,7 @@ import {
 	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
+import { BLOCKERA_GLOBAL_SETTING_PATH } from '@blockera/data';
 import { type VariableType } from '../components/types';
 import { TextShadowPresetOpener } from './text-shadow-preset-opener';
 import {
@@ -131,33 +132,33 @@ const TextShadowPresetGroup = memo(TextShadowPresetGroupComponent);
  */
 export function TextShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		'textShadow.presets.theme',
+		BLOCKERA_GLOBAL_SETTING_PATH.TEXT_SHADOW_PRESETS_THEME,
 		''
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
-		'textShadow.presets.theme',
+		BLOCKERA_GLOBAL_SETTING_PATH.TEXT_SHADOW_PRESETS_THEME,
 		'',
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		'textShadow.presets.default',
+		BLOCKERA_GLOBAL_SETTING_PATH.TEXT_SHADOW_PRESETS_DEFAULT,
 		''
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
-		'textShadow.presets.default',
+		BLOCKERA_GLOBAL_SETTING_PATH.TEXT_SHADOW_PRESETS_DEFAULT,
 		'',
 		'base'
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		'textShadow.presets.custom',
+		BLOCKERA_GLOBAL_SETTING_PATH.TEXT_SHADOW_PRESETS_CUSTOM,
 		''
 	);
 
 	const [defaultTextShadowPresetsEnabled = true] = useGlobalSetting(
-		'textShadow.defaultPresets',
+		BLOCKERA_GLOBAL_SETTING_PATH.TEXT_SHADOW_DEFAULT_PRESETS,
 		''
 	);
 

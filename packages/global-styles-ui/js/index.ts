@@ -45,6 +45,15 @@ export {
 } from './context/preset-variations-context';
 export { getVariationClassName } from './theme-json-utils';
 export { useGlobalSetting, useGlobalStyle } from './context/global-style-hooks';
+export {
+	BLOCKERA_SETTINGS_PROPERTY,
+	BLOCKERA_NESTED_SETTINGS_PROPERTY,
+	BLOCKERA_SETTINGS_KEYS,
+	BLOCKERA_GLOBAL_SETTING_PATH,
+	BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH,
+} from '@blockera/data';
+export { mergeBlockeraSettingsIntoExperimentalFeatures } from './context/merge-blockera-experimental-features';
+export { BlockEditorExperimentalFeaturesSync } from './context/block-editor-experimental-features-sync';
 
 export { Borders } from './borders';
 export { Filters } from './filters';
@@ -56,7 +65,8 @@ export { BorderRadius } from './border-radius';
 
 /** Preset editor bodies (theme / default / custom), for reuse outside full navigation shells. */
 export { SpacingPresetContent } from './spacing';
-export { FontSizesPresetContent } from './font-sizes';
+export { FontSizesPresetContent } from './typography/font-sizes';
+export { LineHeightsPresetContent } from './typography/line-heights';
 export { BordersPresetContent } from './borders';
 export { BorderRadiusPresetContent } from './border-radius';
 export { FiltersPresetContent } from './filters';
@@ -85,7 +95,7 @@ export {
 } from './components/recreate-missing-variable-preset';
 
 export { colorsPanelHandler } from './colors/colors-panel-handler';
-export { typographyPanelHandler } from './font-sizes/typography-panel-handler';
+export { typographyPanelHandler } from './typography/typography-panel-handler';
 export { shadowsPanelHandler } from './shadows/shadows-panel-handler';
 
 export {
