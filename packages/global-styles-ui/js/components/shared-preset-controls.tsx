@@ -257,6 +257,12 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const creatingSlugPersistTimeoutRef = useRef<ReturnType<
 		typeof setTimeout
 	> | null>(null);
+	const repeaterItemsRef = useRef(repeaterItems);
+	repeaterItemsRef.current = repeaterItems;
+	const variableRef = useRef(variable);
+	variableRef.current = variable;
+	const persistedDescriptionRef = useRef(persistedDescription);
+	persistedDescriptionRef.current = persistedDescription;
 	const CREATING_NAME_PERSIST_MS = 200;
 
 	const clearCreatingNamePersistTimeout = useCallback(() => {
@@ -459,35 +465,45 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		]
 	);
 
-	const finalizeCreatingStepPersist = useCallback(() => {
-		const nextName = String(draftNameRef.current ?? variable.name ?? '');
+	const commitCreatingStepDrafts = useCallback(() => {
+		const variableRow = variableRef.current as Record<string, unknown>;
+		const nextName = String(draftNameRef.current ?? variableRow.name ?? '');
 		const nextDescription = draftDescriptionRef.current;
 		const manualSlug = hasManualSlugDuringCreatingRef.current
 			? normalizeVariablePresetSlug(variableSlugRef.current)
 			: '';
 		const derivedSlug = normalizeVariablePresetSlug(nextName);
 		const nextSlug =
-			manualSlug ||
-			derivedSlug ||
-			String((variable as Record<string, unknown>).slug ?? '');
-		const descriptionChanged = nextDescription !== persistedDescription;
-		const slugChanged =
-			nextSlug &&
-			String((variable as Record<string, unknown>).slug ?? '') !==
-				nextSlug;
+			manualSlug || derivedSlug || String(variableRow.slug ?? '');
+		const persistedSlug = String(variableRow.slug ?? '');
+		const persistedVariableName = String(variableRow.name ?? '');
+		const persistedDescriptionValue = persistedDescriptionRef.current;
+		const descriptionChanged =
+			nextDescription !== persistedDescriptionValue;
+		const slugChanged = nextSlug !== '' && persistedSlug !== nextSlug;
+		const nameChanged = nextName !== persistedVariableName;
 
-		if (!descriptionChanged && !slugChanged) {
+		if (!descriptionChanged && !slugChanged && !nameChanged) {
 			return;
 		}
 
 		const updatedItem = buildPresetWithDescriptionUpdate(
 			{
-				...(variable as Record<string, unknown>),
+				...variableRow,
 				name: nextName,
 				slug: nextSlug,
+				creatingStep: false,
 			} as T,
 			nextDescription
 		);
+
+		modifyControlValue({
+			controlId,
+			value: {
+				...repeaterItemsRef.current,
+				[itemId]: updatedItem,
+			},
+		});
 
 		changeRepeaterItem({
 			onChange,
@@ -501,30 +517,64 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		changeRepeaterItem,
 		controlId,
 		itemId,
+		modifyControlValue,
 		onChange,
-		persistedDescription,
 		repeaterId,
 		valueCleanup,
-		variable,
 	]);
 
+	const flushPendingCreatingStepPersist = useCallback(() => {
+		const shouldSyncSlugFromName = !hasManualSlugDuringCreatingRef.current;
+
+		if (creatingNamePersistTimeoutRef.current) {
+			clearTimeout(creatingNamePersistTimeoutRef.current);
+			creatingNamePersistTimeoutRef.current = null;
+			persistCreatingNameToTheme(draftNameRef.current, {
+				syncCreatingSlug: shouldSyncSlugFromName,
+			});
+		}
+
+		if (creatingSlugPersistTimeoutRef.current) {
+			clearTimeout(creatingSlugPersistTimeoutRef.current);
+			creatingSlugPersistTimeoutRef.current = null;
+			persistCreatingSlugToTheme(
+				normalizeVariablePresetSlug(variableSlugRef.current)
+			);
+		}
+	}, [persistCreatingNameToTheme, persistCreatingSlugToTheme]);
+
+	const commitCreatingStepDraftsRef = useRef(commitCreatingStepDrafts);
+	commitCreatingStepDraftsRef.current = commitCreatingStepDrafts;
+
+	const flushPendingCreatingStepPersistRef = useRef(
+		flushPendingCreatingStepPersist
+	);
+	flushPendingCreatingStepPersistRef.current =
+		flushPendingCreatingStepPersist;
+
 	const prevIsCreatingRef = useRef(isCreating);
+	const isCreatingRef = useRef(isCreating);
+	isCreatingRef.current = isCreating;
 
 	useLayoutEffect(() => {
 		const wasCreating = prevIsCreatingRef.current;
 		prevIsCreatingRef.current = isCreating;
 
 		if (wasCreating && !isCreating) {
-			clearCreatingNamePersistTimeout();
-			clearCreatingSlugPersistTimeout();
-			finalizeCreatingStepPersist();
+			flushPendingCreatingStepPersistRef.current();
+			commitCreatingStepDraftsRef.current();
 		}
-	}, [
-		isCreating,
-		clearCreatingNamePersistTimeout,
-		clearCreatingSlugPersistTimeout,
-		finalizeCreatingStepPersist,
-	]);
+	}, [isCreating]);
+
+	// Empty deps: cleanup must run only on unmount, not when repeater rows update.
+	useLayoutEffect(() => {
+		return () => {
+			if (prevIsCreatingRef.current && isCreatingRef.current) {
+				flushPendingCreatingStepPersistRef.current();
+				commitCreatingStepDraftsRef.current();
+			}
+		};
+	}, []);
 
 	const flushPendingFieldEdits = useCallback(() => {
 		const nextName = draftNameRef.current;
