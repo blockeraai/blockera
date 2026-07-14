@@ -11,6 +11,16 @@ export const getBlockEditorSettings = (): Object => {
 };
 
 export {
+	BLOCKERA_SETTINGS_PROPERTY,
+	BLOCKERA_NESTED_SETTINGS_PROPERTY,
+	BLOCKERA_SETTINGS_KEYS,
+	BLOCKERA_GLOBAL_SETTING_PATH,
+	BLOCKERA_CUSTOM_PRESET_SETTINGS_PATH,
+	BLOCKERA_PRESET_METADATA_PATHS,
+	getBlockeraExperimentalFeatures,
+} from '../blockera-settings-paths';
+
+export {
 	getLinearGradients,
 	getLinearGradientBy,
 	getLinearGradient,
@@ -35,6 +45,14 @@ export {
 	getFontSizeVAFromIdString,
 	getFontSizeVAFromVarString,
 } from './font-size';
+export {
+	getLineHeights,
+	getLineHeightBy,
+	getLineHeight,
+	getLineHeightVAStringFromId,
+	getLineHeightVAFromIdString,
+	getLineHeightVAFromVarString,
+} from './line-height';
 export {
 	getSpacings,
 	getSpacingBy,
@@ -74,6 +92,16 @@ export {
 	buildPresetVariablePickerPayload,
 	serializeGlobalStylePresetItemValue,
 } from './preset-variable-picker-payload';
+export {
+	isValueAddonShape,
+	resolveStoredScalarForCssDeclaration,
+} from './value-addon-shape';
+export { textShadowPresetItemsToCss } from './text-shadow-preset-css';
+export {
+	CSS_VAR_INFIX_TO_PRESET_VARIABLE_TYPE,
+	globalStylePresetSerializedValueToCss,
+	resolveThemeJsonPresetCssDeclarationValue,
+} from './theme-json-preset-css-declaration-value';
 export {
 	normalizePresetSize,
 	normalizeFontSizeFluid,

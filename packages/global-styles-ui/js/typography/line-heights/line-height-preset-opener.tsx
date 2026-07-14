@@ -9,20 +9,21 @@ import { useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+
 /**
  * Internal dependencies
  */
-import { getGlobalStylesFontSizePresetPreviewAttributes } from '../preset-preview/injected-helpers';
+import { getGlobalStylesLineHeightPresetPreviewAttributes } from '../../preset-preview/injected-helpers';
 import {
 	type PresetCanvasPreviewPayload,
 	usePresetRowCanvasPreview,
-} from '../components/preset-row-preview-inject';
-import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
-import { useCanEditGlobalStyles } from '../components/use-global-styles-preset-edit';
-import { usePresetTaxonomyHeaderLabel } from '../components';
-import type { VariableType } from '../components/types.ts';
+} from '../../components/preset-row-preview-inject';
+import { getPresetRepeaterHeaderOnClick } from '../../components/preset-repeater-header-click';
+import { useCanEditGlobalStyles } from '../../components/use-global-styles-preset-edit';
+import { usePresetTaxonomyHeaderLabel } from '../../components';
+import type { VariableType } from '../../components/types.ts';
 
-export type FontSizePresetOpenerProps = {
+export type LineHeightPresetOpenerProps = {
 	itemId: string;
 	isOpen: boolean;
 	children?: React.ReactNode;
@@ -32,7 +33,7 @@ export type FontSizePresetOpenerProps = {
 	isOpenPopoverEvent: (event: React.MouseEvent) => boolean;
 };
 
-export function FontSizePresetOpener({
+export function LineHeightPresetOpener({
 	itemId,
 	isOpen,
 	setOpen,
@@ -40,11 +41,11 @@ export function FontSizePresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 	contextType = 'repeater',
-}: FontSizePresetOpenerProps) {
+}: LineHeightPresetOpenerProps) {
 	const canEditGlobalStyles = useCanEditGlobalStyles();
 	const headerLabel = usePresetTaxonomyHeaderLabel(variable, contextType);
 	const getPayload = useCallback((): PresetCanvasPreviewPayload | null => {
-		const patch = getGlobalStylesFontSizePresetPreviewAttributes(
+		const patch = getGlobalStylesLineHeightPresetPreviewAttributes(
 			variable?.size
 		);
 		if (!patch || !Object.keys(patch).length) {
@@ -70,10 +71,10 @@ export function FontSizePresetOpener({
 			onMouseLeave={previewHandlers.onMouseLeave}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
-				__('Font size variable %d', 'blockera'),
+				__('Line height variable %d', 'blockera'),
 				Number(itemId) + 1
 			)}
-			data-cy="font-size-repeater-item-header"
+			data-cy="line-height-repeater-item-header"
 		>
 			<span
 				className={controlInnerClassNames('header-label')}

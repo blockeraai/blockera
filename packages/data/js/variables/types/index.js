@@ -6,6 +6,7 @@ import type { ValueAddonReference } from '../../types';
 
 export type VariableCategory =
 	| 'font-size'
+	| 'line-height'
 	| 'linear-gradient'
 	| 'radial-gradient'
 	| 'spacing'

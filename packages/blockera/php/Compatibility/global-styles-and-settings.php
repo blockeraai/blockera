@@ -1,5 +1,6 @@
 <?php
 
+use Blockera\Setup\Compatibility\BlockeraSettingsPaths;
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
@@ -604,14 +605,40 @@ if (! function_exists('blockera_enqueue_global_styles_css_custom_properties')) {
 	}
 }
 
+if ( ! function_exists( 'blockera_merge_settings_into_experimental_features' ) ) {
+	/**
+	 * Overlays Blockera global-styles-ui settings onto block editor `__experimentalFeatures`.
+	 *
+	 * Mirrors preset paths managed by `useGlobalSetting` (`typography.blockeraLineHeights`, `blockeraWidthSizes`, etc.)
+	 * so variable pickers and canvas CSS vars stay aligned with the Site Editor globalStyles entity.
+	 *
+	 * @param array $experimental_features Reference to current __experimentalFeatures.
+	 * @param array $blockera_settings       Merged settings from {@see blockera_get_global_settings()} or globalStyles entity.
+	 */
+	function blockera_merge_settings_into_experimental_features(
+		array &$experimental_features,
+		array $blockera_settings
+	): void {
+		BlockeraSettingsPaths::merge_into_experimental_features(
+			$experimental_features,
+			$blockera_settings
+		);
+	}
+}
+
 if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) {
 	/**
 	 * Merges Blockera extended global settings into the block editor's __experimentalFeatures.
 	 *
 	 * Core {@see wp_get_global_settings()} uses {@see WP_Theme_JSON_Resolver} and {@see WP_Theme_JSON},
-	 * whose sanitization drops Blockera-only preset groups (transition, transform, filter, textShadow,
-	 * extended border/shadow/dimensions, and block-level entries). The editor still needs those
-	 * for variable pickers and parity with {@see blockera_get_global_stylesheet()}.
+	 * whose sanitization drops Blockera-only preset groups (`typography.blockeraLineHeights`,
+	 * flat `settings.blockera*` keys, `border.blockeraBorder`, etc.).
+	 * The editor still needs those for variable pickers and parity with {@see blockera_get_global_stylesheet()}.
+	 *
+	 * Initial load only: Site Editor live edits are mirrored by
+	 * {@see BlockEditorExperimentalFeaturesSync} (same merge rules, globalStyles entity source,
+	 * store mirrors on `styles` / `__unstableResolvedAssets`, and direct iframe `<style>` injection
+	 * for live preview — Style Book replaces `settings.styles` with core global styles output).
 	 *
 	 * Runs late so prior filters see a stable base; we only add/overlay data from {@see blockera_get_global_settings()}.
 	 *
@@ -628,24 +655,10 @@ if ( ! function_exists( 'blockera_merge_block_editor_experimental_features' ) ) 
 			return $editor_settings;
 		}
 
-		$cur = &$editor_settings['__experimentalFeatures'];
-
-		$blockera_only_top = array( 'transition', 'transform', 'filter', 'textShadow' );
-		foreach ( $blockera_only_top as $key ) {
-			if ( isset( $bf[ $key ] ) ) {
-				$cur[ $key ] = $bf[ $key ];
-			}
-		}
-
-		foreach ( array( 'shadow', 'border', 'dimensions' ) as $key ) {
-			if ( isset( $bf[ $key ] ) && is_array( $bf[ $key ] ) ) {
-				$cur[ $key ] = array_replace_recursive( (array) ( $cur[ $key ] ?? array() ), $bf[ $key ] );
-			}
-		}
-
-		if ( isset( $bf['blocks'] ) && is_array( $bf['blocks'] ) ) {
-			$cur['blocks'] = array_replace_recursive( (array) ( $cur['blocks'] ?? array() ), $bf['blocks'] );
-		}
+		blockera_merge_settings_into_experimental_features(
+			$editor_settings['__experimentalFeatures'],
+			$bf
+		);
 
 		return $editor_settings;
 	}

@@ -111,6 +111,11 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'font-size',
 		},
 		{
+			path: ['typography', 'blockeraLineHeights'],
+			valueKey: 'size',
+			cssVarInfix: 'line-height',
+		},
+		{
 			path: ['typography', 'fontFamilies'],
 			valueKey: 'fontFamily',
 			cssVarInfix: 'font-family',
@@ -121,7 +126,7 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'spacing',
 		},
 		{
-			path: ['layout', 'widthSizes'],
+			path: ['blockeraWidthSizes'],
 			valueKey: 'size',
 			cssVarInfix: 'width-size',
 		},
@@ -131,7 +136,7 @@ export const THEME_JSON_PRESET_METADATA_BASE: $ReadOnlyArray<ThemeJsonPresetReso
 			cssVarInfix: 'border-radius',
 		},
 		{
-			path: ['dimensions', 'dimensionSizes'],
+			path: ['blockeraDimensionSizes'],
 			valueKey: 'size',
 			cssVarInfix: 'dimension',
 		},
@@ -482,6 +487,7 @@ export function normalizeThemeJsonPresetLeafForScalarUi(
 			}
 			return '';
 		case 'font-size':
+		case 'line-height':
 		case 'spacing':
 		case 'border-radius':
 		case 'dimension':

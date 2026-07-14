@@ -322,7 +322,7 @@ export function openGlobalStylesShadowsScreen({ reset } = { reset: true }) {
 		.should('be.visible');
 }
 
-/** Border box presets (`settings.border.presets.custom`). */
+/** Border box presets (`settings.border.blockeraBorder.presets.custom`). */
 export function openGlobalStylesBordersScreen({ reset } = { reset: true }) {
 	return openGlobalStylesDesignSystemPresetScreen({
 		panelButtonId: 'borders',
@@ -397,7 +397,7 @@ export function openGlobalStylesTypographyFlow({ reset } = { reset: false }) {
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-font-size-hub', { timeout: 20000 }).should('exist');
+	cy.get('.blockera-typography-hub', { timeout: 20000 }).should('exist');
 }
 
 /**
@@ -413,13 +413,36 @@ export function openGlobalStylesFontSizesVariablesScreen(
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
 
-	cy.contains('.blockera-font-size-hub button', 'Font size variables')
+	cy.contains('.blockera-typography-hub button', 'Font size variables')
 		.scrollIntoView()
 		.should('exist')
 		.click({ force: true });
 
 	return cy
 		.get('.blockera-font-size-editor', { timeout: 20000 })
+		.should('be.visible');
+}
+
+/**
+ * Typography → Line height variables (design-system line height presets).
+ *
+ * @param {{ reset?: boolean }} options
+ */
+export function openGlobalStylesLineHeightsVariablesScreen(
+	{ reset } = { reset: true }
+) {
+	openGlobalStylesTypographyFlow({ reset });
+
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(500);
+
+	cy.contains('.blockera-typography-hub button', 'Line height variables')
+		.scrollIntoView()
+		.should('exist')
+		.click({ force: true });
+
+	return cy
+		.get('.blockera-line-height-editor', { timeout: 20000 })
 		.should('be.visible');
 }
 

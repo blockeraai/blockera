@@ -31,6 +31,7 @@ import {
 	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
+import { BLOCKERA_GLOBAL_SETTING_PATH } from '@blockera/data';
 import { type VariableType } from '../components/types';
 import { TransitionPresetOpener } from './transition-preset-opener';
 import {
@@ -131,30 +132,30 @@ const TransitionPresetGroup = memo(TransitionPresetGroupComponent);
  */
 export function TransitionsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		'transition.presets.theme'
+		BLOCKERA_GLOBAL_SETTING_PATH.TRANSITION_PRESETS_THEME
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
-		'transition.presets.theme',
+		BLOCKERA_GLOBAL_SETTING_PATH.TRANSITION_PRESETS_THEME,
 		'',
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		'transition.presets.default'
+		BLOCKERA_GLOBAL_SETTING_PATH.TRANSITION_PRESETS_DEFAULT
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
-		'transition.presets.default',
+		BLOCKERA_GLOBAL_SETTING_PATH.TRANSITION_PRESETS_DEFAULT,
 		'',
 		'base'
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		'transition.presets.custom'
+		BLOCKERA_GLOBAL_SETTING_PATH.TRANSITION_PRESETS_CUSTOM
 	);
 
 	const [defaultTransitionPresetsEnabled = true] = useGlobalSetting(
-		'transition.defaultPresets'
+		BLOCKERA_GLOBAL_SETTING_PATH.TRANSITION_DEFAULT_PRESETS
 	);
 
 	const themePresets = useMemo(

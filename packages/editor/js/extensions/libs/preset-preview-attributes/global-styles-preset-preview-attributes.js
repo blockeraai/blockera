@@ -394,6 +394,22 @@ export function getGlobalStylesFontSizePresetPreviewAttributes(
 }
 
 /**
+ * @param {string|void} size Line height preset.
+ * @return {Object} Partial attributes, or empty object.
+ */
+export function getGlobalStylesLineHeightPresetPreviewAttributes(
+	size: string | null | void
+): Object {
+	const s = getValueAddonRealValue((size: any));
+	const t = s !== undefined && s !== null ? String(s).trim() : '';
+	if (!t) {
+		return {};
+	}
+
+	return { blockeraLineHeight: t };
+}
+
+/**
  * @param {{ color?: string, type?: string }} variable Color / gradient preset row.
  * @param {string} [usage=BACKGROUND_COLOR_PRESET_PREVIEW_USAGE]
  * @return {Object} Partial attributes, or empty object. Gradient / border-color return {} (use canvas declarations).

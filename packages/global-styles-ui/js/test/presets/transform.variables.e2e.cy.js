@@ -55,10 +55,14 @@ describe('Global Styles UI → transform presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting('transform.presets.theme').then((rows) => {
-			const row = rows.find((r) => r.slug === 'e-2-e-theme-transform');
-			expect(row.items[0]['move-x']).to.eq('12px');
-		});
+		getEditedGlobalStylesSetting('blockeraTransform.presets.theme').then(
+			(rows) => {
+				const row = rows.find(
+					(r) => r.slug === 'e-2-e-theme-transform'
+				);
+				expect(row.items[0]['move-x']).to.eq('12px');
+			}
+		);
 
 		savePage();
 
@@ -71,10 +75,14 @@ describe('Global Styles UI → transform presets (theme.json + UI)', () => {
 			'E2E Theme Transform'
 		);
 
-		getEditedGlobalStylesSetting('transform.presets.theme').then((rows) => {
-			const row = rows.find((r) => r.slug === 'e-2-e-theme-transform');
-			expect(row.items[0]['move-x']).to.eq('12px');
-		});
+		getEditedGlobalStylesSetting('blockeraTransform.presets.theme').then(
+			(rows) => {
+				const row = rows.find(
+					(r) => r.slug === 'e-2-e-theme-transform'
+				);
+				expect(row.items[0]['move-x']).to.eq('12px');
+			}
+		);
 
 		cy.contains(
 			'.blockera-transforms-presets [data-cy="transform-preset-repeater-item-header"]',

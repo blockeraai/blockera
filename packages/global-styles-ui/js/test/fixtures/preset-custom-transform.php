@@ -1,6 +1,6 @@
 <?php
 /**
- * User global styles layer: one custom transform preset (`settings.transform.presets.custom`).
+ * User global styles layer: one custom transform preset (`settings.blockeraTransform.presets.custom`).
  *
  * Seeds the active theme's `wp_global_styles` post directly so existing custom variables are
  * available in the variable picker even when {@see e2e-global-styles-read-only.php} blocks edits.
@@ -54,28 +54,28 @@ function blockera_e2e_seed_custom_transform_preset(): void {
 		$config['settings'] = [];
 	}
 
-	if (! isset($config['settings']['transform']) || ! is_array($config['settings']['transform'])) {
-		$config['settings']['transform'] = [];
+	if (! isset($config['settings']['blockeraTransform']) || ! is_array($config['settings']['blockeraTransform'])) {
+		$config['settings']['blockeraTransform'] = [];
 	}
 
-	if (! isset($config['settings']['transform']['presets']) || ! is_array($config['settings']['transform']['presets'])) {
-		$config['settings']['transform']['presets'] = [];
+	if (! isset($config['settings']['blockeraTransform']['presets']) || ! is_array($config['settings']['blockeraTransform']['presets'])) {
+		$config['settings']['blockeraTransform']['presets'] = [];
 	}
 
-	if (! isset($config['settings']['transform']['presets']['custom']) || ! is_array($config['settings']['transform']['presets']['custom'])) {
-		$config['settings']['transform']['presets']['custom'] = [];
+	if (! isset($config['settings']['blockeraTransform']['presets']['custom']) || ! is_array($config['settings']['blockeraTransform']['presets']['custom'])) {
+		$config['settings']['blockeraTransform']['presets']['custom'] = [];
 	}
 
 	$slug = 'e-2-e-custom-transform';
 
-	foreach ($config['settings']['transform']['presets']['custom'] as $row) {
+	foreach ($config['settings']['blockeraTransform']['presets']['custom'] as $row) {
 		if (is_array($row) && isset($row['slug']) && $row['slug'] === $slug) {
 			JSONResolver::clean_cached_data();
 			return;
 		}
 	}
 
-	$config['settings']['transform']['presets']['custom'][] = [
+	$config['settings']['blockeraTransform']['presets']['custom'][] = [
 		'slug' => $slug,
 		'name' => 'E2E Custom Transform',
 		'items' => [

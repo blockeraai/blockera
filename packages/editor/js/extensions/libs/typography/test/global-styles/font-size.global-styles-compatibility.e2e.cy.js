@@ -104,6 +104,15 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 			it('Variable Value', () => {
 				cy.getParentContainer('Font Size').as('container');
 
+				// Wait until theme presets from the fixture resolve into the control.
+				// Use exist (not visible): site-editor sidebar uses position:fixed and
+				// can clip Line Height below the fold even after scrollIntoView.
+				cy.get('@container').within(() => {
+					cy.getByDataCy('value-addon-btn', { timeout: 20000 })
+						.should('exist')
+						.and('contain', 'Large');
+				});
+
 				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 
