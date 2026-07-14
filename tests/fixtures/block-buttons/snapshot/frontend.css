@@ -110,6 +110,12 @@ html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block
 	background-color: #dfdfdf;
 }
 
+.blockera-block-14 :where(.blockera-block-14-child-1) {
+	width: 1.33em;
+	height: 1.33em;
+	margin-right: 0.5em;
+}
+
 .blockera-block-10 :where(.blockera-block-10-child-1) {
 	width: 1.33em;
 	height: 1.33em;
