@@ -5,6 +5,7 @@
  */
 import {
 	createPost,
+	getCustomPresetEditPopover,
 	getWPDataObject,
 	openGlobalStylesColorPaletteScreen,
 	closeWelcomeGuide,
@@ -72,11 +73,16 @@ export function typeInVariablePickerSearch(query) {
 	withinVariablePickerPopover(() => {
 		cy.get('.blockera-control-var-picker-search input[type="search"]', {
 			timeout: 20000,
-		})
-			.should('be.visible')
-			.clear({ force: true })
-			.type(query, { delay: 0, force: true })
-			.should('have.value', query);
+		}).should('be.visible');
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		}).clear({ force: true });
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		}).type(query, { delay: 0, force: true });
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		}).should('have.value', query);
 	});
 
 	// Wait for the filtered catalog or empty state to settle after search input changes.
@@ -110,6 +116,122 @@ export function clearVariablePickerSearch() {
 	});
 }
 
+/** Asserts the visible variable picker popover is still open. */
+export function assertVariablePickerPopoverVisible() {
+	cy.getByDataTest('variable-picker-popover', { timeout: 20000 })
+		.filter(':visible')
+		.first()
+		.should('be.visible');
+}
+
+/**
+ * Selects a color preset slug in the picker and reopens the catalog when the first
+ * activation dismisses it (initial bind).
+ *
+ * @param {string} slug Preset slug (`data-variable-slug`).
+ */
+export function selectColorPresetInVariablePicker(slug) {
+	cy.selectValueAddonItem(slug);
+
+	cy.get('body').then(($body) => {
+		if (
+			$body.find('[data-test="variable-picker-popover"]:visible')
+				.length === 0
+		) {
+			reopenVariablePickerPopover();
+		}
+	});
+
+	assertVariablePickerPopoverVisible();
+}
+
+/**
+ * Expands the variations accordion and opens the main preset edit popover via the row edit button.
+ *
+ * @param {string} headerLabel Base preset header label.
+ */
+export function openColorPresetEditPopoverInVariablePicker(headerLabel) {
+	expandColorPresetVariationsAccordionInVariablePicker(headerLabel);
+
+	withinVariablePickerPopover(() => {
+		cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
+			timeout: 20000,
+		})
+			.closest('[data-cy="group-control-header"]')
+			.realHover()
+			.within(() => {
+				cy.get('.blockera-control-btn-edit-item', { timeout: 20000 })
+					.should('be.visible')
+					.click({ force: true });
+			});
+	});
+}
+
+/** @param {string} headerLabel Base preset header label. */
+export function assertNestedShadeRowsHaveNoOpenEditPopover(headerLabel) {
+	withinVariablePickerPopover(() => {
+		cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
+			timeout: 20000,
+		})
+			.parents('.blockera-control-repeater-item-variations-group')
+			.first()
+			.find('[data-cy="repeater-item"]')
+			.each(($row) => {
+				expect($row.attr('data-edit-popover-open')).to.not.equal(
+					'true'
+				);
+			});
+	});
+
+	cy.get('.blockera-component-popover.blockera-control-group-popover').should(
+		'not.exist'
+	);
+}
+
+/**
+ * Opens Text Color picker, binds the base slug, reopens picker, expands variations,
+ * and opens the main preset edit popover.
+ *
+ * @param {string} headerLabel
+ * @param {string} baseSlug
+ */
+export function prepareSelectedBaseColorPresetEditSessionInPicker(
+	headerLabel,
+	baseSlug
+) {
+	openParagraphTextColorVariablePickerPopover();
+	selectColorPresetInVariablePicker(baseSlug);
+	expandColorPresetVariationsAccordionInVariablePicker(headerLabel);
+
+	withinVariablePickerPopover(() => {
+		cy.get('[data-cy="repeater-item"]')
+			.contains(headerLabel)
+			.first()
+			.closest('[data-cy="group-control-header"]')
+			.realHover()
+			.within(() => {
+				cy.get('.blockera-control-btn-edit-item', { timeout: 20000 })
+					.should('be.visible')
+					.click({ force: true });
+			});
+	});
+}
+
+/** Clicks the "Enable Color Shades" toggle inside a scoped edit popover body. */
+export function clickEnableColorShadesToggleInEditPopoverScope() {
+	cy.contains('label', 'Enable Color Shades', { timeout: 20000 })
+		.parent()
+		.find('.components-form-toggle__input')
+		.click({ force: true });
+}
+
+/** Clicks the "Enable Color Shades" toggle in the visible preset edit popover. */
+export function clickEnableColorShadesToggleInCustomPresetEditPopover() {
+	getCustomPresetEditPopover().within(() => {
+		clickEnableColorShadesToggleInEditPopoverScope();
+	});
+}
+
 /** @param {string} headerLabel */
 export function assertColorPresetVisibleInVariablePicker(headerLabel) {
 	withinVariablePickerPopover(() => {
@@ -134,7 +256,9 @@ export function assertColorPresetSlugVisibleInVariablePicker(slug) {
 	withinVariablePickerPopover(() => {
 		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
 			.first()
-			.scrollIntoView()
+			.scrollIntoView();
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
+			.first()
 			.should('exist');
 	});
 }
@@ -213,8 +337,10 @@ export function expandColorPresetVariationsAccordionInVariablePicker(
 		.within(() => {
 			cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
 				timeout: 20000,
+			}).scrollIntoView();
+			cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
+				timeout: 20000,
 			})
-				.scrollIntoView()
 				.should('be.visible')
 				.parents('.blockera-control-repeater-item-variations-group')
 				.first()
@@ -480,7 +606,9 @@ function waitForColorVariablePickerSearchFixtureSlugs() {
 		withinVariablePickerPopover(() => {
 			cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
 				.first()
-				.scrollIntoView()
+				.scrollIntoView();
+			cy.get(`[data-variable-slug="${slug}"]`, { timeout: 30000 })
+				.first()
 				.should('exist');
 		});
 	}
