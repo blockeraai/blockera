@@ -182,6 +182,8 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					'btn-media-library',
 					'btn-upload',
 					'btn-pick-color',
+					// Handles repeater item cases when displayed in accordion mode within a popover.
+					'blockera-control-btn-toggle',
 				];
 
 				if (
