@@ -20,13 +20,13 @@ import {
 	isValid,
 	LabelControl,
 	useValueAddon,
-	extractNumberAndUnit,
-} from '../../../index';
+	type ValueAddon,
+} from '../../../value-addons';
+import { fixLabelText } from '../utils';
 import { SideShape } from './side-shape';
 import { SidePopover } from './side-popover';
-import type { ValueAddon } from '../../../value-addons';
 import type { Side, SideProps, SideReturn } from '../types';
-import { fixLabelText } from '../utils';
+import { extractNumberAndUnit } from '../../input-control/utils';
 
 export function SideItem({
 	side,

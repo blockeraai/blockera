@@ -19,11 +19,12 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Flex, DynamicHtmlFormatter } from '../../../index';
-import AvatarAdem from './images/adem-bagci.png';
-import AvatarDaniel from './images/daniel-weaver.png';
+import Flex from '../../../flex';
 import Star from './icons/star.svg';
 import Logo from './icons/logo.svg';
+import AvatarAdem from './images/adem-bagci.png';
+import AvatarDaniel from './images/daniel-weaver.png';
+import DynamicHtmlFormatter from '../../../dynamic-html-formatter';
 
 export function SiteEditorUpgradeRightColumn(): MixedElement {
 	return (

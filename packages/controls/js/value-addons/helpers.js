@@ -37,7 +37,8 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { isValid } from './utils';
-import { ColorIndicator, NoticeControl } from '../';
+import NoticeControl from '../libs/notice-control';
+import { ColorIndicator } from '../libs/color-indicator';
 import type {
 	ValueAddon,
 	ValueAddonProps,

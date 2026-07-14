@@ -17,7 +17,7 @@ import { Icon } from '@blockera/icons';
  */
 import type { HeaderItem } from '../types';
 import { getBackgroundItemBGProperty } from '../utils';
-import { ColorIndicator, ColorIndicatorStack } from '../../';
+import { ColorIndicator, ColorIndicatorStack } from '../../color-indicator';
 
 const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 	({

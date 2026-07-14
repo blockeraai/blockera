@@ -14,8 +14,10 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import TrashIcon from '../../icons/trash';
+import Flex from '../../../libs/flex';
+import Popover from '../../../libs/popover';
+import { Button } from '../../../libs/button';
 import { getDeletedItemInfo } from '../../helpers';
-import { Button, Flex, Popover } from '../../../libs';
 import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({

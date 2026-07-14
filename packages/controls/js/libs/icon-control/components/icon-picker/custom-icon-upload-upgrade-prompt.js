@@ -11,7 +11,8 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { UpgradePrompt, Flex } from '../../../';
+import Flex from '../../../flex';
+import { UpgradePrompt } from '../../../upgrade-prompt';
 
 export default function CustomIconUploadUpgradePrompt({
 	isOpen = false,

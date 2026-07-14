@@ -21,10 +21,11 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies.
  */
-import { Button, Grid } from '../';
+import Grid from '../grid';
+import { Button } from '../button';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
-import { setValueAddon, useValueAddon } from '../../';
+import { setValueAddon, useValueAddon } from '../../value-addons';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 import RepeaterPopoverTitleDelete from './components/popover-title-delete';

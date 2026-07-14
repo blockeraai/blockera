@@ -17,7 +17,8 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, Modal } from '../index';
+import Modal from '../modal';
+import { Button } from '../button';
 
 export function FeatureWrapper({
 	type,

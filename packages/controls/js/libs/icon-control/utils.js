@@ -29,7 +29,8 @@ import {
 /**
  * Internal dependencies
  */
-import { Tooltip, Button } from '../';
+import { Button } from '../button';
+import { Tooltip } from '../tooltip';
 import { FeatureWrapper } from '../feature-wrapper';
 import ConditionalWrapper from '../conditional-wrapper';
 

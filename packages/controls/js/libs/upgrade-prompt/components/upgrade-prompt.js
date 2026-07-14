@@ -14,24 +14,24 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import Modal from '../../modal';
-import Popover from '../../popover';
-import type { PopoverPlacement } from '../../popover/types/index';
-import { Button } from '../../button';
-import { Icon } from '@blockera/icons';
 import type {
-	LockedFeatureSpec,
 	ProHighlightSpec,
+	LockedFeatureSpec,
 	UpgradePromptProductId,
 } from '../types';
+import Modal from '../../modal';
+import Popover from '../../popover';
+import { Button } from '../../button';
 import { getUpgradePromptProductChrome } from '../products';
-import { getSiteEditorDefaultProHighlights } from '../products/blockera-site-editor';
-import { UpgradePromptChromeLeft } from './upgrade-prompt-chrome';
 import { UpgradePromptContent } from './upgrade-prompt-content';
+import type { PopoverPlacement } from '../../popover/types/index';
+import { UpgradePromptChromeLeft } from './upgrade-prompt-chrome';
+import { getSiteEditorDefaultProHighlights } from '../products/blockera-site-editor';
 
 function resolveProHighlights(
 	product: UpgradePromptProductId,

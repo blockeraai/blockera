@@ -15,9 +15,11 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Modal, Button, Flex } from '../../../';
-import TabMenu from '../../../tabs/tab-menu';
+import Modal from '../../../modal';
+import Flex from '../../../flex';
+import { Button } from '../../../button';
 import { IconContext } from '../../context';
+import TabMenu from '../../../tabs/tab-menu';
 import {
 	isCustomIcon,
 	getCustomSvgDraft,

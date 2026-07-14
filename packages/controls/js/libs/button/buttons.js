@@ -13,7 +13,7 @@ import { componentClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Flex } from '../index';
+import Flex from '../flex';
 import type { ButtonsProps } from './types';
 
 export default function Buttons({

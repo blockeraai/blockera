@@ -28,9 +28,9 @@ import {
 } from '../index';
 import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import RemoveIcon from '../../icons/remove';
+import { Tooltip } from '../../../libs/tooltip';
 import type { ValueAddonControlProps } from './types';
 import DynamicValueIcon from '../../icons/dynamic-value';
-import { Tooltip } from '../../../';
 
 export default function ({
 	controlProps,

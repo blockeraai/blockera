@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { createReduxStore, register, select } from '@wordpress/data';
+import { createReduxStore, register } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -24,9 +24,6 @@ export const store = createReduxStore(STORE_NAME, {
 	actions,
 });
 
-// Check if store is already registered.
-if (!select(STORE_NAME)) {
-	register(store);
-}
+register(store);
 
 export { reducer, selectors, actions, STORE_NAME };
