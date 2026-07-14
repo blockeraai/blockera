@@ -12,7 +12,8 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, Tooltip } from '../../../../';
+import { Button } from '../../../../button';
+import { Tooltip } from '../../../../tooltip';
 import { getElementLabel } from './svg-editor-utils';
 
 /**

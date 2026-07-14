@@ -16,7 +16,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button } from '../../../index';
+import { Button } from '../../../button';
 import { IconContext } from '../../context';
 import { buildRecentIconElements } from '../../utils';
 import { useDraftIconHighlight } from '../../hooks/use-draft-icon-highlight';

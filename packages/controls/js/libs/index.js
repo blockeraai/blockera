@@ -1,4 +1,6 @@
 // @flow
+import './repeater-control/store';
+
 export * from './image';
 export * from './avatar';
 export * from './feature-wrapper';

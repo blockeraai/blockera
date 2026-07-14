@@ -11,7 +11,9 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Button, Flex, NoticeControl } from '../../../../';
+import Flex from '../../../../flex';
+import { Button } from '../../../../button';
+import NoticeControl from '../../../../notice-control';
 
 /**
  * @param {Object}   props

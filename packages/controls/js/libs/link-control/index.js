@@ -18,7 +18,6 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../repeater-control/store';
 import {
 	Button,
 	BaseControl,
@@ -28,6 +27,7 @@ import {
 } from '../index';
 import type { LinkControlProps } from './types';
 import { linkControlValueCleaner } from './utils';
+import { STORE_NAME } from '../repeater-control/store/constants';
 import { ControlContextProvider, useControlContext } from '../../context';
 
 export default function LinkControl({
