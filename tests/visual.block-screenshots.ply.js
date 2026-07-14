@@ -169,7 +169,19 @@ function loadFixtures() {
 }
 
 const sections = loadFixtures();
-const failures = [];
+
+/**
+ * Screenshot options shared by all visual assertions in this file.
+ *
+ * Use expect.soft (not try/catch + afterAll): catching toHaveScreenshot marks the
+ * test as passed, and deferring failure to afterAll is attributed to the last test.
+ * On CI retries that last test alone gets a fresh empty failures array, so real
+ * mismatches become "flaky" and exit 0 (failOnFlakyTests: false). Soft assertions
+ * keep every screenshot failure on the fixture that produced it.
+ */
+const screenshotOptions = {
+	threshold: 0.02,
+};
 
 test.describe('Sections Visual Snapshots', () => {
 	for (const section of Object.keys(sections)) {
@@ -223,19 +235,12 @@ test.describe('Sections Visual Snapshots', () => {
 				// Set viewport and adjust iframe height for full element capture
 				await setEditorViewportForScreenshot(page, 'desktop');
 
-				try {
-					await expect(editorContainer).toHaveScreenshot(
+				await expect
+					.soft(editorContainer)
+					.toHaveScreenshot(
 						`test-${section}-editor-desktop.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-editor-desktop`,
-						error: error.message,
-					});
-				}
 
 				await setDeviceType(page, 'Mobile Portrait');
 
@@ -243,19 +248,12 @@ test.describe('Sections Visual Snapshots', () => {
 				await setEditorViewportForScreenshot(page, 'mobile');
 
 				// Editor Mobile Snapshot
-				try {
-					await expect(editorContainer).toHaveScreenshot(
+				await expect
+					.soft(editorContainer)
+					.toHaveScreenshot(
 						`test-${section}-editor-mobile.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-editor-mobile`,
-						error: error.message,
-					});
-				}
 
 				// Check frontend
 				await savePage(page);
@@ -276,38 +274,24 @@ test.describe('Sections Visual Snapshots', () => {
 				const entryContent = page.locator('.entry-content').first();
 				await entryContent.scrollIntoViewIfNeeded();
 
-				try {
-					await expect(entryContent).toHaveScreenshot(
+				await expect
+					.soft(entryContent)
+					.toHaveScreenshot(
 						`test-${section}-frontend-desktop.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-frontend-desktop`,
-						error: error.message,
-					});
-				}
 
 				await setFrontendViewportForScreenshot(page, 'mobile');
 
 				// Frontend Mobile Snapshot
 				await entryContent.scrollIntoViewIfNeeded();
 
-				try {
-					await expect(entryContent).toHaveScreenshot(
+				await expect
+					.soft(entryContent)
+					.toHaveScreenshot(
 						`test-${section}-frontend-mobile.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-frontend-mobile`,
-						error: error.message,
-					});
-				}
 			} finally {
 				// Deactivate mu-plugin if it was activated
 				if (muPluginActivated) {
@@ -316,16 +300,4 @@ test.describe('Sections Visual Snapshots', () => {
 			}
 		});
 	}
-
-	test.afterAll(() => {
-		// After all tests, check if any failed and throw combined error
-		if (failures.length > 0) {
-			const errorMessage = failures
-				.map((f, i) => `\n${i + 1}. ${f.name}:\n   ${f.error}`)
-				.join('\n');
-			throw new Error(
-				`${failures.length} screenshot(s) failed:${errorMessage}`
-			);
-		}
-	});
 });
