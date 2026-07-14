@@ -95,6 +95,30 @@ export function variablePickerRowMatchesSelected(
 }
 
 /**
+ * Keep the variable picker open when the user re-activates the row that is already
+ * bound to the control (e.g. editing shades on the selected base color preset).
+ */
+export function shouldKeepVariablePickerOpenForRowActivation(
+	row: Record<string, unknown>,
+	options: {
+		variableType: string;
+		origin: string | string[];
+		pickerValue: unknown;
+	}
+): boolean {
+	if (row.creatingStep === true || row.__rebindBoundFeature === true) {
+		return true;
+	}
+
+	return variablePickerRowMatchesSelected(
+		row,
+		options.variableType,
+		options.origin,
+		options.pickerValue
+	);
+}
+
+/**
  * Whether deleting a preset row should clear the control currently bound in the variable picker.
  */
 export function shouldClearVariablePickerFeatureOnRowDelete(

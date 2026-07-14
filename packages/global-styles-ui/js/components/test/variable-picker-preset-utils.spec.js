@@ -1,6 +1,7 @@
 import {
 	applyVariablePickerRepeaterSelection,
 	shouldClearVariablePickerFeatureOnRowDelete,
+	shouldKeepVariablePickerOpenForRowActivation,
 	variablePickerRowMatchesSelected,
 } from '../variable-picker-preset-utils';
 
@@ -73,6 +74,44 @@ describe('variablePickerRowMatchesSelected', () => {
 				}
 			)
 		).toBe(true);
+	});
+});
+
+describe('shouldKeepVariablePickerOpenForRowActivation', () => {
+	it('keeps the picker open when re-activating the already bound row', () => {
+		expect(
+			shouldKeepVariablePickerOpenForRowActivation(customFontSizeRow, {
+				variableType: 'font-size',
+				origin: 'custom',
+				pickerValue: selectedValueAddon,
+			})
+		).toBe(true);
+	});
+
+	it('keeps the picker open during creatingStep', () => {
+		expect(
+			shouldKeepVariablePickerOpenForRowActivation(
+				{ ...customFontSizeRow, creatingStep: true },
+				{
+					variableType: 'font-size',
+					origin: 'custom',
+					pickerValue: null,
+				}
+			)
+		).toBe(true);
+	});
+
+	it('closes the picker when activating a different row', () => {
+		expect(
+			shouldKeepVariablePickerOpenForRowActivation(
+				{ ...customFontSizeRow, slug: 'other-size' },
+				{
+					variableType: 'font-size',
+					origin: 'custom',
+					pickerValue: selectedValueAddon,
+				}
+			)
+		).toBe(false);
 	});
 });
 

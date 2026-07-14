@@ -45,6 +45,7 @@ import {
 	markPopoverClosing,
 	registerPopoverOpen,
 } from '../../../libs/popover/utils';
+import { isClickInsideOpenInspectorRepeaterPopover } from '../../../libs/repeater-control/utils';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
@@ -477,6 +478,12 @@ export default function ({
 				isElementInsideVariablePickerSelectionTarget(event.target) ||
 				isElementInsideVariablePickerPopover(event.target)
 			) {
+				return;
+			}
+
+			// Preset edit popovers portal outside the picker but must not dismiss it
+			// (e.g. toggling color shades off while the base preset is selected).
+			if (isClickInsideOpenInspectorRepeaterPopover(event.target)) {
 				return;
 			}
 
