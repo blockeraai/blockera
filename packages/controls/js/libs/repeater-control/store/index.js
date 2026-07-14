@@ -23,7 +23,7 @@ export const store = createReduxStore(STORE_NAME, {
 	selectors,
 	actions,
 });
-console.trace();
+
 register(store);
 
 export { reducer, selectors, actions, STORE_NAME };
