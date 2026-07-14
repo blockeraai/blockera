@@ -5,6 +5,6 @@ vendor
 source-code-block-editor
 source-code-wordpress
 
-# Fixture HTML uses the built-in HTML formatter (Prettier rewrites inline CSS spacing).
-tests/**/*.html
+# Ignore test fixtures
+tests/**/input.html
 tests/**/*.css
