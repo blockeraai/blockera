@@ -1101,6 +1101,47 @@ async function prepareFrontendForScreenshot(page) {
 }
 
 /**
+ * Apply search-replace operations to a locator's innerHTML before screenshots.
+ * Patterns are treated as regex (global), matching fixture html-search-replace style.
+ *
+ * @param {import('@playwright/test').Locator} locator - Root element to mutate.
+ * @param {Array<{search: string|string[], replace: string}>|null|undefined} operations - Search/replace ops.
+ * @return {Promise<void>}
+ */
+async function applyDomSearchReplace(locator, operations) {
+	if (!operations || !Array.isArray(operations) || operations.length === 0) {
+		return;
+	}
+
+	await locator.evaluate((el, ops) => {
+		let html = el.innerHTML;
+
+		for (const operation of ops) {
+			if (
+				!operation ||
+				operation.search == null ||
+				operation.replace == null
+			) {
+				continue;
+			}
+
+			const patterns = Array.isArray(operation.search)
+				? operation.search
+				: [operation.search];
+
+			for (const pattern of patterns) {
+				html = html.replace(
+					new RegExp(pattern, 'g'),
+					operation.replace
+				);
+			}
+		}
+
+		el.innerHTML = html;
+	}, operations);
+}
+
+/**
  * Set editor viewport for screenshot.
  * Calculates the viewport height based on the editor container height.
  * Sets the viewport size to the calculated height.
@@ -1325,6 +1366,7 @@ module.exports = {
 	addNewTransition,
 	prepareEditorForScreenshot,
 	prepareFrontendForScreenshot,
+	applyDomSearchReplace,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
 };

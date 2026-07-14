@@ -19,6 +19,7 @@ const {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
+	applyDomSearchReplace,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	setDeviceType,
@@ -161,7 +162,12 @@ function loadFixtures() {
 		const shouldScreenshot = !config || config.screenshot !== false;
 
 		if (shouldScreenshot) {
-			sections[sectionId] = { setupFn, frontendSetupFn, sectionContent };
+			sections[sectionId] = {
+				setupFn,
+				frontendSetupFn,
+				sectionContent,
+				config,
+			};
 		}
 	}
 
@@ -189,6 +195,7 @@ test.describe('Sections Visual Snapshots', () => {
 		const sectionContent = sectionData.sectionContent || '';
 		const setupFn = sectionData?.setupFn;
 		const frontendSetupFn = sectionData?.frontendSetupFn;
+		const config = sectionData?.config;
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
 			if (!sectionContent) {
@@ -232,8 +239,18 @@ test.describe('Sections Visual Snapshots', () => {
 				const editorContainer =
 					iframeBody.locator('.is-root-container');
 
+				const editorSearchReplace =
+					config?.['editor-search-replace'] || null;
+				const frontendSearchReplace =
+					config?.['frontend-search-replace'] || null;
+
 				// Set viewport and adjust iframe height for full element capture
 				await setEditorViewportForScreenshot(page, 'desktop');
+
+				await applyDomSearchReplace(
+					editorContainer,
+					editorSearchReplace
+				);
 
 				await expect
 					.soft(editorContainer)
@@ -246,6 +263,11 @@ test.describe('Sections Visual Snapshots', () => {
 
 				// Set viewport and adjust iframe height for full element capture (mobile)
 				await setEditorViewportForScreenshot(page, 'mobile');
+
+				await applyDomSearchReplace(
+					editorContainer,
+					editorSearchReplace
+				);
 
 				// Editor Mobile Snapshot
 				await expect
@@ -274,6 +296,11 @@ test.describe('Sections Visual Snapshots', () => {
 				const entryContent = page.locator('.entry-content').first();
 				await entryContent.scrollIntoViewIfNeeded();
 
+				await applyDomSearchReplace(
+					entryContent,
+					frontendSearchReplace
+				);
+
 				await expect
 					.soft(entryContent)
 					.toHaveScreenshot(
@@ -285,6 +312,11 @@ test.describe('Sections Visual Snapshots', () => {
 
 				// Frontend Mobile Snapshot
 				await entryContent.scrollIntoViewIfNeeded();
+
+				await applyDomSearchReplace(
+					entryContent,
+					frontendSearchReplace
+				);
 
 				await expect
 					.soft(entryContent)
