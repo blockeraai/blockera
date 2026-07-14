@@ -31,11 +31,14 @@ const config = defineConfig({
 	...baseConfig,
 	// Flaky = failed a run then passed on retry; must not fail CI unless explicitly opted in.
 	failOnFlakyTests: false,
-	// Compare screenshots by default. `updateSnapshots: 'all'` made CI rewrite baselines
-	// ("is re-generated, writing actual") and always pass instead of failing on diffs.
-	// - CI: never update (fail on mismatch)
-	// - Local: only create missing baselines
-	// - Intentional refresh: UPDATE_SNAPSHOTS=1 or `npx playwright test --update-snapshots`
+	// Snapshot update mode:
+	// - `all` / UPDATE_SNAPSHOTS=1: rewrite baselines (intentional refresh only).
+	// - `missing` (CI + local default): compare against committed baselines; on mismatch
+	//   fail and write *-actual.png into test-results. If a baseline file is absent,
+	//   take the screenshot, write *-actual.png (for artifact download), write the
+	//   baseline path, and still fail — so CI does not silently invent goldens.
+	// - Do NOT use `none` on CI: Playwright short-circuits missing baselines without
+	//   capturing/writing the actual image, so artifacts have nothing to commit.
 	updateSnapshots: (() => {
 		if (
 			process.env.UPDATE_SNAPSHOTS === '1' ||
@@ -44,7 +47,11 @@ const config = defineConfig({
 			return 'all';
 		}
 
-		return process.env.CI ? 'none' : 'missing';
+		if (process.env.UPDATE_SNAPSHOTS === 'none') {
+			return 'none';
+		}
+
+		return 'missing';
 	})(),
 	testDir: './',
 	testMatch: prPlaywrightEnv.testMatch ?? '**/*.ply.js',

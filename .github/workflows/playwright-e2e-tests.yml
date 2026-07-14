@@ -327,6 +327,22 @@ jobs:
 
                   exit $test_exit_code
 
+            # With updateSnapshots: missing, first-time baselines are written under
+            # tests/__snapshots__/ on the runner. Collect untracked ones so the artifact
+            # has commit-ready filenames (not only *-actual.png under test-results).
+            - name: Collect new visual baselines
+              if: ${{ !cancelled() }}
+              run: |
+                  mkdir -p artifacts/new-baselines
+                  count=0
+                  while IFS= read -r -d '' f; do
+                    cp "$f" "artifacts/new-baselines/$(basename "$f")"
+                    count=$((count + 1))
+                  done < <(git ls-files -z --others --exclude-standard -- 'tests/__snapshots__/*.png' 2>/dev/null || true)
+                  echo "Collected ${count} new baseline PNG(s) into artifacts/new-baselines/"
+
+            # test-results includes *-actual.png (and *-diff.png on mismatch) for every
+            # failed visual assert — including first-time missing baselines (updateSnapshots: missing).
             - name: Archive debug artifacts (screenshots, traces)
               uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
@@ -334,6 +350,7 @@ jobs:
                   name: playwright-artifacts--${{ matrix.category }}
                   path: |
                       artifacts/test-results
+                      artifacts/new-baselines
                       playwright-report
                   if-no-files-found: ignore
                   retention-days: 7
