@@ -99,6 +99,7 @@ export default function ({
 							: '#e20b0b',
 					}}
 					delay={400}
+					key={'variable-value-addon-pointer-tooltip'}
 				>
 					<div
 						key={'variable-value-addon-pointer'}
