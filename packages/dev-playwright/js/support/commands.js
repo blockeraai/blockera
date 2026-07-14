@@ -1101,8 +1101,11 @@ async function prepareFrontendForScreenshot(page) {
 }
 
 /**
- * Apply search-replace operations to a locator's innerHTML before screenshots.
+ * Apply search-replace operations to a locator's DOM before screenshots.
  * Patterns are treated as regex (global), matching fixture html-search-replace style.
+ *
+ * Prefer syncing mutated `<time>` nodes in place so React/SSR roots are not wiped
+ * (assigning root innerHTML can remount ServerSideRender and restore live dates).
  *
  * @param {import('@playwright/test').Locator} locator - Root element to mutate.
  * @param {Array<{search: string|string[], replace: string}>|null|undefined} operations - Search/replace ops.
@@ -1135,6 +1138,38 @@ async function applyDomSearchReplace(locator, operations) {
 					operation.replace
 				);
 			}
+		}
+
+		if (html === el.innerHTML) {
+			return;
+		}
+
+		const tmp = document.createElement('div');
+		tmp.innerHTML = html;
+
+		const liveTimes = el.querySelectorAll('time');
+		const nextTimes = tmp.querySelectorAll('time');
+
+		// Sync sanitised <time> nodes without destroying React-managed ancestors.
+		if (liveTimes.length > 0 && liveTimes.length === nextTimes.length) {
+			liveTimes.forEach((liveTime, index) => {
+				const nextTime = nextTimes[index];
+				const nextAttrs = nextTime.getAttributeNames();
+				const liveAttrs = liveTime.getAttributeNames();
+
+				for (const name of liveAttrs) {
+					if (!nextTime.hasAttribute(name)) {
+						liveTime.removeAttribute(name);
+					}
+				}
+
+				for (const name of nextAttrs) {
+					liveTime.setAttribute(name, nextTime.getAttribute(name));
+				}
+
+				liveTime.innerHTML = nextTime.innerHTML;
+			});
+			return;
 		}
 
 		el.innerHTML = html;
