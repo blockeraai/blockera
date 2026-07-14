@@ -117,7 +117,6 @@
 		"@wordpress/format-library": "^5.37.0",
 		"@wordpress/hooks": "^4.37.0",
 		"@wordpress/i18n": "^6.10.0",
-		"@wordpress/interface": "^9.22.0",
 		"@wordpress/jest-preset-default": "^12.37.0",
 		"@wordpress/postcss-plugins-preset": "^5.37.0",
 		"@wordpress/prettier-config": "^4.37.0",
