@@ -662,7 +662,11 @@ const RepeaterItem = ({
 					return;
 				}
 
-				if (isClickInsideOpenInspectorRepeaterPopover(event?.target)) {
+				// Editing via standalone popover (variations branch) or nested surfaces.
+				if (
+					isOpen ||
+					isClickInsideOpenInspectorRepeaterPopover(event?.target)
+				) {
 					return;
 				}
 
@@ -810,7 +814,10 @@ const RepeaterItem = ({
 					? 'repeater-item-creating-step'
 					: itemId
 			}
-			{...(item?.isSelected
+			{...(showVariationsBranch && isOpen
+				? { 'data-edit-popover-open': 'true' }
+				: {})}
+			{...(item?.isSelected && !isOpen
 				? {
 						onClick: (event: MouseEvent) =>
 							mainItemGroupSharedProps.onClick(event),
