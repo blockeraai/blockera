@@ -188,8 +188,10 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 
 				if (
 					e.target instanceof HTMLElement &&
-					excludeClasses.filter((className) =>
-						e.target.classList.contains(className)
+					excludeClasses.filter(
+						(className) =>
+							e.target.classList.contains(className) ||
+							e.target.closest(`.${className}`)
 					).length !== 0
 				) {
 					return;
