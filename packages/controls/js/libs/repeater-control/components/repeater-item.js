@@ -41,6 +41,7 @@ import {
 import { isVariablePickerSelectionInteraction } from '../../popover/utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
+import Popover from '../../popover';
 import type { RepeaterItemProps, RepeaterItemSize } from '../types';
 import { useControlContext } from '../../../context';
 
@@ -157,6 +158,7 @@ const RepeaterItem = ({
 
 	const styleRef = useRef(null);
 	const itemRef = useRef(null);
+	const mainPresetHeaderRef = useRef(null);
 	const prevItemIdRef = useRef(itemId);
 	const scrollBehavior = useReducedMotion() ? 'auto' : 'smooth';
 	const [draggingIndex, setDraggingIndex] = useState(null);
@@ -539,6 +541,7 @@ const RepeaterItem = ({
 		</div>
 	) : (
 		<div
+			ref={mainPresetHeaderRef}
 			className={controlInnerClassNames('repeater-item-header-holder')}
 			style={{ width: '100%' }}
 			onClickCapture={(e) => {
@@ -730,6 +733,49 @@ const RepeaterItem = ({
 		/>
 	);
 
+	const showVariationsBranch = Boolean(
+		RepeaterItemVariations &&
+		showVariations &&
+		isBoolean(item?.hasVariations) &&
+		item.hasVariations &&
+		true !== item?.listViewCompactShades
+	);
+
+	const mainPresetEditPopover =
+		showVariationsBranch && 'popover' === mode && isOpen ? (
+			<Popover
+				placement="left-start"
+				className={controlInnerClassNames(
+					'group-popover',
+					popoverClassName
+				)}
+				title={
+					'function' === typeof popoverTitle
+						? popoverTitle(itemId, item)
+						: popoverTitle
+				}
+				titleButtonsRight={
+					PopoverTitleButtonsRight && (
+						<PopoverTitleButtonsRight
+							{...repeaterItemActionsProps}
+						/>
+					)
+				}
+				anchor={
+					mainPresetHeaderRef.current instanceof HTMLElement
+						? mainPresetHeaderRef.current
+						: undefined
+				}
+				onClose={handleItemPopoverClose}
+				{...(popoverProps || {})}
+			>
+				<RepeaterItemChildren
+					key={popoverContentKey}
+					{...{ item, itemId }}
+				/>
+			</Popover>
+		) : null;
+
 	const isRowDraggable = !variationsAccordionOpen;
 
 	return (
@@ -786,34 +832,35 @@ const RepeaterItem = ({
 					}
 				/>
 			)}
-			{RepeaterItemVariations &&
-			showVariations &&
-			isBoolean(item?.hasVariations) &&
-			item.hasVariations &&
-			true !== item?.listViewCompactShades ? (
-				<GroupControl
-					mode="accordion"
-					design={design}
-					onClick={mainItemGroupSharedProps.onClick}
-					headerOpenButton={true}
-					toggleOpenBorder={true}
-					actionButtonsType="inline"
-					popoverProps={popoverProps}
-					isOpen={variationsAccordionOpen}
-					className={controlInnerClassNames(
-						'repeater-item-variations-group'
-					)}
-					onOpen={() => setVariationsAccordionOpen(true)}
-					onClose={() => setVariationsAccordionOpen(false)}
-					actionMenuButtonLabel={actionMenuButtonLabel}
-					header={mainItemGroupHeader}
-					headerVariableSlug={headerVariableSlug}
-					injectHeaderButtonsStart={mainItemInjectHeaderButtonsStart}
-				>
-					<RepeaterItemVariationsPane>
-						<RepeaterItemVariations {...{ item, itemId }} />
-					</RepeaterItemVariationsPane>
-				</GroupControl>
+			{showVariationsBranch ? (
+				<>
+					<GroupControl
+						mode="accordion"
+						design={design}
+						onClick={mainItemGroupSharedProps.onClick}
+						headerOpenButton={true}
+						toggleOpenBorder={true}
+						actionButtonsType="inline"
+						popoverProps={popoverProps}
+						isOpen={variationsAccordionOpen}
+						className={controlInnerClassNames(
+							'repeater-item-variations-group'
+						)}
+						onOpen={() => setVariationsAccordionOpen(true)}
+						onClose={() => setVariationsAccordionOpen(false)}
+						actionMenuButtonLabel={actionMenuButtonLabel}
+						header={mainItemGroupHeader}
+						headerVariableSlug={headerVariableSlug}
+						injectHeaderButtonsStart={
+							mainItemInjectHeaderButtonsStart
+						}
+					>
+						<RepeaterItemVariationsPane>
+							<RepeaterItemVariations {...{ item, itemId }} />
+						</RepeaterItemVariationsPane>
+					</GroupControl>
+					{mainPresetEditPopover}
+				</>
 			) : (
 				mainItemGroupControl
 			)}
