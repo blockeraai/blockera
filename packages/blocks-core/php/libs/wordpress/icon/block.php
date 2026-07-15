@@ -47,7 +47,7 @@ return array_merge(
 					'root' => $icon_svg_selector,
 				],
 				'blockera/elements/icon' => [
-					'root' => $icon_svg_selector,
+					'root' => '&& svg',
 				],
 				'htmlEditable' => [
 					'root' => $icon_svg_selector,
