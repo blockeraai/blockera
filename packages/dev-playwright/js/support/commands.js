@@ -1104,8 +1104,8 @@ async function prepareFrontendForScreenshot(page) {
  * Apply search-replace operations to a locator's DOM before screenshots.
  * Patterns are treated as regex (global), matching fixture html-search-replace style.
  *
- * Prefer syncing mutated `<time>` nodes in place so React/SSR roots are not wiped
- * (assigning root innerHTML can remount ServerSideRender and restore live dates).
+ * Sanitised HTML is applied by walking the live tree and updating matching text nodes
+ * and attributes in place so React/SSR roots are not destroyed by a root innerHTML rewrite.
  *
  * @param {import('@playwright/test').Locator} locator - Root element to mutate.
  * @param {Array<{search: string|string[], replace: string}>|null|undefined} operations - Search/replace ops.
@@ -1147,27 +1147,84 @@ async function applyDomSearchReplace(locator, operations) {
 		const tmp = document.createElement('div');
 		tmp.innerHTML = html;
 
-		const liveTimes = el.querySelectorAll('time');
-		const nextTimes = tmp.querySelectorAll('time');
+		const syncAttrs = (liveNode, nextNode) => {
+			const liveAttrs = liveNode.getAttributeNames();
+			const nextAttrs = nextNode.getAttributeNames();
 
-		// Sync sanitised <time> nodes without destroying React-managed ancestors.
-		if (liveTimes.length > 0 && liveTimes.length === nextTimes.length) {
-			liveTimes.forEach((liveTime, index) => {
-				const nextTime = nextTimes[index];
-				const nextAttrs = nextTime.getAttributeNames();
-				const liveAttrs = liveTime.getAttributeNames();
-
-				for (const name of liveAttrs) {
-					if (!nextTime.hasAttribute(name)) {
-						liveTime.removeAttribute(name);
-					}
+			for (const name of liveAttrs) {
+				if (!nextNode.hasAttribute(name)) {
+					liveNode.removeAttribute(name);
 				}
+			}
 
-				for (const name of nextAttrs) {
-					liveTime.setAttribute(name, nextTime.getAttribute(name));
+			for (const name of nextAttrs) {
+				const value = nextNode.getAttribute(name);
+				if (liveNode.getAttribute(name) !== value) {
+					liveNode.setAttribute(name, value);
 				}
+			}
+		};
 
-				liveTime.innerHTML = nextTime.innerHTML;
+		const nodesMatch = (liveNode, nextNode) => {
+			if (liveNode.nodeType !== nextNode.nodeType) {
+				return false;
+			}
+
+			if (liveNode.nodeType === Node.ELEMENT_NODE) {
+				return liveNode.tagName === nextNode.tagName;
+			}
+
+			return true;
+		};
+
+		/**
+		 * Apply sanitised nodes onto the live tree without replacing ancestors.
+		 *
+		 * @param {Node} liveNode
+		 * @param {Node} nextNode
+		 */
+		const syncNode = (liveNode, nextNode) => {
+			if (liveNode.nodeType === Node.TEXT_NODE) {
+				if (liveNode.nodeValue !== nextNode.nodeValue) {
+					liveNode.nodeValue = nextNode.nodeValue;
+				}
+				return;
+			}
+
+			if (liveNode.nodeType !== Node.ELEMENT_NODE) {
+				return;
+			}
+
+			syncAttrs(liveNode, nextNode);
+
+			const liveChildren = Array.from(liveNode.childNodes);
+			const nextChildren = Array.from(nextNode.childNodes);
+
+			if (
+				liveChildren.length === nextChildren.length &&
+				liveChildren.every((child, i) =>
+					nodesMatch(child, nextChildren[i])
+				)
+			) {
+				liveChildren.forEach((child, i) => {
+					syncNode(child, nextChildren[i]);
+				});
+				return;
+			}
+
+			// Structure diverged at this subtree — replace only here.
+			liveNode.innerHTML = nextNode.innerHTML;
+		};
+
+		const liveChildren = Array.from(el.childNodes);
+		const nextChildren = Array.from(tmp.childNodes);
+
+		if (
+			liveChildren.length === nextChildren.length &&
+			liveChildren.every((child, i) => nodesMatch(child, nextChildren[i]))
+		) {
+			liveChildren.forEach((child, i) => {
+				syncNode(child, nextChildren[i]);
 			});
 			return;
 		}
