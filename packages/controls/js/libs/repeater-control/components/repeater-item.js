@@ -663,10 +663,7 @@ const RepeaterItem = ({
 				}
 
 				// Editing via standalone popover (variations branch) or nested surfaces.
-				if (
-					isOpen ||
-					isClickInsideOpenInspectorRepeaterPopover(event?.target)
-				) {
+				if (isClickInsideOpenInspectorRepeaterPopover(event?.target)) {
 					return;
 				}
 
