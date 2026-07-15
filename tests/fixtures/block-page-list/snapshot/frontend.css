@@ -157,10 +157,10 @@ html:root body :where(.blockera-block.blockera-block-1) :where(li)::after {
 }
 
 .blockera-block.blockera-block-2.wp-block-page-list {
-	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%28255%2C%20163%2C%20163%29%3B%20fill%3A%20rgb%28255%2C%20163%2C%20163%29%3B%20width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M6%205V18.5911L12%2013.8473L18%2018.5911V5H6Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
-	--blockera--icon--bg-image: var(--blockera--icon--url);
-	--blockera--icon--mask-image: none;
-	--blockera--icon--editor-icon-bg: transparent;
+	--blockera--icon--url: url("data:image/svg+xml, u003csvg%20xmlns%3Du0022http%3A%2F%2Fwww.w3.org%2F2000%2Fsvgu0022%20id%3Du0022mastercard-2u0022%20width%3Du002277pxu0022%20height%3Du002247.988u0022%20viewBox%3Du00220%200%2077.64%2047.988u0022u003en%20%20u003cpath%20id%3Du0022Path_11162u0022%20d%3Du0022M1930.872%2C978.152v-.932h-.243l-.281.639-.279-.639h-.243v.932H1930v-.7l.262.606h.178l.262-.607v.7h.171Zm-1.539%2C0v-.772h.311v-.157h-.793v.157h.311v.772h.171Zu0022%20transform%3Du0022translate%28-1853.982%20-939.289%29u0022%20fill%3Du0022%23f79410u0022%2Fu003en%20%20u003cpath%20id%3Du0022Path_11163u0022%20d%3Du0022M750.7%2C169.878H729.71V132.15H750.7Zu0022%20transform%3Du0022translate%28-701.386%20-127.021%29u0022%20fill%3Du0022%23ff5f00u0022%2Fu003en%20%20u003cpath%20id%3Du0022Path_11164u0022%20d%3Du0022M29.655%2C23.993A23.954%2C23.954%2C0%2C0%2C1%2C38.818%2C5.129a23.994%2C23.994%2C0%2C1%2C0%2C0%2C37.728%2C23.954%2C23.954%2C0%2C0%2C1-9.164-18.864u0022%20transform%3Du0022translate%280%200.001%29u0022%20fill%3Du0022%23eb001bu0022%2Fu003en%20%20u003cpath%20id%3Du0022Path_11165u0022%20d%3Du0022M1038.93%2C23.993a23.993%2C23.993%2C0%2C0%2C1-38.82%2C18.864%2C24%2C24%2C0%2C0%2C0%2C0-37.728%2C23.993%2C23.993%2C0%2C0%2C1%2C38.82%2C18.864u0022%20transform%3Du0022translate%28-961.291%200.001%29u0022%20fill%3Du0022%23f79e1bu0022%2Fu003enu003c%2Fsvgu003e");
+	--blockera--icon--bg-image: none;
+	--blockera--icon--mask-image: var(--blockera--icon--url);
+	--blockera--icon--editor-icon-bg: var(--blockera--icon--color, currentColor);
 	--blockera--icon--color: #ffa3a3;
 	--blockera--icon--rotate: 270deg;
 	--blockera--icon--flip-vertical: -1;

@@ -73,8 +73,12 @@ export function getBlockCSSSelector(
 				getValueFromObjectPath(selectors, `${path}.root`, null) ||
 				getValueFromObjectPath(selectors, path, null);
 
-			// Return feature selector if found or any available fallback.
-			return featureSelector || fallbackSelector;
+			// Match WP core: only string feature selectors are valid.
+			// Feature maps (e.g. typography: { textIndent: '...' }) must not
+			// be treated as CSS selectors.
+			return 'string' === typeof featureSelector
+				? featureSelector
+				: fallbackSelector;
 		}
 
 		// Try getting old experimental supports selector value.

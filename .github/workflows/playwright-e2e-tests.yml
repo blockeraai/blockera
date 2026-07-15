@@ -10,6 +10,10 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
+env:
+    # Fixture folders per block-screenshots matrix job. Change here to retune parallelism.
+    VISUAL_SNAPSHOT_BATCH_SIZE: '15'
+
 jobs:
     detect_categories:
         name: Detecting Playwright E2E Test Categories
@@ -24,12 +28,58 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Check if .pr-playwright.env.json exists
+              id: check_env_file
+              run: |
+                  if [ -f ".pr-playwright.env.json" ]; then
+                    echo "Found .pr-playwright.env.json"
+                    echo "env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: List test categories
               id: set_categories
               run: |
                   categories=$(node .github/scripts/list-playwright-test-categories.js)
-                  categories_json=$(echo $categories | jq -c '.')
-                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                  visual_batches=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" node .github/scripts/list-visual-snapshot-batches.js)
+
+                  # Expand the single "block-screenshots" category into parallel batch categories
+                  # (block-screenshots-1, block-screenshots-2, …) so fixture folders run concurrently.
+                  expand_visual_batches() {
+                    local input_json="$1"
+                    echo "$input_json" | jq -c --argjson batches "$visual_batches" '
+                      if index("block-screenshots") then
+                        (map(select(. != "block-screenshots")) + $batches) | unique | sort
+                      else
+                        .
+                      end
+                    '
+                  }
+
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Derive matrix categories from the PR-scoped testMatch file list.
+                    # name.category.ply.js → category; name.ply.js → general-1
+                    # block-screenshots → expanded to block-screenshots-N batches (allowlist-aware).
+                    filtered_categories=$(jq -r '.testMatch[]' .pr-playwright.env.json | while read -r pattern; do
+                      [ -z "$pattern" ] && continue
+                      base=$(basename "$pattern" .ply.js)
+                      if [[ "$base" == *.* ]]; then
+                        echo "${base#*.}"
+                      else
+                        echo "general-1"
+                      fi
+                    done | sort -u)
+
+                    filtered_categories_json=$(echo "$filtered_categories" | jq -R -n '[inputs]' | jq -c '.')
+                    filtered_categories_json=$(expand_visual_batches "$filtered_categories_json")
+                    echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
+                    echo "Filtered categories: $filtered_categories_json"
+                  else
+                    categories_json=$(echo "$categories" | jq -c '.')
+                    categories_json=$(expand_visual_batches "$categories_json")
+                    echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                  fi
 
             - name: Print categories output
               run: |
@@ -128,70 +178,119 @@ jobs:
 
             - name: Run Playwright E2E Tests
               run: |
-                  # Determine test pattern based on category
-                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                  test_files=()
+
+                  # Visual snapshot batches: synthetic categories block-screenshots-1..N map to the
+                  # single visual.block-screenshots.ply.js file with an explicit fixture list.
+                  if [[ "${{ matrix.category }}" =~ ^block-screenshots-([0-9]+)$ ]]; then
+                    batch_num="${BASH_REMATCH[1]}"
+                    fixtures_csv=$(VISUAL_SNAPSHOT_BATCH_SIZE="${{ env.VISUAL_SNAPSHOT_BATCH_SIZE }}" \
+                      node .github/scripts/list-visual-snapshot-batches.js --batch "$batch_num" --fixtures-csv)
+
+                    echo "Visual snapshot batch ${batch_num}"
+                    echo "VISUAL_SNAPSHOT_FIXTURES=${fixtures_csv}"
+                    export VISUAL_SNAPSHOT_FIXTURES="$fixtures_csv"
+
+                    if [ -z "$fixtures_csv" ]; then
+                      echo "No fixtures in batch ${batch_num}; skipping."
+                      exit 0
+                    fi
+
+                    test_files+=("tests/visual.block-screenshots.ply.js")
+                  # When .pr-playwright.env.json exists, run only the listed files for this category.
+                  elif [ -f ".pr-playwright.env.json" ]; then
+                    while IFS= read -r pattern; do
+                      [ -z "$pattern" ] && continue
+
+                      base=$(basename "$pattern" .ply.js)
+                      if [[ "$base" == *.* ]]; then
+                        file_category="${base#*.}"
+                      else
+                        file_category="general-1"
+                      fi
+
+                      # Batched block-screenshots-* jobs are handled above; skip the raw category match.
+                      if [ "$file_category" = "block-screenshots" ]; then
+                        continue
+                      fi
+
+                      if [ "$file_category" != "${{ matrix.category }}" ]; then
+                        continue
+                      fi
+
+                      if [ -f "$pattern" ]; then
+                        test_files+=("$pattern")
+                      else
+                        echo "Warning: listed file not found: $pattern"
+                      fi
+                    done < <(jq -r '.testMatch[]' .pr-playwright.env.json)
+
+                    # Apply optional testIgnore entries from the PR config.
+                    if jq -e '.testIgnore | type == "array" and length > 0' .pr-playwright.env.json >/dev/null 2>&1; then
+                      ignore_files=$(jq -r '.testIgnore[]' .pr-playwright.env.json)
+                      filtered_files=()
+                      for file in "${test_files[@]}"; do
+                        skip=false
+                        while IFS= read -r ignore; do
+                          [ -z "$ignore" ] && continue
+                          if [ "$file" = "$ignore" ]; then
+                            skip=true
+                            break
+                          fi
+                        done <<< "$ignore_files"
+                        if [ "$skip" = false ]; then
+                          filtered_files+=("$file")
+                        fi
+                      done
+                      test_files=("${filtered_files[@]}")
+                    fi
+                  elif [ "${{ matrix.category }}" != "general-1" ]; then
                     # Run tests matching the category pattern
                     # e.g., tests/e2e/specs/**/*.blocks-1.ply.js
                     test_patterns=()
-                    
+
                     # Check tests/e2e/specs directory for .ply.js files
                     if find tests/e2e/specs -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("tests/e2e/specs/**/*.${{ matrix.category }}.ply.js")
                     fi
-                    
+
                     # Check tests directory for .ply.js files
                     if find tests -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("tests/**/*.${{ matrix.category }}.ply.js")
                     fi
-                    
+
                     # Check packages directory for .ply.js files
                     if find packages -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("packages/**/*.${{ matrix.category }}.ply.js")
                     fi
-                  else
-                    # Run general tests (files without category in name)
-                    # Find files that match *.ply.js but not *.*.ply.js
-                    # Directly collect file paths instead of using glob patterns
-                    test_files=()
-                    
-                    # Find general files in tests/e2e/specs directory
-                    while IFS= read -r -d '' file; do
-                      test_files+=("$file")
-                    done < <(find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
-                    
-                    # Find general files in packages directory
-                    while IFS= read -r -d '' file; do
-                      test_files+=("$file")
-                    done < <(find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
-                    
-                    # Find general files in tests directory (excluding tests/e2e/specs to avoid duplicates)
-                    while IFS= read -r -d '' file; do
-                      test_files+=("$file")
-                    done < <(find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" ! -path "tests/e2e/specs/*" -print0 2>/dev/null)
-                  fi
 
-                  if [ "${{ matrix.category }}" != "general-1" ]; then
                     # Expand glob patterns to actual file paths to avoid regex conversion issues
-                    test_files=()
                     for pattern in "${test_patterns[@]}"; do
-                      # Convert glob pattern to find command
-                      # Replace ** with find's recursive search
                       if [[ "$pattern" == *"**"* ]]; then
-                        # Extract base directory and filename pattern
-                        # Pattern format: tests/**/*.visual.ply.js
                         base_dir=$(echo "$pattern" | sed -E 's|/\*\*.*||')
                         file_pattern=$(echo "$pattern" | sed -E 's|.*\*\*/||')
-                        # Find matching files recursively
                         while IFS= read -r -d '' file; do
                           test_files+=("$file")
                         done < <(find "$base_dir" -type f -name "$file_pattern" -print0 2>/dev/null)
                       else
-                        # For non-glob patterns, check if file exists
                         if [ -f "$pattern" ]; then
                           test_files+=("$pattern")
                         fi
                       fi
                     done
+                  else
+                    # Run general tests (files without category in name)
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
+
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
+
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" ! -path "tests/e2e/specs/*" -print0 2>/dev/null)
                   fi
 
                   if [ ${#test_files[@]} -eq 0 ]; then
@@ -200,10 +299,8 @@ jobs:
                   fi
 
                   echo "Running tests for category: ${{ matrix.category }}"
-                  if [ "${{ matrix.category }}" != "general-1" ]; then
-                    echo "Test patterns: ${test_patterns[*]}"
-                  fi
-                  echo "Found ${#test_files[@]} test file(s)"
+                  echo "Found ${#test_files[@]} test file(s):"
+                  printf '  %s\n' "${test_files[@]}"
 
                   # Run Playwright tests with actual file paths
                   test_exit_code=0
@@ -230,6 +327,22 @@ jobs:
 
                   exit $test_exit_code
 
+            # With updateSnapshots: missing, first-time baselines are written under
+            # tests/__snapshots__/ on the runner. Collect untracked ones so the artifact
+            # has commit-ready filenames (not only *-actual.png under test-results).
+            - name: Collect new visual baselines
+              if: ${{ !cancelled() }}
+              run: |
+                  mkdir -p artifacts/new-baselines
+                  count=0
+                  while IFS= read -r -d '' f; do
+                    cp "$f" "artifacts/new-baselines/$(basename "$f")"
+                    count=$((count + 1))
+                  done < <(git ls-files -z --others --exclude-standard -- 'tests/__snapshots__/*.png' 2>/dev/null || true)
+                  echo "Collected ${count} new baseline PNG(s) into artifacts/new-baselines/"
+
+            # test-results includes *-actual.png (and *-diff.png on mismatch) for every
+            # failed visual assert — including first-time missing baselines (updateSnapshots: missing).
             - name: Archive debug artifacts (screenshots, traces)
               uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
@@ -237,6 +350,7 @@ jobs:
                   name: playwright-artifacts--${{ matrix.category }}
                   path: |
                       artifacts/test-results
+                      artifacts/new-baselines
                       playwright-report
                   if-no-files-found: ignore
                   retention-days: 7

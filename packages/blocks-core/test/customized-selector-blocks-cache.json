@@ -19,7 +19,7 @@
 	},
 	"core/list-item": {
 		"root": ".wp-block-list > li",
-		"border": ".wp-block-list:not(.wp-block-list .wp-block-list) > li"
+		"border": "li"
 	},
 	"core/accordion-heading": {
 		"typography": {
@@ -29,9 +29,6 @@
 		"spacing": {
 			"root": " .wp-block-accordion-heading__toggle"
 		}
-	},
-	"core/archives": {
-		"root": " .wp-block-archives-list.wp-block-archives"
 	},
 	"core/audio": {
 		"spacing": {

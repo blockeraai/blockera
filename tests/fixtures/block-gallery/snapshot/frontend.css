@@ -17,7 +17,7 @@ html:root body :where(.blockera-block.blockera-block-1) figure.wp-block-image.wp
 	border-radius: 30px;
 }
 
-html:root body :where(.blockera-block.blockera-block-1) > figcaption {
+html:root body :where(.blockera-block.blockera-block-1) > figcaption.blocks-gallery-caption {
 	background-color: #56ebff;
 	padding: 10px 10px 10px 10px;
 	font-weight: 700;
@@ -43,7 +43,7 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-block-image :is(img:
 	border-radius: 10px;
 }
 
-html:root body :where(.blockera-block.blockera-block-1) > figcaption::before {
+html:root body :where(.blockera-block.blockera-block-1) > figcaption.blocks-gallery-caption::before {
 	border-radius: 40px;
 	content: "Before";
 	padding: 3px 15px 3px 15px;
@@ -51,7 +51,7 @@ html:root body :where(.blockera-block.blockera-block-1) > figcaption::before {
 	background-color: #17bed4;
 }
 
-html:root body :where(.blockera-block.blockera-block-1) > figcaption::after {
+html:root body :where(.blockera-block.blockera-block-1) > figcaption.blocks-gallery-caption::after {
 	border-radius: 30px;
 	content: "After";
 	background-color: #17bed4;
@@ -60,7 +60,7 @@ html:root body :where(.blockera-block.blockera-block-1) > figcaption::after {
 }
 
 @media screen and (max-width: 478px) and (min-width: 0px) {
-	html:root body :where(.blockera-block.blockera-block-1) > figcaption {
+	html:root body :where(.blockera-block.blockera-block-1) > figcaption.blocks-gallery-caption {
 		flex-direction: column;
 		align-items: center !important;
 		justify-content: center !important;
@@ -116,7 +116,7 @@ html:root body :where(.blockera-block.blockera-block-2):is(.has-custom-border, :
 	gap: 70px;
 }
 
-html:root body :where(.blockera-block.blockera-block-3) > figcaption {
+html:root body :where(.blockera-block.blockera-block-3) > figcaption.blocks-gallery-caption {
 	background-color: #00000024;
 	order: -1;
 }
@@ -146,7 +146,7 @@ html:root body :where(.blockera-block.blockera-block-4).wp-block-image :is(img, 
 	gap: 40px;
 }
 
-html:root body :where(.blockera-block.blockera-block-5) > figcaption {
+html:root body :where(.blockera-block.blockera-block-5) > figcaption.blocks-gallery-caption {
 	font-weight: 700;
 	font-style: normal;
 }
@@ -174,19 +174,19 @@ html:root body :where(.blockera-block.blockera-block-6) .wp-block-image :is(img:
 	filter: blur(2px);
 }
 
-html:root body :where(.blockera-block.blockera-block-6) > figcaption {
+html:root body :where(.blockera-block.blockera-block-6) > figcaption.blocks-gallery-caption {
 	padding: 5px 5px 5px 5px;
 	margin-top: 20px;
 	flex: 0 1 auto;
 	align-self: center;
 }
 
-html:root body :where(.blockera-block.blockera-block-6) > figcaption:hover {
+html:root body :where(.blockera-block.blockera-block-6) > figcaption.blocks-gallery-caption:hover {
 	background-color: #00000026;
 }
 
 @media screen and (max-width: 478px) and (min-width: 0px) {
-	html:root body :where(.blockera-block.blockera-block-6) > figcaption {
+	html:root body :where(.blockera-block.blockera-block-6) > figcaption.blocks-gallery-caption {
 		flex: 1 1 0%;
 	}
 

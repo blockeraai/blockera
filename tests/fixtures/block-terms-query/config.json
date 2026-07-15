@@ -1,0 +1,15 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"editor-search-replace": [
+		{
+			"search": "<div([^>]*\\bwp-block-term-count\\b[^>]*)>\\d+</div>",
+			"replace": "<div$1>2</div>"
+		}
+	],
+	"frontend-search-replace": [
+		{
+			"search": "<div([^>]*\\bwp-block-term-count\\b[^>]*)>\\d+</div>",
+			"replace": "<div$1>2</div>"
+		}
+	]
+}

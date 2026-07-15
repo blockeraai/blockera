@@ -1,0 +1,23 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"editor-search-replace": [
+		{
+			"search": "<span class=\"tag-link-count\">\\s*\\(\\d+\\)</span>",
+			"replace": "<span class=\"tag-link-count\"> (2)</span>"
+		},
+		{
+			"search": "aria-label=([\"'])([^\"']*?)\\(\\d+ items?\\)\\1",
+			"replace": "aria-label=$1$2(2 items)$1"
+		}
+	],
+	"frontend-search-replace": [
+		{
+			"search": "<span class=\"tag-link-count\">\\s*\\(\\d+\\)</span>",
+			"replace": "<span class=\"tag-link-count\"> (2)</span>"
+		},
+		{
+			"search": "aria-label=([\"'])([^\"']*?)\\(\\d+ items?\\)\\1",
+			"replace": "aria-label=$1$2(2 items)$1"
+		}
+	]
+}

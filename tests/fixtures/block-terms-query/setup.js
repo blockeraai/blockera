@@ -26,12 +26,24 @@ async function setup(page, sectionContent) {
 	const categoryDescription =
 		data.category_description || 'This is the description.';
 
-	// Step 1: Create categories sequentially with descriptions
+	// Step 1: Create categories, then always set description.
+	// Create alone is not enough: when a term already exists (persistent wp-env
+	// DB), `term create` fails and ignoreFailures would leave description empty.
 	for (let i = 0; i < data.categories.length; i++) {
+		const categoryName = data.categories[i];
+		const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+
 		await wpCli(
 			page,
-			`wp term create category '${data.categories[i]}' --description='${categoryDescription}'`,
-			true, // ignoreFailures - handles cases where term already exists
+			`wp term create category '${categoryName}' --description='${categoryDescription}'`,
+			true, // ignoreFailures - term may already exist
+			false
+		);
+
+		await wpCli(
+			page,
+			`wp term update category '${categorySlug}' --by=slug --description='${categoryDescription}'`,
+			false,
 			false
 		);
 	}

@@ -141,7 +141,12 @@ export const LayoutStyles = ({
 		});
 	}
 
-	const layoutDisplay = getLayoutDisplayValue(_attributes.blockeraDisplay);
+	// Prefer current-breakpoint display; fall back to inherited base display for
+	// flex/grid gates (mirrors PHP WithDisplayValueTrait). Do not use inherited
+	// display for emitting the `display` property itself.
+	const layoutDisplay =
+		getLayoutDisplayValue(_attributes.blockeraDisplay) ||
+		getLayoutDisplayValue(props?.inheritedDisplay);
 
 	const gridMinFieldActive = isActiveField(blockeraGridMinimumColumnWidth);
 	const gridCountFieldActive = isActiveField(blockeraGridColumnCount);
@@ -440,7 +445,7 @@ export const LayoutStyles = ({
 				break;
 
 			case 'gap-and-margin':
-				if (!['flex', 'grid'].includes(_attributes.blockeraDisplay)) {
+				if (!['flex', 'grid'].includes(layoutDisplay)) {
 					gapSuffixClass = '.is-layout-constrained > * + *';
 				}
 				break;
@@ -490,7 +495,7 @@ export const LayoutStyles = ({
 				 */
 				if (
 					gapType === 'gap-and-margin' &&
-					['flex', 'grid'].includes(_attributes.blockeraDisplay)
+					['flex', 'grid'].includes(layoutDisplay)
 				) {
 					removeMarginBlockStart = true;
 				}
@@ -540,7 +545,7 @@ export const LayoutStyles = ({
 				 */
 				if (
 					gapType === 'gap-and-margin' &&
-					['flex', 'grid'].includes(_attributes.blockeraDisplay)
+					['flex', 'grid'].includes(layoutDisplay)
 				) {
 					removeMarginBlockStart = true;
 				}
