@@ -85,3 +85,10 @@ html:root body :where(.blockera-block.blockera-block-4) :is(mark, mark[class]) {
 .blockera-block-4 :where(.blockera-block-4-child-1) {
 	background-color: #dfdfdf;
 }
+
+.blockera-block-1 :where(.blockera-block-1-child-1) {
+	font-family: inherit;
+	text-align: initial;
+	font-size: clamp(14px, -0.6272px + 0.875rem + 0.196vw, 16px);
+	letter-spacing: -0.1px;
+}
