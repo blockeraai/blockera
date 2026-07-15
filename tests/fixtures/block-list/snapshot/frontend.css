@@ -103,6 +103,7 @@ html:root body :where(.wp-block-list > li.blockera-block.blockera-block-5) a:not
 }
 
 .wp-block-list.blockera-block.blockera-block-6:not(.wp-block-list .wp-block-list) > li {
+	border: 2px solid #ff7373;
 	border-radius: 10px;
 }
 
@@ -228,6 +229,15 @@ ul.blockera-block.blockera-block-8:hover {
 		order: -1;
 	}
 
+}
+
+.wp-block-list.blockera-block.blockera-block-35kfa5:not(.wp-block-list .wp-block-list) > li {
+	border: 2px solid #ff3535;
+	border-radius: 70px;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-35kfa5 {
+	padding: 10px 20px 10px 20px;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-if13ej93 {
