@@ -184,9 +184,14 @@ const sections = loadFixtures();
  * On CI retries that last test alone gets a fresh empty failures array, so real
  * mismatches become "flaky" and exit 0 (failOnFlakyTests: false). Soft assertions
  * keep every screenshot failure on the fixture that produced it.
+ *
+ * maxDiffPixels: Chromium sub-pixel font AA can flip a handful of fringe pixels
+ * (e.g. buttons `::after` label) between runs with no visible change. threshold
+ * stays strict for color; allow a tiny absolute pixel count for that noise.
  */
 const screenshotOptions = {
 	threshold: 0.02,
+	maxDiffPixels: 25,
 };
 
 test.describe('Sections Visual Snapshots', () => {
