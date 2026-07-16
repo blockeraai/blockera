@@ -2,7 +2,26 @@
  * Shared Cypress helpers for the block editor variable picker popover.
  */
 import { createPost } from './site-navigation';
-import { getSelectedBlock, getWPDataObject } from './editor';
+import { getBlockClientId, getSelectedBlock, getWPDataObject } from './editor';
+
+/** Preset row header targets that wire canvas hover preview (`onMouseEnter`). */
+const VARIABLE_PICKER_PRESET_HEADER_SELECTOR = [
+	'[data-cy="color-repeater-item-header"]',
+	'[data-cy="font-size-repeater-item-header"]',
+	'[data-cy="line-height-repeater-item-header"]',
+	'[data-cy="spacing-size-repeater-item-header"]',
+	'[data-cy="border-preset-repeater-item-header"]',
+	'[data-cy="border-radius-preset-repeater-item-header"]',
+	'[data-cy="shadow-preset-repeater-item-header"]',
+	'[data-cy="text-shadow-preset-repeater-item-header"]',
+	'[data-cy="filter-preset-repeater-item-header"]',
+	'[data-cy="transform-preset-repeater-item-header"]',
+	'[data-cy="transition-preset-repeater-item-header"]',
+	'[data-cy="gradient-repeater-item-header"]',
+	'[data-cy="fallback-catalog-repeater-item-header"]',
+	'[data-cy="width-size-repeater-item-header"]',
+	'.blockera-control-repeater-group-header',
+].join(', ');
 
 /** Opens paragraph → Style → Line Height → variable picker popover. */
 export function openParagraphLineHeightVariablePickerPopover() {
@@ -456,6 +475,134 @@ export function assertSelectedBlockFontSizeVariableId(expectedId) {
 			expect(fontSize.settings?.id).to.equal(expectedId);
 		})
 	);
+}
+
+/**
+ * Types into the variable picker search field (keeps the popover open).
+ *
+ * @param {string} query Search query.
+ */
+export function filterVariablePickerSearch(query) {
+	withinVariablePickerPopover(() => {
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		})
+			.filter(':visible')
+			.first()
+			.should('be.visible')
+			.clear({ force: true })
+			.type(query, { delay: 0, force: true });
+	});
+}
+
+/**
+ * Hovers a preset row in the open variable picker (fires canvas preview mouseenter).
+ *
+ * @param {string} slug Preset slug (`data-variable-slug`).
+ */
+export function hoverVariablePickerPresetRow(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
+			.filter(':visible')
+			.first()
+			.closest('[data-cy="repeater-item"]')
+			.as('variablePickerPresetRow');
+
+		cy.get('@variablePickerPresetRow')
+			.find(VARIABLE_PICKER_PRESET_HEADER_SELECTOR)
+			.first()
+			.scrollIntoView()
+			.realHover();
+	});
+}
+
+/**
+ * Ends preset-row hover preview (mouseleave on the row, then move pointer to search).
+ *
+ * @param {string} slug Preset slug (`data-variable-slug`).
+ */
+export function leaveVariablePickerPresetRowHover(slug) {
+	withinVariablePickerPopover(() => {
+		cy.get(`[data-variable-slug="${slug}"]`, { timeout: 20000 })
+			.filter(':visible')
+			.first()
+			.closest('[data-cy="repeater-item"]')
+			.find(VARIABLE_PICKER_PRESET_HEADER_SELECTOR)
+			.first()
+			.trigger('mouseleave', { force: true });
+
+		cy.get('.blockera-control-var-picker-search input[type="search"]', {
+			timeout: 20000,
+		})
+			.filter(':visible')
+			.first()
+			.realHover();
+	});
+}
+
+/**
+ * Asserts editor canvas styles include a CSS needle (e.g. hover preview declarations).
+ *
+ * @param {string} cssNeedle Substring expected in `#blockera-styles-wrapper`.
+ */
+export function assertEditorStylesWrapperIncludes(cssNeedle) {
+	cy.getIframeBody().within(() => {
+		cy.get('#blockera-styles-wrapper', { timeout: 20000 })
+			.invoke('text')
+			.should('include', cssNeedle);
+	});
+}
+
+/**
+ * Asserts editor canvas styles no longer include a CSS needle (hover preview cleared).
+ *
+ * @param {string} cssNeedle Substring that must be absent from `#blockera-styles-wrapper`.
+ */
+export function assertEditorStylesWrapperExcludes(cssNeedle) {
+	cy.getIframeBody().within(() => {
+		cy.get('#blockera-styles-wrapper', { timeout: 20000 })
+			.invoke('text')
+			.should('not.include', cssNeedle);
+	});
+}
+
+/**
+ * Hover a preset → assert canvas CSS for the selected block → leave hover → CSS cleared.
+ *
+ * @param {Object} options
+ * @param {string} options.slug Preset slug.
+ * @param {string} options.cssNeedle Substring injected while hovering (plain preview value).
+ * @param {string} [options.blockCssProperty] Optional computed style property on the paragraph.
+ * @param {string} [options.blockCssValue] Expected computed style while hovering.
+ */
+export function assertVariablePickerPresetHoverPreview({
+	slug,
+	cssNeedle,
+	blockCssProperty,
+	blockCssValue,
+}) {
+	getWPDataObject().then((data) => {
+		cy.wrap(getBlockClientId(data)).as('previewBlockClientId');
+	});
+
+	hoverVariablePickerPresetRow(slug);
+
+	cy.get('@previewBlockClientId').then((clientId) => {
+		assertEditorStylesWrapperIncludes(`#block-${clientId}`);
+	});
+	assertEditorStylesWrapperIncludes(cssNeedle);
+
+	if (blockCssProperty && blockCssValue) {
+		cy.getBlock('core/paragraph').should(
+			'have.css',
+			blockCssProperty,
+			blockCssValue
+		);
+	}
+
+	leaveVariablePickerPresetRowHover(slug);
+
+	assertEditorStylesWrapperExcludes(cssNeedle);
 }
 
 /**
