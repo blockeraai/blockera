@@ -169,6 +169,9 @@ export default function RepeaterControl(
 	});
 	const [count, setCount] = useState(0);
 	const [pendingOpenItemId, setPendingOpenItemId] = useState(null);
+	// Survives RepeaterItem remounts: after creatingStep close, stale creatingStep
+	// must not auto-reopen the edit popover.
+	const closedCreatingStepItemIdsRef = useRef(new Set());
 
 	const clearPendingOpenItemId = useCallback((itemId?: string) => {
 		setPendingOpenItemId((current) =>
@@ -182,6 +185,20 @@ export default function RepeaterControl(
 				current === fromItemId ? toItemId : current
 			);
 		},
+		[]
+	);
+
+	const markCreatingStepPopoverClosed = useCallback((itemId: string) => {
+		closedCreatingStepItemIdsRef.current.add(String(itemId));
+	}, []);
+
+	const clearCreatingStepPopoverClosed = useCallback((itemId: string) => {
+		closedCreatingStepItemIdsRef.current.delete(String(itemId));
+	}, []);
+
+	const isCreatingStepPopoverCloseGuarded = useCallback(
+		(itemId: string) =>
+			closedCreatingStepItemIdsRef.current.has(String(itemId)),
 		[]
 	);
 
@@ -458,6 +475,9 @@ export default function RepeaterControl(
 		pendingOpenItemId,
 		clearPendingOpenItemId,
 		reparentPendingOpenItemId,
+		markCreatingStepPopoverClosed,
+		clearCreatingStepPopoverClosed,
+		isCreatingStepPopoverCloseGuarded,
 	};
 
 	const addNewButtonOnClick = () => {
@@ -503,9 +523,11 @@ export default function RepeaterControl(
 			itemValue: ?Object,
 			{ selectableId = false }: { selectableId?: boolean } = {}
 		): void => {
-			setPendingOpenItemId(
-				resolveAddedItemId(itemValue, { selectableId })
-			);
+			const addedItemId = resolveAddedItemId(itemValue, {
+				selectableId,
+			});
+			clearCreatingStepPopoverClosed(addedItemId);
+			setPendingOpenItemId(addedItemId);
 		};
 
 		const callback = (value?: Object): void => {

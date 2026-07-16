@@ -103,6 +103,8 @@ const RepeaterItem = ({
 		pendingOpenItemId,
 		clearPendingOpenItemId,
 		reparentPendingOpenItemId,
+		markCreatingStepPopoverClosed,
+		isCreatingStepPopoverCloseGuarded,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -166,6 +168,9 @@ const RepeaterItem = ({
 		useState(false);
 	const prevHasVariationsRef = useRef(item?.hasVariations === true);
 	const [popoverContentKey, setPopoverContentKey] = useState(0);
+	// After an explicit close, block auto-open for this row instance. Cleared only on
+	// intentional open — clearing when creatingStep flickers false→true reopens the popover.
+	const suppressAutoOpenRef = useRef(false);
 
 	const handleItemOpen = useCallback(
 		(options?: { refreshContent?: boolean }) => {
@@ -174,6 +179,7 @@ const RepeaterItem = ({
 					? itemRef.current
 					: undefined;
 
+			suppressAutoOpenRef.current = false;
 			closeInspectorRepeaterPopovers(row);
 
 			setOpen((currentlyOpen) => {
@@ -197,6 +203,7 @@ const RepeaterItem = ({
 				return;
 			}
 
+			suppressAutoOpenRef.current = true;
 			setOpen(false);
 		},
 		[handleItemOpen]
@@ -235,10 +242,22 @@ const RepeaterItem = ({
 			return;
 		}
 
+		if (suppressAutoOpenRef.current) {
+			return;
+		}
+
+		const pendingMatch = pendingOpenItemId === itemId;
+		const storeOpen = item?.isOpen === true;
+		const creatingStep = item?.creatingStep === true;
+		const creatingStepGuarded =
+			typeof isCreatingStepPopoverCloseGuarded === 'function' &&
+			isCreatingStepPopoverCloseGuarded(itemId);
+
+		// After creatingStep close, stale creatingStep (or remount) must not reopen.
 		if (
-			pendingOpenItemId !== itemId &&
-			item?.isOpen !== true &&
-			item?.creatingStep !== true
+			!pendingMatch &&
+			!storeOpen &&
+			(!creatingStep || creatingStepGuarded)
 		) {
 			return;
 		}
@@ -251,6 +270,7 @@ const RepeaterItem = ({
 		itemId,
 		isOpen,
 		handleItemOpen,
+		isCreatingStepPopoverCloseGuarded,
 	]);
 
 	// Rename-by-type changes itemId while the edit popover is open — keep it open.
@@ -325,10 +345,15 @@ const RepeaterItem = ({
 	}, [item?.creatingStep, itemId, scrollBehavior]);
 
 	const handleItemPopoverClose = useCallback(() => {
+		suppressAutoOpenRef.current = true;
 		setOpen(false);
 		clearPendingOpenItemId(itemId);
 
 		if (item?.creatingStep === true) {
+			if (typeof markCreatingStepPopoverClosed === 'function') {
+				markCreatingStepPopoverClosed(itemId);
+			}
+
 			changeRepeaterItem({
 				itemId,
 				value: {
@@ -366,6 +391,7 @@ const RepeaterItem = ({
 		valueCleanup,
 		changeRepeaterItem,
 		clearPendingOpenItemId,
+		markCreatingStepPopoverClosed,
 	]);
 
 	useEffect(() => {
