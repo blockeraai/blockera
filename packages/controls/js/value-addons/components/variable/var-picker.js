@@ -45,6 +45,7 @@ import {
 	markPopoverClosing,
 	registerPopoverOpen,
 } from '../../../libs/popover/utils';
+import { hasOpenModalOverlay } from '../../../libs/modal/overlay-utils';
 import { isClickInsideOpenInspectorRepeaterPopover } from '../../../libs/repeater-control/utils';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
@@ -471,6 +472,12 @@ export default function ({
 			}
 
 			if (isOtherPopoverClosing(popoverRoot)) {
+				return;
+			}
+
+			// Confirm-delete (and similar) modals portal outside the picker. Keep
+			// the picker mounted so the modal is not unmounted mid-interaction.
+			if (hasOpenModalOverlay()) {
 				return;
 			}
 
