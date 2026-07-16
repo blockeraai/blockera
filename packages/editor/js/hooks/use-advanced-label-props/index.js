@@ -497,8 +497,10 @@ export const useAdvancedLabelProps = (
 				isChangedOnSpecificStateAndBreakpoint(
 					currentBreakpoint === baseBreakpoint
 						? currentBlockAttributes
-						: currentBlockAttributes.blockeraBlockStates.normal
-								?.breakpoints[currentBreakpoint]?.attributes,
+						: // Empty states may be pruned after reset; optional-chain
+							// so label calc does not throw while redux settles.
+							currentBlockAttributes.blockeraBlockStates?.normal
+								?.breakpoints?.[currentBreakpoint]?.attributes,
 					isInnerBlock(currentBlock)
 						? currentInnerBlockState
 						: currentState,
