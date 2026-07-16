@@ -50,6 +50,27 @@ export function getWPDataObject() {
 }
 
 /**
+ * Assert against the WordPress data store with automatic retries.
+ *
+ * Unlike `getWPDataObject().then()` (which reads the store exactly once and
+ * throws synchronously when a not-yet-settled attribute path is undefined),
+ * this uses Cypress' retry-able `.should(callback)`: the callback is re-run with
+ * a freshly-read `wp.data` object until every assertion passes or the timeout is
+ * reached. Use it for store-data assertions that run right after UI interactions
+ * (state/breakpoint navigation), where the redux update may lag on slow CI and
+ * make nested reads like `blockeraBlockStates.normal.breakpoints` flaky.
+ *
+ * @param {(data: Object) => void} callback Runs synchronous `expect(...)` assertions against `wp.data`.
+ * @param {{ timeout?: number }} [options] Optional retry timeout in ms. Defaults to 15s to absorb slow-CI redux lag.
+ * @return {Cypress.Chainable} The chainable window assertion.
+ */
+export function assertBlockData(callback, { timeout = 15000 } = {}) {
+	return cy.window({ timeout }).should((win) => {
+		callback(win.wp.data);
+	});
+}
+
+/**
  * Get block type registered object.
  *
  * @param {Object} data the WordPress data.
