@@ -10,6 +10,7 @@ import {
 	openBoxSpacingSide,
 	openGlobalStylesSpacingScreen,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 	setBoxSpacingSide,
@@ -21,6 +22,10 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 	const slug = 'e-2-e-spacing';
 	const addDataTest = 'global-styles-preset-add-spacing-size-presets-custom';
 	const defaultFallback = '20px';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedSpacingPreset() {
 		openGlobalStylesSpacingScreen();
@@ -89,6 +94,8 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 	});
 
 	it('updates generated CSS when the preset size is edited in global styles after picking it', () => {
+		seedSpacingPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Spacing preset edit paragraph.', {

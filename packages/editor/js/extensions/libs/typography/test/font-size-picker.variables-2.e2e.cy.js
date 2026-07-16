@@ -9,6 +9,7 @@ import {
 	getWPDataObject,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesFontSizesVariablesScreen,
+	resetAndSaveGlobalStylesEntityRecord,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 import {
@@ -312,6 +313,10 @@ describe('Font Size variable picker → hover canvas preview', () => {
 	const presetName = 'E2E Font Size';
 	const slug = 'e-2-e-font-size';
 	const addDataTest = 'global-styles-preset-add-font-size-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	it('previews the preset font size on the selected block while hovering the picker row, then clears it on mouse leave', () => {
 		openGlobalStylesFontSizesVariablesScreen();

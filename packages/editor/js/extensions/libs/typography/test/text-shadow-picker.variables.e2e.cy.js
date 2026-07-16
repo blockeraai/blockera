@@ -11,6 +11,7 @@ import {
 	openMoreFeaturesControl,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -20,6 +21,10 @@ describe('Global Styles text-shadow preset → value addon (Text Shadows)', () =
 	const slug = 'e-2-e-txt-shadow';
 	const addDataTest =
 		'global-styles-preset-add-text-shadow-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedTextShadowPreset() {
 		openGlobalStylesTextShadowsScreen();
@@ -85,6 +90,8 @@ describe('Global Styles text-shadow preset → value addon (Text Shadows)', () =
 	});
 
 	it('updates generated CSS when blur is edited in global styles after picking it', () => {
+		seedTextShadowPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Text shadow edit paragraph.', {

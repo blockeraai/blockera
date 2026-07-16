@@ -9,6 +9,7 @@ import {
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesBordersScreen,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 	setGlobalStylesCustomBorderPresetMinWidth,
@@ -18,6 +19,10 @@ describe('Global Styles border preset → value addon (Border)', () => {
 	const presetName = 'E2E Border';
 	const slug = 'e-2-e-border';
 	const addDataTest = 'global-styles-preset-add-border-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedBorderPreset() {
 		openGlobalStylesBordersScreen();
@@ -86,6 +91,7 @@ describe('Global Styles border preset → value addon (Border)', () => {
 	});
 
 	it('updates generated CSS when the border width is edited in global styles after picking it', () => {
+		seedBorderPreset();
 		createPost();
 
 		cy.getBlock('default').type('Border preset edit paragraph.', {

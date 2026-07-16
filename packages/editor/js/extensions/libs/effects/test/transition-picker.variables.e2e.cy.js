@@ -10,6 +10,7 @@ import {
 	openGlobalStylesTransitionsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -20,6 +21,10 @@ describe('Global Styles transition preset → value addon (Transitions Timing)',
 	const slug = 'e-2-e-transition';
 	const addDataTest =
 		'global-styles-preset-add-transition-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedTransitionPreset() {
 		openGlobalStylesTransitionsScreen();
@@ -81,6 +86,8 @@ describe('Global Styles transition preset → value addon (Transitions Timing)',
 	});
 
 	it('updates generated CSS when duration is edited in global styles after picking it', () => {
+		seedTransitionPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Transition edit paragraph.', { delay: 0 });
