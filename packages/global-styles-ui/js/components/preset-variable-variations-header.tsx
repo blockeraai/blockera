@@ -29,8 +29,8 @@ export type PresetVariableVariationsHeaderProps = {
 	/** Variable picker / palette popover active — enables the preset variations strip UI. */
 	isVariablePickerActive: boolean;
 	/**
-	 * Compact stack preview when variations exist, editor is not in variable-picker mode,
-	 * and the variations accordion is collapsed (e.g. color shade stack header).
+	 * Compact stack preview when variations exist and editor is not in variable-picker mode
+	 * (e.g. color shade stack header). Shown for collapsed and expanded variation accordions.
 	 */
 	collapsedVariationStack: ReactNode;
 	/**
@@ -101,8 +101,7 @@ export function PresetVariableVariationsHeader({
 		<>
 			{!isVariablePickerActive && (
 				<>
-					{!variationsAccordionOpen && collapsedVariationStack}
-					{variationsAccordionOpen ? headerIcon : null}
+					{collapsedVariationStack}
 					<span
 						className={controlInnerClassNames('header-label')}
 						data-cy="header-label"
