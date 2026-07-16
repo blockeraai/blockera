@@ -11,6 +11,7 @@ import {
 	deactivateMuPlugin,
 	getSelectedBlock,
 	getWPDataObject,
+	saveSiteEditorDirtyEntities,
 } from './editor';
 import { openSiteEditor } from './site-navigation';
 
@@ -123,6 +124,18 @@ export function resetGlobalStylesEntityRecord() {
 			settings: {},
 		});
 	});
+}
+
+/**
+ * Reopens Site Editor, clears the globalStyles entity, and persists the empty record.
+ * Use in afterEach when a spec seeds/saves custom presets (e.g. hover canvas preview).
+ *
+ * @return {Cypress.Chainable}
+ */
+export function resetAndSaveGlobalStylesEntityRecord() {
+	openSiteEditor();
+	resetGlobalStylesEntityRecord();
+	return saveSiteEditorDirtyEntities();
 }
 
 /**
