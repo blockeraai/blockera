@@ -2,8 +2,10 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesTransformsScreen,
 	openRepeaterHeaderVariablePicker,
@@ -75,6 +77,26 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 			.within(() => {
 				cy.getByAriaLabel('Move-X').should('have.value', '15');
 			});
+	});
+
+	it('previews the transform preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedTransformPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview transform paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openRepeaterHeaderVariablePicker('Transforms');
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: 'translate3d(0px, 0px, 0px)',
+		});
 	});
 
 	it('applies the custom transform preset', () => {

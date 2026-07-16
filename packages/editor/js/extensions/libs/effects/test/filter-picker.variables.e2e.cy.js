@@ -2,8 +2,10 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesFiltersScreen,
 	openRepeaterHeaderVariablePicker,
@@ -22,6 +24,26 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the filter preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedFilterPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview filter paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openRepeaterHeaderVariablePicker('Filters');
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: 'blur(3px)',
+		});
+	});
 
 	it('applies the custom filter preset', () => {
 		seedFilterPreset();
