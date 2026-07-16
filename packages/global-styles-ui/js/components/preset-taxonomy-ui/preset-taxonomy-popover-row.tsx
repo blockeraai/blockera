@@ -94,12 +94,13 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 	);
 	const repeaterCtx = useContext(RepeaterContext) as TaxonomyRepeaterCtx;
 	const editSessionActions = usePresetTaxonomyEditSessionActionsOptional();
-	const rowSlug = String(item.slug ?? itemId);
+	// Match SharedPresetControls (itemId) so begin/end share one session key.
+	const editSessionKey = String(itemId);
 
 	const handlePopoverOpen = useCallback(() => {
 		setOpen(true);
-		editSessionActions?.beginEditSession(rowSlug);
-	}, [editSessionActions, rowSlug]);
+		editSessionActions?.beginEditSession(editSessionKey);
+	}, [editSessionActions, editSessionKey]);
 
 	// Close UI first; deferred field flush + endEditSession run when preset fields unmount.
 	const handlePopoverClose = useCallback(() => {

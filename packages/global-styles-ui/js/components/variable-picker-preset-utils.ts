@@ -409,6 +409,8 @@ export function syncVariablePickerCreatingStepSlugs(
 			continue;
 		}
 
+		// Keep mid-create tracking when persist strips `creatingStep` (undefined).
+		// Explicit `creatingStep: false` (popover close) drops the key.
 		if (key.startsWith('id:')) {
 			const itemId = key.slice(3);
 			const row = rowsByItemId.get(itemId);

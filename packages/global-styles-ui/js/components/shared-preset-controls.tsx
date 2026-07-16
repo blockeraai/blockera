@@ -102,7 +102,6 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	}, [variable, taxonomyNameSource]);
 
 	const persistedName = committedTaxonomyName ?? name;
-	const slugKey = String(slug);
 	const itemIdKey = String(itemId);
 	const isCreating = variable.creatingStep === true;
 	// Local drafts during creatingStep keep inputs stable; repeater rows still sync via changeRepeaterItem.
@@ -359,16 +358,29 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const persistCreatingNameToTheme = useCallback(
-		(nextName: string, { syncCreatingSlug = true } = {}) => {
+		(
+			nextName: string,
+			{
+				syncCreatingSlug = true,
+				endCreating = false,
+			}: { syncCreatingSlug?: boolean; endCreating?: boolean } = {}
+		) => {
+			const value = buildPresetNameUpdateValue(nextName, {
+				syncCreatingSlug,
+			});
+
+			// Finalizing create must not revive creatingStep after the popover closed.
+			if (endCreating) {
+				value.creatingStep = false;
+			}
+
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value: buildPresetNameUpdateValue(nextName, {
-					syncCreatingSlug,
-				}),
+				value,
 			});
 		},
 		[
@@ -440,17 +452,26 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const persistCreatingSlugToTheme = useCallback(
-		(nextSlug: string) => {
+		(
+			nextSlug: string,
+			{ endCreating = false }: { endCreating?: boolean } = {}
+		) => {
+			const value = applyDeferredDescriptionToRow({
+				...(variable as Record<string, unknown>),
+				slug: nextSlug,
+			});
+
+			if (endCreating) {
+				value.creatingStep = false;
+			}
+
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value: applyDeferredDescriptionToRow({
-					...(variable as Record<string, unknown>),
-					slug: nextSlug,
-				}),
+				value,
 			});
 		},
 		[
@@ -482,8 +503,17 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			nextDescription !== persistedDescriptionValue;
 		const slugChanged = nextSlug !== '' && persistedSlug !== nextSlug;
 		const nameChanged = nextName !== persistedVariableName;
+		const creatingStepActive = variableRow.creatingStep === true;
 
-		if (!descriptionChanged && !slugChanged && !nameChanged) {
+		// Always clear creatingStep when finalizing — even if name/slug/desc are unchanged.
+		// Otherwise a prior flush can leave creatingStep:true and break close e2e
+		// (`repeater-item-creating-step` must disappear after popover close).
+		if (
+			!descriptionChanged &&
+			!slugChanged &&
+			!nameChanged &&
+			!creatingStepActive
+		) {
 			return;
 		}
 
@@ -523,25 +553,31 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		valueCleanup,
 	]);
 
-	const flushPendingCreatingStepPersist = useCallback(() => {
-		const shouldSyncSlugFromName = !hasManualSlugDuringCreatingRef.current;
+	const flushPendingCreatingStepPersist = useCallback(
+		({ endCreating = false }: { endCreating?: boolean } = {}) => {
+			const shouldSyncSlugFromName =
+				!hasManualSlugDuringCreatingRef.current;
 
-		if (creatingNamePersistTimeoutRef.current) {
-			clearTimeout(creatingNamePersistTimeoutRef.current);
-			creatingNamePersistTimeoutRef.current = null;
-			persistCreatingNameToTheme(draftNameRef.current, {
-				syncCreatingSlug: shouldSyncSlugFromName,
-			});
-		}
+			if (creatingNamePersistTimeoutRef.current) {
+				clearTimeout(creatingNamePersistTimeoutRef.current);
+				creatingNamePersistTimeoutRef.current = null;
+				persistCreatingNameToTheme(draftNameRef.current, {
+					syncCreatingSlug: shouldSyncSlugFromName,
+					endCreating,
+				});
+			}
 
-		if (creatingSlugPersistTimeoutRef.current) {
-			clearTimeout(creatingSlugPersistTimeoutRef.current);
-			creatingSlugPersistTimeoutRef.current = null;
-			persistCreatingSlugToTheme(
-				normalizeVariablePresetSlug(variableSlugRef.current)
-			);
-		}
-	}, [persistCreatingNameToTheme, persistCreatingSlugToTheme]);
+			if (creatingSlugPersistTimeoutRef.current) {
+				clearTimeout(creatingSlugPersistTimeoutRef.current);
+				creatingSlugPersistTimeoutRef.current = null;
+				persistCreatingSlugToTheme(
+					normalizeVariablePresetSlug(variableSlugRef.current),
+					{ endCreating }
+				);
+			}
+		},
+		[persistCreatingNameToTheme, persistCreatingSlugToTheme]
+	);
 
 	const commitCreatingStepDraftsRef = useRef(commitCreatingStepDrafts);
 	commitCreatingStepDraftsRef.current = commitCreatingStepDrafts;
@@ -561,7 +597,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		prevIsCreatingRef.current = isCreating;
 
 		if (wasCreating && !isCreating) {
-			flushPendingCreatingStepPersistRef.current();
+			flushPendingCreatingStepPersistRef.current({ endCreating: true });
 			commitCreatingStepDraftsRef.current();
 		}
 	}, [isCreating]);
@@ -570,7 +606,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	useLayoutEffect(() => {
 		return () => {
 			if (prevIsCreatingRef.current && isCreatingRef.current) {
-				flushPendingCreatingStepPersistRef.current();
+				flushPendingCreatingStepPersistRef.current({
+					endCreating: true,
+				});
 				commitCreatingStepDraftsRef.current();
 			}
 		};
@@ -605,6 +643,12 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			value = applyDeferredDescriptionToRow(value);
 		}
 
+		// Session flush runs on popover unmount — never revive creatingStep or the
+		// repeater auto-open effect will reopen the edit popover after close.
+		if (value.creatingStep === true) {
+			value = { ...value, creatingStep: false };
+		}
+
 		changeRepeaterItem({
 			onChange,
 			valueCleanup,
@@ -630,31 +674,37 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const flushPendingFieldEditsRef = useRef(flushPendingFieldEdits);
 	flushPendingFieldEditsRef.current = flushPendingFieldEdits;
 
+	// Prefer stable repeater itemId over slug — during creatingStep the slug changes
+	// while naming, and a slug-keyed session would flush/end/begin on every keystroke.
+	const editSessionKey = itemIdKey;
+
+	// creatingStep has its own draft/persist path; joining the taxonomy edit session
+	// on create lets unmount flush re-write creatingStep:true and reopen the popover.
 	useEffect(() => {
-		if (!editSessionActions) {
+		if (!editSessionActions || isCreating) {
 			return;
 		}
-		const key = slugKey;
+		const key = editSessionKey;
 		editSessionActions.registerFlush(key, () =>
 			flushPendingFieldEditsRef.current()
 		);
 		return () => {
 			editSessionActions.unregisterFlush(key);
 		};
-	}, [editSessionActions, slugKey]);
+	}, [editSessionActions, editSessionKey, isCreating]);
 
 	// Flat repeater popovers mount these fields only while open; defer name persist + tree regroup until close.
 	useLayoutEffect(() => {
-		if (!editSessionActions) {
+		if (!editSessionActions || isCreating) {
 			return;
 		}
-		const key = slugKey;
+		const key = editSessionKey;
 		editSessionActions.beginEditSession(key);
 		return () => {
 			editSessionActions.flushSession(key);
 			editSessionActions.endEditSession(key);
 		};
-	}, [editSessionActions, slugKey]);
+	}, [editSessionActions, editSessionKey, isCreating]);
 
 	const displayedName =
 		deferNameEdits || isCreating ? draftName : persistedName;
