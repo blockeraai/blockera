@@ -457,7 +457,11 @@ describe('Input Control label testing (Width)', () => {
 
 			setBlockState('Normal');
 
-			cy.wait(100);
+			// Wait for the debounced advanced-label props (200ms) to mark the
+			// normal state as changed. Until then the label's resetToDefault
+			// handler is not wired, so the shift+click below is a no-op on slow
+			// CI and the value stays uncleared.
+			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// reset normal value
 			cy.getByAriaLabel('Width').click({ shiftKey: true });
@@ -478,6 +482,14 @@ describe('Input Control label testing (Width)', () => {
 			cy.setInputFieldValue('Width', 'Size', 40);
 
 			setBlockState('Hover');
+
+			// Wait for the debounced advanced-label props (200ms) to wire the
+			// hover state's resetToDefault handler before the shift+click reset.
+			cy.checkLabelClassName(
+				'Size',
+				'Width',
+				'changed-in-secondary-state'
+			);
 
 			// reset hover value
 			cy.getByAriaLabel('Width').click({ shiftKey: true });
@@ -500,7 +512,11 @@ describe('Input Control label testing (Width)', () => {
 
 			setBlockState('Normal');
 
-			cy.wait(100);
+			// Wait for the debounced advanced-label props (200ms) to mark the
+			// normal state as changed. Until then the label's resetToDefault
+			// handler is not wired, so the shift+click below is a no-op on slow
+			// CI and the value stays uncleared.
+			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// reset normal value
 			cy.getByAriaLabel('Width').click({ shiftKey: true });
