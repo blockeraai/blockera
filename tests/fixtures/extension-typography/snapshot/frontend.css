@@ -260,3 +260,9 @@ p.blockera-block.blockera-block-42 {
 p.blockera-block.blockera-block-43 {
 	word-break: keep-all;
 }
+
+p.blockera-block.blockera-block-bcil723 {
+	background-color: #ffbebe;
+	padding: 0 0 0 0;
+	line-height: var(--wp--preset--line-height--line-height-1, 3);
+}
