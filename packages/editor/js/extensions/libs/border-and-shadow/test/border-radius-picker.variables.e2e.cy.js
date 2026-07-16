@@ -2,8 +2,10 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesBorderRadiusScreen,
 	redirectToFrontPage,
@@ -22,6 +24,30 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the border-radius preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedRadiusPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview radius paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		cy.getParentContainer('Radius').within(() => {
+			cy.openValueAddon();
+		});
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: `border-radius: ${defaultFallback}`,
+			blockCssProperty: 'border-radius',
+			blockCssValue: defaultFallback,
+		});
+	});
 
 	it('applies the custom border-radius preset', () => {
 		seedRadiusPreset();

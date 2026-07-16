@@ -2,8 +2,10 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesShadowsScreen,
 	openRepeaterHeaderVariablePicker,
@@ -22,6 +24,28 @@ describe('Global Styles box-shadow preset → value addon (Box Shadows)', () => 
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the shadow preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedShadowPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview shadow paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openRepeaterHeaderVariablePicker('Box Shadows');
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: '10px 10px 10px 0px',
+			blockCssProperty: 'box-shadow',
+			blockCssValue: 'rgba(0, 0, 0, 0.67) 10px 10px 10px 0px',
+		});
+	});
 
 	it('applies the custom shadow preset via the repeater variable picker', () => {
 		seedShadowPreset();

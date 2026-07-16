@@ -2,8 +2,10 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesBordersScreen,
 	redirectToFrontPage,
@@ -27,6 +29,28 @@ describe('Global Styles border preset → value addon (Border)', () => {
 		setGlobalStylesCustomBorderPresetMinWidth('2', { presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the border preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedBorderPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview border paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		cy.getParentContainer('Border').within(() => {
+			cy.openValueAddon(1);
+		});
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: '2px solid',
+		});
+	});
 
 	it('applies the custom border preset via the border variable picker', () => {
 		seedBorderPreset();
