@@ -2,9 +2,14 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
+	filterVariablePickerSearch,
 	getSelectedBlock,
 	getWPDataObject,
+	nameNewGlobalStylesCustomPreset,
+	openGlobalStylesLineHeightsVariablesScreen,
+	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 import {
 	assertCustomPresetEditPopoverFieldValue,
@@ -299,6 +304,36 @@ describe('Line Height variable picker → creatingStep preset ID', () => {
 			.should('be.visible');
 
 		getCreatingStepPresetEditPopover().should('be.visible');
+	});
+});
+
+describe('Line Height variable picker → hover canvas preview', () => {
+	const presetName = 'E2E Line Height';
+	const slug = 'e-2-e-line-height';
+	const addDataTest = 'global-styles-preset-add-line-height-presets-custom';
+
+	it('previews the preset line height on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		openGlobalStylesLineHeightsVariablesScreen();
+		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
+		saveSiteEditorDirtyEntities();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview line height paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		cy.getParentContainer('Line Height').within(() => {
+			cy.openValueAddon();
+		});
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: 'line-height: 1.5',
+		});
 	});
 });
 

@@ -2,6 +2,7 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	getEditedGlobalStylesSetting,
 	getSelectedBlock,
@@ -42,8 +43,8 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		});
 	};
 
-	/** Opens Text Color value-addon picker and selects the seeded custom preset. */
-	const pickSeededColorPresetInTextColor = () => {
+	/** Opens Text Color value-addon picker and filters the catalog to the seeded preset. */
+	const openTextColorVariablePickerFilteredToSeed = () => {
 		cy.getParentContainer('Text Color').within(() => {
 			cy.openValueAddon();
 		});
@@ -68,9 +69,33 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 					.clear({ force: true })
 					.type(presetName, { delay: 0, force: true });
 			});
+	};
 
+	/** Opens Text Color value-addon picker and selects the seeded custom preset. */
+	const pickSeededColorPresetInTextColor = () => {
+		openTextColorVariablePickerFilteredToSeed();
 		cy.selectValueAddonItem(expectedSlug);
 	};
+
+	it('previews the preset color on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedColorPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview color paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openTextColorVariablePickerFilteredToSeed();
+
+		assertVariablePickerPresetHoverPreview({
+			slug: expectedSlug,
+			cssNeedle: `color: ${presetDefaultHex}`,
+			blockCssProperty: 'color',
+			blockCssValue: 'rgb(0, 0, 0)',
+		});
+	});
 
 	it('applies the custom preset from value addons: editor CSS, block data, and front match the default hex', () => {
 		seedColorPreset();

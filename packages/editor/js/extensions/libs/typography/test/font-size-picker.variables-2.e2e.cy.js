@@ -2,9 +2,14 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
+	filterVariablePickerSearch,
 	getSelectedBlock,
 	getWPDataObject,
+	nameNewGlobalStylesCustomPreset,
+	openGlobalStylesFontSizesVariablesScreen,
+	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 import {
 	assertCustomPresetEditPopoverFieldValue,
@@ -300,6 +305,38 @@ describe('Font Size variable picker → creatingStep preset ID', () => {
 			.should('be.visible');
 
 		getCreatingStepPresetEditPopover().should('be.visible');
+	});
+});
+
+describe('Font Size variable picker → hover canvas preview', () => {
+	const presetName = 'E2E Font Size';
+	const slug = 'e-2-e-font-size';
+	const addDataTest = 'global-styles-preset-add-font-size-presets-custom';
+
+	it('previews the preset font size on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		openGlobalStylesFontSizesVariablesScreen();
+		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
+		saveSiteEditorDirtyEntities();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview font size paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		cy.getParentContainer('Font Size').within(() => {
+			cy.openValueAddon();
+		});
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: 'font-size: 16px',
+			blockCssProperty: 'font-size',
+			blockCssValue: '16px',
+		});
 	});
 });
 

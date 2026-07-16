@@ -2,8 +2,10 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesTextShadowsScreen,
 	openMoreFeaturesControl,
@@ -24,6 +26,28 @@ describe('Global Styles text-shadow preset → value addon (Text Shadows)', () =
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the text-shadow preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedTextShadowPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview text shadow paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openMoreFeaturesControl('More typography settings');
+
+		openRepeaterHeaderVariablePicker('Text Shadows');
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: '1px 1px 1px',
+		});
+	});
 
 	it('applies the custom text-shadow preset', () => {
 		seedTextShadowPreset();
