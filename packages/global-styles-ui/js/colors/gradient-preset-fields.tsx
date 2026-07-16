@@ -8,6 +8,7 @@ import { useCallback, memo, useContext } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
+	Flex,
 	RepeaterContext,
 	useControlContext,
 	GradientBarControl,
@@ -20,6 +21,7 @@ import {
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllGradientSlugs } from '../components/utils';
+import GradientPreview from './gradient-preview';
 
 interface GradientPresetFieldsProps {
 	origin: string | string[];
@@ -111,15 +113,19 @@ function GradientPresetFieldsComponent({
 	);
 
 	return (
-		<SharedPresetControls
-			itemId={presetId}
-			variable={gradientItem}
-			name={gradientItem.name}
-			slug={gradientItem.slug}
-			allSlugs={getAllGradientSlugs(gradients as any)}
-		>
-			{gradientValueControls}
-		</SharedPresetControls>
+		<Flex direction="column" gap={15}>
+			<GradientPreview gradient={gradientItem.gradient} />
+
+			<SharedPresetControls
+				itemId={presetId}
+				variable={gradientItem}
+				name={gradientItem.name}
+				slug={gradientItem.slug}
+				allSlugs={getAllGradientSlugs(gradients as any)}
+			>
+				{gradientValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 
