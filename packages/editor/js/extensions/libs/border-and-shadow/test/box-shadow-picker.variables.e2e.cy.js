@@ -10,6 +10,7 @@ import {
 	openGlobalStylesShadowsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -18,6 +19,10 @@ describe('Global Styles box-shadow preset → value addon (Box Shadows)', () => 
 	const presetName = 'E2E Shadow';
 	const slug = 'e-2-e-shadow';
 	const addDataTest = 'global-styles-preset-add-shadow-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedShadowPreset() {
 		openGlobalStylesShadowsScreen();

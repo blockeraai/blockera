@@ -10,6 +10,7 @@ import {
 	openGlobalStylesTransitionsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -20,6 +21,10 @@ describe('Global Styles transition preset → value addon (Transitions Timing)',
 	const slug = 'e-2-e-transition';
 	const addDataTest =
 		'global-styles-preset-add-transition-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedTransitionPreset() {
 		openGlobalStylesTransitionsScreen();

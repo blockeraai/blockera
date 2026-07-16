@@ -9,6 +9,7 @@ import {
 	getWPDataObject,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesLineHeightsVariablesScreen,
+	resetAndSaveGlobalStylesEntityRecord,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 import {
@@ -311,6 +312,10 @@ describe('Line Height variable picker → hover canvas preview', () => {
 	const presetName = 'E2E Line Height';
 	const slug = 'e-2-e-line-height';
 	const addDataTest = 'global-styles-preset-add-line-height-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	it('previews the preset line height on the selected block while hovering the picker row, then clears it on mouse leave', () => {
 		openGlobalStylesLineHeightsVariablesScreen();

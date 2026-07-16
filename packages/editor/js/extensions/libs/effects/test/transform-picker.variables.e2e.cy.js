@@ -10,6 +10,7 @@ import {
 	openGlobalStylesTransformsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -20,6 +21,10 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 	const slug = 'e-2-e-transform';
 	const addDataTest =
 		'global-styles-preset-add-transform-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedTransformPreset() {
 		openGlobalStylesTransformsScreen();

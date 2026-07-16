@@ -9,6 +9,7 @@ import {
 	getWPDataObject,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesSpacingScreen,
+	resetAndSaveGlobalStylesEntityRecord,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 import {
@@ -48,6 +49,10 @@ describe('Min Width variable picker → hover canvas preview', () => {
 	const slug = 'e-2-e-min-width-spacing';
 	const addDataTest = 'global-styles-preset-add-spacing-size-presets-custom';
 	const defaultFallback = '20px';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedSpacingPreset() {
 		openGlobalStylesSpacingScreen();

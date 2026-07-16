@@ -10,6 +10,7 @@ import {
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesColorPaletteScreen,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -21,6 +22,10 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 	/** Default swatch for new custom presets in Global Styles (see color palette screen). */
 	const presetDefaultHex = '#000000';
 	const addDataTest = 'global-styles-preset-add-color-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	/**
 	 * One shared custom color preset (free tier allows a single custom variable).

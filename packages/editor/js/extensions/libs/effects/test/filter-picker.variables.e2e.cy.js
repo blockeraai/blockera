@@ -10,6 +10,7 @@ import {
 	openGlobalStylesFiltersScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -18,6 +19,10 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 	const presetName = 'E2E Filter';
 	const slug = 'e-2-e-filter';
 	const addDataTest = 'global-styles-preset-add-filter-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedFilterPreset() {
 		openGlobalStylesFiltersScreen();

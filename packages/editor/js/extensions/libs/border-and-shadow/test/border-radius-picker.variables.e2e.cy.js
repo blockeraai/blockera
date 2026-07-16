@@ -9,6 +9,7 @@ import {
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesBorderRadiusScreen,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -18,6 +19,10 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 	const slug = 'e-2-e-radius';
 	const addDataTest = 'global-styles-preset-add-border-radius-presets-custom';
 	const defaultFallback = '4px';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedRadiusPreset() {
 		openGlobalStylesBorderRadiusScreen();
