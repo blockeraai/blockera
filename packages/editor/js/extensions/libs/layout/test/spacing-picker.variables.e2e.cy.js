@@ -94,6 +94,8 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 	});
 
 	it('updates generated CSS when the preset size is edited in global styles after picking it', () => {
+		seedSpacingPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Spacing preset edit paragraph.', {

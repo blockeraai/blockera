@@ -91,6 +91,7 @@ describe('Global Styles border preset → value addon (Border)', () => {
 	});
 
 	it('updates generated CSS when the border width is edited in global styles after picking it', () => {
+		seedBorderPreset();
 		createPost();
 
 		cy.getBlock('default').type('Border preset edit paragraph.', {

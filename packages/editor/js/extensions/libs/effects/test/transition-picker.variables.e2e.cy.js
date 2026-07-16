@@ -86,6 +86,8 @@ describe('Global Styles transition preset → value addon (Transitions Timing)',
 	});
 
 	it('updates generated CSS when duration is edited in global styles after picking it', () => {
+		seedTransitionPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Transition edit paragraph.', { delay: 0 });

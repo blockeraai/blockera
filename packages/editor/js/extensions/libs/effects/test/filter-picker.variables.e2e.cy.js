@@ -82,6 +82,8 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 	});
 
 	it('updates generated CSS when blur is edited in global styles after picking it', () => {
+		seedFilterPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Filter edit paragraph.', { delay: 0 });

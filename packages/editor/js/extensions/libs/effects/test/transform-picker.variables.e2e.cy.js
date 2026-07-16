@@ -138,6 +138,8 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 	});
 
 	it('updates generated CSS when move-x is edited in global styles after picking it', () => {
+		seedTransformPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Transform edit paragraph.', { delay: 0 });

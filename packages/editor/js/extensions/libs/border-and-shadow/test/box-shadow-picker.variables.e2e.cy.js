@@ -84,6 +84,8 @@ describe('Global Styles box-shadow preset → value addon (Box Shadows)', () => 
 	});
 
 	it('updates generated CSS when the shadow offset is edited in global styles after picking it', () => {
+		seedShadowPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Shadow preset edit paragraph.', {

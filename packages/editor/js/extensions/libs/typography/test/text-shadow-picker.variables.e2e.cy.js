@@ -90,6 +90,8 @@ describe('Global Styles text-shadow preset → value addon (Text Shadows)', () =
 	});
 
 	it('updates generated CSS when blur is edited in global styles after picking it', () => {
+		seedTextShadowPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Text shadow edit paragraph.', {

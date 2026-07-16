@@ -91,6 +91,7 @@ describe('Global Styles border-radius preset → value addon (Radius)', () => {
 	});
 
 	it('updates generated CSS when the radius size is edited in global styles after picking it', () => {
+		seedRadiusPreset();
 		createPost();
 
 		cy.getBlock('default').type('Radius preset edit paragraph.', {
