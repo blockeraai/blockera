@@ -720,6 +720,34 @@ describe('popover offset utils', () => {
 			);
 		});
 
+		it('isPopoverDismissIgnoredTarget does not keep popovers open for unrelated modals after outside pointer', () => {
+			const popover = document.createElement('div');
+			popover.className = 'blockera-component-popover';
+			const inside = document.createElement('button');
+			popover.appendChild(inside);
+			document.body.appendChild(popover);
+
+			const outside = document.createElement('button');
+			document.body.appendChild(outside);
+
+			inside.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+			outside.dispatchEvent(
+				new MouseEvent('mousedown', { bubbles: true })
+			);
+
+			const overlay = document.createElement('div');
+			overlay.className = 'components-modal__screen-overlay';
+			const modalButton = document.createElement('button');
+			overlay.appendChild(modalButton);
+			document.body.appendChild(overlay);
+
+			expect(isPopoverDismissIgnoredTarget(popover, modalButton)).toBe(
+				false
+			);
+		});
+
 		it('isPopoverDismissIgnoredTarget does not ignore unrelated media modals', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
