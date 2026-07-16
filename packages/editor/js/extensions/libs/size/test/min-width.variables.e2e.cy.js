@@ -6,7 +6,7 @@ import {
 	createPost,
 	filterVariablePickerSearch,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesSpacingScreen,
 	resetAndSaveGlobalStylesEntityRecord,
@@ -140,7 +140,7 @@ describe('Min Width variable picker → multi-type custom preset add', () => {
 			assertCustomPresetEditPopoverFieldValue('Size', '48');
 
 			cy.then({ timeout: 15000 }, () =>
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const minWidth = getSelectedBlock(data, 'blockeraMinWidth');
 					expect(minWidth.isValueAddon).to.equal(true);
 					expect(minWidth.valueType).to.equal('variable');
@@ -162,7 +162,7 @@ describe('Min Width variable picker → multi-type custom preset add', () => {
 		assertCustomPresetEditPopoverFieldValue('Size', '320');
 
 		cy.then({ timeout: 15000 }, () =>
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const minWidth = getSelectedBlock(data, 'blockeraMinWidth');
 				expect(minWidth.isValueAddon).to.equal(true);
 				expect(minWidth.valueType).to.equal('variable');

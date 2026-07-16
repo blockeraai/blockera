@@ -1,7 +1,7 @@
 import {
 	setBlockState,
 	openSiteEditor,
-	getWPDataObject,
+	assertBlockData,
 	closeWelcomeGuide,
 	redirectToFrontPage,
 	getSelectedBlockStyle,
@@ -35,7 +35,7 @@ describe('Style Engine → Global Styles', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'font-size', '10px');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraFontSize?.value
@@ -74,7 +74,7 @@ describe('Style Engine → Global Styles', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'font-size', '10px');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraFontSize?.value
@@ -92,7 +92,7 @@ describe('Style Engine → Global Styles', () => {
 		});
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('20px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraBlockStates?.value?.hover?.breakpoints?.desktop

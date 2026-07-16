@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	createPost,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	savePage,
 	redirectToFrontPage,
@@ -80,7 +80,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Rotate').should('be.visible').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(getSelectedBlock(data, 'blockeraIconRotate')).to.equal(90);
 		});
 
@@ -88,7 +88,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Flip Horizontal').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraIconFlipHorizontal')
 			).to.equal(true);
@@ -98,7 +98,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Flip Vertical').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(getSelectedBlock(data, 'blockeraIconFlipVertical')).to.equal(
 				true
 			);
@@ -109,7 +109,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Flip Vertical').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraIconFlipHorizontal')
 			).to.equal('');

@@ -6,7 +6,7 @@ import {
 	appendBlocks,
 	getBlockType,
 	addBlockToPost,
-	getWPDataObject,
+	assertBlockData,
 	getWindowProperty,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -64,7 +64,7 @@ describe('Blockera editor bootstrapper', () => {
 
 		cy.getByAriaLabel('Add New Background').should('exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(true).to.eq(
 				getBlockType(
 					data,

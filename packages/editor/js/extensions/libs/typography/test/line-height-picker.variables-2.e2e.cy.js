@@ -6,7 +6,7 @@ import {
 	createPost,
 	filterVariablePickerSearch,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesLineHeightsVariablesScreen,
 	resetAndSaveGlobalStylesEntityRecord,
@@ -222,7 +222,7 @@ describe('Line Height variable picker → header add custom preset', () => {
 
 		// New custom preset is applied to the control immediately.
 		cy.then({ timeout: 15000 }, () =>
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const lineHeight = getSelectedBlock(data, 'blockeraLineHeight');
 				expect(lineHeight.isValueAddon).to.equal(true);
 				expect(lineHeight.valueType).to.equal('variable');

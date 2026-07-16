@@ -5,7 +5,7 @@ import {
 	savePage,
 	createPost,
 	reSelectBlock,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	setBoxSpacingSide,
@@ -39,7 +39,7 @@ describe('Spacing Extension', () => {
 				.and('have.css', 'margin-left', '30px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					margin: {
 						top: '10px',
@@ -91,7 +91,7 @@ describe('Spacing Extension', () => {
 			});
 
 			// Check block attributes
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					margin: {
 						top: {
@@ -203,7 +203,7 @@ describe('Spacing Extension', () => {
 				.and('have.css', 'padding-left', '30px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					padding: {
 						top: '10px',
@@ -255,7 +255,7 @@ describe('Spacing Extension', () => {
 			});
 
 			// Check block attributes
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					padding: {
 						top: {
@@ -385,7 +385,7 @@ describe('Spacing Extension', () => {
 			});
 
 			// Check block attributes
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					margin: {
 						top: '20px',
@@ -524,7 +524,7 @@ describe('Spacing Extension', () => {
 		//
 		// Check store
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				padding: {
 					top: '10px',
@@ -552,7 +552,7 @@ describe('Spacing Extension', () => {
 		//
 		// Check store
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				padding: {
 					top: '50px',
@@ -583,7 +583,7 @@ describe('Spacing Extension', () => {
 		//
 		// Check store
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				padding: {
 					top: '50px',
@@ -623,7 +623,7 @@ describe('Spacing Extension', () => {
 		//
 		// Check store
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				margin: {
 					right: '60px',
@@ -650,7 +650,7 @@ describe('Spacing Extension', () => {
 		//
 		// Check store
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				padding: {
 					top: '50px',
@@ -683,7 +683,7 @@ describe('Spacing Extension', () => {
 		setBoxSpacingSide('padding-left', 70);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				margin: {
 					top: '10px',
@@ -703,7 +703,7 @@ describe('Spacing Extension', () => {
 		cy.resetBlockeraAttribute('Layout', 'Padding', 'reset');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				margin: {
 					top: '10px',
@@ -723,7 +723,7 @@ describe('Spacing Extension', () => {
 		setBoxSpacingSide('padding-left', 70);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				margin: {
 					top: '10px',
@@ -743,7 +743,7 @@ describe('Spacing Extension', () => {
 		cy.resetBlockeraAttribute('Layout', 'Margin', 'reset');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				padding: {
 					top: '40px',
@@ -766,7 +766,7 @@ describe('Spacing Extension', () => {
 		cy.resetBlockeraAttribute('Layout', 'Margin', 'reset');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				margin: {
 					top: '',

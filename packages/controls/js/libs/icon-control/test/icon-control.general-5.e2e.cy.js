@@ -4,7 +4,7 @@
 import {
 	createPost,
 	appendBlocks,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -76,7 +76,7 @@ describe('icon-control', () => {
 				cy.contains('button', /^Use icon$/i).click();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const selectedIconName = getSelectedBlock(
 					data,
 					'blockeraIcon'
@@ -94,7 +94,7 @@ describe('icon-control', () => {
 			});
 
 			// data assertion
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const selectedIconName = getSelectedBlock(
 					data,
 					'blockeraIcon'
@@ -127,7 +127,7 @@ describe('icon-control', () => {
 					});
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const blockeraIcon = getSelectedBlock(data, 'blockeraIcon');
 				expect(blockeraIcon.svgString).to.contain('<circle');
 			});
@@ -139,7 +139,7 @@ describe('icon-control', () => {
 				cy.get('button[aria-label="Close"]').click();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const blockeraIcon = getSelectedBlock(data, 'blockeraIcon');
 				expect(blockeraIcon.icon).to.equal('');
 				expect(blockeraIcon.svgString).to.equal('');

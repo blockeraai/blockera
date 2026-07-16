@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -37,7 +37,7 @@ describe('Media Fit → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('cover').to.be.equal(
 					getSelectedBlock(data, 'blockeraFit')
 				);
@@ -53,7 +53,7 @@ describe('Media Fit → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('contain').to.be.equal(getSelectedBlock(data, 'scale'));
 			});
 
@@ -67,7 +67,7 @@ describe('Media Fit → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'scale'));
 			});
 		});
@@ -93,7 +93,7 @@ describe('Media Fit → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('contain').to.be.equal(
 					getSelectedBlock(data, 'blockeraFit')
 				);
@@ -109,7 +109,7 @@ describe('Media Fit → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'scale'));
 			});
 		});

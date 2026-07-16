@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -81,7 +81,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Min Height').as('minHeightContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('300px').to.equal(
 						getCoverGlobalStyles(data)?.blockeraMinHeight?.value
 					);
@@ -98,7 +98,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 					cy.get('input').type('400px', { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('400px').to.equal(
 						getCoverGlobalStyles(data)?.dimensions?.minHeight
 					);
@@ -108,7 +108,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getCoverGlobalStyles(data);
 					const dimensionsMinHeight = root?.dimensions?.minHeight;
 					const blockeraMinHeight = root?.blockeraMinHeight?.value;
@@ -128,7 +128,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 			it('Group Simple Value', () => {
 				cy.getParentContainer('Min Height').as('minHeightContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('300px').to.equal(
 						getGroupGlobalStyles(data)?.blockeraMinHeight?.value
 					);
@@ -145,7 +145,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 					cy.get('input').type('400px', { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('400px').to.equal(
 						getGroupGlobalStyles(data)?.dimensions?.minHeight
 					);
@@ -155,7 +155,7 @@ describe('Min Height → WP Compatibility (Global Styles)', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getGroupGlobalStyles(data);
 					const dimensionsMinHeight = root?.dimensions?.minHeight;
 					const blockeraMinHeight = root?.blockeraMinHeight?.value;

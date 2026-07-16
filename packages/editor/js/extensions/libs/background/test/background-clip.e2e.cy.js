@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -29,7 +29,7 @@ describe('Background Clip → Functionality', () => {
 		});
 
 		//assert data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraBackgroundClip')
 			).to.be.equal('padding-box');

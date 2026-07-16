@@ -1,7 +1,7 @@
 import {
 	createPost,
 	appendBlocks,
-	getWPDataObject,
+	assertBlockData,
 } from '@blockera/dev-cypress/js/helpers';
 
 /** Scroll + force: block card can cover fixed inspector inputs (matches width.compatibility e2e). */
@@ -53,7 +53,7 @@ describe('Compatibility: Grid Child ↔ WordPress style.layout', () => {
 		// Core store keeps `style.layout` from pasted markup. Blockera hydrates
 		// controls via `blockera.blockEdit.attributes` filter — that does not
 		// persist `blockeraGridChild*` into `core/block-editor` until the user edits.
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const block = data.select('core/block-editor').getSelectedBlock();
 			expect(block.attributes.style?.layout?.columnSpan).to.equal(4);
 		});
@@ -64,7 +64,7 @@ describe('Compatibility: Grid Child ↔ WordPress style.layout', () => {
 
 		setGridChildNumberInput('grid-child-column-span', 3);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const block = data.select('core/block-editor').getSelectedBlock();
 			expect(block.attributes.style?.layout?.columnSpan).to.equal(3);
 			expect(
@@ -80,7 +80,7 @@ describe('Compatibility: Grid Child ↔ WordPress style.layout', () => {
 
 		cy.getByDataTest('grid-child-column-span').should('have.value', '');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const block = data.select('core/block-editor').getSelectedBlock();
 			expect(block.attributes.style?.layout?.columnSpan).to.equal(
 				undefined
@@ -106,7 +106,7 @@ describe('Compatibility: Grid Child ↔ WordPress style.layout', () => {
 			.scrollIntoView()
 			.should('have.value', '3');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const block = data.select('core/block-editor').getSelectedBlock();
 			expect(block.attributes.style?.layout?.rowSpan).to.equal(3);
 		});
@@ -117,7 +117,7 @@ describe('Compatibility: Grid Child ↔ WordPress style.layout', () => {
 
 		setGridChildNumberInput('grid-child-row-span', 2);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const block = data.select('core/block-editor').getSelectedBlock();
 			expect(block.attributes.style?.layout?.rowSpan).to.equal(2);
 			expect(block.attributes.blockeraGridChildRowSpan?.value).to.equal(
@@ -133,7 +133,7 @@ describe('Compatibility: Grid Child ↔ WordPress style.layout', () => {
 
 		cy.getByDataTest('grid-child-row-span').should('have.value', '');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const block = data.select('core/block-editor').getSelectedBlock();
 			expect(block.attributes.style?.layout?.rowSpan).to.equal(undefined);
 			expect(

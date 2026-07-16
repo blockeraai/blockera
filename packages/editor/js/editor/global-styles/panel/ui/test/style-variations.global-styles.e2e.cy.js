@@ -4,7 +4,7 @@
 import {
 	openSiteEditor,
 	closeWelcomeGuide,
-	getWPDataObject,
+	assertBlockData,
 } from '@blockera/dev-cypress/js/helpers';
 
 const openGroupBlockStyleVariations = () => {
@@ -237,7 +237,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 
 		cy.getByDataTest('style-new-id').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -254,7 +254,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			.find('[data-test="style-new-id"]')
 			.should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -265,7 +265,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		openGroupBlockStyleVariations();
 		cy.getByDataTest('style-new-id').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -282,7 +282,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			.find('[data-test="style-new-id"]')
 			.should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -307,7 +307,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 
 		cy.getByDataTest('style-new-id').should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0
@@ -330,7 +330,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		openGroupBlockStyleVariations();
 		cy.getByDataTest('style-new-id').should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0

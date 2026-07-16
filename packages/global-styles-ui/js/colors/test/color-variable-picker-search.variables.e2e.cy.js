@@ -2,6 +2,7 @@
  * E2E coverage for advanced variable-picker search (multi-word AND + CSS value matching).
  */
 import {
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	getSelectedBlock,
@@ -162,7 +163,7 @@ describe('Global Styles UI → Color variable picker search', () => {
 
 		cy.selectValueAddonItem(SLUG_ON_BRAND);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 
 			expect(fontColor.settings.var).to.equal(

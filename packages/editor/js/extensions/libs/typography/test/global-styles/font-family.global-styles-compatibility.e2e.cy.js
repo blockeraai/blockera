@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -44,7 +44,7 @@ describe('Font Family → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Font Family').as('container');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('Georgia, serif').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraFontFamily
 							?.value
@@ -55,7 +55,7 @@ describe('Font Family → WP Compatibility (Global Styles)', () => {
 					cy.get('select').first().select('fira-code');
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('fira-code').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.fontFamily
 					);
@@ -65,7 +65,7 @@ describe('Font Family → WP Compatibility (Global Styles)', () => {
 					cy.get('select').first().select('', { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.fontFamily);
 					expect(undefined).to.equal(root?.blockeraFontFamily?.value);

@@ -6,7 +6,7 @@ import {
 	createPost,
 	getEditedGlobalStylesSetting,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesColorPaletteScreen,
 	redirectToFrontPage,
@@ -126,7 +126,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 			'rgb(0, 0, 0)'
 		);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 
 			expect(fontColor.isValueAddon).to.equal(true);
@@ -223,7 +223,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 			'rgb(204, 51, 68)'
 		);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 
 			expect(fontColor.isValueAddon).to.equal(true);

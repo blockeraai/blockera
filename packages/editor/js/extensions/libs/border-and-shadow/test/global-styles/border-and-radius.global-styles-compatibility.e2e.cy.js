@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -72,7 +72,7 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 				cy.getParentContainer('Border').as('border');
 				cy.getParentContainer('Radius').as('radius');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getButtonGlobalStyles(data);
 
 					expect({
@@ -105,7 +105,7 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 					cy.get('input').type('20', { force: true, delay: 0 });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getButtonGlobalStyles(data);
 
 					expect({
@@ -149,7 +149,7 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getButtonGlobalStyles(data);
 
 					expect(undefined).to.equal(root?.blockeraBorder?.value);
@@ -161,7 +161,7 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 				cy.getParentContainer('Border').as('border');
 				cy.getParentContainer('Radius').as('radius');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getButtonGlobalStyles(data);
 
 					expect({
@@ -252,7 +252,7 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 					cy.get('input').eq(3).type('80', { force: true, delay: 0 });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getButtonGlobalStyles(data);
 
 					expect({
@@ -354,7 +354,7 @@ describe('Border & Border Radius Together → WP Compatibility (Global Styles)',
 					cy.get('input').eq(3).clear({ force: true, delay: 0 });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getButtonGlobalStyles(data);
 
 					expect({

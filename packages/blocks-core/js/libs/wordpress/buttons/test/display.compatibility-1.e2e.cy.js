@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -35,7 +35,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -57,7 +57,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('flex-direction: column').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default display value for buttons is "flex"
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
@@ -78,7 +78,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('').to.be.equal(getSelectedBlock(data, 'blockeraDisplay'));
@@ -107,7 +107,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -127,7 +127,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('flex-direction: column').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default display value for buttons is "flex"
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
@@ -148,7 +148,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('').to.be.equal(getSelectedBlock(data, 'blockeraDisplay'));
@@ -177,7 +177,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -197,7 +197,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('flex-direction: row').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default display value for buttons is "flex"
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
@@ -218,7 +218,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('').to.be.equal(getSelectedBlock(data, 'blockeraDisplay'));

@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -60,7 +60,7 @@ describe('Box Shadow → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				'outer-0': {
 					isVisible: true,

@@ -6,7 +6,7 @@ import {
 	createPost,
 	filterVariablePickerSearch,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesFontSizesVariablesScreen,
 	resetAndSaveGlobalStylesEntityRecord,
@@ -223,7 +223,7 @@ describe('Font Size variable picker → header add custom preset', () => {
 
 		// New custom preset is applied to the control immediately.
 		cy.then({ timeout: 15000 }, () =>
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const fontSize = getSelectedBlock(data, 'blockeraFontSize');
 				expect(fontSize.isValueAddon).to.equal(true);
 				expect(fontSize.valueType).to.equal('variable');

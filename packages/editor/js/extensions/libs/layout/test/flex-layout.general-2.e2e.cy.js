@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -314,7 +314,7 @@ function configureBlockMatrixAlignment(blockIndex, type, point) {
 		.eq(blockIndex)
 		.should('have.css', 'justify-content', justifyContent);
 
-	getWPDataObject().then((data) => {
+	assertBlockData((data) => {
 		expect(alignItems).to.equal(
 			getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 		);
@@ -386,7 +386,7 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 		.eq(blockIndex)
 		.should('have.css', 'justify-content', unit.justifyContent);
 
-	getWPDataObject().then((data) => {
+	assertBlockData((data) => {
 		expect(unit.alignItems).to.equal(
 			getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 		);
@@ -444,7 +444,7 @@ describe('Flex Layout → Functionality', () => {
 
 		cy.getBlock('core/group').should('have.css', 'flex-direction', 'row');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('row').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFlexLayout')?.direction
 			);
@@ -464,7 +464,7 @@ describe('Flex Layout → Functionality', () => {
 			'column'
 		);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('column').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFlexLayout')?.direction
 			);

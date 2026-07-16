@@ -2,7 +2,7 @@
  * Blockera dependencies
  */
 import {
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -46,7 +46,7 @@ describe('media-image', () => {
 				).should('be.visible');
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const uploadedImageFileName = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -66,7 +66,7 @@ describe('media-image', () => {
 			});
 
 			// data assertion
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const uploadedImageName = getSelectedBlock(
 					data,
 					'blockeraBackground'

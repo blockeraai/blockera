@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -34,7 +34,7 @@ describe('Font Color → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('#70ca9e').to.be.equal(
 				getSelectedBlock(data, 'blockeraFontColor')
 			);
@@ -70,7 +70,7 @@ describe('Font Color → Functionality', () => {
 		});
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Contrast',

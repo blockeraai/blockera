@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -36,7 +36,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('30px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -61,7 +61,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').type(10, { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('10px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -91,7 +91,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').type(100, { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('50px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -111,7 +111,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').clear();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -134,7 +134,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').type(30, { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('30px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -156,7 +156,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -192,7 +192,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|20').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -233,7 +233,7 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.selectValueAddonItem('30');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|30').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -280,7 +280,7 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.selectValueAddonItem('50');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|40').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -345,7 +345,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -395,7 +395,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.getByAriaLabel('Custom Row & Column Gap').click();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|30').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -432,7 +432,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -470,7 +470,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('50px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -495,7 +495,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').type(10, { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('10px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -517,7 +517,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -553,7 +553,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|20').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -594,7 +594,7 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.selectValueAddonItem('30');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|30').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -631,7 +631,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -669,7 +669,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('50px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -694,7 +694,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').type(10, { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('10px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -716,7 +716,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -752,7 +752,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|20').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -793,7 +793,7 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.selectValueAddonItem('30');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|30').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -830,7 +830,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -868,7 +868,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('50px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -893,7 +893,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').type(10, { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('10px').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -915,7 +915,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -951,7 +951,7 @@ describe('Group Block → Gap → Compatibility', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|20').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -992,7 +992,7 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.selectValueAddonItem('30');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|spacing|30').to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);
@@ -1029,7 +1029,7 @@ describe('Group Block → Gap → Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.spacing?.blockGap
 					);

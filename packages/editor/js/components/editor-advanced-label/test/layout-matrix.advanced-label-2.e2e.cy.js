@@ -1,5 +1,4 @@
 import {
-	getWPDataObject,
 	getSelectedBlock,
 	createPost,
 	setBlockState,
@@ -412,7 +411,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					});
 
 					// Assert store data
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect({}).to.be.deep.eq(
 							getBreakpointAttributes(data, 'hover', 'tablet')
 						);
@@ -444,7 +443,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					});
 
 					// Assert store data
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect({
 							direction: 'row',
 							alignItems: '',
@@ -478,7 +477,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					cy.checkStateGraph('Layout', 'Flex Layout', {});
 
 					// Assert store data
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect({}).to.be.deep.eq(
 							getBreakpointAttributes(data, 'hover', 'desktop')
 						);
@@ -832,7 +831,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					cy.checkStateGraph('Layout', 'Flex Layout', {});
 
 					// Assert store data
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect({
 							direction: 'row',
 							alignItems: '',

@@ -7,7 +7,7 @@ import {
 	createPost,
 	deactivateMuPlugin,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	waitForThemeBaseDefaultGradientPreset,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -56,7 +56,7 @@ describe('Background → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'linear-gradient-0': {
 							isVisible: true,
@@ -95,7 +95,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(
 						'linear-gradient(45deg,rgb(135,254,56) 1%,rgb(255,147,147) 97%)'
 					).to.be.equal(
@@ -115,7 +115,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.gradient
 					);
@@ -146,7 +146,7 @@ describe('Background → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'linear-gradient-0': {
 							type: 'linear-gradient',
@@ -205,7 +205,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('light-green-cyan-to-vivid-green-cyan').to.be.equal(
 						getSelectedBlock(data, 'gradient')
 					);
@@ -223,7 +223,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'gradient')
 					);
@@ -250,7 +250,7 @@ describe('Background → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'linear-gradient-0': {
 							type: 'linear-gradient',
@@ -315,7 +315,7 @@ describe('Background → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'radial-gradient-0': {
 							isVisible: true,
@@ -353,7 +353,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(
 						'radial-gradient(rgb(194,169,144) 27%,rgb(254,95,95) 92%)'
 					).to.be.equal(
@@ -373,7 +373,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.gradient
 					);
@@ -399,7 +399,7 @@ describe('Background → WP Compatibility', () => {
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 				cy.addNewTransition();
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const blockeraBackground = getSelectedBlock(
 						data,
 						'blockeraBackground'
@@ -432,7 +432,7 @@ describe('Background → WP Compatibility', () => {
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 				cy.addNewTransition();
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const blockeraBackground = getSelectedBlock(
 						data,
 						'blockeraBackground'
@@ -486,7 +486,7 @@ describe('Background → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'image-0': {
 							isVisible: true,
@@ -527,7 +527,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						url: 'https://placehold.co/600x400',
 						id: 0,
@@ -551,14 +551,14 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage
 					);
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBackground')
 					);

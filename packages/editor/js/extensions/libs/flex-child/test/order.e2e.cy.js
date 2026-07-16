@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	appendBlocks,
@@ -32,7 +32,7 @@ describe('Flex Child → Order', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'order', '-1');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('first').to.be.equal(
 				getSelectedBlock(data, 'blockeraFlexChildOrder')
 			);
@@ -55,7 +55,7 @@ describe('Flex Child → Order', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'order', '100');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('last').to.be.equal(
 				getSelectedBlock(data, 'blockeraFlexChildOrder')
 			);
@@ -84,7 +84,7 @@ describe('Flex Child → Order', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'order', '10');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10').to.be.equal(
 				getSelectedBlock(data, 'blockeraFlexChildOrderCustom')
 			);

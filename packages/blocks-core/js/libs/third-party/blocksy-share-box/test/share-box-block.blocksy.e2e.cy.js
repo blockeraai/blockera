@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 	setInnerBlock,
 	setBlockState,
@@ -43,7 +43,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundColor')
 					);
@@ -69,7 +69,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundColor')
 					);
@@ -91,7 +91,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Background', 'BG Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundColor')
 					);
@@ -130,7 +130,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundColor')
 					);
@@ -176,7 +176,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundColor')
 					);
@@ -215,7 +215,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundColor')
 					);
@@ -258,7 +258,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundHoverColor')
 					);
@@ -286,7 +286,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundHoverColor')
 					);
@@ -309,7 +309,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Background', 'BG Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundHoverColor')
 					);
@@ -349,7 +349,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundHoverColor')
 					);
@@ -397,7 +397,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundHoverColor')
 					);
@@ -437,7 +437,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'backgroundHoverColor')
 					);
@@ -483,7 +483,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'initialColor')
 					);
@@ -509,7 +509,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'initialColor')
 					);
@@ -531,7 +531,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'initialColor')
 					);
@@ -570,7 +570,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'initialColor')
 					);
@@ -616,7 +616,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'initialColor')
 					);
@@ -655,7 +655,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'initialColor')
 					);
@@ -698,7 +698,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'hoverColor')
 					);
@@ -726,7 +726,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'hoverColor')
 					);
@@ -749,7 +749,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'hoverColor')
 					);
@@ -789,7 +789,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'hoverColor')
 					);
@@ -837,7 +837,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'hoverColor')
 					);
@@ -877,7 +877,7 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'hoverColor')
 					);

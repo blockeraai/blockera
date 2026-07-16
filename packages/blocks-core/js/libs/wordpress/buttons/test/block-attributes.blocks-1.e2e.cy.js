@@ -4,7 +4,7 @@
 import {
 	createPost,
 	addBlockToPost,
-	getWPDataObject,
+	assertBlockData,
 	getBlockType,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
@@ -19,7 +19,7 @@ describe('Testing core/buttons block registered default attributes value', () =>
 
 		cy.getBlock('core/buttons').first().click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const attributes = getBlockType(data, 'core/buttons').attributes;
 
 			// Assertion for sync registered default "blockeraDisplay" value with selected block "blockeraDisplay" value.

@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -29,7 +29,7 @@ describe('Text Orientation → Functionality', () => {
 			.and('have.css', 'text-orientation', 'mixed');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('style-1').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
@@ -46,7 +46,7 @@ describe('Text Orientation → Functionality', () => {
 			.and('have.css', 'text-orientation', 'mixed');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('style-2').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
@@ -63,7 +63,7 @@ describe('Text Orientation → Functionality', () => {
 			.and('have.css', 'text-orientation', 'upright');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('style-3').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
@@ -80,7 +80,7 @@ describe('Text Orientation → Functionality', () => {
 			.and('have.css', 'text-orientation', 'upright');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('style-4').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
@@ -97,7 +97,7 @@ describe('Text Orientation → Functionality', () => {
 			.and('have.css', 'text-orientation', 'mixed');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('initial').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextOrientation')
 			);

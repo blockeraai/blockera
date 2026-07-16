@@ -1,7 +1,7 @@
 import {
 	savePage,
 	openSiteEditor,
-	getWPDataObject,
+	assertBlockData,
 	closeWelcomeGuide,
 	redirectToFrontPage,
 	getSelectedBlockStyle,
@@ -27,7 +27,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		cy.setColorControlValue('BG Color', '666666');
 
 		//assert data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraBackgroundColor?.value
@@ -66,7 +66,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		cy.selectValueAddonItem('accent-4');
 
 		//assert data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Accent 4',

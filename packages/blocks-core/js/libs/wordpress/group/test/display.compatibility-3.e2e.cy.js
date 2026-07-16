@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	setInnerBlock,
 	setBlockState,
 	addBlockState,
@@ -40,7 +40,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -56,7 +56,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -73,7 +73,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default value for display in Group block is 'constrained'
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
@@ -107,7 +107,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -129,7 +129,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-grid');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('grid').to.be.equal(
@@ -146,7 +146,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Grid').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default value for display in Group block is 'constrained'
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
@@ -180,7 +180,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -202,7 +202,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-grid');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('grid').to.be.equal(
@@ -219,7 +219,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Grid').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default value for display in Group block is 'constrained'
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
@@ -253,7 +253,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('grid').to.be.equal(
@@ -271,7 +271,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-row');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -288,7 +288,7 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			// default value for display in Group block is 'constrained'
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type

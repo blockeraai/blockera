@@ -1,7 +1,7 @@
 import {
 	savePage,
 	createPost,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	setBoxPositionSide,
@@ -45,7 +45,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'Left', '80px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'relative',
 					position: {
@@ -94,7 +94,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'left', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -118,7 +118,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'right', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -142,7 +142,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'left', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -166,7 +166,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'right', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -191,7 +191,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'right', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -216,7 +216,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'right', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -241,7 +241,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'right', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -266,7 +266,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'left', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -292,7 +292,7 @@ describe('Box Position → Functionality', () => {
 				.and('have.css', 'left', '0px');
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -313,7 +313,7 @@ describe('Box Position → Functionality', () => {
 			).click();
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -569,7 +569,7 @@ describe('Box Position → Functionality', () => {
 		cy.getByAriaLabel('Set 80px').click();
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				type: 'relative',
 				position: {
@@ -591,7 +591,7 @@ describe('Box Position → Functionality', () => {
 				cy.getByAriaLabel('Remove value').click();
 			});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraPosition')?.position?.top
 			);
@@ -607,7 +607,7 @@ describe('Box Position → Functionality', () => {
 				cy.getByAriaLabel('Remove value').click();
 			});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraPosition')?.position?.right
 			);
@@ -623,7 +623,7 @@ describe('Box Position → Functionality', () => {
 				cy.getByAriaLabel('Remove value').click();
 			});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraPosition')?.position?.bottom
 			);
@@ -639,7 +639,7 @@ describe('Box Position → Functionality', () => {
 				cy.getByAriaLabel('Remove value').click();
 			});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraPosition')?.position?.left
 			);

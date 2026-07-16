@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Background Color → WP Compatibility', () => {
@@ -34,7 +34,7 @@ describe('Background Color → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#ffdfdf').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -48,7 +48,7 @@ describe('Background Color → WP Compatibility', () => {
 			cy.setColorControlValue('BG Color', '#666666');
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#666666').to.be.equal(
 					getSelectedBlock(data, 'style')?.color?.background
 				);
@@ -62,13 +62,13 @@ describe('Background Color → WP Compatibility', () => {
 			cy.clearColorControlValue('BG Color');
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.color?.background
 				);
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -95,7 +95,7 @@ describe('Background Color → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					settings: {
 						name: 'Accent 3',
@@ -132,7 +132,7 @@ describe('Background Color → WP Compatibility', () => {
 			cy.selectValueAddonItem('contrast');
 
 			// Check WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('contrast').to.be.equal(
 					getSelectedBlock(data, 'backgroundColor')
 				);
@@ -148,7 +148,7 @@ describe('Background Color → WP Compatibility', () => {
 			});
 
 			// Check WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'backgroundColor')
 				);
@@ -176,7 +176,7 @@ describe('Background Color → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					settings: {
 						name: 'unknown',
@@ -213,7 +213,7 @@ describe('Background Color → WP Compatibility', () => {
 			});
 
 			// Check WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'backgroundColor')
 				);

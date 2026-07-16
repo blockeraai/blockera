@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -24,7 +24,7 @@ describe('Direction → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'direction', 'rtl');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('rtl').to.be.equal(
 				getSelectedBlock(data, 'blockeraDirection')
 			);

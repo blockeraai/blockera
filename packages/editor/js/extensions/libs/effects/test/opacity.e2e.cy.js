@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -27,7 +27,7 @@ describe('Opacity → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('50%').to.be.equal(
 				getSelectedBlock(data, 'blockeraOpacity')
 			);

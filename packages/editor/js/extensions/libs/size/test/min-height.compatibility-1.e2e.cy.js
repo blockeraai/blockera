@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -42,7 +42,7 @@ describe('Min Height → WP Compatibility', () => {
 
 			cy.addNewTransition();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraMinHeight')
 				);
@@ -53,7 +53,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('@containerInput').type('1', { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(3001).to.be.equal(getSelectedBlock(data, 'minHeight'));
 				expect('px').to.be.equal(
 					getSelectedBlock(data, 'minHeightUnit')
@@ -64,7 +64,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'minHeight')
 				);
@@ -104,7 +104,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('select').select('px');
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraMinHeight')
 				);
@@ -123,7 +123,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('select').select('%');
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(200).to.be.equal(getSelectedBlock(data, 'minHeight'));
 
 				expect('%').to.be.equal(
@@ -135,7 +135,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'minHeight')
 				);
@@ -164,7 +164,7 @@ describe('Min Height → WP Compatibility', () => {
 
 			cy.addNewTransition();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraMinHeight')
 				);
@@ -175,7 +175,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('@containerInput').type('1', { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('3001px').to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.minHeight
 				);
@@ -185,7 +185,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.minHeight
 				);

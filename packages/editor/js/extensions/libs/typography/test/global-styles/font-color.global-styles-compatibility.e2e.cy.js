@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -65,7 +65,7 @@ describe('Font Color → WP Compatibility (Global Styles)', () => {
 	describe('Paragraph Block', () => {
 		describe('Simple Value', () => {
 			it('Simple Value', () => {
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('#ffbaba').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraFontColor?.value
 					);
@@ -73,7 +73,7 @@ describe('Font Color → WP Compatibility (Global Styles)', () => {
 
 				cy.setColorControlValue('Text Color', '#666666');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('#666666').to.equal(
 						getParagraphGlobalStyles(data)?.color?.text
 					);
@@ -81,7 +81,7 @@ describe('Font Color → WP Compatibility (Global Styles)', () => {
 
 				cy.clearColorControlValue('Text Color');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.color?.text);
 					expect(undefined).to.equal(root?.blockeraFontColor?.value);
@@ -93,7 +93,7 @@ describe('Font Color → WP Compatibility (Global Styles)', () => {
 			it('Variable Value', () => {
 				cy.getParentContainer('Text Color').as('container');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 
 					expect({
@@ -123,7 +123,7 @@ describe('Font Color → WP Compatibility (Global Styles)', () => {
 
 				cy.selectValueAddonItem('contrast');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var(--wp--preset--color--accent-3)').to.equal(
 						getParagraphGlobalStyles(data)?.color?.text
 					);
@@ -133,7 +133,7 @@ describe('Font Color → WP Compatibility (Global Styles)', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.color?.text);
 					expect(undefined).to.equal(root?.blockeraFontColor?.value);

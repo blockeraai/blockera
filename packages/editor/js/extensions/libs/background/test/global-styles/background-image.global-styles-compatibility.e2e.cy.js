@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -96,7 +96,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 				openParagraphGlobalStyles();
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const blockeraBackground =
 						getParagraphGlobalStyles(data)?.blockeraBackground;
 
@@ -133,7 +133,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 						});
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const gradient =
 						getParagraphGlobalStyles(data)?.color?.gradient;
 
@@ -148,7 +148,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 					});
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const gradient =
 						getParagraphGlobalStyles(data)?.color?.gradient;
 
@@ -160,7 +160,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 				openParagraphGlobalStyles();
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					const blockeraBackground = root?.blockeraBackground;
 					const gradient = root?.color?.gradient;
@@ -210,7 +210,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 
 				cy.selectValueAddonItem('light-green-cyan-to-vivid-green-cyan');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const gradient =
 						getParagraphGlobalStyles(data)?.color?.gradient;
 
@@ -225,7 +225,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 					});
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const gradient =
 						getParagraphGlobalStyles(data)?.color?.gradient;
 
@@ -237,7 +237,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 				openParagraphGlobalStyles();
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					const blockeraBackground = root?.blockeraBackground;
 					const gradient = root?.color?.gradient;
@@ -288,7 +288,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 				openParagraphGlobalStyles();
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const blockeraBackground =
 						getParagraphGlobalStyles(data)?.blockeraBackground;
 
@@ -322,7 +322,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 						cy.get('[data-value="farthest-side"]').click();
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const gradient =
 						getParagraphGlobalStyles(data)?.color?.gradient;
 
@@ -337,7 +337,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 					});
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const gradient =
 						getParagraphGlobalStyles(data)?.color?.gradient;
 
@@ -353,7 +353,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 				openGroupGlobalStyles();
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const blockeraBackground =
 						getGroupGlobalStyles(data)?.blockeraBackground;
 
@@ -388,7 +388,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 						cy.get('[data-value="cover"]').click();
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const backgroundImage =
 						getGroupGlobalStyles(data)?.background?.backgroundImage;
 
@@ -404,7 +404,7 @@ describe('Background Image & Gradient → WP Compatibility (Global Styles)', () 
 					cy.getByAriaLabel('Delete image 0').click({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getGroupGlobalStyles(data);
 					const backgroundImage = root?.background?.backgroundImage;
 					const blockeraBackground = root?.blockeraBackground;

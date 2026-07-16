@@ -1,7 +1,7 @@
 import {
 	savePage,
 	createPost,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -26,7 +26,7 @@ describe('Text Align → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('center').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextAlign')
 			);

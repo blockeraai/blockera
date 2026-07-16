@@ -3,7 +3,7 @@
  */
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -26,7 +26,7 @@ describe('Height → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'height', '80px');
 
 		// Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('80px').to.be.equal(
 				getSelectedBlock(data, 'blockeraHeight')
 			);
@@ -58,7 +58,7 @@ describe('Height → Functionality', () => {
 		});
 
 		// Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Content Width',

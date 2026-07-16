@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -32,7 +32,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('500px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -50,7 +50,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(100).to.be.equal(getSelectedBlock(data, 'width'));
 
 				expect('px').to.be.equal(getSelectedBlock(data, 'widthUnit'));
@@ -66,7 +66,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 
 				expect(undefined).to.be.equal(
@@ -93,7 +93,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('500px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -110,7 +110,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should NOT be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 
 				expect(undefined).to.be.equal(
@@ -131,7 +131,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(100).to.be.equal(getSelectedBlock(data, 'width'));
 
 				expect('%').to.be.equal(getSelectedBlock(data, 'widthUnit'));
@@ -158,7 +158,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('100px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -176,7 +176,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(200).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -190,7 +190,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -213,7 +213,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('100px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -232,7 +232,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -246,7 +246,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -269,7 +269,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(100).to.be.equal(getSelectedBlock(data, 'size'));
 				expect('100px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
@@ -288,7 +288,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(200).to.be.equal(getSelectedBlock(data, 'size'));
 			});
 
@@ -302,7 +302,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'size'));
 			});
 		});
@@ -323,7 +323,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('100px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -342,7 +342,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'size'));
 			});
 
@@ -356,7 +356,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'size'));
 			});
 		});
@@ -385,7 +385,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('25%').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -403,7 +403,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(50).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -417,7 +417,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -444,7 +444,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('25%').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -464,7 +464,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -478,7 +478,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -507,7 +507,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('500px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -525,7 +525,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('200px').to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -539,7 +539,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -559,7 +559,7 @@ describe('Width → WP Compatibility', () => {
 
 			cy.addNewTransition();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const widthVA = getSelectedBlock(data, 'blockeraWidth');
 
 				expect(widthVA).to.deep.include({
@@ -574,7 +574,7 @@ describe('Width → WP Compatibility', () => {
 				});
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const wpWidth = getSelectedBlock(data, 'width');
 
 				expect(wpWidth).to.be.a('string');
@@ -610,7 +610,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -630,7 +630,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -644,7 +644,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -680,7 +680,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('200px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -698,7 +698,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -712,7 +712,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -746,7 +746,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('20%').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -762,7 +762,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -787,7 +787,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('200px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -805,7 +805,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(getSelectedBlock(data, 'width'));
 			});
 
@@ -819,7 +819,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
@@ -842,7 +842,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('30%').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -858,7 +858,7 @@ describe('Width → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 			});
 		});
