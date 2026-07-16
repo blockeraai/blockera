@@ -531,6 +531,22 @@ function notePopoverPointerInteraction(target: ?EventTarget): void {
 	syncModalOpenedFromPopoverRoot();
 }
 
+function isModalOpenedFromPopoverOrNestedChild(
+	popoverRoot: HTMLElement
+): boolean {
+	if (!(modalOpenedFromPopoverRoot instanceof HTMLElement)) {
+		return false;
+	}
+
+	if (isSamePopoverRoot(modalOpenedFromPopoverRoot, popoverRoot)) {
+		return true;
+	}
+
+	// Delete/confirm modals often open from a nested preset edit popover; keep
+	// the parent (e.g. variable picker) open for the full modal interaction.
+	return isPopoverNestedChildOf(modalOpenedFromPopoverRoot, popoverRoot);
+}
+
 function isModalInteractionIgnoredForPopover(
 	popoverRoot: ?HTMLElement,
 	target: ?EventTarget
@@ -549,11 +565,12 @@ function isModalInteractionIgnoredForPopover(
 		return true;
 	}
 
-	if (!(modalOpenedFromPopoverRoot instanceof HTMLElement)) {
-		return false;
-	}
+	// Modal can steal focus as soon as it mounts — associate it with the last
+	// in-popover interaction before evaluating dismiss (do not wait for the next
+	// pointer event inside the modal).
+	syncModalOpenedFromPopoverRoot();
 
-	return modalOpenedFromPopoverRoot === normalizedRoot;
+	return isModalOpenedFromPopoverOrNestedChild(normalizedRoot);
 }
 
 /**
