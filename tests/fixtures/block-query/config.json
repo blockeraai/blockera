@@ -1,0 +1,15 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"editor-search-replace": [
+		{
+			"search": "<div([^>]*\\bwp-block-query-total\\b[^>]*)>\\d+ results? found</div>",
+			"replace": "<div$1>2 results found</div>"
+		}
+	],
+	"frontend-search-replace": [
+		{
+			"search": "<div([^>]*\\bwp-block-query-total\\b[^>]*)>\\d+ results? found</div>",
+			"replace": "<div$1>2 results found</div>"
+		}
+	]
+}

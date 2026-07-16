@@ -1,0 +1,15 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"editor-search-replace": [
+		{
+			"search": "<time datetime=\"[^\"]+\">[^<]*</time>",
+			"replace": "<time datetime=\"Month Day, Year\">Month Day, Year</time>"
+		}
+	],
+	"frontend-search-replace": [
+		{
+			"search": "<time datetime=\"[^\"]+\"( class=\"[^\"]+\")?>([^<]*)</time>",
+			"replace": "<time datetime=\"Month Day, Year\"$1>Month Day, Year</time>"
+		}
+	]
+}

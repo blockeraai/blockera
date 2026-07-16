@@ -19,16 +19,68 @@ const {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
+	applyDomSearchReplace,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	setDeviceType,
 } = require('@blockera/dev-playwright/js/utils/responsive');
 
 /**
- * Optionally limit runs to one fixture folder under tests/fixtures (e.g. '1').
- * Set to `null` to run all fixtures.
+ * Optional CI batch list from `VISUAL_SNAPSHOT_FIXTURES` (comma-separated folder names).
+ * Set by GitHub Actions matrix jobs; local runs leave this unset to exercise all fixtures.
  */
-const VISUAL_ONLY_SECTION = null;
+function getEnvFixtureList() {
+	const raw = process.env.VISUAL_SNAPSHOT_FIXTURES;
+
+	if (!raw || !raw.trim()) {
+		return null;
+	}
+
+	return new Set(
+		raw
+			.split(',')
+			.map((name) => name.trim())
+			.filter(Boolean)
+	);
+}
+
+/**
+ * Optional PR allowlist from `.pr-playwright.env.json` → `visualSnapshotFixtures`.
+ * Missing key or empty array → run all fixtures (unless CI env list is set).
+ */
+function getVisualSnapshotFixtureAllowlist() {
+	const prEnvPath = path.join(__dirname, '..', '.pr-playwright.env.json');
+
+	if (!fs.existsSync(prEnvPath)) {
+		return null;
+	}
+
+	try {
+		const prEnv = JSON.parse(fs.readFileSync(prEnvPath, 'utf8'));
+		const allowlist = prEnv.visualSnapshotFixtures;
+
+		if (!Array.isArray(allowlist) || allowlist.length === 0) {
+			return null;
+		}
+
+		return new Set(allowlist);
+	} catch (error) {
+		// @debug-ignore
+		console.warn(
+			'Failed to read visualSnapshotFixtures from .pr-playwright.env.json:',
+			error.message
+		);
+		return null;
+	}
+}
+
+/**
+ * Resolve which fixture folders are allowed for this run.
+ * CI env list wins (already batched + allowlist-filtered); otherwise PR allowlist; else all.
+ */
+function getFixtureFilter() {
+	return getEnvFixtureList() || getVisualSnapshotFixtureAllowlist();
+}
 
 /**
  * Load all test fixtures from tests/fixtures directory
@@ -41,13 +93,15 @@ function loadFixtures() {
 		return sections;
 	}
 
+	const allowlist = getFixtureFilter();
 	const fixtureFolders = fs
 		.readdirSync(fixturesDir, { withFileTypes: true })
 		.filter((dirent) => dirent.isDirectory())
-		.map((dirent) => dirent.name);
+		.map((dirent) => dirent.name)
+		.sort();
 
 	for (const sectionId of fixtureFolders) {
-		if (VISUAL_ONLY_SECTION && sectionId !== VISUAL_ONLY_SECTION) {
+		if (allowlist && !allowlist.has(sectionId)) {
 			continue;
 		}
 		const sectionDir = path.join(fixturesDir, sectionId);
@@ -108,7 +162,12 @@ function loadFixtures() {
 		const shouldScreenshot = !config || config.screenshot !== false;
 
 		if (shouldScreenshot) {
-			sections[sectionId] = { setupFn, frontendSetupFn, sectionContent };
+			sections[sectionId] = {
+				setupFn,
+				frontendSetupFn,
+				sectionContent,
+				config,
+			};
 		}
 	}
 
@@ -116,7 +175,24 @@ function loadFixtures() {
 }
 
 const sections = loadFixtures();
-const failures = [];
+
+/**
+ * Screenshot options shared by all visual assertions in this file.
+ *
+ * Use expect.soft (not try/catch + afterAll): catching toHaveScreenshot marks the
+ * test as passed, and deferring failure to afterAll is attributed to the last test.
+ * On CI retries that last test alone gets a fresh empty failures array, so real
+ * mismatches become "flaky" and exit 0 (failOnFlakyTests: false). Soft assertions
+ * keep every screenshot failure on the fixture that produced it.
+ *
+ * maxDiffPixels: Chromium sub-pixel font AA can flip a handful of fringe pixels
+ * (e.g. buttons `::after` label) between runs with no visible change. threshold
+ * stays strict for color; allow a tiny absolute pixel count for that noise.
+ */
+const screenshotOptions = {
+	threshold: 0.02,
+	maxDiffPixels: 25,
+};
 
 test.describe('Sections Visual Snapshots', () => {
 	for (const section of Object.keys(sections)) {
@@ -124,6 +200,7 @@ test.describe('Sections Visual Snapshots', () => {
 		const sectionContent = sectionData.sectionContent || '';
 		const setupFn = sectionData?.setupFn;
 		const frontendSetupFn = sectionData?.frontendSetupFn;
+		const config = sectionData?.config;
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
 			if (!sectionContent) {
@@ -167,42 +244,43 @@ test.describe('Sections Visual Snapshots', () => {
 				const editorContainer =
 					iframeBody.locator('.is-root-container');
 
+				const editorSearchReplace =
+					config?.['editor-search-replace'] || null;
+				const frontendSearchReplace =
+					config?.['frontend-search-replace'] || null;
+
 				// Set viewport and adjust iframe height for full element capture
 				await setEditorViewportForScreenshot(page, 'desktop');
 
-				try {
-					await expect(editorContainer).toHaveScreenshot(
+				await applyDomSearchReplace(
+					editorContainer,
+					editorSearchReplace
+				);
+
+				await expect
+					.soft(editorContainer)
+					.toHaveScreenshot(
 						`test-${section}-editor-desktop.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-editor-desktop`,
-						error: error.message,
-					});
-				}
 
 				await setDeviceType(page, 'Mobile Portrait');
 
 				// Set viewport and adjust iframe height for full element capture (mobile)
 				await setEditorViewportForScreenshot(page, 'mobile');
 
+				await applyDomSearchReplace(
+					editorContainer,
+					editorSearchReplace
+				);
+
 				// Editor Mobile Snapshot
-				try {
-					await expect(editorContainer).toHaveScreenshot(
+				await expect
+					.soft(editorContainer)
+					.toHaveScreenshot(
 						`test-${section}-editor-mobile.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-editor-mobile`,
-						error: error.message,
-					});
-				}
 
 				// Check frontend
 				await savePage(page);
@@ -223,38 +301,34 @@ test.describe('Sections Visual Snapshots', () => {
 				const entryContent = page.locator('.entry-content').first();
 				await entryContent.scrollIntoViewIfNeeded();
 
-				try {
-					await expect(entryContent).toHaveScreenshot(
+				await applyDomSearchReplace(
+					entryContent,
+					frontendSearchReplace
+				);
+
+				await expect
+					.soft(entryContent)
+					.toHaveScreenshot(
 						`test-${section}-frontend-desktop.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-frontend-desktop`,
-						error: error.message,
-					});
-				}
 
 				await setFrontendViewportForScreenshot(page, 'mobile');
 
 				// Frontend Mobile Snapshot
 				await entryContent.scrollIntoViewIfNeeded();
 
-				try {
-					await expect(entryContent).toHaveScreenshot(
+				await applyDomSearchReplace(
+					entryContent,
+					frontendSearchReplace
+				);
+
+				await expect
+					.soft(entryContent)
+					.toHaveScreenshot(
 						`test-${section}-frontend-mobile.png`,
-						{
-							threshold: 0.02,
-						}
+						screenshotOptions
 					);
-				} catch (error) {
-					failures.push({
-						name: `test-${section}-frontend-mobile`,
-						error: error.message,
-					});
-				}
 			} finally {
 				// Deactivate mu-plugin if it was activated
 				if (muPluginActivated) {
@@ -263,16 +337,4 @@ test.describe('Sections Visual Snapshots', () => {
 			}
 		});
 	}
-
-	test.afterAll(() => {
-		// After all tests, check if any failed and throw combined error
-		if (failures.length > 0) {
-			const errorMessage = failures
-				.map((f, i) => `\n${i + 1}. ${f.name}:\n   ${f.error}`)
-				.join('\n');
-			throw new Error(
-				`${failures.length} screenshot(s) failed:${errorMessage}`
-			);
-		}
-	});
 });

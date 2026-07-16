@@ -32,7 +32,7 @@
 	color: #16d500;
 }
 
-html:root body :where(.blockera-block.blockera-block-4.wp-block-icon svg).wp-block-icon svg {
+html:root body :where(.blockera-block.blockera-block-4.wp-block-icon) svg {
 	border: 1px solid #ff3636;
 	border-radius: 20px;
 }

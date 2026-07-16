@@ -13,6 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'border' => 'li',
 				'blockera/elements/item' => [
 					'root' => ':where(li)',
 				],

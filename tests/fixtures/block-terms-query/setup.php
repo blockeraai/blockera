@@ -27,33 +27,41 @@ if (!is_array($data) || !isset($data['post']) || !isset($data['categories'])) {
 
 $category_description = $data['category_description'] ?? '';
 
-// Step 1: Create categories with descriptions
+// Step 1: Create categories with descriptions.
+// core/term-description returns '' when the term has no description, so the
+// fixture description must always be applied (create and update paths).
 $category_ids = [];
 foreach ($data['categories'] as $category_name) {
-	// Check if category already exists
 	$term = get_term_by('name', $category_name, 'category');
-	
+
 	if (!$term) {
-		// Create the category with description
-		$term_args = [];
-		if (!empty($category_description)) {
-			$term_args['description'] = $category_description;
-		}
-		
-		$term_result = wp_insert_term($category_name, 'category', $term_args);
-		
+		$term_result = wp_insert_term(
+			$category_name,
+			'category',
+			['description' => $category_description]
+		);
+
 		if (is_wp_error($term_result)) {
 			throw new \Exception('Failed to create category: ' . $term_result->get_error_message());
 		}
-		
+
 		$category_ids[] = $term_result['term_id'];
-	} else {
-		// Update description if it doesn't match
-		if (!empty($category_description) && $term->description !== $category_description) {
-			wp_update_term($term->term_id, 'category', ['description' => $category_description]);
-		}
-		$category_ids[] = $term->term_id;
+		continue;
 	}
+
+	if ($term->description !== $category_description) {
+		$update_result = wp_update_term(
+			$term->term_id,
+			'category',
+			['description' => $category_description]
+		);
+
+		if (is_wp_error($update_result)) {
+			throw new \Exception('Failed to update category description: ' . $update_result->get_error_message());
+		}
+	}
+
+	$category_ids[] = $term->term_id;
 }
 
 // Step 2: Create post

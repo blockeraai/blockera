@@ -3,9 +3,10 @@
  * Playwright e2e test
  */
 const { goTo } = require('@blockera/dev-playwright/js/utils/helpers');
-const { test } = require('@blockera/dev-playwright/js/support/commands');
-
-const failures = [];
+const {
+	test,
+	expect,
+} = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Blockera Dashboard → Visual Test', () => {
 	test('screenshot dashboard', async ({ page }) => {
@@ -42,27 +43,10 @@ test.describe('Blockera Dashboard → Visual Test', () => {
 			height: 1500,
 		});
 
-		try {
-			await expect(entryContent).toHaveScreenshot(`dashboard.png`, {
-				threshold: 0.02,
-			});
-		} catch (error) {
-			failures.push({
-				name: 'dashboard',
-				error: error.message,
-			});
-		}
-	});
-
-	test.afterAll(() => {
-		// After all tests, check if any failed and throw combined error
-		if (failures.length > 0) {
-			const errorMessage = failures
-				.map((f, i) => `\n${i + 1}. ${f.name}:\n   ${f.error}`)
-				.join('\n');
-			throw new Error(
-				`${failures.length} screenshot(s) failed:${errorMessage}`
-			);
-		}
+		// Soft assertion keeps the failure on this test (avoid try/catch + afterAll,
+		// which can be misreported as flaky on CI retries).
+		await expect.soft(body).toHaveScreenshot(`dashboard.png`, {
+			threshold: 0.02,
+		});
 	});
 });

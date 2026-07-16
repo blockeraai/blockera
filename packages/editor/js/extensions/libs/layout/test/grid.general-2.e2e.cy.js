@@ -219,9 +219,25 @@ describe('Grid Layout → Functionality', () => {
 	});
 
 	it('persists grid on the front end after save', () => {
+		// Wait between inputs so min width commits before column count
+		// (typing both without a settle left only repeat(N) on the front).
 		cy.typeInInputByDataTest('layout-grid-minimum-column-width', '9rem');
+		cy.waitForAssertValue();
 		cy.typeInInputByDataTest('layout-grid-column-count', '2');
 		cy.waitForAssertValue();
+
+		getWPDataObject().then((data) => {
+			expect(
+				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
+			).to.equal('9rem');
+			expect(getSelectedBlock(data, 'blockeraGridColumnCount')).to.equal(
+				2
+			);
+		});
+
+		assertEditorBlockeraStylesInclude('max(min(');
+		assertEditorBlockeraStylesInclude('9rem');
+		assertEditorBlockeraStylesInclude('repeat(auto-fill');
 
 		savePage();
 		redirectToFrontPage();
