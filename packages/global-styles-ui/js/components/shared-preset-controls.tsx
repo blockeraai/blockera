@@ -50,7 +50,7 @@ import {
 import { usePresetVariationsStorageOptional } from '../context/preset-variations-context';
 import { isNameBasedTaxonomyPreset } from './preset-taxonomy/parse-preset-name-taxonomy';
 import { resolvePresetTaxonomyEditName } from './preset-taxonomy/taxonomy-meta';
-import { usePresetTaxonomyEditSessionOptional } from './preset-taxonomy/preset-taxonomy-edit-session-context';
+import { usePresetTaxonomyEditSessionActionsOptional } from './preset-taxonomy/preset-taxonomy-edit-session-context';
 
 export interface SharedPresetControlsProps<
 	T extends VariableType = VariableType,
@@ -81,7 +81,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		canEditGlobalStyles ||
 		(isVariablePicker && canEditCustomPresetFieldsInPicker);
 	const presetLocked = !canEditPresetFields;
-	const editSession = usePresetTaxonomyEditSessionOptional();
+	const editSessionActions = usePresetTaxonomyEditSessionActionsOptional();
 	const storage = usePresetVariationsStorageOptional();
 	const taxonomyNameSource = storage?.taxonomyNameSource;
 
@@ -106,7 +106,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const itemIdKey = String(itemId);
 	const isCreating = variable.creatingStep === true;
 	// Local drafts during creatingStep keep inputs stable; repeater rows still sync via changeRepeaterItem.
-	const deferFieldEdits = Boolean(editSession) && !isCreating;
+	const deferFieldEdits = Boolean(editSessionActions) && !isCreating;
 	const deferNameEdits = deferFieldEdits;
 	// Description stays in a local draft during create to avoid textarea/store sync fights in the picker.
 	const deferDescriptionEdits = deferFieldEdits || isCreating;
@@ -627,27 +627,34 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		variable,
 	]);
 
+	const flushPendingFieldEditsRef = useRef(flushPendingFieldEdits);
+	flushPendingFieldEditsRef.current = flushPendingFieldEdits;
+
 	useEffect(() => {
-		if (!editSession) {
+		if (!editSessionActions) {
 			return;
 		}
-		editSession.registerFlush(slugKey, flushPendingFieldEdits);
+		const key = slugKey;
+		editSessionActions.registerFlush(key, () =>
+			flushPendingFieldEditsRef.current()
+		);
 		return () => {
-			editSession.unregisterFlush(slugKey);
+			editSessionActions.unregisterFlush(key);
 		};
-	}, [editSession, flushPendingFieldEdits, slugKey]);
+	}, [editSessionActions, slugKey]);
 
 	// Flat repeater popovers mount these fields only while open; defer name persist + tree regroup until close.
 	useLayoutEffect(() => {
-		if (!editSession) {
+		if (!editSessionActions) {
 			return;
 		}
-		editSession.beginEditSession(slugKey);
+		const key = slugKey;
+		editSessionActions.beginEditSession(key);
 		return () => {
-			editSession.flushSession(slugKey);
-			editSession.endEditSession(slugKey);
+			editSessionActions.flushSession(key);
+			editSessionActions.endEditSession(key);
 		};
-	}, [editSession, slugKey]);
+	}, [editSessionActions, slugKey]);
 
 	const displayedName =
 		deferNameEdits || isCreating ? draftName : persistedName;

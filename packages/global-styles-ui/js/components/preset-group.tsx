@@ -74,6 +74,7 @@ import {
 	useCanAddCustomPresetInVariablePicker,
 	useCanEditGlobalStyles,
 } from './use-global-styles-preset-edit';
+import { usePresetTaxonomyEditSessionActiveCount } from './preset-taxonomy/preset-taxonomy-edit-session-context';
 
 function areCreatingStepSlugMapsEqual(
 	a: Record<string, true>,
@@ -393,6 +394,8 @@ export const PresetGroup = memo(function PresetGroup({
 	const canAddCustomPresetInPicker = useCanAddCustomPresetInVariablePicker();
 	const usesIndexRepeaterItemIds = !isPresetRepeaterObjectValue(variables);
 	const repeaterStoreDispatch = useDispatch('blockera/controls/repeater');
+	const activeEditSessionCount = usePresetTaxonomyEditSessionActiveCount();
+	const skipRepeaterValueSync = activeEditSessionCount > 0;
 	const isVariablePicker =
 		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
 	// Outer picker category titles replace theme/default labels only; custom keeps its header + add button.
@@ -737,16 +740,19 @@ export const PresetGroup = memo(function PresetGroup({
 	const stableRepeaterContextRef = useRef<{
 		name: string;
 		value: PresetRepeaterValue;
+		skipSyncValue?: boolean;
 	} | null>(null);
 
 	const repeaterContextValue = useMemo(() => {
 		const name = repeaterControlName;
 		const prev = stableRepeaterContextRef.current;
+		const skipSyncValue = skipRepeaterValueSync ? true : undefined;
 
 		if (
 			prev &&
 			prev.name === name &&
-			isEquals(prev.value, variablesForRepeater)
+			isEquals(prev.value, variablesForRepeater) &&
+			prev.skipSyncValue === skipSyncValue
 		) {
 			return prev;
 		}
@@ -754,10 +760,11 @@ export const PresetGroup = memo(function PresetGroup({
 		const next = {
 			name,
 			value: variablesForRepeater,
+			...(skipSyncValue ? { skipSyncValue: true } : {}),
 		};
 		stableRepeaterContextRef.current = next;
 		return next;
-	}, [repeaterControlName, variablesForRepeater]);
+	}, [repeaterControlName, variablesForRepeater, skipRepeaterValueSync]);
 
 	useLayoutEffect(() => {
 		if (!usesIndexRepeaterItemIds) {
