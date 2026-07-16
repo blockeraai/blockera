@@ -547,6 +547,47 @@ function isModalOpenedFromPopoverOrNestedChild(
 	return isPopoverNestedChildOf(modalOpenedFromPopoverRoot, popoverRoot);
 }
 
+/**
+ * True when the most recent pointer-down was inside this popover or a nested
+ * child. Used for modal focus-steal: only then should an open modal be treated
+ * as opened from this popover (not every unrelated modal while a stale
+ * interaction root remains).
+ */
+function wasLastPointerInPopoverTree(popoverRoot: HTMLElement): boolean {
+	if (!(lastPopoverPointerDownTarget instanceof Element)) {
+		return false;
+	}
+
+	const normalizedRoot = normalizePopoverRoot(popoverRoot);
+
+	if (!(normalizedRoot instanceof HTMLElement)) {
+		return false;
+	}
+
+	if (normalizedRoot.contains(lastPopoverPointerDownTarget)) {
+		return true;
+	}
+
+	const nestedRoot = getPopoverRoot(lastPopoverPointerDownTarget);
+
+	return (
+		nestedRoot instanceof HTMLElement &&
+		isPopoverNestedChildOf(nestedRoot, normalizedRoot)
+	);
+}
+
+function associateModalWithLastPopoverInteraction(): void {
+	if (!(lastPopoverInteractionRoot instanceof HTMLElement)) {
+		return;
+	}
+
+	if (!hasOpenModalOverlay()) {
+		return;
+	}
+
+	modalOpenedFromPopoverRoot = lastPopoverInteractionRoot;
+}
+
 function isModalInteractionIgnoredForPopover(
 	popoverRoot: ?HTMLElement,
 	target: ?EventTarget
@@ -565,12 +606,22 @@ function isModalInteractionIgnoredForPopover(
 		return true;
 	}
 
-	// Modal can steal focus as soon as it mounts — associate it with the last
-	// in-popover interaction before evaluating dismiss (do not wait for the next
-	// pointer event inside the modal).
-	syncModalOpenedFromPopoverRoot();
+	if (isModalOpenedFromPopoverOrNestedChild(normalizedRoot)) {
+		return true;
+	}
 
-	return isModalOpenedFromPopoverOrNestedChild(normalizedRoot);
+	// Focus-steal path: modal mounts and moves focus before any pointer event
+	// inside it. Only associate when the click that opened the modal was inside
+	// this popover tree — preserve dismiss for unrelated modals.
+	if (hasOpenModalOverlay() && wasLastPointerInPopoverTree(normalizedRoot)) {
+		associateModalWithLastPopoverInteraction();
+		return (
+			isModalOpenedFromPopoverOrNestedChild(normalizedRoot) ||
+			wasLastPointerInPopoverTree(normalizedRoot)
+		);
+	}
+
+	return false;
 }
 
 /**
