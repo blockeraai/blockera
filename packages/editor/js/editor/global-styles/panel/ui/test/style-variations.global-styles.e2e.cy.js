@@ -19,10 +19,17 @@ import {
  * theme variations flagged `hasNewID`/`isDeleted`. So a prior run's delete leaves
  * `style-section-1` permanently unregistered and the whole suite can no longer run.
  *
- * To clear it we must persist an EMPTY *but present* `styles.blockeraMetaData`
- * (SavePost only rewrites the cache when that key exists, and resetting `styles`
- * to `{}` would drop the key and leave the stale cache), then reload so bootstrap
- * re-registers the pristine theme variations.
+ * Clearing meta alone is not enough: rename-with-new-id also writes the new slug
+ * into `styles.blocks.*.variations`. On the next load,
+ * `JSONResolver::register_block_style_variations_from_user_data` re-registers that
+ * leftover variation. With empty meta it invents a label from the slug
+ * (`new-id` → "New Id"), so `style-new-id` still appears but fails
+ * `should('contain', 'New Name')` in Active/Inactive + delete specs.
+ *
+ * Persist an EMPTY *but present* `styles.blockeraMetaData` (SavePost only rewrites
+ * the cache when that key exists) and drop `styles.blocks` so PHP cannot
+ * re-register orphan slugs, then reload so bootstrap re-registers the pristine
+ * theme variations.
  */
 const resetGroupStyleVariationsBaseline = () => {
 	// Wait until the global styles entity resolves after the Site Editor loads.
@@ -46,6 +53,10 @@ const resetGroupStyleVariationsBaseline = () => {
 		) {
 			blockeraDispatch.setBlockeraGlobalStylesMetaData({});
 		}
+		if (typeof blockeraDispatch?.setGlobalStyles === 'function') {
+			blockeraDispatch.setGlobalStyles({});
+		}
+		win.blockeraGlobalStylesMetaData = {};
 
 		const select = registry.select('core');
 		const dispatch = registry.dispatch('core');
@@ -57,14 +68,10 @@ const resetGroupStyleVariationsBaseline = () => {
 			return;
 		}
 
-		const record = select.getEditedEntityRecord('root', 'globalStyles', id);
-		const styles =
-			record?.styles && 'object' === typeof record.styles
-				? record.styles
-				: {};
-
+		// Keep `blockeraMetaData` present (empty) so SavePost refreshes the meta
+		// cache; omit `blocks` so renamed slugs are not re-registered from user data.
 		dispatch.editEntityRecord('root', 'globalStyles', id, {
-			styles: { ...styles, blockeraMetaData: {} },
+			styles: { blockeraMetaData: {} },
 		});
 	});
 
@@ -161,8 +168,15 @@ const ensureNewIdStyleVariation = (label = 'New Name', id = 'new-id') => {
 	// switching away from `$body.find` was an un-hydrated list, which is now
 	// guaranteed to be ready by `openGroupBlockStyleVariations` (waits for
 	// `style-default`), so `$body.find` reflects the real state.
+	//
+	// Also require the expected label: a leftover `styles.blocks` slug can be
+	// re-registered with a generated label ("New Id") after meta-only resets.
 	cy.get('body').then(($body) => {
-		if ($body.find(`[data-test="style-${id}"]`).length) {
+		const $card = $body.find(`[data-test="style-${id}"]`);
+		const hasExpectedLabel =
+			$card.length > 0 && $card.text().includes(label);
+
+		if (hasExpectedLabel) {
 			cy.getByDataTest(`style-${id}`).should('contain', label);
 		} else {
 			renameSection1WithNewId(label, id);
