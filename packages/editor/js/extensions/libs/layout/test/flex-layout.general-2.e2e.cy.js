@@ -374,7 +374,11 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 		cy.getByAriaLabel(type).click();
 	});
 
+	// Matrix single-click commits are deferred 200ms (dblclick detection). Wait
+	// for the selected UI before changing axis selects — otherwise SelectControl
+	// updates cancel the pending setValue and leave alignItems empty (`normal`).
 	cy.getByDataTest('matrix-top-left-normal').click();
+	cy.getByDataTest('matrix-top-left-selected').should('exist');
 
 	setFlexLayoutSelectOption(axisIndex, unit.optionLabel);
 
