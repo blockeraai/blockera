@@ -5,13 +5,93 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	assertBlockData,
+	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
+
+/**
+ * Restores the theme's group style-variation baseline (default, section-1 …
+ * section-5) and drops any leftover user variations (duplicates, renames).
+ *
+ * Rename/delete/duplicate write markers to `blockeraGlobalStylesMetaData`, which
+ * is persisted to a server meta cache (see
+ * packages/wordpress/php/RenderBlock/SavePost.php) and replayed on every load by
+ * `registerBlockStylesFromMetaData` (block-styles-registry.js) — it unregisters
+ * theme variations flagged `hasNewID`/`isDeleted`. So a prior run's delete leaves
+ * `style-section-1` permanently unregistered and the whole suite can no longer run.
+ *
+ * To clear it we must persist an EMPTY *but present* `styles.blockeraMetaData`
+ * (SavePost only rewrites the cache when that key exists, and resetting `styles`
+ * to `{}` would drop the key and leave the stale cache), then reload so bootstrap
+ * re-registers the pristine theme variations.
+ */
+const resetGroupStyleVariationsBaseline = () => {
+	// Wait until the global styles entity resolves after the Site Editor loads.
+	cy.window({ timeout: 20000 }).should((win) => {
+		const select = win.wp?.data?.select?.('core');
+		const id =
+			select?.__experimentalGetCurrentGlobalStylesId?.() ??
+			select?.getCurrentGlobalStylesId?.();
+		expect(id, 'global styles entity id').to.exist;
+	});
+
+	cy.window().then((win) => {
+		const registry = win.wp.data;
+
+		// Clear Blockera's in-memory rename/delete/duplicate markers first so a
+		// later compatibility-enabled save cannot merge them back.
+		const blockeraDispatch = registry.dispatch('blockera/editor');
+		if (
+			typeof blockeraDispatch?.setBlockeraGlobalStylesMetaData ===
+			'function'
+		) {
+			blockeraDispatch.setBlockeraGlobalStylesMetaData({});
+		}
+
+		const select = registry.select('core');
+		const dispatch = registry.dispatch('core');
+		const id =
+			select.__experimentalGetCurrentGlobalStylesId?.() ??
+			select.getCurrentGlobalStylesId?.();
+
+		if (!id) {
+			return;
+		}
+
+		const record = select.getEditedEntityRecord('root', 'globalStyles', id);
+		const styles =
+			record?.styles && 'object' === typeof record.styles
+				? record.styles
+				: {};
+
+		dispatch.editEntityRecord('root', 'globalStyles', id, {
+			styles: { ...styles, blockeraMetaData: {} },
+		});
+	});
+
+	// Skip compatibility: it re-hydrates theme `styles.blocks` from base config.
+	saveSiteEditorDirtyEntities({ runCompatibility: false });
+
+	// Re-navigate (fresh load) so bootstrap re-reads the now-empty meta cache and
+	// re-registers the pristine theme variations. `openSiteEditor` also waits for
+	// the editor to settle + closes the welcome guide.
+	openSiteEditor();
+};
 
 const openGroupBlockStyleVariations = () => {
 	cy.openGlobalStylesPanel();
 	closeWelcomeGuide();
-	cy.getByDataTest('block-style-variations').eq(0).click();
-	cy.get('button[id="/blocks/core%2Fgroup"]').click();
+	cy.getByDataTest('block-style-variations', { timeout: 20000 })
+		.eq(0)
+		.click();
+	cy.get('button[id="/blocks/core%2Fgroup"]', { timeout: 20000 }).click();
+
+	// Wait for the group's style-variation cards to hydrate before a test queries
+	// a specific slug (style-section-1 / style-new-id). The cards render async from
+	// the global styles entity/registry, so after a save + reload a slow Site Editor
+	// load can exceed the 15s command timeout even though the card renders later.
+	// `style-default` is always present, so it is a reliable "list is ready" signal.
+	// Assert existence (not visibility): cards can sit in a fixed/overflowed panel.
+	cy.getByDataTest('style-default', { timeout: 20000 }).should('exist');
 };
 
 const saveSiteEditor = () => {
@@ -75,15 +155,18 @@ const renameSection1WithNewId = (label = 'New Name', id = 'new-id') => {
 };
 
 const ensureNewIdStyleVariation = (label = 'New Name', id = 'new-id') => {
-	cy.get('body').then(() => {
-		// Cypress .find() is unreliable for checking presence, use Cypress directly:
-		cy.get(`[data-test="style-${id}"]`).then(($el) => {
-			if ($el.length) {
-				cy.wrap($el).should('contain', label);
-			} else {
-				renameSection1WithNewId(label, id);
-			}
-		});
+	// Presence check must be non-throwing so the rename fallback stays reachable
+	// when a prior test/run left no `new-id` card. `cy.get(selector)` retries and
+	// then FAILS on absence (skipping the else branch) — the earlier reason for
+	// switching away from `$body.find` was an un-hydrated list, which is now
+	// guaranteed to be ready by `openGroupBlockStyleVariations` (waits for
+	// `style-default`), so `$body.find` reflects the real state.
+	cy.get('body').then(($body) => {
+		if ($body.find(`[data-test="style-${id}"]`).length) {
+			cy.getByDataTest(`style-${id}`).should('contain', label);
+		} else {
+			renameSection1WithNewId(label, id);
+		}
 	});
 };
 
@@ -162,6 +245,13 @@ const selectBlockByType = (blockName, index = 0) => {
 describe('Style Variations Inside Global Styles Panel → Functionality (Global Styles)', () => {
 	beforeEach(() => {
 		openSiteEditor();
+
+		// Specs rename/delete/duplicate theme variations and persist them to the
+		// global styles entity + server meta cache. Without a reset, a prior run's
+		// delete leaves `style-section-1` unregistered forever and the suite can
+		// never re-run. Restore the pristine theme baseline before every test.
+		resetGroupStyleVariationsBaseline();
+
 		openGroupBlockStyleVariations();
 	});
 
