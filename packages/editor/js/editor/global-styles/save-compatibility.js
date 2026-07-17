@@ -81,17 +81,6 @@ const hasObjectKeys = (value: any): boolean =>
  * Explicit core entity blocks remain authoritative; the local store can still
  * contain stale data from a previous save/editor render.
  *
- * Never merge in the post/page editor (`post.php` / `post-new.php`). There
- * `blockera/editor` still holds the theme-merged baseline blocks (from
- * `initializeGlobalStyles`), so merging would dirty `root/globalStyles` on every
- * post publish — spawning the entities-saved-states panel and breaking the normal
- * post save flow.
- *
- * Gate on the URL (Site Editor vs post editor), NOT on the Global Styles panel
- * being open (`selectedBlockRef`). Closing the panel clears that ref, but a
- * subsequent Site Editor save must still merge local blocks that have not yet
- * been flushed by the debounced `setStyle`.
- *
  * @param {Object} record Edited/persisted global styles entity record.
  * @return {Object} Record styles, with local blocks used only when absent.
  */
@@ -101,18 +90,11 @@ const getRecordStylesWithBlockeraUserStyles = (record: Object): Object => {
 			? record.styles
 			: {};
 
-	// Prefer pathname over store presence: Site Editor can also register
-	// `core/edit-post` when editing a page/post inside `site-editor.php`.
-	const isSiteEditor =
-		typeof window !== 'undefined' &&
-		window.location?.pathname?.includes('site-editor.php');
-
 	const blockeraUserStyles =
 		select('blockera/editor')?.getGlobalStyles?.()?.userStyles;
 	const localBlocks = blockeraUserStyles?.styles?.blocks;
 
 	if (
-		!isSiteEditor ||
 		hasObjectKeys(recordStyles.blocks) ||
 		!localBlocks ||
 		'object' !== typeof localBlocks
