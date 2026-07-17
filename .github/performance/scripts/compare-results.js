@@ -370,19 +370,6 @@ function buildReport(results, primaryMetric, defaults) {
 	);
 	lines.push('');
 	lines.push(
-		`- Primary metric: \`${primaryMetric}\` (fallback: Response Time median)`
-	);
-	lines.push(
-		`- Requests: \`${defaults.requests ?? 50}\`, concurrency: \`${defaults.concurrency ?? 1}\``
-	);
-	lines.push(
-		`- Gate: fail if \`|Δ%|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
-	);
-	lines.push(
-		'- Δ is **Blockera − Core** (positive means Blockera is slower)'
-	);
-	lines.push('');
-	lines.push(
 		'| Scenario | Metric | Core | Blockera | Δ ms | Δ % | Threshold | Status |'
 	);
 	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
@@ -401,6 +388,20 @@ function buildReport(results, primaryMetric, defaults) {
 	}
 
 	lines.push('');
+	lines.push(
+		`- Primary metric: \`${primaryMetric}\` (fallback: Response Time median)`
+	);
+	lines.push(
+		`- Requests: \`${defaults.requests ?? 50}\`, concurrency: \`${defaults.concurrency ?? 1}\``
+	);
+	lines.push(
+		`- Gate: fail if \`|Δ%|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
+	);
+	lines.push(
+		'- Δ is **Blockera − Core** (positive means Blockera is slower)'
+	);
+	lines.push('');
+
 	const fails = results.filter((r) => r.status === 'fail');
 	if (fails.length) {
 		lines.push('### Failures');
