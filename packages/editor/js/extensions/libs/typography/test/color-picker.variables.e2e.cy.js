@@ -35,7 +35,9 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 
-		saveSiteEditorDirtyEntities();
+		// Palette-only seed: skip style compatibility so theme blocks are not
+		// hydrated into styles (keeps free-tier custom-color cleanup deterministic).
+		saveSiteEditorDirtyEntities({ runCompatibility: false });
 
 		// Ensure the slug/name landed on the global styles entity before leaving Site Editor.
 		getEditedGlobalStylesSetting('color.palette.custom').then((rows) => {
@@ -82,26 +84,11 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		cy.selectValueAddonItem(expectedSlug);
 	};
 
-	it('previews the preset color on the selected block while hovering the picker row, then clears it on mouse leave', () => {
-		seedColorPreset();
-
-		createPost();
-
-		cy.getBlock('default').type('Hover preview color paragraph.', {
-			delay: 0,
-		});
-		cy.getByAriaControls('styles-view').click();
-
-		openTextColorVariablePickerFilteredToSeed();
-
-		assertVariablePickerPresetHoverPreview({
-			slug: expectedSlug,
-			cssNeedle: `color: ${presetDefaultHex}`,
-			blockCssProperty: 'color',
-			blockCssValue: 'rgb(0, 0, 0)',
-		});
-	});
-
+	/**
+	 * Apply / edit tests run before hover: picker hover preview has been observed to
+	 * pollute the next test's generated `#blockera-styles-wrapper` CSS (TT5 Base
+	 * `#FBFAF3`) even when block data + palette catalog are correct.
+	 */
 	it('applies the custom preset from value addons: editor CSS, block data, and front match the default hex', () => {
 		seedColorPreset();
 
@@ -114,6 +101,19 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 
 		pickSeededColorPresetInTextColor();
 
+		assertBlockData((data) => {
+			const fontColor = getSelectedBlock(data, 'blockeraFontColor');
+
+			expect(fontColor.isValueAddon).to.equal(true);
+			expect(fontColor.valueType).to.equal('variable');
+			expect(fontColor.settings.var).to.equal(
+				`--wp--preset--color--${expectedSlug}`
+			);
+			expect(String(fontColor.settings.value).toLowerCase()).to.equal(
+				presetDefaultHex.toLowerCase()
+			);
+		});
+
 		cy.getIframeBody().within(() => {
 			cy.get('#blockera-styles-wrapper')
 				.invoke('text')
@@ -125,16 +125,6 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 			'color',
 			'rgb(0, 0, 0)'
 		);
-
-		assertBlockData((data) => {
-			const fontColor = getSelectedBlock(data, 'blockeraFontColor');
-
-			expect(fontColor.isValueAddon).to.equal(true);
-			expect(fontColor.valueType).to.equal('variable');
-			expect(fontColor.settings.var).to.equal(
-				`--wp--preset--color--${expectedSlug}`
-			);
-		});
 
 		savePage();
 
@@ -189,7 +179,7 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 		cy.realPress('Escape');
 		cy.realPress('Escape');
 
-		saveSiteEditorDirtyEntities();
+		saveSiteEditorDirtyEntities({ runCompatibility: false });
 
 		getEditedGlobalStylesSetting('color.palette.custom').then((rows) => {
 			const list = Array.isArray(rows) ? rows : [];
@@ -246,5 +236,28 @@ describe('Global Styles color preset → value addon (paragraph Text Color)', ()
 			'color',
 			'rgb(204, 51, 68)'
 		);
+	});
+
+	it('previews the preset color on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedColorPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview color paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openTextColorVariablePickerFilteredToSeed();
+
+		assertVariablePickerPresetHoverPreview({
+			slug: expectedSlug,
+			cssNeedle: `color: ${presetDefaultHex}`,
+			blockCssProperty: 'color',
+			blockCssValue: 'rgb(0, 0, 0)',
+		});
+
+		// Close the picker so preset-preview React state cannot linger into afterEach.
+		cy.realPress('Escape');
 	});
 });
