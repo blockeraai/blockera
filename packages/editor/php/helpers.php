@@ -1160,6 +1160,16 @@ if ( ! function_exists( 'blockera_resolve_block_css_part' ) ) {
 	 * Tries the full block name first, then shorter hyphen segments so blocks like
 	 * `core/list-item` can match `.wp-block-list` inside `.wp-block-list > li`.
 	 *
+	 * Performance: hot path during style-engine selector building. Profiling showed
+	 * nearly all time in `preg_match` (pattern rebuilt via `preg_quote` per segment).
+	 * We use `strpos` + an ASCII boundary check (equivalent to the old regex) and
+	 * request-level static caches for segments and resolved results.
+	 *
+	 * Flow:
+	 * 1. Search `$selector` for `.wp-block-{segment}` (most-specific segment first).
+	 * 2. If not found and the selector is pseudo-only (`::marker`, `::before`, …),
+	 *    fall back to `$root` then `$args['root']` — those carry the real wp-block class.
+	 *
 	 * @param string $selector The prepared support selector.
 	 * @param string $root     The blockera unique root selector.
 	 * @param array  $args     The append arguments.
@@ -1168,37 +1178,108 @@ if ( ! function_exists( 'blockera_resolve_block_css_part' ) ) {
 	 */
 	function blockera_resolve_block_css_part( string $selector, string $root, array $args ): ?string {
 
+		// Per-request memoization: same selector/root/block combo repeats often while
+		// generating CSS for many supports/states on one block.
+		static $result_cache   = [];
+		static $segments_cache = [];
+
 		$block_name = $args['block-name'] ?? '';
 
 		if ( '' === trim( $block_name ) ) {
 			return null;
 		}
 
-		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
-			$part_pattern = blockera_get_block_css_part_pattern( $segment );
+		$args_root = $args['root'] ?? '';
+		$cache_key = $selector . "\0" . $root . "\0" . $block_name . "\0" . $args_root;
 
-			if ( preg_match( $part_pattern, $selector, $selector_match ) ) {
-				return $selector_match[0];
+		if ( isset( $result_cache[ $cache_key ] ) ) {
+			return $result_cache[ $cache_key ];
+		}
+
+		// e.g. list-item → [ 'list-item', 'list' ]; cached so we don't rebuild per call.
+		if ( ! isset( $segments_cache[ $block_name ] ) ) {
+			$segments_cache[ $block_name ] = blockera_get_block_name_segments( $block_name );
+		}
+
+		$segments = $segments_cache[ $block_name ];
+
+		// Phase 1: search the support selector. Phase 2 (pseudo-only only): search roots.
+		$haystacks = [ $selector ];
+
+		/*
+		 * Equivalent to `/\.\bwp-block-{segment}\b(?!\w+|-|_)/` without the regex engine:
+		 * find `.wp-block-{segment}`, then require the next char is NOT ASCII alnum, '-',
+		 * or '_' so `.wp-block-list` does not false-match inside `.wp-block-list-item`.
+		 */
+		for ( $phase = 0; $phase < 2; $phase++ ) {
+			foreach ( $segments as $segment ) {
+				$needle = '.wp-block-' . $segment;
+				$len    = strlen( $needle );
+
+				foreach ( $haystacks as $haystack ) {
+					$offset = 0;
+					$pos    = strpos( $haystack, $needle, $offset );
+
+					while ( false !== $pos ) {
+						$end = $pos + $len;
+
+						// End of string ⇒ valid class-part boundary.
+						if ( ! isset( $haystack[ $end ] ) ) {
+							$result_cache[ $cache_key ] = $needle;
+
+							return $needle;
+						}
+
+						$ord = ord( $haystack[ $end ] );
+
+						// Still inside a longer token (e.g. list→list-item) ⇒ keep searching.
+						if (
+							( $ord >= 48 && $ord <= 57 )
+							|| ( $ord >= 65 && $ord <= 90 )
+							|| ( $ord >= 97 && $ord <= 122 )
+							|| 45 === $ord
+							|| 95 === $ord
+						) {
+							$offset = $pos + 1;
+							$pos    = strpos( $haystack, $needle, $offset );
+							continue;
+						}
+
+						$result_cache[ $cache_key ] = $needle;
+
+						return $needle;
+					}
+				}
+			}
+
+			// After phase 1 miss: only pseudo-only selectors may borrow the wp-block class
+			// from the blockera root or the block-type root (e.g. `.wp-block-list > li`).
+			if ( 0 === $phase ) {
+				if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
+					$result_cache[ $cache_key ] = null;
+
+					return null;
+				}
+
+				$haystacks = [];
+
+				if ( '' !== trim( $root ) ) {
+					$haystacks[] = $root;
+				}
+
+				if ( '' !== trim( $args_root ) ) {
+					$haystacks[] = $args_root;
+				}
+
+				if ( [] === $haystacks ) {
+					$result_cache[ $cache_key ] = null;
+
+					return null;
+				}
 			}
 		}
 
-		if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
-			return null;
-		}
-
-		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
-			$part_pattern = blockera_get_block_css_part_pattern( $segment );
-
-			foreach ( [ $root, $args['root'] ?? '' ] as $source ) {
-				if ( '' === trim( $source ) ) {
-					continue;
-				}
-
-				if ( preg_match( $part_pattern, $source, $source_match ) ) {
-					return $source_match[0];
-				}
-			}
-		}
+		$result_cache[ $cache_key ] = null;
 
 		return null;
 	}
