@@ -2,7 +2,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -63,7 +63,7 @@ describe('Transitions → Functionality', () => {
 		});
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				'all-0': {
 					isVisible: true,
@@ -113,7 +113,7 @@ describe('Transitions → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				'margin-0': {
 					isVisible: true,

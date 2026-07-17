@@ -12,7 +12,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Flex } from '../../../';
+import Flex from '../../../libs/flex';
 
 export default function ({
 	children,

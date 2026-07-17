@@ -8,6 +8,7 @@ import 'cypress-real-events';
  */
 import {
 	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	appendBlocks,
 	setDeviceType,
@@ -129,7 +130,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			setBlockState('Hover');
 
 			// Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks')[
 						'elements/link'
@@ -206,7 +207,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					'elements/link': {
 						attributes: {
@@ -302,7 +303,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks')
 				);
@@ -425,7 +426,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({ blockeraBackgroundColor: '#cccccc' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks')[
 						'elements/link'
@@ -590,7 +591,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({ blockeraBackgroundColor: '#cccccc' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes.blockeraInnerBlocks[
@@ -662,7 +663,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			cy.setColorControlValue('BG Color', 'cccccc');
 
 			// Assert store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(1).to.be.equal(
 					Object.keys(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
@@ -746,7 +747,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 					setInnerBlock('elements/link');
 
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect(undefined).to.be.deep.equal(
 							getSelectedBlock(data, 'blockeraInnerBlocks')[
 								'elements/link'
@@ -808,7 +809,7 @@ describe('Block States on inner blocks E2E tests', () => {
 		resetBlockState('Before');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({}).to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraInnerBlocks')[
 					'elements/container'

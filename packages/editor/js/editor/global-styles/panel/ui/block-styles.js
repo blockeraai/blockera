@@ -111,6 +111,9 @@ function BlockStyles({
 	const [showPreview, setShowPreview] = useState(false);
 	const hoveredStyleRef = useRef(null);
 	const hasShownPreviewRef = useRef(false);
+	// Tracks names last seen in `stylesToRender` so optimistic local rows can be
+	// distinguished from styles that were unregistered (delete/rename).
+	const previouslyRenderedNamesRef = useRef({});
 	const isMobileViewport = useViewportMatch('medium', '<');
 
 	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
@@ -194,29 +197,39 @@ function BlockStyles({
 			: fallbackSetCurrentActiveStyle;
 
 	useEffect(() => {
-		setBlockStyles((previousStyles) => {
-			const rendered = stylesToRender || [];
+		const rendered = stylesToRender || [];
+		const renderedSet = {};
+		for (let i = 0; i < rendered.length; i++) {
+			renderedSet[rendered[i].name] = true;
+		}
 
+		// Snapshot before setState: keep optimistic rows until `stylesToRender`
+		// catches up after registerBlockStyle, but drop rows that previously
+		// appeared in the registry and are now gone (delete/rename/unregister).
+		// Without that guard, a registry update that lands before the local
+		// `setBlockStyles` remove commits will resurrect the deleted card.
+		const previouslyRendered = previouslyRenderedNamesRef.current;
+
+		setBlockStyles((previousStyles) => {
 			if (!previousStyles.length) {
 				return rendered;
-			}
-
-			// Keep optimistic rows until `stylesToRender` catches up after registerBlockStyle.
-			const renderedSet = {};
-			for (let i = 0; i < rendered.length; i++) {
-				renderedSet[rendered[i].name] = true;
 			}
 
 			const pending = [];
 			for (let i = 0; i < previousStyles.length; i++) {
 				const style = previousStyles[i];
-				if (!renderedSet[style.name]) {
+				if (
+					!renderedSet[style.name] &&
+					!previouslyRendered[style.name]
+				) {
 					pending.push(style);
 				}
 			}
 
 			return pending.length ? [...rendered, ...pending] : rendered;
 		});
+
+		previouslyRenderedNamesRef.current = renderedSet;
 	}, [stylesToRender]);
 
 	// Update ref whenever hoveredStyle changes

@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 	setInnerBlock,
 	setBlockState,
@@ -37,7 +37,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'inputFontColor')
 					);
@@ -63,7 +63,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputFontColor')
 					);
@@ -85,7 +85,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputFontColor')
 					);
@@ -118,7 +118,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'inputFontColor')
 					);
@@ -164,7 +164,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'inputFontColor')
 					);
@@ -203,7 +203,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputFontColor')
 					);
@@ -240,7 +240,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputBackgroundColor')
 					);
@@ -266,7 +266,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputBackgroundColor')
 					);
@@ -288,7 +288,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Background', 'BG Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputBackgroundColor')
 					);
@@ -321,7 +321,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputBackgroundColor')
 					);
@@ -367,7 +367,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputBackgroundColor')
 					);
@@ -406,7 +406,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputBackgroundColor')
 					);
@@ -443,7 +443,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'inputIconColor')
 					);
@@ -469,7 +469,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputIconColor')
 					);
@@ -491,7 +491,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputIconColor')
 					);
@@ -524,7 +524,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'inputIconColor')
 					);
@@ -570,7 +570,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'inputIconColor')
 					);
@@ -609,7 +609,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputIconColor')
 					);
@@ -646,7 +646,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'inputIconColorFocus')
 					);
@@ -674,7 +674,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputIconColorFocus')
 					);
@@ -697,7 +697,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputIconColorFocus')
 					);
@@ -731,7 +731,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'inputIconColorFocus')
 					);
@@ -779,7 +779,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'inputIconColorFocus')
 					);
@@ -819,7 +819,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'inputIconColorFocus')
 					);
@@ -859,7 +859,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColor')
 					);
@@ -885,7 +885,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColor')
 					);
@@ -907,7 +907,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Background', 'BG Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColor')
 					);
@@ -940,7 +940,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColor')
 					);
@@ -986,7 +986,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColor')
 					);
@@ -1025,7 +1025,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColor')
 					);
@@ -1062,7 +1062,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColorHover')
 					);
@@ -1093,7 +1093,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColorHover')
 					);
@@ -1119,7 +1119,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Background', 'BG Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColorHover')
 					);
@@ -1156,7 +1156,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColorHover')
 					);
@@ -1207,7 +1207,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColorHover')
 					);
@@ -1250,7 +1250,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'buttonBackgroundColorHover')
 					);
@@ -1293,7 +1293,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownBackgroundColor')
 					);
@@ -1319,7 +1319,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownBackgroundColor')
 					);
@@ -1341,7 +1341,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Background', 'BG Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownBackgroundColor')
 					);
@@ -1374,7 +1374,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownBackgroundColor')
 					);
@@ -1420,7 +1420,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownBackgroundColor')
 					);
@@ -1459,7 +1459,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownBackgroundColor')
 					);
@@ -1496,7 +1496,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'dropdownTextInitialColor')
 					);
@@ -1522,7 +1522,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownTextInitialColor')
 					);
@@ -1544,7 +1544,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownTextInitialColor')
 					);
@@ -1577,7 +1577,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'dropdownTextInitialColor')
 					);
@@ -1623,7 +1623,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'dropdownTextInitialColor')
 					);
@@ -1662,7 +1662,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownTextInitialColor')
 					);
@@ -1699,7 +1699,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'dropdownTextHoverColor')
 					);
@@ -1727,7 +1727,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownTextHoverColor')
 					);
@@ -1750,7 +1750,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownTextHoverColor')
 					);
@@ -1784,7 +1784,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'dropdownTextHoverColor')
 					);
@@ -1832,7 +1832,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'dropdownTextHoverColor')
 					);
@@ -1872,7 +1872,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'dropdownTextHoverColor')
 					);

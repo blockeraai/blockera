@@ -1,6 +1,6 @@
 import {
 	appendBlocks,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	setInnerBlock,
 	setDeviceType,
@@ -28,7 +28,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -45,7 +45,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes.blockeraBackgroundColor
@@ -66,7 +66,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes.blockeraInnerBlocks[
@@ -88,7 +88,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes.blockeraBackgroundColor
@@ -109,7 +109,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes.blockeraBackgroundColor
@@ -130,7 +130,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes.blockeraInnerBlocks[
@@ -155,7 +155,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes.blockeraInnerBlocks[
@@ -179,7 +179,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes.blockeraInnerBlocks[
@@ -205,7 +205,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.mobile.attributes.blockeraInnerBlocks[
@@ -236,7 +236,7 @@ describe('useAttributes Hook Testing ...', () => {
 					cy.getByAriaLabel('Add New State').click();
 
 					// assertion for block attributes.
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect({}).to.be.deep.equal(
 							getSelectedBlock(data, 'blockeraBlockStates')
 						);
@@ -276,7 +276,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 				it('should add "hover" block-state into block with blockeraTextShadow attribute is undefined', () => {
 					// assertion for block attributes.
-					getWPDataObject().then((data) => {
+					assertBlockData((data) => {
 						expect(undefined).to.be.deep.equal(
 							getSelectedBlock(data, 'blockeraBlockStates')?.hover
 						);
@@ -305,7 +305,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.setColorControlValue('BG Color', 'ff0000');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#ff0000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -314,7 +314,7 @@ describe('useAttributes Hook Testing ...', () => {
 			setDeviceType('Tablet');
 			cy.clearColorControlValue('BG Color');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('#ff0000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);

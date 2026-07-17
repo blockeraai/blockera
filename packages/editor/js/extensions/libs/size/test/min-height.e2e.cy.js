@@ -3,7 +3,7 @@
  */
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -29,7 +29,7 @@ describe('Min Height → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'min-height', '10px');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlock(data, 'blockeraMinHeight')
 			);
@@ -66,7 +66,7 @@ describe('Min Height → Functionality', () => {
 		});
 
 		// Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Content Width',

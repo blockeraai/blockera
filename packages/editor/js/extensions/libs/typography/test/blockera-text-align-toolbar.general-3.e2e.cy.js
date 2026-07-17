@@ -4,7 +4,7 @@
 import {
 	createPost,
 	appendBlocks,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	setDeviceType,
 } from '@blockera/dev-cypress/js/helpers';
@@ -71,7 +71,7 @@ describe('Blockera text-align toolbar', () => {
 		it('updates blockeraTextAlign and WP align from toolbar', () => {
 			clickToolbarTextAlign(1);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -80,7 +80,7 @@ describe('Blockera text-align toolbar', () => {
 
 			clickToolbarTextAlign(2);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('right').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -107,7 +107,7 @@ describe('Blockera text-align toolbar', () => {
 
 			cy.waitForAssertValue();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -119,7 +119,7 @@ describe('Blockera text-align toolbar', () => {
 
 			cy.waitForAssertValue();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('left').to.equal(getMobileBreakpointTextAlign(data));
 			});
 
@@ -127,7 +127,7 @@ describe('Blockera text-align toolbar', () => {
 
 			cy.waitForAssertValue();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -153,7 +153,7 @@ describe('Blockera text-align toolbar', () => {
 
 			clickToolbarTextAlign(0);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('left').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -191,7 +191,7 @@ describe('Blockera text-align toolbar', () => {
 
 			clickToolbarTextAlign(1);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);

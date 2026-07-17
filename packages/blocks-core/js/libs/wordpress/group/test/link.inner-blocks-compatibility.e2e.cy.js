@@ -6,7 +6,7 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setBlockState,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -41,7 +41,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		//
 
 		// WP data should come to Blockera
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				blockeraFontColor: '#ffbaba',
 				blockeraBlockStates: {
@@ -83,7 +83,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		cy.setColorControlValue('Text Color', '888888');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				blockeraFontColor: '#666666',
 				blockeraBlockStates: {
@@ -104,13 +104,13 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('#666666').to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link?.color?.text
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('#888888').to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link[':hover']?.color
 					?.text
@@ -137,7 +137,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		cy.clearColorControlValue('Text Color');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				blockeraBlockStates: {
 					hover: {
@@ -155,13 +155,13 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link?.color?.text
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link[':hover']?.color
 					?.text
@@ -195,7 +195,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		//
 
 		// WP data should come to Blockera
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				blockeraFontColor: {
 					settings: {
@@ -275,7 +275,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		cy.selectValueAddonItem('accent-1');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				blockeraFontColor: {
 					settings: {
@@ -326,13 +326,13 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('var:preset|color|contrast').to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link?.color?.text
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('var:preset|color|accent-1').to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link[':hover']?.color
 					?.text
@@ -363,7 +363,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			cy.removeValueAddon();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				blockeraBlockStates: {
 					hover: {
@@ -381,13 +381,13 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link?.color?.text
 			);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link[':hover']?.color
 					?.text

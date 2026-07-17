@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -57,7 +57,7 @@ describe('Compatibility with Blocksy Theme', () => {
 				);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Link',
@@ -110,7 +110,7 @@ describe('Compatibility with Blocksy Theme', () => {
 				);
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Normal Container',

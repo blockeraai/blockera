@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -33,7 +33,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);
@@ -60,7 +60,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('wrap').to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);
@@ -75,7 +75,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('No Wrap').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('nowrap').to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);
@@ -96,7 +96,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('No Wrap').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);
@@ -130,7 +130,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('nowrap').to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);
@@ -149,7 +149,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('wrap').to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);
@@ -169,7 +169,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'layout')?.flexWrap
 			);

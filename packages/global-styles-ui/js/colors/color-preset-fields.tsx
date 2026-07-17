@@ -70,6 +70,7 @@ import {
 	normalizeRepeaterPaletteColorValue,
 } from './utils';
 import { resolveStoredColorForGenerateColorShades } from './resolve-color-for-shade-generator';
+import ColorPreview from './color-preview';
 import './style.scss';
 
 const GLOBAL_STYLES_COLOR_CONTEXT = {
@@ -868,172 +869,196 @@ function ColorPresetFieldsComponent({
 
 	const displayToggleChecked = shadeConsentOpen ? false : shadesSaved;
 
+	let previewColor = colorItem.color;
+	if (isAnchorShadeRow) {
+		previewColor = displayRampMain.color ?? colorItem.color;
+	}
+
 	return (
-		<SharedPresetControls
-			itemId={repeaterItemIdForUpdates}
-			variable={sharedPresetVariable}
-			name={sharedPresetName}
-			slug={sharedPresetSlug}
-			allSlugs={getAllColorSlugs(
-				// Repeater value is id → item object; getAllVariableSlugs accepts that at runtime.
-				colors as unknown as Parameters<typeof getAllColorSlugs>[0]
-			)}
-		>
-			<Flex direction="column" gap={16}>
-				<Flex
-					direction="row"
-					alignItems="center"
-					gap={12}
-					style={{ width: '100%' }}
-				>
+		<Flex direction="column" gap={15}>
+			<ColorPreview
+				color={previewColor}
+				paintType={
+					typeof (colorItem as { type?: string }).type === 'string'
+						? (colorItem as { type?: string }).type
+						: undefined
+				}
+				shadesEnabled={!isShadeRow && shadesSaved}
+				stackMap={shadesSaved ? stackMap : undefined}
+			/>
+
+			<SharedPresetControls
+				itemId={repeaterItemIdForUpdates}
+				variable={sharedPresetVariable}
+				name={sharedPresetName}
+				slug={sharedPresetSlug}
+				allSlugs={getAllColorSlugs(
+					// Repeater value is id → item object; getAllVariableSlugs accepts that at runtime.
+					colors as unknown as Parameters<typeof getAllColorSlugs>[0]
+				)}
+			>
+				<Flex direction="column" gap={16}>
 					<Flex
 						direction="row"
 						alignItems="center"
-						gap={8}
-						style={{ flex: 1, minWidth: 0 }}
+						gap={12}
+						style={{ width: '100%' }}
 					>
-						<BaseControl
-							columns="1.2fr 3fr"
-							label={__('Color', 'blockera')}
-							controlName={`color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`}
+						<Flex
+							direction="row"
+							alignItems="center"
+							gap={8}
+							style={{ flex: 1, minWidth: 0 }}
 						>
-							<GlobalStylesMainColorControl
+							<BaseControl
+								columns="1.2fr 3fr"
+								label={__('Color', 'blockera')}
 								controlName={`color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`}
-								value={
-									isAnchorShadeRow
-										? (displayRampMain.color ??
-											colorItem.color)
-										: colorItem.color
-								}
-								onChange={handleValueChange}
-								disabled={presetLocked}
-							/>
+							>
+								<GlobalStylesMainColorControl
+									controlName={`color-value-${isAnchorShadeRow ? sharedPresetSlug : slug}`}
+									value={
+										isAnchorShadeRow
+											? (displayRampMain.color ??
+												colorItem.color)
+											: colorItem.color
+									}
+									onChange={handleValueChange}
+									disabled={presetLocked}
+								/>
 
-							<VariableVariationsFieldsSection>
-								{!isShadeRow ? (
-									<>
-										<VariableVariationsFieldsSlotProvider>
-											<VariableVariationsFieldsToggleSlot
-												label={__(
-													'Enable Color Shades',
-													'blockera'
-												)}
-												checked={displayToggleChecked}
-												disabled={presetLocked}
-												onChange={handleToggleChange}
-												trailing={
-													<>
-														{displayToggleChecked ? (
-															<VariableVariationsFieldsEditorSlot>
-																<GlobalStylesChromelessShadeRampRow
-																	baseSlug={
-																		effectiveBaseSlug
-																	}
-																	presetName={
-																		sharedPresetName
-																	}
-																	hexLookup={
-																		stackMap
-																	}
-																	mode="edit"
-																	disabledByLock={
-																		presetLocked
-																	}
-																	onStepChange={(
-																		step,
-																		v
-																	) =>
-																		updateShadeStepColor(
+								<VariableVariationsFieldsSection>
+									{!isShadeRow ? (
+										<>
+											<VariableVariationsFieldsSlotProvider>
+												<VariableVariationsFieldsToggleSlot
+													label={__(
+														'Enable Color Shades',
+														'blockera'
+													)}
+													checked={
+														displayToggleChecked
+													}
+													disabled={presetLocked}
+													onChange={
+														handleToggleChange
+													}
+													trailing={
+														<>
+															{displayToggleChecked ? (
+																<VariableVariationsFieldsEditorSlot>
+																	<GlobalStylesChromelessShadeRampRow
+																		baseSlug={
+																			effectiveBaseSlug
+																		}
+																		presetName={
+																			sharedPresetName
+																		}
+																		hexLookup={
+																			stackMap
+																		}
+																		mode="edit"
+																		disabledByLock={
+																			presetLocked
+																		}
+																		onStepChange={(
 																			step,
 																			v
-																		)
-																	}
-																	baselineHexLookup={
-																		shadeEditedBaselineLookup
-																	}
-																/>
-															</VariableVariationsFieldsEditorSlot>
-														) : null}
-													</>
-												}
-											/>
-										</VariableVariationsFieldsSlotProvider>
-									</>
-								) : null}
-							</VariableVariationsFieldsSection>
-						</BaseControl>
-					</Flex>
-				</Flex>
-
-				<VariableVariationsFieldsSection>
-					{!isShadeRow ? (
-						<>
-							{shadeConsentOpen ? (
-								<VariableVariationsFieldsConsentSlot>
-									<NoticeControl type="warning">
-										<p style={{ fontWeight: 500 }}>
-											{__(
-												'Shade variables will be removed',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'The 11 generated shades (neutral-50 through neutral-950) will no longer exist. Any blocks using them will lose their color styling and need to be updated manually.',
-												'blockera'
-											)}
-										</p>
-									</NoticeControl>
-
-									<ControlContextProvider
-										value={{
-											name: `confirm-color-shades-toggle-${effectiveBaseSlug}`,
-											value: shadeToggleConfirmed,
-										}}
-									>
-										<CheckboxControl
-											checkboxLabel={__(
-												'I understand the shade variables will be removed and may affect existing blocks.',
-												'blockera'
-											)}
-											onChange={handleConfirmCheckbox}
-											isBold={true}
-										/>
-									</ControlContextProvider>
-
-									<Flex justifyContent="flex-end" gap={8}>
-										<Button
-											size="small"
-											variant="tertiary"
-											onClick={handleDiscardShadeToggle}
-											className="blockera-preset-save-actions__discard"
-										>
-											{__('Discard', 'blockera')}
-										</Button>
-										<Button
-											size="small"
-											variant="primary"
-											onClick={handleSaveShadeToggle}
-											disabled={!shadeToggleConfirmed}
-											className="blockera-preset-save-actions__save"
-											icon={
-												<Icon
-													icon="save"
-													iconSize="16"
-													library="wp"
+																		) =>
+																			updateShadeStepColor(
+																				step,
+																				v
+																			)
+																		}
+																		baselineHexLookup={
+																			shadeEditedBaselineLookup
+																		}
+																	/>
+																</VariableVariationsFieldsEditorSlot>
+															) : null}
+														</>
+													}
 												/>
-											}
+											</VariableVariationsFieldsSlotProvider>
+										</>
+									) : null}
+								</VariableVariationsFieldsSection>
+							</BaseControl>
+						</Flex>
+					</Flex>
+
+					<VariableVariationsFieldsSection>
+						{!isShadeRow ? (
+							<>
+								{shadeConsentOpen ? (
+									<VariableVariationsFieldsConsentSlot>
+										<NoticeControl type="warning">
+											<p style={{ fontWeight: 500 }}>
+												{__(
+													'Shade variables will be removed',
+													'blockera'
+												)}
+											</p>
+											<p>
+												{__(
+													'The 11 generated shades (neutral-50 through neutral-950) will no longer exist. Any blocks using them will lose their color styling and need to be updated manually.',
+													'blockera'
+												)}
+											</p>
+										</NoticeControl>
+
+										<ControlContextProvider
+											value={{
+												name: `confirm-color-shades-toggle-${effectiveBaseSlug}`,
+												value: shadeToggleConfirmed,
+											}}
 										>
-											{__('Save', 'blockera')}
-										</Button>
-									</Flex>
-								</VariableVariationsFieldsConsentSlot>
-							) : null}
-						</>
-					) : null}
-				</VariableVariationsFieldsSection>
-			</Flex>
-		</SharedPresetControls>
+											<CheckboxControl
+												checkboxLabel={__(
+													'I understand the shade variables will be removed and may affect existing blocks.',
+													'blockera'
+												)}
+												onChange={handleConfirmCheckbox}
+												isBold={true}
+											/>
+										</ControlContextProvider>
+
+										<Flex justifyContent="flex-end" gap={8}>
+											<Button
+												size="small"
+												variant="tertiary"
+												onClick={
+													handleDiscardShadeToggle
+												}
+												className="blockera-preset-save-actions__discard"
+											>
+												{__('Discard', 'blockera')}
+											</Button>
+											<Button
+												size="small"
+												variant="primary"
+												onClick={handleSaveShadeToggle}
+												disabled={!shadeToggleConfirmed}
+												className="blockera-preset-save-actions__save"
+												icon={
+													<Icon
+														icon="save"
+														iconSize="16"
+														library="wp"
+													/>
+												}
+											>
+												{__('Save', 'blockera')}
+											</Button>
+										</Flex>
+									</VariableVariationsFieldsConsentSlot>
+								) : null}
+							</>
+						) : null}
+					</VariableVariationsFieldsSection>
+				</Flex>
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 

@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -26,7 +26,7 @@ describe('Font Size → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'font-size', '10px');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlock(data, 'blockeraFontSize')
 			);
@@ -58,7 +58,7 @@ describe('Font Size → Functionality', () => {
 		});
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Small',

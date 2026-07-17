@@ -15,8 +15,8 @@ import { isEquals, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../store';
 import { registerControl } from '../api';
+import { STORE_NAME } from '../store/constants';
 import type { ControlContextProviderProps } from './types';
 
 export const ControlContext: Object = createContext({

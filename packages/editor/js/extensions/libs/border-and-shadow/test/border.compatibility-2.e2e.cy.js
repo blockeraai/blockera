@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -49,7 +49,7 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -75,7 +75,7 @@ describe('Border → WP Compatibility', () => {
 					cy.get('input').type(10, { force: true, delay: 0 });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -110,7 +110,7 @@ describe('Border → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -150,7 +150,7 @@ describe('Border → WP Compatibility', () => {
 						});
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -194,7 +194,7 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -274,7 +274,7 @@ describe('Border → WP Compatibility', () => {
 					});
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -364,7 +364,7 @@ describe('Border → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -428,7 +428,7 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -504,7 +504,7 @@ describe('Border → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -570,7 +570,7 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -620,7 +620,7 @@ describe('Border → WP Compatibility', () => {
 
 				cy.selectValueAddonItem('contrast');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -675,7 +675,7 @@ describe('Border → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -723,7 +723,7 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -902,7 +902,7 @@ describe('Border → WP Compatibility', () => {
 				});
 				cy.selectValueAddonItem('contrast');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -1070,7 +1070,7 @@ describe('Border → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -1137,7 +1137,7 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -1187,7 +1187,7 @@ describe('Border → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -1232,7 +1232,7 @@ describe('Border → WP Compatibility', () => {
 				//
 				// Test 2.1: WP data to Blockera
 				//
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -1386,7 +1386,7 @@ describe('Border → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						type: 'custom',
 						all: {

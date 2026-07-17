@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -34,7 +34,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 		// Test 1: WP data to Blockera
 		//
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('30px').to.be.equal(
 				getSelectedBlock(data, 'style')?.spacing?.blockGap
 			);
@@ -59,7 +59,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 			cy.get('input').type(10, { force: true });
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlock(data, 'style')?.spacing?.blockGap
 			);
@@ -89,7 +89,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 			cy.get('input').type(100, { force: true });
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('50px').to.be.equal(
 				getSelectedBlock(data, 'style')?.spacing?.blockGap
 			);
@@ -109,7 +109,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 			cy.get('input').clear();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'style')?.spacing?.blockGap
 			);
@@ -132,7 +132,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 			cy.get('input').type(30, { force: true });
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('30px').to.be.equal(
 				getSelectedBlock(data, 'style')?.spacing?.blockGap
 			);
@@ -154,7 +154,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 			cy.get('input').clear({ force: true });
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'style')?.spacing?.blockGap
 			);

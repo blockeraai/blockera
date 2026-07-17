@@ -8,13 +8,16 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { Button, Flex, Popover, Tooltip } from '../../../';
+import Flex from '../../../libs/flex';
+import Popover from '../../../libs/popover';
+import { Button } from '../../../libs/button';
+import { Tooltip } from '../../../libs/tooltip';
 import type { ValueAddonControlProps } from '../control/types';
 import {
 	getDeletedItemInfo,

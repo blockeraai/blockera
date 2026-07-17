@@ -19,9 +19,9 @@ import { isEmpty, isUndefined } from '@blockera/utils';
 import type { InputControlProps } from './types';
 import { useControlContext } from '../../context';
 import { UnitInput } from './components/unit-input';
-import { setValueAddon, useValueAddon } from '../../';
 import { OtherInput } from './components/other-input';
 import { NumberInput } from './components/number-input';
+import { setValueAddon, useValueAddon } from '../../value-addons';
 import { BaseControl, getFirstUnit, getUnitByValue } from './../index';
 import { extractNumberAndUnit, getCSSUnits, isSpecialUnit } from './utils';
 

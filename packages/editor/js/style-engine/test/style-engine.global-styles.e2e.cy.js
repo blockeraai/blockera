@@ -1,7 +1,7 @@
 import {
 	setBlockState,
 	openSiteEditor,
-	getWPDataObject,
+	assertBlockData,
 	closeWelcomeGuide,
 	redirectToFrontPage,
 	getSelectedBlockStyle,
@@ -16,14 +16,25 @@ describe('Style Engine → Global Styles', () => {
 
 		closeWelcomeGuide();
 
-		cy.getByDataTest('block-style-variations').eq(0).click();
+		cy.getByDataTest('block-style-variations', { timeout: 20000 })
+			.eq(0)
+			.should('be.visible')
+			.click();
 
-		cy.get(`button[id="/blocks/core%2Fparagraph"]`).click();
+		cy.get(`button[id="/blocks/core%2Fparagraph"]`, { timeout: 20000 })
+			.should('be.visible')
+			.click();
+
+		// Wait for style cards after the paragraph block screen loads (CI flake).
+		cy.getByDataTest('style-default', { timeout: 20000 })
+			.should('be.visible')
+			.click();
+
+		// Confirm the default style screen mounted (field may be off-screen in fixed panels).
+		cy.getParentContainer('Font Size').should('exist');
 	});
 
 	it('should generate css for all paragraphs cross website pages', () => {
-		cy.getByDataTest('style-default').click();
-
 		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
@@ -35,7 +46,7 @@ describe('Style Engine → Global Styles', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'font-size', '10px');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraFontSize?.value
@@ -47,9 +58,9 @@ describe('Style Engine → Global Styles', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p:first-child').should('have.css', 'font-size', '10px');
-
-		cy.get('#global-styles-inline-css')
+		// Style-engine contract: WP global stylesheet must include the rule
+		// before we trust computed styles (theme fluid sizes otherwise win).
+		cy.get('#global-styles-inline-css', { timeout: 20000 })
 			.invoke('text')
 			.should(
 				'include',
@@ -57,11 +68,11 @@ describe('Style Engine → Global Styles', () => {
  font-size: 10px; 
 }`
 			);
+
+		cy.get('p:first-child').should('have.css', 'font-size', '10px');
 	});
 
 	it('should generate css for normal and hover states of all paragraphs cross website pages', () => {
-		cy.getByDataTest('style-default').click();
-
 		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
@@ -74,7 +85,7 @@ describe('Style Engine → Global Styles', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'font-size', '10px');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraFontSize?.value
@@ -92,7 +103,7 @@ describe('Style Engine → Global Styles', () => {
 		});
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('20px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraBlockStates?.value?.hover?.breakpoints?.desktop
@@ -117,25 +128,22 @@ describe('Style Engine → Global Styles', () => {
 
 		redirectToFrontPage();
 
-		cy.get('p:first-child').realHover();
-		cy.get('p:first-child').should('have.css', 'font-size', '20px');
-
-		cy.get('#global-styles-inline-css')
+		cy.get('#global-styles-inline-css', { timeout: 20000 })
 			.invoke('text')
 			.should(
 				'include',
 				`:root body :where(p) {
  font-size: 10px; 
 }`
-			);
-
-		cy.get('#global-styles-inline-css')
-			.invoke('text')
-			.should(
+			)
+			.and(
 				'include',
 				`:root body :where(p):hover {
  font-size: 20px; 
 }`
 			);
+
+		cy.get('p:first-child').realHover();
+		cy.get('p:first-child').should('have.css', 'font-size', '20px');
 	});
 });

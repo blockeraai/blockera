@@ -13,7 +13,8 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, MediaUploader } from '../../../';
+import { Button } from '../../../button';
+import MediaUploader from '../../../media-uploader';
 import { FeatureWrapper } from '../../../feature-wrapper';
 import ConditionalWrapper from '../../../conditional-wrapper';
 import {

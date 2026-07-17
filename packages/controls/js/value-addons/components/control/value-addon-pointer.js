@@ -28,9 +28,9 @@ import {
 } from '../index';
 import { hasThemeJsonPlainPresetSlug, isValid } from '../../utils';
 import RemoveIcon from '../../icons/remove';
+import { Tooltip } from '../../../libs/tooltip';
 import type { ValueAddonControlProps } from './types';
 import DynamicValueIcon from '../../icons/dynamic-value';
-import { Tooltip } from '../../../';
 
 export default function ({
 	controlProps,
@@ -99,6 +99,7 @@ export default function ({
 							: '#e20b0b',
 					}}
 					delay={400}
+					key={'variable-value-addon-pointer-tooltip'}
 				>
 					<div
 						key={'variable-value-addon-pointer'}

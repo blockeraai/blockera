@@ -2,11 +2,15 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
+	openBoxSpacingSide,
 	openGlobalStylesSpacingScreen,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 	setBoxSpacingSide,
@@ -19,11 +23,43 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 	const addDataTest = 'global-styles-preset-add-spacing-size-presets-custom';
 	const defaultFallback = '20px';
 
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
+
 	function seedSpacingPreset() {
 		openGlobalStylesSpacingScreen();
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the spacing preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedSpacingPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview spacing paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openBoxSpacingSide('margin-top');
+
+		cy.get('.blockera-control.spacing-margin-top')
+			.scrollIntoView()
+			.within(() => {
+				cy.openValueAddon();
+			});
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: `margin-top: ${defaultFallback}`,
+			blockCssProperty: 'margin-top',
+			blockCssValue: defaultFallback,
+		});
+	});
 
 	it('applies the custom preset: editor CSS, block data, and front use the spacing variable', () => {
 		seedSpacingPreset();
@@ -58,6 +94,8 @@ describe('Global Styles spacing preset → value addon (margin-top)', () => {
 	});
 
 	it('updates generated CSS when the preset size is edited in global styles after picking it', () => {
+		seedSpacingPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Spacing preset edit paragraph.', {

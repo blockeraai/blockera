@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -29,7 +29,7 @@ describe('Font Appearance → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('800').to.be.equal(
 				getSelectedBlock(data, 'blockeraFontAppearance')?.weight
 			);

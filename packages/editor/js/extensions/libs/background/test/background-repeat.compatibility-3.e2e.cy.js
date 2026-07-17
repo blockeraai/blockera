@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Background → WP Compatibility', () => {
@@ -44,7 +44,7 @@ describe('Background → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				// default position is 50% 50%
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'image-0': {
 							isVisible: true,
@@ -90,7 +90,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						url: 'https://placehold.co/600x400',
 						id: 0,
@@ -119,7 +119,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage
@@ -165,7 +165,7 @@ describe('Background → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				// default position is 50% 50%
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'image-0': {
 							isVisible: true,
@@ -211,7 +211,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						url: 'https://placehold.co/600x400',
 						id: 0,
@@ -241,7 +241,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage
@@ -287,7 +287,7 @@ describe('Background → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				// default position is 50% 50%
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({
 						'image-0': {
 							isVisible: true,
@@ -333,7 +333,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					// repeat is default and should be removed
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
@@ -350,7 +350,7 @@ describe('Background → WP Compatibility', () => {
 						cy.get('button[data-value="repeat-x"]').click();
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					// repeat-x does not supported by wp and should be removed
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
@@ -367,7 +367,7 @@ describe('Background → WP Compatibility', () => {
 						cy.get('button[data-value="repeat-y"]').click();
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					// repeat-y does not supported by wp and should be removed
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
@@ -384,7 +384,7 @@ describe('Background → WP Compatibility', () => {
 						cy.get('button[data-value="no-repeat"]').click();
 					});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					// no-repeat is supported
 					expect('no-repeat').to.be.equal(
 						getSelectedBlock(data, 'style')?.background
@@ -404,7 +404,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage

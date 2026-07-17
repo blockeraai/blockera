@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	openMoreFeaturesControl,
@@ -47,7 +47,7 @@ describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Decoration').as('container');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('underline').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraTextDecoration
 							?.value
@@ -58,7 +58,7 @@ describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Line Through').click();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('line-through').to.equal(
 						getParagraphGlobalStyles(data)?.typography
 							?.textDecoration
@@ -69,7 +69,7 @@ describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Overline').click();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('overline').to.equal(
 						getParagraphGlobalStyles(data)?.typography
 							?.textDecoration
@@ -80,7 +80,7 @@ describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('None').click();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(
 						root?.typography?.textDecoration

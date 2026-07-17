@@ -3,7 +3,7 @@
  */
 import { experimental } from '@blockera/env';
 import {
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -170,7 +170,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 				);
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					0: {
 						isVisible: true,
@@ -361,7 +361,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 				);
 
 			//Check store
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					0: {
 						isVisible: true,

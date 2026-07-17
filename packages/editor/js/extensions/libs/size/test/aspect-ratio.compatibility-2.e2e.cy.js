@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -39,7 +39,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('4/3').to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
@@ -62,7 +62,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('16/9').to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
@@ -84,7 +84,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
@@ -120,7 +120,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('4/3').to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
@@ -154,7 +154,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 					.type('3', { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('2/3').to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
@@ -178,7 +178,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
@@ -220,7 +220,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('3/2').to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.aspectRatio
 				);
@@ -241,7 +241,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('16/9').to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.aspectRatio
 				);
@@ -263,7 +263,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.aspectRatio
 				);
@@ -304,7 +304,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('3/2').to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.aspectRatio
 				);
@@ -338,7 +338,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 					.type('3', { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('2/3').to.be.equal(
 					getSelectedBlock(data, 'style')?.dimensions?.aspectRatio
 				);
@@ -362,7 +362,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);

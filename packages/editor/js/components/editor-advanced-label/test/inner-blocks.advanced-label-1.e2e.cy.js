@@ -6,7 +6,7 @@ import {
 	setDeviceType,
 	setInnerBlock,
 	reSelectBlock,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -465,7 +465,7 @@ describe('Inner Blocks label testing', () => {
 								});
 
 								// Assert store data
-								getWPDataObject().then((data) => {
+								assertBlockData((data) => {
 									expect(undefined).to.be.deep.eq(
 										getSelectedBlock(
 											data,
@@ -515,7 +515,7 @@ describe('Inner Blocks label testing', () => {
 								});
 
 								// Assert store data
-								getWPDataObject().then((data) => {
+								assertBlockData((data) => {
 									expect({}).to.be.deep.eq(
 										getSelectedBlock(
 											data,
@@ -561,7 +561,7 @@ describe('Inner Blocks label testing', () => {
 						});
 
 						// Assert store data
-						getWPDataObject().then((data) => {
+						assertBlockData((data) => {
 							expect(undefined).to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraBlockStates')
 									.hover.breakpoints.tablet.attributes
@@ -603,7 +603,7 @@ describe('Inner Blocks label testing', () => {
 						});
 
 						// Assert store data
-						getWPDataObject().then((data) => {
+						assertBlockData((data) => {
 							expect(undefined).to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraBlockStates')
 									.hover.breakpoints.tablet.attributes
@@ -645,7 +645,7 @@ describe('Inner Blocks label testing', () => {
 						});
 
 						// Assert store data
-						getWPDataObject().then((data) => {
+						assertBlockData((data) => {
 							expect(undefined).to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraBlockStates')
 									.normal.breakpoints.tablet.attributes
@@ -684,7 +684,7 @@ describe('Inner Blocks label testing', () => {
 						});
 
 						// Assert store data
-						getWPDataObject().then((data) => {
+						assertBlockData((data) => {
 							expect(undefined).to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraBlockStates')
 									.normal.breakpoints.tablet.attributes
@@ -725,7 +725,7 @@ describe('Inner Blocks label testing', () => {
 						});
 
 						// Assert store data
-						getWPDataObject().then((data) => {
+						assertBlockData((data) => {
 							expect(undefined).to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraInnerBlocks')[
 									'elements/link'
@@ -763,7 +763,7 @@ describe('Inner Blocks label testing', () => {
 						cy.checkStateGraph('Typography', 'Text Color', {});
 
 						// Assert store data
-						getWPDataObject().then((data) => {
+						assertBlockData((data) => {
 							expect(undefined).to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraInnerBlocks')[
 									'elements/link'
@@ -872,7 +872,7 @@ describe('Inner Blocks label testing', () => {
 				cy.get('@color-label').should('include.text', 'None');
 
 				// Assert store data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					// root
 					expect(undefined).to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[

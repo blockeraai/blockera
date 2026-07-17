@@ -144,15 +144,11 @@
 		) {
 		> .blockera-control-group-header {
 			padding-top: calc(var(--repeater-item-height) * 0.4);
-		}
 
-		.blockera-control-group-header:has(
-			.is-preset-variable-variations-picker-header
-		) {
 			.blockera-control-action-buttons.type-inline {
 				.blockera-control-btn-edit-item {
-					visibility: hidden;
-					opacity: 0;
+					visibility: visible;
+					opacity: 1;
 				}
 			}
 		}

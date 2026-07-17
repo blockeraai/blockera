@@ -6,7 +6,7 @@ import {
 	createPost,
 	deactivateMuPlugin,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	openGlobalStylesColorPaletteScreen,
 } from '@blockera/dev-cypress/js/helpers';
 import {
@@ -495,7 +495,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-root-alpha');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -546,7 +546,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-crimson');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -606,7 +606,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-sub-nested');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -657,7 +657,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-sole-sub-only');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -729,7 +729,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-sub-single-flat');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -781,7 +781,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-init-open-b');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -836,7 +836,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-sub-io-a');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -879,7 +879,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -903,7 +903,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base-shade-500');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const fontColor = getSelectedBlock(
 						data,
 						'blockeraFontColor'
@@ -927,7 +927,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base-shade-500');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(
 						getSelectedBlock(data, 'blockeraFontColor').settings.var
 					).to.equal(
@@ -939,7 +939,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 				cy.selectValueAddonItem('e-2-e-tax-cat-var-base');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(
 						getSelectedBlock(data, 'blockeraFontColor').settings.var
 					).to.equal('--wp--preset--color--e-2-e-tax-cat-var-base');
@@ -1068,7 +1068,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 			cy.selectValueAddonItem('e-2-e-var-base');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 
 				expect(fontColor.settings.var).to.equal(
@@ -1097,7 +1097,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 
 				expect(fontColor.settings.var).to.equal(
@@ -1115,7 +1115,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(
 					getSelectedBlock(data, 'blockeraFontColor').settings.var
 				).to.equal('--wp--preset--color--e-2-e-var-base-shade-500');
@@ -1129,7 +1129,7 @@ describe('Global Styles UI → Color palette taxonomy & variations (theme.json s
 
 			cy.selectValueAddonItem('e-2-e-var-base');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(
 					getSelectedBlock(data, 'blockeraFontColor').settings.var
 				).to.equal('--wp--preset--color--e-2-e-var-base');

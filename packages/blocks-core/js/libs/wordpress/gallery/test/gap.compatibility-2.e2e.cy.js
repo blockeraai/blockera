@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -41,7 +41,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '30px',
 					left: '30px',
@@ -69,7 +69,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type(10, { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '10px',
 					left: '10px',
@@ -102,7 +102,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type(100, { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '50px',
 					left: '100px',
@@ -125,7 +125,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').clear();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '',
 					left: '100px',
@@ -148,7 +148,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').clear();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -171,7 +171,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type(30, { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '30px',
 					left: '30px',
@@ -196,7 +196,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -238,7 +238,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '30px',
 					left: '60px',
@@ -268,7 +268,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type(10, { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '10px',
 					left: '10px',
@@ -301,7 +301,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type(100, { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '50px',
 					left: '100px',
@@ -324,7 +324,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').clear();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '',
 					left: '100px',
@@ -347,7 +347,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').clear();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -371,7 +371,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type('10', { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '10px',
 					left: '10px',
@@ -397,7 +397,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').type(30, { force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '30px',
 					left: '30px',
@@ -422,7 +422,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -466,7 +466,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: 'var:preset|spacing|20',
 					left: 'var:preset|spacing|20',
@@ -510,7 +510,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 
 			cy.selectValueAddonItem('30');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: 'var:preset|spacing|30',
 					left: 'var:preset|spacing|30',
@@ -560,7 +560,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 
 			cy.selectValueAddonItem('50');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: 'var:preset|spacing|40',
 					left: 'var:preset|spacing|50',
@@ -628,7 +628,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.removeValueAddon();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: '',
 					left: 'var:preset|spacing|50',
@@ -681,7 +681,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.removeValueAddon();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -720,7 +720,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 
 			cy.selectValueAddonItem('20');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: 'var:preset|spacing|20',
 					left: 'var:preset|spacing|20',
@@ -760,7 +760,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.removeValueAddon();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -802,7 +802,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: 'var:preset|spacing|20',
 					left: 'var:preset|spacing|30',
@@ -861,7 +861,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 
 			cy.selectValueAddonItem('30');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					top: 'var:preset|spacing|30',
 					left: 'var:preset|spacing|30',
@@ -918,7 +918,7 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.removeValueAddon();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);

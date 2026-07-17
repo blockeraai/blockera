@@ -20,16 +20,13 @@ import { getNormalizedControlParentId } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { getValueAddonRealValue, isValid } from '../../';
+import { getValueAddonRealValue, isValid } from '../../value-addons';
+import Grid from '../grid';
+import { Button } from '../button';
+import InputControl from '../input-control';
+import { LabelControl, LabelControlContainer } from '../label-control';
 import { useControlContext } from '../../context';
 import type { AddonTypes } from '../../value-addons/types';
-import {
-	Grid,
-	Button,
-	InputControl,
-	LabelControl,
-	LabelControlContainer,
-} from '../index';
 import type { BorderRadiusControlProps, BorderRadiusValue } from './types';
 
 export type * from './types';

@@ -1,7 +1,7 @@
 import {
 	savePage,
 	createPost,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -26,7 +26,7 @@ describe('Flex Wrap → Functionality', () => {
 
 		cy.getBlock('core/paragraph').should('have.css', 'flex-wrap', 'wrap');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				val: 'wrap',
 				reverse: false,
@@ -42,7 +42,7 @@ describe('Flex Wrap → Functionality', () => {
 			'wrap-reverse'
 		);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				val: 'wrap',
 				reverse: true,

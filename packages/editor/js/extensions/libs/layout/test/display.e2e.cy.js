@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -26,7 +26,7 @@ describe('Display → Functionality', () => {
 					item.toLowerCase().replace(' ', '-')
 				);
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(item.toLowerCase().replace(' ', '-')).to.be.equal(
 						getSelectedBlock(data, 'blockeraDisplay')
 					);

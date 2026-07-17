@@ -1,7 +1,7 @@
 import {
 	createPost,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	redirectToFrontPage,
 	savePage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -31,7 +31,7 @@ describe('z-index → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'z-index', '100');
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('100').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraZIndex')
 			);

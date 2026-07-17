@@ -222,15 +222,31 @@ function ColorShadesRepeaterItemComponent({
 			? shadeStepLabel
 			: String(variation.name ?? '');
 
+		// Parent row UI state (e.g. `isOpen` while editing the base) must not leak to siblings.
+		const {
+			isOpen: _omitParentIsOpen,
+			hasVariations: _omitParentHasVariations,
+			creatingStep: _omitParentCreatingStep,
+			listViewCompactShades: _omitParentListViewCompactShades,
+			...parentFieldsForShadeChild
+		} = item as Record<string, unknown>;
+
 		const merged = {
-			...item,
+			...parentFieldsForShadeChild,
 			...variation,
 			display: true,
 			baseSlug: parentSlug,
 			renderRepeaterItem: true,
+			hasVariations: false,
 			name: variationName,
 		};
-		const rowItem = { ...merged };
+		const rowItem: Record<string, unknown> = { ...merged };
+
+		// Open state comes from this variation's repeater row only (anchor shares the parent id).
+		rowItem.isOpen =
+			storeRow &&
+			typeof storeRow === 'object' &&
+			storeRow.isOpen === true;
 		if (
 			inheritRepeaterPickerSelection &&
 			storeRow &&

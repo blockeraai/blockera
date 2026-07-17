@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -20,7 +20,7 @@ describe('Background Color → Functionality', () => {
 		cy.setColorControlValue('BG Color', '666666');
 
 		//assert data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraBackgroundColor')
 			).to.be.equal('#666666');
@@ -53,7 +53,7 @@ describe('Background Color → Functionality', () => {
 		cy.selectValueAddonItem('accent-4');
 
 		//assert data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				settings: {
 					name: 'Accent 4',

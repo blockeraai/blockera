@@ -5,6 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getWPDataObject,
+	assertBlockData,
 } from '@blockera/dev-cypress/js/helpers';
 
 const BLOCK_TYPES_SEARCH_INPUT =
@@ -127,7 +128,7 @@ describe('Blocks UI Plugin → Functionality (Global Styles)', () => {
 	});
 
 	it('should work with all registered block types', () => {
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const blockTypes = data.select('core/blocks').getBlockTypes();
 
 			expect(blockTypes.length).to.be.greaterThan(0);
@@ -137,7 +138,7 @@ describe('Blocks UI Plugin → Functionality (Global Styles)', () => {
 			if ($search.length) {
 				cy.wrap($search).should('be.visible');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect(
 						data.select('core/blocks').getBlockTypes().length
 					).to.be.greaterThan(0);

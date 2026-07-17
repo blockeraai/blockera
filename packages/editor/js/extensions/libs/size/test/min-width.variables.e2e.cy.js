@@ -2,9 +2,15 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
+	filterVariablePickerSearch,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
+	nameNewGlobalStylesCustomPreset,
+	openGlobalStylesSpacingScreen,
+	resetAndSaveGlobalStylesEntityRecord,
+	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
 import {
 	assertCustomPresetEditPopoverFieldValue,
@@ -36,6 +42,39 @@ function openMinWidthPickerAfterSeedingValue(value) {
 		.first()
 		.should('be.visible');
 }
+
+describe('Min Width variable picker → hover canvas preview', () => {
+	const presetName = 'E2E Min Width Spacing';
+	/** Matches `normalizeVariablePresetSlug` for the preset display name. */
+	const slug = 'e-2-e-min-width-spacing';
+	const addDataTest = 'global-styles-preset-add-spacing-size-presets-custom';
+	const defaultFallback = '20px';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
+
+	function seedSpacingPreset() {
+		openGlobalStylesSpacingScreen();
+		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
+		saveSiteEditorDirtyEntities();
+	}
+
+	it('previews the spacing preset as min-width on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedSpacingPreset();
+
+		openMinWidthPickerAfterSeedingValue('');
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: `min-width: ${defaultFallback}`,
+			blockCssProperty: 'min-width',
+			blockCssValue: defaultFallback,
+		});
+	});
+});
 
 describe('Min Width variable picker → multi-type custom preset add', () => {
 	it('shows section add buttons and type-specific custom labels', () => {
@@ -101,7 +140,7 @@ describe('Min Width variable picker → multi-type custom preset add', () => {
 			assertCustomPresetEditPopoverFieldValue('Size', '48');
 
 			cy.then({ timeout: 15000 }, () =>
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const minWidth = getSelectedBlock(data, 'blockeraMinWidth');
 					expect(minWidth.isValueAddon).to.equal(true);
 					expect(minWidth.valueType).to.equal('variable');
@@ -123,7 +162,7 @@ describe('Min Width variable picker → multi-type custom preset add', () => {
 		assertCustomPresetEditPopoverFieldValue('Size', '320');
 
 		cy.then({ timeout: 15000 }, () =>
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const minWidth = getSelectedBlock(data, 'blockeraMinWidth');
 				expect(minWidth.isValueAddon).to.equal(true);
 				expect(minWidth.valueType).to.equal('variable');

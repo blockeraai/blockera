@@ -19,7 +19,7 @@ import { getVariable, STORE_NAME } from '@blockera/data';
 /**
  * Internal dependencies
  */
-import { Tooltip } from '../../../';
+import { Tooltip } from '../../../libs/tooltip';
 import {
 	hasThemeJsonPlainPresetSlug,
 	isAddonUiActive,

@@ -15,7 +15,8 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Popover, Button } from '../';
+import Popover from '../popover';
+import { Button } from '../button';
 import BaseControl from '../base-control';
 import { renderPositionIcon } from './utils';
 import { useControlContext } from '../../context';

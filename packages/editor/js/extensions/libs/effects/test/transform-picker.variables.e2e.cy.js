@@ -2,12 +2,15 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesTransformsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -18,6 +21,10 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 	const slug = 'e-2-e-transform';
 	const addDataTest =
 		'global-styles-preset-add-transform-preset-presets-custom';
+
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
 
 	function seedTransformPreset() {
 		openGlobalStylesTransformsScreen();
@@ -77,6 +84,26 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 			});
 	});
 
+	it('previews the transform preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedTransformPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview transform paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openRepeaterHeaderVariablePicker('Transforms');
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: 'translate3d(0px, 0px, 0px)',
+		});
+	});
+
 	it('applies the custom transform preset', () => {
 		seedTransformPreset();
 
@@ -111,6 +138,8 @@ describe('Global Styles transform preset → value addon (Transforms)', () => {
 	});
 
 	it('updates generated CSS when move-x is edited in global styles after picking it', () => {
+		seedTransformPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Transform edit paragraph.', { delay: 0 });

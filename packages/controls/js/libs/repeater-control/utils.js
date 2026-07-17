@@ -287,11 +287,20 @@ function getOpenRepeaterEditGroups(): Array<HTMLElement> {
 	const repeaterItemSelector = `.${controlInnerClassNames('repeater-item')}`;
 	const groupSelector = buildClassSelector(controlClassNames('group'));
 
-	return Array.from(
+	const fromPopoverGroup = Array.from(
 		document.querySelectorAll(
 			`${repeaterItemSelector} ${groupSelector}.is-open.mode-popover`
 		)
 	).filter((node) => node instanceof HTMLElement);
+
+	// Variations rows use accordion + standalone group-popover (no mode-popover group).
+	const fromVariationsEdit = Array.from(
+		document.querySelectorAll(
+			`${repeaterItemSelector}[data-edit-popover-open="true"]`
+		)
+	).filter((node) => node instanceof HTMLElement);
+
+	return [...fromPopoverGroup, ...fromVariationsEdit];
 }
 
 function findActiveRepeaterGroupEditPopoverRoots(

@@ -19,7 +19,7 @@ import {
 import HelpSmallIcon from '../icons/help-small';
 import ResetIcon from '../icons/reset';
 import type { SimpleLabelControlProps } from '../types';
-import { Tooltip } from '../../';
+import { Tooltip } from '../../tooltip';
 
 export const SimpleLabelControl = ({
 	label,

@@ -14,10 +14,10 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { BaseControl } from '../index';
+import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
-import { setValueAddon, useValueAddon } from '../../';
 import type { GradientBarControlProps } from './types';
+import { setValueAddon, useValueAddon } from '../../value-addons';
 
 export default function GradientBarControl({
 	id,

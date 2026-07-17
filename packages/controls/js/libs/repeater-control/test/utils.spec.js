@@ -144,6 +144,26 @@ describe('isClickInsideOpenInspectorRepeaterPopover', () => {
 		expect(isClickInsideOpenInspectorRepeaterPopover(control)).toBe(true);
 	});
 
+	it('returns true for variations rows with standalone group-popover edit surfaces', () => {
+		const sidebar = createInspectorSidebar();
+
+		const repeaterItem = document.createElement('div');
+		repeaterItem.className = 'blockera-control-repeater-item';
+		repeaterItem.dataset.editPopoverOpen = 'true';
+		sidebar.appendChild(repeaterItem);
+
+		const popover = document.createElement('div');
+		popover.className =
+			'blockera-component blockera-component-popover blockera-control-group-popover';
+		const toggle = document.createElement('button');
+		toggle.type = 'button';
+		toggle.className = 'components-form-toggle';
+		popover.appendChild(toggle);
+		document.body.appendChild(popover);
+
+		expect(isClickInsideOpenInspectorRepeaterPopover(toggle)).toBe(true);
+	});
+
 	it('returns true for nested Blockera popovers opened during the edit session', () => {
 		const sidebar = createInspectorSidebar();
 		const { popover } = createOpenRepeaterEditSession(sidebar);

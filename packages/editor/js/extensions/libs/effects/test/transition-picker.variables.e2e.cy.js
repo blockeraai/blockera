@@ -2,12 +2,15 @@
  * Blockera dependencies
  */
 import {
+	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
+	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesTransitionsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
+	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -19,11 +22,35 @@ describe('Global Styles transition preset → value addon (Transitions Timing)',
 	const addDataTest =
 		'global-styles-preset-add-transition-preset-presets-custom';
 
+	afterEach(() => {
+		resetAndSaveGlobalStylesEntityRecord();
+	});
+
 	function seedTransitionPreset() {
 		openGlobalStylesTransitionsScreen();
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
+
+	it('previews the transition preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
+		seedTransitionPreset();
+
+		createPost();
+
+		cy.getBlock('default').type('Hover preview transition paragraph.', {
+			delay: 0,
+		});
+		cy.getByAriaControls('styles-view').click();
+
+		openRepeaterHeaderVariablePicker(['Transitions Timing', 'Transitions']);
+
+		filterVariablePickerSearch(presetName);
+
+		assertVariablePickerPresetHoverPreview({
+			slug,
+			cssNeedle: 'all 500ms ease 0ms',
+		});
+	});
 
 	it('applies the custom transition preset', () => {
 		seedTransitionPreset();
@@ -59,6 +86,8 @@ describe('Global Styles transition preset → value addon (Transitions Timing)',
 	});
 
 	it('updates generated CSS when duration is edited in global styles after picking it', () => {
+		seedTransitionPreset();
+
 		createPost();
 
 		cy.getBlock('default').type('Transition edit paragraph.', { delay: 0 });

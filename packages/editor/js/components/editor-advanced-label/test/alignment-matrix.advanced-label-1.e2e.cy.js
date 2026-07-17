@@ -1,5 +1,5 @@
 import {
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	createPost,
 	setBlockState,
@@ -378,7 +378,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		cy.checkStateGraph('', 'Position', { desktop: ['Normal'] }, true);
 
 		// Assert store data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({ top: '100%', left: '100%' }).to.be.deep.eq(
 				getSelectedBlock(data, 'blockeraBackground')['image-0'][
 					'image-position'
@@ -463,7 +463,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		cy.checkStateGraph('', 'Position', { desktop: ['Hover'] }, true);
 
 		// Assert store data
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 				getSelectedBlock(data, 'blockeraBackground')['image-0'][
 					'image-position'
@@ -534,7 +534,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes
@@ -570,7 +570,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes
@@ -606,7 +606,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBackground')['image-0'][
 						'image-position'
@@ -644,7 +644,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes
@@ -740,7 +740,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			cy.checkStateGraph('', 'Position', {}, true);
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBackground')['image-0'][
 						'image-position'

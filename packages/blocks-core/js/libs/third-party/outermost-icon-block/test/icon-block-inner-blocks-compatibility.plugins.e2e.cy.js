@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 	savePage,
 	redirectToFrontPage,
@@ -32,7 +32,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 		//
 
 		// WP data should come to Blockera
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('100px').to.be.equal(getSelectedBlock(data, 'width'));
 
 			expect('100px').to.be.equal(
@@ -52,7 +52,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 		//
 		// Check
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('150px').to.be.equal(getSelectedBlock(data, 'width'));
 
 			expect('150px').to.be.equal(
@@ -66,7 +66,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 
 		cy.resetBlockeraAttribute('Size', 'Width', 'reset');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
 
 			expect('').to.be.equal(getSelectedBlock(data, 'blockeraWidth'));
@@ -91,7 +91,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'iconColor')
 				);
@@ -128,7 +128,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			//
 			// Check
 			//
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'iconColor')
 				);
@@ -156,7 +156,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			cy.clearColorControlValue('BG Color');
 			cy.clearColorControlValue('Text Color');
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'iconColor')
 				);
@@ -196,7 +196,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('base').to.be.equal(getSelectedBlock(data, 'iconColor'));
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'customIconColor')
@@ -273,7 +273,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			//
 			// Check
 			//
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('accent-5').to.be.equal(
 					getSelectedBlock(data, 'iconColor')
 				);
@@ -343,7 +343,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 				cy.removeValueAddon();
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'iconColor')
 				);

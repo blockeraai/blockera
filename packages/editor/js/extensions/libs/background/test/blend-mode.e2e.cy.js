@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -34,7 +34,7 @@ describe('Blend Mode → Functionality', () => {
 		);
 
 		// Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('multiply').to.be.equal(
 				getSelectedBlock(data, 'blockeraBlendMode')
 			);

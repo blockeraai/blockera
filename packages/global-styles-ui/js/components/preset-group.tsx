@@ -65,6 +65,7 @@ import {
 	mergeVariablePickerCreatingStepIntoItems,
 	resolveVariablePickerCustomAddPresetValue,
 	shouldClearVariablePickerFeatureOnRowDelete,
+	shouldKeepVariablePickerOpenForRowActivation,
 	stripIsSelectedFromRepeaterItems,
 	stripRepeaterPickerUiFields,
 	syncVariablePickerCreatingStepSlugs,
@@ -507,10 +508,14 @@ export const PresetGroup = memo(function PresetGroup({
 				pickerCtx.variableType
 			);
 			controlProps.handleOnClickVar(payload as never, {
-				keepPickerOpen:
-					row.creatingStep === true ||
-					// Saved slug rename on the selected row (see shared-preset-controls).
-					row.__rebindBoundFeature === true,
+				keepPickerOpen: shouldKeepVariablePickerOpenForRowActivation(
+					row,
+					{
+						variableType: pickerCtx.variableType,
+						origin,
+						pickerValue: controlProps.value,
+					}
+				),
 			});
 		},
 		[isVariablePicker, pickerCtx.variableType, origin]

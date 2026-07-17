@@ -1,7 +1,7 @@
 import {
 	appendBlocks,
 	createPost,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
@@ -113,7 +113,7 @@ describe('Typography MoreFeatures → promote edited features', () => {
 
 			closeMoreTypography();
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('5px').to.equal(
 					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
@@ -132,7 +132,7 @@ describe('Typography MoreFeatures → promote edited features', () => {
 				'is-open'
 			);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('uppercase').to.equal(
 					getSelectedBlock(data, 'blockeraTextTransform')
 				);
@@ -169,7 +169,7 @@ describe('Typography MoreFeatures → promote edited features', () => {
 				'2px'
 			);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const selected = data
 					.select('core/block-editor')
 					.getSelectedBlock();

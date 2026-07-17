@@ -11,6 +11,7 @@ import {
 	deactivateMuPlugin,
 	getSelectedBlock,
 	getWPDataObject,
+	saveSiteEditorDirtyEntities,
 } from './editor';
 import { openSiteEditor } from './site-navigation';
 
@@ -122,6 +123,66 @@ export function resetGlobalStylesEntityRecord() {
 			styles: {},
 			settings: {},
 		});
+	});
+}
+
+/**
+ * Reopens Site Editor, clears the globalStyles entity, and persists the empty record.
+ * Use in afterEach when a spec seeds/saves custom presets (e.g. hover canvas preview).
+ *
+ * Skips save-compatibility: that path re-hydrates theme `styles.blocks` from base
+ * config and would undo the empty reset. Also clears `blockera/editor` userStyles
+ * so a later compatibility-enabled save cannot merge stale local blocks back.
+ *
+ * Free tier allows only one custom color variable — afterEach MUST persist an empty
+ * `settings.color.palette.custom` or the next test's seed hits the upgrade modal /
+ * picks the wrong catalog row.
+ *
+ * @return {Cypress.Chainable}
+ */
+export function resetAndSaveGlobalStylesEntityRecord() {
+	openSiteEditor();
+
+	cy.window().then((win) => {
+		const dispatch = win.wp?.data?.dispatch?.('blockera/editor');
+
+		if (typeof dispatch?.setGlobalStyles === 'function') {
+			dispatch.setGlobalStyles({});
+		}
+	});
+
+	resetGlobalStylesEntityRecord();
+
+	saveSiteEditorDirtyEntities({ runCompatibility: false });
+
+	// Confirm the persisted entity (not only the edited record) has no custom colors.
+	return cy.window({ timeout: 20000 }).should((win) => {
+		const select = win.wp.data.select('core');
+		const id =
+			typeof select.__experimentalGetCurrentGlobalStylesId === 'function'
+				? select.__experimentalGetCurrentGlobalStylesId()
+				: select.getCurrentGlobalStylesId?.();
+
+		expect(id, 'global styles entity id after reset').to.exist;
+
+		const record =
+			select.getEntityRecord(
+				GLOBAL_STYLES_KIND,
+				GLOBAL_STYLES_NAME,
+				id
+			) ||
+			select.getEditedEntityRecord(
+				GLOBAL_STYLES_KIND,
+				GLOBAL_STYLES_NAME,
+				id
+			);
+		const custom = record?.settings?.color?.palette?.custom;
+		const list = Array.isArray(custom) ? custom : [];
+
+		expect(
+			list,
+			'custom color palette after resetAndSaveGlobalStylesEntityRecord'
+		).to.have.length(0);
 	});
 }
 

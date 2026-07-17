@@ -9,7 +9,7 @@ import {
 	deactivateMuPlugin,
 	getEditedGlobalStylesSetting,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	openGlobalStylesColorPaletteScreen,
 	redirectToFrontPage,
 	savePage,
@@ -190,7 +190,7 @@ describe('Global Styles UI → color variable as value for another variable', ()
 
 		cy.getBlock('core/paragraph').should('have.css', 'color', SOURCE_RGB);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 			expect(fontColor.isValueAddon).to.equal(true);
 			expect(fontColor.valueType).to.equal('variable');

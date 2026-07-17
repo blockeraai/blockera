@@ -4,14 +4,101 @@
 import {
 	openSiteEditor,
 	closeWelcomeGuide,
-	getWPDataObject,
+	assertBlockData,
+	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
+
+/**
+ * Restores the theme's group style-variation baseline (default, section-1 …
+ * section-5) and drops any leftover user variations (duplicates, renames).
+ *
+ * Rename/delete/duplicate write markers to `blockeraGlobalStylesMetaData`, which
+ * is persisted to a server meta cache (see
+ * packages/wordpress/php/RenderBlock/SavePost.php) and replayed on every load by
+ * `registerBlockStylesFromMetaData` (block-styles-registry.js) — it unregisters
+ * theme variations flagged `hasNewID`/`isDeleted`. So a prior run's delete leaves
+ * `style-section-1` permanently unregistered and the whole suite can no longer run.
+ *
+ * Clearing meta alone is not enough: rename-with-new-id also writes the new slug
+ * into `styles.blocks.*.variations`. On the next load,
+ * `JSONResolver::register_block_style_variations_from_user_data` re-registers that
+ * leftover variation. With empty meta it invents a label from the slug
+ * (`new-id` → "New Id"), so `style-new-id` still appears but fails
+ * `should('contain', 'New Name')` in Active/Inactive + delete specs.
+ *
+ * Persist an EMPTY *but present* `styles.blockeraMetaData` (SavePost only rewrites
+ * the cache when that key exists) and drop `styles.blocks` so PHP cannot
+ * re-register orphan slugs, then reload so bootstrap re-registers the pristine
+ * theme variations.
+ */
+const resetGroupStyleVariationsBaseline = () => {
+	// Wait until the global styles entity resolves after the Site Editor loads.
+	cy.window({ timeout: 20000 }).should((win) => {
+		const select = win.wp?.data?.select?.('core');
+		const id =
+			select?.__experimentalGetCurrentGlobalStylesId?.() ??
+			select?.getCurrentGlobalStylesId?.();
+		expect(id, 'global styles entity id').to.exist;
+	});
+
+	cy.window().then((win) => {
+		const registry = win.wp.data;
+
+		// Clear Blockera's in-memory rename/delete/duplicate markers first so a
+		// later compatibility-enabled save cannot merge them back.
+		const blockeraDispatch = registry.dispatch('blockera/editor');
+		if (
+			typeof blockeraDispatch?.setBlockeraGlobalStylesMetaData ===
+			'function'
+		) {
+			blockeraDispatch.setBlockeraGlobalStylesMetaData({});
+		}
+		if (typeof blockeraDispatch?.setGlobalStyles === 'function') {
+			blockeraDispatch.setGlobalStyles({});
+		}
+		win.blockeraGlobalStylesMetaData = {};
+
+		const select = registry.select('core');
+		const dispatch = registry.dispatch('core');
+		const id =
+			select.__experimentalGetCurrentGlobalStylesId?.() ??
+			select.getCurrentGlobalStylesId?.();
+
+		if (!id) {
+			return;
+		}
+
+		// Keep `blockeraMetaData` present (empty) so SavePost refreshes the meta
+		// cache; omit `blocks` so renamed slugs are not re-registered from user data.
+		dispatch.editEntityRecord('root', 'globalStyles', id, {
+			styles: { blockeraMetaData: {} },
+		});
+	});
+
+	// Skip compatibility: it re-hydrates theme `styles.blocks` from base config.
+	saveSiteEditorDirtyEntities({ runCompatibility: false });
+
+	// Re-navigate (fresh load) so bootstrap re-reads the now-empty meta cache and
+	// re-registers the pristine theme variations. `openSiteEditor` also waits for
+	// the editor to settle + closes the welcome guide.
+	openSiteEditor();
+};
 
 const openGroupBlockStyleVariations = () => {
 	cy.openGlobalStylesPanel();
 	closeWelcomeGuide();
-	cy.getByDataTest('block-style-variations').eq(0).click();
-	cy.get('button[id="/blocks/core%2Fgroup"]').click();
+	cy.getByDataTest('block-style-variations', { timeout: 20000 })
+		.eq(0)
+		.click();
+	cy.get('button[id="/blocks/core%2Fgroup"]', { timeout: 20000 }).click();
+
+	// Wait for the group's style-variation cards to hydrate before a test queries
+	// a specific slug (style-section-1 / style-new-id). The cards render async from
+	// the global styles entity/registry, so after a save + reload a slow Site Editor
+	// load can exceed the 15s command timeout even though the card renders later.
+	// `style-default` is always present, so it is a reliable "list is ready" signal.
+	// Assert existence (not visibility): cards can sit in a fixed/overflowed panel.
+	cy.getByDataTest('style-default', { timeout: 20000 }).should('exist');
 };
 
 const saveSiteEditor = () => {
@@ -74,16 +161,76 @@ const renameSection1WithNewId = (label = 'New Name', id = 'new-id') => {
 	cy.getByDataTest(`style-${id}`).should('contain', label);
 };
 
+/**
+ * Seed a deletable `new-id` variation ADDITIVELY by duplicating `style-section-1`.
+ *
+ * The delete spec asserts `core/group` returns to its 5 theme variations after
+ * removing the variation. Renaming section-1 (see `renameSection1WithNewId`) is
+ * destructive — it consumes section-1, so a later delete leaves 4. Duplicating
+ * keeps section-1 and adds `new-id` (6 total), so deleting `new-id` restores the
+ * pristine theme baseline of 5 deterministically, without relying on leftover
+ * cross-test state.
+ */
+const duplicateSection1AsNewId = (label = 'New Name', id = 'new-id') => {
+	cy.getByDataTest('open-section-1-contextmenu')
+		.filter(':visible')
+		.first()
+		.click();
+	cy.get('.blockera-component-popover-body button')
+		.contains('Duplicate')
+		.click({ force: true });
+
+	// Set Name first: the modal auto-syncs ID from the name; set ID afterwards so
+	// the manual edit sticks (`isIdManuallyEdited`).
+	cy.getParentContainer('Name').within(() => {
+		cy.get('input').clear();
+		cy.get('input').type(label);
+	});
+
+	cy.getParentContainer('ID').within(() => {
+		cy.get('input').clear();
+		cy.get('input').type(id);
+	});
+
+	cy.getByDataTest('save-duplicate-button').click();
+	cy.getByDataTest('Close Block Style').click();
+	cy.getByDataTest(`style-${id}`).should('contain', label);
+};
+
+const ensureNewIdViaDuplicate = (label = 'New Name', id = 'new-id') => {
+	cy.get('body').then(($body) => {
+		const $card = $body.find(`[data-test="style-${id}"]`);
+		const hasExpectedLabel =
+			$card.length > 0 && $card.text().includes(label);
+
+		if (hasExpectedLabel) {
+			cy.getByDataTest(`style-${id}`).should('contain', label);
+		} else {
+			duplicateSection1AsNewId(label, id);
+		}
+	});
+};
+
 const ensureNewIdStyleVariation = (label = 'New Name', id = 'new-id') => {
-	cy.get('body').then(() => {
-		// Cypress .find() is unreliable for checking presence, use Cypress directly:
-		cy.get(`[data-test="style-${id}"]`).then(($el) => {
-			if ($el.length) {
-				cy.wrap($el).should('contain', label);
-			} else {
-				renameSection1WithNewId(label, id);
-			}
-		});
+	// Presence check must be non-throwing so the rename fallback stays reachable
+	// when a prior test/run left no `new-id` card. `cy.get(selector)` retries and
+	// then FAILS on absence (skipping the else branch) — the earlier reason for
+	// switching away from `$body.find` was an un-hydrated list, which is now
+	// guaranteed to be ready by `openGroupBlockStyleVariations` (waits for
+	// `style-default`), so `$body.find` reflects the real state.
+	//
+	// Also require the expected label: a leftover `styles.blocks` slug can be
+	// re-registered with a generated label ("New Id") after meta-only resets.
+	cy.get('body').then(($body) => {
+		const $card = $body.find(`[data-test="style-${id}"]`);
+		const hasExpectedLabel =
+			$card.length > 0 && $card.text().includes(label);
+
+		if (hasExpectedLabel) {
+			cy.getByDataTest(`style-${id}`).should('contain', label);
+		} else {
+			renameSection1WithNewId(label, id);
+		}
 	});
 };
 
@@ -162,6 +309,13 @@ const selectBlockByType = (blockName, index = 0) => {
 describe('Style Variations Inside Global Styles Panel → Functionality (Global Styles)', () => {
 	beforeEach(() => {
 		openSiteEditor();
+
+		// Specs rename/delete/duplicate theme variations and persist them to the
+		// global styles entity + server meta cache. Without a reset, a prior run's
+		// delete leaves `style-section-1` unregistered forever and the suite can
+		// never re-run. Restore the pristine theme baseline before every test.
+		resetGroupStyleVariationsBaseline();
+
 		openGroupBlockStyleVariations();
 	});
 
@@ -237,7 +391,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 
 		cy.getByDataTest('style-new-id').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -254,7 +408,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			.find('[data-test="style-new-id"]')
 			.should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -265,7 +419,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		openGroupBlockStyleVariations();
 		cy.getByDataTest('style-new-id').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -282,7 +436,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 			.find('[data-test="style-new-id"]')
 			.should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('blockera/editor').getSelectedBlockStyleVariation()
 			).to.equal(undefined);
@@ -290,7 +444,9 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 	});
 
 	it('should be able to delete specific style variation', () => {
-		ensureNewIdStyleVariation();
+		// Additive seed (duplicate, not rename) so section-1 survives and deleting
+		// new-id returns core/group to its 5 theme variations (not 4).
+		ensureNewIdViaDuplicate();
 
 		openStyleVariationContextMenu('new-id');
 		cy.get('.variations-settings-popover')
@@ -307,7 +463,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 
 		cy.getByDataTest('style-new-id').should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0
@@ -330,7 +486,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 		openGroupBlockStyleVariations();
 		cy.getByDataTest('style-new-id').should('not.exist');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(
 				data.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0

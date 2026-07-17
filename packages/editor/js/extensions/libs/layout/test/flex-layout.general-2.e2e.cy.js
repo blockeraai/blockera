@@ -1,6 +1,6 @@
 import {
 	savePage,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -314,7 +314,7 @@ function configureBlockMatrixAlignment(blockIndex, type, point) {
 		.eq(blockIndex)
 		.should('have.css', 'justify-content', justifyContent);
 
-	getWPDataObject().then((data) => {
+	assertBlockData((data) => {
 		expect(alignItems).to.equal(
 			getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 		);
@@ -336,6 +336,22 @@ function setFlexLayoutSelectOption(axisIndex, optionLabel) {
 		.within(() => {
 			cy.contains(optionLabel).click({ force: true });
 		});
+
+	// The axis select renders its listbox in a body-level portal popover. A
+	// force-click on the option does not always dismiss it, and a lingering popover
+	// overlays the editor — the first `savePage()` publish click then only performs
+	// the popover's outside-click close, so the post never publishes and no success
+	// snackbar appears. Dismiss it deterministically before moving on.
+	//
+	// Scope to `[data-open]`: WP CustomSelectControl (Ariakit) only marks the open
+	// select listbox with it. A bare `[role="listbox"]` also matches the persistent
+	// block inserter list (`.block-editor-block-types-list`), which never unmounts.
+	cy.get('body').then(($body) => {
+		if ($body.find('[role="listbox"][data-open]').length) {
+			cy.get('body').type('{esc}');
+		}
+	});
+	cy.get('[role="listbox"][data-open]').should('not.exist');
 }
 
 const MATRIX_SPECIAL_UNITS = [
@@ -374,7 +390,11 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 		cy.getByAriaLabel(type).click();
 	});
 
+	// Matrix single-click commits are deferred 200ms (dblclick detection). Wait
+	// for the selected UI before changing axis selects — otherwise SelectControl
+	// updates cancel the pending setValue and leave alignItems empty (`normal`).
 	cy.getByDataTest('matrix-top-left-normal').click();
+	cy.getByDataTest('matrix-top-left-selected').should('exist');
 
 	setFlexLayoutSelectOption(axisIndex, unit.optionLabel);
 
@@ -386,7 +406,7 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 		.eq(blockIndex)
 		.should('have.css', 'justify-content', unit.justifyContent);
 
-	getWPDataObject().then((data) => {
+	assertBlockData((data) => {
 		expect(unit.alignItems).to.equal(
 			getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 		);
@@ -444,7 +464,7 @@ describe('Flex Layout → Functionality', () => {
 
 		cy.getBlock('core/group').should('have.css', 'flex-direction', 'row');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('row').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFlexLayout')?.direction
 			);
@@ -464,7 +484,7 @@ describe('Flex Layout → Functionality', () => {
 			'column'
 		);
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('column').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFlexLayout')?.direction
 			);

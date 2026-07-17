@@ -13,8 +13,8 @@ import { generateVariableStringFromAttributeVarString } from '@blockera/data';
 /**
  * Internal dependencies
  */
-import { isLikelyRawCssColorInput } from '../libs/color-picker-control/utils/css-color';
 import type { ValueAddon } from './types';
+import { isLikelyRawCssColorInput } from '../libs/color-picker-control/utils/css-color';
 
 /** CSS keywords / unitless scalars that share slug-like spelling but are not theme.json preset slugs. */
 const RAW_CSS_NON_PRESET_SCALAR_KEYWORDS: Set<string> = new Set([

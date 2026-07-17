@@ -7,7 +7,7 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	openBlockNavigator,
 } from '@blockera/dev-cypress/js/helpers';
@@ -47,7 +47,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 
 		// WP data should come to Blockera
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect('#f3f3f3').to.be.equal(
 				getSelectedBlock(data, 'customIconColor')
@@ -113,7 +113,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 		// Check
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect('#888888').to.be.equal(
 				getSelectedBlock(data, 'customIconColor')
@@ -193,7 +193,7 @@ describe('Social Links Block → WP Compatibility', () => {
 
 		cy.clearColorControlValue('Text Color');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'customIconColor')
@@ -260,7 +260,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 
 		// WP data should come to Blockera
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('base').to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'customIconColor')
@@ -386,7 +386,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 		// Check
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('accent-1').to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'customIconColor')
@@ -501,7 +501,7 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.removeValueAddon();
 		});
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'customIconColor')

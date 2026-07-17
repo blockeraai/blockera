@@ -72,10 +72,45 @@ const getGlobalStylesRecord = (): {
 const hasObjectKeys = (value: any): boolean =>
 	!!value && 'object' === typeof value && Object.keys(value).length > 0;
 
+/**
+ * Global Styles panel writes Blockera attrs to `blockera/editor` immediately
+ * (`setBlockStyles`), but the core `root/globalStyles` entity only receives them
+ * after `BLOCKERA_DELAY_EXPECTED_TIME` (1s) via `setStyle`. Save (native or
+ * programmatic) can fire in that window — use local blocks as a fallback while
+ * the core entity has none so compatibility sees the latest blockera* attrs.
+ * Explicit core entity blocks remain authoritative; the local store can still
+ * contain stale data from a previous save/editor render.
+ *
+ * @param {Object} record Edited/persisted global styles entity record.
+ * @return {Object} Record styles, with local blocks used only when absent.
+ */
+const getRecordStylesWithBlockeraUserStyles = (record: Object): Object => {
+	const recordStyles =
+		record?.styles && 'object' === typeof record.styles
+			? record.styles
+			: {};
+
+	const blockeraUserStyles =
+		select('blockera/editor')?.getGlobalStyles?.()?.userStyles;
+	const localBlocks = blockeraUserStyles?.styles?.blocks;
+
+	if (
+		hasObjectKeys(recordStyles.blocks) ||
+		!localBlocks ||
+		'object' !== typeof localBlocks
+	) {
+		return recordStyles;
+	}
+
+	return mergeObject(recordStyles, {
+		blocks: localBlocks,
+	});
+};
+
 const getGlobalStylesBlocksForCompatibility = (
 	record: Object
 ): Object | null => {
-	const styles = record?.styles;
+	const styles = getRecordStylesWithBlockeraUserStyles(record);
 
 	if (!styles || 'object' !== typeof styles) {
 		return null;
@@ -341,6 +376,15 @@ export const registerGlobalStylesSaveCompatibility = (): void => {
 
 	if ('undefined' !== typeof document) {
 		document.addEventListener('click', handleSaveButtonClick, true);
+	}
+
+	// Cypress / programmatic saves call saveEditedEntityRecord directly and
+	// skip the Save-button click + preSavePost hooks. Expose the sync so
+	// helpers can mirror the UI save path before persisting dirty entities.
+	if ('undefined' !== typeof window) {
+		// $FlowFixMe[prop-missing]
+		window.blockeraRunGlobalStylesSaveCompatibility =
+			runGlobalStylesWordPressCompatibilityBeforeSave;
 	}
 
 	isRegistered = true;

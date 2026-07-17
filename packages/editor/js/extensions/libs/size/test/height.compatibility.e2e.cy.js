@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -36,7 +36,7 @@ describe('Height → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('500px').to.be.equal(
 					getSelectedBlock(data, 'blockeraHeight')
 				);
@@ -54,7 +54,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('200px').to.be.equal(getSelectedBlock(data, 'height'));
 			});
 
@@ -68,7 +68,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 		});
@@ -100,7 +100,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(
 					getSelectedBlock(data, 'blockeraHeight')
 				);
@@ -120,7 +120,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 
@@ -134,7 +134,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 		});
@@ -159,7 +159,7 @@ describe('Height → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('200px').to.be.equal(
 					getSelectedBlock(data, 'blockeraHeight')
 				);
@@ -177,7 +177,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(getSelectedBlock(data, 'height'));
 			});
 
@@ -191,7 +191,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 		});
@@ -214,7 +214,7 @@ describe('Height → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('30%').to.be.equal(
 					getSelectedBlock(data, 'blockeraHeight')
 				);
@@ -230,7 +230,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 		});
@@ -257,7 +257,7 @@ describe('Height → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('200px').to.be.equal(
 					getSelectedBlock(data, 'blockeraHeight')
 				);
@@ -275,7 +275,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('300px').to.be.equal(getSelectedBlock(data, 'height'));
 			});
 
@@ -289,7 +289,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 		});
@@ -305,7 +305,7 @@ describe('Height → WP Compatibility', () => {
 
 			cy.setInputFieldValue('Width', 'Size', 100);
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const heightVA = getSelectedBlock(data, 'blockeraHeight');
 
 				expect(heightVA).to.deep.include({
@@ -320,7 +320,7 @@ describe('Height → WP Compatibility', () => {
 				});
 			});
 
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				const wpHeight = getSelectedBlock(data, 'height');
 
 				expect(wpHeight).to.be.a('string');
@@ -348,7 +348,7 @@ describe('Height → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('30%').to.be.equal(
 					getSelectedBlock(data, 'blockeraHeight')
 				);
@@ -364,7 +364,7 @@ describe('Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
 			});
 		});

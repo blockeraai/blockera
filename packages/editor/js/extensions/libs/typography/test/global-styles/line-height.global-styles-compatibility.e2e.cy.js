@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	getWPDataObject,
+	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -71,7 +71,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Line Height').as('container');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('1.8').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraLineHeight
 							?.value
@@ -83,7 +83,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().type('2.5{enter}', { force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('2.5').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.lineHeight
 					);
@@ -93,7 +93,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().clear({ force: true });
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.lineHeight);
 					expect(undefined).to.equal(root?.blockeraLineHeight?.value);
@@ -114,7 +114,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 						.and('contain', 'Relaxed');
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 
 					expect({
@@ -144,7 +144,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 
 				cy.selectValueAddonItem('tight');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('var:preset|line-height|tight').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.lineHeight
 					);
@@ -154,7 +154,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.lineHeight);
 					expect(undefined).to.equal(root?.blockeraLineHeight?.value);
@@ -166,7 +166,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 			it('Not found variable', () => {
 				cy.getParentContainer('Line Height').as('container');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 
 					expect({
@@ -192,7 +192,7 @@ describe('Line Height → WP Compatibility (Global Styles)', () => {
 					cy.removeValueAddon();
 				});
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.lineHeight);
 					expect(undefined).to.equal(root?.blockeraLineHeight?.value);

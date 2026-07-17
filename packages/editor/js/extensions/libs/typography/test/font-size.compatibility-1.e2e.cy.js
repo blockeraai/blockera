@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -34,7 +34,7 @@ describe('Font Size → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('20px').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontSize')
 				);
@@ -56,7 +56,7 @@ describe('Font Size → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('15px').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontSize')
 				);
@@ -76,7 +76,7 @@ describe('Font Size → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontSize')
 				);
@@ -107,7 +107,7 @@ describe('Font Size → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					settings: {
 						name: 'Small',
@@ -145,7 +145,7 @@ describe('Font Size → WP Compatibility', () => {
 			cy.selectValueAddonItem('large');
 
 			// Check WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					settings: {
 						name: 'Large',
@@ -184,7 +184,7 @@ describe('Font Size → WP Compatibility', () => {
 			});
 
 			// Check WP data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				// default value is empty
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontSize')
@@ -215,7 +215,7 @@ describe('Font Size → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect({
 					settings: {
 						name: 'unknown',

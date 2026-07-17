@@ -1,5 +1,5 @@
 import {
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	createPost,
 	setBlockState,
@@ -313,7 +313,7 @@ describe('Input Control label testing (Width)', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('20px').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -399,7 +399,7 @@ describe('Input Control label testing (Width)', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -457,7 +457,11 @@ describe('Input Control label testing (Width)', () => {
 
 			setBlockState('Normal');
 
-			cy.wait(100);
+			// Wait for the debounced advanced-label props (200ms) to mark the
+			// normal state as changed. Until then the label's resetToDefault
+			// handler is not wired, so the shift+click below is a no-op on slow
+			// CI and the value stays uncleared.
+			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// reset normal value
 			cy.getByAriaLabel('Width').click({ shiftKey: true });
@@ -478,6 +482,14 @@ describe('Input Control label testing (Width)', () => {
 			cy.setInputFieldValue('Width', 'Size', 40);
 
 			setBlockState('Hover');
+
+			// Wait for the debounced advanced-label props (200ms) to wire the
+			// hover state's resetToDefault handler before the shift+click reset.
+			cy.checkLabelClassName(
+				'Size',
+				'Width',
+				'changed-in-secondary-state'
+			);
 
 			// reset hover value
 			cy.getByAriaLabel('Width').click({ shiftKey: true });
@@ -500,7 +512,11 @@ describe('Input Control label testing (Width)', () => {
 
 			setBlockState('Normal');
 
-			cy.wait(100);
+			// Wait for the debounced advanced-label props (200ms) to mark the
+			// normal state as changed. Until then the label's resetToDefault
+			// handler is not wired, so the shift+click below is a no-op on slow
+			// CI and the value stays uncleared.
+			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// reset normal value
 			cy.getByAriaLabel('Width').click({ shiftKey: true });
@@ -551,7 +567,7 @@ describe('Input Control label testing (Width)', () => {
 				});
 
 				// Assert store data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({}).to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').normal
 							.breakpoints.tablet.attributes
@@ -582,7 +598,7 @@ describe('Input Control label testing (Width)', () => {
 				});
 
 				// Assert store data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({}).to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
 							.breakpoints.tablet.attributes
@@ -613,7 +629,7 @@ describe('Input Control label testing (Width)', () => {
 				});
 
 				// Assert store data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraWidth')
 					);
@@ -644,7 +660,7 @@ describe('Input Control label testing (Width)', () => {
 				});
 
 				// Assert store data
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect({}).to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
 							.breakpoints.desktop.attributes
@@ -738,7 +754,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkStateGraph('Size', 'Width', {});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -811,7 +827,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkStateGraph('Size', 'Width', { desktop: ['Normal'] });
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('25px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -893,7 +909,7 @@ describe('Input Control label testing (Width)', () => {
 			});
 
 			// Assert store data
-			getWPDataObject().then((data) => {
+			assertBlockData((data) => {
 				expect('').to.be.equal(getSelectedBlock(data, 'blockeraWidth'));
 
 				expect({ blockeraWidth: '25px' }).to.be.deep.equal(

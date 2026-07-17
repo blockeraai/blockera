@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	getWPDataObject,
+	assertBlockData,
 	setInnerBlock,
 	setBlockState,
 	addBlockState,
@@ -43,7 +43,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 		// Test 1: WP data to Blockera
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -88,7 +88,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.editTransition(201, 2001);
 		cy.getByAriaControls('settings-view').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -148,7 +148,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.editTransition(202, 2002);
 		cy.getByAriaControls('settings-view').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -208,7 +208,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.editTransition(203, 2003);
 		cy.getByAriaControls('settings-view').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('grid').to.be.equal(
@@ -261,7 +261,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.editTransition(200, 2000);
 		cy.getByAriaControls('settings-view').click();
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -309,7 +309,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 		// Test 1: WP data to Blockera
 		//
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -347,7 +347,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		// assert current variation
 		cy.checkActiveBlockVariation('group-row');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -377,7 +377,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-stack');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -407,7 +407,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-row');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
@@ -437,7 +437,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-grid');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('grid').to.be.equal(
@@ -467,7 +467,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -500,7 +500,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -532,7 +532,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group');
 
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect('constrained').to.be.equal(
 				getSelectedBlock(data, 'layout')?.type
 			);
@@ -587,7 +587,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 				// assert current variation
 				cy.checkActiveBlockVariation('group');
 
-				getWPDataObject().then((data) => {
+				assertBlockData((data) => {
 					expect('constrained').to.be.equal(
 						getSelectedBlock(data, 'layout')?.type
 					);

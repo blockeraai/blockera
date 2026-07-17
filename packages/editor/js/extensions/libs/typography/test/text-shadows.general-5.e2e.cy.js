@@ -3,7 +3,7 @@ import {
 	createPost,
 	appendBlocks,
 	addBlockToPost,
-	getWPDataObject,
+	assertBlockData,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -70,7 +70,7 @@ describe('Text Shadows → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				0: {
 					isVisible: true,
@@ -120,7 +120,7 @@ describe('Text Shadows → Functionality', () => {
 		);
 
 		//Check store
-		getWPDataObject().then((data) => {
+		assertBlockData((data) => {
 			expect({
 				0: {
 					isVisible: true,
