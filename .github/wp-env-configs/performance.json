@@ -1,0 +1,21 @@
+{
+	"core": "https://wordpress.org/wordpress-latest.zip",
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/performance-lab.latest-stable.zip"
+	],
+	"config": {
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
+		"BLOCKERA_PERF_BENCHMARK": true,
+		"SCRIPT_DEBUG": false,
+		"WP_DEBUG": false,
+		"WP_DEBUG_DISPLAY": false,
+		"SAVEQUERIES": false
+	},
+	"mappings": {
+		"wp-content/mu-plugins": "./.github/performance/mu-plugins"
+	},
+	"lifecycleScripts": {
+		"afterStart": "wp-env run cli -- wp theme activate twentytwentyfive && wp-env run cli -- wp option update blogname 'Blockera Perf Benchmark' && wp-env run cli -- wp rewrite structure '/%postname%/' --hard && wp-env run cli -- wp rewrite flush --hard"
+	}
+}
