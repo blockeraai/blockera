@@ -39,6 +39,19 @@ fi
 
 echo "📊 Using BASE_DIR: $BASE_DIR"
 
+# Fail early if required tools are missing
+if ! python3 -c "import gprof2dot" 2>/dev/null; then
+  echo "❌ Missing dependency: gprof2dot"
+  echo "   Install with: pip install gprof2dot"
+  exit 1
+fi
+
+if ! command -v dot >/dev/null 2>&1; then
+  echo "❌ Missing dependency: Graphviz (dot)"
+  echo "   Install with: brew install graphviz"
+  exit 1
+fi
+
 # Define all available types
 ALL_SUFFIXES=(extra-small small medium full)
 ALL_NODE_THS=(5 2 0.25 0.01)
@@ -84,8 +97,12 @@ else
   echo "📋 Generating all types: ${SUFFIXES[*]}"
 fi
 
+FOUND_ANY=false
+GENERATED_ANY=false
+
 for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
   [[ "$FILE" == *.pdf || "$FILE" == *.svg || "$FILE" == *.png || "$FILE" == *.dot ]] && continue
+  FOUND_ANY=true
 
   for ((i=1; i<=${#SUFFIXES[@]}; i++)); do
     SUFFIX="${SUFFIXES[$i]}"
@@ -102,10 +119,14 @@ for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
 
     echo "→ Generating: $(basename "$PDF")"
 
-    python3 -m gprof2dot -f callgrind \
+    if ! python3 -m gprof2dot -f callgrind \
       --node-thres "$NODE_T" \
       --edge-thres "$EDGE_T" \
-      "$FILE" > "$DOT" || continue
+      "$FILE" > "$DOT"; then
+      echo "❌ gprof2dot failed for: $(basename "$FILE") ($SUFFIX)"
+      rm -f "$DOT"
+      continue
+    fi
 
     python3 - "$DOT" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$TOP5_COLOR" "$TEXT_COLOR" <<'PY'
 import sys, re
@@ -378,9 +399,26 @@ with open(dot_path, 'w') as f:
     f.writelines(out)
 PY
 
-    dot -Tpdf -o "$PDF" "$DOT"
+    if ! dot -Tpdf -o "$PDF" "$DOT"; then
+      echo "❌ Graphviz (dot) failed for: $(basename "$PDF")"
+      rm -f "$DOT"
+      continue
+    fi
     rm -f "$DOT"
+    GENERATED_ANY=true
+    echo "✓ Created: $(basename "$PDF")"
   done
 done
 
-echo "✅ Done"
+if [[ "$FOUND_ANY" == false ]]; then
+  echo "❌ No cachegrind.* files found in: $BASE_DIR"
+  echo "   Tip: cd to your profiles folder, or pass it as an argument:"
+  echo "   xdebug-graphs /Users/aliaghdam/Sites/xdebug-profiles"
+  exit 1
+fi
+
+if [[ "$GENERATED_ANY" == false ]]; then
+  echo "✅ Done (nothing new to generate)"
+else
+  echo "✅ Done"
+fi
