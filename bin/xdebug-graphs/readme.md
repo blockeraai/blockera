@@ -61,6 +61,8 @@ source ~/.zshrc
 
 ### Basic usage
 
+**Important:** run from the folder that contains `cachegrind.*` files, or pass that path explicitly.
+
 Use current directory (generates all types):
 ```bash
 cd /path/to/xdebug-profiles
@@ -71,6 +73,8 @@ Or pass a directory:
 ```bash
 xdebug-graphs /path/to/xdebug-profiles
 ```
+
+If you see `✅ Done` with no `→ Generating` lines, the tool found no `cachegrind.*` files in that directory (wrong folder), or dependencies are missing (`pip install gprof2dot`, `brew install graphviz`).
 
 ### Generate specific types
 
