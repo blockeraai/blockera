@@ -15,18 +15,111 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 	 * @return string Filtered block content.
 	 */
 	function blockera_render_layout_support_flag( $block_content, $block ) {
-		$block_type            = WP_Block_Type_Registry::get_instance()->get_registered( $block['blockName'] );
-		$block_supports_layout = block_has_support( $block_type, 'layout', false ) || block_has_support( $block_type, '__experimentalLayout', false );
-		$child_layout          = isset( $block['attrs']['style']['layout'] ) ? $block['attrs']['style']['layout'] : null;
+		/*
+		 * Per-request caches: this filter runs for every block. Block-type metadata,
+		 * layout definitions, and theme flags are stable for the request.
+		 */
+		static $registry              = null;
+		static $block_meta            = array();
+		static $layout_definitions    = null;
+		static $disable_layout_styles = null;
+		static $root_padding_aware    = null;
+		static $has_block_gap_support = null;
+		static $style_engine_options  = null;
+		static $sanitized_title_cache = array();
+		static $child_layout_keys     = null;
+		static $parent_layout_keys    = null;
+		static $valid_column_units    = null;
+
+		$child_layout = $block['attrs']['style']['layout'] ?? null;
+		$block_name   = $block['blockName'];
+
+		if ( ! isset( $block_meta[ $block_name ] ) ) {
+			if ( null === $registry ) {
+				$registry = WP_Block_Type_Registry::get_instance();
+			}
+
+			$block_type            = $registry->get_registered( $block_name );
+			$block_supports_layout = false;
+
+			// Inline block_has_support() for the two string feature keys (hot path).
+			if ( $block_type instanceof WP_Block_Type ) {
+				$supports = $block_type->supports;
+				if ( isset( $supports['layout'] ) ) {
+					$feature               = $supports['layout'];
+					$block_supports_layout = true === $feature || is_array( $feature );
+				}
+				if ( ! $block_supports_layout && isset( $supports['__experimentalLayout'] ) ) {
+					$feature               = $supports['__experimentalLayout'];
+					$block_supports_layout = true === $feature || is_array( $feature );
+				}
+			}
+
+			$meta = array(
+				'supports' => $block_supports_layout,
+				'type'     => $block_type,
+			);
+
+			// Layout-supporting types: cache derived values used on every render of that type.
+			if ( $block_supports_layout && $block_type instanceof WP_Block_Type ) {
+				$supports        = $block_type->supports;
+				$fallback_layout = $supports['layout']['default'] ?? array();
+				if ( empty( $fallback_layout ) ) {
+					$fallback_layout = $supports['__experimentalLayout']['default'] ?? array();
+				}
+
+				$split_block_name = explode( '/', $block_name );
+				$full_block_name  = 'core' === $split_block_name[0]
+					? $split_block_name[ array_key_last( $split_block_name ) ]
+					: implode( '-', $split_block_name );
+
+				$meta['fallback_layout']  = $fallback_layout;
+				$meta['fallback_gap']     = $supports['spacing']['blockGap']['__experimentalDefault'] ?? '0.5em';
+				$meta['skip_gap']         = wp_should_skip_block_supports_serialization( $block_type, 'spacing', 'blockGap' );
+				$meta['name_slug']        = sanitize_title( $block_name );
+				$meta['full_name']        = $full_block_name;
+				$meta['container_prefix'] = 'wp-container-' . $meta['name_slug'] . '-is-layout-';
+			}
+
+			$block_meta[ $block_name ] = $meta;
+		}
+
+		$meta                  = $block_meta[ $block_name ];
+		$block_supports_layout = $meta['supports'];
 
 		if ( ! $block_supports_layout && ! $child_layout ) {
 			return $block_content;
 		}
 
+		$block_type        = $meta['type'];
 		$outer_class_names = array();
 
 		// Child layout specific logic.
 		if ( $child_layout ) {
+			if ( null === $child_layout_keys ) {
+				$child_layout_keys    = array(
+					'selfStretch' => true,
+					'flexSize'    => true,
+					'columnStart' => true,
+					'columnSpan'  => true,
+					'rowStart'    => true,
+					'rowSpan'     => true,
+				);
+				$parent_layout_keys   = array(
+					'minimumColumnWidth' => true,
+					'columnCount'        => true,
+				);
+				$valid_column_units   = array(
+					'px'  => true,
+					'rem' => true,
+					'em'  => true,
+				);
+				$style_engine_options = array(
+					'context'  => 'block-supports',
+					'prettify' => false,
+				);
+			}
+
 			/*
 			* Generates a unique class for child block layout styles.
 			*
@@ -35,21 +128,28 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 			* come from `$block['attrs']['style']['layout']` and `$block['parentLayout']`.
 			*
 			* As long as these properties coincide, the generated class will be the same.
+			*
+			* Key order must match array_intersect_key() (source-array order) for stable hashes.
 			*/
+			$layout_for_id = array();
+			foreach ( $child_layout as $key => $value ) {
+				if ( isset( $child_layout_keys[ $key ] ) ) {
+					$layout_for_id[ $key ] = $value;
+				}
+			}
+
+			$parent_layout = $block['parentLayout'] ?? array();
+			$parent_for_id = array();
+			foreach ( $parent_layout as $key => $value ) {
+				if ( isset( $parent_layout_keys[ $key ] ) ) {
+					$parent_for_id[ $key ] = $value;
+				}
+			}
+
 			$container_content_class = wp_unique_id_from_values(
 				array(
-					'layout'       => array_intersect_key(
-						$block['attrs']['style']['layout'] ?? array(),
-						array_flip(
-							array( 'selfStretch', 'flexSize', 'columnStart', 'columnSpan', 'rowStart', 'rowSpan' )
-						)
-					),
-					'parentLayout' => array_intersect_key(
-						$block['parentLayout'] ?? array(),
-						array_flip(
-							array( 'minimumColumnWidth', 'columnCount' )
-						)
-					),
+					'layout'       => $layout_for_id,
+					'parentLayout' => $parent_for_id,
 				),
 				'wp-container-content-'
 			);
@@ -57,7 +157,7 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 			$child_layout_declarations = array();
 			$child_layout_styles       = array();
 
-			$self_stretch = isset( $child_layout['selfStretch'] ) ? $child_layout['selfStretch'] : null;
+			$self_stretch = $child_layout['selfStretch'] ?? null;
 
 			if ( 'fixed' === $self_stretch && isset( $child_layout['flexSize'] ) ) {
 				$child_layout_declarations['flex-basis'] = $child_layout['flexSize'];
@@ -85,9 +185,9 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 			* But if the minimumColumnWidth value wasn't changed, it won't be set. In that case, if columnCount doesn't
 			* exist, we can assume that the grid is responsive.
 			*/
-			if ( isset( $child_layout['columnSpan'] ) && ( isset( $block['parentLayout']['minimumColumnWidth'] ) || ! isset( $block['parentLayout']['columnCount'] ) ) ) {
+			if ( isset( $child_layout['columnSpan'] ) && ( isset( $parent_layout['minimumColumnWidth'] ) || ! isset( $parent_layout['columnCount'] ) ) ) {
 				$column_span_number  = floatval( $child_layout['columnSpan'] );
-				$parent_column_width = isset( $block['parentLayout']['minimumColumnWidth'] ) ? $block['parentLayout']['minimumColumnWidth'] : '12rem';
+				$parent_column_width = $parent_layout['minimumColumnWidth'] ?? '12rem';
 				$parent_column_value = floatval( $parent_column_width );
 				$parent_column_unit  = explode( $parent_column_value, $parent_column_width );
 
@@ -102,7 +202,7 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 				} else {
 					$parent_column_unit = $parent_column_unit[1];
 
-					if ( ! in_array( $parent_column_unit, array( 'px', 'rem', 'em' ), true ) ) {
+					if ( ! isset( $valid_column_units[ $parent_column_unit ] ) ) {
 						$parent_column_unit = 'rem';
 					}
 				}
@@ -130,10 +230,7 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 			*/
 			$child_css = wp_style_engine_get_stylesheet_from_css_rules(
 				$child_layout_styles,
-				array(
-					'context'  => 'block-supports',
-					'prettify' => false,
-				)
+				$style_engine_options
 			);
 
 			if ( $child_css ) {
@@ -155,41 +252,44 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		* In these cases add the appropriate class names and then return early; there's
 		* no need to investigate on this block whether additional layout constraints apply.
 		*/
-		if ( ! $block_supports_layout && ! empty( $outer_class_names ) ) {
-			foreach ( $outer_class_names as $class_name ) {
-				$processor->add_class( $class_name );
+		if ( ! $block_supports_layout ) {
+			if ( ! empty( $outer_class_names ) ) {
+				foreach ( $outer_class_names as $class_name ) {
+					$processor->add_class( $class_name );
+				}
+				return $processor->get_updated_html();
 			}
-			return $processor->get_updated_html();
-		} elseif ( ! $block_supports_layout ) {
+
 			// Ensure layout classnames are not injected if there is no layout support.
 			return $block_content;
 		}
 
-		$global_settings = blockera_get_global_settings();
-		$fallback_layout = isset( $block_type->supports['layout']['default'] )
-			? $block_type->supports['layout']['default']
-			: array();
-		if ( empty( $fallback_layout ) ) {
-			$fallback_layout = isset( $block_type->supports['__experimentalLayout']['default'] )
-				? $block_type->supports['__experimentalLayout']['default']
-				: array();
+		if ( null === $root_padding_aware ) {
+			$global_settings       = blockera_get_global_settings();
+			$root_padding_aware    = $global_settings['useRootPaddingAwareAlignments'] ?? false;
+			$has_block_gap_support = isset( $global_settings['spacing']['blockGap'] );
 		}
-		$used_layout = isset( $block['attrs']['layout'] ) ? $block['attrs']['layout'] : $fallback_layout;
 
-		$class_names        = array();
-		$layout_definitions = wp_get_layout_definitions();
+		if ( null === $layout_definitions ) {
+			$layout_definitions = wp_get_layout_definitions();
+		}
+
+		if ( null === $disable_layout_styles ) {
+			$disable_layout_styles = current_theme_supports( 'disable-layout-styles' );
+		}
+
+		$fallback_layout = $meta['fallback_layout'];
+		$used_layout     = $block['attrs']['layout'] ?? $fallback_layout;
+
+		$class_names = array();
 
 		// Set the correct layout type for blocks using legacy content width.
-		if ( isset( $used_layout['inherit'] ) && $used_layout['inherit'] || isset( $used_layout['contentSize'] ) && $used_layout['contentSize'] ) {
+		if ( ( isset( $used_layout['inherit'] ) && $used_layout['inherit'] ) || ( isset( $used_layout['contentSize'] ) && $used_layout['contentSize'] ) ) {
 			$used_layout['type'] = 'constrained';
 		}
 
-		$root_padding_aware_alignments = isset( $global_settings['useRootPaddingAwareAlignments'] )
-			? $global_settings['useRootPaddingAwareAlignments']
-			: false;
-
 		if (
-			$root_padding_aware_alignments &&
+			$root_padding_aware &&
 			isset( $used_layout['type'] ) &&
 			'constrained' === $used_layout['type']
 		) {
@@ -202,42 +302,48 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		* not intended to provide an extended set of classes to match all block layout attributes
 		* here.
 		*/
-		if ( ! empty( $block['attrs']['layout']['orientation'] ) ) {
-			$class_names[] = 'is-' . sanitize_title( $block['attrs']['layout']['orientation'] );
+		$layout_attrs = $block['attrs']['layout'] ?? null;
+		if ( ! empty( $layout_attrs['orientation'] ) ) {
+			$orientation = $layout_attrs['orientation'];
+			if ( ! isset( $sanitized_title_cache[ $orientation ] ) ) {
+				$sanitized_title_cache[ $orientation ] = sanitize_title( $orientation );
+			}
+			$class_names[] = 'is-' . $sanitized_title_cache[ $orientation ];
 		}
 
-		if ( ! empty( $block['attrs']['layout']['justifyContent'] ) ) {
-			$class_names[] = 'is-content-justification-' . sanitize_title( $block['attrs']['layout']['justifyContent'] );
+		if ( ! empty( $layout_attrs['justifyContent'] ) ) {
+			$justify = $layout_attrs['justifyContent'];
+			if ( ! isset( $sanitized_title_cache[ $justify ] ) ) {
+				$sanitized_title_cache[ $justify ] = sanitize_title( $justify );
+			}
+			$class_names[] = 'is-content-justification-' . $sanitized_title_cache[ $justify ];
 		}
 
-		if ( ! empty( $block['attrs']['layout']['flexWrap'] ) && 'nowrap' === $block['attrs']['layout']['flexWrap'] ) {
+		if ( ! empty( $layout_attrs['flexWrap'] ) && 'nowrap' === $layout_attrs['flexWrap'] ) {
 			$class_names[] = 'is-nowrap';
 		}
 
 		// Get classname for layout type.
 		if ( isset( $used_layout['type'] ) ) {
-			$layout_classname = isset( $layout_definitions[ $used_layout['type'] ]['className'] )
-				? $layout_definitions[ $used_layout['type'] ]['className']
-				: '';
+			$layout_classname = $layout_definitions[ $used_layout['type'] ]['className'] ?? '';
 		} else {
-			$layout_classname = isset( $layout_definitions['default']['className'] )
-				? $layout_definitions['default']['className']
-				: '';
+			$layout_classname = $layout_definitions['default']['className'] ?? '';
 		}
 
 		if ( $layout_classname && is_string( $layout_classname ) ) {
-			$class_names[] = sanitize_title( $layout_classname );
+			if ( ! isset( $sanitized_title_cache[ $layout_classname ] ) ) {
+				$sanitized_title_cache[ $layout_classname ] = sanitize_title( $layout_classname );
+			}
+			$class_names[] = $sanitized_title_cache[ $layout_classname ];
 		}
 
 		/*
 		* Only generate Layout styles if the theme has not opted-out.
 		* Attribute-based Layout classnames are output in all cases.
 		*/
-		if ( ! current_theme_supports( 'disable-layout-styles' ) ) {
+		if ( ! $disable_layout_styles ) {
 
-			$gap_value = isset( $block['attrs']['style']['spacing']['blockGap'] )
-				? $block['attrs']['style']['spacing']['blockGap']
-				: null;
+			$gap_value = $block['attrs']['style']['spacing']['blockGap'] ?? null;
 
 			/*
 			* Skip if gap value contains unsupported characters.
@@ -252,23 +358,9 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 				$gap_value = $gap_value && preg_match( '%[\\\(&=}]|/\*%', $gap_value ) ? null : $gap_value;
 			}
 
-			$fallback_gap_value = isset( $block_type->supports['spacing']['blockGap']['__experimentalDefault'] )
-				? $block_type->supports['spacing']['blockGap']['__experimentalDefault']
-				: '0.5em';
-			$block_spacing      = isset( $block['attrs']['style']['spacing'] )
-				? $block['attrs']['style']['spacing']
-				: null;
-
-			/*
-			* If a block's block.json skips serialization for spacing or spacing.blockGap,
-			* don't apply the user-defined value to the styles.
-			*/
-			$should_skip_gap_serialization = wp_should_skip_block_supports_serialization( $block_type, 'spacing', 'blockGap' );
-
-			$block_gap             = isset( $global_settings['spacing']['blockGap'] )
-				? $global_settings['spacing']['blockGap']
-				: null;
-			$has_block_gap_support = isset( $block_gap );
+			$fallback_gap_value            = $meta['fallback_gap'];
+			$block_spacing                 = $block['attrs']['style']['spacing'] ?? null;
+			$should_skip_gap_serialization = $meta['skip_gap'];
 
 			/*
 			* Generates a unique ID based on all the data required to obtain the
@@ -286,7 +378,7 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 					$fallback_gap_value,
 					$block_spacing,
 				),
-				'wp-container-' . sanitize_title( $block['blockName'] ) . '-is-layout-'
+				$meta['container_prefix']
 			);
 
 			$style = wp_get_layout_style(
@@ -306,9 +398,7 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		}
 
 		// Add combined layout and block classname for global styles to hook onto.
-		$split_block_name = explode( '/', $block['blockName'] );
-		$full_block_name  = 'core' === $split_block_name[0] ? end( $split_block_name ) : implode( '-', $split_block_name );
-		$class_names[]    = 'wp-block-' . $full_block_name . '-' . $layout_classname;
+		$class_names[] = 'wp-block-' . $meta['full_name'] . '-' . $layout_classname;
 
 		// Add classes to the outermost HTML tag if necessary.
 		if ( ! empty( $outer_class_names ) ) {
