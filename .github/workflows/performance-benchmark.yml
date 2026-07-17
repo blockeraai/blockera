@@ -18,7 +18,7 @@ env:
 
 jobs:
     performance_benchmark:
-        name: Server-Timing (with vs without Blockera)
+        name: Server-Timing (Blockera vs Core)
         runs-on: ubuntu-latest
         timeout-minutes: 60
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
@@ -67,7 +67,7 @@ jobs:
             - name: Setup benchmark content (complex-1)
               run: bash .github/performance/scripts/setup-content.sh
 
-            - name: Run benchmarks (with / without Blockera)
+            - name: Run benchmarks (Blockera / Core)
               run: bash .github/performance/scripts/run-benchmarks.sh
 
             - name: Compare results and enforce thresholds

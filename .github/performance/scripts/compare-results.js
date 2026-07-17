@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Compare with/without Blockera Server-Timing CSV medians and enforce thresholds.
+ * Compare Blockera vs Core block editor Server-Timing CSV medians and enforce thresholds.
  *
- * Gate: abs((with - without) / without * 100) > thresholdPercent → fail.
+ * Gate: abs((blockera - core) / core * 100) > thresholdPercent → fail.
  * Thresholds come from scenarios.json (scenario override → defaults.thresholdPercent).
  */
 
@@ -215,8 +215,8 @@ function main() {
 		if (!withRow || !withoutRow) {
 			entry.status = 'fail';
 			entry.note = !withRow
-				? 'Missing WITH-Blockera row'
-				: 'Missing WITHOUT-Blockera row';
+				? 'Missing Blockera row'
+				: 'Missing Core block editor row';
 			failed++;
 			results.push(entry);
 			continue;
@@ -227,7 +227,7 @@ function main() {
 		// with an actionable note instead of comparing bogus numbers.
 		if (withSuccess === 0 || withoutSuccess === 0) {
 			entry.status = 'fail';
-			entry.note = `Non-200 responses (success WITH=${fmt(withSuccess)}%, WITHOUT=${fmt(withoutSuccess)}%); check admin auth / URL`;
+			entry.note = `Non-200 responses (success Blockera=${fmt(withSuccess)}%, Core=${fmt(withoutSuccess)}%); check admin auth / URL`;
 			failed++;
 			results.push(entry);
 			continue;
@@ -240,7 +240,7 @@ function main() {
 			if (scenario.requiresBlockera && !withoutMetric) {
 				entry.status = 'skip';
 				entry.note =
-					'Skipped gate: scenario requires Blockera; WITHOUT metrics unavailable';
+					'Skipped gate: scenario requires Blockera; Core metrics unavailable';
 				entry.withMs = withMetric ? withMetric.value : null;
 				entry.metricKey = withMetric ? withMetric.key : null;
 				results.push(entry);
@@ -260,7 +260,8 @@ function main() {
 
 		if (withoutMetric.value === 0) {
 			entry.status = 'fail';
-			entry.note = 'WITHOUT median is 0; cannot compute percent change';
+			entry.note =
+				'Core block editor median is 0; cannot compute percent change';
 			failed++;
 			results.push(entry);
 			continue;
@@ -272,7 +273,7 @@ function main() {
 		);
 		const absPct = Math.abs(entry.deltaPercent);
 
-		// Settings (and similar) only exist with Blockera; WITHOUT is a different screen.
+		// Settings (and similar) only exist with Blockera; Core is a different screen.
 		if (scenario.requiresBlockera) {
 			entry.status = 'skip';
 			entry.note =
@@ -283,7 +284,7 @@ function main() {
 
 		if (absPct > threshold) {
 			entry.status = 'fail';
-			entry.note = `abs change ${absPct}% exceeds ${threshold}%`;
+			entry.note = `${fmtSigned(entry.deltaPercent, '%')} exceeds ±${threshold}%`;
 			failed++;
 		} else {
 			entry.status = 'pass';
@@ -326,13 +327,33 @@ function fmt(n) {
 	return String(n);
 }
 
+/**
+ * Format a signed delta for the report table (+12.5 / -3.2).
+ *
+ * @param {number|null|undefined} n
+ * @param {string} [suffix]
+ * @return {string} Signed number string, or an em dash when empty.
+ */
+function fmtSigned(n, suffix = '') {
+	if (n === null || n === undefined || Number.isNaN(n)) {
+		return '—';
+	}
+	let sign = '';
+	if (n > 0) {
+		sign = '+';
+	} else if (n < 0) {
+		sign = '-';
+	}
+	return `${sign}${Math.abs(n)}${suffix}`;
+}
+
 function buildReport(results, primaryMetric, defaults) {
 	const lines = [];
 	lines.push('<!-- blockera-perf-benchmark -->');
 	lines.push('## Performance benchmark (Server-Timing)');
 	lines.push('');
 	lines.push(
-		`Compare **WITH Blockera** vs **WITHOUT Blockera** on the same content/theme.`
+		'Compare **Blockera** vs **Core block editor** on the same content and theme.'
 	);
 	lines.push('');
 	lines.push(
@@ -344,9 +365,12 @@ function buildReport(results, primaryMetric, defaults) {
 	lines.push(
 		`- Gate: fail if \`|Δ%|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
 	);
+	lines.push(
+		'- Δ is **Blockera − Core** (positive means Blockera is slower)'
+	);
 	lines.push('');
 	lines.push(
-		'| Scenario | Metric | Without (ms) | With (ms) | Δ ms | Δ % | Threshold | Status |'
+		'| Scenario | Metric | Core (ms) | Blockera (ms) | Δ ms | Δ % | Threshold | Status |'
 	);
 	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
@@ -359,7 +383,7 @@ function buildReport(results, primaryMetric, defaults) {
 		}
 		const metric = r.metricKey ? r.metricKey.replace(' (median)', '') : '—';
 		lines.push(
-			`| ${r.label} | ${metric} | ${fmt(r.withoutMs)} | ${fmt(r.withMs)} | ${fmt(r.deltaMs)} | ${fmt(r.deltaPercent)} | ${r.thresholdPercent}% | ${status} |`
+			`| ${r.label} | ${metric} | ${fmt(r.withoutMs)} | ${fmt(r.withMs)} | ${fmtSigned(r.deltaMs)} | ${fmtSigned(r.deltaPercent, '%')} | ${r.thresholdPercent}% | ${status} |`
 		);
 	}
 
