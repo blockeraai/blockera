@@ -89,6 +89,7 @@ jobs:
               if: ${{ always() && github.event_name == 'pull_request' && steps.compare.outputs.has_report == 'true' }}
               uses: marocchino/sticky-pull-request-comment@v2
               with:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   header: blockera-perf-benchmark
                   path: .github/performance/results/report.md
                   recreate: true
