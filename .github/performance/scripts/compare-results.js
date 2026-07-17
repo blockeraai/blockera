@@ -15,25 +15,41 @@ const scenariosPath =
 	process.env.SCENARIOS_FILE || '.github/performance/scenarios.json';
 
 function readCsv(filePath) {
-	const text = fs.readFileSync(filePath, 'utf8').trim();
-	if (!text) {
+	const text = fs.readFileSync(filePath, 'utf8');
+	if (!text.trim()) {
 		throw new Error(`Empty CSV: ${filePath}`);
 	}
 
-	const lines = text.split(/\r?\n/).filter(Boolean);
-	// Find header line (wpp-research may log progress before CSV).
-	let headerIdx = lines.findIndex(
-		(line) => /^URL,/i.test(line) || line.toLowerCase().startsWith('url,')
-	);
-	if (headerIdx === -1) {
-		// Fallback: first line that has enough commas and looks like a table.
-		headerIdx = lines.findIndex((line) => line.includes('Response Time'));
-	}
+	const lines = text.split(/\r?\n/).filter((line) => line.trim() !== '');
+	// wpp-research may log npm/progress noise before the CSV header.
+	const headerIdx = lines.findIndex((line) => /^URL,/i.test(line.trim()));
 	if (headerIdx === -1) {
 		throw new Error(`Could not find CSV header in ${filePath}`);
 	}
 
-	const headers = splitCsvLine(lines[headerIdx]);
+	const header = splitCsvLine(lines[headerIdx]).map((c) => c.trim());
+
+	// wpp-research prints a transposed table: header is `URL,<url1>,<url2>,...`
+	// and each subsequent line is `<Metric>,<v1>,<v2>,...`.
+	const transposed = header.length > 1 && /^https?:\/\//i.test(header[1]);
+
+	if (transposed) {
+		const urls = header.slice(1);
+		const rows = urls.map((u) => ({ URL: u }));
+		for (let i = headerIdx + 1; i < lines.length; i++) {
+			const cols = splitCsvLine(lines[i]);
+			const field = (cols[0] ?? '').trim();
+			if (!field) {
+				continue;
+			}
+			for (let j = 0; j < urls.length; j++) {
+				rows[j][field] = (cols[j + 1] ?? '').trim();
+			}
+		}
+		return { headers: header, rows };
+	}
+
+	// Fallback: one row per URL (older/non-transposed output).
 	const rows = [];
 	for (let i = headerIdx + 1; i < lines.length; i++) {
 		const cols = splitCsvLine(lines[i]);
@@ -41,12 +57,21 @@ function readCsv(filePath) {
 			continue;
 		}
 		const row = {};
-		headers.forEach((h, idx) => {
-			row[h.trim()] = (cols[idx] ?? '').trim();
+		header.forEach((h, idx) => {
+			row[h] = (cols[idx] ?? '').trim();
 		});
 		rows.push(row);
 	}
-	return { headers, rows };
+	return { headers: header, rows };
+}
+
+function successRateOf(row) {
+	if (!row) {
+		return null;
+	}
+	const raw = row['Success Rate'] ?? row['success rate'] ?? '';
+	const n = Number(String(raw).replace('%', '').trim());
+	return Number.isNaN(n) ? null : n;
 }
 
 function splitCsvLine(line) {
@@ -166,6 +191,9 @@ function main() {
 				? scenario.thresholdPercent
 				: defaultThreshold;
 
+		const withSuccess = successRateOf(withRow);
+		const withoutSuccess = successRateOf(withoutRow);
+
 		const entry = {
 			id: scenario.id,
 			label: scenario.label || scenario.id,
@@ -178,6 +206,8 @@ function main() {
 			withoutMs: null,
 			deltaMs: null,
 			deltaPercent: null,
+			withSuccess,
+			withoutSuccess,
 			status: 'pass',
 			note: '',
 		};
@@ -187,6 +217,17 @@ function main() {
 			entry.note = !withRow
 				? 'Missing WITH-Blockera row'
 				: 'Missing WITHOUT-Blockera row';
+			failed++;
+			results.push(entry);
+			continue;
+		}
+
+		// A 0% success rate means the URL never returned HTTP 200 (e.g. an admin
+		// page redirected to login). The measured time is meaningless, so fail
+		// with an actionable note instead of comparing bogus numbers.
+		if (withSuccess === 0 || withoutSuccess === 0) {
+			entry.status = 'fail';
+			entry.note = `Non-200 responses (success WITH=${fmt(withSuccess)}%, WITHOUT=${fmt(withoutSuccess)}%); check admin auth / URL`;
 			failed++;
 			results.push(entry);
 			continue;
@@ -305,9 +346,9 @@ function buildReport(results, primaryMetric, defaults) {
 	);
 	lines.push('');
 	lines.push(
-		'| Scenario | Without (ms) | With (ms) | Δ ms | Δ % | Threshold | Status |'
+		'| Scenario | Metric | Without (ms) | With (ms) | Δ ms | Δ % | Threshold | Status |'
 	);
-	lines.push('| --- | ---: | ---: | ---: | ---: | ---: | --- |');
+	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
 	for (const r of results) {
 		let status = '❌ fail';
@@ -316,8 +357,9 @@ function buildReport(results, primaryMetric, defaults) {
 		} else if (r.status === 'skip') {
 			status = '⏭️ skip';
 		}
+		const metric = r.metricKey ? r.metricKey.replace(' (median)', '') : '—';
 		lines.push(
-			`| ${r.label} | ${fmt(r.withoutMs)} | ${fmt(r.withMs)} | ${fmt(r.deltaMs)} | ${fmt(r.deltaPercent)} | ${r.thresholdPercent}% | ${status} |`
+			`| ${r.label} | ${metric} | ${fmt(r.withoutMs)} | ${fmt(r.withMs)} | ${fmt(r.deltaMs)} | ${fmt(r.deltaPercent)} | ${r.thresholdPercent}% | ${status} |`
 		);
 	}
 
