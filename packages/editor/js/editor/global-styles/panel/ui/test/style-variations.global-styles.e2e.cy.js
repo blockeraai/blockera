@@ -161,6 +161,56 @@ const renameSection1WithNewId = (label = 'New Name', id = 'new-id') => {
 	cy.getByDataTest(`style-${id}`).should('contain', label);
 };
 
+/**
+ * Seed a deletable `new-id` variation ADDITIVELY by duplicating `style-section-1`.
+ *
+ * The delete spec asserts `core/group` returns to its 5 theme variations after
+ * removing the variation. Renaming section-1 (see `renameSection1WithNewId`) is
+ * destructive — it consumes section-1, so a later delete leaves 4. Duplicating
+ * keeps section-1 and adds `new-id` (6 total), so deleting `new-id` restores the
+ * pristine theme baseline of 5 deterministically, without relying on leftover
+ * cross-test state.
+ */
+const duplicateSection1AsNewId = (label = 'New Name', id = 'new-id') => {
+	cy.getByDataTest('open-section-1-contextmenu')
+		.filter(':visible')
+		.first()
+		.click();
+	cy.get('.blockera-component-popover-body button')
+		.contains('Duplicate')
+		.click({ force: true });
+
+	// Set Name first: the modal auto-syncs ID from the name; set ID afterwards so
+	// the manual edit sticks (`isIdManuallyEdited`).
+	cy.getParentContainer('Name').within(() => {
+		cy.get('input').clear();
+		cy.get('input').type(label);
+	});
+
+	cy.getParentContainer('ID').within(() => {
+		cy.get('input').clear();
+		cy.get('input').type(id);
+	});
+
+	cy.getByDataTest('save-duplicate-button').click();
+	cy.getByDataTest('Close Block Style').click();
+	cy.getByDataTest(`style-${id}`).should('contain', label);
+};
+
+const ensureNewIdViaDuplicate = (label = 'New Name', id = 'new-id') => {
+	cy.get('body').then(($body) => {
+		const $card = $body.find(`[data-test="style-${id}"]`);
+		const hasExpectedLabel =
+			$card.length > 0 && $card.text().includes(label);
+
+		if (hasExpectedLabel) {
+			cy.getByDataTest(`style-${id}`).should('contain', label);
+		} else {
+			duplicateSection1AsNewId(label, id);
+		}
+	});
+};
+
 const ensureNewIdStyleVariation = (label = 'New Name', id = 'new-id') => {
 	// Presence check must be non-throwing so the rename fallback stays reachable
 	// when a prior test/run left no `new-id` card. `cy.get(selector)` retries and
@@ -394,7 +444,9 @@ describe('Style Variations Inside Global Styles Panel → Functionality (Global 
 	});
 
 	it('should be able to delete specific style variation', () => {
-		ensureNewIdStyleVariation();
+		// Additive seed (duplicate, not rename) so section-1 survives and deleting
+		// new-id returns core/group to its 5 theme variations (not 4).
+		ensureNewIdViaDuplicate();
 
 		openStyleVariationContextMenu('new-id');
 		cy.get('.variations-settings-popover')
