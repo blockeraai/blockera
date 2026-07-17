@@ -336,6 +336,22 @@ function setFlexLayoutSelectOption(axisIndex, optionLabel) {
 		.within(() => {
 			cy.contains(optionLabel).click({ force: true });
 		});
+
+	// The axis select renders its listbox in a body-level portal popover. A
+	// force-click on the option does not always dismiss it, and a lingering popover
+	// overlays the editor — the first `savePage()` publish click then only performs
+	// the popover's outside-click close, so the post never publishes and no success
+	// snackbar appears. Dismiss it deterministically before moving on.
+	//
+	// Scope to `[data-open]`: WP CustomSelectControl (Ariakit) only marks the open
+	// select listbox with it. A bare `[role="listbox"]` also matches the persistent
+	// block inserter list (`.block-editor-block-types-list`), which never unmounts.
+	cy.get('body').then(($body) => {
+		if ($body.find('[role="listbox"][data-open]').length) {
+			cy.get('body').type('{esc}');
+		}
+	});
+	cy.get('[role="listbox"][data-open]').should('not.exist');
 }
 
 const MATRIX_SPECIAL_UNITS = [
