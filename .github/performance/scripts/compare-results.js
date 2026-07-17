@@ -328,6 +328,19 @@ function fmt(n) {
 }
 
 /**
+ * Format a millisecond value with an `ms` suffix.
+ *
+ * @param {number|null|undefined} n
+ * @return {string} Value with ms suffix, or an em dash when empty.
+ */
+function fmtMs(n) {
+	if (n === null || n === undefined || Number.isNaN(n)) {
+		return '—';
+	}
+	return `${n}ms`;
+}
+
+/**
  * Format a signed delta for the report table (+12.5 / -3.2).
  *
  * @param {number|null|undefined} n
@@ -370,7 +383,7 @@ function buildReport(results, primaryMetric, defaults) {
 	);
 	lines.push('');
 	lines.push(
-		'| Scenario | Metric | Core (ms) | Blockera (ms) | Δ ms | Δ % | Threshold | Status |'
+		'| Scenario | Metric | Core | Blockera | Δ ms | Δ % | Threshold | Status |'
 	);
 	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
@@ -383,7 +396,7 @@ function buildReport(results, primaryMetric, defaults) {
 		}
 		const metric = r.metricKey ? r.metricKey.replace(' (median)', '') : '—';
 		lines.push(
-			`| ${r.label} | ${metric} | ${fmt(r.withoutMs)} | ${fmt(r.withMs)} | ${fmtSigned(r.deltaMs)} | ${fmtSigned(r.deltaPercent, '%')} | ${r.thresholdPercent}% | ${status} |`
+			`| ${r.label} | ${metric} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${fmtSigned(r.deltaMs)} | ${fmtSigned(r.deltaPercent, '%')} | ${r.thresholdPercent}% | ${status} |`
 		);
 	}
 
