@@ -92,7 +92,6 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   header: blockera-perf-benchmark
                   path: .github/performance/results/report.md
-                  recreate: true
 
             - name: Fail job when thresholds exceeded
               if: ${{ steps.compare.outcome == 'failure' }}
