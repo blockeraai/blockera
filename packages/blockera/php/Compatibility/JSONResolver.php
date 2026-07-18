@@ -48,6 +48,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $resolved_merged_data_cache = array();
 
 	/**
+	 * Request-level cache of {@see JSON::get_settings()} for merged data keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_settings_cache = array();
+
+	/**
 	 * Store the default WordPress provided data from theme.
 	 *
 	 * @var \WP_Theme_JSON_Data $default_theme_data the provided from theme data by WordPress.
@@ -578,35 +585,69 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		$result = new JSON();
 		$result->merge( static::get_core_data() );
 		if ( 'default' === $origin ) {
-			if ( ! static::is_testing_environment() ) {
-				static::$merged_data_cache[ $origin ] = $result->get_raw_data();
-			}
+			static::store_merged_data_cache( $origin, $result );
 			return $result;
 		}
 
 		$result->merge( static::get_block_data() );
 		if ( 'blocks' === $origin ) {
-			if ( ! static::is_testing_environment() ) {
-				static::$merged_data_cache[ $origin ] = $result->get_raw_data();
-			}
+			static::store_merged_data_cache( $origin, $result );
 			return $result;
 		}
 
 		$result->merge( static::get_theme_data() );
 		if ( 'theme' === $origin ) {
-			if ( ! static::is_testing_environment() ) {
-				static::$merged_data_cache[ $origin ] = $result->get_raw_data();
-			}
+			static::store_merged_data_cache( $origin, $result );
 			return $result;
 		}
 
 		$result->merge( static::get_user_data() );
 
-		if ( ! static::is_testing_environment() ) {
-			static::$merged_data_cache[ $origin ] = $result->get_raw_data();
-		}
+		static::store_merged_data_cache( $origin, $result );
 
 		return $result;
+	}
+
+	/**
+	 * Settings from merged theme.json (request-level cache).
+	 *
+	 * Prefer this over {@see get_merged_data()}->{@see JSON::get_settings()} when only
+	 * settings are needed — avoids reconstructing a JSON instance on cache hits.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array
+	 */
+	public static function get_merged_settings( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_settings_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_settings_cache[ $origin ];
+		}
+
+		$settings = static::get_merged_data( $origin )->get_settings();
+
+		if ( ! static::is_testing_environment() ) {
+			static::$merged_settings_cache[ $origin ] = $settings;
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Store merged raw data + settings for the origin (no-op in testing).
+	 *
+	 * @param string $origin Origin key.
+	 * @param JSON   $result Merged JSON instance.
+	 * @return void
+	 */
+	private static function store_merged_data_cache( string $origin, JSON $result ): void {
+		if ( static::is_testing_environment() ) {
+			return;
+		}
+
+		static::$merged_data_cache[ $origin ]     = $result->get_raw_data();
+		static::$merged_settings_cache[ $origin ] = $result->get_settings();
 	}
 
 	/**
@@ -1048,6 +1089,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$user_cache_origins_settings_signature = null;
 		static::$merged_data_cache                     = array();
 		static::$resolved_merged_data_cache            = array();
+		static::$merged_settings_cache                 = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();
@@ -1057,6 +1099,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$theme_json_file_cache     = array();
 		static::$theme_with_supports       = null;
 		static::$cached_theme_support_data = null;
+
+		// Drop non-persistent settings/stylesheet entries so admin rebuilds see fresh data.
+		foreach ( array( 'custom', 'theme', 'blocks', 'default' ) as $origin ) {
+			wp_cache_delete( 'blockera_get_global_settings_' . $origin, 'theme_json' );
+		}
+		wp_cache_delete( 'blockera_wp_get_global_stylesheet', 'theme_json' );
 	}
 
 	/**

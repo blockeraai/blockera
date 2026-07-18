@@ -265,7 +265,11 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		}
 
 		if ( null === $root_padding_aware ) {
-			$global_settings       = blockera_get_global_settings();
+			/*
+			 * Core layout flags only — use WordPress settings (already request-cached)
+			 * instead of blockera_get_global_settings(), which rebuilds Blockera's JSON merge.
+			 */
+			$global_settings       = wp_get_global_settings();
 			$root_padding_aware    = $global_settings['useRootPaddingAwareAlignments'] ?? false;
 			$has_block_gap_support = isset( $global_settings['spacing']['blockGap'] );
 		}

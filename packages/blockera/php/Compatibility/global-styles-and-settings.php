@@ -546,7 +546,11 @@ if (! function_exists('blockera_get_global_settings')) {
 		}
 
 		if ( false === $settings ) {
-			$settings = JSONResolver::get_merged_data( $origin )->get_settings();
+			/*
+			 * get_merged_settings() returns a request-cached settings array (also warmed when
+			 * get_merged_data() runs during global styles enqueue) without rebuilding JSON.
+			 */
+			$settings = JSONResolver::get_merged_settings( $origin );
 			if ( $can_use_cached ) {
 				wp_cache_set( $cache_key, $settings, $cache_group );
 			}

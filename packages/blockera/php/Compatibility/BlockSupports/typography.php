@@ -52,7 +52,8 @@ if (! function_exists('blockera_get_typography_font_size_value')) {
 		}
 
 		// Fallback to global settings as default.
-		$global_settings = blockera_get_global_settings();
+		// Fluid typography reads core keys only (typography.fluid, layout.wideSize).
+		$global_settings = wp_get_global_settings();
 		$settings        = wp_parse_args(
 			$settings,
 			$global_settings
