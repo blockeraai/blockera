@@ -154,19 +154,39 @@ if (! function_exists('blockera_load')) {
      * @return mixed file data on success, false on otherwise!
      */
     function blockera_load( string $path, string $baseDir = '', array $params = []) { 
+		static $cache = [];
+
         $file = str_replace('.', DIRECTORY_SEPARATOR, $path) . '.php';
 
         $filename = ( empty($baseDir) ? __DIR__ : $baseDir ) . '/' . $file;
 
-        if (! file_exists($filename)) {
+		// Param-less loads (shared inners, attributes, etc.) are pure — memoize per request.
+		$can_cache = [] === $params;
+
+		if ( $can_cache && array_key_exists( $filename, $cache ) ) {
+			return $cache[ $filename ];
+		}
+
+        if (! is_file($filename)) {
+			if ( $can_cache ) {
+				$cache[ $filename ] = false;
+			}
 
             return false;
         }
 
-        // phpcs:ignore
-        extract($params);
+		if ( $params ) {
+			// phpcs:ignore
+			extract($params);
+		}
 
-        return include $filename;
+		$result = include $filename;
+
+		if ( $can_cache ) {
+			$cache[ $filename ] = $result;
+		}
+
+		return $result;
     }
 }
 
