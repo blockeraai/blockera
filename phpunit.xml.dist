@@ -27,6 +27,7 @@
             <exclude>./dist/</exclude>
             <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
             <exclude>./packages/editor/php/tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
         <testsuite name="snapshots">
             <directory suffix=".php">./packages/dev-phpunit/php/</directory>
@@ -35,6 +36,7 @@
             <exclude>./dist/</exclude>
             <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
             <exclude>./packages/editor/php/tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
