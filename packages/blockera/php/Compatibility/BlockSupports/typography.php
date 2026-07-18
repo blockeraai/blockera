@@ -51,10 +51,12 @@ if (! function_exists('blockera_get_typography_font_size_value')) {
 			);
 		}
 
-		// Fallback to global settings as default.
-		// Fluid typography reads core keys only (typography.fluid, layout.wideSize).
-		$global_settings = wp_get_global_settings();
-		$settings        = wp_parse_args(
+		// Fallback to global settings as default (request-cached; avoid cold WP_Theme_JSON_Resolver).
+		static $global_settings = null;
+		if ( null === $global_settings ) {
+			$global_settings = blockera_get_global_settings();
+		}
+		$settings = wp_parse_args(
 			$settings,
 			$global_settings
 		);

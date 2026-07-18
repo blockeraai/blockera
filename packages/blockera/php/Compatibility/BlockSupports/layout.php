@@ -266,12 +266,13 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 
 		if ( null === $root_padding_aware ) {
 			/*
-			 * Core layout flags only — use WordPress settings (already request-cached)
-			 * instead of blockera_get_global_settings(), which rebuilds Blockera's JSON merge.
+			 * Prefer Blockera's request-cached merged settings (warmed during global-styles
+			 * enqueue). wp_get_global_settings() cold-starts WP_Theme_JSON_Resolver and can
+			 * dominate render_block wall time even though these are core keys.
 			 */
-			$global_settings       = wp_get_global_settings();
-			$root_padding_aware    = $global_settings['useRootPaddingAwareAlignments'] ?? false;
-			$has_block_gap_support = isset( $global_settings['spacing']['blockGap'] );
+			$flags                 = blockera_get_layout_support_global_flags();
+			$root_padding_aware    = $flags['use_root_padding_aware_alignments'];
+			$has_block_gap_support = $flags['has_block_gap_support'];
 		}
 
 		if ( null === $layout_definitions ) {
