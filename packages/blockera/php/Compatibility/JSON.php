@@ -757,16 +757,16 @@ class JSON extends \WP_Theme_JSON {
 	 * @return string The new stylesheet.
 	 */
 	protected function get_blockera_block_rules( $style_nodes ) {
-		$block_rules = '';
+		$parts = array();
 
 		foreach ( $style_nodes as $metadata ) {
 			if ( null === $metadata['selector'] ) {
 				continue;
 			}
-			$block_rules .= static::get_blockera_styles_for_block( $metadata );
+			$parts[] = $this->get_blockera_styles_for_block( $metadata );
 		}
 
-		return $block_rules;
+		return $parts ? implode( '', $parts ) : '';
 	}
 
 	/**
