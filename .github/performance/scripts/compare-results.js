@@ -364,7 +364,7 @@ function fmtSigned(n, suffix = '') {
 function buildReport(results, primaryMetric, defaults) {
 	const lines = [];
 	lines.push('<!-- blockera-perf-benchmark -->');
-	lines.push('## Performance benchmark (Server-Timing)');
+	lines.push('# 📈 Performance Report');
 	lines.push('');
 	lines.push(
 		'Compare **Blockera** vs **Core block editor** on the same content and theme.'

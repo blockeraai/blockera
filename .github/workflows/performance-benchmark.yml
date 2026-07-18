@@ -80,7 +80,7 @@ jobs:
                   set -e
                   if [ ! -f .github/performance/results/report.md ]; then
                     mkdir -p .github/performance/results
-                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '## Performance benchmark' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
+                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '# 📈 Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
                   fi
                   echo "has_report=true" >> "$GITHUB_OUTPUT"
                   exit "${code}"
