@@ -10,6 +10,10 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
+permissions:
+    contents: write
+    pull-requests: read
+
 jobs:
     build:
         name: Create Demo and Attachments
@@ -38,18 +42,68 @@ jobs:
               with:
                   main-file-suffix: '-${{ github.event.pull_request.number }}'
 
-            - name: Upload ZIP to FTP server
-              uses: nerdoza/action-simple-file-upload@v2
+            - name: Upload ZIP as Actions artifact
+              uses: actions/upload-artifact@v4
               with:
-                  host: ${{ secrets.FTP_HOST }}
-                  user: ${{ secrets.FTP_USERNAME }}
-                  password: ${{ secrets.FTP_PASSWORD }}
-                  src: blockera.zip
-                  dest: /domains/cd.blockera.ai/public_html/blockera-${{ github.event.pull_request.number }}.zip
+                  name: blockera-pr-${{ github.event.pull_request.number }}
+                  path: blockera.zip
+                  retention-days: 14
+                  if-no-files-found: error
 
-            - name: Echo uploaded file link
+            - name: Publish ZIP to ci-artifacts prerelease
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  PR_NUMBER: ${{ github.event.pull_request.number }}
+                  REPO: ${{ github.repository }}
+                  SHORT_SHA: ${{ github.event.pull_request.head.sha }}
               run: |
-                  echo "uploaded_zip_file=https://${{ secrets.FTP_HOST }}/blockera-${{ github.event.pull_request.number }}.zip" >> $GITHUB_ENV
+                  set -euo pipefail
+
+                  RELEASE_TAG="ci-artifacts"
+                  ARTIFACTS_TO_KEEP=2
+                  SHORT_SHA="${SHORT_SHA:0:7}"
+                  ASSET_NAME="blockera-pr-${PR_NUMBER}-${SHORT_SHA}.zip"
+                  PUBLIC_URL="https://github.com/${REPO}/releases/download/${RELEASE_TAG}/${ASSET_NAME}"
+
+                  cp blockera.zip "${ASSET_NAME}"
+
+                  # Ensure a public prerelease exists (draft assets require auth and break Playground).
+                  if ! gh release view "${RELEASE_TAG}" --repo "${REPO}" >/dev/null 2>&1; then
+                    gh release create "${RELEASE_TAG}" \
+                      --repo "${REPO}" \
+                      --title "CI Artifacts" \
+                      --notes "Public PR build zips for WordPress Playground demos. Not a product release." \
+                      --prerelease
+                  fi
+
+                  # Upload (replace if this exact asset name already exists from a rerun).
+                  gh release upload "${RELEASE_TAG}" "${ASSET_NAME}" \
+                    --repo "${REPO}" \
+                    --clobber
+
+                  # Prune older assets for this PR; keep the newest ARTIFACTS_TO_KEEP commit sets.
+                  PREFIX="blockera-pr-${PR_NUMBER}-"
+                  mapfile -t OLD_ASSETS < <(
+                    gh release view "${RELEASE_TAG}" --repo "${REPO}" --json assets \
+                      | jq -r --arg prefix "${PREFIX}" --argjson keep "${ARTIFACTS_TO_KEEP}" '
+                          .assets
+                          | map(select(.name | startswith($prefix)))
+                          | sort_by(.createdAt)
+                          | reverse
+                          | .[$keep:]
+                          | .[].name
+                        '
+                  )
+
+                  if ((${#OLD_ASSETS[@]} > 0)); then
+                    for old_asset in "${OLD_ASSETS[@]}"; do
+                      echo "Deleting old release asset: ${old_asset}"
+                      gh release delete-asset "${RELEASE_TAG}" "${old_asset}" --repo "${REPO}" --yes
+                    done
+                  fi
+
+                  echo "uploaded_zip_file=${PUBLIC_URL}" >> "$GITHUB_ENV"
+                  echo "Public zip URL: ${PUBLIC_URL}"
 
             - name: Find existing bot comment
               id: find_comment
@@ -98,7 +152,7 @@ jobs:
                   fi
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$FINAL_JSON" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
+                  ENCODED_JSON=$(echo "$FINAL_JSON" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = $new_url')
 
                   # Update the blogname to append PR number
                   ENCODED_JSON=$(echo "$ENCODED_JSON" | jq --arg pr_num "${{ github.event.pull_request.number }}" '.steps[3].options.blogname += " (PR \($pr_num))"')
