@@ -423,42 +423,51 @@ class JSON extends \WP_Theme_JSON {
 	}
 
 	/**
-     * Given a tree, converts the internal representation of variables to the CSS representation.
-     * Modifies the local tree copy in-place and returns it (same contract as WP_Theme_JSON).
-     *
-     * Hot path (sanitize → styles/settings): large nested theme.json trees.
-     * Optimizations vs core-style recursive walk:
-     * - Iterative BFS stack-of-refs (zero recursive PHP calls; Xdebug showed ~23k self-calls).
-     * - Inline convert_custom_properties (no per-leaf helper + no duplicate prefix check).
-     * - Request-level static cache for repeated var: tokens across the tree / sanitize passes.
-     * - Byte-level `var:` detect (isset + 4 char compares; no str_starts_with call).
-     *
-     * @since 6.3.0
-     *
-     * @param array $tree Input to process.
-     * @return array The modified $tree.
-     */
-    private static function resolve_custom_css_format( $tree) {
-        static $cache = array();
+	 * Given a tree, converts the internal representation of variables to the CSS representation.
+	 * Modifies the local tree copy in-place and returns it (same contract as WP_Theme_JSON).
+	 *
+	 * Hot path (sanitize → styles/settings): large nested theme.json trees.
+	 * Optimizations vs core-style recursive walk:
+	 * - Early return for empty trees.
+	 * - Iterative BFS stack-of-refs (zero recursive PHP calls; Xdebug showed ~23k self-calls).
+	 * - Skip empty nested arrays (no stack push; foreach would be a no-op).
+	 * - Inline convert_custom_properties (no per-leaf helper + no duplicate prefix check).
+	 * - Request-level static cache for repeated var: tokens across the tree / sanitize passes.
+	 * - C-level `str_starts_with( $data, 'var:' )` prefix detect.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @param array $tree Input to process.
+	 * @return array The modified $tree.
+	 */
+	private static function resolve_custom_css_format( $tree ) {
+		if ( ! $tree ) {
+			return $tree;
+		}
 
-        $stack    = array();
-        $stack[0] = &$tree;
+		static $cache = array();
 
-        // Grow-only stack: each nested array is queued once; mutate leaves via foreach-by-ref.
-        // $n tracks stack size so we avoid count() on every iteration.
-        for ($i = 0, $n = 1; $i < $n; $i++) {
-            foreach ($stack[ $i ] as &$data) {
-                if (is_array($data)) {
-                    $stack[ $n++ ] = &$data;
-                } elseif (is_string($data) && isset($data[3]) && 'v' === $data[0] && 'a' === $data[1] && 'r' === $data[2] && ':' === $data[3]) {
-                    $data = $cache[ $data ] ??= 'var(--wp--' . str_replace('|', '--', substr($data, 4)) . ')';
-                }
-            }
-            unset($data);
-        }
+		$stack    = array();
+		$stack[0] = &$tree;
 
-        return $tree;
-    }
+		// Grow-only stack: each nested array is queued once; mutate leaves via foreach-by-ref.
+		// $n tracks stack size so we avoid count() on every iteration.
+		for ( $i = 0, $n = 1; $i < $n; ++$i ) {
+			foreach ( $stack[ $i ] as &$data ) {
+				if ( is_array( $data ) ) {
+					// Empty arrays need no walk (equivalent to foreach no-op).
+					if ( $data ) {
+						$stack[ $n++ ] = &$data;
+					}
+				} elseif ( is_string( $data ) && str_starts_with( $data, 'var:' ) ) {
+					$data = $cache[ $data ] ??= 'var(--wp--' . str_replace( '|', '--', substr( $data, 4 ) ) . ')';
+				}
+			}
+			unset( $data );
+		}
+
+		return $tree;
+	}
 
 	/**
      * This is used to convert the internal representation of variables to the CSS representation.
