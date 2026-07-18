@@ -1,6 +1,6 @@
 {
 	"defaults": {
-		"requests": 50,
+		"requests": 200,
 		"concurrency": 1,
 		"primaryMetric": "wp-total",
 		"thresholdPercent": 10,

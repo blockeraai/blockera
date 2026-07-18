@@ -13,7 +13,7 @@ WPP_REF="${WPP_RESEARCH_REF:-main}"
 
 mkdir -p "$OUT_DIR"
 
-REQUESTS="$(node -e "const s=require('./${SCENARIOS_FILE}'); process.stdout.write(String(s.defaults.requests || 50))")"
+REQUESTS="$(node -e "const s=require('./${SCENARIOS_FILE}'); process.stdout.write(String(s.defaults.requests || 200))")"
 CONCURRENCY="$(node -e "const s=require('./${SCENARIOS_FILE}'); process.stdout.write(String(s.defaults.concurrency || 1))")"
 
 URLS_FILE="${OUT_DIR}/urls.txt"

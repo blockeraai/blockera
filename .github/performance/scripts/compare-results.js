@@ -393,7 +393,7 @@ function buildReport(results, primaryMetric, defaults) {
 		`- Primary metric: \`${primaryMetric}\` (fallback: Response Time median)`
 	);
 	lines.push(
-		`- Requests: \`${defaults.requests ?? 50}\`, concurrency: \`${defaults.concurrency ?? 1}\``
+		`- Requests: \`${defaults.requests ?? 200}\`, concurrency: \`${defaults.concurrency ?? 1}\``
 	);
 	lines.push(
 		`- Gate: fail if \`|Δ%|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
