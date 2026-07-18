@@ -962,6 +962,12 @@ class BlockeraDuotone {
 			return null;
 		}
 
+		static $selector_cache = array();
+		$cache_key             = $block_type->name ?? '';
+		if ( '' !== $cache_key && array_key_exists( $cache_key, $selector_cache ) ) {
+			return $selector_cache[ $cache_key ];
+		}
+
 		/*
 		 * Backward compatibility with `supports.color.__experimentalDuotone`
 		 * is provided via the `block_type_metadata_settings` filter. If
@@ -971,6 +977,9 @@ class BlockeraDuotone {
 		 */
 		$duotone_support = block_has_support( $block_type, array( 'filter', 'duotone' ) );
 		if ( ! $duotone_support ) {
+			if ( '' !== $cache_key ) {
+				$selector_cache[ $cache_key ] = null;
+			}
 			return null;
 		}
 
@@ -983,13 +992,19 @@ class BlockeraDuotone {
 			: false;
 		if ( $experimental_duotone ) {
 			$root_selector = wp_get_block_css_selector( $block_type );
-			return is_string( $experimental_duotone )
+			$selector      = is_string( $experimental_duotone )
 				? JSON::scope_selector( $root_selector, $experimental_duotone )
 				: $root_selector;
+		} else {
+			// Regular filter.duotone support uses filter.duotone selectors with fallbacks.
+			$selector = wp_get_block_css_selector( $block_type, array( 'filter', 'duotone' ), true );
 		}
 
-		// Regular filter.duotone support uses filter.duotone selectors with fallbacks.
-		return wp_get_block_css_selector( $block_type, array( 'filter', 'duotone' ), true );
+		if ( '' !== $cache_key ) {
+			$selector_cache[ $cache_key ] = $selector;
+		}
+
+		return $selector;
 	}
 
 	/**
@@ -1007,8 +1022,8 @@ class BlockeraDuotone {
 		if ( isset( self::$global_styles_presets ) ) {
 			return self::$global_styles_presets;
 		}
-		// Get the per block settings from the theme.json.
-		$tree              = wp_get_global_settings();
+		// Prefer Blockera request-cached settings (avoids cold WP_Theme_JSON_Resolver).
+		$tree              = JSONResolver::get_merged_settings();
 		$presets_by_origin = isset( $tree['color']['duotone'] ) ? $tree['color']['duotone'] : array();
 
 		self::$global_styles_presets = array();
@@ -1021,6 +1036,19 @@ class BlockeraDuotone {
 		}
 
 		return self::$global_styles_presets;
+	}
+
+	/**
+	 * Prefetch merged theme.json + duotone maps before the_posts / render_block.
+	 *
+	 * The handleThePosts path can render blocks before wp_enqueue_scripts; without this warm,
+	 * the first get_all_global_style_block_names() cold-starts JSONResolver::get_merged_data().
+	 *
+	 * @return void
+	 */
+	public static function warm_global_styles_caches(): void {
+		// Block-name map is needed on first render_duotone before enqueue; presets stay lazy.
+		self::get_all_global_style_block_names();
 	}
 
 	/**
@@ -1037,12 +1065,19 @@ class BlockeraDuotone {
 		if ( isset( self::$global_styles_block_names ) ) {
 			return self::$global_styles_block_names;
 		}
-		// Get the per block settings from the theme.json.
-		$tree        = JSONResolver::get_merged_data();
-		$block_nodes = $tree->get_styles_block_nodes();
-		$theme_json  = $tree->get_raw_data();
 
 		self::$global_styles_block_names = array();
+
+		// Use request-cached merged tree (warmed on wp_loaded / enqueue).
+		$tree       = JSONResolver::get_merged_data();
+		$theme_json = $tree->get_raw_data();
+
+		// Most themes have no global duotone bindings — skip get_styles_block_nodes().
+		if ( ! self::raw_theme_json_has_duotone_filter( $theme_json ) ) {
+			return self::$global_styles_block_names;
+		}
+
+		$block_nodes = $tree->get_styles_block_nodes();
 
 		foreach ( $block_nodes as $block_node ) {
 			// This block definition doesn't include any duotone settings. Skip it.
@@ -1068,6 +1103,38 @@ class BlockeraDuotone {
 	}
 
 	/**
+	 * Cheap scan for styles.*.filter.duotone before building style block nodes.
+	 *
+	 * @param array $theme_json Merged theme.json raw data.
+	 * @return bool
+	 */
+	private static function raw_theme_json_has_duotone_filter( array $theme_json ): bool {
+		$styles = $theme_json['styles'] ?? null;
+		if ( ! is_array( $styles ) || array() === $styles ) {
+			return false;
+		}
+
+		$stack    = array();
+		$stack[0] = $styles;
+		for ( $i = 0, $n = 1; $i < $n; ++$i ) {
+			$node = $stack[ $i ];
+			if ( ! is_array( $node ) ) {
+				continue;
+			}
+			if ( isset( $node['filter']['duotone'] ) && $node['filter']['duotone'] ) {
+				return true;
+			}
+			foreach ( $node as $child ) {
+				if ( is_array( $child ) && $child ) {
+					$stack[ $n++ ] = $child;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Render out the duotone CSS styles and SVG.
 	 *
 	 * The hooks self::set_global_style_block_names and self::set_global_styles_presets
@@ -1081,22 +1148,35 @@ class BlockeraDuotone {
 	 * @return string Filtered block content.
 	 */
 	public static function render_duotone_support( $block_content, $block, $wp_block ) {
-		if ( ! $block['blockName'] ) {
+		if ( empty( $block['blockName'] ) ) {
 			return $block_content;
 		}
+
+		/*
+		 * Cheap gates before get_selector() (selector resolution is relatively expensive and
+		 * previously ran for every render_block). Most blocks have neither a duotone attribute
+		 * nor a global-styles duotone mapping.
+		 */
+		$has_duotone_attribute     = isset( $block['attrs']['style']['color']['duotone'] );
+		$global_styles_block_names = null;
+		$has_global_styles_duotone = false;
+
+		if ( ! $has_duotone_attribute ) {
+			// Loaded empty map: skip method call on the remaining ~100 render_block invocations.
+			if ( isset( self::$global_styles_block_names ) && ! self::$global_styles_block_names ) {
+				return $block_content;
+			}
+
+			$global_styles_block_names = self::get_all_global_style_block_names();
+			$has_global_styles_duotone = isset( $global_styles_block_names[ $block['blockName'] ] );
+			if ( ! $has_global_styles_duotone ) {
+				return $block_content;
+			}
+		}
+
 		$duotone_selector = self::get_selector( $wp_block->block_type );
 
 		if ( ! $duotone_selector ) {
-			return $block_content;
-		}
-
-		$global_styles_block_names = self::get_all_global_style_block_names();
-
-		// The block should have a duotone attribute or have duotone defined in its theme.json to be processed.
-		$has_duotone_attribute     = isset( $block['attrs']['style']['color']['duotone'] );
-		$has_global_styles_duotone = array_key_exists( $block['blockName'], $global_styles_block_names );
-
-		if ( ! $has_duotone_attribute && ! $has_global_styles_duotone ) {
 			return $block_content;
 		}
 
