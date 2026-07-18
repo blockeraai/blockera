@@ -43,6 +43,7 @@ jobs:
             - name: Test With WordPress Plugin Check (PCP)
               uses: wordpress/plugin-check-action@v1
               with:
+                  repo-token: ${{ secrets.BLOCKERABOT_PAT }}
                   build-dir: './build/blockera'
                   categories: |
                       general

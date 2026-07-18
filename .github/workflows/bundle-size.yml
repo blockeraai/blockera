@@ -59,7 +59,36 @@ jobs:
             - name: Build Plugin Zip File
               uses: ./.github/build-plugin-zip
 
-            - uses: preactjs/compressed-size-action@v2
+            - id: compressed-size
+              uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.BLOCKERABOT_PAT }}'
                   pattern: '{dist/**/*.min.js,dist/**/*.min.css,blockera.zip,packages/**/*.php,!**/test/**,!**/tests/**,packages/php/**/*.json,packages/js/**/*.json,packages/**/*.svg}'
+
+            # Action has no title input; prepend a custom H1 after it posts/updates the comment.
+            - name: Prepend H1 to size comment
+              uses: actions/github-script@v7
+              with:
+                  github-token: ${{ secrets.BLOCKERABOT_PAT }}
+                  script: |
+                      const h1 = '# 📦 Bundle Size Report';
+                      const marker = 'compressed-size-action';
+                      const { data: comments } = await github.rest.issues.listComments({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: context.issue.number,
+                      });
+                      const comment = comments.find((c) => c.body && c.body.includes(marker));
+                      if (!comment) {
+                        core.warning('Compressed size comment not found; skipping H1 prepend.');
+                        return;
+                      }
+                      if (comment.body.startsWith(h1)) {
+                        return;
+                      }
+                      await github.rest.issues.updateComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        comment_id: comment.id,
+                        body: `${h1}\n\n${comment.body}`,
+                      });
