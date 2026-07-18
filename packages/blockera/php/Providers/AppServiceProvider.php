@@ -450,6 +450,11 @@ class AppServiceProvider extends ServiceProvider {
 				continue;
 			}
 			if (! blockera_contains_blockera_block($post->post_content)) {
+				// Skip parse_blocks when content has no synced-pattern refs.
+				if ( ! str_contains( $post->post_content, '"ref"' ) ) {
+					continue;
+				}
+
 				$parsed_blocks = parse_blocks($post->post_content);
 
 				foreach ($parsed_blocks as $block) {
@@ -462,7 +467,7 @@ class AppServiceProvider extends ServiceProvider {
 					// Get post object by ref id.
 					$post_ref = get_post($ref);
 
-					if (blockera_contains_blockera_block($post_ref->post_content)) {
+					if ( $post_ref && blockera_contains_blockera_block( $post_ref->post_content ) ) {
 						$posts_to_process[ $index ] = $post_ref;
 						$post_ids[]                 = $ref;
 					}
@@ -477,9 +482,20 @@ class AppServiceProvider extends ServiceProvider {
 			return $posts;
 		}
 
-		// Use helper function for cache instance (no container overhead).
-		$cache     = $this->app->make('CacheSystem');
-		$save_post = $this->app->make( SavePost::class );
+		// processPostContentForStyles may render blocks (duotone/layout); ensure merge is hot.
+		if ( function_exists( 'blockera_warm_merged_settings_cache' ) ) {
+			blockera_warm_merged_settings_cache();
+		}
+
+		// Avoid Application::make() on this hot the_posts path (16× per complex page).
+		static $cache     = null;
+		static $save_post = null;
+		if ( null === $cache ) {
+			$cache = blockera_get_cache();
+		}
+		if ( null === $save_post ) {
+			$save_post = $this->app->make( SavePost::class );
+		}
 		$cache_key = $cache->getCacheKey( 'post_content' );
 
         // Batch prime meta cache for all post IDs to avoid N+1 queries.
