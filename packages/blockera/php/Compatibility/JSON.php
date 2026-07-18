@@ -658,55 +658,73 @@ class JSON extends \WP_Theme_JSON {
 			}
 		}
 
+		// O(1) type membership vs repeated in_array scans.
+		$types_set = array_fill_keys( $types, true );
+
 		$blocks_metadata = static::get_blocks_metadata();
 		$style_nodes     = static::get_style_nodes( $this->theme_json, $blocks_metadata, $options );
 		$setting_nodes   = static::get_setting_nodes( $this->theme_json, $blocks_metadata );
 
-		$root_style_key    = array_search( static::ROOT_BLOCK_SELECTOR, array_column( $style_nodes, 'selector' ), true );
-		$root_settings_key = array_search( static::ROOT_BLOCK_SELECTOR, array_column( $setting_nodes, 'selector' ), true );
+		$root_selector_const = static::ROOT_BLOCK_SELECTOR;
+		$root_style_key      = false;
+		foreach ( $style_nodes as $i => $node ) {
+			if ( isset( $node['selector'] ) && $root_selector_const === $node['selector'] ) {
+				$root_style_key = $i;
+				break;
+			}
+		}
+		$root_settings_key = false;
+		foreach ( $setting_nodes as $i => $node ) {
+			if ( isset( $node['selector'] ) && $root_selector_const === $node['selector'] ) {
+				$root_settings_key = $i;
+				break;
+			}
+		}
 
-		if ( ! empty( $options['scope'] ) ) {
+		$scope = $options['scope'] ?? null;
+		if ( ! empty( $scope ) ) {
 			foreach ( $setting_nodes as &$node ) {
-				$node['selector'] = static::scope_selector( $options['scope'], $node['selector'] );
+				$node['selector'] = static::scope_selector( $scope, $node['selector'] );
 			}
 			foreach ( $style_nodes as &$node ) {
-				$node = static::scope_style_node_selectors( $options['scope'], $node );
+				$node = static::scope_style_node_selectors( $scope, $node );
 			}
 			unset( $node );
 		}
 
-		if ( ! empty( $options['root_selector'] ) ) {
+		$root_selector_opt = $options['root_selector'] ?? null;
+		if ( ! empty( $root_selector_opt ) ) {
 			if ( false !== $root_settings_key ) {
-				$setting_nodes[ $root_settings_key ]['selector'] = $options['root_selector'];
+				$setting_nodes[ $root_settings_key ]['selector'] = $root_selector_opt;
 			}
 			if ( false !== $root_style_key ) {
-				$style_nodes[ $root_style_key ]['selector'] = $options['root_selector'];
+				$style_nodes[ $root_style_key ]['selector'] = $root_selector_opt;
 			}
 		}
 
 		$stylesheet = '';
 
-		if ( in_array( 'variables', $types, true ) ) {
+		if ( isset( $types_set['variables'] ) ) {
 			$stylesheet .= $this->get_css_variables( $setting_nodes, $origins );
 		}
 
-		if ( in_array( 'styles', $types, true ) ) {
+		if ( isset( $types_set['styles'] ) ) {
 			if ( false !== $root_style_key && empty( $options['skip_root_layout_styles'] ) ) {
 				$stylesheet .= $this->get_root_layout_rules( $style_nodes[ $root_style_key ]['selector'], $style_nodes[ $root_style_key ] );
 			}
 			$stylesheet .= $this->get_block_classes( $style_nodes );
 			$stylesheet .= $this->get_blockera_block_rules( $style_nodes );
-		} elseif ( in_array( 'base-layout-styles', $types, true ) ) {
-			$root_selector          = static::ROOT_BLOCK_SELECTOR;
+		} elseif ( isset( $types_set['base-layout-styles'] ) ) {
+			$root_selector          = $root_selector_const;
 			$columns_selector       = '.wp-block-columns';
 			$post_template_selector = '.wp-block-post-template';
-			if ( ! empty( $options['scope'] ) ) {
-				$root_selector          = static::scope_selector( $options['scope'], $root_selector );
-				$columns_selector       = static::scope_selector( $options['scope'], $columns_selector );
-				$post_template_selector = static::scope_selector( $options['scope'], $post_template_selector );
+			if ( ! empty( $scope ) ) {
+				$root_selector          = static::scope_selector( $scope, $root_selector );
+				$columns_selector       = static::scope_selector( $scope, $columns_selector );
+				$post_template_selector = static::scope_selector( $scope, $post_template_selector );
 			}
-			if ( ! empty( $options['root_selector'] ) ) {
-				$root_selector = $options['root_selector'];
+			if ( ! empty( $root_selector_opt ) ) {
+				$root_selector = $root_selector_opt;
 			}
 
 			/*
@@ -735,12 +753,12 @@ class JSON extends \WP_Theme_JSON {
 			}
 		}
 
-		if ( in_array( 'presets', $types, true ) ) {
+		if ( isset( $types_set['presets'] ) ) {
 			$stylesheet .= $this->get_preset_classes( $setting_nodes, $origins );
 		}
 
 		// Load the custom CSS last so it has the highest specificity.
-		if ( in_array( 'custom-css', $types, true ) ) {
+		if ( isset( $types_set['custom-css'] ) ) {
 			// Add the global styles root CSS.
 			$stylesheet .= _wp_array_get( $this->theme_json, array( 'styles', 'css' ) );
 		}
