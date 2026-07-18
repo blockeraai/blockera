@@ -568,25 +568,27 @@ class JSON extends \WP_Theme_JSON {
 	 * @return string Block selector with block style variation selector added to it.
 	 */
 	protected static function get_block_style_variation_selector( $variation_name, $block_selector ) {
-		$variation_class = sprintf('.%s%s', self::$style_variation_prefix, $variation_name);
+		$variation_class = '.' . self::$style_variation_prefix . $variation_name;
 
 		if ( ! $block_selector ) {
 			return $variation_class;
 		}
 
-		$limit          = 1;
+		static $pattern = '/((?::\([^)]+\))?\s*)([^\s:]+)/';
+
+		$append = static function ( array $matches ) use ( $variation_class ): string {
+			return $matches[1] . $matches[2] . $variation_class;
+		};
+
+		// Fast path: single selector (no comma) — one preg, no explode/implode.
+		if ( false === strpos( $block_selector, ',' ) ) {
+			return preg_replace_callback( $pattern, $append, $block_selector, 1 );
+		}
+
 		$selector_parts = explode( ',', $block_selector );
 		$result         = array();
-
 		foreach ( $selector_parts as $part ) {
-			$result[] = preg_replace_callback(
-				'/((?::\([^)]+\))?\s*)([^\s:]+)/',
-				function ( $matches ) use ( $variation_class ) {
-					return $matches[1] . $matches[2] . $variation_class;
-				},
-				$part,
-				$limit
-			);
+			$result[] = preg_replace_callback( $pattern, $append, $part, 1 );
 		}
 
 		return implode( ',', $result );
