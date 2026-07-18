@@ -134,6 +134,7 @@ function loadFixtures() {
 		// Try to load setup.js for this section
 		let setupFn = null;
 		let frontendSetupFn = null;
+		let editorSetupFn = null;
 		const setupPath = path.join(sectionDir, 'setup.js');
 		if (fs.existsSync(setupPath)) {
 			try {
@@ -144,6 +145,8 @@ function loadFixtures() {
 				setupFn = setupModule.setup || setupModule.default;
 				frontendSetupFn =
 					setupModule.frontendSetup || setupModule.frontendSetupFn;
+				editorSetupFn =
+					setupModule.editorSetup || setupModule.editorSetupFn;
 			} catch (error) {
 				// Setup file exists but can't be loaded
 				// @debug-ignore
@@ -153,6 +156,7 @@ function loadFixtures() {
 				);
 				setupFn = null;
 				frontendSetupFn = null;
+				editorSetupFn = null;
 			}
 		}
 
@@ -165,6 +169,7 @@ function loadFixtures() {
 			sections[sectionId] = {
 				setupFn,
 				frontendSetupFn,
+				editorSetupFn,
 				sectionContent,
 				config,
 			};
@@ -200,6 +205,7 @@ test.describe('Sections Visual Snapshots', () => {
 		const sectionContent = sectionData.sectionContent || '';
 		const setupFn = sectionData?.setupFn;
 		const frontendSetupFn = sectionData?.frontendSetupFn;
+		const editorSetupFn = sectionData?.editorSetupFn;
 		const config = sectionData?.config;
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
@@ -249,8 +255,14 @@ test.describe('Sections Visual Snapshots', () => {
 				const frontendSearchReplace =
 					config?.['frontend-search-replace'] || null;
 
-				// Set viewport and adjust iframe height for full element capture
+				// Paint styles before viewport helper (it closes the sidebar), then again after.
+				if (editorSetupFn) {
+					await editorSetupFn(page);
+				}
 				await setEditorViewportForScreenshot(page, 'desktop');
+				if (editorSetupFn) {
+					await editorSetupFn(page);
+				}
 
 				await applyDomSearchReplace(
 					editorContainer,
@@ -266,8 +278,13 @@ test.describe('Sections Visual Snapshots', () => {
 
 				await setDeviceType(page, 'Mobile Portrait');
 
-				// Set viewport and adjust iframe height for full element capture (mobile)
+				if (editorSetupFn) {
+					await editorSetupFn(page);
+				}
 				await setEditorViewportForScreenshot(page, 'mobile');
+				if (editorSetupFn) {
+					await editorSetupFn(page);
+				}
 
 				await applyDomSearchReplace(
 					editorContainer,
