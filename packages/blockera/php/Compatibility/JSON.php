@@ -470,30 +470,22 @@ class JSON extends \WP_Theme_JSON {
 	}
 
 	/**
-     * This is used to convert the internal representation of variables to the CSS representation.
-     * For example, `var:preset|color|vivid-green-cyan` becomes `var(--wp--preset--color--vivid-green-cyan)`.
-     *
-     * @since 6.3.0
-     *
-     * @param string $value The variable such as var:preset|color|vivid-green-cyan to convert.
-     * @return string The converted variable.
-     */
-    private static function convert_custom_properties( $value) {
-        $prefix     = 'var:';
-        $prefix_len = strlen($prefix);
-        $token_in   = '|';
-        $token_out  = '--';
-        if (str_starts_with($value, $prefix)) {
-            $unwrapped_name = str_replace(
-                $token_in,
-                $token_out,
-                substr($value, $prefix_len)
-            );
-            $value          = "var(--wp--$unwrapped_name)";
-        }
+	 * This is used to convert the internal representation of variables to the CSS representation.
+	 * For example, `var:preset|color|vivid-green-cyan` becomes `var(--wp--preset--color--vivid-green-cyan)`.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @param string $value The variable such as var:preset|color|vivid-green-cyan to convert.
+	 * @return string The converted variable.
+	 */
+	private static function convert_custom_properties( $value ) {
+		// Align with resolve_custom_css_format hot path (C-level prefix + single replace).
+		if ( str_starts_with( $value, 'var:' ) ) {
+			return 'var(--wp--' . str_replace( '|', '--', substr( $value, 4 ) ) . ')';
+		}
 
-        return $value;
-    }
+		return $value;
+	}
 
 	/**
      * Gets the CSS rules for a particular block from theme.json.
