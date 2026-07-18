@@ -256,133 +256,171 @@ class JSON extends \WP_Theme_JSON {
 	 * 
      * @return array The sanitized output.
      */
-    protected static function sanitize( $input, $valid_block_names, $valid_element_names, $valid_variations): array {
+	protected static function sanitize( $input, $valid_block_names, $valid_element_names, $valid_variations ): array {
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
 
-		$output = array();
+		// Flip once per class (VALID_TOP_LEVEL_KEYS is a constant).
+		static $top_level_keys_flip_by_class = array();
+		$class                               = static::class;
+		if ( ! isset( $top_level_keys_flip_by_class[ $class ] ) ) {
+			$top_level_keys_flip_by_class[ $class ] = array_flip( static::VALID_TOP_LEVEL_KEYS );
+		}
 
-        if (! is_array($input)) {
-            return $output;
-        }
+		// Preserve only the top most level keys.
+		$output = array_intersect_key( $input, $top_level_keys_flip_by_class[ $class ] );
 
-        // Preserve only the top most level keys.
-        $output = array_intersect_key($input, array_flip(static::VALID_TOP_LEVEL_KEYS));
+		/*
+		 * Remove any rules that are annotated as "top" in VALID_STYLES constant.
+		 * Some styles are only meant to be available at the top-level (e.g.: blockGap),
+		 * hence, the schema for blocks & elements should not have them.
+		 *
+		 * Cached per class: blockera_get_valid_supports(VALID_STYLES) + top-strip is stable.
+		 */
+		static $styles_non_top_by_class = array();
+		if ( ! isset( $styles_non_top_by_class[ $class ] ) ) {
+			$styles_non_top_level = blockera_get_valid_supports( static::VALID_STYLES );
+			foreach ( $styles_non_top_level as $section => $props ) {
+				if ( ! is_array( $props ) ) {
+					continue;
+				}
+				foreach ( $props as $prop => $value ) {
+					if ( 'top' === $value ) {
+						unset( $styles_non_top_level[ $section ][ $prop ] );
+					}
+				}
+			}
+			$styles_non_top_by_class[ $class ] = $styles_non_top_level;
+		}
+		$styles_non_top_level = $styles_non_top_by_class[ $class ];
 
-        /*
-         * Remove any rules that are annotated as "top" in VALID_STYLES constant.
-         * Some styles are only meant to be available at the top-level (e.g.: blockGap),
-         * hence, the schema for blocks & elements should not have them.
-         */
-        $styles_non_top_level = blockera_get_valid_supports(static::VALID_STYLES);
-        foreach (array_keys($styles_non_top_level) as $section) {
-            // array_key_exists() needs to be used instead of isset() because the value can be null.
-            if (array_key_exists($section, $styles_non_top_level) && is_array($styles_non_top_level[ $section ])) {
-                foreach (array_keys($styles_non_top_level[ $section ]) as $prop) {
-                    if ('top' === $styles_non_top_level[ $section ][ $prop ]) {
-                        unset($styles_non_top_level[ $section ][ $prop ]);
-                    }
-                }
-            }
-        }
+		/*
+		 * Cache schema parts that depend only on valid block/element name lists
+		 * (not on per-input variations). Variations are applied below per $input.
+		 */
+		static $schema_base_cache = array();
+		$base_key                 = $class . "\0" . implode( "\0", $valid_block_names ) . "\0" . implode( "\0", $valid_element_names );
 
-        // Build the schema based on valid block & element names.
-        $schema                 = array();
-        $schema_styles_elements = array();
+		if ( ! isset( $schema_base_cache[ $base_key ] ) ) {
+			$schema_styles_elements = array();
+			$pseudo_selectors       = static::VALID_ELEMENT_PSEUDO_SELECTORS;
 
-        /*
-         * Set allowed element pseudo selectors based on per element allow list.
-         * Target data structure in schema:
-         * e.g.
-         * - top level elements: `$schema['styles']['elements']['link'][':hover']`.
-         * - block level elements: `$schema['styles']['blocks']['core/button']['elements']['link'][':hover']`.
-         */
-        foreach ($valid_element_names as $element) {
-            $schema_styles_elements[ $element ] = $styles_non_top_level;
+			/*
+			 * Set allowed element pseudo selectors based on per element allow list.
+			 * Target data structure in schema:
+			 * e.g.
+			 * - top level elements: `$schema['styles']['elements']['link'][':hover']`.
+			 * - block level elements: `$schema['styles']['blocks']['core/button']['elements']['link'][':hover']`.
+			 */
+			foreach ( $valid_element_names as $element ) {
+				$schema_styles_elements[ $element ] = $styles_non_top_level;
 
-            if (isset(static::VALID_ELEMENT_PSEUDO_SELECTORS[ $element ])) {
-                foreach (static::VALID_ELEMENT_PSEUDO_SELECTORS[ $element ] as $pseudo_selector) {
-                    $schema_styles_elements[ $element ][ $pseudo_selector ] = $styles_non_top_level;
-                }
-            }
-        }
+				if ( isset( $pseudo_selectors[ $element ] ) ) {
+					foreach ( $pseudo_selectors[ $element ] as $pseudo_selector ) {
+						$schema_styles_elements[ $element ][ $pseudo_selector ] = $styles_non_top_level;
+					}
+				}
+			}
 
-        $schema_styles_blocks   = array();
-        $schema_settings_blocks = array();
+			$schema_styles_blocks   = array();
+			$schema_settings_blocks = array();
+			$settings_schema        = static::get_valid_settings_schema();
 
-        /*
-         * Generate a schema for blocks.
-         * - Block styles can contain `elements` & `variations` definitions.
-         * - Variations definitions cannot be nested.
-         * - Variations can contain styles for inner `blocks`.
-         * - Variation inner `blocks` styles can contain `elements`.
-         *
-         * As each variation needs a `blocks` schema but further nested
-         * inner `blocks`, the overall schema will be generated in multiple passes.
-         */
-        foreach ($valid_block_names as $block) {
-            $schema_settings_blocks[ $block ]           = static::get_valid_settings_schema();
-            $schema_styles_blocks[ $block ]             = $styles_non_top_level;
-            $schema_styles_blocks[ $block ]['elements'] = $schema_styles_elements;
-        }
+			/*
+			 * Generate a schema for blocks.
+			 * - Block styles can contain `elements` & `variations` definitions.
+			 * - Variations definitions cannot be nested.
+			 * - Variations can contain styles for inner `blocks`.
+			 * - Variation inner `blocks` styles can contain `elements`.
+			 */
+			foreach ( $valid_block_names as $block ) {
+				$schema_settings_blocks[ $block ]             = $settings_schema;
+				$schema_styles_blocks[ $block ]               = $styles_non_top_level;
+				$schema_styles_blocks[ $block ]['elements']   = $schema_styles_elements;
+				$schema_styles_blocks[ $block ]['variations'] = array();
+			}
 
-        $block_style_variation_styles             = $styles_non_top_level;
-        $block_style_variation_styles['blocks']   = $schema_styles_blocks;
-        $block_style_variation_styles['elements'] = $schema_styles_elements;
+			$block_style_variation_styles             = $styles_non_top_level;
+			$block_style_variation_styles['blocks']   = $schema_styles_blocks;
+			$block_style_variation_styles['elements'] = $schema_styles_elements;
 
-        foreach ($valid_block_names as $block) {
-            // Build the schema for each block style variation.
-            $style_variation_names = array();
+			$schema_base_cache[ $base_key ] = array(
+				'schema_styles_elements'         => $schema_styles_elements,
+				'schema_styles_blocks'           => $schema_styles_blocks,
+				'schema_settings_blocks'         => $schema_settings_blocks,
+				'block_style_variation_styles'   => $block_style_variation_styles,
+				'settings_schema'                => $settings_schema,
+				'font_families_schema'           => static::schema_in_root_and_per_origin( static::FONT_FAMILY_SCHEMA ),
+			);
+		}
 
-            if (
-                ! empty($input['styles']['blocks'][ $block ]['variations']) &&
-                is_array($input['styles']['blocks'][ $block ]['variations']) &&
-                isset($valid_variations[ $block ])
-            ) {
-				// Important tips:
-				// 1. WP_Theme_JSON class used of array_intersect to validate variations based on available items from static config.
-				// 2. Blockera\Setup\Compatibility\JSON class which override step 1 functionality to support of dynamic items which provided from user config in editor.
-                $style_variation_names = array_merge(
-                    array_keys($input['styles']['blocks'][ $block ]['variations']),
-                    $valid_variations[ $block ]
-                );
-            }
+		$base                         = $schema_base_cache[ $base_key ];
+		$schema_styles_elements       = $base['schema_styles_elements'];
+		$schema_settings_blocks       = $base['schema_settings_blocks'];
+		$block_style_variation_styles = $base['block_style_variation_styles'];
+		// COW copy: per-input variation writes must not mutate the cached base.
+		$schema_styles_blocks = $base['schema_styles_blocks'];
 
-            $schema_styles_variations = array();
-            if (! empty($style_variation_names)) {
-                $schema_styles_variations = array_fill_keys($style_variation_names, $block_style_variation_styles);
-            }
+		$input_blocks = ( isset( $input['styles']['blocks'] ) && is_array( $input['styles']['blocks'] ) )
+			? $input['styles']['blocks']
+			: null;
 
-            $schema_styles_blocks[ $block ]['variations'] = $schema_styles_variations;
-        }
+		foreach ( $valid_block_names as $block ) {
+			$style_variation_names = array();
 
-        $schema['styles']                                 = $styles_non_top_level;
-        $schema['styles']['blocks']                       = $schema_styles_blocks;
-        $schema['styles']['elements']                     = $schema_styles_elements;
-        $schema['settings']                               = static::get_valid_settings_schema();
-        $schema['settings']['blocks']                     = $schema_settings_blocks;
-        $schema['settings']['typography']['fontFamilies'] = static::schema_in_root_and_per_origin(static::FONT_FAMILY_SCHEMA);
+			if (
+				null !== $input_blocks &&
+				! empty( $input_blocks[ $block ]['variations'] ) &&
+				is_array( $input_blocks[ $block ]['variations'] ) &&
+				isset( $valid_variations[ $block ] )
+			) {
+				/*
+				 * Important tips:
+				 * 1. WP_Theme_JSON class used of array_intersect to validate variations based on available items from static config.
+				 * 2. Blockera\Setup\Compatibility\JSON class which override step 1 functionality to support of dynamic items which provided from user config in editor.
+				 */
+				$style_variation_names = array_keys( $input_blocks[ $block ]['variations'] );
+				foreach ( $valid_variations[ $block ] as $variation_name ) {
+					$style_variation_names[] = $variation_name;
+				}
+			}
 
-        // Remove anything that's not present in the schema.
-        foreach (array( 'styles', 'settings' ) as $subtree) {
-            if (! isset($input[ $subtree ])) {
-                continue;
-            }
+			$schema_styles_blocks[ $block ]['variations'] = $style_variation_names
+				? array_fill_keys( $style_variation_names, $block_style_variation_styles )
+				: array();
+		}
 
-            if (! is_array($input[ $subtree ])) {
-                unset($output[ $subtree ]);
-                continue;
-            }
+		$schema                       = array();
+		$schema['styles']             = $styles_non_top_level;
+		$schema['styles']['blocks']   = $schema_styles_blocks;
+		$schema['styles']['elements'] = $schema_styles_elements;
+		$schema['settings']           = $base['settings_schema'];
+		$schema['settings']['blocks'] = $schema_settings_blocks;
+		$schema['settings']['typography']['fontFamilies'] = $base['font_families_schema'];
 
-            $result = static::remove_keys_not_in_schema($input[ $subtree ], $schema[ $subtree ]);
+		// Remove anything that's not present in the schema.
+		foreach ( array( 'styles', 'settings' ) as $subtree ) {
+			if ( ! isset( $input[ $subtree ] ) ) {
+				continue;
+			}
 
-            if (empty($result)) {
-                unset($output[ $subtree ]);
-            } else {
-                $output[ $subtree ] = static::resolve_custom_css_format($result);
-            }
-        }
+			if ( ! is_array( $input[ $subtree ] ) ) {
+				unset( $output[ $subtree ] );
+				continue;
+			}
 
-        return $output;
-    }
+			$result = static::remove_keys_not_in_schema( $input[ $subtree ], $schema[ $subtree ] );
+
+			if ( empty( $result ) ) {
+				unset( $output[ $subtree ] );
+			} else {
+				$output[ $subtree ] = static::resolve_custom_css_format( $result );
+			}
+		}
+
+		return $output;
+	}
 
 	/**
      * Given a tree, converts the internal representation of variables to the CSS representation.
