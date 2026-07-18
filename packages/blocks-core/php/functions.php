@@ -7,6 +7,11 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 	 * @return array the available blocks stack.
 	 */
 	function blockera_get_available_blocks(): array {
+		static $available_blocks = null;
+
+		if ( null !== $available_blocks ) {
+			return $available_blocks;
+		}
 
 		$available_blocks = [];
 		$config_files     = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/blocks-core/js/**/*-blocks-list.json' );
