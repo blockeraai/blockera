@@ -208,10 +208,29 @@ if (! \class_exists(Coordinator::class)) {
 			// Load autoload data from the first plugin immediately.
 			$this->loadAutoloadDataForPlugin($firstPlugin['slug'], $firstPlugin);
 
+			$this->configureClassLoaderPerformance( $this->class_loader );
+
 			// Register the class loader.
 			$this->class_loader->register(true);
 
 			$this->autoloader_registered = true;
+		}
+
+		/**
+		 * Enable ClassLoader caches that cut findFileWithExtension filesystem work.
+		 *
+		 * Mirrors Composer's APCu gate so findFile() results persist across requests.
+		 *
+		 * @param ClassLoader $loader Composer class loader.
+		 */
+		private function configureClassLoaderPerformance( ClassLoader $loader ): void {
+			$apcu_enabled = function_exists( 'apcu_fetch' )
+				&& filter_var( ini_get( 'apc.enabled' ), FILTER_VALIDATE_BOOLEAN )
+				&& ( PHP_SAPI !== 'cli' || filter_var( ini_get( 'apc.enable_cli' ), FILTER_VALIDATE_BOOLEAN ) );
+
+			if ( $apcu_enabled ) {
+				$loader->setApcuPrefix( 'blockera_' . $this->getPluginsCacheKey() );
+			}
 		}
 
 		/**
@@ -595,6 +614,7 @@ if (! \class_exists(Coordinator::class)) {
 			// Unregister old loader and register new one.
 			$this->class_loader->unregister();
 			$this->class_loader = $newLoader;
+			$this->configureClassLoaderPerformance( $this->class_loader );
 			$this->class_loader->register(true);
 		}
 
