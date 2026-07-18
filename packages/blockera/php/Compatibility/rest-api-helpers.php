@@ -61,14 +61,29 @@ if (! function_exists('blockera_editor_wp_theme_json_data_user')) {
      * @return array The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_user( WP_Theme_JSON_Data $data) {
+		static $cache = array();
+
+		$encoded   = wp_json_encode( $data->get_data() );
+		$cache_key = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+
+		if (
+			isset( $cache[ $cache_key ] )
+			&& ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
+		) {
+			return $cache[ $cache_key ];
+		}
+
 		$user_data = blockera_get_user_styles_data();
 
 		// Skip if no user data is found.
 		if (empty($user_data)) {
-			return $data;
+			$cache[ $cache_key ] = $data;
+			return $cache[ $cache_key ];
 		}
 
-		return new JSON($user_data, 'custom');
+		$cache[ $cache_key ] = new JSON($user_data, 'custom');
+
+		return $cache[ $cache_key ];
 	}
 }
 
@@ -115,16 +130,24 @@ if (! function_exists('blockera_editor_wp_theme_json_data_blocks')) {
      * @return JSON|WP_Theme_JSON the filtered data.
      */
 	function blockera_editor_wp_theme_json_data_blocks( WP_Theme_JSON_Data $data ) {
-		// Use static flag to prevent redundant cache clearing on repeated filter calls.
-		static $initialized = false;
+		static $cache = array();
 
-		if ( ! $initialized ) {
-			Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
-			Blockera\Setup\Compatibility\JSONResolver::$default_blocks_data = $data;
-			$initialized = true;
+		$encoded   = wp_json_encode( $data->get_data() );
+		$cache_key = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+
+		if (
+			isset( $cache[ $cache_key ] )
+			&& ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
+		) {
+			return $cache[ $cache_key ];
 		}
 
-		return Blockera\Setup\Compatibility\JSONResolver::get_block_data();
+		Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
+		Blockera\Setup\Compatibility\JSONResolver::$default_blocks_data = $data;
+
+		$cache[ $cache_key ] = Blockera\Setup\Compatibility\JSONResolver::get_block_data();
+
+		return $cache[ $cache_key ];
 	}
 }
 
