@@ -498,65 +498,85 @@ class JSON extends \WP_Theme_JSON {
      * @param array $block_metadata Metadata about the block to get styles for.
      * @return string Styles for the block.
      */
-    public function get_blockera_styles_for_block( $block_metadata) {
-        $node        = _wp_array_get($this->theme_json, $block_metadata['path'], array());
+	public function get_blockera_styles_for_block( $block_metadata ) {
+		$node        = _wp_array_get( $this->theme_json, $block_metadata['path'], array() );
 		$block_rules = '';
+		$block_name  = $block_metadata['name'] ?? null;
+		$supports    = static::$supports;
+
+		// Hoist metadata key sets once (C-level array_flip; reused for root + variations).
+		static $root_exclude_keys = null;
+		if ( null === $root_exclude_keys ) {
+			$root_exclude_keys = array_fill_keys(
+				array_merge( array( 'variations' ), \blockera_get_block_styles_metadata_keys() ),
+				true
+			);
+		}
+		static $variation_exclude_keys = null;
+		if ( null === $variation_exclude_keys ) {
+			$variation_exclude_keys = array_fill_keys(
+				\blockera_get_block_style_variation_metadata_style_keys(),
+				true
+			);
+		}
+
+		$app = Blockera::getInstance();
 
 		// 1. Generate css rules for the block root customization.
-		if (isset($block_metadata['name'])) {
-			$style_engine = Blockera::getInstance()->make(
+		if ( null !== $block_name ) {
+			$attrs = array();
+			foreach ( $node as $key => $value ) {
+				if ( ! isset( $root_exclude_keys[ $key ] ) ) {
+					$attrs[ $key ] = $value;
+				}
+			}
+
+			$style_engine = $app->make(
 				StyleEngine::class,
-				[
-					'block' => [
-						'blockName' => $block_metadata['name'],
-						'attrs' => array_diff_key(
-							$node,
-							array_flip(
-								array_merge(
-									array( 'variations' ),
-									\blockera_get_block_styles_metadata_keys()
-								)
-							)
-						),
-					],
+				array(
+					'block'            => array(
+						'blockName' => $block_name,
+						'attrs'     => $attrs,
+					),
 					'fallbackSelector' => $block_metadata['selector'],
-					'isGlobalStyle' => true,
-				]
+					'isGlobalStyle'    => true,
+				)
 			);
-			$style_engine->setSupports(static::$supports);
+			$style_engine->setSupports( $supports );
 			$block_rules .= $style_engine->getStylesheet();
 		}
 
 		// 2. Generate css rules for the block style variations.
-        if (! empty($block_metadata['variations'])) {
-			foreach ($block_metadata['variations'] as $key => $style_variation) {
-				$style_variation_node           = _wp_array_get( $this->theme_json, $style_variation['path'], array() );
-				$clean_style_variation_selector = trim( $style_variation['selector'] );
+		if ( ! empty( $block_metadata['variations'] ) ) {
+			foreach ( $block_metadata['variations'] as $style_variation ) {
+				$style_variation_node = _wp_array_get( $this->theme_json, $style_variation['path'], array() );
 
-				$variation_attrs_for_styles = array_diff_key(
-					$style_variation_node,
-					array_flip( \blockera_get_block_style_variation_metadata_style_keys() )
-				);
+				$variation_attrs = array();
+				foreach ( $style_variation_node as $key => $value ) {
+					if ( ! isset( $variation_exclude_keys[ $key ] ) ) {
+						$variation_attrs[ $key ] = $value;
+					}
+				}
 
-				$style_engine = Blockera::getInstance()->make(
+				$style_engine = $app->make(
 					StyleEngine::class,
-					[
-						'block' => [
-							'blockName' => $block_metadata['name'],
-							'attrs' => $variation_attrs_for_styles,
-						],
-						'fallbackSelector' => $clean_style_variation_selector,
-						'isGlobalStyle' => true,
-					]
+					array(
+						'block'            => array(
+							'blockName' => $block_name,
+							'attrs'     => $variation_attrs,
+						),
+						'fallbackSelector' => trim( $style_variation['selector'] ),
+						'isGlobalStyle'    => true,
+					)
 				);
-				$style_engine->setIsStyleVariation(true);
-				$style_engine->setSupports(static::$supports);
+				$style_engine->setIsStyleVariation( true );
+				$style_engine->setSupports( $supports );
 				$block_rules .= $style_engine->getStylesheet();
-            }
-        }
+			}
+		}
 
-        return $block_rules;
-    }
+		return $block_rules;
+	}
 
 	/**
 	 * Generates a selector for a block style variation.
