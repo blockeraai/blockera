@@ -740,21 +740,100 @@ class JSON extends \WP_Theme_JSON {
 		if ( null === $properties ) {
 			$properties = static::PROPERTIES_METADATA;
 		}
+
 		$declarations             = array();
 		$root_variable_duplicates = array();
-		$root_style_length        = strlen( '--wp--style--root--' );
+		$is_root_selector         = ( static::ROOT_BLOCK_SELECTOR === $selector );
+		$allow_root_styles        = ( $is_root_selector && $use_root_padding );
+		// Length of '--wp--style--root--' (fixed; avoids strlen per call).
+		$root_style_length    = 19;
+		$apply_bg_defaults    = ( ! $is_root_selector && ! empty( $styles['background']['backgroundImage']['id'] ) );
+		$bg_size_for_defaults = $apply_bg_defaults ? ( $styles['background']['backgroundSize'] ?? null ) : null;
+		$protected            = static::PROTECTED_PROPERTIES;
+		// Root keys that appear in PROTECTED_PROPERTIES (avoid implode on every property).
+		static $protected_roots_by_class = array();
+		$class                           = static::class;
+		if ( ! isset( $protected_roots_by_class[ $class ] ) ) {
+			$roots = array();
+			foreach ( $protected as $protected_path ) {
+				if ( isset( $protected_path[0] ) ) {
+					$roots[ $protected_path[0] ] = true;
+				}
+			}
+			$protected_roots_by_class[ $class ] = $roots;
+		}
+		$protected_roots = $protected_roots_by_class[ $class ];
 
 		foreach ( $properties as $css_property => $value_path ) {
-			if ( ! is_array( $value_path ) ) {
+			if ( ! is_array( $value_path ) || ! isset( $value_path[0] ) ) {
 				continue;
 			}
 
-			$is_root_style = str_starts_with( $css_property, '--wp--style--root--' );
-			if ( $is_root_style && ( static::ROOT_BLOCK_SELECTOR !== $selector || ! $use_root_padding ) ) {
+			// Root custom props: strncmp is a C-level prefix compare (same as str_starts_with).
+			$is_root_style = ( isset( $css_property[18] ) && 0 === strncmp( $css_property, '--wp--style--root--', 19 ) );
+			if ( $is_root_style && ! $allow_root_styles ) {
 				continue;
 			}
 
-			$value = static::get_property_value( $styles, $value_path, $theme_json );
+			/*
+			 * Hot path: skip when the top-level styles key is missing/null.
+			 * Equivalent to get_property_value() → '' (empty values never emit; root-var
+			 * discard of a never-emitted name is a no-op).
+			 */
+			$root_key = $value_path[0];
+			if ( ! isset( $styles[ $root_key ] ) ) {
+				continue;
+			}
+
+			/*
+			 * Inline the common get_property_value() path (unrolled 1–3 segments) to avoid
+			 * _wp_array_get() + static call overhead. Fall back for refs / deeper paths.
+			 */
+			$path_len = count( $value_path );
+			if ( 2 === $path_len ) {
+				$level0 = $styles[ $root_key ];
+				$k1     = $value_path[1];
+				if ( ! is_array( $level0 ) ) {
+					$value = '';
+				} elseif ( isset( $level0[ $k1 ] ) ) {
+					$value = $level0[ $k1 ];
+				} elseif ( array_key_exists( $k1, $level0 ) ) {
+					$value = $level0[ $k1 ];
+				} else {
+					$value = '';
+				}
+			} elseif ( 3 === $path_len ) {
+				$level0 = $styles[ $root_key ];
+				$k1     = $value_path[1];
+				if ( ! is_array( $level0 ) || ( ! isset( $level0[ $k1 ] ) && ! array_key_exists( $k1, $level0 ) ) ) {
+					$value = '';
+				} else {
+					$level1 = $level0[ $k1 ];
+					$k2     = $value_path[2];
+					if ( ! is_array( $level1 ) ) {
+						$value = '';
+					} elseif ( isset( $level1[ $k2 ] ) ) {
+						$value = $level1[ $k2 ];
+					} elseif ( array_key_exists( $k2, $level1 ) ) {
+						$value = $level1[ $k2 ];
+					} else {
+						$value = '';
+					}
+				}
+			} elseif ( 1 === $path_len ) {
+				$value = $styles[ $root_key ];
+			} else {
+				$value = static::get_property_value( $styles, $value_path, $theme_json );
+			}
+
+			if ( 1 === $path_len || 2 === $path_len || 3 === $path_len ) {
+				if ( '' === $value || null === $value ) {
+					$value = '';
+				} elseif ( is_array( $value ) && isset( $value['ref'] ) ) {
+					// Ref resolution stays in get_property_value() (rare path).
+					$value = static::get_property_value( $styles, $value_path, $theme_json );
+				}
+			}
 
 			/*
 			 * Root-level padding styles don't currently support strings with CSS shorthand values.
@@ -764,7 +843,8 @@ class JSON extends \WP_Theme_JSON {
 				continue;
 			}
 
-			if ( $is_root_style && $use_root_padding ) {
+			// After the early continue, $is_root_style implies $use_root_padding is truthy.
+			if ( $is_root_style ) {
 				$root_variable_duplicates[] = substr( $css_property, $root_style_length );
 			}
 
@@ -780,33 +860,34 @@ class JSON extends \WP_Theme_JSON {
 				);
 				$value             = $background_styles['declarations'][ $css_property ];
 			}
-			if ( empty( $value ) && static::ROOT_BLOCK_SELECTOR !== $selector && ! empty( $styles['background']['backgroundImage']['id'] ) ) {
+
+			if ( empty( $value ) && $apply_bg_defaults ) {
 				if ( 'background-size' === $css_property ) {
 					$value = 'cover';
-				}
-				// If the background size is set to `contain` and no position is set, set the position to `center`.
-				if ( 'background-position' === $css_property ) {
-					$background_size = $styles['background']['backgroundSize'] ?? null;
-					$value           = 'contain' === $background_size ? '50% 50%' : null;
+				} elseif ( 'background-position' === $css_property ) {
+					// If the background size is set to `contain` and no position is set, set the position to `center`.
+					$value = 'contain' === $bg_size_for_defaults ? '50% 50%' : null;
 				}
 			}
 
 			// Skip if empty and not "0" or value represents array of longhand values.
-			$has_missing_value = empty( $value ) && ! is_numeric( $value );
-			if ( $has_missing_value || is_array( $value ) ) {
+			if ( ( empty( $value ) && ! is_numeric( $value ) ) || is_array( $value ) ) {
 				continue;
 			}
 
 			/*
 			 * Look up protected properties, keyed by value path.
 			 * Skip protected properties that are explicitly set to `null`.
+			 * Only implode when the path root can match PROTECTED_PROPERTIES.
 			 */
-			$path_string = implode( '.', $value_path );
-			if (
-				isset( static::PROTECTED_PROPERTIES[ $path_string ] ) &&
-				_wp_array_get( $settings, static::PROTECTED_PROPERTIES[ $path_string ], null ) === null
-			) {
-				continue;
+			if ( isset( $protected_roots[ $root_key ] ) ) {
+				$path_string = implode( '.', $value_path );
+				if (
+					isset( $protected[ $path_string ] ) &&
+					_wp_array_get( $settings, $protected[ $path_string ], null ) === null
+				) {
+					continue;
+				}
 			}
 
 			// Calculates fluid typography rules where available.
@@ -838,11 +919,20 @@ class JSON extends \WP_Theme_JSON {
 		}
 
 		// If a variable value is added to the root, the corresponding property should be removed.
-		foreach ( $root_variable_duplicates as $duplicate ) {
-			$discard = array_search( $duplicate, array_column( $declarations, 'name' ), true );
-			if ( is_numeric( $discard ) ) {
-				array_splice( $declarations, $discard, 1 );
+		// Single pass: remove only the first match per duplicate (same as array_search + splice).
+		if ( $root_variable_duplicates ) {
+			$discard_set = array_fill_keys( $root_variable_duplicates, true );
+			$filtered    = array();
+			foreach ( $declarations as $declaration ) {
+				$name = $declaration['name'];
+				if ( isset( $discard_set[ $name ] ) ) {
+					unset( $discard_set[ $name ] );
+					continue;
+				}
+				$filtered[] = $declaration;
 			}
+
+			return $filtered;
 		}
 
 		return $declarations;
