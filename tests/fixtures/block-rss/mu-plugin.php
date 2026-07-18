@@ -23,8 +23,8 @@ function blockera_intercept_rss_feed_request( $preempt, $args, $url ) {
 		return $preempt;
 	}
 
-	// When PHPUnit copies this file into WPMU_PLUGIN_DIR, __FILE__ points at mu-plugins/, not
-	// tests/fixtures/{design}/ — helpers sets $GLOBALS['blockera_test_mu_plugin_fixture_dir'] before require.
+	// Prefer the fixture dir set by PHPUnit helpers / Playwright loader stub.
+	// Plain copies into WPMU_PLUGIN_DIR make dirname( __FILE__ ) wrong for feed.xml.
 	$fixture_dir = '';
 	if ( isset( $GLOBALS['blockera_test_mu_plugin_fixture_dir'] ) && is_string( $GLOBALS['blockera_test_mu_plugin_fixture_dir'] ) && $GLOBALS['blockera_test_mu_plugin_fixture_dir'] !== '' ) {
 		$fixture_dir = $GLOBALS['blockera_test_mu_plugin_fixture_dir'];
@@ -33,6 +33,14 @@ function blockera_intercept_rss_feed_request( $preempt, $args, $url ) {
 		$fixture_dir = dirname( __FILE__ );
 	}
 	$feed_file = $fixture_dir . '/feed.xml';
+
+	// Fallback when activation copied this file without setting the fixture global.
+	if ( ! file_exists( $feed_file ) && defined( 'WP_PLUGIN_DIR' ) ) {
+		$plugin_fixture = WP_PLUGIN_DIR . '/blockera/tests/fixtures/block-rss/feed.xml';
+		if ( file_exists( $plugin_fixture ) ) {
+			$feed_file = $plugin_fixture;
+		}
+	}
 
 	// Check if the static feed file exists.
 	if ( ! file_exists( $feed_file ) ) {
