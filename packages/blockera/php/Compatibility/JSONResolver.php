@@ -41,11 +41,27 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $merged_data_cache = array();
 
 	/**
+	 * Request-level live {@see JSON} instances for merged data keyed by origin.
+	 *
+	 * Prefer returning these over {@see JSON::with_raw_data()} on every cache hit.
+	 *
+	 * @var array<string, JSON>
+	 */
+	private static $merged_json_instances = array();
+
+	/**
 	 * Request-level cache of URI-resolved merged theme.json raw data keyed by origin.
 	 *
 	 * @var array<string, array>
 	 */
 	private static $resolved_merged_data_cache = array();
+
+	/**
+	 * Request-level live {@see JSON} instances for URI-resolved merged data keyed by origin.
+	 *
+	 * @var array<string, JSON>
+	 */
+	private static $resolved_json_instances = array();
 
 	/**
 	 * Request-level cache of {@see JSON::get_settings()} for merged data keyed by origin.
@@ -319,15 +335,19 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return string
 	 */
 	private static function get_origins_settings_signature_for_user_cache(): string {
+		// Prefer raw settings: same invalidation signal, avoids get_settings() processing thrice.
 		$parts = array();
 		if ( null !== static::$core ) {
-			$parts['core'] = static::$core->get_settings();
+			$raw           = static::$core->get_raw_data();
+			$parts['core'] = $raw['settings'] ?? array();
 		}
 		if ( null !== static::$blocks ) {
-			$parts['blocks'] = static::$blocks->get_settings();
+			$raw             = static::$blocks->get_raw_data();
+			$parts['blocks'] = $raw['settings'] ?? array();
 		}
 		if ( null !== static::$theme ) {
-			$parts['theme'] = static::$theme->get_settings();
+			$raw            = static::$theme->get_raw_data();
+			$parts['theme'] = $raw['settings'] ?? array();
 		}
 		$encoded = wp_json_encode( $parts );
 		return is_string( $encoded ) ? md5( $encoded ) : md5( '' );
@@ -576,13 +596,23 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		}
 
 		if (
+			isset( static::$merged_json_instances[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_json_instances[ $origin ];
+		}
+
+		if (
 			isset( static::$merged_data_cache[ $origin ] )
 			&& ! static::is_testing_environment()
 		) {
-			return JSON::with_raw_data( static::$merged_data_cache[ $origin ] );
+			$cached                                   = JSON::with_raw_data( static::$merged_data_cache[ $origin ] );
+			static::$merged_json_instances[ $origin ] = $cached;
+			return $cached;
 		}
 
-		$result = new JSON();
+		// Skip empty-tree sanitize/migrate that `new JSON()` would pay before merge.
+		$result = JSON::with_raw_data( array( 'version' => JSON::LATEST_SCHEMA ) );
 		$result->merge( static::get_core_data() );
 		if ( 'default' === $origin ) {
 			static::store_merged_data_cache( $origin, $result );
@@ -625,6 +655,16 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			return static::$merged_settings_cache[ $origin ];
 		}
 
+		// get_merged_data() stores settings via store_merged_data_cache(); reuse that.
+		static::get_merged_data( $origin );
+
+		if (
+			isset( static::$merged_settings_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_settings_cache[ $origin ];
+		}
+
 		$settings = static::get_merged_data( $origin )->get_settings();
 
 		if ( ! static::is_testing_environment() ) {
@@ -648,6 +688,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 		static::$merged_data_cache[ $origin ]     = $result->get_raw_data();
 		static::$merged_settings_cache[ $origin ] = $result->get_settings();
+		static::$merged_json_instances[ $origin ] = $result;
 	}
 
 	/**
@@ -661,16 +702,33 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	public static function get_resolved_merged_data( $origin = 'custom' ) {
 		if (
+			isset( static::$resolved_json_instances[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$resolved_json_instances[ $origin ];
+		}
+
+		if (
 			isset( static::$resolved_merged_data_cache[ $origin ] )
 			&& ! static::is_testing_environment()
 		) {
-			return JSON::with_raw_data( static::$resolved_merged_data_cache[ $origin ] );
+			$cached                                     = JSON::with_raw_data( static::$resolved_merged_data_cache[ $origin ] );
+			static::$resolved_json_instances[ $origin ] = $cached;
+			return $cached;
 		}
 
-		$resolved = static::resolve_theme_file_uris( static::get_merged_data( $origin ) );
+		$merged   = static::get_merged_data( $origin );
+		$resolved = static::resolve_theme_file_uris( $merged );
+
+		// When no URIs change, resolve returns the same instance — keep a dedicated
+		// resolved handle so later URI-less hits do not alias mutate-risk with merged.
+		if ( $resolved === $merged ) {
+			$resolved = JSON::with_raw_data( $merged->get_raw_data() );
+		}
 
 		if ( ! static::is_testing_environment() ) {
 			static::$resolved_merged_data_cache[ $origin ] = $resolved->get_raw_data();
+			static::$resolved_json_instances[ $origin ]    = $resolved;
 		}
 
 		return $resolved;
@@ -684,28 +742,24 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return WP_Theme_JSON
 	 */
 	public static function get_block_data() {
+		// Match core: static hit before registry serialize / transient I/O.
+		if ( null !== static::$blocks && static::has_same_registered_blocks( 'blocks' ) ) {
+			return static::$blocks;
+		}
+
 		$registry = \WP_Block_Type_Registry::get_instance();
 		$blocks   = $registry->get_all_registered();
-		try {
-			$hash = md5( serialize( $blocks ) );
-		} catch ( \Throwable $e ) {
-			// Fallback when blocks contain non-serializable data (e.g. closures in WooCommerce render callbacks).
-			$hash = md5( implode( ',', array_keys( $blocks ) ) );
-		}
+		// Keys are enough for invalidation; full serialize is costly (closures in render_callback).
+		$hash = md5( implode( ',', array_keys( $blocks ) ) );
 
-		$cache = blockera_get_cache();
-
+		$cache         = blockera_get_cache();
 		$transient_key = 'resolver_get_block_data_' . $hash;
-		$transient     = $cache->getTransientCache($transient_key);
+		$transient     = $cache->getTransientCache( $transient_key );
 
-		$has_same_registered_blocks = static::has_same_registered_blocks( 'blocks' );
-
-		if ( $transient && ( null === static::$blocks || ! $has_same_registered_blocks ) ) {
-			return $transient;
-		}
-
-		// Check cache FIRST before any expensive operations.
-		if ( null !== static::$blocks && $has_same_registered_blocks ) {
+		if ( is_array( $transient ) && isset( $transient['version'] ) ) {
+			static::$blocks = JSON::with_raw_data( $transient );
+			// Populate blocks_cache fingerprint so the next call hits the static early return.
+			static::has_same_registered_blocks( 'blocks' );
 			return static::$blocks;
 		}
 
@@ -749,8 +803,11 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		 */
 		static::$blocks = new JSON( apply_filters( 'blockera_theme_json_data_blocks', $config ), 'blocks' );
 
-		// Cache the blocks data in a transient for performance.
-		$cache->setTransientCache( $transient_key, static::$blocks, HOUR_IN_SECONDS );
+		// Align registry fingerprint with core's has_same_registered_blocks() contract.
+		static::has_same_registered_blocks( 'blocks' );
+
+		// Persist raw array — serializing a live JSON object graph is heavy/fragile.
+		$cache->setTransientCache( $transient_key, static::$blocks->get_raw_data(), HOUR_IN_SECONDS );
 
 		return static::$blocks;
 	}
@@ -808,8 +865,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			}
 
 			$translated = static::translate( $decoded_file, $text_domain );
-			// Avoid creating JSON object just to call get_raw_data() - translate already returns array.
-			$variation = ( new JSON( $translated ) )->get_raw_data();
+
+			/*
+			 * Skip per-file JSON sanitize/construct. Inject paths only need styles/blockTypes/slug/title,
+			 * and the subsequent theme `new JSON( $theme_json_data )` sanitizes injected styles.
+			 * TT5 alone has ~9 block style partials — each full sanitize was a major warm-path cost.
+			 */
+			$variation = $translated;
 
 			if ( empty( $variation['title'] ) ) {
 				$variation['title'] = basename( $path, '.json' );
@@ -1088,7 +1150,9 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 		static::$user_cache_origins_settings_signature = null;
 		static::$merged_data_cache                     = array();
+		static::$merged_json_instances                 = array();
 		static::$resolved_merged_data_cache            = array();
+		static::$resolved_json_instances               = array();
 		static::$merged_settings_cache                 = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
