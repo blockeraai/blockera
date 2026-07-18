@@ -381,21 +381,23 @@ class JSON extends \WP_Theme_JSON {
 		$schema_settings_blocks       = $base['schema_settings_blocks'];
 		$block_style_variation_styles = $base['block_style_variation_styles'];
 		// COW copy: per-input variation writes must not mutate the cached base.
+		// Cached base already has empty variations[]; only overwrite blocks that need them.
 		$schema_styles_blocks = $base['schema_styles_blocks'];
 
 		$input_blocks = ( isset( $input['styles']['blocks'] ) && is_array( $input['styles']['blocks'] ) )
 			? $input['styles']['blocks']
 			: null;
 
-		foreach ( $valid_block_names as $block ) {
-			$style_variation_names = array();
+		if ( null !== $input_blocks ) {
+			foreach ( $valid_block_names as $block ) {
+				if (
+					empty( $input_blocks[ $block ]['variations'] ) ||
+					! is_array( $input_blocks[ $block ]['variations'] ) ||
+					! isset( $valid_variations[ $block ] )
+				) {
+					continue;
+				}
 
-			if (
-				null !== $input_blocks &&
-				! empty( $input_blocks[ $block ]['variations'] ) &&
-				is_array( $input_blocks[ $block ]['variations'] ) &&
-				isset( $valid_variations[ $block ] )
-			) {
 				/*
 				 * Important tips:
 				 * 1. WP_Theme_JSON class used of array_intersect to validate variations based on available items from static config.
@@ -405,11 +407,12 @@ class JSON extends \WP_Theme_JSON {
 				foreach ( $valid_variations[ $block ] as $variation_name ) {
 					$style_variation_names[] = $variation_name;
 				}
-			}
 
-			$schema_styles_blocks[ $block ]['variations'] = $style_variation_names
-				? array_fill_keys( $style_variation_names, $block_style_variation_styles )
-				: array();
+				$schema_styles_blocks[ $block ]['variations'] = array_fill_keys(
+					$style_variation_names,
+					$block_style_variation_styles
+				);
+			}
 		}
 
 		$schema                       = array();
