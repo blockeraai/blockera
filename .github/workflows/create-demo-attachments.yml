@@ -154,7 +154,8 @@ jobs:
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
 
                   # Generate the final URL with encoded JSON appended
-                  DEMO_URL="https://playground.wordpress.net/#${BASE64_ENCODED_JSON}"
+                  # storage=temp + can-save=no: fresh site each open; no OPFS autosave restore.
+                  DEMO_URL="https://playground.wordpress.net/?storage=temp&can-save=no#${BASE64_ENCODED_JSON}"
 
                   # Save the URL as an output for later steps if needed
                   echo "demo_url=$DEMO_URL" >> $GITHUB_ENV
