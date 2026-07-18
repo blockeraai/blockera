@@ -1,7 +1,6 @@
 <?php
 
 use Blockera\Setup\Compatibility\BlockeraSettingsPaths;
-use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
 if (! function_exists('blockera_get_global_stylesheet')) {
@@ -59,7 +58,7 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 			}
 		}
 
-		$tree                = JSONResolver::resolve_theme_file_uris( JSONResolver::get_merged_data() );
+		$tree                = JSONResolver::get_resolved_merged_data();
 		$supports_theme_json = wp_theme_has_theme_json();
 
 		if ( empty( $types ) && ! $supports_theme_json ) {
@@ -165,16 +164,13 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		}
 
 		// Build tree only if not restored from cache.
+		// Reuse the same resolved merged tree as blockera_get_global_stylesheet() (request cache).
 		if (! isset($tree)) {
-			$tree        = new JSON();
-			$merged_data = JSONResolver::get_merged_data();
+			$tree = JSONResolver::get_resolved_merged_data();
 
-			if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {
+			if (! method_exists($tree, 'get_raw_data')) {
 				return;
 			}
-
-			$tree->merge($merged_data);
-			$tree = JSONResolver::resolve_theme_file_uris($tree);
 
 			$block_nodes = $tree->get_styles_block_nodes();
 
