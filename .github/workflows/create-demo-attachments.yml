@@ -150,6 +150,20 @@ jobs:
                   # Update the blogname to append PR number
                   ENCODED_JSON=$(echo "$ENCODED_JSON" | jq --arg pr_num "${{ github.event.pull_request.number }}" '.steps[3].options.blogname += " (PR \($pr_num))"')
 
+                  # Unique per workflow run so the blueprint hash / Playground setup fingerprint changes.
+                  ENCODED_JSON=$(echo "$ENCODED_JSON" | jq \
+                    --arg run_id "${{ github.run_id }}-${{ github.run_attempt }}" \
+                    '
+                      .meta.title = ((.meta.title // "Blockera Demo") + " [" + $run_id + "]")
+                      | .steps |= map(
+                          if .step == "defineWpConfigConsts" then
+                            .consts.BLOCKERA_PLAYGROUND_RUN_ID = $run_id
+                          else
+                            .
+                          end
+                        )
+                    ')
+
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
 
