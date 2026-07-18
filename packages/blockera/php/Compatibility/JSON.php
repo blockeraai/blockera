@@ -232,6 +232,27 @@ class JSON extends \WP_Theme_JSON {
 	}
 
 	/**
+	 * Build an instance from already-processed theme.json raw data.
+	 *
+	 * Skips migrate / sanitize / preset-origin keying. Use only with data from
+	 * {@see get_raw_data()} (or equivalent post-construct shape).
+	 *
+	 * Hot path: cloning merged trees and URI resolution without re-sanitizing.
+	 *
+	 * @param array $data Already-processed theme.json data.
+	 * @return self
+	 */
+	public static function with_raw_data( array $data ): self {
+		$instance             = ( new \ReflectionClass( static::class ) )->newInstanceWithoutConstructor();
+		$instance->theme_json = $data;
+
+		global $blockera_block_supports;
+		$instance->set_supports( is_array( $blockera_block_supports ?? null ) ? $blockera_block_supports : array() );
+
+		return $instance;
+	}
+
+	/**
 	 * Set features support list.
 	 *
 	 * @param array $supports Features support list.
