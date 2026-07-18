@@ -38,6 +38,15 @@ echo "Page ID: ${POST_ID}"
 
 npx wp-env run cli -- wp rewrite flush --hard >/dev/null
 
+# Ensure the default Hello World post (ID 1) is published for the front-default-post scenario.
+npx wp-env run cli -- wp post update 1 --post_status=publish >/dev/null 2>&1 || true
+DEFAULT_POST_ID=1
+DEFAULT_POST_PATH="/?p=1"
+DEFAULT_POST_CODE="$(curl -s -o /dev/null -w '%{http_code}' "${BASE_URL}${DEFAULT_POST_PATH}" || true)"
+if [[ "$DEFAULT_POST_CODE" != "200" ]]; then
+	echo "Warning: default post ID 1 returned HTTP ${DEFAULT_POST_CODE}; scenario may fail."
+fi
+
 FRONT_PATH="/${SLUG}/"
 HTTP_CODE="$(curl -s -o /dev/null -w '%{http_code}' "${BASE_URL}${FRONT_PATH}" || true)"
 if [[ "$HTTP_CODE" != "200" ]]; then
@@ -45,11 +54,19 @@ if [[ "$HTTP_CODE" != "200" ]]; then
 	echo "Pretty permalink returned ${HTTP_CODE}; using ${FRONT_PATH}"
 fi
 
+HOME_CODE="$(curl -s -o /dev/null -w '%{http_code}' "${BASE_URL}/" || true)"
+if [[ "$HOME_CODE" != "200" ]]; then
+	echo "Warning: home page returned HTTP ${HOME_CODE}; scenario may fail."
+fi
+
 cat > "${OUT_DIR}/content-state.json" <<EOF
 {
   "postId": ${POST_ID},
   "slug": "${SLUG}",
   "frontPath": "${FRONT_PATH}",
+  "defaultPostId": ${DEFAULT_POST_ID},
+  "defaultPostPath": "${DEFAULT_POST_PATH}",
+  "homePath": "/",
   "baseUrl": "${BASE_URL}"
 }
 EOF
@@ -72,6 +89,10 @@ for (const scenario of scenarios.scenarios || []) {
 	let p = scenario.path || '/';
 	if (scenario.id === 'front-complex-1') {
 		p = state.frontPath;
+	} else if (scenario.id === 'front-home') {
+		p = state.homePath || '/';
+	} else if (scenario.id === 'front-default-post') {
+		p = state.defaultPostPath || '/?p=1';
 	}
 	p = p.replace('{POST_ID}', String(state.postId));
 	p = p.replace('{ID}', String(state.postId));

@@ -8,6 +8,20 @@
 	},
 	"scenarios": [
 		{
+			"id": "front-home",
+			"group": "page-rendering",
+			"label": "Front-end home page",
+			"path": "/",
+			"thresholdPercent": 15
+		},
+		{
+			"id": "front-default-post",
+			"group": "page-rendering",
+			"label": "Front-end default post (ID 1)",
+			"path": "/?p=1",
+			"thresholdPercent": 15
+		},
+		{
 			"id": "front-complex-1",
 			"group": "patterns",
 			"label": "Front-end complex-1 page",
@@ -28,6 +42,14 @@
 			"group": "admin",
 			"label": "Admin posts list",
 			"path": "/wp-admin/edit.php",
+			"auth": true,
+			"thresholdPercent": 15
+		},
+		{
+			"id": "admin-media",
+			"group": "admin",
+			"label": "Admin media library",
+			"path": "/wp-admin/upload.php",
 			"auth": true,
 			"thresholdPercent": 15
 		},
