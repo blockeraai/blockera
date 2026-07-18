@@ -21,16 +21,16 @@
 <a href="https://github.com/blockeraai/blockera/actions/workflows/cypress-e2e-tests.yml"><img alt="E2E Tests" src="https://img.shields.io/github/actions/workflow/status/blockeraai/blockera/cypress-e2e-tests.yml?style=flat&label=Test%20/%20E2E"></a> 
 <a href="https://github.com/blockeraai/blockera/actions/workflows/jest-unit-tests.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blockeraai/blockera/jest-unit-tests.yml?style=flat&label=Test%20/%20JS"></a> 
 <a href="https://github.com/blockeraai/blockera/actions/workflows/php-unit-tests.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blockeraai/blockera/php-unit-tests.yml?style=flat&label=Test%20/%20PHP"></a> 
-<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks/core/js/wordpress-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks%2Fcore%2Fjs%2Fwordpress-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&suffix=%20of%2094&logo=wordpress&logoColor=ffffff&label=WordPress%20Supported%20Blocks&labelColor=21759b&color=49c320"></a> 
-<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks/core/js/woocommerce-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks%2Fcore%2Fjs%2Fwoocommerce-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&suffix=%20of%20137&label=WooCommerce%20Supported%20Blocks&labelColor=7F54B3&color=49c320"></a> 
-<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks/core/js/third-party-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks%2Fcore%2Fjs%2Fthird-party-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&label=Third%20Party%20Supported%20Blocks&labelColor=0151e7&color=49c320"></a> 
+<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks-core/js/wordpress-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks-core%2Fjs%2Fwordpress-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&suffix=%20of%2094&logo=wordpress&logoColor=ffffff&label=WordPress%20Supported%20Blocks&labelColor=21759b&color=49c320"></a> 
+<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks-core/js/woocommerce-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks-core%2Fjs%2Fwoocommerce-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&suffix=%20of%20137&label=WooCommerce%20Supported%20Blocks&labelColor=7F54B3&color=49c320"></a> 
+<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks-core/js/third-party-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks-core%2Fjs%2Fthird-party-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&label=Third%20Party%20Supported%20Blocks&labelColor=0151e7&color=49c320"></a> 
 <a href="https://wordpress.org/plugins/blockera/"><img alt="Total Plugin Downloads" src="https://img.shields.io/wordpress/plugin/dt/blockera?label=Pluign%20Downloads&color=49c320"></a>
 <a href="https://wordpress.org/plugins/blockera/"><img alt="WordPress Plugin Active Installs" src="https://img.shields.io/wordpress/plugin/installs/blockera?label=Plugin%20Active%20Installs&color=49c320"></a>
 </p>
 
 <h2>Tired of Gutenberg's limitations?</h2>
 
-**🧐 Imagine this:** All the familiarity of Gutenberg, same core blocks but **supercharged** with **advanced options** and **responsive controls**. 
+**🧐 Imagine this:** All the familiarity of Gutenberg, same core blocks but **supercharged** with **advanced options** and **responsive controls**.
 
 That's **Blockera**, Welcome to the Block Era! 😎
 
@@ -40,7 +40,7 @@ This unique approach ensures a seamless transition and empowers you to create st
 
 <h3>Who Is Blockera For? 🎯</h3>
 
-Blockera is for anyone that tired of Gutenberg's limitations and weak performance of other page builders. 
+Blockera is for anyone that tired of Gutenberg's limitations and weak performance of other page builders.
 
 Install Blockera today and unlock the true potential of Gutenberg for creating professional and blazing fast websites!
 
@@ -80,29 +80,28 @@ Currently we are working on the following features to add in Blockera:
 
 - **AI Integration**: We will add AI integration to block editor for creating content or designing websites. We are working on it.
 
-
 ## Installation 😍
 
 1. Download Blockera from the [WordPress plugin directory](https://wordpress.org/plugins/blockera/).
 2. Install and Activate it 🎉
 
-
 ## Support 👋
 
 Need help? This is a developer's portal for Blockera and should not be used for general support and queries. Please visit the [Blockera community](https://community.blockera.ai/) for assistance.
 
-
 ## Change log and Releases 📝
+
 Complete list of updates and releases is available in [changelog](https://community.blockera.ai/changelog-9l8hbrv0).
 
-
 ## Contributors 😎
+
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/blockeraai/blockera?label=Total%20Commits"> <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/blockeraai/blockera?label=Monthly%20Commits">
 <img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/blockeraai/blockera?label=Contributors"> <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/blockeraai/blockera?label=Issues">
 
 Blockera is built by [contributors and volunteers](./.github/CONTRIBUTING.md) around the globe.
 
 ## Screenshots 🌇
+
 <p align="center">
 <img alt="Screenshot 1" src="./.wordpress-org/screenshot-1.gif">
 <img alt="Screenshot 2" src="./.wordpress-org/screenshot-2.jpg">
