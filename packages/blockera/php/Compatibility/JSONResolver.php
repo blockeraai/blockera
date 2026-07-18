@@ -40,6 +40,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	private static $merged_data_cache = array();
 
+	/**
+	 * Request-level cache of URI-resolved merged theme.json raw data keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $resolved_merged_data_cache = array();
 
 	/**
 	 * Store the default WordPress provided data from theme.
@@ -603,6 +609,31 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		return $result;
 	}
 
+	/**
+	 * Merged theme.json with theme-relative file URIs resolved (request-level cache).
+	 *
+	 * Shared by {@see blockera_get_global_stylesheet()} and
+	 * {@see blockera_add_global_styles_for_blocks()} so enqueue pays merge/URI work once.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return JSON
+	 */
+	public static function get_resolved_merged_data( $origin = 'custom' ) {
+		if (
+			isset( static::$resolved_merged_data_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return JSON::with_raw_data( static::$resolved_merged_data_cache[ $origin ] );
+		}
+
+		$resolved = static::resolve_theme_file_uris( static::get_merged_data( $origin ) );
+
+		if ( ! static::is_testing_environment() ) {
+			static::$resolved_merged_data_cache[ $origin ] = $resolved->get_raw_data();
+		}
+
+		return $resolved;
+	}
 
 	/**
 	 * Gets the styles for blocks from the block.json file.
@@ -1016,6 +1047,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 		static::$user_cache_origins_settings_signature = null;
 		static::$merged_data_cache                     = array();
+		static::$resolved_merged_data_cache            = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();
@@ -1049,6 +1081,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			_wp_array_set( $resolved_theme_json_data, $path, $resolved_url['href'] );
 		}
 
-		return new JSON( $resolved_theme_json_data );
+		// Data is already sanitized; avoid a full JSON reconstruct/sanitize pass.
+		return JSON::with_raw_data( $resolved_theme_json_data );
 	}
 }
