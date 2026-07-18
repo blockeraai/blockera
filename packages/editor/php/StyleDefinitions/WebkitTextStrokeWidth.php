@@ -2,42 +2,33 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\Contracts\StandardDefinition;
-use Blockera\Editor\StyleDefinitions\Traits\SimpleDefinitionTrait;
-
 class WebkitTextStrokeWidth extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'], $setting['-webkit-text-stroke-width'] ) || '-webkit-text-stroke-width' !== $setting['type'] ) {
+			return [];
+		}
 
-        if (! isset($setting['type'])) {
-            return [];
-        }
+		$strokeData = $setting['-webkit-text-stroke-width'];
 
-        $cssProperty = $setting['type'];
+		if ( ! isset( $strokeData['width'] ) ) {
+			$this->setCss( $this->declarations );
 
-        if ('' === $cssProperty || '-webkit-text-stroke-width' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
-            return [];
-        }
+			return $this->css;
+		}
 
-        $strokeData = $setting[ $cssProperty ];
+		$width = blockera_get_value_addon_real_value( $strokeData['width'] );
 
-        if (! isset($strokeData['width'])) {
-            $this->setCss($this->declarations);
-            return $this->css;
-        }
+		if ( empty( $width ) ) {
+			$this->setCss( $this->declarations );
 
-        $width = blockera_get_value_addon_real_value($strokeData['width']);
+			return $this->css;
+		}
 
-        if (empty($width)) {
-            $this->setCss($this->declarations);
-            return $this->css;
-        }
+		$this->setDeclaration( '-webkit-text-stroke-width', $width );
+		$this->setDeclaration( 'text-stroke-width', $width );
+		$this->setCss( $this->declarations );
 
-        $this->setDeclaration('-webkit-text-stroke-width', $width);
-        $this->setDeclaration('text-stroke-width', $width);
-
-        $this->setCss($this->declarations);
-
-        return $this->css;
-    }
+		return $this->css;
+	}
 }

@@ -81,7 +81,8 @@ class Transition extends BaseStyleDefinition implements Repeater {
 					}
 				}
 
-				return implode( ', ', array_filter( $parts, 'strlen' ) );
+				// Parts are only appended when non-empty — skip array_filter callback.
+				return implode( ', ', $parts );
 			},
 			$resolved_from_var
 		);

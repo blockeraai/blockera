@@ -2,38 +2,30 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
-
 class SelfOrigin extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'], $setting['self-origin'] ) || 'self-origin' !== $setting['type'] ) {
+			return [];
+		}
 
-        if (! isset($setting['type'])) {
-            return [];
-        }
+		$originData = $setting['self-origin'];
 
-        $cssProperty = $setting['type'];
+		if ( ! isset( $originData['top'], $originData['left'] ) ) {
+			$this->setCss( $this->declarations );
 
-        if ('self-origin' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
-            return [];
-        }
+			return $this->css;
+		}
 
-        $originData = $setting[ $cssProperty ];
+		$top  = blockera_get_value_addon_real_value( $originData['top'] );
+		$left = blockera_get_value_addon_real_value( $originData['left'] );
 
-        if (! isset($originData['top'], $originData['left'])) {
-            $this->setCss($this->declarations);
-            return $this->css;
-        }
+		if ( '' !== $top && '' !== $left ) {
+			$this->setDeclaration( 'transform-origin', $top . ' ' . $left );
+		}
 
-        $top  = blockera_get_value_addon_real_value($originData['top']);
-        $left = blockera_get_value_addon_real_value($originData['left']);
+		$this->setCss( $this->declarations );
 
-        if ('' !== $top && '' !== $left) {
-            $this->setDeclaration('transform-origin', $top . ' ' . $left);
-        }
-
-        $this->setCss($this->declarations);
-
-        return $this->css;
-    }
+		return $this->css;
+	}
 }

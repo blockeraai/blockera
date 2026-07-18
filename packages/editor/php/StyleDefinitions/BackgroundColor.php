@@ -1,22 +1,23 @@
-<?php 
+<?php
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
-
 class BackgroundColor extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
-		$cssProperty = $setting['type'] ?? null;
-
-		if ( 'background-color' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) || '' === $setting[ $cssProperty ] ) {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'], $setting['background-color'] ) || 'background-color' !== $setting['type'] ) {
 			return [];
 		}
 
-		$this->setDeclaration( $cssProperty, blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) );
+		$value = $setting['background-color'];
+
+		if ( '' === $value ) {
+			return [];
+		}
+
+		$this->setDeclaration( 'background-color', blockera_get_value_addon_real_value( $value ) );
 		$this->setCss( $this->declarations );
 
 		return $this->css;
-    }
+	}
 }
-

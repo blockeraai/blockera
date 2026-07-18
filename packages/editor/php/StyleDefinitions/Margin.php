@@ -13,29 +13,27 @@ class Margin extends BaseStyleDefinition {
 	 */
 	protected function css( array $setting ): array {
 
-		if ( ! isset( $setting['type'] ) || '' === $setting['type'] ) {
+		$cssProperty = $setting['type'] ?? '';
+
+		if ( '' === $cssProperty ) {
 			return [];
 		}
 
-		$cssProperty = $setting['type'];
-
-		if ( ! isset( $setting[ $cssProperty ]['margin'] ) ) {
+		if ( ! isset( $setting[ $cssProperty ]['margin'] ) || ! is_array( $setting[ $cssProperty ]['margin'] ) ) {
 			return [];
 		}
 
 		$margin = $setting[ $cssProperty ]['margin'];
 
-		if ( ! is_array( $margin ) || 0 === count( $margin ) ) {
+		if ( ! $margin ) {
 			return [];
 		}
 
+		// Build flat map directly — avoids nested single-key arrays + blockera_array_flat().
 		$declaration = [];
-		$marginKeys  = array_keys( $margin );
-		$marginCount = count( $marginKeys );
 
-		for ( $i = 0; $i < $marginCount; ++$i ) {
-			$key  = $marginKeys[ $i ];
-			$item = blockera_get_value_addon_real_value( $margin[ $key ] );
+		foreach ( $margin as $key => $raw ) {
+			$item = blockera_get_value_addon_real_value( $raw );
 
 			if ( '' === $item ) {
 				continue;
@@ -46,16 +44,15 @@ class Margin extends BaseStyleDefinition {
 				$item .= ' !important';
 			}
 
-			$declaration[] = [ "margin-{$key}" => $item ];
+			$declaration[ 'margin-' . $key ] = $item;
 		}
 
-		if ( 0 === count( $declaration ) ) {
+		if ( ! $declaration ) {
 			return [];
 		}
 
-		$this->setCss( blockera_array_flat( $declaration ) );
+		$this->setCss( $declaration );
 
 		return $this->css;
 	}
-
 }

@@ -2,35 +2,28 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
-
 class ChildPerspective extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'], $setting['child-perspective'] ) || 'child-perspective' !== $setting['type'] ) {
+			return [];
+		}
 
-        if (! isset($setting['type'])) {
-            return [];
-        }
+		$settingValue = $setting['child-perspective'];
 
-        $cssProperty = $setting['type'];
+		if ( '' === $settingValue || null === $settingValue ) {
+			return [];
+		}
 
-        if ('child-perspective' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
-            return [];
-        }
+		$childPerspective = blockera_get_value_addon_real_value( $settingValue );
 
-        $settingValue = $setting[ $cssProperty ];
+		if ( '' === $childPerspective || null === $childPerspective ) {
+			return $this->css;
+		}
 
-        if ('' === $settingValue || null === $settingValue) {
-            return [];
-        }
+		$this->declarations['perspective'] = '0px' !== $childPerspective ? $childPerspective : 'none';
+		$this->setCss( $this->declarations );
 
-        $childPerspective = blockera_get_value_addon_real_value($settingValue);
-
-        if ('' !== $childPerspective && null !== $childPerspective) {
-            $this->declarations['perspective'] = '0px' !== $childPerspective ? $childPerspective : 'none';
-            $this->setCss($this->declarations);
-        }
-
-        return $this->css;
-    }
+		return $this->css;
+	}
 }

@@ -302,8 +302,7 @@ class BoxShadow extends BaseStyleDefinition {
 	 * @param array $setting Row with type, x, y, blur, spread, color.
 	 */
 	public static function getBoxShadow( array $setting ): string {
-		$type  = isset( $setting['type'] ) ? $setting['type'] : '';
-		$inset = ( 'inner' === $type ) ? 'inset' : '';
+		$inset = ( isset( $setting['type'] ) && 'inner' === $setting['type'] ) ? 'inset' : '';
 
 		$x      = ( isset( $setting['x'] ) && '' !== $setting['x'] ) ? blockera_get_value_addon_real_value( $setting['x'] ) : '';
 		$y      = ( isset( $setting['y'] ) && '' !== $setting['y'] ) ? blockera_get_value_addon_real_value( $setting['y'] ) : '';
@@ -311,7 +310,8 @@ class BoxShadow extends BaseStyleDefinition {
 		$spread = ( isset( $setting['spread'] ) && '' !== $setting['spread'] ) ? blockera_get_value_addon_real_value( $setting['spread'] ) : '';
 		$color  = ( isset( $setting['color'] ) && '' !== $setting['color'] ) ? blockera_get_value_addon_real_value( $setting['color'] ) : '';
 
-		return trim( sprintf( '%s %s %s %s %s %s', $inset, $x, $y, $blur, $spread, $color ) );
+		// Concat + trim matches prior sprintf spacing (leading space when inset empty).
+		return trim( $inset . ' ' . $x . ' ' . $y . ' ' . $blur . ' ' . $spread . ' ' . $color );
 	}
 
 	/**

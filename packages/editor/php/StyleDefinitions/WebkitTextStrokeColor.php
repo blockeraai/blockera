@@ -4,42 +4,37 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class WebkitTextStrokeColor extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'], $setting['-webkit-text-stroke-color'] ) || '-webkit-text-stroke-color' !== $setting['type'] ) {
+			return [];
+		}
 
-        if (! isset($setting['type'])) {
-            return [];
-        }
+		$strokeData = $setting['-webkit-text-stroke-color'];
 
-        $cssProperty = $setting['type'];
+		if ( ! isset( $strokeData['color'] ) ) {
+			$this->setCss( $this->declarations );
 
-        if ('' === $cssProperty || '-webkit-text-stroke-color' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
-            return [];
-        }
+			return $this->css;
+		}
 
-        $strokeData = $setting[ $cssProperty ];
+		$color = blockera_get_value_addon_real_value( $strokeData['color'] );
 
-        if (! isset($strokeData['color'])) {
-            $this->setCss($this->declarations);
-            return $this->css;
-        }
+		if ( empty( $color ) ) {
+			$this->setCss( $this->declarations );
 
-        $color = blockera_get_value_addon_real_value($strokeData['color']);
+			return $this->css;
+		}
 
-        if (empty($color)) {
-            $this->setCss($this->declarations);
-            return $this->css;
-        }
+		$this->setDeclaration( '-webkit-text-stroke-color', $color );
+		$this->setDeclaration( 'text-stroke-color', $color );
 
-        $this->setDeclaration('-webkit-text-stroke-color', $color);
-        $this->setDeclaration('text-stroke-color', $color);
+		if ( isset( $strokeData['width'] ) && ! empty( $strokeData['width'] ) ) {
+			$this->setDeclaration( '-webkit-text-stroke-width', $strokeData['width'] );
+			$this->setDeclaration( 'text-stroke-width', $strokeData['width'] );
+		}
 
-        if (isset($strokeData['width']) && ! empty($strokeData['width'])) {
-            $this->setDeclaration('-webkit-text-stroke-width', $strokeData['width']);
-            $this->setDeclaration('text-stroke-width', $strokeData['width']);
-        }
+		$this->setCss( $this->declarations );
 
-        $this->setCss($this->declarations);
-
-        return $this->css;
-    }
+		return $this->css;
+	}
 }

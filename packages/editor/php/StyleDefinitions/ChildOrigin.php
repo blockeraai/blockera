@@ -2,37 +2,28 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
-
 class ChildOrigin extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'] ) || 'child-origin' !== $setting['type'] ) {
+			return $this->css;
+		}
 
-        if (! isset($setting['type']) || 'child-origin' !== $setting['type']) {
-            return $this->css;
-        }
+		$childOrigin = $setting['child-origin'] ?? null;
 
-        $cssProperty = $setting['type'];
+		if ( ! is_array( $childOrigin ) || ! isset( $childOrigin['top'], $childOrigin['left'] ) ) {
+			return $this->css;
+		}
 
-        if (! isset($setting[ $cssProperty ]) || ! is_array($setting[ $cssProperty ])) {
-            return $this->css;
-        }
+		$top  = $childOrigin['top'];
+		$left = $childOrigin['left'];
 
-        $childOrigin = $setting[ $cssProperty ];
+		if ( '' !== $top && '' !== $left ) {
+			$this->setDeclaration( 'perspective-origin', $top . ' ' . $left );
+		}
 
-        if (! isset($childOrigin['top'], $childOrigin['left'])) {
-            return $this->css;
-        }
+		$this->setCss( $this->declarations );
 
-        $top  = $childOrigin['top'];
-        $left = $childOrigin['left'];
-
-        if ('' !== $top && '' !== $left) {
-            $this->setDeclaration('perspective-origin', $top . ' ' . $left);
-        }
-
-        $this->setCss($this->declarations);
-
-        return $this->css;
-    }
+		return $this->css;
+	}
 }

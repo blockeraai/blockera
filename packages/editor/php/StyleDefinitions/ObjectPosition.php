@@ -11,19 +11,18 @@ class ObjectPosition extends BaseStyleDefinition {
 	 *
 	 * @return array Retrieve array of collection of css selectors and css declarations.
 	 */
-	protected function css( array $setting): array {
-		$cssProperty = $setting['type'] ?? '';
-
-		if ( 'object-position' !== $cssProperty ) {
+	protected function css( array $setting ): array {
+		if ( ! isset( $setting['type'] ) || 'object-position' !== $setting['type'] ) {
 			return [];
 		}
 
-		$positionData = $setting[ $cssProperty ] ?? null;
+		$positionData = $setting['object-position'] ?? null;
+
 		if ( null === $positionData || ! isset( $positionData['top'], $positionData['left'] ) ) {
 			return [];
 		}
 
-		$this->declarations[ $cssProperty ] = $positionData['top'] . ' ' . $positionData['left'];
+		$this->declarations['object-position'] = $positionData['top'] . ' ' . $positionData['left'];
 		$this->setCss( $this->declarations );
 
 		return $this->css;

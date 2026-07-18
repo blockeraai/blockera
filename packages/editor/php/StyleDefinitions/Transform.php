@@ -15,14 +15,12 @@ class Transform extends BaseStyleDefinition implements Repeater {
 
 	protected function css( array $setting): array {
 
-		$declaration      = [];
 		$cssProperty      = $setting['type'] ?? '';
 		$declaration_only = ! empty( $setting['_blockeraDeclarationOnly'] );
 		$preset_mode      = ! empty( $setting['_blockeraGlobalPreset'] );
 
-		if ( '' === $cssProperty || 'transform' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) || empty( $setting[ $cssProperty ] ) ) {
-
-			return $declaration;
+		if ( '' === $cssProperty || 'transform' !== $cssProperty || empty( $setting[ $cssProperty ] ) ) {
+			return [];
 		}
 
 		$value             = &$setting[ $cssProperty ];
