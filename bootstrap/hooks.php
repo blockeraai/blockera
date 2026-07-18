@@ -53,6 +53,8 @@ function blockera_after_setup_theme() {
 	remove_action( 'enqueue_block_editor_assets', 'wp_enqueue_global_styles_css_custom_properties' );
 
 	// Replace with your own implementation.
+	// Warm before query_posts/the_posts (wp_enqueue_scripts is too late for duotone-during-posts).
+	add_action( 'wp_loaded', 'blockera_warm_merged_settings_cache', 99 );
 	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_global_styles' );
 	add_action( 'wp_footer', 'blockera_enqueue_global_styles', 1 );
 	add_action( 'enqueue_block_editor_assets', 'blockera_enqueue_global_styles_css_custom_properties' );
