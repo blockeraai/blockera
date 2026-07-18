@@ -83,111 +83,149 @@ if ( ! function_exists( 'blockera_resolve_breakpoint_media_settings' ) ) {
 	 */
 	function blockera_resolve_breakpoint_media_settings( array $breakpoints): array {
 
+		// Request-level memo: StyleEngine calls this per breakpoint with the same list.
+		static $cache = [];
+
+		// Fingerprint only media-relevant fields (type/base/min/max).
+		$key = '';
+		foreach ( $breakpoints as $breakpoint ) {
+			if ( ! is_array( $breakpoint ) ) {
+				continue;
+			}
+
+			$key .= ( $breakpoint['type'] ?? '' ) . "\0"
+				. ( empty( $breakpoint['base'] ) ? '0' : '1' ) . "\0"
+				. ( $breakpoint['settings']['min'] ?? '' ) . "\0"
+				. ( $breakpoint['settings']['max'] ?? '' ) . "\1";
+		}
+
+		if ( isset( $cache[ $key ] ) ) {
+			return $cache[ $key ];
+		}
+
+		/**
+		 * Validate + parse px once (same rules as is_valid/parse helpers).
+		 *
+		 * @return array{0:bool,1:int} [valid, px]
+		 */
+		$parse_px = static function ( string $value ): array {
+			if ( '' === $value || false !== strpos( $value, 'func' ) ) {
+				return [ false, 0 ];
+			}
+
+			// Fast path: "123px" (default Blockera config).
+			$len = strlen( $value );
+			if ( $len > 2 && 'p' === $value[ $len - 2 ] && 'x' === $value[ $len - 1 ] ) {
+				$num = substr( $value, 0, $len - 2 );
+				if ( '' !== $num && ctype_digit( $num ) ) {
+					return [ true, (int) $num ];
+				}
+			}
+
+			$numeric = preg_replace( '/[^0-9]/', '', $value );
+			if ( '' === $numeric || ! is_numeric( $numeric ) ) {
+				return [ false, 0 ];
+			}
+
+			return [ true, (int) $numeric ];
+		};
+
 		$resolved = [];
-		$items    = [];
+		$max_only = []; // List of [px, type, max].
+		$min_only = []; // List of [px, type, min].
+		$fallback = []; // List of [type, min, max].
 
 		foreach ( $breakpoints as $breakpoint ) {
 			if ( empty( $breakpoint['type'] ) || ! empty( $breakpoint['base'] ) ) {
 				continue;
 			}
 
-			$items[] = $breakpoint;
-		}
-
-		foreach ( $items as $breakpoint ) {
-			$min = $breakpoint['settings']['min'] ?? '';
-			$max = $breakpoint['settings']['max'] ?? '';
-
-			if ( $min && $max ) {
-				$resolved[ $breakpoint['type'] ] = [
-					'min' => $min,
-					'max' => $max,
-				];
-			}
-		}
-
-		$max_only = array_values(
-			array_filter(
-				$items,
-				function ( array $breakpoint ) use ( $resolved ): bool {
-					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
-						return false;
-					}
-
-					$max = $breakpoint['settings']['max'] ?? '';
-					$min = $breakpoint['settings']['min'] ?? '';
-
-					return blockera_is_valid_breakpoint_px( $max ) && ! $min;
-				}
-			)
-		);
-
-		usort(
-			$max_only,
-			function ( array $a, array $b ): int {
-				return blockera_parse_breakpoint_px( $b['settings']['max'] ?? '' ) - blockera_parse_breakpoint_px( $a['settings']['max'] ?? '' );
-			}
-		);
-
-		foreach ( $max_only as $index => $breakpoint ) {
-			$next = $max_only[ $index + 1 ] ?? null;
-			$min  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['max'] ?? '' ) )
-				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['max'] ) + 1 )
-				: blockera_format_breakpoint_px( 0 );
-
-			$resolved[ $breakpoint['type'] ] = [
-				'min' => $min,
-				'max' => $breakpoint['settings']['max'] ?? '',
-			];
-		}
-
-		$min_only = array_values(
-			array_filter(
-				$items,
-				function ( array $breakpoint ) use ( $resolved ): bool {
-					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
-						return false;
-					}
-
-					$min = $breakpoint['settings']['min'] ?? '';
-					$max = $breakpoint['settings']['max'] ?? '';
-
-					return blockera_is_valid_breakpoint_px( $min ) && ! $max;
-				}
-			)
-		);
-
-		usort(
-			$min_only,
-			function ( array $a, array $b ): int {
-				return blockera_parse_breakpoint_px( $a['settings']['min'] ?? '' ) - blockera_parse_breakpoint_px( $b['settings']['min'] ?? '' );
-			}
-		);
-
-		foreach ( $min_only as $index => $breakpoint ) {
-			$next = $min_only[ $index + 1 ] ?? null;
-			$max  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['min'] ?? '' ) )
-				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['min'] ) - 1 )
-				: '';
-
-			$resolved[ $breakpoint['type'] ] = [
-				'min' => $breakpoint['settings']['min'] ?? '',
-				'max' => $max,
-			];
-		}
-
-		foreach ( $items as $breakpoint ) {
 			$type = $breakpoint['type'];
 			$min  = $breakpoint['settings']['min'] ?? '';
 			$max  = $breakpoint['settings']['max'] ?? '';
 
-			if ( ! isset( $resolved[ $type ] ) && ( $min || $max ) ) {
+			if ( $min && $max ) {
 				$resolved[ $type ] = [
-					'min' => $min ? $min : '',
-					'max' => $max ? $max : '',
+					'min' => $min,
+					'max' => $max,
+				];
+				continue;
+			}
+
+			if ( ! $min ) {
+				[ $max_valid, $max_px ] = $parse_px( $max );
+				if ( $max_valid ) {
+					$max_only[] = [ $max_px, $type, $max ];
+					continue;
+				}
+			}
+
+			if ( ! $max ) {
+				[ $min_valid, $min_px ] = $parse_px( $min );
+				if ( $min_valid ) {
+					$min_only[] = [ $min_px, $type, $min ];
+					continue;
+				}
+			}
+
+			if ( $min || $max ) {
+				$fallback[] = [ $type, $min, $max ];
+			}
+		}
+
+		$max_n = count( $max_only );
+		if ( $max_n > 1 ) {
+			$px_col = [];
+			for ( $i = 0; $i < $max_n; $i++ ) {
+				$px_col[ $i ] = $max_only[ $i ][0];
+			}
+			array_multisort( $px_col, SORT_DESC, SORT_NUMERIC, $max_only );
+		}
+
+		for ( $i = 0; $i < $max_n; $i++ ) {
+			$next = $max_only[ $i + 1 ] ?? null;
+			// Neighbor max values are already validated; min is next.max+1 or 0px.
+			$min = ( null !== $next )
+				? ( $next[0] + 1 ) . 'px'
+				: '0px';
+
+			$resolved[ $max_only[ $i ][1] ] = [
+				'min' => $min,
+				'max' => $max_only[ $i ][2],
+			];
+		}
+
+		$min_n = count( $min_only );
+		if ( $min_n > 1 ) {
+			$px_col = [];
+			for ( $i = 0; $i < $min_n; $i++ ) {
+				$px_col[ $i ] = $min_only[ $i ][0];
+			}
+			array_multisort( $px_col, SORT_ASC, SORT_NUMERIC, $min_only );
+		}
+
+		for ( $i = 0; $i < $min_n; $i++ ) {
+			$next = $min_only[ $i + 1 ] ?? null;
+			$max  = ( null !== $next )
+				? ( $next[0] - 1 ) . 'px'
+				: '';
+
+			$resolved[ $min_only[ $i ][1] ] = [
+				'min' => $min_only[ $i ][2],
+				'max' => $max,
+			];
+		}
+
+		foreach ( $fallback as $row ) {
+			if ( ! isset( $resolved[ $row[0] ] ) ) {
+				$resolved[ $row[0] ] = [
+					'min' => $row[1] ? $row[1] : '',
+					'max' => $row[2] ? $row[2] : '',
 				];
 			}
 		}
+
+		$cache[ $key ] = $resolved;
 
 		return $resolved;
 	}
