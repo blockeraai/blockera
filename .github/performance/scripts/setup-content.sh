@@ -39,12 +39,24 @@ echo "Page ID: ${POST_ID}"
 npx wp-env run cli -- wp rewrite flush --hard >/dev/null
 
 # Ensure the default Hello World post (ID 1) is published for the front-default-post scenario.
+# Prefer the canonical permalink: `/?p=1` redirects under pretty permalinks, and
+# wpp-research counts non-200 redirects as Success Rate 0%.
 npx wp-env run cli -- wp post update 1 --post_status=publish >/dev/null 2>&1 || true
 DEFAULT_POST_ID=1
+DEFAULT_POST_URL="$(
+	npx wp-env run cli -- wp post url 1 2>/dev/null | tr -d '\r' | tail -n1 || true
+)"
 DEFAULT_POST_PATH="/?p=1"
+if [[ -n "${DEFAULT_POST_URL:-}" && "$DEFAULT_POST_URL" =~ ^https?:// ]]; then
+	DEFAULT_POST_PATH="$(
+		node -e "const u=new URL(process.argv[1]); process.stdout.write(u.pathname + u.search);" "$DEFAULT_POST_URL"
+	)"
+fi
 DEFAULT_POST_CODE="$(curl -s -o /dev/null -w '%{http_code}' "${BASE_URL}${DEFAULT_POST_PATH}" || true)"
 if [[ "$DEFAULT_POST_CODE" != "200" ]]; then
-	echo "Warning: default post ID 1 returned HTTP ${DEFAULT_POST_CODE}; scenario may fail."
+	echo "Warning: default post ID 1 at ${DEFAULT_POST_PATH} returned HTTP ${DEFAULT_POST_CODE}; scenario may fail."
+else
+	echo "Default post ID 1 URL: ${DEFAULT_POST_PATH}"
 fi
 
 FRONT_PATH="/${SLUG}/"

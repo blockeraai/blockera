@@ -222,30 +222,40 @@ function main() {
 			continue;
 		}
 
-		// A 0% success rate means the URL never returned HTTP 200 (e.g. an admin
-		// page redirected to login). The measured time is meaningless, so fail
-		// with an actionable note instead of comparing bogus numbers.
+		const withMetric = pickMetric(withRow, primaryMetric);
+		const withoutMetric = pickMetric(withoutRow, primaryMetric);
+
+		// Settings (and similar) only exist with Blockera. Core often returns
+		// non-200 without the plugin — still report Blockera timings, skip gate.
+		if (scenario.requiresBlockera) {
+			if (withSuccess === 0 || !withMetric) {
+				entry.status = 'fail';
+				entry.note = `Blockera settings unavailable (success=${fmt(withSuccess)}%, metric missing)`;
+				failed++;
+			} else {
+				entry.metricKey = withMetric.key;
+				entry.withMs = withMetric.value;
+				entry.status = 'skip';
+				entry.note =
+					withoutSuccess === 0
+						? 'Informational only (requires Blockera); Core returns non-200 without plugin'
+						: 'Informational only (requires Blockera); gate not applied';
+			}
+			results.push(entry);
+			continue;
+		}
+
+		// A 0% success rate means the URL never returned HTTP 200 (e.g. redirect
+		// to a pretty permalink, or admin login). Timings are not comparable.
 		if (withSuccess === 0 || withoutSuccess === 0) {
 			entry.status = 'fail';
-			entry.note = `Non-200 responses (success Blockera=${fmt(withSuccess)}%, Core=${fmt(withoutSuccess)}%); check admin auth / URL`;
+			entry.note = `Non-200 responses (success Blockera=${fmt(withSuccess)}%, Core=${fmt(withoutSuccess)}%); check URL / redirects / auth`;
 			failed++;
 			results.push(entry);
 			continue;
 		}
 
-		const withMetric = pickMetric(withRow, primaryMetric);
-		const withoutMetric = pickMetric(withoutRow, primaryMetric);
-
 		if (!withMetric || !withoutMetric) {
-			if (scenario.requiresBlockera && !withoutMetric) {
-				entry.status = 'skip';
-				entry.note =
-					'Skipped gate: scenario requires Blockera; Core metrics unavailable';
-				entry.withMs = withMetric ? withMetric.value : null;
-				entry.metricKey = withMetric ? withMetric.key : null;
-				results.push(entry);
-				continue;
-			}
 			entry.status = 'fail';
 			entry.note = `Missing metric ${primaryMetric} (and Response Time fallback)`;
 			failed++;
@@ -272,15 +282,6 @@ function main() {
 				100
 		);
 		const absPct = Math.abs(entry.deltaPercent);
-
-		// Settings (and similar) only exist with Blockera; Core is a different screen.
-		if (scenario.requiresBlockera) {
-			entry.status = 'skip';
-			entry.note =
-				'Informational only (requires Blockera); gate not applied';
-			results.push(entry);
-			continue;
-		}
 
 		if (absPct > threshold) {
 			entry.status = 'fail';

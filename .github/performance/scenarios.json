@@ -19,6 +19,7 @@
 			"group": "page-rendering",
 			"label": "Front-end default post (ID 1)",
 			"path": "/?p=1",
+			"note": "Resolved to the canonical permalink at setup (/?p=1 redirects under pretty permalinks).",
 			"thresholdPercent": 15
 		},
 		{
