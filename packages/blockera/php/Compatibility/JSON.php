@@ -243,7 +243,14 @@ class JSON extends \WP_Theme_JSON {
 	 * @return self
 	 */
 	public static function with_raw_data( array $data ): self {
-		$instance             = ( new \ReflectionClass( static::class ) )->newInstanceWithoutConstructor();
+		static $reflections = array();
+
+		$class = static::class;
+		if ( ! isset( $reflections[ $class ] ) ) {
+			$reflections[ $class ] = new \ReflectionClass( $class );
+		}
+
+		$instance             = $reflections[ $class ]->newInstanceWithoutConstructor();
 		$instance->theme_json = $data;
 
 		global $blockera_block_supports;
@@ -512,6 +519,46 @@ class JSON extends \WP_Theme_JSON {
 	}
 
 	/**
+	 * Build a StyleEngine for global-styles CSS without Application::make()/resolve().
+	 *
+	 * Hot path during blockera_add_global_styles_for_blocks (dozens of engines per request).
+	 *
+	 * @param array  $block              Block payload with blockName + attrs.
+	 * @param string $fallback_selector  CSS selector.
+	 * @param array  $supports           Feature supports list.
+	 * @param bool   $is_style_variation Whether this engine targets a style variation.
+	 * @return StyleEngine
+	 */
+	private static function make_global_style_engine(
+		array $block,
+		string $fallback_selector,
+		array $supports,
+		bool $is_style_variation = false
+	): StyleEngine {
+		static $app         = null;
+		static $breakpoint  = null;
+		static $breakpoints = null;
+
+		if ( null === $app ) {
+			$app         = Blockera::getInstance();
+			$breakpoint  = blockera_core_config( 'breakpoints.base' );
+			$breakpoints = $app->getEntity( 'breakpoints' );
+		}
+
+		$style_engine = new StyleEngine( $block, $fallback_selector, true );
+		$style_engine->setApp( $app );
+		$style_engine->setBreakpoint( $breakpoint );
+		$style_engine->setBreakpoints( $breakpoints );
+		$style_engine->setSupports( $supports );
+
+		if ( $is_style_variation ) {
+			$style_engine->setIsStyleVariation( true );
+		}
+
+		return $style_engine;
+	}
+
+	/**
      * Gets the CSS rules for a particular block from theme.json.
      *
      * @since 6.1.0
@@ -544,8 +591,6 @@ class JSON extends \WP_Theme_JSON {
 			);
 		}
 
-		$app = Blockera::getInstance();
-
 		// 1. Generate css rules for the block root customization.
 		if ( null !== $block_name ) {
 			$attrs = array();
@@ -555,18 +600,14 @@ class JSON extends \WP_Theme_JSON {
 				}
 			}
 
-			$style_engine = $app->make(
-				StyleEngine::class,
+			$style_engine = self::make_global_style_engine(
 				array(
-					'block'            => array(
-						'blockName' => $block_name,
-						'attrs'     => $attrs,
-					),
-					'fallbackSelector' => $block_metadata['selector'],
-					'isGlobalStyle'    => true,
-				)
+					'blockName' => $block_name,
+					'attrs'     => $attrs,
+				),
+				$block_metadata['selector'],
+				$supports
 			);
-			$style_engine->setSupports( $supports );
 			$block_rules .= $style_engine->getStylesheet();
 		}
 
@@ -582,19 +623,15 @@ class JSON extends \WP_Theme_JSON {
 					}
 				}
 
-				$style_engine = $app->make(
-					StyleEngine::class,
+				$style_engine = self::make_global_style_engine(
 					array(
-						'block'            => array(
-							'blockName' => $block_name,
-							'attrs'     => $variation_attrs,
-						),
-						'fallbackSelector' => trim( $style_variation['selector'] ),
-						'isGlobalStyle'    => true,
-					)
+						'blockName' => $block_name,
+						'attrs'     => $variation_attrs,
+					),
+					trim( $style_variation['selector'] ),
+					$supports,
+					true
 				);
-				$style_engine->setIsStyleVariation( true );
-				$style_engine->setSupports( $supports );
 				$block_rules .= $style_engine->getStylesheet();
 			}
 		}
