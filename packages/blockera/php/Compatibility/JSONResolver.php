@@ -31,6 +31,17 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $user_cache_origins_settings_signature = null;
 
 	/**
+	 * Request-level cache of merged theme.json raw data keyed by origin.
+	 *
+	 * Avoids repeated empty {@see JSON} construction + origin merges on every
+	 * {@see get_merged_data()} call within the same request (stylesheet + block styles).
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_data_cache = array();
+
+
+	/**
 	 * Store the default WordPress provided data from theme.
 	 *
 	 * @var \WP_Theme_JSON_Data $default_theme_data the provided from theme data by WordPress.
@@ -551,26 +562,47 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			_deprecated_argument( __FUNCTION__, '5.9.0' );
 		}
 
+		if (
+			isset( static::$merged_data_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return JSON::with_raw_data( static::$merged_data_cache[ $origin ] );
+		}
+
 		$result = new JSON();
 		$result->merge( static::get_core_data() );
 		if ( 'default' === $origin ) {
+			if ( ! static::is_testing_environment() ) {
+				static::$merged_data_cache[ $origin ] = $result->get_raw_data();
+			}
 			return $result;
 		}
 
 		$result->merge( static::get_block_data() );
 		if ( 'blocks' === $origin ) {
+			if ( ! static::is_testing_environment() ) {
+				static::$merged_data_cache[ $origin ] = $result->get_raw_data();
+			}
 			return $result;
 		}
 
 		$result->merge( static::get_theme_data() );
 		if ( 'theme' === $origin ) {
+			if ( ! static::is_testing_environment() ) {
+				static::$merged_data_cache[ $origin ] = $result->get_raw_data();
+			}
 			return $result;
 		}
 
 		$result->merge( static::get_user_data() );
 
+		if ( ! static::is_testing_environment() ) {
+			static::$merged_data_cache[ $origin ] = $result->get_raw_data();
+		}
+
 		return $result;
 	}
+
 
 	/**
 	 * Gets the styles for blocks from the block.json file.
@@ -983,6 +1015,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		parent::clean_cached_data();
 
 		static::$user_cache_origins_settings_signature = null;
+		static::$merged_data_cache                     = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();
