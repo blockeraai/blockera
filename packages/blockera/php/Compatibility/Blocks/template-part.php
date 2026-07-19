@@ -32,7 +32,8 @@ if (! function_exists('blockera_render_block_core_template_part')) {
 	 * @return string The render.
 	 */
 	function blockera_render_block_core_template_part( $attributes ) {
-		static $seen_ids = array();
+		static $seen_ids      = array();
+		static $defined_areas = null;
 
 		$template_part_id = null;
 		$content          = null;
@@ -151,7 +152,9 @@ if (! function_exists('blockera_render_block_core_template_part')) {
 
 		// Look up area definition.
 		$area_definition = null;
-		$defined_areas   = get_allowed_block_template_part_areas();
+		if ( null === $defined_areas ) {
+			$defined_areas = get_allowed_block_template_part_areas();
+		}
 		foreach ( $defined_areas as $defined_area ) {
 			if ( $defined_area['area'] === $area ) {
 				$area_definition = $defined_area;
