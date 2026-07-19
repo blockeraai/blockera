@@ -21,6 +21,7 @@ use Blockera\Bootstrap\ServiceProvider;
 use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Features\Core\FeaturesManager;
 use Blockera\Setup\Compatibility\Compatibility;
+use Blockera\Setup\Compatibility\JSON;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
@@ -250,6 +251,8 @@ class AppServiceProvider extends ServiceProvider {
 		$this->loadTextDomain();
 
 		blockera_editor_hooks();
+
+		JSON::register_sanitize_cache_invalidation_hooks();
 	}
 
 	/**
