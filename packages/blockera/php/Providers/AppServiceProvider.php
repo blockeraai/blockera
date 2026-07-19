@@ -420,6 +420,8 @@ class AppServiceProvider extends ServiceProvider {
 			return $posts;
 		}
 
+		static $non_blockera_post_ids = array();
+
 		$template_post_types = [ 'wp_template', 'wp_template_part' ];
 
 		// Process main query or FSE template queries (wp_template, wp_template_part).
@@ -452,9 +454,15 @@ class AppServiceProvider extends ServiceProvider {
 			if (isset($exception_post_types[ $post->post_type ])) {
 				continue;
 			}
+
+			if ( isset( $non_blockera_post_ids[ $post->ID ] ) ) {
+				continue;
+			}
+
 			if (! blockera_contains_blockera_block($post->post_content)) {
 				// Skip parse_blocks when content has no synced-pattern refs.
 				if ( ! str_contains( $post->post_content, '"ref"' ) ) {
+					$non_blockera_post_ids[ $post->ID ] = true;
 					continue;
 				}
 
