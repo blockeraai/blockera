@@ -127,7 +127,6 @@ for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
     GRAPH_PDF="${FILE}-${SUFFIX}.graph.pdf"
 
     if [[ -f "$PDF" ]]; then
-      echo "✓ Exists: $(basename "$PDF")"
       continue
     fi
 
