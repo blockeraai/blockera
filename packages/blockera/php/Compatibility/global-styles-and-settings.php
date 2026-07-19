@@ -73,6 +73,9 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 			$types = array( 'variables', 'presets', 'base-layout-styles' );
 		} elseif ( empty( $types ) ) {
 			$types = array( 'variables', 'styles', 'presets' );
+			if ( wp_is_block_theme() ) {
+				$types[] = 'custom-css';
+			}
 		}
 
 		/*
@@ -305,6 +308,72 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 	}
 }
 
+if (! function_exists('blockera_get_theme_styles_partials_mtime')) {
+	/**
+	 * Max mtime of theme style partial JSON files (transient + request cached).
+	 *
+	 * @return string
+	 */
+	function blockera_get_theme_styles_partials_mtime(): string {
+		static $mtime = null;
+
+		if ( null !== $mtime ) {
+			return $mtime;
+		}
+
+		$can_use_cached = ! wp_is_development_mode( 'theme' );
+		$cache_key      = 'theme_styles_partials_mtime_' . get_template();
+
+		if ( $can_use_cached ) {
+			$cached = blockera_get_cache()->getTransientCache( $cache_key );
+			if ( is_string( $cached ) ) {
+				$mtime = $cached;
+				return $mtime;
+			}
+		}
+
+		$styles_directory = get_template_directory() . '/styles';
+		if ( ! is_dir( $styles_directory ) ) {
+			$mtime = '0';
+			if ( $can_use_cached ) {
+				blockera_get_cache()->setTransientCache( $cache_key, $mtime, DAY_IN_SECONDS );
+			}
+			return $mtime;
+		}
+
+		$top_level_styles = glob( $styles_directory . '/*.json' );
+		$nested_styles    = glob( $styles_directory . '/*/*.json' );
+		$styles_files     = array_merge(
+			false !== $top_level_styles ? $top_level_styles : array(),
+			false !== $nested_styles ? $nested_styles : array()
+		);
+		$styles_mtime     = 0;
+		foreach ( $styles_files as $file ) {
+			$file_mtime = (int) filemtime( $file );
+			if ( $file_mtime > $styles_mtime ) {
+				$styles_mtime = $file_mtime;
+			}
+		}
+
+		$mtime = (string) $styles_mtime;
+
+		if ( $can_use_cached ) {
+			blockera_get_cache()->setTransientCache( $cache_key, $mtime, DAY_IN_SECONDS );
+		}
+
+		return $mtime;
+	}
+}
+
+if ( ! function_exists( 'blockera_clear_theme_styles_partials_mtime_cache' ) ) {
+	/**
+	 * @return void
+	 */
+	function blockera_clear_theme_styles_partials_mtime_cache(): void {
+		blockera_get_cache()->deleteTransientCache( 'theme_styles_partials_mtime_' . get_template() );
+	}
+}
+
 if (! function_exists('blockera_get_global_styles_cache_hash')) {
 	/**
 	 * Generates a cache hash based on Blockera version, theme version, and theme.json file modification time.
@@ -339,21 +408,7 @@ if (! function_exists('blockera_get_global_styles_cache_hash')) {
 		}
 
 		// Max mtime across theme style partials (top-level + one nested level, e.g. styles/blocks/).
-		$styles_directory = get_template_directory() . '/styles';
-		$top_level_styles = glob( $styles_directory . '/*.json' );
-		$nested_styles    = glob( $styles_directory . '/*/*.json' );
-		$styles_files     = array_merge(
-			false !== $top_level_styles ? $top_level_styles : array(),
-			false !== $nested_styles ? $nested_styles : array()
-		);
-		$styles_mtime     = 0;
-		foreach ( $styles_files as $file ) {
-			$mtime = (int) filemtime( $file );
-			if ( $mtime > $styles_mtime ) {
-				$styles_mtime = $mtime;
-			}
-		}
-		$styles_mtime = (string) $styles_mtime;
+		$styles_mtime = blockera_get_theme_styles_partials_mtime();
 
 		// Include user global styles post modified time for user customizations.
 		$user_styles_mtime = blockera_get_user_styles_modified_time();
@@ -660,6 +715,7 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 		$warmed = true;
 
 		JSONResolver::get_merged_settings();
+		blockera_get_global_styles_cache_hash();
 		blockera_get_layout_support_global_flags();
 		blockera_warm_layout_render_cache();
 	}
