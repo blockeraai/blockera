@@ -364,7 +364,7 @@ function buildReport({
 		lines.push('### Failures');
 		lines.push('');
 		for (const f of fails) {
-			lines.push(`- **${f.label}**: ${f.note} (\`${f.url}\`)`);
+			lines.push(`- ❌ **${f.label}**: ${f.note} (\`${f.url}\`)`);
 		}
 		lines.push('');
 	}
