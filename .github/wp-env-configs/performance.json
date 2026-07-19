@@ -7,6 +7,8 @@
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
 		"BLOCKERA_PERF_BENCHMARK": true,
+		"AUTOMATIC_UPDATER_DISABLED": true,
+		"DISABLE_WP_CRON": true,
 		"SCRIPT_DEBUG": false,
 		"WP_DEBUG": false,
 		"WP_DEBUG_DISPLAY": false,
