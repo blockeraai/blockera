@@ -19,18 +19,20 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		 * Per-request caches: this filter runs for every block. Block-type metadata,
 		 * layout definitions, and theme flags are stable for the request.
 		 */
-		static $registry              = null;
-		static $block_meta            = array();
-		static $layout_definitions    = null;
-		static $disable_layout_styles = null;
-		static $root_padding_aware    = null;
-		static $has_block_gap_support = null;
-		static $style_engine_options  = null;
-		static $sanitized_title_cache = array();
-		static $child_layout_keys     = null;
-		static $parent_layout_keys    = null;
-		static $valid_column_units    = null;
-		static $request_initialized   = false;
+		static $registry               = null;
+		static $block_meta             = array();
+		static $layout_definitions     = null;
+		static $disable_layout_styles  = null;
+		static $root_padding_aware     = null;
+		static $has_block_gap_support  = null;
+		static $style_engine_options   = null;
+		static $sanitized_title_cache  = array();
+		static $child_layout_keys      = null;
+		static $parent_layout_keys     = null;
+		static $valid_column_units     = null;
+		static $request_initialized    = false;
+		static $layout_type_classnames = null;
+		static $layout_style_cache     = array();
 
 		if ( ! $request_initialized ) {
 			$request_initialized   = true;
@@ -39,6 +41,19 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 			$has_block_gap_support = $flags['has_block_gap_support'];
 			$layout_definitions    = wp_get_layout_definitions();
 			$disable_layout_styles = current_theme_supports( 'disable-layout-styles' );
+
+			$layout_type_classnames = array( 'default' => '' );
+			foreach ( $layout_definitions as $type => $definition ) {
+				$class_name = $definition['className'] ?? '';
+				if ( $class_name && is_string( $class_name ) ) {
+					if ( ! isset( $sanitized_title_cache[ $class_name ] ) ) {
+						$sanitized_title_cache[ $class_name ] = sanitize_title( $class_name );
+					}
+					$layout_type_classnames[ $type ] = $sanitized_title_cache[ $class_name ];
+				} else {
+					$layout_type_classnames[ $type ] = '';
+				}
+			}
 		}
 
 		$child_layout = $block['attrs']['style']['layout'] ?? null;
@@ -311,17 +326,11 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		}
 
 		// Get classname for layout type.
-		if ( isset( $used_layout['type'] ) ) {
-			$layout_classname = $layout_definitions[ $used_layout['type'] ]['className'] ?? '';
-		} else {
-			$layout_classname = $layout_definitions['default']['className'] ?? '';
-		}
+		$layout_type_key  = $used_layout['type'] ?? 'default';
+		$layout_classname = $layout_type_classnames[ $layout_type_key ] ?? $layout_type_classnames['default'];
 
-		if ( $layout_classname && is_string( $layout_classname ) ) {
-			if ( ! isset( $sanitized_title_cache[ $layout_classname ] ) ) {
-				$sanitized_title_cache[ $layout_classname ] = sanitize_title( $layout_classname );
-			}
-			$class_names[] = $sanitized_title_cache[ $layout_classname ];
+		if ( $layout_classname ) {
+			$class_names[] = $layout_classname;
 		}
 
 		/*
@@ -368,15 +377,19 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 				$meta['container_prefix']
 			);
 
-			$style = wp_get_layout_style(
-				".$container_class",
-				$used_layout,
-				$has_block_gap_support,
-				$gap_value,
-				$should_skip_gap_serialization,
-				$fallback_gap_value,
-				$block_spacing
-			);
+			$style_cache_key = md5( wp_json_encode( array( $used_layout, $has_block_gap_support, $gap_value, $should_skip_gap_serialization, $fallback_gap_value, $block_spacing ) ) );
+			if ( ! isset( $layout_style_cache[ $style_cache_key ] ) ) {
+				$layout_style_cache[ $style_cache_key ] = wp_get_layout_style(
+					".$container_class",
+					$used_layout,
+					$has_block_gap_support,
+					$gap_value,
+					$should_skip_gap_serialization,
+					$fallback_gap_value,
+					$block_spacing
+				);
+			}
+			$style = $layout_style_cache[ $style_cache_key ];
 
 			// Only add container class and enqueue block support styles if unique styles were generated.
 			if ( ! empty( $style ) ) {
@@ -450,7 +463,11 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		 */
 		$inner_block_wrapper_classes = null;
 		$first_chunk                 = isset( $block['innerContent'][0] ) ? $block['innerContent'][0] : null;
-		if ( is_string( $first_chunk ) && count( $block['innerContent'] ) > 1 ) {
+		if (
+			! empty( $block['innerBlocks'] )
+			&& is_string( $first_chunk )
+			&& count( $block['innerContent'] ) > 1
+		) {
 			$first_chunk_processor = new WP_HTML_Tag_Processor( $first_chunk );
 			while ( $first_chunk_processor->next_tag() ) {
 				$class_attribute = $first_chunk_processor->get_attribute( 'class' );

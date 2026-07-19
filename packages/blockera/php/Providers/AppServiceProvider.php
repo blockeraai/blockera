@@ -421,6 +421,12 @@ class AppServiceProvider extends ServiceProvider {
 		}
 
 		static $non_blockera_post_ids = array();
+		static $empty_query_ids       = array();
+
+		$query_id = spl_object_id( $query );
+		if ( $query_id && isset( $empty_query_ids[ $query_id ] ) ) {
+			return $posts;
+		}
 
 		$template_post_types = [ 'wp_template', 'wp_template_part' ];
 
@@ -444,6 +450,28 @@ class AppServiceProvider extends ServiceProvider {
         $exception_post_types = [
             'wp_global_styles' => true,
         ];
+
+		$needs_processing = false;
+		foreach ( $posts as $post ) {
+			if ( isset( $exception_post_types[ $post->post_type ] ) ) {
+				continue;
+			}
+			if ( isset( $non_blockera_post_ids[ $post->ID ] ) ) {
+				continue;
+			}
+			$content = $post->post_content;
+			if ( str_contains( $content, 'blockeraPropsId' ) || str_contains( $content, '"ref"' ) ) {
+				$needs_processing = true;
+				break;
+			}
+		}
+
+		if ( ! $needs_processing ) {
+			if ( $query_id ) {
+				$empty_query_ids[ $query_id ] = true;
+			}
+			return $posts;
+		}
 
 		$posts_to_process = [];
 		$post_ids         = [];
@@ -490,6 +518,9 @@ class AppServiceProvider extends ServiceProvider {
 		}
 
 		if (empty($posts_to_process)) {
+			if ( $query_id ) {
+				$empty_query_ids[ $query_id ] = true;
+			}
 			return $posts;
 		}
 

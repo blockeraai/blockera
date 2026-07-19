@@ -64,6 +64,17 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 				$request_stylesheets[ $request_key ] = $cached;
 				return $cached;
 			}
+
+			global $blockera_mode;
+			if ( ! $blockera_mode && ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT ) ) {
+				$transient_key = 'blockera_global_stylesheet_' . blockera_get_global_styles_cache_hash();
+				$transient_css = blockera_get_cache()->getTransientCache( $transient_key );
+				if ( is_string( $transient_css ) && '' !== $transient_css ) {
+					wp_cache_set( $cache_key, $transient_css, $cache_group );
+					$request_stylesheets[ $request_key ] = $transient_css;
+					return $transient_css;
+				}
+			}
 		}
 
 		$tree                = JSONResolver::get_resolved_merged_data();
@@ -115,6 +126,12 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		}
 		if ( $can_use_cached ) {
 			wp_cache_set( $cache_key, $stylesheet, $cache_group );
+
+			global $blockera_mode;
+			if ( ! $blockera_mode && ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT ) ) {
+				$transient_key = 'blockera_global_stylesheet_' . blockera_get_global_styles_cache_hash();
+				blockera_get_cache()->setTransientCache( $transient_key, $stylesheet, DAY_IN_SECONDS );
+			}
 		}
 
 		$request_stylesheets[ $request_key ] = $stylesheet;
@@ -371,6 +388,7 @@ if ( ! function_exists( 'blockera_clear_theme_styles_partials_mtime_cache' ) ) {
 	 */
 	function blockera_clear_theme_styles_partials_mtime_cache(): void {
 		blockera_get_cache()->deleteTransientCache( 'theme_styles_partials_mtime_' . get_template() );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_global_stylesheet_' );
 	}
 }
 
@@ -646,7 +664,8 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 		}
 		$warmed = true;
 
-		JSONResolver::get_merged_settings();
+		// One merge + URI resolve warms settings, raw data, and resolved tree for enqueue/render.
+		JSONResolver::get_resolved_merged_data();
 		blockera_get_global_styles_cache_hash();
 		blockera_get_layout_support_global_flags();
 		blockera_warm_layout_render_cache();
