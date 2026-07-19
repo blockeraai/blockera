@@ -11,8 +11,6 @@ RESOLVED_FILE="${OUT_DIR}/resolved-scenarios.json"
 WPP_DIR="${WPP_RESEARCH_DIR:-${OUT_DIR}/wpp-research}"
 # Pin for reproducibility; bump intentionally when upgrading the tool.
 WPP_REF="${WPP_RESEARCH_REF:-main}"
-BLOCKERA_PLUGIN="blockera/blockera.php"
-
 mkdir -p "$OUT_DIR"
 
 REQUESTS="$(node -e "const s=require('./${SCENARIOS_FILE}'); process.stdout.write(String(s.defaults.requests || 200))")"
@@ -82,18 +80,20 @@ if [[ ! -d "$WPP_DIR/node_modules" ]]; then
 	(cd "$WPP_DIR" && npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts)
 fi
 
-# Ensure WP-CLI and the web container agree on Blockera's active state.
+# Ensure WP-CLI reports the intended Blockera active state before warm-up.
+# Prefer `wp plugin is-active` over grepping active_plugins JSON: wp-env chrome
+# and JSON-escaped slashes (blockera\/blockera.php) made substring checks brittle.
 assert_blockera_cli_state() {
 	local expect="$1" # "1" active, "0" inactive
-	local active_plugins is_active=0
+	local is_active=0
 
-	active_plugins="$(npx wp-env run cli -- wp option get active_plugins --format=json 2>/dev/null | tr -d '\r' || true)"
-	if [[ "$active_plugins" == *"${BLOCKERA_PLUGIN}"* ]]; then
+	if npx wp-env run cli -- wp plugin is-active blockera >/dev/null 2>&1; then
 		is_active=1
 	fi
 
-	echo "CLI active_plugins contains ${BLOCKERA_PLUGIN}: ${is_active} (expect ${expect})"
-	printf '%s\n' "${active_plugins:-[]}" > "${OUT_DIR}/active-plugins-${expect}.json"
+	echo "CLI wp plugin is-active blockera: ${is_active} (expect ${expect})"
+	npx wp-env run cli -- wp plugin list --status=active --fields=name,status 2>/dev/null \
+		| tr -d '\r' > "${OUT_DIR}/active-plugins-${expect}.txt" || true
 
 	if [[ "$is_active" != "$expect" ]]; then
 		echo "Error: WP-CLI Blockera state mismatch (expected ${expect}, got ${is_active})."

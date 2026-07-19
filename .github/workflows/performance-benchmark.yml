@@ -111,8 +111,8 @@ jobs:
                       .github/performance/results/compare.json
                       .github/performance/results/urls.txt
                       .github/performance/results/urls-without-blockera.txt
-                      .github/performance/results/active-plugins-0.json
-                      .github/performance/results/active-plugins-1.json
+                      .github/performance/results/active-plugins-0.txt
+                      .github/performance/results/active-plugins-1.txt
                       .github/performance/results/resolved-scenarios.json
                       .github/performance/results/content-state.json
                   if-no-files-found: ignore
