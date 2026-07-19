@@ -71,6 +71,30 @@ if ( ! function_exists( 'auth_redirect' ) ) {
 add_filter( 'perflab_server_timing_use_output_buffer', '__return_true' );
 
 /**
+ * Expose Blockera active state on every response so warm-up can assert the web
+ * container matches the intended with/without-plugin phase.
+ *
+ * Uses the active_plugins option (not is_plugin_active) so this works on
+ * front-end and admin without loading wp-admin includes. Sent on `init` because
+ * `wp_headers` does not run for all wp-admin screens.
+ *
+ * @return void
+ */
+add_action(
+	'init',
+	static function () {
+		if ( headers_sent() ) {
+			return;
+		}
+
+		$active = (array) get_option( 'active_plugins', array() );
+		$value  = in_array( 'blockera/blockera.php', $active, true ) ? '1' : '0';
+		header( 'X-Blockera-Perf-Active: ' . $value, false );
+	},
+	1
+);
+
+/**
  * Stub a "freshly checked, no updates" site transient so WordPress skips the
  * HTTP round-trip to api.wordpress.org during benchmark requests.
  *
