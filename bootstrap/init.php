@@ -11,72 +11,104 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Blockera\Setup\Compatibility\JSONResolver;
 
-add_filter('wp_theme_json_get_style_nodes', 'blockera_filter_theme_json_get_style_nodes');
+add_filter( 'wp_theme_json_get_style_nodes', 'blockera_filter_theme_json_get_style_nodes' );
 
-if (! function_exists('blockera_filter_theme_json_get_style_nodes')) {
-	function blockera_filter_theme_json_get_style_nodes( array $nodes): array {
-		$new_nodes = [];
+if ( ! function_exists( 'blockera_filter_theme_json_get_style_nodes' ) ) {
+	/**
+	 * Filter style nodes to drop deleted Blockera block style variations.
+	 *
+	 * Request-cached: {@see JSON::get_stylesheet()} invokes this once per stylesheet pass.
+	 *
+	 * @param array<int, array<string, mixed>> $nodes Style nodes from theme.json.
+	 * @return array<int, array<string, mixed>>
+	 */
+	function blockera_filter_theme_json_get_style_nodes( array $nodes ): array {
+		static $cached_nodes      = null;
+		static $cached_nodes_hash = null;
+		static $cached_meta_hash  = null;
 
-		// Get the global styles post id.
 		$post_id = JSONResolver::get_user_global_styles_post_id();
-		// Get the cache instance.
-		$cache = blockera_get_cache();
-		// Get the blockera meta data for global styles.
-		$blockera_meta_data = $cache->getMetaCache( $post_id, 'blockeraGlobalStylesMetaData' );
+		$cache   = blockera_get_cache();
+		$meta    = $cache->getMetaCache( $post_id, 'blockeraGlobalStylesMetaData' );
+		$blocks  = $meta['blocks'] ?? array();
 
-		foreach ($nodes as $node) {
-			if (! isset($node['name'])) {
-				// push to new stack.
+		if ( empty( $blocks ) ) {
+			return $nodes;
+		}
+
+		$nodes_hash = md5( wp_json_encode( $nodes ) );
+		$meta_hash  = md5( wp_json_encode( $blocks ) );
+
+		if (
+			null !== $cached_nodes
+			&& $nodes_hash === $cached_nodes_hash
+			&& $meta_hash === $cached_meta_hash
+		) {
+			return $cached_nodes;
+		}
+
+		$deleted_by_block = array();
+		foreach ( $blocks as $block_name => $block_meta ) {
+			if ( empty( $block_meta['variations'] ) || ! is_array( $block_meta['variations'] ) ) {
+				continue;
+			}
+			foreach ( $block_meta['variations'] as $variation ) {
+				if ( ! empty( $variation['isDeleted'] ) && ! empty( $variation['name'] ) ) {
+					$deleted_by_block[ $block_name ][ $variation['name'] ] = true;
+				}
+			}
+		}
+
+		if ( empty( $deleted_by_block ) ) {
+			$cached_nodes      = $nodes;
+			$cached_nodes_hash = $nodes_hash;
+			$cached_meta_hash  = $meta_hash;
+			return $nodes;
+		}
+
+		$new_nodes = array();
+
+		foreach ( $nodes as $node ) {
+			if ( empty( $node['name'] ) || empty( $node['variations'] ) ) {
 				$new_nodes[] = $node;
 				continue;
 			}
 
-			if (! isset($node['variations']) || empty($node['variations'])) {
-				// push to new stack.
+			$deleted_names = $deleted_by_block[ $node['name'] ] ?? null;
+			if ( null === $deleted_names ) {
 				$new_nodes[] = $node;
 				continue;
 			}
-
-			if (! isset($blockera_meta_data['blocks'][ $node['name'] ])) {
-				// push to new stack.
-				$new_nodes[] = $node;
-				continue;
-			}
-
-			$node_meta = $blockera_meta_data['blocks'][ $node['name'] ];
 
 			$is_deleted_node = false;
 
-			foreach ($node['variations'] as $node_variation) {
-				foreach ($node_meta['variations'] ?? [] as $variation) {
-					if (isset($variation['isDeleted'], $variation['name']) && $variation['isDeleted']) {
-						foreach ($node_variation as $key => $value) {
-							// Skip process, just 'path' key allowed.
-							if ('path' !== $key) {
-								continue;
-							}
-
-							// Marked node as a deleted node when found inside path stack.
-							foreach ($value as $path) {
-								if (str_contains($path, $variation['name'])) {
-									$is_deleted_node = true;
-								}
-							}
+			foreach ( $node['variations'] as $node_variation ) {
+				$paths = $node_variation['path'] ?? null;
+				if ( ! is_array( $paths ) ) {
+					continue;
+				}
+				foreach ( $paths as $path ) {
+					if ( ! is_string( $path ) ) {
+						continue;
+					}
+					foreach ( $deleted_names as $deleted_name => $_true ) {
+						if ( str_contains( $path, $deleted_name ) ) {
+							$is_deleted_node = true;
+							break 3;
 						}
 					}
 				}
 			}
 
-			// removing from stack.
-			if ($is_deleted_node) {
-				continue;
+			if ( ! $is_deleted_node ) {
+				$new_nodes[] = $node;
 			}
-
-			// push to new stack.
-			$new_nodes[] = $node;
 		}
 
-		// filtered the style nodes.
+		$cached_nodes      = $new_nodes;
+		$cached_nodes_hash = $nodes_hash;
+		$cached_meta_hash  = $meta_hash;
+
 		return $new_nodes;
-	}	
+	}
 }
