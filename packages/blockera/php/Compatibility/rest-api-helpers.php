@@ -2,6 +2,8 @@
 
 use Blockera\Http\Routes;
 use Blockera\Setup\Compatibility\JSON;
+use Blockera\Setup\Compatibility\JSONData;
+use Blockera\Setup\Compatibility\JSONResolver;
 
 if (! function_exists('blockera_register_wp_global_styles_post_type_args')) {
 	/**
@@ -52,38 +54,44 @@ if (! function_exists('blockera_editor_hooks')) {
 	}
 }
 
+if ( ! function_exists( 'blockera_editor_theme_json_filter_cache_enabled' ) ) {
+	/**
+	 * Whether request-level theme.json filter caches may be used.
+	 *
+	 * @return bool
+	 */
+	function blockera_editor_theme_json_filter_cache_enabled(): bool {
+		return ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT );
+	}
+}
+
 if (! function_exists('blockera_editor_wp_theme_json_data_user')) {
 	/**
      * Filters the user data for the editor.
      *
      * @param WP_Theme_JSON_Data $data The data to filter.
      * 
-     * @return array The filtered data.
+     * @return WP_Theme_JSON_Data The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_user( WP_Theme_JSON_Data $data) {
-		static $cache = array();
+		static $cached = null;
 
-		$encoded   = wp_json_encode( $data->get_data() );
-		$cache_key = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
-
-		if (
-			isset( $cache[ $cache_key ] )
-			&& ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
-		) {
-			return $cache[ $cache_key ];
+		if ( null !== $cached && blockera_editor_theme_json_filter_cache_enabled() ) {
+			return $cached;
 		}
 
 		$user_data = blockera_get_user_styles_data();
 
 		// Skip if no user data is found.
-		if (empty($user_data)) {
-			$cache[ $cache_key ] = $data;
-			return $cache[ $cache_key ];
+		if ( empty( $user_data ) ) {
+			$cached = $data;
+			return $cached;
 		}
 
-		$cache[ $cache_key ] = new JSON($user_data, 'custom');
+		// Return JSONData so core uses get_theme_json() (no second sanitize via get_data()).
+		$cached = new JSONData( $user_data, 'custom' );
 
-		return $cache[ $cache_key ];
+		return $cached;
 	}
 }
 
@@ -93,31 +101,22 @@ if (! function_exists('blockera_editor_wp_theme_json_data_theme')) {
      *
      * @param WP_Theme_JSON_Data $data the data to filter.
      * 
-     * @return JSON|WP_Theme_JSON the filtered data.
+     * @return JSONData The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_theme( WP_Theme_JSON_Data $data ) {
-		static $cache = array();
+		static $cached = null;
 
-		$encoded   = wp_json_encode( $data->get_data() );
-		$cache_key = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
-
-		if (
-			isset( $cache[ $cache_key ] )
-			&& ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
-		) {
-			return $cache[ $cache_key ];
+		if ( null !== $cached && blockera_editor_theme_json_filter_cache_enabled() ) {
+			return $cached;
 		}
 
-		Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
-		Blockera\Setup\Compatibility\JSONResolver::$default_theme_data = $data;
+		unset( $data );
 
-		// Return JSONData (extends WP_Theme_JSON_Data) so core keeps Blockera's JSON instance
-		// instead of re-wrapping get_data() in core WP_Theme_JSON (which strips Blockera presets).
-		$theme = Blockera\Setup\Compatibility\JSONResolver::get_theme_data();
+		// Return JSONData wrapping the already-sanitized theme tree (no re-sanitize).
+		$theme  = JSONResolver::get_theme_data();
+		$cached = JSONData::from_json( $theme, 'theme' );
 
-		$cache[ $cache_key ] = new Blockera\Setup\Compatibility\JSONData( $theme->get_raw_data(), 'theme' );
-
-		return $cache[ $cache_key ];
+		return $cached;
 	}
 }
 
@@ -127,27 +126,25 @@ if (! function_exists('blockera_editor_wp_theme_json_data_blocks')) {
      *
      * @param WP_Theme_JSON_Data $data the data to filter.
      * 
-     * @return JSON|WP_Theme_JSON the filtered data.
+     * @return JSONData The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_blocks( WP_Theme_JSON_Data $data ) {
-		static $cache = array();
+		static $cached = null;
 
-		$encoded   = wp_json_encode( $data->get_data() );
-		$cache_key = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
-
-		if (
-			isset( $cache[ $cache_key ] )
-			&& ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
-		) {
-			return $cache[ $cache_key ];
+		if ( null !== $cached && blockera_editor_theme_json_filter_cache_enabled() ) {
+			return $cached;
 		}
 
-		Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
-		Blockera\Setup\Compatibility\JSONResolver::$default_blocks_data = $data;
+		unset( $data );
 
-		$cache[ $cache_key ] = Blockera\Setup\Compatibility\JSONResolver::get_block_data();
+		// Wrap Blockera blocks JSON so core does not re-sanitize via get_data() + WP_Theme_JSON.
+		$blocks = JSONResolver::get_block_data();
+		if ( ! $blocks instanceof JSON ) {
+			$blocks = JSON::with_raw_data( $blocks->get_raw_data() );
+		}
+		$cached = JSONData::from_json( $blocks, 'blocks' );
 
-		return $cache[ $cache_key ];
+		return $cached;
 	}
 }
 
@@ -223,6 +220,6 @@ if (! function_exists('blockera_get_valid_supports')) {
 		}
 
 		$cache[ $cache_key ] = $with_blockera_supports;
-		return $with_blockera_supports;
+		return $cache[ $cache_key ];
 	}
 }
