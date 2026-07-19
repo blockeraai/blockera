@@ -328,7 +328,7 @@ function buildReport({
 		lines.push('');
 	}
 	lines.push(
-		'| Scenario | Metric | Core | Blockera | Δ ms | Δ % | Threshold | Status |'
+		'| Scenario | Metric | Core | Blockera | Diff ms | Diff % | Threshold | Status |'
 	);
 	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
@@ -352,10 +352,10 @@ function buildReport({
 		`- Theme: Twenty Twenty-Five · Locale: en_US · \`TEST_RUNS\` default from harness`
 	);
 	lines.push(
-		`- Gate: fail if \`|Δ%|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
+		`- Gate: fail if \`|Diff %|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
 	);
 	lines.push(
-		'- Δ is **Blockera − Core** (positive means Blockera is slower)'
+		'- Diff is **Blockera − Core** (positive means Blockera is slower)'
 	);
 	lines.push('');
 
