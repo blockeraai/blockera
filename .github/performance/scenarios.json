@@ -1,10 +1,9 @@
 {
 	"defaults": {
-		"requests": 200,
-		"concurrency": 1,
 		"primaryMetric": "wp-total",
 		"thresholdPercent": 10,
-		"baseUrl": "http://localhost:8888"
+		"baseUrl": "http://localhost:8888",
+		"testRuns": 20
 	},
 	"scenarios": [
 		{

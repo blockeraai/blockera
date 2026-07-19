@@ -1,9 +1,6 @@
 {
 	"core": "https://wordpress.org/wordpress-latest.zip",
-	"plugins": [
-		".",
-		"https://downloads.wordpress.org/plugin/performance-lab.latest-stable.zip"
-	],
+	"plugins": ["."],
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
 		"BLOCKERA_PERF_BENCHMARK": true,

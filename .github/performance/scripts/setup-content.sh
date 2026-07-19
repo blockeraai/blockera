@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish complex-1 fixture as a page and emit resolved scenario URLs for benchmarking.
+# Publish complex-1 fixture as a page and emit resolved scenario paths for Playwright.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -39,8 +39,7 @@ echo "Page ID: ${POST_ID}"
 npx wp-env run cli -- wp rewrite flush --hard >/dev/null
 
 # Ensure the default Hello World post (ID 1) is published for the front-default-post scenario.
-# Prefer the canonical permalink: `/?p=1` redirects under pretty permalinks, and
-# wpp-research counts non-200 redirects as Success Rate 0%.
+# Prefer the canonical permalink: `/?p=1` redirects under pretty permalinks.
 npx wp-env run cli -- wp post update 1 --post_status=publish >/dev/null 2>&1 || true
 DEFAULT_POST_ID=1
 DEFAULT_POST_URL="$(
@@ -94,7 +93,6 @@ const scenarios = JSON.parse(fs.readFileSync(path.join(root, scenariosFile), 'ut
 const state = JSON.parse(fs.readFileSync(path.join(root, outDir, 'content-state.json'), 'utf8'));
 const base = (scenarios.defaults && scenarios.defaults.baseUrl) || state.baseUrl;
 
-const urls = [];
 const resolved = [];
 
 for (const scenario of scenarios.scenarios || []) {
@@ -110,19 +108,17 @@ for (const scenario of scenarios.scenarios || []) {
 	p = p.replace('{ID}', String(state.postId));
 
 	const url = new URL(p, base.endsWith('/') ? base : base + '/').href;
-	urls.push(url);
 	resolved.push({ ...scenario, resolvedPath: p, url });
 }
 
-fs.writeFileSync(path.join(root, outDir, 'urls.txt'), urls.join('\n') + '\n');
 fs.writeFileSync(
 	path.join(root, outDir, 'resolved-scenarios.json'),
 	JSON.stringify({ defaults: scenarios.defaults, scenarios: resolved }, null, '\t') + '\n'
 );
 
-console.log('Wrote URLs:');
-for (const u of urls) {
-	console.log('  ' + u);
+console.log('Wrote resolved scenarios:');
+for (const s of resolved) {
+	console.log(`  ${s.id}: ${s.resolvedPath}`);
 }
 NODE
 
