@@ -1926,37 +1926,72 @@ if (! function_exists('blockera_get_available_block_supports')) {
 	/**
 	 * Get all available block supports.
 	 *
+	 * Loads JSON schemas from editor block-supports directory, skips entries without
+	 * a title, merges icon supports, and memoizes the final payload for the request.
+	 *
 	 * @return array the block supports.
 	 */
 	function blockera_get_available_block_supports(): array {
 		// Static cache to avoid repeated file I/O and JSON parsing within the same request.
 		static $cached_supports = null;
 
+		// Test/benchmark hook: force cold path without changing the public signature.
+		if ( isset( $GLOBALS['__blockera_reset_available_block_supports'] ) ) {
+			$cached_supports = null;
+			unset( $GLOBALS['__blockera_reset_available_block_supports'] );
+		}
+
 		if ( null !== $cached_supports ) {
 			return $cached_supports;
 		}
 
 		$supports = [];
-		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
+		$dir      = blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports';
+		$entries  = [];
 
-		foreach ( $files as $support_file ) {			
-			ob_start();
+		// opendir/readdir avoids glob() pattern compilation; sort keeps glob()-stable order.
+		$handle = opendir( $dir );
 
-			require $support_file;
+		if ( $handle ) {
+			$entry = readdir( $handle );
 
-			$support = json_decode(ob_get_clean(), true);
+			while ( false !== $entry ) {
+				if ( isset( $entry[0] ) && '.' !== $entry[0] && str_ends_with( $entry, '-block-supports-list.json' ) ) {
+					$entries[] = $entry;
+				}
 
-			if (empty($support['title'])) {
-
-				continue;
+				$entry = readdir( $handle );
 			}
 
-			$supports[ $support['title'] ] = $support;
+			closedir( $handle );
 		}
 
-		$cached_supports = $supports;
+		if ( $entries ) {
+			sort( $entries, SORT_STRING );
 
-		return blockera_add_icon_block_supports($supports);
+			foreach ( $entries as $entry ) {
+				// Direct read beats ob_start()/require for static JSON data files.
+				$raw = file_get_contents( $dir . '/' . $entry );
+
+				if ( false === $raw ) {
+					continue;
+				}
+
+				$support = json_decode( $raw, true );
+
+				// Skip invalid JSON / entries without a usable title key.
+				if ( ! is_array( $support ) || empty( $support['title'] ) ) {
+					continue;
+				}
+
+				$supports[ $support['title'] ] = $support;
+			}
+		}
+
+		// Cache the final payload (including icon) so warm hits stay consistent.
+		$cached_supports = blockera_add_icon_block_supports( $supports );
+
+		return $cached_supports;
 	}
 }
 
