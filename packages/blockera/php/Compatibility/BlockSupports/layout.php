@@ -30,6 +30,16 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 		static $child_layout_keys     = null;
 		static $parent_layout_keys    = null;
 		static $valid_column_units    = null;
+		static $request_initialized   = false;
+
+		if ( ! $request_initialized ) {
+			$request_initialized   = true;
+			$flags                 = blockera_get_layout_support_global_flags();
+			$root_padding_aware    = $flags['use_root_padding_aware_alignments'];
+			$has_block_gap_support = $flags['has_block_gap_support'];
+			$layout_definitions    = wp_get_layout_definitions();
+			$disable_layout_styles = current_theme_supports( 'disable-layout-styles' );
+		}
 
 		$child_layout = $block['attrs']['style']['layout'] ?? null;
 		$block_name   = $block['blockName'];
@@ -238,49 +248,21 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 			}
 		}
 
-		// Prep the processor for modifying the block output.
-		$processor = new WP_HTML_Tag_Processor( $block_content );
-
-		// Having no tags implies there are no tags onto which to add class names.
-		if ( ! $processor->next_tag() ) {
-			return $block_content;
-		}
-
-		/*
-		* A block may not support layout but still be affected by a parent block's layout.
-		*
-		* In these cases add the appropriate class names and then return early; there's
-		* no need to investigate on this block whether additional layout constraints apply.
-		*/
 		if ( ! $block_supports_layout ) {
-			if ( ! empty( $outer_class_names ) ) {
-				foreach ( $outer_class_names as $class_name ) {
-					$processor->add_class( $class_name );
-				}
-				return $processor->get_updated_html();
+			if ( empty( $outer_class_names ) ) {
+				return $block_content;
 			}
 
-			// Ensure layout classnames are not injected if there is no layout support.
-			return $block_content;
-		}
+			$processor = new WP_HTML_Tag_Processor( $block_content );
+			if ( ! $processor->next_tag() ) {
+				return $block_content;
+			}
 
-		if ( null === $root_padding_aware ) {
-			/*
-			 * Prefer Blockera's request-cached merged settings (warmed during global-styles
-			 * enqueue). wp_get_global_settings() cold-starts WP_Theme_JSON_Resolver and can
-			 * dominate render_block wall time even though these are core keys.
-			 */
-			$flags                 = blockera_get_layout_support_global_flags();
-			$root_padding_aware    = $flags['use_root_padding_aware_alignments'];
-			$has_block_gap_support = $flags['has_block_gap_support'];
-		}
+			foreach ( $outer_class_names as $class_name ) {
+				$processor->add_class( $class_name );
+			}
 
-		if ( null === $layout_definitions ) {
-			$layout_definitions = wp_get_layout_definitions();
-		}
-
-		if ( null === $disable_layout_styles ) {
-			$disable_layout_styles = current_theme_supports( 'disable-layout-styles' );
+			return $processor->get_updated_html();
 		}
 
 		$fallback_layout = $meta['fallback_layout'];
@@ -404,6 +386,13 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 
 		// Add combined layout and block classname for global styles to hook onto.
 		$class_names[] = 'wp-block-' . $meta['full_name'] . '-' . $layout_classname;
+
+		$processor = new WP_HTML_Tag_Processor( $block_content );
+
+		// Having no tags implies there are no tags onto which to add class names.
+		if ( ! $processor->next_tag() ) {
+			return $block_content;
+		}
 
 		// Add classes to the outermost HTML tag if necessary.
 		if ( ! empty( $outer_class_names ) ) {
