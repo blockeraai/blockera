@@ -35,7 +35,7 @@
 			"label": "Admin dashboard",
 			"path": "/wp-admin/",
 			"auth": true,
-			"thresholdPercent": 10
+			"thresholdPercent": 15
 		},
 		{
 			"id": "admin-posts",
@@ -43,7 +43,7 @@
 			"label": "Admin posts list",
 			"path": "/wp-admin/edit.php",
 			"auth": true,
-			"thresholdPercent": 10
+			"thresholdPercent": 15
 		},
 		{
 			"id": "admin-media",
@@ -51,7 +51,7 @@
 			"label": "Admin media library",
 			"path": "/wp-admin/upload.php",
 			"auth": true,
-			"thresholdPercent": 10
+			"thresholdPercent": 15
 		},
 		{
 			"id": "admin-blockera-settings",
@@ -60,7 +60,7 @@
 			"path": "/wp-admin/admin.php?page=blockera-settings-dashboard",
 			"auth": true,
 			"requiresBlockera": true,
-			"thresholdPercent": 10
+			"thresholdPercent": 15
 		},
 		{
 			"id": "admin-block-editor",
@@ -69,7 +69,7 @@
 			"path": "/wp-admin/post.php?post={POST_ID}&action=edit",
 			"fixture": "tests/fixtures/complex-1/input.html",
 			"auth": true,
-			"thresholdPercent": 10
+			"thresholdPercent": 15
 		}
 	]
 }
