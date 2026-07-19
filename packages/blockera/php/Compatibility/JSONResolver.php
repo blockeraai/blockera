@@ -85,6 +85,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $user_global_styles_post_modified = null;
 
 	/**
+	 * Request-cached wp_global_styles CPT row (read-only; no create_post).
+	 *
+	 * @var array<string, mixed>|null
+	 */
+	private static $user_global_styles_cpt = null;
+
+	/**
 	 * Store the default WordPress provided data from theme.
 	 *
 	 * @var \WP_Theme_JSON_Data $default_theme_data the provided from theme data by WordPress.
@@ -279,9 +286,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		}
 
 		$config   = array();
-		$user_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme() );
-
-		static::cache_user_global_styles_post_modified( $user_cpt );
+		$user_cpt = static::get_user_global_styles_cpt();
 
 		if ( array_key_exists( 'post_content', $user_cpt ) ) {
 			$decoded_data = json_decode( $user_cpt['post_content'], true );
@@ -597,6 +602,22 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * User global styles CPT row (request-cached; no create_post).
+	 *
+	 * @return array<string, mixed>
+	 */
+	public static function get_user_global_styles_cpt(): array {
+		if ( null !== static::$user_global_styles_cpt ) {
+			return static::$user_global_styles_cpt;
+		}
+
+		static::$user_global_styles_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme(), false );
+		static::cache_user_global_styles_post_modified( static::$user_global_styles_cpt );
+
+		return static::$user_global_styles_cpt;
+	}
+
+	/**
 	 * User global styles post modified time (request-cached; no create_post).
 	 *
 	 * Reuses the CPT row loaded by {@see get_user_data()} when merge already ran.
@@ -608,8 +629,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			return static::$user_global_styles_post_modified;
 		}
 
-		$user_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme(), false );
-		static::cache_user_global_styles_post_modified( $user_cpt );
+		static::get_user_global_styles_cpt();
 
 		return static::$user_global_styles_post_modified;
 	}
