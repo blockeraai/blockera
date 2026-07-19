@@ -223,6 +223,43 @@ class Cache {
 		return delete_transient( $this->getCacheKey( $key ) );
 	}
 
+	/**
+	 * Delete transients whose keys start with a suffix (after the product prefix).
+	 *
+	 * Used to invalidate a family of related transients (e.g. json_sanitize_*).
+	 *
+	 * @param string $key_prefix Suffix after {@see getCacheKey()} product prefix.
+	 * @return int Number of transients deleted.
+	 */
+	public function deleteTransientCacheByPrefix( string $key_prefix ): int {
+		global $wpdb;
+
+		$transient_prefix = '_transient_' . $this->getCacheKey( $key_prefix );
+
+		$transient_names = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( $transient_prefix ) . '%'
+			)
+		);
+
+		if ( empty( $transient_names ) ) {
+			return 0;
+		}
+
+		$deleted_count = 0;
+
+		foreach ( $transient_names as $option_name ) {
+			$transient_key = substr( $option_name, strlen( '_transient_' ) );
+
+			if ( delete_transient( $transient_key ) ) {
+				++$deleted_count;
+			}
+		}
+
+		return $deleted_count;
+	}
+
 	// =========================================================================
 	// LEGACY/BACKWARD COMPATIBLE METHODS
 	// =========================================================================

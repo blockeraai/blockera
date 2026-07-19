@@ -16,6 +16,7 @@ use ReflectionProperty;
 class JsonTrivialApiTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 	public function tear_down(): void {
+		JSON::clear_sanitize_request_cache();
 		JSON::set_style_variation_prefix( 'is-style-' );
 		parent::tear_down();
 	}

@@ -215,6 +215,19 @@ class JSON extends \WP_Theme_JSON {
 		return $schema;
 	}
 
+	/** Transient key prefix for post-sanitize theme.json construct cache. */
+	private const SANITIZE_TRANSIENT_PREFIX = 'json_sanitize_';
+
+	/** TTL for sanitize transients (aligned with JSONResolver::get_block_data). */
+	private const SANITIZE_TRANSIENT_TTL = HOUR_IN_SECONDS;
+
+	/**
+	 * Request-level cache of sanitized {@see get_raw_data()} keyed by {@see build_sanitize_cache_key()}.
+	 *
+	 * @var array<string, array>
+	 */
+	private static array $sanitize_request_cache = array();
+
 	/**
 	 * Constructor.
 	 *
@@ -224,11 +237,211 @@ class JSON extends \WP_Theme_JSON {
 	public function __construct( array $data = array(), string $origin = 'theme', string $style_variation_prefix = 'is-style-') {
 		self::$style_variation_prefix = $style_variation_prefix;
 
-		parent::__construct($data, $origin);
+		global $blockera_block_supports;
+		$supports  = is_array( $blockera_block_supports ?? null ) ? $blockera_block_supports : array();
+		$cache_key = null;
+
+		if ( self::should_use_sanitize_cache() ) {
+			$cache_key = self::build_sanitize_cache_key( $data, $origin, $style_variation_prefix );
+			$cached    = self::get_sanitize_cached_raw_data( $cache_key );
+
+			if ( null !== $cached ) {
+				$this->theme_json = $cached;
+				$this->set_supports( $supports );
+
+				return;
+			}
+		}
+
+		parent::__construct( $data, $origin );
+
+		$this->set_supports( $supports );
+
+		if ( null !== $cache_key ) {
+			self::store_sanitize_cached_raw_data( $cache_key, $this->get_raw_data() );
+		}
+	}
+
+	/**
+	 * Whether sanitize construct caching is enabled for this request.
+	 *
+	 * @return bool
+	 */
+	private static function should_use_sanitize_cache(): bool {
+		return ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT );
+	}
+
+	/**
+	 * Build a transient/request cache key for a JSON construct input.
+	 *
+	 * Key includes origin, input payload, and everything that affects {@see sanitize()}:
+	 * plugin version, registered blocks, block style names, variation prefix, Blockera supports.
+	 *
+	 * @param array  $data                   Raw theme.json input (pre-migrate).
+	 * @param string $origin                 Origin passed to the constructor.
+	 * @param string $style_variation_prefix Style variation class prefix.
+	 * @return string Transient key (without Blockera product prefix).
+	 */
+	public static function build_sanitize_cache_key( array $data, string $origin, string $style_variation_prefix = 'is-style-' ): string {
+		if ( ! in_array( $origin, static::VALID_ORIGINS, true ) ) {
+			$origin = 'theme';
+		}
+
+		return self::SANITIZE_TRANSIENT_PREFIX
+			. $origin . '_'
+			. self::get_sanitize_cache_context( $style_variation_prefix ) . '_'
+			. self::hash_sanitize_input_data( $data );
+	}
+
+	/**
+	 * Fingerprint of registry/schema state that affects sanitize output.
+	 *
+	 * @param string $style_variation_prefix Per-construct variation prefix.
+	 * @return string Short hash segment for cache keys.
+	 */
+	private static function get_sanitize_cache_context( string $style_variation_prefix ): string {
+		static $contexts = array();
+
+		if ( isset( $contexts[ $style_variation_prefix ] ) ) {
+			return $contexts[ $style_variation_prefix ];
+		}
+
+		$registry = \WP_Block_Type_Registry::get_instance();
+		$blocks   = $registry->get_all_registered();
+
+		$style_variation_names = array();
+		if ( class_exists( '\WP_Block_Styles_Registry' ) ) {
+			foreach ( \WP_Block_Styles_Registry::get_instance()->get_all_registered() as $block_styles ) {
+				$style_variation_names = array_merge( $style_variation_names, array_keys( $block_styles ) );
+			}
+			sort( $style_variation_names );
+		}
 
 		global $blockera_block_supports;
+		$support_keys = is_array( $blockera_block_supports ?? null ) ? array_keys( $blockera_block_supports ) : array();
+		sort( $support_keys );
 
-		$this->set_supports($blockera_block_supports);
+		$parts = array(
+			'v'  => defined( 'BLOCKERA_SB_VERSION' ) ? BLOCKERA_SB_VERSION : '0',
+			'b'  => md5( implode( ',', array_keys( $blocks ) ) ),
+			'sv' => md5( implode( ',', $style_variation_names ) ),
+			'sp' => md5( $style_variation_prefix ),
+			'su' => md5( implode( ',', $support_keys ) ),
+		);
+
+		$encoded = wp_json_encode( $parts );
+
+		$contexts[ $style_variation_prefix ] = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+
+		return $contexts[ $style_variation_prefix ];
+	}
+
+	/**
+	 * Hash constructor input data for cache keys.
+	 *
+	 * @param array $data Raw theme.json input.
+	 * @return string md5 hex digest.
+	 */
+	private static function hash_sanitize_input_data( array $data ): string {
+		$encoded = wp_json_encode( $data );
+
+		return is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+	}
+
+	/**
+	 * Read sanitized raw data from request cache, then transient.
+	 *
+	 * @param string $cache_key Key from {@see build_sanitize_cache_key()}.
+	 * @return array|null Sanitized raw tree or null on miss.
+	 */
+	private static function get_sanitize_cached_raw_data( string $cache_key ): ?array {
+		if ( isset( self::$sanitize_request_cache[ $cache_key ] ) ) {
+			return self::$sanitize_request_cache[ $cache_key ];
+		}
+
+		if ( ! function_exists( 'blockera_get_cache' ) ) {
+			return null;
+		}
+
+		$transient = blockera_get_cache()->getTransientCache( $cache_key );
+
+		if ( ! is_array( $transient ) || ! isset( $transient['version'] ) ) {
+			return null;
+		}
+
+		self::$sanitize_request_cache[ $cache_key ] = $transient;
+
+		return $transient;
+	}
+
+	/**
+	 * Persist sanitized raw data to request cache and transients.
+	 *
+	 * @param string $cache_key Cache key.
+	 * @param array  $raw_data  Post-construct {@see get_raw_data()}.
+	 * @return void
+	 */
+	private static function store_sanitize_cached_raw_data( string $cache_key, array $raw_data ): void {
+		self::$sanitize_request_cache[ $cache_key ] = $raw_data;
+
+		if ( function_exists( 'blockera_get_cache' ) ) {
+			blockera_get_cache()->setTransientCache( $cache_key, $raw_data, self::SANITIZE_TRANSIENT_TTL );
+		}
+	}
+
+	/**
+	 * Drop request-level sanitize construct cache only.
+	 *
+	 * Call from {@see JSONResolver::clean_cached_data()} so in-request resolver rebuilds
+	 * do not reuse stale sanitized trees while transients remain valid for the next request.
+	 *
+	 * @return void
+	 */
+	public static function clear_sanitize_request_cache(): void {
+		self::$sanitize_request_cache = array();
+	}
+
+	/**
+	 * Drop all sanitize construct transients for this site.
+	 *
+	 * @return int Number of transients deleted.
+	 */
+	public static function clear_sanitize_transient_cache(): int {
+		if ( ! function_exists( 'blockera_get_cache' ) ) {
+			return 0;
+		}
+
+		return blockera_get_cache()->deleteTransientCacheByPrefix( self::SANITIZE_TRANSIENT_PREFIX );
+	}
+
+	/**
+	 * Full sanitize cache invalidation (request + transients).
+	 *
+	 * Recommended hooks: {@see register_sanitize_cache_invalidation_hooks()}.
+	 *
+	 * @return void
+	 */
+	public static function clear_sanitize_cache(): void {
+		self::clear_sanitize_request_cache();
+		self::clear_sanitize_transient_cache();
+	}
+
+	/**
+	 * Register WordPress hooks that should invalidate sanitize construct cache.
+	 *
+	 * @return void
+	 */
+	public static function register_sanitize_cache_invalidation_hooks(): void {
+		static $registered = false;
+
+		if ( $registered ) {
+			return;
+		}
+
+		$registered = true;
+
+		add_action( 'switch_theme', array( self::class, 'clear_sanitize_cache' ) );
+		add_action( 'save_post_wp_global_styles', array( self::class, 'clear_sanitize_cache' ) );
 	}
 
 	/**
