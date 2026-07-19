@@ -48,6 +48,7 @@ test.describe('Scenario', () => {
 				});
 			}
 
+			// @debug-ignore — conditional skip when subject is core without Blockera
 			test.skip(skipForCore, `Scenario ${scenario.id} requires Blockera`);
 
 			const results = {
