@@ -71,6 +71,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $merged_settings_cache = array();
 
 	/**
+	 * Request-level cache of {@see JSON::get_styles_block_nodes()} for merged data keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_styles_block_nodes_cache = array();
+
+	/**
 	 * Store the default WordPress provided data from theme.
 	 *
 	 * @var \WP_Theme_JSON_Data $default_theme_data the provided from theme data by WordPress.
@@ -675,6 +682,31 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Style block nodes from merged theme.json (request-level cache).
+	 *
+	 * Shared by duotone global-styles bindings and {@see blockera_add_global_styles_for_blocks()}.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_merged_styles_block_nodes( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_styles_block_nodes_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_styles_block_nodes_cache[ $origin ];
+		}
+
+		$nodes = static::get_merged_data( $origin )->get_styles_block_nodes();
+
+		if ( ! static::is_testing_environment() ) {
+			static::$merged_styles_block_nodes_cache[ $origin ] = $nodes;
+		}
+
+		return $nodes;
+	}
+
+	/**
 	 * Store merged raw data + settings for the origin (no-op in testing).
 	 *
 	 * @param string $origin Origin key.
@@ -1154,6 +1186,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$resolved_merged_data_cache            = array();
 		static::$resolved_json_instances               = array();
 		static::$merged_settings_cache                 = array();
+		static::$merged_styles_block_nodes_cache       = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();
@@ -1163,6 +1196,8 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$theme_json_file_cache     = array();
 		static::$theme_with_supports       = null;
 		static::$cached_theme_support_data = null;
+
+		JSON::clear_sanitize_request_cache();
 
 		// Drop non-persistent settings/stylesheet entries so admin rebuilds see fresh data.
 		foreach ( array( 'custom', 'theme', 'blocks', 'default' ) as $origin ) {
