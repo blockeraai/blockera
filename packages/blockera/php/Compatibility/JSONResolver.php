@@ -78,6 +78,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $merged_styles_block_nodes_cache = array();
 
 	/**
+	 * Cached `post_modified` from the user global styles CPT (shared with cache hash).
+	 *
+	 * @var string|null
+	 */
+	private static $user_global_styles_post_modified = null;
+
+	/**
 	 * Store the default WordPress provided data from theme.
 	 *
 	 * @var \WP_Theme_JSON_Data $default_theme_data the provided from theme data by WordPress.
@@ -273,6 +280,8 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 		$config   = array();
 		$user_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme() );
+
+		static::cache_user_global_styles_post_modified( $user_cpt );
 
 		if ( array_key_exists( 'post_content', $user_cpt ) ) {
 			$decoded_data = json_decode( $user_cpt['post_content'], true );
@@ -585,6 +594,42 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$cached_theme_support_data = $theme_support_data;
 
 		return static::$cached_theme_support_data;
+	}
+
+	/**
+	 * User global styles post modified time (request-cached; no create_post).
+	 *
+	 * Reuses the CPT row loaded by {@see get_user_data()} when merge already ran.
+	 *
+	 * @return string Post modified timestamp or '0'.
+	 */
+	public static function get_user_global_styles_post_modified_time(): string {
+		if ( null !== static::$user_global_styles_post_modified ) {
+			return static::$user_global_styles_post_modified;
+		}
+
+		$user_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme(), false );
+		static::cache_user_global_styles_post_modified( $user_cpt );
+
+		return static::$user_global_styles_post_modified;
+	}
+
+	/**
+	 * @param array<string, mixed> $user_cpt Row from {@see get_user_data_from_wp_global_styles()}.
+	 * @return void
+	 */
+	private static function cache_user_global_styles_post_modified( array $user_cpt ): void {
+		if ( null !== static::$user_global_styles_post_modified ) {
+			return;
+		}
+
+		static::$user_global_styles_post_modified = ! empty( $user_cpt['post_modified'] )
+			? (string) $user_cpt['post_modified']
+			: '0';
+
+		if ( ! empty( $user_cpt['ID'] ) && null === static::$user_custom_post_type_id ) {
+			static::$user_custom_post_type_id = (int) $user_cpt['ID'];
+		}
 	}
 
 	/**
