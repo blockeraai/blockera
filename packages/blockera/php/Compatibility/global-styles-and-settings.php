@@ -495,7 +495,7 @@ if (! function_exists('blockera_get_user_styles_data')) {
 			return $user_data;
 		}
 
-		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+		$global_styles_post = JSONResolver::get_user_global_styles_cpt();
 
 		// Validate the global styles post content.
 		if (empty($global_styles_post['post_content']) || ! str_contains($global_styles_post['post_content'], 'blockera')) {
