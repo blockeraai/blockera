@@ -71,6 +71,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $merged_settings_cache = array();
 
 	/**
+	 * Request-level cache of merged theme.json styles keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_styles_cache = array();
+
+	/**
 	 * Request-level cache of {@see JSON::get_styles_block_nodes()} for merged data keyed by origin.
 	 *
 	 * @var array<string, array>
@@ -682,6 +689,38 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Styles from merged theme.json (request-level cache).
+	 *
+	 * Prefer this over {@see get_merged_data()}->{@see JSON::get_raw_data()}['styles'] when only
+	 * styles are needed — avoids reconstructing a JSON instance on cache hits.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array
+	 */
+	public static function get_merged_styles( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_styles_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_styles_cache[ $origin ];
+		}
+
+		static::get_merged_data( $origin );
+
+		if (
+			isset( static::$merged_styles_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_styles_cache[ $origin ];
+		}
+
+		// Testing: store_merged_data_cache() is a no-op; read styles from the merged instance.
+		$raw_data = static::get_merged_data( $origin )->get_raw_data();
+
+		return $raw_data['styles'] ?? array();
+	}
+
+	/**
 	 * Style block nodes from merged theme.json (request-level cache).
 	 *
 	 * Shared by duotone global-styles bindings and {@see blockera_add_global_styles_for_blocks()}.
@@ -718,8 +757,10 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			return;
 		}
 
-		static::$merged_data_cache[ $origin ]     = $result->get_raw_data();
+		$raw_data                                 = $result->get_raw_data();
+		static::$merged_data_cache[ $origin ]     = $raw_data;
 		static::$merged_settings_cache[ $origin ] = $result->get_settings();
+		static::$merged_styles_cache[ $origin ]   = $raw_data['styles'] ?? array();
 		static::$merged_json_instances[ $origin ] = $result;
 	}
 
@@ -1186,6 +1227,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$resolved_merged_data_cache            = array();
 		static::$resolved_json_instances               = array();
 		static::$merged_settings_cache                 = array();
+		static::$merged_styles_cache                   = array();
 		static::$merged_styles_block_nodes_cache       = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
