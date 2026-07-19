@@ -389,6 +389,8 @@ if ( ! function_exists( 'blockera_clear_theme_styles_partials_mtime_cache' ) ) {
 	function blockera_clear_theme_styles_partials_mtime_cache(): void {
 		blockera_get_cache()->deleteTransientCache( 'theme_styles_partials_mtime_' . get_template() );
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_global_stylesheet_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_user_styles_mtime_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_layout_support_flags_' );
 	}
 }
 
@@ -454,16 +456,25 @@ if (! function_exists('blockera_get_user_styles_modified_time')) {
 	function blockera_get_user_styles_modified_time(): string {
 		static $mtime = null;
 
-		if (null !== $mtime) {
+		if ( null !== $mtime ) {
 			return $mtime;
 		}
 
-		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+		$can_use_cached = ! wp_is_development_mode( 'theme' );
+		$cache_key      = 'blockera_user_styles_mtime_' . get_stylesheet();
 
-		if (! empty($global_styles_post['post_modified'])) {
-			$mtime = $global_styles_post['post_modified'];
-		} else {
-			$mtime = '0';
+		if ( $can_use_cached ) {
+			$cached = blockera_get_cache()->getTransientCache( $cache_key );
+			if ( is_string( $cached ) ) {
+				$mtime = $cached;
+				return $mtime;
+			}
+		}
+
+		$mtime = JSONResolver::get_user_global_styles_post_modified_time();
+
+		if ( $can_use_cached ) {
+			blockera_get_cache()->setTransientCache( $cache_key, $mtime, DAY_IN_SECONDS );
 		}
 
 		return $mtime;
@@ -620,6 +631,18 @@ if (! function_exists('blockera_get_global_settings')) {
 	}
 }
 
+if ( ! function_exists( 'blockera_prime_layout_support_global_flags' ) ) {
+	/**
+	 * Seed request-level layout flags without calling JSONResolver merge.
+	 *
+	 * @param array{use_root_padding_aware_alignments: bool, has_block_gap_support: bool} $flags Layout flags.
+	 * @return void
+	 */
+	function blockera_prime_layout_support_global_flags( array $flags ): void {
+		blockera_get_layout_support_global_flags( $flags );
+	}
+}
+
 if ( ! function_exists( 'blockera_get_layout_support_global_flags' ) ) {
 	/**
 	 * Layout support flags from Blockera merged settings (request-cached).
@@ -627,12 +650,21 @@ if ( ! function_exists( 'blockera_get_layout_support_global_flags' ) ) {
 	 * Used by {@see blockera_render_layout_support_flag()} so render_block does not
 	 * cold-start {@see wp_get_global_settings()} / {@see WP_Theme_JSON_Resolver::get_merged_data()}.
 	 *
+	 * @param array{use_root_padding_aware_alignments?: bool, has_block_gap_support?: bool}|null $prime Optional precomputed flags.
 	 * @return array{use_root_padding_aware_alignments: bool, has_block_gap_support: bool}
 	 */
-	function blockera_get_layout_support_global_flags(): array {
+	function blockera_get_layout_support_global_flags( ?array $prime = null ): array {
 		static $flags = null;
 
 		if ( null !== $flags ) {
+			return $flags;
+		}
+
+		if ( null !== $prime ) {
+			$flags = array(
+				'use_root_padding_aware_alignments' => (bool) ( $prime['use_root_padding_aware_alignments'] ?? false ),
+				'has_block_gap_support'             => (bool) ( $prime['has_block_gap_support'] ?? false ),
+			);
 			return $flags;
 		}
 
@@ -642,6 +674,16 @@ if ( ! function_exists( 'blockera_get_layout_support_global_flags' ) ) {
 			'use_root_padding_aware_alignments' => (bool) ( $settings['useRootPaddingAwareAlignments'] ?? false ),
 			'has_block_gap_support'             => isset( $settings['spacing']['blockGap'] ),
 		);
+
+		global $blockera_mode;
+		if (
+			! $blockera_mode
+			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
+			&& ! wp_is_development_mode( 'theme' )
+		) {
+			$cache_key = 'blockera_layout_support_flags_' . blockera_get_global_styles_cache_hash();
+			blockera_get_cache()->setTransientCache( $cache_key, $flags, DAY_IN_SECONDS );
+		}
 
 		return $flags;
 	}
@@ -663,6 +705,31 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 			return;
 		}
 		$warmed = true;
+
+		global $blockera_mode;
+		$can_use_transients = ! $blockera_mode
+			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
+			&& ! wp_is_development_mode( 'theme' );
+
+		if ( $can_use_transients ) {
+			$hash           = blockera_get_global_styles_cache_hash();
+			$cache          = blockera_get_cache();
+			$stylesheet_css = $cache->getTransientCache( 'blockera_global_stylesheet_' . $hash );
+			$cached_flags   = $cache->getTransientCache( 'blockera_layout_support_flags_' . $hash );
+
+			if (
+				is_string( $stylesheet_css )
+				&& '' !== $stylesheet_css
+				&& is_array( $cached_flags )
+				&& array_key_exists( 'use_root_padding_aware_alignments', $cached_flags )
+				&& array_key_exists( 'has_block_gap_support', $cached_flags )
+			) {
+				wp_cache_set( 'blockera_wp_get_global_stylesheet', $stylesheet_css, 'theme_json' );
+				blockera_prime_layout_support_global_flags( $cached_flags );
+				blockera_warm_layout_render_cache();
+				return;
+			}
+		}
 
 		// One merge + URI resolve warms settings, raw data, and resolved tree for enqueue/render.
 		JSONResolver::get_resolved_merged_data();

@@ -420,29 +420,29 @@ class AppServiceProvider extends ServiceProvider {
 			return $posts;
 		}
 
+		$template_post_types = [ 'wp_template', 'wp_template_part' ];
+
+		// Most the_posts calls are secondary queries — bail before per-query caches and content scans.
+		if ( ! $query->is_main_query() ) {
+			$post_type         = $query->get( 'post_type' );
+			$is_template_query = in_array( $post_type, $template_post_types, true )
+				|| ( is_array( $post_type ) && ! empty( array_intersect( $template_post_types, $post_type ) ) );
+
+			if ( ! $is_template_query ) {
+				$first_post        = reset( $posts );
+				$is_template_query = $first_post && in_array( $first_post->post_type, $template_post_types, true );
+			}
+
+			if ( ! $is_template_query ) {
+				return $posts;
+			}
+		}
+
 		static $non_blockera_post_ids = array();
 		static $empty_query_ids       = array();
 
 		$query_id = spl_object_id( $query );
 		if ( $query_id && isset( $empty_query_ids[ $query_id ] ) ) {
-			return $posts;
-		}
-
-		$template_post_types = [ 'wp_template', 'wp_template_part' ];
-
-		// Process main query or FSE template queries (wp_template, wp_template_part).
-		// Template queries are not main query but must be processed for block styles.
-		$post_type         = $query->get( 'post_type' );
-		$is_template_query = in_array( $post_type, $template_post_types, true )
-			|| ( is_array( $post_type ) && ! empty( array_intersect( $template_post_types, $post_type ) ) );
-
-		// Fallback: check posts when query vars may not expose post_type (e.g. ID-based lookup).
-		if ( ! $is_template_query ) {
-			$first_post        = reset( $posts );
-			$is_template_query = $first_post && in_array( $first_post->post_type, $template_post_types, true );
-		}
-
-		if ( ! $query->is_main_query() && ! $is_template_query ) {
 			return $posts;
 		}
 
