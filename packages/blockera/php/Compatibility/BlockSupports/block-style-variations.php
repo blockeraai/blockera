@@ -178,8 +178,11 @@ if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_style
 			return $parsed_block;
 		}
 
-		$tree       = JSONResolver::get_merged_data();
-		$theme_json = $tree->get_raw_data();
+		static $theme_json = null;
+
+		if ( null === $theme_json ) {
+			$theme_json = JSONResolver::get_merged_data()->get_raw_data();
+		}
 
 		$variation_data = array();
 		$variation      = '';
@@ -284,7 +287,11 @@ if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_style
 		$current_class_name = isset( $parsed_block['attrs']['className'] ) ? (string) $parsed_block['attrs']['className'] : '';
 		$updated_class_name = trim( $current_class_name . ' ' . $class_name );
 
-		wp_register_style( $style_handle, false, array( 'wp-block-library', 'global-styles' ) );
+		static $registered_variation_handles = array();
+		if ( ! isset( $registered_variation_handles[ $style_handle ] ) ) {
+			wp_register_style( $style_handle, false, array( 'wp-block-library', 'global-styles' ) );
+			$registered_variation_handles[ $style_handle ] = true;
+		}
 		wp_add_inline_style( $style_handle, $variation_styles );
 
 		_wp_array_set( $parsed_block, array( 'attrs', 'className' ), $updated_class_name );
@@ -319,6 +326,13 @@ if (! function_exists('blockera_render_block_style_variation_support_styles')) {
 	 */
 	function blockera_render_block_style_variation_support_styles( $parsed_block ) {
 		$classes = $parsed_block['attrs']['className'] ?? '';
+
+		if (
+			'' === $classes
+			|| ( ! str_contains( $classes, 'is-style-' ) && ! str_contains( $classes, 'is-size-' ) )
+		) {
+			return $parsed_block;
+		}
 
 		foreach ( blockera_collect_block_variation_render_jobs( $classes ) as $job ) {
 			$parsed_block = blockera_render_one_block_theme_variation_support_styles(
