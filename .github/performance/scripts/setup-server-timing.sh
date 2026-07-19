@@ -14,7 +14,10 @@ else
 	echo "Warning: Server-Timing header not detected on HEAD (may still emit on full GET)."
 	# Full GET can expose headers that HEAD omits on some stacks.
 	curl -sD - -o /dev/null "http://localhost:8888/?rnd=${RANDOM}" | grep -i 'server-timing' || {
-		echo "Error: Server-Timing header missing. Check .github/performance/mu-plugins/server-timing.php and BLOCKERA_PERF_BENCHMARK."
+		echo "Error: Server-Timing header missing."
+		echo "Usually wp-env was started without performance.json (setup-wp-env.js overwrote it)."
+		echo "Fix: npx wp-env stop && WP_ENV_CONFIG=performance npm run env:start"
+		echo "Or:  npm run test:performance:local -- --skip-build --force-env-restart"
 		exit 1
 	}
 fi
