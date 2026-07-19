@@ -212,31 +212,6 @@ function main() {
 			note: '',
 		};
 
-		// Settings (and similar) are omitted from the without-Blockera URL list.
-		// Report Blockera timings only; never apply the with/without gate.
-		if (scenario.requiresBlockera) {
-			if (!withRow) {
-				entry.status = 'fail';
-				entry.note = 'Missing Blockera row';
-				failed++;
-			} else {
-				const withMetric = pickMetric(withRow, primaryMetric);
-				if (withSuccess === 0 || !withMetric) {
-					entry.status = 'fail';
-					entry.note = `Blockera settings unavailable (success=${fmt(withSuccess)}%, metric missing)`;
-					failed++;
-				} else {
-					entry.metricKey = withMetric.key;
-					entry.withMs = withMetric.value;
-					entry.status = 'skip';
-					entry.note =
-						'Informational only (requires Blockera); skipped in Core-only run';
-				}
-			}
-			results.push(entry);
-			continue;
-		}
-
 		if (!withRow || !withoutRow) {
 			entry.status = 'fail';
 			entry.note = !withRow
@@ -249,6 +224,26 @@ function main() {
 
 		const withMetric = pickMetric(withRow, primaryMetric);
 		const withoutMetric = pickMetric(withoutRow, primaryMetric);
+
+		// Settings (and similar) only exist with Blockera. Core often returns
+		// non-200 without the plugin — still report Blockera timings, skip gate.
+		if (scenario.requiresBlockera) {
+			if (withSuccess === 0 || !withMetric) {
+				entry.status = 'fail';
+				entry.note = `Blockera settings unavailable (success=${fmt(withSuccess)}%, metric missing)`;
+				failed++;
+			} else {
+				entry.metricKey = withMetric.key;
+				entry.withMs = withMetric.value;
+				entry.status = 'skip';
+				entry.note =
+					withoutSuccess === 0
+						? 'Informational only (requires Blockera); Core returns non-200 without plugin'
+						: 'Informational only (requires Blockera); gate not applied';
+			}
+			results.push(entry);
+			continue;
+		}
 
 		// A 0% success rate means the URL never returned HTTP 200 (e.g. redirect
 		// to a pretty permalink, or admin login). Timings are not comparable.
