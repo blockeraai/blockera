@@ -136,6 +136,8 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		$update_cache   = false;
 		$cached         = null;
 		$cache_key      = 'styles_for_blocks';
+		$cache_hash     = null;
+		$block_nodes    = null;
 
 		$cache_instance = blockera_get_cache();
 
@@ -151,11 +153,6 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 				&& ( isset( $cached['tree_raw'] ) || isset( $cached['tree'] ) );
 
 			if ( $has_tree ) {
-				if ( isset( $cached['tree_raw'] ) && is_array( $cached['tree_raw'] ) ) {
-					$tree = JSON::with_raw_data( $cached['tree_raw'] );
-				} else {
-					$tree = $cached['tree'];
-				}
 				$block_nodes = $cached['block_nodes'];
 			} else {
 				// Cache miss or hash changed - need to rebuild.
@@ -164,33 +161,67 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 			}
 		}
 
-		// Build tree only if not restored from cache.
-		// Reuse the same resolved merged tree as blockera_get_global_stylesheet() (request cache).
-		if (! isset($tree)) {
-			$tree = JSONResolver::get_resolved_merged_data();
-
-			if (! method_exists($tree, 'get_raw_data')) {
-				return;
-			}
-
-			$block_nodes = JSONResolver::get_merged_styles_block_nodes();
-
-			// Prepare cache structure for storing (raw tree — avoid serializing JSON objects).
-			if ($can_use_cached && $update_cache) {
-				$cached = array(
-					'hash'        => $cache_hash,
-					'tree_raw'    => $tree->get_raw_data(),
-					'block_nodes' => $block_nodes,
-					'wp'          => array( 'blocks' => array() ),
-					'blockera'    => array( 'blocks' => array() ),
-				);
-			}
-		}
-
 		// Cache styles queue lookup for O(1) checks instead of repeated in_array().
 		$styles_queue_set = null;
 		if (wp_should_load_block_assets_on_demand()) {
 			$styles_queue_set = array_fill_keys($wp_styles->queue, true);
+		}
+
+		$batched_css = '';
+
+		// Transient hit with complete per-block CSS: skip JSON tree and batch one inline style.
+		if ( $can_use_cached && null !== $cached && null !== $block_nodes && null === $styles_queue_set ) {
+			$all_css_cached = true;
+			foreach ( $block_nodes as $metadata ) {
+				$cache_node_key = $metadata['name'] ?? md5( wp_json_encode( $metadata ) );
+				foreach ( array( 'wp', 'blockera' ) as $source ) {
+					if ( ! isset( $cached[ $source ]['blocks'][ $cache_node_key ] ) ) {
+						$all_css_cached = false;
+						break 2;
+					}
+					$batched_css .= $cached[ $source ]['blocks'][ $cache_node_key ];
+				}
+			}
+
+			if ( $all_css_cached ) {
+				if ( '' !== $batched_css ) {
+					wp_add_inline_style( 'global-styles', $batched_css );
+				}
+				return;
+			}
+
+			$batched_css = '';
+		}
+
+		// Build tree only when per-block CSS must be generated or the transient is incomplete.
+		if ( ! isset( $tree ) ) {
+			if ( $can_use_cached && null !== $cached && isset( $cached['tree_raw'] ) && is_array( $cached['tree_raw'] ) ) {
+				$tree = JSON::with_raw_data( $cached['tree_raw'] );
+			} elseif ( $can_use_cached && null !== $cached && isset( $cached['tree'] ) ) {
+				$tree = $cached['tree'];
+			} else {
+				$tree = JSONResolver::get_resolved_merged_data();
+
+				if ( ! method_exists( $tree, 'get_raw_data' ) ) {
+					return;
+				}
+
+				$block_nodes = JSONResolver::get_merged_styles_block_nodes();
+
+				if ( $can_use_cached && $update_cache ) {
+					$cached = array(
+						'hash'        => $cache_hash,
+						'tree_raw'    => $tree->get_raw_data(),
+						'block_nodes' => $block_nodes,
+						'wp'          => array( 'blocks' => array() ),
+						'blockera'    => array( 'blocks' => array() ),
+					);
+				}
+			}
+		}
+
+		if ( null === $block_nodes ) {
+			$block_nodes = JSONResolver::get_merged_styles_block_nodes();
 		}
 
 		foreach ( $block_nodes as $metadata ) {
@@ -217,8 +248,12 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 					$block_css = $tree->get_blockera_styles_for_block( $metadata );
 				}
 
+				if ( '' === $block_css ) {
+					continue;
+				}
+
 				if ( null === $styles_queue_set ) {
-					wp_add_inline_style( 'global-styles', $block_css );
+					$batched_css .= $block_css;
 					continue;
 				}
 
@@ -256,6 +291,10 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 					}
 				}
 			}
+		}
+
+		if ( null === $styles_queue_set && '' !== $batched_css ) {
+			wp_add_inline_style( 'global-styles', $batched_css );
 		}
 
 		if ($update_cache && null !== $cached) {
