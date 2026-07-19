@@ -20,14 +20,14 @@
             <directory suffix=".php">./packages/blockera/php/tests/</directory>
             <directory suffix=".php">./packages/blockera-admin/php/tests/</directory>
             <directory suffix=".php">./packages/data/php/tests/</directory>
-            <directory suffix=".php">./packages/editor/php/tests/</directory>
+            <directory suffix=".php">./packages/editor/php/Tests/</directory>
             <directory suffix=".php">./packages/wordpress/php/tests/</directory>
             <directory suffix=".php">./packages/utils/php/tests/</directory>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
             <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/tests/StyleDefinitionTestCase.php</exclude>
+            <exclude>./packages/editor/php/Tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
         <testsuite name="snapshots">
             <directory suffix=".php">./packages/dev-phpunit/php/</directory>
@@ -35,8 +35,8 @@
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
             <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/tests/StyleDefinitionTestCase.php</exclude>
+            <exclude>./packages/editor/php/Tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
