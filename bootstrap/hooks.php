@@ -51,6 +51,9 @@ function blockera_after_setup_theme() {
 	remove_filter( 'render_block', 'wp_render_block_style_variation_class_name', 10, 2 );
 	remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
 	remove_action( 'enqueue_block_editor_assets', 'wp_enqueue_global_styles_css_custom_properties' );
+	remove_action( 'wp_head', 'wp_print_font_faces', 50 );
+	remove_action( 'admin_print_styles', 'wp_print_font_faces', 50 );
+	remove_action( 'admin_print_styles', 'wp_print_font_faces_from_style_variations', 50 );
 
 	// Replace with your own implementation.
 	// Warm before query_posts/the_posts (wp_enqueue_scripts is too late for duotone-during-posts).
@@ -59,6 +62,9 @@ function blockera_after_setup_theme() {
 	add_action( 'save_post_wp_global_styles', 'blockera_clear_theme_styles_partials_mtime_cache' );
 	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_global_styles' );
 	add_action( 'wp_footer', 'blockera_enqueue_global_styles', 1 );
+	add_action( 'wp_head', 'blockera_print_font_faces', 50 );
+	add_action( 'admin_print_styles', 'blockera_print_font_faces', 50 );
+	add_action( 'admin_print_styles', 'blockera_print_font_faces_from_style_variations', 50 );
 	add_action( 'enqueue_block_editor_assets', 'blockera_enqueue_global_styles_css_custom_properties' );
 	add_filter( 'render_block', array( BlockeraDuotone::class, 'render_duotone_support' ), 10, 3 );
 	add_action( 'init', 'blockera_register_block_core_template_part' );
@@ -75,4 +81,5 @@ function blockera_after_setup_theme() {
 	add_filter( 'block_editor_settings_all', 'blockera_merge_block_editor_experimental_features', 100, 1 );
 	// Canvas iframe does not load enqueue_block_editor_assets; inject preset CSS variables into resolved assets.
 	add_filter( 'block_editor_settings_all', 'blockera_append_global_styles_variables_to_resolved_iframe_assets', 101, 1 );
+	add_filter( 'block_editor_settings_all', 'blockera_append_font_faces_to_resolved_iframe_assets', 102, 1 );
 }
