@@ -102,6 +102,7 @@ function main() {
 	const coreStats = parseFile('core-performance-results.json');
 
 	if (!blockeraStats.length) {
+		// @debug-ignore — CLI error for missing benchmark artifacts
 		console.error(
 			'Missing artifacts/blockera-performance-results.json — run Blockera subject first.'
 		);
@@ -288,7 +289,9 @@ function main() {
 		fs.writeFileSync(summaryArg, report);
 	}
 
+	// @debug-ignore — CLI report output for CI / local runs
 	console.log(report);
+	// @debug-ignore
 	console.log(`\nWrote ${reportPath}`);
 
 	if (failed > 0) {
