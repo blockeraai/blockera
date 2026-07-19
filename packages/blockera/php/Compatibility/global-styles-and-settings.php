@@ -1,7 +1,6 @@
 <?php
 
 use Blockera\Setup\Compatibility\BlockeraSettingsPaths;
-use Blockera\Setup\Compatibility\BlockSupports\BlockeraDuotone;
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
@@ -165,7 +164,7 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 				return;
 			}
 
-			$block_nodes = $tree->get_styles_block_nodes();
+			$block_nodes = JSONResolver::get_merged_styles_block_nodes();
 
 			// Prepare cache structure for storing (raw tree — avoid serializing JSON objects).
 			if ($can_use_cached && $update_cache) {
@@ -529,10 +528,10 @@ if ( ! function_exists( 'blockera_get_layout_support_global_flags' ) ) {
 
 if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 	/**
-	 * Warm JSONResolver + duotone maps before the_posts / render_block.
+	 * Warm JSONResolver merged settings before the_posts / render_block.
 	 *
-	 * Must run on {@see 'wp_loaded'} (before query_posts): handleThePosts can render blocks
-	 * and invoke duotone support prior to wp_enqueue_scripts.
+	 * Must run on {@see 'wp_loaded'} (before query_posts): layout support and block styles
+	 * can invoke {@see JSONResolver::get_merged_settings()} during post processing.
 	 *
 	 * @return void
 	 */
@@ -545,7 +544,6 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 		$warmed = true;
 
 		JSONResolver::get_merged_settings();
-		BlockeraDuotone::warm_global_styles_caches();
 	}
 }
 

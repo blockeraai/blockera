@@ -485,11 +485,6 @@ class AppServiceProvider extends ServiceProvider {
 			return $posts;
 		}
 
-		// processPostContentForStyles may render blocks (duotone/layout); ensure merge is hot.
-		if ( function_exists( 'blockera_warm_merged_settings_cache' ) ) {
-			blockera_warm_merged_settings_cache();
-		}
-
 		// Avoid Application::make() on this hot the_posts path (16× per complex page).
 		static $cache     = null;
 		static $save_post = null;
