@@ -553,6 +553,27 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 		$warmed = true;
 
 		JSONResolver::get_merged_settings();
+		blockera_get_layout_support_global_flags();
+		blockera_warm_layout_render_cache();
+	}
+}
+
+if ( ! function_exists( 'blockera_warm_layout_render_cache' ) ) {
+	/**
+	 * Warm layout render_block lookups before the first block is rendered.
+	 *
+	 * @return void
+	 */
+	function blockera_warm_layout_render_cache(): void {
+		static $warmed = false;
+
+		if ( $warmed ) {
+			return;
+		}
+		$warmed = true;
+
+		wp_get_layout_definitions();
+		current_theme_supports( 'disable-layout-styles' );
 	}
 }
 
