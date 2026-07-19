@@ -36,6 +36,43 @@ if (! function_exists('blockera_editor_register_routes')) {
 	}
 }
 
+if ( ! function_exists( 'blockera_should_register_editor_theme_json_filters' ) ) {
+	/**
+	 * Whether Blockera must replace core wp_theme_json_data_* filters this request.
+	 *
+	 * Generic wp-admin screens (dashboard, plugins list, etc.) do not need Blockera
+	 * theme.json sanitization; skipping filter registration avoids cold JSON merges there.
+	 *
+	 * @return bool
+	 */
+	function blockera_should_register_editor_theme_json_filters(): bool {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+
+		if ( preg_match( '/\/wp-admin\/(post|post-new|site-editor|widgets)\.php/i', $request_uri ) ) {
+			return true;
+		}
+
+		if ( blockera_is_admin() ) {
+			$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+			if ( '' !== $page && str_starts_with( $page, 'blockera' ) ) {
+				return true;
+			}
+		}
+
+		if ( wp_is_json_request() && is_string( $request_uri ) ) {
+			if (
+				str_contains( $request_uri, '/wp/v2/global-styles' )
+				|| str_contains( $request_uri, '/wp/v2/themes/' )
+				|| preg_match( '#/(blockera|blockera-pro)/v\d+/#', $request_uri )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
 if (! function_exists('blockera_editor_hooks')) {
 	/**
      * Registers the block and site editor related hooks.
@@ -43,11 +80,14 @@ if (! function_exists('blockera_editor_hooks')) {
      * @return void
      */
 	function blockera_editor_hooks(): void {
-		// Skip if not an admin request. because we need to below filters only in admin requests.
-		if (! blockera_is_admin_request(false)) {
+		if ( ! blockera_is_admin_request( false ) && ! wp_is_json_request() ) {
 			return;
 		}
-	
+
+		if ( ! blockera_should_register_editor_theme_json_filters() ) {
+			return;
+		}
+
 		add_filter('wp_theme_json_data_user', 'blockera_editor_wp_theme_json_data_user', 9e2);
 		add_filter('wp_theme_json_data_theme', 'blockera_editor_wp_theme_json_data_theme', 9e2);
 		add_filter('wp_theme_json_data_blocks', 'blockera_editor_wp_theme_json_data_blocks', 9e2);
