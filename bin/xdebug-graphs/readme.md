@@ -103,14 +103,14 @@ Existing PDFs are skipped (not overwritten).
 Each generated PDF includes:
 
 1. **Call graph** (Graphviz)
-2. **Top 20 Blockera — Included Time**
-3. **Top 20 Blockera — Self Time**
-4. **Top 20 Blockera — Calls**
-5. **Top 20 Non-Blockera — Included Time**
-6. **Top 20 Non-Blockera — Self Time**
-7. **Top 20 Non-Blockera — Calls**
+2. **Top N Blockera — Included Time**
+3. **Top N Blockera — Self Time**
+4. **Top N Blockera — Calls**
+5. **Top N Non-Blockera — Included Time**
+6. **Top N Non-Blockera — Self Time**
+7. **Top N Non-Blockera — Calls**
 
-Ranking tables use only the nodes present in that graph type (after the type’s node/edge thresholds). Columns: Rank, Function/Method, Inc %, Self %, Calls.
+Ranking tables use only the nodes present in that graph type (after the type’s node/edge thresholds). Default is Top 20; `full` uses Top 60. Columns: Rank, Function/Method, Inc %, Self %, Calls.
 
 Call graph styling:
 

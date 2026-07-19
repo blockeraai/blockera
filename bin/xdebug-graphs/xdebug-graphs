@@ -531,6 +531,8 @@ def build_summary_pdf(path, nodes):
     muted = colors.Color(0.35, 0.35, 0.38)
     header_bg = colors.Color(0.95, 0.96, 0.98)
     alt_row = colors.Color(0.97, 0.98, 1.0)
+    # full graphs include many more nodes; show a deeper ranking table
+    table_rows = 60 if graph_suffix == 'full' else 20
 
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle(
@@ -566,12 +568,12 @@ def build_summary_pdf(path, nodes):
     )
 
     pages = [
-        ('Top 20 Blockera — Included Time', True, 'inc'),
-        ('Top 20 Blockera — Self Time', True, 'self'),
-        ('Top 20 Blockera — Calls', True, 'calls'),
-        ('Top 20 Non-Blockera — Included Time', False, 'inc'),
-        ('Top 20 Non-Blockera — Self Time', False, 'self'),
-        ('Top 20 Non-Blockera — Calls', False, 'calls'),
+        (f'Top {table_rows} Blockera — Included Time', True, 'inc'),
+        (f'Top {table_rows} Blockera — Self Time', True, 'self'),
+        (f'Top {table_rows} Blockera — Calls', True, 'calls'),
+        (f'Top {table_rows} Non-Blockera — Included Time', False, 'inc'),
+        (f'Top {table_rows} Non-Blockera — Self Time', False, 'self'),
+        (f'Top {table_rows} Non-Blockera — Calls', False, 'calls'),
     ]
 
     doc = SimpleDocTemplate(
@@ -589,7 +591,7 @@ def build_summary_pdf(path, nodes):
             story.append(PageBreak())
 
         filtered = [n for n in nodes if n['is_blockera'] == want_blockera]
-        ranked = top_n(filtered, sort_key, 20)
+        ranked = top_n(filtered, sort_key, table_rows)
 
         title_color = accent if want_blockera else colors.HexColor('#111827')
         page_title = ParagraphStyle(
