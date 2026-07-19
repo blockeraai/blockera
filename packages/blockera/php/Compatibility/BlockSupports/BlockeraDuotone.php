@@ -1039,23 +1039,13 @@ class BlockeraDuotone {
 	}
 
 	/**
-	 * Prefetch merged theme.json + duotone maps before the_posts / render_block.
-	 *
-	 * The handleThePosts path can render blocks before wp_enqueue_scripts; without this warm,
-	 * the first get_all_global_style_block_names() cold-starts JSONResolver::get_merged_data().
-	 *
-	 * @return void
-	 */
-	public static function warm_global_styles_caches(): void {
-		// Block-name map is needed on first render_duotone before enqueue; presets stay lazy.
-		self::get_all_global_style_block_names();
-	}
-
-	/**
 	 * Scrape all block names from global styles and store in self::$global_styles_block_names.
 	 *
 	 * Used in conjunction with self::render_duotone_support to output the
 	 * duotone filters defined in the theme.json global styles.
+	 *
+	 * Lazy: first render_block without a duotone attribute pays one merged-tree read;
+	 * themes without global duotone bindings exit after a shallow blocks scan.
 	 *
 	 * @since 6.3.0
 	 *
@@ -1068,16 +1058,15 @@ class BlockeraDuotone {
 
 		self::$global_styles_block_names = array();
 
-		// Use request-cached merged tree (warmed on wp_loaded / enqueue).
 		$tree       = JSONResolver::get_merged_data();
 		$theme_json = $tree->get_raw_data();
 
-		// Most themes have no global duotone bindings — skip get_styles_block_nodes().
-		if ( ! self::raw_theme_json_has_duotone_filter( $theme_json ) ) {
+		// Shallow scan of styles.blocks only — avoid walking the full styles subtree.
+		if ( ! self::theme_json_has_global_duotone_block_styles( $theme_json ) ) {
 			return self::$global_styles_block_names;
 		}
 
-		$block_nodes = $tree->get_styles_block_nodes();
+		$block_nodes = JSONResolver::get_merged_styles_block_nodes();
 
 		foreach ( $block_nodes as $block_node ) {
 			// This block definition doesn't include any duotone settings. Skip it.
@@ -1103,30 +1092,36 @@ class BlockeraDuotone {
 	}
 
 	/**
-	 * Cheap scan for styles.*.filter.duotone before building style block nodes.
+	 * Whether merged theme.json defines global duotone on any block style node.
+	 *
+	 * Only inspects `styles.blocks` (and one-level elements) — not the entire styles tree.
 	 *
 	 * @param array $theme_json Merged theme.json raw data.
 	 * @return bool
 	 */
-	private static function raw_theme_json_has_duotone_filter( array $theme_json ): bool {
-		$styles = $theme_json['styles'] ?? null;
-		if ( ! is_array( $styles ) || array() === $styles ) {
+	private static function theme_json_has_global_duotone_block_styles( array $theme_json ): bool {
+		$blocks = $theme_json['styles']['blocks'] ?? null;
+		if ( ! is_array( $blocks ) || array() === $blocks ) {
 			return false;
 		}
 
-		$stack    = array();
-		$stack[0] = $styles;
-		for ( $i = 0, $n = 1; $i < $n; ++$i ) {
-			$node = $stack[ $i ];
-			if ( ! is_array( $node ) ) {
+		foreach ( $blocks as $block_styles ) {
+			if ( ! is_array( $block_styles ) ) {
 				continue;
 			}
-			if ( isset( $node['filter']['duotone'] ) && $node['filter']['duotone'] ) {
+
+			if ( ! empty( $block_styles['filter']['duotone'] ) ) {
 				return true;
 			}
-			foreach ( $node as $child ) {
-				if ( is_array( $child ) && $child ) {
-					$stack[ $n++ ] = $child;
+
+			$elements = $block_styles['elements'] ?? null;
+			if ( ! is_array( $elements ) ) {
+				continue;
+			}
+
+			foreach ( $elements as $element_styles ) {
+				if ( is_array( $element_styles ) && ! empty( $element_styles['filter']['duotone'] ) ) {
+					return true;
 				}
 			}
 		}
