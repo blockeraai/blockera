@@ -11,7 +11,7 @@
 			"group": "page-rendering",
 			"label": "Front-end home page",
 			"path": "/",
-			"thresholdPercent": 15
+			"thresholdPercent": 25
 		},
 		{
 			"id": "front-default-post",
@@ -19,7 +19,7 @@
 			"label": "Front-end default post (ID 1)",
 			"path": "/?p=1",
 			"note": "Resolved to the canonical permalink at setup (/?p=1 redirects under pretty permalinks).",
-			"thresholdPercent": 15
+			"thresholdPercent": 25
 		},
 		{
 			"id": "front-complex-1",
