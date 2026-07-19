@@ -345,11 +345,7 @@ if (! function_exists('blockera_render_layout_support_flag')) {
 				$gap_value = $gap_value && preg_match( '%[\\\(&=}]|/\*%', $gap_value ) ? null : $gap_value;
 			}
 
-			$fallback_gap_value            = blockera_resolve_layout_fallback_block_gap(
-				$block_name,
-				$meta['fallback_gap'],
-				$block['attrs'] ?? array()
-			);
+			$fallback_gap_value            = $meta['fallback_gap'];
 			$block_spacing                 = $block['attrs']['style']['spacing'] ?? null;
 			$should_skip_gap_serialization = $meta['skip_gap'];
 
