@@ -65,9 +65,9 @@ if ! command -v dot >/dev/null 2>&1; then
 fi
 
 # Define all available types
-ALL_SUFFIXES=(extra-small small medium full)
-ALL_NODE_THS=(5 2 0.25 0.01)
-ALL_EDGE_THS=(3 1 0.10 0.01)
+ALL_SUFFIXES=(extra-small small medium large full)
+ALL_NODE_THS=(5 2 0.25 0.125 0.01)
+ALL_EDGE_THS=(3 1 0.10 0.05 0.01)
 
 # Filter types if --types argument is provided
 if [[ -n "$TYPES_ARG" ]]; then
