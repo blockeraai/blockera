@@ -357,12 +357,10 @@ if (! function_exists('blockera_get_user_styles_data')) {
 	 * @return array The user styles data or an empty array if no data is found.
 	 */
 	function blockera_get_user_styles_data(): array {
-		static $user_data = [];
+		static $user_data  = null;
+		static $registered = false;
 
-		if (! empty($user_data)) {
-			// Register the block style from the user data.
-			JSONResolver::register_block_style_variations_from_user_data( $user_data );
-
+		if ( null !== $user_data ) {
 			return $user_data;
 		}
 
@@ -370,15 +368,19 @@ if (! function_exists('blockera_get_user_styles_data')) {
 
 		// Validate the global styles post content.
 		if (empty($global_styles_post['post_content']) || ! str_contains($global_styles_post['post_content'], 'blockera')) {
-			return [];
+			$user_data = array();
+			return $user_data;
 		}
 
 		$user_data = json_decode($global_styles_post['post_content'], true);
 
 		unset($user_data['isGlobalStylesUserThemeJSON']);
 
-		// Register the block style from the user data.
-		JSONResolver::register_block_style_variations_from_user_data( $user_data );
+		if ( ! $registered ) {
+			// Register block styles once per request (cache hits previously re-registered).
+			JSONResolver::register_block_style_variations_from_user_data( $user_data );
+			$registered = true;
+		}
 
 		return $user_data;
 	}
