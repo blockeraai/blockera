@@ -39,6 +39,18 @@ run_bench() {
 	local label="$1"
 	local outfile="$2"
 
+	# Prime requests to trigger first-request side effects before measuring.
+	# The results are discarded.
+	echo "=== Warmup (${label}): n=2 c=${CONCURRENCY} ==="
+	(
+		cd "$WPP_DIR"
+		npm run research -- benchmark-server-timing \
+			-f "${ROOT_DIR}/${URLS_FILE}" \
+			-n 2 \
+			-c "$CONCURRENCY" \
+			-o csv
+	) > /dev/null
+
 	echo "=== Benchmark (${label}): n=${REQUESTS} c=${CONCURRENCY} ==="
 	(
 		cd "$WPP_DIR"
