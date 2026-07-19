@@ -28,6 +28,12 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		*/
 		$can_use_cached = empty( $types ) && ! wp_is_development_mode( 'theme' );
 
+		static $request_stylesheets = array();
+		$request_key                = empty( $types ) ? '' : implode( ',', $types );
+		if ( isset( $request_stylesheets[ $request_key ] ) ) {
+			return $request_stylesheets[ $request_key ];
+		}
+
 		/*
 		* By using the 'theme_json' group, this data is marked to be non-persistent across requests.
 		* @see `wp_cache_add_non_persistent_groups()`.
@@ -55,6 +61,7 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		if ( $can_use_cached ) {
 			$cached = wp_cache_get( $cache_key, $cache_group );
 			if ( $cached ) {
+				$request_stylesheets[ $request_key ] = $cached;
 				return $cached;
 			}
 		}
@@ -106,6 +113,8 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		if ( $can_use_cached ) {
 			wp_cache_set( $cache_key, $stylesheet, $cache_group );
 		}
+
+		$request_stylesheets[ $request_key ] = $stylesheet;
 
 		return $stylesheet;
 	}
