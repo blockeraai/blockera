@@ -174,6 +174,8 @@ if ( ! function_exists( 'blockera_get_font_faces_stylesheet' ) ) {
 			return $stylesheet;
 		}
 
+		blockera_warm_merged_settings_cache();
+
 		ob_start();
 		blockera_print_font_faces();
 		blockera_print_font_faces_from_style_variations();
@@ -195,6 +197,8 @@ if ( ! function_exists( 'blockera_print_font_faces' ) ) {
 	 * @return void
 	 */
 	function blockera_print_font_faces( $fonts = array() ) {
+		blockera_warm_merged_settings_cache();
+
 		if ( empty( $fonts ) ) {
 			$fonts = blockera_get_fonts_from_theme_json();
 		}

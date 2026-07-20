@@ -19,6 +19,11 @@ add_action('admin_init', 'blockera_redirect_to_dashboard_page');
 register_activation_hook(BLOCKERA_SB_FILE, 'blockera_activation_hook');
 register_deactivation_hook(BLOCKERA_SB_FILE, 'blockera_deactivation_hook');
 
+// Warm runs on wp_loaded for frontend, editor, and admin (admin_print_styles needs merged settings for @font-face).
+add_action( 'wp_loaded', 'blockera_warm_merged_settings_cache', 99 );
+add_action( 'switch_theme', 'blockera_clear_theme_styles_partials_mtime_cache' );
+add_action( 'save_post_wp_global_styles', 'blockera_clear_theme_styles_partials_mtime_cache' );
+
 // Admin font faces are registered in wp-admin/includes/admin-filters.php after after_setup_theme,
 // so swap them on admin_init (outside the frontend/editor gate) for all admin screens.
 add_action( 'admin_init', 'blockera_replace_admin_font_face_hooks', 0 );
@@ -73,10 +78,7 @@ function blockera_after_setup_theme() {
 	remove_action( 'wp_head', 'wp_print_font_faces', 50 );
 
 	// Replace with your own implementation.
-	// Warm before query_posts/the_posts (wp_enqueue_scripts is too late for duotone-during-posts).
-	add_action( 'wp_loaded', 'blockera_warm_merged_settings_cache', 99 );
-	add_action( 'switch_theme', 'blockera_clear_theme_styles_partials_mtime_cache' );
-	add_action( 'save_post_wp_global_styles', 'blockera_clear_theme_styles_partials_mtime_cache' );
+	// Warm + cache invalidation: registered in hooks.php for frontend, editor, and admin.
 	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_global_styles' );
 	add_action( 'wp_footer', 'blockera_enqueue_global_styles', 1 );
 	add_action( 'wp_head', 'blockera_print_font_faces', 50 );
