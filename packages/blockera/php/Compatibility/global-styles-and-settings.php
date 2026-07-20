@@ -1,6 +1,7 @@
 <?php
 
 use Blockera\Setup\Compatibility\BlockeraSettingsPaths;
+use Blockera\Setup\Compatibility\BlockSupports\BlockeraDuotone;
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
@@ -391,6 +392,62 @@ if ( ! function_exists( 'blockera_clear_theme_styles_partials_mtime_cache' ) ) {
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_global_stylesheet_' );
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_user_styles_mtime_' );
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_layout_support_flags_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_duotone_global_block_names_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_merged_settings_' );
+	}
+}
+
+if ( ! function_exists( 'blockera_persist_merged_settings_transient' ) ) {
+	/**
+	 * Persist merged settings for warm-skip requests (fonts, global settings).
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @return void
+	 */
+	function blockera_persist_merged_settings_transient( string $hash ): void {
+		global $blockera_mode;
+
+		if (
+			$blockera_mode
+			|| ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
+			|| wp_is_development_mode( 'theme' )
+		) {
+			return;
+		}
+
+		blockera_get_cache()->setTransientCache(
+			'blockera_merged_settings_' . $hash,
+			JSONResolver::get_merged_settings(),
+			DAY_IN_SECONDS
+		);
+	}
+}
+
+if ( ! function_exists( 'blockera_prime_merged_settings_from_transient' ) ) {
+	/**
+	 * Restore merged settings from transients when warm skips cold merge.
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @param mixed  $cache_instance Optional {@see blockera_get_cache()} instance.
+	 * @return bool True when settings were restored from transient.
+	 */
+	function blockera_prime_merged_settings_from_transient( string $hash, $cache_instance = null ): bool {
+		if ( null === $cache_instance ) {
+			$cache_instance = blockera_get_cache();
+		}
+
+		$cached_settings = $cache_instance->getTransientCache( 'blockera_merged_settings_' . $hash );
+		if ( ! is_array( $cached_settings ) ) {
+			return false;
+		}
+
+		JSONResolver::prime_merged_settings_cache( 'custom', $cached_settings );
+
+		if ( ! wp_is_development_mode( 'theme' ) ) {
+			wp_cache_set( 'blockera_get_global_settings_custom', $cached_settings, 'theme_json' );
+		}
+
+		return true;
 	}
 }
 
@@ -689,12 +746,55 @@ if ( ! function_exists( 'blockera_get_layout_support_global_flags' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_warm_duotone_global_block_names_cache' ) ) {
+	/**
+	 * Warm duotone global block map before render_block (avoids cold merge on first block).
+	 *
+	 * @param string|null $hash           Optional cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @param mixed       $cache_instance Optional {@see blockera_get_cache()} instance.
+	 * @return void
+	 */
+	function blockera_warm_duotone_global_block_names_cache( ?string $hash = null, $cache_instance = null ): void {
+		global $blockera_mode;
+
+		$can_use_transients = ! $blockera_mode
+			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
+			&& ! wp_is_development_mode( 'theme' );
+
+		if ( $can_use_transients ) {
+			if ( null === $hash ) {
+				$hash = blockera_get_global_styles_cache_hash();
+			}
+			if ( null === $cache_instance ) {
+				$cache_instance = blockera_get_cache();
+			}
+
+			if ( BlockeraDuotone::load_global_styles_block_names_from_transient( $hash ) ) {
+				return;
+			}
+
+			$styles_for_blocks = $cache_instance->getTransientCache( 'styles_for_blocks' );
+			if (
+				is_array( $styles_for_blocks )
+				&& isset( $styles_for_blocks['hash'], $styles_for_blocks['tree_raw'] )
+				&& $styles_for_blocks['hash'] === $hash
+				&& is_array( $styles_for_blocks['tree_raw'] )
+				&& BlockeraDuotone::try_prime_empty_global_styles_block_names_from_theme_json( $styles_for_blocks['tree_raw'] )
+			) {
+				return;
+			}
+		}
+
+		BlockeraDuotone::warm_global_styles_block_names_cache();
+	}
+}
+
 if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 	/**
-	 * Warm JSONResolver merged settings before the_posts / render_block.
+	 * Warm JSONResolver merged settings before the_posts, render_block, and admin_print_styles fonts.
 	 *
-	 * Must run on {@see 'wp_loaded'} (before query_posts): layout support and block styles
-	 * can invoke {@see JSONResolver::get_merged_settings()} during post processing.
+	 * Must run on {@see 'wp_loaded'} (before query_posts and admin_print_styles): layout support,
+	 * block styles, and {@see blockera_print_font_faces()} can invoke {@see JSONResolver::get_merged_settings()}.
 	 *
 	 * @return void
 	 */
@@ -727,15 +827,22 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 				wp_cache_set( 'blockera_wp_get_global_stylesheet', $stylesheet_css, 'theme_json' );
 				blockera_prime_layout_support_global_flags( $cached_flags );
 				blockera_warm_layout_render_cache();
+				blockera_warm_duotone_global_block_names_cache( $hash, $cache );
+				if ( ! blockera_prime_merged_settings_from_transient( $hash, $cache ) ) {
+					JSONResolver::get_merged_settings();
+					blockera_persist_merged_settings_transient( $hash );
+				}
 				return;
 			}
 		}
 
 		// One merge + URI resolve warms settings, raw data, and resolved tree for enqueue/render.
 		JSONResolver::get_resolved_merged_data();
-		blockera_get_global_styles_cache_hash();
+		$hash = blockera_get_global_styles_cache_hash();
 		blockera_get_layout_support_global_flags();
 		blockera_warm_layout_render_cache();
+		blockera_warm_duotone_global_block_names_cache( $hash, blockera_get_cache() );
+		blockera_persist_merged_settings_transient( $hash );
 	}
 }
 
