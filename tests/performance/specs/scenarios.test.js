@@ -3,6 +3,9 @@
  *
  * Pattern adapted from WordPress core tests/performance/specs/*.test.js
  * URLs come from .github/performance/scenarios.json (resolved at content setup).
+ *
+ * CI isolation: only `npm run test:performance` (tests/performance/playwright.config.js)
+ * runs this file. Root Playwright e2e, Cypress, and Jest ignore `tests/performance/**`.
  */
 
 const fs = require('node:fs');

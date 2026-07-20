@@ -15,6 +15,7 @@ module.exports = {
 		'/node_modules/',
 		'/source-code-block-editor/',
 		'/source-code-wordpress/',
+		'/tests/performance/',
 	],
 	testMatch: ['**/test/**/*.spec.js', '**/tests/**/*.spec.js'],
 	transformIgnorePatterns: [

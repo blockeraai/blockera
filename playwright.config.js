@@ -55,10 +55,14 @@ const config = defineConfig({
 	})(),
 	testDir: './',
 	testMatch: prPlaywrightEnv.testMatch ?? '**/*.ply.js',
-	...(Array.isArray(prPlaywrightEnv.testIgnore) &&
-	prPlaywrightEnv.testIgnore.length
-		? { testIgnore: prPlaywrightEnv.testIgnore }
-		: {}),
+	// Performance suite has its own Playwright configs under tests/performance/.
+	// Never include it in e2e / visual CI runs (even if testMatch is widened).
+	testIgnore: [
+		'**/tests/performance/**',
+		...(Array.isArray(prPlaywrightEnv.testIgnore)
+			? prPlaywrightEnv.testIgnore
+			: []),
+	],
 	reporter: process.env.CI
 		? [
 				['list'], // Shows test names and progress in real-time
