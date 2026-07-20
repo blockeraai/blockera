@@ -420,7 +420,6 @@ PY
 
     # Build ranking summary PDF from nodes present in this graph DOT
     if ! python3 - "$DOT" "$SUMMARY_PDF" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$SUFFIX" <<'PY'
-import os
 import re
 import sys
 from reportlab.lib import colors
@@ -428,23 +427,7 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
-
-
-def rank_header_font():
-    """Unicode TTF so header sort marker (↓) renders; Helvetica cannot."""
-    for path in (
-        '/System/Library/Fonts/Supplemental/Arial Unicode.ttf',
-        '/Library/Fonts/Arial Unicode.ttf',
-        '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
-        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
-    ):
-        if os.path.isfile(path):
-            pdfmetrics.registerFont(TTFont('RankHeaderFont', path))
-            return 'RankHeaderFont'
-    return 'Helvetica-Bold'
 
 dot_path, summary_pdf, path_frag, ns_prefix, blockera_color, graph_suffix = sys.argv[1:]
 
@@ -574,16 +557,28 @@ def build_summary_pdf(path, nodes):
         leading=10,
         alignment=TA_LEFT,
         wordWrap='CJK',
+        fontName='Helvetica',
     )
-    header_font = rank_header_font()
+    cell_style_active = ParagraphStyle(
+        'RankCellActive',
+        parent=cell_style,
+        fontName='Helvetica-Bold',
+    )
     header_style = ParagraphStyle(
         'RankHeader',
         parent=styles['Normal'],
         fontSize=8,
         leading=10,
         textColor=colors.HexColor('#111827'),
-        fontName=header_font,
+        fontName='Helvetica',
     )
+    # Active sort column: bold (+ ↓); ReportLab draws ↓ via Symbol with Helvetica-Bold.
+    header_style_active = ParagraphStyle(
+        'RankHeaderActive',
+        parent=header_style,
+        fontName='Helvetica-Bold',
+    )
+    sort_col = {'inc': 2, 'self': 3, 'calls': 4}
 
     pages = [
         (f'Top {table_rows} Blockera — Included Time', True, 'inc'),
@@ -623,13 +618,14 @@ def build_summary_pdf(path, nodes):
             subtitle_style,
         ))
 
-        # Mark the active sort column (tables are always descending).
+        # Mark the active sort column (bold header + cells + ↓; tables are always descending).
+        active_col = sort_col[sort_key]
         col_headers = [
             Paragraph('#', header_style),
             Paragraph('Function / Method', header_style),
-            Paragraph('Inc % ↓' if sort_key == 'inc' else 'Inc %', header_style),
-            Paragraph('Self % ↓' if sort_key == 'self' else 'Self %', header_style),
-            Paragraph('Calls ↓' if sort_key == 'calls' else 'Calls', header_style),
+            Paragraph('Inc % ↓', header_style_active) if sort_key == 'inc' else Paragraph('Inc %', header_style),
+            Paragraph('Self % ↓', header_style_active) if sort_key == 'self' else Paragraph('Self %', header_style),
+            Paragraph('Calls ↓', header_style_active) if sort_key == 'calls' else Paragraph('Calls', header_style),
         ]
         data = [col_headers]
 
@@ -643,19 +639,21 @@ def build_summary_pdf(path, nodes):
             ])
         else:
             for rank, row in enumerate(ranked, start=1):
+                inc_style = cell_style_active if active_col == 2 else cell_style
+                self_style = cell_style_active if active_col == 3 else cell_style
+                calls_style = cell_style_active if active_col == 4 else cell_style
                 data.append([
                     Paragraph(str(rank), cell_style),
                     Paragraph(row['name'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'), cell_style),
-                    Paragraph(f"{row['inc']:.2f}%", cell_style),
-                    Paragraph(f"{row['self']:.2f}%", cell_style),
-                    Paragraph(f"{row['calls']:,}", cell_style),
+                    Paragraph(f"{row['inc']:.2f}%", inc_style),
+                    Paragraph(f"{row['self']:.2f}%", self_style),
+                    Paragraph(f"{row['calls']:,}", calls_style),
                 ])
 
         table = Table(data, colWidths=[0.45 * inch, 7.6 * inch, 0.85 * inch, 0.85 * inch, 0.85 * inch])
         style_cmds = [
             ('BACKGROUND', (0, 0), (-1, 0), header_bg),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor('#111827')),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
             ('ALIGN', (0, 0), (0, -1), 'CENTER'),
