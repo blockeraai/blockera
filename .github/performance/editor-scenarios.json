@@ -1,0 +1,19 @@
+{
+	"defaults": {
+		"thresholdPercent": 20
+	},
+	"scenarios": [
+		{
+			"id": "editor-select-blocks",
+			"label": "Selecting blocks",
+			"primaryMetric": "focus",
+			"thresholdPercent": 1000
+		},
+		{
+			"id": "editor-switch-workspace-tabs",
+			"label": "Switching workspace tabs",
+			"primaryMetric": "switchTab",
+			"requiresBlockera": true
+		}
+	]
+}

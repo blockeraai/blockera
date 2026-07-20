@@ -167,9 +167,18 @@ function scenarioIdFromTitle(title) {
 	return (parts[parts.length - 1] || '').trim();
 }
 
+/**
+ * @param {number[]} array
+ * @return {number} Sum of values.
+ */
+function sum(array = []) {
+	return array.reduce((acc, value) => acc + value, 0);
+}
+
 module.exports = {
 	parseFile,
 	median,
+	sum,
 	camelCaseDashes,
 	formatAsMarkdownTable,
 	formatValue,
