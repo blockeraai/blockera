@@ -30,22 +30,27 @@ if (! function_exists('blockera_get_typography_font_size_value')) {
 	 * @return string|null Font-size value or null if a size is not passed in $preset.
 	 */
 	function blockera_get_typography_font_size_value( $preset, $settings = array() ) {
+		static $global_settings = null;
+		static $memo            = array();
+
 		if ( ! isset( $preset['size'] ) ) {
 			return null;
 		}
 
+		$size = $preset['size'];
+
 		/*
-		* Catches falsy values and 0/'0'. Fluid calculations cannot be performed on `0`.
-		* Also returns early when a preset font size explicitly disables fluid typography with `false`.
-		*/
+		 * Catches falsy values and 0/'0'. Fluid calculations cannot be performed on `0`.
+		 * Also returns early when a preset font size explicitly disables fluid typography with `false`.
+		 */
 		$fluid_font_size_settings = $preset['fluid'] ?? null;
-		if ( false === $fluid_font_size_settings || empty( $preset['size'] ) ) {
-			return $preset['size'];
+		if ( false === $fluid_font_size_settings || empty( $size ) ) {
+			return $size;
 		}
 
 		/*
-		* As a boolean (deprecated since 6.6), $settings acts as an override to switch fluid typography "on" (`true`) or "off" (`false`).
-		*/
+		 * As a boolean (deprecated since 6.6), $settings acts as an override to switch fluid typography "on" (`true`) or "off" (`false`).
+		 */
 		if ( is_bool( $settings ) ) {
 			_deprecated_argument( __FUNCTION__, '6.6.0', __( '`boolean` type for second argument `$settings` is deprecated. Use `array()` instead.', 'blockera' ) );
 			$settings = array(
@@ -58,111 +63,160 @@ if (! function_exists('blockera_get_typography_font_size_value')) {
 		/*
 		 * Fallback to Blockera global settings (request-cached). Skip the merge when the
 		 * caller already passed typography + layout (e.g. JSON stylesheet generation).
+		 * `+` matches wp_parse_args() shallow merge for arrays (preserve caller keys).
 		 */
-		if ( empty( $settings ) || ! isset( $settings['typography'], $settings['layout'] ) ) {
-			static $global_settings = null;
+		if ( ! isset( $settings['typography'], $settings['layout'] ) ) {
 			if ( null === $global_settings ) {
 				$global_settings = blockera_get_global_settings();
 			}
-			$settings = empty( $settings )
-				? $global_settings
-				: wp_parse_args( $settings, $global_settings );
+			$settings = $settings ? ( $settings + $global_settings ) : $global_settings;
 		}
 
-		$typography_settings = $settings['typography'] ?? array();
+		$typography_settings = $settings['typography'] ?? null;
+		$typo_fluid          = is_array( $typography_settings ) ? ( $typography_settings['fluid'] ?? null ) : null;
 
 		/*
-		* Return early when fluid typography is disabled in the settings, and there
-		* are no local settings to enable it for the individual preset.
-		*
-		* If this condition isn't met, either the settings or individual preset settings
-		* have enabled fluid typography.
-		*/
-		if ( empty( $typography_settings['fluid'] ) && empty( $fluid_font_size_settings ) ) {
-			return $preset['size'];
+		 * Return early when fluid typography is disabled in the settings, and there
+		 * are no local settings to enable it for the individual preset.
+		 *
+		 * If this condition isn't met, either the settings or individual preset settings
+		 * have enabled fluid typography.
+		 */
+		if ( empty( $typo_fluid ) && empty( $fluid_font_size_settings ) ) {
+			return $size;
 		}
 
-		$fluid_settings  = isset( $typography_settings['fluid'] ) ? $typography_settings['fluid'] : array();
-		$layout_settings = isset( $settings['layout'] ) ? $settings['layout'] : array();
+		$layout_settings = $settings['layout'] ?? null;
+		$wide_size       = ( is_array( $layout_settings ) && isset( $layout_settings['wideSize'] ) )
+			? $layout_settings['wideSize']
+			: '';
 
-		// Defaults.
-		$default_maximum_viewport_width       = '1600px';
-		$default_minimum_viewport_width       = '320px';
-		$default_minimum_font_size_factor_max = 0.75;
-		$default_minimum_font_size_factor_min = 0.25;
-		$default_scale_factor                 = 1;
-		$default_minimum_font_size_limit      = '14px';
-
-		// Defaults overrides.
-		$minimum_viewport_width = isset( $fluid_settings['minViewportWidth'] ) ? $fluid_settings['minViewportWidth'] : $default_minimum_viewport_width;
-		$maximum_viewport_width = isset( $layout_settings['wideSize'] ) && ! empty( wp_get_typography_value_and_unit( $layout_settings['wideSize'] ) ) ? $layout_settings['wideSize'] : $default_maximum_viewport_width;
-		if ( isset( $fluid_settings['maxViewportWidth'] ) ) {
-			$maximum_viewport_width = $fluid_settings['maxViewportWidth'];
+		/*
+		 * Memoize by the exact inputs that affect the CSS result. Hot path: many
+		 * font-size declarations share the same theme fluid/layout settings.
+		 */
+		if ( is_array( $fluid_font_size_settings ) ) {
+			$preset_fluid_key = ( $fluid_font_size_settings['min'] ?? '' ) . "\0" . ( $fluid_font_size_settings['max'] ?? '' );
+		} elseif ( true === $fluid_font_size_settings ) {
+			$preset_fluid_key = '1';
+		} else {
+			$preset_fluid_key = '';
 		}
-		$has_min_font_size       = isset( $fluid_settings['minFontSize'] ) && ! empty( wp_get_typography_value_and_unit( $fluid_settings['minFontSize'] ) );
-		$minimum_font_size_limit = $has_min_font_size ? $fluid_settings['minFontSize'] : $default_minimum_font_size_limit;
 
-		// Try to grab explicit min and max fluid font sizes.
-		$minimum_font_size_raw = isset( $fluid_font_size_settings['min'] ) ? $fluid_font_size_settings['min'] : null;
-		$maximum_font_size_raw = isset( $fluid_font_size_settings['max'] ) ? $fluid_font_size_settings['max'] : null;
+		if ( is_array( $typo_fluid ) ) {
+			$typo_fluid_key = ( $typo_fluid['minViewportWidth'] ?? '' ) . "\0"
+				. ( $typo_fluid['maxViewportWidth'] ?? '' ) . "\0"
+				. ( $typo_fluid['minFontSize'] ?? '' );
+		} elseif ( true === $typo_fluid ) {
+			$typo_fluid_key = '1';
+		} else {
+			// Non-empty non-array (should not reach here often); stringify for safety.
+			$typo_fluid_key = (string) $typo_fluid;
+		}
 
-		// Font sizes.
-		$preferred_size = wp_get_typography_value_and_unit( $preset['size'] );
+		$memo_key = $size . "\0" . $preset_fluid_key . "\0" . $typo_fluid_key . "\0" . $wide_size;
+		if ( isset( $memo[ $memo_key ] ) ) {
+			return $memo[ $memo_key ];
+		}
+
+		// Viewport / min-font defaults (literals — avoid unused local default vars).
+		$minimum_viewport_width  = '320px';
+		$maximum_viewport_width  = '1600px';
+		$minimum_font_size_limit = '14px';
+
+		if ( is_array( $typo_fluid ) ) {
+			if ( isset( $typo_fluid['minViewportWidth'] ) ) {
+				$minimum_viewport_width = $typo_fluid['minViewportWidth'];
+			}
+			if ( isset( $typo_fluid['maxViewportWidth'] ) ) {
+				$maximum_viewport_width = $typo_fluid['maxViewportWidth'];
+			}
+			if ( isset( $typo_fluid['minFontSize'] ) && ! empty( wp_get_typography_value_and_unit( $typo_fluid['minFontSize'] ) ) ) {
+				$minimum_font_size_limit = $typo_fluid['minFontSize'];
+			}
+		}
+
+		// wideSize wins over default max viewport when parseable; maxViewportWidth (set above) wins over wideSize.
+		if ( ! is_array( $typo_fluid ) || ! isset( $typo_fluid['maxViewportWidth'] ) ) {
+			if ( '' !== $wide_size && ! empty( wp_get_typography_value_and_unit( $wide_size ) ) ) {
+				$maximum_viewport_width = $wide_size;
+			}
+		}
+
+		// Explicit min/max from preset fluid object (bool true / non-array → none).
+		if ( is_array( $fluid_font_size_settings ) ) {
+			$minimum_font_size_raw = $fluid_font_size_settings['min'] ?? null;
+			$maximum_font_size_raw = $fluid_font_size_settings['max'] ?? null;
+		} else {
+			$minimum_font_size_raw = null;
+			$maximum_font_size_raw = null;
+		}
+
+		$preferred_size = wp_get_typography_value_and_unit( $size );
 
 		// Protects against unsupported units.
 		if ( empty( $preferred_size['unit'] ) ) {
-			return $preset['size'];
+			$memo[ $memo_key ] = $size;
+
+			return $size;
 		}
 
+		$preferred_unit  = $preferred_size['unit'];
+		$preferred_value = $preferred_size['value'];
+
 		/*
-		* Normalizes the minimum font size limit according to the incoming unit,
-		* in order to perform comparative checks.
-		*/
+		 * Normalizes the minimum font size limit according to the incoming unit,
+		 * in order to perform comparative checks.
+		 */
 		$minimum_font_size_limit = wp_get_typography_value_and_unit(
 			$minimum_font_size_limit,
 			array(
-				'coerce_to' => $preferred_size['unit'],
+				'coerce_to' => $preferred_unit,
 			)
 		);
 
 		// Don't enforce minimum font size if a font size has explicitly set a min and max value.
-		if ( ! empty( $minimum_font_size_limit ) && ( ! $minimum_font_size_raw && ! $maximum_font_size_raw ) ) {
+		if ( ! empty( $minimum_font_size_limit ) && ! $minimum_font_size_raw && ! $maximum_font_size_raw ) {
 			/*
-			* If a minimum size was not passed to this function
-			* and the user-defined font size is lower than $minimum_font_size_limit,
-			* do not calculate a fluid value.
-			*/
-			if ( $preferred_size['value'] <= $minimum_font_size_limit['value'] ) {
-				return $preset['size'];
+			 * If a minimum size was not passed to this function
+			 * and the user-defined font size is lower than $minimum_font_size_limit,
+			 * do not calculate a fluid value.
+			 */
+			if ( $preferred_value <= $minimum_font_size_limit['value'] ) {
+				$memo[ $memo_key ] = $size;
+
+				return $size;
 			}
 		}
 
 		// If no fluid max font size is available use the incoming value.
 		if ( ! $maximum_font_size_raw ) {
-			$maximum_font_size_raw = $preferred_size['value'] . $preferred_size['unit'];
+			$maximum_font_size_raw = $preferred_value . $preferred_unit;
 		}
 
 		/*
-		* If no minimumFontSize is provided, create one using
-		* the given font size multiplied by the min font size scale factor.
-		*/
+		 * If no minimumFontSize is provided, create one using
+		 * the given font size multiplied by the min font size scale factor.
+		 */
 		if ( ! $minimum_font_size_raw ) {
-			$preferred_font_size_in_px = 'px' === $preferred_size['unit'] ? $preferred_size['value'] : $preferred_size['value'] * 16;
+			$preferred_font_size_in_px = ( 'px' === $preferred_unit )
+				? $preferred_value
+				: $preferred_value * 16;
 
 			/*
-			* The scale factor is a multiplier that affects how quickly the curve will move towards the minimum,
-			* that is, how quickly the size factor reaches 0 given increasing font size values.
-			* For a - b * log2(), lower values of b will make the curve move towards the minimum faster.
-			* The scale factor is constrained between min and max values.
-			*/
-			$minimum_font_size_factor     = min( max( 1 - 0.075 * log( $preferred_font_size_in_px, 2 ), $default_minimum_font_size_factor_min ), $default_minimum_font_size_factor_max );
-			$calculated_minimum_font_size = round( $preferred_size['value'] * $minimum_font_size_factor, 3 );
+			 * The scale factor is a multiplier that affects how quickly the curve will move towards the minimum,
+			 * that is, how quickly the size factor reaches 0 given increasing font size values.
+			 * For a - b * log2(), lower values of b will make the curve move towards the minimum faster.
+			 * The scale factor is constrained between min and max values.
+			 */
+			$minimum_font_size_factor     = min( max( 1 - 0.075 * log( $preferred_font_size_in_px, 2 ), 0.25 ), 0.75 );
+			$calculated_minimum_font_size = round( $preferred_value * $minimum_font_size_factor, 3 );
 
 			// Only use calculated min font size if it's > $minimum_font_size_limit value.
 			if ( ! empty( $minimum_font_size_limit ) && $calculated_minimum_font_size <= $minimum_font_size_limit['value'] ) {
 				$minimum_font_size_raw = $minimum_font_size_limit['value'] . $minimum_font_size_limit['unit'];
 			} else {
-				$minimum_font_size_raw = $calculated_minimum_font_size . $preferred_size['unit'];
+				$minimum_font_size_raw = $calculated_minimum_font_size . $preferred_unit;
 			}
 		}
 
@@ -172,15 +226,15 @@ if (! function_exists('blockera_get_typography_font_size_value')) {
 				'maximum_viewport_width' => $maximum_viewport_width,
 				'minimum_font_size'      => $minimum_font_size_raw,
 				'maximum_font_size'      => $maximum_font_size_raw,
-				'scale_factor'           => $default_scale_factor,
+				'scale_factor'           => 1,
 			)
 		);
 
-		if ( ! empty( $fluid_font_size_value ) ) {
-			return $fluid_font_size_value;
-		}
+		$result = ! empty( $fluid_font_size_value ) ? $fluid_font_size_value : $size;
 
-		return $preset['size'];
+		$memo[ $memo_key ] = $result;
+
+		return $result;
 	}
 }
 
@@ -388,7 +442,13 @@ if ( ! function_exists( 'blockera_render_typography_support' ) ) {
 	 * @return string Filtered block content.
 	 */
 	function blockera_render_typography_support( $block_content, $block ) {
-		if ( ! empty( $block['attrs']['fitText'] ) && $block['attrs']['fitText'] && ! is_admin() ) {
+		static $replace_cache = array();
+
+		/*
+		 * fitText: enqueue frontend module + Interactivity directives.
+		 * `! empty( fitText )` matches core truthiness (redundant `&& $fitText` omitted).
+		 */
+		if ( ! empty( $block['attrs']['fitText'] ) && ! is_admin() ) {
 			wp_enqueue_script_module( '@wordpress/block-editor/utils/fit-text-frontend' );
 
 			// Add Interactivity API directives for fit text to work with client-side navigation.
@@ -407,6 +467,7 @@ if ( ! function_exists( 'blockera_render_typography_support' ) ) {
 			// fitText supersedes any other typography features.
 			return $block_content;
 		}
+
 		if ( ! isset( $block['attrs']['style']['typography']['fontSize'] ) ) {
 			return $block_content;
 		}
@@ -418,11 +479,30 @@ if ( ! function_exists( 'blockera_render_typography_support' ) ) {
 		 * Checks that $fluid_font_size does not match $custom_font_size,
 		 * which means it's been mutated by the fluid font size functions.
 		 */
-		if ( ! empty( $fluid_font_size ) && $fluid_font_size !== $custom_font_size ) {
-			// Replaces the first instance of `font-size:$custom_font_size` with `font-size:$fluid_font_size`.
-			return preg_replace( '/font-size\s*:\s*' . preg_quote( $custom_font_size, '/' ) . '\s*;?/', 'font-size:' . esc_attr( $fluid_font_size ) . ';', $block_content, 1 );
+		if ( empty( $fluid_font_size ) || $fluid_font_size === $custom_font_size ) {
+			return $block_content;
 		}
 
-		return $block_content;
+		/*
+		 * Pattern is lowercase `font-size` only. Skip preg when the needle cannot match
+		 * (common: fontSize attr present but size comes from a classname / stylesheet).
+		 */
+		if ( is_string( $block_content ) && ! str_contains( $block_content, 'font-size' ) ) {
+			return $block_content;
+		}
+
+		// Memoize preg pattern + escaped replacement for repeated sizes in one request.
+		$cache_key = $custom_font_size . "\0" . $fluid_font_size;
+		$cached    = $replace_cache[ $cache_key ] ?? null;
+		if ( null === $cached ) {
+			$cached                      = array(
+				'/font-size\s*:\s*' . preg_quote( $custom_font_size, '/' ) . '\s*;?/',
+				'font-size:' . esc_attr( $fluid_font_size ) . ';',
+			);
+			$replace_cache[ $cache_key ] = $cached;
+		}
+
+		// Replaces the first instance of `font-size:$custom_font_size` with `font-size:$fluid_font_size`.
+		return preg_replace( $cached[0], $cached[1], $block_content, 1 );
 	}
 }
