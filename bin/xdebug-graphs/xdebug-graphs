@@ -696,7 +696,7 @@ PY
 
     rm -f "$DOT" "$SUMMARY_PDF" "$GRAPH_PDF"
     GENERATED_ANY=true
-    echo "✓ Created: $(basename "$PDF")"
+    echo "\033[32m✓ Generated: $(basename "$PDF")\033[0m"
   done
 done
 
