@@ -451,35 +451,13 @@ class AppServiceProvider extends ServiceProvider {
             'wp_global_styles' => true,
         ];
 
-		$needs_processing = false;
-		foreach ( $posts as $post ) {
-			if ( isset( $exception_post_types[ $post->post_type ] ) ) {
-				continue;
-			}
-			if ( isset( $non_blockera_post_ids[ $post->ID ] ) ) {
-				continue;
-			}
-			$content = $post->post_content;
-			if ( str_contains( $content, 'blockeraPropsId' ) || str_contains( $content, '"ref"' ) ) {
-				$needs_processing = true;
-				break;
-			}
-		}
-
-		if ( ! $needs_processing ) {
-			if ( $query_id ) {
-				$empty_query_ids[ $query_id ] = true;
-			}
-			return $posts;
-		}
-
 		$posts_to_process = [];
 		$post_ids         = [];
 
         // Process only the posts that are not in the exception post types.
         // And contain Blockera blocks.
-		foreach ($posts as $index => $post) {
-			if (isset($exception_post_types[ $post->post_type ])) {
+		foreach ( $posts as $index => $post ) {
+			if ( isset( $exception_post_types[ $post->post_type ] ) ) {
 				continue;
 			}
 
@@ -487,37 +465,42 @@ class AppServiceProvider extends ServiceProvider {
 				continue;
 			}
 
-			if (! blockera_contains_blockera_block($post->post_content)) {
-				// Skip parse_blocks when content has no synced-pattern refs.
-				if ( ! str_contains( $post->post_content, '"ref"' ) ) {
-					$non_blockera_post_ids[ $post->ID ] = true;
+			$content = $post->post_content;
+			if ( ! str_contains( $content, 'blockeraPropsId' ) && ! str_contains( $content, '"ref"' ) ) {
+				$non_blockera_post_ids[ $post->ID ] = true;
+				continue;
+			}
+
+			if ( str_contains( $content, 'blockeraPropsId' ) ) {
+				$posts_to_process[ $index ] = $post;
+				$post_ids[]                 = $post->ID;
+				continue;
+			}
+
+			if ( ! str_contains( $content, '"ref"' ) ) {
+				$non_blockera_post_ids[ $post->ID ] = true;
+				continue;
+			}
+
+			$parsed_blocks = parse_blocks( $content );
+
+			foreach ( $parsed_blocks as $block ) {
+				$ref = $block['attrs']['ref'] ?? null;
+
+				if ( ! $ref ) {
 					continue;
 				}
 
-				$parsed_blocks = parse_blocks($post->post_content);
+				$post_ref = get_post( $ref );
 
-				foreach ($parsed_blocks as $block) {
-					$ref = $block['attrs']['ref'] ?? null;
-
-					if (! $ref) {
-						continue;
-					}
-
-					// Get post object by ref id.
-					$post_ref = get_post($ref);
-
-					if ( $post_ref && blockera_contains_blockera_block( $post_ref->post_content ) ) {
-						$posts_to_process[ $index ] = $post_ref;
-						$post_ids[]                 = $ref;
-					}
+				if ( $post_ref && blockera_contains_blockera_block( $post_ref->post_content ) ) {
+					$posts_to_process[ $index ] = $post_ref;
+					$post_ids[]                 = $ref;
 				}
-				continue;
 			}
-			$posts_to_process[ $index ] = $post;
-			$post_ids[]                 = $post->ID;
 		}
 
-		if (empty($posts_to_process)) {
+		if ( empty( $posts_to_process ) ) {
 			if ( $query_id ) {
 				$empty_query_ids[ $query_id ] = true;
 			}
