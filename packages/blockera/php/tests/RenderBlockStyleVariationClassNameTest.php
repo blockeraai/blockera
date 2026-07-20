@@ -330,8 +330,9 @@ class RenderBlockStyleVariationClassNameTest extends \Blockera\Dev\PHPUnit\AppTe
 	 * Realistic frontend-like markup (paragraph with Blockera + instance class).
 	 */
 	public function testRealisticParagraphMarkup(): void {
+		// Instance class is appended after existing class tokens (not inserted mid-list).
 		$this->assertSame(
-			'<p class="blockera-block blockera-block-2 blockera-has-font-size is-style-akbar has-background is-style-akbar--1 wp-block-paragraph">Custom variation.</p>',
+			'<p class="blockera-block blockera-block-2 blockera-has-font-size is-style-akbar has-background wp-block-paragraph is-style-akbar--1">Custom variation.</p>',
 			$this->render(
 				'<p class="blockera-block blockera-block-2 blockera-has-font-size is-style-akbar has-background wp-block-paragraph">Custom variation.</p>',
 				$this->block_with_class( 'blockera-block blockera-block-2 is-style-akbar is-style-akbar--1' )
