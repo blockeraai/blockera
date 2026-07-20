@@ -464,14 +464,14 @@ if ( ! function_exists( 'blockera_render_block_style_variation_class_name' ) ) {
 
 if ( ! function_exists( 'blockera_enqueue_block_size_variation_styles' ) ) {
 	/**
-	 * Prints registered inline CSS for `block-size-variation-styles` when that handle was used.
+	 * Enqueues styles for block size variations.
 	 *
-	 * Mirrors {@see wp_enqueue_block_style_variation_styles} for the style surface handle.
+	 * Mirrors {@see wp_enqueue_block_style_variation_styles}: enqueue early so
+	 * {@see WP_Dependencies::queued_before_register} promotes the handle when
+	 * {@see wp_register_style} runs during render.
 	 */
 	function blockera_enqueue_block_size_variation_styles(): void {
-		if ( wp_style_is( 'block-size-variation-styles', 'registered' ) ) {
-			wp_enqueue_style( 'block-size-variation-styles' );
-		}
+		wp_enqueue_style( 'block-size-variation-styles' );
 	}
 }
 
