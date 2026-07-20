@@ -1,8 +1,8 @@
 <?php
 /**
- * Publish or update the complex-1 fixture as a page. Prints the post ID.
+ * Publish or update the page-1 benchmark page from the complex-2 fixture. Prints the post ID.
  *
- * Usage (inside wp-env): wp eval-file wp-content/plugins/blockera/.github/performance/scripts/publish-complex-1.php
+ * Usage (inside wp-env): wp eval-file wp-content/plugins/blockera/.github/performance/scripts/publish-page-1.php
  *
  * @package Blockera
  */
@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 1 );
 }
 
-$fixture = ABSPATH . 'wp-content/plugins/blockera/tests/fixtures/complex-1/input.html';
-$slug    = 'perf-complex-1';
-$title   = 'Perf Complex 1';
+$fixture = ABSPATH . 'wp-content/plugins/blockera/tests/fixtures/complex-2/input.html';
+$slug    = 'perf-page-1';
+$title   = 'Perf Page 1';
 
 if ( ! file_exists( $fixture ) ) {
 	fwrite( STDERR, "Missing fixture: {$fixture}\n" );

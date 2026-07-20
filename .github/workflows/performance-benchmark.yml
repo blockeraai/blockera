@@ -71,7 +71,7 @@ jobs:
             - name: Setup Server-Timing
               run: bash .github/performance/scripts/setup-server-timing.sh
 
-            - name: Setup benchmark content (complex-1)
+            - name: Setup benchmark content (page-1)
               run: bash .github/performance/scripts/setup-content.sh
 
             - name: Run benchmarks (Blockera / Core)

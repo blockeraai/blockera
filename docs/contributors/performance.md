@@ -16,7 +16,7 @@ wp-env (performance.json)
 
 1. **Environment** — [`.github/wp-env-configs/performance.json`](../../.github/wp-env-configs/performance.json) enables `BLOCKERA_PERF_BENCHMARK`, maps CI MU-plugins, and activates Twenty Twenty-Five.
 2. **Server-Timing** — [`.github/performance/mu-plugins/server-timing.php`](../../.github/performance/mu-plugins/server-timing.php) emits `wp-total` (and front-end `wp-before-template` / `wp-template`, memory, DB queries). [`clear-cache.php`](../../.github/performance/mu-plugins/clear-cache.php) clears caches between iterations via `/?clear_cache`.
-3. **Scenarios** — [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json) lists URLs (home, default post, complex-1 fixture, admin screens, block editor). Setup publishes the complex-1 page and writes `.github/performance/results/resolved-scenarios.json`.
+3. **Scenarios** — [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json) lists URLs (home, default post, page-1 from the complex-2 fixture, admin screens, block editor). Setup publishes the page-1 page and writes `.github/performance/results/resolved-scenarios.json`.
 4. **Playwright suite** — [`tests/performance/`](../../tests/performance/) loads each scenario many times (`TEST_RUNS`, plus `repeatEach`), collects Server-Timing / TTFB / LCP (front-end only), and writes JSON under `artifacts/`.
 5. **Compare + gate** — [`tests/performance/compare-results.js`](../../tests/performance/compare-results.js) builds a markdown report (median / STD / MAD) and fails when `| (Blockera − Core) / Core × 100 |` exceeds the scenario’s `thresholdPercent` on `wp-total`. Scenarios with `requiresBlockera: true` are informational only (no Core gate).
 

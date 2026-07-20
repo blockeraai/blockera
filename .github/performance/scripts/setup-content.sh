@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish complex-1 fixture as a page and emit resolved scenario paths for Playwright.
+# Publish page-1 (complex-2 fixture) as a page and emit resolved scenario paths for Playwright.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -7,9 +7,9 @@ cd "$ROOT_DIR"
 
 SCENARIOS_FILE="${SCENARIOS_FILE:-.github/performance/scenarios.json}"
 OUT_DIR="${PERF_RESULTS_DIR:-.github/performance/results}"
-HOST_FIXTURE="${ROOT_DIR}/tests/fixtures/complex-1/input.html"
-SLUG="perf-complex-1"
-EVAL_FILE="wp-content/plugins/blockera/.github/performance/scripts/publish-complex-1.php"
+HOST_FIXTURE="${ROOT_DIR}/tests/fixtures/complex-2/input.html"
+SLUG="perf-page-1"
+EVAL_FILE="wp-content/plugins/blockera/.github/performance/scripts/publish-page-1.php"
 
 export SCENARIOS_FILE
 export PERF_RESULTS_DIR="$OUT_DIR"
@@ -23,7 +23,7 @@ fi
 
 BASE_URL="$(node -e "const s=require('./${SCENARIOS_FILE}'); process.stdout.write(s.defaults.baseUrl || 'http://localhost:8888')")"
 
-echo "Publishing fixture tests/fixtures/complex-1/input.html as page /${SLUG}/ ..."
+echo "Publishing fixture tests/fixtures/complex-2/input.html as page /${SLUG}/ ..."
 
 POST_ID="$(
 	npx wp-env run cli -- wp eval-file "$EVAL_FILE" | tr -d '\r' | tail -n1
@@ -97,7 +97,7 @@ const resolved = [];
 
 for (const scenario of scenarios.scenarios || []) {
 	let p = scenario.path || '/';
-	if (scenario.id === 'front-complex-1') {
+	if (scenario.id === 'front-page-1') {
 		p = state.frontPath;
 	} else if (scenario.id === 'front-home') {
 		p = state.homePath || '/';
