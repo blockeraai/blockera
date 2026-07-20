@@ -101,7 +101,7 @@ jobs:
                   set -e
                   if [ ! -f .github/performance/results/report.md ]; then
                     mkdir -p .github/performance/results
-                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '# 📈 Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
+                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '# 📈 Server-Timing Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
                   fi
                   if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f .github/performance/results/report.md ]; then
                     cat .github/performance/results/report.md >> "$GITHUB_STEP_SUMMARY"
@@ -156,7 +156,7 @@ jobs:
                   set -e
                   if [ ! -f .github/performance/results/editor-report.md ]; then
                     mkdir -p .github/performance/results
-                    printf '%s\n' '<!-- blockera-editor-perf-benchmark -->' '# Block Editor Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/editor-report.md
+                    printf '%s\n' '<!-- blockera-editor-perf-benchmark -->' '# 📈 Block Editor Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/editor-report.md
                   fi
                   if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f .github/performance/results/editor-report.md ]; then
                     cat .github/performance/results/editor-report.md >> "$GITHUB_STEP_SUMMARY"
