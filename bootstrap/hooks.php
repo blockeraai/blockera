@@ -19,6 +19,25 @@ add_action('admin_init', 'blockera_redirect_to_dashboard_page');
 register_activation_hook(BLOCKERA_SB_FILE, 'blockera_activation_hook');
 register_deactivation_hook(BLOCKERA_SB_FILE, 'blockera_deactivation_hook');
 
+// Admin font faces are registered in wp-admin/includes/admin-filters.php after after_setup_theme,
+// so swap them on admin_init (outside the frontend/editor gate) for all admin screens.
+add_action( 'admin_init', 'blockera_replace_admin_font_face_hooks', 0 );
+
+/**
+ * Replace core admin @font-face printers with Blockera implementations.
+ *
+ * Core hooks (see wp-admin/includes/admin-filters.php) are added after after_setup_theme,
+ * so remove_action must run on admin_init or later.
+ *
+ * @return void
+ */
+function blockera_replace_admin_font_face_hooks(): void {
+	remove_action( 'admin_print_styles', 'wp_print_font_faces', 50 );
+	remove_action( 'admin_print_styles', 'wp_print_font_faces_from_style_variations', 50 );
+	add_action( 'admin_print_styles', 'blockera_print_font_faces', 50 );
+	add_action( 'admin_print_styles', 'blockera_print_font_faces_from_style_variations', 50 );
+}
+
 // Blockera should be loaded hooks only on frontend and editor requests.
 if (! blockera_is_frontend_request() && ! blockera_is_editor_request()) {
     return;
@@ -52,8 +71,6 @@ function blockera_after_setup_theme() {
 	remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
 	remove_action( 'enqueue_block_editor_assets', 'wp_enqueue_global_styles_css_custom_properties' );
 	remove_action( 'wp_head', 'wp_print_font_faces', 50 );
-	remove_action( 'admin_print_styles', 'wp_print_font_faces', 50 );
-	remove_action( 'admin_print_styles', 'wp_print_font_faces_from_style_variations', 50 );
 
 	// Replace with your own implementation.
 	// Warm before query_posts/the_posts (wp_enqueue_scripts is too late for duotone-during-posts).
@@ -63,8 +80,7 @@ function blockera_after_setup_theme() {
 	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_global_styles' );
 	add_action( 'wp_footer', 'blockera_enqueue_global_styles', 1 );
 	add_action( 'wp_head', 'blockera_print_font_faces', 50 );
-	add_action( 'admin_print_styles', 'blockera_print_font_faces', 50 );
-	add_action( 'admin_print_styles', 'blockera_print_font_faces_from_style_variations', 50 );
+	// Admin font faces: see blockera_replace_admin_font_face_hooks() (admin_init; outside early return).
 	add_action( 'enqueue_block_editor_assets', 'blockera_enqueue_global_styles_css_custom_properties' );
 	add_filter( 'render_block', array( BlockeraDuotone::class, 'render_duotone_support' ), 10, 3 );
 	add_action( 'init', 'blockera_register_block_core_template_part' );
