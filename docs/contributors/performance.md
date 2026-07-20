@@ -5,16 +5,14 @@ Blockera CI compares **WordPress Core** (Blockera deactivated) vs **Blockera act
 1. **Server-Timing** — PHP / request-path overhead (`wp-total`, TTFB, LCP on the front end).
 2. **Block editor (client)** — Chromium tracing metrics adapted from the Gutenberg post-editor performance suite (block selection, workspace tab switching).
 
-Each comparable scenario has a `%` overhead threshold. If Blockera’s median exceeds Core by more than that threshold (either direction), the job fails. Server-Timing and editor results each get their own sticky PR comment and share the same workflow artifact upload.
+Each comparable scenario has a `%` overhead threshold. If Blockera’s median exceeds Core by more than that threshold (either direction), that matrix job fails. Server-Timing and editor each get their own sticky PR comment and artifact upload, and run **in parallel** on CI.
 
 ### How it works
 
 ```text
-wp-env (performance.json)
-  → publish fixtures / resolve scenario URLs
-  → Server-Timing: Blockera ON / Core OFF → compare-results.js → report.md
-  → Editor:        Blockera ON / Core OFF → compare-editor-results.js → editor-report.md
-  → sticky PR comments (separate) + artifacts
+                    ┌─ Server-Timing job ─ run-benchmarks.sh → report.md + comment
+performance.json ───┤
+                    └─ Editor job ──────── run-editor-benchmarks.sh → editor-report.md + comment
 ```
 
 1. **Environment** — [`.github/wp-env-configs/performance.json`](../../.github/wp-env-configs/performance.json) enables `BLOCKERA_PERF_BENCHMARK`, maps CI MU-plugins, and activates Twenty Twenty-Five.
@@ -61,16 +59,14 @@ Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale 
 
 The workflow runs on pull requests (`opened`, `synchronize`, `ready_for_review`) and `workflow_dispatch`.
 
-Typical CI steps:
+Suites run as a **matrix in parallel** (`fail-fast: false`) so Server-Timing and Block Editor do not block each other:
 
-1. Copy `performance.json` → `.wp-env.json`, start wp-env, build.
-2. Install Chromium, verify Server-Timing, set up content.
-3. Run [`.github/performance/scripts/run-benchmarks.sh`](../../.github/performance/scripts/run-benchmarks.sh) (Blockera on, then off).
-4. Compare Server-Timing; post sticky PR comment (`header: blockera-perf-benchmark`).
-5. Run [`.github/performance/scripts/run-editor-benchmarks.sh`](../../.github/performance/scripts/run-editor-benchmarks.sh) (Blockera on, then off).
-6. Compare editor; post **separate** sticky PR comment (`header: blockera-editor-perf-benchmark`).
-7. Fail the job if either threshold gate failed.
-8. Upload artifacts (both reports + JSON files).
+| Matrix job | Script | Sticky comment header | Artifact |
+| --- | --- | --- | --- |
+| Server-Timing (Blockera vs Core) | `run-benchmarks.sh` | `blockera-perf-benchmark` | `performance-benchmark-server-timing` |
+| Block Editor (Blockera vs Core) | `run-editor-benchmarks.sh` | `blockera-editor-perf-benchmark` | `performance-benchmark-editor` |
+
+Shared per-job setup: performance wp-env, build, Chromium. Server-Timing also runs content setup + Server-Timing MU-plugin checks. Each job posts its own sticky PR comment and fails independently on its threshold gate.
 
 CI uses `TEST_RUNS=20` for Server-Timing. Editor suites use a fixed 10 (+1 throwaway) samples per Gutenberg’s pattern.
 
