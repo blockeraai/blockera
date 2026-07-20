@@ -711,6 +711,26 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Merged theme.json raw data (request-level cache).
+	 *
+	 * Prefer over {@see get_merged_data()}->{@see JSON::get_raw_data()} when only the
+	 * array tree is needed — avoids reconstructing a JSON instance on cache hits.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array
+	 */
+	public static function get_merged_raw_data( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_data_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_data_cache[ $origin ];
+		}
+
+		return static::get_merged_data( $origin )->get_raw_data();
+	}
+
+	/**
 	 * Settings from merged theme.json (request-level cache).
 	 *
 	 * Prefer this over {@see get_merged_data()}->{@see JSON::get_settings()} when only
@@ -744,6 +764,24 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Seed request-level merged settings without running {@see get_merged_data()}.
+	 *
+	 * Used when warm transient skip restores settings for {@see blockera_get_global_settings()}
+	 * and {@see blockera_print_font_faces()} on admin_print_styles.
+	 *
+	 * @param string $origin   Origin key (same as {@see get_merged_settings()}).
+	 * @param array  $settings Settings array from {@see JSON::get_settings()}.
+	 * @return void
+	 */
+	public static function prime_merged_settings_cache( string $origin, array $settings ): void {
+		if ( static::is_testing_environment() ) {
+			return;
+		}
+
+		static::$merged_settings_cache[ $origin ] = $settings;
 	}
 
 	/**
