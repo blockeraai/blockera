@@ -46,21 +46,21 @@
 			"thresholdPercent": 10
 		},
 		{
-			"id": "admin-blockera-settings",
-			"group": "admin",
-			"label": "Admin: Blockera dashboard",
-			"path": "/wp-admin/admin.php?page=blockera-settings-dashboard",
-			"auth": true,
-			"requiresBlockera": true,
-			"thresholdPercent": 10
-		},
-		{
 			"id": "admin-block-editor",
 			"group": "admin",
 			"label": "Admin: Block editor (Large page 1)",
 			"path": "/wp-admin/post.php?post={POST_ID}&action=edit",
 			"fixture": "tests/fixtures/complex-1/input.html",
 			"auth": true,
+			"thresholdPercent": 10
+		},
+		{
+			"id": "admin-blockera-settings",
+			"group": "admin",
+			"label": "Admin: Blockera dashboard",
+			"path": "/wp-admin/admin.php?page=blockera-settings-dashboard",
+			"auth": true,
+			"requiresBlockera": true,
 			"thresholdPercent": 10
 		}
 	]
