@@ -66,6 +66,7 @@ import {
 	getCompatibleAttributes,
 } from '../../../../../extensions/components/get-compatible-attributes';
 import { VARIATION_SURFACE_STYLE } from '../../variation-surfaces';
+import { setBlockeraGlobalStylesMetaData } from '../../../helpers';
 
 export const useBlockStyleItem = ({
 	style,
@@ -99,7 +100,6 @@ export const useBlockStyleItem = ({
 		setEditorSelectedBlockEvent,
 		updateBlockeraGlobalStylesMetaData,
 		mergeBlockeraGlobalStylesMetaData,
-		setBlockeraGlobalStylesMetaData,
 	} = dispatch('blockera/editor');
 	const getBlockeraGlobalStylesMetaData =
 		select('blockera/editor').getBlockeraGlobalStylesMetaData;
@@ -630,8 +630,8 @@ export const useBlockStyleItem = ({
 					blockeraMetaData: updatedMetaData,
 				},
 				{
-					forceUpdated: [currentStyleName],
-					deletedProps: [currentStyleName],
+					forceUpdated: [currentStyleName, 'blockeraMetaData'],
+					deletedProps: [currentStyleName, 'blockeraMetaData'],
 				}
 			)
 		);

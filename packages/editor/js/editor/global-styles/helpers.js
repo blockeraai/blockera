@@ -37,13 +37,11 @@ export const getBlockeraGlobalStylesMetaData = (): Object => {
  * @return {void}
  */
 export const setBlockeraGlobalStylesMetaData = (metaData: Object): void => {
-	try {
-		const storeDispatch = dispatch('blockera/editor');
-		if (storeDispatch?.setBlockeraGlobalStylesMetaData) {
-			storeDispatch.setBlockeraGlobalStylesMetaData(metaData);
-		}
-	} catch {
-		// Store may not be ready yet - fallback to window for backward compatibility
-		window.blockeraGlobalStylesMetaData = metaData;
+	const storeDispatch = dispatch('blockera/editor');
+	if (storeDispatch?.setBlockeraGlobalStylesMetaData) {
+		storeDispatch.setBlockeraGlobalStylesMetaData(metaData);
 	}
+
+	// Fallback to window for backward compatibility
+	window.blockeraGlobalStylesMetaData = metaData;
 };
