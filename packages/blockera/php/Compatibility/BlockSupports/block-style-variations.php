@@ -3,77 +3,20 @@
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
-if ( ! function_exists( 'blockera_block_style_variation_theme_json_store' ) ) {
-	/**
-	 * Request-level merged theme.json raw data for block style variation CSS.
-	 *
-	 * @param array|null $set When set, primes the store without calling JSONResolver merge.
-	 * @return array Merged theme.json raw data.
-	 */
-	function blockera_block_style_variation_theme_json_store( ?array $set = null ): array {
-		static $theme_json = null;
-
-		if ( null !== $set ) {
-			$theme_json = $set;
-			return $theme_json;
-		}
-
-		if ( null === $theme_json ) {
-			$theme_json = JSONResolver::get_merged_raw_data();
-		}
-
-		return $theme_json;
-	}
-}
-
-if ( ! function_exists( 'blockera_get_block_style_variation_merged_theme_json' ) ) {
-	/**
-	 * @return array Merged theme.json raw data for variation lookups.
-	 */
-	function blockera_get_block_style_variation_merged_theme_json(): array {
-		return blockera_block_style_variation_theme_json_store();
-	}
-}
-
-if ( ! function_exists( 'blockera_prime_block_style_variation_merged_theme_json' ) ) {
-	/**
-	 * @param array $raw Merged theme.json raw data (e.g. from styles_for_blocks transient).
-	 * @return void
-	 */
-	function blockera_prime_block_style_variation_merged_theme_json( array $raw ): void {
-		blockera_block_style_variation_theme_json_store( $raw );
-	}
-}
-
 if ( ! function_exists( 'blockera_warm_block_style_variation_theme_json_cache' ) ) {
 	/**
-	 * Warm merged theme.json for render_block_data variation styles before the first matching block.
+	 * Warm merged theme.json raw data before the first block style variation render.
 	 *
-	 * @param string|null $hash           Optional cache hash.
-	 * @param mixed       $cache_instance Optional cache instance.
+	 * Must use {@see JSONResolver::get_merged_raw_data()} (unresolved merge), not the
+	 * resolved `styles_for_blocks` transient tree, and must not use a separate request
+	 * store that can freeze data before late `blockera/json/resolver/get_style_variations` filters.
+	 *
+	 * @param string|null $hash           Unused. Kept for call-site compatibility.
+	 * @param mixed       $cache_instance Unused. Kept for call-site compatibility.
 	 * @return void
 	 */
 	function blockera_warm_block_style_variation_theme_json_cache( ?string $hash = null, $cache_instance = null ): void {
-		global $blockera_mode;
-
-		$can_use_transients = ! $blockera_mode
-			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
-			&& ! wp_is_development_mode( 'theme' );
-
-		if ( $can_use_transients && null !== $hash && null !== $cache_instance ) {
-			$styles_for_blocks = $cache_instance->getTransientCache( 'styles_for_blocks' );
-			if (
-				is_array( $styles_for_blocks )
-				&& isset( $styles_for_blocks['hash'], $styles_for_blocks['tree_raw'] )
-				&& $styles_for_blocks['hash'] === $hash
-				&& is_array( $styles_for_blocks['tree_raw'] )
-			) {
-				blockera_prime_block_style_variation_merged_theme_json( $styles_for_blocks['tree_raw'] );
-				return;
-			}
-		}
-
-		blockera_get_block_style_variation_merged_theme_json();
+		JSONResolver::get_merged_raw_data();
 	}
 }
 
@@ -252,13 +195,16 @@ if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_style
 			return $parsed_block;
 		}
 
+		static $theme_json  = null;
 		static $styles_hash = null;
 
 		if ( null === $styles_hash && function_exists( 'blockera_get_global_styles_cache_hash' ) ) {
 			$styles_hash = blockera_get_global_styles_cache_hash();
 		}
 
-		$theme_json = blockera_get_block_style_variation_merged_theme_json();
+		if ( null === $theme_json ) {
+			$theme_json = JSONResolver::get_merged_raw_data();
+		}
 
 		$variation_data = array();
 		$variation      = '';
