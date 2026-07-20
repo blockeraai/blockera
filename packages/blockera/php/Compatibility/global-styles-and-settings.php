@@ -1,6 +1,7 @@
 <?php
 
 use Blockera\Setup\Compatibility\BlockeraSettingsPaths;
+use Blockera\Setup\Compatibility\BlockSupports\BlockeraDuotone;
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
@@ -27,6 +28,12 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		* developer's workflow.
 		*/
 		$can_use_cached = empty( $types ) && ! wp_is_development_mode( 'theme' );
+
+		static $request_stylesheets = array();
+		$request_key                = empty( $types ) ? '' : implode( ',', $types );
+		if ( isset( $request_stylesheets[ $request_key ] ) ) {
+			return $request_stylesheets[ $request_key ];
+		}
 
 		/*
 		* By using the 'theme_json' group, this data is marked to be non-persistent across requests.
@@ -55,70 +62,80 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 		if ( $can_use_cached ) {
 			$cached = wp_cache_get( $cache_key, $cache_group );
 			if ( $cached ) {
+				$request_stylesheets[ $request_key ] = $cached;
 				return $cached;
+			}
+
+			global $blockera_mode;
+			if ( ! $blockera_mode && ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT ) ) {
+				$transient_key = 'blockera_global_stylesheet_' . blockera_get_global_styles_cache_hash();
+				$transient_css = blockera_get_cache()->getTransientCache( $transient_key );
+				if ( is_string( $transient_css ) && '' !== $transient_css ) {
+					wp_cache_set( $cache_key, $transient_css, $cache_group );
+					$request_stylesheets[ $request_key ] = $transient_css;
+					return $transient_css;
+				}
 			}
 		}
 
-		$tree                = JSONResolver::resolve_theme_file_uris( JSONResolver::get_merged_data() );
+		$tree                = JSONResolver::get_resolved_merged_data();
 		$supports_theme_json = wp_theme_has_theme_json();
 
 		if ( empty( $types ) && ! $supports_theme_json ) {
 			$types = array( 'variables', 'presets', 'base-layout-styles' );
 		} elseif ( empty( $types ) ) {
 			$types = array( 'variables', 'styles', 'presets' );
-		}
-
-		/*
-		* If variables are part of the stylesheet, then add them.
-		* This is so themes without a theme.json still work as before 5.9:
-		* they can override the default presets.
-		* See https://core.trac.wordpress.org/ticket/54782
-		*/
-		$styles_variables = '';
-		if ( in_array( 'variables', $types, true ) ) {
-			/*
-			* Only use the default, theme, and custom origins. Why?
-			* Because styles for `blocks` origin are added at a later phase
-			* (i.e. in the render cycle). Here, only the ones in use are rendered.
-			* @see wp_add_global_styles_for_blocks
-			*/
-			$origins          = array( 'default', 'theme', 'custom' );
-			$styles_variables = $tree->get_stylesheet( array( 'variables' ), $origins );
-			$types            = array_diff( $types, array( 'variables' ) );
-		}
-
-		/*
-		* For the remaining types (presets, styles), we do consider origins:
-		*
-		* - themes without theme.json: only the classes for the presets defined by core
-		* - themes with theme.json: the presets and styles classes, both from core and the theme
-		*/
-		$styles_rest = '';
-		if ( ! empty( $types ) ) {
-			/*
-			* Only use the default, theme, and custom origins. Why?
-			* Because styles for `blocks` origin are added at a later phase
-			* (i.e. in the render cycle). Here, only the ones in use are rendered.
-			* @see wp_add_global_styles_for_blocks
-			*/
-			$origins = array( 'default', 'theme', 'custom' );
-
-			/*
-			* If the theme doesn't have theme.json but supports both appearance tools and color palette,
-			* the 'theme' origin should be included so color palette presets are also output.
-			*/
-			if ( ! $supports_theme_json && ( current_theme_supports( 'appearance-tools' ) || current_theme_supports( 'border' ) ) && current_theme_supports( 'editor-color-palette' ) ) {
-				$origins = array( 'default', 'theme' );
-			} elseif ( ! $supports_theme_json ) {
-				$origins = array( 'default' );
+			if ( wp_is_block_theme() ) {
+				$types[] = 'custom-css';
 			}
-			$styles_rest = $tree->get_stylesheet( $types, $origins );
 		}
 
-		$stylesheet = $styles_variables . $styles_rest;
+		/*
+		 * Origins for variables always include theme/custom so classic themes can
+		 * override default presets. Remaining types may use a narrower origin set
+		 * when the theme has no theme.json — only then must we call get_stylesheet twice.
+		 *
+		 * @see https://core.trac.wordpress.org/ticket/54782
+		 */
+		$origins_variables = array( 'default', 'theme', 'custom' );
+		$origins_rest      = array( 'default', 'theme', 'custom' );
+
+		if ( ! $supports_theme_json && ( current_theme_supports( 'appearance-tools' ) || current_theme_supports( 'border' ) ) && current_theme_supports( 'editor-color-palette' ) ) {
+			$origins_rest = array( 'default', 'theme' );
+		} elseif ( ! $supports_theme_json ) {
+			$origins_rest = array( 'default' );
+		}
+
+		$wants_variables = in_array( 'variables', $types, true );
+		$types_rest      = $wants_variables ? array_values( array_diff( $types, array( 'variables' ) ) ) : $types;
+
+		if ( $wants_variables && ! empty( $types_rest ) && $origins_variables === $origins_rest ) {
+			// Block themes: one stylesheet pass for variables + styles + presets.
+			$stylesheet = $tree->get_stylesheet( array_merge( array( 'variables' ), $types_rest ), $origins_variables );
+		} else {
+			$styles_variables = '';
+			if ( $wants_variables ) {
+				$styles_variables = $tree->get_stylesheet( array( 'variables' ), $origins_variables );
+			}
+
+			$styles_rest = '';
+			if ( ! empty( $types_rest ) ) {
+				$styles_rest = $tree->get_stylesheet( $types_rest, $origins_rest );
+			}
+
+			$stylesheet = $styles_variables . $styles_rest;
+		}
 		if ( $can_use_cached ) {
 			wp_cache_set( $cache_key, $stylesheet, $cache_group );
+
+			global $blockera_mode;
+			if ( ! $blockera_mode && ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT ) ) {
+				$transient_key = 'blockera_global_stylesheet_' . blockera_get_global_styles_cache_hash();
+				blockera_get_cache()->setTransientCache( $transient_key, $stylesheet, DAY_IN_SECONDS );
+			}
 		}
+
+		$request_stylesheets[ $request_key ] = $stylesheet;
 
 		return $stylesheet;
 	}
@@ -140,6 +157,8 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		$update_cache   = false;
 		$cached         = null;
 		$cache_key      = 'styles_for_blocks';
+		$cache_hash     = null;
+		$block_nodes    = null;
 
 		$cache_instance = blockera_get_cache();
 
@@ -148,44 +167,18 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 			$cache_hash = blockera_get_global_styles_cache_hash();
 			$cached     = $cache_instance->getTransientCache($cache_key);
 
-			// Check if we have a fully valid cache with all data.
-			if (
-				is_array($cached) &&
-				isset($cached['hash'], $cached['tree'], $cached['block_nodes']) &&
-				$cached['hash'] === $cache_hash
-			) {
-				// Restore cached tree and block nodes - skip expensive JSON operations.
-				$tree        = $cached['tree'];
+			// Accept tree_raw (preferred) or legacy live `tree` object.
+			$has_tree = is_array( $cached )
+				&& isset( $cached['hash'], $cached['block_nodes'] )
+				&& $cached['hash'] === $cache_hash
+				&& ( isset( $cached['tree_raw'] ) || isset( $cached['tree'] ) );
+
+			if ( $has_tree ) {
 				$block_nodes = $cached['block_nodes'];
 			} else {
 				// Cache miss or hash changed - need to rebuild.
 				$cached       = null;
 				$update_cache = true;
-			}
-		}
-
-		// Build tree only if not restored from cache.
-		if (! isset($tree)) {
-			$tree        = new JSON();
-			$merged_data = JSONResolver::get_merged_data();
-
-			if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {
-				return;
-			}
-
-			$tree->merge($merged_data);
-			$tree = JSONResolver::resolve_theme_file_uris($tree);
-
-			$block_nodes = $tree->get_styles_block_nodes();
-
-			// Prepare cache structure for storing.
-			if ($can_use_cached && $update_cache) {
-				$cached = array(
-					'hash'        => $cache_hash,
-					'tree'        => $tree,
-					'block_nodes' => $block_nodes,
-					'blocks'      => array(),
-				);
 			}
 		}
 
@@ -195,141 +188,297 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 			$styles_queue_set = array_fill_keys($wp_styles->queue, true);
 		}
 
-		foreach ($block_nodes as $metadata) {
-			$block_css = null;
+		$batched_css = '';
 
-			if ($can_use_cached && null !== $cached) {
-				// Use the block name as the key for cached CSS data. Otherwise, use a hash of the metadata.
-				$cache_node_key = $metadata['name'] ?? md5(wp_json_encode($metadata));
-
-				if (isset($cached['wp']['blocks'][ $cache_node_key ])) {
-					// Get the css styles for blocks from WordPress cached.
-					$block_css = $cached['wp']['blocks'][ $cache_node_key ];
-				} else {
-					// Get the WordPress styles for current block.
-					$block_css .= $tree->get_styles_for_block($metadata);
-					// Cache the WordPress styles for the block.
-					$cached['wp']['blocks'][ $cache_node_key ] = $block_css;
-					// Update the cache.
-					$update_cache = true;
-				}
-			} else {
-				// Get the WordPress styles for current block.
-				$block_css .= $tree->get_styles_for_block($metadata);
-			}
-
-			// Fast path: no on-demand loading - add all styles directly.
-			if (null === $styles_queue_set) {
-				wp_add_inline_style('global-styles', $block_css);
-				continue;
-			}
-
-			$stylesheet_handle = 'global-styles';
-
-			/*
-			 * When `wp_should_load_block_assets_on_demand()` is true, block styles are
-			 * enqueued for each block on the page in class WP_Block's render function.
-			 * This means there will be a handle in the styles queue for each of those blocks.
-			 * Block-specific global styles should be attached to the global-styles handle, but
-			 * only for blocks on the page, thus we check if the block's handle is in the queue
-			 * before adding the inline style.
-			 * This conditional loading only applies to core blocks.
-			 * TODO: Explore how this could be expanded to third-party blocks as well.
-			 */
-			if (isset($metadata['name'])) {
-				if (str_starts_with($metadata['name'], 'core/')) {
-					$block_handle = 'wp-block-' . substr($metadata['name'], 5);
-					if (isset($styles_queue_set[ $block_handle ])) {
-						wp_add_inline_style($stylesheet_handle, $block_css);
+		// Transient hit with complete per-block CSS: skip JSON tree and batch one inline style.
+		if ( $can_use_cached && null !== $cached && null !== $block_nodes && null === $styles_queue_set ) {
+			$all_css_cached = true;
+			foreach ( $block_nodes as $metadata ) {
+				$cache_node_key = $metadata['name'] ?? md5( wp_json_encode( $metadata ) );
+				foreach ( array( 'wp', 'blockera' ) as $source ) {
+					if ( ! isset( $cached[ $source ]['blocks'][ $cache_node_key ] ) ) {
+						$all_css_cached = false;
+						break 2;
 					}
-				} else {
-					wp_add_inline_style($stylesheet_handle, $block_css);
+					$batched_css .= $cached[ $source ]['blocks'][ $cache_node_key ];
 				}
-			} elseif (! empty($metadata['path'])) {
-				// The likes of block element styles from theme.json do not have $metadata['name'] set.
-				$block_name = wp_get_block_name_from_theme_json_path($metadata['path']);
-				if ($block_name) {
-					if (str_starts_with($block_name, 'core/')) {
-						$block_handle = 'wp-block-' . substr($block_name, 5);
-						if (isset($styles_queue_set[ $block_handle ])) {
-							wp_add_inline_style($stylesheet_handle, $block_css);
+			}
+
+			if ( $all_css_cached ) {
+				if ( '' !== $batched_css ) {
+					wp_add_inline_style( 'global-styles', $batched_css );
+				}
+				return;
+			}
+
+			$batched_css = '';
+		}
+
+		// Build tree only when per-block CSS must be generated or the transient is incomplete.
+		if ( ! isset( $tree ) ) {
+			if ( $can_use_cached && null !== $cached && isset( $cached['tree_raw'] ) && is_array( $cached['tree_raw'] ) ) {
+				$tree = JSON::with_raw_data( $cached['tree_raw'] );
+			} elseif ( $can_use_cached && null !== $cached && isset( $cached['tree'] ) ) {
+				$tree = $cached['tree'];
+			} else {
+				$tree = JSONResolver::get_resolved_merged_data();
+
+				if ( ! method_exists( $tree, 'get_raw_data' ) ) {
+					return;
+				}
+
+				$block_nodes = JSONResolver::get_merged_styles_block_nodes();
+
+				if ( $can_use_cached && $update_cache ) {
+					$cached = array(
+						'hash'        => $cache_hash,
+						'tree_raw'    => $tree->get_raw_data(),
+						'block_nodes' => $block_nodes,
+						'wp'          => array( 'blocks' => array() ),
+						'blockera'    => array( 'blocks' => array() ),
+					);
+				}
+			}
+		}
+
+		if ( null === $block_nodes ) {
+			$block_nodes = JSONResolver::get_merged_styles_block_nodes();
+		}
+
+		foreach ( $block_nodes as $metadata ) {
+			$cache_node_key = $metadata['name'] ?? md5( wp_json_encode( $metadata ) );
+
+			foreach ( array( 'wp', 'blockera' ) as $source ) {
+				$block_css = null;
+
+				if ( $can_use_cached && null !== $cached ) {
+					if ( isset( $cached[ $source ]['blocks'][ $cache_node_key ] ) ) {
+						$block_css = $cached[ $source ]['blocks'][ $cache_node_key ];
+					} else {
+						if ( 'wp' === $source ) {
+							$block_css = $tree->get_styles_for_block( $metadata );
+						} else {
+							$block_css = $tree->get_blockera_styles_for_block( $metadata );
+						}
+						$cached[ $source ]['blocks'][ $cache_node_key ] = $block_css;
+						$update_cache                                   = true;
+					}
+				} elseif ( 'wp' === $source ) {
+					$block_css = $tree->get_styles_for_block( $metadata );
+				} else {
+					$block_css = $tree->get_blockera_styles_for_block( $metadata );
+				}
+
+				if ( '' === $block_css ) {
+					continue;
+				}
+
+				if ( null === $styles_queue_set ) {
+					$batched_css .= $block_css;
+					continue;
+				}
+
+				$stylesheet_handle = 'global-styles';
+
+				/*
+				 * When `wp_should_load_block_assets_on_demand()` is true, block styles are
+				 * enqueued for each block on the page in class WP_Block's render function.
+				 * This means there will be a handle in the styles queue for each of those blocks.
+				 * Block-specific global styles should be attached to the global-styles handle, but
+				 * only for blocks on the page, thus we check if the block's handle is in the queue
+				 * before adding the inline style.
+				 * This conditional loading only applies to core blocks.
+				 */
+				if ( isset( $metadata['name'] ) ) {
+					if ( str_starts_with( $metadata['name'], 'core/' ) ) {
+						$block_handle = 'wp-block-' . substr( $metadata['name'], 5 );
+						if ( isset( $styles_queue_set[ $block_handle ] ) ) {
+							wp_add_inline_style( $stylesheet_handle, $block_css );
 						}
 					} else {
-						wp_add_inline_style($stylesheet_handle, $block_css);
+						wp_add_inline_style( $stylesheet_handle, $block_css );
+					}
+				} elseif ( ! empty( $metadata['path'] ) ) {
+					$block_name = wp_get_block_name_from_theme_json_path( $metadata['path'] );
+					if ( $block_name ) {
+						if ( str_starts_with( $block_name, 'core/' ) ) {
+							$block_handle = 'wp-block-' . substr( $block_name, 5 );
+							if ( isset( $styles_queue_set[ $block_handle ] ) ) {
+								wp_add_inline_style( $stylesheet_handle, $block_css );
+							}
+						} else {
+							wp_add_inline_style( $stylesheet_handle, $block_css );
+						}
 					}
 				}
 			}
 		}
 
-		foreach ($block_nodes as $metadata) {
-			$block_css = null;
-
-			if ($can_use_cached && null !== $cached) {
-				// Use the block name as the key for cached CSS data. Otherwise, use a hash of the metadata.
-				$cache_node_key = $metadata['name'] ?? md5(wp_json_encode($metadata));
-
-				if (isset($cached['blockera']['blocks'][ $cache_node_key ])) {
-					// Get the Blockera styles for blocks from cache.
-					$block_css = $cached['blockera']['blocks'][ $cache_node_key ];
-				} else {
-					// Get the Blockera styles for current block.
-					$block_css .= $tree->get_blockera_styles_for_block($metadata);
-					// Cache the Blockera styles for the block.
-					$cached['blockera']['blocks'][ $cache_node_key ] = $block_css;
-					// Update the cache.
-					$update_cache = true;
-				}
-			} else {
-				// Get the Blockera styles for current block.
-				$block_css .= $tree->get_blockera_styles_for_block($metadata);
-			}
-
-			// Fast path: no on-demand loading - add all styles directly.
-			if (null === $styles_queue_set) {
-				wp_add_inline_style('global-styles', $block_css);
-				continue;
-			}
-
-			$stylesheet_handle = 'global-styles';
-
-			/*
-			 * When `wp_should_load_block_assets_on_demand()` is true, block styles are
-			 * enqueued for each block on the page in class WP_Block's render function.
-			 * This means there will be a handle in the styles queue for each of those blocks.
-			 * Block-specific global styles should be attached to the global-styles handle, but
-			 * only for blocks on the page, thus we check if the block's handle is in the queue
-			 * before adding the inline style.
-			 * This conditional loading only applies to core blocks.
-			 * TODO: Explore how this could be expanded to third-party blocks as well.
-			 */
-			if (isset($metadata['name'])) {
-				if (str_starts_with($metadata['name'], 'core/')) {
-					$block_handle = 'wp-block-' . substr($metadata['name'], 5);
-					if (isset($styles_queue_set[ $block_handle ])) {
-						wp_add_inline_style($stylesheet_handle, $block_css);
-					}
-				} else {
-					wp_add_inline_style($stylesheet_handle, $block_css);
-				}
-			} elseif (! empty($metadata['path'])) {
-				// The likes of block element styles from theme.json do not have $metadata['name'] set.
-				$block_name = wp_get_block_name_from_theme_json_path($metadata['path']);
-				if ($block_name) {
-					if (str_starts_with($block_name, 'core/')) {
-						$block_handle = 'wp-block-' . substr($block_name, 5);
-						if (isset($styles_queue_set[ $block_handle ])) {
-							wp_add_inline_style($stylesheet_handle, $block_css);
-						}
-					} else {
-						wp_add_inline_style($stylesheet_handle, $block_css);
-					}
-				}
-			}
+		if ( null === $styles_queue_set && '' !== $batched_css ) {
+			wp_add_inline_style( 'global-styles', $batched_css );
 		}
 
 		if ($update_cache && null !== $cached) {
+			// Drop legacy live object if present before persisting.
+			unset( $cached['tree'] );
 			$cache_instance->setTransientCache($cache_key, $cached, DAY_IN_SECONDS);
 		}
+	}
+}
+
+if (! function_exists('blockera_get_theme_styles_partials_mtime')) {
+	/**
+	 * Max mtime of theme style partial JSON files (transient + request cached).
+	 *
+	 * @return string
+	 */
+	function blockera_get_theme_styles_partials_mtime(): string {
+		static $mtime = null;
+
+		if ( null !== $mtime ) {
+			return $mtime;
+		}
+
+		$can_use_cached = ! wp_is_development_mode( 'theme' );
+		$cache_key      = 'theme_styles_partials_mtime_' . get_template();
+
+		if ( $can_use_cached ) {
+			$cached = blockera_get_cache()->getTransientCache( $cache_key );
+			if ( is_string( $cached ) ) {
+				$mtime = $cached;
+				return $mtime;
+			}
+		}
+
+		$styles_directory = get_template_directory() . '/styles';
+		if ( ! is_dir( $styles_directory ) ) {
+			$mtime = '0';
+			if ( $can_use_cached ) {
+				blockera_get_cache()->setTransientCache( $cache_key, $mtime, DAY_IN_SECONDS );
+			}
+			return $mtime;
+		}
+
+		$top_level_styles = glob( $styles_directory . '/*.json' );
+		$nested_styles    = glob( $styles_directory . '/*/*.json' );
+		$styles_files     = array_merge(
+			false !== $top_level_styles ? $top_level_styles : array(),
+			false !== $nested_styles ? $nested_styles : array()
+		);
+		$styles_mtime     = 0;
+		foreach ( $styles_files as $file ) {
+			$file_mtime = (int) filemtime( $file );
+			if ( $file_mtime > $styles_mtime ) {
+				$styles_mtime = $file_mtime;
+			}
+		}
+
+		$mtime = (string) $styles_mtime;
+
+		if ( $can_use_cached ) {
+			blockera_get_cache()->setTransientCache( $cache_key, $mtime, DAY_IN_SECONDS );
+		}
+
+		return $mtime;
+	}
+}
+
+if ( ! function_exists( 'blockera_clear_theme_styles_partials_mtime_cache' ) ) {
+	/**
+	 * @return void
+	 */
+	function blockera_clear_theme_styles_partials_mtime_cache(): void {
+		blockera_get_cache()->deleteTransientCache( 'theme_styles_partials_mtime_' . get_template() );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_global_stylesheet_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_user_styles_mtime_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_layout_support_flags_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_duotone_global_block_names_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_merged_settings_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_merged_raw_data_' );
+	}
+}
+
+if ( ! function_exists( 'blockera_persist_merged_settings_transient' ) ) {
+	/**
+	 * Persist merged settings and unresolved raw data for warm-skip requests.
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @return void
+	 */
+	function blockera_persist_merged_settings_transient( string $hash ): void {
+		global $blockera_mode;
+
+		if (
+			$blockera_mode
+			|| ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
+			|| wp_is_development_mode( 'theme' )
+		) {
+			return;
+		}
+
+		blockera_get_cache()->setTransientCache(
+			'blockera_merged_settings_' . $hash,
+			JSONResolver::get_merged_settings(),
+			DAY_IN_SECONDS
+		);
+
+		blockera_get_cache()->setTransientCache(
+			'blockera_merged_raw_data_' . $hash,
+			JSONResolver::get_merged_raw_data(),
+			DAY_IN_SECONDS
+		);
+	}
+}
+
+if ( ! function_exists( 'blockera_prime_merged_raw_data_from_transient' ) ) {
+	/**
+	 * Restore unresolved merged theme.json raw data when warm skips cold merge.
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @param mixed  $cache_instance Optional {@see blockera_get_cache()} instance.
+	 * @return bool True when raw data was restored from transient.
+	 */
+	function blockera_prime_merged_raw_data_from_transient( string $hash, $cache_instance = null ): bool {
+		if ( null === $cache_instance ) {
+			$cache_instance = blockera_get_cache();
+		}
+
+		$cached_raw = $cache_instance->getTransientCache( 'blockera_merged_raw_data_' . $hash );
+		if ( ! is_array( $cached_raw ) ) {
+			return false;
+		}
+
+		JSONResolver::prime_merged_raw_data_cache( 'custom', $cached_raw );
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'blockera_prime_merged_settings_from_transient' ) ) {
+	/**
+	 * Restore merged settings from transients when warm skips cold merge.
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @param mixed  $cache_instance Optional {@see blockera_get_cache()} instance.
+	 * @return bool True when settings were restored from transient.
+	 */
+	function blockera_prime_merged_settings_from_transient( string $hash, $cache_instance = null ): bool {
+		if ( null === $cache_instance ) {
+			$cache_instance = blockera_get_cache();
+		}
+
+		$cached_settings = $cache_instance->getTransientCache( 'blockera_merged_settings_' . $hash );
+		if ( ! is_array( $cached_settings ) ) {
+			return false;
+		}
+
+		JSONResolver::prime_merged_settings_cache( 'custom', $cached_settings );
+
+		if ( ! wp_is_development_mode( 'theme' ) ) {
+			wp_cache_set( 'blockera_get_global_settings_custom', $cached_settings, 'theme_json' );
+		}
+
+		return true;
 	}
 }
 
@@ -366,13 +515,8 @@ if (! function_exists('blockera_get_global_styles_cache_hash')) {
 			$parent_info       = '|p:' . $parent_version . ':' . $parent_json_mtime;
 		}
 
-		// Get the block theme all json files exists inside /styles directory modification time.
-		$styles_directory = get_template_directory() . '/styles';
-		$styles_files     = glob($styles_directory . '/*.json');
-		$styles_mtime     = '0';
-		foreach ($styles_files as $file) {
-			$styles_mtime = (string) filemtime($file);
-		}
+		// Max mtime across theme style partials (top-level + one nested level, e.g. styles/blocks/).
+		$styles_mtime = blockera_get_theme_styles_partials_mtime();
 
 		// Include user global styles post modified time for user customizations.
 		$user_styles_mtime = blockera_get_user_styles_modified_time();
@@ -400,16 +544,25 @@ if (! function_exists('blockera_get_user_styles_modified_time')) {
 	function blockera_get_user_styles_modified_time(): string {
 		static $mtime = null;
 
-		if (null !== $mtime) {
+		if ( null !== $mtime ) {
 			return $mtime;
 		}
 
-		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+		$can_use_cached = ! wp_is_development_mode( 'theme' );
+		$cache_key      = 'blockera_user_styles_mtime_' . get_stylesheet();
 
-		if (! empty($global_styles_post['post_modified'])) {
-			$mtime = $global_styles_post['post_modified'];
-		} else {
-			$mtime = '0';
+		if ( $can_use_cached ) {
+			$cached = blockera_get_cache()->getTransientCache( $cache_key );
+			if ( is_string( $cached ) ) {
+				$mtime = $cached;
+				return $mtime;
+			}
+		}
+
+		$mtime = JSONResolver::get_user_global_styles_post_modified_time();
+
+		if ( $can_use_cached ) {
+			blockera_get_cache()->setTransientCache( $cache_key, $mtime, DAY_IN_SECONDS );
 		}
 
 		return $mtime;
@@ -423,28 +576,30 @@ if (! function_exists('blockera_get_user_styles_data')) {
 	 * @return array The user styles data or an empty array if no data is found.
 	 */
 	function blockera_get_user_styles_data(): array {
-		static $user_data = [];
+		static $user_data  = null;
+		static $registered = false;
 
-		if (! empty($user_data)) {
-			// Register the block style from the user data.
-			JSONResolver::register_block_style_variations_from_user_data( $user_data );
-
+		if ( null !== $user_data ) {
 			return $user_data;
 		}
 
-		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+		$global_styles_post = JSONResolver::get_user_global_styles_cpt();
 
 		// Validate the global styles post content.
 		if (empty($global_styles_post['post_content']) || ! str_contains($global_styles_post['post_content'], 'blockera')) {
-			return [];
+			$user_data = array();
+			return $user_data;
 		}
 
 		$user_data = json_decode($global_styles_post['post_content'], true);
 
 		unset($user_data['isGlobalStylesUserThemeJSON']);
 
-		// Register the block style from the user data.
-		JSONResolver::register_block_style_variations_from_user_data( $user_data );
+		if ( ! $registered ) {
+			// Register block styles once per request (cache hits previously re-registered).
+			JSONResolver::register_block_style_variations_from_user_data( $user_data );
+			$registered = true;
+		}
 
 		return $user_data;
 	}
@@ -550,13 +705,200 @@ if (! function_exists('blockera_get_global_settings')) {
 		}
 
 		if ( false === $settings ) {
-			$settings = JSONResolver::get_merged_data( $origin )->get_settings();
+			/*
+			 * get_merged_settings() returns a request-cached settings array (also warmed when
+			 * get_merged_data() runs during global styles enqueue) without rebuilding JSON.
+			 */
+			$settings = JSONResolver::get_merged_settings( $origin );
 			if ( $can_use_cached ) {
 				wp_cache_set( $cache_key, $settings, $cache_group );
 			}
 		}
 
 		return _wp_array_get( $settings, $path, $settings );
+	}
+}
+
+if ( ! function_exists( 'blockera_prime_layout_support_global_flags' ) ) {
+	/**
+	 * Seed request-level layout flags without calling JSONResolver merge.
+	 *
+	 * @param array{use_root_padding_aware_alignments: bool, has_block_gap_support: bool} $flags Layout flags.
+	 * @return void
+	 */
+	function blockera_prime_layout_support_global_flags( array $flags ): void {
+		blockera_get_layout_support_global_flags( $flags );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_layout_support_global_flags' ) ) {
+	/**
+	 * Layout support flags from Blockera merged settings (request-cached).
+	 *
+	 * Used by {@see blockera_render_layout_support_flag()} so render_block does not
+	 * cold-start {@see wp_get_global_settings()} / {@see WP_Theme_JSON_Resolver::get_merged_data()}.
+	 *
+	 * @param array{use_root_padding_aware_alignments?: bool, has_block_gap_support?: bool}|null $prime Optional precomputed flags.
+	 * @return array{use_root_padding_aware_alignments: bool, has_block_gap_support: bool}
+	 */
+	function blockera_get_layout_support_global_flags( ?array $prime = null ): array {
+		static $flags = null;
+
+		if ( null !== $flags ) {
+			return $flags;
+		}
+
+		if ( null !== $prime ) {
+			$flags = array(
+				'use_root_padding_aware_alignments' => (bool) ( $prime['use_root_padding_aware_alignments'] ?? false ),
+				'has_block_gap_support'             => (bool) ( $prime['has_block_gap_support'] ?? false ),
+			);
+			return $flags;
+		}
+
+		$settings = JSONResolver::get_merged_settings();
+
+		$flags = array(
+			'use_root_padding_aware_alignments' => (bool) ( $settings['useRootPaddingAwareAlignments'] ?? false ),
+			'has_block_gap_support'             => isset( $settings['spacing']['blockGap'] ),
+		);
+
+		global $blockera_mode;
+		if (
+			! $blockera_mode
+			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
+			&& ! wp_is_development_mode( 'theme' )
+		) {
+			$cache_key = 'blockera_layout_support_flags_' . blockera_get_global_styles_cache_hash();
+			blockera_get_cache()->setTransientCache( $cache_key, $flags, DAY_IN_SECONDS );
+		}
+
+		return $flags;
+	}
+}
+
+if ( ! function_exists( 'blockera_warm_duotone_global_block_names_cache' ) ) {
+	/**
+	 * Warm duotone global block map before render_block (avoids cold merge on first block).
+	 *
+	 * @param string|null $hash           Optional cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @param mixed       $cache_instance Optional {@see blockera_get_cache()} instance.
+	 * @return void
+	 */
+	function blockera_warm_duotone_global_block_names_cache( ?string $hash = null, $cache_instance = null ): void {
+		global $blockera_mode;
+
+		$can_use_transients = ! $blockera_mode
+			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
+			&& ! wp_is_development_mode( 'theme' );
+
+		if ( $can_use_transients ) {
+			if ( null === $hash ) {
+				$hash = blockera_get_global_styles_cache_hash();
+			}
+			if ( null === $cache_instance ) {
+				$cache_instance = blockera_get_cache();
+			}
+
+			if ( BlockeraDuotone::load_global_styles_block_names_from_transient( $hash ) ) {
+				return;
+			}
+
+			$styles_for_blocks = $cache_instance->getTransientCache( 'styles_for_blocks' );
+			if (
+				is_array( $styles_for_blocks )
+				&& isset( $styles_for_blocks['hash'], $styles_for_blocks['tree_raw'] )
+				&& $styles_for_blocks['hash'] === $hash
+				&& is_array( $styles_for_blocks['tree_raw'] )
+				&& BlockeraDuotone::try_prime_empty_global_styles_block_names_from_theme_json( $styles_for_blocks['tree_raw'] )
+			) {
+				return;
+			}
+		}
+
+		BlockeraDuotone::warm_global_styles_block_names_cache();
+	}
+}
+
+if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
+	/**
+	 * Warm JSONResolver merged settings before the_posts, render_block, and admin_print_styles fonts.
+	 *
+	 * Must run on {@see 'wp_loaded'} (before query_posts and admin_print_styles): layout support,
+	 * block styles, and {@see blockera_print_font_faces()} can invoke {@see JSONResolver::get_merged_settings()}.
+	 *
+	 * @return void
+	 */
+	function blockera_warm_merged_settings_cache(): void {
+		static $warmed = false;
+
+		if ( $warmed ) {
+			return;
+		}
+		$warmed = true;
+
+		global $blockera_mode;
+		$can_use_transients = ! $blockera_mode
+			&& ( ! defined( 'BLOCKERA_DEVELOPMENT' ) || ! BLOCKERA_DEVELOPMENT )
+			&& ! wp_is_development_mode( 'theme' );
+
+		if ( $can_use_transients ) {
+			$hash           = blockera_get_global_styles_cache_hash();
+			$cache          = blockera_get_cache();
+			$stylesheet_css = $cache->getTransientCache( 'blockera_global_stylesheet_' . $hash );
+			$cached_flags   = $cache->getTransientCache( 'blockera_layout_support_flags_' . $hash );
+
+			if (
+				is_string( $stylesheet_css )
+				&& '' !== $stylesheet_css
+				&& is_array( $cached_flags )
+				&& array_key_exists( 'use_root_padding_aware_alignments', $cached_flags )
+				&& array_key_exists( 'has_block_gap_support', $cached_flags )
+			) {
+				wp_cache_set( 'blockera_wp_get_global_stylesheet', $stylesheet_css, 'theme_json' );
+				blockera_prime_layout_support_global_flags( $cached_flags );
+				blockera_warm_layout_render_cache();
+				blockera_warm_duotone_global_block_names_cache( $hash, $cache );
+
+				if ( ! blockera_prime_merged_settings_from_transient( $hash, $cache ) ) {
+					JSONResolver::get_merged_settings();
+				}
+
+				if ( ! blockera_prime_merged_raw_data_from_transient( $hash, $cache ) ) {
+					JSONResolver::get_merged_raw_data();
+					blockera_persist_merged_settings_transient( $hash );
+				}
+
+				return;
+			}
+		}
+
+		// One merge + URI resolve warms settings, raw data, and resolved tree for enqueue/render.
+		JSONResolver::get_resolved_merged_data();
+		$hash = blockera_get_global_styles_cache_hash();
+		blockera_get_layout_support_global_flags();
+		blockera_warm_layout_render_cache();
+		blockera_warm_duotone_global_block_names_cache( $hash, blockera_get_cache() );
+		blockera_persist_merged_settings_transient( $hash );
+	}
+}
+
+if ( ! function_exists( 'blockera_warm_layout_render_cache' ) ) {
+	/**
+	 * Warm layout render_block lookups before the first block is rendered.
+	 *
+	 * @return void
+	 */
+	function blockera_warm_layout_render_cache(): void {
+		static $warmed = false;
+
+		if ( $warmed ) {
+			return;
+		}
+		$warmed = true;
+
+		wp_get_layout_definitions();
+		current_theme_supports( 'disable-layout-styles' );
 	}
 }
 

@@ -76,38 +76,24 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function css( array $setting ): array {
 
-		$declaration = [];
+		$cssProperty = $setting['type'] ?? '';
 
-		// Direct isset check avoids empty() overhead.
-		if ( ! isset( $setting['type'] ) || '' === $setting['type'] ) {
-			return $declaration;
+		if ( '' === $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
+			return [];
 		}
 
-		$cssProperty = $setting['type'];
-
-		// Early return if property not set - avoids function call.
-		if ( ! isset( $setting[ $cssProperty ] ) ) {
-			return $declaration;
-		}
-
-		$sortedRepeater = blockera_get_sorted_repeater( $setting[ $cssProperty ] );
-
-		// Inline filtering avoids callback overhead and array_values reindexing.
-		// Direct foreach is faster than array_filter + array_map callbacks.
-		$filteredSettings = [];
-		foreach ( $sortedRepeater as $item ) {
-			if ( $this->isValidSetting( $item ) ) {
-				$filteredSettings[] = $item;
+		// One pass: validate + apply (avoids intermediate filtered array).
+		$has_valid = false;
+		foreach ( blockera_get_sorted_repeater( $setting[ $cssProperty ] ) as $item ) {
+			if ( ! $this->isValidSetting( $item ) ) {
+				continue;
 			}
+			$has_valid = true;
+			$this->setActiveBackgroundType( $item );
 		}
 
-		if ( empty( $filteredSettings ) ) {
-			return $declaration;
-		}
-
-		// Direct foreach avoids array_map callback overhead.
-		foreach ( $filteredSettings as $filteredSetting ) {
-			$this->setActiveBackgroundType( $filteredSetting );
+		if ( ! $has_valid ) {
+			return [];
 		}
 
 		$this->setCss( $this->declarations );

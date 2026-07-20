@@ -962,6 +962,12 @@ class BlockeraDuotone {
 			return null;
 		}
 
+		static $selector_cache = array();
+		$cache_key             = $block_type->name ?? '';
+		if ( '' !== $cache_key && array_key_exists( $cache_key, $selector_cache ) ) {
+			return $selector_cache[ $cache_key ];
+		}
+
 		/*
 		 * Backward compatibility with `supports.color.__experimentalDuotone`
 		 * is provided via the `block_type_metadata_settings` filter. If
@@ -971,6 +977,9 @@ class BlockeraDuotone {
 		 */
 		$duotone_support = block_has_support( $block_type, array( 'filter', 'duotone' ) );
 		if ( ! $duotone_support ) {
+			if ( '' !== $cache_key ) {
+				$selector_cache[ $cache_key ] = null;
+			}
 			return null;
 		}
 
@@ -983,13 +992,19 @@ class BlockeraDuotone {
 			: false;
 		if ( $experimental_duotone ) {
 			$root_selector = wp_get_block_css_selector( $block_type );
-			return is_string( $experimental_duotone )
+			$selector      = is_string( $experimental_duotone )
 				? JSON::scope_selector( $root_selector, $experimental_duotone )
 				: $root_selector;
+		} else {
+			// Regular filter.duotone support uses filter.duotone selectors with fallbacks.
+			$selector = wp_get_block_css_selector( $block_type, array( 'filter', 'duotone' ), true );
 		}
 
-		// Regular filter.duotone support uses filter.duotone selectors with fallbacks.
-		return wp_get_block_css_selector( $block_type, array( 'filter', 'duotone' ), true );
+		if ( '' !== $cache_key ) {
+			$selector_cache[ $cache_key ] = $selector;
+		}
+
+		return $selector;
 	}
 
 	/**
@@ -1007,8 +1022,8 @@ class BlockeraDuotone {
 		if ( isset( self::$global_styles_presets ) ) {
 			return self::$global_styles_presets;
 		}
-		// Get the per block settings from the theme.json.
-		$tree              = wp_get_global_settings();
+		// Prefer Blockera request-cached settings (avoids cold WP_Theme_JSON_Resolver).
+		$tree              = JSONResolver::get_merged_settings();
 		$presets_by_origin = isset( $tree['color']['duotone'] ) ? $tree['color']['duotone'] : array();
 
 		self::$global_styles_presets = array();
@@ -1029,42 +1044,183 @@ class BlockeraDuotone {
 	 * Used in conjunction with self::render_duotone_support to output the
 	 * duotone filters defined in the theme.json global styles.
 	 *
+	 * Prefer {@see warm_global_styles_block_names_cache()} on {@see 'wp_loaded'} so
+	 * render_block never pays {@see JSONResolver::get_merged_data()}.
+	 *
 	 * @since 6.3.0
 	 *
 	 * @return string[] An array of global style block slugs, keyed on the block name.
 	 */
 	private static function get_all_global_style_block_names() {
-		if ( isset( self::$global_styles_block_names ) ) {
-			return self::$global_styles_block_names;
+		if ( ! isset( self::$global_styles_block_names ) ) {
+			self::warm_global_styles_block_names_cache();
 		}
-		// Get the per block settings from the theme.json.
-		$tree        = JSONResolver::get_merged_data();
-		$block_nodes = $tree->get_styles_block_nodes();
-		$theme_json  = $tree->get_raw_data();
+
+		return self::$global_styles_block_names;
+	}
+
+	/**
+	 * Prime the request-level duotone block map (e.g. from transients).
+	 *
+	 * @param array<string, string> $names Block name => duotone preset slug.
+	 * @return void
+	 */
+	public static function prime_global_styles_block_names( array $names ): void {
+		self::$global_styles_block_names = $names;
+	}
+
+	/**
+	 * Load duotone block map from a cross-request transient.
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @return bool True when the map was loaded.
+	 */
+	public static function load_global_styles_block_names_from_transient( string $hash ): bool {
+		if ( ! function_exists( 'blockera_get_cache' ) ) {
+			return false;
+		}
+
+		$cached = blockera_get_cache()->getTransientCache( 'blockera_duotone_global_block_names_' . $hash );
+		if ( ! is_array( $cached ) ) {
+			return false;
+		}
+
+		self::$global_styles_block_names = $cached;
+
+		return true;
+	}
+
+	/**
+	 * When merged theme.json has no global duotone bindings, prime an empty map without merge.
+	 *
+	 * @param array $theme_json Merged theme.json raw data.
+	 * @return bool True when an empty map was primed.
+	 */
+	public static function try_prime_empty_global_styles_block_names_from_theme_json( array $theme_json ): bool {
+		if ( isset( self::$global_styles_block_names ) ) {
+			return true;
+		}
+
+		if ( self::theme_json_has_global_duotone_block_styles( $theme_json ) ) {
+			return false;
+		}
 
 		self::$global_styles_block_names = array();
+		self::persist_global_styles_block_names_transient( self::$global_styles_block_names );
+
+		return true;
+	}
+
+	/**
+	 * Build and cache the duotone global block map for this request (and transients).
+	 *
+	 * @return void
+	 */
+	public static function warm_global_styles_block_names_cache(): void {
+		if ( isset( self::$global_styles_block_names ) ) {
+			return;
+		}
+
+		self::$global_styles_block_names = self::build_global_style_block_names();
+		self::persist_global_styles_block_names_transient( self::$global_styles_block_names );
+	}
+
+	/**
+	 * @return array<string, string> Block name => duotone preset slug.
+	 */
+	private static function build_global_style_block_names(): array {
+		$names      = array();
+		$theme_json = JSONResolver::get_merged_raw_data();
+
+		if ( ! self::theme_json_has_global_duotone_block_styles( $theme_json ) ) {
+			return $names;
+		}
+
+		$block_nodes = JSONResolver::get_merged_styles_block_nodes();
 
 		foreach ( $block_nodes as $block_node ) {
-			// This block definition doesn't include any duotone settings. Skip it.
 			if ( empty( $block_node['duotone'] ) ) {
 				continue;
 			}
 
-			// Value looks like this: 'var(--wp--preset--duotone--blue-orange)' or 'var:preset|duotone|blue-orange'.
 			$duotone_attr_path = array_merge( $block_node['path'], array( 'filter', 'duotone' ) );
 			$duotone_attr      = _wp_array_get( $theme_json, $duotone_attr_path, array() );
 
 			if ( empty( $duotone_attr ) ) {
 				continue;
 			}
-			// If it has a duotone filter preset, save the block name and the preset slug.
+
 			$slug = self::get_slug_from_attribute( $duotone_attr );
 
 			if ( $slug && $slug !== $duotone_attr ) {
-				self::$global_styles_block_names[ $block_node['name'] ] = $slug;
+				$names[ $block_node['name'] ] = $slug;
 			}
 		}
-		return self::$global_styles_block_names;
+
+		return $names;
+	}
+
+	/**
+	 * @param array<string, string> $names Block name => duotone preset slug.
+	 * @return void
+	 */
+	private static function persist_global_styles_block_names_transient( array $names ): void {
+		global $blockera_mode;
+
+		if (
+			$blockera_mode
+			|| ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT )
+			|| wp_is_development_mode( 'theme' )
+			|| ! function_exists( 'blockera_get_global_styles_cache_hash' )
+			|| ! function_exists( 'blockera_get_cache' )
+		) {
+			return;
+		}
+
+		$hash = blockera_get_global_styles_cache_hash();
+		blockera_get_cache()->setTransientCache(
+			'blockera_duotone_global_block_names_' . $hash,
+			$names,
+			DAY_IN_SECONDS
+		);
+	}
+
+	/**
+	 * Whether merged theme.json defines global duotone on any block style node.
+	 *
+	 * Only inspects `styles.blocks` (and one-level elements) — not the entire styles tree.
+	 *
+	 * @param array $theme_json Merged theme.json raw data.
+	 * @return bool
+	 */
+	private static function theme_json_has_global_duotone_block_styles( array $theme_json ): bool {
+		$blocks = $theme_json['styles']['blocks'] ?? null;
+		if ( ! is_array( $blocks ) || array() === $blocks ) {
+			return false;
+		}
+
+		foreach ( $blocks as $block_styles ) {
+			if ( ! is_array( $block_styles ) ) {
+				continue;
+			}
+
+			if ( ! empty( $block_styles['filter']['duotone'] ) ) {
+				return true;
+			}
+
+			$elements = $block_styles['elements'] ?? null;
+			if ( ! is_array( $elements ) ) {
+				continue;
+			}
+
+			foreach ( $elements as $element_styles ) {
+				if ( is_array( $element_styles ) && ! empty( $element_styles['filter']['duotone'] ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -1081,22 +1237,44 @@ class BlockeraDuotone {
 	 * @return string Filtered block content.
 	 */
 	public static function render_duotone_support( $block_content, $block, $wp_block ) {
-		if ( ! $block['blockName'] ) {
+		// empty() suppresses undefined-index notices — keep that contract.
+		if ( empty( $block['blockName'] ) ) {
 			return $block_content;
 		}
+
+		/*
+		 * Cheap gates before get_selector() (selector resolution is relatively expensive and
+		 * previously ran for every render_block). Most blocks have neither a duotone attribute
+		 * nor a global-styles duotone mapping.
+		 *
+		 * Hot path (~render_block × N): no attribute → O(1) static map lookup, no method call
+		 * once self::$global_styles_block_names is populated (including the empty-map case).
+		 */
+		$block_name            = $block['blockName'];
+		$has_duotone_attribute = isset( $block['attrs']['style']['color']['duotone'] );
+
+		if ( ! $has_duotone_attribute ) {
+			if ( isset( self::$global_styles_block_names ) ) {
+				$global_styles_block_names = self::$global_styles_block_names;
+				// Loaded empty map: skip work on the remaining render_block invocations.
+				if ( ! $global_styles_block_names ) {
+					return $block_content;
+				}
+			} else {
+				$global_styles_block_names = self::get_all_global_style_block_names();
+				if ( ! $global_styles_block_names ) {
+					return $block_content;
+				}
+			}
+
+			if ( ! isset( $global_styles_block_names[ $block_name ] ) ) {
+				return $block_content;
+			}
+		}
+
 		$duotone_selector = self::get_selector( $wp_block->block_type );
 
 		if ( ! $duotone_selector ) {
-			return $block_content;
-		}
-
-		$global_styles_block_names = self::get_all_global_style_block_names();
-
-		// The block should have a duotone attribute or have duotone defined in its theme.json to be processed.
-		$has_duotone_attribute     = isset( $block['attrs']['style']['color']['duotone'] );
-		$has_global_styles_duotone = array_key_exists( $block['blockName'], $global_styles_block_names );
-
-		if ( ! $has_duotone_attribute && ! $has_global_styles_duotone ) {
 			return $block_content;
 		}
 
@@ -1107,45 +1285,73 @@ class BlockeraDuotone {
 			 * 1. Array of colors - e.g. array('#000000', '#ffffff').
 			 * 2. Variable for an existing Duotone preset - e.g. 'var:preset|duotone|blue-orange' or 'var(--wp--preset--duotone--blue-orange)''
 			 * 3. A CSS string - e.g. 'unset' to remove globally applied duotone.
+			 *
+			 * Branch order: array first (common custom filters), then string. Preset detection
+			 * skips is_preset()/presets load for strings that cannot match the preset grammar
+			 * (e.g. 'unset'), and reuses one slug extraction on the preset hit path.
 			 */
-
 			$duotone_attr = $block['attrs']['style']['color']['duotone'];
-			$is_preset    = is_string( $duotone_attr ) && self::is_preset( $duotone_attr );
-			$is_css       = is_string( $duotone_attr ) && ! $is_preset;
-			$is_custom    = is_array( $duotone_attr );
 
-			if ( $is_preset ) {
-
-				$slug         = self::get_slug_from_attribute( $duotone_attr ); // e.g. 'blue-orange'.
-				$filter_id    = self::get_filter_id( $slug ); // e.g. 'wp-duotone-filter-blue-orange'.
-				$filter_value = self::get_css_var( $slug ); // e.g. 'var(--wp--preset--duotone--blue-orange)'.
-
-				// CSS custom property, SVG filter, and block CSS.
-				self::enqueue_global_styles_preset( $filter_id, $duotone_selector, $filter_value );
-
-			} elseif ( $is_css ) {
-				$slug         = wp_unique_id( sanitize_key( $duotone_attr . '-' ) ); // e.g. 'unset-1'.
-				$filter_id    = self::get_filter_id( $slug ); // e.g. 'wp-duotone-filter-unset-1'.
-				$filter_value = $duotone_attr; // e.g. 'unset'.
-
-				// Just block CSS.
-				self::enqueue_block_css( $filter_id, $duotone_selector, $filter_value );
-			} elseif ( $is_custom ) {
+			if ( is_array( $duotone_attr ) ) {
 				$slug         = wp_unique_id( sanitize_key( implode( '-', $duotone_attr ) . '-' ) ); // e.g. '000000-ffffff-2'.
-				$filter_id    = self::get_filter_id( $slug ); // e.g. 'wp-duotone-filter-000000-ffffff-2'.
-				$filter_value = self::get_filter_url( $filter_id ); // e.g. 'url(#wp-duotone-filter-000000-ffffff-2)'.
-				$filter_data  = array(
-					'slug'   => $slug,
-					'colors' => $duotone_attr,
-				);
+				$filter_id    = 'wp-duotone-' . $slug;
+				$filter_value = 'url(#' . $filter_id . ')';
 
 				// SVG filter and block CSS.
-				self::enqueue_custom_filter( $filter_id, $duotone_selector, $filter_value, $filter_data );
+				self::enqueue_custom_filter(
+					$filter_id,
+					$duotone_selector,
+					$filter_value,
+					array(
+						'slug'   => $slug,
+						'colors' => $duotone_attr,
+					)
+				);
+			} elseif ( is_string( $duotone_attr ) ) {
+				/*
+				 * Preset attrs always start with one of these two prefixes (see get_slug_from_attribute).
+				 * Fast-reject CSS strings like 'unset' without touching global presets.
+				 */
+				$looks_like_preset = isset( $duotone_attr[0] )
+					&& 'v' === $duotone_attr[0]
+					&& (
+						str_starts_with( $duotone_attr, 'var:preset|duotone|' )
+						|| str_starts_with( $duotone_attr, 'var(--wp--preset--duotone--' )
+					);
+
+				if ( $looks_like_preset ) {
+					$slug      = self::get_slug_from_attribute( $duotone_attr ); // e.g. 'blue-orange'.
+					$filter_id = 'wp-duotone-' . $slug;
+
+					// Same membership check as is_preset(), without a second slug parse.
+					if ( array_key_exists( $filter_id, self::get_all_global_styles_presets() ) ) {
+						$filter_value = 'var(--wp--preset--duotone--' . $slug . ')';
+
+						// CSS custom property, SVG filter, and block CSS.
+						self::enqueue_global_styles_preset( $filter_id, $duotone_selector, $filter_value );
+					} else {
+						// Unknown preset slug → treat as CSS string (parity with ! is_preset()).
+						$slug         = wp_unique_id( sanitize_key( $duotone_attr . '-' ) );
+						$filter_id    = 'wp-duotone-' . $slug;
+						$filter_value = $duotone_attr;
+
+						self::enqueue_block_css( $filter_id, $duotone_selector, $filter_value );
+					}
+				} else {
+					$slug         = wp_unique_id( sanitize_key( $duotone_attr . '-' ) ); // e.g. 'unset-1'.
+					$filter_id    = 'wp-duotone-' . $slug;
+					$filter_value = $duotone_attr; // e.g. 'unset'.
+
+					// Just block CSS.
+					self::enqueue_block_css( $filter_id, $duotone_selector, $filter_value );
+				}
 			}
-		} elseif ( $has_global_styles_duotone ) {
-			$slug         = $global_styles_block_names[ $block['blockName'] ]; // e.g. 'blue-orange'.
-			$filter_id    = self::get_filter_id( $slug ); // e.g. 'wp-duotone-filter-blue-orange'.
-			$filter_value = self::get_css_var( $slug ); // e.g. 'var(--wp--preset--duotone--blue-orange)'.
+			// Non-string/non-array: leave $filter_id unset (same as core — Tag Processor + notice).
+		} else {
+			// Reached only when the block is in the global-styles duotone map.
+			$slug         = $global_styles_block_names[ $block_name ]; // e.g. 'blue-orange'.
+			$filter_id    = 'wp-duotone-' . $slug;
+			$filter_value = 'var(--wp--preset--duotone--' . $slug . ')';
 
 			// CSS custom property, SVG filter, and block CSS.
 			self::enqueue_global_styles_preset( $filter_id, $duotone_selector, $filter_value );
@@ -1156,6 +1362,7 @@ class BlockeraDuotone {
 		if ( $tags->next_tag() ) {
 			$tags->add_class( $filter_id );
 		}
+
 		return $tags->get_updated_html();
 	}
 

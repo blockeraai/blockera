@@ -83,111 +83,149 @@ if ( ! function_exists( 'blockera_resolve_breakpoint_media_settings' ) ) {
 	 */
 	function blockera_resolve_breakpoint_media_settings( array $breakpoints): array {
 
+		// Request-level memo: StyleEngine calls this per breakpoint with the same list.
+		static $cache = [];
+
+		// Fingerprint only media-relevant fields (type/base/min/max).
+		$key = '';
+		foreach ( $breakpoints as $breakpoint ) {
+			if ( ! is_array( $breakpoint ) ) {
+				continue;
+			}
+
+			$key .= ( $breakpoint['type'] ?? '' ) . "\0"
+				. ( empty( $breakpoint['base'] ) ? '0' : '1' ) . "\0"
+				. ( $breakpoint['settings']['min'] ?? '' ) . "\0"
+				. ( $breakpoint['settings']['max'] ?? '' ) . "\1";
+		}
+
+		if ( isset( $cache[ $key ] ) ) {
+			return $cache[ $key ];
+		}
+
+		/**
+		 * Validate + parse px once (same rules as is_valid/parse helpers).
+		 *
+		 * @return array{0:bool,1:int} [valid, px]
+		 */
+		$parse_px = static function ( string $value ): array {
+			if ( '' === $value || false !== strpos( $value, 'func' ) ) {
+				return [ false, 0 ];
+			}
+
+			// Fast path: "123px" (default Blockera config).
+			$len = strlen( $value );
+			if ( $len > 2 && 'p' === $value[ $len - 2 ] && 'x' === $value[ $len - 1 ] ) {
+				$num = substr( $value, 0, $len - 2 );
+				if ( '' !== $num && ctype_digit( $num ) ) {
+					return [ true, (int) $num ];
+				}
+			}
+
+			$numeric = preg_replace( '/[^0-9]/', '', $value );
+			if ( '' === $numeric || ! is_numeric( $numeric ) ) {
+				return [ false, 0 ];
+			}
+
+			return [ true, (int) $numeric ];
+		};
+
 		$resolved = [];
-		$items    = [];
+		$max_only = []; // List of [px, type, max].
+		$min_only = []; // List of [px, type, min].
+		$fallback = []; // List of [type, min, max].
 
 		foreach ( $breakpoints as $breakpoint ) {
 			if ( empty( $breakpoint['type'] ) || ! empty( $breakpoint['base'] ) ) {
 				continue;
 			}
 
-			$items[] = $breakpoint;
-		}
-
-		foreach ( $items as $breakpoint ) {
-			$min = $breakpoint['settings']['min'] ?? '';
-			$max = $breakpoint['settings']['max'] ?? '';
-
-			if ( $min && $max ) {
-				$resolved[ $breakpoint['type'] ] = [
-					'min' => $min,
-					'max' => $max,
-				];
-			}
-		}
-
-		$max_only = array_values(
-			array_filter(
-				$items,
-				function ( array $breakpoint ) use ( $resolved ): bool {
-					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
-						return false;
-					}
-
-					$max = $breakpoint['settings']['max'] ?? '';
-					$min = $breakpoint['settings']['min'] ?? '';
-
-					return blockera_is_valid_breakpoint_px( $max ) && ! $min;
-				}
-			)
-		);
-
-		usort(
-			$max_only,
-			function ( array $a, array $b ): int {
-				return blockera_parse_breakpoint_px( $b['settings']['max'] ?? '' ) - blockera_parse_breakpoint_px( $a['settings']['max'] ?? '' );
-			}
-		);
-
-		foreach ( $max_only as $index => $breakpoint ) {
-			$next = $max_only[ $index + 1 ] ?? null;
-			$min  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['max'] ?? '' ) )
-				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['max'] ) + 1 )
-				: blockera_format_breakpoint_px( 0 );
-
-			$resolved[ $breakpoint['type'] ] = [
-				'min' => $min,
-				'max' => $breakpoint['settings']['max'] ?? '',
-			];
-		}
-
-		$min_only = array_values(
-			array_filter(
-				$items,
-				function ( array $breakpoint ) use ( $resolved ): bool {
-					if ( isset( $resolved[ $breakpoint['type'] ] ) ) {
-						return false;
-					}
-
-					$min = $breakpoint['settings']['min'] ?? '';
-					$max = $breakpoint['settings']['max'] ?? '';
-
-					return blockera_is_valid_breakpoint_px( $min ) && ! $max;
-				}
-			)
-		);
-
-		usort(
-			$min_only,
-			function ( array $a, array $b ): int {
-				return blockera_parse_breakpoint_px( $a['settings']['min'] ?? '' ) - blockera_parse_breakpoint_px( $b['settings']['min'] ?? '' );
-			}
-		);
-
-		foreach ( $min_only as $index => $breakpoint ) {
-			$next = $min_only[ $index + 1 ] ?? null;
-			$max  = ( $next && blockera_is_valid_breakpoint_px( $next['settings']['min'] ?? '' ) )
-				? blockera_format_breakpoint_px( blockera_parse_breakpoint_px( $next['settings']['min'] ) - 1 )
-				: '';
-
-			$resolved[ $breakpoint['type'] ] = [
-				'min' => $breakpoint['settings']['min'] ?? '',
-				'max' => $max,
-			];
-		}
-
-		foreach ( $items as $breakpoint ) {
 			$type = $breakpoint['type'];
 			$min  = $breakpoint['settings']['min'] ?? '';
 			$max  = $breakpoint['settings']['max'] ?? '';
 
-			if ( ! isset( $resolved[ $type ] ) && ( $min || $max ) ) {
+			if ( $min && $max ) {
 				$resolved[ $type ] = [
-					'min' => $min ? $min : '',
-					'max' => $max ? $max : '',
+					'min' => $min,
+					'max' => $max,
+				];
+				continue;
+			}
+
+			if ( ! $min ) {
+				[ $max_valid, $max_px ] = $parse_px( $max );
+				if ( $max_valid ) {
+					$max_only[] = [ $max_px, $type, $max ];
+					continue;
+				}
+			}
+
+			if ( ! $max ) {
+				[ $min_valid, $min_px ] = $parse_px( $min );
+				if ( $min_valid ) {
+					$min_only[] = [ $min_px, $type, $min ];
+					continue;
+				}
+			}
+
+			if ( $min || $max ) {
+				$fallback[] = [ $type, $min, $max ];
+			}
+		}
+
+		$max_n = count( $max_only );
+		if ( $max_n > 1 ) {
+			$px_col = [];
+			for ( $i = 0; $i < $max_n; $i++ ) {
+				$px_col[ $i ] = $max_only[ $i ][0];
+			}
+			array_multisort( $px_col, SORT_DESC, SORT_NUMERIC, $max_only );
+		}
+
+		for ( $i = 0; $i < $max_n; $i++ ) {
+			$next = $max_only[ $i + 1 ] ?? null;
+			// Neighbor max values are already validated; min is next.max+1 or 0px.
+			$min = ( null !== $next )
+				? ( $next[0] + 1 ) . 'px'
+				: '0px';
+
+			$resolved[ $max_only[ $i ][1] ] = [
+				'min' => $min,
+				'max' => $max_only[ $i ][2],
+			];
+		}
+
+		$min_n = count( $min_only );
+		if ( $min_n > 1 ) {
+			$px_col = [];
+			for ( $i = 0; $i < $min_n; $i++ ) {
+				$px_col[ $i ] = $min_only[ $i ][0];
+			}
+			array_multisort( $px_col, SORT_ASC, SORT_NUMERIC, $min_only );
+		}
+
+		for ( $i = 0; $i < $min_n; $i++ ) {
+			$next = $min_only[ $i + 1 ] ?? null;
+			$max  = ( null !== $next )
+				? ( $next[0] - 1 ) . 'px'
+				: '';
+
+			$resolved[ $min_only[ $i ][1] ] = [
+				'min' => $min_only[ $i ][2],
+				'max' => $max,
+			];
+		}
+
+		foreach ( $fallback as $row ) {
+			if ( ! isset( $resolved[ $row[0] ] ) ) {
+				$resolved[ $row[0] ] = [
+					'min' => $row[1] ? $row[1] : '',
+					'max' => $row[2] ? $row[2] : '',
 				];
 			}
 		}
+
+		$cache[ $key ] = $resolved;
 
 		return $resolved;
 	}
@@ -1160,6 +1198,16 @@ if ( ! function_exists( 'blockera_resolve_block_css_part' ) ) {
 	 * Tries the full block name first, then shorter hyphen segments so blocks like
 	 * `core/list-item` can match `.wp-block-list` inside `.wp-block-list > li`.
 	 *
+	 * Performance: hot path during style-engine selector building. Profiling showed
+	 * nearly all time in `preg_match` (pattern rebuilt via `preg_quote` per segment).
+	 * We use `strpos` + an ASCII boundary check (equivalent to the old regex) and
+	 * request-level static caches for segments and resolved results.
+	 *
+	 * Flow:
+	 * 1. Search `$selector` for `.wp-block-{segment}` (most-specific segment first).
+	 * 2. If not found and the selector is pseudo-only (`::marker`, `::before`, …),
+	 *    fall back to `$root` then `$args['root']` — those carry the real wp-block class.
+	 *
 	 * @param string $selector The prepared support selector.
 	 * @param string $root     The blockera unique root selector.
 	 * @param array  $args     The append arguments.
@@ -1168,37 +1216,108 @@ if ( ! function_exists( 'blockera_resolve_block_css_part' ) ) {
 	 */
 	function blockera_resolve_block_css_part( string $selector, string $root, array $args ): ?string {
 
+		// Per-request memoization: same selector/root/block combo repeats often while
+		// generating CSS for many supports/states on one block.
+		static $result_cache   = [];
+		static $segments_cache = [];
+
 		$block_name = $args['block-name'] ?? '';
 
 		if ( '' === trim( $block_name ) ) {
 			return null;
 		}
 
-		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
-			$part_pattern = blockera_get_block_css_part_pattern( $segment );
+		$args_root = $args['root'] ?? '';
+		$cache_key = $selector . "\0" . $root . "\0" . $block_name . "\0" . $args_root;
 
-			if ( preg_match( $part_pattern, $selector, $selector_match ) ) {
-				return $selector_match[0];
+		if ( isset( $result_cache[ $cache_key ] ) ) {
+			return $result_cache[ $cache_key ];
+		}
+
+		// e.g. list-item → [ 'list-item', 'list' ]; cached so we don't rebuild per call.
+		if ( ! isset( $segments_cache[ $block_name ] ) ) {
+			$segments_cache[ $block_name ] = blockera_get_block_name_segments( $block_name );
+		}
+
+		$segments = $segments_cache[ $block_name ];
+
+		// Phase 1: search the support selector. Phase 2 (pseudo-only only): search roots.
+		$haystacks = [ $selector ];
+
+		/*
+		 * Equivalent to `/\.\bwp-block-{segment}\b(?!\w+|-|_)/` without the regex engine:
+		 * find `.wp-block-{segment}`, then require the next char is NOT ASCII alnum, '-',
+		 * or '_' so `.wp-block-list` does not false-match inside `.wp-block-list-item`.
+		 */
+		for ( $phase = 0; $phase < 2; $phase++ ) {
+			foreach ( $segments as $segment ) {
+				$needle = '.wp-block-' . $segment;
+				$len    = strlen( $needle );
+
+				foreach ( $haystacks as $haystack ) {
+					$offset = 0;
+					$pos    = strpos( $haystack, $needle, $offset );
+
+					while ( false !== $pos ) {
+						$end = $pos + $len;
+
+						// End of string ⇒ valid class-part boundary.
+						if ( ! isset( $haystack[ $end ] ) ) {
+							$result_cache[ $cache_key ] = $needle;
+
+							return $needle;
+						}
+
+						$ord = ord( $haystack[ $end ] );
+
+						// Still inside a longer token (e.g. list→list-item) ⇒ keep searching.
+						if (
+							( $ord >= 48 && $ord <= 57 )
+							|| ( $ord >= 65 && $ord <= 90 )
+							|| ( $ord >= 97 && $ord <= 122 )
+							|| 45 === $ord
+							|| 95 === $ord
+						) {
+							$offset = $pos + 1;
+							$pos    = strpos( $haystack, $needle, $offset );
+							continue;
+						}
+
+						$result_cache[ $cache_key ] = $needle;
+
+						return $needle;
+					}
+				}
+			}
+
+			// After phase 1 miss: only pseudo-only selectors may borrow the wp-block class
+			// from the blockera root or the block-type root (e.g. `.wp-block-list > li`).
+			if ( 0 === $phase ) {
+				if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
+					$result_cache[ $cache_key ] = null;
+
+					return null;
+				}
+
+				$haystacks = [];
+
+				if ( '' !== trim( $root ) ) {
+					$haystacks[] = $root;
+				}
+
+				if ( '' !== trim( $args_root ) ) {
+					$haystacks[] = $args_root;
+				}
+
+				if ( [] === $haystacks ) {
+					$result_cache[ $cache_key ] = null;
+
+					return null;
+				}
 			}
 		}
 
-		if ( ! blockera_is_pseudo_only_block_selector( $selector ) ) {
-			return null;
-		}
-
-		foreach ( blockera_get_block_name_segments( $block_name ) as $segment ) {
-			$part_pattern = blockera_get_block_css_part_pattern( $segment );
-
-			foreach ( [ $root, $args['root'] ?? '' ] as $source ) {
-				if ( '' === trim( $source ) ) {
-					continue;
-				}
-
-				if ( preg_match( $part_pattern, $source, $source_match ) ) {
-					return $source_match[0];
-				}
-			}
-		}
+		$result_cache[ $cache_key ] = null;
 
 		return null;
 	}
@@ -1807,6 +1926,9 @@ if (! function_exists('blockera_get_available_block_supports')) {
 	/**
 	 * Get all available block supports.
 	 *
+	 * Loads JSON schemas from editor block-supports directory, skips entries without
+	 * a title, merges icon supports, and memoizes the final payload for the request.
+	 *
 	 * @return array the block supports.
 	 */
 	function blockera_get_available_block_supports(): array {
@@ -1818,26 +1940,52 @@ if (! function_exists('blockera_get_available_block_supports')) {
 		}
 
 		$supports = [];
-		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
+		$dir      = blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports';
+		$entries  = [];
 
-		foreach ( $files as $support_file ) {			
-			ob_start();
+		// opendir/readdir avoids glob() pattern compilation; sort keeps glob()-stable order.
+		$handle = opendir( $dir );
 
-			require $support_file;
+		if ( $handle ) {
+			$entry = readdir( $handle );
 
-			$support = json_decode(ob_get_clean(), true);
+			while ( false !== $entry ) {
+				if ( isset( $entry[0] ) && '.' !== $entry[0] && str_ends_with( $entry, '-block-supports-list.json' ) ) {
+					$entries[] = $entry;
+				}
 
-			if (empty($support['title'])) {
-
-				continue;
+				$entry = readdir( $handle );
 			}
 
-			$supports[ $support['title'] ] = $support;
+			closedir( $handle );
 		}
 
-		$cached_supports = $supports;
+		if ( $entries ) {
+			sort( $entries, SORT_STRING );
 
-		return blockera_add_icon_block_supports($supports);
+			foreach ( $entries as $entry ) {
+				// Direct read beats ob_start()/require for static JSON data files.
+				$raw = file_get_contents( $dir . '/' . $entry );
+
+				if ( false === $raw ) {
+					continue;
+				}
+
+				$support = json_decode( $raw, true );
+
+				// Skip invalid JSON / entries without a usable title key.
+				if ( ! is_array( $support ) || empty( $support['title'] ) ) {
+					continue;
+				}
+
+				$supports[ $support['title'] ] = $support;
+			}
+		}
+
+		// Cache the final payload (including icon) so warm hits stay consistent.
+		$cached_supports = blockera_add_icon_block_supports( $supports );
+
+		return $cached_supports;
 	}
 }
 

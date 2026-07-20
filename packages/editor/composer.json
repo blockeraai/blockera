@@ -12,7 +12,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Blockera\\Editor\\Tests": "php/tests/"
+			"Blockera\\Editor\\Tests\\": "php/Tests/"
 		}
 	}
 }

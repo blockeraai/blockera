@@ -38,13 +38,14 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 					} elseif ( ! $self->isValidSetting( $row ) ) {
 						continue;
 					}
-					$layer = trim( self::textShadowRowToCssValue( $row ) );
+					// textShadowRowToCssValue() already trims.
+					$layer = self::textShadowRowToCssValue( $row );
 					if ( '' !== $layer ) {
 						$parts[] = $layer;
 					}
 				}
 
-				return implode( ', ', array_filter( $parts, 'strlen' ) );
+				return implode( ', ', $parts );
 			},
 			$resolved_from_var
 		);
@@ -60,7 +61,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 				if ( ! is_array( $row ) || ! ( $row['isVisible'] ?? true ) ) {
 					continue;
 				}
-				$layer = trim( self::textShadowRowToCssValue( $row ) );
+				$layer = self::textShadowRowToCssValue( $row );
 				if ( '' === $layer ) {
 					continue;
 				}

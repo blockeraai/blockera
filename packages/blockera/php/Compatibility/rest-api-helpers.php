@@ -2,6 +2,8 @@
 
 use Blockera\Http\Routes;
 use Blockera\Setup\Compatibility\JSON;
+use Blockera\Setup\Compatibility\JSONData;
+use Blockera\Setup\Compatibility\JSONResolver;
 
 if (! function_exists('blockera_register_wp_global_styles_post_type_args')) {
 	/**
@@ -34,6 +36,43 @@ if (! function_exists('blockera_editor_register_routes')) {
 	}
 }
 
+if ( ! function_exists( 'blockera_should_register_editor_theme_json_filters' ) ) {
+	/**
+	 * Whether Blockera must replace core wp_theme_json_data_* filters this request.
+	 *
+	 * Generic wp-admin screens (dashboard, plugins list, etc.) do not need Blockera
+	 * theme.json sanitization; skipping filter registration avoids cold JSON merges there.
+	 *
+	 * @return bool
+	 */
+	function blockera_should_register_editor_theme_json_filters(): bool {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+
+		if ( preg_match( '/\/wp-admin\/(post|post-new|site-editor|widgets)\.php/i', $request_uri ) ) {
+			return true;
+		}
+
+		if ( blockera_is_admin() ) {
+			$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+			if ( '' !== $page && str_starts_with( $page, 'blockera' ) ) {
+				return true;
+			}
+		}
+
+		if ( wp_is_json_request() && is_string( $request_uri ) ) {
+			if (
+				str_contains( $request_uri, '/wp/v2/global-styles' )
+				|| str_contains( $request_uri, '/wp/v2/themes/' )
+				|| preg_match( '#/(blockera|blockera-pro)/v\d+/#', $request_uri )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
 if (! function_exists('blockera_editor_hooks')) {
 	/**
      * Registers the block and site editor related hooks.
@@ -41,14 +80,28 @@ if (! function_exists('blockera_editor_hooks')) {
      * @return void
      */
 	function blockera_editor_hooks(): void {
-		// Skip if not an admin request. because we need to below filters only in admin requests.
-		if (! blockera_is_admin_request(false)) {
+		if ( ! blockera_is_admin_request( false ) && ! wp_is_json_request() ) {
 			return;
 		}
-	
+
+		if ( ! blockera_should_register_editor_theme_json_filters() ) {
+			return;
+		}
+
 		add_filter('wp_theme_json_data_user', 'blockera_editor_wp_theme_json_data_user', 9e2);
 		add_filter('wp_theme_json_data_theme', 'blockera_editor_wp_theme_json_data_theme', 9e2);
 		add_filter('wp_theme_json_data_blocks', 'blockera_editor_wp_theme_json_data_blocks', 9e2);
+	}
+}
+
+if ( ! function_exists( 'blockera_editor_theme_json_filter_cache_enabled' ) ) {
+	/**
+	 * Whether request-level theme.json filter caches may be used.
+	 *
+	 * @return bool
+	 */
+	function blockera_editor_theme_json_filter_cache_enabled(): bool {
+		return ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT );
 	}
 }
 
@@ -58,17 +111,27 @@ if (! function_exists('blockera_editor_wp_theme_json_data_user')) {
      *
      * @param WP_Theme_JSON_Data $data The data to filter.
      * 
-     * @return array The filtered data.
+     * @return WP_Theme_JSON_Data The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_user( WP_Theme_JSON_Data $data) {
+		static $cached = null;
+
+		if ( null !== $cached && blockera_editor_theme_json_filter_cache_enabled() ) {
+			return $cached;
+		}
+
 		$user_data = blockera_get_user_styles_data();
 
 		// Skip if no user data is found.
-		if (empty($user_data)) {
-			return $data;
+		if ( empty( $user_data ) ) {
+			$cached = $data;
+			return $cached;
 		}
 
-		return new JSON($user_data, 'custom');
+		// Return JSONData so core uses get_theme_json() (no second sanitize via get_data()).
+		$cached = new JSONData( $user_data, 'custom' );
+
+		return $cached;
 	}
 }
 
@@ -78,23 +141,22 @@ if (! function_exists('blockera_editor_wp_theme_json_data_theme')) {
      *
      * @param WP_Theme_JSON_Data $data the data to filter.
      * 
-     * @return JSON|WP_Theme_JSON the filtered data.
+     * @return JSONData The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_theme( WP_Theme_JSON_Data $data ) {
-		// Use static flag to prevent redundant cache clearing on repeated filter calls.
-		static $initialized = false;
+		static $cached = null;
 
-		if ( ! $initialized ) {
-			Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
-			Blockera\Setup\Compatibility\JSONResolver::$default_theme_data = $data;
-			$initialized = true;
+		if ( null !== $cached && blockera_editor_theme_json_filter_cache_enabled() ) {
+			return $cached;
 		}
 
-		// Return JSONData (extends WP_Theme_JSON_Data) so core keeps Blockera's JSON instance
-		// instead of re-wrapping get_data() in core WP_Theme_JSON (which strips Blockera presets).
-		$theme = Blockera\Setup\Compatibility\JSONResolver::get_theme_data();
+		unset( $data );
 
-		return new Blockera\Setup\Compatibility\JSONData( $theme->get_raw_data(), 'theme' );
+		// Return JSONData wrapping the already-sanitized theme tree (no re-sanitize).
+		$theme  = JSONResolver::get_theme_data();
+		$cached = JSONData::from_json( $theme, 'theme' );
+
+		return $cached;
 	}
 }
 
@@ -104,19 +166,25 @@ if (! function_exists('blockera_editor_wp_theme_json_data_blocks')) {
      *
      * @param WP_Theme_JSON_Data $data the data to filter.
      * 
-     * @return JSON|WP_Theme_JSON the filtered data.
+     * @return JSONData The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_blocks( WP_Theme_JSON_Data $data ) {
-		// Use static flag to prevent redundant cache clearing on repeated filter calls.
-		static $initialized = false;
+		static $cached = null;
 
-		if ( ! $initialized ) {
-			Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
-			Blockera\Setup\Compatibility\JSONResolver::$default_blocks_data = $data;
-			$initialized = true;
+		if ( null !== $cached && blockera_editor_theme_json_filter_cache_enabled() ) {
+			return $cached;
 		}
 
-		return Blockera\Setup\Compatibility\JSONResolver::get_block_data();
+		unset( $data );
+
+		// Wrap Blockera blocks JSON so core does not re-sanitize via get_data() + WP_Theme_JSON.
+		$blocks = JSONResolver::get_block_data();
+		if ( ! $blocks instanceof JSON ) {
+			$blocks = JSON::with_raw_data( $blocks->get_raw_data() );
+		}
+		$cached = JSONData::from_json( $blocks, 'blocks' );
+
+		return $cached;
 	}
 }
 
@@ -192,6 +260,6 @@ if (! function_exists('blockera_get_valid_supports')) {
 		}
 
 		$cache[ $cache_key ] = $with_blockera_supports;
-		return $with_blockera_supports;
+		return $cache[ $cache_key ];
 	}
 }

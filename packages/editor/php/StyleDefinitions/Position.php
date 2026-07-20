@@ -9,45 +9,35 @@ namespace Blockera\Editor\StyleDefinitions;
  */
 class Position extends BaseStyleDefinition {
 
-    /**
-     * Collect all css selectors and declarations.
-     *
-     * @param array $setting the block setting.
-     *
-     * @return array
-     */
-    protected function css( array $setting): array {
+	/**
+	 * Collect all css selectors and declarations.
+	 *
+	 * @param array $setting the block setting.
+	 *
+	 * @return array
+	 */
+	protected function css( array $setting ): array {
 
-        if (! isset($setting['type'])) {
-            return [];
-        }
+		if ( ! isset( $setting['type'] ) || 'position' !== $setting['type'] || ! isset( $setting['position'] ) ) {
+			return [];
+		}
 
-        $cssProperty = $setting['type'];
+		$positionData = $setting['position'];
 
-        if ('position' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
-            return [];
-        }
+		if ( ! isset( $positionData['type'], $positionData['position'] ) || ! is_array( $positionData['position'] ) ) {
+			return [];
+		}
 
-        $positionData = $setting[ $cssProperty ];
+		$this->declarations['position'] = $positionData['type'];
 
-        if (! isset($positionData['type'], $positionData['position']) || ! is_array($positionData['position'])) {
-            return [];
-        }
+		foreach ( $positionData['position'] as $property => $item ) {
+			if ( $item ) {
+				$this->declarations[ $property ] = blockera_get_value_addon_real_value( $item );
+			}
+		}
 
-        $position = $positionData['type'];
-        $value    = $positionData['position'];
+		$this->setCss( $this->declarations );
 
-        $this->declarations[ $cssProperty ] = $position;
-
-        foreach ($value as $property => $item) {
-            if ($item) {
-                $this->declarations[ $property ] = blockera_get_value_addon_real_value($item);
-            }
-        }
-
-        $this->setCss($this->declarations);
-
-        return $this->css;
-    }
-
+		return $this->css;
+	}
 }

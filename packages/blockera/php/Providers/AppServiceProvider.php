@@ -21,6 +21,7 @@ use Blockera\Bootstrap\ServiceProvider;
 use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Features\Core\FeaturesManager;
 use Blockera\Setup\Compatibility\Compatibility;
+use Blockera\Setup\Compatibility\JSON;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
@@ -37,6 +38,16 @@ use Blockera\Editor\EditorPersistenceStore;
  * @package Blockera\Setup\Providers\AppServiceProvider
  */
 class AppServiceProvider extends ServiceProvider {
+
+	/**
+	 * Request-scoped Blockera post_content meta batch cache.
+	 *
+	 * Kept separate from core {@see wp_cache_get()} post_meta so partial priming
+	 * never blocks other meta keys (footnotes, thumbnails, etc.).
+	 *
+	 * @var array<int, array|false> post_id => meta array, or false when absent.
+	 */
+	private static $post_content_meta_cache = array();
 
 	/**
 	 * Flag to check if the blockera css has been outputted.
@@ -250,6 +261,8 @@ class AppServiceProvider extends ServiceProvider {
 		$this->loadTextDomain();
 
 		blockera_editor_hooks();
+
+		JSON::register_sanitize_cache_invalidation_hooks();
 	}
 
 	/**
@@ -419,19 +432,31 @@ class AppServiceProvider extends ServiceProvider {
 
 		$template_post_types = [ 'wp_template', 'wp_template_part' ];
 
-		// Process main query or FSE template queries (wp_template, wp_template_part).
-		// Template queries are not main query but must be processed for block styles.
-		$post_type         = $query->get( 'post_type' );
-		$is_template_query = in_array( $post_type, $template_post_types, true )
-			|| ( is_array( $post_type ) && ! empty( array_intersect( $template_post_types, $post_type ) ) );
+		// Most the_posts calls are secondary queries — bail before per-query caches and content scans.
+		if ( ! $query->is_main_query() ) {
+			$post_type         = $query->get( 'post_type' );
+			$is_template_query = in_array( $post_type, $template_post_types, true )
+				|| ( is_array( $post_type ) && ! empty( array_intersect( $template_post_types, $post_type ) ) );
 
-		// Fallback: check posts when query vars may not expose post_type (e.g. ID-based lookup).
-		if ( ! $is_template_query ) {
-			$first_post        = reset( $posts );
-			$is_template_query = $first_post && in_array( $first_post->post_type, $template_post_types, true );
+			if ( ! $is_template_query ) {
+				$first_post        = reset( $posts );
+				$is_template_query = $first_post && in_array( $first_post->post_type, $template_post_types, true );
+			}
+
+			if ( ! $is_template_query ) {
+				return $posts;
+			}
 		}
 
-		if ( ! $query->is_main_query() && ! $is_template_query ) {
+		if ( 'ids' === $query->get( 'fields' ) ) {
+			return $posts;
+		}
+
+		static $non_blockera_post_ids = array();
+		static $empty_query_ids       = array();
+
+		$query_id = spl_object_id( $query );
+		if ( $query_id && isset( $empty_query_ids[ $query_id ] ) ) {
 			return $posts;
 		}
 
@@ -440,60 +465,101 @@ class AppServiceProvider extends ServiceProvider {
             'wp_global_styles' => true,
         ];
 
+		$needs_processing = false;
+		foreach ( $posts as $post ) {
+			if ( isset( $exception_post_types[ $post->post_type ] ) ) {
+				continue;
+			}
+			if ( isset( $non_blockera_post_ids[ $post->ID ] ) ) {
+				continue;
+			}
+			$content = $post->post_content;
+			if ( str_contains( $content, 'blockeraPropsId' ) || str_contains( $content, '"ref"' ) ) {
+				$needs_processing = true;
+				break;
+			}
+		}
+
+		if ( ! $needs_processing ) {
+			if ( $query_id ) {
+				$empty_query_ids[ $query_id ] = true;
+			}
+			return $posts;
+		}
+
 		$posts_to_process = [];
 		$post_ids         = [];
 
         // Process only the posts that are not in the exception post types.
         // And contain Blockera blocks.
-		foreach ($posts as $index => $post) {
-			if (isset($exception_post_types[ $post->post_type ])) {
+		foreach ( $posts as $index => $post ) {
+			if ( isset( $exception_post_types[ $post->post_type ] ) ) {
 				continue;
 			}
-			if (! blockera_contains_blockera_block($post->post_content)) {
-				$parsed_blocks = parse_blocks($post->post_content);
 
-				foreach ($parsed_blocks as $block) {
-					$ref = $block['attrs']['ref'] ?? null;
+			if ( isset( $non_blockera_post_ids[ $post->ID ] ) ) {
+				continue;
+			}
 
-					if (! $ref) {
-						continue;
-					}
+			$content = $post->post_content;
 
-					// Get post object by ref id.
-					$post_ref = get_post($ref);
+			if ( blockera_contains_blockera_block( $content ) ) {
+				$posts_to_process[ $index ] = $post;
+				$post_ids[]                 = $post->ID;
+				continue;
+			}
 
-					if (blockera_contains_blockera_block($post_ref->post_content)) {
-						$posts_to_process[ $index ] = $post_ref;
-						$post_ids[]                 = $ref;
-					}
+			if ( ! str_contains( $content, '"ref"' ) ) {
+				$non_blockera_post_ids[ $post->ID ] = true;
+				continue;
+			}
+
+			$parsed_blocks = parse_blocks( $content );
+
+			foreach ( $parsed_blocks as $block ) {
+				$ref = $block['attrs']['ref'] ?? null;
+
+				if ( ! $ref ) {
+					continue;
 				}
-				continue;
+
+				$post_ref = get_post( $ref );
+
+				if ( $post_ref && blockera_contains_blockera_block( $post_ref->post_content ) ) {
+					$posts_to_process[ $index ] = $post_ref;
+					$post_ids[]                 = $ref;
+				}
 			}
-			$posts_to_process[ $index ] = $post;
-			$post_ids[]                 = $post->ID;
 		}
 
-		if (empty($posts_to_process)) {
+		if ( empty( $posts_to_process ) ) {
+			if ( $query_id ) {
+				$empty_query_ids[ $query_id ] = true;
+			}
 			return $posts;
 		}
 
-		// Use helper function for cache instance (no container overhead).
-		$cache     = $this->app->make('CacheSystem');
-		$save_post = $this->app->make( SavePost::class );
+		// Avoid Application::make() on this hot the_posts path (16× per complex page).
+		static $cache     = null;
+		static $save_post = null;
+		if ( null === $cache ) {
+			$cache = blockera_get_cache();
+		}
+		if ( null === $save_post ) {
+			$save_post = new SavePost( $this->app );
+		}
 		$cache_key = $cache->getCacheKey( 'post_content' );
 
-        // Batch prime meta cache for all post IDs to avoid N+1 queries.
-        // This loads all post meta in a single query instead of one per post.
-        \update_meta_cache('post', $post_ids);
+		$this->primeBlockeraPostContentMetaCache( $post_ids, $cache_key );
 
-		foreach ($posts_to_process as $index => $post) {
-			// Compute hash once per iteration.
-			$current_hash = md5($post->post_content);
-			// Get the cached data for the post.
-			$cached_data = \get_post_meta($post->ID, $cache_key, true);
+		foreach ( $posts_to_process as $index => $post ) {
+			$current_hash = md5( $post->post_content );
+			$cached_data  = $this->getBlockeraPostContentMeta( $post->ID, $cache_key );
 
-			if (! empty($cached_data) 
-				&& isset($cached_data['hash'], $cached_data['content'])
+			if (
+				! empty( $cached_data )
+				&& is_array( $cached_data )
+				&& isset( $cached_data['hash'], $cached_data['content'] )
 				&& $cached_data['hash'] === $current_hash
 			) {
 				$posts[ $index ]->post_content = $cached_data['content'];
@@ -517,12 +583,84 @@ class AppServiceProvider extends ServiceProvider {
 					]
 				);
 
+				self::$post_content_meta_cache[ $post->ID ] = [
+					'hash'    => $current_hash,
+					'content' => $result['content'],
+				];
+
 				// Replace post_content with processed content.
 				$posts[ $index ]->post_content = $result['content'];
 			}
 		}
 
 		return $posts;
+	}
+
+	/**
+	 * Read Blockera post_content meta using the request batch cache.
+	 *
+	 * @param int    $post_id  Post ID.
+	 * @param string $meta_key Full post meta key from {@see Cache::getCacheKey()}.
+	 * @return mixed Same shape as {@see get_post_meta()} with `$single = true`.
+	 */
+	private function getBlockeraPostContentMeta( int $post_id, string $meta_key ) {
+		if ( ! array_key_exists( $post_id, self::$post_content_meta_cache ) ) {
+			$value                                     = \get_post_meta( $post_id, $meta_key, true );
+			self::$post_content_meta_cache[ $post_id ] = ( is_array( $value ) && array() !== $value ) || ( ! is_array( $value ) && '' !== $value )
+				? $value
+				: false;
+		}
+
+		$cached = self::$post_content_meta_cache[ $post_id ];
+
+		return false === $cached ? '' : $cached;
+	}
+
+	/**
+	 * Batch-load Blockera post_content meta without touching core post_meta cache.
+	 *
+	 * @param int[]  $post_ids Post IDs to prime.
+	 * @param string $meta_key Full post meta key from {@see Cache::getCacheKey()}.
+	 * @return void
+	 */
+	private function primeBlockeraPostContentMetaCache( array $post_ids, string $meta_key ): void {
+		$post_ids = array_values( array_unique( array_map( 'intval', $post_ids ) ) );
+		$to_fetch = array();
+
+		foreach ( $post_ids as $post_id ) {
+			if ( $post_id <= 0 || array_key_exists( $post_id, self::$post_content_meta_cache ) ) {
+				continue;
+			}
+
+			$to_fetch[] = $post_id;
+		}
+
+		if ( empty( $to_fetch ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$id_list           = implode( ',', $to_fetch );
+		$values_by_post_id = array();
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- post IDs are intval.
+		$sql  = $wpdb->prepare(
+			"SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND post_id IN ($id_list)",
+			$meta_key
+		);
+		$rows = $wpdb->get_results( $sql, ARRAY_A );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( is_array( $rows ) ) {
+			foreach ( $rows as $row ) {
+				$values_by_post_id[ (int) $row['post_id'] ] = maybe_unserialize( $row['meta_value'] );
+			}
+		}
+
+		foreach ( $to_fetch as $post_id ) {
+			self::$post_content_meta_cache[ $post_id ] = $values_by_post_id[ $post_id ] ?? false;
+		}
 	}
 
 	/**

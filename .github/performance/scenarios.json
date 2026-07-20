@@ -1,0 +1,67 @@
+{
+	"defaults": {
+		"primaryMetric": "wp-total",
+		"thresholdPercent": 10,
+		"baseUrl": "http://localhost:8888",
+		"testRuns": 20
+	},
+	"scenarios": [
+		{
+			"id": "front-home",
+			"group": "page-rendering",
+			"label": "Home page",
+			"path": "/",
+			"thresholdPercent": 20
+		},
+		{
+			"id": "front-page-1",
+			"group": "patterns",
+			"label": "Blocks: Large page 1",
+			"path": "/perf-page-1/",
+			"fixture": "tests/fixtures/complex-2/input.html",
+			"thresholdPercent": 20
+		},
+		{
+			"id": "admin-dashboard",
+			"group": "admin",
+			"label": "Admin: Dashboard",
+			"path": "/wp-admin/",
+			"auth": true,
+			"thresholdPercent": 15
+		},
+		{
+			"id": "admin-posts",
+			"group": "admin",
+			"label": "Admin: Posts list",
+			"path": "/wp-admin/edit.php",
+			"auth": true,
+			"thresholdPercent": 15
+		},
+		{
+			"id": "admin-media",
+			"group": "admin",
+			"label": "Admin: Media library",
+			"path": "/wp-admin/upload.php",
+			"auth": true,
+			"thresholdPercent": 15
+		},
+		{
+			"id": "admin-block-editor",
+			"group": "admin",
+			"label": "Admin: Block editor (Large page 1)",
+			"path": "/wp-admin/post.php?post={POST_ID}&action=edit",
+			"fixture": "tests/fixtures/complex-2/input.html",
+			"auth": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "admin-blockera-settings",
+			"group": "admin",
+			"label": "Admin: Blockera dashboard",
+			"path": "/wp-admin/admin.php?page=blockera-settings-dashboard",
+			"auth": true,
+			"requiresBlockera": true,
+			"thresholdPercent": 15
+		}
+	]
+}

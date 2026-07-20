@@ -43,7 +43,7 @@ class AdminAssetsProvider extends AssetsProvider {
 	public function boot(): void {
 
 		// Skip execution if saving in site editor.
-		if (blockera_is_skip_request()) {
+		if (! blockera_is_admin() || blockera_is_skip_request()) {
 			return;
 		}
 

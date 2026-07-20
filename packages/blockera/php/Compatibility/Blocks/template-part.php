@@ -32,7 +32,10 @@ if (! function_exists('blockera_render_block_core_template_part')) {
 	 * @return string The render.
 	 */
 	function blockera_render_block_core_template_part( $attributes ) {
-		static $seen_ids = array();
+		static $seen_ids       = array();
+		static $defined_areas  = null;
+		static $area_by_slug   = null;
+		static $resolved_parts = array();
 
 		$template_part_id = null;
 		$content          = null;
@@ -40,89 +43,102 @@ if (! function_exists('blockera_render_block_core_template_part')) {
 		$theme            = isset( $attributes['theme'] ) ? $attributes['theme'] : get_stylesheet();
 
 		if ( isset( $attributes['slug'] ) && get_stylesheet() === $theme ) {
-			$template_part_id    = $theme . '//' . $attributes['slug'];
-			$template_part_query = new WP_Query(
-				array(
-					'post_type'           => 'wp_template_part',
-					'post_status'         => 'publish',
-					'post_name__in'       => array( $attributes['slug'] ),
-					'tax_query'           => array(
-						array(
-							'taxonomy' => 'wp_theme',
-							'field'    => 'name',
-							'terms'    => $theme,
-						),
-					),
-					'posts_per_page'      => 1,
-					'no_found_rows'       => true,
-					'lazy_load_term_meta' => false, // Do not lazy load term meta, as template parts only have one term.
-				)
-			);
-			$template_part_post  = $template_part_query->have_posts() ? $template_part_query->next_post() : null;
-			if ( $template_part_post ) {
-				// A published post might already exist if this template part was customized elsewhere
-				// or if it's part of a customized template.
-				$block_template = _build_block_template_result_from_post( $template_part_post );
-				$content        = $block_template->content;
-				if ( isset( $block_template->area ) ) {
-					$area = $block_template->area;
-				}
-				/**
-				 * Fires when a block template part is loaded from a template post stored in the database.
-				 *
-				 * @since 5.9.0
-				 *
-				 * @param string  $template_part_id   The requested template part namespaced to the theme.
-				 * @param array   $attributes         The block attributes.
-				 * @param WP_Post $template_part_post The template part post object.
-				 * @param string  $content            The template part content.
-				 */
-				do_action( 'render_block_core_template_part_post', $template_part_id, $attributes, $template_part_post, $content );
-			} else {
-				$template_part_file_path = '';
-				// Else, if the template part was provided by the active theme,
-				// render the corresponding file content.
-				if ( 0 === validate_file( $attributes['slug'] ) ) {
-					$block_template = get_block_file_template( $template_part_id, 'wp_template_part' );
+			$template_part_id = $theme . '//' . $attributes['slug'];
+			$cache_key        = $template_part_id;
 
-					if ( isset( $block_template->content ) ) {
-						$content = $block_template->content;
-					}
+			if ( isset( $resolved_parts[ $cache_key ] ) ) {
+				$content = $resolved_parts[ $cache_key ]['content'];
+				$area    = $resolved_parts[ $cache_key ]['area'];
+			} else {
+				$template_part_query = new WP_Query(
+                    array(
+						'post_type'           => 'wp_template_part',
+						'post_status'         => 'publish',
+						'post_name__in'       => array( $attributes['slug'] ),
+						'tax_query'           => array(
+							array(
+								'taxonomy' => 'wp_theme',
+								'field'    => 'name',
+								'terms'    => $theme,
+							),
+						),
+						'posts_per_page'      => 1,
+						'no_found_rows'       => true,
+						'lazy_load_term_meta' => false, // Do not lazy load term meta, as template parts only have one term.
+                    )
+				);
+				$template_part_post  = $template_part_query->have_posts() ? $template_part_query->next_post() : null;
+				if ( $template_part_post ) {
+					// A published post might already exist if this template part was customized elsewhere
+					// or if it's part of a customized template.
+					$block_template = _build_block_template_result_from_post( $template_part_post );
+					$content        = $block_template->content;
 					if ( isset( $block_template->area ) ) {
 						$area = $block_template->area;
 					}
+					/**
+					 * Fires when a block template part is loaded from a template post stored in the database.
+					 *
+					 * @since 5.9.0
+					 *
+					 * @param string  $template_part_id   The requested template part namespaced to the theme.
+					 * @param array   $attributes         The block attributes.
+					 * @param WP_Post $template_part_post The template part post object.
+					 * @param string  $content            The template part content.
+					 */
+					do_action( 'render_block_core_template_part_post', $template_part_id, $attributes, $template_part_post, $content );
+				} else {
+					$template_part_file_path = '';
+					// Else, if the template part was provided by the active theme,
+					// render the corresponding file content.
+					if ( 0 === validate_file( $attributes['slug'] ) ) {
+						$block_template = get_block_file_template( $template_part_id, 'wp_template_part' );
 
-					// Needed for the `render_block_core_template_part_file` and `render_block_core_template_part_none` actions below.
-					$block_template_file = _get_block_template_file( 'wp_template_part', $attributes['slug'] );
-					if ( $block_template_file ) {
-						$template_part_file_path = $block_template_file['path'];
+						if ( isset( $block_template->content ) ) {
+							$content = $block_template->content;
+						}
+						if ( isset( $block_template->area ) ) {
+							$area = $block_template->area;
+						}
+
+						// Needed for the `render_block_core_template_part_file` and `render_block_core_template_part_none` actions below.
+						// Prefer Blockera helper so core `_get_block_template_file` does not cold-start WP_Theme_JSON_Resolver.
+						$block_template_file = blockera_get_block_template_file( 'wp_template_part', $attributes['slug'] );
+						if ( $block_template_file ) {
+							$template_part_file_path = $block_template_file['path'];
+						}
+					}
+
+					if ( '' !== $content && null !== $content ) {
+						/**
+						 * Fires when a block template part is loaded from a template part in the theme.
+						 *
+						 * @since 5.9.0
+						 *
+						 * @param string $template_part_id        The requested template part namespaced to the theme.
+						 * @param array  $attributes              The block attributes.
+						 * @param string $template_part_file_path Absolute path to the template path.
+						 * @param string $content                 The template part content.
+						 */
+						do_action( 'render_block_core_template_part_file', $template_part_id, $attributes, $template_part_file_path, $content );
+					} else {
+						/**
+						 * Fires when a requested block template part does not exist in the database nor in the theme.
+						 *
+						 * @since 5.9.0
+						 *
+						 * @param string $template_part_id        The requested template part namespaced to the theme.
+						 * @param array  $attributes              The block attributes.
+						 * @param string $template_part_file_path Absolute path to the not found template path.
+						 */
+						do_action( 'render_block_core_template_part_none', $template_part_id, $attributes, $template_part_file_path );
 					}
 				}
 
-				if ( '' !== $content && null !== $content ) {
-					/**
-					 * Fires when a block template part is loaded from a template part in the theme.
-					 *
-					 * @since 5.9.0
-					 *
-					 * @param string $template_part_id        The requested template part namespaced to the theme.
-					 * @param array  $attributes              The block attributes.
-					 * @param string $template_part_file_path Absolute path to the template path.
-					 * @param string $content                 The template part content.
-					 */
-					do_action( 'render_block_core_template_part_file', $template_part_id, $attributes, $template_part_file_path, $content );
-				} else {
-					/**
-					 * Fires when a requested block template part does not exist in the database nor in the theme.
-					 *
-					 * @since 5.9.0
-					 *
-					 * @param string $template_part_id        The requested template part namespaced to the theme.
-					 * @param array  $attributes              The block attributes.
-					 * @param string $template_part_file_path Absolute path to the not found template path.
-					 */
-					do_action( 'render_block_core_template_part_none', $template_part_id, $attributes, $template_part_file_path );
-				}
+				$resolved_parts[ $cache_key ] = array(
+					'content' => $content,
+					'area'    => $area,
+				);
 			}
 		}
 
@@ -151,12 +167,15 @@ if (! function_exists('blockera_render_block_core_template_part')) {
 
 		// Look up area definition.
 		$area_definition = null;
-		$defined_areas   = get_allowed_block_template_part_areas();
-		foreach ( $defined_areas as $defined_area ) {
-			if ( $defined_area['area'] === $area ) {
-				$area_definition = $defined_area;
-				break;
+		if ( null === $defined_areas ) {
+			$defined_areas = get_allowed_block_template_part_areas();
+			$area_by_slug  = array();
+			foreach ( $defined_areas as $defined_area ) {
+				$area_by_slug[ $defined_area['area'] ] = $defined_area;
 			}
+		}
+		if ( isset( $area_by_slug[ $area ] ) ) {
+			$area_definition = $area_by_slug[ $area ];
 		}
 
 		// If $area is not allowed, set it back to the uncategorized default.
@@ -236,11 +255,11 @@ if (! function_exists('blockera_get_block_template_file')) {
 				);
 
 				if ( 'wp_template_part' === $template_type ) {
-					return _add_block_template_part_area_info( $new_template_item );
+					return blockera_add_block_template_part_area_info( $new_template_item );
 				}
 
 				// If it's not a `wp_template_part`, it must be a `wp_template`.
-				return _add_block_template_info( $new_template_item );
+				return blockera_add_block_template_info( $new_template_item );
 			}
 		}
 
@@ -260,7 +279,7 @@ if (! function_exists('blockera_add_block_template_part_area_info')) {
      */
 	function blockera_add_block_template_part_area_info( $template_info ) {
 		if ( wp_theme_has_theme_json() ) {
-			$theme_data = wp_get_theme_data_template_parts();
+			$theme_data = blockera_get_theme_data_template_parts();
 		}
 
 		if ( isset( $theme_data[ $template_info['slug'] ]['area'] ) ) {
@@ -278,28 +297,40 @@ if (! function_exists('blockera_get_theme_data_template_parts')) {
 	/**
 	 * Returns the metadata for the template parts defined by the theme.
 	 *
+	 * Lightweight path: reads only templateParts from theme.json (no style variations /
+	 * sanitize). Cached per-request and in the `theme_json` object-cache group.
+	 *
 	 * @since 6.4.0
 	 *
 	 * @return array Associative array of `$part_name => $part_data` pairs,
 	 *               with `$part_data` having "title" and "area" fields.
 	 */
 	function blockera_get_theme_data_template_parts() {
+		static $request_cache = null;
+
+		if ( null !== $request_cache ) {
+			return $request_cache;
+		}
+
 		$cache_group    = 'theme_json';
-		$cache_key      = 'wp_get_theme_data_template_parts';
+		$cache_key      = 'blockera_theme_data_template_parts';
 		$can_use_cached = ! wp_is_development_mode( 'theme' );
 
 		if ( $can_use_cached ) {
 			$metadata = wp_cache_get( $cache_key, $cache_group );
 			if ( false !== $metadata ) {
-				return $metadata;
+				$request_cache = $metadata;
+				return $request_cache;
 			}
 		}
 
-		$metadata = JSONResolver::get_theme_data( array(), array( 'with_supports' => false ) )->get_template_parts();
+		$metadata      = JSONResolver::get_theme_templates_metadata()['templateParts'];
+		$request_cache = $metadata;
+
 		if ( $can_use_cached ) {
 			wp_cache_set( $cache_key, $metadata, $cache_group );
 		}
 
-		return $metadata;
-	}	
+		return $request_cache;
+	}
 }

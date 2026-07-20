@@ -19,6 +19,30 @@ add_action('admin_init', 'blockera_redirect_to_dashboard_page');
 register_activation_hook(BLOCKERA_SB_FILE, 'blockera_activation_hook');
 register_deactivation_hook(BLOCKERA_SB_FILE, 'blockera_deactivation_hook');
 
+// Warm runs on wp_loaded for frontend, editor, and admin (admin_print_styles needs merged settings for @font-face).
+add_action( 'wp_loaded', 'blockera_warm_merged_settings_cache', 99 );
+add_action( 'switch_theme', 'blockera_clear_theme_styles_partials_mtime_cache' );
+add_action( 'save_post_wp_global_styles', 'blockera_clear_theme_styles_partials_mtime_cache' );
+
+// Admin font faces are registered in wp-admin/includes/admin-filters.php after after_setup_theme,
+// so swap them on admin_init (outside the frontend/editor gate) for all admin screens.
+add_action( 'admin_init', 'blockera_replace_admin_font_face_hooks', 0 );
+
+/**
+ * Replace core admin @font-face printers with Blockera implementations.
+ *
+ * Core hooks (see wp-admin/includes/admin-filters.php) are added after after_setup_theme,
+ * so remove_action must run on admin_init or later.
+ *
+ * @return void
+ */
+function blockera_replace_admin_font_face_hooks(): void {
+	remove_action( 'admin_print_styles', 'wp_print_font_faces', 50 );
+	remove_action( 'admin_print_styles', 'wp_print_font_faces_from_style_variations', 50 );
+	add_action( 'admin_print_styles', 'blockera_print_font_faces', 50 );
+	add_action( 'admin_print_styles', 'blockera_print_font_faces_from_style_variations', 50 );
+}
+
 // Blockera should be loaded hooks only on frontend and editor requests.
 if (! blockera_is_frontend_request() && ! blockera_is_editor_request()) {
     return;
@@ -26,10 +50,22 @@ if (! blockera_is_frontend_request() && ! blockera_is_editor_request()) {
 
 $blockera_setup_render_block = Setup::getInstance();
 $blockera_setup_render_block->setPluginPath(blockera_core_config('app.vendor_path'));
-$blockera_setup_render_block->setAvailableBlocks(blockera_get_available_blocks());
+$blockera_available_blocks = blockera_get_available_blocks();
+$blockera_setup_render_block->setAvailableBlocks( $blockera_available_blocks );
+add_action(
+	'wp_loaded',
+	static function () use ( $blockera_setup_render_block ): void {
+		$blockera_setup_render_block->warmBlockCustomizationOverlays();
+	},
+	1
+);
 add_filter(
     'register_block_type_args',
-    function ( array $args, string $block_type ) use ( $blockera_setup_render_block ): array {
+    static function ( array $args, string $block_type ) use ( $blockera_setup_render_block, $blockera_available_blocks ): array {
+		if ( ! isset( $blockera_available_blocks[ $block_type ] ) ) {
+			return $args;
+		}
+
         return $blockera_setup_render_block->registerBlock($args, $block_type);
     },
     9e2,
@@ -50,11 +86,16 @@ function blockera_after_setup_theme() {
 	remove_filter( 'render_block_data', 'wp_render_block_style_variation_support_styles', 10, 2 );
 	remove_filter( 'render_block', 'wp_render_block_style_variation_class_name', 10, 2 );
 	remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
+	remove_filter( 'render_block', 'wp_render_typography_support', 10, 2 );
 	remove_action( 'enqueue_block_editor_assets', 'wp_enqueue_global_styles_css_custom_properties' );
+	remove_action( 'wp_head', 'wp_print_font_faces', 50 );
 
 	// Replace with your own implementation.
+	// Warm + cache invalidation: registered in hooks.php for frontend, editor, and admin.
 	add_action( 'wp_enqueue_scripts', 'blockera_enqueue_global_styles' );
 	add_action( 'wp_footer', 'blockera_enqueue_global_styles', 1 );
+	add_action( 'wp_head', 'blockera_print_font_faces', 50 );
+	// Admin font faces: see blockera_replace_admin_font_face_hooks() (admin_init; outside early return).
 	add_action( 'enqueue_block_editor_assets', 'blockera_enqueue_global_styles_css_custom_properties' );
 	add_filter( 'render_block', array( BlockeraDuotone::class, 'render_duotone_support' ), 10, 3 );
 	add_action( 'init', 'blockera_register_block_core_template_part' );
@@ -64,11 +105,25 @@ function blockera_after_setup_theme() {
 	// Replaced wp_navigation / fallback / nested submenu inners: full subtree; extensions may reuse blockera_apply_render_block_data_to_inner_block_list() the same way.
 	add_filter( 'block_core_navigation_render_inner_blocks', 'blockera_navigation_inner_blocks_apply_render_block_data', 5 );
 	add_filter( 'render_block', 'blockera_render_layout_support_flag', 10, 2 );
-	add_filter('_get_block_templates_files', 'blockera_get_block_templates', PHP_INT_MAX, 3);
+	add_filter( 'render_block', 'blockera_render_typography_support', 10, 2 );
+	// Overwrite core typography apply so fluid font-size uses blockera_get_global_settings().
+	WP_Block_Supports::get_instance()->register(
+		'typography',
+		array(
+			'register_attribute' => 'wp_register_typography_support',
+			'apply'              => 'blockera_apply_typography_support',
+		)
+	);
+	// Short-circuit core get_block_templates() so _add_block_template_info() never
+	// cold-starts WP_Theme_JSON_Resolver via wp_get_theme_data_custom_templates().
+	add_filter( 'pre_get_block_templates', 'blockera_get_block_templates', PHP_INT_MAX, 3 );
+	// Same for single-file lookups (template-part render → get_block_file_template).
+	add_filter( 'pre_get_block_file_template', 'blockera_pre_get_block_file_template', PHP_INT_MAX, 3 );
 
 	// Core wp_get_global_settings() omits Blockera-only presets; merge JSONResolver output for the editor.
 	// Site Editor live preset edits (useGlobalSetting) are mirrored by BlockEditorExperimentalFeaturesSync (useEffect + updateEditorSettings).
 	add_filter( 'block_editor_settings_all', 'blockera_merge_block_editor_experimental_features', 100, 1 );
 	// Canvas iframe does not load enqueue_block_editor_assets; inject preset CSS variables into resolved assets.
 	add_filter( 'block_editor_settings_all', 'blockera_append_global_styles_variables_to_resolved_iframe_assets', 101, 1 );
+	add_filter( 'block_editor_settings_all', 'blockera_append_font_faces_to_resolved_iframe_assets', 102, 1 );
 }

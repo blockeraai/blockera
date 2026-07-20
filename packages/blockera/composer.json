@@ -14,6 +14,7 @@
 			"php/Compatibility/BlockSupports/layout.php",
 			"php/Compatibility/BlockSupports/typography.php",
 			"php/Compatibility/global-styles-and-settings.php",
+			"php/Compatibility/fonts.php",
 			"php/Compatibility/BlockSupports/block-style-variations.php"
 		]
 	},

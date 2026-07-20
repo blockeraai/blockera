@@ -30,6 +30,25 @@ if (! function_exists('blockera_core_config')) {
 		 * This avoids expensive serialize() calls while maintaining uniqueness.
 		 */
         static $config_cache = [];
+
+		/**
+		 * Static known config files under {root}/config/.
+		 * Keys are camelCase first-path segments (same as former glob+basename conversion).
+		 * Avoids glob() + runtime camelCase on every cold mapped_configs miss.
+		 * Trade-off: new config/*.php files must be registered here.
+		 */
+		static $config_files = [
+			'app'                 => 'app.php',
+			'assets'              => 'assets.php',
+			'breakpoints'         => 'breakpoints.php',
+			'entities'            => 'entities.php',
+			'features'            => 'features.php',
+			'menu'                => 'menu.php',
+			'panel'               => 'panel.php',
+			'telemetryRestParams' => 'telemetry-rest-params.php',
+			'telemetry'           => 'telemetry.php',
+			'valueAddon'          => 'value-addon.php',
+		];
         
         if (empty($args)) {
             $cache_key = $key;
@@ -62,46 +81,16 @@ if (! function_exists('blockera_core_config')) {
             return false;
         }
 
-        // Cache config directory and files mapping.
-        static $mapped_configs = [];
-        $config_dir            = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
-        
-        if (! isset($mapped_configs[ $config_dir ])) {
-            $config_files = glob($config_dir . '/config/*.php');
-            if (false === $config_files) {
-                $config_files = [];
-            }
-            
-            // Optimize camelCase conversion: inline the logic to avoid function call overhead.
-            // Utils::camelCase does: lcfirst(pascalCase(str_replace('.php', '', basename($file)))).
-            // We inline this for better performance (avoids multiple function calls).
-            $mapped = [];
-            foreach ($config_files as $file) {
-                $basename = basename($file, '.php');
-                // Inline camelCase: split by '-', capitalize each part, join, lowercase first char.
-                $parts = explode('-', $basename);
-                $camel = '';
-                $first = true;
-                foreach ($parts as $part) {
-                    if ('' !== $part) {
-                        $camel .= $first ? strtolower($part) : ucfirst($part);
-                        $first  = false;
-                    }
-                }
-                $mapped[ $camel ] = $file;
-            }
-            $mapped_configs[ $config_dir ] = $mapped;
-        }
-
         // Use direct array access instead of array_shift (avoids array modification overhead).
         $firstNode = $keyNodes[0];
 
-        if (! isset($mapped_configs[ $config_dir ][ $firstNode ])) {
+        if (! isset($config_files[ $firstNode ])) {
             $config_cache[ $cache_key ] = false;
             return false;
         }
 
-        $config = require $mapped_configs[ $config_dir ][ $firstNode ];
+        $config_dir = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
+        $config     = require $config_dir . '/config/' . $config_files[ $firstNode ];
 
         // Iterate from index 1 (skip first node already processed).
         // Use for loop instead of foreach for slightly better performance.
@@ -154,19 +143,39 @@ if (! function_exists('blockera_load')) {
      * @return mixed file data on success, false on otherwise!
      */
     function blockera_load( string $path, string $baseDir = '', array $params = []) { 
+		static $cache = [];
+
         $file = str_replace('.', DIRECTORY_SEPARATOR, $path) . '.php';
 
         $filename = ( empty($baseDir) ? __DIR__ : $baseDir ) . '/' . $file;
 
-        if (! file_exists($filename)) {
+		// Param-less loads (shared inners, attributes, etc.) are pure — memoize per request.
+		$can_cache = [] === $params;
+
+		if ( $can_cache && array_key_exists( $filename, $cache ) ) {
+			return $cache[ $filename ];
+		}
+
+        if (! is_file($filename)) {
+			if ( $can_cache ) {
+				$cache[ $filename ] = false;
+			}
 
             return false;
         }
 
-        // phpcs:ignore
-        extract($params);
+		if ( $params ) {
+			// phpcs:ignore
+			extract($params);
+		}
 
-        return include $filename;
+		$result = include $filename;
+
+		if ( $can_cache ) {
+			$cache[ $filename ] = $result;
+		}
+
+		return $result;
     }
 }
 
@@ -547,9 +556,6 @@ if (! function_exists('blockera_enqueue_global_styles')) {
 				$custom_css = "\n" . $custom_css;
 			}
 			$stylesheet .= $custom_css;
-
-			// Add the global styles custom CSS at the end.
-			$stylesheet .= blockera_get_global_stylesheet( array( 'custom-css' ) );
 		}
 
 		if ( empty( $stylesheet ) ) {

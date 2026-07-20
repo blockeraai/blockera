@@ -178,8 +178,16 @@ if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_style
 			return $parsed_block;
 		}
 
-		$tree       = JSONResolver::get_merged_data();
-		$theme_json = $tree->get_raw_data();
+		static $theme_json  = null;
+		static $styles_hash = null;
+
+		if ( null === $styles_hash && function_exists( 'blockera_get_global_styles_cache_hash' ) ) {
+			$styles_hash = blockera_get_global_styles_cache_hash();
+		}
+
+		if ( null === $theme_json ) {
+			$theme_json = JSONResolver::get_merged_raw_data();
+		}
 
 		$variation_data = array();
 		$variation      = '';
@@ -199,7 +207,7 @@ if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_style
 
 		wp_resolve_block_style_variation_ref_values( $variation_data, $theme_json );
 
-		$cache_sig                                       = md5( $parsed_block['blockName'] . '|' . $variation . '|' . $class_prefix . '|' . blockera_get_global_styles_cache_hash() );
+		$cache_sig                                       = md5( $parsed_block['blockName'] . '|' . $variation . '|' . $class_prefix . '|' . ( $styles_hash ?? '' ) );
 		$placeholder_instance                            = 'bvars' . substr( md5( 'blockera_var_ph|' . $cache_sig ), 0, 24 );
 		$can_style_cache                                 = function_exists( 'blockera_get_global_styles_cache_hash' ) && ! wp_is_development_mode( 'theme' );
 		$cache_wp_key                                    = 'bss_' . $cache_sig;
@@ -284,7 +292,11 @@ if ( ! function_exists( 'blockera_render_one_block_theme_variation_support_style
 		$current_class_name = isset( $parsed_block['attrs']['className'] ) ? (string) $parsed_block['attrs']['className'] : '';
 		$updated_class_name = trim( $current_class_name . ' ' . $class_name );
 
-		wp_register_style( $style_handle, false, array( 'wp-block-library', 'global-styles' ) );
+		static $registered_variation_handles = array();
+		if ( ! isset( $registered_variation_handles[ $style_handle ] ) ) {
+			wp_register_style( $style_handle, false, array( 'wp-block-library', 'global-styles' ) );
+			$registered_variation_handles[ $style_handle ] = true;
+		}
 		wp_add_inline_style( $style_handle, $variation_styles );
 
 		_wp_array_set( $parsed_block, array( 'attrs', 'className' ), $updated_class_name );
@@ -320,6 +332,13 @@ if (! function_exists('blockera_render_block_style_variation_support_styles')) {
 	function blockera_render_block_style_variation_support_styles( $parsed_block ) {
 		$classes = $parsed_block['attrs']['className'] ?? '';
 
+		if (
+			'' === $classes
+			|| ( ! str_contains( $classes, 'is-style-' ) && ! str_contains( $classes, 'is-size-' ) )
+		) {
+			return $parsed_block;
+		}
+
 		foreach ( blockera_collect_block_variation_render_jobs( $classes ) as $job ) {
 			$parsed_block = blockera_render_one_block_theme_variation_support_styles(
 				$parsed_block,
@@ -351,22 +370,44 @@ if ( ! function_exists( 'blockera_render_block_style_variation_class_name' ) ) {
 
 		$class_string = $block['attrs']['className'];
 
-		preg_match_all( '/\bis-style-\S+?--\d+\b/', $class_string, $style_instances );
-		preg_match_all( '/\bis-size-\S+?--\d+\b/', $class_string, $size_instances );
-
-		$to_apply = array_values(
-			array_unique(
-				array_merge(
-					$style_instances[0] ?? array(),
-					$size_instances[0] ?? array()
-				)
-			)
-		);
-
-		if ( empty( $to_apply ) ) {
+		// Hot path: most blocks never carry instance classes — avoid preg_match_all entirely.
+		$has_style = false !== strpos( $class_string, 'is-style-' );
+		$has_size  = false !== strpos( $class_string, 'is-size-' );
+		if ( ! $has_style && ! $has_size ) {
 			return $block_content;
 		}
 
+		// Only scan prefixes that exist; skip merge/unique when a single side has one token.
+		$style_matches = array();
+		$size_matches  = array();
+		if ( $has_style ) {
+			preg_match_all( '/\bis-style-\S+?--\d+\b/', $class_string, $m );
+			$style_matches = $m[0];
+		}
+		if ( $has_size ) {
+			preg_match_all( '/\bis-size-\S+?--\d+\b/', $class_string, $m );
+			$size_matches = $m[0];
+		}
+
+		if ( $style_matches ) {
+			if ( $size_matches ) {
+				$to_apply = array_values( array_unique( array_merge( $style_matches, $size_matches ) ) );
+			} elseif ( isset( $style_matches[1] ) ) {
+				$to_apply = array_values( array_unique( $style_matches ) );
+			} else {
+				$to_apply = $style_matches;
+			}
+		} elseif ( $size_matches ) {
+			if ( isset( $size_matches[1] ) ) {
+				$to_apply = array_values( array_unique( $size_matches ) );
+			} else {
+				$to_apply = $size_matches;
+			}
+		} else {
+			return $block_content;
+		}
+
+		// First real tag only (skip comments/doctype via (?!!)).
 		$updated = preg_replace_callback(
 			'/<(?!!)([\w:-]+)(\s([^>]*?))?(\/\s*)?>/',
 			static function ( $m ) use ( $to_apply ) {
@@ -428,14 +469,14 @@ if ( ! function_exists( 'blockera_render_block_style_variation_class_name' ) ) {
 
 if ( ! function_exists( 'blockera_enqueue_block_size_variation_styles' ) ) {
 	/**
-	 * Prints registered inline CSS for `block-size-variation-styles` when that handle was used.
+	 * Enqueues styles for block size variations.
 	 *
-	 * Mirrors {@see wp_enqueue_block_style_variation_styles} for the style surface handle.
+	 * Mirrors {@see wp_enqueue_block_style_variation_styles}: enqueue early so
+	 * {@see WP_Dependencies::queued_before_register} promotes the handle when
+	 * {@see wp_register_style} runs during render.
 	 */
 	function blockera_enqueue_block_size_variation_styles(): void {
-		if ( wp_style_is( 'block-size-variation-styles', 'registered' ) ) {
-			wp_enqueue_style( 'block-size-variation-styles' );
-		}
+		wp_enqueue_style( 'block-size-variation-styles' );
 	}
 }
 

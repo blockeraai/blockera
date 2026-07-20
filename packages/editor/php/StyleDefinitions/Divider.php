@@ -10,13 +10,10 @@ namespace Blockera\Editor\StyleDefinitions;
 class Divider extends BaseStyleDefinition {
 
 	protected function css( array $setting ): array {
+		$cssProperty = $setting['type'] ?? '';
 
-		$declaration = [];
-		$cssProperty = $setting['type'];
-
-		if ( empty( $cssProperty ) ) {
-
-			return $declaration;
+		if ( '' === $cssProperty ) {
+			return [];
 		}
 
 		return $this->css;

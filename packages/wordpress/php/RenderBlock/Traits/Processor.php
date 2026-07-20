@@ -80,22 +80,42 @@ trait Processor {
 		// Pair with registerBlockDomOrderSlot() from pre_render_block (document order).
 		// render_block fires post-order; we consume the next unconsumed slot for this props id.
 		$props_id = $this->block['attrs']['blockeraPropsId'] ?? '';
-		if ('' === $props_id) {
+		if ( '' === $props_id ) {
 			return PHP_INT_MAX;
 		}
 
-		foreach (static::$block_dom_order_slots as $i => $slot) {
-			if ( ! empty( $slot['consumed'] ) ) {
-				continue;
-			}
-			if ( $slot['propsId'] === $props_id ) {
-				static::$block_dom_order_slots[ $i ]['consumed'] = true;
+		// Incremental propsId → slot-index queues (O(1) consume vs O(n) scan per render_block).
+		// Invalidated when resetGeneratedCSS() empties slots (count drops).
+		static $by_props = [];
+		static $heads    = [];
+		static $built    = 0;
 
-				return $slot['order'];
-			}
+		$slots = &static::$block_dom_order_slots;
+		$n     = count( $slots );
+
+		if ( $built > $n ) {
+			$by_props = [];
+			$heads    = [];
+			$built    = 0;
 		}
 
-		return PHP_INT_MAX;
+		if ( $built < $n ) {
+			for ( $i = $built; $i < $n; $i++ ) {
+				$by_props[ $slots[ $i ]['propsId'] ][] = $i;
+			}
+			$built = $n;
+		}
+
+		$head = $heads[ $props_id ] ?? 0;
+		if ( ! isset( $by_props[ $props_id ][ $head ] ) ) {
+			return PHP_INT_MAX;
+		}
+
+		$i                       = $by_props[ $props_id ][ $head ];
+		$heads[ $props_id ]      = $head + 1;
+		$slots[ $i ]['consumed'] = true;
+
+		return $slots[ $i ]['order'];
 	}
 
 	/**

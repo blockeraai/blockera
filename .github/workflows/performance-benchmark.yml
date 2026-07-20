@@ -1,0 +1,129 @@
+name: Performance Benchmark
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+    pull-requests: write
+
+env:
+    PERF_RESULTS_DIR: .github/performance/results
+    WP_ARTIFACTS_PATH: ${{ github.workspace }}/artifacts
+    WP_BASE_URL: http://localhost:8888
+    TEST_RUNS: '20'
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+
+jobs:
+    performance_benchmark:
+        name: Server-Timing (Blockera vs Core)
+        runs-on: ubuntu-latest
+        timeout-minutes: 90
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Install Composer Packages
+              run: composer install --no-dev -o --apcu-autoloader -a
+
+            - name: Create required environment files
+              run: |
+                  cp .github/wp-env-configs/performance.json .wp-env.json
+                  cat .wp-env.json
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Start WordPress Environment
+              run: bash .github/scripts/retry-wp-env-start.sh
+
+            - name: Build plugin assets
+              run: npm run build
+
+            - name: Wait for WordPress to be ready
+              run: |
+                  echo "Waiting for WordPress at http://localhost:8888..."
+                  for i in $(seq 1 36); do
+                    if curl -sf -o /dev/null http://localhost:8888; then
+                      echo "WordPress is ready"
+                      break
+                    fi
+                    echo "Attempt $i/36 - WordPress not ready yet, waiting 5s..."
+                    sleep 5
+                  done
+                  curl -sf -o /dev/null http://localhost:8888 || (echo "WordPress failed to become ready" && exit 1)
+
+            - name: Install Playwright Chromium
+              run: npx playwright install --with-deps chromium
+
+            - name: Setup Server-Timing
+              run: bash .github/performance/scripts/setup-server-timing.sh
+
+            - name: Setup benchmark content (page-1)
+              run: bash .github/performance/scripts/setup-content.sh
+
+            - name: Run benchmarks (Blockera / Core)
+              run: bash .github/performance/scripts/run-benchmarks.sh
+
+            - name: Compare results and enforce thresholds
+              id: compare
+              continue-on-error: true
+              run: |
+                  set +e
+                  node tests/performance/compare-results.js
+                  code=$?
+                  set -e
+                  if [ ! -f .github/performance/results/report.md ]; then
+                    mkdir -p .github/performance/results
+                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '# 📈 Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
+                  fi
+                  if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f .github/performance/results/report.md ]; then
+                    cat .github/performance/results/report.md >> "$GITHUB_STEP_SUMMARY"
+                  fi
+                  echo "has_report=true" >> "$GITHUB_OUTPUT"
+                  exit "${code}"
+
+            - name: Comment report on PR
+              if: ${{ always() && github.event_name == 'pull_request' && steps.compare.outputs.has_report == 'true' }}
+              uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  header: blockera-perf-benchmark
+                  path: .github/performance/results/report.md
+
+            - name: Fail job when thresholds exceeded
+              if: ${{ steps.compare.outcome == 'failure' }}
+              run: |
+                  echo "Performance threshold gate failed. See the PR comment and artifacts."
+                  exit 1
+
+            - name: Upload benchmark artifacts
+              if: ${{ always() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: performance-benchmark
+                  path: |
+                      .github/performance/results/report.md
+                      .github/performance/results/compare.json
+                      .github/performance/results/resolved-scenarios.json
+                      .github/performance/results/content-state.json
+                      artifacts/*performance-results.json
+                      artifacts/performance-results.md
+                  if-no-files-found: ignore
+                  retention-days: 14
+
+            - name: Stop WordPress Environment
+              if: ${{ always() }}
+              run: npm run env:stop

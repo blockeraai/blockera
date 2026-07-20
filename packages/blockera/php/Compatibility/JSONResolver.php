@@ -14,6 +14,16 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $theme_with_supports = null;
 
 	/**
+	 * Request-level cache for lightweight customTemplates + templateParts metadata.
+	 *
+	 * Avoids cold-starting {@see get_theme_data()} (style variations + sanitize) when
+	 * only template title/postTypes/area are needed.
+	 *
+	 * @var array{customTemplates: array, templateParts: array}|null
+	 */
+	private static $theme_templates_metadata = null;
+
+	/**
 	 * Cached theme support data array to avoid repeated calculations.
 	 *
 	 * @var array|null
@@ -29,6 +39,67 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @var string|null
 	 */
 	private static $user_cache_origins_settings_signature = null;
+
+	/**
+	 * Request-level cache of merged theme.json raw data keyed by origin.
+	 *
+	 * Avoids repeated empty {@see JSON} construction + origin merges on every
+	 * {@see get_merged_data()} call within the same request (stylesheet + block styles).
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_data_cache = array();
+
+	/**
+	 * Request-level live {@see JSON} instances for merged data keyed by origin.
+	 *
+	 * Prefer returning these over {@see JSON::with_raw_data()} on every cache hit.
+	 *
+	 * @var array<string, JSON>
+	 */
+	private static $merged_json_instances = array();
+
+	/**
+	 * Request-level cache of URI-resolved merged theme.json raw data keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $resolved_merged_data_cache = array();
+
+	/**
+	 * Request-level live {@see JSON} instances for URI-resolved merged data keyed by origin.
+	 *
+	 * @var array<string, JSON>
+	 */
+	private static $resolved_json_instances = array();
+
+	/**
+	 * Request-level cache of {@see JSON::get_settings()} for merged data keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_settings_cache = array();
+
+	/**
+	 * Request-level cache of {@see JSON::get_styles_block_nodes()} for merged data keyed by origin.
+	 *
+	 * @var array<string, array>
+	 */
+	private static $merged_styles_block_nodes_cache = array();
+
+	/**
+	 * Cached `post_modified` from the user global styles CPT (shared with cache hash).
+	 *
+	 * @var string|null
+	 */
+	private static $user_global_styles_post_modified = null;
+
+	/**
+	 * Request-cached wp_global_styles CPT row (read-only; no create_post).
+	 *
+	 * @var array<string, mixed>|null
+	 */
+	private static $user_global_styles_cpt = null;
 
 	/**
 	 * Store the default WordPress provided data from theme.
@@ -225,7 +296,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		}
 
 		$config   = array();
-		$user_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme() );
+		$user_cpt = static::get_user_global_styles_cpt();
 
 		if ( array_key_exists( 'post_content', $user_cpt ) ) {
 			$decoded_data = json_decode( $user_cpt['post_content'], true );
@@ -295,15 +366,19 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return string
 	 */
 	private static function get_origins_settings_signature_for_user_cache(): string {
+		// Prefer raw settings: same invalidation signal, avoids get_settings() processing thrice.
 		$parts = array();
 		if ( null !== static::$core ) {
-			$parts['core'] = static::$core->get_settings();
+			$raw           = static::$core->get_raw_data();
+			$parts['core'] = $raw['settings'] ?? array();
 		}
 		if ( null !== static::$blocks ) {
-			$parts['blocks'] = static::$blocks->get_settings();
+			$raw             = static::$blocks->get_raw_data();
+			$parts['blocks'] = $raw['settings'] ?? array();
 		}
 		if ( null !== static::$theme ) {
-			$parts['theme'] = static::$theme->get_settings();
+			$raw            = static::$theme->get_raw_data();
+			$parts['theme'] = $raw['settings'] ?? array();
 		}
 		$encoded = wp_json_encode( $parts );
 		return is_string( $encoded ) ? md5( $encoded ) : md5( '' );
@@ -331,6 +406,94 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	private static function is_testing_environment(): bool {
 		return defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT;
+	}
+
+	/**
+	 * Returns customTemplates + templateParts from theme.json without full theme data resolution.
+	 *
+	 * Unlike {@see get_theme_data()}, this skips style variations, block-style injection,
+	 * and {@see JSON} sanitization — those are irrelevant for template title/postTypes/area.
+	 *
+	 * Parent theme.json is applied first; active (child) theme overwrites by template name.
+	 *
+	 * @return array{
+	 *     customTemplates: array<string, array{title: string, postTypes: string[]}>,
+	 *     templateParts: array<string, array{title: string, area: string}>
+	 * }
+	 */
+	public static function get_theme_templates_metadata(): array {
+		if ( null !== static::$theme_templates_metadata && ! static::is_testing_environment() ) {
+			return static::$theme_templates_metadata;
+		}
+
+		$custom_templates = array();
+		$template_parts   = array();
+		$wp_theme         = wp_get_theme();
+		$parent           = $wp_theme->parent();
+
+		if ( $parent ) {
+			$parent_file = $parent->get_file_path( 'theme.json' );
+			if ( is_readable( $parent_file ) ) {
+				static::map_theme_templates_metadata(
+					static::translate( static::read_json_file( $parent_file ), $parent->get( 'TextDomain' ) ),
+					$custom_templates,
+					$template_parts
+				);
+			}
+		}
+
+		$theme_json_file = $wp_theme->get_file_path( 'theme.json' );
+		if ( is_readable( $theme_json_file ) ) {
+			static::map_theme_templates_metadata(
+				static::translate( static::read_json_file( $theme_json_file ), $wp_theme->get( 'TextDomain' ) ),
+				$custom_templates,
+				$template_parts
+			);
+		}
+
+		static::$theme_templates_metadata = array(
+			'customTemplates' => $custom_templates,
+			'templateParts'   => $template_parts,
+		);
+
+		return static::$theme_templates_metadata;
+	}
+
+	/**
+	 * Maps raw theme.json customTemplates / templateParts into name-keyed metadata arrays.
+	 *
+	 * Mirrors {@see \WP_Theme_JSON::get_custom_templates()} and {@see \WP_Theme_JSON::get_template_parts()}.
+	 *
+	 * @param array $theme_data        Decoded theme.json data.
+	 * @param array $custom_templates  Accumulator keyed by template name.
+	 * @param array $template_parts    Accumulator keyed by part name.
+	 *
+	 * @return void
+	 */
+	private static function map_theme_templates_metadata( array $theme_data, array &$custom_templates, array &$template_parts ): void {
+		if ( ! empty( $theme_data['customTemplates'] ) && is_array( $theme_data['customTemplates'] ) ) {
+			foreach ( $theme_data['customTemplates'] as $item ) {
+				if ( ! isset( $item['name'] ) ) {
+					continue;
+				}
+				$custom_templates[ $item['name'] ] = array(
+					'title'     => $item['title'] ?? '',
+					'postTypes' => $item['postTypes'] ?? array( 'page' ),
+				);
+			}
+		}
+
+		if ( ! empty( $theme_data['templateParts'] ) && is_array( $theme_data['templateParts'] ) ) {
+			foreach ( $theme_data['templateParts'] as $item ) {
+				if ( ! isset( $item['name'] ) ) {
+					continue;
+				}
+				$template_parts[ $item['name'] ] = array(
+					'title' => $item['title'] ?? '',
+					'area'  => $item['area'] ?? '',
+				);
+			}
+		}
 	}
 
 	/**
@@ -537,6 +700,57 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * User global styles CPT row (request-cached; no create_post).
+	 *
+	 * @return array<string, mixed>
+	 */
+	public static function get_user_global_styles_cpt(): array {
+		if ( null !== static::$user_global_styles_cpt ) {
+			return static::$user_global_styles_cpt;
+		}
+
+		static::$user_global_styles_cpt = static::get_user_data_from_wp_global_styles( wp_get_theme(), false );
+		static::cache_user_global_styles_post_modified( static::$user_global_styles_cpt );
+
+		return static::$user_global_styles_cpt;
+	}
+
+	/**
+	 * User global styles post modified time (request-cached; no create_post).
+	 *
+	 * Reuses the CPT row loaded by {@see get_user_data()} when merge already ran.
+	 *
+	 * @return string Post modified timestamp or '0'.
+	 */
+	public static function get_user_global_styles_post_modified_time(): string {
+		if ( null !== static::$user_global_styles_post_modified ) {
+			return static::$user_global_styles_post_modified;
+		}
+
+		static::get_user_global_styles_cpt();
+
+		return static::$user_global_styles_post_modified;
+	}
+
+	/**
+	 * @param array<string, mixed> $user_cpt Row from {@see get_user_data_from_wp_global_styles()}.
+	 * @return void
+	 */
+	private static function cache_user_global_styles_post_modified( array $user_cpt ): void {
+		if ( null !== static::$user_global_styles_post_modified ) {
+			return;
+		}
+
+		static::$user_global_styles_post_modified = ! empty( $user_cpt['post_modified'] )
+			? (string) $user_cpt['post_modified']
+			: '0';
+
+		if ( ! empty( $user_cpt['ID'] ) && null === static::$user_custom_post_type_id ) {
+			static::$user_custom_post_type_id = (int) $user_cpt['ID'];
+		}
+	}
+
+	/**
 	 * Returns the merged data from core, blocks, theme, and user.
 	 *
 	 * Overrides parent to ensure Blockera's JSON class is returned.
@@ -551,25 +765,224 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			_deprecated_argument( __FUNCTION__, '5.9.0' );
 		}
 
-		$result = new JSON();
+		if (
+			isset( static::$merged_json_instances[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_json_instances[ $origin ];
+		}
+
+		if (
+			isset( static::$merged_data_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			$cached                                   = JSON::with_raw_data( static::$merged_data_cache[ $origin ] );
+			static::$merged_json_instances[ $origin ] = $cached;
+			return $cached;
+		}
+
+		// Skip empty-tree sanitize/migrate that `new JSON()` would pay before merge.
+		$result = JSON::with_raw_data( array( 'version' => JSON::LATEST_SCHEMA ) );
 		$result->merge( static::get_core_data() );
 		if ( 'default' === $origin ) {
+			static::store_merged_data_cache( $origin, $result );
 			return $result;
 		}
 
 		$result->merge( static::get_block_data() );
 		if ( 'blocks' === $origin ) {
+			static::store_merged_data_cache( $origin, $result );
 			return $result;
 		}
 
 		$result->merge( static::get_theme_data() );
 		if ( 'theme' === $origin ) {
+			static::store_merged_data_cache( $origin, $result );
 			return $result;
 		}
 
 		$result->merge( static::get_user_data() );
 
+		static::store_merged_data_cache( $origin, $result );
+
 		return $result;
+	}
+
+	/**
+	 * Merged theme.json raw data (request-level cache).
+	 *
+	 * Prefer over {@see get_merged_data()}->{@see JSON::get_raw_data()} when only the
+	 * array tree is needed — avoids reconstructing a JSON instance on cache hits.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array
+	 */
+	public static function get_merged_raw_data( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_data_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_data_cache[ $origin ];
+		}
+
+		return static::get_merged_data( $origin )->get_raw_data();
+	}
+
+	/**
+	 * Settings from merged theme.json (request-level cache).
+	 *
+	 * Prefer this over {@see get_merged_data()}->{@see JSON::get_settings()} when only
+	 * settings are needed — avoids reconstructing a JSON instance on cache hits.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array
+	 */
+	public static function get_merged_settings( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_settings_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_settings_cache[ $origin ];
+		}
+
+		// get_merged_data() stores settings via store_merged_data_cache(); reuse that.
+		static::get_merged_data( $origin );
+
+		if (
+			isset( static::$merged_settings_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_settings_cache[ $origin ];
+		}
+
+		$settings = static::get_merged_data( $origin )->get_settings();
+
+		if ( ! static::is_testing_environment() ) {
+			static::$merged_settings_cache[ $origin ] = $settings;
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Seed request-level merged settings without running {@see get_merged_data()}.
+	 *
+	 * Used when warm transient skip restores settings for {@see blockera_get_global_settings()}
+	 * and {@see blockera_print_font_faces()} on admin_print_styles.
+	 *
+	 * @param string $origin   Origin key (same as {@see get_merged_settings()}).
+	 * @param array  $settings Settings array from {@see JSON::get_settings()}.
+	 * @return void
+	 */
+	public static function prime_merged_settings_cache( string $origin, array $settings ): void {
+		if ( static::is_testing_environment() ) {
+			return;
+		}
+
+		static::$merged_settings_cache[ $origin ] = $settings;
+	}
+
+	/**
+	 * Seed request-level merged raw data without running {@see get_merged_data()}.
+	 *
+	 * Used when warm transient skip restores unresolved theme.json for block style
+	 * variation CSS without paying a cold merge on wp_loaded.
+	 *
+	 * @param string $origin Origin key (same as {@see get_merged_raw_data()}).
+	 * @param array  $raw    Raw merged tree from {@see JSON::get_raw_data()}.
+	 * @return void
+	 */
+	public static function prime_merged_raw_data_cache( string $origin, array $raw ): void {
+		if ( static::is_testing_environment() ) {
+			return;
+		}
+
+		static::$merged_data_cache[ $origin ] = $raw;
+	}
+
+	/**
+	 * Style block nodes from merged theme.json (request-level cache).
+	 *
+	 * Shared by duotone global-styles bindings and {@see blockera_add_global_styles_for_blocks()}.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_merged_styles_block_nodes( $origin = 'custom' ) {
+		if (
+			isset( static::$merged_styles_block_nodes_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$merged_styles_block_nodes_cache[ $origin ];
+		}
+
+		$nodes = static::get_merged_data( $origin )->get_styles_block_nodes();
+
+		if ( ! static::is_testing_environment() ) {
+			static::$merged_styles_block_nodes_cache[ $origin ] = $nodes;
+		}
+
+		return $nodes;
+	}
+
+	/**
+	 * Store merged raw data + settings for the origin (no-op in testing).
+	 *
+	 * @param string $origin Origin key.
+	 * @param JSON   $result Merged JSON instance.
+	 * @return void
+	 */
+	private static function store_merged_data_cache( string $origin, JSON $result ): void {
+		if ( static::is_testing_environment() ) {
+			return;
+		}
+
+		static::$merged_data_cache[ $origin ]     = $result->get_raw_data();
+		static::$merged_settings_cache[ $origin ] = $result->get_settings();
+		static::$merged_json_instances[ $origin ] = $result;
+	}
+
+	/**
+	 * Merged theme.json with theme-relative file URIs resolved (request-level cache).
+	 *
+	 * Shared by {@see blockera_get_global_stylesheet()} and
+	 * {@see blockera_add_global_styles_for_blocks()} so enqueue pays merge/URI work once.
+	 *
+	 * @param string $origin Optional. Same as {@see get_merged_data()}. Default 'custom'.
+	 * @return JSON
+	 */
+	public static function get_resolved_merged_data( $origin = 'custom' ) {
+		if (
+			isset( static::$resolved_json_instances[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			return static::$resolved_json_instances[ $origin ];
+		}
+
+		if (
+			isset( static::$resolved_merged_data_cache[ $origin ] )
+			&& ! static::is_testing_environment()
+		) {
+			$cached                                     = JSON::with_raw_data( static::$resolved_merged_data_cache[ $origin ] );
+			static::$resolved_json_instances[ $origin ] = $cached;
+			return $cached;
+		}
+
+		$merged   = static::get_merged_data( $origin );
+		$resolved = static::resolve_theme_file_uris( $merged );
+
+		// When no URIs change, resolve returns the same instance — keep a dedicated
+		// resolved handle so later URI-less hits do not alias mutate-risk with merged.
+		if ( $resolved === $merged ) {
+			$resolved = JSON::with_raw_data( $merged->get_raw_data() );
+		}
+
+		if ( ! static::is_testing_environment() ) {
+			static::$resolved_merged_data_cache[ $origin ] = $resolved->get_raw_data();
+			static::$resolved_json_instances[ $origin ]    = $resolved;
+		}
+
+		return $resolved;
 	}
 
 	/**
@@ -580,28 +993,24 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return WP_Theme_JSON
 	 */
 	public static function get_block_data() {
+		// Match core: static hit before registry serialize / transient I/O.
+		if ( null !== static::$blocks && static::has_same_registered_blocks( 'blocks' ) ) {
+			return static::$blocks;
+		}
+
 		$registry = \WP_Block_Type_Registry::get_instance();
 		$blocks   = $registry->get_all_registered();
-		try {
-			$hash = md5( serialize( $blocks ) );
-		} catch ( \Throwable $e ) {
-			// Fallback when blocks contain non-serializable data (e.g. closures in WooCommerce render callbacks).
-			$hash = md5( implode( ',', array_keys( $blocks ) ) );
-		}
+		// Keys are enough for invalidation; full serialize is costly (closures in render_callback).
+		$hash = md5( implode( ',', array_keys( $blocks ) ) );
 
-		$cache = blockera_get_cache();
-
+		$cache         = blockera_get_cache();
 		$transient_key = 'resolver_get_block_data_' . $hash;
-		$transient     = $cache->getTransientCache($transient_key);
+		$transient     = $cache->getTransientCache( $transient_key );
 
-		$has_same_registered_blocks = static::has_same_registered_blocks( 'blocks' );
-
-		if ( $transient && ( null === static::$blocks || ! $has_same_registered_blocks ) ) {
-			return $transient;
-		}
-
-		// Check cache FIRST before any expensive operations.
-		if ( null !== static::$blocks && $has_same_registered_blocks ) {
+		if ( is_array( $transient ) && isset( $transient['version'] ) ) {
+			static::$blocks = JSON::with_raw_data( $transient );
+			// Populate blocks_cache fingerprint so the next call hits the static early return.
+			static::has_same_registered_blocks( 'blocks' );
 			return static::$blocks;
 		}
 
@@ -645,8 +1054,11 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		 */
 		static::$blocks = new JSON( apply_filters( 'blockera_theme_json_data_blocks', $config ), 'blocks' );
 
-		// Cache the blocks data in a transient for performance.
-		$cache->setTransientCache( $transient_key, static::$blocks, HOUR_IN_SECONDS );
+		// Align registry fingerprint with core's has_same_registered_blocks() contract.
+		static::has_same_registered_blocks( 'blocks' );
+
+		// Persist raw array — serializing a live JSON object graph is heavy/fragile.
+		$cache->setTransientCache( $transient_key, static::$blocks->get_raw_data(), HOUR_IN_SECONDS );
 
 		return static::$blocks;
 	}
@@ -704,8 +1116,13 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			}
 
 			$translated = static::translate( $decoded_file, $text_domain );
-			// Avoid creating JSON object just to call get_raw_data() - translate already returns array.
-			$variation = ( new JSON( $translated ) )->get_raw_data();
+
+			/*
+			 * Skip per-file JSON sanitize/construct. Inject paths only need styles/blockTypes/slug/title,
+			 * and the subsequent theme `new JSON( $theme_json_data )` sanitizes injected styles.
+			 * TT5 alone has ~9 block style partials — each full sanitize was a major warm-path cost.
+			 */
+			$variation = $translated;
 
 			if ( empty( $variation['title'] ) ) {
 				$variation['title'] = basename( $path, '.json' );
@@ -983,6 +1400,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		parent::clean_cached_data();
 
 		static::$user_cache_origins_settings_signature = null;
+		static::$merged_data_cache                     = array();
+		static::$merged_json_instances                 = array();
+		static::$resolved_merged_data_cache            = array();
+		static::$resolved_json_instances               = array();
+		static::$merged_settings_cache                 = array();
+		static::$merged_styles_block_nodes_cache       = array();
 
 		if ( class_exists( 'WP_Theme_JSON_Resolver_Gutenberg' ) ) {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();
@@ -992,6 +1415,17 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$theme_json_file_cache     = array();
 		static::$theme_with_supports       = null;
 		static::$cached_theme_support_data = null;
+		static::$theme_templates_metadata  = null;
+
+		JSON::clear_sanitize_request_cache();
+
+		// Drop non-persistent settings/stylesheet entries so admin rebuilds see fresh data.
+		foreach ( array( 'custom', 'theme', 'blocks', 'default' ) as $origin ) {
+			wp_cache_delete( 'blockera_get_global_settings_' . $origin, 'theme_json' );
+		}
+		wp_cache_delete( 'blockera_wp_get_global_stylesheet', 'theme_json' );
+		wp_cache_delete( 'blockera_theme_data_custom_templates', 'theme_json' );
+		wp_cache_delete( 'blockera_theme_data_template_parts', 'theme_json' );
 	}
 
 	/**
@@ -1016,6 +1450,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			_wp_array_set( $resolved_theme_json_data, $path, $resolved_url['href'] );
 		}
 
-		return new JSON( $resolved_theme_json_data );
+		// Data is already sanitized; avoid a full JSON reconstruct/sanitize pass.
+		return JSON::with_raw_data( $resolved_theme_json_data );
 	}
 }

@@ -41,6 +41,24 @@ class JSONData extends \WP_Theme_JSON_Data {
 	}
 
 	/**
+	 * Wrap an already-sanitized {@see JSON} instance (no migrate/sanitize pass).
+	 *
+	 * Used by editor theme.json filters so core's `instanceof WP_Theme_JSON_Data`
+	 * path can call {@see get_theme_json()} without reconstructing via get_data().
+	 *
+	 * @param JSON   $json   Sanitized theme.json instance.
+	 * @param string $origin The origin of the data: default, theme, user, blocks, custom.
+	 * @return self
+	 */
+	public static function from_json( JSON $json, string $origin = 'theme' ): self {
+		$instance             = ( new \ReflectionClass( static::class ) )->newInstanceWithoutConstructor();
+		$instance->origin     = $origin;
+		$instance->theme_json = $json;
+
+		return $instance;
+	}
+
+	/**
 	 * Updates the theme.json with the the given data.
 	 *
 	 * @since 1.13.0

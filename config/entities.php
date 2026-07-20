@@ -12,6 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $blockera_current_theme = wp_get_theme();
 
+$blockera_settings = get_option( 'blockera_settings', false );
+
+if ( false === $blockera_settings ) {
+	$blockera_settings = blockera_core_config( 'panel.std' );
+}
+
 return apply_filters(
 	'blockera/config/entities',
 	[
@@ -31,7 +37,7 @@ return apply_filters(
 			'url' => home_url(),
 		],
 		'blockera' => [
-			'settings' => get_option( 'blockera_settings', blockera_core_config( 'panel.std' ) ),
+			'settings' => $blockera_settings,
 			'name'     => blockera_core_config( 'app.name' ),
 			'version'  => blockera_core_config( 'app.version' ),
 		],

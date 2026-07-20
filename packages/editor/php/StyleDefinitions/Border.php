@@ -166,10 +166,10 @@ class Border extends BaseStyleDefinition {
 			return '';
 		}
 
-		$sides = array( 'top', 'right', 'bottom', 'left' );
-		$out   = array();
+		$out = [];
 
-		foreach ( $sides as $edge ) {
+		for ( $i = 0; $i < 4; ++$i ) {
+			$edge = self::$sides[ $i ];
 			if ( empty( $border[ $edge ] ) || ! is_array( $border[ $edge ] ) ) {
 				$out[] = '';
 				continue;

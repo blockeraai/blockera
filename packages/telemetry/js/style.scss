@@ -42,7 +42,12 @@
 		width: 32px;
 		height: 32px;
 		border-radius: 50%;
-		border: 2px solid #ffffff;
+		border: 2px solid
+			color-mix(
+				in srgb,
+				var(--blockera-controls-primary-color) 10%,
+				#ffffff 100%
+			);
 		margin-left: -8px;
 		box-sizing: border-box;
 		flex-shrink: 0;
@@ -57,7 +62,11 @@
 	.blockera-opt-in-modal__team-dot--image {
 		padding: 0;
 		overflow: hidden;
-		background: #e5e8ed;
+		background: color-mix(
+			in srgb,
+			var(--blockera-controls-primary-color) 20%,
+			#000000
+		);
 
 		img {
 			display: block;

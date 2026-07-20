@@ -21,7 +21,7 @@ class GridChildColumnSpan extends BaseStyleDefinition {
 	 * @param array $setting Envelope: type + grid-column value.
 	 * @return array
 	 */
-	protected function css( array $setting): array {
+	protected function css( array $setting ): array {
 		if ( ! isset( $setting['type'], $setting['grid-column'] ) || 'grid-column' !== $setting['type'] ) {
 			return [];
 		}

@@ -72,7 +72,7 @@ class JSON extends \WP_Theme_JSON {
 			'path'              => array( 'typography', 'fontSizes' ),
 			'prevent_override'  => array( 'typography', 'defaultFontSizes' ),
 			'use_default_names' => true,
-			'value_func'        => 'wp_get_typography_font_size_value',
+			'value_func'        => 'blockera_get_typography_font_size_value',
 			'css_vars'          => '--wp--preset--font-size--$slug',
 			'classes'           => array( '.has-$slug-font-size' => 'font-size' ),
 			'properties'        => array( 'font-size' ),
@@ -215,6 +215,19 @@ class JSON extends \WP_Theme_JSON {
 		return $schema;
 	}
 
+	/** Transient key prefix for post-sanitize theme.json construct cache. */
+	private const SANITIZE_TRANSIENT_PREFIX = 'json_sanitize_';
+
+	/** TTL for sanitize transients (aligned with JSONResolver::get_block_data). */
+	private const SANITIZE_TRANSIENT_TTL = HOUR_IN_SECONDS;
+
+	/**
+	 * Request-level cache of sanitized {@see get_raw_data()} keyed by {@see build_sanitize_cache_key()}.
+	 *
+	 * @var array<string, array>
+	 */
+	private static array $sanitize_request_cache = array();
+
 	/**
 	 * Constructor.
 	 *
@@ -224,11 +237,239 @@ class JSON extends \WP_Theme_JSON {
 	public function __construct( array $data = array(), string $origin = 'theme', string $style_variation_prefix = 'is-style-') {
 		self::$style_variation_prefix = $style_variation_prefix;
 
-		parent::__construct($data, $origin);
+		global $blockera_block_supports;
+		$supports  = is_array( $blockera_block_supports ?? null ) ? $blockera_block_supports : array();
+		$cache_key = null;
+
+		if ( self::should_use_sanitize_cache() ) {
+			$cache_key = self::build_sanitize_cache_key( $data, $origin, $style_variation_prefix );
+			$cached    = self::get_sanitize_cached_raw_data( $cache_key );
+
+			if ( null !== $cached ) {
+				$this->theme_json = $cached;
+				$this->set_supports( $supports );
+
+				return;
+			}
+		}
+
+		parent::__construct( $data, $origin );
+
+		$this->set_supports( $supports );
+
+		if ( null !== $cache_key ) {
+			self::store_sanitize_cached_raw_data( $cache_key, $this->get_raw_data() );
+		}
+	}
+
+	/**
+	 * Whether sanitize construct caching is enabled for this request.
+	 *
+	 * @return bool
+	 */
+	private static function should_use_sanitize_cache(): bool {
+		return ! ( defined( 'BLOCKERA_DEVELOPMENT' ) && BLOCKERA_DEVELOPMENT );
+	}
+
+	/**
+	 * Build a transient/request cache key for a JSON construct input.
+	 *
+	 * Key includes origin, input payload, and everything that affects {@see sanitize()}:
+	 * plugin version, registered blocks, block style names, variation prefix, Blockera supports.
+	 *
+	 * @param array  $data                   Raw theme.json input (pre-migrate).
+	 * @param string $origin                 Origin passed to the constructor.
+	 * @param string $style_variation_prefix Style variation class prefix.
+	 * @return string Transient key (without Blockera product prefix).
+	 */
+	public static function build_sanitize_cache_key( array $data, string $origin, string $style_variation_prefix = 'is-style-' ): string {
+		if ( ! in_array( $origin, static::VALID_ORIGINS, true ) ) {
+			$origin = 'theme';
+		}
+
+		return self::SANITIZE_TRANSIENT_PREFIX
+			. $origin . '_'
+			. self::get_sanitize_cache_context( $style_variation_prefix ) . '_'
+			. self::hash_sanitize_input_data( $data );
+	}
+
+	/**
+	 * Fingerprint of registry/schema state that affects sanitize output.
+	 *
+	 * @param string $style_variation_prefix Per-construct variation prefix.
+	 * @return string Short hash segment for cache keys.
+	 */
+	private static function get_sanitize_cache_context( string $style_variation_prefix ): string {
+		static $contexts = array();
+
+		if ( isset( $contexts[ $style_variation_prefix ] ) ) {
+			return $contexts[ $style_variation_prefix ];
+		}
+
+		$registry = \WP_Block_Type_Registry::get_instance();
+		$blocks   = $registry->get_all_registered();
+
+		$style_variation_names = array();
+		if ( class_exists( '\WP_Block_Styles_Registry' ) ) {
+			foreach ( \WP_Block_Styles_Registry::get_instance()->get_all_registered() as $block_styles ) {
+				$style_variation_names = array_merge( $style_variation_names, array_keys( $block_styles ) );
+			}
+			sort( $style_variation_names );
+		}
 
 		global $blockera_block_supports;
+		$support_keys = is_array( $blockera_block_supports ?? null ) ? array_keys( $blockera_block_supports ) : array();
+		sort( $support_keys );
 
-		$this->set_supports($blockera_block_supports);
+		$parts = array(
+			'v'  => defined( 'BLOCKERA_SB_VERSION' ) ? BLOCKERA_SB_VERSION : '0',
+			'b'  => md5( implode( ',', array_keys( $blocks ) ) ),
+			'sv' => md5( implode( ',', $style_variation_names ) ),
+			'sp' => md5( $style_variation_prefix ),
+			'su' => md5( implode( ',', $support_keys ) ),
+		);
+
+		$encoded = wp_json_encode( $parts );
+
+		$contexts[ $style_variation_prefix ] = is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+
+		return $contexts[ $style_variation_prefix ];
+	}
+
+	/**
+	 * Hash constructor input data for cache keys.
+	 *
+	 * @param array $data Raw theme.json input.
+	 * @return string md5 hex digest.
+	 */
+	private static function hash_sanitize_input_data( array $data ): string {
+		$encoded = wp_json_encode( $data );
+
+		return is_string( $encoded ) ? md5( $encoded ) : md5( '' );
+	}
+
+	/**
+	 * Read sanitized raw data from request cache, then transient.
+	 *
+	 * @param string $cache_key Key from {@see build_sanitize_cache_key()}.
+	 * @return array|null Sanitized raw tree or null on miss.
+	 */
+	private static function get_sanitize_cached_raw_data( string $cache_key ): ?array {
+		if ( isset( self::$sanitize_request_cache[ $cache_key ] ) ) {
+			return self::$sanitize_request_cache[ $cache_key ];
+		}
+
+		if ( ! function_exists( 'blockera_get_cache' ) ) {
+			return null;
+		}
+
+		$transient = blockera_get_cache()->getTransientCache( $cache_key );
+
+		if ( ! is_array( $transient ) || ! isset( $transient['version'] ) ) {
+			return null;
+		}
+
+		self::$sanitize_request_cache[ $cache_key ] = $transient;
+
+		return $transient;
+	}
+
+	/**
+	 * Persist sanitized raw data to request cache and transients.
+	 *
+	 * @param string $cache_key Cache key.
+	 * @param array  $raw_data  Post-construct {@see get_raw_data()}.
+	 * @return void
+	 */
+	private static function store_sanitize_cached_raw_data( string $cache_key, array $raw_data ): void {
+		self::$sanitize_request_cache[ $cache_key ] = $raw_data;
+
+		if ( function_exists( 'blockera_get_cache' ) ) {
+			blockera_get_cache()->setTransientCache( $cache_key, $raw_data, self::SANITIZE_TRANSIENT_TTL );
+		}
+	}
+
+	/**
+	 * Drop request-level sanitize construct cache only.
+	 *
+	 * Call from {@see JSONResolver::clean_cached_data()} so in-request resolver rebuilds
+	 * do not reuse stale sanitized trees while transients remain valid for the next request.
+	 *
+	 * @return void
+	 */
+	public static function clear_sanitize_request_cache(): void {
+		self::$sanitize_request_cache = array();
+	}
+
+	/**
+	 * Drop all sanitize construct transients for this site.
+	 *
+	 * @return int Number of transients deleted.
+	 */
+	public static function clear_sanitize_transient_cache(): int {
+		if ( ! function_exists( 'blockera_get_cache' ) ) {
+			return 0;
+		}
+
+		return blockera_get_cache()->deleteTransientCacheByPrefix( self::SANITIZE_TRANSIENT_PREFIX );
+	}
+
+	/**
+	 * Full sanitize cache invalidation (request + transients).
+	 *
+	 * Recommended hooks: {@see register_sanitize_cache_invalidation_hooks()}.
+	 *
+	 * @return void
+	 */
+	public static function clear_sanitize_cache(): void {
+		self::clear_sanitize_request_cache();
+		self::clear_sanitize_transient_cache();
+	}
+
+	/**
+	 * Register WordPress hooks that should invalidate sanitize construct cache.
+	 *
+	 * @return void
+	 */
+	public static function register_sanitize_cache_invalidation_hooks(): void {
+		static $registered = false;
+
+		if ( $registered ) {
+			return;
+		}
+
+		$registered = true;
+
+		add_action( 'switch_theme', array( self::class, 'clear_sanitize_cache' ) );
+		add_action( 'save_post_wp_global_styles', array( self::class, 'clear_sanitize_cache' ) );
+	}
+
+	/**
+	 * Build an instance from already-processed theme.json raw data.
+	 *
+	 * Skips migrate / sanitize / preset-origin keying. Use only with data from
+	 * {@see get_raw_data()} (or equivalent post-construct shape).
+	 *
+	 * Hot path: cloning merged trees and URI resolution without re-sanitizing.
+	 *
+	 * @param array $data Already-processed theme.json data.
+	 * @return self
+	 */
+	public static function with_raw_data( array $data ): self {
+		static $reflections = array();
+
+		$class = static::class;
+		if ( ! isset( $reflections[ $class ] ) ) {
+			$reflections[ $class ] = new \ReflectionClass( $class );
+		}
+
+		$instance             = $reflections[ $class ]->newInstanceWithoutConstructor();
+		$instance->theme_json = $data;
+
+		global $blockera_block_supports;
+		$instance->set_supports( is_array( $blockera_block_supports ?? null ) ? $blockera_block_supports : array() );
+
+		return $instance;
 	}
 
 	/**
@@ -256,182 +497,279 @@ class JSON extends \WP_Theme_JSON {
 	 * 
      * @return array The sanitized output.
      */
-    protected static function sanitize( $input, $valid_block_names, $valid_element_names, $valid_variations): array {
+	protected static function sanitize( $input, $valid_block_names, $valid_element_names, $valid_variations ): array {
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
 
-		$output = array();
+		// Flip once per class (VALID_TOP_LEVEL_KEYS is a constant).
+		static $top_level_keys_flip_by_class = array();
+		$class                               = static::class;
+		if ( ! isset( $top_level_keys_flip_by_class[ $class ] ) ) {
+			$top_level_keys_flip_by_class[ $class ] = array_flip( static::VALID_TOP_LEVEL_KEYS );
+		}
 
-        if (! is_array($input)) {
-            return $output;
-        }
+		// Preserve only the top most level keys.
+		$output = array_intersect_key( $input, $top_level_keys_flip_by_class[ $class ] );
 
-        // Preserve only the top most level keys.
-        $output = array_intersect_key($input, array_flip(static::VALID_TOP_LEVEL_KEYS));
+		/*
+		 * Remove any rules that are annotated as "top" in VALID_STYLES constant.
+		 * Some styles are only meant to be available at the top-level (e.g.: blockGap),
+		 * hence, the schema for blocks & elements should not have them.
+		 *
+		 * Cached per class: blockera_get_valid_supports(VALID_STYLES) + top-strip is stable.
+		 */
+		static $styles_non_top_by_class = array();
+		if ( ! isset( $styles_non_top_by_class[ $class ] ) ) {
+			$styles_non_top_level = blockera_get_valid_supports( static::VALID_STYLES );
+			foreach ( $styles_non_top_level as $section => $props ) {
+				if ( ! is_array( $props ) ) {
+					continue;
+				}
+				foreach ( $props as $prop => $value ) {
+					if ( 'top' === $value ) {
+						unset( $styles_non_top_level[ $section ][ $prop ] );
+					}
+				}
+			}
+			$styles_non_top_by_class[ $class ] = $styles_non_top_level;
+		}
+		$styles_non_top_level = $styles_non_top_by_class[ $class ];
 
-        /*
-         * Remove any rules that are annotated as "top" in VALID_STYLES constant.
-         * Some styles are only meant to be available at the top-level (e.g.: blockGap),
-         * hence, the schema for blocks & elements should not have them.
-         */
-        $styles_non_top_level = blockera_get_valid_supports(static::VALID_STYLES);
-        foreach (array_keys($styles_non_top_level) as $section) {
-            // array_key_exists() needs to be used instead of isset() because the value can be null.
-            if (array_key_exists($section, $styles_non_top_level) && is_array($styles_non_top_level[ $section ])) {
-                foreach (array_keys($styles_non_top_level[ $section ]) as $prop) {
-                    if ('top' === $styles_non_top_level[ $section ][ $prop ]) {
-                        unset($styles_non_top_level[ $section ][ $prop ]);
-                    }
-                }
-            }
-        }
+		/*
+		 * Cache schema parts that depend only on valid block/element name lists
+		 * (not on per-input variations). Variations are applied below per $input.
+		 */
+		static $schema_base_cache = array();
+		$base_key                 = $class . "\0" . implode( "\0", $valid_block_names ) . "\0" . implode( "\0", $valid_element_names );
 
-        // Build the schema based on valid block & element names.
-        $schema                 = array();
-        $schema_styles_elements = array();
+		if ( ! isset( $schema_base_cache[ $base_key ] ) ) {
+			$schema_styles_elements = array();
+			$pseudo_selectors       = static::VALID_ELEMENT_PSEUDO_SELECTORS;
 
-        /*
-         * Set allowed element pseudo selectors based on per element allow list.
-         * Target data structure in schema:
-         * e.g.
-         * - top level elements: `$schema['styles']['elements']['link'][':hover']`.
-         * - block level elements: `$schema['styles']['blocks']['core/button']['elements']['link'][':hover']`.
-         */
-        foreach ($valid_element_names as $element) {
-            $schema_styles_elements[ $element ] = $styles_non_top_level;
+			/*
+			 * Set allowed element pseudo selectors based on per element allow list.
+			 * Target data structure in schema:
+			 * e.g.
+			 * - top level elements: `$schema['styles']['elements']['link'][':hover']`.
+			 * - block level elements: `$schema['styles']['blocks']['core/button']['elements']['link'][':hover']`.
+			 */
+			foreach ( $valid_element_names as $element ) {
+				$schema_styles_elements[ $element ] = $styles_non_top_level;
 
-            if (isset(static::VALID_ELEMENT_PSEUDO_SELECTORS[ $element ])) {
-                foreach (static::VALID_ELEMENT_PSEUDO_SELECTORS[ $element ] as $pseudo_selector) {
-                    $schema_styles_elements[ $element ][ $pseudo_selector ] = $styles_non_top_level;
-                }
-            }
-        }
+				if ( isset( $pseudo_selectors[ $element ] ) ) {
+					foreach ( $pseudo_selectors[ $element ] as $pseudo_selector ) {
+						$schema_styles_elements[ $element ][ $pseudo_selector ] = $styles_non_top_level;
+					}
+				}
+			}
 
-        $schema_styles_blocks   = array();
-        $schema_settings_blocks = array();
+			$schema_styles_blocks   = array();
+			$schema_settings_blocks = array();
+			$settings_schema        = static::get_valid_settings_schema();
 
-        /*
-         * Generate a schema for blocks.
-         * - Block styles can contain `elements` & `variations` definitions.
-         * - Variations definitions cannot be nested.
-         * - Variations can contain styles for inner `blocks`.
-         * - Variation inner `blocks` styles can contain `elements`.
-         *
-         * As each variation needs a `blocks` schema but further nested
-         * inner `blocks`, the overall schema will be generated in multiple passes.
-         */
-        foreach ($valid_block_names as $block) {
-            $schema_settings_blocks[ $block ]           = static::get_valid_settings_schema();
-            $schema_styles_blocks[ $block ]             = $styles_non_top_level;
-            $schema_styles_blocks[ $block ]['elements'] = $schema_styles_elements;
-        }
+			/*
+			 * Generate a schema for blocks.
+			 * - Block styles can contain `elements` & `variations` definitions.
+			 * - Variations definitions cannot be nested.
+			 * - Variations can contain styles for inner `blocks`.
+			 * - Variation inner `blocks` styles can contain `elements`.
+			 */
+			foreach ( $valid_block_names as $block ) {
+				$schema_settings_blocks[ $block ]             = $settings_schema;
+				$schema_styles_blocks[ $block ]               = $styles_non_top_level;
+				$schema_styles_blocks[ $block ]['elements']   = $schema_styles_elements;
+				$schema_styles_blocks[ $block ]['variations'] = array();
+			}
 
-        $block_style_variation_styles             = $styles_non_top_level;
-        $block_style_variation_styles['blocks']   = $schema_styles_blocks;
-        $block_style_variation_styles['elements'] = $schema_styles_elements;
+			$block_style_variation_styles             = $styles_non_top_level;
+			$block_style_variation_styles['blocks']   = $schema_styles_blocks;
+			$block_style_variation_styles['elements'] = $schema_styles_elements;
 
-        foreach ($valid_block_names as $block) {
-            // Build the schema for each block style variation.
-            $style_variation_names = array();
+			$schema_base_cache[ $base_key ] = array(
+				'schema_styles_elements'         => $schema_styles_elements,
+				'schema_styles_blocks'           => $schema_styles_blocks,
+				'schema_settings_blocks'         => $schema_settings_blocks,
+				'block_style_variation_styles'   => $block_style_variation_styles,
+				'settings_schema'                => $settings_schema,
+				'font_families_schema'           => static::schema_in_root_and_per_origin( static::FONT_FAMILY_SCHEMA ),
+			);
+		}
 
-            if (
-                ! empty($input['styles']['blocks'][ $block ]['variations']) &&
-                is_array($input['styles']['blocks'][ $block ]['variations']) &&
-                isset($valid_variations[ $block ])
-            ) {
-				// Important tips:
-				// 1. WP_Theme_JSON class used of array_intersect to validate variations based on available items from static config.
-				// 2. Blockera\Setup\Compatibility\JSON class which override step 1 functionality to support of dynamic items which provided from user config in editor.
-                $style_variation_names = array_merge(
-                    array_keys($input['styles']['blocks'][ $block ]['variations']),
-                    $valid_variations[ $block ]
-                );
-            }
+		$base                         = $schema_base_cache[ $base_key ];
+		$schema_styles_elements       = $base['schema_styles_elements'];
+		$schema_settings_blocks       = $base['schema_settings_blocks'];
+		$block_style_variation_styles = $base['block_style_variation_styles'];
+		// COW copy: per-input variation writes must not mutate the cached base.
+		// Cached base already has empty variations[]; only overwrite blocks that need them.
+		$schema_styles_blocks = $base['schema_styles_blocks'];
 
-            $schema_styles_variations = array();
-            if (! empty($style_variation_names)) {
-                $schema_styles_variations = array_fill_keys($style_variation_names, $block_style_variation_styles);
-            }
+		$input_blocks = ( isset( $input['styles']['blocks'] ) && is_array( $input['styles']['blocks'] ) )
+			? $input['styles']['blocks']
+			: null;
 
-            $schema_styles_blocks[ $block ]['variations'] = $schema_styles_variations;
-        }
+		if ( null !== $input_blocks ) {
+			foreach ( $valid_block_names as $block ) {
+				if (
+					empty( $input_blocks[ $block ]['variations'] ) ||
+					! is_array( $input_blocks[ $block ]['variations'] ) ||
+					! isset( $valid_variations[ $block ] )
+				) {
+					continue;
+				}
 
-        $schema['styles']                                 = $styles_non_top_level;
-        $schema['styles']['blocks']                       = $schema_styles_blocks;
-        $schema['styles']['elements']                     = $schema_styles_elements;
-        $schema['settings']                               = static::get_valid_settings_schema();
-        $schema['settings']['blocks']                     = $schema_settings_blocks;
-        $schema['settings']['typography']['fontFamilies'] = static::schema_in_root_and_per_origin(static::FONT_FAMILY_SCHEMA);
+				/*
+				 * Important tips:
+				 * 1. WP_Theme_JSON class used of array_intersect to validate variations based on available items from static config.
+				 * 2. Blockera\Setup\Compatibility\JSON class which override step 1 functionality to support of dynamic items which provided from user config in editor.
+				 */
+				$style_variation_names = array_keys( $input_blocks[ $block ]['variations'] );
+				foreach ( $valid_variations[ $block ] as $variation_name ) {
+					$style_variation_names[] = $variation_name;
+				}
 
-        // Remove anything that's not present in the schema.
-        foreach (array( 'styles', 'settings' ) as $subtree) {
-            if (! isset($input[ $subtree ])) {
-                continue;
-            }
+				$schema_styles_blocks[ $block ]['variations'] = array_fill_keys(
+					$style_variation_names,
+					$block_style_variation_styles
+				);
+			}
+		}
 
-            if (! is_array($input[ $subtree ])) {
-                unset($output[ $subtree ]);
-                continue;
-            }
+		$schema                       = array();
+		$schema['styles']             = $styles_non_top_level;
+		$schema['styles']['blocks']   = $schema_styles_blocks;
+		$schema['styles']['elements'] = $schema_styles_elements;
+		$schema['settings']           = $base['settings_schema'];
+		$schema['settings']['blocks'] = $schema_settings_blocks;
+		$schema['settings']['typography']['fontFamilies'] = $base['font_families_schema'];
 
-            $result = static::remove_keys_not_in_schema($input[ $subtree ], $schema[ $subtree ]);
+		// Remove anything that's not present in the schema.
+		foreach ( array( 'styles', 'settings' ) as $subtree ) {
+			if ( ! isset( $input[ $subtree ] ) ) {
+				continue;
+			}
 
-            if (empty($result)) {
-                unset($output[ $subtree ]);
-            } else {
-                $output[ $subtree ] = static::resolve_custom_css_format($result);
-            }
-        }
+			if ( ! is_array( $input[ $subtree ] ) ) {
+				unset( $output[ $subtree ] );
+				continue;
+			}
 
-        return $output;
-    }
+			$result = static::remove_keys_not_in_schema( $input[ $subtree ], $schema[ $subtree ] );
+
+			if ( empty( $result ) ) {
+				unset( $output[ $subtree ] );
+			} else {
+				$output[ $subtree ] = static::resolve_custom_css_format( $result );
+			}
+		}
+
+		return $output;
+	}
 
 	/**
-     * Given a tree, converts the internal representation of variables to the CSS representation.
-     * It is recursive and modifies the input in-place.
-     *
-     * @since 6.3.0
-     *
-     * @param array $tree Input to process.
-     * @return array The modified $tree.
-     */
-    private static function resolve_custom_css_format( $tree) {
-        $prefix = 'var:';
+	 * Given a tree, converts the internal representation of variables to the CSS representation.
+	 * Modifies the local tree copy in-place and returns it (same contract as WP_Theme_JSON).
+	 *
+	 * Hot path (sanitize → styles/settings): large nested theme.json trees.
+	 * Optimizations vs core-style recursive walk:
+	 * - Early return for empty trees.
+	 * - Iterative BFS stack-of-refs (zero recursive PHP calls; Xdebug showed ~23k self-calls).
+	 * - Skip empty nested arrays (no stack push; foreach would be a no-op).
+	 * - Inline convert_custom_properties (no per-leaf helper + no duplicate prefix check).
+	 * - Request-level static cache for repeated var: tokens across the tree / sanitize passes.
+	 * - C-level `str_starts_with( $data, 'var:' )` prefix detect.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @param array $tree Input to process.
+	 * @return array The modified $tree.
+	 */
+	private static function resolve_custom_css_format( $tree ) {
+		if ( ! $tree ) {
+			return $tree;
+		}
 
-        foreach ($tree as $key => $data) {
-            if (is_string($data) && str_starts_with($data, $prefix)) {
-                $tree[ $key ] = self::convert_custom_properties($data);
-            } elseif (is_array($data)) {
-                $tree[ $key ] = self::resolve_custom_css_format($data);
-            }
-        }
+		static $cache = array();
 
-        return $tree;
-    }
+		$stack    = array();
+		$stack[0] = &$tree;
+
+		// Grow-only stack: each nested array is queued once; mutate leaves via foreach-by-ref.
+		// $n tracks stack size so we avoid count() on every iteration.
+		for ( $i = 0, $n = 1; $i < $n; ++$i ) {
+			foreach ( $stack[ $i ] as &$data ) {
+				if ( is_array( $data ) ) {
+					// Empty arrays need no walk (equivalent to foreach no-op).
+					if ( $data ) {
+						$stack[ $n++ ] = &$data;
+					}
+				} elseif ( is_string( $data ) && str_starts_with( $data, 'var:' ) ) {
+					$data = $cache[ $data ] ??= 'var(--wp--' . str_replace( '|', '--', substr( $data, 4 ) ) . ')';
+				}
+			}
+			unset( $data );
+		}
+
+		return $tree;
+	}
 
 	/**
-     * This is used to convert the internal representation of variables to the CSS representation.
-     * For example, `var:preset|color|vivid-green-cyan` becomes `var(--wp--preset--color--vivid-green-cyan)`.
-     *
-     * @since 6.3.0
-     *
-     * @param string $value The variable such as var:preset|color|vivid-green-cyan to convert.
-     * @return string The converted variable.
-     */
-    private static function convert_custom_properties( $value) {
-        $prefix     = 'var:';
-        $prefix_len = strlen($prefix);
-        $token_in   = '|';
-        $token_out  = '--';
-        if (str_starts_with($value, $prefix)) {
-            $unwrapped_name = str_replace(
-                $token_in,
-                $token_out,
-                substr($value, $prefix_len)
-            );
-            $value          = "var(--wp--$unwrapped_name)";
-        }
+	 * This is used to convert the internal representation of variables to the CSS representation.
+	 * For example, `var:preset|color|vivid-green-cyan` becomes `var(--wp--preset--color--vivid-green-cyan)`.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @param string $value The variable such as var:preset|color|vivid-green-cyan to convert.
+	 * @return string The converted variable.
+	 */
+	private static function convert_custom_properties( $value ) {
+		// Align with resolve_custom_css_format hot path (C-level prefix + single replace).
+		if ( str_starts_with( $value, 'var:' ) ) {
+			return 'var(--wp--' . str_replace( '|', '--', substr( $value, 4 ) ) . ')';
+		}
 
-        return $value;
-    }
+		return $value;
+	}
+
+	/**
+	 * Build a StyleEngine for global-styles CSS without Application::make()/resolve().
+	 *
+	 * Hot path during blockera_add_global_styles_for_blocks (dozens of engines per request).
+	 *
+	 * @param array  $block              Block payload with blockName + attrs.
+	 * @param string $fallback_selector  CSS selector.
+	 * @param array  $supports           Feature supports list.
+	 * @param bool   $is_style_variation Whether this engine targets a style variation.
+	 * @return StyleEngine
+	 */
+	private static function make_global_style_engine(
+		array $block,
+		string $fallback_selector,
+		array $supports,
+		bool $is_style_variation = false
+	): StyleEngine {
+		static $app         = null;
+		static $breakpoint  = null;
+		static $breakpoints = null;
+
+		if ( null === $app ) {
+			$app         = Blockera::getInstance();
+			$breakpoint  = blockera_core_config( 'breakpoints.base' );
+			$breakpoints = $app->getEntity( 'breakpoints' );
+		}
+
+		$style_engine = new StyleEngine( $block, $fallback_selector, true );
+		$style_engine->setApp( $app );
+		$style_engine->setBreakpoint( $breakpoint );
+		$style_engine->setBreakpoints( $breakpoints );
+		$style_engine->setSupports( $supports );
+
+		if ( $is_style_variation ) {
+			$style_engine->setIsStyleVariation( true );
+		}
+
+		return $style_engine;
+	}
 
 	/**
      * Gets the CSS rules for a particular block from theme.json.
@@ -444,65 +782,75 @@ class JSON extends \WP_Theme_JSON {
      * @param array $block_metadata Metadata about the block to get styles for.
      * @return string Styles for the block.
      */
-    public function get_blockera_styles_for_block( $block_metadata) {
-        $node        = _wp_array_get($this->theme_json, $block_metadata['path'], array());
+	public function get_blockera_styles_for_block( $block_metadata ) {
+		$node        = _wp_array_get( $this->theme_json, $block_metadata['path'], array() );
 		$block_rules = '';
+		$block_name  = $block_metadata['name'] ?? null;
+		$supports    = static::$supports;
+
+		// Hoist metadata key sets once (C-level array_flip; reused for root + variations).
+		static $root_exclude_keys = null;
+		if ( null === $root_exclude_keys ) {
+			$root_exclude_keys = array_fill_keys(
+				array_merge( array( 'variations' ), \blockera_get_block_styles_metadata_keys() ),
+				true
+			);
+		}
+		static $variation_exclude_keys = null;
+		if ( null === $variation_exclude_keys ) {
+			$variation_exclude_keys = array_fill_keys(
+				\blockera_get_block_style_variation_metadata_style_keys(),
+				true
+			);
+		}
 
 		// 1. Generate css rules for the block root customization.
-		if (isset($block_metadata['name'])) {
-			$style_engine = Blockera::getInstance()->make(
-				StyleEngine::class,
-				[
-					'block' => [
-						'blockName' => $block_metadata['name'],
-						'attrs' => array_diff_key(
-							$node,
-							array_flip(
-								array_merge(
-									array( 'variations' ),
-									\blockera_get_block_styles_metadata_keys()
-								)
-							)
-						),
-					],
-					'fallbackSelector' => $block_metadata['selector'],
-					'isGlobalStyle' => true,
-				]
+		if ( null !== $block_name ) {
+			$attrs = array();
+			foreach ( $node as $key => $value ) {
+				if ( ! isset( $root_exclude_keys[ $key ] ) ) {
+					$attrs[ $key ] = $value;
+				}
+			}
+
+			$style_engine = self::make_global_style_engine(
+				array(
+					'blockName' => $block_name,
+					'attrs'     => $attrs,
+				),
+				$block_metadata['selector'],
+				$supports
 			);
-			$style_engine->setSupports(static::$supports);
 			$block_rules .= $style_engine->getStylesheet();
 		}
 
 		// 2. Generate css rules for the block style variations.
-        if (! empty($block_metadata['variations'])) {
-			foreach ($block_metadata['variations'] as $key => $style_variation) {
-				$style_variation_node           = _wp_array_get( $this->theme_json, $style_variation['path'], array() );
-				$clean_style_variation_selector = trim( $style_variation['selector'] );
+		if ( ! empty( $block_metadata['variations'] ) ) {
+			foreach ( $block_metadata['variations'] as $style_variation ) {
+				$style_variation_node = _wp_array_get( $this->theme_json, $style_variation['path'], array() );
 
-				$variation_attrs_for_styles = array_diff_key(
-					$style_variation_node,
-					array_flip( \blockera_get_block_style_variation_metadata_style_keys() )
-				);
+				$variation_attrs = array();
+				foreach ( $style_variation_node as $key => $value ) {
+					if ( ! isset( $variation_exclude_keys[ $key ] ) ) {
+						$variation_attrs[ $key ] = $value;
+					}
+				}
 
-				$style_engine = Blockera::getInstance()->make(
-					StyleEngine::class,
-					[
-						'block' => [
-							'blockName' => $block_metadata['name'],
-							'attrs' => $variation_attrs_for_styles,
-						],
-						'fallbackSelector' => $clean_style_variation_selector,
-						'isGlobalStyle' => true,
-					]
+				$style_engine = self::make_global_style_engine(
+					array(
+						'blockName' => $block_name,
+						'attrs'     => $variation_attrs,
+					),
+					trim( $style_variation['selector'] ),
+					$supports,
+					true
 				);
-				$style_engine->setIsStyleVariation(true);
-				$style_engine->setSupports(static::$supports);
 				$block_rules .= $style_engine->getStylesheet();
-            }
-        }
+			}
+		}
 
-        return $block_rules;
-    }
+		return $block_rules;
+	}
 
 	/**
 	 * Generates a selector for a block style variation.
@@ -514,25 +862,27 @@ class JSON extends \WP_Theme_JSON {
 	 * @return string Block selector with block style variation selector added to it.
 	 */
 	protected static function get_block_style_variation_selector( $variation_name, $block_selector ) {
-		$variation_class = sprintf('.%s%s', self::$style_variation_prefix, $variation_name);
+		$variation_class = '.' . self::$style_variation_prefix . $variation_name;
 
 		if ( ! $block_selector ) {
 			return $variation_class;
 		}
 
-		$limit          = 1;
+		static $pattern = '/((?::\([^)]+\))?\s*)([^\s:]+)/';
+
+		$append = static function ( array $matches ) use ( $variation_class ): string {
+			return $matches[1] . $matches[2] . $variation_class;
+		};
+
+		// Fast path: single selector (no comma) — one preg, no explode/implode.
+		if ( false === strpos( $block_selector, ',' ) ) {
+			return preg_replace_callback( $pattern, $append, $block_selector, 1 );
+		}
+
 		$selector_parts = explode( ',', $block_selector );
 		$result         = array();
-
 		foreach ( $selector_parts as $part ) {
-			$result[] = preg_replace_callback(
-				'/((?::\([^)]+\))?\s*)([^\s:]+)/',
-				function ( $matches ) use ( $variation_class ) {
-					return $matches[1] . $matches[2] . $variation_class;
-				},
-				$part,
-				$limit
-			);
+			$result[] = preg_replace_callback( $pattern, $append, $part, 1 );
 		}
 
 		return implode( ',', $result );
@@ -582,55 +932,73 @@ class JSON extends \WP_Theme_JSON {
 			}
 		}
 
+		// O(1) type membership vs repeated in_array scans.
+		$types_set = array_fill_keys( $types, true );
+
 		$blocks_metadata = static::get_blocks_metadata();
 		$style_nodes     = static::get_style_nodes( $this->theme_json, $blocks_metadata, $options );
 		$setting_nodes   = static::get_setting_nodes( $this->theme_json, $blocks_metadata );
 
-		$root_style_key    = array_search( static::ROOT_BLOCK_SELECTOR, array_column( $style_nodes, 'selector' ), true );
-		$root_settings_key = array_search( static::ROOT_BLOCK_SELECTOR, array_column( $setting_nodes, 'selector' ), true );
+		$root_selector_const = static::ROOT_BLOCK_SELECTOR;
+		$root_style_key      = false;
+		foreach ( $style_nodes as $i => $node ) {
+			if ( isset( $node['selector'] ) && $root_selector_const === $node['selector'] ) {
+				$root_style_key = $i;
+				break;
+			}
+		}
+		$root_settings_key = false;
+		foreach ( $setting_nodes as $i => $node ) {
+			if ( isset( $node['selector'] ) && $root_selector_const === $node['selector'] ) {
+				$root_settings_key = $i;
+				break;
+			}
+		}
 
-		if ( ! empty( $options['scope'] ) ) {
+		$scope = $options['scope'] ?? null;
+		if ( ! empty( $scope ) ) {
 			foreach ( $setting_nodes as &$node ) {
-				$node['selector'] = static::scope_selector( $options['scope'], $node['selector'] );
+				$node['selector'] = static::scope_selector( $scope, $node['selector'] );
 			}
 			foreach ( $style_nodes as &$node ) {
-				$node = static::scope_style_node_selectors( $options['scope'], $node );
+				$node = static::scope_style_node_selectors( $scope, $node );
 			}
 			unset( $node );
 		}
 
-		if ( ! empty( $options['root_selector'] ) ) {
+		$root_selector_opt = $options['root_selector'] ?? null;
+		if ( ! empty( $root_selector_opt ) ) {
 			if ( false !== $root_settings_key ) {
-				$setting_nodes[ $root_settings_key ]['selector'] = $options['root_selector'];
+				$setting_nodes[ $root_settings_key ]['selector'] = $root_selector_opt;
 			}
 			if ( false !== $root_style_key ) {
-				$style_nodes[ $root_style_key ]['selector'] = $options['root_selector'];
+				$style_nodes[ $root_style_key ]['selector'] = $root_selector_opt;
 			}
 		}
 
 		$stylesheet = '';
 
-		if ( in_array( 'variables', $types, true ) ) {
+		if ( isset( $types_set['variables'] ) ) {
 			$stylesheet .= $this->get_css_variables( $setting_nodes, $origins );
 		}
 
-		if ( in_array( 'styles', $types, true ) ) {
+		if ( isset( $types_set['styles'] ) ) {
 			if ( false !== $root_style_key && empty( $options['skip_root_layout_styles'] ) ) {
 				$stylesheet .= $this->get_root_layout_rules( $style_nodes[ $root_style_key ]['selector'], $style_nodes[ $root_style_key ] );
 			}
 			$stylesheet .= $this->get_block_classes( $style_nodes );
 			$stylesheet .= $this->get_blockera_block_rules( $style_nodes );
-		} elseif ( in_array( 'base-layout-styles', $types, true ) ) {
-			$root_selector          = static::ROOT_BLOCK_SELECTOR;
+		} elseif ( isset( $types_set['base-layout-styles'] ) ) {
+			$root_selector          = $root_selector_const;
 			$columns_selector       = '.wp-block-columns';
 			$post_template_selector = '.wp-block-post-template';
-			if ( ! empty( $options['scope'] ) ) {
-				$root_selector          = static::scope_selector( $options['scope'], $root_selector );
-				$columns_selector       = static::scope_selector( $options['scope'], $columns_selector );
-				$post_template_selector = static::scope_selector( $options['scope'], $post_template_selector );
+			if ( ! empty( $scope ) ) {
+				$root_selector          = static::scope_selector( $scope, $root_selector );
+				$columns_selector       = static::scope_selector( $scope, $columns_selector );
+				$post_template_selector = static::scope_selector( $scope, $post_template_selector );
 			}
-			if ( ! empty( $options['root_selector'] ) ) {
-				$root_selector = $options['root_selector'];
+			if ( ! empty( $root_selector_opt ) ) {
+				$root_selector = $root_selector_opt;
 			}
 
 			/*
@@ -659,12 +1027,12 @@ class JSON extends \WP_Theme_JSON {
 			}
 		}
 
-		if ( in_array( 'presets', $types, true ) ) {
+		if ( isset( $types_set['presets'] ) ) {
 			$stylesheet .= $this->get_preset_classes( $setting_nodes, $origins );
 		}
 
 		// Load the custom CSS last so it has the highest specificity.
-		if ( in_array( 'custom-css', $types, true ) ) {
+		if ( isset( $types_set['custom-css'] ) ) {
 			// Add the global styles root CSS.
 			$stylesheet .= _wp_array_get( $this->theme_json, array( 'styles', 'css' ) );
 		}
@@ -681,16 +1049,16 @@ class JSON extends \WP_Theme_JSON {
 	 * @return string The new stylesheet.
 	 */
 	protected function get_blockera_block_rules( $style_nodes ) {
-		$block_rules = '';
+		$parts = array();
 
 		foreach ( $style_nodes as $metadata ) {
 			if ( null === $metadata['selector'] ) {
 				continue;
 			}
-			$block_rules .= static::get_blockera_styles_for_block( $metadata );
+			$parts[] = $this->get_blockera_styles_for_block( $metadata );
 		}
 
-		return $block_rules;
+		return $parts ? implode( '', $parts ) : '';
 	}
 
 	/**
@@ -725,21 +1093,100 @@ class JSON extends \WP_Theme_JSON {
 		if ( null === $properties ) {
 			$properties = static::PROPERTIES_METADATA;
 		}
+
 		$declarations             = array();
 		$root_variable_duplicates = array();
-		$root_style_length        = strlen( '--wp--style--root--' );
+		$is_root_selector         = ( static::ROOT_BLOCK_SELECTOR === $selector );
+		$allow_root_styles        = ( $is_root_selector && $use_root_padding );
+		// Length of '--wp--style--root--' (fixed; avoids strlen per call).
+		$root_style_length    = 19;
+		$apply_bg_defaults    = ( ! $is_root_selector && ! empty( $styles['background']['backgroundImage']['id'] ) );
+		$bg_size_for_defaults = $apply_bg_defaults ? ( $styles['background']['backgroundSize'] ?? null ) : null;
+		$protected            = static::PROTECTED_PROPERTIES;
+		// Root keys that appear in PROTECTED_PROPERTIES (avoid implode on every property).
+		static $protected_roots_by_class = array();
+		$class                           = static::class;
+		if ( ! isset( $protected_roots_by_class[ $class ] ) ) {
+			$roots = array();
+			foreach ( $protected as $protected_path ) {
+				if ( isset( $protected_path[0] ) ) {
+					$roots[ $protected_path[0] ] = true;
+				}
+			}
+			$protected_roots_by_class[ $class ] = $roots;
+		}
+		$protected_roots = $protected_roots_by_class[ $class ];
 
 		foreach ( $properties as $css_property => $value_path ) {
-			if ( ! is_array( $value_path ) ) {
+			if ( ! is_array( $value_path ) || ! isset( $value_path[0] ) ) {
 				continue;
 			}
 
-			$is_root_style = str_starts_with( $css_property, '--wp--style--root--' );
-			if ( $is_root_style && ( static::ROOT_BLOCK_SELECTOR !== $selector || ! $use_root_padding ) ) {
+			// Root custom props: strncmp is a C-level prefix compare (same as str_starts_with).
+			$is_root_style = ( isset( $css_property[18] ) && 0 === strncmp( $css_property, '--wp--style--root--', 19 ) );
+			if ( $is_root_style && ! $allow_root_styles ) {
 				continue;
 			}
 
-			$value = static::get_property_value( $styles, $value_path, $theme_json );
+			/*
+			 * Hot path: skip when the top-level styles key is missing/null.
+			 * Equivalent to get_property_value() → '' (empty values never emit; root-var
+			 * discard of a never-emitted name is a no-op).
+			 */
+			$root_key = $value_path[0];
+			if ( ! isset( $styles[ $root_key ] ) ) {
+				continue;
+			}
+
+			/*
+			 * Inline the common get_property_value() path (unrolled 1–3 segments) to avoid
+			 * _wp_array_get() + static call overhead. Fall back for refs / deeper paths.
+			 */
+			$path_len = count( $value_path );
+			if ( 2 === $path_len ) {
+				$level0 = $styles[ $root_key ];
+				$k1     = $value_path[1];
+				if ( ! is_array( $level0 ) ) {
+					$value = '';
+				} elseif ( isset( $level0[ $k1 ] ) ) {
+					$value = $level0[ $k1 ];
+				} elseif ( array_key_exists( $k1, $level0 ) ) {
+					$value = $level0[ $k1 ];
+				} else {
+					$value = '';
+				}
+			} elseif ( 3 === $path_len ) {
+				$level0 = $styles[ $root_key ];
+				$k1     = $value_path[1];
+				if ( ! is_array( $level0 ) || ( ! isset( $level0[ $k1 ] ) && ! array_key_exists( $k1, $level0 ) ) ) {
+					$value = '';
+				} else {
+					$level1 = $level0[ $k1 ];
+					$k2     = $value_path[2];
+					if ( ! is_array( $level1 ) ) {
+						$value = '';
+					} elseif ( isset( $level1[ $k2 ] ) ) {
+						$value = $level1[ $k2 ];
+					} elseif ( array_key_exists( $k2, $level1 ) ) {
+						$value = $level1[ $k2 ];
+					} else {
+						$value = '';
+					}
+				}
+			} elseif ( 1 === $path_len ) {
+				$value = $styles[ $root_key ];
+			} else {
+				$value = static::get_property_value( $styles, $value_path, $theme_json );
+			}
+
+			if ( 1 === $path_len || 2 === $path_len || 3 === $path_len ) {
+				if ( '' === $value || null === $value ) {
+					$value = '';
+				} elseif ( is_array( $value ) && isset( $value['ref'] ) ) {
+					// Ref resolution stays in get_property_value() (rare path).
+					$value = static::get_property_value( $styles, $value_path, $theme_json );
+				}
+			}
 
 			/*
 			 * Root-level padding styles don't currently support strings with CSS shorthand values.
@@ -749,7 +1196,8 @@ class JSON extends \WP_Theme_JSON {
 				continue;
 			}
 
-			if ( $is_root_style && $use_root_padding ) {
+			// After the early continue, $is_root_style implies $use_root_padding is truthy.
+			if ( $is_root_style ) {
 				$root_variable_duplicates[] = substr( $css_property, $root_style_length );
 			}
 
@@ -765,33 +1213,34 @@ class JSON extends \WP_Theme_JSON {
 				);
 				$value             = $background_styles['declarations'][ $css_property ];
 			}
-			if ( empty( $value ) && static::ROOT_BLOCK_SELECTOR !== $selector && ! empty( $styles['background']['backgroundImage']['id'] ) ) {
+
+			if ( empty( $value ) && $apply_bg_defaults ) {
 				if ( 'background-size' === $css_property ) {
 					$value = 'cover';
-				}
-				// If the background size is set to `contain` and no position is set, set the position to `center`.
-				if ( 'background-position' === $css_property ) {
-					$background_size = $styles['background']['backgroundSize'] ?? null;
-					$value           = 'contain' === $background_size ? '50% 50%' : null;
+				} elseif ( 'background-position' === $css_property ) {
+					// If the background size is set to `contain` and no position is set, set the position to `center`.
+					$value = 'contain' === $bg_size_for_defaults ? '50% 50%' : null;
 				}
 			}
 
 			// Skip if empty and not "0" or value represents array of longhand values.
-			$has_missing_value = empty( $value ) && ! is_numeric( $value );
-			if ( $has_missing_value || is_array( $value ) ) {
+			if ( ( empty( $value ) && ! is_numeric( $value ) ) || is_array( $value ) ) {
 				continue;
 			}
 
 			/*
 			 * Look up protected properties, keyed by value path.
 			 * Skip protected properties that are explicitly set to `null`.
+			 * Only implode when the path root can match PROTECTED_PROPERTIES.
 			 */
-			$path_string = implode( '.', $value_path );
-			if (
-				isset( static::PROTECTED_PROPERTIES[ $path_string ] ) &&
-				_wp_array_get( $settings, static::PROTECTED_PROPERTIES[ $path_string ], null ) === null
-			) {
-				continue;
+			if ( isset( $protected_roots[ $root_key ] ) ) {
+				$path_string = implode( '.', $value_path );
+				if (
+					isset( $protected[ $path_string ] ) &&
+					_wp_array_get( $settings, $protected[ $path_string ], null ) === null
+				) {
+					continue;
+				}
 			}
 
 			// Calculates fluid typography rules where available.
@@ -823,11 +1272,20 @@ class JSON extends \WP_Theme_JSON {
 		}
 
 		// If a variable value is added to the root, the corresponding property should be removed.
-		foreach ( $root_variable_duplicates as $duplicate ) {
-			$discard = array_search( $duplicate, array_column( $declarations, 'name' ), true );
-			if ( is_numeric( $discard ) ) {
-				array_splice( $declarations, $discard, 1 );
+		// Single pass: remove only the first match per duplicate (same as array_search + splice).
+		if ( $root_variable_duplicates ) {
+			$discard_set = array_fill_keys( $root_variable_duplicates, true );
+			$filtered    = array();
+			foreach ( $declarations as $declaration ) {
+				$name = $declaration['name'];
+				if ( isset( $discard_set[ $name ] ) ) {
+					unset( $discard_set[ $name ] );
+					continue;
+				}
+				$filtered[] = $declaration;
 			}
+
+			return $filtered;
 		}
 
 		return $declarations;

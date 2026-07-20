@@ -37,25 +37,27 @@ function blockera_add_cron_interval( array $schedules ): array {
  */
 function blockera_redirect_to_dashboard_page(): void {
 
-    if (blockera_telemetry_opt_in_is_off('blockera')) {
+	if ( ! blockera_is_admin() || blockera_is_doing_ajax() ) {
+		return;
+	}
 
-        return;
-    }
+	$option = blockera_core_config( 'telemetryRestParams.slug' ) . '_do_activation_redirect';
 
-    $option = blockera_core_config('telemetryRestParams.slug') . '_do_activation_redirect';
+	if ( ! get_option( $option, false ) ) {
+		return;
+	}
 
-    // Check if the redirect flag is set and the user has sufficient permissions.
-    if (get_option($option, false)) {
+	if ( blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+		return;
+	}
 
-        delete_option($option);
+	delete_option( $option );
 
-        if (blockera_is_admin() && current_user_can('activate_plugins')) {
-
-            // Redirect to plugin dashboard or settings page.
-            wp_safe_redirect(admin_url('admin.php?page=' . blockera_core_config('app.dashboard_page')));
-            exit;
-        }
-    }
+	if ( current_user_can( 'activate_plugins' ) ) {
+		// Redirect to plugin dashboard or settings page.
+		wp_safe_redirect( admin_url( 'admin.php?page=' . blockera_core_config( 'app.dashboard_page' ) ) );
+		exit;
+	}
 }
 
 /**

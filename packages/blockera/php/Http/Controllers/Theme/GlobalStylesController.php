@@ -372,9 +372,9 @@ class GlobalStylesController extends \WP_REST_Global_Styles_Controller {
 
 		$variations = JSONResolver::get_style_variations();
 
-		// Add resolved theme asset links.
+		// Add resolved theme asset links (with_raw_data: URI scan only needs get_raw_data()).
 		foreach ( $variations as $variation ) {
-			$variation_theme_json = new JSON( $variation );
+			$variation_theme_json = JSON::with_raw_data( $variation );
 			$resolved_theme_uris  = JSONResolver::get_resolved_theme_uris( $variation_theme_json );
 			$data                 = rest_ensure_response( $variation );
 			if ( ! empty( $resolved_theme_uris ) ) {
