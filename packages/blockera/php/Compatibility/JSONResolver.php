@@ -14,6 +14,16 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	private static $theme_with_supports = null;
 
 	/**
+	 * Request-level cache for lightweight customTemplates + templateParts metadata.
+	 *
+	 * Avoids cold-starting {@see get_theme_data()} (style variations + sanitize) when
+	 * only template title/postTypes/area are needed.
+	 *
+	 * @var array{customTemplates: array, templateParts: array}|null
+	 */
+	private static $theme_templates_metadata = null;
+
+	/**
 	 * Cached theme support data array to avoid repeated calculations.
 	 *
 	 * @var array|null
@@ -396,6 +406,94 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	private static function is_testing_environment(): bool {
 		return defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT;
+	}
+
+	/**
+	 * Returns customTemplates + templateParts from theme.json without full theme data resolution.
+	 *
+	 * Unlike {@see get_theme_data()}, this skips style variations, block-style injection,
+	 * and {@see JSON} sanitization — those are irrelevant for template title/postTypes/area.
+	 *
+	 * Parent theme.json is applied first; active (child) theme overwrites by template name.
+	 *
+	 * @return array{
+	 *     customTemplates: array<string, array{title: string, postTypes: string[]}>,
+	 *     templateParts: array<string, array{title: string, area: string}>
+	 * }
+	 */
+	public static function get_theme_templates_metadata(): array {
+		if ( null !== static::$theme_templates_metadata && ! static::is_testing_environment() ) {
+			return static::$theme_templates_metadata;
+		}
+
+		$custom_templates = array();
+		$template_parts   = array();
+		$wp_theme         = wp_get_theme();
+		$parent           = $wp_theme->parent();
+
+		if ( $parent ) {
+			$parent_file = $parent->get_file_path( 'theme.json' );
+			if ( is_readable( $parent_file ) ) {
+				static::map_theme_templates_metadata(
+					static::translate( static::read_json_file( $parent_file ), $parent->get( 'TextDomain' ) ),
+					$custom_templates,
+					$template_parts
+				);
+			}
+		}
+
+		$theme_json_file = $wp_theme->get_file_path( 'theme.json' );
+		if ( is_readable( $theme_json_file ) ) {
+			static::map_theme_templates_metadata(
+				static::translate( static::read_json_file( $theme_json_file ), $wp_theme->get( 'TextDomain' ) ),
+				$custom_templates,
+				$template_parts
+			);
+		}
+
+		static::$theme_templates_metadata = array(
+			'customTemplates' => $custom_templates,
+			'templateParts'   => $template_parts,
+		);
+
+		return static::$theme_templates_metadata;
+	}
+
+	/**
+	 * Maps raw theme.json customTemplates / templateParts into name-keyed metadata arrays.
+	 *
+	 * Mirrors {@see \WP_Theme_JSON::get_custom_templates()} and {@see \WP_Theme_JSON::get_template_parts()}.
+	 *
+	 * @param array $theme_data        Decoded theme.json data.
+	 * @param array $custom_templates  Accumulator keyed by template name.
+	 * @param array $template_parts    Accumulator keyed by part name.
+	 *
+	 * @return void
+	 */
+	private static function map_theme_templates_metadata( array $theme_data, array &$custom_templates, array &$template_parts ): void {
+		if ( ! empty( $theme_data['customTemplates'] ) && is_array( $theme_data['customTemplates'] ) ) {
+			foreach ( $theme_data['customTemplates'] as $item ) {
+				if ( ! isset( $item['name'] ) ) {
+					continue;
+				}
+				$custom_templates[ $item['name'] ] = array(
+					'title'     => $item['title'] ?? '',
+					'postTypes' => $item['postTypes'] ?? array( 'page' ),
+				);
+			}
+		}
+
+		if ( ! empty( $theme_data['templateParts'] ) && is_array( $theme_data['templateParts'] ) ) {
+			foreach ( $theme_data['templateParts'] as $item ) {
+				if ( ! isset( $item['name'] ) ) {
+					continue;
+				}
+				$template_parts[ $item['name'] ] = array(
+					'title' => $item['title'] ?? '',
+					'area'  => $item['area'] ?? '',
+				);
+			}
+		}
 	}
 
 	/**
@@ -1299,6 +1397,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$theme_json_file_cache     = array();
 		static::$theme_with_supports       = null;
 		static::$cached_theme_support_data = null;
+		static::$theme_templates_metadata  = null;
 
 		JSON::clear_sanitize_request_cache();
 
@@ -1307,6 +1406,8 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			wp_cache_delete( 'blockera_get_global_settings_' . $origin, 'theme_json' );
 		}
 		wp_cache_delete( 'blockera_wp_get_global_stylesheet', 'theme_json' );
+		wp_cache_delete( 'blockera_theme_data_custom_templates', 'theme_json' );
+		wp_cache_delete( 'blockera_theme_data_template_parts', 'theme_json' );
 	}
 
 	/**

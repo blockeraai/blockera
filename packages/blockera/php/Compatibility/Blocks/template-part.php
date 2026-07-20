@@ -102,7 +102,8 @@ if (! function_exists('blockera_render_block_core_template_part')) {
 						}
 
 						// Needed for the `render_block_core_template_part_file` and `render_block_core_template_part_none` actions below.
-						$block_template_file = _get_block_template_file( 'wp_template_part', $attributes['slug'] );
+						// Prefer Blockera helper so core `_get_block_template_file` does not cold-start WP_Theme_JSON_Resolver.
+						$block_template_file = blockera_get_block_template_file( 'wp_template_part', $attributes['slug'] );
 						if ( $block_template_file ) {
 							$template_part_file_path = $block_template_file['path'];
 						}
@@ -254,11 +255,11 @@ if (! function_exists('blockera_get_block_template_file')) {
 				);
 
 				if ( 'wp_template_part' === $template_type ) {
-					return _add_block_template_part_area_info( $new_template_item );
+					return blockera_add_block_template_part_area_info( $new_template_item );
 				}
 
 				// If it's not a `wp_template_part`, it must be a `wp_template`.
-				return _add_block_template_info( $new_template_item );
+				return blockera_add_block_template_info( $new_template_item );
 			}
 		}
 
@@ -278,7 +279,7 @@ if (! function_exists('blockera_add_block_template_part_area_info')) {
      */
 	function blockera_add_block_template_part_area_info( $template_info ) {
 		if ( wp_theme_has_theme_json() ) {
-			$theme_data = wp_get_theme_data_template_parts();
+			$theme_data = blockera_get_theme_data_template_parts();
 		}
 
 		if ( isset( $theme_data[ $template_info['slug'] ]['area'] ) ) {
@@ -296,28 +297,40 @@ if (! function_exists('blockera_get_theme_data_template_parts')) {
 	/**
 	 * Returns the metadata for the template parts defined by the theme.
 	 *
+	 * Lightweight path: reads only templateParts from theme.json (no style variations /
+	 * sanitize). Cached per-request and in the `theme_json` object-cache group.
+	 *
 	 * @since 6.4.0
 	 *
 	 * @return array Associative array of `$part_name => $part_data` pairs,
 	 *               with `$part_data` having "title" and "area" fields.
 	 */
 	function blockera_get_theme_data_template_parts() {
+		static $request_cache = null;
+
+		if ( null !== $request_cache ) {
+			return $request_cache;
+		}
+
 		$cache_group    = 'theme_json';
-		$cache_key      = 'wp_get_theme_data_template_parts';
+		$cache_key      = 'blockera_theme_data_template_parts';
 		$can_use_cached = ! wp_is_development_mode( 'theme' );
 
 		if ( $can_use_cached ) {
 			$metadata = wp_cache_get( $cache_key, $cache_group );
 			if ( false !== $metadata ) {
-				return $metadata;
+				$request_cache = $metadata;
+				return $request_cache;
 			}
 		}
 
-		$metadata = JSONResolver::get_theme_data( array(), array( 'with_supports' => false ) )->get_template_parts();
+		$metadata      = JSONResolver::get_theme_templates_metadata()['templateParts'];
+		$request_cache = $metadata;
+
 		if ( $can_use_cached ) {
 			wp_cache_set( $cache_key, $metadata, $cache_group );
 		}
 
-		return $metadata;
-	}	
+		return $request_cache;
+	}
 }

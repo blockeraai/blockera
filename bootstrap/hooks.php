@@ -102,7 +102,11 @@ function blockera_after_setup_theme() {
 			'apply'              => 'blockera_apply_typography_support',
 		)
 	);
-	add_filter('_get_block_templates_files', 'blockera_get_block_templates', PHP_INT_MAX, 3);
+	// Short-circuit core get_block_templates() so _add_block_template_info() never
+	// cold-starts WP_Theme_JSON_Resolver via wp_get_theme_data_custom_templates().
+	add_filter( 'pre_get_block_templates', 'blockera_get_block_templates', PHP_INT_MAX, 3 );
+	// Same for single-file lookups (template-part render → get_block_file_template).
+	add_filter( 'pre_get_block_file_template', 'blockera_pre_get_block_file_template', PHP_INT_MAX, 3 );
 
 	// Core wp_get_global_settings() omits Blockera-only presets; merge JSONResolver output for the editor.
 	// Site Editor live preset edits (useGlobalSetting) are mirrored by BlockEditorExperimentalFeaturesSync (useEffect + updateEditorSettings).

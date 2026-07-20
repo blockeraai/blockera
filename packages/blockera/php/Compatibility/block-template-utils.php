@@ -4,15 +4,23 @@ use Blockera\Setup\Compatibility\JSONResolver;
 
 if (! function_exists('blockera_get_block_templates')) {
 	/**
-	 * Get the block templates.
+	 * Short-circuit {@see get_block_templates()} via `pre_get_block_templates`.
 	 *
-	 * @param array  $templates The templates.
-	 * @param array  $query The query.
-	 * @param string $template_type The template type.
-	 * 
-	 * @return array Return a non-null value to bypass the WordPress queries.
+	 * Uses Blockera helpers so core {@see wp_get_theme_data_custom_templates()} /
+	 * {@see WP_Theme_JSON_Resolver} is never cold-started for template listing.
+	 *
+	 * @param WP_Block_Template[]|null $templates     Pre-filtered templates (unused; always rebuild).
+	 * @param array                    $query         Template query args.
+	 * @param string                   $template_type Template type.
+	 *
+	 * @return array Non-null value bypasses the WordPress default query.
 	 */
 	function blockera_get_block_templates( $templates, $query, $template_type): array {
+		// Another plugin already short-circuited; keep their result.
+		if ( null !== $templates ) {
+			return $templates;
+		}
+
 		$post_type     = isset( $query['post_type'] ) ? $query['post_type'] : '';
 		$wp_query_args = array(
 			'post_status'         => array( 'auto-draft', 'draft', 'publish' ),
@@ -232,7 +240,7 @@ if (! function_exists('blockera_get_block_templates_files')) {
 				);
 
 				if ( 'wp_template_part' === $template_type ) {
-					$candidate = _add_block_template_part_area_info( $new_template_item );
+					$candidate = blockera_add_block_template_part_area_info( $new_template_item );
 					if ( ! isset( $area ) || $area === $candidate['area'] ) {
 						$template_files[ $template_slug ] = $candidate;
 					}
@@ -291,12 +299,79 @@ if (! function_exists('blockera_get_theme_data_custom_templates')) {
 	/**
 	 * Returns the metadata for the custom templates defined by the theme via theme.json.
 	 *
+	 * Lightweight path: reads only customTemplates from theme.json (no style variations /
+	 * sanitize). Cached per-request and in the `theme_json` object-cache group.
+	 *
 	 * @since 6.4.0
 	 *
 	 * @return array Associative array of `$template_name => $template_data` pairs,
 	 *               with `$template_data` having "title" and "postTypes" fields.
 	 */
 	function blockera_get_theme_data_custom_templates() {
-		return JSONResolver::get_theme_data( array(), array( 'with_supports' => false ) )->get_custom_templates();
+		static $request_cache = null;
+
+		if ( null !== $request_cache ) {
+			return $request_cache;
+		}
+
+		$cache_group    = 'theme_json';
+		$cache_key      = 'blockera_theme_data_custom_templates';
+		$can_use_cached = ! wp_is_development_mode( 'theme' );
+
+		if ( $can_use_cached ) {
+			$metadata = wp_cache_get( $cache_key, $cache_group );
+			if ( false !== $metadata ) {
+				$request_cache = $metadata;
+				return $request_cache;
+			}
+		}
+
+		$metadata      = JSONResolver::get_theme_templates_metadata()['customTemplates'];
+		$request_cache = $metadata;
+
+		if ( $can_use_cached ) {
+			wp_cache_set( $cache_key, $metadata, $cache_group );
+		}
+
+		return $request_cache;
+	}
+}
+
+if ( ! function_exists( 'blockera_pre_get_block_file_template' ) ) {
+	/**
+	 * Short-circuit {@see get_block_file_template()} via `pre_get_block_file_template`.
+	 *
+	 * Uses {@see blockera_get_block_template_file()} so core `_get_block_template_file()`
+	 * does not call {@see wp_get_theme_data_custom_templates()} /
+	 * {@see wp_get_theme_data_template_parts()}.
+	 *
+	 * @param WP_Block_Template|null $block_template Pre-filtered template.
+	 * @param string                 $id             Template id (`theme//slug`).
+	 * @param string                 $template_type  Template type.
+	 *
+	 * @return WP_Block_Template|null Non-null bypasses core file discovery.
+	 */
+	function blockera_pre_get_block_file_template( $block_template, $id, $template_type ) {
+		if ( null !== $block_template ) {
+			return $block_template;
+		}
+
+		$parts = explode( '//', $id, 2 );
+		if ( count( $parts ) < 2 ) {
+			return null;
+		}
+
+		list( $theme, $slug ) = $parts;
+
+		if ( get_stylesheet() !== $theme ) {
+			return null;
+		}
+
+		$template_file = blockera_get_block_template_file( $template_type, $slug );
+		if ( null === $template_file ) {
+			return null;
+		}
+
+		return _build_block_template_result_from_file( $template_file, $template_type );
 	}
 }
