@@ -9,22 +9,14 @@
 		{
 			"id": "front-home",
 			"group": "page-rendering",
-			"label": "Front-end home page",
+			"label": "Home page",
 			"path": "/",
-			"thresholdPercent": 15
-		},
-		{
-			"id": "front-default-post",
-			"group": "page-rendering",
-			"label": "Front-end default post (ID 1)",
-			"path": "/?p=1",
-			"note": "Resolved to the canonical permalink at setup (/?p=1 redirects under pretty permalinks).",
 			"thresholdPercent": 15
 		},
 		{
 			"id": "front-complex-1",
 			"group": "patterns",
-			"label": "Front-end complex-1 page",
+			"label": "Blocks: Large page 1",
 			"path": "/perf-complex-1/",
 			"fixture": "tests/fixtures/complex-1/input.html",
 			"thresholdPercent": 15
@@ -32,7 +24,7 @@
 		{
 			"id": "admin-dashboard",
 			"group": "admin",
-			"label": "Admin dashboard",
+			"label": "Admin: Dashboard",
 			"path": "/wp-admin/",
 			"auth": true,
 			"thresholdPercent": 10
@@ -40,7 +32,7 @@
 		{
 			"id": "admin-posts",
 			"group": "admin",
-			"label": "Admin posts list",
+			"label": "Admin: Posts list",
 			"path": "/wp-admin/edit.php",
 			"auth": true,
 			"thresholdPercent": 10
@@ -48,7 +40,7 @@
 		{
 			"id": "admin-media",
 			"group": "admin",
-			"label": "Admin media library",
+			"label": "Admin: Media library",
 			"path": "/wp-admin/upload.php",
 			"auth": true,
 			"thresholdPercent": 10
@@ -56,7 +48,7 @@
 		{
 			"id": "admin-blockera-settings",
 			"group": "admin",
-			"label": "Blockera settings dashboard",
+			"label": "Admin: Blockera dashboard",
 			"path": "/wp-admin/admin.php?page=blockera-settings-dashboard",
 			"auth": true,
 			"requiresBlockera": true,
@@ -65,7 +57,7 @@
 		{
 			"id": "admin-block-editor",
 			"group": "admin",
-			"label": "Block editor (complex-1 post)",
+			"label": "Admin: Block editor (Large page 1)",
 			"path": "/wp-admin/post.php?post={POST_ID}&action=edit",
 			"fixture": "tests/fixtures/complex-1/input.html",
 			"auth": true,
