@@ -172,8 +172,9 @@ export const OptInModal = (): MixedElement => {
 						style={{
 							flexDirection: 'column',
 							gap: '12px',
-							background: '#f8f8f9',
-							border: '1px solid #dadade',
+							background:
+								'color-mix(in srgb, var(--blockera-controls-primary-color) 10%, #ffffff 100%)',
+							border: '1px solid color-mix(in srgb,var(--blockera-controls-primary-color) 25%,#0000)',
 							borderRadius: '5px',
 							padding: '20px 22px',
 							margin: '0',
