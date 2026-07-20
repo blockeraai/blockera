@@ -394,12 +394,13 @@ if ( ! function_exists( 'blockera_clear_theme_styles_partials_mtime_cache' ) ) {
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_layout_support_flags_' );
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_duotone_global_block_names_' );
 		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_merged_settings_' );
+		blockera_get_cache()->deleteTransientCacheByPrefix( 'blockera_merged_raw_data_' );
 	}
 }
 
 if ( ! function_exists( 'blockera_persist_merged_settings_transient' ) ) {
 	/**
-	 * Persist merged settings for warm-skip requests (fonts, global settings).
+	 * Persist merged settings and unresolved raw data for warm-skip requests.
 	 *
 	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
 	 * @return void
@@ -420,6 +421,36 @@ if ( ! function_exists( 'blockera_persist_merged_settings_transient' ) ) {
 			JSONResolver::get_merged_settings(),
 			DAY_IN_SECONDS
 		);
+
+		blockera_get_cache()->setTransientCache(
+			'blockera_merged_raw_data_' . $hash,
+			JSONResolver::get_merged_raw_data(),
+			DAY_IN_SECONDS
+		);
+	}
+}
+
+if ( ! function_exists( 'blockera_prime_merged_raw_data_from_transient' ) ) {
+	/**
+	 * Restore unresolved merged theme.json raw data when warm skips cold merge.
+	 *
+	 * @param string $hash Cache hash from {@see blockera_get_global_styles_cache_hash()}.
+	 * @param mixed  $cache_instance Optional {@see blockera_get_cache()} instance.
+	 * @return bool True when raw data was restored from transient.
+	 */
+	function blockera_prime_merged_raw_data_from_transient( string $hash, $cache_instance = null ): bool {
+		if ( null === $cache_instance ) {
+			$cache_instance = blockera_get_cache();
+		}
+
+		$cached_raw = $cache_instance->getTransientCache( 'blockera_merged_raw_data_' . $hash );
+		if ( ! is_array( $cached_raw ) ) {
+			return false;
+		}
+
+		JSONResolver::prime_merged_raw_data_cache( 'custom', $cached_raw );
+
+		return true;
 	}
 }
 
@@ -828,11 +859,16 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 				blockera_prime_layout_support_global_flags( $cached_flags );
 				blockera_warm_layout_render_cache();
 				blockera_warm_duotone_global_block_names_cache( $hash, $cache );
-				blockera_warm_block_style_variation_theme_json_cache( $hash, $cache );
+
 				if ( ! blockera_prime_merged_settings_from_transient( $hash, $cache ) ) {
 					JSONResolver::get_merged_settings();
+				}
+
+				if ( ! blockera_prime_merged_raw_data_from_transient( $hash, $cache ) ) {
+					JSONResolver::get_merged_raw_data();
 					blockera_persist_merged_settings_transient( $hash );
 				}
+
 				return;
 			}
 		}
@@ -843,7 +879,6 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 		blockera_get_layout_support_global_flags();
 		blockera_warm_layout_render_cache();
 		blockera_warm_duotone_global_block_names_cache( $hash, blockera_get_cache() );
-		blockera_warm_block_style_variation_theme_json_cache( $hash, blockera_get_cache() );
 		blockera_persist_merged_settings_transient( $hash );
 	}
 }

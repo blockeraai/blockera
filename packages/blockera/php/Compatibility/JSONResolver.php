@@ -883,6 +883,24 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Seed request-level merged raw data without running {@see get_merged_data()}.
+	 *
+	 * Used when warm transient skip restores unresolved theme.json for block style
+	 * variation CSS without paying a cold merge on wp_loaded.
+	 *
+	 * @param string $origin Origin key (same as {@see get_merged_raw_data()}).
+	 * @param array  $raw    Raw merged tree from {@see JSON::get_raw_data()}.
+	 * @return void
+	 */
+	public static function prime_merged_raw_data_cache( string $origin, array $raw ): void {
+		if ( static::is_testing_environment() ) {
+			return;
+		}
+
+		static::$merged_data_cache[ $origin ] = $raw;
+	}
+
+	/**
 	 * Style block nodes from merged theme.json (request-level cache).
 	 *
 	 * Shared by duotone global-styles bindings and {@see blockera_add_global_styles_for_blocks()}.

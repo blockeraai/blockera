@@ -3,23 +3,6 @@
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
 
-if ( ! function_exists( 'blockera_warm_block_style_variation_theme_json_cache' ) ) {
-	/**
-	 * Warm merged theme.json raw data before the first block style variation render.
-	 *
-	 * Must use {@see JSONResolver::get_merged_raw_data()} (unresolved merge), not the
-	 * resolved `styles_for_blocks` transient tree, and must not use a separate request
-	 * store that can freeze data before late `blockera/json/resolver/get_style_variations` filters.
-	 *
-	 * @param string|null $hash           Unused. Kept for call-site compatibility.
-	 * @param mixed       $cache_instance Unused. Kept for call-site compatibility.
-	 * @return void
-	 */
-	function blockera_warm_block_style_variation_theme_json_cache( ?string $hash = null, $cache_instance = null ): void {
-		JSONResolver::get_merged_raw_data();
-	}
-}
-
 if (! function_exists('blockera_register_block_style_variations_from_theme_json_partials')) {
 	/**
      * Registers block style variations read in from theme.json partials.
