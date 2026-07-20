@@ -182,6 +182,52 @@ function openFlexColumnInBlockera() {
 	openFlexDisplayInBlockera();
 }
 
+function ensureStylesViewOpen() {
+	cy.getByAriaControls('styles-view', { timeout: 20000 }).then(($btn) => {
+		if ($btn.attr('aria-expanded') !== 'true') {
+			cy.wrap($btn).click();
+		}
+	});
+}
+
+function getDirectionSuffix(type) {
+	return type === 'flex-direction: row' ? 'row' : 'column';
+}
+
+function getSpecialUnitMatrixTestId(type, unit) {
+	const suffix = getDirectionSuffix(type);
+
+	if (unit.optionLabel === 'Space Around') {
+		return `matrix-space-around-start-fill-${suffix}`;
+	}
+
+	if (unit.optionLabel === 'Space Between') {
+		return `matrix-space-between-start-fill-${suffix}`;
+	}
+
+	return `matrix-stretch-${suffix}`;
+}
+
+function dismissFlexLayoutSelectPopover() {
+	// Force-click on Ariakit listbox options does not always close the popover.
+	// A lingering overlay intercepts the publish click and savePage never sees a snackbar.
+	cy.realPress('Escape');
+	cy.get('[role="listbox"][data-open]').should('not.exist');
+}
+
+function prepareEditorForPublish() {
+	dismissFlexLayoutSelectPopover();
+
+	// Blur inspector controls so no popover/focus trap covers the header publish button.
+	cy.getBlock('core/paragraph').first().click({ force: true });
+
+	cy.get('.editor-post-publish-button')
+		.should('be.visible')
+		.and(($button) => {
+			expect($button.attr('aria-disabled')).not.to.equal('true');
+		});
+}
+
 /**
  * Matrix slots use screen vertical/horizontal; column stores them on swapped flex props.
  */
@@ -296,7 +342,7 @@ function configureBlockMatrixAlignment(blockIndex, type, point) {
 	);
 
 	cy.getBlock('core/paragraph').eq(blockIndex).click();
-	cy.getByAriaControls('styles-view').click();
+	ensureStylesViewOpen();
 
 	ensureBlockDisplayFlex(blockIndex);
 
@@ -331,27 +377,16 @@ function setFlexLayoutSelectOption(axisIndex, optionLabel) {
 			.eq(axisIndex)
 			.click({ force: true });
 	});
-	cy.get('[role="listbox"]:visible')
-		.last()
-		.within(() => {
-			cy.contains(optionLabel).click({ force: true });
-		});
 
-	// The axis select renders its listbox in a body-level portal popover. A
-	// force-click on the option does not always dismiss it, and a lingering popover
-	// overlays the editor — the first `savePage()` publish click then only performs
-	// the popover's outside-click close, so the post never publishes and no success
-	// snackbar appears. Dismiss it deterministically before moving on.
-	//
 	// Scope to `[data-open]`: WP CustomSelectControl (Ariakit) only marks the open
 	// select listbox with it. A bare `[role="listbox"]` also matches the persistent
 	// block inserter list (`.block-editor-block-types-list`), which never unmounts.
-	cy.get('body').then(($body) => {
-		if ($body.find('[role="listbox"][data-open]').length) {
-			cy.get('body').type('{esc}');
-		}
-	});
-	cy.get('[role="listbox"][data-open]').should('not.exist');
+	cy.get('[role="listbox"][data-open]', { timeout: 10000 })
+		.should('be.visible')
+		.contains('[role="option"]', optionLabel)
+		.click({ force: true });
+
+	dismissFlexLayoutSelectPopover();
 }
 
 const MATRIX_SPECIAL_UNITS = [
@@ -382,7 +417,7 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 			: getAlignAxisSelectIndex(type);
 
 	cy.getBlock('core/paragraph').eq(blockIndex).click();
-	cy.getByAriaControls('styles-view').click();
+	ensureStylesViewOpen();
 
 	ensureBlockDisplayFlex(blockIndex);
 
@@ -397,6 +432,8 @@ function configureBlockSpecialUnit(blockIndex, type, unit) {
 	cy.getByDataTest('matrix-top-left-selected').should('exist');
 
 	setFlexLayoutSelectOption(axisIndex, unit.optionLabel);
+
+	cy.getByDataTest(getSpecialUnitMatrixTestId(type, unit)).should('exist');
 
 	cy.getBlock('core/paragraph')
 		.eq(blockIndex)
@@ -560,6 +597,7 @@ describe('Flex Layout → Functionality', () => {
 								configureBlockSpecialUnit(index, type, unit);
 							});
 
+							prepareEditorForPublish();
 							savePage();
 
 							redirectToFrontPage();
