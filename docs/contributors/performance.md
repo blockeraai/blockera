@@ -1,24 +1,33 @@
 ## Performance Benchmarks
 
-Blockera CI compares **WordPress Core** (Blockera deactivated) vs **Blockera active** using a Playwright harness adapted from WordPress core’s Server-Timing performance suite.
+Blockera CI compares **WordPress Core** (Blockera deactivated) vs **Blockera active** using two Playwright harnesses:
 
-The goal is to catch PHP / request-path regressions early: each scenario has a `%` overhead threshold. If Blockera’s median `wp-total` exceeds Core by more than that threshold, the job fails and a sticky report is posted on the PR.
+1. **Server-Timing** — PHP / request-path overhead (`wp-total`, TTFB, LCP on the front end).
+2. **Block editor (client)** — Chromium tracing metrics adapted from the Gutenberg post-editor performance suite (block selection, workspace tab switching).
+
+Each comparable scenario has a `%` overhead threshold. If Blockera’s median exceeds Core by more than that threshold (either direction), the job fails. Server-Timing and editor results each get their own sticky PR comment and share the same workflow artifact upload.
 
 ### How it works
 
 ```text
 wp-env (performance.json)
   → publish fixtures / resolve scenario URLs
-  → Playwright (Blockera ON)  → artifacts/blockera-performance-results.json
-  → Playwright (Blockera OFF) → artifacts/core-performance-results.json
-  → compare-results.js → report.md (+ threshold gate)
+  → Server-Timing: Blockera ON / Core OFF → compare-results.js → report.md
+  → Editor:        Blockera ON / Core OFF → compare-editor-results.js → editor-report.md
+  → sticky PR comments (separate) + artifacts
 ```
 
 1. **Environment** — [`.github/wp-env-configs/performance.json`](../../.github/wp-env-configs/performance.json) enables `BLOCKERA_PERF_BENCHMARK`, maps CI MU-plugins, and activates Twenty Twenty-Five.
 2. **Server-Timing** — [`.github/performance/mu-plugins/server-timing.php`](../../.github/performance/mu-plugins/server-timing.php) emits `wp-total` (and front-end `wp-before-template` / `wp-template`, memory, DB queries). [`clear-cache.php`](../../.github/performance/mu-plugins/clear-cache.php) clears caches between iterations via `/?clear_cache`.
-3. **Scenarios** — [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json) lists URLs (home, default post, page-1 from the complex-2 fixture, admin screens, block editor). Setup publishes the page-1 page and writes `.github/performance/results/resolved-scenarios.json`.
-4. **Playwright suite** — [`tests/performance/`](../../tests/performance/) loads each scenario many times (`TEST_RUNS`, plus `repeatEach`), collects Server-Timing / TTFB / LCP (front-end only), and writes JSON under `artifacts/`.
-5. **Compare + gate** — [`tests/performance/compare-results.js`](../../tests/performance/compare-results.js) builds a markdown report (median / STD / MAD) and fails when `| (Blockera − Core) / Core × 100 |` exceeds the scenario’s `thresholdPercent` on `wp-total`. Scenarios with `requiresBlockera: true` are informational only (no Core gate).
+3. **Server-Timing scenarios** — [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json) lists URLs (home, page-1, admin screens, block editor shell). Setup publishes the page-1 page and writes `.github/performance/results/resolved-scenarios.json`.
+4. **Editor scenarios** — [`.github/performance/editor-scenarios.json`](../../.github/performance/editor-scenarios.json) lists client interaction suites (selecting blocks, switching Blockera workspace tabs).
+5. **Playwright suites** — [`tests/performance/`](../../tests/performance/)  
+   - Server-Timing: `specs/scenarios.test.js` + `playwright.config.js`  
+   - Editor: `specs/editor-scenarios.test.js` + `playwright.editor.config.js` (Gutenberg-style 10 samples + 1 throwaway, `repeatEach: 1`)
+6. **Compare + gate** —  
+   - [`compare-results.js`](../../tests/performance/compare-results.js) → `report.md` (gate on `wp-total`)  
+   - [`compare-editor-results.js`](../../tests/performance/compare-editor-results.js) → `editor-report.md` (gate on per-scenario metric, e.g. `focus`)  
+   Scenarios with `requiresBlockera: true` are informational only (no Core gate).
 
 Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale matrix).
 
@@ -28,20 +37,25 @@ Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale 
 | --- | --- |
 | `.github/workflows/performance-benchmark.yml` | CI workflow |
 | `.github/wp-env-configs/performance.json` | wp-env config for benchmarks |
-| `.github/performance/scenarios.json` | URLs + thresholds |
+| `.github/performance/scenarios.json` | Server-Timing URLs + thresholds |
+| `.github/performance/editor-scenarios.json` | Editor interaction scenarios + thresholds |
 | `.github/performance/mu-plugins/` | Server-Timing + cache clear + update-check hardening |
 | `.github/performance/scripts/` | setup / run helpers |
-| `tests/performance/` | Playwright suite + compare script |
-| `.github/performance/results/report.md` | Human-readable compare report |
+| `tests/performance/` | Playwright suites + compare scripts |
+| `.github/performance/results/report.md` | Server-Timing compare report |
+| `.github/performance/results/editor-report.md` | Block editor compare report |
 | `artifacts/*-performance-results.json` | Raw Playwright metric payloads |
 
 ### npm scripts
 
 | Script | Purpose |
 | --- | --- |
-| `npm run test:performance` | Single Playwright subject run (used by the runner with env prefixes) |
-| `npm run test:performance:compare` | Compare existing `artifacts/` JSON files and write `report.md` |
-| `npm run test:performance:local` | Full local Core vs Blockera pipeline (see below) |
+| `npm run test:performance` | Single Server-Timing subject run (used by the runner with env prefixes) |
+| `npm run test:performance:compare` | Compare Server-Timing artifacts → `report.md` |
+| `npm run test:performance:editor` | Single editor subject run |
+| `npm run test:performance:editor:compare` | Compare editor artifacts → `editor-report.md` |
+| `npm run test:performance:editor:local` | Full local editor Core vs Blockera pipeline (see below) |
+| `npm run test:performance:local` | Full local Server-Timing Core vs Blockera pipeline (see below) |
 
 ### CI usage
 
@@ -52,12 +66,15 @@ Typical CI steps:
 1. Copy `performance.json` → `.wp-env.json`, start wp-env, build.
 2. Install Chromium, verify Server-Timing, set up content.
 3. Run [`.github/performance/scripts/run-benchmarks.sh`](../../.github/performance/scripts/run-benchmarks.sh) (Blockera on, then off).
-4. Compare with thresholds; post sticky PR comment; fail the job if the gate fails.
-5. Upload artifacts (`report.md`, `compare.json`, performance JSON files).
+4. Compare Server-Timing; post sticky PR comment (`header: blockera-perf-benchmark`).
+5. Run [`.github/performance/scripts/run-editor-benchmarks.sh`](../../.github/performance/scripts/run-editor-benchmarks.sh) (Blockera on, then off).
+6. Compare editor; post **separate** sticky PR comment (`header: blockera-editor-perf-benchmark`).
+7. Fail the job if either threshold gate failed.
+8. Upload artifacts (both reports + JSON files).
 
-CI uses `TEST_RUNS=20` by default.
+CI uses `TEST_RUNS=20` for Server-Timing. Editor suites use a fixed 10 (+1 throwaway) samples per Gutenberg’s pattern.
 
-### Configuring scenarios and thresholds
+### Configuring Server-Timing scenarios
 
 Edit [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json):
 
@@ -70,11 +87,26 @@ Edit [`.github/performance/scenarios.json`](../../.github/performance/scenarios.
 
 After changing scenarios, re-run content setup (or the full local/CI pipeline) so `resolved-scenarios.json` is refreshed.
 
+### Configuring editor scenarios
+
+Edit [`.github/performance/editor-scenarios.json`](../../.github/performance/editor-scenarios.json):
+
+| Scenario id | Metric | Notes |
+| --- | --- | --- |
+| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern; Blockera vs Core gated (default threshold 1000% — Blockera’s inspector makes selection much slower than Core; tighten as optimizations land) |
+| `editor-switch-workspace-tabs` | `switchTab` | Blockera workspace document tabs; `requiresBlockera` (informational) |
+
+- Per-scenario `primaryMetric` — result key to gate/report.
+- Per-scenario `thresholdPercent` — override (default 20%).
+- `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate.
+
+More editor metrics (typing, inserter, loading) can be added later as new describe blocks + scenario rows.
+
 ### Using it on local
 
-Prefer the all-in-one local script. It applies the performance wp-env config, verifies Server-Timing, runs both subjects, and prints the compare report.
+#### Server-Timing (existing)
 
-#### Quick start
+Prefer the all-in-one local script. It applies the performance wp-env config, verifies Server-Timing, runs both subjects, and prints the compare report.
 
 ```bash
 npm run test:performance:local
@@ -93,7 +125,7 @@ Report output:
 - `artifacts/blockera-performance-results.json`
 - `artifacts/core-performance-results.json`
 
-#### CLI flags
+#### CLI flags (Server-Timing local)
 
 ```bash
 npm run test:performance:local -- --help
@@ -107,32 +139,45 @@ npm run test:performance:local -- --help
 | `--force-env-restart` | Stop + start wp-env with performance mappings |
 | `--base-url=URL` | WordPress URL (default `http://localhost:8888`) |
 
-Example with all flags:
+#### Block editor (client) locally
+
+Prefer the all-in-one local script (same performance wp-env as Server-Timing):
 
 ```bash
-npm run test:performance:local -- --runs=10 --skip-build --skip-env-start --base-url=http://localhost:8888
+npm run test:performance:editor:local
 ```
-
-When Server-Timing is missing after a previous non-perf env:
 
 ```bash
-npm run test:performance:local -- --skip-build --force-env-restart
+npm run test:performance:editor:local -- --help
 ```
+
+| Flag | Meaning |
+| --- | --- |
+| `--skip-build` | Skip `npm run build` |
+| `--skip-env-start` | Do not start/restart wp-env |
+| `--force-env-restart` | Stop + start wp-env with performance mappings |
+| `--base-url=URL` | WordPress URL (default `http://localhost:8888`) |
+
+Example:
+
+```bash
+npm run test:performance:editor:local -- --skip-build --force-env-restart
+```
+
+Report output:
+
+- `.github/performance/results/editor-report.md`
+- `.github/performance/results/editor-compare.json`
+- `artifacts/blockera-editor-performance-results.json`
+- `artifacts/core-editor-performance-results.json`
 
 #### Important: `WP_ENV_CONFIG=performance`
 
 `npm run env:start` runs [`.github/scripts/setup-wp-env.js`](../../.github/scripts/setup-wp-env.js), which copies a config from `.env` (`WP_ENV_CONFIG`, often `base` / `development`) onto `.wp-env.json`. That **overwrites** `performance.json` and drops MU-plugin mappings.
 
-The local runner always starts with:
+The Server-Timing local runner always starts with:
 
 ```bash
-WP_ENV_CONFIG=performance npm run env:start
-```
-
-Manual equivalent:
-
-```bash
-npx wp-env stop
 WP_ENV_CONFIG=performance npm run env:start
 ```
 
@@ -142,9 +187,7 @@ Confirm Server-Timing:
 curl -sD - -o /dev/null "http://localhost:8888/" | grep -i server-timing
 ```
 
-#### Manual step-by-step (optional)
-
-If you prefer not to use `test:performance:local`:
+#### Manual Server-Timing step-by-step (optional)
 
 ```bash
 WP_ENV_CONFIG=performance npm run env:start
@@ -156,10 +199,10 @@ TEST_RUNS=5 bash .github/performance/scripts/run-benchmarks.sh
 npm run test:performance:compare
 ```
 
-`test:performance:compare` alone only works after both artifact JSON files exist.
+`test:performance:compare` / `test:performance:editor:compare` alone only work after the matching artifact JSON files exist.
 
 #### Tips
 
 - Keep the machine quiet while measuring; treat local numbers as relative (Blockera vs Core on the same run), not absolute CI parity.
-- Use higher `--runs` when validating a suspected regression; use `5` for quick iteration.
+- Use higher `--runs` when validating a suspected Server-Timing regression; use `5` for quick iteration.
 - Do not commit `.github/performance/results/` or `artifacts/` outputs (they are gitignored / ephemeral).
