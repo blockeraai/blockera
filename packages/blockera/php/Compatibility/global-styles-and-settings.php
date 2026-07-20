@@ -828,6 +828,7 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 				blockera_prime_layout_support_global_flags( $cached_flags );
 				blockera_warm_layout_render_cache();
 				blockera_warm_duotone_global_block_names_cache( $hash, $cache );
+				blockera_warm_block_style_variation_theme_json_cache( $hash, $cache );
 				if ( ! blockera_prime_merged_settings_from_transient( $hash, $cache ) ) {
 					JSONResolver::get_merged_settings();
 					blockera_persist_merged_settings_transient( $hash );
@@ -842,6 +843,7 @@ if ( ! function_exists( 'blockera_warm_merged_settings_cache' ) ) {
 		blockera_get_layout_support_global_flags();
 		blockera_warm_layout_render_cache();
 		blockera_warm_duotone_global_block_names_cache( $hash, blockera_get_cache() );
+		blockera_warm_block_style_variation_theme_json_cache( $hash, blockera_get_cache() );
 		blockera_persist_merged_settings_transient( $hash );
 	}
 }
