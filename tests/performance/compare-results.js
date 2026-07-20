@@ -253,8 +253,6 @@ function main() {
 	const report = buildReport({
 		gateResults,
 		detailSections,
-		primaryMetric,
-		primaryKey,
 		defaults,
 		repetitions,
 		iterations,
@@ -306,8 +304,6 @@ function main() {
 function buildReport({
 	gateResults,
 	detailSections,
-	primaryMetric,
-	primaryKey,
 	defaults,
 	repetitions,
 	iterations,
@@ -321,6 +317,10 @@ function buildReport({
 		'Compare **Blockera** vs **Core** (plugin off) using the WordPress Playwright Server-Timing harness.'
 	);
 	lines.push('');
+	lines.push(
+		'Numbers in the table are how long WordPress takes on the server to fully process each page (median, in milliseconds). Lower is faster.'
+	);
+	lines.push('');
 	if (repetitions && iterations) {
 		lines.push(
 			`All gated numbers are median values over **${repetitions}** repetition(s) with **${iterations}** iteration(s) each.`
@@ -328,9 +328,9 @@ function buildReport({
 		lines.push('');
 	}
 	lines.push(
-		'| Scenario | Metric | Core | Blockera | Diff ms | Diff % | Threshold | Status |'
+		'| Scenario | Core | Blockera | Diff ms | Diff % | Threshold | Status |'
 	);
-	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
+	lines.push('| --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
 	for (const r of gateResults) {
 		let status = '❌ fail';
@@ -340,14 +340,11 @@ function buildReport({
 			status = '⏭️ skip';
 		}
 		lines.push(
-			`| ${r.label} | ${r.metricKey || primaryKey} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${fmtSigned(r.deltaMs)} | ${fmtSigned(r.deltaPercent, '%')} | ${r.thresholdPercent}% | ${status} |`
+			`| ${r.label} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${fmtSigned(r.deltaMs)} | ${fmtSigned(r.deltaPercent, '%')} | ${r.thresholdPercent}% | ${status} |`
 		);
 	}
 
 	lines.push('');
-	lines.push(
-		`- Primary gate metric: \`${primaryMetric}\` → \`${primaryKey}\``
-	);
 	lines.push(
 		`- Theme: Twenty Twenty-Five · Locale: en_US · \`TEST_RUNS\` default from harness`
 	);
