@@ -1935,12 +1935,6 @@ if (! function_exists('blockera_get_available_block_supports')) {
 		// Static cache to avoid repeated file I/O and JSON parsing within the same request.
 		static $cached_supports = null;
 
-		// Test/benchmark hook: force cold path without changing the public signature.
-		if ( isset( $GLOBALS['__blockera_reset_available_block_supports'] ) ) {
-			$cached_supports = null;
-			unset( $GLOBALS['__blockera_reset_available_block_supports'] );
-		}
-
 		if ( null !== $cached_supports ) {
 			return $cached_supports;
 		}
