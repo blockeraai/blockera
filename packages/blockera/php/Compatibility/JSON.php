@@ -72,7 +72,7 @@ class JSON extends \WP_Theme_JSON {
 			'path'              => array( 'typography', 'fontSizes' ),
 			'prevent_override'  => array( 'typography', 'defaultFontSizes' ),
 			'use_default_names' => true,
-			'value_func'        => 'wp_get_typography_font_size_value',
+			'value_func'        => 'blockera_get_typography_font_size_value',
 			'css_vars'          => '--wp--preset--font-size--$slug',
 			'classes'           => array( '.has-$slug-font-size' => 'font-size' ),
 			'properties'        => array( 'font-size' ),
