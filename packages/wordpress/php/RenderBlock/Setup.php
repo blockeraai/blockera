@@ -91,6 +91,30 @@ class Setup {
 		$this->available_blocks = $blocks;
 	}
 
+	/**
+	 * Whether all block.php overlays were preloaded for this request.
+	 *
+	 * @var bool
+	 */
+	private bool $overlays_warmed = false;
+
+	/**
+	 * Preload every Blockera block.php overlay once before register_block_type_args runs.
+	 *
+	 * @return void
+	 */
+	public function warmBlockCustomizationOverlays(): void {
+		if ( $this->overlays_warmed || empty( $this->available_blocks ) ) {
+			return;
+		}
+
+		$this->overlays_warmed = true;
+
+		foreach ( array_keys( $this->available_blocks ) as $block_type ) {
+			$this->getBlockCustomizationOverlay( (string) $block_type );
+		}
+	}
+
     /**
      * Register block extra arguments for third party block types.
      *
@@ -104,9 +128,12 @@ class Setup {
             return $args;
         }
 
-        // Merging blockera shared block attributes.
-        $sharedAttributes   = blockera_get_shared_block_attributes();
-        $args['attributes'] = array_merge($args['attributes'] ?? [], $sharedAttributes);
+		$this->warmBlockCustomizationOverlays();
+
+        if ( ! isset( $args['attributes']['blockeraPropsId'] ) ) {
+			$args['attributes'] = array_merge( $args['attributes'] ?? [], blockera_get_shared_block_attributes() );
+		}
+
         return $this->getCustomizedBlock($block_type, $args);
     }
 
@@ -144,7 +171,6 @@ class Setup {
 	 */
 	private function getBlockCustomizationOverlay( string $block_type ): ?array {
 		if ( array_key_exists( $block_type, $this->block_overlays ) ) {
-			$this->setBlockDirectoryPath( $block_type );
 			return $this->block_overlays[ $block_type ];
 		}
 
