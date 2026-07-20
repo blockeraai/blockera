@@ -365,22 +365,44 @@ if ( ! function_exists( 'blockera_render_block_style_variation_class_name' ) ) {
 
 		$class_string = $block['attrs']['className'];
 
-		preg_match_all( '/\bis-style-\S+?--\d+\b/', $class_string, $style_instances );
-		preg_match_all( '/\bis-size-\S+?--\d+\b/', $class_string, $size_instances );
-
-		$to_apply = array_values(
-			array_unique(
-				array_merge(
-					$style_instances[0] ?? array(),
-					$size_instances[0] ?? array()
-				)
-			)
-		);
-
-		if ( empty( $to_apply ) ) {
+		// Hot path: most blocks never carry instance classes — avoid preg_match_all entirely.
+		$has_style = false !== strpos( $class_string, 'is-style-' );
+		$has_size  = false !== strpos( $class_string, 'is-size-' );
+		if ( ! $has_style && ! $has_size ) {
 			return $block_content;
 		}
 
+		// Only scan prefixes that exist; skip merge/unique when a single side has one token.
+		$style_matches = array();
+		$size_matches  = array();
+		if ( $has_style ) {
+			preg_match_all( '/\bis-style-\S+?--\d+\b/', $class_string, $m );
+			$style_matches = $m[0];
+		}
+		if ( $has_size ) {
+			preg_match_all( '/\bis-size-\S+?--\d+\b/', $class_string, $m );
+			$size_matches = $m[0];
+		}
+
+		if ( $style_matches ) {
+			if ( $size_matches ) {
+				$to_apply = array_values( array_unique( array_merge( $style_matches, $size_matches ) ) );
+			} elseif ( isset( $style_matches[1] ) ) {
+				$to_apply = array_values( array_unique( $style_matches ) );
+			} else {
+				$to_apply = $style_matches;
+			}
+		} elseif ( $size_matches ) {
+			if ( isset( $size_matches[1] ) ) {
+				$to_apply = array_values( array_unique( $size_matches ) );
+			} else {
+				$to_apply = $size_matches;
+			}
+		} else {
+			return $block_content;
+		}
+
+		// First real tag only (skip comments/doctype via (?!!)).
 		$updated = preg_replace_callback(
 			'/<(?!!)([\w:-]+)(\s([^>]*?))?(\/\s*)?>/',
 			static function ( $m ) use ( $to_apply ) {
