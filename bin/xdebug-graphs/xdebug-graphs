@@ -420,6 +420,7 @@ PY
 
     # Build ranking summary PDF from nodes present in this graph DOT
     if ! python3 - "$DOT" "$SUMMARY_PDF" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$SUFFIX" <<'PY'
+import os
 import re
 import sys
 from reportlab.lib import colors
@@ -427,7 +428,23 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+
+
+def rank_header_font():
+    """Unicode TTF so header sort marker (↓) renders; Helvetica cannot."""
+    for path in (
+        '/System/Library/Fonts/Supplemental/Arial Unicode.ttf',
+        '/Library/Fonts/Arial Unicode.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+    ):
+        if os.path.isfile(path):
+            pdfmetrics.registerFont(TTFont('RankHeaderFont', path))
+            return 'RankHeaderFont'
+    return 'Helvetica-Bold'
 
 dot_path, summary_pdf, path_frag, ns_prefix, blockera_color, graph_suffix = sys.argv[1:]
 
@@ -558,13 +575,14 @@ def build_summary_pdf(path, nodes):
         alignment=TA_LEFT,
         wordWrap='CJK',
     )
+    header_font = rank_header_font()
     header_style = ParagraphStyle(
         'RankHeader',
         parent=styles['Normal'],
         fontSize=8,
         leading=10,
         textColor=colors.HexColor('#111827'),
-        fontName='Helvetica-Bold',
+        fontName=header_font,
     )
 
     pages = [
@@ -605,12 +623,13 @@ def build_summary_pdf(path, nodes):
             subtitle_style,
         ))
 
+        # Mark the active sort column (tables are always descending).
         col_headers = [
             Paragraph('#', header_style),
             Paragraph('Function / Method', header_style),
-            Paragraph('Inc %', header_style),
-            Paragraph('Self %', header_style),
-            Paragraph('Calls', header_style),
+            Paragraph('Inc % ↓' if sort_key == 'inc' else 'Inc %', header_style),
+            Paragraph('Self % ↓' if sort_key == 'self' else 'Self %', header_style),
+            Paragraph('Calls ↓' if sort_key == 'calls' else 'Calls', header_style),
         ]
         data = [col_headers]
 
