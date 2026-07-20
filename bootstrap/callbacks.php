@@ -37,7 +37,7 @@ function blockera_add_cron_interval( array $schedules ): array {
  */
 function blockera_redirect_to_dashboard_page(): void {
 
-	if ( ! blockera_is_admin() ) {
+	if ( ! blockera_is_admin() || blockera_is_doing_ajax() ) {
 		return;
 	}
 
