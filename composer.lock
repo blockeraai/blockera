@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b3c1787ba982ecaa33ea9dbe89ffb2d",
+    "content-hash": "e7580b9189ca11a950df3552ded97918",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -401,6 +401,25 @@
                 }
             },
             "description": "Handles version plugin compatibility checking between Blockera and Blockera Pro plugins to ensure proper functionality",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/storage",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/storage",
+                "reference": "6ec75785b5d9c3660db5ee23e027328f1af8460c"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "php/functions.php"
+                ]
+            },
+            "description": "Browser and database storage helpers for Blockera.",
             "transport-options": {
                 "relative": true
             }
@@ -7779,5 +7798,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

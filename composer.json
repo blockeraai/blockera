@@ -30,6 +30,10 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/storage"
+		},
+		{
+			"type": "path",
 			"url": "packages/global-styles-ui"
 		},
 		{
@@ -109,6 +113,7 @@
 		"blockera/icons": "*",
 		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
+		"blockera/storage": "*",
 		"blockera/global-styles-ui": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
