@@ -572,4 +572,181 @@ test.describe('Editor', () => {
 			}
 		});
 	});
+
+	test.describe('editor-gs-default-bg-color', () => {
+		const results = {
+			gsDefaultBgColor: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera Global Styles BG Color control
+		test.skip(
+			skipForCore,
+			'GS default bg color requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure GS default bg color', async ({
+			admin,
+			page,
+			perfUtils,
+			metrics,
+		}) => {
+			await admin.visitSiteEditor({
+				canvas: 'edit',
+				showWelcomeGuide: false,
+			});
+			await admin.waitForSiteEditor();
+			await closeWelcomeGuide(page);
+
+			await perfUtils.setupGlobalStylesDefaultStyleVariation(
+				'core/paragraph'
+			);
+
+			const globalStylesDefaultBgColorContainer =
+				await perfUtils.getBackgroundColorContainer();
+			await expect(globalStylesDefaultBgColorContainer).toBeVisible({
+				timeout: 60000,
+			});
+
+			const canvas = await perfUtils.getCanvas();
+			const paragraph = canvas.locator('.wp-block-paragraph').first();
+			await expect(paragraph).toBeVisible({ timeout: 60000 });
+
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const colorSuffix = String(i).padStart(2, '0');
+				const colorValue = `6666${colorSuffix}`;
+				const expectedHex = `#${colorValue}`;
+				const blueChannel = parseInt(colorSuffix, 16);
+
+				await metrics.startTracing();
+				await perfUtils.setBackgroundColor(colorValue);
+				await perfUtils.expectDefaultStyleVariationBackgroundColor(
+					expectedHex
+				);
+				await expect(paragraph).toHaveCSS(
+					'backgroundColor',
+					`rgb(102, 102, ${blueChannel})`,
+					{ timeout: 30000 }
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) &&
+						'editor-gs-default-bg-color'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.gsDefaultBgColor.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
+
+	test.describe('editor-gs-default-bg-color-variable', () => {
+		const results = {
+			gsDefaultBgColorVariable: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera BG Color value addon
+		test.skip(
+			skipForCore,
+			'GS default bg color variable requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure GS default bg color variable', async ({
+			admin,
+			page,
+			perfUtils,
+			metrics,
+		}) => {
+			await admin.visitSiteEditor({
+				canvas: 'edit',
+				showWelcomeGuide: false,
+			});
+			await admin.waitForSiteEditor();
+			await closeWelcomeGuide(page);
+
+			await perfUtils.setupGlobalStylesDefaultStyleVariation(
+				'core/paragraph'
+			);
+
+			const globalStylesDefaultBgColorContainer =
+				await perfUtils.getBackgroundColorContainer();
+			await expect(globalStylesDefaultBgColorContainer).toBeVisible({
+				timeout: 60000,
+			});
+
+			const variableIds = ['accent-3', 'accent-4'];
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const variableId = variableIds[(i - 1) % variableIds.length];
+
+				await metrics.startTracing();
+				await perfUtils.setBackgroundColorVariable(variableId);
+				await perfUtils.expectDefaultStyleVariationBackgroundColorVariable(
+					variableId
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) &&
+						'editor-gs-default-bg-color-variable'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.gsDefaultBgColorVariable.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
 });
