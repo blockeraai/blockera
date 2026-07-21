@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -47,7 +47,7 @@ describe('Border → Functionality', () => {
 			);
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: {
@@ -97,7 +97,7 @@ describe('Border → Functionality', () => {
 			);
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: {
@@ -158,7 +158,7 @@ describe('Border → Functionality', () => {
 			);
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -211,7 +211,7 @@ describe('Border → Functionality', () => {
 			);
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -268,7 +268,7 @@ describe('Border → Functionality', () => {
 			);
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -329,7 +329,7 @@ describe('Border → Functionality', () => {
 			);
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -413,7 +413,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: {
@@ -476,7 +476,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: {
@@ -507,7 +507,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: {
@@ -558,7 +558,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -627,7 +627,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -715,7 +715,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },
@@ -822,7 +822,7 @@ describe('Border → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'custom',
 					all: { color: '', style: '', width: '' },

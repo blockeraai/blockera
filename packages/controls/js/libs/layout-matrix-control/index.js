@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useEffect, useRef } from '@wordpress/element';
+import { useRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -391,16 +391,6 @@ export default function LayoutMatrixControl({
 		: 'justifyContent';
 
 	const clickTimerRef = useRef<?TimeoutID>();
-
-	// Single-click commits are deferred 200ms to allow double-click detection.
-	// Cancel any pending commit when the controlled value changes externally
-	// (block-state / breakpoint navigation) or on unmount — otherwise the
-	// deferred setValue can land on the newly active state after a fast switch.
-	useEffect(() => {
-		return () => {
-			clearTimeout(clickTimerRef.current);
-		};
-	}, [value?.alignItems, value?.justifyContent, value?.direction]);
 
 	const createMatrixHandlers = (
 		singleClickAction: () => void,

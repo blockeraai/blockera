@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -33,7 +33,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('2px').to.be.equal(
 					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
@@ -53,7 +53,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('3px').to.be.equal(
 					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
@@ -72,7 +72,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);

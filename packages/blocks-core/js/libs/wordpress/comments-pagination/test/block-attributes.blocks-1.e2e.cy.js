@@ -5,7 +5,7 @@ import {
 	createPost,
 	getBlockType,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -27,7 +27,7 @@ describe('Testing core/comments-pagination block registered default attributes v
 
 		cy.getByAriaLabel('Select parent block: Comments Pagination').click();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const attributes = getBlockType(
 				data,
 				'core/comments-pagination'

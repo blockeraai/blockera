@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -27,7 +27,7 @@ describe('Text Transform → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('uppercase').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextTransform')
 			);

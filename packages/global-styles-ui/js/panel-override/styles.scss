@@ -6,9 +6,6 @@
  * overrides stay forward/backward compatible without runtime branching in CSS.
  */
 
-@use "sass:list";
-@use "sass:string";
-
 // Navigator + screen shells
 $gs-navigator-screen: ".edit-site-global-styles-sidebar__navigator-screen, .global-styles-ui-sidebar__navigator-screen";
 $gs-screen-root: ".edit-site-global-styles-screen-root, .global-styles-ui-screen-root";
@@ -23,43 +20,10 @@ $gs-block-preview-panel: ".edit-site-global-styles__block-preview-panel, .global
 $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 
 @mixin blockera-preset-cleanup-screen-styles(
-	$inspector-active-classes,
+	$inspector-active-class,
 	$content-wrapper-class: "blockera-block-inspector-controls-wrapper",
 	$reset-spacer-padding: true
 ) {
-	$inspector-active-class-list: ();
-
-	@if type-of($inspector-active-classes) == list {
-		$inspector-active-class-list: $inspector-active-classes;
-	}
-
-	@else {
-		@each $class-name in string.split($inspector-active-classes, ",") {
-			$inspector-active-class-list: list.append(
-				$inspector-active-class-list,
-				$class-name
-			);
-		}
-	}
-
-	$has-colors-inspector: false;
-
-	@each $inspector-active-class in $inspector-active-class-list {
-		@if $inspector-active-class == "blockera-colors-preset-inspector-active" {
-			$has-colors-inspector: true;
-		}
-	}
-
-	$navigator-screen-not-selectors: ();
-
-	@each $inspector-active-class in $inspector-active-class-list {
-		$navigator-screen-not-selectors: list.append(
-			$navigator-screen-not-selectors,
-			".#{$inspector-active-class} div[data-wp-component=\"Navigator.Screen\"]:first-child",
-			$separator: comma
-		);
-	}
-
 	&.blockera-cleanup-screen-styles {
 		#{$gs-global-styles-screen} {
 			margin: 0 !important;
@@ -81,7 +45,8 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		}
 
 		div[data-wp-component="Navigator.Screen"]:first-child:not(
-				#{$navigator-screen-not-selectors}
+				.#{$inspector-active-class}
+					div[data-wp-component="Navigator.Screen"]:first-child
 			) {
 			@if 'blockera-shadows-panel' == $content-wrapper-class {
 				> div:first-child:not(:has(button[data-wp-component="Navigator.BackButton"])) {
@@ -120,7 +85,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 			}
 		}
 		
-		@if $has-colors-inspector {
+		@if 'blockera-colors-preset-inspector-active' == $inspector-active-class {
 			div[data-wp-component="Navigator.Screen"]:first-child:has(button[id="/colors/linear-gradients"]) {
 
 				> div:first-child:has(.global-styles-ui-header__description) {
@@ -133,11 +98,9 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		}
 	}
 
-	@each $inspector-active-class in $inspector-active-class-list {
-		.#{$inspector-active-class} {
-			> *:not(.#{$content-wrapper-class}) {
-				display: none;
-			}
+	.#{$inspector-active-class} {
+		> *:not(.#{$content-wrapper-class}) {
+			display: none;
 		}
 	}
 }
@@ -235,7 +198,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 // Typography preset takeover
 .is-open-blockera-typography-navigation-override {
 	@include blockera-preset-cleanup-screen-styles(
-		"blockera-font-size-preset-inspector-active,blockera-line-height-preset-inspector-active",
+		"blockera-font-size-preset-inspector-active",
 		"blockera-block-inspector-controls-wrapper",
 		false
 	);
@@ -244,10 +207,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		// Hide native WP "Font size presets" block; keep Blockera "Font size variables".
 		[data-wp-component="VStack"]:has(
 				button[id="/typography/font-sizes"]
-			):not(:has(.blockera-typography-hub, .blockera-font-size-editor-groups), :has(
-					.blockera-typography-hub,
-					.blockera-line-height-editor-groups
-				)) {
+			):not(:has(.blockera-font-size-hub, .blockera-font-size-editor-groups)) {
 			display: none !important;
 		}
 
@@ -265,8 +225,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 		}
 	}
 
-	.blockera-font-size-preset-inspector-active,
-	.blockera-line-height-preset-inspector-active {
+	.blockera-font-size-preset-inspector-active {
 		margin: 0 !important;
 
 		> div > *:not(:last-child) {

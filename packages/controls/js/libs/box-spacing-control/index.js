@@ -26,13 +26,16 @@ import {
 	boxSpacingValueCleanup,
 	getSmartLock,
 } from './utils';
-import Grid from '../grid';
-import { Button } from '../button';
-import { LabelControl, LabelControlContainer } from '../label-control';
-import InputControl from '../input-control';
-import BaseControl from '../base-control';
+import {
+	BaseControl,
+	Grid,
+	Button,
+	LabelControl,
+	LabelControlContainer,
+	InputControl,
+} from '../index';
 import { useControlContext } from '../../context';
-import { isValid } from '../../value-addons';
+import { isValid } from '../..';
 
 export default function BoxSpacingControl({
 	className,

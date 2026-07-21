@@ -22,11 +22,7 @@ import { isEmpty, isUndefined } from '@blockera/utils';
  * Internal dependencies
  */
 import { iconReducer } from '../store/reducer';
-import {
-	isCustomIcon,
-	sanitizeRawSVGString,
-	isProIconClickBlocked,
-} from '../utils';
+import { isCustomIcon, sanitizeRawSVGString } from '../utils';
 import { parseUploadedMediaAndSetIcon } from '../helpers';
 import { useRecentIcons } from './useRecentIcons';
 
@@ -64,7 +60,6 @@ export function useIconPickerModal({
 
 	const [isOpenModal, setOpenModal] = useState(false);
 	const [modalInitialTab, setModalInitialTab] = useState('library');
-	const [draftLibraryIcon, setDraftLibraryIcon] = useState(null);
 
 	useEffect(() => {
 		currentIconDispatch({
@@ -75,18 +70,6 @@ export function useIconPickerModal({
 
 	const closeModal = useCallback(() => {
 		setOpenModal(false);
-		setDraftLibraryIcon(null);
-	}, []);
-
-	const getLibraryIconDraftFromIcon = useCallback((icon) => {
-		if (isCustomIcon(icon) || !icon?.icon || !icon?.library) {
-			return null;
-		}
-
-		return {
-			icon: icon.icon,
-			library: icon.library,
-		};
 	}, []);
 
 	const dispatchActions = useCallback(
@@ -118,10 +101,9 @@ export function useIconPickerModal({
 				preferredTab ??
 					(isCustomIcon(currentIcon) ? 'custom' : 'library')
 			);
-			setDraftLibraryIcon(getLibraryIconDraftFromIcon(currentIcon));
 			setOpenModal(true);
 		},
-		[currentIcon, getLibraryIconDraftFromIcon]
+		[currentIcon]
 	);
 
 	const isCurrentIcon = useCallback(
@@ -130,82 +112,24 @@ export function useIconPickerModal({
 		[currentIcon]
 	);
 
-	const isDraftLibraryIcon = useCallback(
-		(iconName, library) =>
-			draftLibraryIcon?.icon === iconName &&
-			draftLibraryIcon?.library === library,
-		[draftLibraryIcon]
-	);
-
-	/**
-	 * Library tab uses a draft-then-commit flow:
-	 * - single click updates draft highlight only (modal stays open)
-	 * - double click or "Use icon" commits via dispatchActions (closes modal)
-	 * - custom/recent SVG picks still commit immediately
-	 */
-	const handleLibraryIconInteraction = useCallback(
-		(event, action, { commit = false } = {}) => {
+	const handleIconSelect = useCallback(
+		(event, action) => {
 			event.stopPropagation();
 
-			if (isProIconClickBlocked(event)) {
+			let target = event.target;
+
+			if ('SVG' !== target.nodeName) {
+				target = target.closest('svg');
+			}
+
+			if (target?.classList?.contains('blockera-is-pro-icon')) {
 				return;
 			}
 
-			if (action.type === 'UPDATE_SVG') {
-				dispatchActions(action);
-				return;
-			}
-
-			if (action.type !== 'UPDATE_ICON') {
-				return;
-			}
-
-			if (commit) {
-				dispatchActions(action);
-				return;
-			}
-
-			setDraftLibraryIcon({
-				icon: action.icon,
-				library: action.library,
-			});
+			dispatchActions(action);
 		},
 		[dispatchActions]
 	);
-
-	const handleIconSelect = useCallback(
-		(event, action) => handleLibraryIconInteraction(event, action),
-		[handleLibraryIconInteraction]
-	);
-
-	const handleLibraryIconQuickSelect = useCallback(
-		(event, action) =>
-			handleLibraryIconInteraction(event, action, { commit: true }),
-		[handleLibraryIconInteraction]
-	);
-
-	const handleUseLibraryIcon = useCallback(() => {
-		if (!draftLibraryIcon?.icon || !draftLibraryIcon?.library) {
-			return;
-		}
-
-		dispatchActions({
-			type: 'UPDATE_ICON',
-			icon: draftLibraryIcon.icon,
-			library: draftLibraryIcon.library,
-		});
-	}, [draftLibraryIcon, dispatchActions]);
-
-	const clearLibrarySelection = useCallback(() => {
-		setDraftLibraryIcon(null);
-
-		if (!isCustomIcon(currentIcon) && currentIcon?.icon) {
-			const nextIcon = iconReducer(currentIcon, { type: 'DELETE_ICON' });
-
-			currentIconDispatch({ type: 'DELETE_ICON' });
-			onCommit(nextIcon);
-		}
-	}, [currentIcon, onCommit]);
 
 	const parseMediaForDraft = useCallback(
 		(media, setDraft) => {
@@ -293,11 +217,6 @@ export function useIconPickerModal({
 			dispatch: currentIconDispatch,
 			handleIconSelect,
 			isCurrentIcon,
-			draftLibraryIcon,
-			isDraftLibraryIcon,
-			handleUseLibraryIcon,
-			handleLibraryIconQuickSelect,
-			clearLibrarySelection,
 			recentIcons,
 			removeRecentIcon,
 			clearRecentIcons,
@@ -307,11 +226,6 @@ export function useIconPickerModal({
 			currentIcon,
 			handleIconSelect,
 			isCurrentIcon,
-			draftLibraryIcon,
-			isDraftLibraryIcon,
-			handleUseLibraryIcon,
-			handleLibraryIconQuickSelect,
-			clearLibrarySelection,
 			recentIcons,
 			removeRecentIcon,
 			clearRecentIcons,

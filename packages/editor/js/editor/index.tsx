@@ -24,7 +24,6 @@ import AIExperimentalTools from './ai-experimental-tools';
 import GlobalStyles, {
 	registration as globalStylesRegistration,
 } from './global-styles';
-import { BlockEditorExperimentalFeaturesSync } from '@blockera/global-styles-ui';
 import './register-var-picker-global-styles-panels';
 import './register-global-styles-preset-preview-helpers';
 import { registerMissingVariableRecreateBridge } from './register-missing-variable-recreate-bridge';
@@ -117,11 +116,6 @@ const editorPlugins = [
 	{
 		name: 'blockera-additional-css-contextmenu-observer',
 		render: AdditionalCssContextmenuObserver,
-		icon: null,
-	},
-	{
-		name: 'blockera-global-styles-experimental-features-sync',
-		render: BlockEditorExperimentalFeaturesSync,
 		icon: null,
 	},
 	{

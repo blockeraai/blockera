@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	openMoreFeaturesControl,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -34,7 +34,7 @@ describe('Font Family → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('manrope').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontFamily')
 				);
@@ -53,7 +53,7 @@ describe('Font Family → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('fira-code').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontFamily')
 				);
@@ -72,7 +72,7 @@ describe('Font Family → WP Compatibility', () => {
 				cy.get('select').select('');
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontFamily')
 				);

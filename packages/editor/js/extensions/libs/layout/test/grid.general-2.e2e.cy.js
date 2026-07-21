@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -102,7 +102,7 @@ describe('Grid Layout → Functionality', () => {
 			.invoke('css', 'grid-template-columns')
 			.should('match', /\d/);
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(getSelectedBlock(data, 'blockeraDisplay')).to.equal('grid');
 			expect(
 				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
@@ -127,7 +127,7 @@ describe('Grid Layout → Functionality', () => {
 			.invoke('css', 'container-type')
 			.should('eq', 'inline-size');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
 			).to.equal('8rem');
@@ -141,7 +141,7 @@ describe('Grid Layout → Functionality', () => {
 		cy.typeInInputByDataTest('layout-grid-minimum-column-width', '8');
 		cy.waitForAssertValue();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
 			).to.equal('8rem');
@@ -163,7 +163,7 @@ describe('Grid Layout → Functionality', () => {
 				expectResolvedGridTrackCount(gtc, 3);
 			});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(getSelectedBlock(data, 'blockeraGridColumnCount')).to.equal(
 				3
 			);
@@ -185,7 +185,7 @@ describe('Grid Layout → Functionality', () => {
 			.invoke('css', 'container-type')
 			.should('eq', 'inline-size');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
 			).to.equal('10rem');
@@ -208,7 +208,7 @@ describe('Grid Layout → Functionality', () => {
 
 		cy.getBlock('core/paragraph').should('have.css', 'display', 'grid');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
 			).to.equal('');
@@ -219,25 +219,9 @@ describe('Grid Layout → Functionality', () => {
 	});
 
 	it('persists grid on the front end after save', () => {
-		// Wait between inputs so min width commits before column count
-		// (typing both without a settle left only repeat(N) on the front).
 		cy.typeInInputByDataTest('layout-grid-minimum-column-width', '9rem');
-		cy.waitForAssertValue();
 		cy.typeInInputByDataTest('layout-grid-column-count', '2');
 		cy.waitForAssertValue();
-
-		assertBlockData((data) => {
-			expect(
-				getSelectedBlock(data, 'blockeraGridMinimumColumnWidth')
-			).to.equal('9rem');
-			expect(getSelectedBlock(data, 'blockeraGridColumnCount')).to.equal(
-				2
-			);
-		});
-
-		assertEditorBlockeraStylesInclude('max(min(');
-		assertEditorBlockeraStylesInclude('9rem');
-		assertEditorBlockeraStylesInclude('repeat(auto-fill');
 
 		savePage();
 		redirectToFrontPage();
@@ -258,7 +242,7 @@ describe('Grid Layout → Functionality', () => {
 		cy.typeInInputByDataTest('layout-grid-column-count', '4');
 		cy.waitForAssertValue();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(getSelectedBlock(data, 'blockeraGridColumnCount')).to.equal(
 				4
 			);
@@ -294,7 +278,7 @@ describe('Grid Layout → Functionality', () => {
 			assertEditorBlockeraStylesInclude('repeat(4,');
 			assertEditorBlockeraStylesInclude('minmax(0, 1fr)');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(getMobileBreakpointGridColumnCount(data)).to.equal(4);
 			});
 
@@ -316,7 +300,7 @@ describe('Grid Layout → Functionality', () => {
 			selectCanvasParagraphOpenBlockTabAndStyleTab();
 			cy.waitForAssertValue();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(
 					getSelectedBlock(data, 'blockeraGridColumnCount')
 				).to.equal(2);

@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -30,7 +30,7 @@ describe('Letter Spacing → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('5px').to.be.equal(
 				getSelectedBlock(data, 'blockeraLetterSpacing')
 			);

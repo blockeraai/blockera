@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useMemo, useContext, useRef } from '@wordpress/element';
+import { useMemo, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,21 +16,17 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button } from '../../../button';
+import { Button } from '../../../index';
 import { IconContext } from '../../context';
 import { buildRecentIconElements } from '../../utils';
-import { useDraftIconHighlight } from '../../hooks/use-draft-icon-highlight';
 
 export default function RecentIcons() {
-	const libraryBodyRef = useRef(null);
-
 	const {
 		recentIcons,
 		removeRecentIcon,
 		clearRecentIcons,
 		handleIconSelect,
-		handleLibraryIconQuickSelect,
-		draftLibraryIcon,
+		isCurrentIcon,
 	} = useContext(IconContext);
 
 	const iconElements = useMemo(
@@ -38,18 +34,11 @@ export default function RecentIcons() {
 			buildRecentIconElements({
 				items: recentIcons,
 				onSelect: handleIconSelect,
-				onDoubleSelect: handleLibraryIconQuickSelect,
 				onRemove: removeRecentIcon,
+				isCurrentIcon,
 			}),
-		[
-			recentIcons,
-			handleIconSelect,
-			handleLibraryIconQuickSelect,
-			removeRecentIcon,
-		]
+		[recentIcons, handleIconSelect, removeRecentIcon, isCurrentIcon]
 	);
-
-	useDraftIconHighlight(libraryBodyRef, draftLibraryIcon, recentIcons.length);
 
 	if (!iconElements.length) {
 		return null;
@@ -91,10 +80,7 @@ export default function RecentIcons() {
 				</Button>
 			</div>
 
-			<div
-				className={controlInnerClassNames('library-body', 'no-fade')}
-				ref={libraryBodyRef}
-			>
+			<div className={controlInnerClassNames('library-body', 'no-fade')}>
 				{iconElements}
 			</div>
 		</div>

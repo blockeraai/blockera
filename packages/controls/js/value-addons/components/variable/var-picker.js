@@ -45,7 +45,6 @@ import {
 	markPopoverClosing,
 	registerPopoverOpen,
 } from '../../../libs/popover/utils';
-import { isClickInsideOpenInspectorRepeaterPopover } from '../../../libs/repeater-control/utils';
 import { PickerCategory, PickerValueItem } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
 import { VarPickerPresetContext } from './var-picker-preset-context';
@@ -207,6 +206,19 @@ function VariablePickerPresetPanel({
 	const controlPropsRef = useRef(controlProps);
 	controlPropsRef.current = controlProps;
 
+	const controlPropsSelectionKey = useMemo(
+		() => ({
+			value: controlProps?.value,
+			themeJsonPlainPresetSlug: controlProps?.themeJsonPlainPresetSlug,
+			variableTypes: controlProps?.variableTypes,
+		}),
+		[
+			controlProps?.value,
+			controlProps?.themeJsonPlainPresetSlug,
+			controlProps?.variableTypes,
+		]
+	);
+
 	const presetContextValue = useMemo(
 		() => ({
 			active: true,
@@ -246,13 +258,14 @@ function VariablePickerPresetPanel({
 			presetType,
 			catalogItems,
 			catalogLabel,
-			omitRepeaterSectionLabel,
+			controlPropsSelectionKey,
+			pickerProps?.spacingPresetPreviewUsage,
 			pickerProps?.colorPresetPreviewUsage,
 			pickerProps?.filterPresetPreviewUsage,
 			pickerProps?.borderPresetPreviewUsage,
-			pickerProps?.spacingPresetPreviewUsage,
-			pickerProps?.gradientPresetPreviewUsage,
 			pickerProps?.borderRadiusPresetPreviewUsage,
+			pickerProps?.gradientPresetPreviewUsage,
+			omitRepeaterSectionLabel,
 		]
 	);
 
@@ -280,10 +293,7 @@ export default function ({
 	controlProps: ValueAddonControlProps,
 	onClose?: () => void,
 }): MixedElement {
-	const controlVariableTypes = useMemo(
-		() => controlProps.variableTypes || [],
-		[controlProps.variableTypes]
-	);
+	const controlVariableTypes = controlProps.variableTypes || [];
 	const variablePickerSectionKeys = useSelect(
 		(wpSelect) =>
 			buildVariablePickerSectionKeys(
@@ -478,12 +488,6 @@ export default function ({
 				isElementInsideVariablePickerSelectionTarget(event.target) ||
 				isElementInsideVariablePickerPopover(event.target)
 			) {
-				return;
-			}
-
-			// Preset edit popovers portal outside the picker but must not dismiss it
-			// (e.g. toggling color shades off while the base preset is selected).
-			if (isClickInsideOpenInspectorRepeaterPopover(event.target)) {
 				return;
 			}
 

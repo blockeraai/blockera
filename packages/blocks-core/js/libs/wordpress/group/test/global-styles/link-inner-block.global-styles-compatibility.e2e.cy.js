@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	setInnerBlock,
@@ -70,7 +70,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 		cy.getByDataTest('style-default').click();
 		cy.addNewTransition();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const root = getGroupGlobalStyles(data);
 			const linkElement = root?.elements?.link;
 			const linkInnerBlock =
@@ -103,7 +103,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 		setBlockState('Hover');
 		cy.setColorControlValue('Text Color', '888888');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const root = getGroupGlobalStyles(data);
 			const linkElement = root?.elements?.link;
 			const linkInnerBlock =
@@ -134,7 +134,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 		setBlockState('Hover');
 		cy.clearColorControlValue('Text Color');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const root = getGroupGlobalStyles(data);
 			const linkElement = root?.elements?.link;
 			const linkInnerBlock =
@@ -161,7 +161,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 		cy.getByDataTest('style-default').click();
 		cy.addNewTransition();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const root = getGroupGlobalStyles(data);
 			const linkElement = root?.elements?.link;
 			const linkInnerBlock =
@@ -234,7 +234,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 		});
 		cy.selectValueAddonItem('accent-1');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const root = getGroupGlobalStyles(data);
 			const linkElement = root?.elements?.link;
 			const linkInnerBlock =
@@ -303,7 +303,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility (Global Sty
 			cy.removeValueAddon();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const root = getGroupGlobalStyles(data);
 			const linkElement = root?.elements?.link;
 			const linkInnerBlock =

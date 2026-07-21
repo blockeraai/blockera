@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -71,7 +71,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 			it('Simple Value (Weight and Style)', () => {
 				cy.getParentContainer('Appearance').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						weight: '600',
 						style: 'italic',
@@ -85,7 +85,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 					cy.get('select').select('200-normal');
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect('200').to.equal(root?.typography?.fontWeight);
 					expect('normal').to.equal(root?.typography?.fontStyle);
@@ -95,7 +95,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 					cy.get('select').select('', { force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.fontWeight);
 					expect(undefined).to.equal(root?.typography?.fontStyle);
@@ -110,7 +110,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 			it('Weight Only', () => {
 				cy.getParentContainer('Appearance').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						weight: '700',
 						style: 'normal',
@@ -124,7 +124,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 					cy.get('select').select('400-normal');
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect('400').to.equal(root?.typography?.fontWeight);
 					expect('normal').to.equal(root?.typography?.fontStyle);
@@ -136,7 +136,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 			it('Style Only', () => {
 				cy.getParentContainer('Appearance').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						weight: '100',
 						style: 'italic',
@@ -150,7 +150,7 @@ describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 					cy.get('select').select('300-normal');
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect('300').to.equal(root?.typography?.fontWeight);
 					expect('normal').to.equal(root?.typography?.fontStyle);

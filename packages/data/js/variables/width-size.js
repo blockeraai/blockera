@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import type { ValueAddon } from '../types/value-addon';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 import { isString, isUndefined, isObject } from '@blockera/utils';
 
 /**
@@ -18,17 +18,15 @@ import { STORE_NAME } from '../store';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 import { generateVariableString, parseVarString } from './utils';
-import { getBlockeraExperimentalFeatures } from '../blockera-settings-paths';
-import { normalizePresetSize } from './normalize-preset-sizes';
 import { CUSTOM_ORIGIN_REFERENCE } from './merge-global-style-simple-presets';
+import { normalizePresetSize } from './normalize-preset-sizes';
 
 export const getWidthSizes = (): Array<VariableItem> | [] => {
 	const reference = {
 		type: 'preset',
 	};
 
-	const features = getBlockEditorSettings()?.__experimentalFeatures;
-	const layout = features?.layout;
+	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
 
 	const items = [];
 
@@ -54,8 +52,7 @@ export const getWidthSizes = (): Array<VariableItem> | [] => {
 		});
 	}
 
-	const customWidthSizes =
-		getBlockeraExperimentalFeatures(features)?.blockeraWidthSizes?.custom;
+	const customWidthSizes = layout?.widthSizes?.custom;
 	if (Array.isArray(customWidthSizes)) {
 		for (const raw of customWidthSizes) {
 			if (!raw || raw.slug === undefined || raw.slug === null) {

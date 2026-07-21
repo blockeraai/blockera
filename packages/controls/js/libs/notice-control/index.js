@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import Flex from '../flex';
+import { Flex } from '../';
 import { NoticeIcon } from './utils';
 import BaseControl from '../base-control';
 import type { TNoticeControlProps } from './types';

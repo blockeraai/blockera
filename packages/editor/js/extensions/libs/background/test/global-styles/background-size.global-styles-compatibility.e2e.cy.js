@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -52,7 +52,7 @@ describe('Background Size → WP Compatibility (Global Styles)', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const blockeraBackground =
 						getGroupGlobalStyles(data)?.blockeraBackground;
 
@@ -91,7 +91,7 @@ describe('Background Size → WP Compatibility (Global Styles)', () => {
 						cy.get('[data-value="contain"]').click();
 					});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const backgroundSize =
 						getGroupGlobalStyles(data)?.background?.backgroundSize;
 
@@ -106,7 +106,7 @@ describe('Background Size → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Delete image 0').click({ force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getGroupGlobalStyles(data);
 					const backgroundSize = root?.background?.backgroundSize;
 					const blockeraBackground = root?.blockeraBackground;

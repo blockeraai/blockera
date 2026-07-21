@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	openMoreFeaturesControl,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -37,7 +37,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -59,7 +59,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('style-1').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -77,7 +77,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('style-2').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -95,7 +95,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('style-3').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -113,7 +113,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('style-4').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -131,7 +131,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -150,7 +150,7 @@ describe('Text Orientation → WP Compatibility', () => {
 				cy.get('button[data-value="initial"]').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -183,7 +183,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('style-1').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
@@ -202,7 +202,7 @@ describe('Text Orientation → WP Compatibility', () => {
 				cy.get('button[data-value="style-1"]').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextOrientation')
 				);

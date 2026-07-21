@@ -8,7 +8,7 @@ import { useInstanceId } from '@wordpress/compose';
 /**
  * Blockera dependencies
  */
-import { getIconLibrary, Icon } from '@blockera/icons';
+import { getIconLibrary } from '@blockera/icons';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -68,15 +68,6 @@ export default function LibraryFilters({ libraries, selected, onFilterClick }) {
 		return [
 			{
 				name: 'all',
-				icon: (
-					<span
-						className={controlInnerClassNames(
-							'icon-picker-filter-icon'
-						)}
-					>
-						<Icon icon="funnel" library="wp" />
-					</span>
-				),
 				title: (
 					<FilterTabLabel
 						label={__('All', 'blockera')}

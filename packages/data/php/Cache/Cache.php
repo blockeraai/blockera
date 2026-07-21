@@ -81,10 +81,8 @@ class Cache {
 			throw new \Exception( __( 'Key is required on setMetaCache method', 'blockera' ) );
 		}
 
-		// update_post_meta() always wp_unslash()es the value. Slash first so backslashes
-		// from serialize_block_attributes() (e.g. \u002d for "--" in className) survive.
 		// update_post_meta returns int|bool; cast to bool for consistency.
-		return (bool) update_post_meta( $post_id, $this->getCacheKey( $key ), wp_slash( $cache ) );
+		return (bool) update_post_meta( $post_id, $this->getCacheKey( $key ), $cache );
 	}
 
 	/**
@@ -221,43 +219,6 @@ class Cache {
 	 */
 	public function deleteTransientCache( string $key ): bool {
 		return delete_transient( $this->getCacheKey( $key ) );
-	}
-
-	/**
-	 * Delete transients whose keys start with a suffix (after the product prefix).
-	 *
-	 * Used to invalidate a family of related transients (e.g. json_sanitize_*).
-	 *
-	 * @param string $key_prefix Suffix after {@see getCacheKey()} product prefix.
-	 * @return int Number of transients deleted.
-	 */
-	public function deleteTransientCacheByPrefix( string $key_prefix ): int {
-		global $wpdb;
-
-		$transient_prefix = '_transient_' . $this->getCacheKey( $key_prefix );
-
-		$transient_names = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( $transient_prefix ) . '%'
-			)
-		);
-
-		if ( empty( $transient_names ) ) {
-			return 0;
-		}
-
-		$deleted_count = 0;
-
-		foreach ( $transient_names as $option_name ) {
-			$transient_key = substr( $option_name, strlen( '_transient_' ) );
-
-			if ( delete_transient( $transient_key ) ) {
-				++$deleted_count;
-			}
-		}
-
-		return $deleted_count;
 	}
 
 	// =========================================================================

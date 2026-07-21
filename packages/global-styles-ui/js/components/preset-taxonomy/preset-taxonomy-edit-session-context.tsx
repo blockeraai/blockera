@@ -13,25 +13,19 @@ import {
 
 type FlushFn = () => void;
 
-type PresetTaxonomyEditSessionActions = {
+type PresetTaxonomyEditSessionContextValue = {
 	beginEditSession: (slug: string) => void;
 	endEditSession: (slug: string) => void;
 	registerFlush: (slug: string, fn: FlushFn) => void;
 	unregisterFlush: (slug: string) => void;
 	flushSession: (slug: string) => void;
 	isSessionOpen: (slug: string) => boolean;
+	/** Ref-count of open taxonomy preset popovers — used to freeze tree layout while editing. */
+	activeSessionCount: number;
 };
 
-export type PresetTaxonomyEditSessionContextValue =
-	PresetTaxonomyEditSessionActions & {
-		/** Ref-count of open taxonomy preset popovers — used to freeze tree layout while editing. */
-		activeSessionCount: number;
-	};
-
-const PresetTaxonomyEditSessionActionsContext =
-	createContext<PresetTaxonomyEditSessionActions | null>(null);
-
-const PresetTaxonomyEditSessionCountContext = createContext<number>(0);
+const PresetTaxonomyEditSessionContext =
+	createContext<PresetTaxonomyEditSessionContextValue | null>(null);
 
 export function PresetTaxonomyEditSessionProvider({
 	children,
@@ -86,16 +80,18 @@ export function PresetTaxonomyEditSessionProvider({
 		return openSessionsRef.current.has(String(slug));
 	}, []);
 
-	const actions = useMemo(
-		(): PresetTaxonomyEditSessionActions => ({
+	const value = useMemo(
+		(): PresetTaxonomyEditSessionContextValue => ({
 			beginEditSession,
 			endEditSession,
 			registerFlush,
 			unregisterFlush,
 			flushSession,
 			isSessionOpen,
+			activeSessionCount,
 		}),
 		[
+			activeSessionCount,
 			beginEditSession,
 			endEditSession,
 			flushSession,
@@ -106,61 +102,23 @@ export function PresetTaxonomyEditSessionProvider({
 	);
 
 	return (
-		<PresetTaxonomyEditSessionActionsContext.Provider value={actions}>
-			<PresetTaxonomyEditSessionCountContext.Provider
-				value={activeSessionCount}
-			>
-				{children}
-			</PresetTaxonomyEditSessionCountContext.Provider>
-		</PresetTaxonomyEditSessionActionsContext.Provider>
+		<PresetTaxonomyEditSessionContext.Provider value={value}>
+			{children}
+		</PresetTaxonomyEditSessionContext.Provider>
 	);
 }
 
-/** Stable session actions — identity does not change when activeSessionCount updates. */
-export function usePresetTaxonomyEditSessionActions(): PresetTaxonomyEditSessionActions {
-	const ctx = useContext(PresetTaxonomyEditSessionActionsContext);
+export function usePresetTaxonomyEditSession(): PresetTaxonomyEditSessionContextValue {
+	const ctx = useContext(PresetTaxonomyEditSessionContext);
 	if (!ctx) {
 		throw new Error(
-			'usePresetTaxonomyEditSessionActions must be used within PresetTaxonomyEditSessionProvider'
+			'usePresetTaxonomyEditSession must be used within PresetTaxonomyEditSessionProvider'
 		);
 	}
 	return ctx;
 }
 
-export function usePresetTaxonomyEditSessionActionsOptional(): PresetTaxonomyEditSessionActions | null {
-	return useContext(PresetTaxonomyEditSessionActionsContext);
-}
-
-export function usePresetTaxonomyEditSessionActiveCount(): number {
-	return useContext(PresetTaxonomyEditSessionCountContext);
-}
-
-export function usePresetTaxonomyEditSession(): PresetTaxonomyEditSessionContextValue {
-	const actions = usePresetTaxonomyEditSessionActions();
-	const activeSessionCount = usePresetTaxonomyEditSessionActiveCount();
-
-	return useMemo(
-		(): PresetTaxonomyEditSessionContextValue => ({
-			...actions,
-			activeSessionCount,
-		}),
-		[actions, activeSessionCount]
-	);
-}
-
 /** Optional hook — returns null outside taxonomy edit session provider. */
 export function usePresetTaxonomyEditSessionOptional(): PresetTaxonomyEditSessionContextValue | null {
-	const actions = usePresetTaxonomyEditSessionActionsOptional();
-	const activeSessionCount = usePresetTaxonomyEditSessionActiveCount();
-
-	return useMemo(() => {
-		if (!actions) {
-			return null;
-		}
-
-		return {
-			...actions,
-			activeSessionCount,
-		};
-	}, [actions, activeSessionCount]);
+	return useContext(PresetTaxonomyEditSessionContext);
 }

@@ -1,11 +1,11 @@
 // @flow
 
 /**
- * Internal dependencies
+ * Blockera dependencies
  */
-import type { ValueAddon } from '../types/value-addon';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 import { isObject, isString } from '@blockera/utils';
-import { isValueAddonShape } from './value-addon-shape';
+import { isValid } from '@blockera/controls/js/value-addons/utils';
 
 /**
  * Internal dependencies
@@ -18,7 +18,6 @@ import { getSpacingVAFromVarString } from './spacing';
 import type { VariableCategory } from './types';
 import { getBorderRadiusVAFromVarString } from './border-radius';
 import { getWidthSizeVAFromVarString } from './width-size';
-import { getLineHeightVAFromVarString } from './line-height';
 
 export function generateVariableString({
 	reference,
@@ -81,7 +80,7 @@ export function generateAttributeVarStringFromVA(
 		return valueAddon;
 	}
 
-	if (isValueAddonShape(valueAddon)) {
+	if (isValid(valueAddon)) {
 		//$FlowFixMe
 		let _reference: string = valueAddon?.settings?.reference?.type;
 
@@ -215,7 +214,6 @@ function getVAFromVarStringByType(): {
 			'width-size': getWidthSizeVAFromVarString,
 			color: getColorVAFromVarString,
 			'font-size': getFontSizeVAFromVarString,
-			'line-height': getLineHeightVAFromVarString,
 			'border-radius': getBorderRadiusVAFromVarString,
 			gradient: getGradientVAFromVarString,
 		};
@@ -241,7 +239,6 @@ function inferVariableCategoryFromCssVarValue(
 		[/^var\(--wp--style--global--(?:content-size|wide-size)/, 'width-size'],
 		[/^var\(--wp--preset--color--/, 'color'],
 		[/^var\(--wp--preset--font-size--/, 'font-size'],
-		[/^var\(--wp--preset--line-height--/, 'line-height'],
 		[/^var\(--wp--preset--gradient--/, 'gradient'],
 		[/^var\(--wp--preset--border-radius--/, 'border-radius'],
 		[/^var\(--wp--preset--text-shadow--/, 'text-shadow'],

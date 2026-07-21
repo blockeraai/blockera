@@ -13,23 +13,25 @@ class Display extends BaseStyleDefinition {
 		return true;
 	}
 
-	protected function css( array $setting ): array {
-		if ( ! isset( $setting['type'], $setting['display'] ) ) {
+	protected function css( array $setting): array {
+		if (! isset($setting['type'])) {
 			return [];
 		}
 
 		$cssProperty = $setting['type'];
 
-		if ( '' === $cssProperty || '' === $setting['display'] ) {
+		if ('' === $cssProperty || ! isset($setting[ $cssProperty ]) || '' === $setting[ $cssProperty ]) {
 			return [];
 		}
 
-		$this->declarations[ $cssProperty ] = $setting['display'];
-		$this->setCss( $this->declarations );
+		$this->declarations[ $cssProperty ] = $setting[ $cssProperty ];
+		$this->setCss($this->declarations);
 
 		// Extra deep compatibility for columns block: removes margin-block-start from inner items.
-		if ( 'core/columns' === ( $this->block['blockName'] ?? '' ) ) {
-			$this->setCss( [ 'margin-block-start' => '0' ], 'margin-block-start', ' > *' );
+		// Removes margin-block-start from inner items.
+		$blockName = $this->block['blockName'];
+		if ('core/columns' === $blockName) {
+			$this->setCss([ 'margin-block-start' => '0' ], 'margin-block-start', ' > *');
 		}
 
 		return $this->css;

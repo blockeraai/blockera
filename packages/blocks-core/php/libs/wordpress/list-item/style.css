@@ -1,18 +1,19 @@
 /* Icon style — list-item owns ::before when it has its own icon class. */
-.wp-block-list li.blockera-block[class*="blockera-has-icon-"] {
+.wp-block-list .blockera-block[class*="blockera-has-icon-"] {
 	position: relative;
 	column-gap: var(--blockera--icon--gap, 0.5em);
 	display: flex;
 	align-items: center;
+	margin-left: -25px;
 	flex-wrap: wrap;
 }
 
-.wp-block-list li.blockera-block[class*="blockera-has-icon-"] .wp-block-list {
+.wp-block-list .blockera-block[class*="blockera-has-icon-"] .wp-block-list {
 	width: 100%;
 	flex-grow: 1;
 }
 
-.wp-block-list li.blockera-block[class*="blockera-has-icon-"]::before {
+.wp-block-list .blockera-block[class*="blockera-has-icon-"]::before {
 	content: "";
 	display: inline-flex;
 	align-self: center;
@@ -43,7 +44,7 @@
 }
 
 /* Hide the default marker */
-.wp-block-list li.blockera-block[class*="blockera-has-icon-"]::marker {
+.wp-block-list .blockera-block[class*="blockera-has-icon-"]::marker {
 	content: "";
 	display: none;
 }

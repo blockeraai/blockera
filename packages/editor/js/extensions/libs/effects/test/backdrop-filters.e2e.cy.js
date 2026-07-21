@@ -2,7 +2,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -62,7 +62,7 @@ describe('Backdrop Filters → Functionality', () => {
 		});
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				'drop-shadow-0': {
 					isVisible: true,
@@ -119,7 +119,7 @@ describe('Backdrop Filters → Functionality', () => {
 		);
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				'brightness-0': {
 					isVisible: true,

@@ -8,27 +8,33 @@ class FlexDirection extends BaseStyleDefinition {
 
 	use WithDisplayValueTrait;
 
-	protected function css( array $setting ): array {
+    protected function css( array $setting): array {
 
-		if ( ! isset( $setting['type'] ) ) {
+		if (! isset($setting['type'])) {
 			return [];
 		}
 
 		$cssProperty = $setting['type'];
 
-		if ( '' === $cssProperty || 'flex-direction' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
+		if ('' === $cssProperty || 'flex-direction' !== $cssProperty) {
+			return [];
+		}
+
+		if (! isset($setting[ $cssProperty ])) {
 			return [];
 		}
 
 		$item = $setting['flex-direction'];
-
-		if ( ! is_array( $item ) ) {
+		if (! is_array($item)) {
 			return [];
 		}
 
-		$display = $this->getDisplayValue();
+		$display_list = [
+			'flex' => true,
+			'grid' => true,
+		];
 
-		if ( 'flex' !== $display && 'grid' !== $display ) {
+		if (! isset($display_list[ $this->getDisplayValue() ])) {
 			return [];
 		}
 
@@ -36,20 +42,20 @@ class FlexDirection extends BaseStyleDefinition {
 		$alignItems     = $item['alignItems'] ?? null;
 		$justifyContent = $item['justifyContent'] ?? null;
 
-		if ( null !== $direction && '' !== $direction ) {
+		if (null !== $direction && '' !== $direction) {
 			$this->declarations[ $cssProperty ] = $direction;
 		}
 
-		if ( null !== $alignItems && '' !== $alignItems ) {
+		if (null !== $alignItems && '' !== $alignItems) {
 			$this->declarations['align-items'] = $alignItems . ' !important';
 		}
 
-		if ( null !== $justifyContent && '' !== $justifyContent ) {
+		if (null !== $justifyContent && '' !== $justifyContent) {
 			$this->declarations['justify-content'] = $justifyContent . ' !important';
 		}
 
-		$this->setCss( $this->declarations );
+		$this->setCss($this->declarations);
 
-		return $this->css;
-	}
+        return $this->css;
+    }
 }

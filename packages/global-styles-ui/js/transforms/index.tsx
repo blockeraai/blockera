@@ -31,7 +31,6 @@ import {
 	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
-import { BLOCKERA_GLOBAL_SETTING_PATH } from '@blockera/data';
 import { type VariableType } from '../components/types';
 import { TransformPresetOpener } from './transform-preset-opener';
 import {
@@ -133,30 +132,30 @@ const TransformPresetGroup = memo(TransformPresetGroupComponent);
  */
 export function TransformsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.TRANSFORM_PRESETS_THEME
+		'transform.presets.theme'
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.TRANSFORM_PRESETS_THEME,
+		'transform.presets.theme',
 		'',
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.TRANSFORM_PRESETS_DEFAULT
+		'transform.presets.default'
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.TRANSFORM_PRESETS_DEFAULT,
+		'transform.presets.default',
 		'',
 		'base'
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.TRANSFORM_PRESETS_CUSTOM
+		'transform.presets.custom'
 	);
 
 	const [defaultTransformPresetsEnabled = true] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.TRANSFORM_DEFAULT_PRESETS
+		'transform.defaultPresets'
 	);
 
 	const themePresets = useMemo(

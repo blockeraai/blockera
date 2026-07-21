@@ -2,15 +2,9 @@
  * Blockera dependencies
  */
 import {
-	assertVariablePickerPresetHoverPreview,
 	createPost,
-	filterVariablePickerSearch,
 	getSelectedBlock,
-	assertBlockData,
-	nameNewGlobalStylesCustomPreset,
-	openGlobalStylesFontSizesVariablesScreen,
-	resetAndSaveGlobalStylesEntityRecord,
-	saveSiteEditorDirtyEntities,
+	getWPDataObject,
 } from '@blockera/dev-cypress/js/helpers';
 import {
 	assertCustomPresetEditPopoverFieldValue,
@@ -18,8 +12,6 @@ import {
 	assertLastVariablePickerRepeaterItemInPopoverBody,
 	getVariablePickerLastRepeaterItem,
 	getVariablePickerPopoverBody,
-	getVariablePickerRepeaterItemCount,
-	assertVariablePickerRepeaterItemCountIncreasedByOne,
 	makeVariablePickerPopoverBodyScrollable,
 	openParagraphFontSizeVariablePickerPopover,
 	scrollVariablePickerPopoverToTop,
@@ -61,18 +53,26 @@ describe('Font Size variable picker → header add custom preset', () => {
 			cy.openValueAddon();
 		});
 
-		getVariablePickerRepeaterItemCount().then((beforeCount) => {
-			cy.getByDataTest('variable-picker-section-add-font-size', {
-				timeout: 20000,
-			})
-				.filter(':visible')
-				.first()
-				.scrollIntoView()
-				.should('be.visible')
-				.click({ force: true });
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.should('be.visible')
+			.find('[data-cy="repeater-item"]')
+			.its('length')
+			.then((beforeCount) => {
+				cy.getByDataTest('variable-picker-section-add-font-size', {
+					timeout: 20000,
+				})
+					.filter(':visible')
+					.first()
+					.scrollIntoView()
+					.should('be.visible')
+					.click({ force: true });
 
-			assertVariablePickerRepeaterItemCountIncreasedByOne(beforeCount);
-		});
+				cy.getByDataTest('variable-picker-popover')
+					.find('[data-cy="repeater-item"]')
+					.should('have.length', beforeCount + 1);
+			});
 
 		cy.getByDataTest('repeater-item-creating-step', {
 			timeout: 20000,
@@ -107,29 +107,40 @@ describe('Font Size variable picker → header add custom preset', () => {
 
 		openParagraphFontSizeVariablePickerPopover();
 
-		getVariablePickerRepeaterItemCount().then((beforeCount) => {
-			cy.get('.blockera-control-var-picker-search input[type="search"]', {
-				timeout: 20000,
-			})
-				.should('be.visible')
-				.clear({ force: true })
-				.type(searchSeed, { delay: 0, force: true });
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.should('be.visible')
+			.find('[data-cy="repeater-item"]')
+			.its('length')
+			.then((beforeCount) => {
+				cy.get(
+					'.blockera-control-var-picker-search input[type="search"]',
+					{
+						timeout: 20000,
+					}
+				)
+					.should('be.visible')
+					.clear({ force: true })
+					.type(searchSeed, { delay: 0, force: true });
 
-			cy.getByDataTest(
-				'variable-picker-search-empty-add-custom-variable',
-				{ timeout: 20000 }
-			)
-				.should('be.visible')
-				.click({ force: true });
+				cy.getByDataTest(
+					'variable-picker-search-empty-add-custom-variable',
+					{ timeout: 20000 }
+				)
+					.should('be.visible')
+					.click({ force: true });
 
-			cy.get(
-				'.blockera-control-var-picker-search input[type="search"]'
-			).should('have.value', '');
+				cy.get(
+					'.blockera-control-var-picker-search input[type="search"]'
+				).should('have.value', '');
 
-			cy.getByDataTest('var-picker-search-empty').should('not.exist');
+				cy.getByDataTest('var-picker-search-empty').should('not.exist');
 
-			assertVariablePickerRepeaterItemCountIncreasedByOne(beforeCount);
-		});
+				cy.getByDataTest('variable-picker-popover')
+					.find('[data-cy="repeater-item"]')
+					.should('have.length', beforeCount + 1);
+			});
 
 		cy.getByDataTest('repeater-item-creating-step', {
 			timeout: 20000,
@@ -203,11 +214,19 @@ describe('Font Size variable picker → header add custom preset', () => {
 			cy.openValueAddon();
 		});
 
-		getVariablePickerRepeaterItemCount().then((beforeCount) => {
-			clickVariablePickerHeaderAddCustomVariable();
+		cy.getByDataTest('variable-picker-popover')
+			.filter(':visible')
+			.first()
+			.should('be.visible')
+			.find('[data-cy="repeater-item"]')
+			.its('length')
+			.then((beforeCount) => {
+				clickVariablePickerHeaderAddCustomVariable();
 
-			assertVariablePickerRepeaterItemCountIncreasedByOne(beforeCount);
-		});
+				cy.getByDataTest('variable-picker-popover')
+					.find('[data-cy="repeater-item"]')
+					.should('have.length', beforeCount + 1);
+			});
 
 		cy.getByDataTest('repeater-item-creating-step', {
 			timeout: 20000,
@@ -223,7 +242,7 @@ describe('Font Size variable picker → header add custom preset', () => {
 
 		// New custom preset is applied to the control immediately.
 		cy.then({ timeout: 15000 }, () =>
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontSize = getSelectedBlock(data, 'blockeraFontSize');
 				expect(fontSize.isValueAddon).to.equal(true);
 				expect(fontSize.valueType).to.equal('variable');
@@ -306,42 +325,6 @@ describe('Font Size variable picker → creatingStep preset ID', () => {
 			.should('be.visible');
 
 		getCreatingStepPresetEditPopover().should('be.visible');
-	});
-});
-
-describe('Font Size variable picker → hover canvas preview', () => {
-	const presetName = 'E2E Font Size';
-	const slug = 'e-2-e-font-size';
-	const addDataTest = 'global-styles-preset-add-font-size-presets-custom';
-
-	afterEach(() => {
-		resetAndSaveGlobalStylesEntityRecord();
-	});
-
-	it('previews the preset font size on the selected block while hovering the picker row, then clears it on mouse leave', () => {
-		openGlobalStylesFontSizesVariablesScreen();
-		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
-		saveSiteEditorDirtyEntities();
-
-		createPost();
-
-		cy.getBlock('default').type('Hover preview font size paragraph.', {
-			delay: 0,
-		});
-		cy.getByAriaControls('styles-view').click();
-
-		cy.getParentContainer('Font Size').within(() => {
-			cy.openValueAddon();
-		});
-
-		filterVariablePickerSearch(presetName);
-
-		assertVariablePickerPresetHoverPreview({
-			slug,
-			cssNeedle: 'font-size: 16px',
-			blockCssProperty: 'font-size',
-			blockCssValue: '16px',
-		});
 	});
 });
 

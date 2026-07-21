@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
@@ -36,7 +36,7 @@ describe('Text Indent → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('2px').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextIndent')
 				);
@@ -56,7 +56,7 @@ describe('Text Indent → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('3px').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextIndent')
 				);
@@ -75,7 +75,7 @@ describe('Text Indent → WP Compatibility', () => {
 				cy.get('input').clear({ force: true });
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextIndent')
 				);

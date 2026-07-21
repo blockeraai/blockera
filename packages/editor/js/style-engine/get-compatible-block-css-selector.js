@@ -11,6 +11,7 @@ import { select } from '@wordpress/data';
 import {
 	isEmpty,
 	isUndefined,
+	union,
 	getEditorDocumentElement,
 } from '@blockera/utils';
 
@@ -876,32 +877,35 @@ export function prepareBlockCssSelector(params: {
 		let fallbackSelector;
 
 		// Create fallback selector from fallback support id as an array.
-		// Match PHP: take the first non-empty string selector (do not join all).
 		if (Array.isArray(fallbackSupportId)) {
-			for (const supportId of fallbackSupportId) {
-				const picked = getBlockCSSSelector(
-					blockType,
-					supportId || 'root',
-					{
-						fallback: false,
-					}
-				);
+			const fallbacks = union(
+				fallbackSupportId.map((supportId) => {
+					const picked = getBlockCSSSelector(
+						blockType,
+						supportId || 'root',
+						{
+							fallback: false,
+						}
+					);
 
-				if ('string' === typeof picked && !isEmpty(picked)) {
-					fallbackSelector = picked;
-					break;
-				}
-			}
+					if ('object' === typeof picked) {
+						return union(Object.values(picked || {})).join(', ');
+					}
+
+					return picked;
+				})
+			);
+
+			fallbackSelector = fallbacks
+				.filter((selector: any): boolean => !isEmpty(selector))
+				.join(', ');
 		}
 
-		// Last resort: force fallback on the original feature (PHP parity),
-		// or on a string fallback id. Never pass an array into getBlockCSSSelector.
+		// Create fallback selector from fallback support ID as a string (used as the last resort fallback).
 		if (!fallbackSelector) {
 			fallbackSelector = getBlockCSSSelector(
 				blockType,
-				!Array.isArray(fallbackSupportId) && fallbackSupportId
-					? fallbackSupportId
-					: query || support || 'root',
+				fallbackSupportId || 'root',
 				{
 					fallback: true,
 				}
@@ -1429,12 +1433,11 @@ const appendRootBlockCssSelector = (
 	}
 
 	// Descendant element selectors inside the block wrapper root (e.g. `li::before`).
-	// Keep a descendant combinator between root and the trimmed child selector.
 	if (
 		trimmedLeadingSpaceForBlockWrapper &&
 		!/\bwp-block-/.test(normalizedSelector.split(/[\s>+~]/)[0])
 	) {
-		return `${root} ${normalizedSelector}`;
+		return `${root}${normalizedSelector}`;
 	}
 
 	// Assume received selector is another reference to root, so we should concat together.

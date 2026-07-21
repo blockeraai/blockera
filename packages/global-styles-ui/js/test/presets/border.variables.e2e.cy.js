@@ -22,7 +22,7 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 		deactivateMuPlugin({ pluginPath: MU, pluginName: MU_NAME });
 	});
 
-	it('merges theme border.blockeraBorder.presets.theme from theme.json, shows in UI, persists width edit', () => {
+	it('merges theme border.presets.theme from theme.json, shows in UI, persists width edit', () => {
 		openGlobalStylesBordersScreen();
 
 		cy.get('.blockera-borders-presets', { timeout: 20000 }).should(
@@ -48,9 +48,7 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting(
-			'border.blockeraBorder.presets.theme'
-		).then((rows) => {
+		getEditedGlobalStylesSetting('border.presets.theme').then((rows) => {
 			const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
 			expect(row.border.width).to.eq('6px');
 		});
@@ -66,9 +64,7 @@ describe('Global Styles UI → border box presets (theme.json + UI)', () => {
 			'E2E Theme Border'
 		);
 
-		getEditedGlobalStylesSetting(
-			'border.blockeraBorder.presets.theme'
-		).then((rows) => {
+		getEditedGlobalStylesSetting('border.presets.theme').then((rows) => {
 			const row = rows.find((r) => r.slug === 'e-2-e-theme-border');
 			expect(row.border.width).to.eq('6px');
 		});

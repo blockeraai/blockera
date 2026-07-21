@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -29,7 +29,7 @@ describe('Custom CSS → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('.block { background-color: red; }').to.be.equal(
 				getSelectedBlock(data, 'blockeraCustomCSS')
 			);

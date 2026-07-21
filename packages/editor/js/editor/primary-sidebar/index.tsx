@@ -8,6 +8,8 @@ import {
 	useShortcut,
 	store as keyboardShortcutsStore,
 } from '@wordpress/keyboard-shortcuts';
+import { store as interfaceStore } from '@wordpress/interface';
+
 /**
  * Internal dependencies
  */
@@ -86,7 +88,7 @@ export default function PrimarySidebarController() {
 	// Watch the active complementary area from the interface store
 	// This tracks both edit-post/document and edit-site/global-styles sidebars
 	const activeComplementaryArea = useSelect((select) => {
-		const interfaceSelect = select('core/interface') as {
+		const interfaceSelect = select(interfaceStore) as {
 			getActiveComplementaryArea: (
 				scope: string
 			) => string | null | undefined;

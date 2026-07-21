@@ -31,7 +31,7 @@
 			"id": "blockeraFontColor",
 			"definition": "Color",
 			"css-property": "color",
-			"fallback": ["color.text", "color", "typography.root", "root"],
+			"fallback": ["color.text", "color", "typography"],
 			"description": "Support for \"blockeraFontColor\" value, this is mirror for WordPress block core \"color\" support.",
 			"inner-blocks": {
 				"all": true
@@ -42,7 +42,7 @@
 			"id": "blockeraFontSize",
 			"definition": "FontSize",
 			"css-property": "font-size",
-			"fallback": ["typography.fontSize", "typography.root", "root"],
+			"fallback": ["typography.fontSize", "typography"],
 			"description": "Support for \"blockeraFontSize\" value, this is mirror for WordPress block core \"fontSize\" support."
 		},
 		"blockeraDirection": {

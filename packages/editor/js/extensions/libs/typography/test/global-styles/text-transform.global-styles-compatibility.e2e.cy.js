@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	openMoreFeaturesControl,
@@ -47,7 +47,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Capitalize').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('uppercase').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraTextTransform
 							?.value
@@ -58,7 +58,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Capitalize').last().click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('capitalize').to.equal(
 						getParagraphGlobalStyles(data)?.typography
 							?.textTransform
@@ -69,7 +69,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Lowercase').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('lowercase').to.equal(
 						getParagraphGlobalStyles(data)?.typography
 							?.textTransform
@@ -80,7 +80,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('None').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('initial').to.equal(
 						getParagraphGlobalStyles(data)?.typography
 							?.textTransform
@@ -91,7 +91,7 @@ describe('Text Transform → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('None').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.textTransform);
 					expect(undefined).to.equal(

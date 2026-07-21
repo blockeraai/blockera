@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -29,7 +29,7 @@ describe('Line Height → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'line-height');
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('10').to.be.equal(
 				getSelectedBlock(data, 'blockeraLineHeight')
 			);
@@ -59,7 +59,7 @@ describe('Line Height → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'line-height', '10px');
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('10px').to.be.equal(
 				getSelectedBlock(data, 'blockeraLineHeight')
 			);

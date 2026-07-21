@@ -6,7 +6,7 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -34,7 +34,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#98cc08').to.be.equal(
 						getSelectedBlock(data, 'blockeraFontColor')
 					);
@@ -60,7 +60,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -87,7 +87,7 @@ describe('Font Color → WP Compatibility', () => {
 
 				cy.setColorControlValue('Text Color', '555555');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -113,7 +113,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.clearColorControlValue('Text Color');
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -151,7 +151,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#98cc08').to.be.equal(
 						getSelectedBlock(data, 'blockeraFontColor')
 					);
@@ -177,7 +177,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -203,7 +203,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -242,7 +242,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#df4414').to.be.equal(
 						getSelectedBlock(data, 'blockeraFontColor')
 					);
@@ -264,7 +264,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -284,7 +284,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
 					);
@@ -319,7 +319,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						settings: {
 							name: 'Accent 3',
@@ -365,7 +365,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Check WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						settings: {
 							name: 'Contrast',
@@ -408,7 +408,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Check WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					// default value is empty
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'blockeraFontColor')
@@ -446,7 +446,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						settings: {
 							name: 'Accent 3',
@@ -496,7 +496,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Check WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						settings: {
 							name: 'Contrast',
@@ -539,7 +539,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Check WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					// default value is empty
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'blockeraFontColor')
@@ -577,7 +577,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						settings: {
 							name: 'unknown',
@@ -624,7 +624,7 @@ describe('Font Color → WP Compatibility', () => {
 				cy.wait(100);
 
 				// Check WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					// default value is empty
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'blockeraFontColor')

@@ -162,8 +162,7 @@ export function serializeGlobalStylePresetItemValue(
 		}
 
 		case 'spacing':
-		case 'font-size':
-		case 'line-height': {
+		case 'font-size': {
 			const v = item.size ?? item.value ?? '';
 
 			return normalizePresetSize(v);

@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -71,7 +71,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 	it('imports column flex layout from WP (screen axes → swapped CSS props)', () => {
 		openStackGroupInBlockera();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'vertical',
 				verticalAlignment: 'top',
@@ -90,7 +90,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 	it('imports row flex layout from WP (screen axes → direct CSS props)', () => {
 		openRowGroupInBlockera();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'horizontal',
 				verticalAlignment: 'center',
@@ -112,7 +112,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 			cy.getByAriaLabel('flex-direction: row').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'horizontal',
 				verticalAlignment: 'top',
@@ -130,7 +130,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 			cy.getByAriaLabel('flex-direction: column').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'vertical',
 				verticalAlignment: 'top',
@@ -156,7 +156,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 			cy.getByDataTest('matrix-center-left-normal').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'horizontal',
 				verticalAlignment: 'center',
@@ -178,7 +178,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 			cy.getByDataTest('matrix-center-left-normal').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'vertical',
 				verticalAlignment: 'center',
@@ -199,7 +199,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		cy.getByAriaLabel('Flex Layout').click();
 		cy.getByAriaLabel('Reset To Default Setting').click();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			assertWpLayout(data, {
 				orientation: 'horizontal',
 				verticalAlignment: undefined,

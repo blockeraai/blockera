@@ -7,7 +7,7 @@ import {
 	appendBlocks,
 	openInserter,
 	reSelectBlock,
-	assertBlockData,
+	getWPDataObject,
 	resetBlockState,
 	getSelectedBlock,
 	getAllowedBlocks,
@@ -124,7 +124,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 			});
 
 			// Check value clean up and store api.
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				// Assertion for store api.
 				expect([
 					'core/heading',
@@ -153,7 +153,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 		resetBlockState('Item Container');
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({}).to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraInnerBlocks')[
 					'elements/container'

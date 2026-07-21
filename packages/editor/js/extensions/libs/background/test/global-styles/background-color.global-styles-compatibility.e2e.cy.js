@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -76,7 +76,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const blockeraBackgroundColor =
 					getParagraphGlobalStyles(data)?.blockeraBackgroundColor
 						?.value;
@@ -90,7 +90,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 
 			cy.setColorControlValue('BG Color', '#666666');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const styleColorBackground =
 					getParagraphGlobalStyles(data)?.color?.background;
 
@@ -103,7 +103,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 
 			cy.clearColorControlValue('BG Color');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const root = getParagraphGlobalStyles(data);
 				const styleColorBackground = root?.color?.background;
 				const blockeraBackgroundColor =
@@ -121,7 +121,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const root = getParagraphGlobalStyles(data);
 				const blockeraBackgroundColor =
 					root?.blockeraBackgroundColor?.value;
@@ -158,7 +158,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 
 			cy.selectValueAddonItem('contrast');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const backgroundColor =
 					getParagraphGlobalStyles(data)?.color?.background;
 
@@ -173,7 +173,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 				cy.removeValueAddon();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const root = getParagraphGlobalStyles(data);
 				const backgroundColor = root?.color?.background;
 				const blockeraBackgroundColor =
@@ -191,7 +191,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 			// Test 1: WP data to Blockera
 			//
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const root = getParagraphGlobalStyles(data);
 				const blockeraBackgroundColor =
 					root?.blockeraBackgroundColor?.value;
@@ -230,7 +230,7 @@ describe('Background Color → WP Compatibility (Global Styles)', () => {
 				cy.removeValueAddon();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const root = getParagraphGlobalStyles(data);
 				const backgroundColor = root?.color?.background;
 				const blockeraBackgroundColor =

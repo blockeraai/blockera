@@ -19,7 +19,7 @@
 	},
 	"core/list-item": {
 		"root": ".wp-block-list > li",
-		"border": "li"
+		"border": ".wp-block-list:not(.wp-block-list .wp-block-list) > li"
 	},
 	"core/accordion-heading": {
 		"typography": {
@@ -29,6 +29,9 @@
 		"spacing": {
 			"root": " .wp-block-accordion-heading__toggle"
 		}
+	},
+	"core/archives": {
+		"root": " .wp-block-archives-list.wp-block-archives"
 	},
 	"core/audio": {
 		"spacing": {
@@ -166,8 +169,7 @@
 		"root": ".wp-block-icon svg",
 		"css": ".wp-block-icon",
 		"spacing": {
-			"margin": "&.wp-block-icon",
-			"padding": "&.wp-block-icon"
+			"margin": ".wp-block-icon"
 		},
 		"color": {
 			"root": "&.wp-block-icon svg"

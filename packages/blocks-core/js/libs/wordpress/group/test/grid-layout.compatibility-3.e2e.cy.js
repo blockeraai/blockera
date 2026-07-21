@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -30,7 +30,7 @@ describe('Group Block → Grid layout → WP data compatibility', () => {
 		cy.checkActiveBlockVariation('group-grid');
 		cy.addNewTransition();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const layout = getSelectedBlock(data, 'layout');
 
 			expect(layout?.type).to.equal('grid');
@@ -71,7 +71,7 @@ describe('Group Block → Grid layout → WP data compatibility', () => {
 		cy.typeInInputByDataTest('layout-grid-column-count', '2');
 		cy.waitForAssertValue();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const layout = getSelectedBlock(data, 'layout');
 
 			expect(layout?.type).to.equal('grid');
@@ -97,7 +97,7 @@ describe('Group Block → Grid layout → WP data compatibility', () => {
 		cy.checkActiveBlockVariation('group-grid');
 		cy.addNewTransition();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const layout = getSelectedBlock(data, 'layout');
 
 			expect(layout?.type).to.equal('grid');
@@ -145,7 +145,7 @@ describe('Group Block → Grid layout → WP data compatibility', () => {
 		cy.checkActiveBlockVariation('group-grid');
 		cy.waitForAssertValue();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const layout = getSelectedBlock(data, 'layout');
 
 			expect(layout?.type).to.equal('grid');
@@ -175,7 +175,7 @@ describe('Group Block → Grid layout → WP data compatibility', () => {
 		cy.typeInInputByDataTest('layout-grid-column-count', '');
 		cy.waitForAssertValue();
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const layout = getSelectedBlock(data, 'layout');
 
 			expect(layout?.type).to.equal('grid');

@@ -13,8 +13,8 @@ import { componentClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import type { ColorIndicatorStackProps } from './types';
 import { default as ColorIndicator } from './color-indicator';
+import type { ColorIndicatorStackProps } from './types';
 
 /**
  * Distance from the middle item (left-middle for even counts).

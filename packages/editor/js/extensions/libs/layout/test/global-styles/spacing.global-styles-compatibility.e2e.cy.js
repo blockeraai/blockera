@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	setBoxSpacingSide,
@@ -52,7 +52,7 @@ describe('Spacing → WP Compatibility (Global Styles)', () => {
 				// Test 1: WP data to Blockera
 				//
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const blockeraSpacing =
 						getParagraphGlobalStyles(data)?.blockeraSpacing?.value;
 
@@ -78,7 +78,7 @@ describe('Spacing → WP Compatibility (Global Styles)', () => {
 
 				setBoxSpacingSide('padding-top', '25');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const spacingPaddingTop =
 						getParagraphGlobalStyles(data)?.spacing?.padding?.top;
 
@@ -91,7 +91,7 @@ describe('Spacing → WP Compatibility (Global Styles)', () => {
 
 				clearBoxSpacingSide('padding-top');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					const spacingPaddingTop = root?.spacing?.padding?.top;
 					const blockeraSpacing = root?.blockeraSpacing?.value;

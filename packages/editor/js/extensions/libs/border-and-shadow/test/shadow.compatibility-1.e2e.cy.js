@@ -11,7 +11,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -64,7 +64,7 @@ describe('Shadow → WP Compatibility', () => {
 			cy.getParentContainer('Box Shadows').as('container');
 			cy.addNewTransition();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const blockeraBoxShadow = getSelectedBlock(
 					data,
 					'blockeraBoxShadow'
@@ -113,7 +113,7 @@ describe('Shadow → WP Compatibility', () => {
 			cy.getParentContainer('Box Shadows').as('container');
 			cy.addNewTransition();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const blockeraBoxShadow = getSelectedBlock(
 					data,
 					'blockeraBoxShadow'
@@ -152,7 +152,7 @@ describe('Shadow → WP Compatibility', () => {
 					});
 				});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const wpShadow = getSelectedBlock(data, 'style')?.shadow;
 
 				expect(wpShadow).to.be.a('undefined');
@@ -173,7 +173,7 @@ describe('Shadow → WP Compatibility', () => {
 			cy.getParentContainer('Box Shadows').as('container');
 			cy.addNewTransition();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const blockeraBoxShadow = getSelectedBlock(
 					data,
 					'blockeraBoxShadow'

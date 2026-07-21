@@ -25,7 +25,7 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/gallery-caption' => [
-					'root' => '> figcaption.blocks-gallery-caption',
+					'root' => '> figcaption',
 				],
 				'blockera/elements/image-caption'   => [
 					// Double ".wp-block-image" to make sure it has more specificity than the gallery caption.

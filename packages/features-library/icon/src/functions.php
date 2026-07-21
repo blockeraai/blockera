@@ -32,7 +32,7 @@ if ( ! function_exists('blockera_is_stroke_icon_library')) {
 	 * @return bool
 	 */
 	function blockera_is_stroke_icon_library( string $library): bool {
-		return in_array($library, [ 'feather', 'lucide', 'untitledui', 'tabler' ], true);
+		return in_array($library, [ 'feather', 'lucide', 'untitledui' ], true);
 	}
 }
 
@@ -667,40 +667,6 @@ if ( ! function_exists('blockera_get_icon_color_attr_value')) {
 	}
 }
 
-if ( ! function_exists( 'blockera_icon_block_uses_html_editable_rendering' ) ) {
-	/**
-	 * Whether the block injects icons as inline SVG on the frontend (EditBlockHTML path).
-	 *
-	 * Matches EditBlockHTML::isValidBlock(): icon feature enabled, htmlEditable on,
-	 * and an htmlEditable selector configured on the block type.
-	 *
-	 * @param string $block_name Registered block name (e.g. core/button).
-	 *
-	 * @return bool
-	 */
-	function blockera_icon_block_uses_html_editable_rendering( string $block_name): bool {
-		if ( '' === $block_name ) {
-			return false;
-		}
-
-		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $block_name );
-
-		if ( ! $block_type ) {
-			return false;
-		}
-
-		$icon_support = $block_type->supports['blockFeatures']['icon'] ?? [];
-
-		if ( empty( $icon_support['status'] ) || empty( $icon_support['htmlEditable']['status'] ) ) {
-			return false;
-		}
-
-		$html_editable_root = blockera_get_block_type_property( $block_name, 'selectors' )['htmlEditable']['root'] ?? '';
-
-		return '' !== $html_editable_root;
-	}
-}
-
 if ( ! function_exists('blockera_block_has_icon')) {
 	/**
 	 * Check if the block has an icon.
@@ -810,9 +776,8 @@ if ( ! function_exists('blockera_core_icon_render_frontend_html')) {
 	/**
 	 * Replace core/icon frontend markup with Blockera-managed SVG output.
 	 *
-	 * Hooked on `render_block` (priority 10) so markup exists before Blockera's style
-	 * pipeline at priority 900. WP applies `render_block` before `render_block_{name}`,
-	 * so `render_block_core/icon` would run too late for CSS generation.
+	 * Runs on render_block_core/icon so icon rendering does not depend on blockeraPropsId
+	 * or the full Blockera render_block CSS pipeline.
 	 *
 	 * @param string $html       HTML from WordPress core/icon render (may be empty).
 	 * @param array  $attributes Block attributes.
@@ -888,19 +853,13 @@ if ( ! function_exists('blockera_core_icon_register_navigation_hooks')) {
 			3
 		);
 
-		// Must run on `render_block` before Blockera styles (priority 900). WP fires
-		// `render_block` before `render_block_{name}`, so core/icon injection on the
-		// block-specific filter would leave HTML empty during CSS generation.
 		add_filter(
-			'render_block',
+			'render_block_core/icon',
 			static function ( $html, $parsed_block ): string {
-				if ('core/icon' !== ( $parsed_block['blockName'] ?? '' )) {
-					return is_string($html) ? $html : '';
-				}
-
+				// WP passes the parsed block array (attrs live under `attrs`), not flat attributes.
 				$attrs = is_array($parsed_block['attrs'] ?? null)
 					? $parsed_block['attrs']
-					: [];
+					: ( is_array($parsed_block) ? $parsed_block : [] );
 
 				return blockera_core_icon_render_frontend_html(
 					is_string($html) ? $html : '',
@@ -912,16 +871,14 @@ if ( ! function_exists('blockera_core_icon_register_navigation_hooks')) {
 		);
 
 		add_filter(
-			'render_block',
-			static function ( $html, $parsed_block ) {
-				if ('core/icon' === ( $parsed_block['blockName'] ?? '' )) {
-					blockera_core_icon_set_navigation_child_render(false);
-				}
+			'render_block_core/icon',
+			static function ( $html ) {
+				blockera_core_icon_set_navigation_child_render(false);
 
 				return $html;
 			},
 			999,
-			2
+			1
 		);
 	}
 }

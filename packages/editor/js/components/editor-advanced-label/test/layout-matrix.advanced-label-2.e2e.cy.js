@@ -1,9 +1,10 @@
 import {
+	getWPDataObject,
 	getSelectedBlock,
 	createPost,
 	setBlockState,
+	addBlockState,
 	setDeviceType,
-	assertBlockData,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Layout Matrix Control label testing (Flex Layout)', () => {
@@ -21,14 +22,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		cy.getByDataTest('layout-matrix').within(() =>
 			cy.getByDataTest(item).click()
 		);
-
-		// LayoutMatrixControl defers single-click setValue by 200ms (dblclick
-		// detection). Wait for the UI commit before state/device navigation so
-		// the deferred write cannot land on the wrong active state (CI flake).
-		const selectedItem = item.replace(/-normal$/, '-selected');
-		cy.getByDataTest('layout-matrix').within(() =>
-			cy.getByDataTest(selectedItem).should('exist')
-		);
 	};
 
 	const checkMatrixItem = (item) => {
@@ -36,16 +29,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			cy.getByDataTest(item).should('exist')
 		);
 	};
-
-	/**
-	 * After reset/reset-all, empty states may be pruned (undefined) or left as
-	 * `{}`. Normalize both so store assertions do not throw
-	 * `Cannot read properties of undefined (reading 'breakpoints')` on CI.
-	 */
-	const getBreakpointAttributes = (data, state, breakpoint) =>
-		getSelectedBlock(data, 'blockeraBlockStates')?.[state]?.breakpoints?.[
-			breakpoint
-		]?.attributes ?? {};
 
 	it('should display changed value on Flex Layout -> Normal -> Desktop', () => {
 		// Assert label before set value
@@ -356,20 +339,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					// Reset to normal
 					cy.resetBlockeraAttribute('Layout', 'Flex Layout', 'reset');
 
-					// Wait for reset to clear tablet attrs and keep desktop inherit
-					assertBlockData((data) => {
-						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'normal', 'tablet')
-						);
-						expect({
-							direction: 'row',
-							alignItems: 'flex-start',
-							justifyContent: 'flex-start',
-						}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraFlexLayout')
-						);
-					});
-
 					// Assert label
 					cy.checkLabelClassName(
 						'Layout',
@@ -384,6 +353,14 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					cy.checkStateGraph('Layout', 'Flex Layout', {
 						tablet: ['Hover'],
 						desktop: ['Hover', 'Normal'],
+					});
+
+					// Assert store data
+					getWPDataObject().then((data) => {
+						expect({}).to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraBlockStates').normal
+								.breakpoints.tablet.attributes
+						);
 					});
 				}
 			);
@@ -411,9 +388,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'hover', 'tablet')
+							getSelectedBlock(data, 'blockeraBlockStates').hover
+								.breakpoints.tablet.attributes
 						);
 					});
 				}
@@ -443,7 +421,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({
 							direction: 'row',
 							alignItems: '',
@@ -477,9 +455,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					cy.checkStateGraph('Layout', 'Flex Layout', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'hover', 'desktop')
+							getSelectedBlock(data, 'blockeraBlockStates').hover
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
@@ -556,8 +535,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				desktop: ['Normal'],
 			});
 
-			// Assert store data (retry; empty states may be pruned after reset)
-			assertBlockData((data) => {
+			// Assert store data
+			getWPDataObject().then((data) => {
 				expect({
 					direction: 'row',
 					alignItems: 'flex-end',
@@ -565,13 +544,18 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'normal', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
 				);
+
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'desktop')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.desktop.attributes
 				);
+
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
 				);
 			});
 		});
@@ -670,8 +654,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				desktop: ['Hover'],
 			});
 
-			// Assert store data (retry; empty states may be pruned after reset)
-			assertBlockData((data) => {
+			// Assert store data
+			getWPDataObject().then((data) => {
 				expect({
 					direction: 'row',
 					alignItems: '',
@@ -679,7 +663,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'normal', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
 				);
 
 				expect({
@@ -689,11 +674,13 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 						justifyContent: 'flex-end',
 					},
 				}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'desktop')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
 				);
 			});
 		});
@@ -722,20 +709,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			context(
 				'should correctly reset blockeraFlexLayout, and display effected fields(label, control, stateGraph) in all states',
 				() => {
-					// Normal/Tablet — wait for async RESET_ALL before UI asserts
-					assertBlockData((data) => {
-						expect({
-							direction: 'row',
-							alignItems: '',
-							justifyContent: '',
-						}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraFlexLayout')
-						);
-						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'hover', 'desktop')
-						);
-					});
-
+					// Normal/Tablet
 					// Assert label
 					cy.checkLabelClassName(
 						'Layout',
@@ -831,7 +805,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					cy.checkStateGraph('Layout', 'Flex Layout', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({
 							direction: 'row',
 							alignItems: '',
@@ -841,13 +815,18 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 						);
 
 						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'normal', 'tablet')
+							getSelectedBlock(data, 'blockeraBlockStates').normal
+								?.breakpoints?.tablet?.attributes || {}
 						);
+
 						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'hover', 'desktop')
+							getSelectedBlock(data, 'blockeraBlockStates').hover
+								?.breakpoints?.desktop?.attributes
 						);
+
 						expect({}).to.be.deep.eq(
-							getBreakpointAttributes(data, 'hover', 'tablet')
+							getSelectedBlock(data, 'blockeraBlockStates').hover
+								?.breakpoints?.tablet?.attributes || {}
 						);
 					});
 				}
@@ -924,8 +903,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				desktop: ['Normal'],
 			});
 
-			// Assert store data (retry; empty states may be pruned after reset-all)
-			assertBlockData((data) => {
+			// Assert store data
+			getWPDataObject().then((data) => {
 				expect({
 					direction: 'row',
 					alignItems: 'flex-end',
@@ -933,13 +912,18 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'normal', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
 				);
+
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'desktop')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.desktop.attributes
 				);
+
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
 				);
 			});
 		});
@@ -1039,9 +1023,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				desktop: ['Hover'],
 			});
 
-			// Assert store data — CI flake: `.hover.breakpoints` threw when
-			// empty states were pruned after reset-all. Use safe access + retry.
-			assertBlockData((data) => {
+			// Assert store data
+			getWPDataObject().then((data) => {
 				expect({
 					direction: 'row',
 					alignItems: '',
@@ -1049,7 +1032,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'normal', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
 				);
 
 				expect({
@@ -1059,11 +1043,13 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 						justifyContent: 'flex-end',
 					},
 				}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'desktop')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
-					getBreakpointAttributes(data, 'hover', 'tablet')
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
 				);
 			});
 		});

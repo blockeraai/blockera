@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -50,7 +50,7 @@ describe('Aspect Ratio → WP Compatibility (Global Styles)', () => {
 					'aspectRatioContainer'
 				);
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						val: '3/2',
 						width: '',
@@ -64,7 +64,7 @@ describe('Aspect Ratio → WP Compatibility (Global Styles)', () => {
 					cy.get('select').select('16/9');
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('16/9').to.equal(
 						getCoverGlobalStyles(data)?.dimensions?.aspectRatio
 					);
@@ -74,7 +74,7 @@ describe('Aspect Ratio → WP Compatibility (Global Styles)', () => {
 					cy.get('select').select('', { force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getCoverGlobalStyles(data);
 
 					expect(undefined).to.equal(root?.dimensions?.aspectRatio);

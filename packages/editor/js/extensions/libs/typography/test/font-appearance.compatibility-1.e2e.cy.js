@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	openMoreFeaturesControl,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -32,7 +32,7 @@ describe('Font Appearance → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('italic').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontAppearance')?.style
 				);
@@ -59,7 +59,7 @@ describe('Font Appearance → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('normal').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontAppearance')?.style
 				);
@@ -87,7 +87,7 @@ describe('Font Appearance → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontAppearance')?.style
 				);

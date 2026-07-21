@@ -19,8 +19,8 @@ import {
 	getValueAddonRealValue,
 	isValid as isValidVariable,
 } from '../../value-addons';
-import type { ColorIndicatorProps } from './types';
 import { getContextualColorKeywordMeta } from './get-contextual-color-keyword-meta';
+import type { ColorIndicatorProps } from './types';
 
 export default function ColorIndicator({
 	className,

@@ -22,9 +22,8 @@ import type {
 /**
  * Internal dependencies
  */
-import { Tooltip } from '../../../libs/tooltip';
+import { Tooltip, ConditionalWrapper } from '../../../';
 import type { AddonTypesItem, ValueAddon } from '../../types';
-import ConditionalWrapper from '../../../libs/conditional-wrapper';
 
 export default function ({
 	value,

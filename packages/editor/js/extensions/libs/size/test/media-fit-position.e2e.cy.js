@@ -3,7 +3,7 @@
  */
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -39,7 +39,7 @@ describe('Media Fit Position → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({ top: '0%', left: '50%' }).to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFitPosition')
 			);
@@ -61,7 +61,7 @@ describe('Media Fit Position → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({ top: '10%', left: '30%' }).to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFitPosition')
 			);

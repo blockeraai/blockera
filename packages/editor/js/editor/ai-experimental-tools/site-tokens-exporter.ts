@@ -6,13 +6,10 @@
  * each as a flat `{ tokenId: cssValueString }` map.
  *
  * Preset reading is anchored at `__experimentalFeatures` (already merged by
- * core: theme.json defaults + theme + user). Blockera-only presets live under
- * `__experimentalFeatures.blockera*` flat keys.
- * `blockGap` is resolved separately via `styles.spacing.blockGap` and its preset
- * reference is dereferenced against the spacing-size map we just built.
+ * core: theme.json defaults + theme + user). `blockGap` is resolved separately
+ * via `styles.spacing.blockGap` and its preset reference is dereferenced
+ * against the spacing-size map we just built.
  */
-import { getBlockeraExperimentalFeatures } from '@blockera/data';
-
 type StringMap = { [key: string]: string };
 
 type LayeredPresets<T> =
@@ -431,7 +428,6 @@ export function buildSiteTokensJson({
 	};
 
 	const f = features || {};
-	const blockera = getBlockeraExperimentalFeatures(f);
 
 	// color
 	for (const item of flattenThemeCustomLayers<any>(f?.color?.palette)) {
@@ -477,9 +473,7 @@ export function buildSiteTokensJson({
 	}
 
 	// border-line — Blockera border presets ({ slug, name, border })
-	for (const item of flattenThemeCustomLayers<any>(
-		f?.border?.blockeraBorder?.presets
-	)) {
+	for (const item of flattenThemeCustomLayers<any>(f?.border?.presets)) {
 		if (!item || typeof item !== 'object') {
 			continue;
 		}
@@ -498,7 +492,7 @@ export function buildSiteTokensJson({
 
 	// text-shadow
 	for (const preset of flattenThemeCustomLayers<any>(
-		blockera?.blockeraTextShadow?.presets
+		f?.textShadow?.presets
 	)) {
 		pushString(
 			out.categories['text-shadow'],
@@ -508,9 +502,7 @@ export function buildSiteTokensJson({
 	}
 
 	// transforms
-	for (const preset of flattenThemeCustomLayers<any>(
-		blockera?.blockeraTransform?.presets
-	)) {
+	for (const preset of flattenThemeCustomLayers<any>(f?.transform?.presets)) {
 		if (!preset || typeof preset !== 'object') {
 			continue;
 		}
@@ -521,9 +513,7 @@ export function buildSiteTokensJson({
 	// filter — also re-emit under `backdrop-filter` since Blockera doesn't
 	// keep a separate preset namespace for backdrop-filter (the same filter
 	// preset can be used for either CSS property).
-	for (const preset of flattenThemeCustomLayers<any>(
-		blockera?.blockeraFilter?.presets
-	)) {
+	for (const preset of flattenThemeCustomLayers<any>(f?.filter?.presets)) {
 		if (!preset || typeof preset !== 'object') {
 			continue;
 		}
@@ -534,7 +524,7 @@ export function buildSiteTokensJson({
 
 	// transition
 	for (const preset of flattenThemeCustomLayers<any>(
-		blockera?.blockeraTransition?.presets
+		f?.transition?.presets
 	)) {
 		if (!preset || typeof preset !== 'object') {
 			continue;

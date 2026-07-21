@@ -11,7 +11,6 @@ import {
 	deactivateMuPlugin,
 	getSelectedBlock,
 	getWPDataObject,
-	saveSiteEditorDirtyEntities,
 } from './editor';
 import { openSiteEditor } from './site-navigation';
 
@@ -123,66 +122,6 @@ export function resetGlobalStylesEntityRecord() {
 			styles: {},
 			settings: {},
 		});
-	});
-}
-
-/**
- * Reopens Site Editor, clears the globalStyles entity, and persists the empty record.
- * Use in afterEach when a spec seeds/saves custom presets (e.g. hover canvas preview).
- *
- * Skips save-compatibility: that path re-hydrates theme `styles.blocks` from base
- * config and would undo the empty reset. Also clears `blockera/editor` userStyles
- * so a later compatibility-enabled save cannot merge stale local blocks back.
- *
- * Free tier allows only one custom color variable — afterEach MUST persist an empty
- * `settings.color.palette.custom` or the next test's seed hits the upgrade modal /
- * picks the wrong catalog row.
- *
- * @return {Cypress.Chainable}
- */
-export function resetAndSaveGlobalStylesEntityRecord() {
-	openSiteEditor();
-
-	cy.window().then((win) => {
-		const dispatch = win.wp?.data?.dispatch?.('blockera/editor');
-
-		if (typeof dispatch?.setGlobalStyles === 'function') {
-			dispatch.setGlobalStyles({});
-		}
-	});
-
-	resetGlobalStylesEntityRecord();
-
-	saveSiteEditorDirtyEntities({ runCompatibility: false });
-
-	// Confirm the persisted entity (not only the edited record) has no custom colors.
-	return cy.window({ timeout: 20000 }).should((win) => {
-		const select = win.wp.data.select('core');
-		const id =
-			typeof select.__experimentalGetCurrentGlobalStylesId === 'function'
-				? select.__experimentalGetCurrentGlobalStylesId()
-				: select.getCurrentGlobalStylesId?.();
-
-		expect(id, 'global styles entity id after reset').to.exist;
-
-		const record =
-			select.getEntityRecord(
-				GLOBAL_STYLES_KIND,
-				GLOBAL_STYLES_NAME,
-				id
-			) ||
-			select.getEditedEntityRecord(
-				GLOBAL_STYLES_KIND,
-				GLOBAL_STYLES_NAME,
-				id
-			);
-		const custom = record?.settings?.color?.palette?.custom;
-		const list = Array.isArray(custom) ? custom : [];
-
-		expect(
-			list,
-			'custom color palette after resetAndSaveGlobalStylesEntityRecord'
-		).to.have.length(0);
 	});
 }
 
@@ -383,7 +322,7 @@ export function openGlobalStylesShadowsScreen({ reset } = { reset: true }) {
 		.should('be.visible');
 }
 
-/** Border box presets (`settings.border.blockeraBorder.presets.custom`). */
+/** Border box presets (`settings.border.presets.custom`). */
 export function openGlobalStylesBordersScreen({ reset } = { reset: true }) {
 	return openGlobalStylesDesignSystemPresetScreen({
 		panelButtonId: 'borders',
@@ -458,7 +397,7 @@ export function openGlobalStylesTypographyFlow({ reset } = { reset: false }) {
 		timeout: 20000,
 	}).should('exist');
 
-	cy.get('.blockera-typography-hub', { timeout: 20000 }).should('exist');
+	cy.get('.blockera-font-size-hub', { timeout: 20000 }).should('exist');
 }
 
 /**
@@ -474,36 +413,13 @@ export function openGlobalStylesFontSizesVariablesScreen(
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
 	cy.wait(500);
 
-	cy.contains('.blockera-typography-hub button', 'Font size variables')
+	cy.contains('.blockera-font-size-hub button', 'Font size variables')
 		.scrollIntoView()
 		.should('exist')
 		.click({ force: true });
 
 	return cy
 		.get('.blockera-font-size-editor', { timeout: 20000 })
-		.should('be.visible');
-}
-
-/**
- * Typography → Line height variables (design-system line height presets).
- *
- * @param {{ reset?: boolean }} options
- */
-export function openGlobalStylesLineHeightsVariablesScreen(
-	{ reset } = { reset: true }
-) {
-	openGlobalStylesTypographyFlow({ reset });
-
-	// eslint-disable-next-line cypress/no-unnecessary-waiting
-	cy.wait(500);
-
-	cy.contains('.blockera-typography-hub button', 'Line height variables')
-		.scrollIntoView()
-		.should('exist')
-		.click({ force: true });
-
-	return cy
-		.get('.blockera-line-height-editor', { timeout: 20000 })
 		.should('be.visible');
 }
 

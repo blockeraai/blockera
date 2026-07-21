@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	openMoreFeaturesControl,
@@ -46,7 +46,7 @@ describe('Text Indent → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Text Indent').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('2px').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraTextIndent
 							?.value
@@ -58,7 +58,7 @@ describe('Text Indent → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().type('3', { force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('3px').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.textIndent
 					);
@@ -68,7 +68,7 @@ describe('Text Indent → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().clear({ force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.textIndent);
 					expect(undefined).to.equal(root?.blockeraTextIndent?.value);

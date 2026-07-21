@@ -55,7 +55,7 @@ describe('Global Styles UI → text shadow presets (theme.json + UI)', () => {
 
 		cy.realPress('Escape');
 
-		getEditedGlobalStylesSetting('blockeraTextShadow.presets.theme').then(
+		getEditedGlobalStylesSetting('textShadow.presets.theme').then(
 			(rows) => {
 				const row = rows.find((r) => r.slug === 'e-2-e-theme-tshadow');
 				expect(row.shadow).to.match(/8px/);
@@ -73,7 +73,7 @@ describe('Global Styles UI → text shadow presets (theme.json + UI)', () => {
 			'E2E Theme Text Shadow'
 		);
 
-		getEditedGlobalStylesSetting('blockeraTextShadow.presets.theme').then(
+		getEditedGlobalStylesSetting('textShadow.presets.theme').then(
 			(rows) => {
 				const row = rows.find((r) => r.slug === 'e-2-e-theme-tshadow');
 				expect(row.shadow).to.match(/8px/);

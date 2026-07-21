@@ -14,13 +14,15 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Button } from '../button';
-import BaseControl from '../base-control';
+import { setValueAddon, useValueAddon } from '../../';
 import type { ColorControlProps } from './types';
 import { useControlContext } from '../../context';
-import { ColorIndicator } from '../color-indicator';
-import { ColorPickerControl } from '../color-picker-control';
-import { setValueAddon, useValueAddon } from '../../value-addons';
+import {
+	Button,
+	BaseControl,
+	ColorIndicator,
+	ColorPickerControl,
+} from '../index';
 import { getContextualColorKeywordMeta } from '../color-indicator/get-contextual-color-keyword-meta';
 
 export default function ColorControl({

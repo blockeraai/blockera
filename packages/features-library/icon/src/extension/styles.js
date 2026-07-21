@@ -131,13 +131,11 @@ export const IconStyles = ({
 			const iconUrlValue = `url("data:image/svg+xml,${encodeURIComponent(
 				svgForCssUrl
 			)}")`;
-			// Keep --url as the single SVG payload; mask/bg reference it (no duplicated data URL).
 			const iconUrlProperties = hasPreservedColors
 				? {
 						'--blockera--icon--url': iconUrlValue,
 						// Editor canvas: render full-color SVG via background-image, not mask.
-						'--blockera--icon--bg-image':
-							'var(--blockera--icon--url)',
+						'--blockera--icon--bg-image': iconUrlValue,
 						'--blockera--icon--mask-image': 'none',
 						'--blockera--icon--editor-icon-bg': 'transparent',
 					}
@@ -145,8 +143,7 @@ export const IconStyles = ({
 						'--blockera--icon--url': iconUrlValue,
 						// Reset inherited multi-color vars from ancestor list blocks.
 						'--blockera--icon--bg-image': 'none',
-						'--blockera--icon--mask-image':
-							'var(--blockera--icon--url)',
+						'--blockera--icon--mask-image': iconUrlValue,
 						'--blockera--icon--editor-icon-bg':
 							'var(--blockera--icon--color, currentColor)',
 					};

@@ -4,7 +4,7 @@
 import {
 	openSiteEditor,
 	closeWelcomeGuide,
-	assertBlockData,
+	getWPDataObject,
 } from '@blockera/dev-cypress/js/helpers';
 
 const openBlockStyleVariationsTab = () => {
@@ -46,7 +46,7 @@ describe('Global Styles Actions For Blocks Plugin → Functionality (Global Styl
 					.first()
 					.click();
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(
 						data.select('blockera/editor').getSelectedBlockStyle()
 					).to.equal('');
@@ -64,7 +64,7 @@ describe('Global Styles Actions For Blocks Plugin → Functionality (Global Styl
 					'body[data-test="has-blockera-global-styles-ui"]'
 				).should('be.visible');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(
 						data.select('blockera/editor').getSelectedBlockRef()
 					).to.not.equal(undefined);

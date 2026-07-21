@@ -4,7 +4,7 @@
 import {
 	createPost,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	setDeviceType,
 } from '@blockera/dev-cypress/js/helpers';
@@ -196,7 +196,7 @@ describe('Blockera layout toolbar', () => {
 		it('updates blockeraFlexLayout and WP layout from toolbar', () => {
 			clickHorizontalToolbarOption(1);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 				);
@@ -210,7 +210,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickVerticalToolbarOption(1);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 				);
@@ -226,7 +226,7 @@ describe('Blockera layout toolbar', () => {
 		it('supports stretch on align and space-around on justify in row', () => {
 			clickHorizontalToolbarOption(3);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('space-around').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 				);
@@ -234,7 +234,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickVerticalToolbarOption(3);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('stretch').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 				);
@@ -248,7 +248,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickHorizontalToolbarOption(0);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				assertWpLayout(data, {
 					orientation: 'vertical',
 					justifyContent: 'left',
@@ -270,7 +270,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickVerticalToolbarOption(4);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('space-between').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 				);
@@ -284,7 +284,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickVerticalToolbarOption(3);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('space-around').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 				);
@@ -302,7 +302,7 @@ describe('Blockera layout toolbar', () => {
 
 			cy.waitForAssertValue();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 				);
@@ -314,7 +314,7 @@ describe('Blockera layout toolbar', () => {
 
 			cy.waitForAssertValue();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('flex-start').to.equal(
 					getMobileBreakpointFlexLayout(data)?.justifyContent
 				);
@@ -324,7 +324,7 @@ describe('Blockera layout toolbar', () => {
 
 			cy.waitForAssertValue();
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 				);
@@ -354,7 +354,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickVerticalToolbarOption(1);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 				);
@@ -374,7 +374,7 @@ describe('Blockera layout toolbar', () => {
 
 			clickVerticalToolbarOption(1);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.equal(
 					getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 				);

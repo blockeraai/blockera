@@ -24,15 +24,6 @@ class Setup {
 	protected string $plugin_path;
 
 	/**
-	 * Request-level cache of block.php customization overlays keyed by block type.
-	 *
-	 * Null means no block.php; array means selectors/supports/attributes to merge.
-	 *
-	 * @var array<string, array<string, array>|null>
-	 */
-	private array $block_overlays = [];
-
-	/**
 	 * Get instance.
 	 *
 	 * @return self the instance.
@@ -91,30 +82,6 @@ class Setup {
 		$this->available_blocks = $blocks;
 	}
 
-	/**
-	 * Whether all block.php overlays were preloaded for this request.
-	 *
-	 * @var bool
-	 */
-	private bool $overlays_warmed = false;
-
-	/**
-	 * Preload every Blockera block.php overlay once before register_block_type_args runs.
-	 *
-	 * @return void
-	 */
-	public function warmBlockCustomizationOverlays(): void {
-		if ( $this->overlays_warmed || empty( $this->available_blocks ) ) {
-			return;
-		}
-
-		$this->overlays_warmed = true;
-
-		foreach ( array_keys( $this->available_blocks ) as $block_type ) {
-			$this->getBlockCustomizationOverlay( (string) $block_type );
-		}
-	}
-
     /**
      * Register block extra arguments for third party block types.
      *
@@ -128,21 +95,14 @@ class Setup {
             return $args;
         }
 
-		$this->warmBlockCustomizationOverlays();
-
-        if ( ! isset( $args['attributes']['blockeraPropsId'] ) ) {
-			$args['attributes'] = array_merge( $args['attributes'] ?? [], blockera_get_shared_block_attributes() );
-		}
-
+        // Merging blockera shared block attributes.
+        $sharedAttributes   = blockera_get_shared_block_attributes();
+        $args['attributes'] = array_merge($args['attributes'] ?? [], $sharedAttributes);
         return $this->getCustomizedBlock($block_type, $args);
     }
 
     /**
      * Get customized block type arguments.
-     *
-     * Loads each block.php once, caches the Blockera overlay (selectors/supports/attributes),
-     * then merges into the live $args. Avoids re-executing block.php / shared inners on
-     * repeated register_block_type_args / editor attribute registration calls.
      *
      * @param string $block_type the block type name.
      * @param array  $args       the block type previous arguments.
@@ -150,69 +110,13 @@ class Setup {
      * @return array the customized block type arguments.
      */
     public function getCustomizedBlock( string $block_type, array $args): array {
-		$overlay = $this->getBlockCustomizationOverlay( $block_type );
-
-		if ( null === $overlay || [] === $overlay ) {
-			return $args;
-		}
-
-		foreach ( $overlay as $key => $values ) {
-			$args[ $key ] = array_merge( $args[ $key ] ?? [], $values );
-		}
-
-		return $args;
+        $this->setBlockDirectoryPath($block_type);
+        $blockFile = $this->plugin_path . 'blockera/blocks-core/php/' . $this->block_dir_path . '/block.php';
+        if (false === file_exists($blockFile)) {
+            return $args;
+        }
+        return require $blockFile;
     }
-
-	/**
-	 * Load and memoize the Blockera-only arg overlay for a block type.
-	 *
-	 * @param string $block_type Block name (e.g. core/paragraph).
-	 * @return array<string, array>|null Overlay keys, or null when block.php is missing.
-	 */
-	private function getBlockCustomizationOverlay( string $block_type ): ?array {
-		if ( array_key_exists( $block_type, $this->block_overlays ) ) {
-			return $this->block_overlays[ $block_type ];
-		}
-
-		$this->setBlockDirectoryPath( $block_type );
-		$block_file = $this->plugin_path . 'blockera/blocks-core/php/' . $this->block_dir_path . '/block.php';
-
-		if ( ! is_file( $block_file ) ) {
-			$this->block_overlays[ $block_type ] = null;
-			return null;
-		}
-
-		/*
-		 * Require in an isolated scope with empty base args so block.php returns only
-		 * Blockera additions (all current block.php files merge attributes/selectors/supports).
-		 */
-		$overlay = ( static function ( string $block_file ): array {
-			$args = [
-				'attributes' => [],
-				'selectors'  => [],
-				'supports'   => [],
-			];
-
-			$result = require $block_file;
-
-			if ( ! is_array( $result ) ) {
-				return [];
-			}
-
-			$overlay = [];
-			foreach ( [ 'attributes', 'selectors', 'supports' ] as $key ) {
-				if ( ! empty( $result[ $key ] ) && is_array( $result[ $key ] ) ) {
-					$overlay[ $key ] = $result[ $key ];
-				}
-			}
-
-			return $overlay;
-		} )( $block_file );
-
-		$this->block_overlays[ $block_type ] = $overlay;
-
-		return $overlay;
-	}
 
     /**
      * Get block directory relative path.

@@ -1,25 +1,32 @@
-<?php
+<?php 
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
+
 class BackgroundClip extends BaseStyleDefinition {
 
-	protected function css( array $setting ): array {
-		if ( ! isset( $setting['type'], $setting['background-clip'] ) || 'background-clip' !== $setting['type'] ) {
+    protected function css( array $setting): array {
+        
+		$cssProperty = $setting['type'] ?? '';
+
+		if ( 'background-clip' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
 			return [];
 		}
 
-		$value = $setting['background-clip'];
-
-		$this->declarations['background-clip']         = $value;
-		$this->declarations['-webkit-background-clip'] = $value;
+		$value = $setting[ $cssProperty ];		
+		
+		$declarations                            = &$this->declarations;
+		$declarations[ $cssProperty ]            = $value;
+		$declarations['-webkit-background-clip'] = $value;
 
 		if ( 'text' === $value ) {
-			$this->declarations['-webkit-text-fill-color'] = 'transparent';
+			$declarations['-webkit-text-fill-color'] = 'transparent';
 		}
 
-		$this->setCss( $this->declarations );
+		$this->setCss( $declarations );
 
 		return $this->css;
-	}
+    }
 }
+

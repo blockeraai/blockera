@@ -2,15 +2,12 @@
  * Blockera dependencies
  */
 import {
-	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
-	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesShadowsScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
-	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -20,37 +17,11 @@ describe('Global Styles box-shadow preset → value addon (Box Shadows)', () => 
 	const slug = 'e-2-e-shadow';
 	const addDataTest = 'global-styles-preset-add-shadow-preset-presets-custom';
 
-	afterEach(() => {
-		resetAndSaveGlobalStylesEntityRecord();
-	});
-
 	function seedShadowPreset() {
 		openGlobalStylesShadowsScreen();
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
-
-	it('previews the shadow preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
-		seedShadowPreset();
-
-		createPost();
-
-		cy.getBlock('default').type('Hover preview shadow paragraph.', {
-			delay: 0,
-		});
-		cy.getByAriaControls('styles-view').click();
-
-		openRepeaterHeaderVariablePicker('Box Shadows');
-
-		filterVariablePickerSearch(presetName);
-
-		assertVariablePickerPresetHoverPreview({
-			slug,
-			cssNeedle: '10px 10px 10px 0px',
-			blockCssProperty: 'box-shadow',
-			blockCssValue: 'rgba(0, 0, 0, 0.67) 10px 10px 10px 0px',
-		});
-	});
 
 	it('applies the custom shadow preset via the repeater variable picker', () => {
 		seedShadowPreset();
@@ -84,8 +55,6 @@ describe('Global Styles box-shadow preset → value addon (Box Shadows)', () => 
 	});
 
 	it('updates generated CSS when the shadow offset is edited in global styles after picking it', () => {
-		seedShadowPreset();
-
 		createPost();
 
 		cy.getBlock('default').type('Shadow preset edit paragraph.', {

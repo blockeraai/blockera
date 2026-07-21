@@ -4,7 +4,7 @@
 import {
 	createPost,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -51,7 +51,7 @@ describe('Block Card', () => {
 			'My custom name'
 		);
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('My custom name').to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -71,7 +71,7 @@ describe('Block Card', () => {
 			.should('have.text', '')
 			.should('have.attr', 'placeholder', 'Paragraph');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -100,7 +100,7 @@ describe('Block Card', () => {
 			'New custom name'
 		);
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('New custom name').to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -126,7 +126,7 @@ describe('Block Card', () => {
 			.should('have.text', '')
 			.should('have.attr', 'placeholder', 'Paragraph');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -163,7 +163,7 @@ describe('Block Card', () => {
 			.should('have.text', '')
 			.should('have.attr', 'placeholder', 'Group');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -183,7 +183,7 @@ describe('Block Card', () => {
 			.should('have.text', '')
 			.should('have.attr', 'placeholder', 'Row');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -211,7 +211,7 @@ describe('Block Card', () => {
 			'New custom group name'
 		);
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('New custom group name').to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -232,7 +232,7 @@ describe('Block Card', () => {
 			'New custom group name'
 		);
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('New custom group name').to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -256,7 +256,7 @@ describe('Block Card', () => {
 			.should('have.text', '')
 			.should('have.attr', 'placeholder', 'Stack');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);
@@ -276,7 +276,7 @@ describe('Block Card', () => {
 			.should('have.text', '')
 			.should('have.attr', 'placeholder', 'Grid');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'metadata')?.name
 			);

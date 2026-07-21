@@ -70,8 +70,6 @@ export const LineHeight = ({
 				onChange={(newValue, ref) =>
 					onChange('blockeraLineHeight', newValue, { ref })
 				}
-				controlAddonTypes={['variable']}
-				variableTypes={['line-height']}
 				size={size}
 				{...props}
 			/>

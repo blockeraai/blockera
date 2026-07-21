@@ -1,5 +1,5 @@
 import {
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	createPost,
 	setBlockState,
@@ -320,7 +320,7 @@ describe('Range Control label testing (Opacity)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
 								.breakpoints.tablet.attributes
@@ -352,7 +352,7 @@ describe('Range Control label testing (Opacity)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.tablet.attributes
@@ -386,7 +386,7 @@ describe('Range Control label testing (Opacity)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect('').to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraOpacity')
 						);
@@ -422,7 +422,7 @@ describe('Range Control label testing (Opacity)', () => {
 					cy.checkStateGraph('Effects', 'Opacity', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.desktop.attributes
@@ -505,7 +505,7 @@ describe('Range Control label testing (Opacity)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('15%').to.be.eq(
 					getSelectedBlock(data, 'blockeraOpacity')
 				);
@@ -602,7 +602,7 @@ describe('Range Control label testing (Opacity)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.eq(getSelectedBlock(data, 'blockeraOpacity'));
 
 				expect({}).to.be.deep.eq(
@@ -710,7 +710,7 @@ describe('Range Control label testing (Opacity)', () => {
 					cy.checkStateGraph('Effects', 'Opacity', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect('').to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraOpacity')
 						);
@@ -805,7 +805,7 @@ describe('Range Control label testing (Opacity)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('45%').to.be.eq(
 					getSelectedBlock(data, 'blockeraOpacity')
 				);
@@ -902,7 +902,7 @@ describe('Range Control label testing (Opacity)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraOpacity')
 				);

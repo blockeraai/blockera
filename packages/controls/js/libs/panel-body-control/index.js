@@ -22,8 +22,7 @@ import {
  * Internal Dependencies
  */
 import { useUpdateEffect } from './utils';
-import ChangeIndicator from '../change-indicator';
-import ConditionalWrapper from '../conditional-wrapper';
+import { ChangeIndicator, ConditionalWrapper } from '../../index';
 import { PoweredBy } from '../powered-by';
 import type { PanelBodyControlProps } from './types';
 

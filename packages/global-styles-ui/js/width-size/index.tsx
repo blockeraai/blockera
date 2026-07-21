@@ -13,10 +13,7 @@ import {
 	useVarPickerPresetContext,
 	VarPickerPresetContext,
 } from '@blockera/controls';
-import {
-	normalizeSizeThemeJsonPreset,
-	BLOCKERA_GLOBAL_SETTING_PATH,
-} from '@blockera/data';
+import { normalizeSizeThemeJsonPreset } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -178,7 +175,7 @@ const WidthSizeCustomGroup = memo(WidthSizeCustomGroupComponent);
  */
 export function WidthSizePresetContent() {
 	const [rawCustomWidthSizes = [], setCustomWidthSizes] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.WIDTH_SIZES_CUSTOM
+		'layout.widthSizes.custom'
 	);
 
 	const customSizesForUi = useMemo(

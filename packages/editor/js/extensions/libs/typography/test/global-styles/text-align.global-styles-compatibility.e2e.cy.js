@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -44,7 +44,7 @@ describe('Text Align → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Text Align').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('center').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraTextAlign?.value
 					);
@@ -54,7 +54,7 @@ describe('Text Align → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Right').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('right').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.textAlign
 					);
@@ -64,7 +64,7 @@ describe('Text Align → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Right').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.textAlign);
 					expect(undefined).to.equal(root?.blockeraTextAlign?.value);

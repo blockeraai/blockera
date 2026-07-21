@@ -50,27 +50,6 @@ export function getWPDataObject() {
 }
 
 /**
- * Assert against the WordPress data store with automatic retries.
- *
- * Unlike `getWPDataObject().then()` (which reads the store exactly once and
- * throws synchronously when a not-yet-settled attribute path is undefined),
- * this uses Cypress' retry-able `.should(callback)`: the callback is re-run with
- * a freshly-read `wp.data` object until every assertion passes or the timeout is
- * reached. Use it for store-data assertions that run right after UI interactions
- * (state/breakpoint navigation), where the redux update may lag on slow CI and
- * make nested reads like `blockeraBlockStates.normal.breakpoints` flaky.
- *
- * @param {(data: Object) => void} callback Runs synchronous `expect(...)` assertions against `wp.data`.
- * @param {{ timeout?: number }} [options] Optional retry timeout in ms. Defaults to 15s to absorb slow-CI redux lag.
- * @return {Cypress.Chainable} The chainable window assertion.
- */
-export function assertBlockData(callback, { timeout = 15000 } = {}) {
-	return cy.window({ timeout }).should((win) => {
-		callback(win.wp.data);
-	});
-}
-
-/**
  * Get block type registered object.
  *
  * @param {Object} data the WordPress data.
@@ -215,92 +194,34 @@ export function getBlockeraEntity(data, field) {
  * Persist all dirty entity records (e.g. global styles) from the site or post editor.
  * Mirrors the multi-entity save flow used when clicking Save in the editor UI.
  *
- * Runs Blockera's global-styles WordPress compatibility sync first (same work as
- * the Save button / preSavePost hook). That sync also merges `blockera/editor`
- * userStyles into the core entity so saves do not race the delayed `setStyle`
- * path. Without it, `#global-styles-inline-css` on the front never receives the
- * WP-native typography/layout mirrors.
- *
- * Also waits for `BLOCKERA_DELAY_EXPECTED_TIME` (1s) so a late `setStyle` cannot
- * re-dirty `root/globalStyles` immediately after the first save.
- *
- * @param {{ runCompatibility?: boolean }} [options]
- * @param {boolean} [options.runCompatibility=true] When false, skip compatibility
- *                                                  (needed for empty-entity resets —
- *                                                  compatibility re-hydrates theme
- *                                                  `styles.blocks` from base config).
  * @return {Cypress.Chainable} Resolves when WordPress `saveEditedEntityRecord` calls complete.
  */
-export function saveSiteEditorDirtyEntities({ runCompatibility = true } = {}) {
-	const saveDirtyEntitiesOnce = () =>
-		cy.window().then((win) => {
-			if (runCompatibility) {
-				expect(
-					win.blockeraRunGlobalStylesSaveCompatibility,
-					'blockeraRunGlobalStylesSaveCompatibility'
-				).to.be.a('function');
+export function saveSiteEditorDirtyEntities() {
+	return cy.window().then((win) => {
+		const select = win.wp.data.select('core');
+		const dispatch = win.wp.data.dispatch('core');
+		const getDirty = select.__experimentalGetDirtyEntityRecords;
 
-				win.blockeraRunGlobalStylesSaveCompatibility();
-			}
-
-			const select = win.wp.data.select('core');
-			const dispatch = win.wp.data.dispatch('core');
-			const getDirty = select.__experimentalGetDirtyEntityRecords;
-
-			if (typeof getDirty !== 'function') {
-				throw new Error(
-					'wp.data.select("core").__experimentalGetDirtyEntityRecords is not available'
-				);
-			}
-
-			// Re-read after compatibility may have dirtied `root/globalStyles`.
-			const dirtyRecords = getDirty() || [];
-			const entitiesToSave = dirtyRecords.filter(
-				(record) => !(record.kind === 'root' && record.name === 'site')
+		if (typeof getDirty !== 'function') {
+			throw new Error(
+				'wp.data.select("core").__experimentalGetDirtyEntityRecords is not available'
 			);
+		}
 
-			if (!entitiesToSave.length) {
-				return null;
-			}
+		const dirtyRecords = getDirty() || [];
+		const entitiesToSave = dirtyRecords.filter(
+			(record) => !(record.kind === 'root' && record.name === 'site')
+		);
 
-			return Promise.all(
-				entitiesToSave.map((record) =>
-					dispatch.saveEditedEntityRecord(
-						record.kind,
-						record.name,
-						record.key
-					)
+		return Promise.all(
+			entitiesToSave.map((record) =>
+				dispatch.saveEditedEntityRecord(
+					record.kind,
+					record.name,
+					record.key
 				)
-			);
-		});
-
-	// Global Styles panel writes the core entity via setStyle after a 1s debounce
-	// (block-base BLOCKERA_DELAY_EXPECTED_TIME). Saving before that settles lets a
-	// late setStyle re-dirty root/globalStyles and flake the clean assertion.
-	if (runCompatibility) {
-		// eslint-disable-next-line cypress/no-unnecessary-waiting
-		cy.wait(1100);
-	}
-
-	saveDirtyEntitiesOnce();
-	// Second pass catches a setStyle that landed during / right after the first save.
-	if (runCompatibility) {
-		saveDirtyEntitiesOnce();
-	}
-
-	return cy.window({ timeout: 20000 }).should((win) => {
-		const dirtyRecords =
-			win.wp.data
-				.select('core')
-				.__experimentalGetDirtyEntityRecords?.() || [];
-
-		expect(
-			dirtyRecords.filter(
-				(record) =>
-					record.kind === 'root' && record.name === 'globalStyles'
-			),
-			'dirty global styles records after save'
-		).to.have.length(0);
+			)
+		);
 	});
 }
 
@@ -813,23 +734,6 @@ export function closeWelcomeGuide() {
 			$b.find('.components-modal__header-heading-container:visible')
 		).to.have.length(0);
 	});
-}
-
-/**
- * Dismiss any open Blockera/Gutenberg modal (icon picker, welcome guide, etc.).
- * Use in beforeEach/afterEach when tests may leave a screen overlay behind.
- */
-export function dismissOpenModals() {
-	cy.get('body').then(($body) => {
-		if ($body.find('.blockera-control-icon-picker-modal').length) {
-			return cy
-				.get('.blockera-control-icon-picker-modal')
-				.find('button[aria-label="Close"]')
-				.click({ force: true });
-		}
-	});
-
-	closeWelcomeGuide();
 }
 
 /**

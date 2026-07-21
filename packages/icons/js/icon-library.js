@@ -63,14 +63,6 @@ import LucideIconsSearchData from './library-lucide/search-data.json';
 import { UntitleduiIcons } from './library-untitledui';
 import { default as UntitleduiLibraryIcon } from './library-untitledui/library-icon';
 import UntitleduiIconsSearchData from './library-untitledui/search-data.json';
-// Tabler Library
-import { TablerIcons } from './library-tabler';
-import { default as TablerLibraryIcon } from './library-tabler/library-icon';
-import TablerIconsSearchData from './library-tabler/search-data.json';
-// Tabler Filled Library
-import { TablerFilledIcons } from './library-tabler-filled';
-import { default as TablerFilledLibraryIcon } from './library-tabler-filled/library-icon';
-import TablerFilledIconsSearchData from './library-tabler-filled/search-data.json';
 import { default as BrandsIcon } from './library-brands/library-icon';
 import searchLibraries from './search-libraries.json';
 import searchLibraries2 from './search-libraries-2.json';
@@ -147,24 +139,6 @@ export const IconLibraries: {
 		count: Object.keys(UntitleduiIcons).length,
 		author: 'Untitled UI',
 		link: 'https://github.com/untitleduico/icons',
-	},
-	tabler: {
-		id: 'tabler',
-		// translators: Icon library name
-		name: __('Tabler Icons', 'blockera'),
-		icon: <TablerLibraryIcon />,
-		count: Object.keys(TablerIcons).length,
-		author: 'Tabler',
-		link: 'https://github.com/tabler/tabler-icons',
-	},
-	'tabler-filled': {
-		id: 'tabler-filled',
-		// translators: Icon library name
-		name: __('Tabler Icons Filled', 'blockera'),
-		icon: <TablerFilledLibraryIcon />,
-		count: Object.keys(TablerFilledIcons).length,
-		author: 'Tabler',
-		link: 'https://github.com/tabler/tabler-icons',
 	},
 	brands: {
 		id: 'brands',
@@ -267,12 +241,6 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 
 		case 'untitledui':
 			return UntitleduiIcons;
-
-		case 'tabler':
-			return TablerIcons;
-
-		case 'tabler-filled':
-			return TablerFilledIcons;
 	}
 
 	return {};
@@ -302,10 +270,6 @@ function _getLibraryIcons(library: IconLibraryTypes): Array<any> {
 			return LucideIconsSearchData;
 		case 'untitledui':
 			return UntitleduiIconsSearchData;
-		case 'tabler':
-			return TablerIconsSearchData;
-		case 'tabler-filled':
-			return TablerFilledIconsSearchData;
 	}
 
 	return [];

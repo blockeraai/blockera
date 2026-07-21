@@ -37,12 +37,6 @@ import LucideSearchData from '../library-lucide/search-data.json';
 import { UntitleduiIcons } from '../library-untitledui/icons';
 import UntitleduiSearchData from '../library-untitledui/search-data.json';
 
-import { TablerIcons } from '../library-tabler/icons';
-import TablerSearchData from '../library-tabler/search-data.json';
-
-import { TablerFilledIcons } from '../library-tabler-filled/icons';
-import TablerFilledSearchData from '../library-tabler-filled/search-data.json';
-
 // Import the libraries configuration
 import searchLibraries1 from '../search-libraries.json';
 import searchLibraries2 from '../search-libraries-2.json';
@@ -107,16 +101,6 @@ const libraryConfigs = {
 		icons: UntitleduiIcons,
 		searchData: UntitleduiSearchData,
 		name: 'Untitled UI Icons',
-	},
-	tabler: {
-		icons: TablerIcons,
-		searchData: TablerSearchData,
-		name: 'Tabler Icons',
-	},
-	'tabler-filled': {
-		icons: TablerFilledIcons,
-		searchData: TablerFilledSearchData,
-		name: 'Tabler Icons Filled',
 	},
 };
 

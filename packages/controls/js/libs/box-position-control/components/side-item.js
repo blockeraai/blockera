@@ -16,13 +16,17 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { fixLabelText } from '../utils';
+import {
+	isValid,
+	LabelControl,
+	useValueAddon,
+	extractNumberAndUnit,
+} from '../../../index';
 import { SideShape } from './side-shape';
 import { SidePopover } from './side-popover';
-import { LabelControl } from '../../label-control';
+import type { ValueAddon } from '../../../value-addons';
 import type { Side, SideProps, SideReturn } from '../types';
-import { extractNumberAndUnit } from '../../input-control/utils';
-import { isValid, useValueAddon, type ValueAddon } from '../../../value-addons';
+import { fixLabelText } from '../utils';
 
 export function SideItem({
 	side,

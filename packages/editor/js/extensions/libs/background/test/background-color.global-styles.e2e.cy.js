@@ -1,78 +1,33 @@
 import {
+	savePage,
 	openSiteEditor,
-	assertBlockData,
+	getWPDataObject,
 	closeWelcomeGuide,
 	redirectToFrontPage,
 	getSelectedBlockStyle,
-	saveSiteEditorDirtyEntities,
-	resetGlobalStylesEntityRecord,
 } from '@blockera/dev-cypress/js/helpers';
-
-/**
- * Clears `blockera/editor` userStyles so save-compatibility cannot merge stale
- * local blocks back into a just-reset `root/globalStyles` entity.
- */
-const clearBlockeraGlobalStylesStore = () => {
-	cy.window().then((win) => {
-		const dispatch = win.wp?.data?.dispatch?.('blockera/editor');
-
-		if (typeof dispatch?.setGlobalStyles === 'function') {
-			dispatch.setGlobalStyles({});
-		}
-	});
-};
 
 describe('Background Color Inside Style Variations → Functionality', () => {
 	beforeEach(() => {
 		openSiteEditor();
 
-		// Specs persist global styles to the DB. Without a reset, a prior run leaves
-		// a value-addon chip on BG Color (no `color-btn`) and the suite flakes.
-		clearBlockeraGlobalStylesStore();
-		resetGlobalStylesEntityRecord();
-
 		cy.openGlobalStylesPanel();
 
 		closeWelcomeGuide();
 
-		cy.getByDataTest('block-style-variations', { timeout: 20000 })
-			.eq(0)
-			.should('be.visible')
-			.click();
+		cy.getByDataTest('block-style-variations').eq(0).click();
 
-		cy.get(`button[id="/blocks/core%2Fparagraph"]`, { timeout: 20000 })
-			.should('be.visible')
-			.click();
-
-		// Wait for style cards after the paragraph block screen loads (CI flake).
-		cy.getByDataTest('style-default', { timeout: 20000 })
-			.should('be.visible')
-			.click();
-
-		// Wait until the BG Color control is interactive (plain color button, not a
-		// leftover value-addon chip from a previous persisted run).
-		cy.getParentContainer('BG Color')
-			.last()
-			.find('[data-cy="color-btn"]', { timeout: 20000 })
-			.should('exist');
-	});
-
-	afterEach(() => {
-		// Persist empty styles so the next Cypress run hydrates a clean entity.
-		// Clear the Blockera store first — saveSiteEditorDirtyEntities merges
-		// blockera/editor userStyles into the entity before save.
-		openSiteEditor();
-		clearBlockeraGlobalStylesStore();
-		resetGlobalStylesEntityRecord();
-		saveSiteEditorDirtyEntities();
+		cy.get(`button[id="/blocks/core%2Fparagraph"]`).click();
 	});
 
 	it('should be set background color for Default style variation', () => {
+		cy.getByDataTest('style-default').click();
+
 		// Uses last Popover + data-cy hex field (avoids multi-match .components-popover input)
 		cy.setColorControlValue('BG Color', '666666');
 
 		//assert data
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraBackgroundColor?.value
@@ -87,7 +42,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		);
 
 		//assert frontend
-		saveSiteEditorDirtyEntities();
+		savePage();
 		redirectToFrontPage();
 		cy.get('.entry-content p:first-child').should(
 			'have.css',
@@ -97,6 +52,8 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 	});
 
 	it('should be set background color with variable for Default style variation', () => {
+		cy.getByDataTest('style-default').click();
+
 		// add alias to the feature container
 		cy.getParentContainer('BG Color').as('bgColorContainer');
 
@@ -109,7 +66,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		cy.selectValueAddonItem('accent-4');
 
 		//assert data
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				settings: {
 					name: 'Accent 4',
@@ -142,7 +99,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		});
 
 		//assert frontend
-		saveSiteEditorDirtyEntities();
+		savePage();
 		redirectToFrontPage();
 
 		cy.get('.entry-content p:first-child').should(

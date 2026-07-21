@@ -19,15 +19,18 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import Grid from '../grid';
-import { Button } from '../button';
-import BaseControl from '../base-control';
-import { isValid } from '../../value-addons';
-import BorderControl from '../border-control';
+import { isValid } from '../../';
 import { useControlContext } from '../../context';
 import type { AddonTypes } from '../../value-addons/types';
+import {
+	Grid,
+	Button,
+	BaseControl,
+	BorderControl,
+	LabelControl,
+	LabelControlContainer,
+} from '../index';
 import type { BoxBorderControlProps, TValueTypes } from './types';
-import { LabelControl, LabelControlContainer } from '../label-control';
 
 export default function BoxBorderControl({
 	id,

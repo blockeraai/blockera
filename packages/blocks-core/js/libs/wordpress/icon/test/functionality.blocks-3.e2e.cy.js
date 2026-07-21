@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	createPost,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	savePage,
 	redirectToFrontPage,
@@ -51,13 +51,10 @@ describe('core/icon Block', () => {
 
 		cy.get('.blockera-control-icon-picker-modal').should('be.visible');
 
-		cy.get('.blockera-control-icon-picker-modal').within(() => {
-			cy.get('.blockera-control-icon-control-icon')
-				.not('.blockera-is-pro-icon')
-				.first()
-				.click();
-			cy.contains('button', /^Use icon$/i).click();
-		});
+		cy.get('.blockera-control-icon-control-icon')
+			.not('.blockera-is-pro-icon')
+			.first()
+			.click();
 
 		cy.get('.blockera-control-icon-picker-modal').should('not.exist');
 
@@ -80,7 +77,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Rotate').should('be.visible').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(getSelectedBlock(data, 'blockeraIconRotate')).to.equal(90);
 		});
 
@@ -88,7 +85,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Flip Horizontal').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraIconFlipHorizontal')
 			).to.equal(true);
@@ -98,7 +95,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Flip Vertical').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(getSelectedBlock(data, 'blockeraIconFlipVertical')).to.equal(
 				true
 			);
@@ -109,7 +106,7 @@ describe('core/icon Block', () => {
 			cy.getByAriaLabel('Flip Vertical').click();
 		});
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect(
 				getSelectedBlock(data, 'blockeraIconFlipHorizontal')
 			).to.equal('');

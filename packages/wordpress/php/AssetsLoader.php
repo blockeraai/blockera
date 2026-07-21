@@ -123,68 +123,57 @@ class AssetsLoader {
 			return;
 		}
 
-		$assets    = $this->prepareAssets();
-		$ver_cache = [];
-		// Reused args array — WP only reads `in_footer`; avoid per-asset allocation.
-		static $footer_args = [ 'in_footer' => true ];
+		$assets = $this->prepareAssets();
 
-		foreach ( $assets as $asset ) {
-			$name = $asset['name'];
+		array_map(
+			function ( array $asset ) use ($assets) : void {
 
-			// Memo package versions for this enqueue pass (getPackageVersion is filesystem I/O).
-			$pkg_key = str_replace( [ '@blockera/', '-styles' ], '', $name );
-			if ( ! isset( $ver_cache[ $pkg_key ] ) ) {
-				$ver_cache[ $pkg_key ] = str_replace( '.', '-', $this->getPackageVersion( $pkg_key ) );
-			}
-			$package_version = $ver_cache[ $pkg_key ];
-			$handle          = $name . '-' . $package_version;
+				$package_version = $this->getPackageVersion(str_replace(['@blockera/', '-styles'], '', $asset['name']));
+				$package_version = str_replace('.', '-', $package_version);
 
-			if ( $asset['style'] ) {
+				if ( $asset['style'] ) {
 
-				wp_enqueue_style(
-					$handle,
-					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
-					[],
-					$asset['version']
-				);
-			}
-
-			if ( ! $asset['script'] ) {
-
-				continue;
-			}
-
-			$deps = $this->excludeDependencies( $asset['deps'] );
-
-			// Single pass: enqueue package deps, then version-suffix handles for the dependency list.
-			$pkg_deps = $this->packages_deps[ $name ] ?? null;
-			if ( $pkg_deps ) {
-
-				foreach ( $pkg_deps as $index => $dep ) {
-
-					wp_enqueue_script( $dep );
-
-					$dep_key = str_replace( '@blockera/', '', $dep );
-					if ( ! isset( $ver_cache[ $dep_key ] ) ) {
-						$ver_cache[ $dep_key ] = str_replace( '.', '-', $this->getPackageVersion( $dep_key ) );
-					}
-
-					$this->packages_deps[ $name ][ $index ] .= '-' . $ver_cache[ $dep_key ];
+					wp_enqueue_style(
+						$asset['name'] . '-' . $package_version,
+						str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
+						[],
+						$asset['version']
+					);
 				}
 
-				$deps = array_merge( $deps, $this->packages_deps[ $name ] );
-			}
+				if ( ! $asset['script'] ) {
 
-			wp_enqueue_script(
-				$handle,
-				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
-				$deps,
-				$asset['version'],
-				$footer_args
-			);
-		}
+					return;
+				}
 
-		$hook = 'blockera/wordpress/' . $this->id . '/';
+				$deps = $this->excludeDependencies( $asset['deps'] );
+
+				array_map( 'wp_enqueue_script', $this->packages_deps[ $asset['name'] ] ?? [] );
+
+				foreach($this->packages_deps[ $asset['name'] ] ?? [] as $index => $dep){
+					
+					$version = $this->getPackageVersion(str_replace('@blockera/', '', $dep));
+					$version = str_replace('.', '-', $version);
+
+					$this->packages_deps[$asset['name']][$index] .= '-' . $version;
+				}
+
+				wp_enqueue_script(
+					$asset['name'] . '-' . $package_version,
+					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
+					array_merge(
+						$deps,
+						$this->packages_deps[ $asset['name'] ] ?? []
+					),
+					$asset['version'],
+					[
+						'in_footer' => true,
+					]
+				);
+
+			},
+			$assets
+		);
 
 		/**
 		 * This filter for extendable before inline script from internal or third-party developers.
@@ -192,7 +181,7 @@ class AssetsLoader {
 		 * @hook  'blockera/wordpress/{$this->id}/inline-script/before'
 		 * @since 1.0.0
 		 */
-		$before_inline_script = apply_filters( $hook . 'inline-script/before', '' );
+		$before_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/inline-script/before', '' );
 
 		/**
 		 * This filter for extendable after inline script from internal or third-party developers.
@@ -200,7 +189,7 @@ class AssetsLoader {
 		 * @hook  'blockera/wordpress/{$this->id}/inline-script/after'
 		 * @since 1.0.0
 		 */
-		$after_inline_script = apply_filters( $hook . 'inline-script/after', '' );
+		$after_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/inline-script/after', '' );
 
 		/**
 		 * This filter for change handle name for inline script from internal or third-party developers.
@@ -208,9 +197,9 @@ class AssetsLoader {
 		 * @hook  'blockera/wordpress/{$this->id}/handle/inline-script
 		 * @since 1.0.0
 		 */
-		$handle_inline_script = apply_filters( $hook . 'handle/inline-script', '' );
+		$handle_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/handle/inline-script', '' );
 
-		if ( ! empty( $before_inline_script ) && ! empty( $handle_inline_script ) ) {
+		if ( !empty( $before_inline_script ) && !empty( $handle_inline_script ) ) {
 
 			// blockera server side before scripts.
 			wp_add_inline_script(
@@ -220,7 +209,7 @@ class AssetsLoader {
 			);
 		}
 
-		if ( ! empty( $after_inline_script ) && ! empty( $handle_inline_script ) ) {
+		if ( !empty( $after_inline_script ) && !empty( $handle_inline_script ) ) {
 
 			// blockera server side before scripts.
 			wp_add_inline_script(

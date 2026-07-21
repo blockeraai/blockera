@@ -7,8 +7,7 @@
  * @package blockera/packages/blocks/js/wordpress/icon
  */
 
-$icon_wrapper_selector = '&.wp-block-icon';
-$icon_svg_selector     = '&.wp-block-icon svg';
+$icon_svg_selector = '&.wp-block-icon svg';
 
 return array_merge(
 	$args,
@@ -30,12 +29,8 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'spacing' => [
-					'margin' => $icon_wrapper_selector,
-					'padding' => $icon_wrapper_selector,
-				],
 				'color' => [
-					'root'       => $icon_svg_selector,
+					'root' => $icon_svg_selector,
 				],
 				'border' => [
 					'root' => $icon_svg_selector,
@@ -47,7 +42,7 @@ return array_merge(
 					'root' => $icon_svg_selector,
 				],
 				'blockera/elements/icon' => [
-					'root' => '&& svg',
+					'root' => $icon_svg_selector,
 				],
 				'htmlEditable' => [
 					'root' => $icon_svg_selector,

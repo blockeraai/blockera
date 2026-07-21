@@ -35,16 +35,30 @@ class GridLayout extends BaseStyleDefinition {
 		$declarations = [];
 
 		if ( '' !== $minimum_column_width && $column_count > 0 ) {
-			$block_gap_to_use = $this->ensure_gap_unit( $horizontal_gap );
-			// Keep core-compatible spacing inside max()/minmax() tokens.
-			$max_value                             = 'max(min( ' . $minimum_column_width . ', 100%), ( 100% - (' . $block_gap_to_use . '*' . ( $column_count - 1 ) . ') ) / ' . $column_count . ' )';
-			$declarations['grid-template-columns'] = 'repeat(auto-fill, minmax(' . $max_value . ', 1fr))';
+			$block_gap_to_use                      = $this->ensure_gap_unit( $horizontal_gap );
+			$max_value                             = sprintf(
+				'max(min( %1$s, 100%%), ( 100%% - (%2$s*%3$d) ) / %4$d )',
+				$minimum_column_width,
+				$block_gap_to_use,
+				$column_count - 1,
+				$column_count
+			);
+			$declarations['grid-template-columns'] = sprintf(
+				'repeat(auto-fill, minmax(%s, 1fr))',
+				$max_value
+			);
 			$declarations['container-type']        = 'inline-size';
 		} elseif ( $column_count > 0 ) {
-			$declarations['grid-template-columns'] = 'repeat(' . $column_count . ', minmax(0, 1fr))';
+			$declarations['grid-template-columns'] = sprintf(
+				'repeat(%d, minmax(0, 1fr))',
+				$column_count
+			);
 		} else {
 			$min_or_default                        = '' !== $minimum_column_width ? $minimum_column_width : '12rem';
-			$declarations['grid-template-columns'] = 'repeat(auto-fill, minmax(min(' . $min_or_default . ', 100%), 1fr))';
+			$declarations['grid-template-columns'] = sprintf(
+				'repeat(auto-fill, minmax(min(%s, 100%%), 1fr))',
+				$min_or_default
+			);
 			$declarations['container-type']        = 'inline-size';
 		}
 

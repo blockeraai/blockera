@@ -20,17 +20,19 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isValid as isValidVariable } from '../../../value-addons';
-import Flex from '../../flex';
-import { Button } from '../../button';
-import BaseControl from '../../base-control';
-import InputControl from '../../input-control';
-import NoticeControl from '../../notice-control';
-import MediaImageControl from '../../media-image-control';
-import PositionButtonControl from '../../position-button';
-import GradientBarControl from '../../gradient-bar-control';
-import AnglePickerControl from '../../angle-picker-control';
-import ToggleSelectControl from '../../toggle-select-control';
+import { isValid as isValidVariable } from '../../../';
+import {
+	Flex,
+	Button,
+	BaseControl,
+	InputControl,
+	MediaImageControl,
+	GradientBarControl,
+	AnglePickerControl,
+	ToggleSelectControl,
+	NoticeControl,
+	PositionButtonControl,
+} from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
 import { backgroundComponentConfig } from '../bootstrap';

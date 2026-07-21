@@ -578,7 +578,6 @@ export const MappedExtensions = ({
 								blockeraFlexLayout: {},
 								blockeraGap: {},
 								blockeraFlexWrap: {},
-								blockeraAlignContent: {},
 								blockeraSpacing: {},
 								blockeraGridMinimumColumnWidth: {},
 								blockeraGridColumnCount: {},

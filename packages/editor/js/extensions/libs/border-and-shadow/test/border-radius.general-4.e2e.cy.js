@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -38,7 +38,7 @@ describe('Border Radius → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({ type: 'all', all: '25px' }).to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraBorderRadius')
 			);
@@ -86,7 +86,7 @@ describe('Border Radius → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				type: 'custom',
 				all: '25px',
@@ -146,7 +146,7 @@ describe('Border Radius → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
 				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
@@ -175,7 +175,7 @@ describe('Border Radius → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
 				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
@@ -203,7 +203,7 @@ describe('Border Radius → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
 				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
@@ -231,7 +231,7 @@ describe('Border Radius → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
 				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);

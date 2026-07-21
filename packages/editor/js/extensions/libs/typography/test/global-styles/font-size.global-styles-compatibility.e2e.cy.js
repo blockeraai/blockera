@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -71,7 +71,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Font Size').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('24px').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraFontSize?.value
 					);
@@ -82,7 +82,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().type('18', { force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('18px').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.fontSize
 					);
@@ -92,7 +92,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().clear({ force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.fontSize);
 					expect(undefined).to.equal(root?.blockeraFontSize?.value);
@@ -104,16 +104,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 			it('Variable Value', () => {
 				cy.getParentContainer('Font Size').as('container');
 
-				// Wait until theme presets from the fixture resolve into the control.
-				// Use exist (not visible): site-editor sidebar uses position:fixed and
-				// can clip Line Height below the fold even after scrollIntoView.
-				cy.get('@container').within(() => {
-					cy.getByDataCy('value-addon-btn', { timeout: 20000 })
-						.should('exist')
-						.and('contain', 'Large');
-				});
-
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 
 					expect({
@@ -147,7 +138,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 
 				cy.selectValueAddonItem('medium');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('var:preset|font-size|medium').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.fontSize
 					);
@@ -157,7 +148,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 					cy.removeValueAddon();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.fontSize);
 					expect(undefined).to.equal(root?.blockeraFontSize?.value);
@@ -169,7 +160,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 			it('Not found variable', () => {
 				cy.getParentContainer('Font Size').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 
 					expect({
@@ -196,7 +187,7 @@ describe('Font Size → WP Compatibility (Global Styles)', () => {
 					cy.removeValueAddon();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.fontSize);
 					expect(undefined).to.equal(root?.blockeraFontSize?.value);

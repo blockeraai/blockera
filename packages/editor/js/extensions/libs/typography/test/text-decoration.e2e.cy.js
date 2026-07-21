@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -26,7 +26,7 @@ describe('Text Decoration → Functionality', () => {
 			.should('include', 'overline');
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('overline').to.be.equal(
 				getSelectedBlock(data, 'blockeraTextDecoration')
 			);

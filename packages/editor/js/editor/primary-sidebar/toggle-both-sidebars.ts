@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { dispatch, select } from '@wordpress/data';
+import { store as interfaceStore } from '@wordpress/interface';
 
 /**
  * Internal dependencies
@@ -14,7 +15,7 @@ import { store as blockeraEditorStore } from '../store-persistence';
  */
 function applyPrimarySidebarToEditorShell(open: boolean): void {
 	const { enableComplementaryArea, disableComplementaryArea } = dispatch(
-		'core/interface'
+		interfaceStore
 	) as {
 		enableComplementaryArea: (scope: string, id: string) => void;
 		disableComplementaryArea: (scope: string) => void;

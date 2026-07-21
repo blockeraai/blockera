@@ -31,7 +31,6 @@ import {
 	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
-import { BLOCKERA_GLOBAL_SETTING_PATH } from '@blockera/data';
 import { type VariableType } from '../components/types';
 import { FilterPresetOpener } from './filter-preset-opener';
 import {
@@ -131,30 +130,30 @@ const FilterPresetGroup = memo(FilterPresetGroupComponent);
  */
 export function FiltersPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.FILTER_PRESETS_THEME
+		'filter.presets.theme'
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.FILTER_PRESETS_THEME,
+		'filter.presets.theme',
 		'',
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.FILTER_PRESETS_DEFAULT
+		'filter.presets.default'
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.FILTER_PRESETS_DEFAULT,
+		'filter.presets.default',
 		'',
 		'base'
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.FILTER_PRESETS_CUSTOM
+		'filter.presets.custom'
 	);
 
 	const [defaultFilterPresetsEnabled = true] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.FILTER_DEFAULT_PRESETS
+		'filter.defaultPresets'
 	);
 
 	const themePresets = useMemo(

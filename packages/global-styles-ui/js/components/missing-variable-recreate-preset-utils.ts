@@ -261,7 +261,6 @@ export function buildMissingVariableRecreatePreset(
 
 	if (
 		variableType !== 'font-size' &&
-		variableType !== 'line-height' &&
 		variableType !== 'spacing' &&
 		variableType !== 'width-size' &&
 		variableType !== 'border-radius' &&
@@ -293,7 +292,6 @@ export function buildMissingVariableRecreatePreset(
 		}
 
 		case 'spacing':
-		case 'line-height':
 		case 'width-size':
 		case 'border-radius': {
 			const { base, value } = presetContext(settings, slug);

@@ -3,7 +3,6 @@
  * Deeper ramp/accordion/strip scenarios live in `js/colors/test/color-shade-variations.e2e.cy.js`.
  */
 import {
-	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	getSelectedBlock,
@@ -68,7 +67,7 @@ describe('Global Styles UI → Variable variations (basic, colors)', () => {
 
 			cy.selectValueAddonItem('e-2-e-var-base');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.isValueAddon).to.equal(true);
 				expect(fontColor.valueType).to.equal('variable');

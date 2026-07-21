@@ -21,7 +21,7 @@ import { mergeSimpleRepeaterIntoFullPalette } from './merge-palette-after-simple
 import { mergeTaxonomyRepeaterPayloadBySlug } from './merge-taxonomy-repeater-payload';
 import { presetsBySlugMap } from './parse-preset-name-taxonomy';
 import { isPresetTaxonomyGroupedUiEnabled } from './use-preset-taxonomy-grouped-ui-enabled';
-import { usePresetTaxonomyEditSessionActiveCount } from './preset-taxonomy-edit-session-context';
+import { usePresetTaxonomyEditSession } from './preset-taxonomy-edit-session-context';
 import { type PresetVariationsContextValue } from '../../context/preset-variations-context';
 
 export type UsePresetTaxonomyGroupUiConfig<
@@ -92,7 +92,7 @@ export function usePresetTaxonomyGroupUi<
 	mergeAfterTaxonomyChange,
 }: UsePresetTaxonomyGroupUiConfig<TItem>): UsePresetTaxonomyGroupUiResult<TItem> {
 	const pickerCtx = useVarPickerPresetContext();
-	const activeSessionCount = usePresetTaxonomyEditSessionActiveCount();
+	const { activeSessionCount } = usePresetTaxonomyEditSession();
 
 	const baseItemsTyped = baseItems as TItem[] | undefined;
 

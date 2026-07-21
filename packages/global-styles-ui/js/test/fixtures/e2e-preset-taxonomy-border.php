@@ -10,10 +10,7 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings']['border'])) {
 		$data['settings']['border'] = [];
 	}
-	if (!isset($data['settings']['border']['blockeraBorder'])) {
-		$data['settings']['border']['blockeraBorder'] = [];
-	}
-	$data['settings']['border']['blockeraBorder']['presets'][] = [
+	$data['settings']['border']['presets'][] = [
 		'slug'   => 'e-2-e-taxonomy-border',
 		'name'   => 'E2E Group / Tiny',
 		'border' => [

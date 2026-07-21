@@ -4,7 +4,7 @@
 import {
 	createPost,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	setBoxSpacingSide,
 	openBoxSpacingSide,
@@ -28,7 +28,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '15px',
@@ -52,7 +52,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '15px',
@@ -108,7 +108,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			setBoxSpacingSide('padding-left', '120');
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '50px',
@@ -126,7 +126,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			});
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '50px',
@@ -160,7 +160,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			clearBoxSpacingSide('padding-left');
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '',
@@ -189,7 +189,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '15',
@@ -213,7 +213,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '15px',
@@ -247,7 +247,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			setBoxSpacingSide('padding-left', '120');
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '50px',
@@ -265,7 +265,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			});
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '50px',
@@ -299,7 +299,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			clearBoxSpacingSide('padding-left');
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '',
@@ -328,7 +328,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: 'var:preset|spacing|20',
@@ -352,7 +352,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					padding: {
 						top: {
@@ -503,7 +503,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			setBoxSpacingSide('padding-left', '70', true);
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: {
@@ -641,7 +641,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			});
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: 'var:preset|spacing|40',
@@ -675,7 +675,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			clearBoxSpacingSide('padding-left', true);
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '',
@@ -711,7 +711,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: 'var:preset|spacing|20',
@@ -735,7 +735,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					padding: {
 						top: '100px',
@@ -849,7 +849,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			setBoxSpacingSide('padding-left', '50');
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '50px',
@@ -927,7 +927,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			});
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					padding: {
 						top: 'var:preset|spacing|50',
@@ -961,7 +961,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			clearBoxSpacingSide('padding-left');
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '',
@@ -997,7 +997,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Assert WP value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: 'var:preset|spacing|unknown-1',
@@ -1021,7 +1021,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 
 			// Assert Blockera value
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					padding: {
 						top: {
@@ -1164,7 +1164,7 @@ describe('Box Spacing → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					margin: {
 						top: '',

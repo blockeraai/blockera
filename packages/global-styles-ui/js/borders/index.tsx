@@ -31,7 +31,6 @@ import {
 	buildVisiblePresetOriginSets,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
-import { BLOCKERA_GLOBAL_SETTING_PATH } from '@blockera/data';
 import { type VariableType } from '../components/types';
 import { BorderPresetOpener } from './border-preset-opener';
 import {
@@ -123,26 +122,26 @@ const BorderPresetGroup = memo(BorderPresetGroupComponent);
 
 export function BordersPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.BORDER_PRESETS_THEME
+		'border.presets.theme'
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.BORDER_PRESETS_THEME,
+		'border.presets.theme',
 		'',
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.BORDER_PRESETS_DEFAULT
+		'border.presets.default'
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.BORDER_PRESETS_DEFAULT,
+		'border.presets.default',
 		'',
 		'base'
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		BLOCKERA_GLOBAL_SETTING_PATH.BORDER_PRESETS_CUSTOM
+		'border.presets.custom'
 	);
 
 	const themePresets = useMemo(

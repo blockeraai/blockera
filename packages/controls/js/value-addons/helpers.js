@@ -19,7 +19,6 @@ import {
 	getUserDynamicValueItemsBy,
 	getColors,
 	getFontSizes,
-	getLineHeights,
 	getLinearGradients,
 	getMergedGlobalStylePresetVariables,
 	getRadialGradients,
@@ -37,8 +36,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { isValid } from './utils';
-import NoticeControl from '../libs/notice-control';
-import { ColorIndicator } from '../libs/color-indicator';
+import { ColorIndicator, NoticeControl } from '../';
 import type {
 	ValueAddon,
 	ValueAddonProps,
@@ -387,9 +385,6 @@ export function getVariableIcon({
 		case 'font-size':
 			return <Icon icon="variable-font-size" iconSize={iconSizeProp} />;
 
-		case 'line-height':
-			return <Icon icon="line-height" iconSize={iconSizeProp} />;
-
 		case 'radial-gradient':
 		case 'linear-gradient':
 			return (
@@ -458,13 +453,6 @@ export function getVariableCategory(
 				label: __('Font Size Variables', 'blockera'),
 				items: getFontSizes(),
 				type: 'font-size',
-			};
-
-		case 'line-height':
-			return {
-				label: __('Line Height Variables', 'blockera'),
-				items: getLineHeights(),
-				type: 'line-height',
 			};
 
 		case 'linear-gradient':

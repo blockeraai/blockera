@@ -54,11 +54,13 @@ class BorderRadius extends BaseStyleDefinition {
 		}
 
 		$border_radius_config = $this->getStyleEngineConfig( 'blockeraBorderRadius' );
-		$value                = $setting[ $css_property ];
-		$declaration          = [];
+
+		$value       = $setting[ $css_property ];
+		$declaration = [];
 
 		if ( ! empty( $value['isValueAddon'] ) && ! empty( $value['valueType'] ) ) {
-			$declaration[ $border_radius_config['all'] ] = blockera_get_value_addon_real_value( $value );
+			$config_all                 = $border_radius_config['all'];
+			$declaration[ $config_all ] = blockera_get_value_addon_real_value( $value );
 			$this->setCss( $declaration );
 
 			return $this->css;

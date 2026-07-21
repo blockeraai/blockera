@@ -50,7 +50,7 @@ import {
 import { usePresetVariationsStorageOptional } from '../context/preset-variations-context';
 import { isNameBasedTaxonomyPreset } from './preset-taxonomy/parse-preset-name-taxonomy';
 import { resolvePresetTaxonomyEditName } from './preset-taxonomy/taxonomy-meta';
-import { usePresetTaxonomyEditSessionActionsOptional } from './preset-taxonomy/preset-taxonomy-edit-session-context';
+import { usePresetTaxonomyEditSessionOptional } from './preset-taxonomy/preset-taxonomy-edit-session-context';
 
 export interface SharedPresetControlsProps<
 	T extends VariableType = VariableType,
@@ -81,7 +81,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		canEditGlobalStyles ||
 		(isVariablePicker && canEditCustomPresetFieldsInPicker);
 	const presetLocked = !canEditPresetFields;
-	const editSessionActions = usePresetTaxonomyEditSessionActionsOptional();
+	const editSession = usePresetTaxonomyEditSessionOptional();
 	const storage = usePresetVariationsStorageOptional();
 	const taxonomyNameSource = storage?.taxonomyNameSource;
 
@@ -102,10 +102,11 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	}, [variable, taxonomyNameSource]);
 
 	const persistedName = committedTaxonomyName ?? name;
+	const slugKey = String(slug);
 	const itemIdKey = String(itemId);
 	const isCreating = variable.creatingStep === true;
 	// Local drafts during creatingStep keep inputs stable; repeater rows still sync via changeRepeaterItem.
-	const deferFieldEdits = Boolean(editSessionActions) && !isCreating;
+	const deferFieldEdits = Boolean(editSession) && !isCreating;
 	const deferNameEdits = deferFieldEdits;
 	// Description stays in a local draft during create to avoid textarea/store sync fights in the picker.
 	const deferDescriptionEdits = deferFieldEdits || isCreating;
@@ -256,12 +257,6 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const creatingSlugPersistTimeoutRef = useRef<ReturnType<
 		typeof setTimeout
 	> | null>(null);
-	const repeaterItemsRef = useRef(repeaterItems);
-	repeaterItemsRef.current = repeaterItems;
-	const variableRef = useRef(variable);
-	variableRef.current = variable;
-	const persistedDescriptionRef = useRef(persistedDescription);
-	persistedDescriptionRef.current = persistedDescription;
 	const CREATING_NAME_PERSIST_MS = 200;
 
 	const clearCreatingNamePersistTimeout = useCallback(() => {
@@ -358,29 +353,16 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const persistCreatingNameToTheme = useCallback(
-		(
-			nextName: string,
-			{
-				syncCreatingSlug = true,
-				endCreating = false,
-			}: { syncCreatingSlug?: boolean; endCreating?: boolean } = {}
-		) => {
-			const value = buildPresetNameUpdateValue(nextName, {
-				syncCreatingSlug,
-			});
-
-			// Finalizing create must not revive creatingStep after the popover closed.
-			if (endCreating) {
-				value.creatingStep = false;
-			}
-
+		(nextName: string, { syncCreatingSlug = true } = {}) => {
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value,
+				value: buildPresetNameUpdateValue(nextName, {
+					syncCreatingSlug,
+				}),
 			});
 		},
 		[
@@ -452,26 +434,17 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	);
 
 	const persistCreatingSlugToTheme = useCallback(
-		(
-			nextSlug: string,
-			{ endCreating = false }: { endCreating?: boolean } = {}
-		) => {
-			const value = applyDeferredDescriptionToRow({
-				...(variable as Record<string, unknown>),
-				slug: nextSlug,
-			});
-
-			if (endCreating) {
-				value.creatingStep = false;
-			}
-
+		(nextSlug: string) => {
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
-				value,
+				value: applyDeferredDescriptionToRow({
+					...(variable as Record<string, unknown>),
+					slug: nextSlug,
+				}),
 			});
 		},
 		[
@@ -486,54 +459,35 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		]
 	);
 
-	const commitCreatingStepDrafts = useCallback(() => {
-		const variableRow = variableRef.current as Record<string, unknown>;
-		const nextName = String(draftNameRef.current ?? variableRow.name ?? '');
+	const finalizeCreatingStepPersist = useCallback(() => {
+		const nextName = String(draftNameRef.current ?? variable.name ?? '');
 		const nextDescription = draftDescriptionRef.current;
 		const manualSlug = hasManualSlugDuringCreatingRef.current
 			? normalizeVariablePresetSlug(variableSlugRef.current)
 			: '';
 		const derivedSlug = normalizeVariablePresetSlug(nextName);
 		const nextSlug =
-			manualSlug || derivedSlug || String(variableRow.slug ?? '');
-		const persistedSlug = String(variableRow.slug ?? '');
-		const persistedVariableName = String(variableRow.name ?? '');
-		const persistedDescriptionValue = persistedDescriptionRef.current;
-		const descriptionChanged =
-			nextDescription !== persistedDescriptionValue;
-		const slugChanged = nextSlug !== '' && persistedSlug !== nextSlug;
-		const nameChanged = nextName !== persistedVariableName;
-		const creatingStepActive = variableRow.creatingStep === true;
+			manualSlug ||
+			derivedSlug ||
+			String((variable as Record<string, unknown>).slug ?? '');
+		const descriptionChanged = nextDescription !== persistedDescription;
+		const slugChanged =
+			nextSlug &&
+			String((variable as Record<string, unknown>).slug ?? '') !==
+				nextSlug;
 
-		// Always clear creatingStep when finalizing — even if name/slug/desc are unchanged.
-		// Otherwise a prior flush can leave creatingStep:true and break close e2e
-		// (`repeater-item-creating-step` must disappear after popover close).
-		if (
-			!descriptionChanged &&
-			!slugChanged &&
-			!nameChanged &&
-			!creatingStepActive
-		) {
+		if (!descriptionChanged && !slugChanged) {
 			return;
 		}
 
 		const updatedItem = buildPresetWithDescriptionUpdate(
 			{
-				...variableRow,
+				...(variable as Record<string, unknown>),
 				name: nextName,
 				slug: nextSlug,
-				creatingStep: false,
 			} as T,
 			nextDescription
 		);
-
-		modifyControlValue({
-			controlId,
-			value: {
-				...repeaterItemsRef.current,
-				[itemId]: updatedItem,
-			},
-		});
 
 		changeRepeaterItem({
 			onChange,
@@ -547,72 +501,30 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		changeRepeaterItem,
 		controlId,
 		itemId,
-		modifyControlValue,
 		onChange,
+		persistedDescription,
 		repeaterId,
 		valueCleanup,
+		variable,
 	]);
 
-	const flushPendingCreatingStepPersist = useCallback(
-		({ endCreating = false }: { endCreating?: boolean } = {}) => {
-			const shouldSyncSlugFromName =
-				!hasManualSlugDuringCreatingRef.current;
-
-			if (creatingNamePersistTimeoutRef.current) {
-				clearTimeout(creatingNamePersistTimeoutRef.current);
-				creatingNamePersistTimeoutRef.current = null;
-				persistCreatingNameToTheme(draftNameRef.current, {
-					syncCreatingSlug: shouldSyncSlugFromName,
-					endCreating,
-				});
-			}
-
-			if (creatingSlugPersistTimeoutRef.current) {
-				clearTimeout(creatingSlugPersistTimeoutRef.current);
-				creatingSlugPersistTimeoutRef.current = null;
-				persistCreatingSlugToTheme(
-					normalizeVariablePresetSlug(variableSlugRef.current),
-					{ endCreating }
-				);
-			}
-		},
-		[persistCreatingNameToTheme, persistCreatingSlugToTheme]
-	);
-
-	const commitCreatingStepDraftsRef = useRef(commitCreatingStepDrafts);
-	commitCreatingStepDraftsRef.current = commitCreatingStepDrafts;
-
-	const flushPendingCreatingStepPersistRef = useRef(
-		flushPendingCreatingStepPersist
-	);
-	flushPendingCreatingStepPersistRef.current =
-		flushPendingCreatingStepPersist;
-
 	const prevIsCreatingRef = useRef(isCreating);
-	const isCreatingRef = useRef(isCreating);
-	isCreatingRef.current = isCreating;
 
 	useLayoutEffect(() => {
 		const wasCreating = prevIsCreatingRef.current;
 		prevIsCreatingRef.current = isCreating;
 
 		if (wasCreating && !isCreating) {
-			flushPendingCreatingStepPersistRef.current({ endCreating: true });
-			commitCreatingStepDraftsRef.current();
+			clearCreatingNamePersistTimeout();
+			clearCreatingSlugPersistTimeout();
+			finalizeCreatingStepPersist();
 		}
-	}, [isCreating]);
-
-	// Empty deps: cleanup must run only on unmount, not when repeater rows update.
-	useLayoutEffect(() => {
-		return () => {
-			if (prevIsCreatingRef.current && isCreatingRef.current) {
-				flushPendingCreatingStepPersistRef.current({
-					endCreating: true,
-				});
-				commitCreatingStepDraftsRef.current();
-			}
-		};
-	}, []);
+	}, [
+		isCreating,
+		clearCreatingNamePersistTimeout,
+		clearCreatingSlugPersistTimeout,
+		finalizeCreatingStepPersist,
+	]);
 
 	const flushPendingFieldEdits = useCallback(() => {
 		const nextName = draftNameRef.current;
@@ -643,12 +555,6 @@ function SharedPresetControlsComponent<T extends VariableType>({
 			value = applyDeferredDescriptionToRow(value);
 		}
 
-		// Session flush runs on popover unmount — never revive creatingStep or the
-		// repeater auto-open effect will reopen the edit popover after close.
-		if (value.creatingStep === true) {
-			value = { ...value, creatingStep: false };
-		}
-
 		changeRepeaterItem({
 			onChange,
 			valueCleanup,
@@ -671,40 +577,27 @@ function SharedPresetControlsComponent<T extends VariableType>({
 		variable,
 	]);
 
-	const flushPendingFieldEditsRef = useRef(flushPendingFieldEdits);
-	flushPendingFieldEditsRef.current = flushPendingFieldEdits;
-
-	// Prefer stable repeater itemId over slug — during creatingStep the slug changes
-	// while naming, and a slug-keyed session would flush/end/begin on every keystroke.
-	const editSessionKey = itemIdKey;
-
-	// creatingStep has its own draft/persist path; joining the taxonomy edit session
-	// on create lets unmount flush re-write creatingStep:true and reopen the popover.
 	useEffect(() => {
-		if (!editSessionActions || isCreating) {
+		if (!editSession) {
 			return;
 		}
-		const key = editSessionKey;
-		editSessionActions.registerFlush(key, () =>
-			flushPendingFieldEditsRef.current()
-		);
+		editSession.registerFlush(slugKey, flushPendingFieldEdits);
 		return () => {
-			editSessionActions.unregisterFlush(key);
+			editSession.unregisterFlush(slugKey);
 		};
-	}, [editSessionActions, editSessionKey, isCreating]);
+	}, [editSession, flushPendingFieldEdits, slugKey]);
 
 	// Flat repeater popovers mount these fields only while open; defer name persist + tree regroup until close.
 	useLayoutEffect(() => {
-		if (!editSessionActions || isCreating) {
+		if (!editSession) {
 			return;
 		}
-		const key = editSessionKey;
-		editSessionActions.beginEditSession(key);
+		editSession.beginEditSession(slugKey);
 		return () => {
-			editSessionActions.flushSession(key);
-			editSessionActions.endEditSession(key);
+			editSession.flushSession(slugKey);
+			editSession.endEditSession(slugKey);
 		};
-	}, [editSessionActions, editSessionKey, isCreating]);
+	}, [editSession, slugKey]);
 
 	const displayedName =
 		deferNameEdits || isCreating ? draftName : persistedName;

@@ -3,7 +3,7 @@
  */
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -32,7 +32,7 @@ describe('Box Sizing → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('border-box').to.be.equal(
 				getSelectedBlock(data, 'blockeraBoxSizing')
 			);

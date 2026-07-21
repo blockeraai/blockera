@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 } from '@blockera/dev-cypress/js/helpers';
@@ -71,7 +71,7 @@ describe('Shadow → WP Compatibility (Global Styles)', () => {
 			it('Simple shadow value', () => {
 				cy.getParentContainer('Box Shadows').as('shadowContainer');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getButtonGlobalStyles(data);
 					const blockeraBoxShadow = root?.blockeraBoxShadow?.value;
 					const shadow = root?.shadow;
@@ -123,7 +123,7 @@ describe('Shadow → WP Compatibility (Global Styles)', () => {
 						});
 					});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const shadow = getButtonGlobalStyles(data)?.shadow;
 
 					expect(undefined).to.equal(shadow);
@@ -133,7 +133,7 @@ describe('Shadow → WP Compatibility (Global Styles)', () => {
 					cy.getByAriaLabel('Delete outer 0').click({ force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const blockeraBoxShadow =
 						getButtonGlobalStyles(data)?.blockeraBoxShadow;
 
@@ -144,7 +144,7 @@ describe('Shadow → WP Compatibility (Global Styles)', () => {
 			it('Shadow preset reference', () => {
 				cy.getParentContainer('Box Shadows').as('shadowContainer');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getButtonGlobalStyles(data);
 					const blockeraBoxShadow = root?.blockeraBoxShadow?.value;
 					const shadow = root?.shadow;
@@ -181,7 +181,7 @@ describe('Shadow → WP Compatibility (Global Styles)', () => {
 						});
 					});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const shadow = getButtonGlobalStyles(data)?.shadow;
 
 					expect(undefined).to.equal(shadow);

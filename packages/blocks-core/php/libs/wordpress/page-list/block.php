@@ -28,6 +28,9 @@ return array_merge(
 				'blockera/elements/current-page' => [
 					'root' => ':where(li.current-menu-item a)',
 				],
+				'blockera/elements/current-page' => [
+					'root' => 'li.current-menu-item',
+				],
 			],
 		),
 		'supports' => array_merge(

@@ -52,37 +52,11 @@ if (! \class_exists(Coordinator::class)) {
 		private array $included_files = [];
 
 		/**
-		 * Cached prepared package files for the current request.
-		 *
-		 * @var array<string,array<int,array{identifier:string,path:string,version:string,plugin:string}>>|null
-		 */
-		private ?array $prepared_packages_files_cache = null;
-
-		/**
-		 * Cached package manifest for the current request.
-		 *
-		 * @var array<string,array{version:string,plugin:string,vendor_dir:string}>|null
-		 */
-		private ?array $package_manifest_cache = null;
-
-		/**
 		 * Cached autoload manifest (PSR-4, classmap, files) per plugin.
          *
 		 * @var array<string,array{psr4:array,classmap:array,files:array,vendor_dir:string}>|null
 		 */
 		private $autoload_manifest = null;
-
-		/**
-		 * Build a cache key based on currently registered plugins.
-		 *
-		 * @return string
-		 */
-		private function getPluginsCacheKey(): string {
-			$slugs = array_keys($this->plugins);
-			sort($slugs);
-
-			return md5(serialize($slugs));
-		}
 
         /**
          * Singleton accessor.
@@ -116,9 +90,7 @@ if (! \class_exists(Coordinator::class)) {
 			}
 
 			// Invalidate autoload manifest.
-			$this->autoload_manifest             = null;
-			$this->prepared_packages_files_cache = null;
-			$this->package_manifest_cache        = null;
+			$this->autoload_manifest = null;
         }
 
         /**
@@ -130,51 +102,46 @@ if (! \class_exists(Coordinator::class)) {
 		 * @return void
          */
         public function bootstrap( $callback = null): void {
-			$plugin_count = count($this->plugins);
-
-			if (1 > $plugin_count) {
+			// If there are less than 2 plugins, we don't need to coordinate.
+			if (2 > count($this->plugins)) {
 				return;
 			}
 
-			if (2 <= $plugin_count && ! $this->bootstrapped) {
-				$this->bootstrapped = true;
+			// If the autoloader is already bootstrapped, we don't need to do it again.
+            if ($this->bootstrapped) {
+                return;
+            }
+            $this->bootstrapped = true;
 
-				// Find default plugin reference.
-				$defaultKey  = array_search(true, array_column($this->plugins, 'default'), true);
-				$default_ref = ( false !== $defaultKey && isset($this->plugins[ $defaultKey ]) )
-					? $this->plugins[ $defaultKey ]['slug']
-					: 'blockera';
-				// Get the coordinator reference from the environment variable.
-				$env_ref = isset($_ENV['AUTOLOADER_COORDINATOR_REF']) ? sanitize_text_field($_ENV['AUTOLOADER_COORDINATOR_REF']) : null;
-				// Set the coordinator reference.
-				$this->coordinator_ref = $env_ref ?? $default_ref;
+			// Find default plugin reference.
+			$defaultKey  = array_search(true, array_column($this->plugins, 'default'), true);
+			$default_ref = ( false !== $defaultKey && isset($this->plugins[ $defaultKey ]) ) 
+				? $this->plugins[ $defaultKey ]['slug'] 
+				: 'blockera';
+			// Get the coordinator reference from the environment variable.
+			$env_ref = isset($_ENV['AUTOLOADER_COORDINATOR_REF']) ? sanitize_text_field($_ENV['AUTOLOADER_COORDINATOR_REF']) : null;
+			// Set the coordinator reference.
+			$this->coordinator_ref = $env_ref ?? $default_ref;
 
-				// Sort plugins by priority and preferred coordinator reference.
-				usort(
-					$this->plugins,
-					function ( $a, $b) {
-						if ($a['slug'] === $this->coordinator_ref) {
-							return -1;
-						}
-						if ($b['slug'] === $this->coordinator_ref) {
-							return 1;
-						}
-						return $a['priority'] - $b['priority'];
+			// Sort plugins by priority.
+            usort(
+                $this->plugins,
+                function ( $a, $b) {
+					if ($a['plugin_dir'] === $this->coordinator_ref) {
+						return -1;
 					}
-				);
-			}
+					if ($b['plugin_dir'] === $this->coordinator_ref) {
+						return 1;
+					}
+					return $a['priority'] - $b['priority'];
+				}
+            );
 
+			// Immediately register autoloader for this plugin.
 			$this->registerAutoloader();
 
-			if (2 <= $plugin_count && $this->bootstrapped) {
-				$this->maybeCoordinate();
-			} else {
-				$this->ensureAutoloadManifestIsBuilt();
-
-				if (! $this->shouldDeferFileInclusionUntilCompanionRegisters()) {
-					$this->includeAutoloadFiles();
-				}
-			}
+            // Run file inclusion after all plugins are loaded.
+            $this->maybeCoordinate();
 
 			if (is_callable($callback)) {
 				$callback();
@@ -208,29 +175,10 @@ if (! \class_exists(Coordinator::class)) {
 			// Load autoload data from the first plugin immediately.
 			$this->loadAutoloadDataForPlugin($firstPlugin['slug'], $firstPlugin);
 
-			$this->configureClassLoaderPerformance( $this->class_loader );
-
 			// Register the class loader.
 			$this->class_loader->register(true);
 
 			$this->autoloader_registered = true;
-		}
-
-		/**
-		 * Enable ClassLoader caches that cut findFileWithExtension filesystem work.
-		 *
-		 * Mirrors Composer's APCu gate so findFile() results persist across requests.
-		 *
-		 * @param ClassLoader $loader Composer class loader.
-		 */
-		private function configureClassLoaderPerformance( ClassLoader $loader ): void {
-			$apcu_enabled = function_exists( 'apcu_fetch' )
-				&& filter_var( ini_get( 'apc.enabled' ), FILTER_VALIDATE_BOOLEAN )
-				&& ( PHP_SAPI !== 'cli' || filter_var( ini_get( 'apc.enable_cli' ), FILTER_VALIDATE_BOOLEAN ) );
-
-			if ( $apcu_enabled ) {
-				$loader->setApcuPrefix( 'blockera_' . $this->getPluginsCacheKey() );
-			}
 		}
 
 		/**
@@ -296,25 +244,6 @@ if (! \class_exists(Coordinator::class)) {
 			if (is_file($filesFile)) {
 				$files = $this->loadAutoloadFile($filesFile, $vendorDir, dirname($vendorDir));
 			}
-
-			$needs_vendor_files = ! is_array($files) || empty($files);
-			$needs_vendor_psr4  = ! is_file($psr4File);
-
-			if ($needs_vendor_files || $needs_vendor_psr4) {
-				$fallback = $this->collectAutoloadFromPackages($plugin);
-
-				if ($needs_vendor_files && ! empty($fallback['files'])) {
-					$files = array_merge(is_array($files) ? $files : [], $fallback['files']);
-				}
-
-				if ($needs_vendor_psr4 && ! empty($fallback['psr4'])) {
-					foreach ($fallback['psr4'] as $namespace => $paths) {
-						foreach ($paths as $path) {
-							$this->class_loader->addPsr4($namespace, $path);
-						}
-					}
-				}
-			}
 			
 			if (null === $this->autoload_manifest) {
 				$this->autoload_manifest = [];
@@ -324,168 +253,6 @@ if (! \class_exists(Coordinator::class)) {
 				'classmap' => is_array($classmap) ? $classmap : [],
 				'vendor_dir' => $vendorDir,
 			];
-		}
-
-		/**
-		 * Collect autoload metadata from local package directories.
-		 * Used when vendor/composer autoload files are unavailable (e.g. local dev).
-		 *
-		 * @param array{plugin_dir:string,vendor_dir:string,packages_dir:string} $plugin Plugin data.
-		 * @return array{files:array<string,string>,psr4:array<string,array<int,string>>}
-		 */
-		private function collectAutoloadFromPackages( array $plugin): array {
-			$result = [
-				'files' => [],
-				'psr4'  => [],
-			];
-
-			$roots = array_filter(
-				[
-					$plugin['packages_dir'],
-					$plugin['plugin_dir'] . '/packages',
-				],
-				'is_dir'
-			);
-
-			foreach ($roots as $root) {
-				foreach ($this->globPackageComposerJsonInRoot($root) as $composer_json) {
-					$package_dir = dirname($composer_json);
-					$json        = @file_get_contents($composer_json);
-
-					if (false === $json) {
-						continue;
-					}
-
-					$data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
-
-					if (! is_array($data)) {
-						continue;
-					}
-
-					$package_name = isset($data['name']) ? (string) $data['name'] : $composer_json;
-
-					foreach ($data['autoload']['files'] ?? [] as $file) {
-						$file_path = $package_dir . '/' . ltrim( (string) $file, './' );
-
-						if (! is_file($file_path)) {
-							continue;
-						}
-
-						$identifier                     = md5('blockera-package-file:' . $package_name . ':' . $file);
-						$result['files'][ $identifier ] = $file_path;
-					}
-
-					foreach ($data['autoload']['psr-4'] ?? [] as $namespace => $dir) {
-						$path = $package_dir . '/' . trim( (string) $dir, './' );
-
-						if (! is_dir($path)) {
-							continue;
-						}
-
-						$result['psr4'][ (string) $namespace ][] = $path;
-					}
-				}
-			}
-
-			return $result;
-		}
-
-		/**
-		 * Find package composer.json files in a packages root directory.
-		 *
-		 * @param string $root Packages root directory.
-		 * @return array<int,string>
-		 */
-		private function globPackageComposerJsonInRoot( string $root): array {
-			$result = [];
-			$root   = rtrim($root, '/\\');
-			$handle = @opendir($root);
-
-			if (false === $handle) {
-				return $result;
-			}
-
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-			while (false !== ( $entry = readdir($handle) )) {
-				if ('.' === $entry || '..' === $entry) {
-					continue;
-				}
-
-				$package_dir = $root . '/' . $entry;
-
-				if (! is_dir($package_dir)) {
-					continue;
-				}
-
-				$composer_json = $package_dir . '/composer.json';
-
-				if (is_file($composer_json)) {
-					$realpath = realpath($composer_json);
-					$result[] = ( false !== $realpath ) ? $realpath : $composer_json;
-				}
-			}
-
-			closedir($handle);
-
-			return $result;
-		}
-
-		/**
-		 * Ensure every registered plugin has autoload manifest data loaded.
-		 *
-		 * @return void
-		 */
-		private function ensureAutoloadManifestIsBuilt(): void {
-			if (null === $this->class_loader) {
-				$this->registerAutoloader();
-			}
-
-			if (null === $this->class_loader) {
-				return;
-			}
-
-			if (null === $this->autoload_manifest) {
-				$this->autoload_manifest = [];
-			}
-
-			foreach ($this->plugins as $slug => $plugin) {
-				if (! isset($this->autoload_manifest[ $slug ])) {
-					$this->loadAutoloadDataForPlugin($slug, $plugin);
-				}
-			}
-		}
-
-		/**
-		 * Get the preferred plugin slug for package conflict resolution.
-		 *
-		 * @return string|null
-		 */
-		private function getPreferredPluginSlug(): ?string {
-			if ('' !== $this->coordinator_ref && isset($this->plugins[ $this->coordinator_ref ])) {
-				return $this->coordinator_ref;
-			}
-
-			return null;
-		}
-
-		/**
-		 * Defer autoload file inclusion when Pro bootstraps alone but Free is active.
-		 * Free must bootstrap immediately because it calls shared helpers at load time.
-		 *
-		 * @return bool
-		 */
-		private function shouldDeferFileInclusionUntilCompanionRegisters(): bool {
-			if (2 <= count($this->plugins)) {
-				return false;
-			}
-
-			$slug = array_key_first($this->plugins);
-
-			if ('blockera-pro' !== $slug || ! function_exists('is_plugin_active')) {
-				return false;
-			}
-
-			return is_plugin_active('blockera/blockera.php');
 		}
 
 		/**
@@ -513,7 +280,6 @@ if (! \class_exists(Coordinator::class)) {
 		 * @return void
 		 */
 		public function maybeCoordinate(): void {
-			$this->ensureAutoloadManifestIsBuilt();
 			// If multiple plugins, coordinate their autoloads.
 			$this->coordinateMultiplePlugins();
 			// Include files from all registered plugins.
@@ -533,13 +299,28 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
-			$this->ensureAutoloadManifestIsBuilt();
-
 			// Collect all package versions to determine winners.
 			$packageVersions = $this->collectPackageVersions();
 
+			// Apply coordinator_ref filter if set.
+			$preferredPlugin = null;
+			if ('' !== $this->coordinator_ref && isset($this->plugins[ $this->coordinator_ref ])) {
+				$preferredPlugin = $this->coordinator_ref;
+			}
+
+			// Load autoload data from additional plugins.
+			$first = true;
+			foreach ($this->plugins as $slug => $plugin) {
+				if ($first) {
+					$first = false;
+					continue; // Skip the first plugin, already loaded.
+				}
+
+				$this->loadAutoloadDataForPlugin($slug, $plugin);
+			}
+
 			// Re-register PSR-4 and classmap with version-based priority.
-			$this->applyVersionBasedPriority($packageVersions, $this->getPreferredPluginSlug());
+			$this->applyVersionBasedPriority($packageVersions, $preferredPlugin);
 		}
 
 		/**
@@ -614,7 +395,6 @@ if (! \class_exists(Coordinator::class)) {
 			// Unregister old loader and register new one.
 			$this->class_loader->unregister();
 			$this->class_loader = $newLoader;
-			$this->configureClassLoaderPerformance( $this->class_loader );
 			$this->class_loader->register(true);
 		}
 
@@ -858,107 +638,31 @@ if (! \class_exists(Coordinator::class)) {
 
 		/**
 		 * Include autoload files from all registered plugins.
-		 * Exclusive packages load from both plugins; shared packages load from the winner only.
+		 * Uses version-based selection for shared packages.
 		 */
 		private function includeAutoloadFiles(): void {
 			if (null === $this->autoload_manifest) {
 				return;
 			}
 
-			$allFiles        = $this->preparePackagesFiles();
-			$preferredPlugin = $this->getPreferredPluginSlug();
-			$package_groups  = $this->partitionExclusiveAndSharedPackages($allFiles);
-			$exclusive       = $package_groups[0];
-			$shared          = $package_groups[1];
-
-			// Always load plugin-exclusive dependencies (e.g. blockera/blockera on free, blockera/blockera-pro on pro).
-			foreach ($exclusive as $files) {
-				foreach ($files as $file) {
-					$this->includeFile($file['identifier'], $file['path']);
-				}
-			}
-
-			// Load shared packages from the winning plugin only.
-			foreach ($shared as $packageName => $files) {
-				foreach ($this->selectWinningAutoloadFiles($packageName, $files, $preferredPlugin) as $file) {
-					$this->includeFile($file['identifier'], $file['path']);
-				}
-			}
-		}
-
-		/**
-		 * Split package autoload files into exclusive and shared groups.
-		 *
-		 * @param array<string,array<int,array{identifier:string,path:string,version:string,plugin:string}>> $allFiles Package files grouped by package name.
-		 * @return array{0:array<string,array<int,array{identifier:string,path:string,version:string,plugin:string}>>,1:array<string,array<int,array{identifier:string,path:string,version:string,plugin:string}>>}
-		 */
-		private function partitionExclusiveAndSharedPackages( array $allFiles): array {
-			$exclusive = [];
-			$shared    = [];
+			$allFiles = $this->preparePackagesFiles();
 
 			foreach ($allFiles as $packageName => $files) {
-				$plugin_slugs = array_unique(array_column($files, 'plugin'));
-
-				if (1 === count($plugin_slugs)) {
-					$exclusive[ $packageName ] = $files;
-					continue;
-				}
-
-				$shared[ $packageName ] = $files;
-			}
-
-			return [ $exclusive, $shared ];
-		}
-
-		/**
-		 * Select autoload files for a shared package based on version and preferred plugin.
-		 *
-		 * @param string      $packageName Package name.
-		 * @param array       $files Candidate files.
-		 * @param string|null $preferredPlugin Preferred plugin slug.
-		 * @return array
-		 */
-		private function selectWinningAutoloadFiles( string $packageName, array $files, ?string $preferredPlugin): array {
-			if (empty($files)) {
-				return [];
-			}
-
-			if (1 === count($files)) {
-				return $files;
-			}
-
-			usort(
-				$files,
-				function ( $a, $b) use ( $preferredPlugin) {
-					$version_compare = version_compare($a['version'], $b['version']);
-
-					if (0 !== $version_compare) {
-						return $version_compare < 0 ? 1 : -1;
-					}
-
-					if (null !== $preferredPlugin) {
-						if ($a['plugin'] === $preferredPlugin) {
-							return -1;
-						}
-						if ($b['plugin'] === $preferredPlugin) {
-							return 1;
-						}
-					}
-
-					return 0;
-				}
-			);
-
-			$winning_plugin = $files[0]['plugin'];
-
-			return array_values(
-				array_filter(
+				// Sort by version descending.
+				usort(
 					$files,
-					static function ( array $file) use ( $winning_plugin) {
-						return $file['plugin'] === $winning_plugin;
+					static function( $a, $b) {
+						return version_compare($a['version'], $b['version']) < 0 ? 1 : -1;
 					}
-				)
-			);
+				);
+
+				// Include file from highest version.
+				if (! empty($files)) {
+					foreach ($files as $file) {
+						$this->includeFile($file['identifier'], $file['path']);
+					}
+				}
+			}
 		}
 
 		/**
@@ -967,16 +671,18 @@ if (! \class_exists(Coordinator::class)) {
 		 * @return array the packages files array.
 		 */
 		private function preparePackagesFiles(): array {
-			if (null !== $this->prepared_packages_files_cache) {
-				return $this->prepared_packages_files_cache;
+			// Request-level cache.
+			static $memo = null;
+			if (null !== $memo) {
+				return $memo;
 			}
 
-			$cache_key = 'blockera_pkgs_files_' . $this->getPluginsCacheKey();
+			$cache_key = 'blockera_pkgs_files';
 			$files     = get_transient($cache_key);
 
 			if (is_array($files)) {
-				$this->prepared_packages_files_cache = $files;
-				return $this->prepared_packages_files_cache;
+				$memo = $files;
+				return $memo;
 			}
 
 			// Collect all files with their package info.
@@ -987,6 +693,11 @@ if (! \class_exists(Coordinator::class)) {
 				}
 
 				foreach ($manifest['files'] as $identifier => $filePath) {
+					// Skip if already included.
+					if (isset($this->included_files[ $identifier ])) {
+						continue;
+					}
+
 					// Detect package for this file.
 					$packageInfo = $this->detectPackageFromPath($filePath);
 					$packageName = $packageInfo['name'] ?? 'unknown-' . $identifier;
@@ -1006,10 +717,11 @@ if (! \class_exists(Coordinator::class)) {
 				}
 			}
 
+			// Cache miss: detect packages.
 			set_transient($cache_key, $files, HOUR_IN_SECONDS);
-			$this->prepared_packages_files_cache = $files;
+			$memo = $files;
 
-			return $this->prepared_packages_files_cache;
+			return $memo;
 		}
 
 		/**
@@ -1095,24 +807,26 @@ if (! \class_exists(Coordinator::class)) {
 		 * @return array<string, array{version:string,plugin:string,vendor_dir:string}> Package name => meta.
 		 */
 		private function getPackageManifest(): array {
-			if (null !== $this->package_manifest_cache) {
-				return $this->package_manifest_cache;
+			// Request-level cache.
+			static $memo = null;
+			if (null !== $memo) {
+				return $memo;
 			}
 
-			$cache_key = 'blockera_pkg_manifest_' . $this->getPluginsCacheKey();
+			$cache_key = 'blockera_pkg_manifest';
 			$manifest  = get_transient($cache_key);
 
 			if (is_array($manifest)) {
-				$this->package_manifest_cache = $manifest;
-				return $this->package_manifest_cache;
+				$memo = $manifest;
+				return $memo;
 			}
 
+			// Cache miss: build manifest.
 			$manifest = $this->buildPackageManifest();
 			set_transient($cache_key, $manifest, HOUR_IN_SECONDS);
 
-			$this->package_manifest_cache = $manifest;
-
-			return $this->package_manifest_cache;
+			$memo = $manifest;
+			return $memo;
 		}
 
 		/**
@@ -1125,57 +839,39 @@ if (! \class_exists(Coordinator::class)) {
 			$packages = [];
 
 			foreach ($this->plugins as $slug => $plugin) {
-				foreach ($this->getPackageScanRoots($plugin) as $packagesDir) {
-					foreach ($this->globRecursiveComposerJson($packagesDir) as $composerJson) {
-						$json = @file_get_contents($composerJson);
-						if (false === $json) {
-							continue;
-						}
+				$packagesDir = $plugin['packages_dir'];
+				if (! is_dir($packagesDir)) {
+					continue;
+				}
 
-						$data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
-						if (! is_array($data) || ! isset($data['name'])) {
-							continue;
-						}
-
-						$name    = (string) $data['name'];
-						$version = isset($data['version']) ? (string) $data['version'] : '0.0.0';
-
-						if (isset($packages[ $name ]) && version_compare($version, $packages[ $name ]['version']) <= 0) {
-							continue;
-						}
-
-						$packages[ $name ] = [
-							'version'    => $version,
-							'plugin'     => $slug,
-							'vendor_dir' => $plugin['vendor_dir'],
-						];
+				foreach ($this->globRecursiveComposerJson($packagesDir) as $composerJson) {
+					$json = @file_get_contents($composerJson);
+					if (false === $json) {
+						continue;
 					}
+
+					$data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
+					if (! is_array($data) || ! isset($data['name'])) {
+						continue;
+					}
+
+					$name    = (string) $data['name'];
+					$version = isset($data['version']) ? (string) $data['version'] : '0.0.0';
+
+					// Only keep if this version is higher.
+					if (isset($packages[ $name ]) && version_compare($version, $packages[ $name ]['version']) <= 0) {
+						continue;
+					}
+
+					$packages[ $name ] = [
+						'version'    => $version,
+						'plugin'     => $slug,
+						'vendor_dir' => $plugin['vendor_dir'],
+					];
 				}
 			}
 
 			return $packages;
-		}
-
-		/**
-		 * Resolve package scan roots for a plugin.
-		 *
-		 * @param array{plugin_dir:string,vendor_dir:string,packages_dir:string} $plugin Plugin data.
-		 * @return array<int,string>
-		 */
-		private function getPackageScanRoots( array $plugin): array {
-			$roots = [];
-
-			if (is_dir($plugin['packages_dir'])) {
-				$roots[] = $plugin['packages_dir'];
-			}
-
-			$local_packages_dir = $plugin['plugin_dir'] . '/packages';
-
-			if (is_dir($local_packages_dir)) {
-				$roots[] = $local_packages_dir;
-			}
-
-			return $roots;
 		}
 
 		/**
@@ -1185,30 +881,22 @@ if (! \class_exists(Coordinator::class)) {
 		public function invalidatePackageManifest(): void {
 			delete_transient('blockera_pkg_manifest');
 			delete_transient('blockera_pkgs_files');
-
-			$this->prepared_packages_files_cache = null;
-			$this->package_manifest_cache        = null;
-
+			
+			// Invalidate all classmap caches by pattern.
+			// WordPress doesn't support wildcard deletion, so we use direct database query.
+			// The cache will rebuild on next request with current configuration.
 			global $wpdb;
-
-			$patterns = [
-				$wpdb->esc_like('_transient_blockera_pkg_manifest_') . '%',
-				$wpdb->esc_like('_transient_timeout_blockera_pkg_manifest_') . '%',
-				$wpdb->esc_like('_transient_blockera_pkgs_files_') . '%',
-				$wpdb->esc_like('_transient_timeout_blockera_pkgs_files_') . '%',
-				$wpdb->esc_like('_transient_blockera_classmap_') . '%',
-				$wpdb->esc_like('_transient_timeout_blockera_classmap_') . '%',
-			];
-
-			foreach ($patterns as $pattern) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->query(
-					$wpdb->prepare(
-						"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-						$pattern
-					)
-				);
-			}
+			$transientPattern = $wpdb->esc_like('_transient_blockera_classmap_') . '%';
+			$timeoutPattern   = $wpdb->esc_like('_transient_timeout_blockera_classmap_') . '%';
+			
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+					$transientPattern,
+					$timeoutPattern
+				)
+			);
 		}
 
         /**

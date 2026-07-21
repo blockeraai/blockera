@@ -7,9 +7,6 @@ export const BLOCKERA_COLORS_PRESET_INSPECTOR_ACTIVE_CLASS =
 export const BLOCKERA_FONT_SIZE_PRESET_INSPECTOR_ACTIVE_CLASS =
 	'blockera-font-size-preset-inspector-active';
 
-export const BLOCKERA_LINE_HEIGHT_PRESET_INSPECTOR_ACTIVE_CLASS =
-	'blockera-line-height-preset-inspector-active';
-
 export const BLOCKERA_SHADOWS_PRESET_INSPECTOR_ACTIVE_CLASS =
 	'blockera-shadows-preset-inspector-active';
 

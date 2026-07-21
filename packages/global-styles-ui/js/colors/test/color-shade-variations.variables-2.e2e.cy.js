@@ -3,7 +3,6 @@
  * variable picker selection). Uses existing MU fixtures under `test/fixtures/`.
  */
 import {
-	assertBlockData,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	getSelectedBlock,
@@ -122,7 +121,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 				}
 			).should('not.exist');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.settings.var).to.equal(
 					'--wp--preset--color--e-2-e-var-base-shade-500'
@@ -149,7 +148,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 				}
 			).should('not.exist');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.settings.var).to.equal(
 					'--wp--preset--color--e-2-e-var-base-shade-500'
@@ -169,7 +168,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 				}
 			).should('not.exist');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.settings.var).to.equal(
 					'--wp--preset--color--e-2-e-var-base'
@@ -186,7 +185,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 
 			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.settings.var).to.equal(
 					'--wp--preset--color--e-2-e-var-base-shade-500'
@@ -202,7 +201,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 			);
 			cy.selectValueAddonItem('e-2-e-var-base-shade-500');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(
 					getSelectedBlock(data, 'blockeraFontColor').settings.var
 				).to.equal('--wp--preset--color--e-2-e-var-base-shade-500');
@@ -216,7 +215,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 
 			cy.selectValueAddonItem('e-2-e-var-base');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(
 					getSelectedBlock(data, 'blockeraFontColor').settings.var
 				).to.equal('--wp--preset--color--e-2-e-var-base');
@@ -276,7 +275,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 
 			cy.selectValueAddonItem('e-2-e-tax-cat-var-base-shade-500');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.settings.var).to.equal(
 					'--wp--preset--color--e-2-e-tax-cat-var-base-shade-500'
@@ -296,7 +295,7 @@ describe('Global Styles UI → Color shade variations (ramp & picker)', () => {
 
 			cy.selectValueAddonItem('e-2-e-tax-cat-var-base');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const fontColor = getSelectedBlock(data, 'blockeraFontColor');
 				expect(fontColor.settings.var).to.equal(
 					'--wp--preset--color--e-2-e-tax-cat-var-base'

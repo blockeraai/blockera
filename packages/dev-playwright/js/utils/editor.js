@@ -532,12 +532,10 @@ async function savePage(page) {
 		await snackbarSaveButton.click();
 	}
 
-	// Use .first() — save can surface multiple snackbars (e.g. draft + published),
-	// and waitForSelector fails in strict mode when more than one matches.
-	await page
-		.locator('.components-snackbar, .components-notice.is-success')
-		.first()
-		.waitFor({ state: 'visible', timeout: 10000 });
+	await page.waitForSelector(
+		'.components-snackbar, .components-notice.is-success',
+		{ timeout: 10000 }
+	);
 }
 
 /**
@@ -994,14 +992,8 @@ async function waitForAssertValue(time = 300) {
 	return new Promise((resolve) => setTimeout(resolve, time));
 }
 /**
- * Activate mu-plugin by installing a loader stub under wp-content/mu-plugins/.
- *
- * Do not copy the fixture PHP body into mu-plugins/: after a plain copy,
- * dirname( __FILE__ ) points at WPMU_PLUGIN_DIR, so sibling assets (e.g.
- * feed.xml) are missing and WordPress never sets
- * $GLOBALS['blockera_test_mu_plugin_fixture_dir'] (PHPUnit helpers do that
- * only for the in-process require). The stub sets that global and require_onces
- * the original fixture file so __FILE__ stays under tests/fixtures/.
+ * Activate mu-plugin by copying it to wp-content/mu-plugins/ directory.
+ * This function accepts a full path to the mu-plugin.php file and copies it to the mu-plugins directory.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} muPluginPath - Full path to the mu-plugin.php file (relative to plugin root).
@@ -1026,22 +1018,9 @@ async function activateMuPlugin(
 		targetName = `${pluginName}-test-${folderName}.php`;
 	}
 
-	// Fixture directory relative to plugin root (sibling of mu-plugin.php).
-	const fixtureDirRel = pathParts.slice(0, -1).join('/');
-
-	// Install a loader stub (not a content copy) so fixture-relative assets resolve.
-	// Use wp eval to execute PHP code directly without creating temp files.
-	// chr(36) builds "$GLOBALS" in the stub so shell/$ escaping stays simple.
-	const phpCode = [
-		`if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); }`,
-		`$sourceFile = ABSPATH . 'wp-content/plugins/${pluginName}/${muPluginPath}';`,
-		`$fixtureDir = ABSPATH . 'wp-content/plugins/${pluginName}/${fixtureDirRel}';`,
-		`$targetFile = WPMU_PLUGIN_DIR . '/${targetName}';`,
-		`if (file_exists($sourceFile)) {`,
-		`$loader = '<?php' . "\\n" . chr(36) . "GLOBALS['blockera_test_mu_plugin_fixture_dir'] = " . var_export($fixtureDir, true) . ";\\nrequire_once " . var_export($sourceFile, true) . ";\\n";`,
-		`file_put_contents($targetFile, $loader);`,
-		`}`,
-	].join(' ');
+	// Build PHP code to copy mu-plugin to mu-plugins directory
+	// Use wp eval to execute PHP code directly without creating temp files
+	const phpCode = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${pluginName}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($sourceFile)) { $content = file_get_contents($sourceFile); file_put_contents($targetFile, $content); }`;
 
 	// Escape single quotes for shell: ' becomes '\''
 	// Use single quotes in shell command to preserve $ signs in PHP

@@ -25,7 +25,6 @@ import type { VariableType } from '../types';
 import {
 	applyVariablePickerRepeaterSelection,
 	buildPresetVariablePickerPayload,
-	shouldKeepVariablePickerOpenForRowActivation,
 	stripRepeaterPickerUiFields,
 } from '../variable-picker-preset-utils';
 import { useCanEditGlobalStyles } from '../use-global-styles-preset-edit';
@@ -148,14 +147,9 @@ export function TaxonomyRepeaterBridgeInner({
 				pickerCtx.variableType
 			);
 			pickerCtx.controlProps.handleOnClickVar(payload as never, {
-				keepPickerOpen: shouldKeepVariablePickerOpenForRowActivation(
-					row,
-					{
-						variableType: pickerCtx.variableType,
-						origin,
-						pickerValue: pickerCtx.controlProps?.value,
-					}
-				),
+				keepPickerOpen:
+					row.creatingStep === true ||
+					row.__rebindBoundFeature === true,
 			});
 		},
 		[

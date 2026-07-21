@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 	openBoxPositionSide,
 	clearBoxPositionSide,
@@ -37,7 +37,7 @@ describe('Box Position → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Position').as('container');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'sticky',
 					top: '0px',
@@ -51,7 +51,7 @@ describe('Box Position → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'sticky',
 					position: {
@@ -73,7 +73,7 @@ describe('Box Position → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'absolute',
 					top: '0px',
@@ -83,7 +83,7 @@ describe('Box Position → WP Compatibility', () => {
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.position);
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'absolute',
 					position: {
@@ -107,7 +107,7 @@ describe('Box Position → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.position
 				);
@@ -147,7 +147,7 @@ describe('Box Position → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Position').as('container');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('var:preset|spacing|20').to.be.equal(
 					getSelectedBlock(data, 'style')?.position?.top
 				);
@@ -158,7 +158,7 @@ describe('Box Position → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'sticky',
 					position: {
@@ -222,7 +222,7 @@ describe('Box Position → WP Compatibility', () => {
 				});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'sticky',
 					top: 'var:preset|spacing|20',
@@ -232,7 +232,7 @@ describe('Box Position → WP Compatibility', () => {
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.position);
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'sticky',
 					position: {
@@ -317,7 +317,7 @@ describe('Box Position → WP Compatibility', () => {
 
 			// WP data should be removed too
 			// but type should remain
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'sticky',
 					position: {
@@ -343,7 +343,7 @@ describe('Box Position → WP Compatibility', () => {
 			});
 
 			// WP data should be removed too
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'style')?.position
 				);
@@ -383,7 +383,7 @@ describe('Box Position → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Position').as('container');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('var:preset|spacing|unknown-1').to.be.equal(
 					getSelectedBlock(data, 'style')?.position?.top
 				);

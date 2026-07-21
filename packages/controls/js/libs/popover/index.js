@@ -9,11 +9,11 @@ import { useState } from '@wordpress/element';
  * Internal dependencies
  */
 import { PopoverCore } from './core';
-import type { TPopoverProps } from './types';
 import { DraggablePopover } from './draggable';
-import { DEFAULT_POPOVER_OFFSET } from './utils';
 import { usePopoverActiveColorStyle } from '../../context';
 import { useInspectorPopoverOffset } from './use-inspector-popover-offset';
+import { DEFAULT_POPOVER_OFFSET } from './utils';
+import type { TPopoverProps } from './types';
 
 export default function Popover({
 	draggable = true,

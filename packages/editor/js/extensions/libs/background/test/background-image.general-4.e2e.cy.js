@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	hexToRGB,
@@ -68,7 +68,7 @@ describe('Background Image → Functionality', () => {
 
 		it('should add background image to block', () => {
 			//assert data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const backgroundImageState = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -96,7 +96,7 @@ describe('Background Image → Functionality', () => {
 					cy.get('button[data-value="contain"]').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const backgroundImgSizeState = getSelectedBlock(
 						data,
 						'blockeraBackground'
@@ -130,7 +130,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				//assert data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const backgroundState = getSelectedBlock(
 						data,
 						'blockeraBackground'
@@ -194,7 +194,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// assert data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -300,7 +300,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// assert data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -372,7 +372,7 @@ describe('Background Image → Functionality', () => {
 			cy.selectValueAddonItem('vivid-cyan-blue-to-vivid-purple');
 
 			// assert data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					settings: {
 						name: 'Vivid cyan blue to vivid purple',
@@ -493,7 +493,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// assert data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -630,7 +630,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// assert data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -766,7 +766,7 @@ describe('Background Image → Functionality', () => {
 					cy.contains(noneNotice).should('be.visible');
 				});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const blockeraBackground = getSelectedBlock(
 					data,
 					'blockeraBackground'
@@ -819,7 +819,7 @@ describe('Background Image → Functionality', () => {
 					cy.contains(noneNotice).should('be.visible');
 				});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const blockeraBackground = getSelectedBlock(
 					data,
 					'blockeraBackground'

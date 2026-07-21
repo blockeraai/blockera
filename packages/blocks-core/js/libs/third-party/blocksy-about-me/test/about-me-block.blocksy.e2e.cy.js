@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 	setInnerBlock,
 	setBlockState,
@@ -43,7 +43,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('').to.be.equal(getSelectedBlock(data, 'textColor'));
 
 					expect('#7790ff').to.be.equal(
@@ -67,7 +67,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textColor')
 					);
@@ -89,7 +89,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textColor')
 					);
@@ -128,7 +128,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'textColor')
 					);
@@ -174,7 +174,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'textColor')
 					);
@@ -213,7 +213,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textColor')
 					);
@@ -256,7 +256,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'textHoverColor')
 					);
@@ -284,7 +284,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textHoverColor')
 					);
@@ -307,7 +307,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textHoverColor')
 					);
@@ -347,7 +347,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'textHoverColor')
 					);
@@ -395,7 +395,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'textHoverColor')
 					);
@@ -435,7 +435,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textHoverColor')
 					);
@@ -488,7 +488,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'iconsColor')
 					);
@@ -514,7 +514,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'iconsColor')
 					);
@@ -536,7 +536,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'iconsColor')
 					);
@@ -575,7 +575,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'iconsColor')
 					);
@@ -621,7 +621,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'iconsColor')
 					);
@@ -660,7 +660,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'iconsColor')
 					);
@@ -703,7 +703,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
 						getSelectedBlock(data, 'iconsHoverColor')
 					);
@@ -731,7 +731,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'iconsHoverColor')
 					);
@@ -754,7 +754,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'iconsHoverColor')
 					);
@@ -794,7 +794,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-1').to.be.equal(
 						getSelectedBlock(data, 'iconsHoverColor')
 					);
@@ -842,7 +842,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				// Check
 				//
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('palette-color-2').to.be.equal(
 						getSelectedBlock(data, 'iconsHoverColor')
 					);
@@ -882,7 +882,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'iconsHoverColor')
 					);

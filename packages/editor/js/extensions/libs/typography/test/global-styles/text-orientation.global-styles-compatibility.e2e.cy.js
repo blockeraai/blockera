@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	openMoreFeaturesControl,
@@ -69,7 +69,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 			it('Horizontal value', () => {
 				cy.getParentContainer('Orientation').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('initial').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraTextOrientation
 							?.value
@@ -80,7 +80,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					cy.get('button[data-value="style-1"]').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('vertical-rl').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.writingMode
 					);
@@ -90,7 +90,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					cy.get('button[data-value="initial"]').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('horizontal-tb').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.writingMode
 					);
@@ -102,7 +102,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					});
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.writingMode);
 					expect(undefined).to.equal(
@@ -116,7 +116,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 			it('Vertical value', () => {
 				cy.getParentContainer('Orientation').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('style-1').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraTextOrientation
 							?.value
@@ -127,7 +127,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					cy.get('button[data-value="initial"]').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('horizontal-tb').to.equal(
 						getParagraphGlobalStyles(data)?.typography?.writingMode
 					);
@@ -137,7 +137,7 @@ describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					cy.get('button[data-value="style-1"]').click();
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect('vertical-rl').to.equal(
 						root?.typography?.writingMode

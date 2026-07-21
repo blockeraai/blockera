@@ -2,13 +2,7 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import {
-	useState,
-	useContext,
-	useMemo,
-	useRef,
-	useCallback,
-} from '@wordpress/element';
+import { useState, useContext, useMemo } from '@wordpress/element';
 import { SearchControl as WPSearchControl } from '@wordpress/components';
 
 /**
@@ -25,7 +19,6 @@ import { Icon } from '@blockera/icons';
  */
 import { IconContext } from '../../context';
 import { getLibraryIcons } from '../../utils';
-import { useDraftIconHighlight } from '../../hooks/use-draft-icon-highlight';
 import {
 	DEFAULT_LIBRARIES,
 	formatIconCount,
@@ -39,57 +32,32 @@ export default function Search({
 	const [searchInput, setSearchInput] = useState('');
 	const [searchData, setSearchData] = useState([]);
 	const [searchData2, setSearchData2] = useState([]);
-	const searchResultsRef = useRef(null);
 
-	const { handleIconSelect, handleLibraryIconQuickSelect, draftLibraryIcon } =
-		useContext(IconContext);
-
+	const { handleIconSelect } = useContext(IconContext);
 	const iconCount = useMemo(
 		() => getLibrariesIconCount(libraries),
 		[libraries]
 	);
 
-	const buildSearchResults = useCallback(
-		(value) => {
-			setSearchData(
-				getLibraryIcons({
-					library: 'search',
-					query: value,
-					onClick: handleIconSelect,
-					onDoubleClick: handleLibraryIconQuickSelect,
-					limit: 49,
-				})
-			);
-			setSearchData2(
-				getLibraryIcons({
-					library: 'search-2',
-					query: value,
-					onClick: handleIconSelect,
-					onDoubleClick: handleLibraryIconQuickSelect,
-					limit: 200,
-				})
-			);
-		},
-		[handleIconSelect, handleLibraryIconQuickSelect]
-	);
-
-	useDraftIconHighlight(
-		searchResultsRef,
-		draftLibraryIcon,
-		`${searchInput}:${searchData.length}:${searchData2.length}`
-	);
-
 	const handleSearchChange = (value) => {
 		setSearchInput(value);
 		onSearchChange(value);
-
-		if (!value) {
-			setSearchData([]);
-			setSearchData2([]);
-			return;
-		}
-
-		buildSearchResults(value);
+		setSearchData(
+			getLibraryIcons({
+				library: 'search',
+				query: value,
+				onClick: handleIconSelect,
+				limit: 49,
+			})
+		);
+		setSearchData2(
+			getLibraryIcons({
+				library: 'search-2',
+				query: value,
+				onClick: handleIconSelect,
+				limit: 49,
+			})
+		);
 	};
 
 	return (
@@ -112,7 +80,7 @@ export default function Search({
 			/>
 
 			{searchInput && (
-				<div ref={searchResultsRef}>
+				<>
 					<div
 						className={controlInnerClassNames(
 							'icon-library',
@@ -209,7 +177,7 @@ export default function Search({
 							</p>
 						)}
 					</div>
-				</div>
+				</>
 			)}
 		</div>
 	);

@@ -7,11 +7,11 @@ add_filter('blockera_theme_json_data_theme', function ($theme_json) {
 	if (!isset($data['settings'])) {
 		$data['settings'] = [];
 	}
-	if (!isset($data['settings']['blockeraFilter'])) {
-		$data['settings']['blockeraFilter'] = [];
+	if (!isset($data['settings']['filter'])) {
+		$data['settings']['filter'] = [];
 	}
-	$data['settings']['blockeraFilter']['defaultPresets'] = true;
-	$data['settings']['blockeraFilter']['presets'][] = [
+	$data['settings']['filter']['defaultPresets'] = true;
+	$data['settings']['filter']['presets'][] = [
 		'slug' => 'e-2-e-theme-filter',
 		'name' => 'E2E Theme Filter',
 		'items' => [

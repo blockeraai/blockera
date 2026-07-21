@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	openMoreFeaturesControl,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -37,7 +37,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('underline').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
@@ -56,7 +56,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('line-through').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
@@ -71,7 +71,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('overline').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
@@ -86,7 +86,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			});
 
 			// Blockera value should NOT moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
@@ -105,7 +105,7 @@ describe('Text Decoration → WP Compatibility', () => {
 				cy.getByAriaLabel('None').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextDecoration')
 				);

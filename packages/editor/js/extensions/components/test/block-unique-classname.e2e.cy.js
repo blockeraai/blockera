@@ -4,7 +4,6 @@
 import {
 	createPost,
 	getWPDataObject,
-	assertBlockData,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -41,7 +40,7 @@ describe('Block Unique Classname → Functionality', () => {
 		cy.selectValueAddonItem('accent-5');
 
 		cy.get('@originBlockClassname').then((originBlockClassname) => {
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const duplicatedBlockClassname = getSelectedBlock(
 					data,
 					'className'

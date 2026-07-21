@@ -5,7 +5,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	openMoreFeaturesControl,
@@ -47,7 +47,7 @@ describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 			it('Simple Value', () => {
 				cy.getParentContainer('Letters').as('container');
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('2px').to.equal(
 						getParagraphGlobalStyles(data)?.blockeraLetterSpacing
 							?.value
@@ -59,7 +59,7 @@ describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().type('3', { force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect('3px').to.equal(
 						getParagraphGlobalStyles(data)?.typography
 							?.letterSpacing
@@ -70,7 +70,7 @@ describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 					cy.get('input').first().clear({ force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					const root = getParagraphGlobalStyles(data);
 					expect(undefined).to.equal(root?.typography?.letterSpacing);
 					expect(undefined).to.equal(

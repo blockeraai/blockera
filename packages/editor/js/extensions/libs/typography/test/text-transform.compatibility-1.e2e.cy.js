@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	openMoreFeaturesControl,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
@@ -37,7 +37,7 @@ describe('Text Transform → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('uppercase').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextTransform')
 				);
@@ -59,7 +59,7 @@ describe('Text Transform → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('capitalize').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextTransform')
 				);
@@ -77,7 +77,7 @@ describe('Text Transform → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('lowercase').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextTransform')
 				);
@@ -95,7 +95,7 @@ describe('Text Transform → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextTransform')
 				);
@@ -114,7 +114,7 @@ describe('Text Transform → WP Compatibility', () => {
 				cy.get('button[data-value="initial"]').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextTransform')
 				);

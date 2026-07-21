@@ -41,7 +41,6 @@ import {
 import { isVariablePickerSelectionInteraction } from '../../popover/utils';
 import Flex from '../../flex';
 import GroupControl from '../../group-control';
-import Popover from '../../popover';
 import type { RepeaterItemProps, RepeaterItemSize } from '../types';
 import { useControlContext } from '../../../context';
 
@@ -103,8 +102,6 @@ const RepeaterItem = ({
 		pendingOpenItemId,
 		clearPendingOpenItemId,
 		reparentPendingOpenItemId,
-		markCreatingStepPopoverClosed,
-		isCreatingStepPopoverCloseGuarded,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
@@ -160,17 +157,12 @@ const RepeaterItem = ({
 
 	const styleRef = useRef(null);
 	const itemRef = useRef(null);
-	const mainPresetHeaderRef = useRef(null);
 	const prevItemIdRef = useRef(itemId);
 	const scrollBehavior = useReducedMotion() ? 'auto' : 'smooth';
 	const [draggingIndex, setDraggingIndex] = useState(null);
 	const [variationsAccordionOpen, setVariationsAccordionOpen] =
 		useState(false);
-	const prevHasVariationsRef = useRef(item?.hasVariations === true);
 	const [popoverContentKey, setPopoverContentKey] = useState(0);
-	// After an explicit close, block auto-open for this row instance. Cleared only on
-	// intentional open — clearing when creatingStep flickers false→true reopens the popover.
-	const suppressAutoOpenRef = useRef(false);
 
 	const handleItemOpen = useCallback(
 		(options?: { refreshContent?: boolean }) => {
@@ -179,7 +171,6 @@ const RepeaterItem = ({
 					? itemRef.current
 					: undefined;
 
-			suppressAutoOpenRef.current = false;
 			closeInspectorRepeaterPopovers(row);
 
 			setOpen((currentlyOpen) => {
@@ -203,7 +194,6 @@ const RepeaterItem = ({
 				return;
 			}
 
-			suppressAutoOpenRef.current = true;
 			setOpen(false);
 		},
 		[handleItemOpen]
@@ -227,37 +217,14 @@ const RepeaterItem = ({
 
 	// New rows open the edit popover via pendingOpenItemId, creatingStep, or store isOpen.
 	useEffect(() => {
-		const hadVariations = prevHasVariationsRef.current;
-		const hasVariationsNow = item?.hasVariations === true;
-
-		if (!hadVariations && hasVariationsNow) {
-			setVariationsAccordionOpen(false);
-		}
-
-		prevHasVariationsRef.current = hasVariationsNow;
-	}, [item?.hasVariations]);
-
-	useEffect(() => {
 		if (isOpen) {
 			return;
 		}
 
-		if (suppressAutoOpenRef.current) {
-			return;
-		}
-
-		const pendingMatch = pendingOpenItemId === itemId;
-		const storeOpen = item?.isOpen === true;
-		const creatingStep = item?.creatingStep === true;
-		const creatingStepGuarded =
-			typeof isCreatingStepPopoverCloseGuarded === 'function' &&
-			isCreatingStepPopoverCloseGuarded(itemId);
-
-		// After creatingStep close, stale creatingStep (or remount) must not reopen.
 		if (
-			!pendingMatch &&
-			!storeOpen &&
-			(!creatingStep || creatingStepGuarded)
+			pendingOpenItemId !== itemId &&
+			item?.isOpen !== true &&
+			item?.creatingStep !== true
 		) {
 			return;
 		}
@@ -270,7 +237,6 @@ const RepeaterItem = ({
 		itemId,
 		isOpen,
 		handleItemOpen,
-		isCreatingStepPopoverCloseGuarded,
 	]);
 
 	// Rename-by-type changes itemId while the edit popover is open — keep it open.
@@ -345,15 +311,10 @@ const RepeaterItem = ({
 	}, [item?.creatingStep, itemId, scrollBehavior]);
 
 	const handleItemPopoverClose = useCallback(() => {
-		suppressAutoOpenRef.current = true;
 		setOpen(false);
 		clearPendingOpenItemId(itemId);
 
 		if (item?.creatingStep === true) {
-			if (typeof markCreatingStepPopoverClosed === 'function') {
-				markCreatingStepPopoverClosed(itemId);
-			}
-
 			changeRepeaterItem({
 				itemId,
 				value: {
@@ -391,7 +352,6 @@ const RepeaterItem = ({
 		valueCleanup,
 		changeRepeaterItem,
 		clearPendingOpenItemId,
-		markCreatingStepPopoverClosed,
 	]);
 
 	useEffect(() => {
@@ -567,7 +527,6 @@ const RepeaterItem = ({
 		</div>
 	) : (
 		<div
-			ref={mainPresetHeaderRef}
 			className={controlInnerClassNames('repeater-item-header-holder')}
 			style={{ width: '100%' }}
 			onClickCapture={(e) => {
@@ -688,7 +647,6 @@ const RepeaterItem = ({
 					return;
 				}
 
-				// Editing via standalone popover (variations branch) or nested surfaces.
 				if (isClickInsideOpenInspectorRepeaterPopover(event?.target)) {
 					return;
 				}
@@ -760,49 +718,6 @@ const RepeaterItem = ({
 		/>
 	);
 
-	const showVariationsBranch = Boolean(
-		RepeaterItemVariations &&
-		showVariations &&
-		isBoolean(item?.hasVariations) &&
-		item.hasVariations &&
-		true !== item?.listViewCompactShades
-	);
-
-	const mainPresetEditPopover =
-		showVariationsBranch && 'popover' === mode && isOpen ? (
-			<Popover
-				placement="left-start"
-				className={controlInnerClassNames(
-					'group-popover',
-					popoverClassName
-				)}
-				title={
-					'function' === typeof popoverTitle
-						? popoverTitle(itemId, item)
-						: popoverTitle
-				}
-				titleButtonsRight={
-					PopoverTitleButtonsRight && (
-						<PopoverTitleButtonsRight
-							{...repeaterItemActionsProps}
-						/>
-					)
-				}
-				anchor={
-					mainPresetHeaderRef.current instanceof HTMLElement
-						? mainPresetHeaderRef.current
-						: undefined
-				}
-				onClose={handleItemPopoverClose}
-				{...(popoverProps || {})}
-			>
-				<RepeaterItemChildren
-					key={popoverContentKey}
-					{...{ item, itemId }}
-				/>
-			</Popover>
-		) : null;
-
 	const isRowDraggable = !variationsAccordionOpen;
 
 	return (
@@ -837,10 +752,7 @@ const RepeaterItem = ({
 					? 'repeater-item-creating-step'
 					: itemId
 			}
-			{...(showVariationsBranch && isOpen
-				? { 'data-edit-popover-open': 'true' }
-				: {})}
-			{...(item?.isSelected && !isOpen
+			{...(item?.isSelected
 				? {
 						onClick: (event: MouseEvent) =>
 							mainItemGroupSharedProps.onClick(event),
@@ -862,35 +774,34 @@ const RepeaterItem = ({
 					}
 				/>
 			)}
-			{showVariationsBranch ? (
-				<>
-					<GroupControl
-						mode="accordion"
-						design={design}
-						onClick={mainItemGroupSharedProps.onClick}
-						headerOpenButton={true}
-						toggleOpenBorder={true}
-						actionButtonsType="inline"
-						popoverProps={popoverProps}
-						isOpen={variationsAccordionOpen}
-						className={controlInnerClassNames(
-							'repeater-item-variations-group'
-						)}
-						onOpen={() => setVariationsAccordionOpen(true)}
-						onClose={() => setVariationsAccordionOpen(false)}
-						actionMenuButtonLabel={actionMenuButtonLabel}
-						header={mainItemGroupHeader}
-						headerVariableSlug={headerVariableSlug}
-						injectHeaderButtonsStart={
-							mainItemInjectHeaderButtonsStart
-						}
-					>
-						<RepeaterItemVariationsPane>
-							<RepeaterItemVariations {...{ item, itemId }} />
-						</RepeaterItemVariationsPane>
-					</GroupControl>
-					{mainPresetEditPopover}
-				</>
+			{RepeaterItemVariations &&
+			showVariations &&
+			isBoolean(item?.hasVariations) &&
+			item.hasVariations &&
+			true !== item?.listViewCompactShades ? (
+				<GroupControl
+					mode="accordion"
+					design={design}
+					onClick={mainItemGroupSharedProps.onClick}
+					headerOpenButton={true}
+					toggleOpenBorder={true}
+					actionButtonsType="inline"
+					popoverProps={popoverProps}
+					isOpen={variationsAccordionOpen}
+					className={controlInnerClassNames(
+						'repeater-item-variations-group'
+					)}
+					onOpen={() => setVariationsAccordionOpen(true)}
+					onClose={() => setVariationsAccordionOpen(false)}
+					actionMenuButtonLabel={actionMenuButtonLabel}
+					header={mainItemGroupHeader}
+					headerVariableSlug={headerVariableSlug}
+					injectHeaderButtonsStart={mainItemInjectHeaderButtonsStart}
+				>
+					<RepeaterItemVariationsPane>
+						<RepeaterItemVariations {...{ item, itemId }} />
+					</RepeaterItemVariationsPane>
+				</GroupControl>
 			) : (
 				mainItemGroupControl
 			)}

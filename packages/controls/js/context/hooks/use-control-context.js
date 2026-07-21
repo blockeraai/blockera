@@ -22,13 +22,17 @@ import {
 /**
  * Internal dependencies
  */
+import {
+	store as controlStore,
+	STORE_NAME as CONTROL_STORE_NAME,
+} from '../../store';
+import { STORE_NAME as REPEATER_STORE_NAME } from '../../libs/repeater-control/store/constants';
 import useControlEffect from './use-control-effect';
 import { BaseControlContext, ControlContext } from '../index';
-import { STORE_NAME as CONTROL_STORE_NAME } from '../../store/constants';
 import type { ControlContextHookProps, ControlContextRef } from '../types';
+import { store as repeaterStore } from '../../libs/repeater-control/store';
 import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
 import { repeaterOnChange } from '../../libs/repeater-control/store/reducers/utils';
-import { STORE_NAME as REPEATER_STORE_NAME } from '../../libs/repeater-control/store/constants';
 
 //eslint-disable-next-line
 /**
@@ -192,8 +196,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			const breakpoints = Object.keys(getBreakpoints());
 			//get `blockera/controls` store or details of that
 			const { getControl } = isRepeaterControl()
-				? select(REPEATER_STORE_NAME)
-				: select(CONTROL_STORE_NAME);
+				? select(repeaterStore)
+				: select(controlStore);
 
 			states.forEach((state) => {
 				const currentState = isInnerBlock(getExtensionCurrentBlock())

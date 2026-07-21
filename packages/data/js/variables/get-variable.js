@@ -4,7 +4,6 @@
  */
 import { getWidthSize } from './width-size';
 import { getFontSize } from './font-size';
-import { getLineHeight } from './line-height';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 import { getColor } from './color';
@@ -23,9 +22,6 @@ export const getVariable = (type: string, id: string): ?VariableItem => {
 
 		case 'font-size':
 			return getFontSize(id);
-
-		case 'line-height':
-			return getLineHeight(id);
 
 		case 'linear-gradient':
 			return getLinearGradient(id);

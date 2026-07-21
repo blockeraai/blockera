@@ -3,7 +3,7 @@
  */
 import {
 	createPost,
-	assertBlockData,
+	getWPDataObject,
 	getBlockType,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
@@ -16,7 +16,7 @@ describe('Testing shared default attributes value', () => {
 	it('should valid sets default attributes values', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const attributes = getBlockType(data, 'core/paragraph').attributes;
 
 			for (const name in attributes) {

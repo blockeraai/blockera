@@ -17,7 +17,6 @@ import {
 	checkBlockCard,
 	resetBlockState,
 	getWPDataObject,
-	assertBlockData,
 	getSelectedBlock,
 	getBlockClientId,
 	openBlockInserter,
@@ -143,7 +142,7 @@ describe('Block State E2E Test', () => {
 			cy.getByAriaLabel('Input Width').type(100, { force: true });
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet
@@ -170,7 +169,7 @@ describe('Block State E2E Test', () => {
 			setBlockState('Hover');
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes.blockeraInnerBlocks
@@ -200,7 +199,7 @@ describe('Block State E2E Test', () => {
 			});
 
 			// Assert store data.
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('100px').to.be.equal(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
@@ -263,7 +262,7 @@ describe('Block State E2E Test', () => {
 			});
 
 			// Assert store data.
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({ blockeraWidth: '100px' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes
@@ -362,7 +361,7 @@ describe('Block State E2E Test', () => {
 			});
 
 			// Assert store data.
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					desktop: { attributes: { blockeraWidth: '150px' } },
 				}).to.be.deep.equal(
@@ -443,7 +442,7 @@ describe('Block State E2E Test', () => {
 			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({ blockeraWidth: '100px' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes
@@ -806,7 +805,7 @@ describe('Block State E2E Test', () => {
 						);
 					});
 
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({
 							hover: {
 								breakpoints: {
@@ -1063,7 +1062,7 @@ describe('Block State E2E Test', () => {
 		resetBlockState('Before');
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({}).to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraBlockStates').before.breakpoints
 					.desktop.attributes
@@ -1089,7 +1088,7 @@ describe('Block State E2E Test', () => {
 
 		checkCurrentState('before');
 
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			const blockStates = getSelectedBlock(data, 'blockeraBlockStates');
 
 			expect({}).to.be.deep.equal(

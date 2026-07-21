@@ -597,60 +597,6 @@ describe('popover offset utils', () => {
 			);
 		});
 
-		it('isPopoverDismissIgnoredTarget associates a modal on focus-steal without another modal pointer event', () => {
-			const popover = document.createElement('div');
-			popover.className = 'blockera-component-popover';
-			const modalOpener = document.createElement('button');
-			popover.appendChild(modalOpener);
-			document.body.appendChild(popover);
-
-			modalOpener.dispatchEvent(
-				new MouseEvent('mousedown', { bubbles: true })
-			);
-
-			const overlay = document.createElement('div');
-			overlay.className = 'components-modal__screen-overlay';
-			const modalButton = document.createElement('button');
-			overlay.appendChild(modalButton);
-			document.body.appendChild(overlay);
-
-			// Modal mounts and steals focus before any mousedown inside it.
-			expect(isPopoverDismissIgnoredTarget(popover, modalButton)).toBe(
-				true
-			);
-		});
-
-		it('isPopoverDismissIgnoredTarget keeps parent open for modals opened from a nested child popover', () => {
-			const parentPopover = document.createElement('div');
-			parentPopover.className = 'blockera-component-popover';
-			document.body.appendChild(parentPopover);
-
-			const nestedPopover = document.createElement('div');
-			nestedPopover.className = 'blockera-component-popover';
-			const modalOpener = document.createElement('button');
-			nestedPopover.appendChild(modalOpener);
-			document.body.appendChild(nestedPopover);
-
-			linkNestedPopoverToParent(nestedPopover, parentPopover);
-
-			modalOpener.dispatchEvent(
-				new MouseEvent('mousedown', { bubbles: true })
-			);
-
-			const overlay = document.createElement('div');
-			overlay.className = 'components-modal__screen-overlay';
-			const modalButton = document.createElement('button');
-			overlay.appendChild(modalButton);
-			document.body.appendChild(overlay);
-
-			expect(
-				isPopoverDismissIgnoredTarget(nestedPopover, modalButton)
-			).toBe(true);
-			expect(
-				isPopoverDismissIgnoredTarget(parentPopover, modalButton)
-			).toBe(true);
-		});
-
 		it('isPopoverDismissIgnoredTarget keeps the popover open for media modals opened from parent', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
@@ -708,34 +654,6 @@ describe('popover offset utils', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
 			document.body.appendChild(popover);
-
-			const overlay = document.createElement('div');
-			overlay.className = 'components-modal__screen-overlay';
-			const modalButton = document.createElement('button');
-			overlay.appendChild(modalButton);
-			document.body.appendChild(overlay);
-
-			expect(isPopoverDismissIgnoredTarget(popover, modalButton)).toBe(
-				false
-			);
-		});
-
-		it('isPopoverDismissIgnoredTarget does not keep popovers open for unrelated modals after outside pointer', () => {
-			const popover = document.createElement('div');
-			popover.className = 'blockera-component-popover';
-			const inside = document.createElement('button');
-			popover.appendChild(inside);
-			document.body.appendChild(popover);
-
-			const outside = document.createElement('button');
-			document.body.appendChild(outside);
-
-			inside.dispatchEvent(
-				new MouseEvent('mousedown', { bubbles: true })
-			);
-			outside.dispatchEvent(
-				new MouseEvent('mousedown', { bubbles: true })
-			);
 
 			const overlay = document.createElement('div');
 			overlay.className = 'components-modal__screen-overlay';

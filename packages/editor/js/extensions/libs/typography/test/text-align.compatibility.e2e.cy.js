@@ -4,7 +4,7 @@
 import {
 	createPost,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -33,7 +33,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -50,7 +50,7 @@ describe('Text Align → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('right').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -64,7 +64,7 @@ describe('Text Align → WP Compatibility', () => {
 			});
 
 			// Blockera value should NOT moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('justify').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -81,7 +81,7 @@ describe('Text Align → WP Compatibility', () => {
 				cy.getByAriaLabel('Justify').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -113,7 +113,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('left').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -134,7 +134,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -155,7 +155,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('right').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -185,7 +185,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -204,7 +204,7 @@ describe('Text Align → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('right').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -220,7 +220,7 @@ describe('Text Align → WP Compatibility', () => {
 			});
 
 			// Blockera value should NOT moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('justify').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -239,7 +239,7 @@ describe('Text Align → WP Compatibility', () => {
 				cy.getByAriaLabel('Justify').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -273,7 +273,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('left').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -296,7 +296,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('center').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);
@@ -319,7 +319,7 @@ describe('Text Align → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('right').to.be.equal(
 					getSelectedBlock(data, 'blockeraTextAlign')
 				);

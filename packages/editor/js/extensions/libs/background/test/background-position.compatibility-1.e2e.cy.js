@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Background → WP Compatibility', () => {
@@ -44,7 +44,7 @@ describe('Background → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				// default position is 50% 50%
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						'image-0': {
 							isVisible: true,
@@ -102,7 +102,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						url: 'https://placehold.co/600x400',
 						id: 0,
@@ -131,7 +131,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage
@@ -177,7 +177,7 @@ describe('Background → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				// default position is 50% 50%
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						'image-0': {
 							isVisible: true,
@@ -235,7 +235,7 @@ describe('Background → WP Compatibility', () => {
 					});
 
 				// Blockera value should be moved to WP data
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						url: 'https://placehold.co/600x400',
 						id: 0,
@@ -264,7 +264,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage

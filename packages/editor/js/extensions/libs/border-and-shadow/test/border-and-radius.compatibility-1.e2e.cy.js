@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Border & Border Radius Together → WP Compatibility', () => {
@@ -37,7 +37,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -79,7 +79,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 					cy.get('input').type(20, { force: true, delay: 0 });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -135,7 +135,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 					cy.get('input').clear({ force: true });
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						type: 'all',
 						all: {
@@ -185,7 +185,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				//
 
 				// WP data should come to Blockera
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -308,7 +308,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 					});
 				});
 
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						type: 'custom',
 						all: {
@@ -429,7 +429,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				});
 
 				// WP data should be removed too
-				assertBlockData((data) => {
+				getWPDataObject().then((data) => {
 					expect({
 						type: 'custom',
 						all: {

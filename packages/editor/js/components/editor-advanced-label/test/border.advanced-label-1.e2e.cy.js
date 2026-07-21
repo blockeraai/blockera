@@ -2,7 +2,7 @@ import {
 	createPost,
 	setBlockState,
 	setDeviceType,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -325,7 +325,7 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes
@@ -355,7 +355,7 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes
@@ -385,7 +385,7 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: { width: '', style: '', color: '' },
@@ -416,7 +416,7 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					blockeraBorder: {
 						type: 'all',
@@ -530,7 +530,7 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.checkStateGraph('Border And Shadow', 'Border', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({
 							type: 'all',
 							all: {
@@ -632,7 +632,7 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: { style: '', color: '', width: '12px' },
@@ -728,7 +728,7 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
 					all: { style: '', width: '', color: '' },

@@ -1,5 +1,5 @@
 import {
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	createPost,
 	setBlockState,
@@ -389,7 +389,7 @@ describe('Color Control label testing (BG Color)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
 								.breakpoints.tablet.attributes
@@ -425,7 +425,7 @@ describe('Color Control label testing (BG Color)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.tablet.attributes
@@ -462,7 +462,7 @@ describe('Color Control label testing (BG Color)', () => {
 					});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect('').to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBackgroundColor')
 						);
@@ -496,7 +496,7 @@ describe('Color Control label testing (BG Color)', () => {
 					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.desktop.attributes
@@ -575,7 +575,7 @@ describe('Color Control label testing (BG Color)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('#1db0cc').to.be.eq(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -668,7 +668,7 @@ describe('Color Control label testing (BG Color)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.eq(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -780,7 +780,7 @@ describe('Color Control label testing (BG Color)', () => {
 					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Assert store data
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect('').to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBackgroundColor')
 						);
@@ -875,7 +875,7 @@ describe('Color Control label testing (BG Color)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('#c4c4c4').to.be.eq(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -970,7 +970,7 @@ describe('Color Control label testing (BG Color)', () => {
 			});
 
 			// Assert store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.eq(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);

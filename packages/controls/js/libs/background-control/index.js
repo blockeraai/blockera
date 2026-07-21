@@ -15,8 +15,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import Flex from '../flex';
-import { UpgradePrompt } from '../upgrade-prompt';
+import { UpgradePrompt, Flex } from '../';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';

@@ -3,7 +3,7 @@
  */
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -31,7 +31,7 @@ describe('Media Fit → Functionality', () => {
 		cy.getBlock('core/paragraph').should('have.css', 'object-fit', 'fill');
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('fill').to.be.equal(getSelectedBlock(data, 'blockeraFit'));
 		});
 
@@ -48,7 +48,7 @@ describe('Media Fit → Functionality', () => {
 		);
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('scale-down').to.be.deep.equal(
 				getSelectedBlock(data, 'blockeraFit')
 			);

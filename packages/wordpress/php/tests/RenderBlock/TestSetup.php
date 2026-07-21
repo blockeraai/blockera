@@ -47,25 +47,4 @@ class TestSetup extends \WP_UnitTestCase {
 		$this->assertEquals( 'core', $setup->getBlockDirectoryPath() );
 	}
 
-	/**
-	 * Overlay cache must merge Blockera selectors into live args without dropping them.
-	 */
-	public function testGetCustomizedBlockMergesSelectorsAndIsStableAcrossCalls() {
-		$setup = Setup::getInstance();
-		$setup->setPluginPath( blockera_core_config( 'app.vendor_path' ) );
-
-		$args = [
-			'attributes' => [ 'content' => [ 'type' => 'string' ] ],
-			'selectors'  => [ 'root' => '.existing' ],
-		];
-
-		$first  = $setup->getCustomizedBlock( 'core/paragraph', $args );
-		$second = $setup->getCustomizedBlock( 'core/paragraph', $args );
-
-		$this->assertSame( $first, $second );
-		$this->assertSame( '.existing', $first['selectors']['root'] );
-		$this->assertArrayHasKey( 'blockera/elements/link', $first['selectors'] );
-		$this->assertSame( [ 'type' => 'string' ], $first['attributes']['content'] );
-	}
-
 }

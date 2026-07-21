@@ -15,16 +15,9 @@ const hexToRgb = (hex) => {
 		: null;
 };
 
-const GRADIENT_CONTROL_POINT_SELECTOR =
-	'.components-custom-gradient-picker__control-point-button';
-
-const getGradientControl = () => cy.getByDataCy('gradient-bar-control');
-
-const getGradientControlPoints = () =>
-	getGradientControl().find(GRADIENT_CONTROL_POINT_SELECTOR);
-
-const hoverGradientBarCenter = () => {
-	getGradientControl()
+const addGradientControlPoint = () => {
+	// WP 31+ shows the inserter on hover (not click) and opens the color picker from the plus button.
+	cy.getByDataCy('gradient-bar-control')
 		.find('.components-custom-gradient-picker__gradient-bar')
 		.realHover()
 		.then(($bar) => {
@@ -35,28 +28,13 @@ const hoverGradientBarCenter = () => {
 				Math.round(height / 2)
 			);
 		});
-};
-
-const clearGradientBarHover = () => {
-	cy.get('body').realMouseMove(0, 0);
-};
-
-const addGradientControlPoint = () => {
-	// WP 31+ shows the inserter on hover (not click) and opens the color picker from the plus button.
-	hoverGradientBarCenter();
 
 	cy.get('.components-custom-gradient-picker__insert-point-dropdown')
 		.should('be.visible')
 		.click();
 
-	// The stop is created on the first ColorPicker color commit.
-	cy.get('.components-popover')
-		.find('.react-colorful')
-		.should('be.visible')
-		.click();
-
-	cy.clickOutside();
-	clearGradientBarHover();
+	cy.get('[aria-label="Color"]').click();
+	cy.get('.components-popover').clickOutside();
 };
 
 describe('gradient bar control component testing', () => {
@@ -79,7 +57,9 @@ describe('gradient bar control component testing', () => {
 			component: <GradientBarControl label="My Label" />,
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
 		});
-		getGradientControlPoints().should('have.length', 2);
+		cy.getByDataCy('gradient-bar-control')
+			.find('button')
+			.should('have.length', 2);
 	});
 
 	it('should render default value', () => {
@@ -122,9 +102,12 @@ describe('gradient bar control component testing', () => {
 		cy.withDataProvider({
 			component: <GradientBarControl label="My Label" />,
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
+			skipSyncValue: false,
 		});
 		addGradientControlPoint();
-		getGradientControlPoints().should('have.length', 3);
+		cy.getByDataCy('gradient-bar-control')
+			.find('button')
+			.should('have.length', 3);
 	});
 
 	it('should render onchange when component changed', () => {
@@ -157,29 +140,36 @@ describe('gradient bar control component testing', () => {
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
 			name,
 		});
-		getGradientControlPoints().should('have.length', 2);
+		cy.getByDataCy('gradient-bar-control')
+			.find('button')
+			.should('have.length', 2);
 		// add new pointer
 		addGradientControlPoint();
 		// check pointers length
-		getGradientControlPoints().should('have.length', 3);
+		cy.getByDataCy('gradient-bar-control')
+			.find('button')
+			.should('have.length', 3);
 		// remove new pointer (inserted between the two default stops)
-		getGradientControlPoints().then(($buttons) => {
-			const middleButton = [...$buttons].find((button) => {
-				const match = button
-					.getAttribute('aria-label')
-					?.match(/at position (\d+)%/);
-				const position = match ? Number(match[1]) : -1;
+		cy.getByDataCy('gradient-bar-control')
+			.find('.components-custom-gradient-picker__control-point-button')
+			.then(($buttons) => {
+				const middleButton = [...$buttons].find((button) => {
+					const match = button
+						.getAttribute('aria-label')
+						?.match(/position (\d+)%/);
+					const position = match ? Number(match[1]) : -1;
 
-				return position > 0 && position < 100;
+					return position > 0 && position < 100;
+				});
+
+				expect(middleButton, 'middle control point').to.exist;
+				cy.wrap(middleButton).click();
 			});
-
-			expect(middleButton, 'middle control point').to.exist;
-			cy.wrap(middleButton).click();
-		});
 		cy.contains('button', 'Remove Control Point').click();
-		clearGradientBarHover();
 		// check pointers length
-		getGradientControlPoints().should('have.length', 2);
+		cy.getByDataCy('gradient-bar-control')
+			.find('button')
+			.should('have.length', 2);
 
 		// Check data provider value!
 		cy.then(() => {
@@ -196,10 +186,16 @@ describe('gradient bar control component testing', () => {
 			value: 'linear-gradient(135deg,rgb(6,147,227)',
 			name,
 		});
-		getGradientControlPoints().first().click();
+		cy.getByDataCy('gradient-bar-control')
+			.find('.components-custom-gradient-picker__control-point-button')
+			.first()
+			.click();
 		cy.get('input[maxlength="9"]').then(($input) => {
 			const val = $input.val();
-			getGradientControlPoints()
+			cy.getByDataCy('gradient-bar-control')
+				.find(
+					'.components-custom-gradient-picker__control-point-button'
+				)
 				.first()
 				.invoke('attr', 'aria-label')
 				.then((ariaLabel) => {

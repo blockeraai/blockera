@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -35,7 +35,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			cy.getBlock('core/paragraph').should('have.css', 'gap', '10px');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: true,
 					gap: '10px',
@@ -58,7 +58,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 				cy.getByAriaLabel('Custom Row & Column Gap').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: false,
 					gap: '8px',
@@ -83,7 +83,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 				.should('have.css', 'column-gap', '15px')
 				.and('have.css', 'row-gap', '10px');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: false,
 					gap: '8px',
@@ -120,7 +120,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 					);
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: true,
 					gap: {
@@ -165,7 +165,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 				cy.getByAriaLabel('Custom Row & Column Gap').click();
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: false,
 					gap: {
@@ -244,7 +244,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 					);
 			});
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: false,
 					gap: {
@@ -329,7 +329,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			cy.getBlock('core/paragraph').should('have.css', 'gap', 'normal');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: true,
 					gap: '',
@@ -360,7 +360,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 				'normal'
 			);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: true,
 					gap: '',
@@ -395,7 +395,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 				'normal'
 			);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: false,
 					gap: '30px',
@@ -423,7 +423,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 			);
 			cy.getBlock('core/paragraph').should('have.css', 'row-gap', '40px');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: false,
 					gap: '40px',
@@ -457,7 +457,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 				'normal'
 			);
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					lock: true,
 					gap: '',

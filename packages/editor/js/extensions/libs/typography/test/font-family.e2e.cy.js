@@ -1,6 +1,6 @@
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -33,7 +33,7 @@ describe('Font Family → Functionality', () => {
 		});
 
 		//Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect('fira-code').to.be.equal(
 				getSelectedBlock(data, 'blockeraFontFamily')
 			);

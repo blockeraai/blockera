@@ -172,18 +172,6 @@ export const runInsideBlockInspector = (
 };
 
 /**
- * Resolve the store definition key for an inner block.
- * Exact keys win (e.g. `core/heading-1`). Instance suffixes fall back to the
- * base key (e.g. `elements/link-1` → `elements/link`).
- *
- * @param {string} innerBlock Inner block registry key.
- * @return {string} Definition lookup key.
- */
-export function resolveInnerBlockDefinitionKey(innerBlock: string): string {
-	return innerBlock.replace(/-\d+$/, '');
-}
-
-/**
  * Whether an inner block definition is registered for a block via Blockera store API.
  *
  * @param {string} innerBlock Inner block registry key.
@@ -196,25 +184,12 @@ export function isInnerBlockRegisteredForBlock(
 ): boolean {
 	const { getDefinition } = select(STORE_NAME);
 
-	if (getDefinition(innerBlock, blockName)) {
-		return true;
-	}
-
-	const sanitizedKey = resolveInnerBlockDefinitionKey(innerBlock);
-
-	return (
-		sanitizedKey !== innerBlock &&
-		Boolean(getDefinition(sanitizedKey, blockName))
-	);
+	return Boolean(getDefinition(innerBlock, blockName));
 }
 
 /**
  * Remove blockeraInnerBlocks entries that are not registered for the current block.
  * WordPress core attribute data in the same payload is preserved.
- *
- * Only use this on compatibility *patches* (see mergeWPCompatibility). Do not run
- * it on the full attribute bag — that drops legitimate saved inner-block data
- * (allowed children, instance keys, etc.).
  *
  * @param {Object} result Compatibility result object.
  * @param {string} blockName WordPress block name.
@@ -302,20 +277,15 @@ export function mergeWPCompatibility(
 }
 
 /**
- * Finalize attributes after from-WordPress compatibility import.
- *
- * Must not strip existing `blockeraInnerBlocks` — that data may include allowed
- * children and instance keys that are valid even when not store-registered.
- * Unregistered keys from WP compat patches are already filtered in
- * mergeWPCompatibility.
+ * Sanitize attributes after from-WordPress compatibility import.
  *
  * @param {Object} attributes Block attributes.
  * @param {BlockDetail} blockDetail Current block detail.
- * @return {Object} Attributes unchanged.
+ * @return {Object} Sanitized attributes.
  */
 export function sanitizeWPCompatibilityAttributes(
 	attributes: Object,
-	_blockDetail: BlockDetail // eslint-disable-line no-unused-vars
+	blockDetail: BlockDetail
 ): Object {
-	return attributes;
+	return omitUnregisteredInnerBlockData(attributes, blockDetail.blockId);
 }

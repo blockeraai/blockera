@@ -190,7 +190,6 @@ function seedByVariableType(
 ): Record<string, unknown> | null {
 	switch (variableType) {
 		case 'font-size':
-		case 'line-height':
 		case 'spacing':
 		case 'width-size':
 		case 'border-radius': {

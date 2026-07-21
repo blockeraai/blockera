@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	setInnerBlock,
 	setBlockState,
 	addBlockState,
@@ -52,7 +52,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					cy.addNewTransition();
 
 					// Assert WP element value
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect('#ff6868').to.be.equal(
 							getSelectedBlock(data, 'style')?.elements[element]
 								?.color?.text
@@ -64,7 +64,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					//
 
 					// WP data should come to Blockera
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({
 							blockeraFontColor: '#ff6868',
 						}).to.be.deep.equal(
@@ -86,7 +86,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					cy.setColorControlValue('Text Color', '666666');
 
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({
 							blockeraFontColor: '#666666',
 						}).to.be.deep.equal(
@@ -96,7 +96,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						);
 					});
 
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect('#666666').to.be.equal(
 							getSelectedBlock(data, 'style')?.elements[element]
 								?.color?.text
@@ -109,7 +109,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					cy.clearColorControlValue('Text Color');
 
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.equal(
 							getSelectedBlock(data, 'blockeraInnerBlocks')[
 								innerBlock
@@ -117,7 +117,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						);
 					});
 
-					assertBlockData((data) => {
+					getWPDataObject().then((data) => {
 						expect(undefined).to.be.equal(
 							getSelectedBlock(data, 'style')?.elements[element]
 								?.color?.text
@@ -150,7 +150,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						cy.addNewTransition();
 
 						// Assert WP data
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect('var:preset|color|accent-3').to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
@@ -163,7 +163,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						//
 
 						// WP data should come to Blockera
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect({
 								blockeraFontColor: {
 									settings: {
@@ -200,7 +200,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 						cy.selectValueAddonItem('contrast');
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect({
 								blockeraFontColor: {
 									settings: {
@@ -225,7 +225,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							);
 						});
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect('var:preset|color|contrast').to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
@@ -241,7 +241,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							cy.removeValueAddon();
 						});
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect({}).to.be.deep.equal(
 								getSelectedBlock(data, 'blockeraInnerBlocks')[
 									innerBlock
@@ -249,7 +249,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							);
 						});
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect(undefined).to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
@@ -282,7 +282,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						cy.addNewTransition();
 
 						// Assert WP element value
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect('#ffcaca').to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
@@ -295,7 +295,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						//
 
 						// WP data should come to Blockera
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect({
 								blockeraBackgroundColor: '#ffcaca',
 							}).to.be.deep.equal(
@@ -317,7 +317,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 						cy.setColorControlValue('BG Color', '666666');
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect({
 								blockeraBackgroundColor: '#666666',
 							}).to.be.deep.equal(
@@ -327,7 +327,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							);
 						});
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect('#666666').to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
@@ -341,7 +341,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 						cy.clearColorControlValue('BG Color');
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect({}).to.be.deep.equal(
 								getSelectedBlock(data, 'blockeraInnerBlocks')[
 									innerBlock
@@ -349,7 +349,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							);
 						});
 
-						assertBlockData((data) => {
+						getWPDataObject().then((data) => {
 							expect(undefined).to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
@@ -383,7 +383,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							cy.addNewTransition();
 
 							// Assert WP element value
-							assertBlockData((data) => {
+							getWPDataObject().then((data) => {
 								expect('var:preset|color|accent-3').to.be.equal(
 									getSelectedBlock(data, 'style')?.elements[
 										element
@@ -396,7 +396,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							//
 
 							// WP data should come to Blockera
-							assertBlockData((data) => {
+							getWPDataObject().then((data) => {
 								expect({
 									blockeraBackgroundColor: {
 										settings: {
@@ -434,7 +434,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 							cy.selectValueAddonItem('contrast');
 
-							assertBlockData((data) => {
+							getWPDataObject().then((data) => {
 								expect({
 									blockeraBackgroundColor: {
 										settings: {
@@ -460,7 +460,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								);
 							});
 
-							assertBlockData((data) => {
+							getWPDataObject().then((data) => {
 								expect('var:preset|color|contrast').to.be.equal(
 									getSelectedBlock(data, 'style')?.elements[
 										element
@@ -476,7 +476,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								cy.removeValueAddon();
 							});
 
-							assertBlockData((data) => {
+							getWPDataObject().then((data) => {
 								expect({}).to.be.deep.equal(
 									getSelectedBlock(
 										data,
@@ -485,7 +485,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								);
 							});
 
-							assertBlockData((data) => {
+							getWPDataObject().then((data) => {
 								expect(undefined).to.be.equal(
 									getSelectedBlock(data, 'style')?.elements[
 										element

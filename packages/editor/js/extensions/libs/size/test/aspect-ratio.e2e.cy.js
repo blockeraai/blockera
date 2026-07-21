@@ -3,7 +3,7 @@
  */
 import {
 	savePage,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
@@ -34,7 +34,7 @@ describe('Aspect Ratio → Functionality', () => {
 		);
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				val: '1',
 				width: '',
@@ -48,7 +48,7 @@ describe('Aspect Ratio → Functionality', () => {
 		});
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				val: 'custom',
 				width: '1',
@@ -62,7 +62,7 @@ describe('Aspect Ratio → Functionality', () => {
 		});
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				val: '4/3',
 				width: '',
@@ -76,7 +76,7 @@ describe('Aspect Ratio → Functionality', () => {
 		});
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				val: 'custom',
 				width: '4',
@@ -104,7 +104,7 @@ describe('Aspect Ratio → Functionality', () => {
 		);
 
 		// Check store
-		assertBlockData((data) => {
+		getWPDataObject().then((data) => {
 			expect({
 				val: 'custom',
 				width: 2,

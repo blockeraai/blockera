@@ -2,7 +2,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	assertBlockData,
+	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -50,7 +50,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			// Check store data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					'move-0': {
 						isVisible: true,
@@ -116,7 +116,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					'scale-0': {
 						type: 'scale',
@@ -166,7 +166,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					'rotate-0': {
 						type: 'rotate',
@@ -218,7 +218,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					'skew-0': {
 						type: 'skew',
@@ -260,7 +260,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check store
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect({
 					'skew-0': {
 						type: 'skew',

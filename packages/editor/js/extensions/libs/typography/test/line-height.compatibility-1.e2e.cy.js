@@ -4,7 +4,7 @@
 import {
 	appendBlocks,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -33,7 +33,7 @@ describe('Line Height → WP Compatibility', () => {
 			//
 
 			// WP data should come to Blockera
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('1.2').to.be.equal(
 					getSelectedBlock(data, 'blockeraLineHeight')
 				);
@@ -55,7 +55,7 @@ describe('Line Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('2').to.be.equal(
 					getSelectedBlock(data, 'blockeraLineHeight')
 				);
@@ -75,7 +75,7 @@ describe('Line Height → WP Compatibility', () => {
 			});
 
 			// Blockera value should be moved to WP data
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraLineHeight')
 				);

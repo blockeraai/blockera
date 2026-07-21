@@ -8,29 +8,31 @@ class Mask extends BaseStyleDefinition implements Repeater {
 
     protected function css( array $setting): array {
 
-		$cssProperty = $setting['type'] ?? '';
+        $declaration = [];
+        $cssProperty = $setting['type'];
 
-		if ( '' === $cssProperty || 'mask' !== $cssProperty || empty( $setting[ $cssProperty ] ) ) {
-			return [];
+        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'mask' !== $cssProperty) {
+
+            return $declaration;
+        }
+
+		if (! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', 'mask' ])) {
+
+			return $declaration;
 		}
 
-		if ( ! blockera_get_experimental( [ 'editor', 'extensions', 'effectsExtension', 'mask' ] ) ) {
-			return [];
+        $filteredMasks = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
+
+        if (empty($filteredMasks)) {
+
+			return $declaration;
 		}
 
-		// First visible row only — avoid array_filter + array_values allocs.
-		foreach ( blockera_get_sorted_repeater( $setting[ $cssProperty ] ) as $row ) {
-			if ( ! $this->isValidSetting( $row ) ) {
-				continue;
-			}
+		$this->setMask($filteredMasks[0]);
 
-			$this->setMask( $row );
-			$this->setCss( $this->declarations );
+        $this->setCss($this->declarations);
 
-			return $this->css;
-		}
-
-		return [];
+        return $this->css;
     }
 
     /**

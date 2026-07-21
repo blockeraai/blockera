@@ -10,7 +10,7 @@ import {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
-	assertBlockData,
+	getWPDataObject,
 	activateMuPlugin,
 	deactivateMuPlugin,
 	setInnerBlock,
@@ -217,7 +217,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 			setBlockState('Hover');
 			cy.setColorControlValue('Text Color', '888888');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const group = getGroupGlobalStyles(data);
 				const link = group?.elements?.link;
 
@@ -230,7 +230,7 @@ describe('Inner blocks bootstrap → global styles theme.json (mu-plugins)', () 
 			setInnerBlock('core/button');
 			cy.setColorControlValue('Text Color', '445566');
 
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const group = getGroupGlobalStyles(data);
 
 				expect('#445566').to.equal(

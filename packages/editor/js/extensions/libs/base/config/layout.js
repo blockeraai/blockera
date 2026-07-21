@@ -43,15 +43,6 @@ const blockeraFlexWrap: FeatureConfig = {
 	keywords: ['flex', 'wrap', 'nowrap', 'children'],
 };
 
-const blockeraAlignContent: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	onCompanion: true,
-	label: __('Align Content', 'blockera'),
-	keywords: ['align-content', 'flex', 'wrap', 'align', 'content', 'stretch'],
-};
-
 const blockeraSpacing: FeatureConfig = {
 	show: true,
 	force: false,
@@ -92,7 +83,6 @@ export const layoutConfig = {
 	blockeraFlexLayout,
 	blockeraGap,
 	blockeraFlexWrap,
-	blockeraAlignContent,
 	blockeraSpacing,
 	blockeraGridMinimumColumnWidth,
 	blockeraGridColumnCount,

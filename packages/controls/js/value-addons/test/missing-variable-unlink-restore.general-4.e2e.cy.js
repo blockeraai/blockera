@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	getSelectedBlock,
-	assertBlockData,
+	getWPDataObject,
 	openMoreFeaturesControl,
 	openRepeaterHeaderVariablePicker,
 	setBoxSpacingSide,
@@ -135,7 +135,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 			cy.selectValueAddonItem('e-2-e-missing-color');
 		},
 		assertUnlinked() {
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const value = getSelectedBlock(data, 'blockeraFontColor');
 				expect(value?.isValueAddon).to.not.equal(true);
 			});
@@ -189,7 +189,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 			setBoxSpacingSide('margin-top', 'e-2-e-missing-space', true);
 		},
 		assertUnlinked() {
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const spacing = getSelectedBlock(data, 'blockeraSpacing');
 				expect(spacing?.margin?.top?.isValueAddon).to.not.equal(true);
 			});
@@ -301,7 +301,7 @@ describe('Missing variable → recreate + unlink (consolidated per type)', () =>
 			});
 		},
 		assertUnlinked() {
-			assertBlockData((data) => {
+			getWPDataObject().then((data) => {
 				const border = getSelectedBlock(data, 'blockeraBorder');
 				expect(border?.all?.color?.isValueAddon).to.not.equal(true);
 			});

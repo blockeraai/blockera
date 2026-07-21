@@ -2,15 +2,12 @@
  * Blockera dependencies
  */
 import {
-	assertVariablePickerPresetHoverPreview,
 	createPost,
 	expectBlockAttrIncludesPresetVar,
-	filterVariablePickerSearch,
 	nameNewGlobalStylesCustomPreset,
 	openGlobalStylesFiltersScreen,
 	openRepeaterHeaderVariablePicker,
 	redirectToFrontPage,
-	resetAndSaveGlobalStylesEntityRecord,
 	savePage,
 	saveSiteEditorDirtyEntities,
 } from '@blockera/dev-cypress/js/helpers';
@@ -20,35 +17,11 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 	const slug = 'e-2-e-filter';
 	const addDataTest = 'global-styles-preset-add-filter-preset-presets-custom';
 
-	afterEach(() => {
-		resetAndSaveGlobalStylesEntityRecord();
-	});
-
 	function seedFilterPreset() {
 		openGlobalStylesFiltersScreen();
 		nameNewGlobalStylesCustomPreset({ addDataTest, presetName });
 		saveSiteEditorDirtyEntities();
 	}
-
-	it('previews the filter preset on the selected block while hovering the picker row, then clears it on mouse leave', () => {
-		seedFilterPreset();
-
-		createPost();
-
-		cy.getBlock('default').type('Hover preview filter paragraph.', {
-			delay: 0,
-		});
-		cy.getByAriaControls('styles-view').click();
-
-		openRepeaterHeaderVariablePicker('Filters');
-
-		filterVariablePickerSearch(presetName);
-
-		assertVariablePickerPresetHoverPreview({
-			slug,
-			cssNeedle: 'blur(3px)',
-		});
-	});
 
 	it('applies the custom filter preset', () => {
 		seedFilterPreset();
@@ -82,8 +55,6 @@ describe('Global Styles filter preset → value addon (Filters)', () => {
 	});
 
 	it('updates generated CSS when blur is edited in global styles after picking it', () => {
-		seedFilterPreset();
-
 		createPost();
 
 		cy.getBlock('default').type('Filter edit paragraph.', { delay: 0 });

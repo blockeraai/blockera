@@ -38,7 +38,7 @@ import { buildPresetVariablePickerPayload } from '../variable-picker-preset-util
 import { isTaxonomyPopoverOpenEvent } from './is-taxonomy-popover-open-event';
 import { PresetTaxonomyPresetFields } from './taxonomy-preset-fields';
 import { isPresetTaxonomyInterfaceSizeSmall } from './preset-taxonomy-utils';
-import { usePresetTaxonomyEditSessionActionsOptional } from '../preset-taxonomy/preset-taxonomy-edit-session-context';
+import { usePresetTaxonomyEditSessionOptional } from '../preset-taxonomy/preset-taxonomy-edit-session-context';
 
 type TaxonomyRepeaterCtx = {
 	popoverTitle?: string;
@@ -93,14 +93,13 @@ export const PresetTaxonomyPopoverRow = memo(function PresetTaxonomyPopoverRow({
 		[item, viewMode]
 	);
 	const repeaterCtx = useContext(RepeaterContext) as TaxonomyRepeaterCtx;
-	const editSessionActions = usePresetTaxonomyEditSessionActionsOptional();
-	// Match SharedPresetControls (itemId) so begin/end share one session key.
-	const editSessionKey = String(itemId);
+	const editSession = usePresetTaxonomyEditSessionOptional();
+	const rowSlug = String(item.slug ?? itemId);
 
 	const handlePopoverOpen = useCallback(() => {
 		setOpen(true);
-		editSessionActions?.beginEditSession(editSessionKey);
-	}, [editSessionActions, editSessionKey]);
+		editSession?.beginEditSession(rowSlug);
+	}, [editSession, rowSlug]);
 
 	// Close UI first; deferred field flush + endEditSession run when preset fields unmount.
 	const handlePopoverClose = useCallback(() => {

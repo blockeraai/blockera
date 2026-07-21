@@ -3,10 +3,7 @@
 /**
  * Internal dependencies
  */
-import {
-	getValueAddonRealValue,
-	isValid as isValidVariable,
-} from '../../value-addons';
+import { getValueAddonRealValue, isValid as isValidVariable } from '../../';
 import type { TDefaultRepeaterItemValue } from './types';
 
 export function getBackgroundItemBGProperty(

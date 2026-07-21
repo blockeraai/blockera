@@ -16,17 +16,16 @@ const GLOBAL_STYLES_NAME = 'globalStyles';
 /** Edited-entity `settings.*` dot paths for custom preset arrays. */
 export const MISSING_VARIABLE_CUSTOM_PRESET_PATH = {
 	'font-size': 'typography.fontSizes.custom',
-	'line-height': 'typography.blockeraLineHeights.custom',
 	color: 'color.palette.custom',
 	spacing: 'spacing.spacingSizes.custom',
-	'width-size': 'blockeraWidthSizes.custom',
+	'width-size': 'layout.widthSizes.custom',
 	'border-radius': 'border.radiusSizes.custom',
-	border: 'border.blockeraBorder.presets.custom',
+	border: 'border.presets.custom',
 	shadow: 'shadow.presets.custom',
-	'text-shadow': 'blockeraTextShadow.presets.custom',
-	transform: 'blockeraTransform.presets.custom',
-	transition: 'blockeraTransition.presets.custom',
-	filter: 'blockeraFilter.presets.custom',
+	'text-shadow': 'textShadow.presets.custom',
+	transform: 'transform.presets.custom',
+	transition: 'transition.presets.custom',
+	filter: 'filter.presets.custom',
 	'linear-gradient': 'color.gradients.custom',
 	'radial-gradient': 'color.gradients.custom',
 };
@@ -294,7 +293,6 @@ export function assertRecreatePresetHasStoredValue(variableType, slug) {
 				case 'spacing':
 				case 'width-size':
 				case 'font-size':
-				case 'line-height':
 					expect(String(row.size ?? '').trim()).to.not.equal('');
 					break;
 				default:

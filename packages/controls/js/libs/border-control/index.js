@@ -17,10 +17,8 @@ import { controlClassNames, classNames } from '@blockera/classnames';
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { BorderControlProps } from './types';
-import { setValueAddon, useValueAddon } from '../../value-addons';
-import InputControl from '../input-control';
-import { ColorControl } from '../color-control';
-import SelectControl from '../select-control';
+import { setValueAddon, useValueAddon } from '../../';
+import { InputControl, ColorControl, SelectControl } from '../index';
 
 export default function BorderControl({
 	linesDirection = 'horizontal',

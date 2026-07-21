@@ -86,26 +86,6 @@ if (! function_exists('blockera_is_admin')) {
 	}
 }
 
-if (! function_exists('blockera_is_doing_ajax')) {
-
-	/**
-	 * Check if the request is a WordPress Ajax request.
-	 *
-	 * @return bool true on success, false otherwise.
-	 */
-	function blockera_is_doing_ajax(): bool {
-		static $cached_result = null;
-
-		if ( null !== $cached_result ) {
-			return $cached_result;
-		}
-
-		$cached_result = wp_doing_ajax();
-
-		return $cached_result;
-	}
-}
-
 if (! function_exists('blockera_is_frontend_request')) {
 	
 	/**
