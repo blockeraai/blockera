@@ -587,6 +587,31 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
 }
 
 /**
+ * Sets a React-controlled text input in one shot (mirrors dev-cypress setControlledInputValue).
+ *
+ * @param {import('@playwright/test').Locator} locator - Input locator.
+ * @param {string} value - Final value.
+ * @return {Promise<void>}
+ */
+async function setControlledInputValue(locator, value) {
+	await locator.evaluate((el, nextValue) => {
+		const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+			window.HTMLInputElement.prototype,
+			'value'
+		)?.set;
+
+		if (nativeInputValueSetter) {
+			nativeInputValueSetter.call(el, nextValue);
+		} else {
+			el.value = nextValue;
+		}
+
+		el.dispatchEvent(new Event('input', { bubbles: true }));
+		el.dispatchEvent(new Event('change', { bubbles: true }));
+	}, value);
+}
+
+/**
  * Set color control value.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -595,14 +620,26 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
  * @return {Promise<void>}
  */
 async function setColorControlValue(page, label, value) {
-	const container = await getParentContainer(page, label);
-	await container.locator('[data-cy="color-btn"]').click();
+	const container = page
+		.locator(`[data-cy="base-control"]:has([aria-label="${label}"])`)
+		.last();
 
-	const popover = page.locator('.blockera-color-picker-popover').last();
-	await popover.locator('[data-cy="color-picker-css-value"]').clear();
-	await popover.locator('[data-cy="color-picker-css-value"]').fill(value);
-	await popover.locator('[data-cy="color-picker-css-value"]').blur();
+	await container.locator('[data-cy="color-btn"]').click({ force: true });
+
+	const popover = page
+		.locator('.blockera-color-picker-popover')
+		.filter({ visible: true })
+		.last();
+
+	await expect(popover).toBeVisible({ timeout: 15000 });
+
+	const cssValueInput = popover.locator('[data-cy="color-picker-css-value"]');
+	await setControlledInputValue(cssValueInput, value);
+
+	// Close commits via handleClose. Skip blur first — focus-outside can unmount the
+	// popover before Playwright reaches the close control (Cypress force-click races past this).
 	await popover.locator('[data-test="close-popover"]').click({ force: true });
+	await expect(popover).toBeHidden({ timeout: 15000 });
 }
 
 /**
