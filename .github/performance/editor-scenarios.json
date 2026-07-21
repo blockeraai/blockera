@@ -34,6 +34,12 @@
 			"thresholdPercent": 1000
 		},
 		{
+			"id": "editor-gs-variation-bg-image",
+			"label": "GS variation bg image",
+			"primaryMetric": "gsVariationBgImage",
+			"thresholdPercent": 1000
+		},
+		{
 			"id": "editor-gs-variation-duplicate",
 			"label": "GS variation duplicate",
 			"primaryMetric": "gsVariationDuplicate",

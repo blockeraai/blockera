@@ -483,6 +483,99 @@ test.describe('Editor', () => {
 		});
 	});
 
+	test.describe('editor-gs-variation-bg-image', () => {
+		const results = {
+			gsVariationBgImage: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera Global Styles shared style variation controls
+		test.skip(
+			skipForCore,
+			'GS variation bg image requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure GS variation bg image', async ({
+			admin,
+			page,
+			perfUtils,
+			metrics,
+		}) => {
+			const styleSlug = `perf-sv-img-${Date.now()}`;
+
+			await admin.visitSiteEditor({
+				canvas: 'edit',
+				showWelcomeGuide: false,
+			});
+			await admin.waitForSiteEditor();
+			await closeWelcomeGuide(page);
+
+			await perfUtils.openGlobalStylesBlockStyleVariations(
+				'core/paragraph'
+			);
+			await perfUtils.createGlobalStylesSharedStyleVariation(styleSlug);
+			await perfUtils.shareGlobalStylesStyleVariationWithOtherBlocks(
+				styleSlug,
+				['core/heading']
+			);
+
+			const backgroundImageContainer =
+				await perfUtils.getBackgroundImageContainer();
+			await expect(backgroundImageContainer).toBeVisible({
+				timeout: 60000,
+			});
+
+			await perfUtils.setupBackgroundImage();
+
+			const sizeValues = ['contain', 'cover'];
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const sizeValue = sizeValues[(i - 1) % sizeValues.length];
+
+				await metrics.startTracing();
+				await perfUtils.setBackgroundImageSize(sizeValue);
+				await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundImageSize(
+					styleSlug,
+					sizeValue
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) &&
+						'editor-gs-variation-bg-image'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.gsVariationBgImage.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
+
 	test.describe('editor-gs-variation-duplicate', () => {
 		const results = {
 			gsVariationDuplicate: [],
