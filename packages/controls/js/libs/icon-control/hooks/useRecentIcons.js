@@ -3,6 +3,11 @@
  */
 import { useState, useCallback } from '@wordpress/element';
 
+/**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
 export const RECENT_ICONS_STORAGE_KEY = 'blockera-icon-control-recent-icons';
 export const MAX_RECENT_ICONS = 40;
 
@@ -141,13 +146,7 @@ function sanitizeStoredEntry(entry) {
  */
 export function loadRecentIcons() {
 	try {
-		const stored = localStorage.getItem(RECENT_ICONS_STORAGE_KEY);
-
-		if (!stored) {
-			return [];
-		}
-
-		const parsed = JSON.parse(stored);
+		const parsed = localStorage.getJSON(RECENT_ICONS_STORAGE_KEY);
 
 		if (!Array.isArray(parsed)) {
 			return [];
@@ -184,9 +183,9 @@ export function loadRecentIcons() {
  */
 export function saveRecentIcons(items) {
 	try {
-		localStorage.setItem(
+		localStorage.setJSON(
 			RECENT_ICONS_STORAGE_KEY,
-			JSON.stringify(items.slice(0, MAX_RECENT_ICONS))
+			items.slice(0, MAX_RECENT_ICONS)
 		);
 	} catch {
 		// localStorage might be full or disabled, ignore

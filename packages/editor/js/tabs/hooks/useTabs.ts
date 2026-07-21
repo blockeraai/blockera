@@ -12,6 +12,11 @@ import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
 /**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
+/**
  * Internal dependencies
  */
 import { TABS_STORAGE_KEY } from '../utils/storageKeys';
@@ -68,10 +73,8 @@ function enforceWorkspaceLimits(
 
 function loadTabsFromStorage(limits: TabsLimitsConfig): WorkspaceTabs {
 	try {
-		const stored = localStorage.getItem(TABS_STORAGE_KEY);
-		if (stored) {
-			const parsed = JSON.parse(stored);
-
+		const parsed = localStorage.getJSON(TABS_STORAGE_KEY);
+		if (parsed) {
 			// Workspace structure: { "main": { "pinned-tabs": [], "tabs": [] } }
 			if (
 				parsed &&
@@ -118,7 +121,7 @@ function saveTabsToStorage(workspaceTabs: WorkspaceTabs): void {
 		const storage: TabsStorage = {
 			[MAIN_WORKSPACE_ID]: workspaceTabs,
 		};
-		localStorage.setItem(TABS_STORAGE_KEY, JSON.stringify(storage));
+		localStorage.setJSON(TABS_STORAGE_KEY, storage);
 	} catch {
 		// localStorage might be full or disabled, ignore
 	}

@@ -2,6 +2,7 @@
  * localStorage utilities for zoom persistence.
  */
 
+import { localStorage } from '@blockera/storage';
 import { DEFAULT_ZOOM, MAX_ZOOM, MIN_ZOOM, STORAGE_KEY } from './constants';
 import type { ZoomPercent } from '../types';
 

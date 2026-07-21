@@ -5,6 +5,11 @@ import editorPersistenceDefaultsJson from '../../../php/data/editor-persistence-
 import type { PersistenceLayer } from './persistence';
 
 /**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
+/**
  * Type definition for store state.
  */
 export type StoreState = {
@@ -51,19 +56,13 @@ function getInitialState(): StoreState {
 	const preloadedData = (window as any).blockeraEditorPersistenceData as
 		(StoreState & { _modified?: string }) | undefined;
 
-	// Also check localStorage as fallback (in case preloaded data is stale)
-	// Use user-specific key to avoid conflicts when multiple users share the same browser
-	const userId = (window as any).blockeraEditorPersistenceUserId as
-		number | undefined;
-	const localStorageKey = userId
-		? `BLOCKERA_EDITOR_PERSISTENCE_RESTORE_${userId}`
-		: 'BLOCKERA_EDITOR_PERSISTENCE_RESTORE';
+	// Also check localStorage as fallback (in case preloaded data is stale).
+	// Site + user scoped via @blockera/storage.
 	let localData: (StoreState & { _modified?: string }) | null = null;
 	try {
-		const stored = localStorage.getItem(localStorageKey);
-		if (stored) {
-			localData = JSON.parse(stored);
-		}
+		localData = localStorage.getJSON(
+			'BLOCKERA_EDITOR_PERSISTENCE_RESTORE'
+		) as (StoreState & { _modified?: string }) | null;
 	} catch (e) {
 		// Ignore localStorage errors
 	}

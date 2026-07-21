@@ -26,6 +26,7 @@ import { Button, Modal, NoticeControl, Tabs } from '@blockera/controls';
 import { componentInnerClassNames } from '@blockera/classnames';
 import { useGlobalStylesContext } from '@blockera/global-styles-ui';
 import { experimental } from '@blockera/env';
+import { localStorage } from '@blockera/storage';
 
 /**
  * Internal dependencies
@@ -58,6 +59,10 @@ const AI_STORAGE_PREFIX = 'blockera:ai-experimental-tools:ai-generator:';
 const AI_DEFAULT_PATTERN_GENERATOR_URL =
 	'http://127.0.0.1:8000/ai/v1/pattern-generator';
 const AI_DEFAULT_MODEL = 'anthropic/claude-opus-4-7';
+
+function getAiStorageKey(suffix: string): string {
+	return AI_STORAGE_PREFIX + suffix;
+}
 
 /** Non-empty string / non-zero scalar — AI sometimes sends "" or whitespace-only IDs. */
 function hasTruthyBlockeraId(value: unknown): boolean {
@@ -228,17 +233,6 @@ function safeJsonBlock(input: any): JsonBlockInput | null {
 	};
 }
 
-function safeGetLocalStorage(): Storage | null {
-	try {
-		if (typeof window === 'undefined') {
-			return null;
-		}
-		return window.localStorage || null;
-	} catch {
-		return null;
-	}
-}
-
 export default function AIExperimentalTools(): JSX.Element {
 	const isEnabled = experimental().get('ai.experimentalTools');
 
@@ -405,29 +399,24 @@ export default function AIExperimentalTools(): JSX.Element {
 			return;
 		}
 
-		const storage = safeGetLocalStorage();
-		if (!storage) {
-			return;
-		}
-
-		const storedIntent = storage.getItem(AI_STORAGE_PREFIX + 'intent');
+		const storedIntent = localStorage.getItem(getAiStorageKey('intent'));
 		if (typeof storedIntent === 'string' && storedIntent !== '') {
 			setAiIntent(storedIntent);
 		}
 
-		const storedContext = storage.getItem(
-			AI_STORAGE_PREFIX + 'site_context'
+		const storedContext = localStorage.getItem(
+			getAiStorageKey('site_context')
 		);
 		if (typeof storedContext === 'string' && storedContext !== '') {
 			setAiSiteContext(storedContext);
 		}
 
-		const storedUrl = storage.getItem(AI_STORAGE_PREFIX + 'url');
+		const storedUrl = localStorage.getItem(getAiStorageKey('url'));
 		if (typeof storedUrl === 'string' && storedUrl !== '') {
 			setAiPatternGeneratorUrl(storedUrl);
 		}
 
-		const storedModel = storage.getItem(AI_STORAGE_PREFIX + 'model');
+		const storedModel = localStorage.getItem(getAiStorageKey('model'));
 		if (typeof storedModel === 'string' && storedModel !== '') {
 			setAiModel(storedModel);
 		}
@@ -436,15 +425,7 @@ export default function AIExperimentalTools(): JSX.Element {
 	}, [isOpen]);
 
 	const persistAiField = useCallback((key: string, nextValue: string) => {
-		const storage = safeGetLocalStorage();
-		if (!storage) {
-			return;
-		}
-		try {
-			storage.setItem(AI_STORAGE_PREFIX + key, nextValue);
-		} catch {
-			// Ignore storage quota / privacy errors.
-		}
+		localStorage.setItem(getAiStorageKey(key), nextValue);
 	}, []);
 
 	const onGenerateByAi = useCallback(async () => {

@@ -4,6 +4,19 @@
 import { useEffect, useRef } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { sessionStorage } from '@blockera/storage';
+
+/**
+ * Internal dependencies
+ */
+import {
+	BULK_EDIT_IDS_STORAGE_KEY,
+	BULK_EDIT_POST_TYPE_STORAGE_KEY,
+} from '../utils/storageKeys';
+
+/**
  * Hook to detect bulk_edit_ids URL parameter and open posts as tabs
  *
  * @param addTab - Function to add a tab
@@ -42,19 +55,11 @@ export function useBulkEditTabs(
 		let bulkIdsFromSessionStorage = false;
 
 		// Try sessionStorage first (captured by inline script before editor loads)
-		if (typeof Storage !== 'undefined') {
-			try {
-				bulkEditIds = sessionStorage.getItem(
-					'blockera_tabs_bulk_edit_ids'
-				);
-				storedPostType = sessionStorage.getItem(
-					'blockera_tabs_bulk_edit_post_type'
-				);
-				bulkIdsFromSessionStorage = !!bulkEditIds;
-			} catch {
-				// sessionStorage might be disabled
-			}
-		}
+		bulkEditIds = sessionStorage.getItem(BULK_EDIT_IDS_STORAGE_KEY);
+		storedPostType = sessionStorage.getItem(
+			BULK_EDIT_POST_TYPE_STORAGE_KEY
+		);
+		bulkIdsFromSessionStorage = !!bulkEditIds;
 
 		// Fallback to global variable (set by inline script)
 		if (!bulkEditIds && window.blockeraTabsBulkEditIds) {
@@ -84,13 +89,9 @@ export function useBulkEditTabs(
 		}
 
 		// Consume sessionStorage / globals now that we will process.
-		if (bulkIdsFromSessionStorage && typeof Storage !== 'undefined') {
-			try {
-				sessionStorage.removeItem('blockera_tabs_bulk_edit_ids');
-				sessionStorage.removeItem('blockera_tabs_bulk_edit_post_type');
-			} catch {
-				// sessionStorage might be disabled
-			}
+		if (bulkIdsFromSessionStorage) {
+			sessionStorage.removeItem(BULK_EDIT_IDS_STORAGE_KEY);
+			sessionStorage.removeItem(BULK_EDIT_POST_TYPE_STORAGE_KEY);
 		}
 		if (window.blockeraTabsBulkEditIds) {
 			delete window.blockeraTabsBulkEditIds;

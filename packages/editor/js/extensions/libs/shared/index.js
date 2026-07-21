@@ -19,7 +19,7 @@ import {
  * Blockera dependencies
  */
 import { Tabs } from '@blockera/controls';
-import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
+import { localStorage } from '@blockera/storage';
 import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 
 /**
@@ -296,10 +296,10 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	}, [extensions]);
 
 	const cacheData = useMemo(() => {
-		let localCache = getItem(cacheKey) || {};
-
+		let localCache = localStorage.getJSON(cacheKey);
 		if (!localCache) {
-			localCache = freshItem(cacheKey, cacheKeyPrefix);
+			localStorage.freshItem(cacheKey, cacheKeyPrefix);
+			localCache = {};
 		}
 
 		let { [props.name]: cache = {} } = localCache || {};
@@ -314,11 +314,11 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 
 		if (!isEquals(cacheOmitted, extensionsOmitted)) {
 			cache = _extensionsWithoutLabel;
-			setItem(
+			localStorage.setJSON(
 				cacheKey,
 				mergeObject(
 					{
-						...(getItem(cacheKey) || {}),
+						...(localStorage.getJSON(cacheKey) || {}),
 						[props.name]: cache,
 					},
 					{
@@ -332,7 +332,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	}, [cacheKey, props.name, _extensionsWithoutLabel]);
 	const supports = useMemo(() => {
 		if (!cacheData) {
-			setItem(
+			localStorage.setJSON(
 				cacheKey,
 				mergeObject(cacheData, {
 					[props.name]: _extensionsWithoutLabel,
@@ -443,7 +443,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			};
 
 			setSettings(newSettings);
-			updateItem(
+			localStorage.updateJSON(
 				cacheKey,
 				mergeObject(cacheData, {
 					[props.name]: newSettings,

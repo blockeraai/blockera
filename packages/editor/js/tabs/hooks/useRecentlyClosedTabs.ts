@@ -10,6 +10,11 @@ import {
 } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
+/**
  * Internal dependencies
  */
 import { RECENTLY_CLOSED_STORAGE_KEY } from '../utils/storageKeys';
@@ -28,10 +33,8 @@ import type {
  */
 function loadFromStorage(maxRecentlyClosedTabs: number): RecentlyClosedTab[] {
 	try {
-		const stored = localStorage.getItem(RECENTLY_CLOSED_STORAGE_KEY);
-		if (stored) {
-			const parsed = JSON.parse(stored);
-
+		const parsed = localStorage.getJSON(RECENTLY_CLOSED_STORAGE_KEY);
+		if (parsed) {
 			// Workspace structure: { "main": [...] }
 			if (
 				parsed &&
@@ -97,10 +100,7 @@ function saveToStorage(
 			};
 		}
 
-		localStorage.setItem(
-			RECENTLY_CLOSED_STORAGE_KEY,
-			JSON.stringify(storage)
-		);
+		localStorage.setJSON(RECENTLY_CLOSED_STORAGE_KEY, storage);
 	} catch {
 		// localStorage might be full or disabled, ignore
 	}
