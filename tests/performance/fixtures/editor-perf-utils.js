@@ -10,6 +10,8 @@ const {
 	getParentContainer,
 	setColorControlValue,
 	openGlobalStylesPanel,
+	clickValueAddonButton,
+	selectValueAddonItem,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 const BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE = path.join(
@@ -218,6 +220,213 @@ class EditorPerfUtils {
 	}
 
 	/**
+	 * Returns the BG Color control container (same UI in block-level and Global Styles).
+	 *
+	 * @return {Promise<import('@playwright/test').Locator>} BG Color container.
+	 */
+	async getBackgroundColorContainer() {
+		return getParentContainer(this.page, 'BG Color');
+	}
+
+	/**
+	 * Waits until BG Color shows the plain color button (not a stale value-addon chip).
+	 */
+	async ensureBackgroundColorControlReady() {
+		const container = await this.getBackgroundColorContainer();
+		await container
+			.locator('[data-cy="color-btn"]')
+			.last()
+			.waitFor({ state: 'attached', timeout: 20000 });
+	}
+
+	/**
+	 * Sets BG Color via the shared hex control (block-level or Global Styles).
+	 *
+	 * @param {string} value Hex color without leading `#`.
+	 */
+	async setBackgroundColor(value) {
+		await setColorControlValue(this.page, 'BG Color', value);
+	}
+
+	/**
+	 * Sets BG Color from a theme/design token via the value addon picker.
+	 *
+	 * @param {string} itemID Variable slug (e.g. accent-4).
+	 */
+	async setBackgroundColorVariable(itemID) {
+		const container = await this.getBackgroundColorContainer();
+		await clickValueAddonButton(this.page, container);
+		await selectValueAddonItem(this.page, itemID);
+	}
+
+	/**
+	 * Clears `blockera/editor` userStyles before resetting global styles entity.
+	 */
+	async clearBlockeraGlobalStylesStore() {
+		await this.page.evaluate(() => {
+			const dispatch = window.wp?.data?.dispatch?.('blockera/editor');
+
+			if (typeof dispatch?.setGlobalStyles === 'function') {
+				dispatch.setGlobalStyles({});
+			}
+		});
+	}
+
+	/**
+	 * Discards in-memory edits for the global styles entity (see dev-cypress global-styles helper).
+	 */
+	async resetGlobalStylesEntityRecord() {
+		await this.page.waitForFunction(() => window?.wp?.data);
+
+		await this.page.evaluate(() => {
+			const registry = window.wp?.data;
+			const store = window.wp?.coreData?.store;
+
+			if (!registry || !store) {
+				throw new Error(
+					'wp.data / wp.coreData.store is not available; open the Site Editor first.'
+				);
+			}
+
+			const select = registry.select(store);
+
+			let recordId;
+			if (
+				typeof select.__experimentalGetCurrentGlobalStylesId ===
+				'function'
+			) {
+				recordId = select.__experimentalGetCurrentGlobalStylesId();
+			} else if (typeof select.getCurrentGlobalStylesId === 'function') {
+				recordId = select.getCurrentGlobalStylesId();
+			}
+
+			if (
+				recordId === undefined ||
+				recordId === null ||
+				recordId === ''
+			) {
+				throw new Error(
+					'No global styles entity id: open the Site Editor and wait until global styles resolve.'
+				);
+			}
+
+			if (typeof select.canUser === 'function') {
+				const userCanEditGlobalStyles = select.canUser('update', {
+					kind: 'root',
+					name: 'globalStyles',
+					id: recordId,
+				});
+
+				if (userCanEditGlobalStyles === false) {
+					return;
+				}
+
+				if (typeof userCanEditGlobalStyles !== 'boolean') {
+					throw new Error(
+						'Global styles `canUser` not resolved yet; retry after the Site Editor finishes loading.'
+					);
+				}
+			}
+
+			const dispatch = registry.dispatch(store);
+
+			if (typeof dispatch.editEntityRecord !== 'function') {
+				throw new Error(
+					'core-data editEntityRecord is not available; cannot discard global styles edits.'
+				);
+			}
+
+			dispatch.editEntityRecord('root', 'globalStyles', recordId, {
+				styles: {},
+				settings: {},
+			});
+		});
+	}
+
+	/**
+	 * Resets global styles and opens the Default style variation for a block type
+	 * (see background-color.global-styles.e2e.cy.js).
+	 *
+	 * @param {string} [blockType] Block name, e.g. core/paragraph.
+	 */
+	async setupGlobalStylesDefaultStyleVariation(blockType = 'core/paragraph') {
+		await this.clearBlockeraGlobalStylesStore();
+		await this.resetGlobalStylesEntityRecord();
+		await this.openGlobalStylesBlockStyleVariations(blockType);
+		await this.selectGlobalStylesStyleVariation('default');
+		await this.ensureBackgroundColorControlReady();
+	}
+
+	/**
+	 * Waits until Default style variation BG color matches the expected hex in store.
+	 *
+	 * @param {string} expectedHex Expected `#rrggbb` value.
+	 * @param {string} [blockType] Block name.
+	 */
+	async expectDefaultStyleVariationBackgroundColor(
+		expectedHex,
+		blockType = 'core/paragraph'
+	) {
+		await this.page.waitForFunction(
+			({ hex, blockName }) => {
+				const blockeraSelect =
+					window.wp?.data?.select('blockera/editor');
+				const blockStyle = blockeraSelect?.getBlockStyles(
+					blockName,
+					'default'
+				);
+				return blockStyle?.blockeraBackgroundColor?.value === hex;
+			},
+			{ hex: expectedHex, blockName: blockType },
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
+	 * Waits until Default style variation BG color uses the expected theme variable.
+	 *
+	 * @param {string} variableId Theme color slug (e.g. accent-4).
+	 * @param {string} [blockType] Block name.
+	 */
+	async expectDefaultStyleVariationBackgroundColorVariable(
+		variableId,
+		blockType = 'core/paragraph'
+	) {
+		const cssVar = `--wp--preset--color--${variableId}`;
+
+		await this.page.waitForFunction(
+			({ slug, blockName, varName }) => {
+				const blockeraSelect =
+					window.wp?.data?.select('blockera/editor');
+				const value = blockeraSelect?.getBlockStyles(
+					blockName,
+					'default'
+				)?.blockeraBackgroundColor?.value;
+
+				if (!value?.isValueAddon || value?.settings?.id !== slug) {
+					return false;
+				}
+
+				const canvas = document.querySelector(
+					'iframe[name="editor-canvas"]'
+				);
+				const doc = canvas?.contentDocument || document;
+				const wrapper = doc.querySelector(
+					'#blockera-global-styles-wrapper'
+				);
+
+				return Boolean(
+					wrapper?.textContent?.includes(
+						`background-color: var(${varName}`
+					)
+				);
+			},
+			{ slug: variableId, blockName: blockType, varName: cssVar },
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
 	 * Sets block-level background image size in the open background popover.
 	 *
 	 * @param {'contain'|'cover'|'custom'} sizeValue Background size preset.
@@ -414,16 +623,6 @@ class EditorPerfUtils {
 			{ slug: styleSlug, hex: expectedHex, blocks: blockTypes },
 			{ timeout: 30000 }
 		);
-	}
-
-	/**
-	 * Sets Global Styles shared style variation background color in the
-	 * Global Styles inspector (not block-level BG Color).
-	 *
-	 * @param {string} value Hex color without leading `#`.
-	 */
-	async setGlobalStylesSharedStyleVariationBackgroundColor(value) {
-		await setColorControlValue(this.page, 'BG Color', value);
 	}
 
 	/**
