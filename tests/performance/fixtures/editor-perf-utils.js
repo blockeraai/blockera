@@ -14,7 +14,7 @@ const {
 	selectValueAddonItem,
 } = require('@blockera/dev-playwright/js/support/commands');
 
-const BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE = path.join(
+const BACKGROUND_IMAGE_FIXTURE = path.join(
 	process.cwd(),
 	'packages/dev-cypress/js/fixtures/bg-extension-test.png'
 );
@@ -164,18 +164,23 @@ class EditorPerfUtils {
 	}
 
 	/**
-	 * Adds a block-level background image layer via Image & Gradient repeater
+	 * Returns the Image & Gradient control container (same UI in block-level and Global Styles).
+	 *
+	 * @return {Promise<import('@playwright/test').Locator>} Image & Gradient container.
+	 */
+	async getBackgroundImageContainer() {
+		return getParentContainer(this.page, 'Image & Gradient');
+	}
+
+	/**
+	 * Adds a background image layer via Image & Gradient repeater
 	 * (see background-image.general-4.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
-	async setupBlockLevelBackgroundImage(
-		filePath = BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE
-	) {
-		const imageAndGradientContainer = await getParentContainer(
-			this.page,
-			'Image & Gradient'
-		);
+	async setupBackgroundImage(filePath = BACKGROUND_IMAGE_FIXTURE) {
+		const imageAndGradientContainer =
+			await this.getBackgroundImageContainer();
 		await imageAndGradientContainer
 			.getByRole('button', { name: 'Add New Background' })
 			.click();
@@ -200,23 +205,37 @@ class EditorPerfUtils {
 	}
 
 	/**
-	 * Opens the block-level background image popover when it is not visible.
+	 * Opens the background image popover when it is not visible.
 	 */
-	async ensureBlockLevelBackgroundImagePopoverOpen() {
+	async ensureBackgroundImagePopoverOpen() {
 		const popover = this.page.locator('.blockera-component-popover').last();
 		if (await popover.isVisible().catch(() => false)) {
 			return;
 		}
 
-		const imageAndGradientContainer = await getParentContainer(
-			this.page,
-			'Image & Gradient'
-		);
+		const imageAndGradientContainer =
+			await this.getBackgroundImageContainer();
 		await imageAndGradientContainer
 			.locator('[data-cy="repeater-item"]')
 			.first()
 			.click();
 		await popover.waitFor({ state: 'visible', timeout: 30000 });
+	}
+
+	/**
+	 * Sets background image size in the open background popover
+	 * (block-level or Global Styles).
+	 *
+	 * @param {'contain'|'cover'|'custom'} sizeValue Background size preset.
+	 */
+	async setBackgroundImageSize(sizeValue) {
+		await this.ensureBackgroundImagePopoverOpen();
+
+		const popover = this.page.locator('.blockera-component-popover').last();
+		await popover
+			.locator('[data-cy="base-control"]:has([aria-label="Size"])')
+			.locator(`button[data-value="${sizeValue}"]`)
+			.click();
 	}
 
 	/**
@@ -427,18 +446,86 @@ class EditorPerfUtils {
 	}
 
 	/**
-	 * Sets block-level background image size in the open background popover.
+	 * Waits until a Global Styles shared style variation background image size
+	 * is synced across block types (global styles entity, not block-level attributes).
 	 *
-	 * @param {'contain'|'cover'|'custom'} sizeValue Background size preset.
+	 * @param {string}   styleSlug     Variation slug.
+	 * @param {string}   expectedSize  Expected image size preset (e.g. contain, cover).
+	 * @param {string[]} blockTypes    Block types that must share the value.
 	 */
-	async setBlockLevelBackgroundImageSize(sizeValue) {
-		await this.ensureBlockLevelBackgroundImagePopoverOpen();
+	async expectGlobalStylesSharedStyleVariationBackgroundImageSize(
+		styleSlug,
+		expectedSize,
+		blockTypes = ['core/paragraph', 'core/heading']
+	) {
+		await this.page.waitForFunction(
+			({ slug, size, blocks }) => {
+				const data = window.wp?.data;
+				if (!data) {
+					return false;
+				}
 
-		const popover = this.page.locator('.blockera-component-popover').last();
-		await popover
-			.locator('[data-cy="base-control"]:has([aria-label="Size"])')
-			.locator(`button[data-value="${sizeValue}"]`)
-			.click();
+				const blockeraSelect = data.select('blockera/editor');
+				const registered = blockeraSelect.getStyleVariationBlocks(slug);
+
+				for (const blockType of blocks) {
+					if (!registered.includes(blockType)) {
+						return false;
+					}
+
+					const blockStyle = blockeraSelect.getBlockStyles(
+						blockType,
+						slug
+					);
+					const imageSize =
+						blockStyle?.blockeraBackground?.value?.['image-0']?.[
+							'image-size'
+						];
+					if (imageSize !== size) {
+						return false;
+					}
+				}
+
+				const coreSelect = data.select('core');
+				let gsId;
+				if (
+					typeof coreSelect.__experimentalGetCurrentGlobalStylesId ===
+					'function'
+				) {
+					gsId = coreSelect.__experimentalGetCurrentGlobalStylesId();
+				} else if (
+					typeof coreSelect.getCurrentGlobalStylesId === 'function'
+				) {
+					gsId = coreSelect.getCurrentGlobalStylesId();
+				}
+
+				if (!gsId) {
+					return false;
+				}
+
+				const edited = coreSelect.getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					gsId
+				);
+
+				for (const blockType of blocks) {
+					const variation =
+						edited?.styles?.blocks?.[blockType]?.variations?.[slug];
+					const imageSize =
+						variation?.blockeraBackground?.value?.['image-0']?.[
+							'image-size'
+						];
+					if (imageSize !== size) {
+						return false;
+					}
+				}
+
+				return true;
+			},
+			{ slug: styleSlug, size: expectedSize, blocks: blockTypes },
+			{ timeout: 30000 }
+		);
 	}
 
 	/**
@@ -837,5 +924,5 @@ class EditorPerfUtils {
 
 module.exports = {
 	EditorPerfUtils,
-	BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE,
+	BACKGROUND_IMAGE_FIXTURE,
 };
