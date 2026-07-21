@@ -19,7 +19,6 @@ const { EditorPerfUtils } = require('../fixtures/editor-perf-utils');
 const { sum } = require('../utils');
 const {
 	getParentContainer,
-	setColorControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	closeWelcomeGuide,
@@ -270,7 +269,7 @@ test.describe('Editor', () => {
 				const blueChannel = parseInt(colorSuffix, 16);
 
 				await metrics.startTracing();
-				await setColorControlValue(page, 'BG Color', colorValue);
+				await perfUtils.setBackgroundColor(colorValue);
 				await expect(paragraph).toHaveCSS(
 					'backgroundColor',
 					`rgb(102, 102, ${blueChannel})`,
@@ -458,9 +457,7 @@ test.describe('Editor', () => {
 				const expectedHex = `#${colorValue}`;
 
 				await metrics.startTracing();
-				await perfUtils.setGlobalStylesSharedStyleVariationBackgroundColor(
-					colorValue
-				);
+				await perfUtils.setBackgroundColor(colorValue);
 				await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
 					styleSlug,
 					expectedHex
@@ -530,9 +527,7 @@ test.describe('Editor', () => {
 				'core/paragraph'
 			);
 			await perfUtils.selectGlobalStylesStyleVariation(styleSlug);
-			await perfUtils.setGlobalStylesSharedStyleVariationBackgroundColor(
-				'aabbcc'
-			);
+			await perfUtils.setBackgroundColor('aabbcc');
 			await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
 				styleSlug,
 				expectedHex
