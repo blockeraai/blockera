@@ -27,9 +27,6 @@ const {
 } = require('../fixtures/core-editor-perf-utils');
 const { sum } = require('../utils');
 const {
-	getParentContainer,
-} = require('@blockera/dev-playwright/js/support/commands');
-const {
 	closeWelcomeGuide,
 } = require('@blockera/dev-playwright/js/utils/editor');
 
@@ -244,10 +241,8 @@ test.describe('Editor', () => {
 			if (perfUtils.isCore) {
 				await perfUtils.core.openDocumentSettingsSidebar();
 			} else {
-				const blockLevelBgColorContainer = await getParentContainer(
-					page,
-					'BG Color'
-				);
+				const blockLevelBgColorContainer =
+					await perfUtils.getBackgroundColorContainer();
 				await expect(blockLevelBgColorContainer).toBeVisible({
 					timeout: 60000,
 				});
@@ -278,11 +273,13 @@ test.describe('Editor', () => {
 					);
 				} else {
 					await perfUtils.setBackgroundColor(colorValue);
+					await perfUtils.expectSelectedBlockBackgroundColor(
+						expectedHex
+					);
 				}
-				await expect(paragraph).toHaveCSS(
-					'backgroundColor',
-					`rgb(102, 102, ${blueChannel})`,
-					{ timeout: 30000 }
+				await perfUtils.expectCanvasBackgroundColor(
+					paragraph,
+					`rgb(102, 102, ${blueChannel})`
 				);
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) && 'editor-block-bg-color'
@@ -357,6 +354,8 @@ test.describe('Editor', () => {
 			await expect(block).toBeVisible({ timeout: 60000 });
 			if (perfUtils.isCore) {
 				await perfUtils.core.expectCanvasBackgroundImage(block);
+			} else {
+				await perfUtils.expectCanvasBackgroundImage(block);
 			}
 
 			const sizeValues = ['contain', 'cover'];
@@ -378,10 +377,14 @@ test.describe('Editor', () => {
 					);
 				} else {
 					await perfUtils.setBackgroundImageSize(sizeValue);
+					await perfUtils.expectSelectedBlockBackgroundImageSize(
+						sizeValue
+					);
 				}
-				await expect(block).toHaveCSS('background-size', sizeValue, {
-					timeout: 30000,
-				});
+				await perfUtils.expectCanvasBackgroundImageSize(
+					block,
+					sizeValue
+				);
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) && 'editor-block-bg-image'
 				);
@@ -448,7 +451,7 @@ test.describe('Editor', () => {
 					['core/heading']
 				);
 				const globalStylesSharedStyleVariationBgColorContainer =
-					await getParentContainer(page, 'BG Color');
+					await perfUtils.getBackgroundColorContainer();
 				await expect(
 					globalStylesSharedStyleVariationBgColorContainer
 				).toBeVisible({
@@ -769,10 +772,9 @@ test.describe('Editor', () => {
 						expectedHex
 					);
 				}
-				await expect(paragraph).toHaveCSS(
-					'backgroundColor',
-					`rgb(102, 102, ${blueChannel})`,
-					{ timeout: 30000 }
+				await perfUtils.expectCanvasBackgroundColor(
+					paragraph,
+					`rgb(102, 102, ${blueChannel})`
 				);
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) &&
