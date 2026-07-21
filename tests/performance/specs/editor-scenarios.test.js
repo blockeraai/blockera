@@ -337,13 +337,13 @@ test.describe('Editor', () => {
 			await perfUtils.saveDraft();
 			await perfUtils.disableAutosave();
 
-			const blockLevelImageAndGradientContainer =
-				await getParentContainer(page, 'Image & Gradient');
-			await expect(blockLevelImageAndGradientContainer).toBeVisible({
+			const backgroundImageContainer =
+				await perfUtils.getBackgroundImageContainer();
+			await expect(backgroundImageContainer).toBeVisible({
 				timeout: 60000,
 			});
 
-			await perfUtils.setupBlockLevelBackgroundImage();
+			await perfUtils.setupBackgroundImage();
 
 			const canvas = await perfUtils.getCanvas();
 			const paragraph = canvas.locator('.wp-block-paragraph').first();
@@ -362,7 +362,7 @@ test.describe('Editor', () => {
 				const sizeValue = sizeValues[(i - 1) % sizeValues.length];
 
 				await metrics.startTracing();
-				await perfUtils.setBlockLevelBackgroundImageSize(sizeValue);
+				await perfUtils.setBackgroundImageSize(sizeValue);
 				await expect(paragraph).toHaveCSS(
 					'background-size',
 					sizeValue,
