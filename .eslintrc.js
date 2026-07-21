@@ -94,12 +94,37 @@ module.exports = {
 		'jsdoc/check-param-names': 'off',
 		'no-shadow': 'off',
 		'no-console': 'off',
+		'no-restricted-globals': [
+			'error',
+			{
+				name: 'localStorage',
+				message:
+					'Do not use native localStorage. Import { localStorage } from @blockera/storage so keys are site/user scoped.',
+			},
+			{
+				name: 'sessionStorage',
+				message:
+					'Do not use native sessionStorage. Import { sessionStorage } from @blockera/storage so keys are site/user scoped.',
+			},
+		],
 		'no-restricted-syntax': [
 			'error',
 			{
 				selector:
 					"CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
 				message: 'Unexpected property on console object was called',
+			},
+			{
+				selector:
+					"MemberExpression[object.name='window'][property.name='localStorage']",
+				message:
+					'Do not use window.localStorage. Import { localStorage } from @blockera/storage so keys are site/user scoped.',
+			},
+			{
+				selector:
+					"MemberExpression[object.name='window'][property.name='sessionStorage']",
+				message:
+					'Do not use window.sessionStorage. Import { sessionStorage } from @blockera/storage so keys are site/user scoped.',
 			},
 		],
 		'jsx-a11y/no-static-element-interactions': 'off',
@@ -124,6 +149,46 @@ module.exports = {
 		'import/no-named-as-default-member': 'off',
 	},
 	overrides: [
+		{
+			// Only @blockera/storage may touch native browser storage backends.
+			files: ['packages/storage/js/**'],
+			rules: {
+				'no-restricted-globals': 'off',
+				'no-restricted-syntax': [
+					'error',
+					{
+						selector:
+							"CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+						message:
+							'Unexpected property on console object was called',
+					},
+				],
+			},
+		},
+		{
+			// Cypress / Jest harnesses clear or seed native storage via win.localStorage.
+			files: [
+				'packages/dev-cypress/**',
+				'**/*.spec.js',
+				'**/*.spec.ts',
+				'**/*.test.js',
+				'**/*.test.ts',
+				'**/*.e2e.cy.js',
+				'**/test/**',
+			],
+			rules: {
+				'no-restricted-globals': 'off',
+				'no-restricted-syntax': [
+					'error',
+					{
+						selector:
+							"CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+						message:
+							'Unexpected property on console object was called',
+					},
+				],
+			},
+		},
 		{
 			files: ['packages/classnames/js/**'],
 			rules: {
