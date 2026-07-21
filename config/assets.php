@@ -40,6 +40,7 @@ return [
 	'admin'  => [
 		'list'      => [
 			'utils',
+			'storage',
 			'classnames',
 			'icons',
 			'data-editor',
