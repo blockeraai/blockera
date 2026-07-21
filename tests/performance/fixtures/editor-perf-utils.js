@@ -7,7 +7,6 @@
 const path = require('node:path');
 const { expect } = require('@wordpress/e2e-test-utils-playwright');
 const {
-	getParentContainer,
 	setColorControlValue,
 	openGlobalStylesPanel,
 	clickValueAddonButton,
@@ -185,7 +184,11 @@ class EditorPerfUtils {
 	 * @return {Promise<import('@playwright/test').Locator>} Image & Gradient container.
 	 */
 	async getBackgroundImageContainer() {
-		return getParentContainer(this.page, 'Image & Gradient');
+		return this.page
+			.locator(
+				'[data-cy="base-control"]:has([aria-label="Image & Gradient"])'
+			)
+			.last();
 	}
 
 	/**
@@ -211,13 +214,11 @@ class EditorPerfUtils {
 		await this.page.locator('input[type="file"]').setInputFiles(filePath);
 		await this.page.locator('.media-toolbar-primary > .button').click();
 
+		await this.expectSelectedBlockBackgroundImage();
+
 		const canvas = await this.getCanvas();
 		const paragraph = canvas.locator('.wp-block-paragraph').first();
-		await expect(paragraph).toHaveCSS(
-			'background-image',
-			/bg-extension-test/,
-			{ timeout: 60000 }
-		);
+		await this.expectCanvasBackgroundImage(paragraph);
 	}
 
 	/**
@@ -260,7 +261,9 @@ class EditorPerfUtils {
 	 * @return {Promise<import('@playwright/test').Locator>} BG Color container.
 	 */
 	async getBackgroundColorContainer() {
-		return getParentContainer(this.page, 'BG Color');
+		return this.page
+			.locator('[data-cy="base-control"]:has([aria-label="BG Color"])')
+			.last();
 	}
 
 	/**
@@ -281,6 +284,127 @@ class EditorPerfUtils {
 	 */
 	async setBackgroundColor(value) {
 		await setColorControlValue(this.page, 'BG Color', value);
+	}
+
+	/**
+	 * Waits until the selected block stores the expected Blockera BG Color
+	 * (mirrors Cypress assertBlockData + getSelectedBlock(..., 'blockeraBackgroundColor')).
+	 *
+	 * @param {string} expectedHex Expected `#rrggbb` value.
+	 */
+	async expectSelectedBlockBackgroundColor(expectedHex) {
+		await this.page.waitForFunction(
+			(hex) => {
+				const block = window.wp?.data
+					?.select('core/block-editor')
+					?.getSelectedBlock?.();
+				if (!block) {
+					return false;
+				}
+
+				const attr = block.attributes?.blockeraBackgroundColor;
+				const value =
+					attr && typeof attr === 'object' && 'value' in attr
+						? attr.value
+						: attr;
+
+				return (
+					typeof value === 'string' &&
+					value.toLowerCase() === hex.toLowerCase()
+				);
+			},
+			expectedHex,
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
+	 * Waits until the selected block stores an uploaded background image
+	 * (mirrors background-image.general-4.e2e.cy.js assertBlockData).
+	 */
+	async expectSelectedBlockBackgroundImage() {
+		await this.page.waitForFunction(
+			() => {
+				const block = window.wp?.data
+					?.select('core/block-editor')
+					?.getSelectedBlock?.();
+				if (!block) {
+					return false;
+				}
+
+				const background = block.attributes?.blockeraBackground;
+				const layers = background?.value || background;
+				const image = layers?.['image-0']?.image;
+
+				return (
+					typeof image === 'string' &&
+					/bg-extension-test|blob:|url\(/i.test(image)
+				);
+			},
+			undefined,
+			{ timeout: 60000 }
+		);
+	}
+
+	/**
+	 * Waits until the selected block stores the expected background image size.
+	 *
+	 * @param {'contain'|'cover'|'custom'} expectedSize Background size preset.
+	 */
+	async expectSelectedBlockBackgroundImageSize(expectedSize) {
+		await this.page.waitForFunction(
+			(size) => {
+				const block = window.wp?.data
+					?.select('core/block-editor')
+					?.getSelectedBlock?.();
+				if (!block) {
+					return false;
+				}
+
+				const background = block.attributes?.blockeraBackground;
+				const layers = background?.value || background;
+				return layers?.['image-0']?.['image-size'] === size;
+			},
+			expectedSize,
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
+	 * Asserts computed background-color on a canvas block (Playwright needs kebab-case).
+	 *
+	 * @param {import('@playwright/test').Locator} blockLocator Canvas block locator.
+	 * @param {string} expectedRgb Expected computed rgb(), e.g. rgb(102, 102, 1).
+	 */
+	async expectCanvasBackgroundColor(blockLocator, expectedRgb) {
+		await expect(blockLocator).toHaveCSS('background-color', expectedRgb, {
+			timeout: 30000,
+		});
+	}
+
+	/**
+	 * Asserts computed background-image on a canvas block.
+	 *
+	 * @param {import('@playwright/test').Locator} blockLocator Canvas block locator.
+	 */
+	async expectCanvasBackgroundImage(blockLocator) {
+		await expect(blockLocator).toHaveCSS(
+			'background-image',
+			/bg-extension-test|blob:|url\(/,
+			{ timeout: 60000 }
+		);
+	}
+
+	/**
+	 * Asserts computed background-size on a canvas block.
+	 *
+	 * @param {import('@playwright/test').Locator} blockLocator Canvas block locator.
+	 * @param {string} expectedSize Expected size preset (e.g. contain, cover).
+	 */
+	async expectCanvasBackgroundImageSize(blockLocator, expectedSize) {
+		await expect(blockLocator).toHaveCSS('background-size', expectedSize, {
+			timeout: 30000,
+		});
 	}
 
 	/**
