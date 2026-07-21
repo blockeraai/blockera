@@ -7,11 +7,11 @@
  *
  * @package    Blockera
  * @subpackage Storage
+ *
+ * Loaded via Composer `files` autoload (before WordPress boots in PHPUnit).
+ * Do not exit on missing ABSPATH — that silently aborts CLI/test runners with code 0.
+ * WP APIs below are only called after WordPress is loaded.
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 if ( ! function_exists( 'blockera_generate_storage_site_key' ) ) {
 	/**
