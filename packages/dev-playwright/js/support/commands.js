@@ -634,10 +634,11 @@ async function setColorControlValue(page, label, value) {
 	await expect(popover).toBeVisible({ timeout: 15000 });
 
 	const cssValueInput = popover.locator('[data-cy="color-picker-css-value"]');
+	await cssValueInput.click();
+	// Mirror Cypress setControlledInputValue — avoid .fill() (keystroke-by-keystroke
+	// remounts/locks the picker) and avoid .blur() (focus-outside dismisses before close).
 	await setControlledInputValue(cssValueInput, value);
 
-	// Close commits via handleClose. Skip blur first — focus-outside can unmount the
-	// popover before Playwright reaches the close control (Cypress force-click races past this).
 	await popover.locator('[data-test="close-popover"]').click({ force: true });
 	await expect(popover).toBeHidden({ timeout: 15000 });
 }
