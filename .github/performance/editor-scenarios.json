@@ -5,15 +5,27 @@
 	"scenarios": [
 		{
 			"id": "editor-select-blocks",
-			"label": "Selecting blocks",
+			"label": "Select blocks",
 			"primaryMetric": "focus",
 			"thresholdPercent": 1000
 		},
 		{
-			"id": "editor-switch-workspace-tabs",
-			"label": "Switching workspace tabs",
+			"id": "editor-workspace-tabs",
+			"label": "Workspace tabs",
 			"primaryMetric": "switchTab",
 			"requiresBlockera": true
+		},
+		{
+			"id": "editor-block-bg-color",
+			"label": "Block bg color",
+			"primaryMetric": "blockBgColor",
+			"thresholdPercent": 1000
+		},
+		{
+			"id": "editor-block-bg-image",
+			"label": "Block bg image",
+			"primaryMetric": "blockBgImage",
+			"thresholdPercent": 1000
 		}
 	]
 }

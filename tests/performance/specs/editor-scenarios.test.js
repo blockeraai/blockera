@@ -17,6 +17,10 @@
 const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 const { EditorPerfUtils } = require('../fixtures/editor-perf-utils');
 const { sum } = require('../utils');
+const {
+	getParentContainer,
+	setColorControlValue,
+} = require('@blockera/dev-playwright/js/support/commands');
 
 // See https://github.com/WordPress/gutenberg/issues/51383#issuecomment-1613460429
 const BROWSER_IDLE_WAIT = 1000;
@@ -45,7 +49,7 @@ test.describe('Editor', () => {
 			});
 		});
 
-		test('Measure block selection', async ({
+		test('Measure select blocks', async ({
 			admin,
 			page,
 			requestUtils,
@@ -102,7 +106,7 @@ test.describe('Editor', () => {
 		});
 	});
 
-	test.describe('editor-switch-workspace-tabs', () => {
+	test.describe('editor-workspace-tabs', () => {
 		const results = {
 			switchTab: [],
 		};
@@ -125,7 +129,7 @@ test.describe('Editor', () => {
 			});
 		});
 
-		test('Measure workspace tab switching', async ({
+		test('Measure workspace tabs', async ({
 			admin,
 			page,
 			requestUtils,
@@ -183,14 +187,200 @@ test.describe('Editor', () => {
 					timeout: 30000,
 				});
 				await metrics.stopTracing(
-					i === Math.floor(iterations / 2) &&
-						'editor-switch-workspace-tabs'
+					i === Math.floor(iterations / 2) && 'editor-workspace-tabs'
 				);
 
 				const [mouseClickEvents] = metrics.getClickEventDurations();
 
 				if (i > throwaway) {
 					results.switchTab.push(mouseClickEvents[0]);
+				}
+			}
+		});
+	});
+
+	test.describe('editor-block-bg-color', () => {
+		const results = {
+			blockBgColor: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera block-level BG Color control
+		test.skip(
+			skipForCore,
+			'Block bg color requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure block bg color', async ({
+			admin,
+			page,
+			requestUtils,
+			perfUtils,
+			metrics,
+		}) => {
+			await requestUtils.setPreferences('core/edit-post', {
+				welcomeGuide: false,
+				fullscreenMode: false,
+				editorMode: 'visual',
+			});
+
+			await admin.createNewPost({ showWelcomeGuide: false });
+			await perfUtils.waitForEditor();
+			await perfUtils.insertParagraph();
+			await perfUtils.saveDraft();
+			await perfUtils.disableAutosave();
+
+			const blockLevelBgColorContainer = await getParentContainer(
+				page,
+				'BG Color'
+			);
+			await expect(blockLevelBgColorContainer).toBeVisible({
+				timeout: 60000,
+			});
+
+			const canvas = await perfUtils.getCanvas();
+			const paragraph = canvas.locator('.wp-block-paragraph').first();
+			await expect(paragraph).toBeVisible({ timeout: 60000 });
+
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// Idle wait matches Gutenberg post-editor performance suite.
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const colorSuffix = String(i).padStart(2, '0');
+				const colorValue = `6666${colorSuffix}`;
+				const blueChannel = parseInt(colorSuffix, 16);
+
+				await metrics.startTracing();
+				await setColorControlValue(page, 'BG Color', colorValue);
+				await expect(paragraph).toHaveCSS(
+					'backgroundColor',
+					`rgb(102, 102, ${blueChannel})`,
+					{ timeout: 30000 }
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) && 'editor-block-bg-color'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.blockBgColor.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
+
+	test.describe('editor-block-bg-image', () => {
+		const results = {
+			blockBgImage: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera block-level Image & Gradient control
+		test.skip(
+			skipForCore,
+			'Block bg image requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure block bg image', async ({
+			admin,
+			page,
+			requestUtils,
+			perfUtils,
+			metrics,
+		}) => {
+			await requestUtils.setPreferences('core/edit-post', {
+				welcomeGuide: false,
+				fullscreenMode: false,
+				editorMode: 'visual',
+			});
+
+			await admin.createNewPost({ showWelcomeGuide: false });
+			await perfUtils.waitForEditor();
+			await perfUtils.insertParagraph();
+			await perfUtils.saveDraft();
+			await perfUtils.disableAutosave();
+
+			const blockLevelImageAndGradientContainer =
+				await getParentContainer(page, 'Image & Gradient');
+			await expect(blockLevelImageAndGradientContainer).toBeVisible({
+				timeout: 60000,
+			});
+
+			await perfUtils.setupBlockLevelBackgroundImage();
+
+			const canvas = await perfUtils.getCanvas();
+			const paragraph = canvas.locator('.wp-block-paragraph').first();
+			await expect(paragraph).toBeVisible({ timeout: 60000 });
+
+			const sizeValues = ['contain', 'cover'];
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// Idle wait matches Gutenberg post-editor performance suite.
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const sizeValue = sizeValues[(i - 1) % sizeValues.length];
+
+				await metrics.startTracing();
+				await perfUtils.setBlockLevelBackgroundImageSize(sizeValue);
+				await expect(paragraph).toHaveCSS(
+					'background-size',
+					sizeValue,
+					{ timeout: 30000 }
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) && 'editor-block-bg-image'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.blockBgImage.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
 				}
 			}
 		});
