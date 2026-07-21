@@ -8,6 +8,8 @@ const path = require('node:path');
 const { expect } = require('@wordpress/e2e-test-utils-playwright');
 const {
 	getParentContainer,
+	setColorControlValue,
+	openGlobalStylesPanel,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 const BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE = path.join(
@@ -236,6 +238,402 @@ class EditorPerfUtils {
 	 *
 	 * @param {string} [blockType] Block name, e.g. core/paragraph.
 	 */
+	async openGlobalStylesBlockStyleVariations(blockType = 'core/paragraph') {
+		await openGlobalStylesPanel(this.page);
+		await this.page.locator('[data-test="block-style-variations"]').click();
+		const blockButtonId = `/blocks/${encodeURIComponent(blockType)}`;
+		await this.page
+			.locator(`button[id="${blockButtonId}"]`)
+			.first()
+			.click();
+	}
+
+	/**
+	 * Creates a shared style variation in Global Styles (not block-level).
+	 *
+	 * @param {string} styleSlug Variation slug / id.
+	 */
+	async createGlobalStylesSharedStyleVariation(styleSlug) {
+		await this.page
+			.locator('[data-test="add-new-block-style-variation"]')
+			.first()
+			.click();
+
+		const dialog = this.page
+			.getByRole('dialog', { name: /Add new style variation/i })
+			.last();
+		await dialog
+			.locator('[aria-label="Name"]')
+			.locator('..')
+			.locator('..')
+			.locator('input')
+			.fill(`E2E Shared ${styleSlug}`);
+		await dialog
+			.locator('[aria-label="ID"]')
+			.locator('..')
+			.locator('..')
+			.locator('input')
+			.fill(styleSlug);
+
+		await this.page.locator('[data-test="add-style-button"]').click();
+		await expect(
+			this.page.getByRole('dialog', {
+				name: /Add new style variation/i,
+			})
+		).toHaveCount(0, { timeout: 20000 });
+
+		await this.page.waitForFunction(
+			(slug) =>
+				window.wp?.data
+					?.select('blockera/editor')
+					?.getSelectedBlockStyleVariation()?.name === slug,
+			styleSlug,
+			{ timeout: 20000 }
+		);
+	}
+
+	/**
+	 * Shares a Global Styles style variation with additional block types.
+	 *
+	 * @param {string}   styleSlug         Variation slug.
+	 * @param {string[]} additionalBlocks  Block types to include.
+	 */
+	async shareGlobalStylesStyleVariationWithOtherBlocks(
+		styleSlug,
+		additionalBlocks = ['core/heading']
+	) {
+		await this.page
+			.locator(`[data-test="open-${styleSlug}-block-card-contextmenu"]`)
+			.filter({ visible: true })
+			.first()
+			.click({ force: true });
+
+		const popover = this.page
+			.locator('.variations-settings-popover')
+			.filter({ visible: true })
+			.last();
+		await popover
+			.getByRole('button', { name: 'Share with other blocks' })
+			.click({ force: true });
+
+		await expect(
+			this.page
+				.locator('[data-test="save-usage-for-multiple-blocks-button"]')
+				.first()
+		).toBeVisible({ timeout: 20000 });
+
+		for (const blockType of additionalBlocks) {
+			const blockToggle = this.page
+				.locator(`[data-test="${blockType}"]`)
+				.first();
+			await blockToggle.scrollIntoViewIfNeeded();
+			await blockToggle.click({ force: true });
+		}
+
+		await this.page
+			.locator('[data-test="save-usage-for-multiple-blocks-button"]')
+			.first()
+			.click();
+		await expect(
+			this.page.locator(
+				'[data-test="save-usage-for-multiple-blocks-button"]'
+			)
+		).toHaveCount(0, { timeout: 20000 });
+	}
+
+	/**
+	 * Waits until a Global Styles shared style variation BG color is synced
+	 * across block types (global styles entity, not block-level attributes).
+	 *
+	 * @param {string}   styleSlug   Variation slug.
+	 * @param {string}   expectedHex Expected `#rrggbb` value.
+	 * @param {string[]} blockTypes  Block types that must share the value.
+	 */
+	async expectGlobalStylesSharedStyleVariationBackgroundColor(
+		styleSlug,
+		expectedHex,
+		blockTypes = ['core/paragraph', 'core/heading']
+	) {
+		await this.page.waitForFunction(
+			({ slug, hex, blocks }) => {
+				const data = window.wp?.data;
+				if (!data) {
+					return false;
+				}
+
+				const blockeraSelect = data.select('blockera/editor');
+				const registered = blockeraSelect.getStyleVariationBlocks(slug);
+
+				for (const blockType of blocks) {
+					if (!registered.includes(blockType)) {
+						return false;
+					}
+
+					const blockStyle = blockeraSelect.getBlockStyles(
+						blockType,
+						slug
+					);
+					if (blockStyle?.blockeraBackgroundColor?.value !== hex) {
+						return false;
+					}
+				}
+
+				const coreSelect = data.select('core');
+				let gsId;
+				if (
+					typeof coreSelect.__experimentalGetCurrentGlobalStylesId ===
+					'function'
+				) {
+					gsId = coreSelect.__experimentalGetCurrentGlobalStylesId();
+				} else if (
+					typeof coreSelect.getCurrentGlobalStylesId === 'function'
+				) {
+					gsId = coreSelect.getCurrentGlobalStylesId();
+				}
+
+				if (!gsId) {
+					return false;
+				}
+
+				const edited = coreSelect.getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					gsId
+				);
+
+				for (const blockType of blocks) {
+					const variation =
+						edited?.styles?.blocks?.[blockType]?.variations?.[slug];
+					if (variation?.blockeraBackgroundColor?.value !== hex) {
+						return false;
+					}
+				}
+
+				return true;
+			},
+			{ slug: styleSlug, hex: expectedHex, blocks: blockTypes },
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
+	 * Sets Global Styles shared style variation background color in the
+	 * Global Styles inspector (not block-level BG Color).
+	 *
+	 * @param {string} value Hex color without leading `#`.
+	 */
+	async setGlobalStylesSharedStyleVariationBackgroundColor(value) {
+		await setColorControlValue(this.page, 'BG Color', value);
+	}
+
+	/**
+	 * Selects an existing Global Styles block style variation by slug.
+	 *
+	 * @param {string} styleSlug Variation slug (e.g. text-display).
+	 */
+	async selectGlobalStylesStyleVariation(styleSlug) {
+		await this.page
+			.locator(`[data-test="style-${styleSlug}"]`)
+			.first()
+			.click({ force: true });
+	}
+
+	/**
+	 * Duplicates a Global Styles shared style variation via block card menu
+	 * (see shared-style-variation.global-styles.e2e.cy.js duplicate test).
+	 *
+	 * @param {string} styleSlug Source variation slug to duplicate.
+	 */
+	async duplicateGlobalStylesSharedStyleVariation(styleSlug) {
+		const contextMenu = this.page
+			.locator(`[data-test="open-${styleSlug}-block-card-contextmenu"]`)
+			.filter({ visible: true })
+			.first();
+		await contextMenu.scrollIntoViewIfNeeded();
+		await contextMenu.click({ force: true });
+
+		const popover = this.page
+			.locator('.variations-settings-popover')
+			.filter({ visible: true })
+			.last();
+		await popover
+			.getByRole('button', { name: 'Duplicate' })
+			.click({ force: true });
+
+		const saveButton = this.page.locator(
+			'[data-test="save-duplicate-button"]'
+		);
+		await expect(saveButton).toBeVisible({ timeout: 20000 });
+		await expect(saveButton).toBeEnabled({ timeout: 20000 });
+		await saveButton.click();
+	}
+
+	/**
+	 * Waits until the newest duplicated Global Styles variation exists and
+	 * copies background color + block registrations from the source variation.
+	 *
+	 * @param {string}   sourceSlug  Original variation slug (e.g. text-display).
+	 * @param {string}   expectedHex Expected `#rrggbb` on the duplicate.
+	 * @param {string[]} blockTypes  Block types the duplicate must register.
+	 */
+	async expectGlobalStylesSharedStyleVariationDuplicated(
+		sourceSlug,
+		expectedHex,
+		blockTypes = ['core/paragraph', 'core/heading']
+	) {
+		await this.page.waitForFunction(
+			({ source, hex, blocks }) => {
+				const data = window.wp?.data;
+				if (!data) {
+					return false;
+				}
+
+				const coreSelect = data.select('core');
+
+				let gsId;
+				if (
+					typeof coreSelect.__experimentalGetCurrentGlobalStylesId ===
+					'function'
+				) {
+					gsId = coreSelect.__experimentalGetCurrentGlobalStylesId();
+				} else if (
+					typeof coreSelect.getCurrentGlobalStylesId === 'function'
+				) {
+					gsId = coreSelect.getCurrentGlobalStylesId();
+				}
+
+				if (!gsId) {
+					return false;
+				}
+
+				const edited = coreSelect.getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					gsId
+				);
+				const paragraphVariations =
+					edited?.styles?.blocks?.['core/paragraph']?.variations ??
+					{};
+
+				const blockeraSelect = data.select('blockera/editor');
+				const origRegistered =
+					blockeraSelect.getStyleVariationBlocks(source);
+				for (const blockType of blocks) {
+					if (!origRegistered.includes(blockType)) {
+						return false;
+					}
+				}
+
+				const copyKeys = Object.keys(paragraphVariations)
+					.filter(
+						(key) =>
+							key !== source &&
+							key.includes('copy') &&
+							paragraphVariations[key] !== undefined &&
+							paragraphVariations[key] !== null
+					)
+					.sort();
+				const duplicateSlug = copyKeys[copyKeys.length - 1];
+
+				if (typeof duplicateSlug !== 'string' || !duplicateSlug) {
+					return false;
+				}
+
+				const copyRegistered =
+					blockeraSelect.getStyleVariationBlocks(duplicateSlug);
+				for (const blockType of blocks) {
+					if (!copyRegistered.includes(blockType)) {
+						return false;
+					}
+				}
+
+				const paragraphCopyVariation =
+					paragraphVariations[duplicateSlug];
+				const headingCopyVariation =
+					edited?.styles?.blocks?.['core/heading']?.variations?.[
+						duplicateSlug
+					];
+
+				if (
+					paragraphCopyVariation?.blockeraBackgroundColor?.value !==
+					headingCopyVariation?.blockeraBackgroundColor?.value
+				) {
+					return false;
+				}
+
+				return (
+					paragraphCopyVariation?.blockeraBackgroundColor?.value ===
+					hex
+				);
+			},
+			{ source: sourceSlug, hex: expectedHex, blocks: blockTypes },
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
+	 * Generates and loads 1000 paragraphs into the editor canvas.
+	 */
+	async load1000Paragraphs() {
+		await this.page.waitForFunction(
+			() => window?.wp?.blocks && window?.wp?.data
+		);
+
+		await this.page.evaluate(() => {
+			const { createBlock } = window.wp.blocks;
+			const { dispatch } = window.wp.data;
+			const blocks = Array.from({ length: 1000 }).map(() =>
+				createBlock('core/paragraph', { content: 'paragraph' })
+			);
+			dispatch('core/block-editor').resetBlocks(blocks);
+		});
+	}
+
+	/**
+	 * Locates paragraph blocks in the canvas (role first).
+	 *
+	 * @param {import('@playwright/test').Locator|import('@playwright/test').FrameLocator} canvas
+	 * @return {import('@playwright/test').Locator} Paragraph block locators.
+	 */
+	paragraphs(canvas) {
+		return canvas.getByRole('document', {
+			name: /Block: Paragraph/i,
+		});
+	}
+
+	/**
+	 * Clears Blockera workspace tab localStorage so tab setup is deterministic.
+	 */
+	async resetWorkspaceTabsStorage() {
+		await this.page.evaluate(() => {
+			window.localStorage.removeItem('blockera-tabs-tabs');
+			window.localStorage.removeItem('blockera-tabs-recently-closed');
+			window.localStorage.removeItem(
+				'blockera-tabs-recently-closed-persistence'
+			);
+		});
+	}
+
+	/**
+	 * Opens a second draft post via the Blockera "Add tab" command palette.
+	 */
+	async addWorkspaceTabNewPost() {
+		const addTab = this.page.locator(
+			'[test-id="blockera-workspace-tabs-add"]'
+		);
+		await addTab.first().click({ force: true });
+
+		const input = this.page.locator('.commands-command-menu [cmdk-input]');
+		await input.waitFor({ state: 'visible', timeout: 20000 });
+		await input.fill('');
+		await input.type('Add new post', { delay: 40 });
+		await this.page
+			.locator('.commands-command-menu [cmdk-item]')
+			.filter({ hasNot: this.page.locator('[aria-disabled="true"]') })
+			.first()
+			.waitFor({ state: 'visible', timeout: 20000 });
+		await input.press('Enter');
+	}
 }
 
 module.exports = {
