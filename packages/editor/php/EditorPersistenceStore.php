@@ -326,21 +326,28 @@ class EditorPersistenceStore {
 		// Get default values.
 		$defaults = $this->get_defaults();
 
-		// Inject defaults, persisted data, and user ID into JavaScript.
+		$handle  = 'blockera-editor-persistence';
+		$version = wp_generate_uuid4();
+		wp_register_script( $handle, false, array(), $version, array( 'in_footer' => false ) );
+		wp_enqueue_script( $handle );
+
 		// wp_json_encode with JSON_HEX_TAG prevents XSS by escaping < and > characters.
 		wp_add_inline_script(
-			'blockera',
+			$handle,
 			sprintf(
 				'( function() {
+					window.blockeraStorageSiteKey = %s;
+					window.blockeraStorageUserId = %d;
 					window.blockeraEditorPersistenceDefaults = %s;
 					window.blockeraEditorPersistenceData = %s;
 					window.blockeraEditorPersistenceUserId = %d;
 				} )();',
+				wp_json_encode( blockera_get_storage_site_key(), JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ),
+				$user_id,
 				wp_json_encode( $defaults, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ),
 				wp_json_encode( $preload_data ? $preload_data : null, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ),
 				$user_id
-			),
-			'before'
+			)
 		);
 	}
 }
