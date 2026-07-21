@@ -4,7 +4,16 @@
  * Adapted from Gutenberg test/performance/fixtures/perf-utils.ts
  */
 
+const path = require('node:path');
 const { expect } = require('@wordpress/e2e-test-utils-playwright');
+const {
+	getParentContainer,
+} = require('@blockera/dev-playwright/js/support/commands');
+
+const BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE = path.join(
+	process.cwd(),
+	'packages/dev-cypress/js/fixtures/bg-extension-test.png'
+);
 
 class EditorPerfUtils {
 	/**
@@ -132,68 +141,104 @@ class EditorPerfUtils {
 	}
 
 	/**
-	 * Generates and loads 1000 paragraphs into the editor canvas.
+	 * Inserts a single paragraph block and selects it for block-level styling.
+	 *
+	 * @param {string} [content] Paragraph text.
 	 */
-	async load1000Paragraphs() {
+	async insertParagraph(content = 'This is test paragraph') {
 		await this.page.waitForFunction(
 			() => window?.wp?.blocks && window?.wp?.data
 		);
 
-		await this.page.evaluate(() => {
+		await this.page.evaluate((text) => {
 			const { createBlock } = window.wp.blocks;
 			const { dispatch } = window.wp.data;
-			const blocks = Array.from({ length: 1000 }).map(() =>
-				createBlock('core/paragraph', { content: 'paragraph' })
-			);
-			dispatch('core/block-editor').resetBlocks(blocks);
-		});
+			const block = createBlock('core/paragraph', { content: text });
+			dispatch('core/block-editor').resetBlocks([block]);
+			dispatch('core/block-editor').selectBlock(block.clientId);
+		}, content);
 	}
 
 	/**
-	 * Locates paragraph blocks in the canvas (role first).
+	 * Adds a block-level background image layer via Image & Gradient repeater
+	 * (see background-image.general-4.e2e.cy.js).
 	 *
-	 * @param {import('@playwright/test').Locator|import('@playwright/test').FrameLocator} canvas
-	 * @return {import('@playwright/test').Locator} Paragraph block locators.
+	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
-	paragraphs(canvas) {
-		return canvas.getByRole('document', {
-			name: /Block: Paragraph/i,
-		});
-	}
-
-	/**
-	 * Clears Blockera workspace tab localStorage so tab setup is deterministic.
-	 */
-	async resetWorkspaceTabsStorage() {
-		await this.page.evaluate(() => {
-			window.localStorage.removeItem('blockera-tabs-tabs');
-			window.localStorage.removeItem('blockera-tabs-recently-closed');
-			window.localStorage.removeItem(
-				'blockera-tabs-recently-closed-persistence'
-			);
-		});
-	}
-
-	/**
-	 * Opens a second draft post via the Blockera "Add tab" command palette.
-	 */
-	async addWorkspaceTabNewPost() {
-		const addTab = this.page.locator(
-			'[test-id="blockera-workspace-tabs-add"]'
+	async setupBlockLevelBackgroundImage(
+		filePath = BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE
+	) {
+		const imageAndGradientContainer = await getParentContainer(
+			this.page,
+			'Image & Gradient'
 		);
-		await addTab.first().click({ force: true });
+		await imageAndGradientContainer
+			.getByRole('button', { name: 'Add New Background' })
+			.click();
 
-		const input = this.page.locator('.commands-command-menu [cmdk-input]');
-		await input.waitFor({ state: 'visible', timeout: 20000 });
-		await input.fill('');
-		await input.type('Add new post', { delay: 40 });
-		await this.page
-			.locator('.commands-command-menu [cmdk-item]')
-			.filter({ hasNot: this.page.locator('[aria-disabled="true"]') })
-			.first()
-			.waitFor({ state: 'visible', timeout: 20000 });
-		await input.press('Enter');
+		const popoverHeader = this.page
+			.locator('[data-test="popover-header"]')
+			.locator('..');
+		await popoverHeader
+			.getByRole('button', { name: /media library/i })
+			.click();
+		await this.page.locator('#menu-item-upload').click();
+		await this.page.locator('input[type="file"]').setInputFiles(filePath);
+		await this.page.locator('.media-toolbar-primary > .button').click();
+
+		const canvas = await this.getCanvas();
+		const paragraph = canvas.locator('.wp-block-paragraph').first();
+		await expect(paragraph).toHaveCSS(
+			'background-image',
+			/bg-extension-test/,
+			{ timeout: 60000 }
+		);
 	}
+
+	/**
+	 * Opens the block-level background image popover when it is not visible.
+	 */
+	async ensureBlockLevelBackgroundImagePopoverOpen() {
+		const popover = this.page.locator('.blockera-component-popover').last();
+		if (await popover.isVisible().catch(() => false)) {
+			return;
+		}
+
+		const imageAndGradientContainer = await getParentContainer(
+			this.page,
+			'Image & Gradient'
+		);
+		await imageAndGradientContainer
+			.locator('[data-cy="repeater-item"]')
+			.first()
+			.click();
+		await popover.waitFor({ state: 'visible', timeout: 30000 });
+	}
+
+	/**
+	 * Sets block-level background image size in the open background popover.
+	 *
+	 * @param {'contain'|'cover'|'custom'} sizeValue Background size preset.
+	 */
+	async setBlockLevelBackgroundImageSize(sizeValue) {
+		await this.ensureBlockLevelBackgroundImagePopoverOpen();
+
+		const popover = this.page.locator('.blockera-component-popover').last();
+		await popover
+			.locator('[data-cy="base-control"]:has([aria-label="Size"])')
+			.locator(`button[data-value="${sizeValue}"]`)
+			.click();
+	}
+
+	/**
+	 * Opens Block Style Variations for a block type in Global Styles
+	 * (see shared-style-variation.global-styles.e2e.cy.js).
+	 *
+	 * @param {string} [blockType] Block name, e.g. core/paragraph.
+	 */
 }
 
-module.exports = { EditorPerfUtils };
+module.exports = {
+	EditorPerfUtils,
+	BLOCK_LEVEL_BACKGROUND_IMAGE_FIXTURE,
+};
