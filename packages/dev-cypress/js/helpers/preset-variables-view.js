@@ -2,6 +2,8 @@
  * Cypress helpers for preset variables summary row (count + grouped/list view).
  */
 
+import { getScopedStorageKey, removeScopedStorageKeys } from './storage';
+
 export const PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY =
 	'blockera-variables-view-mode';
 
@@ -77,7 +79,10 @@ export function expectPresetVariablesCount(count) {
  */
 export function clearPresetVariablesViewModeStorage() {
 	cy.window().then((win) => {
-		win.localStorage.removeItem(PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY);
+		removeScopedStorageKeys(
+			win.localStorage,
+			PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY
+		);
 	});
 }
 
@@ -87,7 +92,9 @@ export function clearPresetVariablesViewModeStorage() {
 export function expectPresetVariablesViewModeStorage(mode) {
 	cy.window().then((win) => {
 		expect(
-			win.localStorage.getItem(PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY)
+			win.localStorage.getItem(
+				getScopedStorageKey(win, PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY)
+			)
 		).to.eq(mode);
 	});
 }

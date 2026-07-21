@@ -13,3 +13,4 @@ export * from './helpers/global-styles';
 export * from './helpers/preset-variables-view';
 export * from './helpers/variable-picker';
 export * from './helpers/missing-variable';
+export * from './helpers/storage';
