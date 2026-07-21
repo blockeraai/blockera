@@ -12,10 +12,19 @@
  * CI isolation: only `npm run test:performance:editor` (playwright.editor.config.js)
  * runs this file. Root Playwright e2e (*.ply.js), Cypress (*.e2e.cy.js), and Jest
  * (*.spec.js) explicitly ignore `tests/performance/**`.
+ *
+ * Subject model (`PERF_SUBJECT`, see run-editor-benchmarks.sh):
+ * - `core` — WordPress default block editor UI baseline (plugin deactivated)
+ * - `blockera` — Blockera UI only (plugin active)
+ * Each scenario runs one UI path per benchmark subject; results are compared after both runs.
  */
 
 const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 const { EditorPerfUtils } = require('../fixtures/editor-perf-utils');
+const {
+	CORE_GS_PARAGRAPH_VARIATION,
+	CORE_GS_GROUP_VARIATION,
+} = require('../fixtures/core-editor-perf-utils');
 const { sum } = require('../utils');
 const {
 	getParentContainer,
@@ -34,8 +43,8 @@ const subject = process.env.PERF_SUBJECT || 'blockera';
 
 test.describe('Editor', () => {
 	test.use({
-		perfUtils: async ({ page }, use) => {
-			await use(new EditorPerfUtils({ page }));
+		perfUtils: async ({ page, editor }, use) => {
+			await use(new EditorPerfUtils({ page, editor, subject }));
 		},
 	});
 
@@ -206,18 +215,7 @@ test.describe('Editor', () => {
 			blockBgColor: [],
 		};
 
-		const skipForCore = subject === 'core';
-
-		// @debug-ignore — Core has no Blockera block-level BG Color control
-		test.skip(
-			skipForCore,
-			'Block bg color requires Blockera (PERF_SUBJECT=blockera)'
-		);
-
 		test.afterAll(async ({}, testInfo) => {
-			if (skipForCore) {
-				return;
-			}
 			await testInfo.attach('results', {
 				body: JSON.stringify(results, null, 2),
 				contentType: 'application/json',
@@ -243,13 +241,17 @@ test.describe('Editor', () => {
 			await perfUtils.saveDraft();
 			await perfUtils.disableAutosave();
 
-			const blockLevelBgColorContainer = await getParentContainer(
-				page,
-				'BG Color'
-			);
-			await expect(blockLevelBgColorContainer).toBeVisible({
-				timeout: 60000,
-			});
+			if (perfUtils.isCore) {
+				await perfUtils.core.openDocumentSettingsSidebar();
+			} else {
+				const blockLevelBgColorContainer = await getParentContainer(
+					page,
+					'BG Color'
+				);
+				await expect(blockLevelBgColorContainer).toBeVisible({
+					timeout: 60000,
+				});
+			}
 
 			const canvas = await perfUtils.getCanvas();
 			const paragraph = canvas.locator('.wp-block-paragraph').first();
@@ -260,16 +262,23 @@ test.describe('Editor', () => {
 			const iterations = samples + throwaway;
 
 			for (let i = 1; i <= iterations; i++) {
-				// Idle wait matches Gutenberg post-editor performance suite.
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
 				const colorSuffix = String(i).padStart(2, '0');
 				const colorValue = `6666${colorSuffix}`;
+				const expectedHex = `#${colorValue}`;
 				const blueChannel = parseInt(colorSuffix, 16);
 
 				await metrics.startTracing();
-				await perfUtils.setBackgroundColor(colorValue);
+				if (perfUtils.isCore) {
+					await perfUtils.core.setBlockBackgroundColor(colorValue);
+					await perfUtils.core.expectSelectedBlockBackgroundColor(
+						expectedHex
+					);
+				} else {
+					await perfUtils.setBackgroundColor(colorValue);
+				}
 				await expect(paragraph).toHaveCSS(
 					'backgroundColor',
 					`rgb(102, 102, ${blueChannel})`,
@@ -300,18 +309,7 @@ test.describe('Editor', () => {
 			blockBgImage: [],
 		};
 
-		const skipForCore = subject === 'core';
-
-		// @debug-ignore — Core has no Blockera block-level Image & Gradient control
-		test.skip(
-			skipForCore,
-			'Block bg image requires Blockera (PERF_SUBJECT=blockera)'
-		);
-
 		test.afterAll(async ({}, testInfo) => {
-			if (skipForCore) {
-				return;
-			}
 			await testInfo.attach('results', {
 				body: JSON.stringify(results, null, 2),
 				contentType: 'application/json',
@@ -333,21 +331,33 @@ test.describe('Editor', () => {
 
 			await admin.createNewPost({ showWelcomeGuide: false });
 			await perfUtils.waitForEditor();
-			await perfUtils.insertParagraph();
+			if (perfUtils.isCore) {
+				await perfUtils.core.insertGroupBlock();
+			} else {
+				await perfUtils.insertParagraph();
+			}
 			await perfUtils.saveDraft();
 			await perfUtils.disableAutosave();
 
-			const backgroundImageContainer =
-				await perfUtils.getBackgroundImageContainer();
-			await expect(backgroundImageContainer).toBeVisible({
-				timeout: 60000,
-			});
-
-			await perfUtils.setupBackgroundImage();
+			if (perfUtils.isCore) {
+				await perfUtils.core.setupBlockBackgroundImage();
+			} else {
+				const backgroundImageContainer =
+					await perfUtils.getBackgroundImageContainer();
+				await expect(backgroundImageContainer).toBeVisible({
+					timeout: 60000,
+				});
+				await perfUtils.setupBackgroundImage();
+			}
 
 			const canvas = await perfUtils.getCanvas();
-			const paragraph = canvas.locator('.wp-block-paragraph').first();
-			await expect(paragraph).toBeVisible({ timeout: 60000 });
+			const block = perfUtils.isCore
+				? canvas.locator('.wp-block-group').first()
+				: canvas.locator('.wp-block-paragraph').first();
+			await expect(block).toBeVisible({ timeout: 60000 });
+			if (perfUtils.isCore) {
+				await perfUtils.core.expectCanvasBackgroundImage(block);
+			}
 
 			const sizeValues = ['contain', 'cover'];
 			const samples = 10;
@@ -355,19 +365,23 @@ test.describe('Editor', () => {
 			const iterations = samples + throwaway;
 
 			for (let i = 1; i <= iterations; i++) {
-				// Idle wait matches Gutenberg post-editor performance suite.
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
 				const sizeValue = sizeValues[(i - 1) % sizeValues.length];
 
 				await metrics.startTracing();
-				await perfUtils.setBackgroundImageSize(sizeValue);
-				await expect(paragraph).toHaveCSS(
-					'background-size',
-					sizeValue,
-					{ timeout: 30000 }
-				);
+				if (perfUtils.isCore) {
+					await perfUtils.core.setBackgroundImageSize(sizeValue);
+					await perfUtils.core.expectSelectedBlockBackgroundImageSize(
+						sizeValue
+					);
+				} else {
+					await perfUtils.setBackgroundImageSize(sizeValue);
+				}
+				await expect(block).toHaveCSS('background-size', sizeValue, {
+					timeout: 30000,
+				});
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) && 'editor-block-bg-image'
 				);
@@ -393,18 +407,7 @@ test.describe('Editor', () => {
 			gsVariationBgColor: [],
 		};
 
-		const skipForCore = subject === 'core';
-
-		// @debug-ignore — Core has no Blockera Global Styles shared style variation controls
-		test.skip(
-			skipForCore,
-			'GS variation bg color requires Blockera (PERF_SUBJECT=blockera)'
-		);
-
 		test.afterAll(async ({}, testInfo) => {
-			if (skipForCore) {
-				return;
-			}
 			await testInfo.attach('results', {
 				body: JSON.stringify(results, null, 2),
 				contentType: 'application/json',
@@ -417,7 +420,7 @@ test.describe('Editor', () => {
 			perfUtils,
 			metrics,
 		}) => {
-			const styleSlug = `perf-sv-${Date.now()}`;
+			let styleSlug;
 
 			await admin.visitSiteEditor({
 				canvas: 'edit',
@@ -426,29 +429,38 @@ test.describe('Editor', () => {
 			await admin.waitForSiteEditor();
 			await closeWelcomeGuide(page);
 
-			await perfUtils.openGlobalStylesBlockStyleVariations(
-				'core/paragraph'
-			);
-			await perfUtils.createGlobalStylesSharedStyleVariation(styleSlug);
-			await perfUtils.shareGlobalStylesStyleVariationWithOtherBlocks(
-				styleSlug,
-				['core/heading']
-			);
-
-			const globalStylesSharedStyleVariationBgColorContainer =
-				await getParentContainer(page, 'BG Color');
-			await expect(
-				globalStylesSharedStyleVariationBgColorContainer
-			).toBeVisible({
-				timeout: 60000,
-			});
+			if (perfUtils.isCore) {
+				styleSlug = CORE_GS_PARAGRAPH_VARIATION.slug;
+				await perfUtils.core.openGlobalStylesBlock('Paragraph');
+				await perfUtils.core.selectGlobalStylesVariation(
+					CORE_GS_PARAGRAPH_VARIATION.label
+				);
+			} else {
+				styleSlug = `perf-sv-${Date.now()}`;
+				await perfUtils.openGlobalStylesBlockStyleVariations(
+					'core/paragraph'
+				);
+				await perfUtils.createGlobalStylesSharedStyleVariation(
+					styleSlug
+				);
+				await perfUtils.shareGlobalStylesStyleVariationWithOtherBlocks(
+					styleSlug,
+					['core/heading']
+				);
+				const globalStylesSharedStyleVariationBgColorContainer =
+					await getParentContainer(page, 'BG Color');
+				await expect(
+					globalStylesSharedStyleVariationBgColorContainer
+				).toBeVisible({
+					timeout: 60000,
+				});
+			}
 
 			const samples = 10;
 			const throwaway = 1;
 			const iterations = samples + throwaway;
 
 			for (let i = 1; i <= iterations; i++) {
-				// Idle wait matches Gutenberg post-editor performance suite.
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
@@ -457,11 +469,22 @@ test.describe('Editor', () => {
 				const expectedHex = `#${colorValue}`;
 
 				await metrics.startTracing();
-				await perfUtils.setBackgroundColor(colorValue);
-				await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
-					styleSlug,
-					expectedHex
-				);
+				if (perfUtils.isCore) {
+					await perfUtils.core.setGlobalStylesBackgroundColor(
+						colorValue
+					);
+					await perfUtils.core.expectGlobalStylesVariationBackgroundColor(
+						'core/paragraph',
+						styleSlug,
+						expectedHex
+					);
+				} else {
+					await perfUtils.setBackgroundColor(colorValue);
+					await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
+						styleSlug,
+						expectedHex
+					);
+				}
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) &&
 						'editor-gs-variation-bg-color'
@@ -488,18 +511,7 @@ test.describe('Editor', () => {
 			gsVariationBgImage: [],
 		};
 
-		const skipForCore = subject === 'core';
-
-		// @debug-ignore — Core has no Blockera Global Styles shared style variation controls
-		test.skip(
-			skipForCore,
-			'GS variation bg image requires Blockera (PERF_SUBJECT=blockera)'
-		);
-
 		test.afterAll(async ({}, testInfo) => {
-			if (skipForCore) {
-				return;
-			}
 			await testInfo.attach('results', {
 				body: JSON.stringify(results, null, 2),
 				contentType: 'application/json',
@@ -512,7 +524,8 @@ test.describe('Editor', () => {
 			perfUtils,
 			metrics,
 		}) => {
-			const styleSlug = `perf-sv-img-${Date.now()}`;
+			let styleSlug = null;
+			let gsBlockType = 'core/group';
 
 			await admin.visitSiteEditor({
 				canvas: 'edit',
@@ -521,22 +534,33 @@ test.describe('Editor', () => {
 			await admin.waitForSiteEditor();
 			await closeWelcomeGuide(page);
 
-			await perfUtils.openGlobalStylesBlockStyleVariations(
-				'core/paragraph'
-			);
-			await perfUtils.createGlobalStylesSharedStyleVariation(styleSlug);
-			await perfUtils.shareGlobalStylesStyleVariationWithOtherBlocks(
-				styleSlug,
-				['core/heading']
-			);
-
-			const backgroundImageContainer =
-				await perfUtils.getBackgroundImageContainer();
-			await expect(backgroundImageContainer).toBeVisible({
-				timeout: 60000,
-			});
-
-			await perfUtils.setupBackgroundImage();
+			if (perfUtils.isCore) {
+				styleSlug = CORE_GS_GROUP_VARIATION.slug;
+				await perfUtils.core.openGlobalStylesBlock('Group');
+				await perfUtils.core.selectGlobalStylesVariation(
+					CORE_GS_GROUP_VARIATION.label
+				);
+				await perfUtils.core.setupGlobalStylesBackgroundImage();
+			} else {
+				styleSlug = `perf-sv-img-${Date.now()}`;
+				gsBlockType = 'core/paragraph';
+				await perfUtils.openGlobalStylesBlockStyleVariations(
+					'core/paragraph'
+				);
+				await perfUtils.createGlobalStylesSharedStyleVariation(
+					styleSlug
+				);
+				await perfUtils.shareGlobalStylesStyleVariationWithOtherBlocks(
+					styleSlug,
+					['core/heading']
+				);
+				const backgroundImageContainer =
+					await perfUtils.getBackgroundImageContainer();
+				await expect(backgroundImageContainer).toBeVisible({
+					timeout: 60000,
+				});
+				await perfUtils.setupBackgroundImage();
+			}
 
 			const sizeValues = ['contain', 'cover'];
 			const samples = 10;
@@ -550,11 +574,20 @@ test.describe('Editor', () => {
 				const sizeValue = sizeValues[(i - 1) % sizeValues.length];
 
 				await metrics.startTracing();
-				await perfUtils.setBackgroundImageSize(sizeValue);
-				await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundImageSize(
-					styleSlug,
-					sizeValue
-				);
+				if (perfUtils.isCore) {
+					await perfUtils.core.setBackgroundImageSize(sizeValue);
+					await perfUtils.core.expectGlobalStylesBackgroundImageSize(
+						gsBlockType,
+						sizeValue,
+						styleSlug
+					);
+				} else {
+					await perfUtils.setBackgroundImageSize(sizeValue);
+					await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundImageSize(
+						styleSlug,
+						sizeValue
+					);
+				}
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) &&
 						'editor-gs-variation-bg-image'
@@ -671,18 +704,7 @@ test.describe('Editor', () => {
 			gsDefaultBgColor: [],
 		};
 
-		const skipForCore = subject === 'core';
-
-		// @debug-ignore — Core has no Blockera Global Styles BG Color control
-		test.skip(
-			skipForCore,
-			'GS default bg color requires Blockera (PERF_SUBJECT=blockera)'
-		);
-
 		test.afterAll(async ({}, testInfo) => {
-			if (skipForCore) {
-				return;
-			}
 			await testInfo.attach('results', {
 				body: JSON.stringify(results, null, 2),
 				contentType: 'application/json',
@@ -702,15 +724,18 @@ test.describe('Editor', () => {
 			await admin.waitForSiteEditor();
 			await closeWelcomeGuide(page);
 
-			await perfUtils.setupGlobalStylesDefaultStyleVariation(
-				'core/paragraph'
-			);
-
-			const globalStylesDefaultBgColorContainer =
-				await perfUtils.getBackgroundColorContainer();
-			await expect(globalStylesDefaultBgColorContainer).toBeVisible({
-				timeout: 60000,
-			});
+			if (perfUtils.isCore) {
+				await perfUtils.core.setupGlobalStylesDefaultParagraphStyles();
+			} else {
+				await perfUtils.setupGlobalStylesDefaultStyleVariation(
+					'core/paragraph'
+				);
+				const globalStylesDefaultBgColorContainer =
+					await perfUtils.getBackgroundColorContainer();
+				await expect(globalStylesDefaultBgColorContainer).toBeVisible({
+					timeout: 60000,
+				});
+			}
 
 			const canvas = await perfUtils.getCanvas();
 			const paragraph = canvas.locator('.wp-block-paragraph').first();
@@ -730,10 +755,20 @@ test.describe('Editor', () => {
 				const blueChannel = parseInt(colorSuffix, 16);
 
 				await metrics.startTracing();
-				await perfUtils.setBackgroundColor(colorValue);
-				await perfUtils.expectDefaultStyleVariationBackgroundColor(
-					expectedHex
-				);
+				if (perfUtils.isCore) {
+					await perfUtils.core.setGlobalStylesBackgroundColor(
+						colorValue
+					);
+					await perfUtils.core.expectGlobalStylesBlockBackgroundColor(
+						'core/paragraph',
+						expectedHex
+					);
+				} else {
+					await perfUtils.setBackgroundColor(colorValue);
+					await perfUtils.expectDefaultStyleVariationBackgroundColor(
+						expectedHex
+					);
+				}
 				await expect(paragraph).toHaveCSS(
 					'backgroundColor',
 					`rgb(102, 102, ${blueChannel})`,
@@ -765,18 +800,7 @@ test.describe('Editor', () => {
 			gsDefaultBgColorVariable: [],
 		};
 
-		const skipForCore = subject === 'core';
-
-		// @debug-ignore — Core has no Blockera BG Color value addon
-		test.skip(
-			skipForCore,
-			'GS default bg color variable requires Blockera (PERF_SUBJECT=blockera)'
-		);
-
 		test.afterAll(async ({}, testInfo) => {
-			if (skipForCore) {
-				return;
-			}
 			await testInfo.attach('results', {
 				body: JSON.stringify(results, null, 2),
 				contentType: 'application/json',
@@ -789,6 +813,12 @@ test.describe('Editor', () => {
 			perfUtils,
 			metrics,
 		}) => {
+			const corePresetLabels = {
+				'accent-3': 'Accent 3',
+				'accent-4': 'Accent 4',
+			};
+			const variableIds = ['accent-3', 'accent-4'];
+
 			await admin.visitSiteEditor({
 				canvas: 'edit',
 				showWelcomeGuide: false,
@@ -796,17 +826,19 @@ test.describe('Editor', () => {
 			await admin.waitForSiteEditor();
 			await closeWelcomeGuide(page);
 
-			await perfUtils.setupGlobalStylesDefaultStyleVariation(
-				'core/paragraph'
-			);
+			if (perfUtils.isCore) {
+				await perfUtils.core.setupGlobalStylesDefaultParagraphStyles();
+			} else {
+				await perfUtils.setupGlobalStylesDefaultStyleVariation(
+					'core/paragraph'
+				);
+				const globalStylesDefaultBgColorContainer =
+					await perfUtils.getBackgroundColorContainer();
+				await expect(globalStylesDefaultBgColorContainer).toBeVisible({
+					timeout: 60000,
+				});
+			}
 
-			const globalStylesDefaultBgColorContainer =
-				await perfUtils.getBackgroundColorContainer();
-			await expect(globalStylesDefaultBgColorContainer).toBeVisible({
-				timeout: 60000,
-			});
-
-			const variableIds = ['accent-3', 'accent-4'];
 			const samples = 10;
 			const throwaway = 1;
 			const iterations = samples + throwaway;
@@ -818,10 +850,20 @@ test.describe('Editor', () => {
 				const variableId = variableIds[(i - 1) % variableIds.length];
 
 				await metrics.startTracing();
-				await perfUtils.setBackgroundColorVariable(variableId);
-				await perfUtils.expectDefaultStyleVariationBackgroundColorVariable(
-					variableId
-				);
+				if (perfUtils.isCore) {
+					await perfUtils.core.setGlobalStylesBackgroundPreset(
+						corePresetLabels[variableId]
+					);
+					await perfUtils.core.expectGlobalStylesBackgroundPreset(
+						'core/paragraph',
+						variableId
+					);
+				} else {
+					await perfUtils.setBackgroundColorVariable(variableId);
+					await perfUtils.expectDefaultStyleVariationBackgroundColorVariable(
+						variableId
+					);
+				}
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) &&
 						'editor-gs-default-bg-color-variable'
