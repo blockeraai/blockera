@@ -43,6 +43,7 @@
 			"id": "editor-gs-variation-duplicate",
 			"label": "GS variation duplicate",
 			"primaryMetric": "gsVariationDuplicate",
+			"requiresBlockera": true,
 			"thresholdPercent": 1000
 		},
 		{
@@ -55,7 +56,6 @@
 			"id": "editor-gs-default-bg-color-variable",
 			"label": "GS default bg color variable",
 			"primaryMetric": "gsDefaultBgColorVariable",
-			"requiresBlockera": true,
 			"thresholdPercent": 1000
 		}
 	]
