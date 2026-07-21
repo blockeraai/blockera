@@ -26,6 +26,18 @@
 			"label": "Block bg image",
 			"primaryMetric": "blockBgImage",
 			"thresholdPercent": 1000
+		},
+		{
+			"id": "editor-gs-variation-bg-color",
+			"label": "GS variation bg color",
+			"primaryMetric": "gsVariationBgColor",
+			"thresholdPercent": 1000
+		},
+		{
+			"id": "editor-gs-variation-duplicate",
+			"label": "GS variation duplicate",
+			"primaryMetric": "gsVariationDuplicate",
+			"thresholdPercent": 1000
 		}
 	]
 }

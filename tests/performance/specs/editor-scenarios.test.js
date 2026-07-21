@@ -21,6 +21,9 @@ const {
 	getParentContainer,
 	setColorControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
+const {
+	closeWelcomeGuide,
+} = require('@blockera/dev-playwright/js/utils/editor');
 
 // See https://github.com/WordPress/gutenberg/issues/51383#issuecomment-1613460429
 const BROWSER_IDLE_WAIT = 1000;
@@ -377,6 +380,195 @@ test.describe('Editor', () => {
 
 				if (i > throwaway) {
 					results.blockBgImage.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
+
+	test.describe('editor-gs-variation-bg-color', () => {
+		const results = {
+			gsVariationBgColor: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera Global Styles shared style variation controls
+		test.skip(
+			skipForCore,
+			'GS variation bg color requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure GS variation bg color', async ({
+			admin,
+			page,
+			perfUtils,
+			metrics,
+		}) => {
+			const styleSlug = `perf-sv-${Date.now()}`;
+
+			await admin.visitSiteEditor({
+				canvas: 'edit',
+				showWelcomeGuide: false,
+			});
+			await admin.waitForSiteEditor();
+			await closeWelcomeGuide(page);
+
+			await perfUtils.openGlobalStylesBlockStyleVariations(
+				'core/paragraph'
+			);
+			await perfUtils.createGlobalStylesSharedStyleVariation(styleSlug);
+			await perfUtils.shareGlobalStylesStyleVariationWithOtherBlocks(
+				styleSlug,
+				['core/heading']
+			);
+
+			const globalStylesSharedStyleVariationBgColorContainer =
+				await getParentContainer(page, 'BG Color');
+			await expect(
+				globalStylesSharedStyleVariationBgColorContainer
+			).toBeVisible({
+				timeout: 60000,
+			});
+
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// Idle wait matches Gutenberg post-editor performance suite.
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const colorSuffix = String(i).padStart(2, '0');
+				const colorValue = `4455${colorSuffix}`;
+				const expectedHex = `#${colorValue}`;
+
+				await metrics.startTracing();
+				await perfUtils.setGlobalStylesSharedStyleVariationBackgroundColor(
+					colorValue
+				);
+				await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
+					styleSlug,
+					expectedHex
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) &&
+						'editor-gs-variation-bg-color'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.gsVariationBgColor.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
+
+	test.describe('editor-gs-variation-duplicate', () => {
+		const results = {
+			gsVariationDuplicate: [],
+		};
+
+		const skipForCore = subject === 'core';
+
+		// @debug-ignore — Core has no Blockera Global Styles duplicate action
+		test.skip(
+			skipForCore,
+			'GS variation duplicate requires Blockera (PERF_SUBJECT=blockera)'
+		);
+
+		test.afterAll(async ({}, testInfo) => {
+			if (skipForCore) {
+				return;
+			}
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure GS variation duplicate', async ({
+			admin,
+			page,
+			perfUtils,
+			metrics,
+		}) => {
+			// Theme preset shared across core/paragraph + core/heading (TT5 text-display).
+			const styleSlug = 'text-display';
+			const expectedHex = '#aabbcc';
+
+			await admin.visitSiteEditor({
+				canvas: 'edit',
+				showWelcomeGuide: false,
+			});
+			await admin.waitForSiteEditor();
+			await closeWelcomeGuide(page);
+
+			await perfUtils.openGlobalStylesBlockStyleVariations(
+				'core/paragraph'
+			);
+			await perfUtils.selectGlobalStylesStyleVariation(styleSlug);
+			await perfUtils.setGlobalStylesSharedStyleVariationBackgroundColor(
+				'aabbcc'
+			);
+			await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
+				styleSlug,
+				expectedHex
+			);
+
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// Idle wait matches Gutenberg post-editor performance suite.
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				await perfUtils.selectGlobalStylesStyleVariation(styleSlug);
+
+				await metrics.startTracing();
+				await perfUtils.duplicateGlobalStylesSharedStyleVariation(
+					styleSlug
+				);
+				await perfUtils.expectGlobalStylesSharedStyleVariationDuplicated(
+					styleSlug,
+					expectedHex
+				);
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) &&
+						'editor-gs-variation-duplicate'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.gsVariationDuplicate.push(
 						eventGroups.reduce((acc, eventDurations) => {
 							return acc + sum(eventDurations);
 						}, 0)
