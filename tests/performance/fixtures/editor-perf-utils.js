@@ -179,6 +179,45 @@ class EditorPerfUtils {
 	}
 
 	/**
+	 * Re-selects the first canvas block when the inspector lost selection (e.g. after save).
+	 */
+	async ensureSelectedBlock() {
+		await this.page.waitForFunction(() => window?.wp?.data);
+
+		await this.page.evaluate(() => {
+			const select = window.wp.data.select('core/block-editor');
+			if (select.getSelectedBlockClientId()) {
+				return;
+			}
+
+			const firstBlock = select.getBlocks()?.[0];
+			if (firstBlock?.clientId) {
+				window.wp.data
+					.dispatch('core/block-editor')
+					.selectBlock(firstBlock.clientId);
+			}
+		});
+	}
+
+	/**
+	 * Expands the Blockera Background panel when collapsed.
+	 */
+	async ensureBackgroundPanelOpen() {
+		const panelToggle = this.page
+			.locator('.blockera-extension-background')
+			.locator('button.components-panel__body-toggle')
+			.first();
+
+		if (!(await panelToggle.count())) {
+			return;
+		}
+
+		if ((await panelToggle.getAttribute('aria-expanded')) === 'false') {
+			await panelToggle.click();
+		}
+	}
+
+	/**
 	 * Returns the Image & Gradient control container (same UI in block-level and Global Styles).
 	 *
 	 * @return {Promise<import('@playwright/test').Locator>} Image & Gradient container.
@@ -192,27 +231,158 @@ class EditorPerfUtils {
 	}
 
 	/**
+	 * Returns the open background-layer edit popover (Cypress: `.blockera-component-popover`).
+	 * Uses the Size control as anchor — present for image layers before and after upload.
+	 *
+	 * @return {Promise<import('@playwright/test').Locator>} Open background layer popover.
+	 */
+	async getOpenBackgroundLayerPopover() {
+		const popover = this.page
+			.locator('.blockera-component-popover')
+			.filter({ visible: true })
+			.filter({
+				has: this.page.locator(
+					'[data-cy="base-control"]:has([aria-label="Size"])'
+				),
+			})
+			.last();
+
+		await expect(popover).toBeVisible({ timeout: 30000 });
+
+		return popover;
+	}
+
+	/**
+	 * Returns the open background-layer popover ready for image upload (no image yet).
+	 *
+	 * @return {Promise<import('@playwright/test').Locator>} Popover with upload controls visible.
+	 */
+	async getOpenBackgroundImageUploadPopover() {
+		const popover = await this.getOpenBackgroundLayerPopover();
+
+		await expect(
+			popover
+				.locator(
+					'.blockera-control-media-image .btn-choose-image, .blockera-control-media-image .btn-media-library'
+				)
+				.first()
+		).toBeVisible({ timeout: 30000 });
+
+		return popover;
+	}
+
+	/**
+	 * Opens the background repeater layer popover (add row or focus existing row).
+	 *
+	 * @return {Promise<import('@playwright/test').Locator>} Open background layer popover.
+	 */
+	async openBackgroundImageLayerPopover() {
+		await this.ensureSelectedBlock();
+		await this.ensureBackgroundPanelOpen();
+
+		const container = await this.getBackgroundImageContainer();
+		await container.scrollIntoViewIfNeeded();
+
+		const repeaterItem = container
+			.locator('[data-cy="repeater-item"]')
+			.first();
+		const hasRepeaterItem = await repeaterItem
+			.isVisible()
+			.catch(() => false);
+
+		if (!hasRepeaterItem) {
+			await container
+				.locator('[aria-label="Add New Background"]')
+				.click({ force: true });
+			await expect(repeaterItem).toBeVisible({ timeout: 15000 });
+		}
+
+		try {
+			return await this.getOpenBackgroundLayerPopover();
+		} catch {
+			await repeaterItem.click({ force: true });
+			return await this.getOpenBackgroundLayerPopover();
+		}
+	}
+
+	/**
+	 * Opens the WP media modal from the background image layer popover.
+	 *
+	 * @param {import('@playwright/test').Locator} popover Open background popover.
+	 */
+	async openBackgroundImageMediaModal(popover) {
+		const typeControl = popover.locator(
+			'[data-cy="base-control"]:has([aria-label="Type"])'
+		);
+
+		if (await typeControl.isVisible().catch(() => false)) {
+			const imageTypeButton = typeControl.locator(
+				'button[data-value="image"]'
+			);
+			if (await imageTypeButton.isVisible().catch(() => false)) {
+				await imageTypeButton.click({ force: true });
+			}
+		}
+
+		const mediaLibraryButton = popover
+			.locator(
+				'.blockera-control-media-image .btn-choose-image, .blockera-control-media-image .btn-media-library'
+			)
+			.filter({ hasText: /media library/i })
+			.first();
+
+		if (await mediaLibraryButton.isVisible().catch(() => false)) {
+			await mediaLibraryButton.click({ force: true });
+			return;
+		}
+
+		const uploadImageButton = popover
+			.locator('.blockera-control-media-image .btn-choose-image')
+			.filter({ hasText: /upload image/i })
+			.first();
+
+		await expect(uploadImageButton).toBeVisible({ timeout: 15000 });
+		await uploadImageButton.click({ force: true });
+	}
+
+	/**
+	 * Opens the background layer popover and uploads an image via Media Library
+	 * (mirrors background-image.general-4.e2e.cy.js + media-image.general-4.e2e.cy.js).
+	 *
+	 * @param {string} [filePath] Absolute path to the upload fixture.
+	 */
+	async uploadBackgroundImageViaMediaLibrary(
+		filePath = BACKGROUND_IMAGE_FIXTURE
+	) {
+		await this.openBackgroundImageLayerPopover();
+		const popover = await this.getOpenBackgroundImageUploadPopover();
+		await this.openBackgroundImageMediaModal(popover);
+
+		const mediaModal = this.page.locator('.media-modal');
+		await expect(mediaModal).toBeVisible({ timeout: 15000 });
+
+		const uploadTab = this.page.locator('#menu-item-upload');
+		if (await uploadTab.isVisible().catch(() => false)) {
+			await uploadTab.click();
+		} else {
+			await mediaModal
+				.getByRole('button', { name: /upload files/i })
+				.click({ force: true });
+		}
+
+		await this.page.locator('input[type="file"]').setInputFiles(filePath);
+		await this.page.locator('.media-toolbar-primary > .button').click();
+		await expect(mediaModal).toBeHidden({ timeout: 60000 });
+	}
+
+	/**
 	 * Adds a background image layer via Image & Gradient repeater
 	 * (see background-image.general-4.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
 	async setupBackgroundImage(filePath = BACKGROUND_IMAGE_FIXTURE) {
-		const imageAndGradientContainer =
-			await this.getBackgroundImageContainer();
-		await imageAndGradientContainer
-			.getByRole('button', { name: 'Add New Background' })
-			.click();
-
-		const popoverHeader = this.page
-			.locator('[data-test="popover-header"]')
-			.locator('..');
-		await popoverHeader
-			.getByRole('button', { name: /media library/i })
-			.click();
-		await this.page.locator('#menu-item-upload').click();
-		await this.page.locator('input[type="file"]').setInputFiles(filePath);
-		await this.page.locator('.media-toolbar-primary > .button').click();
+		await this.uploadBackgroundImageViaMediaLibrary(filePath);
 
 		await this.expectSelectedBlockBackgroundImage();
 
@@ -225,18 +395,17 @@ class EditorPerfUtils {
 	 * Opens the background image popover when it is not visible.
 	 */
 	async ensureBackgroundImagePopoverOpen() {
-		const popover = this.page.locator('.blockera-component-popover').last();
-		if (await popover.isVisible().catch(() => false)) {
-			return;
+		try {
+			await this.getOpenBackgroundLayerPopover();
+		} catch {
+			await this.ensureSelectedBlock();
+			const container = await this.getBackgroundImageContainer();
+			await container
+				.locator('[data-cy="repeater-item"]')
+				.first()
+				.click({ force: true });
+			await this.getOpenBackgroundLayerPopover();
 		}
-
-		const imageAndGradientContainer =
-			await this.getBackgroundImageContainer();
-		await imageAndGradientContainer
-			.locator('[data-cy="repeater-item"]')
-			.first()
-			.click();
-		await popover.waitFor({ state: 'visible', timeout: 30000 });
 	}
 
 	/**
@@ -248,11 +417,11 @@ class EditorPerfUtils {
 	async setBackgroundImageSize(sizeValue) {
 		await this.ensureBackgroundImagePopoverOpen();
 
-		const popover = this.page.locator('.blockera-component-popover').last();
+		const popover = await this.getOpenBackgroundLayerPopover();
 		await popover
 			.locator('[data-cy="base-control"]:has([aria-label="Size"])')
 			.locator(`button[data-value="${sizeValue}"]`)
-			.click();
+			.click({ force: true });
 	}
 
 	/**
