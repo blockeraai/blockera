@@ -14,6 +14,8 @@ const {
 	selectValueAddonItem,
 } = require('@blockera/dev-playwright/js/support/commands');
 
+const { CoreEditorPerfUtils } = require('./core-editor-perf-utils');
+
 const BACKGROUND_IMAGE_FIXTURE = path.join(
 	process.cwd(),
 	'packages/dev-cypress/js/fixtures/bg-extension-test.png'
@@ -21,10 +23,24 @@ const BACKGROUND_IMAGE_FIXTURE = path.join(
 
 class EditorPerfUtils {
 	/**
-	 * @param {{ page: import('@playwright/test').Page }} args
+	 * @param {{ page: import('@playwright/test').Page, editor?: import('@wordpress/e2e-test-utils-playwright').Editor, subject?: string }} args
 	 */
-	constructor({ page }) {
+	constructor({
+		page,
+		editor,
+		subject = process.env.PERF_SUBJECT || 'blockera',
+	}) {
 		this.page = page;
+		this.editor = editor;
+		this.subject = subject;
+		this.core = new CoreEditorPerfUtils({ page, editor });
+	}
+
+	/**
+	 * Whether the current run collects Core (default block editor) baseline metrics.
+	 */
+	get isCore() {
+		return this.subject === 'core';
 	}
 
 	/**
