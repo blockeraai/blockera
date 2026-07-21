@@ -339,6 +339,7 @@ test.describe('Editor', () => {
 			if (perfUtils.isCore) {
 				await perfUtils.core.setupBlockBackgroundImage();
 			} else {
+				await perfUtils.ensureSelectedBlock();
 				const backgroundImageContainer =
 					await perfUtils.getBackgroundImageContainer();
 				await expect(backgroundImageContainer).toBeVisible({
