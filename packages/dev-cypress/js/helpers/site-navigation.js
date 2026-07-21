@@ -3,6 +3,7 @@ import {
 	disableGutenbergFeatures,
 	closeWelcomeGuide,
 } from './editor';
+import { removeScopedStorageKeys } from './storage';
 
 /**
  * Login to our test WordPress site
@@ -106,7 +107,10 @@ export function createPostClearingZoomStorage({
 	return cy
 		.visit(path, {
 			onBeforeLoad(win) {
-				win.localStorage.removeItem('blockeraEditorZoomPercent');
+				removeScopedStorageKeys(
+					win.localStorage,
+					'blockeraEditorZoomPercent'
+				);
 			},
 		})
 		.then(() => {

@@ -4,8 +4,13 @@
  * The Block Editor stores local autosave backups in sessionStorage using a specific
  * key format. This utility mirrors that format to detect if a post has a backup.
  *
+ * Uses native sessionStorage intentionally — WordPress core owns these keys
+ * and they must not go through Blockera site-scoped storage.
+ *
  * @see source-code-block-editor/packages/editor/src/store/local-autosave.js
  */
+
+/* eslint-disable no-restricted-globals, no-restricted-syntax -- WordPress core autosave keys; not Blockera data. */
 
 /**
  * Get the sessionStorage key for a post's local autosave.

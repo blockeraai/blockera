@@ -15,7 +15,7 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import { updateItem } from '@blockera/storage';
+import { localStorage } from '@blockera/storage';
 
 /**
  * Internal dependencies
@@ -136,7 +136,7 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 				}
 			}
 
-			updateItem(cacheKey, next);
+			localStorage.updateJSON(cacheKey, next);
 			setBlockAppSettings(next);
 		},
 		[
@@ -209,7 +209,7 @@ export const useBlockSections = (): BlockSections => {
 				},
 			};
 
-			updateItem(cacheKey, next);
+			localStorage.updateJSON(cacheKey, next);
 			setBlockAppSettings(next);
 		},
 		[

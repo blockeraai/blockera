@@ -11,6 +11,11 @@ import {
 	useState,
 } from '@wordpress/element';
 
+/**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
 export const PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY =
 	'blockera-variables-view-mode';
 
