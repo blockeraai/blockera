@@ -88,7 +88,7 @@ function shouldSkipScenario(scenarioId) {
 test.describe('Editor', () => {
 	test.use({
 		perfUtils: async ({ page, editor }, use) => {
-			await use(new EditorPerfUtils({ page, editor, subject }));
+			await use(new EditorPerfUtils({ page, editor }));
 		},
 	});
 

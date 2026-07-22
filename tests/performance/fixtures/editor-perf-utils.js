@@ -17,8 +17,6 @@ const {
 	closeWelcomeGuide,
 } = require('@blockera/dev-playwright/js/utils/editor');
 
-const { CoreEditorPerfUtils } = require('./core-editor-perf-utils');
-
 const BACKGROUND_IMAGE_FIXTURE = path.join(
 	process.cwd(),
 	'packages/dev-cypress/js/fixtures/bg-extension-test.png'
@@ -29,24 +27,11 @@ const BORDER_PRESET_ADD_DATA_TEST =
 
 class EditorPerfUtils {
 	/**
-	 * @param {{ page: import('@playwright/test').Page, editor?: import('@wordpress/e2e-test-utils-playwright').Editor, subject?: string }} args
+	 * @param {{ page: import('@playwright/test').Page, editor?: import('@wordpress/e2e-test-utils-playwright').Editor }} args
 	 */
-	constructor({
-		page,
-		editor,
-		subject = process.env.PERF_SUBJECT || 'blockera',
-	}) {
+	constructor({ page, editor }) {
 		this.page = page;
 		this.editor = editor;
-		this.subject = subject;
-		this.core = new CoreEditorPerfUtils({ page, editor });
-	}
-
-	/**
-	 * Whether the current run collects Core (default block editor) baseline metrics.
-	 */
-	get isCore() {
-		return this.subject === 'core';
 	}
 
 	/**
