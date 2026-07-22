@@ -175,6 +175,65 @@ function sum(array = []) {
 	return array.reduce((acc, value) => acc + value, 0);
 }
 
+/**
+ * TT5 theme.json palette slugs used by GS background variable perf scenarios.
+ */
+const TT5_THEME_COLOR_VARIABLES = [
+	{ slug: 'base', label: 'Base' },
+	{ slug: 'contrast', label: 'Contrast' },
+	{ slug: 'accent-1', label: 'Accent 1' },
+	{ slug: 'accent-2', label: 'Accent 2' },
+	{ slug: 'accent-3', label: 'Accent 3' },
+	{ slug: 'accent-4', label: 'Accent 4' },
+	{ slug: 'accent-5', label: 'Accent 5' },
+	{ slug: 'accent-6', label: 'Accent 6' },
+];
+
+/**
+ * Distinct 6-char hex color (no `#`) per 1-based perf iteration.
+ *
+ * @param {number} iteration 1-based loop index.
+ * @param {string} [prefix] Four hex chars shared within a scenario (e.g. 6666).
+ * @return {{ colorValue: string, expectedHex: string, blueChannel: number }} Hex color parts for assertions.
+ */
+function iterationHexColor(iteration, prefix = '6666') {
+	const suffix = String(iteration).padStart(2, '0');
+	const colorValue = `${prefix}${suffix}`;
+	const blueChannel = parseInt(suffix, 16);
+
+	return {
+		colorValue,
+		expectedHex: `#${colorValue}`,
+		blueChannel,
+	};
+}
+
+/**
+ * Theme color variable for a perf iteration (TT5 palette, unique for i 1–8).
+ *
+ * @param {number} iteration 1-based loop index.
+ * @return {{ slug: string, label: string }} Theme preset slug and UI label.
+ */
+function iterationThemeColorVariable(iteration) {
+	const i = Math.max(1, Math.floor(iteration));
+	const palette = TT5_THEME_COLOR_VARIABLES;
+
+	if (i <= palette.length) {
+		return palette[i - 1];
+	}
+
+	const overflowSlugs = [
+		'accent-2',
+		'accent-5',
+		'accent-6',
+		'accent-1',
+		'accent-3',
+	];
+	const slug = overflowSlugs[(i - palette.length - 1) % overflowSlugs.length];
+
+	return palette.find((entry) => entry.slug === slug) ?? palette[0];
+}
+
 module.exports = {
 	parseFile,
 	median,
@@ -187,4 +246,7 @@ module.exports = {
 	accumulateValues,
 	toResultMetricKey,
 	scenarioIdFromTitle,
+	iterationHexColor,
+	iterationThemeColorVariable,
+	TT5_THEME_COLOR_VARIABLES,
 };
