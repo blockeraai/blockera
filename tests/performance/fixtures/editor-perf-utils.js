@@ -1381,11 +1381,11 @@ class EditorPerfUtils {
 	 */
 	async resetWorkspaceTabsStorage() {
 		await this.page.evaluate(() => {
-			// eslint-disable-next-line no-restricted-properties
+			// eslint-disable-next-line no-restricted-properties, no-restricted-syntax
 			window.localStorage.removeItem('blockera-tabs-tabs');
-			// eslint-disable-next-line no-restricted-properties
+			// eslint-disable-next-line no-restricted-properties, no-restricted-syntax
 			window.localStorage.removeItem('blockera-tabs-recently-closed');
-			// eslint-disable-next-line no-restricted-properties
+			// eslint-disable-next-line no-restricted-properties, no-restricted-syntax
 			window.localStorage.removeItem(
 				'blockera-tabs-recently-closed-persistence'
 			);
