@@ -12,6 +12,9 @@ const {
 	clickValueAddonButton,
 	selectValueAddonItem,
 } = require('@blockera/dev-playwright/js/support/commands');
+const {
+	closeWelcomeGuide,
+} = require('@blockera/dev-playwright/js/utils/editor');
 
 const { CoreEditorPerfUtils } = require('./core-editor-perf-utils');
 
@@ -274,11 +277,15 @@ class EditorPerfUtils {
 	/**
 	 * Opens the background repeater layer popover (add row or focus existing row).
 	 *
+	 * @param {Object} [options]
+	 * @param {boolean} [options.globalStyles] When true, skip post-editor block inspector setup.
 	 * @return {Promise<import('@playwright/test').Locator>} Open background layer popover.
 	 */
-	async openBackgroundImageLayerPopover() {
-		await this.ensureSelectedBlock();
-		await this.ensureBackgroundPanelOpen();
+	async openBackgroundImageLayerPopover({ globalStyles = false } = {}) {
+		if (!globalStyles) {
+			await this.ensureSelectedBlock();
+			await this.ensureBackgroundPanelOpen();
+		}
 
 		const container = await this.getBackgroundImageContainer();
 		await container.scrollIntoViewIfNeeded();
@@ -350,11 +357,14 @@ class EditorPerfUtils {
 	 * (mirrors background-image.general-4.e2e.cy.js + media-image.general-4.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
+	 * @param {Object} [options]
+	 * @param {boolean} [options.globalStyles] When true, skip post-editor block inspector setup.
 	 */
 	async uploadBackgroundImageViaMediaLibrary(
-		filePath = BACKGROUND_IMAGE_FIXTURE
+		filePath = BACKGROUND_IMAGE_FIXTURE,
+		{ globalStyles = false } = {}
 	) {
-		await this.openBackgroundImageLayerPopover();
+		await this.openBackgroundImageLayerPopover({ globalStyles });
 		const popover = await this.getOpenBackgroundImageUploadPopover();
 		await this.openBackgroundImageMediaModal(popover);
 
@@ -392,13 +402,36 @@ class EditorPerfUtils {
 	}
 
 	/**
-	 * Opens the background image popover when it is not visible.
+	 * Adds a background image to the selected Global Styles shared variation.
+	 *
+	 * @param {string} styleSlug Variation slug.
+	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
-	async ensureBackgroundImagePopoverOpen() {
+	async setupGlobalStylesBackgroundImage(
+		styleSlug,
+		filePath = BACKGROUND_IMAGE_FIXTURE
+	) {
+		await this.uploadBackgroundImageViaMediaLibrary(filePath, {
+			globalStyles: true,
+		});
+		await this.expectGlobalStylesSharedStyleVariationBackgroundImage(
+			styleSlug
+		);
+	}
+
+	/**
+	 * Opens the background image popover when it is not visible.
+	 *
+	 * @param {Object} [options]
+	 * @param {boolean} [options.globalStyles] When true, skip post-editor block inspector setup.
+	 */
+	async ensureBackgroundImagePopoverOpen({ globalStyles = false } = {}) {
 		try {
 			await this.getOpenBackgroundLayerPopover();
 		} catch {
-			await this.ensureSelectedBlock();
+			if (!globalStyles) {
+				await this.ensureSelectedBlock();
+			}
 			const container = await this.getBackgroundImageContainer();
 			await container
 				.locator('[data-cy="repeater-item"]')
@@ -413,9 +446,11 @@ class EditorPerfUtils {
 	 * (block-level or Global Styles).
 	 *
 	 * @param {'contain'|'cover'|'custom'} sizeValue Background size preset.
+	 * @param {Object} [options]
+	 * @param {boolean} [options.globalStyles] When true, skip post-editor block inspector setup.
 	 */
-	async setBackgroundImageSize(sizeValue) {
-		await this.ensureBackgroundImagePopoverOpen();
+	async setBackgroundImageSize(sizeValue, { globalStyles = false } = {}) {
+		await this.ensureBackgroundImagePopoverOpen({ globalStyles });
 
 		const popover = await this.getOpenBackgroundLayerPopover();
 		await popover
@@ -838,19 +873,85 @@ class EditorPerfUtils {
 	}
 
 	/**
+	 * Waits until a Global Styles shared style variation stores an uploaded image.
+	 *
+	 * @param {string}   styleSlug  Variation slug.
+	 * @param {string[]} blockTypes Block types that must share the value.
+	 */
+	async expectGlobalStylesSharedStyleVariationBackgroundImage(
+		styleSlug,
+		blockTypes = ['core/paragraph', 'core/heading']
+	) {
+		await this.page.waitForFunction(
+			({ slug, blocks }) => {
+				const data = window.wp?.data;
+				if (!data) {
+					return false;
+				}
+
+				const blockeraSelect = data.select('blockera/editor');
+				const registered = blockeraSelect.getStyleVariationBlocks(slug);
+
+				for (const blockType of blocks) {
+					if (!registered.includes(blockType)) {
+						return false;
+					}
+
+					const image = blockeraSelect.getBlockStyles(blockType, slug)
+						?.blockeraBackground?.value?.['image-0']?.image;
+
+					if (
+						typeof image !== 'string' ||
+						!/bg-extension-test|blob:|url\(/i.test(image)
+					) {
+						return false;
+					}
+				}
+
+				return true;
+			},
+			{ slug: styleSlug, blocks: blockTypes },
+			{ timeout: 60000 }
+		);
+	}
+
+	/**
+	 * Clears stale Blockera global styles before style-variation specs (Cypress beforeEach).
+	 */
+	async prepareGlobalStylesForStyleVariations() {
+		await this.clearBlockeraGlobalStylesStore();
+		await this.resetGlobalStylesEntityRecord();
+	}
+
+	/**
 	 * Opens Block Style Variations for a block type in Global Styles
 	 * (see shared-style-variation.global-styles.e2e.cy.js).
 	 *
 	 * @param {string} [blockType] Block name, e.g. core/paragraph.
 	 */
 	async openGlobalStylesBlockStyleVariations(blockType = 'core/paragraph') {
+		await this.prepareGlobalStylesForStyleVariations();
 		await openGlobalStylesPanel(this.page);
-		await this.page.locator('[data-test="block-style-variations"]').click();
-		const blockButtonId = `/blocks/${encodeURIComponent(blockType)}`;
+		await closeWelcomeGuide(this.page);
+
 		await this.page
+			.locator('.blockera-block-inspector-controls-wrapper')
+			.waitFor({ state: 'attached', timeout: 30000 });
+
+		const blockStyleVariations = this.page
+			.locator('[data-test="block-style-variations"]')
+			.first();
+
+		await expect(blockStyleVariations).toBeVisible({ timeout: 20000 });
+		await blockStyleVariations.click({ force: true });
+
+		const blockButtonId = `/blocks/${encodeURIComponent(blockType)}`;
+		const blockButton = this.page
 			.locator(`button[id="${blockButtonId}"]`)
-			.first()
-			.click();
+			.first();
+
+		await expect(blockButton).toBeVisible({ timeout: 20000 });
+		await blockButton.click({ force: true });
 	}
 
 	/**
