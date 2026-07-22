@@ -82,6 +82,42 @@ export const prepareBlockeraDefaultAttributesValues = (
 		context = 'block-inspector',
 	}: { context?: 'global-styles-panel' | 'block-inspector' } = {}
 ): Object => {
+	if (!rootAttributes) {
+		return {};
+	}
+
+	const cacheKey = context;
+	let cacheForRoot = defaultAttributesCache.get(rootAttributes);
+
+	if (!cacheForRoot) {
+		cacheForRoot = new Map();
+		defaultAttributesCache.set(rootAttributes, cacheForRoot);
+	}
+
+	if (cacheForRoot.has(cacheKey)) {
+		return cacheForRoot.get(cacheKey);
+	}
+
+	const prepared = prepareBlockeraDefaultAttributesValuesImpl(
+		rootAttributes,
+		{ context }
+	);
+	cacheForRoot.set(cacheKey, prepared);
+
+	return prepared;
+};
+
+const defaultAttributesCache: WeakMap<
+	Object,
+	Map<string, Object>,
+> = new WeakMap();
+
+const prepareBlockeraDefaultAttributesValuesImpl = (
+	rootAttributes: Object,
+	{
+		context = 'block-inspector',
+	}: { context?: 'global-styles-panel' | 'block-inspector' } = {}
+): Object => {
 	// Extracting default prop of items and assigning to a new object
 	const attributes: { [key: string]: any } = {};
 
