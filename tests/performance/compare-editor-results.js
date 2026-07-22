@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 /**
- * Compare Core vs Blockera editor (client) Playwright performance artifacts.
+ * Compare Blockera editor (client) Playwright performance artifacts vs a baseline.
  *
- * Gate: fail when abs((blockera - core) / core * 100) > thresholdPercent
+ * Baselines (PERF_BASELINE):
+ * - `core` (default) — PR Blockera vs WordPress Core (plugin off).
+ *   Gates scenarios without requiresBlockera (or requiresBlockera: false).
+ * - `master` — PR Blockera vs Blockera on master.
+ *   Gates scenarios with requiresBlockera: true.
+ *
+ * Gate: fail when abs((current - baseline) / baseline * 100) > thresholdPercent
  * on each scenario's primaryMetric (focus, switchTab, …).
- * Scenarios with requiresBlockera are informational only.
  */
 
 const fs = require('node:fs');
@@ -26,6 +31,15 @@ const outDir = process.env.PERF_RESULTS_DIR || '.github/performance/results';
 const artifactsPath =
 	process.env.WP_ARTIFACTS_PATH || path.join(root, 'artifacts');
 process.env.WP_ARTIFACTS_PATH = artifactsPath;
+
+const baselineMode = (process.env.PERF_BASELINE || 'core').toLowerCase();
+const currentPrefix = process.env.PERF_CURRENT_PREFIX || 'blockera-editor';
+const baselinePrefix =
+	process.env.PERF_BASELINE_PREFIX ||
+	(baselineMode === 'master' ? 'master-editor' : 'core-editor');
+const reportName = process.env.PERF_EDITOR_REPORT_NAME || 'editor-report.md';
+const compareName =
+	process.env.PERF_EDITOR_COMPARE_NAME || 'editor-compare.json';
 
 const summaryArg = process.argv[2];
 
@@ -81,7 +95,48 @@ function indexByScenarioId(stats) {
 	return map;
 }
 
+/**
+ * Whether a scenario should be gated for the active baseline.
+ *
+ * @param {{requiresBlockera?: boolean}} scenario
+ * @param {string} mode
+ * @return {boolean} True when the scenario belongs in this baseline report.
+ */
+function scenarioMatchesBaseline(scenario, mode) {
+	const requiresBlockera = Boolean(scenario.requiresBlockera);
+	if (mode === 'master') {
+		return requiresBlockera;
+	}
+	// core (and any future non-master baseline that compares to WP Core)
+	return !requiresBlockera;
+}
+
+/**
+ * @param {string} mode
+ * @return {{label: string, artifact: string}} Human label and artifact filename for the baseline.
+ */
+function baselineMeta(mode) {
+	if (mode === 'master') {
+		return {
+			label: 'Master',
+			artifact: `${baselinePrefix}-performance-results.json`,
+		};
+	}
+	return {
+		label: 'Core',
+		artifact: `${baselinePrefix}-performance-results.json`,
+	};
+}
+
 function main() {
+	if (baselineMode !== 'core' && baselineMode !== 'master') {
+		// @debug-ignore — CLI error for invalid baseline
+		console.error(
+			`Unknown PERF_BASELINE='${baselineMode}' (expected: core, master)`
+		);
+		process.exit(1);
+	}
+
 	const scenariosPath = path.join(
 		root,
 		'.github/performance/editor-scenarios.json'
@@ -93,19 +148,29 @@ function main() {
 			? defaults.thresholdPercent
 			: 20;
 
-	const blockeraStats = parseFile('blockera-editor-performance-results.json');
-	const coreStats = parseFile('core-editor-performance-results.json');
+	const meta = baselineMeta(baselineMode);
+	const currentArtifact = `${currentPrefix}-performance-results.json`;
+	const blockeraStats = parseFile(currentArtifact);
+	const baselineStats = parseFile(meta.artifact);
 
 	if (!blockeraStats.length) {
 		// @debug-ignore — CLI error for missing benchmark artifacts
 		console.error(
-			'Missing artifacts/blockera-editor-performance-results.json — run editor Blockera subject first.'
+			`Missing artifacts/${currentArtifact} — run current Branch Blockera subject first.`
+		);
+		process.exit(1);
+	}
+
+	if (!baselineStats.length) {
+		// @debug-ignore
+		console.error(
+			`Missing artifacts/${meta.artifact} — run ${meta.label} baseline subject first.`
 		);
 		process.exit(1);
 	}
 
 	const blockeraById = indexByScenarioId(blockeraStats);
-	const coreById = indexByScenarioId(coreStats);
+	const baselineById = indexByScenarioId(baselineStats);
 
 	const gateResults = [];
 	const detailSections = [];
@@ -121,7 +186,19 @@ function main() {
 		iterations = Array.isArray(firstMetric) ? firstMetric.length : 0;
 	}
 
-	for (const scenario of config.scenarios || []) {
+	const scenarios = (config.scenarios || []).filter((scenario) =>
+		scenarioMatchesBaseline(scenario, baselineMode)
+	);
+
+	if (!scenarios.length) {
+		// @debug-ignore
+		console.error(
+			`No editor scenarios match PERF_BASELINE=${baselineMode} in editor-scenarios.json.`
+		);
+		process.exit(1);
+	}
+
+	for (const scenario of scenarios) {
 		const threshold =
 			typeof scenario.thresholdPercent === 'number'
 				? scenario.thresholdPercent
@@ -131,13 +208,14 @@ function main() {
 		const primaryKey = toResultMetricKey(primaryMetric);
 
 		const blockeraRow = blockeraById.get(scenario.id);
-		const coreRow = coreById.get(scenario.id);
+		const baselineRow = baselineById.get(scenario.id);
 
 		const entry = {
 			id: scenario.id,
 			label: scenario.label || scenario.id,
 			thresholdPercent: threshold,
 			requiresBlockera: Boolean(scenario.requiresBlockera),
+			baseline: baselineMode,
 			primaryMetric,
 			metricKey: primaryKey,
 			withMs: null,
@@ -151,17 +229,19 @@ function main() {
 		const blockeraMetrics = blockeraRow
 			? accumulateValues(blockeraRow.results)
 			: null;
-		const coreMetrics = coreRow ? accumulateValues(coreRow.results) : null;
+		const baselineMetrics = baselineRow
+			? accumulateValues(baselineRow.results)
+			: null;
 
 		const blockeraValues = blockeraMetrics?.[primaryKey];
-		const coreValues = coreMetrics?.[primaryKey];
+		const baselineValues = baselineMetrics?.[primaryKey];
 
 		if (blockeraMetrics) {
 			const rows = [];
 			for (const [metric, values] of Object.entries(blockeraMetrics)) {
-				const coreVals = coreMetrics?.[metric] || null;
+				const baselineVals = baselineMetrics?.[metric] || null;
 				const value = median(values);
-				const prevValue = coreVals ? median(coreVals) : null;
+				const prevValue = baselineVals ? median(baselineVals) : null;
 				const delta =
 					prevValue !== null && prevValue !== undefined
 						? value - prevValue
@@ -175,7 +255,7 @@ function main() {
 
 				rows.push({
 					Metric: metric,
-					Core:
+					[meta.label]:
 						prevValue !== null
 							? formatValue(metric, prevValue)
 							: 'N/A',
@@ -192,40 +272,25 @@ function main() {
 			});
 		}
 
-		if (scenario.requiresBlockera) {
-			if (!blockeraValues?.length) {
-				entry.status = 'fail';
-				entry.note = 'Missing Blockera metrics';
-				failed++;
-			} else {
-				entry.withMs = round2(median(blockeraValues));
-				entry.status = 'skip';
-				entry.note =
-					'Informational only (requires Blockera); gate not applied';
-			}
-			gateResults.push(entry);
-			continue;
-		}
-
-		if (!blockeraValues?.length || !coreValues?.length) {
+		if (!blockeraValues?.length || !baselineValues?.length) {
 			entry.status = 'fail';
 			entry.note = !blockeraValues?.length
 				? 'Missing Blockera metrics'
-				: 'Missing Core metrics';
+				: `Missing ${meta.label} metrics`;
 			failed++;
 			gateResults.push(entry);
 			continue;
 		}
 
 		const withMs = median(blockeraValues);
-		const withoutMs = median(coreValues);
+		const withoutMs = median(baselineValues);
 		entry.withMs = round2(withMs);
 		entry.withoutMs = round2(withoutMs);
 		entry.deltaMs = round2(withMs - withoutMs);
 
 		if (withoutMs === 0) {
 			entry.status = 'fail';
-			entry.note = 'Core median is 0; cannot compute percent change';
+			entry.note = `${meta.label} median is 0; cannot compute percent change`;
 			failed++;
 			gateResults.push(entry);
 			continue;
@@ -252,15 +317,19 @@ function main() {
 		repetitions,
 		iterations,
 		failed,
+		baselineLabel: meta.label,
+		baselineMode,
 	});
 
 	fs.mkdirSync(path.join(root, outDir), { recursive: true });
-	const reportPath = path.join(root, outDir, 'editor-report.md');
+	const reportPath = path.join(root, outDir, reportName);
 	fs.writeFileSync(reportPath, report);
 	fs.writeFileSync(
-		path.join(root, outDir, 'editor-compare.json'),
+		path.join(root, outDir, compareName),
 		JSON.stringify(
 			{
+				baseline: baselineMode,
+				baselineLabel: meta.label,
 				defaults,
 				results: gateResults,
 				failed,
@@ -304,17 +373,39 @@ function buildReport({
 	repetitions,
 	iterations,
 	failed,
+	baselineLabel,
+	baselineMode,
 }) {
 	const lines = [];
-	lines.push('<!-- blockera-editor-perf-benchmark -->');
-	lines.push('# Block Editor Performance Report');
+	const commentMarker =
+		baselineMode === 'master'
+			? '<!-- blockera-editor-perf-benchmark-master -->'
+			: '<!-- blockera-editor-perf-benchmark-core -->';
+
+	lines.push(commentMarker);
+	lines.push(`# Block Editor Performance Report (PR vs ${baselineLabel})`);
+	lines.push('');
+
+	if (baselineMode === 'master') {
+		lines.push(
+			'Compare **Blockera on this PR** vs **Blockera on master** using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
+		);
+		lines.push('');
+		lines.push(
+			'Only scenarios with `requiresBlockera: true` are gated in this report.'
+		);
+	} else {
+		lines.push(
+			'Compare **Blockera** vs **Core** (plugin off) using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
+		);
+		lines.push('');
+		lines.push(
+			'Only scenarios without `requiresBlockera` (or `requiresBlockera: false`) are gated in this report.'
+		);
+	}
 	lines.push('');
 	lines.push(
-		'Compare **Blockera** vs **Core** (plugin off) using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
-	);
-	lines.push('');
-	lines.push(
-		'Numbers are median interaction durations in milliseconds (lower is faster). Selection uses focus-event duration; workspace tabs use click-event duration.'
+		'Numbers are median interaction durations in milliseconds (lower is faster).'
 	);
 	lines.push('');
 	if (repetitions && iterations) {
@@ -324,7 +415,7 @@ function buildReport({
 		lines.push('');
 	}
 	lines.push(
-		'| Scenario | Metric | Core | Blockera | Diff ms | Diff % | Threshold | Status |'
+		`| Scenario | Metric | ${baselineLabel} | Blockera (PR) | Diff ms | Diff % | Threshold | Status |`
 	);
 	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
@@ -348,10 +439,7 @@ function buildReport({
 		'- Gate: fail if `|Diff %|` exceeds per-scenario `thresholdPercent` (either direction)'
 	);
 	lines.push(
-		'- Diff is **Blockera − Core** (positive means Blockera is slower)'
-	);
-	lines.push(
-		'- `requiresBlockera` scenarios are informational (no Core comparison)'
+		`- Diff is **Blockera (PR) − ${baselineLabel}** (positive means PR is slower)`
 	);
 	lines.push('');
 
@@ -361,16 +449,6 @@ function buildReport({
 		lines.push('');
 		for (const f of fails) {
 			lines.push(`- ❌ **${f.label}**: ${f.note}`);
-		}
-		lines.push('');
-	}
-
-	const skips = gateResults.filter((r) => r.status === 'skip');
-	if (skips.length) {
-		lines.push('### Skipped');
-		lines.push('');
-		for (const s of skips) {
-			lines.push(`- **${s.label}**: ${s.note}`);
 		}
 		lines.push('');
 	}

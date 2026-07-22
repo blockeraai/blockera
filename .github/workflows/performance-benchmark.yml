@@ -24,20 +24,32 @@ jobs:
     performance_benchmark:
         name: ${{ matrix.name }}
         runs-on: ubuntu-latest
-        timeout-minutes: 90
+        timeout-minutes: 120
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: false
             matrix:
+                # `environment` is reserved for future targets (e.g. WooCommerce, PHP variants).
+                # `baseline` selects the comparison target for editor (and server-timing) suites.
                 include:
                     - suite: server-timing
+                      baseline: core
+                      environment: default
                       name: Server-Timing (Blockera vs Core)
                     - suite: editor
-                      name: Block Editor (Blockera vs Core)
+                      baseline: core
+                      environment: default
+                      name: Block Editor (PR vs Core)
+                    - suite: editor
+                      baseline: master
+                      environment: default
+                      name: Block Editor (PR vs Master)
 
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -141,27 +153,112 @@ jobs:
 
             # ── Block Editor suite ───────────────────────────────────────────
 
-            - name: Run editor benchmarks (Blockera / Core)
+            - name: Preserve PR editor harness
+              if: ${{ matrix.suite == 'editor' && matrix.baseline == 'master' }}
+              run: |
+                  mkdir -p /tmp/blockera-perf-pr-tools/artifacts
+                  cp -a tests/performance /tmp/blockera-perf-pr-tools/performance-tests
+                  cp .github/performance/editor-scenarios.json /tmp/blockera-perf-pr-tools/
+                  echo "${{ github.event.pull_request.head.sha || github.sha }}" > /tmp/blockera-perf-pr-tools/pr-sha.txt
+
+            - name: Run editor benchmarks (PR Blockera${{ matrix.baseline == 'core' && ' / Core' || '' }})
               if: ${{ matrix.suite == 'editor' }}
+              env:
+                  PERF_BASELINE: ${{ matrix.baseline == 'core' && 'core' || 'current' }}
+                  PERF_CURRENT_PREFIX: blockera-editor
+                  PERF_BASELINE_PREFIX: core-editor
+                  PERF_SCENARIO_SCOPE: ${{ matrix.baseline == 'core' && 'core-comparable' || 'blockera-only' }}
               run: bash .github/performance/scripts/run-editor-benchmarks.sh
+
+            - name: Build and run master Blockera baseline
+              if: ${{ matrix.suite == 'editor' && matrix.baseline == 'master' }}
+              env:
+                  PERF_SCENARIO_SCOPE: blockera-only
+              run: |
+                  set -euo pipefail
+
+                  echo "Backing up PR editor results before switching branches..."
+                  mkdir -p /tmp/blockera-perf-pr-tools/artifacts
+                  cp -a artifacts/. /tmp/blockera-perf-pr-tools/artifacts/ 2>/dev/null || true
+
+                  echo "Stopping wp-env before switching to master..."
+                  npm run env:stop || true
+
+                  echo "Fetching and checking out origin/master..."
+                  git fetch --depth=1 origin master
+                  git checkout -f FETCH_HEAD
+
+                  echo "Installing master dependencies..."
+                  npm ci
+                  composer install --no-dev -o --apcu-autoloader -a
+
+                  cp .github/wp-env-configs/performance.json .wp-env.json
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+
+                  echo "Building master plugin assets..."
+                  npm run build
+
+                  echo "Restoring PR editor harness (same scenarios/tests against master plugin)..."
+                  rm -rf tests/performance
+                  cp -a /tmp/blockera-perf-pr-tools/performance-tests tests/performance
+                  mkdir -p .github/performance artifacts
+                  cp /tmp/blockera-perf-pr-tools/editor-scenarios.json .github/performance/
+                  cp -a /tmp/blockera-perf-pr-tools/artifacts/. artifacts/
+
+                  echo "Starting WordPress with master plugin..."
+                  bash .github/scripts/retry-wp-env-start.sh
+
+                  echo "Waiting for WordPress at http://localhost:8888..."
+                  for i in $(seq 1 36); do
+                    if curl -sf -o /dev/null http://localhost:8888; then
+                      echo "WordPress is ready"
+                      break
+                    fi
+                    echo "Attempt $i/36 - WordPress not ready yet, waiting 5s..."
+                    sleep 5
+                  done
+                  curl -sf -o /dev/null http://localhost:8888 || (echo "WordPress failed to become ready" && exit 1)
+
+                  echo "Running master Blockera editor benchmarks..."
+                  npx wp-env run cli -- wp plugin activate blockera
+                  PERF_SUBJECT=blockera \
+                    TEST_RESULTS_PREFIX=master-editor \
+                    PERF_SCENARIO_SCOPE=blockera-only \
+                    npm run test:performance:editor
+
+                  # Ensure PR current results remain present for compare.
+                  if [ ! -f artifacts/blockera-editor-performance-results.json ]; then
+                    cp /tmp/blockera-perf-pr-tools/artifacts/blockera-editor-performance-results.json artifacts/
+                  fi
 
             - name: Compare editor results and enforce thresholds
               id: compare_editor
               if: ${{ matrix.suite == 'editor' }}
               continue-on-error: true
+              env:
+                  PERF_BASELINE: ${{ matrix.baseline }}
+                  PERF_CURRENT_PREFIX: blockera-editor
+                  PERF_BASELINE_PREFIX: ${{ matrix.baseline == 'master' && 'master-editor' || 'core-editor' }}
+                  PERF_EDITOR_REPORT_NAME: editor-report-${{ matrix.baseline }}.md
+                  PERF_EDITOR_COMPARE_NAME: editor-compare-${{ matrix.baseline }}.json
               run: |
                   set +e
                   node tests/performance/compare-editor-results.js
                   code=$?
                   set -e
-                  if [ ! -f .github/performance/results/editor-report.md ]; then
+                  REPORT=".github/performance/results/editor-report-${{ matrix.baseline }}.md"
+                  MARKER="<!-- blockera-editor-perf-benchmark-${{ matrix.baseline }} -->"
+                  if [ ! -f "$REPORT" ]; then
                     mkdir -p .github/performance/results
-                    printf '%s\n' '<!-- blockera-editor-perf-benchmark -->' '# 📈 Block Editor Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/editor-report.md
+                    printf '%s\n' "$MARKER" "# 📈 Block Editor Performance Report (PR vs ${{ matrix.baseline }})" '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > "$REPORT"
                   fi
-                  if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f .github/performance/results/editor-report.md ]; then
-                    cat .github/performance/results/editor-report.md >> "$GITHUB_STEP_SUMMARY"
+                  if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f "$REPORT" ]; then
+                    cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
                   fi
                   echo "has_report=true" >> "$GITHUB_OUTPUT"
+                  echo "report_path=$REPORT" >> "$GITHUB_OUTPUT"
                   exit "${code}"
 
             - name: Comment editor report on PR
@@ -169,29 +266,30 @@ jobs:
               uses: marocchino/sticky-pull-request-comment@v2
               with:
                   GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
-                  header: blockera-editor-perf-benchmark
-                  path: .github/performance/results/editor-report.md
+                  header: blockera-editor-perf-benchmark-${{ matrix.baseline }}
+                  path: .github/performance/results/editor-report-${{ matrix.baseline }}.md
 
             - name: Fail editor job when thresholds exceeded
               if: ${{ matrix.suite == 'editor' && steps.compare_editor.outcome == 'failure' }}
               run: |
-                  echo "Block Editor threshold gate failed. See the PR comment and artifacts."
+                  echo "Block Editor threshold gate failed (baseline=${{ matrix.baseline }}). See the PR comment and artifacts."
                   exit 1
 
             - name: Upload editor artifacts
               if: ${{ always() && matrix.suite == 'editor' }}
               uses: actions/upload-artifact@v4
               with:
-                  name: performance-benchmark-editor
+                  name: performance-benchmark-editor-${{ matrix.baseline }}-${{ matrix.environment }}
                   path: |
-                      .github/performance/results/editor-report.md
-                      .github/performance/results/editor-compare.json
+                      .github/performance/results/editor-report-${{ matrix.baseline }}.md
+                      .github/performance/results/editor-compare-${{ matrix.baseline }}.json
                       artifacts/blockera-editor-performance-results.json
                       artifacts/core-editor-performance-results.json
+                      artifacts/master-editor-performance-results.json
                       artifacts/editor-performance-results.md
                   if-no-files-found: ignore
                   retention-days: 14
 
             - name: Stop WordPress Environment
               if: ${{ always() }}
-              run: npm run env:stop
+              run: npm run env:stop || true
