@@ -645,6 +645,8 @@ test.describe('Editor', () => {
 			metrics,
 		}) => {
 			// Theme preset shared across core/paragraph + core/heading (TT5 text-display).
+			// Blockera Free allows one duplicate; further Duplicate clicks open the
+			// upgrade modal (see style-variations.global-styles.e2e.cy.js).
 			const styleSlug = 'text-display';
 			const expectedHex = '#aabbcc';
 
@@ -677,13 +679,16 @@ test.describe('Editor', () => {
 				await perfUtils.selectGlobalStylesStyleVariation(styleSlug);
 
 				await metrics.startTracing();
-				await perfUtils.duplicateGlobalStylesSharedStyleVariation(
-					styleSlug
-				);
-				await perfUtils.expectGlobalStylesSharedStyleVariationDuplicated(
-					styleSlug,
-					expectedHex
-				);
+				const duplicateOutcome =
+					await perfUtils.duplicateGlobalStylesSharedStyleVariation(
+						styleSlug
+					);
+				if (duplicateOutcome === 'duplicated') {
+					await perfUtils.expectGlobalStylesSharedStyleVariationDuplicated(
+						styleSlug,
+						expectedHex
+					);
+				}
 				await metrics.stopTracing(
 					i === Math.floor(iterations / 2) &&
 						'editor-gs-variation-duplicate'
