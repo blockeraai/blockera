@@ -541,6 +541,221 @@ class CoreEditorPerfUtils {
 	}
 
 	/**
+	 * Persists dirty global styles entity records (core baseline, no Blockera compatibility).
+	 */
+	async saveGlobalStylesEntity() {
+		await this.page.evaluate(() => {
+			const select = window.wp.data.select('core');
+			const getDirty = select.__experimentalGetDirtyEntityRecords;
+
+			if (typeof getDirty !== 'function') {
+				throw new Error(
+					'wp.data.select("core").__experimentalGetDirtyEntityRecords is not available'
+				);
+			}
+
+			const dirtyRecords = getDirty() || [];
+			const entitiesToSave = dirtyRecords.filter(
+				(record) => !(record.kind === 'root' && record.name === 'site')
+			);
+
+			if (!entitiesToSave.length) {
+				return null;
+			}
+
+			const dispatch = window.wp.data.dispatch('core');
+
+			return Promise.all(
+				entitiesToSave.map((record) =>
+					dispatch.saveEditedEntityRecord(
+						record.kind,
+						record.name,
+						record.key
+					)
+				)
+			);
+		});
+
+		await this.page.waitForFunction(
+			() => {
+				const dirtyRecords =
+					window.wp?.data
+						?.select('core')
+						?.__experimentalGetDirtyEntityRecords?.() || [];
+
+				return !dirtyRecords.filter(
+					(record) =>
+						!(record.kind === 'root' && record.name === 'site')
+				).length;
+			},
+			undefined,
+			{ timeout: 20000 }
+		);
+	}
+
+	/**
+	 * Waits until global styles entity edits are dirty (before save).
+	 */
+	async waitForGlobalStylesEntityDirty() {
+		await this.page.waitForFunction(
+			() => {
+				const dirtyRecords =
+					window.wp?.data
+						?.select('core')
+						?.__experimentalGetDirtyEntityRecords?.() || [];
+
+				return dirtyRecords.some(
+					(record) =>
+						record.kind === 'root' && record.name === 'globalStyles'
+				);
+			},
+			undefined,
+			{ timeout: 20000 }
+		);
+	}
+
+	/**
+	 * Global Styles → Colors → Edit palette (core custom color preset screen).
+	 */
+	async openGlobalStylesColorPaletteScreen() {
+		await this.resetGlobalStylesEntityRecord();
+		await this.openGlobalStylesPanel();
+		await this.page.getByRole('button', { name: 'Colors' }).click();
+		await this.page.getByRole('button', { name: 'Edit palette' }).click();
+
+		await expect(
+			this.page.locator('.global-styles-ui-color-palette-panel')
+		).toBeVisible({ timeout: 20000 });
+	}
+
+	/**
+	 * Seeds a custom color in the core Global Styles palette (closest native analog
+	 * to Blockera border preset seeding — both add a custom design token preset).
+	 *
+	 * @param {{ presetName: string, hexWithoutHash: string }} options
+	 */
+	async seedGlobalStylesCustomColorPreset({ presetName, hexWithoutHash }) {
+		await this.openGlobalStylesColorPaletteScreen();
+
+		await this.page
+			.getByRole('button', { name: 'Add color' })
+			.last()
+			.click();
+
+		const nameInput = this.page
+			.getByRole('textbox', { name: 'Color name' })
+			.last();
+
+		await nameInput.click();
+		await this.page.keyboard.press('ControlOrMeta+A');
+		await nameInput.pressSequentially(presetName, { delay: 0 });
+
+		await this.page
+			.getByRole('button', { name: /^Edit:/i })
+			.last()
+			.click();
+
+		const hexInput = this.page.getByRole('textbox', { name: 'Hex color' });
+		await hexInput.waitFor({ state: 'visible', timeout: 20000 });
+		await hexInput.click();
+		await this.page.keyboard.press('ControlOrMeta+A');
+		await hexInput.pressSequentially(hexWithoutHash, { delay: 0 });
+
+		await this.page.keyboard.press('Escape');
+		await this.waitForGlobalStylesCustomColorPresetInStore({
+			presetName,
+			expectedHex: `#${hexWithoutHash}`,
+		});
+		try {
+			await this.waitForGlobalStylesEntityDirty();
+		} catch {
+			// PaletteEdit may persist synchronously before dirty resolution updates.
+		}
+		await this.saveGlobalStylesEntity();
+	}
+
+	/**
+	 * Waits until a custom color preset exists in edited global styles settings.
+	 *
+	 * @param {{ presetName: string, expectedHex: string }} options
+	 */
+	async waitForGlobalStylesCustomColorPresetInStore({
+		presetName,
+		expectedHex,
+	}) {
+		await this.page.waitForFunction(
+			({ name, hex }) => {
+				const normalizeHex = (value) => {
+					if (typeof value !== 'string') {
+						return '';
+					}
+
+					const lower = value.toLowerCase();
+
+					if (lower.startsWith('#') && lower.length >= 7) {
+						return lower.slice(0, 7);
+					}
+
+					return lower;
+				};
+
+				const select = window.wp?.data?.select('core');
+				let gsId;
+
+				if (
+					typeof select?.__experimentalGetCurrentGlobalStylesId ===
+					'function'
+				) {
+					gsId = select.__experimentalGetCurrentGlobalStylesId();
+				} else if (
+					typeof select?.getCurrentGlobalStylesId === 'function'
+				) {
+					gsId = select.getCurrentGlobalStylesId();
+				}
+
+				if (!gsId) {
+					return false;
+				}
+
+				const customs = select.getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					gsId
+				)?.settings?.color?.palette?.custom;
+
+				if (!Array.isArray(customs)) {
+					return false;
+				}
+
+				const targetHex = normalizeHex(hex);
+
+				return customs.some(
+					(preset) =>
+						preset?.name === name &&
+						normalizeHex(preset?.color) === targetHex
+				);
+			},
+			{ name: presetName, hex: expectedHex },
+			{ timeout: 30000 }
+		);
+	}
+
+	/**
+	 * Waits until a custom color preset exists in the global styles entity.
+	 *
+	 * @param {{ presetName: string, expectedHex: string }} options
+	 */
+	async expectGlobalStylesCustomColorPresetSeeded({
+		presetName,
+		expectedHex,
+	}) {
+		await this.waitForGlobalStylesCustomColorPresetInStore({
+			presetName,
+			expectedHex,
+		});
+	}
+
+	/**
 	 * Asserts uploaded background image is visible on a canvas block wrapper.
 	 *
 	 * @param {import('@playwright/test').Locator} blockLocator Canvas block locator.

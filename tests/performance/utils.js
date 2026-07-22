@@ -234,6 +234,40 @@ function iterationThemeColorVariable(iteration) {
 	return palette.find((entry) => entry.slug === slug) ?? palette[0];
 }
 
+/**
+ * Border box preset name + width for a perf iteration (Blockera GS borders screen).
+ *
+ * @param {number} iteration 1-based loop index.
+ * @return {{ presetName: string, widthPx: string }} Display name and width in px (no unit).
+ */
+function iterationBorderPreset(iteration) {
+	const i = Math.max(1, Math.floor(iteration));
+	const suffix = String(i).padStart(2, '0');
+
+	return {
+		presetName: `Perf Border ${suffix}`,
+		widthPx: String(2 + ((i - 1) % 7)),
+	};
+}
+
+/**
+ * Custom color palette preset for a perf iteration (core GS Edit palette analog).
+ *
+ * @param {number} iteration 1-based loop index.
+ * @return {{ presetName: string, colorValue: string, expectedHex: string }} Name and hex values.
+ */
+function iterationCoreColorPreset(iteration) {
+	const i = Math.max(1, Math.floor(iteration));
+	const suffix = String(i).padStart(2, '0');
+	const { colorValue, expectedHex } = iterationHexColor(i);
+
+	return {
+		presetName: `Perf Color ${suffix}`,
+		colorValue,
+		expectedHex,
+	};
+}
+
 module.exports = {
 	parseFile,
 	median,
@@ -248,5 +282,7 @@ module.exports = {
 	scenarioIdFromTitle,
 	iterationHexColor,
 	iterationThemeColorVariable,
+	iterationBorderPreset,
+	iterationCoreColorPreset,
 	TT5_THEME_COLOR_VARIABLES,
 };

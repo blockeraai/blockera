@@ -57,6 +57,12 @@
 			"label": "GS default bg color variable",
 			"primaryMetric": "gsDefaultBgColorVariable",
 			"thresholdPercent": 1000
+		},
+		{
+			"id": "editor-gs-seed-border-preset",
+			"label": "GS seed border preset",
+			"primaryMetric": "gsSeedBorderPreset",
+			"thresholdPercent": 1000
 		}
 	]
 }

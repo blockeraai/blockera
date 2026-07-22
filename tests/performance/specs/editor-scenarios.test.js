@@ -29,6 +29,8 @@ const {
 	sum,
 	iterationHexColor,
 	iterationThemeColorVariable,
+	iterationBorderPreset,
+	iterationCoreColorPreset,
 } = require('../utils');
 const {
 	closeWelcomeGuide,
@@ -885,6 +887,87 @@ test.describe('Editor', () => {
 
 				if (i > throwaway) {
 					results.gsDefaultBgColorVariable.push(
+						eventGroups.reduce((acc, eventDurations) => {
+							return acc + sum(eventDurations);
+						}, 0)
+					);
+				}
+			}
+		});
+	});
+
+	test.describe('editor-gs-seed-border-preset', () => {
+		const results = {
+			gsSeedBorderPreset: [],
+		};
+
+		test.afterAll(async ({}, testInfo) => {
+			await testInfo.attach('results', {
+				body: JSON.stringify(results, null, 2),
+				contentType: 'application/json',
+			});
+		});
+
+		test('Measure GS seed border preset', async ({
+			admin,
+			page,
+			perfUtils,
+			metrics,
+		}) => {
+			await admin.visitSiteEditor({
+				canvas: 'edit',
+				showWelcomeGuide: false,
+			});
+			await admin.waitForSiteEditor();
+			await closeWelcomeGuide(page);
+
+			const samples = 10;
+			const throwaway = 1;
+			const iterations = samples + throwaway;
+
+			for (let i = 1; i <= iterations; i++) {
+				// eslint-disable-next-line no-restricted-syntax
+				await page.waitForTimeout(BROWSER_IDLE_WAIT);
+
+				const { presetName, widthPx } = iterationBorderPreset(i);
+				const corePreset = iterationCoreColorPreset(i);
+
+				await metrics.startTracing();
+				if (perfUtils.isCore) {
+					// Core has no border-box preset UI; custom color palette seeding
+					// is the closest native Global Styles design-token preset flow.
+					await perfUtils.core.seedGlobalStylesCustomColorPreset({
+						presetName: corePreset.presetName,
+						hexWithoutHash: corePreset.colorValue,
+					});
+					await perfUtils.core.expectGlobalStylesCustomColorPresetSeeded(
+						{
+							presetName: corePreset.presetName,
+							expectedHex: corePreset.expectedHex,
+						}
+					);
+				} else {
+					await perfUtils.seedGlobalStylesBorderPreset({
+						presetName,
+						widthPx,
+					});
+					await perfUtils.expectGlobalStylesBorderPresetSeeded({
+						presetName,
+						widthPx,
+					});
+				}
+				await metrics.stopTracing(
+					i === Math.floor(iterations / 2) &&
+						'editor-gs-seed-border-preset'
+				);
+
+				const eventGroups = [
+					...metrics.getClickEventDurations(),
+					...metrics.getTypingEventDurations(),
+				];
+
+				if (i > throwaway) {
+					results.gsSeedBorderPreset.push(
 						eventGroups.reduce((acc, eventDurations) => {
 							return acc + sum(eventDurations);
 						}, 0)
