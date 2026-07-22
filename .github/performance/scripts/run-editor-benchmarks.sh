@@ -56,8 +56,8 @@ case "${PERF_BASELINE}" in
 		npx wp-env run cli -- wp plugin activate blockera || true
 		;;
 	current|master)
-		# Master baseline is collected in a separate workflow step after
-		# checking out origin/master (same machine, rebuilt plugin).
+		# Master baseline is collected by run-editor-master-baseline.sh:
+		# build origin/master in a worktree, remount wp-env, keep PR test harness.
 		echo "PERF_BASELINE=${PERF_BASELINE}: skipped in-env Core subject."
 		;;
 	*)

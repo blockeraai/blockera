@@ -153,14 +153,6 @@ jobs:
 
             # ── Block Editor suite ───────────────────────────────────────────
 
-            - name: Preserve PR editor harness
-              if: ${{ matrix.suite == 'editor' && matrix.baseline == 'master' }}
-              run: |
-                  mkdir -p /tmp/blockera-perf-pr-tools/artifacts
-                  cp -a tests/performance /tmp/blockera-perf-pr-tools/performance-tests
-                  cp .github/performance/editor-scenarios.json /tmp/blockera-perf-pr-tools/
-                  echo "${{ github.event.pull_request.head.sha || github.sha }}" > /tmp/blockera-perf-pr-tools/pr-sha.txt
-
             - name: Run editor benchmarks (PR Blockera${{ matrix.baseline == 'core' && ' / Core' || '' }})
               if: ${{ matrix.suite == 'editor' }}
               env:
@@ -174,64 +166,8 @@ jobs:
               if: ${{ matrix.suite == 'editor' && matrix.baseline == 'master' }}
               env:
                   PERF_SCENARIO_SCOPE: blockera-only
-              run: |
-                  set -euo pipefail
-
-                  echo "Backing up PR editor results before switching branches..."
-                  mkdir -p /tmp/blockera-perf-pr-tools/artifacts
-                  cp -a artifacts/. /tmp/blockera-perf-pr-tools/artifacts/ 2>/dev/null || true
-
-                  echo "Stopping wp-env before switching to master..."
-                  npm run env:stop || true
-
-                  echo "Fetching and checking out origin/master..."
-                  git fetch --depth=1 origin master
-                  git checkout -f FETCH_HEAD
-
-                  echo "Installing master dependencies..."
-                  npm ci
-                  composer install --no-dev -o --apcu-autoloader -a
-
-                  cp .github/wp-env-configs/performance.json .wp-env.json
-                  touch .env
-                  echo APP_MODE=production >> .env
-                  echo DB=wp_tests >> .env
-
-                  echo "Building master plugin assets..."
-                  npm run build
-
-                  echo "Restoring PR editor harness (same scenarios/tests against master plugin)..."
-                  rm -rf tests/performance
-                  cp -a /tmp/blockera-perf-pr-tools/performance-tests tests/performance
-                  mkdir -p .github/performance artifacts
-                  cp /tmp/blockera-perf-pr-tools/editor-scenarios.json .github/performance/
-                  cp -a /tmp/blockera-perf-pr-tools/artifacts/. artifacts/
-
-                  echo "Starting WordPress with master plugin..."
-                  bash .github/scripts/retry-wp-env-start.sh
-
-                  echo "Waiting for WordPress at http://localhost:8888..."
-                  for i in $(seq 1 36); do
-                    if curl -sf -o /dev/null http://localhost:8888; then
-                      echo "WordPress is ready"
-                      break
-                    fi
-                    echo "Attempt $i/36 - WordPress not ready yet, waiting 5s..."
-                    sleep 5
-                  done
-                  curl -sf -o /dev/null http://localhost:8888 || (echo "WordPress failed to become ready" && exit 1)
-
-                  echo "Running master Blockera editor benchmarks..."
-                  npx wp-env run cli -- wp plugin activate blockera
-                  PERF_SUBJECT=blockera \
-                    TEST_RESULTS_PREFIX=master-editor \
-                    PERF_SCENARIO_SCOPE=blockera-only \
-                    npm run test:performance:editor
-
-                  # Ensure PR current results remain present for compare.
-                  if [ ! -f artifacts/blockera-editor-performance-results.json ]; then
-                    cp /tmp/blockera-perf-pr-tools/artifacts/blockera-editor-performance-results.json artifacts/
-                  fi
+                  PERF_MASTER_REF: origin/master
+              run: bash .github/performance/scripts/run-editor-master-baseline.sh
 
             - name: Compare editor results and enforce thresholds
               id: compare_editor
