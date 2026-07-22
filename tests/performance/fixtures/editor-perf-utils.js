@@ -9,7 +9,7 @@ const { expect } = require('@wordpress/e2e-test-utils-playwright');
 const {
 	setColorControlValue,
 	openGlobalStylesPanel,
-	clickValueAddonButton,
+	openValueAddon,
 	selectValueAddonItem,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
@@ -618,7 +618,8 @@ class EditorPerfUtils {
 	 */
 	async setBackgroundColorVariable(itemID) {
 		const container = await this.getBackgroundColorContainer();
-		await clickValueAddonButton(this.page, container);
+		await expect(container).toBeVisible({ timeout: 20000 });
+		await openValueAddon(this.page, container);
 		await selectValueAddonItem(this.page, itemID);
 	}
 
