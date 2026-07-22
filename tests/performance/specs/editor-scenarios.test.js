@@ -25,7 +25,11 @@ const {
 	CORE_GS_PARAGRAPH_VARIATION,
 	CORE_GS_GROUP_VARIATION,
 } = require('../fixtures/core-editor-perf-utils');
-const { sum } = require('../utils');
+const {
+	sum,
+	iterationHexColor,
+	iterationThemeColorVariable,
+} = require('../utils');
 const {
 	closeWelcomeGuide,
 } = require('@blockera/dev-playwright/js/utils/editor');
@@ -260,10 +264,8 @@ test.describe('Editor', () => {
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
-				const colorSuffix = String(i).padStart(2, '0');
-				const colorValue = `6666${colorSuffix}`;
-				const expectedHex = `#${colorValue}`;
-				const blueChannel = parseInt(colorSuffix, 16);
+				const { colorValue, expectedHex, blueChannel } =
+					iterationHexColor(i);
 
 				await metrics.startTracing();
 				if (perfUtils.isCore) {
@@ -468,9 +470,10 @@ test.describe('Editor', () => {
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
-				const colorSuffix = String(i).padStart(2, '0');
-				const colorValue = `4455${colorSuffix}`;
-				const expectedHex = `#${colorValue}`;
+				const { colorValue, expectedHex } = iterationHexColor(
+					i,
+					'4455'
+				);
 
 				await metrics.startTracing();
 				if (perfUtils.isCore) {
@@ -648,7 +651,6 @@ test.describe('Editor', () => {
 			// Blockera Free allows one duplicate; further Duplicate clicks open the
 			// upgrade modal (see style-variations.global-styles.e2e.cy.js).
 			const styleSlug = 'text-display';
-			const expectedHex = '#aabbcc';
 
 			await admin.visitSiteEditor({
 				canvas: 'edit',
@@ -660,12 +662,6 @@ test.describe('Editor', () => {
 			await perfUtils.openGlobalStylesBlockStyleVariations(
 				'core/paragraph'
 			);
-			await perfUtils.selectGlobalStylesStyleVariation(styleSlug);
-			await perfUtils.setBackgroundColor('aabbcc');
-			await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
-				styleSlug,
-				expectedHex
-			);
 
 			const samples = 10;
 			const throwaway = 1;
@@ -676,7 +672,17 @@ test.describe('Editor', () => {
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
+				const { colorValue, expectedHex } = iterationHexColor(
+					i,
+					'aabb'
+				);
+
 				await perfUtils.selectGlobalStylesStyleVariation(styleSlug);
+				await perfUtils.setBackgroundColor(colorValue);
+				await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundColor(
+					styleSlug,
+					expectedHex
+				);
 
 				await metrics.startTracing();
 				const duplicateOutcome =
@@ -760,10 +766,8 @@ test.describe('Editor', () => {
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
-				const colorSuffix = String(i).padStart(2, '0');
-				const colorValue = `6666${colorSuffix}`;
-				const expectedHex = `#${colorValue}`;
-				const blueChannel = parseInt(colorSuffix, 16);
+				const { colorValue, expectedHex, blueChannel } =
+					iterationHexColor(i);
 
 				await metrics.startTracing();
 				if (perfUtils.isCore) {
@@ -823,12 +827,6 @@ test.describe('Editor', () => {
 			perfUtils,
 			metrics,
 		}) => {
-			const corePresetLabels = {
-				'accent-3': 'Accent 3',
-				'accent-4': 'Accent 4',
-			};
-			const variableIds = ['accent-3', 'accent-4'];
-
 			await admin.visitSiteEditor({
 				canvas: 'edit',
 				showWelcomeGuide: false,
@@ -857,12 +855,13 @@ test.describe('Editor', () => {
 				// eslint-disable-next-line no-restricted-syntax
 				await page.waitForTimeout(BROWSER_IDLE_WAIT);
 
-				const variableId = variableIds[(i - 1) % variableIds.length];
+				const { slug: variableId, label: variableLabel } =
+					iterationThemeColorVariable(i);
 
 				await metrics.startTracing();
 				if (perfUtils.isCore) {
 					await perfUtils.core.setGlobalStylesBackgroundPreset(
-						corePresetLabels[variableId]
+						variableLabel
 					);
 					await perfUtils.core.expectGlobalStylesBackgroundPreset(
 						'core/paragraph',
