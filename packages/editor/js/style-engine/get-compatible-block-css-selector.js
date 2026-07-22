@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import memoize from 'fast-memoize';
 
 /**
  * Blockera dependencies
@@ -484,7 +485,7 @@ export const getNormalizedSelector = (
 
 export { getSelectorWithRootBody, getExtractedSelectorFromRootBody };
 
-export const getCompatibleBlockCssSelector = ({
+function resolveCompatibleBlockCssSelector({
 	state,
 	query,
 	support,
@@ -502,7 +503,7 @@ export const getCompatibleBlockCssSelector = ({
 	isStyleVariation = false,
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
-}: NormalizedSelectorProps): string => {
+}: NormalizedSelectorProps): string {
 	let rootSelector = '{{UNIQUE_CLASSNAME}}';
 
 	// If current block is inner block, we should append the root selector to the root body for specificity reasons.
@@ -836,7 +837,7 @@ export const getCompatibleBlockCssSelector = ({
 		className,
 		currentBlock,
 	});
-};
+}
 
 /**
  * Retrieve css selector with selectors dataset , support id and query string.
@@ -1470,3 +1471,35 @@ const appendRootBlockCssSelector = (
 
 	return `${root}${normalizedSelector}`;
 };
+
+/**
+ * @param {NormalizedSelectorProps} props Selector props.
+ * @return {string} Cache key.
+ */
+const serializeCompatibleBlockCssSelectorArgs = (
+	props: NormalizedSelectorProps
+): string => {
+	return [
+		props.clientId,
+		props.query,
+		props.support,
+		props.state,
+		props.blockName,
+		props.masterState,
+		props.currentBlock,
+		props.className,
+		props.suffixClass,
+		props.fallbackSupportId ?? '',
+		props.styleVariationName ?? '',
+		props.variationClassPrefix ?? '',
+		props.isStyleVariation ? '1' : '0',
+		props.isGlobalStylesWrapper ? '1' : '0',
+		props.currentStateHasSelectors ? '1' : '0',
+	].join('\0');
+};
+
+export const getCompatibleBlockCssSelector: (
+	props: NormalizedSelectorProps
+) => string = memoize(resolveCompatibleBlockCssSelector, {
+	serializer: serializeCompatibleBlockCssSelectorArgs,
+});
