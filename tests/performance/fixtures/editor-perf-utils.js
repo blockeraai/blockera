@@ -632,6 +632,14 @@ class EditorPerfUtils {
 			if (typeof dispatch?.setGlobalStyles === 'function') {
 				dispatch.setGlobalStyles({});
 			}
+
+			if (
+				typeof dispatch?.setBlockeraGlobalStylesMetaData === 'function'
+			) {
+				dispatch.setBlockeraGlobalStylesMetaData({});
+			}
+
+			window.blockeraGlobalStylesMetaData = {};
 		});
 	}
 
@@ -952,6 +960,31 @@ class EditorPerfUtils {
 
 		await expect(blockButton).toBeVisible({ timeout: 20000 });
 		await blockButton.click({ force: true });
+
+		await this.waitForGlobalStylesStyleVariationsListReady();
+	}
+
+	/**
+	 * Waits until block style variation cards hydrate (Cypress openGroupBlockStyleVariations).
+	 */
+	async waitForGlobalStylesStyleVariationsListReady() {
+		await expect(
+			this.page.locator('[data-test="style-default"]').first()
+		).toBeAttached({ timeout: 20000 });
+	}
+
+	/**
+	 * Closes the open Global Styles block style card so the variation list is reachable.
+	 */
+	async closeGlobalStylesBlockStyleCardIfOpen() {
+		const closeButton = this.page
+			.locator('[data-test="Close Block Style"]')
+			.filter({ visible: true })
+			.first();
+
+		if (await closeButton.count()) {
+			await closeButton.click({ force: true });
+		}
 	}
 
 	/**
@@ -1128,17 +1161,45 @@ class EditorPerfUtils {
 	 * @param {string} styleSlug Variation slug (e.g. text-display).
 	 */
 	async selectGlobalStylesStyleVariation(styleSlug) {
-		await this.page
+		await this.closeGlobalStylesBlockStyleCardIfOpen();
+
+		const styleRow = this.page
 			.locator(`[data-test="style-${styleSlug}"]`)
-			.first()
-			.click({ force: true });
+			.first();
+
+		await expect(styleRow).toBeAttached({ timeout: 20000 });
+		await styleRow.scrollIntoViewIfNeeded();
+		await styleRow.click({ force: true });
+	}
+
+	/**
+	 * Closes the Blockera free-plan upgrade modal for Global Styles variations.
+	 */
+	async closeGlobalStylesPremiumUpgradeModalIfOpen() {
+		const upgradeModal = this.page
+			.locator('[data-test="promote-global-styles-premium-feature"]')
+			.filter({ visible: true })
+			.first();
+
+		if (!(await upgradeModal.isVisible())) {
+			return;
+		}
+
+		await upgradeModal.getByRole('button', { name: 'Close' }).click({
+			force: true,
+		});
+		await expect(upgradeModal).toBeHidden({ timeout: 20000 });
 	}
 
 	/**
 	 * Duplicates a Global Styles shared style variation via block card menu
 	 * (see shared-style-variation.global-styles.e2e.cy.js duplicate test).
 	 *
+	 * On Blockera Free, only the first duplicate opens the save modal; later
+	 * attempts show the upgrade modal instead (style-variations.global-styles.e2e.cy.js).
+	 *
 	 * @param {string} styleSlug Source variation slug to duplicate.
+	 * @return {Promise<'duplicated'|'upgrade-blocked'>} Which modal path opened.
 	 */
 	async duplicateGlobalStylesSharedStyleVariation(styleSlug) {
 		const contextMenu = this.page
@@ -1159,9 +1220,27 @@ class EditorPerfUtils {
 		const saveButton = this.page.locator(
 			'[data-test="save-duplicate-button"]'
 		);
-		await expect(saveButton).toBeVisible({ timeout: 20000 });
+		const upgradeModal = this.page.locator(
+			'[data-test="promote-global-styles-premium-feature"]'
+		);
+
+		await expect(saveButton.or(upgradeModal).first()).toBeVisible({
+			timeout: 20000,
+		});
+
+		if (await upgradeModal.first().isVisible()) {
+			await this.closeGlobalStylesPremiumUpgradeModalIfOpen();
+			return 'upgrade-blocked';
+		}
+
 		await expect(saveButton).toBeEnabled({ timeout: 20000 });
 		await saveButton.click();
+
+		await expect(
+			this.page.getByRole('dialog', { name: /Duplicate/i })
+		).toHaveCount(0, { timeout: 20000 });
+
+		return 'duplicated';
 	}
 
 	/**
