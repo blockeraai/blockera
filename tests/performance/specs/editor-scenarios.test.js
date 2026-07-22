@@ -98,6 +98,7 @@ test.describe('Editor', () => {
 		};
 
 		const { skip, reason } = shouldSkipScenario('editor-select-blocks');
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -173,7 +174,7 @@ test.describe('Editor', () => {
 		};
 
 		const { skip, reason } = shouldSkipScenario('editor-workspace-tabs');
-		// @debug-ignore — Core has no Blockera workspace tabs
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -262,6 +263,7 @@ test.describe('Editor', () => {
 		};
 
 		const { skip, reason } = shouldSkipScenario('editor-block-bg-color');
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -347,6 +349,7 @@ test.describe('Editor', () => {
 		};
 
 		const { skip, reason } = shouldSkipScenario('editor-block-bg-image');
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -439,6 +442,7 @@ test.describe('Editor', () => {
 		const { skip, reason } = shouldSkipScenario(
 			'editor-gs-variation-bg-color'
 		);
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -529,6 +533,7 @@ test.describe('Editor', () => {
 		const { skip, reason } = shouldSkipScenario(
 			'editor-gs-variation-bg-image'
 		);
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -618,7 +623,7 @@ test.describe('Editor', () => {
 		const { skip, reason } = shouldSkipScenario(
 			'editor-gs-variation-duplicate'
 		);
-		// @debug-ignore — Core has no Blockera Global Styles duplicate action
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -714,6 +719,7 @@ test.describe('Editor', () => {
 		const { skip, reason } = shouldSkipScenario(
 			'editor-gs-default-bg-color'
 		);
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -801,6 +807,7 @@ test.describe('Editor', () => {
 		const { skip, reason } = shouldSkipScenario(
 			'editor-gs-default-bg-color-variable'
 		);
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
@@ -879,6 +886,7 @@ test.describe('Editor', () => {
 		const { skip, reason } = shouldSkipScenario(
 			'editor-gs-seed-border-preset'
 		);
+		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
 		test.afterAll(async ({}, testInfo) => {
