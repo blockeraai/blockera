@@ -675,6 +675,37 @@ async function clickValueAddonButton(page, container = null) {
 }
 
 /**
+ * Open the value addon variable picker (mirrors Cypress openValueAddon).
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {import('@playwright/test').Locator} container - Container locator (optional).
+ * @return {Promise<void>}
+ */
+async function openValueAddon(page, container = null) {
+	const targetContainer = container || page;
+	const plainColorButton = targetContainer
+		.locator('[data-cy="color-btn"]')
+		.first();
+
+	// Plain hex mode (Cypress background-color.global-styles beforeEach): open via pointer.
+	if (await plainColorButton.isVisible()) {
+		const pointer = targetContainer
+			.locator('.blockera-control-value-addon-pointers .var-pointer')
+			.first();
+		await expect(pointer).toBeVisible({ timeout: 20000 });
+		await pointer.click({ force: true });
+		return;
+	}
+
+	// Variable chip mode: pointer mousedown removes the variable; chip onClick opens picker.
+	const variableChip = targetContainer
+		.locator('[data-cy="value-addon-btn"]')
+		.first();
+	await expect(variableChip).toBeVisible({ timeout: 20000 });
+	await variableChip.click({ force: true });
+}
+
+/**
  * Select value addon item from popover.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -690,14 +721,15 @@ async function selectValueAddonItem(page, itemID) {
 	].join(', ');
 
 	const popover = page
-		.locator(
-			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables'
-		)
+		.locator('[data-test="variable-picker-popover"]')
 		.filter({ visible: true })
 		.first();
 
-	await popover.waitFor({ state: 'visible', timeout: 15000 });
-	await popover.locator(itemSelector).first().dispatchEvent('click');
+	await popover.waitFor({ state: 'visible', timeout: 20000 });
+
+	const item = popover.locator(itemSelector).first();
+	await item.scrollIntoViewIfNeeded();
+	await item.click({ force: true });
 }
 
 /**
@@ -1480,6 +1512,7 @@ module.exports = {
 	setColorControlValue,
 	clearColorControlValue,
 	clickValueAddonButton,
+	openValueAddon,
 	selectValueAddonItem,
 	removeValueAddon,
 	setBlockVariation,
