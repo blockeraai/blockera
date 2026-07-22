@@ -563,7 +563,7 @@ test.describe('Editor', () => {
 				await expect(backgroundImageContainer).toBeVisible({
 					timeout: 60000,
 				});
-				await perfUtils.setupBackgroundImage();
+				await perfUtils.setupGlobalStylesBackgroundImage(styleSlug);
 			}
 
 			const sizeValues = ['contain', 'cover'];
@@ -586,7 +586,9 @@ test.describe('Editor', () => {
 						styleSlug
 					);
 				} else {
-					await perfUtils.setBackgroundImageSize(sizeValue);
+					await perfUtils.setBackgroundImageSize(sizeValue, {
+						globalStyles: true,
+					});
 					await perfUtils.expectGlobalStylesSharedStyleVariationBackgroundImageSize(
 						styleSlug,
 						sizeValue
