@@ -118,7 +118,7 @@ export const BackgroundStyles = ({
 				styleGroup.push({
 					selector: pickedSelector,
 					declarations: [
-						`background-color:${blockeraBackgroundColorValue} !important;`,
+						`background-color: ${blockeraBackgroundColorValue} !important;`,
 					],
 				});
 			} else {
