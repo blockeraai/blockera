@@ -7,6 +7,7 @@
  */
 
 @use "sass:list";
+@use "sass:meta";
 @use "sass:string";
 
 // Navigator + screen shells
@@ -29,7 +30,7 @@ $gs-navigator-back-button: 'button[data-wp-component="Navigator.BackButton"]';
 ) {
 	$inspector-active-class-list: ();
 
-	@if type-of($inspector-active-classes) == list {
+	@if meta.type-of($inspector-active-classes) == list {
 		$inspector-active-class-list: $inspector-active-classes;
 	}
 
