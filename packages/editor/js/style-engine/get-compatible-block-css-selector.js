@@ -1479,22 +1479,52 @@ const appendRootBlockCssSelector = (
 const serializeCompatibleBlockCssSelectorArgs = (
 	props: NormalizedSelectorProps
 ): string => {
+	const { getActiveInnerState, getActiveMasterState } =
+		select('blockera/extensions') || {};
+	const { getState, getInnerState: getInnerStateFromEditor } =
+		select('blockera/editor') || {};
+
+	const activeMasterState =
+		typeof getActiveMasterState === 'function'
+			? getActiveMasterState(props.clientId, props.blockName) || ''
+			: '';
+	const activeInnerState =
+		typeof getActiveInnerState === 'function'
+			? getActiveInnerState(props.clientId, props.currentBlock) || ''
+			: '';
+
+	const stateConfig =
+		(typeof getState === 'function' ? getState(props.state) : null) ||
+		(typeof getInnerStateFromEditor === 'function'
+			? getInnerStateFromEditor(props.state)
+			: null) ||
+		null;
+	const hasContent = Boolean(stateConfig?.settings?.hasContent);
+
+	const queryKey = Array.isArray(props.query)
+		? props.query.join('\x1e')
+		: (props.query ?? '');
+
 	return [
 		props.clientId,
-		props.query,
-		props.support,
+		queryKey,
+		props.support ?? '',
 		props.state,
 		props.blockName,
-		props.masterState,
+		props.masterState ?? '',
 		props.currentBlock,
-		props.className,
-		props.suffixClass,
+		props.className ?? '',
+		props.suffixClass ?? '',
 		props.fallbackSupportId ?? '',
 		props.styleVariationName ?? '',
 		props.variationClassPrefix ?? '',
 		props.isStyleVariation ? '1' : '0',
 		props.isGlobalStylesWrapper ? '1' : '0',
 		props.currentStateHasSelectors ? '1' : '0',
+		props.activeDeviceType ?? '',
+		activeMasterState,
+		activeInnerState,
+		hasContent ? '1' : '0',
 	].join('\0');
 };
 
