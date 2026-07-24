@@ -312,8 +312,13 @@ export function getBlockClientId(data) {
  * Disable Gutenberg Tips
  */
 export function disableGutenbergFeatures() {
-	return getWPDataObject().then((data) => {
-		data.dispatch('core/editor').disablePublishSidebar();
+	// Wait until core/editor is registered (WP 7 can load the store after first paint).
+	return cy.window().should((win) => {
+		const disablePublishSidebar =
+			win.wp?.data?.dispatch('core/editor')?.disablePublishSidebar;
+
+		expect(disablePublishSidebar).to.be.a('function');
+		disablePublishSidebar();
 	});
 }
 
@@ -871,7 +876,9 @@ function runMuPluginTask(
 
 	return cy.task(taskName, taskArgs, { log: false }).then((result) => {
 		const elapsedMs = Date.now() - startedAt;
-		const line = `[${action}] ${label} | ${result?.message || ''} (${elapsedMs}ms)`;
+		const line = `[${action}] ${label} | ${
+			result?.message || ''
+		} (${elapsedMs}ms)`;
 
 		if (log) {
 			logMuPluginToCi(line);
@@ -924,7 +931,9 @@ export function activateMuPlugin({
 	const label = `${pluginPath} -> ${targetName}`;
 
 	logCi(
-		`[activateMuPlugin] start | label=${label} | maxAttempts=${maxAttempts} | ci=${Boolean(Cypress.env('CI'))}`
+		`[activateMuPlugin] start | label=${label} | maxAttempts=${maxAttempts} | ci=${Boolean(
+			Cypress.env('CI')
+		)}`
 	);
 	cy.log(`[activateMuPlugin] start | ${label} | maxAttempts=${maxAttempts}`);
 
@@ -955,7 +964,9 @@ export function activateMuPlugin({
 			)
 			.then((activateResult) => {
 				const activateMs = Date.now() - startedAt;
-				const activateLine = `[activateMuPlugin] ${attemptLabel} activate | ${label} | ${activateResult?.message || ''} (${activateMs}ms)`;
+				const activateLine = `[activateMuPlugin] ${attemptLabel} activate | ${label} | ${
+					activateResult?.message || ''
+				} (${activateMs}ms)`;
 				logCi(activateLine);
 				cy.log(activateLine);
 			})
@@ -972,7 +983,9 @@ export function activateMuPlugin({
 			)
 			.then((verifyResult) => {
 				const verifyMs = Date.now() - startedAt;
-				const verifyLine = `[activateMuPlugin] ${attemptLabel} verify | ${label} | ok=${Boolean(verifyResult?.ok)} | ${verifyResult?.message || ''} (${verifyMs}ms)`;
+				const verifyLine = `[activateMuPlugin] ${attemptLabel} verify | ${label} | ok=${Boolean(
+					verifyResult?.ok
+				)} | ${verifyResult?.message || ''} (${verifyMs}ms)`;
 				logCi(verifyLine);
 				cy.log(verifyLine);
 
@@ -984,14 +997,20 @@ export function activateMuPlugin({
 				}
 
 				if (attempt >= maxAttempts) {
-					const failureLine = `[activateMuPlugin] failed | exhausted ${maxAttempts} attempt(s) | ${label} | last=${verifyResult?.message || 'unknown verify error'}`;
+					const failureLine = `[activateMuPlugin] failed | exhausted ${maxAttempts} attempt(s) | ${label} | last=${
+						verifyResult?.message || 'unknown verify error'
+					}`;
 					logCi(failureLine);
 					throw new Error(
-						`Mu-plugin activation failed after ${maxAttempts} attempt(s): ${verifyResult?.message || 'unknown verify error'}`
+						`Mu-plugin activation failed after ${maxAttempts} attempt(s): ${
+							verifyResult?.message || 'unknown verify error'
+						}`
 					);
 				}
 
-				const retryLine = `[activateMuPlugin] retry | ${attemptLabel} failed verify, waiting 500ms before attempt ${attempt + 1}/${maxAttempts} | ${label}`;
+				const retryLine = `[activateMuPlugin] retry | ${attemptLabel} failed verify, waiting 500ms before attempt ${
+					attempt + 1
+				}/${maxAttempts} | ${label}`;
 				logCi(retryLine);
 				cy.log(retryLine);
 

@@ -39,7 +39,8 @@ module.exports = {
 			'<rootDir>/packages/dev-jest/js/__mocks__/wordpress-theme.js',
 		'^@wordpress/theme/build-module/private-apis\\.mjs$':
 			'<rootDir>/packages/dev-jest/js/__mocks__/wordpress-theme.js',
-		'.*/editor/header-ui/components/breakpoints/bootstrap\\.js$':
+		// Match extensionless `./bootstrap` imports as well as explicit `.js`.
+		'.*/editor/header-ui/components/breakpoints/bootstrap(\\.js)?$':
 			'<rootDir>/packages/dev-jest/js/__mocks__/bootstrap-breakpoints.js',
 		// Force module uuid to resolve with the CJS entry point, because Jest does not support package.json.exports. See https://github.com/uuidjs/uuid/issues/451
 		uuid: require.resolve('uuid'),
