@@ -96,12 +96,12 @@ export const BackgroundStyles = ({
 	}
 
 	if (isActiveField(blockeraBackgroundColor)) {
-		const blockeraBackgroundColor = getValueAddonRealValue(
+		const blockeraBackgroundColorValue = getValueAddonRealValue(
 			blockProps.attributes.blockeraBackgroundColor
 		);
 
 		if (
-			blockeraBackgroundColor !==
+			blockeraBackgroundColorValue !==
 			attributes.blockeraBackgroundColor.default
 		) {
 			const pickedSelector = getCompatibleBlockCssSelector({
@@ -114,24 +114,34 @@ export const BackgroundStyles = ({
 				),
 			});
 
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraBackgroundColor: [
-							{
-								type: 'static',
-								properties: {
-									'background-color':
-										blockeraBackgroundColor + ' !important',
+			if (typeof blockeraBackgroundColorValue === 'string') {
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: [
+						`background-color: ${blockeraBackgroundColorValue} !important;`,
+					],
+				});
+			} else {
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							blockeraBackgroundColor: [
+								{
+									type: 'static',
+									properties: {
+										'background-color':
+											blockeraBackgroundColorValue +
+											' !important',
+									},
 								},
-							},
-						],
-					},
-					blockProps,
-					pickedSelector
-				),
-			});
+							],
+						},
+						blockProps,
+						pickedSelector
+					),
+				});
+			}
 		}
 	}
 

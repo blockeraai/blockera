@@ -1,0 +1,76 @@
+{
+	"defaults": {
+		"thresholdPercent": 20
+	},
+	"scenarios": [
+		{
+			"id": "editor-select-blocks",
+			"label": "Select blocks",
+			"primaryMetric": "focus",
+			"thresholdPercent": 1000
+		},
+		{
+			"id": "editor-workspace-tabs",
+			"label": "Workspace tabs",
+			"primaryMetric": "switchTab",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-block-bg-color",
+			"label": "Block bg color",
+			"primaryMetric": "blockBgColor",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-block-bg-image",
+			"label": "Block bg image",
+			"primaryMetric": "blockBgImage",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-gs-variation-bg-color",
+			"label": "GS variation bg color",
+			"primaryMetric": "gsVariationBgColor",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-gs-variation-bg-image",
+			"label": "GS variation bg image",
+			"primaryMetric": "gsVariationBgImage",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-gs-variation-duplicate",
+			"label": "GS variation duplicate",
+			"primaryMetric": "gsVariationDuplicate",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-gs-default-bg-color",
+			"label": "GS default bg color",
+			"primaryMetric": "gsDefaultBgColor",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-gs-default-bg-color-variable",
+			"label": "GS default bg color variable",
+			"primaryMetric": "gsDefaultBgColorVariable",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		},
+		{
+			"id": "editor-gs-seed-border-preset",
+			"label": "GS seed border preset",
+			"primaryMetric": "gsSeedBorderPreset",
+			"requiresBlockera": true,
+			"thresholdPercent": 20
+		}
+	]
+}
