@@ -17,7 +17,7 @@
 		"optimizeStyleGenerationOnEditor": false,
 		"optimizeStyleGenerationOnEditorStatus": "alpha",
 		"enableSvgUpload": true,
-		"enableSvgUploadStatus": "beta"
+		"enableSvgUploadStatus": "pre-release"
 	},
 	"ai": {
 		"experimentalTools": false
