@@ -5,16 +5,17 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-// import { useContext, useState } from '@wordpress/element';
+import { useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-// import { TabsContext, SettingsContext } from '@blockera/wordpress';
+import { experimental } from '@blockera/env';
+import { TabsContext, SettingsContext } from '@blockera/wordpress';
 import {
 	Flex,
-	// ToggleControl,
-	// ControlContextProvider,
+	ToggleControl,
+	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
@@ -24,36 +25,36 @@ import { Icon } from '@blockera/icons';
 import FeatureLabel from './components/feature-label';
 import FeatureDesc from './components/feature-desc';
 
-// here store fallback default values for tab general settings.
-// const fallbackDefaultValue = {
-// 	earlyAccessLab: {
-// 		optimizeStyleGeneration: false,
-// 		optimizeStyleGenerationStatus: 'alpha',
-// 	},
-// };
+const fallbackGeneralDefaults = {
+	enableSvgUpload: true,
+};
 
 export const ExperimentalLabPanel = (): MixedElement => {
-	// const {
-	// 	defaultSettings,
-	// 	//  config
-	// } = useContext(SettingsContext);
+	const { defaultSettings } = useContext(SettingsContext);
+	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
 
-	// const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
+	const generalSettings =
+		settings?.general ||
+		defaultSettings?.general ||
+		fallbackGeneralDefaults;
 
-	// const earlyAccessLabSettings =
-	// 	settings?.earlyAccessLab ||
-	// 	defaultSettings?.earlyAccessLab ||
-	// 	fallbackDefaultValue;
+	const {
+		blockeraSettings: { general: savedGeneralSettings = {} },
+	} = window;
 
-	// const {
-	// 	blockeraSettings: { earlyAccessLab: savedEarlyAccessLabSettings },
-	// } = window;
+	const isSvgUploadExperimentEnabled = Boolean(
+		experimental().get('earlyAccessLab.enableSvgUpload')
+	);
 
-	// const [optimizeStyleGenerationStatus] = useState(
-	// 	earlyAccessLabSettings?.optimizeStyleGenerationStatus !== undefined
-	// 		? earlyAccessLabSettings.optimizeStyleGenerationStatus
-	// 		: fallbackDefaultValue.earlyAccessLab.optimizeStyleGenerationStatus
-	// );
+	const enableSvgUpload =
+		generalSettings.enableSvgUpload !== undefined
+			? generalSettings.enableSvgUpload
+			: fallbackGeneralDefaults.enableSvgUpload;
+
+	const savedEnableSvgUpload =
+		savedGeneralSettings?.enableSvgUpload !== undefined
+			? savedGeneralSettings.enableSvgUpload
+			: fallbackGeneralDefaults.enableSvgUpload;
 
 	return (
 		<Flex
@@ -61,6 +62,79 @@ export const ExperimentalLabPanel = (): MixedElement => {
 			className={'blockera-settings-panel-container'}
 			gap={40}
 		>
+			{isSvgUploadExperimentEnabled && (
+				<Flex
+					direction={'column'}
+					className={'blockera-settings-section'}
+				>
+					<h3 className={'blockera-settings-general section-title'}>
+						<Icon
+							icon={'upload'}
+							library={'wp'}
+							iconSize={24}
+							style={{
+								color: 'var(--blockera-controls-primary-color)',
+							}}
+						/>
+						{__('SVG File Upload', 'blockera')}
+
+						<FeatureLabel status={'beta'} />
+					</h3>
+
+					<p className={'blockera-settings-general section-desc'}>
+						{__(
+							'Allow uploading SVG files to the WordPress Media Library. Uploaded SVGs are sanitized automatically to remove unsafe content before they are stored.',
+							'blockera'
+						)}
+					</p>
+
+					<div
+						className={'blockera-settings-general control-wrapper'}
+					>
+						<ControlContextProvider
+							value={{
+								name: 'toggleEnableSvgUpload',
+								value: enableSvgUpload,
+							}}
+						>
+							<ToggleControl
+								labelType={'self'}
+								id={'toggleEnableSvgUpload'}
+								className={'blockera-settings-general control'}
+								defaultValue={enableSvgUpload}
+								onChange={(checked: boolean) => {
+									setHasUpdates(
+										checked !== savedEnableSvgUpload
+									);
+
+									setSettings({
+										...settings,
+										general: {
+											...generalSettings,
+											enableSvgUpload: checked,
+										},
+									});
+								}}
+								label={
+									<strong
+										className={
+											'blockera-settings-general control-label'
+										}
+									>
+										{__(
+											'Enable SVG file uploads',
+											'blockera'
+										)}
+									</strong>
+								}
+							/>
+						</ControlContextProvider>
+					</div>
+
+					<FeatureDesc status={'beta'} />
+				</Flex>
+			)}
+
 			<Flex direction={'column'} className={'blockera-settings-section'}>
 				<h3 className={'blockera-settings-general section-title'}>
 					<Icon
@@ -90,57 +164,6 @@ export const ExperimentalLabPanel = (): MixedElement => {
 						{__('Learn more', 'blockera')}
 					</a>
 				</p>
-
-				{/* <div className={'blockera-settings-general control-wrapper'}>
-					<ControlContextProvider
-						value={{
-							name: 'toggleCleanupStyles',
-							value: earlyAccessLabSettings.optimizeStyleGeneration,
-						}}
-					>
-						<ToggleControl
-							labelType={'self'}
-							id={'toggleCleanupStyles'}
-							className={'blockera-settings-general control'}
-							defaultValue={
-								earlyAccessLabSettings.optimizeStyleGeneration
-							}
-							onChange={(checked: boolean) => {
-								setHasUpdates(
-									checked !==
-										savedEarlyAccessLabSettings.optimizeStyleGeneration
-								);
-
-								const newSettings = {
-									...settings,
-									earlyAccessLab: {
-										...earlyAccessLabSettings,
-										optimizeStyleGeneration: checked,
-									},
-								};
-
-								// The status should be removed from the settings because it is not a valid setting.
-								// it is only used to display the status of the feature.
-								delete newSettings.earlyAccessLab
-									.optimizeStyleGenerationStatus;
-
-								setSettings(newSettings);
-							}}
-							label={
-								<strong
-									className={
-										'blockera-settings-general control-label'
-									}
-								>
-									{__(
-										'Optimize the style generation process',
-										'blockera'
-									)}
-								</strong>
-							}
-						/>
-					</ControlContextProvider>
-				</div> */}
 
 				<FeatureDesc status={'released'} />
 			</Flex>
