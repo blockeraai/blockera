@@ -25,6 +25,7 @@ import { Icon } from '@blockera/icons';
 import FeatureLabel from './components/feature-label';
 import FeatureDesc from './components/feature-desc';
 import type { FeatureStatus } from './types';
+import { default as SvgIcon } from './icons/svg.svg';
 
 const fallbackGeneralDefaults = {
 	enableSvgUpload: true,
@@ -72,16 +73,8 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					className={'blockera-settings-section'}
 				>
 					<h3 className={'blockera-settings-general section-title'}>
-						<Icon
-							icon={'upload'}
-							library={'wp'}
-							iconSize={24}
-							style={{
-								color: 'var(--blockera-controls-primary-color)',
-							}}
-						/>
+						<SvgIcon />
 						{__('SVG File Upload', 'blockera')}
-
 						<FeatureLabel status={enableSvgUploadStatus} />
 					</h3>
 
