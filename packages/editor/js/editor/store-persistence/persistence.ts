@@ -4,6 +4,11 @@
 import apiFetch from '@wordpress/api-fetch';
 
 /**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
+/**
  * Type definition for the persistence layer.
  */
 export interface PersistenceLayer<T> {
@@ -94,14 +99,6 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 } = {}): PersistenceLayer<T> {
 	let cache: T | undefined;
 	const debouncedApiFetch = debounceAsync(apiFetch, requestDebounceMS);
-	const localStorage = window.localStorage;
-
-	// Get user ID from window (injected by PHP) to make localStorage user-specific
-	const userId = (window as any).blockeraEditorPersistenceUserId as
-		number | undefined;
-	const userSpecificKey = userId
-		? `${localStorageRestoreKey}_${userId}`
-		: localStorageRestoreKey;
 
 	/**
 	 * Gets persisted data from cache, server, or localStorage.
@@ -117,9 +114,9 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 			const serverData = (await apiFetch({
 				path: '/blockera/v1/editor-persistence',
 			})) as T | null;
-			const localData = JSON.parse(
-				localStorage.getItem(userSpecificKey) || 'null'
-			);
+			const localData = localStorage.getJSON(
+				localStorageRestoreKey
+			) as T | null;
 
 			// Compare timestamps to determine which data is more recent
 			// Compare server data, preloaded data, and localStorage data
@@ -158,9 +155,9 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 			return cache;
 		} catch (error) {
 			// If API fails, try localStorage
-			const localData = JSON.parse(
-				localStorage.getItem(userSpecificKey) || 'null'
-			);
+			const localData = localStorage.getJSON(
+				localStorageRestoreKey
+			) as T | null;
 			cache = localData || ({} as T);
 			return cache;
 		}
@@ -176,16 +173,9 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 		};
 		cache = dataWithTimestamp;
 
-		// Store in localStorage as fallback (user-specific key)
+		// Store in localStorage as fallback (site + user scoped)
 		// If API request fails, this data can restore preferences
-		try {
-			localStorage.setItem(
-				userSpecificKey,
-				JSON.stringify(dataWithTimestamp)
-			);
-		} catch (error) {
-			// Ignore localStorage errors
-		}
+		localStorage.setJSON(localStorageRestoreKey, dataWithTimestamp);
 
 		// Save to database via custom REST API endpoint
 		// Debounced to prevent rapid successive requests

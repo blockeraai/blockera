@@ -8,6 +8,8 @@ import {
 	createPost,
 	savePage,
 	closeWelcomeGuide,
+	getScopedStorageKey,
+	removeScopedStorageKeys,
 } from '@blockera/dev-cypress/js/helpers';
 import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 
@@ -29,6 +31,24 @@ describe('Workspace tabs: Recently closed', () => {
 
 		cy.tabsResetTabsRelatedStorage();
 		createPost({ postType: 'post' });
+
+		cy.window().should((win) => {
+			expect(
+				win.blockeraStorageSiteKey,
+				'site key for scoped tabs storage'
+			)
+				.to.be.a('string')
+				.and.not.equal('0');
+
+			const storageGlobal = Object.keys(win).find((key) =>
+				/^blockeraStorage_\d/.test(key)
+			);
+			expect(storageGlobal, 'storage package global').to.be.a('string');
+			expect(win[storageGlobal]?.localStorage?.setJSON).to.be.a(
+				'function'
+			);
+		});
+
 		cy.tabsExpectUnpinnedCount(1);
 
 		setPostTitleInCanvas(titleClosed);
@@ -94,10 +114,16 @@ describe('Workspace tabs: Recently closed', () => {
 		// Same effect as toolbar “Remember recently closed tabs” off (read at editor boot).
 		cy.window().then((win) => {
 			win.localStorage.setItem(
-				'blockera-tabs-recently-closed-persistence',
+				getScopedStorageKey(
+					win,
+					'blockera-tabs-recently-closed-persistence'
+				),
 				JSON.stringify(false)
 			);
-			win.localStorage.removeItem('blockera-tabs-recently-closed');
+			removeScopedStorageKeys(
+				win.localStorage,
+				'blockera-tabs-recently-closed'
+			);
 		});
 		cy.reload();
 		waitAfterEditorReload();
@@ -108,14 +134,19 @@ describe('Workspace tabs: Recently closed', () => {
 
 		cy.window().then((win) => {
 			expect(
-				win.localStorage.getItem('blockera-tabs-recently-closed'),
+				win.localStorage.getItem(
+					getScopedStorageKey(win, 'blockera-tabs-recently-closed')
+				),
 				'recently closed list should not be persisted when disabled'
 			).to.be.null;
 		});
 
 		cy.window().then((win) => {
 			win.localStorage.setItem(
-				'blockera-tabs-recently-closed-persistence',
+				getScopedStorageKey(
+					win,
+					'blockera-tabs-recently-closed-persistence'
+				),
 				JSON.stringify(true)
 			);
 		});
@@ -169,7 +200,8 @@ describe('Workspace tabs: Recently closed', () => {
 
 		// Revert storage default for other specs in this file.
 		cy.window().then((win) => {
-			win.localStorage.removeItem(
+			removeScopedStorageKeys(
+				win.localStorage,
 				'blockera-tabs-recently-closed-persistence'
 			);
 		});

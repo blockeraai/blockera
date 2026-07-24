@@ -368,17 +368,21 @@ class BulkActions {
 	 * @param string $post_type Post type.
 	 */
 	private function output_capture_script( $bulk_edit_ids, $post_type ) {
+		$ids_key       = blockera_get_scoped_storage_key( 'blockera_tabs_bulk_edit_ids' );
+		$post_type_key = blockera_get_scoped_storage_key( 'blockera_tabs_bulk_edit_post_type' );
 		?>
 		<script type="text/javascript">
 			(function() {
 				// Capture immediately when script runs (before React/editor initializes).
 				var bulkEditIds = <?php echo wp_json_encode( $bulk_edit_ids ); ?>;
 				var postType = <?php echo wp_json_encode( $post_type ); ?>;
+				var idsKey = <?php echo wp_json_encode( $ids_key ); ?>;
+				var postTypeKey = <?php echo wp_json_encode( $post_type_key ); ?>;
 
 				if ( typeof Storage !== 'undefined' ) {
 					try {
-						sessionStorage.setItem( 'blockera_tabs_bulk_edit_ids', bulkEditIds );
-						sessionStorage.setItem( 'blockera_tabs_bulk_edit_post_type', postType );
+						sessionStorage.setItem( idsKey, bulkEditIds );
+						sessionStorage.setItem( postTypeKey, postType );
 					} catch ( e ) {
 						// sessionStorage might be disabled, fallback to global variable.
 						window.blockeraTabsBulkEditIds = bulkEditIds;

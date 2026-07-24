@@ -12,6 +12,7 @@ import {
 	disableGutenbergFeatures,
 	resetGlobalStylesEntityRecord,
 	setAbsoluteBlockToolbar,
+	removeScopedStorageKeys,
 } from '@blockera/dev-cypress/js/helpers';
 import { PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY } from '@blockera/dev-cypress/js/helpers/preset-variables-view';
 
@@ -581,8 +582,12 @@ function createPostForVariablePickerSearchE2E() {
 	return cy
 		.visit(path, {
 			onBeforeLoad(win) {
-				win.localStorage.removeItem('blockeraEditorZoomPercent');
-				win.localStorage.removeItem(
+				removeScopedStorageKeys(
+					win.localStorage,
+					'blockeraEditorZoomPercent'
+				);
+				removeScopedStorageKeys(
+					win.localStorage,
 					PRESET_VARIABLES_VIEW_MODE_STORAGE_KEY
 				);
 			},

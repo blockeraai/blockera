@@ -1,0 +1,10 @@
+{
+	"name": "blockera/storage",
+	"version": "1.0.0",
+	"description": "Browser and database storage helpers for Blockera.",
+	"autoload": {
+		"files": [
+			"php/functions.php"
+		]
+	}
+}

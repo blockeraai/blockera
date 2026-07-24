@@ -31,6 +31,7 @@ use Blockera\Editor\TemplatePreview;
 use Blockera\Editor\TabLocking;
 use Blockera\Editor\BulkActions;
 use Blockera\Editor\EditorPersistenceStore;
+use Blockera\WordPress\Media\SvgUpload;
 
 /**
  * Class AppServiceProvider for providing all application services.
@@ -263,6 +264,35 @@ class AppServiceProvider extends ServiceProvider {
 		blockera_editor_hooks();
 
 		JSON::register_sanitize_cache_invalidation_hooks();
+
+		$this->bootSvgUpload();
+	}
+
+	/**
+	 * Register Media Library SVG upload + sanitization when dual-gated feature is on.
+	 *
+	 * @return void
+	 */
+	private function bootSvgUpload(): void {
+		if ( ! blockera_is_svg_upload_enabled() ) {
+			return;
+		}
+
+		// Shared Pro autoload coordinator may cache an older classmap (1h transient).
+		// Ensure the class is loadable before instantiation during local development.
+		if ( ! class_exists( SvgUpload::class, true ) ) {
+			$svg_upload_file = dirname( __DIR__, 3 ) . '/wordpress/php/Media/SvgUpload.php';
+
+			if ( is_readable( $svg_upload_file ) ) {
+				require_once $svg_upload_file;
+			}
+		}
+
+		if ( ! class_exists( SvgUpload::class, false ) ) {
+			return;
+		}
+
+		( new SvgUpload() )->register();
 	}
 
 	/**

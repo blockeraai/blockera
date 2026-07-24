@@ -32,8 +32,10 @@ import {
 	loadZoomFromStorage,
 	saveZoomToStorage,
 } from '../../zoom/utils/storage';
+import { getStorageKey } from '@blockera/storage';
 import { handleZoomKeyboardEvent } from '../../zoom/utils/zoomKeyboard';
 import {
+	STORAGE_KEY as ZOOM_STORAGE_KEY,
 	ZOOM_CSS_VAR,
 	ZOOMED_OUT_CLASS,
 	DEFAULT_ZOOM,
@@ -758,7 +760,10 @@ export default function PreviewOverlay({
 		// Listen for storage changes to sync zoom updates from other tabs/windows
 		const handleStorageChange = (event: StorageEvent): void => {
 			// Check if zoom storage key changed
-			if (event.key === 'blockeraEditorZoomPercent' && event.newValue) {
+			if (
+				event.key === getStorageKey(ZOOM_STORAGE_KEY) &&
+				event.newValue
+			) {
 				const newZoom = parseInt(event.newValue, 10);
 				if (!isNaN(newZoom) && newZoom >= 10 && newZoom <= 200) {
 					setZoomPercent(newZoom);

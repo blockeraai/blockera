@@ -392,3 +392,29 @@ if (! function_exists('blockera_contains_blockera_block')) {
 		return true;
 	}
 }
+
+if ( ! function_exists( 'blockera_is_svg_upload_enabled' ) ) {
+	/**
+	 * Whether Blockera SVG Media Library upload support is enabled.
+	 *
+	 * Requires both the Early Access Lab experimental flag and the durable
+	 * general setting (so graduating the UI later needs no settings migration).
+	 *
+	 * @return bool
+	 */
+	function blockera_is_svg_upload_enabled(): bool {
+		if ( ! function_exists( 'blockera_get_experimental' ) || ! function_exists( 'blockera_get_admin_options' ) ) {
+			return false;
+		}
+
+		$enabled = (bool) blockera_get_experimental( [ 'earlyAccessLab', 'enableSvgUpload' ] )
+			&& (bool) blockera_get_admin_options( [ 'general', 'enableSvgUpload' ] );
+
+		/**
+		 * Filters whether Blockera SVG upload support is enabled.
+		 *
+		 * @param bool $enabled Whether SVG upload is enabled.
+		 */
+		return (bool) apply_filters( 'blockera_is_svg_upload_enabled', $enabled );
+	}
+}

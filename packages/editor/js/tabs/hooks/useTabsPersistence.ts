@@ -4,6 +4,11 @@
 import { useState, useCallback } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { localStorage } from '@blockera/storage';
+
+/**
  * Internal dependencies
  */
 import {
@@ -18,7 +23,7 @@ import {
 /**
  * Load persistence setting from localStorage
  *
- * @param key - Storage key
+ * @param key - Logical (unscoped) storage key
  * @param defaultValue - Default value if not stored (default: true)
  * @return Stored value or default
  */
@@ -27,9 +32,9 @@ function loadPersistenceFromStorage(
 	defaultValue: boolean = true
 ): boolean {
 	try {
-		const stored = localStorage.getItem(key);
+		const stored = localStorage.getJSON(key);
 		if (stored !== null) {
-			return JSON.parse(stored) as boolean;
+			return stored as boolean;
 		}
 	} catch {
 		// Invalid data in localStorage, use default
@@ -40,12 +45,12 @@ function loadPersistenceFromStorage(
 /**
  * Save persistence setting to localStorage
  *
- * @param key - Storage key
+ * @param key - Logical (unscoped) storage key
  * @param enabled - Whether persistence is enabled
  */
 function savePersistenceToStorage(key: string, enabled: boolean): void {
 	try {
-		localStorage.setItem(key, JSON.stringify(enabled));
+		localStorage.setJSON(key, enabled);
 	} catch {
 		// localStorage might be full or disabled, ignore
 	}
@@ -54,7 +59,7 @@ function savePersistenceToStorage(key: string, enabled: boolean): void {
 /**
  * Clear data from localStorage
  *
- * @param key - Storage key
+ * @param key - Logical (unscoped) storage key
  */
 function clearFromStorage(key: string): void {
 	try {

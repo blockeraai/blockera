@@ -8,7 +8,7 @@ import { select, dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { getItem, freshItem, setItem } from '@blockera/storage';
+import { localStorage } from '@blockera/storage';
 
 /**
  * Internal dependencies
@@ -44,7 +44,7 @@ export const bootstrapBlockAppSettings = () => {
 	).getExtensionCurrentBlock();
 	const version = select('blockera/data').getEntity('blockera')?.version;
 	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
-	const cacheData = getItem(cacheKey);
+	const cacheData = localStorage.getJSON(cacheKey);
 	const initialState = {
 		...defaultValue,
 		sections: {
@@ -55,13 +55,13 @@ export const bootstrapBlockAppSettings = () => {
 	};
 
 	if (!cacheData) {
-		freshItem(cacheKey, cacheKeyPrefix);
-		setItem(cacheKey, initialState);
+		localStorage.freshItem(cacheKey, cacheKeyPrefix);
+		localStorage.setJSON(cacheKey, initialState);
 		setBlockAppSettings(initialState);
 
 		return;
 	}
 
-	setItem(cacheKey, cacheData);
+	localStorage.setJSON(cacheKey, cacheData);
 	setBlockAppSettings(cacheData);
 };

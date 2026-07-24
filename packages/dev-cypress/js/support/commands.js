@@ -14,6 +14,7 @@ import {
 	hexStringToByte,
 	openBoxSpacingSide,
 	openBoxPositionSide,
+	removeScopedStorageKeys,
 } from '../helpers';
 import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 import { PREVIEW_MODE_TEST_ID } from 'blockera-editor-preview-test-ids';
@@ -1066,7 +1067,7 @@ export const registerCommands = () => {
 	 */
 	Cypress.Commands.add('tabsResetWorkspaceStorage', () => {
 		cy.window().then((win) => {
-			win.localStorage.removeItem('blockera-tabs-tabs');
+			removeScopedStorageKeys(win.localStorage, 'blockera-tabs-tabs');
 		});
 	});
 
@@ -1076,9 +1077,17 @@ export const registerCommands = () => {
 	 */
 	Cypress.Commands.add('tabsResetTabsRelatedStorage', () => {
 		cy.window().then((win) => {
-			win.localStorage.removeItem('blockera-tabs-tabs');
-			win.localStorage.removeItem('blockera-tabs-recently-closed');
-			win.localStorage.removeItem(
+			removeScopedStorageKeys(win.localStorage, 'blockera-tabs-tabs');
+			removeScopedStorageKeys(
+				win.localStorage,
+				'blockera-tabs-persistence'
+			);
+			removeScopedStorageKeys(
+				win.localStorage,
+				'blockera-tabs-recently-closed'
+			);
+			removeScopedStorageKeys(
+				win.localStorage,
 				'blockera-tabs-recently-closed-persistence'
 			);
 		});
@@ -1115,6 +1124,10 @@ export const registerCommands = () => {
 		cy.get('.commands-command-menu [cmdk-input]', { timeout: 20000 })
 			.should('be.visible')
 			.type('{selectall}{backspace}Add new post{enter}');
+
+		// New post navigates the editor; wait until a second unpinned tab can appear.
+		cy.location('pathname', { timeout: 60000 }).should('include', 'post');
+		cy.get('.blockera-tabs-bar', { timeout: 60000 }).should('be.visible');
 	});
 
 	/**
