@@ -24,6 +24,7 @@ import { Icon } from '@blockera/icons';
  */
 import FeatureLabel from './components/feature-label';
 import FeatureDesc from './components/feature-desc';
+import type { FeatureStatus } from './types';
 
 const fallbackGeneralDefaults = {
 	enableSvgUpload: true,
@@ -45,6 +46,9 @@ export const ExperimentalLabPanel = (): MixedElement => {
 	const isSvgUploadExperimentEnabled = Boolean(
 		experimental().get('earlyAccessLab.enableSvgUpload')
 	);
+
+	const enableSvgUploadStatus: FeatureStatus =
+		experimental().get('earlyAccessLab.enableSvgUploadStatus') || 'beta';
 
 	const enableSvgUpload =
 		generalSettings.enableSvgUpload !== undefined
@@ -78,7 +82,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 						/>
 						{__('SVG File Upload', 'blockera')}
 
-						<FeatureLabel status={'beta'} />
+						<FeatureLabel status={enableSvgUploadStatus} />
 					</h3>
 
 					<p className={'blockera-settings-general section-desc'}>
@@ -131,7 +135,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 						</ControlContextProvider>
 					</div>
 
-					<FeatureDesc status={'beta'} />
+					<FeatureDesc status={enableSvgUploadStatus} />
 				</Flex>
 			)}
 
