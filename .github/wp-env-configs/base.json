@@ -1,9 +1,6 @@
 {
 	"core": "https://wordpress.org/wordpress-latest.zip",
-	"plugins": [
-		".",
-		"https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"
-	],
+	"plugins": ["."],
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
 		"SCRIPT_DEBUG": false,
