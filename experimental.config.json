@@ -15,7 +15,9 @@
 	},
 	"earlyAccessLab": {
 		"optimizeStyleGenerationOnEditor": false,
-		"optimizeStyleGenerationOnEditorStatus": "alpha"
+		"optimizeStyleGenerationOnEditorStatus": "alpha",
+		"enableSvgUpload": true,
+		"enableSvgUploadStatus": "beta"
 	},
 	"ai": {
 		"experimentalTools": false

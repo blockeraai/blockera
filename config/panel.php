@@ -34,6 +34,7 @@ return [
 			'allowedUserRoles'               => blockera_normalized_user_roles(),
 			'allowedPostTypes' => blockera_get_post_types(),
 			'disableRestrictBlockVisibilityByPostType' => false,
+			'enableSvgUpload'                => true,
 		],
 		'earlyAccessLab' => json_decode(ob_get_clean(), true)['earlyAccessLab'] ?? [],
 	],
