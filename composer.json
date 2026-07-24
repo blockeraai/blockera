@@ -123,7 +123,8 @@
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"voku/simple_html_dom": "dev-master"
+		"voku/simple_html_dom": "dev-master",
+		"enshrined/svg-sanitize": "^0.22"
 	},
 	"require-dev": {
 		"blockera/dev-phpunit": "*",
