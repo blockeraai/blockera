@@ -37,16 +37,27 @@ function resolveWpEnvMuPluginsDir() {
 		.createHash('md5')
 		.update(configFilePath)
 		.digest('hex');
-	const muDir = path.join(
-		getWpEnvHome(),
-		envHash,
-		'wordpress-latest',
-		'wp-content',
-		'mu-plugins'
-	);
+	const envRoot = path.join(getWpEnvHome(), envHash);
 
-	fs.mkdirSync(muDir, { recursive: true });
-	return muDir;
+	// Prefer the directory that is actually bind-mounted by wp-env
+	// (`WordPress` / `tests-WordPress`). Fall back to legacy `wordpress-latest`.
+	const candidates = [
+		path.join(envRoot, 'WordPress', 'wp-content', 'mu-plugins'),
+		path.join(envRoot, 'tests-WordPress', 'wp-content', 'mu-plugins'),
+		path.join(envRoot, 'wordpress-latest', 'wp-content', 'mu-plugins'),
+	];
+
+	for (const candidate of candidates) {
+		const wordpressRoot = path.dirname(path.dirname(candidate));
+		if (fs.existsSync(wordpressRoot)) {
+			fs.mkdirSync(candidate, { recursive: true });
+			return candidate;
+		}
+	}
+
+	const fallback = candidates[0];
+	fs.mkdirSync(fallback, { recursive: true });
+	return fallback;
 }
 
 /**
@@ -437,9 +448,10 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 	}
 
 	const options = {
-		webpackOptions: require(
-			path.resolve(__dirname, '../webpack.config.js')
-		),
+		webpackOptions: require(path.resolve(
+			__dirname,
+			'../webpack.config.js'
+		)),
 		watchOptions: {},
 	};
 
