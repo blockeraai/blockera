@@ -36,6 +36,8 @@ export const registerIconUploadSvgHandler = (): void => {
 				'blockeraIcon',
 				{
 					...newValue,
+					icon: '',
+					library: '',
 					renderedIcon: renderedIcon.encodedIcon,
 				},
 				{
