@@ -32,7 +32,6 @@ import { IconPickerModalProvider } from '@blockera/controls/js/libs/icon-control
 import { useIconPickerModal } from '@blockera/controls/js/libs/icon-control/hooks/use-icon-picker-modal';
 import { useIconPreviewFileDrop } from '@blockera/controls/js/libs/icon-control/hooks/use-icon-preview-file-drop';
 import IconPickerModal from '@blockera/controls/js/libs/icon-control/components/icon-picker/icon-picker-modal';
-import CustomIconUploadUpgradePrompt from '@blockera/controls/js/libs/icon-control/components/icon-picker/custom-icon-upload-upgrade-prompt';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -149,11 +148,7 @@ export const CoreIconBlockToolbar = ({
 		onCommit: handlePickerCommit,
 	});
 
-	const {
-		handlePreviewFilesDrop,
-		isUploadUpgradeOpen,
-		closeUploadUpgradePrompt,
-	} = useIconPreviewFileDrop({
+	const { handlePreviewFilesDrop } = useIconPreviewFileDrop({
 		onCommitSvg: handleUseCustomIcon,
 	});
 
@@ -356,11 +351,6 @@ export const CoreIconBlockToolbar = ({
 			)}
 			<div {...blockProps}>
 				<DropZone onFilesDrop={handlePreviewFilesDrop} />
-
-				<CustomIconUploadUpgradePrompt
-					isOpen={isUploadUpgradeOpen}
-					onClose={closeUploadUpgradePrompt}
-				/>
 
 				<CoreIconLinkWrapper
 					href={href}

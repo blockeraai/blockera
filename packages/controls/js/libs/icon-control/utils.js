@@ -212,27 +212,6 @@ export function getCustomSvgDraft(icon) {
 }
 
 /**
- * Resolve FeatureWrapper type for custom icon upload controls.
- *
- * @return {'native'|'none'} Locked (`native`) on free; unlocked (`none`) when Pro filter is active.
- */
-export function getCustomIconFeatureType() {
-	return applyFilters(
-		'blockera.controls.iconControl.customIcon.featureType',
-		'native'
-	);
-}
-
-/**
- * Whether custom icon file upload (drop / media library) is locked to PRO.
- *
- * @return {boolean} True on free; false when Pro filter unlocks uploads.
- */
-export function isCustomIconUploadLocked() {
-	return getCustomIconFeatureType() === 'native';
-}
-
-/**
  * Read the first dropped SVG file as text.
  *
  * @param {FileList|File[]} files   Dropped files.

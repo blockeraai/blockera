@@ -476,3 +476,10 @@
 	button[role="tab"][data-focus-visible="true"]:first-child::after {
 	outline: none !important;
 }
+
+/**
+* Reduce the padding on the block types list items
+*/
+.components-button.block-editor-block-types-list__item {
+	padding: 8px 2px !important;
+}
