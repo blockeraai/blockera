@@ -523,7 +523,7 @@ if (! function_exists('blockera_get_global_styles_cache_hash')) {
 
 		// Build hash from: blockera version | theme version | (all) theme.json mtime(s) | parent info | user styles mtime.
 		$hash = md5(
-			BLOCKERA_SB_VERSION . '|' .
+			BLOCKERA_ONE_VERSION . '|' .
 			$theme_version . '|' .
 			$theme_json_mtime .
 			$styles_mtime .

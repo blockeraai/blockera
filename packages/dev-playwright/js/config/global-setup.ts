@@ -27,7 +27,7 @@ async function globalSetup(config: FullConfig) {
 
 	// Reset the test environment before running the tests.
 	await Promise.all([
-		requestUtils.activateTheme('twentytwentyfive'),
+		requestUtils.activateTheme('blockera-one'),
 		requestUtils.deleteAllPosts(),
 		requestUtils.deleteAllBlocks(),
 		requestUtils.resetPreferences(),

@@ -18,11 +18,11 @@ if ( ! function_exists( 'blockera_get_experimental' ) ) {
 		static $blockera_experimental_config_cache = null;
 
 		if ( null === $blockera_experimental_config_cache ) {
-			$blockera_experimental_config_file = BLOCKERA_SB_PATH . 'experimental.config.json';
+			$blockera_experimental_config_file = BLOCKERA_ONE_PATH . 'experimental.config.json';
 
 			### BEGIN DEV-ONLY LOCAL EXPERIMENTAL CONFIG
-			if ( defined( 'BLOCKERA_SB_MODE' ) && 'development' === BLOCKERA_SB_MODE ) {
-				$blockera_local_experimental_config_file = BLOCKERA_SB_PATH . 'local.experimental.config.json';
+			if ( defined( 'BLOCKERA_ONE_MODE' ) && 'development' === BLOCKERA_ONE_MODE ) {
+				$blockera_local_experimental_config_file = BLOCKERA_ONE_PATH . 'local.experimental.config.json';
 
 				if ( is_readable( $blockera_local_experimental_config_file ) ) {
 					$blockera_experimental_config_file = $blockera_local_experimental_config_file;

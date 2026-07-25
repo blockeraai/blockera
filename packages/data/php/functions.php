@@ -22,7 +22,7 @@ if (! function_exists('blockera_init_cache')) {
 	 */
 	function blockera_init_cache( array $params = []): bool {
 		// Use the new invalidateIfVersionChanged method which handles everything.
-		return ! blockera_get_cache($params)->invalidateIfVersionChanged( BLOCKERA_SB_VERSION );
+		return ! blockera_get_cache($params)->invalidateIfVersionChanged( BLOCKERA_ONE_VERSION );
 	}
 }
 

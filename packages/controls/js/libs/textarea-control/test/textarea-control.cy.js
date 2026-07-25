@@ -161,42 +161,4 @@ describe('textarea control component testing', () => {
 			});
 		});
 	});
-
-	describe('Auto Height', () => {
-		it('should grow above the 30px min height for multiline value', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <TextAreaControl height="auto" />,
-				name,
-				value: 'line one\nline two\nline three\nline four',
-			});
-
-			cy.get('textarea')
-				.should('have.css', 'min-height', '30px')
-				.and(($textarea) => {
-					expect($textarea[0].offsetHeight).to.be.greaterThan(30);
-				});
-		});
-
-		it('should increase height when more lines are typed', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <TextAreaControl height="auto" />,
-				name,
-				value: 'line one',
-			});
-
-			cy.get('textarea').then(($textarea) => {
-				const initialHeight = $textarea[0].offsetHeight;
-
-				cy.wrap($textarea)
-					.type('{enter}line two{enter}line three{enter}line four')
-					.should(($updated) => {
-						expect($updated[0].offsetHeight).to.be.greaterThan(
-							initialHeight
-						);
-					});
-			});
-		});
-	});
 });

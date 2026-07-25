@@ -481,11 +481,12 @@ if (! \class_exists(Coordinator::class)) {
 
 			$slug = array_key_first($this->plugins);
 
-			if ('blockera-pro' !== $slug || ! function_exists('is_plugin_active')) {
+			if ( 'blockera-pro' !== $slug ) {
 				return false;
 			}
 
-			return is_plugin_active('blockera/blockera.php');
+			// Free plugin already bootstrapped if its entry constant exists.
+			return defined( 'BLOCKERA_SB_FILE' );
 		}
 
 		/**

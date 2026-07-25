@@ -725,6 +725,6 @@ class AppServiceProvider extends ServiceProvider {
             load_textdomain('blockera', $mo_file);
         }
 
-        load_plugin_textdomain('blockera', false, dirname(plugin_basename(BLOCKERA_SB_FILE)) . '/languages');
+        load_plugin_textdomain('blockera', false, dirname(plugin_basename(BLOCKERA_ONE_FILE)) . '/languages');
     }
 }

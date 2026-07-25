@@ -93,7 +93,7 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 		$options     = blockera_get_admin_options();
 		$breakpoints = $options['general']['breakpoints'] ?? blockera_core_config('breakpoints.list');
 
-		if (! is_plugin_active('blockera-pro/blockera-pro.php') && ! blockera_is_skip_request()) {
+		if ( ! defined( 'BLOCKERA_PRO_FILE' ) && ! blockera_is_skip_request() ) {
 
 			$breakpoints = blockera_update_breakpoints($options, $breakpoints);
 		}

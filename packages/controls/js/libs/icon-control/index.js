@@ -31,6 +31,7 @@ import {
 } from './utils';
 import { Button, BaseControl, Tooltip } from '../index';
 import { default as IconPickerModal } from './components/icon-picker/icon-picker-modal';
+import CustomIconUploadUpgradePrompt from './components/icon-picker/custom-icon-upload-upgrade-prompt';
 import { useIconPickerModal } from './hooks/use-icon-picker-modal';
 import { useIconPreviewFileDrop } from './hooks/use-icon-preview-file-drop';
 
@@ -82,7 +83,11 @@ function IconControl({
 	});
 
 	const { currentIcon } = iconContextValue;
-	const { handlePreviewFilesDrop } = useIconPreviewFileDrop({
+	const {
+		handlePreviewFilesDrop,
+		isUploadUpgradeOpen,
+		closeUploadUpgradePrompt,
+	} = useIconPreviewFileDrop({
 		onCommitSvg: commitIconAction,
 	});
 
@@ -188,6 +193,11 @@ function IconControl({
 					onClick={openModal}
 				>
 					<DropZone onFilesDrop={handlePreviewFilesDrop} />
+
+					<CustomIconUploadUpgradePrompt
+						isOpen={isUploadUpgradeOpen}
+						onClose={closeUploadUpgradePrompt}
+					/>
 
 					{hasIcon() ? (
 						<div

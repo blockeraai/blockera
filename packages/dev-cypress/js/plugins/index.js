@@ -448,10 +448,9 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 	}
 
 	const options = {
-		webpackOptions: require(path.resolve(
-			__dirname,
-			'../webpack.config.js'
-		)),
+		webpackOptions: require(
+			path.resolve(__dirname, '../webpack.config.js')
+		),
 		watchOptions: {},
 	};
 

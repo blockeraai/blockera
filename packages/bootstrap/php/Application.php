@@ -1202,7 +1202,7 @@ abstract class Application {
      * @param  \Closure|null   $callback
      * @return void
      */
-    public function beforeResolving( $abstract, Closure $callback = null) {
+    public function beforeResolving( $abstract, Closure $callback) {
 		if (is_string($abstract)) {
             $abstract = $this->getAlias($abstract);
 		}
@@ -1221,7 +1221,7 @@ abstract class Application {
      * @param  \Closure|null   $callback
      * @return void
      */
-    public function resolving( $abstract, Closure $callback = null) {
+    public function resolving( $abstract, Closure $callback) {
 		if (is_string($abstract)) {
             $abstract = $this->getAlias($abstract);
 		}
@@ -1240,7 +1240,7 @@ abstract class Application {
      * @param  \Closure|null   $callback
      * @return void
      */
-    public function afterResolving( $abstract, Closure $callback = null) {
+    public function afterResolving( $abstract, Closure $callback) {
 		if (is_string($abstract)) {
             $abstract = $this->getAlias($abstract);
 		}
@@ -1514,7 +1514,7 @@ abstract class Application {
      * @param  \Blockera\Bootstrap\Contracts\Container\Container|null $container
      * @return \Blockera\Bootstrap\Contracts\Container\Container|static
      */
-    public static function setInstance( ContainerContract $container = null) {
+    public static function setInstance( ContainerContract $container) {
          return static::$instance = $container;
     }
 
