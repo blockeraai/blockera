@@ -22,14 +22,34 @@ env:
 
 jobs:
     performance_benchmark:
-        name: Server-Timing (Blockera vs Core)
+        name: ${{ matrix.name }}
         runs-on: ubuntu-latest
-        timeout-minutes: 90
+        timeout-minutes: 120
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                # `environment` is reserved for future targets (e.g. WooCommerce, PHP variants).
+                # `baseline` selects the comparison target for editor (and server-timing) suites.
+                include:
+                    - suite: server-timing
+                      baseline: core
+                      environment: default
+                      name: Server-Timing (Blockera vs Core)
+                    - suite: editor
+                      baseline: core
+                      environment: default
+                      name: Block Editor (PR vs Core)
+                    - suite: editor
+                      baseline: master
+                      environment: default
+                      name: Block Editor (PR vs Master)
 
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -68,17 +88,23 @@ jobs:
             - name: Install Playwright Chromium
               run: npx playwright install --with-deps chromium
 
+            # ── Server-Timing suite ──────────────────────────────────────────
+
             - name: Setup Server-Timing
+              if: ${{ matrix.suite == 'server-timing' }}
               run: bash .github/performance/scripts/setup-server-timing.sh
 
             - name: Setup benchmark content (page-1)
+              if: ${{ matrix.suite == 'server-timing' }}
               run: bash .github/performance/scripts/setup-content.sh
 
-            - name: Run benchmarks (Blockera / Core)
+            - name: Run Server-Timing benchmarks (Blockera / Core)
+              if: ${{ matrix.suite == 'server-timing' }}
               run: bash .github/performance/scripts/run-benchmarks.sh
 
-            - name: Compare results and enforce thresholds
+            - name: Compare Server-Timing results and enforce thresholds
               id: compare
+              if: ${{ matrix.suite == 'server-timing' }}
               continue-on-error: true
               run: |
                   set +e
@@ -87,7 +113,7 @@ jobs:
                   set -e
                   if [ ! -f .github/performance/results/report.md ]; then
                     mkdir -p .github/performance/results
-                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '# 📈 Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
+                    printf '%s\n' '<!-- blockera-perf-benchmark -->' '# 📈 Server-Timing Performance Report' '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > .github/performance/results/report.md
                   fi
                   if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f .github/performance/results/report.md ]; then
                     cat .github/performance/results/report.md >> "$GITHUB_STEP_SUMMARY"
@@ -95,35 +121,111 @@ jobs:
                   echo "has_report=true" >> "$GITHUB_OUTPUT"
                   exit "${code}"
 
-            - name: Comment report on PR
-              if: ${{ always() && github.event_name == 'pull_request' && steps.compare.outputs.has_report == 'true' }}
+            - name: Comment Server-Timing report on PR
+              if: ${{ always() && matrix.suite == 'server-timing' && github.event_name == 'pull_request' && steps.compare.outputs.has_report == 'true' }}
               uses: marocchino/sticky-pull-request-comment@v2
               with:
                   GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   header: blockera-perf-benchmark
                   path: .github/performance/results/report.md
 
-            - name: Fail job when thresholds exceeded
-              if: ${{ steps.compare.outcome == 'failure' }}
+            - name: Fail Server-Timing job when thresholds exceeded
+              if: ${{ matrix.suite == 'server-timing' && steps.compare.outcome == 'failure' }}
               run: |
-                  echo "Performance threshold gate failed. See the PR comment and artifacts."
+                  echo "Server-Timing threshold gate failed. See the PR comment and artifacts."
                   exit 1
 
-            - name: Upload benchmark artifacts
-              if: ${{ always() }}
+            - name: Upload Server-Timing artifacts
+              if: ${{ always() && matrix.suite == 'server-timing' }}
               uses: actions/upload-artifact@v4
               with:
-                  name: performance-benchmark
+                  name: performance-benchmark-server-timing
                   path: |
                       .github/performance/results/report.md
                       .github/performance/results/compare.json
                       .github/performance/results/resolved-scenarios.json
                       .github/performance/results/content-state.json
-                      artifacts/*performance-results.json
+                      artifacts/blockera-performance-results.json
+                      artifacts/core-performance-results.json
                       artifacts/performance-results.md
+                  if-no-files-found: ignore
+                  retention-days: 14
+
+            # ── Block Editor suite ───────────────────────────────────────────
+
+            - name: Run editor benchmarks (PR Blockera${{ matrix.baseline == 'core' && ' / Core' || '' }})
+              if: ${{ matrix.suite == 'editor' }}
+              env:
+                  PERF_BASELINE: ${{ matrix.baseline == 'core' && 'core' || 'current' }}
+                  PERF_CURRENT_PREFIX: blockera-editor
+                  PERF_BASELINE_PREFIX: core-editor
+                  PERF_SCENARIO_SCOPE: ${{ matrix.baseline == 'core' && 'core-comparable' || 'blockera-only' }}
+              run: bash .github/performance/scripts/run-editor-benchmarks.sh
+
+            - name: Build and run master Blockera baseline
+              if: ${{ matrix.suite == 'editor' && matrix.baseline == 'master' }}
+              env:
+                  PERF_SCENARIO_SCOPE: blockera-only
+                  PERF_MASTER_REF: origin/master
+              run: bash .github/performance/scripts/run-editor-master-baseline.sh
+
+            - name: Compare editor results and enforce thresholds
+              id: compare_editor
+              if: ${{ matrix.suite == 'editor' }}
+              continue-on-error: true
+              env:
+                  PERF_BASELINE: ${{ matrix.baseline }}
+                  PERF_CURRENT_PREFIX: blockera-editor
+                  PERF_BASELINE_PREFIX: ${{ matrix.baseline == 'master' && 'master-editor' || 'core-editor' }}
+                  PERF_EDITOR_REPORT_NAME: editor-report-${{ matrix.baseline }}.md
+                  PERF_EDITOR_COMPARE_NAME: editor-compare-${{ matrix.baseline }}.json
+              run: |
+                  set +e
+                  node tests/performance/compare-editor-results.js
+                  code=$?
+                  set -e
+                  REPORT=".github/performance/results/editor-report-${{ matrix.baseline }}.md"
+                  MARKER="<!-- blockera-editor-perf-benchmark-${{ matrix.baseline }} -->"
+                  if [ ! -f "$REPORT" ]; then
+                    mkdir -p .github/performance/results
+                    printf '%s\n' "$MARKER" "# 📈 Block Editor Performance Report (PR vs ${{ matrix.baseline }})" '' '_Compare step failed before writing a full report. Check workflow logs/artifacts._' '' > "$REPORT"
+                  fi
+                  if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -f "$REPORT" ]; then
+                    cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
+                  fi
+                  echo "has_report=true" >> "$GITHUB_OUTPUT"
+                  echo "report_path=$REPORT" >> "$GITHUB_OUTPUT"
+                  exit "${code}"
+
+            - name: Comment editor report on PR
+              if: ${{ always() && matrix.suite == 'editor' && github.event_name == 'pull_request' && steps.compare_editor.outputs.has_report == 'true' }}
+              uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  header: blockera-editor-perf-benchmark-${{ matrix.baseline }}
+                  path: .github/performance/results/editor-report-${{ matrix.baseline }}.md
+
+            - name: Fail editor job when thresholds exceeded
+              if: ${{ matrix.suite == 'editor' && steps.compare_editor.outcome == 'failure' }}
+              run: |
+                  echo "Block Editor threshold gate failed (baseline=${{ matrix.baseline }}). See the PR comment and artifacts."
+                  exit 1
+
+            - name: Upload editor artifacts
+              if: ${{ always() && matrix.suite == 'editor' }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: performance-benchmark-editor-${{ matrix.baseline }}-${{ matrix.environment }}
+                  path: |
+                      .github/performance/results/editor-report-${{ matrix.baseline }}.md
+                      .github/performance/results/editor-compare-${{ matrix.baseline }}.json
+                      artifacts/blockera-editor-performance-results.json
+                      artifacts/core-editor-performance-results.json
+                      artifacts/master-editor-performance-results.json
+                      artifacts/editor-performance-results.md
                   if-no-files-found: ignore
                   retention-days: 14
 
             - name: Stop WordPress Environment
               if: ${{ always() }}
-              run: npm run env:stop
+              run: npm run env:stop || true

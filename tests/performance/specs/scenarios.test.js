@@ -3,6 +3,11 @@
  *
  * Pattern adapted from WordPress core tests/performance/specs/*.test.js
  * URLs come from .github/performance/scenarios.json (resolved at content setup).
+ *
+ * Each scenario loads its URL once as an uncounted warm-up before measured runs.
+ *
+ * CI isolation: only `npm run test:performance` (tests/performance/playwright.config.js)
+ * runs this file. Root Playwright e2e, Cypress, and Jest ignore `tests/performance/**`.
  */
 
 const fs = require('node:fs');
@@ -60,6 +65,13 @@ test.describe('Scenario', () => {
 					body: JSON.stringify(results, null, 2),
 					contentType: 'application/json',
 				});
+			});
+
+			// One warm-up load so OPcache / object cache / assets settle.
+			// Metrics from this request are intentionally discarded.
+			test('Warm up URL load (not measured)', async ({ page }) => {
+				await page.goto('/?clear_cache');
+				await page.goto(scenarioPath(scenario));
 			});
 
 			for (let i = 1; i <= iterations; i++) {

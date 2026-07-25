@@ -4,8 +4,9 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { memo } from '@wordpress/element';
 
-export const Style = ({
+const StyleComponent = ({
 	declarations,
 }: {
 	declarations: string,
@@ -16,3 +17,8 @@ export const Style = ({
 
 	return <style>{declarations}</style>;
 };
+
+export const Style = memo(
+	StyleComponent,
+	(prev, next) => prev.declarations === next.declarations
+);

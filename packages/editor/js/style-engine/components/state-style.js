@@ -5,7 +5,7 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useState, useEffect, useMemo } from '@wordpress/element';
+import { useState, useEffect, useMemo, useRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -23,6 +23,7 @@ import { getComputedCssProps } from '../get-computed-css-props';
 import { MediaQuery } from './media-query';
 import type { StateStyleProps } from './types';
 import { combineDeclarations } from '../utils';
+import { getStateStyleFingerprint } from '../blockera-style-fingerprint';
 
 export const StateStyle = (
 	props: StateStyleProps
@@ -92,7 +93,27 @@ export const StateStyle = (
 		states.push(states.splice(0, 1)[0]);
 	}
 
+	const styleFingerprint = getStateStyleFingerprint(
+		props,
+		states,
+		breakpoints
+	);
+	const renderedStylesRef = useRef<{
+		fingerprint: string,
+		elements: Array<MixedElement> | MixedElement,
+	}>({
+		fingerprint: '',
+		elements: <></>,
+	});
+
 	return useMemo(() => {
+		if (
+			renderedStylesRef.current.fingerprint === styleFingerprint &&
+			renderedStylesRef.current.elements
+		) {
+			return renderedStylesRef.current.elements;
+		}
+
 		const devicesCssStyles: { [key: TBreakpoint]: Array<string> } = {};
 		const sortedBreakpoints: Object = sortBreakpoints(breakpoints);
 
@@ -130,7 +151,7 @@ export const StateStyle = (
 			devicesCssStyles[type] = stylesheet;
 		}
 
-		return Object.entries(devicesCssStyles).map(
+		const elements = Object.entries(devicesCssStyles).map(
 			(
 				[type, stylesheet]: [TBreakpoint, Array<string>],
 				i: number
@@ -149,7 +170,14 @@ export const StateStyle = (
 				);
 			}
 		);
-	}, [props, breakpoints, states]);
+
+		renderedStylesRef.current = {
+			fingerprint: styleFingerprint,
+			elements,
+		};
+
+		return elements;
+	}, [styleFingerprint, props.clientId]);
 };
 
 /**

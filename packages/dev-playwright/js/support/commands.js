@@ -587,6 +587,31 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
 }
 
 /**
+ * Sets a React-controlled text input in one shot (mirrors dev-cypress setControlledInputValue).
+ *
+ * @param {import('@playwright/test').Locator} locator - Input locator.
+ * @param {string} value - Final value.
+ * @return {Promise<void>}
+ */
+async function setControlledInputValue(locator, value) {
+	await locator.evaluate((el, nextValue) => {
+		const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+			window.HTMLInputElement.prototype,
+			'value'
+		)?.set;
+
+		if (nativeInputValueSetter) {
+			nativeInputValueSetter.call(el, nextValue);
+		} else {
+			el.value = nextValue;
+		}
+
+		el.dispatchEvent(new Event('input', { bubbles: true }));
+		el.dispatchEvent(new Event('change', { bubbles: true }));
+	}, value);
+}
+
+/**
  * Set color control value.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -595,14 +620,27 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
  * @return {Promise<void>}
  */
 async function setColorControlValue(page, label, value) {
-	const container = await getParentContainer(page, label);
-	await container.locator('[data-cy="color-btn"]').click();
+	const container = page
+		.locator(`[data-cy="base-control"]:has([aria-label="${label}"])`)
+		.last();
 
-	const popover = page.locator('.blockera-color-picker-popover').last();
-	await popover.locator('[data-cy="color-picker-css-value"]').clear();
-	await popover.locator('[data-cy="color-picker-css-value"]').fill(value);
-	await popover.locator('[data-cy="color-picker-css-value"]').blur();
+	await container.locator('[data-cy="color-btn"]').click({ force: true });
+
+	const popover = page
+		.locator('.blockera-color-picker-popover')
+		.filter({ visible: true })
+		.last();
+
+	await expect(popover).toBeVisible({ timeout: 15000 });
+
+	const cssValueInput = popover.locator('[data-cy="color-picker-css-value"]');
+	await cssValueInput.click();
+	// Mirror Cypress setControlledInputValue — avoid .fill() (keystroke-by-keystroke
+	// remounts/locks the picker) and avoid .blur() (focus-outside dismisses before close).
+	await setControlledInputValue(cssValueInput, value);
+
 	await popover.locator('[data-test="close-popover"]').click({ force: true });
+	await expect(popover).toBeHidden({ timeout: 15000 });
 }
 
 /**
@@ -637,6 +675,37 @@ async function clickValueAddonButton(page, container = null) {
 }
 
 /**
+ * Open the value addon variable picker (mirrors Cypress openValueAddon).
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {import('@playwright/test').Locator} container - Container locator (optional).
+ * @return {Promise<void>}
+ */
+async function openValueAddon(page, container = null) {
+	const targetContainer = container || page;
+	const plainColorButton = targetContainer
+		.locator('[data-cy="color-btn"]')
+		.first();
+
+	// Plain hex mode (Cypress background-color.global-styles beforeEach): open via pointer.
+	if (await plainColorButton.isVisible()) {
+		const pointer = targetContainer
+			.locator('.blockera-control-value-addon-pointers .var-pointer')
+			.first();
+		await expect(pointer).toBeVisible({ timeout: 20000 });
+		await pointer.click({ force: true });
+		return;
+	}
+
+	// Variable chip mode: pointer mousedown removes the variable; chip onClick opens picker.
+	const variableChip = targetContainer
+		.locator('[data-cy="value-addon-btn"]')
+		.first();
+	await expect(variableChip).toBeVisible({ timeout: 20000 });
+	await variableChip.click({ force: true });
+}
+
+/**
  * Select value addon item from popover.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -652,14 +721,15 @@ async function selectValueAddonItem(page, itemID) {
 	].join(', ');
 
 	const popover = page
-		.locator(
-			'[data-test="variable-picker-popover"], [data-cy="variable-picker-popover"], .components-popover.blockera-control-popover-variables, .blockera-control-popover-variables'
-		)
+		.locator('[data-test="variable-picker-popover"]')
 		.filter({ visible: true })
 		.first();
 
-	await popover.waitFor({ state: 'visible', timeout: 15000 });
-	await popover.locator(itemSelector).first().dispatchEvent('click');
+	await popover.waitFor({ state: 'visible', timeout: 20000 });
+
+	const item = popover.locator(itemSelector).first();
+	await item.scrollIntoViewIfNeeded();
+	await item.click({ force: true });
 }
 
 /**
@@ -1442,6 +1512,7 @@ module.exports = {
 	setColorControlValue,
 	clearColorControlValue,
 	clickValueAddonButton,
+	openValueAddon,
 	selectValueAddonItem,
 	removeValueAddon,
 	setBlockVariation,

@@ -467,27 +467,49 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 			shouldUpdateClassName: true,
 		}
 	) => {
-		const valueToStore = cloneObject(value);
-		const classNameStr = valueToStore.className ?? '';
+		const classNameStr = value?.className ?? '';
 		const match = BLOCKERA_BLOCK_REGEX.exec(classNameStr);
+		const needsClassNameRewrite =
+			(shouldUpdateClassName &&
+				/^is-(?:style|size)-/.test(classNameStr) &&
+				!/\s/g.test(classNameStr)) ||
+			(match &&
+				isClassNameDuplicate(
+					clientId,
+					match[0],
+					getBlocksClassNames()
+				));
+
+		let valueToStore = value;
+
+		if (needsClassNameRewrite) {
+			valueToStore = cloneObject(value);
+		}
+
+		const storedClassName = valueToStore.className ?? '';
+		const storedMatch = BLOCKERA_BLOCK_REGEX.exec(storedClassName);
 
 		// We should update classname with unique generate classname while customizing style variation.
 		if (
 			shouldUpdateClassName &&
-			/^is-(?:style|size)-/.test(classNameStr) &&
-			!/\s/g.test(classNameStr)
+			/^is-(?:style|size)-/.test(storedClassName) &&
+			!/\s/g.test(storedClassName)
 		) {
-			valueToStore.className = classNames(classNameStr, {
+			valueToStore.className = classNames(storedClassName, {
 				'blockera-block': true,
 				[uniqueClassName]: true,
 			});
 			registerClassName(clientId, uniqueClassName);
 		} else if (
 			shouldUpdateClassName &&
-			match &&
-			isClassNameDuplicate(clientId, match[0], getBlocksClassNames())
+			storedMatch &&
+			isClassNameDuplicate(
+				clientId,
+				storedMatch[0],
+				getBlocksClassNames()
+			)
 		) {
-			const prevClassName = classNameStr
+			const prevClassName = storedClassName
 				.replace(BLOCKERA_BLOCK_REGEX, '')
 				.replace(/\bblockera-block\b/gi, '');
 			valueToStore.className = classNames(prevClassName.trim(), {
@@ -496,8 +518,8 @@ const BlockBaseImpl = (_props: Object): Element<any> | null => {
 			});
 
 			registerClassName(clientId, uniqueClassName);
-		} else if (match && shouldUpdateClassName) {
-			registerClassName(clientId, match[0]);
+		} else if (storedMatch && shouldUpdateClassName) {
+			registerClassName(clientId, storedMatch[0]);
 		}
 
 		if (
