@@ -24,37 +24,8 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-// the fallback way to load the composer default autoloader.
-if (! is_plugin_active('blockera-pro/blockera-pro.php')) {
-	require_once __DIR__ . '/vendor/autoload.php';
-} else {
-	// the shared autoloader way to load the composer customized autoloader.
-	add_filter(
-        'blockera/autoloader-coordinator/plugins/dependencies',
-        function ( array $plugins): array {
-			$plugins['blockera'] = [
-				'dir' => __DIR__,
-				'priority' => 10,
-				'default' => true,
-			];
-
-			return $plugins;
-		}
-    );
-
-	// Register into shared autoload coordinator.
-	// This replaces vendor/autoload.php by loading directly from Composer-generated static files.
-	require_once __DIR__ . '/packages/autoloader-coordinator/loader.php';
-
-	// Register into shared autoload coordinator and bootstrap autoloading.
-	\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin();
-	\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
-
-	// Invalidate package manifest cache on plugin activation, deactivation, and upgrade.
-	add_action('activated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
-	add_action('deactivated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
-	add_action('upgrader_process_complete', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
-}
+require_once __DIR__ . '/packages/autoloader-coordinator/bootstrap.php';
+blockera_bootstrap_shared_autoloader('blockera', __DIR__, 10, ! defined('BLOCKERA_SB_FILE') || BLOCKERA_SB_FILE === __FILE__);
 ### END AUTO-GENERATED AUTOLOADER
 
 if (file_exists(__DIR__ . '/.env')) {
@@ -141,8 +112,10 @@ $blockera_block_supports = apply_filters(
 	blockera_get_available_block_supports()
 );
 
-// Initialize hooks on Front Controller.
-blockera_load('bootstrap.hooks', __DIR__);
+// Initialize hooks on Front Controller when this product owns the bootstrap.
+if ( BLOCKERA_SB_FILE === __FILE__ ) {
+	blockera_load('bootstrap.hooks', __DIR__);
+}
 
 add_action('init', 'blockera_init', 10);
 
