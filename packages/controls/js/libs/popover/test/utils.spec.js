@@ -939,6 +939,27 @@ describe('popover offset utils', () => {
 			expect(isOtherPopoverClosing(nestedPopover)).toBe(false);
 		});
 
+		it('isPopoverDismissIgnoredTarget ignores unregistered WordPress dropdown popovers such as gradient color pickers', () => {
+			const rootPopover = document.createElement('div');
+			rootPopover.className = 'blockera-component-popover';
+			const gradientPicker = document.createElement('div');
+			gradientPicker.className = 'components-custom-gradient-picker';
+			rootPopover.appendChild(gradientPicker);
+			document.body.appendChild(rootPopover);
+
+			const gradientDropdown = document.createElement('div');
+			gradientDropdown.className =
+				'components-popover components-dropdown__content components-custom-gradient-picker__control-point-dropdown';
+			const colorPicker = document.createElement('div');
+			colorPicker.className = 'react-colorful';
+			gradientDropdown.appendChild(colorPicker);
+			document.body.appendChild(gradientDropdown);
+
+			expect(
+				isPopoverDismissIgnoredTarget(rootPopover, colorPicker)
+			).toBe(true);
+		});
+
 		it('shouldIgnorePopoverFocusOutside ignores sketch-picker drag interaction', () => {
 			const popover = document.createElement('div');
 			popover.className = 'blockera-component-popover';
