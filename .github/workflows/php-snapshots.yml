@@ -117,13 +117,31 @@ jobs:
                   set -o pipefail
                   npm run test:snapshots:php | tee phpunit.log
 
-            # Verifies that PHPUnit actually runs in the first place. We want visibility
-            # into issues which can cause it to fail silently, so we check the output
-            # to verify that at least 500 tests have passed. This is an arbitrary
-            # number, but makes sure a drastic change doesn't happen without us noticing.
+            # Verifies PHPUnit actually ran the snapshot suite (guards against silent no-op).
+            # Expected count matches BlockeraTest::designNameProvider(): fixture dirs under
+            # tests/fixtures/*/ unless config.json sets "snapshot": false.
             - name: Check number of passed tests
               run: |
                   # Note: relies on PHPUnit execution to fail on test failure.
+                  expected_tests=0
+                  for design_dir in tests/fixtures/*/; do
+                    [ -d "$design_dir" ] || continue
+                    config_path="${design_dir}config.json"
+                    if [ -f "$config_path" ]; then
+                      # Skip only when snapshot is explicitly false (same as designNameProvider).
+                      if jq -e '.snapshot == false' "$config_path" >/dev/null 2>&1; then
+                        continue
+                      fi
+                    fi
+                    expected_tests=$((expected_tests + 1))
+                  done
+
+                  if [ "$expected_tests" -eq 0 ]; then
+                    echo "No snapshot fixtures found under tests/fixtures/*/ (or all have snapshot: false)."
+                    echo "Add fixtures or disable this workflow — refusing to treat an empty suite as success."
+                    exit 1
+                  fi
+
                   # Extract the number of executed tests from the log file.
                   if ! num_tests=$(grep -Eo 'OK \([0-9]+ tests' phpunit.log) ; then
                     if ! num_tests=$(grep -Eo 'Tests: [0-9]+, Assertions:' phpunit.log) ; then
@@ -132,7 +150,7 @@ jobs:
                   fi
                   # Extract just the number of tests from the string.
                   num_tests=$(echo "$num_tests" | grep -Eo '[0-9]+')
-                  if [ $num_tests -lt 54 ] ; then
-                    echo "Only $num_tests tests passed, which is much fewer than expected." && exit 1
+                  if [ "$num_tests" -lt "$expected_tests" ]; then
+                    echo "Only $num_tests tests passed, expected at least $expected_tests (from tests/fixtures)." && exit 1
                   fi
-                  echo "$num_tests tests passed."
+                  echo "$num_tests tests passed (expected at least $expected_tests)."
