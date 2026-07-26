@@ -1164,6 +1164,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					onChange={handleDescriptionChange}
 					columns="1.2fr 3fr"
 					data-test="global-styles-preset-description-field"
+					height={'auto'}
 				/>
 			</ControlContextProvider>
 
