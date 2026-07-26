@@ -15,7 +15,13 @@ import { Icon } from '@blockera/icons';
  */
 import { Button } from '../../../button';
 import MediaUploader from '../../../media-uploader';
-import { sanitizeRawSVGString } from '../../utils';
+import { FeatureWrapper } from '../../../feature-wrapper';
+import ConditionalWrapper from '../../../conditional-wrapper';
+import {
+	sanitizeRawSVGString,
+	getCustomIconFeatureType,
+	isCustomIconUploadLocked,
+} from '../../utils';
 import SvgEditorPreview from './svg-editor/svg-editor-preview';
 
 const SVG_PLACEHOLDER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -29,6 +35,8 @@ export default function CustomIconTab({
 }) {
 	const sanitizedDraft = sanitizeRawSVGString(draftSvgString);
 	const hasValidPreview = sanitizedDraft !== '';
+	const customIconFeatureType = getCustomIconFeatureType();
+	const isUploadLocked = isCustomIconUploadLocked();
 
 	const updateDraft = useCallback(
 		(svgString, uploadSVG = null) => {
@@ -122,22 +130,40 @@ export default function CustomIconTab({
 					</span>
 				</div>
 
-				<div
-					className={controlInnerClassNames(
-						'icon-picker-custom-icon-dropzone'
+				<ConditionalWrapper
+					condition={isUploadLocked}
+					wrapper={(children) => (
+						<FeatureWrapper
+							type={customIconFeatureType}
+							showText="always"
+							className={controlInnerClassNames(
+								'icon-picker-custom-icon-dropzone-wrapper'
+							)}
+						>
+							{children}
+						</FeatureWrapper>
 					)}
 				>
-					<textarea
+					<div
 						className={controlInnerClassNames(
-							'icon-picker-custom-icon-textarea'
+							'icon-picker-custom-icon-dropzone'
 						)}
-						value={draftSvgString}
-						onChange={(event) => handleSvgInput(event.target.value)}
-						onPaste={handlePaste}
-						placeholder={SVG_PLACEHOLDER}
-						spellCheck={false}
-					/>
-				</div>
+					>
+						<textarea
+							className={controlInnerClassNames(
+								'icon-picker-custom-icon-textarea'
+							)}
+							value={draftSvgString}
+							onChange={(event) =>
+								handleSvgInput(event.target.value)
+							}
+							onPaste={handlePaste}
+							placeholder={SVG_PLACEHOLDER}
+							spellCheck={false}
+							disabled={isUploadLocked}
+						/>
+					</div>
+				</ConditionalWrapper>
 
 				<div
 					className={controlInnerClassNames(
@@ -147,23 +173,43 @@ export default function CustomIconTab({
 					<span>{__('or', 'blockera')}</span>
 				</div>
 
-				<MediaUploader
-					allowedTypes={['image/svg+xml']}
-					onSelect={handleMediaSelect}
-					mode="browse"
-					render={({ open }) => (
-						<Button
+				<ConditionalWrapper
+					condition={isUploadLocked}
+					wrapper={(children) => (
+						<FeatureWrapper
+							type={customIconFeatureType}
+							showText="always"
 							className={controlInnerClassNames(
-								'icon-picker-custom-icon-browse-btn'
+								'icon-picker-custom-icon-browse-wrapper'
 							)}
-							onClick={(event) => handleBrowseClick(event, open)}
-							variant="secondary"
 						>
-							<Icon icon="image" library="wp" iconSize={18} />
-							{__('Browse WordPress Media Library', 'blockera')}
-						</Button>
+							{children}
+						</FeatureWrapper>
 					)}
-				/>
+				>
+					<MediaUploader
+						allowedTypes={['image/svg+xml']}
+						onSelect={handleMediaSelect}
+						mode="browse"
+						render={({ open }) => (
+							<Button
+								className={controlInnerClassNames(
+									'icon-picker-custom-icon-browse-btn'
+								)}
+								onClick={(event) =>
+									handleBrowseClick(event, open)
+								}
+								variant="secondary"
+							>
+								<Icon icon="image" library="wp" iconSize={18} />
+								{__(
+									'Browse WordPress Media Library',
+									'blockera'
+								)}
+							</Button>
+						)}
+					/>
+				</ConditionalWrapper>
 			</div>
 
 			<div

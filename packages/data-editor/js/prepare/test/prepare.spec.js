@@ -111,4 +111,3 @@ describe('API Preparing data property value testing...', () => {
 		expect(prepare(query, data)).toEqual(undefined);
 	});
 });
-

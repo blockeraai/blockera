@@ -1,10 +1,4 @@
-import {
-	savePage,
-	getWPDataObject,
-	getSelectedBlock,
-	redirectToFrontPage,
-	createPost,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost } from '@blockera/dev-cypress/js/helpers';
 
 // Import the missing icons utility
 import {
@@ -19,7 +13,7 @@ import {
 import searchLibraries1 from '../search-libraries.json';
 import searchLibraries2 from '../search-libraries-2.json';
 
-let searchLibraries = [...searchLibraries1, ...searchLibraries2];
+const searchLibraries = [...searchLibraries1, ...searchLibraries2];
 
 describe('Icon Libraries → Check all icons are available and search data', () => {
 	beforeEach(() => {
@@ -32,7 +26,7 @@ describe('Icon Libraries → Check all icons are available and search data', () 
 	 * @param {string} libraryId - The library ID
 	 * @return {string} JSON string with search data entries
 	 */
-	function generateSearchDataForLibrary(libraryId: string): string {
+	function generateSearchDataForLibrary(libraryId) {
 		const missingDetails = getMissingIconsDetails(libraryId);
 
 		if (missingDetails.length === 0) {
@@ -60,7 +54,7 @@ describe('Icon Libraries → Check all icons are available and search data', () 
 	 *
 	 * @return {Object} Object with library IDs as keys and JSON strings as values
 	 */
-	function generateAllSearchData(): { [string]: string } {
+	function generateAllSearchData() {
 		const result = {};
 
 		searchLibraries.forEach((libraryId) => {
