@@ -89,7 +89,7 @@ if (! function_exists('blockera_core_config')) {
             return false;
         }
 
-        $config_dir = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_ONE_PATH;
+        $config_dir = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
         $config     = require $config_dir . '/config/' . $config_files[ $firstNode ];
 
         // Iterate from index 1 (skip first node already processed).
@@ -425,7 +425,7 @@ if (! function_exists('blockera_load_script_translations')) {
             return;
         }
 
-        wp_set_script_translations( "@blockera/{$script}", 'blockera', BLOCKERA_ONE_PATH . '/languages' );
+        wp_set_script_translations( "@blockera/{$script}", 'blockera', BLOCKERA_SB_PATH . '/languages' );
     }
 }
 

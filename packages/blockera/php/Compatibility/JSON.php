@@ -322,7 +322,7 @@ class JSON extends \WP_Theme_JSON {
 		sort( $support_keys );
 
 		$parts = array(
-			'v'  => defined( 'BLOCKERA_ONE_VERSION' ) ? BLOCKERA_ONE_VERSION : '0',
+			'v'  => defined( 'BLOCKERA_SB_VERSION' ) ? BLOCKERA_SB_VERSION : '0',
 			'b'  => md5( implode( ',', array_keys( $blocks ) ) ),
 			'sv' => md5( implode( ',', $style_variation_names ) ),
 			'sp' => md5( $style_variation_prefix ),

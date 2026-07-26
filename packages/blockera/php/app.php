@@ -16,7 +16,7 @@ if (! blockera_is_frontend_request() && ! blockera_is_editor_request() && ! bloc
     return;
 }
 
-global $blockera_one, $blockera_one_cache_key, $blockera_one_cache_group, $blockera_one_block_supports;
+global $blockera, $blockera_cache_key, $blockera_cache_group, $blockera_block_supports;
 
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
@@ -24,19 +24,19 @@ blockera_add_icon_style_definitions();
 blockera_register_core_icon_navigation_hooks();
 
 // Add blockera object cache to non persistent group to compatible with third party cache plugins.
-$blockera_one_cache_group = 'plugins';
-$blockera_one_cache_key = 'blockera_instance' . BLOCKERA_ONE_VERSION;
+$blockera_cache_group = 'plugins';
+$blockera_cache_key = 'blockera_instance' . BLOCKERA_SB_VERSION;
 
 // Initialize static cache.
-$blockera_one_cache = wp_cache_get($blockera_one_cache_key, $blockera_one_cache_group);
+$blockera_cache = wp_cache_get($blockera_cache_key, $blockera_cache_group);
 
-if ($blockera_one_cache !== false) {
-    $blockera_one = $blockera_one_cache;
+if ($blockera_cache !== false) {
+    $blockera = $blockera_cache;
 } else {
     // Optimize class initialization.
-    $blockera_one = \Blockera\Setup\Blockera::getInstance();
+    $blockera = \Blockera\Setup\Blockera::getInstance();
     // Cache the instance.
-    wp_cache_set($blockera_one_cache_key, $blockera_one, $blockera_one_cache_group);
+    wp_cache_set($blockera_cache_key, $blockera, $blockera_cache_group);
 }
 
 // Conditional loading based on context.
@@ -49,14 +49,14 @@ if (blockera_is_admin()) {
 blockera_load('telemetry.php.hooks', $external_dir);
 
 // Set the block supports.
-$blockera_one->setBlockSupports($blockera_one_block_supports);
+$blockera->setBlockSupports($blockera_block_supports);
 // Initialize core components with optimized bootstrap.
-$blockera_one->bootstrap();
+$blockera->bootstrap();
 
 // Register shutdown function for cleanup.
 function blockera_cleanup_cache() {
-    global $blockera_one_cache_key, $blockera_one_cache_group;
+    global $blockera_cache_key, $blockera_cache_group;
 
-    wp_cache_delete($blockera_one_cache_key, $blockera_one_cache_group);
+    wp_cache_delete($blockera_cache_key, $blockera_cache_group);
 }
 add_action('shutdown', 'blockera_cleanup_cache');

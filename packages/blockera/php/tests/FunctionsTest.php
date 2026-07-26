@@ -144,7 +144,7 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 			],
 			[
 				'path'     => 'app.version',
-				'expected' => BLOCKERA_ONE_VERSION,
+				'expected' => BLOCKERA_SB_VERSION,
 			],
 			[
 				'path'     => 'app.namespaces.controllers',
