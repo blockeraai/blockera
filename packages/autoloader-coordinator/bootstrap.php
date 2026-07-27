@@ -5,6 +5,10 @@
  * @package blockera/autoloader-coordinator
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if (! function_exists('blockera_bootstrap_shared_autoloader')) {
 	/**
 	 * Register a Blockera product with the shared autoload coordinator.
