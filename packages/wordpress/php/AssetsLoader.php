@@ -95,11 +95,13 @@ class AssetsLoader {
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
 			// Editor UI scripts stay in the parent document.
-			add_action( 'enqueue_block_editor_assets', [ $this, 'enqueueScripts' ] );
+			// accepted_args=0: WP's do_action() injects '' when called with no args, which
+			// would coerce a bool $is_admin param to false and skip the admin gate.
+			add_action( 'enqueue_block_editor_assets', [ $this, 'enqueueScripts' ], 10, 0 );
 			// Canvas styles must use enqueue_block_assets so WordPress includes them in
 			// `_wp_get_iframed_editor_assets()` (avoids Gutenberg's
 			// "added to the iframe incorrectly" compatibility warning).
-			add_action( 'enqueue_block_assets', [ $this, 'enqueueStyles' ] );
+			add_action( 'enqueue_block_assets', [ $this, 'enqueueStyles' ], 10, 0 );
 
 		} elseif ( ! empty( $args['enqueue-admin-assets'] ) ) {
 
@@ -118,14 +120,18 @@ class AssetsLoader {
 	 *
 	 * Hooked to `enqueue_block_assets` so styles are collected into
 	 * `__unstableResolvedAssets` instead of being cloned from the parent document.
-	 *
-	 * @param bool $is_admin Whether this enqueue is intended for admin context.
+	 * Editor-only: must not load on the front end (Plugin Check EnqueuedStylesScope).
 	 *
 	 * @return void
 	 */
-	public function enqueueStyles( bool $is_admin = true ): void {
+	public function enqueueStyles(): void {
 
-		$this->enqueue( $is_admin, 'styles' );
+		// Defense in depth: never trust action args for the admin gate (see constructor).
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$this->enqueue( true, 'styles' );
 	}
 
 	/**
@@ -133,13 +139,11 @@ class AssetsLoader {
 	 *
 	 * Hooked to `enqueue_block_editor_assets` (parent frame only).
 	 *
-	 * @param bool $is_admin Whether this enqueue is intended for admin context.
-	 *
 	 * @return void
 	 */
-	public function enqueueScripts( bool $is_admin = true ): void {
+	public function enqueueScripts(): void {
 
-		$this->enqueue( $is_admin, 'scripts' );
+		$this->enqueue( true, 'scripts' );
 	}
 
 	/**
