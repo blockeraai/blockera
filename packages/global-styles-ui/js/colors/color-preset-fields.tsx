@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 import {
 	useCallback,
 	memo,
@@ -25,6 +26,7 @@ import {
 	ControlContextProvider,
 	Flex,
 	NoticeControl,
+	UpgradePrompt,
 	useControlContext,
 	RepeaterContext,
 	BaseControl,
@@ -77,6 +79,17 @@ const GLOBAL_STYLES_COLOR_CONTEXT = {
 	attribute: 'blockeraColor',
 	blockName: 'global-styles',
 } as const;
+
+/**
+ * Free: shade-step ColorControls open UpgradePrompt.
+ * Pro unlocks via filter returning true (see blockera-pro unlockGlobalStyles).
+ */
+export const COLOR_SHADE_EDIT_COLORS_FILTER =
+	'blockera.globalStyles.colorShades.canEditShadeColors';
+
+function canEditColorShadeColors(): boolean {
+	return applyFilters(COLOR_SHADE_EDIT_COLORS_FILTER, false) === true;
+}
 
 const chromelessColorFieldProps = {
 	label: '',
@@ -527,6 +540,7 @@ function ColorPresetFieldsComponent({
 
 	const [shadeConsentOpen, setShadeConsentOpen] = useState(false);
 	const [shadeToggleConfirmed, setShadeToggleConfirmed] = useState(false);
+	const [isShadeEditUpgradeOpen, setIsShadeEditUpgradeOpen] = useState(false);
 
 	const applyShadeToggle = useCallback(
 		(enabled: boolean) => {
@@ -867,6 +881,7 @@ function ColorPresetFieldsComponent({
 		return null;
 	}
 
+	const canEditShadeColors = canEditColorShadeColors();
 	const displayToggleChecked = shadeConsentOpen ? false : shadesSaved;
 
 	let previewColor = colorItem.color;
@@ -946,7 +961,22 @@ function ColorPresetFieldsComponent({
 													trailing={
 														<>
 															{displayToggleChecked ? (
-																<VariableVariationsFieldsEditorSlot>
+																<VariableVariationsFieldsEditorSlot
+																	onClickCapture={
+																		canEditShadeColors ||
+																		presetLocked
+																			? undefined
+																			: (
+																					event
+																				) => {
+																					event.preventDefault();
+																					event.stopPropagation();
+																					setIsShadeEditUpgradeOpen(
+																						true
+																					);
+																				}
+																	}
+																>
 																	<GlobalStylesChromelessShadeRampRow
 																		baseSlug={
 																			effectiveBaseSlug
@@ -1058,6 +1088,35 @@ function ColorPresetFieldsComponent({
 					</VariableVariationsFieldsSection>
 				</Flex>
 			</SharedPresetControls>
+
+			{!canEditShadeColors ? (
+				<UpgradePrompt
+					type="modal"
+					data-test="promote-color-shade-edit"
+					isOpen={isShadeEditUpgradeOpen}
+					onClose={() => setIsShadeEditUpgradeOpen(false)}
+					lockedFeature={{
+						icon: <Icon icon="wp-colors" iconSize={26} />,
+						title: __('Edit Color Shade Variables', 'blockera'),
+						description: (
+							<Flex direction="column" gap="6px">
+								{__(
+									'Customize each shade in the ramp for precise design-system colors',
+									'blockera'
+								)}
+								<Flex direction="row" gap="6px">
+									<span className="blockera-free-plan-hint">
+										{__('Free: View only', 'blockera')}
+									</span>
+									<span className="blockera-pro-plan-hint">
+										{__('Pro: Full edit', 'blockera')}
+									</span>
+								</Flex>
+							</Flex>
+						),
+					}}
+				/>
+			) : null}
 		</Flex>
 	);
 }
