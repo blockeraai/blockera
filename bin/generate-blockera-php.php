@@ -69,9 +69,6 @@ while (true) {
 require_once __DIR__ . '/inc/bootstrap.php';
 blockera_bootstrap_shared_autoloader('blockera', __DIR__, 10, ! defined('BLOCKERA_SB_FILE') || BLOCKERA_SB_FILE === __FILE__);
 
-// Fallback Composer autoloader for non-Blockera vendor packages.
-require __DIR__ . '/vendor/autoload.php';
-
 PHP;
 			break;
 
