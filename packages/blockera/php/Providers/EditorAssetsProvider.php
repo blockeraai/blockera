@@ -16,11 +16,11 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 	/**
-	 * Enqueue Blockera canvas-only CSS into the editor iframe.
+	 * Enqueue Blockera canvas CSS into the editor iframe.
 	 *
-	 * Uses the core enqueue pipeline (enqueue_block_assets) so styles are loaded
-	 * where WordPress expects (including the editor-canvas iframe), instead of
-	 * injecting CSS via editor settings.
+	 * Uses the core enqueue pipeline (`enqueue_block_assets`) so styles are loaded
+	 * via `_wp_get_iframed_editor_assets()` instead of being cloned from the parent
+	 * document (which triggers Gutenberg's iframe compatibility warning).
 	 *
 	 * @return void
 	 */
@@ -35,12 +35,19 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return;
 		}
 
+		$version = blockera_core_config( 'app.version' );
 		$handle  = 'blockera-editor-canvas';
 		$src     = blockera_core_config( 'app.root_url' ) . 'packages/editor/js/editor/editor-canvas-style.css';
-		$version = blockera_core_config( 'app.version' );
 
 		wp_register_style( $handle, $src, [], $version );
 		wp_enqueue_style( $handle );
+
+		// Feature/block package editor.css files target canvas content (`.wp-block*`).
+		$base_url  = blockera_core_config( 'app.vendor_url' ) . 'blockera/';
+		$base_path = blockera_core_config( 'app.vendor_path' ) . 'blockera/';
+
+		blockera_enqueue_blocks_editor_styles( $base_path, $base_url, $version );
+		blockera_enqueue_features_editor_styles( $base_path, $base_url, $version );
 	}
 
 	/**
@@ -98,18 +105,6 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'l10n' ] );
 
-		add_action(
-            'enqueue_block_editor_assets',
-            function () {
-                $version   = blockera_core_config('app.version');
-                $base_url  = blockera_core_config('app.vendor_url') . 'blockera/';
-				$base_path = blockera_core_config( 'app.vendor_path' ) . 'blockera/';
-
-				blockera_enqueue_blocks_editor_styles($base_path, $base_url, $version);
-				blockera_enqueue_features_editor_styles($base_path, $base_url, $version);
-			} 
-        );
-		
 		add_action( 'enqueue_block_assets', [ $this, 'enqueueCanvasIframeStyles' ], 20 );
 	}
 
