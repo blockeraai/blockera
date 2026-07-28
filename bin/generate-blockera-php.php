@@ -65,13 +65,11 @@ while (true) {
 		case '### BEGIN AUTO-GENERATED AUTOLOADER':
 			$inside_defines = true;
 			echo $line;
-			echo "require_once __DIR__ . '/inc/class-shared-autoload-coordinator.php';
-\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
-\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+			echo <<<'PHP'
+require_once __DIR__ . '/inc/bootstrap.php';
+blockera_bootstrap_shared_autoloader('blockera', __DIR__, 10, ! defined('BLOCKERA_SB_FILE') || BLOCKERA_SB_FILE === __FILE__);
 
-// loading autoloader.
-require __DIR__ . '/vendor/autoload.php';
-";
+PHP;
 			break;
 
 		case '### END AUTO-GENERATED AUTOLOADER':

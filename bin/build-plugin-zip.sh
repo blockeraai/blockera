@@ -126,6 +126,7 @@ status "Generating inc/app.php 📝"
 mkdir -p "inc"
 cp packages/blockera/php/app.php inc/app.php
 cp packages/autoloader-coordinator/class-shared-autoload-coordinator.php inc/class-shared-autoload-coordinator.php
+cp packages/autoloader-coordinator/bootstrap.php inc/bootstrap.php
 
 build_files=$(
 	ls dist/*/*.{min.js,min.css,asset.php} \

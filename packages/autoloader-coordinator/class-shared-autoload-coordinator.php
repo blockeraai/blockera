@@ -36,6 +36,9 @@ if (! \class_exists(Coordinator::class)) {
 		/** @var bool */
 		private bool $autoloader_registered = false;
 
+		/** @var bool */
+		private bool $native_composer_bootstrapped = false;
+
 		/**
 		 * Combined ClassLoader instance for all plugins.
          *
@@ -50,6 +53,13 @@ if (! \class_exists(Coordinator::class)) {
 		 * @var array<string,bool>
 		 */
 		private array $included_files = [];
+
+		/**
+		 * Normalized autoload file paths already included (prevents duplicate requires).
+		 *
+		 * @var array<string,bool>
+		 */
+		private array $included_file_paths = [];
 
 		/**
 		 * Cached prepared package files for the current request.
@@ -89,7 +99,7 @@ if (! \class_exists(Coordinator::class)) {
 		/**
 		 * Cached autoload policy per vendor/plugin pair (computed once per request).
 		 *
-		 * @var array<string,array{include_dev:bool,skip_vendor_dev_filter:bool,allowed_packages:?array<string,bool>,dev_dir_prefixes:array<int,string>,dev_exact_paths:array<string,bool>}>
+		 * @var array<string,array{include_dev:bool,skip_vendor_dev_filter:bool,allowed_packages:?array<string,bool>,dev_dir_prefixes:array<int,string>,dev_exact_paths:array<string,bool>,runtime_excluded_files:array<string,bool>,runtime_excluded_dirs:array<int,string>}>
 		 */
 		private array $autoload_policy_by_key = [];
 
@@ -225,15 +235,19 @@ if (! \class_exists(Coordinator::class)) {
 				);
 			}
 
-			$this->registerAutoloader();
-
-			if (2 <= $plugin_count && $this->bootstrapped) {
-				$this->maybeCoordinate();
+			if ($this->canUseNativeComposerAutoload()) {
+				$this->bootstrapNativeComposerAutoload();
 			} else {
-				$this->ensureAutoloadManifestIsBuilt();
+				$this->registerAutoloader();
 
-				if (! $this->shouldDeferFileInclusionUntilCompanionRegisters()) {
-					$this->includeAutoloadFiles();
+				if (2 <= $plugin_count && $this->bootstrapped) {
+					$this->maybeCoordinate();
+				} else {
+					$this->ensureAutoloadManifestIsBuilt();
+
+					if (! $this->shouldDeferFileInclusionUntilCompanionRegisters()) {
+						$this->includeAutoloadFiles();
+					}
 				}
 			}
 
@@ -241,6 +255,67 @@ if (! \class_exists(Coordinator::class)) {
 				$callback();
 			}
         }
+
+		/**
+		 * Whether the native Composer autoloader can replace manual bootstrap.
+		 * Single-product installs with matching Composer metadata use vendor/autoload.php
+		 * (same path as pre-coordinator Blockera) with near-zero coordinator overhead.
+		 */
+		private function canUseNativeComposerAutoload(): bool {
+			if (1 !== count($this->plugins)) {
+				return false;
+			}
+
+			if ($this->shouldDeferFileInclusionUntilCompanionRegisters()) {
+				return false;
+			}
+
+			$plugin = reset($this->plugins);
+
+			if (! is_array($plugin) || ! is_file($plugin['vendor_dir'] . '/autoload.php')) {
+				return false;
+			}
+
+			$context = $this->getInstalledPackagesContext($plugin['vendor_dir']);
+
+			// Production install (`composer install --no-dev`): Composer autoload matches runtime.
+			if (null === $context || empty($context['include_dev'])) {
+				return true;
+			}
+
+			// Dev install: native autoload only when dev runtime explicitly allows dev deps.
+			return $this->isBlockeraDevelopmentRuntime();
+		}
+
+		/**
+		 * Bootstrap via Composer's optimized vendor/autoload.php (single-plugin fast path).
+		 */
+		private function bootstrapNativeComposerAutoload(): void {
+			if ($this->native_composer_bootstrapped) {
+				return;
+			}
+
+			$plugin = reset($this->plugins);
+
+			require_once $plugin['vendor_dir'] . '/autoload.php';
+
+			$this->native_composer_bootstrapped = true;
+			$this->bootstrapped                 = true;
+			$this->autoloader_registered        = true;
+		}
+
+		/**
+		 * Whether autoload entries need per-path dev/runtime filtering.
+		 *
+		 * @param array $policy Autoload policy.
+		 */
+		private function shouldFilterAutoloadPaths( array $policy): bool {
+			if (! empty($policy['skip_vendor_dev_filter'])) {
+				return ! empty($policy['runtime_excluded_files']) || ! empty($policy['runtime_excluded_dirs']);
+			}
+
+			return true;
+		}
 
 		/**
 		 * Register the autoloader immediately.
@@ -313,14 +388,57 @@ if (! \class_exists(Coordinator::class)) {
 		}
 
 		/**
+		 * Whether Blockera is running in an explicit development runtime.
+		 * Defaults to production-safe behavior during WordPress bootstrap.
+		 */
+		private function isBlockeraDevelopmentRuntime(): bool {
+			if (defined('BLOCKERA_SB_MODE') && 'production' === BLOCKERA_SB_MODE) {
+				return false;
+			}
+
+			if (defined('BLOCKERA_PRO_APP_MODE') && 'production' === BLOCKERA_PRO_APP_MODE) {
+				return false;
+			}
+
+			$app_mode = null;
+
+			if (isset($_ENV['APP_MODE'])) {
+				$app_mode = sanitize_text_field(wp_unslash($_ENV['APP_MODE']));
+			} elseif (isset($_SERVER['APP_MODE'])) {
+				$app_mode = sanitize_text_field(wp_unslash($_SERVER['APP_MODE']));
+			} else {
+				$env_value = getenv('APP_MODE');
+
+				if (false !== $env_value && is_string($env_value)) {
+					$app_mode = sanitize_text_field($env_value);
+				}
+			}
+
+			if (null !== $app_mode && 'development' === $app_mode) {
+				return true;
+			}
+
+			if (defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE) {
+				return true;
+			}
+
+			if (defined('BLOCKERA_PRO_APP_MODE') && 'development' === BLOCKERA_PRO_APP_MODE) {
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
 		 * Resolve autoload policy for a plugin vendor tree (computed once, cached per request).
 		 *
 		 * Production installs (`composer install --no-dev`) already omit dev autoload entries
-		 * from vendor/composer/autoload_*.php, so we skip per-path filtering on that hot path.
+		 * from vendor/composer/autoload_*.php. When Composer was installed with dev dependencies
+		 * but Blockera is running in production mode, dev paths are filtered at runtime.
 		 *
 		 * @param string $vendorDir Vendor directory path.
 		 * @param string $pluginDir Plugin root directory path.
-		 * @return array{include_dev:bool,skip_vendor_dev_filter:bool,allowed_packages:?array<string,bool>,dev_dir_prefixes:array<int,string>,dev_exact_paths:array<string,bool>}
+		 * @return array{include_dev:bool,skip_vendor_dev_filter:bool,allowed_packages:?array<string,bool>,dev_dir_prefixes:array<int,string>,dev_exact_paths:array<string,bool>,runtime_excluded_files:array<string,bool>,runtime_excluded_dirs:array<int,string>}
 		 */
 		private function getAutoloadPolicy( string $vendorDir, string $pluginDir): array {
 			$cacheKey = $this->getAutoloadPolicyCacheKey($vendorDir, $pluginDir);
@@ -329,12 +447,22 @@ if (! \class_exists(Coordinator::class)) {
 				return $this->autoload_policy_by_key[ $cacheKey ];
 			}
 
-			$context    = $this->getInstalledPackagesContext($vendorDir);
-			$includeDev = $context['include_dev'] ?? false;
+			$context             = $this->getInstalledPackagesContext($vendorDir);
+			$composerIncludesDev = $context['include_dev'] ?? false;
+			$includeDev          = $composerIncludesDev && $this->isBlockeraDevelopmentRuntime();
 
 			$allowedPackages = null;
 			$devDirPrefixes  = [];
 			$devExactPaths   = [];
+			$runtimeExcluded = [
+				'files' => [],
+				'dirs'  => [],
+			];
+
+			// Root autoload-dev paths are only relevant when dev packages remain in vendor metadata.
+			if ($composerIncludesDev && ! $includeDev) {
+				$runtimeExcluded = $this->getRootAutoloadDevPathRules($pluginDir);
+			}
 
 			if (null !== $context) {
 				if ($includeDev) {
@@ -356,23 +484,17 @@ if (! \class_exists(Coordinator::class)) {
 
 						$devDirPrefixes[] = $prefix . '/';
 					}
-
-					$rootDevRules = $this->getRootAutoloadDevPathRules($pluginDir);
-
-					foreach ($rootDevRules['dirs'] as $dirPrefix) {
-						$devDirPrefixes[] = $dirPrefix;
-					}
-
-					$devExactPaths = $rootDevRules['files'];
 				}
 			}
 
 			$policy = [
 				'include_dev'              => $includeDev,
-				'skip_vendor_dev_filter'   => ! $includeDev && is_file($vendorDir . '/composer/autoload_psr4.php'),
+				'skip_vendor_dev_filter'   => ! $composerIncludesDev && is_file($vendorDir . '/composer/autoload_psr4.php'),
 				'allowed_packages'         => $allowedPackages,
 				'dev_dir_prefixes'         => $devDirPrefixes,
 				'dev_exact_paths'          => $devExactPaths,
+				'runtime_excluded_files'   => $runtimeExcluded['files'],
+				'runtime_excluded_dirs'    => $runtimeExcluded['dirs'],
 			];
 
 			$this->autoload_policy_by_key[ $cacheKey ]              = $policy;
@@ -391,6 +513,16 @@ if (! \class_exists(Coordinator::class)) {
 				return $this->include_dev_dependencies_by_vendor[ $vendorDir ];
 			}
 
+			foreach ($this->plugins as $plugin) {
+				if ($plugin['vendor_dir'] !== $vendorDir) {
+					continue;
+				}
+
+				$policy = $this->getAutoloadPolicy($vendorDir, $plugin['plugin_dir']);
+
+				return $policy['include_dev'];
+			}
+
 			$context = $this->getInstalledPackagesContext($vendorDir);
 
 			if (null === $context) {
@@ -398,9 +530,11 @@ if (! \class_exists(Coordinator::class)) {
 				return false;
 			}
 
-			$this->include_dev_dependencies_by_vendor[ $vendorDir ] = $context['include_dev'];
+			$includeDev = $context['include_dev'] && $this->isBlockeraDevelopmentRuntime();
 
-			return $context['include_dev'];
+			$this->include_dev_dependencies_by_vendor[ $vendorDir ] = $includeDev;
+
+			return $includeDev;
 		}
 
 		/**
@@ -463,6 +597,8 @@ if (! \class_exists(Coordinator::class)) {
 
 		/**
 		 * Resolve root-project autoload-dev path rules from composer.json.
+		 * These paths are excluded from WordPress runtime autoloading in all modes.
+		 * PHPUnit bootstraps load them explicitly.
 		 *
 		 * @param string $pluginDir Plugin root directory path.
 		 * @return array{files:array<string,bool>,dirs:array<int,string>}
@@ -548,6 +684,46 @@ if (! \class_exists(Coordinator::class)) {
 		}
 
 		/**
+		 * Check whether an autoload path is excluded from WordPress runtime loading.
+		 *
+		 * @param string $path   File or directory path.
+		 * @param array  $policy Autoload policy.
+		 */
+		private function isRuntimeExcludedAutoloadPath( string $path, array $policy): bool {
+			$normalized = $this->normalizePath($path);
+
+			if (! empty($policy['runtime_excluded_files'][ $normalized ])) {
+				return true;
+			}
+
+			foreach ($policy['runtime_excluded_dirs'] ?? [] as $prefix) {
+				if (rtrim($prefix, '/\\') === $normalized || 0 === strpos($normalized, $prefix)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Decide whether an autoload path should be skipped for the current request.
+		 *
+		 * @param string $path   File or directory path.
+		 * @param array  $policy Autoload policy.
+		 */
+		private function shouldSkipAutoloadPath( string $path, array $policy): bool {
+			if ($this->isRuntimeExcludedAutoloadPath($path, $policy)) {
+				return true;
+			}
+
+			if (! empty($policy['skip_vendor_dev_filter'])) {
+				return false;
+			}
+
+			return $this->isDevAutoloadPathForPolicy($path, $policy);
+		}
+
+		/**
 		 * Remove dev dependency entries from a Composer classmap.
 		 *
 		 * @param array<string,string> $classmap Composer classmap.
@@ -555,14 +731,14 @@ if (! \class_exists(Coordinator::class)) {
 		 * @return array<string,string>
 		 */
 		private function filterDevAutoloadClassmapForPolicy( array $classmap, array $policy): array {
-			if (empty($policy['dev_dir_prefixes']) && empty($policy['dev_exact_paths'])) {
+			if (! $this->shouldFilterAutoloadPaths($policy)) {
 				return $classmap;
 			}
 
 			$filtered = [];
 
 			foreach ($classmap as $className => $filePath) {
-				if ($this->isDevAutoloadPathForPolicy( (string) $filePath, $policy)) {
+				if ($this->shouldSkipAutoloadPath( (string) $filePath, $policy)) {
 					continue;
 				}
 
@@ -580,14 +756,14 @@ if (! \class_exists(Coordinator::class)) {
 		 * @return array<string,string>
 		 */
 		private function filterDevAutoloadFilesForPolicy( array $files, array $policy): array {
-			if (empty($policy['dev_dir_prefixes']) && empty($policy['dev_exact_paths'])) {
+			if (! $this->shouldFilterAutoloadPaths($policy)) {
 				return $files;
 			}
 
 			$filtered = [];
 
 			foreach ($files as $identifier => $filePath) {
-				if ($this->isDevAutoloadPathForPolicy( (string) $filePath, $policy)) {
+				if ($this->shouldSkipAutoloadPath( (string) $filePath, $policy)) {
 					continue;
 				}
 
@@ -595,51 +771,6 @@ if (! \class_exists(Coordinator::class)) {
 			}
 
 			return $filtered;
-		}
-
-		/**
-		 * Collect root-project autoload-dev metadata for package fallback mode.
-		 *
-		 * @param array{plugin_dir:string,vendor_dir:string,packages_dir:string} $plugin Plugin data.
-		 * @return array{files:array<string,string>,psr4:array<string,array<int,string>>}
-		 */
-		private function collectRootComposerAutoloadDev( array $plugin): array {
-			$result = [
-				'files' => [],
-				'psr4'  => [],
-			];
-
-			if (! $this->shouldIncludeDevDependencies($plugin['vendor_dir'])) {
-				return $result;
-			}
-
-			$composerJson = $plugin['plugin_dir'] . '/composer.json';
-
-			if (! is_file($composerJson)) {
-				return $result;
-			}
-
-			$json = @file_get_contents($composerJson);
-
-			if (false === $json) {
-				return $result;
-			}
-
-			$data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
-
-			if (! is_array($data)) {
-				return $result;
-			}
-
-			$package_name = isset($data['name']) ? (string) $data['name'] : $composerJson;
-
-			return $this->appendComposerAutoloadSections(
-				$data['autoload-dev'] ?? [],
-				$plugin['plugin_dir'],
-				$package_name,
-				$result,
-				'autoload-dev'
-			);
 		}
 
 		/**
@@ -694,10 +825,11 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
-			$vendorDir   = $plugin['vendor_dir'];
-			$pluginDir   = $plugin['plugin_dir'];
-			$composerDir = $vendorDir . '/composer';
-			$policy      = $this->getAutoloadPolicy($vendorDir, $pluginDir);
+			$vendorDir    = $plugin['vendor_dir'];
+			$pluginDir    = $plugin['plugin_dir'];
+			$composerDir  = $vendorDir . '/composer';
+			$policy       = $this->getAutoloadPolicy($vendorDir, $pluginDir);
+			$filter_paths = $this->shouldFilterAutoloadPaths($policy);
 
 			// Load PSR-4 mappings.
 			$psr4File = $composerDir . '/autoload_psr4.php';
@@ -709,12 +841,16 @@ if (! \class_exists(Coordinator::class)) {
 							continue;
 						}
 
-						foreach ($paths as $path) {
-							if (! $policy['skip_vendor_dev_filter'] && $this->isDevAutoloadPathForPolicy( (string) $path, $policy)) {
-								continue;
-							}
+						if ($filter_paths) {
+							foreach ($paths as $path) {
+								if ($this->shouldSkipAutoloadPath( (string) $path, $policy)) {
+									continue;
+								}
 
-							$this->class_loader->addPsr4($namespace, $path);
+								$this->class_loader->addPsr4($namespace, $path);
+							}
+						} else {
+							$this->class_loader->addPsr4($namespace, $paths);
 						}
 					}
 				}
@@ -726,10 +862,7 @@ if (! \class_exists(Coordinator::class)) {
 			if (is_file($classmapFile)) {
 				$classmap = $this->loadAutoloadFile($classmapFile, $vendorDir, dirname($vendorDir));
 				if (is_array($classmap)) {
-					if (! $policy['skip_vendor_dev_filter']) {
-						$classmap = $this->filterDevAutoloadClassmapForPolicy($classmap, $policy);
-					}
-
+					$classmap = $this->filterDevAutoloadClassmapForPolicy($classmap, $policy);
 					$this->class_loader->addClassMap($classmap);
 				}
 			}
@@ -739,18 +872,16 @@ if (! \class_exists(Coordinator::class)) {
 			$files     = null;
 			if (is_file($filesFile)) {
 				$files = $this->loadAutoloadFile($filesFile, $vendorDir, dirname($vendorDir));
-				if (is_array($files) && ! $policy['skip_vendor_dev_filter']) {
+				if (is_array($files)) {
 					$files = $this->filterDevAutoloadFilesForPolicy($files, $policy);
 				}
 			}
 
-			$needs_vendor_files    = ! is_array($files) || empty($files);
-			$needs_vendor_psr4     = ! is_file($psr4File);
-			$used_package_fallback = false;
+			$needs_vendor_files = ! is_array($files) || empty($files);
+			$needs_vendor_psr4  = ! is_file($psr4File);
 
 			if ($needs_vendor_files || $needs_vendor_psr4) {
-				$fallback              = $this->collectAutoloadFromPackages($plugin);
-				$used_package_fallback = true;
+				$fallback = $this->collectAutoloadFromPackages($plugin);
 
 				if ($needs_vendor_files && ! empty($fallback['files'])) {
 					$files = array_merge(is_array($files) ? $files : [], $fallback['files']);
@@ -758,24 +889,16 @@ if (! \class_exists(Coordinator::class)) {
 
 				if ($needs_vendor_psr4 && ! empty($fallback['psr4'])) {
 					foreach ($fallback['psr4'] as $namespace => $paths) {
-						foreach ($paths as $path) {
-							$this->class_loader->addPsr4($namespace, $path);
-						}
-					}
-				}
-			}
+						if ($filter_paths) {
+							foreach ($paths as $path) {
+								if ($this->shouldSkipAutoloadPath( (string) $path, $policy)) {
+									continue;
+								}
 
-			if ($used_package_fallback && $this->shouldIncludeDevDependencies($vendorDir)) {
-				$rootDevAutoload = $this->collectRootComposerAutoloadDev($plugin);
-
-				if (! empty($rootDevAutoload['files'])) {
-					$files = array_merge(is_array($files) ? $files : [], $rootDevAutoload['files']);
-				}
-
-				if (! empty($rootDevAutoload['psr4'])) {
-					foreach ($rootDevAutoload['psr4'] as $namespace => $paths) {
-						foreach ($paths as $path) {
-							$this->class_loader->addPsr4($namespace, $path);
+								$this->class_loader->addPsr4($namespace, $path);
+							}
+						} else {
+							$this->class_loader->addPsr4($namespace, $paths);
 						}
 					}
 				}
@@ -785,8 +908,8 @@ if (! \class_exists(Coordinator::class)) {
 				$this->autoload_manifest = [];
 			}
 			$this->autoload_manifest[ $slug ] = [
-				'files' => is_array($files) ? $files : [],
-				'classmap' => is_array($classmap) ? $classmap : [],
+				'files'      => is_array($files) ? $files : [],
+				'classmap'   => is_array($classmap) ? $classmap : [],
 				'vendor_dir' => $vendorDir,
 			];
 		}
@@ -1335,6 +1458,11 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
+			if (1 === count($this->plugins) && 1 === count($this->autoload_manifest)) {
+				$this->includeAutoloadFilesForSinglePlugin();
+				return;
+			}
+
 			$allFiles        = $this->preparePackagesFiles();
 			$preferredPlugin = $this->getPreferredPluginSlug();
 			$package_groups  = $this->partitionExclusiveAndSharedPackages($allFiles);
@@ -1353,6 +1481,21 @@ if (! \class_exists(Coordinator::class)) {
 				foreach ($this->selectWinningAutoloadFiles($packageName, $files, $preferredPlugin) as $file) {
 					$this->includeFile($file['identifier'], $file['path']);
 				}
+			}
+		}
+
+		/**
+		 * Include autoload files for a single registered plugin without package coordination.
+		 */
+		private function includeAutoloadFilesForSinglePlugin(): void {
+			$manifest = reset($this->autoload_manifest);
+
+			if (! is_array($manifest) || ! isset($manifest['files']) || ! is_array($manifest['files'])) {
+				return;
+			}
+
+			foreach ($manifest['files'] as $identifier => $filePath) {
+				$this->includeFile( (string) $identifier, (string) $filePath);
 			}
 		}
 
@@ -1457,6 +1600,17 @@ if (! \class_exists(Coordinator::class)) {
 				}
 
 				foreach ($manifest['files'] as $identifier => $filePath) {
+					$pluginDir = $this->plugins[ $slug ]['plugin_dir'] ?? '';
+					$vendorDir = $manifest['vendor_dir'] ?? ( $this->plugins[ $slug ]['vendor_dir'] ?? '' );
+
+					if ('' !== $pluginDir && '' !== $vendorDir) {
+						$policy = $this->getAutoloadPolicy($vendorDir, $pluginDir);
+
+						if ($this->shouldSkipAutoloadPath( (string) $filePath, $policy)) {
+							continue;
+						}
+					}
+
 					// Detect package for this file.
 					$packageInfo = $this->detectPackageFromPath($filePath);
 					$packageName = $packageInfo['name'] ?? 'unknown-' . $identifier;
@@ -1498,11 +1652,30 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
-			if (is_file($file)) {
+			if (! is_file($file)) {
+				return;
+			}
+
+			$normalized = $this->normalizePath($file);
+
+			if (isset($this->included_file_paths[ $normalized ])) {
 				$this->included_files[ $identifier ]               = true;
 				$GLOBALS['blockera_autoload_files'][ $identifier ] = true;
-				require $file;
+				return;
 			}
+
+			if (isset($GLOBALS['blockera_autoload_file_paths'][ $normalized ])) {
+				$this->included_files[ $identifier ]               = true;
+				$this->included_file_paths[ $normalized ]          = true;
+				$GLOBALS['blockera_autoload_files'][ $identifier ] = true;
+				return;
+			}
+
+			$this->included_files[ $identifier ]                    = true;
+			$this->included_file_paths[ $normalized ]               = true;
+			$GLOBALS['blockera_autoload_files'][ $identifier ]      = true;
+			$GLOBALS['blockera_autoload_file_paths'][ $normalized ] = true;
+			require $file;
 		}
 
 		/**

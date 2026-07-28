@@ -9,6 +9,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( defined( 'BLOCKERA_BOOTSTRAP_HOOKS_LOADED' ) ) {
+	return;
+}
+
+define( 'BLOCKERA_BOOTSTRAP_HOOKS_LOADED', true );
+
 use Blockera\WordPress\RenderBlock\Setup;
 use Blockera\Setup\Compatibility\BlockSupports\BlockeraDuotone;
 
