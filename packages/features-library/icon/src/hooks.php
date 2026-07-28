@@ -2,7 +2,7 @@
 
 use Blockera\Feature\Icon\IconStyleDefinition;
 
-if (! function_exists('blockera_add_icon_style_definitions')) {
+if (! function_exists('blockera_icon_style_definitions')) {
 	/**
 	 * Add icon style definition to the editor style definitions.
 	 *
