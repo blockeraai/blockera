@@ -400,9 +400,21 @@ if (! \class_exists(Coordinator::class)) {
 				return false;
 			}
 
-			$app_mode = $_ENV['APP_MODE'] ?? $_SERVER['APP_MODE'] ?? getenv('APP_MODE');
+			$app_mode = null;
 
-			if (is_string($app_mode) && 'development' === $app_mode) {
+			if (isset($_ENV['APP_MODE'])) {
+				$app_mode = sanitize_text_field(wp_unslash($_ENV['APP_MODE']));
+			} elseif (isset($_SERVER['APP_MODE'])) {
+				$app_mode = sanitize_text_field(wp_unslash($_SERVER['APP_MODE']));
+			} else {
+				$env_value = getenv('APP_MODE');
+
+				if (false !== $env_value && is_string($env_value)) {
+					$app_mode = sanitize_text_field($env_value);
+				}
+			}
+
+			if (null !== $app_mode && 'development' === $app_mode) {
 				return true;
 			}
 
