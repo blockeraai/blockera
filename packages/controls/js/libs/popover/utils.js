@@ -666,12 +666,8 @@ export function isPopoverDismissIgnoredTarget(
 	}
 
 	const nestedPopover = getPopoverRoot(target);
-	if (
-		nestedPopover instanceof HTMLElement &&
-		nestedPopover !== popoverRoot &&
-		isPopoverNestedChildOf(nestedPopover, popoverRoot)
-	) {
-		return true;
+	if (nestedPopover instanceof HTMLElement && nestedPopover !== popoverRoot) {
+		return isPopoverNestedChildOf(nestedPopover, popoverRoot);
 	}
 
 	if (
