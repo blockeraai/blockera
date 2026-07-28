@@ -23,6 +23,7 @@ import BlockType from './block-type';
 const blockManagerCategoryConfig = {
 	status: true,
 	onCompanion: true,
+	isParentActive: true,
 };
 
 /**
