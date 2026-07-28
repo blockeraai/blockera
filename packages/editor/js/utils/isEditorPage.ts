@@ -30,3 +30,14 @@ export function isEditorPage(): boolean {
 
 	return false;
 }
+
+/**
+ * Check if the current page is the new post/page editor (post-new.php).
+ */
+export function isPostNewEditorPage(): boolean {
+	if (typeof window === 'undefined') {
+		return false;
+	}
+
+	return window.location.pathname.includes('post-new.php');
+}

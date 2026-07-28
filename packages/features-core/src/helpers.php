@@ -32,9 +32,6 @@ if (! function_exists('blockera_features_list')) {
 if (! function_exists('blockera_enqueue_features_editor_styles')) {
 	/**
 	 * Enqueue the blockera features editor styles assets.
-	 *
-	 * Intended to be called from `enqueue_block_assets` so styles are included
-	 * in the editor canvas iframe via `_wp_get_iframed_editor_assets()`.
 	 * 
 	 * @param string $base_path The base path of the plugin.
 	 * @param string $base_url The base url of the plugin.

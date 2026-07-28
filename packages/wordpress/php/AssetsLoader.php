@@ -67,7 +67,7 @@ class AssetsLoader {
 	/**
 	 * AssetsProvider constructor method,
 	 * when create new instance of current class,
-	 * fire the appropriate WordPress enqueue hooks.
+	 * fire `wp_enqueue_scripts` and `enqueue_block_editor_assets`
 	 *
 	 * @param Application $app    the application container instance.
 	 * @param array       $assets the assets stack.
@@ -94,14 +94,7 @@ class AssetsLoader {
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
-			// Editor UI scripts stay in the parent document.
-			// accepted_args=0: WP's do_action() injects '' when called with no args, which
-			// would coerce a bool $is_admin param to false and skip the admin gate.
-			add_action( 'enqueue_block_editor_assets', [ $this, 'enqueueScripts' ], 10, 0 );
-			// Canvas styles must use enqueue_block_assets so WordPress includes them in
-			// `_wp_get_iframed_editor_assets()` (avoids Gutenberg's
-			// "added to the iframe incorrectly" compatibility warning).
-			add_action( 'enqueue_block_assets', [ $this, 'enqueueStyles' ], 10, 0 );
+			add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue' ] );
 
 		} elseif ( ! empty( $args['enqueue-admin-assets'] ) ) {
 
@@ -116,54 +109,19 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Enqueue package styles for the block editor canvas iframe.
+	 * Enqueue assets just load into gutenberg canvas editor iframe.
 	 *
-	 * Hooked to `enqueue_block_assets` so styles are collected into
-	 * `__unstableResolvedAssets` instead of being cloned from the parent document.
-	 * Editor-only: must not load on the front end (Plugin Check EnqueuedStylesScope).
+	 * @param bool $is_admin The flag to check if the assets are being loaded in the admin area. Default is true.
 	 *
 	 * @return void
 	 */
-	public function enqueueStyles(): void {
-
-		// Defense in depth: never trust action args for the admin gate (see constructor).
-		if ( ! is_admin() ) {
-			return;
-		}
-
-		$this->enqueue( true, 'styles' );
-	}
-
-	/**
-	 * Enqueue package scripts for the block editor parent UI.
-	 *
-	 * Hooked to `enqueue_block_editor_assets` (parent frame only).
-	 *
-	 * @return void
-	 */
-	public function enqueueScripts(): void {
-
-		$this->enqueue( true, 'scripts' );
-	}
-
-	/**
-	 * Enqueue assets for the current context.
-	 *
-	 * @param bool   $is_admin Whether to require an admin request. Default true.
-	 * @param string $parts    Which asset types to enqueue: `all`, `styles`, or `scripts`.
-	 *
-	 * @return void
-	 */
-	public function enqueue( bool $is_admin = true, string $parts = 'all' ): void {
-
+	public function enqueue(bool $is_admin = true): void
+	{
 		// Return early if we're trying to load admin assets on the frontend.
 		if ($is_admin && ! blockera_is_admin()) {
 
 			return;
 		}
-
-		$load_styles  = ( 'all' === $parts || 'styles' === $parts );
-		$load_scripts = ( 'all' === $parts || 'scripts' === $parts );
 
 		$assets    = $this->prepareAssets();
 		$ver_cache = [];
@@ -181,7 +139,7 @@ class AssetsLoader {
 			$package_version = $ver_cache[ $pkg_key ];
 			$handle          = $name . '-' . $package_version;
 
-			if ( $load_styles && $asset['style'] ) {
+			if ( $asset['style'] ) {
 
 				wp_enqueue_style(
 					$handle,
@@ -191,7 +149,7 @@ class AssetsLoader {
 				);
 			}
 
-			if ( ! $load_scripts || ! $asset['script'] ) {
+			if ( ! $asset['script'] ) {
 
 				continue;
 			}
@@ -224,11 +182,6 @@ class AssetsLoader {
 				$asset['version'],
 				$footer_args
 			);
-		}
-
-		if ( ! $load_scripts ) {
-
-			return;
 		}
 
 		$hook = 'blockera/wordpress/' . $this->id . '/';

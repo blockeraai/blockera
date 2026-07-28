@@ -17,8 +17,10 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import Modal from '../modal';
-import { Button } from '../button';
+import { FEATURE_WRAPPER_TEST_ID } from './constants/testIds';
+import { CompanionPluginModal } from './components/CompanionPluginModal';
+
+export { CompanionPluginModal };
 
 export function FeatureWrapper({
 	type,
@@ -46,6 +48,20 @@ export function FeatureWrapper({
 	children: MixedElement,
 }): MixedElement {
 	const [isCompanionModalOpen, setIsCompanionModalOpen] = useState(false);
+
+	const openCompanionModal = (e: any) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setIsCompanionModalOpen(true);
+	};
+
+	const closeCompanionModal = () => {
+		setIsCompanionModalOpen(false);
+	};
+
+	const stopModalEventPropagation = (event: any) => {
+		event.stopPropagation();
+	};
 
 	if ('none' === type) {
 		return children;
@@ -87,11 +103,7 @@ export function FeatureWrapper({
 					/>
 				);
 				link = '';
-				onClick = (e: any) => {
-					e.preventDefault();
-					e.stopPropagation();
-					setIsCompanionModalOpen(true);
-				};
+				onClick = openCompanionModal;
 				break;
 
 			case 'native':
@@ -180,7 +192,18 @@ export function FeatureWrapper({
 				'show-text-' + showText,
 				className
 			)}
-			onClick={onClick}
+			data-test={FEATURE_WRAPPER_TEST_ID.root(type)}
+			onClick={
+				'companion' === type
+					? (event) => {
+							if (isCompanionModalOpen) {
+								return;
+							}
+
+							openCompanionModal(event);
+						}
+					: onClick
+			}
 			{...props}
 		>
 			<div
@@ -188,6 +211,11 @@ export function FeatureWrapper({
 					'feature-wrapper__notice',
 					isNoticeClickable ? 'is-clickable' : ''
 				)}
+				data-test={
+					'companion' === type
+						? FEATURE_WRAPPER_TEST_ID.companionNotice
+						: undefined
+				}
 				role={onClick ? 'button' : undefined}
 				tabIndex={onClick ? 0 : undefined}
 				onClick={onClick}
@@ -237,41 +265,15 @@ export function FeatureWrapper({
 			</div>
 
 			{'companion' === type && isCompanionModalOpen ? (
-				<Modal
-					headerIcon={
-						<Icon
-							icon="blockera"
-							library="blockera"
-							iconSize="18"
-						/>
-					}
-					headerTitle={__('Install Companion Plugin', 'blockera')}
-					onRequestClose={() => setIsCompanionModalOpen(false)}
-					actions={
-						<>
-							<Button
-								variant="tertiary"
-								onClick={() => setIsCompanionModalOpen(false)}
-							>
-								{__('Close', 'blockera')}
-							</Button>
-
-							<Button variant="primary">
-								{__('Install', 'blockera')}
-							</Button>
-						</>
-					}
-					className={componentInnerClassNames(
-						'feature-wrapper-companion-modal'
-					)}
+				<div
+					onClick={stopModalEventPropagation}
+					onMouseDown={stopModalEventPropagation}
 				>
-					<p>
-						{__(
-							'For using all features you have to install the companion plugin: Blockera Site Builder.',
-							'blockera'
-						)}
-					</p>
-				</Modal>
+					<CompanionPluginModal
+						isOpen={isCompanionModalOpen}
+						onRequestClose={closeCompanionModal}
+					/>
+				</div>
 			) : null}
 
 			<div

@@ -11,13 +11,72 @@ import { isString } from '@blockera/utils';
  */
 import {
 	closeWelcomeGuide,
+	disableGutenbergFeatures,
 	hexStringToByte,
 	openBoxSpacingSide,
 	openBoxPositionSide,
 	removeScopedStorageKeys,
+	setAbsoluteBlockToolbar,
 } from '../helpers';
 import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 import { PREVIEW_MODE_TEST_ID } from 'blockera-editor-preview-test-ids';
+
+function resolveCypressTestUrl(path = '/wp-admin') {
+	const testURL = Cypress.env('testURL');
+
+	if (
+		(testURL.endsWith('/') && !path.startsWith('/')) ||
+		(!testURL.endsWith('/') && path.startsWith('/'))
+	) {
+		return `${testURL}${path}`;
+	}
+
+	if (!testURL.endsWith('/') && !path.startsWith('/')) {
+		return `${testURL}/${path}`;
+	}
+
+	if (testURL.endsWith('/') && path.startsWith('/')) {
+		return `${testURL.slice(0, -1)}${path}`;
+	}
+
+	return `${testURL}${path}`;
+}
+
+function buildStaleTabsStorageJson(unpinnedCount) {
+	const tabs = Array.from({ length: unpinnedCount }, (_, index) => ({
+		id: 9000 + index,
+		type: 'post',
+		title: `Stale tab ${index + 1}`,
+		slug: null,
+		status: 'draft',
+		key: `post-${9000 + index}`,
+		isPinned: false,
+	}));
+
+	return JSON.stringify({
+		main: {
+			'pinned-tabs': [],
+			tabs,
+		},
+	});
+}
+
+function buildStaleRecentlyClosedStorageJson() {
+	return JSON.stringify({
+		main: [
+			{
+				id: 8888,
+				type: 'post',
+				title: 'Stale closed tab',
+				slug: null,
+				status: 'draft',
+				key: 'post-8888',
+				isPinned: false,
+				closedAt: Date.now(),
+			},
+		],
+	});
+}
 
 export const registerCommands = () => {
 	//This registers the cy.compareSnapshot() custom command provided by the plugin
@@ -1108,12 +1167,50 @@ export const registerCommands = () => {
 		}).should('exist');
 	});
 
-	/** Opens the add-tab flow (command palette in “add tab” mode). */
-	Cypress.Commands.add('tabsOpenAddPalette', () => {
+	/** Stub companion plugin as installed so tabs e2e can add multiple tabs in theme mode. */
+	Cypress.Commands.add('tabsStubCompanionPluginInstalled', () => {
+		cy.window().then((win) => {
+			expect(win.wp?.hooks, 'wp.hooks').to.exist;
+
+			win.wp.hooks.addFilter(
+				'blockera.products.isCompanionPlugin',
+				'blockera-e2e/tabs.isCompanionPlugin',
+				() => true,
+				999
+			);
+		});
+	});
+
+	/** Dispatch Ctrl/Cmd+T for the workspace add-tab shortcut. */
+	Cypress.Commands.add('tabsPressAddTabShortcut', () => {
+		const isMac = Cypress.platform === 'darwin';
+
+		cy.window().then((win) => {
+			win.document.dispatchEvent(
+				new win.KeyboardEvent('keydown', {
+					key: 't',
+					code: 'KeyT',
+					bubbles: true,
+					cancelable: true,
+					metaKey: isMac,
+					ctrlKey: !isMac,
+				})
+			);
+		});
+	});
+
+	/** Click add tab without stubbing companion (theme-mode limit tests). */
+	Cypress.Commands.add('tabsOpenAddTabWithoutCompanionStub', () => {
 		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.add}"]`)
 			.first()
 			.should('exist')
 			.click({ force: true });
+	});
+
+	/** Opens the add-tab flow (command palette in “add tab” mode). */
+	Cypress.Commands.add('tabsOpenAddPalette', () => {
+		cy.tabsStubCompanionPluginInstalled();
+		cy.tabsOpenAddTabWithoutCompanionStub();
 	});
 
 	/**
@@ -1510,6 +1607,71 @@ export const registerCommands = () => {
 				.should(shouldExist ? 'exist' : 'not.exist');
 		}
 	);
+
+	/**
+	 * Asserts the companion install modal is visible (theme mode tab limit).
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 20000 }`.
+	 */
+	Cypress.Commands.add('tabsExpectCompanionLimitPrompt', (options = {}) => {
+		cy.get('.blockera-component-feature-wrapper-companion-modal', options)
+			.should('exist')
+			.should('be.visible');
+	});
+
+	/** Asserts the companion install modal is not shown (theme mode tab bootstrap). */
+	Cypress.Commands.add('tabsExpectNoCompanionLimitPrompt', () => {
+		cy.get('.blockera-component-feature-wrapper-companion-modal').should(
+			'not.exist'
+		);
+	});
+
+	/**
+	 * Visit post-new with stale workspace tabs in localStorage (theme bootstrap test).
+	 *
+	 * @param {{ postType?: string, staleTabCount?: number }} [options]
+	 */
+	Cypress.Commands.add('tabsVisitPostNewWithStaleStorage', (options = {}) => {
+		const { postType = 'post', staleTabCount = 3 } = options;
+		const url = resolveCypressTestUrl(
+			`/wp-admin/post-new.php?post_type=${postType}`
+		);
+
+		cy.visit(url, {
+			onBeforeLoad(win) {
+				removeScopedStorageKeys(win.localStorage, 'blockera-tabs-tabs');
+				removeScopedStorageKeys(
+					win.localStorage,
+					'blockera-tabs-recently-closed'
+				);
+				win.localStorage.setItem(
+					'blockera-tabs-tabs',
+					buildStaleTabsStorageJson(staleTabCount)
+				);
+				win.localStorage.setItem(
+					'blockera-tabs-recently-closed',
+					buildStaleRecentlyClosedStorageJson()
+				);
+			},
+		});
+
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.wait(2000);
+		closeWelcomeGuide();
+
+		if (['post', 'page'].includes(postType)) {
+			disableGutenbergFeatures();
+			setAbsoluteBlockToolbar();
+		}
+	});
+
+	/** Clicks the site editor view-mode toggle (companion limit bypass). */
+	Cypress.Commands.add('tabsClickSiteEditorViewModeToggle', () => {
+		cy.get('.edit-site-editor__view-mode-toggle', { timeout: 60000 })
+			.should('be.visible')
+			.find('button')
+			.first()
+			.click({ force: true });
+	});
 
 	/**
 	 * Asserts the workspace tab limit upgrade prompt is visible (free tier; Pro removes limits).

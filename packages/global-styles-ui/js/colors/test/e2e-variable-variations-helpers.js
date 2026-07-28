@@ -233,60 +233,6 @@ export function clickEnableColorShadesToggleInCustomPresetEditPopover() {
 	});
 }
 
-/**
- * Opens the site-editor color palette screen and the edit popover for a theme preset row.
- *
- * @param {string} headerLabel Preset header label text.
- */
-export function openThemeColorPresetEditPopoverFromPalette(headerLabel) {
-	openGlobalStylesColorPaletteScreen();
-
-	withinThemePresetGroup(() => {
-		cy.contains('[data-cy="color-repeater-item-header"]', headerLabel, {
-			timeout: 20000,
-		}).click({ force: true });
-	});
-
-	getCustomPresetEditPopover().should('be.visible');
-}
-
-/**
- * Clicks a shade-ramp ColorControl swatch inside the visible preset edit popover.
- *
- * @param {number} [index=0] Zero-based index within the shade editor strip.
- */
-export function clickShadeRampSwatchInCustomPresetEditPopover(index = 0) {
-	getCustomPresetEditPopover().within(() => {
-		cy.get(
-			'.blockera-component-editor-variable-variations-fields-wrapper [data-cy="color-btn"]',
-			{ timeout: 20000 }
-		)
-			.eq(index)
-			.should('be.visible')
-			.click({ force: true });
-	});
-}
-
-/** Asserts the shade-edit UpgradePrompt modal is visible. */
-export function assertColorShadeEditUpgradePromptVisible() {
-	cy.getByDataTest('promote-color-shade-edit', { timeout: 15000 })
-		.should('be.visible')
-		.and('contain.text', 'Edit Color Shade Variables')
-		.and('contain.text', 'Free: View only');
-}
-
-/** Asserts the nested color picker popover is open. */
-export function assertColorPickerPopoverVisible() {
-	cy.get('[data-cy="color-picker-css-value"]', { timeout: 15000 }).should(
-		'be.visible'
-	);
-}
-
-/** Asserts the nested color picker is not present. */
-export function assertColorPickerPopoverNotPresent() {
-	cy.get('[data-cy="color-picker-css-value"]').should('not.exist');
-}
-
 /** @param {string} headerLabel */
 export function assertColorPresetVisibleInVariablePicker(headerLabel) {
 	withinVariablePickerPopover(() => {

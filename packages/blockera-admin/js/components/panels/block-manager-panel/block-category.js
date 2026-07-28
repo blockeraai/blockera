@@ -13,11 +13,17 @@ import { without } from '@blockera/utils';
 import { Button, Flex, Grid } from '@blockera/controls';
 import { componentInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { AdminFeatureWrapper } from '@blockera/wordpress';
 
 /**
  * Internal dependencies
  */
 import BlockType from './block-type';
+
+const blockManagerCategoryConfig = {
+	status: true,
+	onCompanion: true,
+};
 
 /**
  * Renders the list of BlockType controls for a given block category on the
@@ -98,73 +104,75 @@ export default function BlockCategory(props: {
 	}
 
 	return (
-		<Flex
-			gap={15}
-			direction={'column'}
-			className={'blockera-settings-section'}
-		>
+		<AdminFeatureWrapper config={blockManagerCategoryConfig}>
 			<Flex
-				alignItems={'center'}
-				justifyContent={'space-between'}
-				className={'blockera-block-category'}
+				gap={15}
+				direction={'column'}
+				className={'blockera-settings-section'}
 			>
-				<div className={'blockera-block-category'}>
-					<h4 className={'blockera-block-category-name'}>
-						{getCategoryIcon(category.slug)}
-
-						{category.title}
-					</h4>
-				</div>
-
-				<div
-					className={componentInnerClassNames(
-						'block-category-buttons'
-					)}
+				<Flex
+					alignItems={'center'}
+					justifyContent={'space-between'}
+					className={'blockera-block-category'}
 				>
-					<Button
-						className={componentInnerClassNames(
-							'block-category-button'
-						)}
-						data-test={`${category.slug}-category=disable`}
-						text={__('Disable All', 'blockera')}
-						onClick={() => onBlockCategoryChange(false)}
-						variant={'tertiary'}
-						size={'small'}
-						disabled={checkedBlockNames.length === 0}
-					/>
+					<div className={'blockera-block-category'}>
+						<h4 className={'blockera-block-category-name'}>
+							{getCategoryIcon(category.slug)}
 
-					<Button
-						className={componentInnerClassNames(
-							'block-category-button'
-						)}
-						data-test={`${category.slug}-category=enable`}
-						text={__('Enable All', 'blockera')}
-						onClick={() => onBlockCategoryChange(true)}
-						variant={'tertiary'}
-						size={'small'}
-						disabled={
-							checkedBlockNames.length === blockNames.length
-						}
-					/>
-				</div>
-			</Flex>
+							{category.title}
+						</h4>
+					</div>
 
-			<Grid
-				gridTemplateColumns={'repeat(3, 1fr)'}
-				justifyContent={'space-between'}
-				className={'blockera-block-category-items'}
-			>
-				{blockTypes.map((blockType, index) => {
-					return (
-						<BlockType
-							key={index}
-							blockType={blockType}
-							disabledBlocks={disabledBlocks}
-							handleBlockTypeChange={handleBlockTypeChange}
+					<div
+						className={componentInnerClassNames(
+							'block-category-buttons'
+						)}
+					>
+						<Button
+							className={componentInnerClassNames(
+								'block-category-button'
+							)}
+							data-test={`${category.slug}-category=disable`}
+							text={__('Disable All', 'blockera')}
+							onClick={() => onBlockCategoryChange(false)}
+							variant={'tertiary'}
+							size={'small'}
+							disabled={checkedBlockNames.length === 0}
 						/>
-					);
-				})}
-			</Grid>
-		</Flex>
+
+						<Button
+							className={componentInnerClassNames(
+								'block-category-button'
+							)}
+							data-test={`${category.slug}-category=enable`}
+							text={__('Enable All', 'blockera')}
+							onClick={() => onBlockCategoryChange(true)}
+							variant={'tertiary'}
+							size={'small'}
+							disabled={
+								checkedBlockNames.length === blockNames.length
+							}
+						/>
+					</div>
+				</Flex>
+
+				<Grid
+					gridTemplateColumns={'repeat(3, 1fr)'}
+					justifyContent={'space-between'}
+					className={'blockera-block-category-items'}
+				>
+					{blockTypes.map((blockType, index) => {
+						return (
+							<BlockType
+								key={index}
+								blockType={blockType}
+								disabledBlocks={disabledBlocks}
+								handleBlockTypeChange={handleBlockTypeChange}
+							/>
+						);
+					})}
+				</Grid>
+			</Flex>
+		</AdminFeatureWrapper>
 	);
 }
