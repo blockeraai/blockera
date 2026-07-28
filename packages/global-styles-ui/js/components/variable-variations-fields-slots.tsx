@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import type { ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import { ToggleControl } from '@wordpress/components';
 
 /**
@@ -73,6 +73,8 @@ export function VariableVariationsFieldsToggleSlot({
 export type VariableVariationsFieldsEditorSlotProps = {
 	children: ReactNode;
 	style?: object;
+	/** e.g. free-tier UpgradePrompt gate on shade ColorControl clicks */
+	onClickCapture?: (event: MouseEvent) => void;
 };
 
 /**
@@ -81,6 +83,7 @@ export type VariableVariationsFieldsEditorSlotProps = {
 export function VariableVariationsFieldsEditorSlot({
 	children,
 	style = {},
+	onClickCapture,
 }: VariableVariationsFieldsEditorSlotProps) {
 	return (
 		<Flex
@@ -93,6 +96,7 @@ export function VariableVariationsFieldsEditorSlot({
 				width: '100%',
 				...style,
 			}}
+			onClickCapture={onClickCapture}
 		>
 			{children}
 		</Flex>
