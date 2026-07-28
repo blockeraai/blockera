@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 import { type MixedElement } from 'react';
 
 /**
@@ -30,11 +30,25 @@ export const AdminFeatureWrapper = ({
 }): MixedElement => {
 	const feature = {
 		onNative: false,
+		onCompanion: false,
 		...config,
 	};
 
 	if (!feature?.status) {
 		return <></>;
+	}
+
+	const isCompanionPlugin = applyFilters(
+		'blockera.products.isCompanionPlugin',
+		false
+	);
+
+	if (feature.onCompanion && !isCompanionPlugin) {
+		return (
+			<FeatureWrapper type="companion" showText="always" {...props}>
+				{children}
+			</FeatureWrapper>
+		);
 	}
 
 	if (feature?.onNative) {

@@ -116,7 +116,7 @@ export interface UseTabsOptions {
 	persistenceEnabled?: boolean;
 }
 
-export type TabsLimitExceededType = 'regular' | 'pinned' | null;
+export type TabsLimitExceededType = 'regular' | 'pinned' | 'companion' | null;
 
 /**
  * Optional behavior when adding a tab (e.g. URL navigation vs in-app "new tab").
@@ -130,6 +130,10 @@ export interface AddTabOptions {
 	evictLastUnpinnedIfAtLimit?: boolean;
 	/** Called with the evicted unpinned tab (e.g. push to recently closed). */
 	onEvictedUnpinned?: (tab: Tab) => void;
+	/**
+	 * When true, skip companion and free-tier tab limits (e.g. site editor view-mode toggle).
+	 */
+	skipTabLimits?: boolean;
 }
 
 /**
@@ -173,6 +177,11 @@ export interface UseTabsReturn {
 	limitExceededType: TabsLimitExceededType;
 	/** Clear current limit exceeded state. */
 	clearLimitExceeded: () => void;
+	/**
+	 * Guard before opening the add-tab flow (+ button, Ctrl/Cmd+T).
+	 * Returns false when companion mode blocks any new tab (shows promotion).
+	 */
+	guardOpenAddTab: () => boolean;
 }
 
 /**
