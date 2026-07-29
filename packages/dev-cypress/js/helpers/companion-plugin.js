@@ -4,9 +4,9 @@
 
 import { goTo } from './site-navigation';
 // eslint-disable-next-line import/no-unresolved
-import { FEATURE_WRAPPER_TEST_ID } from 'blockera-controls-feature-wrapper-test-ids';
 import { assertBlockData } from './editor';
 
+import { FEATURE_WRAPPER_TEST_ID } from '../../../controls/js/libs/feature-wrapper/constants/testIds';
 export { FEATURE_WRAPPER_TEST_ID };
 
 export const COMPANION_INSTALL_NOTICE = 'Install Companion Plugin to Unlock';
