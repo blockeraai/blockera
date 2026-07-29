@@ -6,7 +6,6 @@
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useDispatch } from '@wordpress/data';
-import { store as coreStore } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
@@ -109,7 +108,7 @@ export function useCompanionPluginInstall(
 	onComplete: () => void
 ): CompanionInstallState {
 	const config = getCompanionPluginConfig();
-	const { saveEntityRecord } = useDispatch(coreStore);
+	const { saveEntityRecord } = useDispatch('core');
 	const [phase, setPhase] = useState<CompanionInstallPhase>('idle');
 	const [progress, setProgress] = useState(0);
 	const [statusMessage, setStatusMessage] = useState('');

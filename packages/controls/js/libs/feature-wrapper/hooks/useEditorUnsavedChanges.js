@@ -4,14 +4,15 @@
  * External dependencies
  */
 import { useSelect, useDispatch, select } from '@wordpress/data';
-import { store as coreStore } from '@wordpress/core-data';
-import { store as editorStore } from '@wordpress/editor';
 import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { getEditorUnsavedChangesSnapshot } from '../utils/getEditorUnsavedChangesSnapshot';
+
+const CORE_STORE = 'core';
+const EDITOR_STORE = 'core/editor';
 
 export type EditorUnsavedChangesState = {
 	hasUnsavedChanges: boolean,
@@ -22,6 +23,8 @@ export type EditorUnsavedChangesState = {
 
 /**
  * Detect block editor dirty state and expose save-all helper for reload flows.
+ *
+ * Uses string store names so controls tests do not bundle @wordpress/editor.
  */
 export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 	const [isSaving, setIsSaving] = useState(false);
@@ -29,8 +32,8 @@ export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 	const { dirtyRecords, isSaveable, isEditedPostDirty, currentPostDirty } =
 		useSelect((select) => {
 			try {
-				const coreSelect = select(coreStore);
-				const editorSelect = select(editorStore);
+				const coreSelect = select(CORE_STORE);
+				const editorSelect = select(EDITOR_STORE);
 
 				if (
 					!coreSelect ||
@@ -94,7 +97,7 @@ export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 
 	const currentPostId = useSelect((select) => {
 		try {
-			const editorSelect = select(editorStore);
+			const editorSelect = select(EDITOR_STORE);
 
 			return typeof editorSelect?.getCurrentPostId === 'function'
 				? editorSelect.getCurrentPostId()
@@ -106,7 +109,7 @@ export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 
 	const currentPostType = useSelect((select) => {
 		try {
-			const editorSelect = select(editorStore);
+			const editorSelect = select(EDITOR_STORE);
 
 			return typeof editorSelect?.getCurrentPostType === 'function'
 				? editorSelect.getCurrentPostType()
@@ -116,8 +119,8 @@ export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 		}
 	}, []);
 
-	const { saveEntityRecord } = useDispatch(coreStore);
-	const { savePost } = useDispatch(editorStore);
+	const { saveEntityRecord } = useDispatch(CORE_STORE);
+	const { savePost } = useDispatch(EDITOR_STORE);
 
 	const saveChanges = useCallback(async (): Promise<boolean> => {
 		const snapshot = getEditorUnsavedChangesSnapshot();
@@ -129,7 +132,7 @@ export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 		setIsSaving(true);
 
 		try {
-			const coreSelect = select(coreStore);
+			const coreSelect = select(CORE_STORE);
 			const records =
 				typeof coreSelect.__experimentalGetDirtyEntityRecords ===
 				'function'
