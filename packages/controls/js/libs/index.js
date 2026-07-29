@@ -3,7 +3,8 @@ import './repeater-control/store';
 
 export * from './image';
 export * from './avatar';
-export * from './feature-wrapper';
+export { FeatureWrapper } from './feature-wrapper';
+export { CompanionPluginModal } from './feature-wrapper/components/CompanionPluginModal';
 export { Switch } from './switch';
 export * from './item-group/index.tsx';
 export { default as Flex } from './flex';
