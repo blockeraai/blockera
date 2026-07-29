@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { type MixedElement, useState } from 'react';
+import { type MixedElement, lazy, Suspense, useState } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -18,9 +18,12 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { FEATURE_WRAPPER_TEST_ID } from './constants/testIds';
-import { CompanionPluginModal } from './components/CompanionPluginModal';
 
-export { CompanionPluginModal };
+const LazyCompanionPluginModal = lazy(() =>
+	import('./components/CompanionPluginModal').then((module) => ({
+		default: module.CompanionPluginModal,
+	}))
+);
 
 export function FeatureWrapper({
 	type,
@@ -269,10 +272,12 @@ export function FeatureWrapper({
 					onClick={stopModalEventPropagation}
 					onMouseDown={stopModalEventPropagation}
 				>
-					<CompanionPluginModal
-						isOpen={isCompanionModalOpen}
-						onRequestClose={closeCompanionModal}
-					/>
+					<Suspense fallback={null}>
+						<LazyCompanionPluginModal
+							isOpen={isCompanionModalOpen}
+							onRequestClose={closeCompanionModal}
+						/>
+					</Suspense>
 				</div>
 			) : null}
 
