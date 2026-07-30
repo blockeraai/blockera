@@ -18,6 +18,10 @@ export type FeatureConfig = {
 	 */
 	onNative?: boolean,
 	/**
+	 * Requires the companion plugin (Blockera Site Builder).
+	 */
+	onCompanion?: boolean,
+	/**
 	 * Is active on parent dependency settings.
 	 */
 	isParentActive?: boolean,

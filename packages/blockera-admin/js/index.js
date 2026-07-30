@@ -23,6 +23,16 @@ import { unstableBootstrapServerSideEntities } from '@blockera/data';
  */
 import { Dashboard } from './dashboard';
 
+/**
+ * This plugin defines the companion (Blockera Site Builder) plugin as installed.
+ */
+addFilter(
+	'blockera.products.isCompanionPlugin',
+	'blockera/products.isCompanionPlugin',
+	() => true,
+	10
+);
+
 const root = createRoot(
 	document.getElementById('blockera-admin-settings-container')
 );

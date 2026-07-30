@@ -245,4 +245,208 @@
 .blockera-component-feature-wrapper-companion-modal {
 	--blockera-controls-primary-color: #0051e7;
 	--blockera-controls-primary-color-darker-20: #0040b3;
+
+	&__progress {
+		margin-top: 16px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	&__progress-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	&__progress-track {
+		position: relative;
+		width: 100%;
+		height: 6px;
+		border-radius: 999px;
+		overflow: hidden;
+		background: linear-gradient(
+			90deg,
+			color-mix(
+					in srgb,
+					var(--blockera-controls-primary-color, #0051e7) 8%,
+					#ffffff
+				)
+				0%,
+			color-mix(
+					in srgb,
+					var(--blockera-controls-primary-color, #0051e7) 14%,
+					#f0f0f0
+				)
+				100%
+		);
+		box-shadow: inset 0 1px 2px
+			color-mix(in srgb, var(--blockera-controls-primary-color, #0051e7) 8%, transparent);
+	}
+
+	&__progress-fill {
+		position: relative;
+		height: 100%;
+		min-width: 6px;
+		border-radius: inherit;
+		background: linear-gradient(
+			90deg,
+			var(--blockera-controls-primary-color-darker-20, #0040b3) 0%,
+			var(--blockera-controls-primary-color, #0051e7) 55%,
+			color-mix(
+					in srgb,
+					var(--blockera-controls-primary-color, #0051e7) 70%,
+					#ffffff
+				)
+				100%
+		);
+		box-shadow: 0 0 12px
+			color-mix(
+				in srgb,
+				var(--blockera-controls-primary-color, #0051e7) 45%,
+				transparent
+			);
+		transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+		overflow: hidden;
+	}
+
+	&__progress-shimmer {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			90deg,
+			transparent 0%,
+			color-mix(in srgb, #ffffff 55%, transparent) 50%,
+			transparent 100%
+		);
+		transform: translateX(-100%);
+		animation: blockera-companion-install-progress-shimmer 1.6s ease-in-out
+			infinite;
+	}
+
+	&__progress-percent {
+		flex-shrink: 0;
+		min-width: 42px;
+		padding: 2px 8px;
+		border-radius: 999px;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-align: center;
+		color: var(--blockera-controls-primary-color, #0051e7);
+		background: color-mix(
+			in srgb,
+			var(--blockera-controls-primary-color, #0051e7) 10%,
+			transparent
+		);
+	}
+
+	&__countdown {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	&__countdown-message {
+		margin: 0;
+		font-size: 13px;
+		color: #50575e;
+	}
+
+	&__countdown-value {
+		align-self: center;
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 24px;
+		font-weight: 600;
+		color: var(--blockera-controls-primary-color, #0051e7);
+		background: color-mix(
+			in srgb,
+			var(--blockera-controls-primary-color, #0051e7) 12%,
+			transparent
+		);
+	}
+
+	&__progress-message,
+	&__success-message {
+		margin: 0;
+		font-size: 13px;
+		color: #50575e;
+	}
+
+	&__success-message {
+		margin-top: 12px;
+		color: var(--blockera-controls-primary-color, #0051e7);
+		font-weight: 500;
+	}
+
+	&__error-message {
+		margin: 12px 0 0;
+		color: #b80000;
+		font-size: 13px;
+	}
+
+	&__permission-message {
+		margin: 12px 0 0;
+		color: #646970;
+		font-size: 13px;
+	}
+
+	.install-now.updating-message,
+	.install-now.activating-message {
+		pointer-events: none;
+	}
+
+	.blockera-component-modal__actions {
+		align-items: center;
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 8px;
+		width: 100%;
+
+		.components-button.blockera-component-button {
+			box-sizing: border-box;
+			min-height: var(--blockera-controls-input-height);
+			height: var(--blockera-controls-input-height);
+			padding: 0 12px;
+			line-height: 1;
+		}
+
+		.install-now.button-primary {
+			min-height: var(--blockera-controls-input-height);
+			height: var(--blockera-controls-input-height);
+			padding: 0 12px;
+			line-height: 1;
+		}
+	}
+}
+
+@keyframes blockera-companion-install-progress-shimmer {
+	0% {
+		transform: translateX(-100%);
+	}
+
+	100% {
+		transform: translateX(200%);
+	}
+}
+
+.components-modal__screen-overlay:has(
+		.blockera-component-feature-wrapper-companion-modal
+	),
+.components-modal__screen-overlay:has(
+		.blockera-component-feature-wrapper-companion-reload-dialog
+	) {
+	z-index: 1000000000;
 }
