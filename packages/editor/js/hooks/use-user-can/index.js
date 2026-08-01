@@ -23,11 +23,12 @@ export function useUserCan(kind: string, name: string): boolean {
 					break;
 			}
 
-			return select(coreStore).canUserEditEntityRecord(
+			// WP 6.7+: canUserEditEntityRecord is deprecated in favor of canUser + entity resource.
+			return select(coreStore).canUser('update', {
 				kind,
 				name,
-				recordId
-			);
+				id: recordId,
+			});
 		},
 		[kind, name]
 	);

@@ -69,7 +69,7 @@ declare module '@wordpress/data' {
 	): T;
 
 	export function useDispatch<
-		T = Record<string, (...args: unknown[]) => unknown>
+		T = Record<string, (...args: unknown[]) => unknown>,
 	>(storeNameOrDescriptor?: string | StoreDescriptor<T>): T;
 
 	export function useRegistry(): DataRegistry;
@@ -220,9 +220,16 @@ declare module '@wordpress/core-data' {
 
 		canUser(
 			action: string,
-			resource: string,
+			resource:
+				| string
+				| {
+						kind: string;
+						name: string;
+						id?: number | string | null;
+				  },
 			id?: number | string
 		): boolean | undefined;
+		/** @deprecated since WP 6.7 — use canUser( 'update', { kind, name, id } ) */
 		canUserEditEntityRecord(
 			kind: string,
 			name: string,
@@ -311,8 +318,7 @@ declare module '@wordpress/editor' {
 		getEditedPostVisibility(): 'public' | 'private' | 'password';
 		getPermalink(): string | undefined;
 		getPermalinkParts():
-			| { prefix: string; postName: string; suffix: string }
-			| undefined;
+			{ prefix: string; postName: string; suffix: string } | undefined;
 		isPostSavingLocked(): boolean;
 		isPostAutosavingLocked(): boolean;
 		isPostLockTakeover(): boolean;
@@ -512,12 +518,7 @@ declare module '@wordpress/components' {
 		'aria-pressed'?: boolean;
 		'aria-expanded'?: boolean;
 		'aria-haspopup'?:
-			| boolean
-			| 'dialog'
-			| 'menu'
-			| 'listbox'
-			| 'tree'
-			| 'grid';
+			boolean | 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid';
 		[key: string]: unknown;
 	}
 
@@ -696,13 +697,7 @@ declare module '@wordpress/components' {
 		onChange: (value: string) => void;
 		placeholder?: string;
 		type?:
-			| 'text'
-			| 'email'
-			| 'number'
-			| 'password'
-			| 'tel'
-			| 'url'
-			| 'search';
+			'text' | 'email' | 'number' | 'password' | 'tel' | 'url' | 'search';
 		value: string;
 		autoComplete?: string;
 		autoFocus?: boolean;
@@ -737,8 +732,7 @@ declare module '@wordpress/components' {
 		children?: ReactNode;
 		className?: string;
 		direction?:
-			| CSSProperties['flexDirection']
-			| CSSProperties['flexDirection'][];
+			CSSProperties['flexDirection'] | CSSProperties['flexDirection'][];
 		expanded?: boolean;
 		gap?: number | string;
 		justify?: CSSProperties['justifyContent'];
