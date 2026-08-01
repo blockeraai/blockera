@@ -111,7 +111,13 @@ export const LayoutStyles = ({
 	// Flag for removing `margin-block-start` for `gap` property and the `columns` block
 	let removeMarginBlockStart = false;
 
-	if (isActiveField(blockeraDisplay) && _attributes.blockeraDisplay !== '') {
+	// Resolve once: attrs may be a raw string, `{ value }`, undefined, or empty.
+	// Never pass non-strings into the CSS generator (console spam).
+	const currentDisplayValue = getLayoutDisplayValue(
+		_attributes.blockeraDisplay
+	);
+
+	if (isActiveField(blockeraDisplay) && currentDisplayValue !== '') {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraDisplay',
@@ -130,7 +136,7 @@ export const LayoutStyles = ({
 						{
 							...staticDefinitionParams,
 							properties: {
-								display: _attributes.blockeraDisplay,
+								display: currentDisplayValue,
 							},
 						},
 					],
@@ -145,8 +151,7 @@ export const LayoutStyles = ({
 	// flex/grid gates (mirrors PHP WithDisplayValueTrait). Do not use inherited
 	// display for emitting the `display` property itself.
 	const layoutDisplay =
-		getLayoutDisplayValue(_attributes.blockeraDisplay) ||
-		getLayoutDisplayValue(props?.inheritedDisplay);
+		currentDisplayValue || getLayoutDisplayValue(props?.inheritedDisplay);
 
 	const gridMinFieldActive = isActiveField(blockeraGridMinimumColumnWidth);
 	const gridCountFieldActive = isActiveField(blockeraGridColumnCount);

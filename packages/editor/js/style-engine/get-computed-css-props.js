@@ -359,6 +359,23 @@ export const getComputedCssProps = ({
 				className: params?.attributes?.className || '',
 			};
 
+			// Parent block defaults (e.g. gallery `blockeraDisplay: flex`) must not
+			// leak onto inner elements. Only keep display when this inner block
+			// (or its base breakpoint attrs) actually set it.
+			const innerOwnsDisplay =
+				Object.prototype.hasOwnProperty.call(
+					attributes || {},
+					'blockeraDisplay'
+				) ||
+				(isBaseDevice &&
+					Object.prototype.hasOwnProperty.call(
+						baseInnerAttrs || {},
+						'blockeraDisplay'
+					));
+			if (!innerOwnsDisplay) {
+				delete mergedInnerAttrs.blockeraDisplay;
+			}
+
 			// Mirror PHP WithDisplayValueTrait: non-base breakpoints often set
 			// flex/grid layout without repeating blockeraDisplay. Pass the base
 			// display for layout gates only (do not put it on attributes or
