@@ -82,6 +82,9 @@ class DirectoryRegistrarTest extends \WP_UnitTestCase {
 	 * Scans fixtures and parses headers (arrays, ints, bools).
 	 */
 	public function test_get_patterns_parses_headers_from_fixtures(): void {
+		// Invalid fixtures (missing slug / title) intentionally trigger _doing_it_wrong().
+		$this->setExpectedIncorrectUsage( DirectoryRegistrar::class . '::get_patterns' );
+
 		$patterns = $this->registrar->get_patterns(
 			$this->fixtures_dir,
 			array(
@@ -259,6 +262,9 @@ class DirectoryRegistrarTest extends \WP_UnitTestCase {
 
 		unlink( $this->temp_dir . '/valid-pattern.php' );
 
+		// Cached entry points at a deleted file; register() reports _doing_it_wrong().
+		$this->setExpectedIncorrectUsage( DirectoryRegistrar::class . '::register' );
+
 		$this->registrar->register(
 			$this->temp_dir,
 			array(
@@ -295,6 +301,9 @@ class DirectoryRegistrarTest extends \WP_UnitTestCase {
 		$this->copy_fixture( 'missing-slug.php' );
 		$this->copy_fixture( 'missing-title.php' );
 		$this->copy_fixture( 'valid-pattern.php' );
+
+		// Invalid fixtures intentionally trigger _doing_it_wrong() during get_patterns().
+		$this->setExpectedIncorrectUsage( DirectoryRegistrar::class . '::get_patterns' );
 
 		$this->registrar->register(
 			$this->temp_dir,
