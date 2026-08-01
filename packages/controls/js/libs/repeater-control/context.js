@@ -37,6 +37,9 @@ const RepeaterContext = createContext({
 	repeaterItems: {}, // value
 	//
 	customProps: {}, // we use this for passing props from out of RepeaterControl to RepeaterItemHeader and RepeaterItemChildren
+	runRepeaterCompanionGatedAction: (onAllowed) => {
+		onAllowed();
+	},
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {

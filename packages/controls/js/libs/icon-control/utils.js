@@ -212,6 +212,29 @@ export function getCustomSvgDraft(icon) {
 }
 
 /**
+ * Resolve FeatureWrapper type for custom icon upload controls.
+ *
+ * @return {'companion'|'native'|'none'} Locked (`companion`) without the companion plugin; unlocked (`none`) when active.
+ */
+export function getCustomIconFeatureType() {
+	return applyFilters(
+		'blockera.controls.iconControl.customIcon.featureType',
+		applyFilters('blockera.products.isCompanionPlugin', false)
+			? 'none'
+			: 'companion'
+	);
+}
+
+/**
+ * Whether custom icon file upload (drop / media library) requires the companion plugin.
+ *
+ * @return {boolean} True when uploads are gated; false when unlocked.
+ */
+export function isCustomIconUploadLocked() {
+	return getCustomIconFeatureType() !== 'none';
+}
+
+/**
  * Read the first dropped SVG file as text.
  *
  * @param {FileList|File[]} files   Dropped files.

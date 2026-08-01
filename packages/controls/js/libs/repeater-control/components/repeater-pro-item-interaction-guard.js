@@ -2,8 +2,9 @@
 /**
  * External dependencies
  */
+import { useState, type MixedElement } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { __, sprintf } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -18,6 +19,8 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { MenuItem } from '../../';
+import { CompanionPluginModal } from '../../feature-wrapper';
+import { FEATURE_WRAPPER_TEST_ID } from '../../feature-wrapper/constants/testIds';
 import {
 	getArialLabelSuffix,
 	shouldGateRepeaterItemHeaderForPromo,
@@ -27,8 +30,8 @@ const DEFAULT_UPGRADE_LINK =
 	'https://blockera.ai/products/site-builder/upgrade/?utm_source=repeater-pro-item-guard&utm_medium=referral&utm_campaign=upgrade-feature-wrapper&utm_content=cta-link';
 
 /**
- * Matches FeatureWrapper native markup (pill + “Upgrade to PRO”).
- * Styled via `feature-wrapper`/`type-native` classes with repeater-scoped overrides.
+ * Matches FeatureWrapper native/companion markup for gated repeater rows.
+ * Theme-only → companion (blue). Companion plugin → Pro upgrade (red).
  */
 export function RepeaterProItemInteractionGuard({
 	item,
@@ -53,6 +56,8 @@ export function RepeaterProItemInteractionGuard({
 	enablePromoCountOnRepeaterItemHeader: boolean,
 	isPromoActive: boolean,
 }): MixedElement | null {
+	const [isCompanionModalOpen, setIsCompanionModalOpen] = useState(false);
+
 	if (
 		!shouldGateRepeaterItemHeaderForPromo(
 			itemId,
@@ -65,19 +70,36 @@ export function RepeaterProItemInteractionGuard({
 		return null;
 	}
 
-	const text = __('Upgrade to PRO', 'blockera');
+	const isCompanionPlugin = applyFilters(
+		'blockera.products.isCompanionPlugin',
+		false
+	);
+	const gateType = isCompanionPlugin ? 'native' : 'companion';
+	const text = isCompanionPlugin
+		? __('Upgrade to PRO', 'blockera')
+		: __('Install Companion Plugin to Unlock', 'blockera');
 
 	const notifyBlocked = (e: any) => {
 		e.preventDefault();
 		e.stopPropagation();
 		onBlockedPointerInteraction?.(e);
+
+		if (!isCompanionPlugin) {
+			setIsCompanionModalOpen(true);
+		}
 	};
 
-	const ariaLabelUpgrade = sprintf(
-		// translators: %s is the repeater item id.
-		__('Upgrade to PRO — %s', 'blockera'),
-		getArialLabelSuffix(itemId)
-	);
+	const ariaLabel = isCompanionPlugin
+		? sprintf(
+				// translators: %s is the repeater item id.
+				__('Upgrade to PRO — %s', 'blockera'),
+				getArialLabelSuffix(itemId)
+			)
+		: sprintf(
+				// translators: %s is the repeater item id.
+				__('Install Companion Plugin to Unlock — %s', 'blockera'),
+				getArialLabelSuffix(itemId)
+			);
 
 	const icon = (
 		<Icon
@@ -111,75 +133,122 @@ export function RepeaterProItemInteractionGuard({
 		</div>
 	);
 
+	const companionModal = !isCompanionPlugin ? (
+		<CompanionPluginModal
+			isOpen={isCompanionModalOpen}
+			onRequestClose={() => setIsCompanionModalOpen(false)}
+		/>
+	) : null;
+
 	if (actionButtonsType === 'menu') {
 		return (
-			<MenuItem
-				onClick={notifyBlocked}
-				className="blockera-block-menu-item"
-			>
-				<div
-					className={componentClassNames(
-						'feature-wrapper',
-						'type-native',
-						'show-text-on-hover',
-						'feature-wrapper--repeater-upgrade',
-						'feature-wrapper--repeater-upgrade-menu'
-					)}
+			<>
+				<MenuItem
+					onClick={notifyBlocked}
+					className="blockera-block-menu-item"
 				>
 					<div
-						className={componentInnerClassNames(
-							'feature-wrapper__notice',
-							'is-clickable'
+						className={componentClassNames(
+							'feature-wrapper',
+							`type-${gateType}`,
+							'show-text-on-hover',
+							'feature-wrapper--repeater-upgrade',
+							'feature-wrapper--repeater-upgrade-menu'
 						)}
+						data-test={FEATURE_WRAPPER_TEST_ID.root(gateType)}
 					>
-						{upgradeNoticeIcons}
-
-						<span
+						<div
 							className={componentInnerClassNames(
-								'feature-wrapper__notice__text'
+								'feature-wrapper__notice',
+								'is-clickable'
 							)}
+							data-test={
+								'companion' === gateType
+									? FEATURE_WRAPPER_TEST_ID.companionNotice
+									: undefined
+							}
 						>
-							{text}
-						</span>
+							{upgradeNoticeIcons}
+
+							<span
+								className={componentInnerClassNames(
+									'feature-wrapper__notice__text'
+								)}
+							>
+								{text}
+							</span>
+						</div>
 					</div>
-				</div>
-			</MenuItem>
+				</MenuItem>
+				{companionModal}
+			</>
 		);
 	}
 
 	return (
-		<div
-			className={componentClassNames(
-				'feature-wrapper',
-				'type-native',
-				'show-text-' + showText,
-				'feature-wrapper--repeater-upgrade',
-				className
-			)}
-		>
+		<>
 			<div
-				className={componentInnerClassNames(
-					'feature-wrapper__notice',
-					'is-clickable'
+				className={componentClassNames(
+					'feature-wrapper',
+					`type-${gateType}`,
+					'show-text-' + showText,
+					'feature-wrapper--repeater-upgrade',
+					className
 				)}
+				data-test={FEATURE_WRAPPER_TEST_ID.root(gateType)}
 			>
-				{upgradeNoticeIcons}
-
-				<a
-					href={upgradeLink}
-					target="_blank"
-					rel="noreferrer"
+				<div
 					className={componentInnerClassNames(
-						'feature-wrapper__notice__text',
-						'feature-wrapper__notice__text__link',
-						'repeater-item-interaction-guard-text'
+						'feature-wrapper__notice',
+						'is-clickable'
 					)}
+					data-test={
+						'companion' === gateType
+							? FEATURE_WRAPPER_TEST_ID.companionNotice
+							: undefined
+					}
+					role="button"
+					tabIndex={0}
+					aria-label={ariaLabel}
 					onClick={notifyBlocked}
-					aria-label={ariaLabelUpgrade}
+					onKeyDown={(e) => {
+						if ('Enter' !== e.key && ' ' !== e.key) {
+							return;
+						}
+
+						notifyBlocked(e);
+					}}
 				>
-					{text}
-				</a>
+					{upgradeNoticeIcons}
+
+					{isCompanionPlugin ? (
+						<a
+							href={upgradeLink}
+							target="_blank"
+							rel="noreferrer"
+							className={componentInnerClassNames(
+								'feature-wrapper__notice__text',
+								'feature-wrapper__notice__text__link',
+								'repeater-item-interaction-guard-text'
+							)}
+							onClick={notifyBlocked}
+							aria-label={ariaLabel}
+						>
+							{text}
+						</a>
+					) : (
+						<div
+							className={componentInnerClassNames(
+								'feature-wrapper__notice__text',
+								'repeater-item-interaction-guard-text'
+							)}
+						>
+							{text}
+						</div>
+					)}
+				</div>
 			</div>
-		</div>
+			{companionModal}
+		</>
 	);
 }

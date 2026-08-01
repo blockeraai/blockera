@@ -15,6 +15,7 @@ const blockeraCustomCSS: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Custom CSS Code', 'blockera'),
+	onCompanion: true,
 	onStates: false,
 	onInnerBlocks: false,
 	onBreakpoints: false,

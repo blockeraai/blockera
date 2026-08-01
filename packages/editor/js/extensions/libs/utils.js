@@ -94,18 +94,10 @@ export function generateExtensionId(
  *
  * @return {Object} The regex pattern.
  */
-export function ignoreDefaultBlockAttributeKeysRegExp(): Object {
-	return /^(?!blockera\w+).*/i;
-}
-
-/**
- * Exclude or ignore blockera attribute keys with regular expression.
- *
- * @return {Object} The regex pattern.
- */
-export function ignoreBlockeraAttributeKeysRegExp(): Object {
-	return /^blockera\w+/i;
-}
+export {
+	ignoreDefaultBlockAttributeKeysRegExp,
+	ignoreBlockeraAttributeKeysRegExp,
+} from './attribute-key-patterns';
 
 /**
  * Is reference of sets value one of types "reset" or "reset_all_states"?

@@ -52,8 +52,12 @@ export const AdminFeatureWrapper = ({
 	}
 
 	if (feature?.onNative) {
-		return (
+		return isCompanionPlugin ? (
 			<FeatureWrapper type="native" showText="always" {...props}>
+				{children}
+			</FeatureWrapper>
+		) : (
+			<FeatureWrapper type="companion" showText="always" {...props}>
 				{children}
 			</FeatureWrapper>
 		);

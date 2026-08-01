@@ -2,11 +2,15 @@
  * Cypress helpers for blockera-one companion plugin identity in the theme.
  */
 
-import { goTo } from './site-navigation';
+import { goTo, openSiteEditor } from './site-navigation';
 // eslint-disable-next-line import/no-unresolved
-import { assertBlockData } from './editor';
+import { FEATURE_WRAPPER_TEST_ID } from 'blockera-controls-feature-wrapper-test-ids';
+import {
+	assertBlockData,
+	closeWelcomeGuide,
+	openSettingsPanel,
+} from './editor';
 
-import { FEATURE_WRAPPER_TEST_ID } from '../../../controls/js/libs/feature-wrapper/constants/testIds';
 export { FEATURE_WRAPPER_TEST_ID };
 
 export const COMPANION_INSTALL_NOTICE = 'Install Companion Plugin to Unlock';
@@ -671,4 +675,486 @@ export function waitForCompanionInstallToFinish() {
 	cy.getByDataTest(FEATURE_WRAPPER_TEST_ID.companionInstallProgress, {
 		timeout: 20000,
 	}).should('not.exist');
+}
+
+export const BUTTON_BLOCK_FOR_ICON_CONTROL = `<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Test btn 1</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->`;
+
+/**
+ * Open Blockera icon settings for the selected core/button block.
+ */
+export function openButtonBlockIconSettings() {
+	cy.getBlock('core/button').click();
+	cy.getByAriaControls('settings-view').click();
+}
+
+/**
+ * Open the icon picker on the custom SVG tab.
+ */
+export function openIconPickerCustomTab() {
+	cy.getByDataCy('upload-svg-btn').first().click({ force: true });
+	cy.get('.blockera-control-icon-picker-custom-icon-tab').should(
+		'be.visible'
+	);
+}
+
+/**
+ * Assert custom SVG upload controls are gated in theme mode.
+ */
+export function assertCustomIconUploadCompanionGateVisible() {
+	cy.get('.blockera-control-icon-picker-custom-icon-tab').within(() => {
+		cy.getByDataTest(FEATURE_WRAPPER_TEST_ID.root('companion')).should(
+			'have.length',
+			2
+		);
+		assertCompanionInstallNoticeVisible();
+		cy.get('.blockera-control-icon-picker-custom-icon-textarea').should(
+			'be.disabled'
+		);
+	});
+}
+
+/**
+ * Open the companion install modal from the custom icon tab gate.
+ */
+export function openCompanionInstallModalFromCustomIconTab() {
+	cy.get('.blockera-control-icon-picker-custom-icon-dropzone-wrapper').within(
+		() => {
+			clickCompanionInstallNotice();
+		}
+	);
+
+	assertCompanionInstallModalVisible();
+}
+
+/**
+ * Dispatch a fixture SVG drop on a container (DropZone or modal root).
+ *
+ * @param {string} selector Cypress selector for the drop target container.
+ * @param {string} [fixture='home.svg'] Fixture filename in dev-cypress/js/fixtures.
+ */
+export function dropSvgFixtureOnElement(selector, fixture = 'home.svg') {
+	cy.get(selector)
+		.should('be.visible')
+		.then(($container) => {
+			const $dropZone = $container.find('.components-drop-zone');
+			const $target = $dropZone.length ? $dropZone.first() : $container;
+
+			cy.fixture(fixture, 'utf8').then((content) => {
+				cy.window().then((win) => {
+					const dataTransfer = new win.DataTransfer();
+					const file = new win.File([content], fixture, {
+						type: 'image/svg+xml',
+					});
+
+					dataTransfer.items.add(file);
+
+					['dragenter', 'dragover', 'drop'].forEach((type) => {
+						$target[0].dispatchEvent(
+							new win.DragEvent(type, {
+								bubbles: true,
+								cancelable: true,
+								dataTransfer,
+							})
+						);
+					});
+				});
+			});
+		});
+}
+
+/**
+ * Open global styles → style variations for a block type in the site editor.
+ *
+ * @param {string} [blockName='core/paragraph'] Block name (e.g. core/paragraph).
+ */
+export function openGlobalStylesBlockStyleVariations(
+	blockName = 'core/paragraph'
+) {
+	openSiteEditor();
+	cy.openGlobalStylesPanel();
+	closeWelcomeGuide();
+	cy.getByDataTest('block-style-variations', { timeout: 20000 }).click();
+	cy.get(`button[id="/blocks/${encodeURIComponent(blockName)}"]`, {
+		timeout: 20000,
+	})
+		.first()
+		.click();
+}
+
+/**
+ * Open global styles → size variations for a block type in the site editor.
+ *
+ * Requires a block with `hasSizeVariations` (e.g. core/button).
+ *
+ * @param {string} [blockName='core/button'] Block name.
+ */
+export function openGlobalStylesBlockSizeVariations(blockName = 'core/button') {
+	openSiteEditor();
+	cy.openGlobalStylesPanel();
+	closeWelcomeGuide();
+	cy.getByDataTest('block-style-variations', { timeout: 20000 }).click();
+	cy.get(`button[id="/blocks/${encodeURIComponent(blockName)}"]`, {
+		timeout: 20000,
+	})
+		.first()
+		.click({ force: true });
+	cy.get('.blockera-global-styles-panel-aside', { timeout: 20000 }).should(
+		'be.visible'
+	);
+}
+
+/**
+ * Scope Cypress commands to the global styles size-variations aside.
+ *
+ * @param {Function} callback Cypress chain callback.
+ */
+export function withinGlobalStylesSizeVariationsPanel(callback) {
+	cy.get('.blockera-global-styles-panel-aside', { timeout: 20000 })
+		.should('be.visible')
+		.within(callback);
+}
+
+/**
+ * Click an add size variation button in global styles.
+ *
+ * @param {number} [index=0] Zero-based index among size add buttons.
+ */
+export function clickAddSizeVariationButton(index = 0) {
+	withinGlobalStylesSizeVariationsPanel(() => {
+		cy.getByDataTest('add-new-block-size-variation').eq(index).click();
+	});
+}
+
+/**
+ * Open the companion install modal by clicking add size variation.
+ *
+ * @param {number} [index=0] Zero-based index among size add buttons.
+ */
+export function openCompanionInstallModalFromAddSizeVariation(index = 0) {
+	clickAddSizeVariationButton(index);
+	assertCompanionInstallModalVisible();
+}
+
+/**
+ * Assert clicking add size variation opens the companion install modal.
+ *
+ * @param {number} [index=0] Zero-based index among size add buttons.
+ */
+export function assertAddSizeVariationOpensCompanionModal(index = 0) {
+	clickAddSizeVariationButton(index);
+	assertCompanionInstallModalVisible();
+	cy.contains('[role="dialog"]', 'Add new size variation').should(
+		'not.exist'
+	);
+}
+
+/**
+ * Assert every add size variation button opens the companion install modal.
+ *
+ * Companion modals render in a portal, so modal assertions must run outside
+ * `withinGlobalStylesSizeVariationsPanel`.
+ */
+export function assertEachAddSizeVariationButtonOpensCompanionModal() {
+	cy.get('.blockera-global-styles-panel-aside', { timeout: 20000 })
+		.should('be.visible')
+		.find('[data-test="add-new-block-size-variation"]')
+		.its('length')
+		.then((count) => {
+			const assertAtIndex = (index) => {
+				if (index >= count) {
+					return;
+				}
+
+				if (index > 0) {
+					closeCompanionInstallModal();
+				}
+
+				clickAddSizeVariationButton(index);
+				assertCompanionInstallModalVisible();
+				cy.contains('[role="dialog"]', 'Add new size variation').should(
+					'not.exist'
+				);
+
+				assertAtIndex(index + 1);
+			};
+
+			assertAtIndex(0);
+		});
+}
+
+/**
+ * Click an add style variation button in global styles.
+ *
+ * @param {number} [index=0] Zero-based index among add buttons on the screen.
+ */
+export function clickAddStyleVariationButton(index = 0) {
+	cy.getByDataTest('add-new-block-style-variation').eq(index).click();
+}
+
+/**
+ * Open the companion install modal by clicking add style variation.
+ *
+ * @param {number} [index=0] Zero-based index among add buttons on the screen.
+ */
+export function openCompanionInstallModalFromAddStyleVariation(index = 0) {
+	clickAddStyleVariationButton(index);
+	assertCompanionInstallModalVisible();
+}
+
+/**
+ * Assert clicking add style variation opens the companion install modal.
+ *
+ * @param {number} [index=0] Zero-based index among add buttons on the screen.
+ */
+export function assertAddStyleVariationOpensCompanionModal(index = 0) {
+	clickAddStyleVariationButton(index);
+	assertCompanionInstallModalVisible();
+	cy.contains('[role="dialog"]', 'Add new style variation').should(
+		'not.exist'
+	);
+}
+
+/**
+ * Assert every add style variation button opens the companion install modal.
+ */
+export function assertEachAddStyleVariationButtonOpensCompanionModal() {
+	cy.getByDataTest('add-new-block-style-variation')
+		.its('length')
+		.then((count) => {
+			const assertAtIndex = (index) => {
+				if (index >= count) {
+					return;
+				}
+
+				if (index > 0) {
+					closeCompanionInstallModal();
+				}
+
+				clickAddStyleVariationButton(index);
+				assertCompanionInstallModalVisible();
+				cy.contains(
+					'[role="dialog"]',
+					'Add new style variation'
+				).should('not.exist');
+
+				assertAtIndex(index + 1);
+			};
+
+			assertAtIndex(0);
+		});
+}
+
+/**
+ * Open the Custom CSS extension panel for the selected block.
+ */
+export function openCustomCssSettingsPanel() {
+	openSettingsPanel('Custom CSS');
+	cy.getParentContainer('Custom CSS Code').scrollIntoView({
+		offset: { top: -300 },
+		duration: 0,
+	});
+}
+
+/**
+ * Locate the companion FeatureWrapper on the Custom CSS Code control.
+ */
+export function getCustomCssCompanionWrapper() {
+	return cy
+		.getParentContainer('Custom CSS Code')
+		.parents(COMPANION_EDITOR_WRAPPER_SELECTOR)
+		.first();
+}
+
+/**
+ * Assert Custom CSS controls are gated in theme mode.
+ */
+export function assertCustomCssCompanionGateVisible() {
+	getCustomCssCompanionWrapper().within(() => {
+		assertCompanionInstallNoticeVisible();
+		cy.get('.monaco-editor').should('have.css', 'pointer-events', 'none');
+	});
+}
+
+/**
+ * Open the companion install modal from the Custom CSS gate.
+ */
+export function openCompanionInstallModalFromCustomCss() {
+	getCustomCssCompanionWrapper().within(() => {
+		clickCompanionInstallNotice();
+	});
+
+	assertCompanionInstallModalVisible();
+}
+
+/**
+ * Open a style variation row context menu and click Duplicate.
+ *
+ * @param {string} [styleSlug='section-1'] Style variation slug.
+ */
+export function clickDuplicateStyleVariationFromContextMenu(
+	styleSlug = 'section-1'
+) {
+	cy.getByDataTest(`open-${styleSlug}-contextmenu`)
+		.filter(':visible')
+		.first()
+		.click();
+	cy.get('.variations-settings-popover')
+		.filter(':visible')
+		.last()
+		.contains('button', 'Duplicate')
+		.click();
+}
+
+/**
+ * Assert duplicating a style variation opens the companion install modal.
+ *
+ * @param {string} [styleSlug='section-1'] Style variation slug.
+ */
+export function assertDuplicateStyleVariationOpensCompanionModal(
+	styleSlug = 'section-1'
+) {
+	clickDuplicateStyleVariationFromContextMenu(styleSlug);
+	assertCompanionInstallModalVisible();
+	cy.contains('[role="dialog"]', 'Duplicate style variation').should(
+		'not.exist'
+	);
+	cy.contains('[role="dialog"]', 'Duplicate size variation').should(
+		'not.exist'
+	);
+}
+
+/**
+ * Open a size variation row context menu and click Duplicate.
+ *
+ * @param {string} styleSlug Size variation slug.
+ */
+export function clickDuplicateSizeVariationFromContextMenu(styleSlug) {
+	withinGlobalStylesSizeVariationsPanel(() => {
+		cy.getByDataTest(`open-${styleSlug}-contextmenu`)
+			.filter(':visible')
+			.first()
+			.click();
+	});
+	cy.get('.variations-settings-popover.is-variation-ui-size')
+		.filter(':visible')
+		.last()
+		.contains('button', 'Duplicate')
+		.click();
+}
+
+/**
+ * Assert duplicating a size variation opens the companion install modal.
+ *
+ * @param {string} styleSlug Size variation slug.
+ */
+export function assertDuplicateSizeVariationOpensCompanionModal(styleSlug) {
+	clickDuplicateSizeVariationFromContextMenu(styleSlug);
+	assertCompanionInstallModalVisible();
+	cy.contains('[role="dialog"]', 'Duplicate size variation').should(
+		'not.exist'
+	);
+	cy.contains('[role="dialog"]', 'Duplicate style variation').should(
+		'not.exist'
+	);
+}
+
+/**
+ * Click add on the global styles custom color preset repeater.
+ */
+export function clickAddCustomColorPreset() {
+	cy.getParentContainer('Custom variables').within(() => {
+		cy.getByDataTest('global-styles-preset-add-color-presets-custom').click(
+			{
+				force: true,
+			}
+		);
+	});
+}
+
+/**
+ * Assert adding a custom color preset opens the companion install modal (theme mode).
+ */
+export function assertAddCustomColorPresetOpensCompanionModal() {
+	clickAddCustomColorPreset();
+	assertCompanionInstallModalVisible();
+	cy.get('.blockera-component-upgrade-prompt').should('not.exist');
+	cy.getByDataTest('global-styles-preset-name-field').should('not.exist');
+}
+
+/**
+ * Click clone on a custom color preset repeater row.
+ *
+ * @param {number} [index=0] Repeater row index.
+ */
+export function clickDuplicateCustomColorPreset(index = 0) {
+	cy.getParentContainer('Custom variables').within(() => {
+		cy.get('[data-cy="repeater-item"]')
+			.eq(index)
+			.trigger('mouseover', { force: true });
+		cy.get('[class*="btn-clone"]').first().click({ force: true });
+	});
+}
+
+/**
+ * Assert duplicating a custom color preset opens the companion install modal.
+ *
+ * @param {number} [index=0] Repeater row index.
+ */
+export function assertDuplicateCustomColorPresetOpensCompanionModal(index = 0) {
+	clickDuplicateCustomColorPreset(index);
+	assertCompanionInstallModalVisible();
+	cy.get('.blockera-component-upgrade-prompt').should('not.exist');
+}
+
+/**
+ * Open a style variation row context menu and click Share with other blocks.
+ *
+ * @param {string} [styleSlug='section-1'] Style variation slug.
+ */
+export function clickShareStyleVariationWithOtherBlocksFromContextMenu(
+	styleSlug = 'section-1'
+) {
+	cy.getByDataTest(`open-${styleSlug}-contextmenu`)
+		.filter(':visible')
+		.first()
+		.click();
+	cy.get('.variations-settings-popover')
+		.filter(':visible')
+		.last()
+		.contains('button', 'Share with other blocks')
+		.click();
+}
+
+/**
+ * Open Share with other blocks and wait for the usage modal.
+ *
+ * @param {string} [styleSlug='section-1'] Style variation slug.
+ */
+export function openShareStyleVariationWithOtherBlocksModal(
+	styleSlug = 'section-1'
+) {
+	clickShareStyleVariationWithOtherBlocksFromContextMenu(styleSlug);
+	cy.getByDataTest('save-usage-for-multiple-blocks-button', {
+		timeout: 20000,
+	})
+		.first()
+		.should('be.visible');
+}
+
+/**
+ * Assert a gated action inside the share modal opens the companion install modal.
+ *
+ * @param {string} [styleSlug='section-1'] Style variation slug.
+ */
+export function assertShareStyleVariationModalActionOpensCompanionModal(
+	styleSlug = 'section-1'
+) {
+	openShareStyleVariationWithOtherBlocksModal(styleSlug);
+	cy.getByDataTest('core/heading').first().click({ force: true });
+	assertCompanionInstallModalVisible();
+	cy.getByDataTest('save-usage-for-multiple-blocks-button').should('exist');
 }

@@ -53,6 +53,10 @@ module.exports = {
 				__dirname,
 				'../../editor/js/preview-mode/constants/testIds.ts'
 			),
+			'blockera-controls-feature-wrapper-test-ids': path.resolve(
+				__dirname,
+				'../../controls/js/libs/feature-wrapper/constants/testIds.js'
+			),
 		},
 	},
 	module: {

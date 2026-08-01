@@ -46,6 +46,7 @@ export const BlockTypes = ({
 	handleOnUsageForMultipleBlocks,
 	handleOnSaveUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
+	gateVariationAction,
 }: {
 	items: Object,
 	style: Object,
@@ -58,6 +59,7 @@ export const BlockTypes = ({
 	) => void,
 	handleOnSaveUsageForMultipleBlocks: (params: Object) => void,
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
+	gateVariationAction?: (onAllowed: () => void) => void,
 }): MixedElement => {
 	const {
 		defaultStyles,
@@ -455,6 +457,18 @@ export const BlockTypes = ({
 		handleOnSaveUsageForMultipleBlocks,
 	]);
 
+	const runGatedUsageAction = useCallback(
+		(onAllowed: () => void) => {
+			if ('function' === typeof gateVariationAction) {
+				gateVariationAction(onAllowed);
+				return;
+			}
+
+			onAllowed();
+		},
+		[gateVariationAction]
+	);
+
 	if (!items || !itemsCount) {
 		return <></>;
 	}
@@ -555,13 +569,17 @@ export const BlockTypes = ({
 								}
 								variant="primary"
 								onClick={() => {
-									setIsSaving(true);
-									setTimeout(() => {
-										handleOnSave();
-										// Clear action state.
-										setAction(null);
-										setIsOpenUsageForMultipleBlocks(false);
-									}, 10);
+									runGatedUsageAction(() => {
+										setIsSaving(true);
+										setTimeout(() => {
+											handleOnSave();
+											// Clear action state.
+											setAction(null);
+											setIsOpenUsageForMultipleBlocks(
+												false
+											);
+										}, 10);
+									});
 								}}
 							>
 								{__('Save', 'blockera')}
@@ -576,13 +594,15 @@ export const BlockTypes = ({
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
-						const blockToKeep = selectedBlockStyle || blockName;
-						const keepItems = blockToKeep ? [blockToKeep] : [];
-						setBlocksState({
-							items: keepItems,
-							primitiveItems: blocksState.primitiveItems,
+						runGatedUsageAction(() => {
+							const blockToKeep = selectedBlockStyle || blockName;
+							const keepItems = blockToKeep ? [blockToKeep] : [];
+							setBlocksState({
+								items: keepItems,
+								primitiveItems: blocksState.primitiveItems,
+							});
+							setGlobalData('disable-all', '', keepItems);
 						});
-						setGlobalData('disable-all', '', keepItems);
 					}}
 				>
 					{__('Disable all', 'blockera')}
@@ -592,37 +612,43 @@ export const BlockTypes = ({
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
-						let enableItems;
-						if (
-							-1 !== maxSelectableBlocks &&
-							blocksState.items.length >= maxSelectableBlocks
-						) {
-							setIsUpgradePromptOpen(true);
-							return;
-						}
-						if (maxSelectableBlocks === -1) {
-							enableItems = validItems.map((item) => item.name);
-						} else {
-							const toAdd = validItems.filter(
-								(v) => !blocksState.items.includes(v.name)
-							);
-							const addCount = Math.min(
-								remainingBlocks ?? 0,
-								toAdd.length
-							);
-							enableItems = [
-								...blocksState.items,
-								...toAdd.slice(0, addCount).map((v) => v.name),
-							];
-						}
-						if (enableItems.length === 0) {
-							return;
-						}
-						setBlocksState({
-							items: enableItems,
-							primitiveItems: blocksState.primitiveItems,
+						runGatedUsageAction(() => {
+							let enableItems;
+							if (
+								-1 !== maxSelectableBlocks &&
+								blocksState.items.length >= maxSelectableBlocks
+							) {
+								setIsUpgradePromptOpen(true);
+								return;
+							}
+							if (maxSelectableBlocks === -1) {
+								enableItems = validItems.map(
+									(item) => item.name
+								);
+							} else {
+								const toAdd = validItems.filter(
+									(v) => !blocksState.items.includes(v.name)
+								);
+								const addCount = Math.min(
+									remainingBlocks ?? 0,
+									toAdd.length
+								);
+								enableItems = [
+									...blocksState.items,
+									...toAdd
+										.slice(0, addCount)
+										.map((v) => v.name),
+								];
+							}
+							if (enableItems.length === 0) {
+								return;
+							}
+							setBlocksState({
+								items: enableItems,
+								primitiveItems: blocksState.primitiveItems,
+							});
+							setGlobalData('enable-all', '', enableItems);
 						});
-						setGlobalData('enable-all', '', enableItems);
 					}}
 				>
 					{__('Enable all', 'blockera')}
@@ -669,6 +695,9 @@ export const BlockTypes = ({
 										}
 										setIsUpgradePromptOpen={
 											setIsUpgradePromptOpen
+										}
+										runGatedUsageAction={
+											runGatedUsageAction
 										}
 									/>
 								))}
@@ -728,46 +757,49 @@ const BlockType = ({
 	setBlocksState,
 	maxSelectableBlocks,
 	setIsUpgradePromptOpen,
+	runGatedUsageAction,
 }: Object): MixedElement => {
 	// Stable primitive for hooks; avoids recreating callbacks when parent passes a new `item` reference.
 	const typeName = item?.name ?? '';
 
 	const handleToggleChange = useCallback(
 		(newValue: boolean) => {
-			if (!typeName) {
-				return;
-			}
-			const name = typeName;
-			// Active block must stay enabled for this style (toggle is disabled; guard for programmatic calls).
-			if (name === blockName && !newValue) {
-				return;
-			}
-			if (newValue) {
-				if (
-					-1 !== maxSelectableBlocks &&
-					blocksState.items.length >= maxSelectableBlocks
-				) {
-					setIsUpgradePromptOpen(true);
+			runGatedUsageAction(() => {
+				if (!typeName) {
 					return;
 				}
-			} else {
-				setIsUpgradePromptOpen(false);
-			}
+				const name = typeName;
+				// Active block must stay enabled for this style (toggle is disabled; guard for programmatic calls).
+				if (name === blockName && !newValue) {
+					return;
+				}
+				if (newValue) {
+					if (
+						-1 !== maxSelectableBlocks &&
+						blocksState.items.length >= maxSelectableBlocks
+					) {
+						setIsUpgradePromptOpen(true);
+						return;
+					}
+				} else {
+					setIsUpgradePromptOpen(false);
+				}
 
-			let nextItems;
-			// Functional update avoids stale `items` when toggling quickly.
-			setBlocksState((prev) => {
-				nextItems = prev.items.includes(name)
-					? prev.items.filter((i) => i !== name)
-					: [...prev.items, name];
-				return { ...prev, items: nextItems };
+				let nextItems;
+				// Functional update avoids stale `items` when toggling quickly.
+				setBlocksState((prev) => {
+					nextItems = prev.items.includes(name)
+						? prev.items.filter((i) => i !== name)
+						: [...prev.items, name];
+					return { ...prev, items: nextItems };
+				});
+
+				setGlobalData(
+					newValue ? 'single-enable' : 'single-disable',
+					name,
+					nextItems
+				);
 			});
-
-			setGlobalData(
-				newValue ? 'single-enable' : 'single-disable',
-				name,
-				nextItems
-			);
 		},
 		[
 			typeName,
@@ -777,6 +809,7 @@ const BlockType = ({
 			setBlocksState,
 			setGlobalData,
 			setIsUpgradePromptOpen,
+			runGatedUsageAction,
 		]
 	);
 

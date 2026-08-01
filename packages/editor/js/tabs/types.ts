@@ -134,6 +134,11 @@ export interface AddTabOptions {
 	 * When true, skip companion and free-tier tab limits (e.g. site editor view-mode toggle).
 	 */
 	skipTabLimits?: boolean;
+	/**
+	 * Theme mode document sync: replace the workspace with a single unpinned tab for
+	 * the current document instead of blocking or stacking tabs.
+	 */
+	replaceUnpinnedForCompanionSync?: boolean;
 }
 
 /**

@@ -30,6 +30,7 @@ import {
 	INSPECTOR_SIDEBAR_SELECTORS,
 	POPOVER_ROOT_SELECTOR,
 } from '../popover/utils';
+import { getRepeaterActiveItemsCount } from './helpers';
 
 export const isOpenPopoverEvent = (
 	event: Object,
@@ -150,6 +151,37 @@ export function isEnabledPromote(
 		'function' === typeof Promotion &&
 		0 !== Children.count(Promotion({ items }))
 	);
+}
+
+/**
+ * Whether add/clone should open the companion install gate (theme mode, 2+ items).
+ *
+ * When the companion plugin is installed, returns false so the existing Pro promo flow runs.
+ *
+ * @param {Object} items Repeater items value.
+ * @param {boolean} [isCompanionPlugin] Optional override for tests.
+ * @param {boolean} [companionGateAllRepeaterActions] When true, gate the first add/clone too.
+ * @return {boolean} True when companion gate should block add/clone.
+ */
+export function isRepeaterCompanionGateActive(
+	items: Object,
+	isCompanionPlugin?: boolean,
+	companionGateAllRepeaterActions: boolean = false
+): boolean {
+	const isCompanion =
+		'boolean' === typeof isCompanionPlugin
+			? isCompanionPlugin
+			: applyFilters('blockera.products.isCompanionPlugin', false);
+
+	if (isCompanion) {
+		return false;
+	}
+
+	if (companionGateAllRepeaterActions) {
+		return true;
+	}
+
+	return getRepeaterActiveItemsCount(items) >= 1;
 }
 
 /**

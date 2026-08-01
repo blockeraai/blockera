@@ -28,6 +28,20 @@ export function getCurrentEditorContext(): EditorContext | null {
 }
 
 /**
+ * Whether companion tab-limit promotions should be skipped for this add-tab call.
+ *
+ * Passive document sync (post.php, post-new.php, site editor) uses
+ * `replaceUnpinnedForCompanionSync` via TabsManager in theme mode.
+ *
+ * @param options Optional add-tab options (honours `skipTabLimits`).
+ */
+export function shouldSkipCompanionTabLimits(options?: {
+	skipTabLimits?: boolean;
+}): boolean {
+	return Boolean(options?.skipTabLimits);
+}
+
+/**
  * Determine which editor context a post type belongs to
  *
  * @param postType - Post type to check

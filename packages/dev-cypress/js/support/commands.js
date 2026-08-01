@@ -1181,10 +1181,12 @@ export const registerCommands = () => {
 		});
 	});
 
-	/** Dispatch Ctrl/Cmd+T for the workspace add-tab shortcut. */
+	/**
+	 * Dispatch Ctrl+T for the workspace add-tab shortcut.
+	 * Matches `blockera/tabs/open-add-tab` which registers modifier `ctrl`
+	 * (literal Control), not WordPress `primary` (Cmd on macOS).
+	 */
 	Cypress.Commands.add('tabsPressAddTabShortcut', () => {
-		const isMac = Cypress.platform === 'darwin';
-
 		cy.window().then((win) => {
 			win.document.dispatchEvent(
 				new win.KeyboardEvent('keydown', {
@@ -1192,11 +1194,33 @@ export const registerCommands = () => {
 					code: 'KeyT',
 					bubbles: true,
 					cancelable: true,
-					metaKey: isMac,
-					ctrlKey: !isMac,
+					ctrlKey: true,
+					metaKey: false,
 				})
 			);
 		});
+	});
+
+	/**
+	 * Opens the WordPress core command palette (Cmd/Ctrl+K), not add-tab mode.
+	 * Prefer store `open()` so Electron/Cypress keyboard quirks do not matter.
+	 */
+	Cypress.Commands.add('tabsOpenCoreCommandBar', () => {
+		cy.window({ timeout: 20000 }).then((win) => {
+			const dispatch = win.wp?.data?.dispatch?.('core/commands');
+
+			if (!dispatch?.open) {
+				throw new Error(
+					'core/commands open() is required (command palette not loaded).'
+				);
+			}
+
+			dispatch.open();
+		});
+
+		cy.get('.commands-command-menu [cmdk-input]', {
+			timeout: 20000,
+		}).should('be.visible');
 	});
 
 	/** Click add tab without stubbing companion (theme-mode limit tests). */

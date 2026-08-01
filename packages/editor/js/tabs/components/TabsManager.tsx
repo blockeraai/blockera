@@ -50,7 +50,8 @@ import {
 	isSiteEditorViewModeToggleClick,
 	markSiteEditorViewModeToggleNavigation,
 } from '../utils/siteEditorViewModeToggle';
-import { isPostNewEditorPage } from '../../utils/isEditorPage';
+import { getCurrentEditorContext } from '../utils/editorContext';
+import { isCompanionPlugin } from '../utils/isCompanionPlugin';
 import type {
 	DocumentInaccessibleInfo,
 	RecentlyClosedTab,
@@ -412,12 +413,35 @@ export default function TabsManager(): React.ReactElement | null {
 	}, []);
 
 	const getDocumentSyncAddTabOptions = useCallback(() => {
-		const skipTabLimits =
-			consumeSiteEditorViewModeToggleBypass() || isPostNewEditorPage();
+		if (consumeSiteEditorViewModeToggleBypass()) {
+			if (!isCompanionPlugin()) {
+				return {
+					replaceUnpinnedForCompanionSync: true,
+					onEvictedUnpinned: addClosedTab,
+				};
+			}
+
+			return {
+				skipTabLimits: true,
+				evictLastUnpinnedIfAtLimit: false,
+				onEvictedUnpinned: addClosedTab,
+			};
+		}
+
+		const editorContext = getCurrentEditorContext();
+		const isPassiveDocumentSync =
+			editorContext === 'site' || editorContext === 'post';
+
+		if (isPassiveDocumentSync && !isCompanionPlugin()) {
+			return {
+				replaceUnpinnedForCompanionSync: true,
+				onEvictedUnpinned: addClosedTab,
+			};
+		}
 
 		return {
-			skipTabLimits,
-			evictLastUnpinnedIfAtLimit: !skipTabLimits,
+			skipTabLimits: false,
+			evictLastUnpinnedIfAtLimit: isPassiveDocumentSync,
 			onEvictedUnpinned: addClosedTab,
 		};
 	}, [addClosedTab]);

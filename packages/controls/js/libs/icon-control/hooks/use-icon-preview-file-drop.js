@@ -5,12 +5,16 @@
  */
 import { __ } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import { readSvgFromDroppedFiles, sanitizeRawSVGString } from '../utils';
+import {
+	isCustomIconUploadLocked,
+	readSvgFromDroppedFiles,
+	sanitizeRawSVGString,
+} from '../utils';
 
 type CommitSvgAction = {
 	type: 'UPDATE_SVG',
@@ -24,6 +28,8 @@ type UseIconPreviewFileDropOptions = {
 
 type UseIconPreviewFileDropReturn = {
 	handlePreviewFilesDrop: (files: FileList | File[]) => void,
+	isCompanionInstallOpen: boolean,
+	closeCompanionInstallPrompt: () => void,
 };
 
 /**
@@ -33,10 +39,16 @@ export function useIconPreviewFileDrop({
 	onCommitSvg,
 }: UseIconPreviewFileDropOptions): UseIconPreviewFileDropReturn {
 	const { createNotice } = dispatch('core/notices');
+	const [isCompanionInstallOpen, setIsCompanionInstallOpen] = useState(false);
 
 	const handlePreviewFilesDrop = useCallback(
 		(files) => {
 			if (!files?.length) {
+				return;
+			}
+
+			if (isCustomIconUploadLocked()) {
+				setIsCompanionInstallOpen(true);
 				return;
 			}
 
@@ -64,7 +76,13 @@ export function useIconPreviewFileDrop({
 		[onCommitSvg, createNotice]
 	);
 
+	const closeCompanionInstallPrompt = useCallback(() => {
+		setIsCompanionInstallOpen(false);
+	}, []);
+
 	return {
 		handlePreviewFilesDrop,
+		isCompanionInstallOpen,
+		closeCompanionInstallPrompt,
 	};
 }
