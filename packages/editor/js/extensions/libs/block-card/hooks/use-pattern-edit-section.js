@@ -11,6 +11,7 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
+import { getEditedContentOnlySection } from '../../../../utils/block-editor-private-apis';
 import {
 	findPatternSectionClientId,
 	isCoreExitPatternEditModeVisible,
@@ -18,7 +19,7 @@ import {
 
 /**
  * Resolves the active pattern section client id when editing an inner block inside
- * a pattern (content-only section), using core's public unstable selector when available.
+ * a pattern (content-only section), using core's private content-only selector.
  *
  * @param {string} selectedClientId Currently selected block client id.
  * @return {string|null} Pattern section client id to show in PatternBlockCard, or null.
@@ -34,8 +35,8 @@ export function usePatternEditSection(selectedClientId: string): string | null {
 			}
 
 			const store = select(blockEditorStore);
-			const editedSection =
-				store.__unstableGetTemporarilyEditingAsBlocks?.() || null;
+			// Private replacement for deprecated __unstableGetTemporarilyEditingAsBlocks.
+			const editedSection = getEditedContentOnlySection(select);
 
 			let fallbackPatternClientId = null;
 
