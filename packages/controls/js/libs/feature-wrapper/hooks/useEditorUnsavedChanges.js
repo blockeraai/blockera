@@ -119,8 +119,10 @@ export function useEditorUnsavedChanges(): EditorUnsavedChangesState {
 		}
 	}, []);
 
-	const { saveEntityRecord } = useDispatch(CORE_STORE);
-	const { savePost } = useDispatch(EDITOR_STORE);
+	const { saveEntityRecord } = useDispatch(CORE_STORE) || {
+		saveEntityRecord: () => {},
+	};
+	const { savePost } = useDispatch(EDITOR_STORE) || { savePost: () => {} };
 
 	const saveChanges = useCallback(async (): Promise<boolean> => {
 		const snapshot = getEditorUnsavedChangesSnapshot();
