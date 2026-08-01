@@ -1186,7 +1186,7 @@ async function applyDomSearchReplace(locator, operations) {
 		return;
 	}
 
-	await locator.evaluate((el, ops) => {
+	const didMutate = await locator.evaluate((el, ops) => {
 		let html = el.innerHTML;
 
 		for (const operation of ops) {
@@ -1211,7 +1211,7 @@ async function applyDomSearchReplace(locator, operations) {
 		}
 
 		if (html === el.innerHTML) {
-			return;
+			return false;
 		}
 
 		const tmp = document.createElement('div');
@@ -1296,11 +1296,31 @@ async function applyDomSearchReplace(locator, operations) {
 			liveChildren.forEach((child, i) => {
 				syncNode(child, nextChildren[i]);
 			});
-			return;
+			return true;
 		}
 
 		el.innerHTML = html;
+		return true;
 	}, operations);
+
+	// Avatar/src sanitizers may swap image URLs; wait so screenshots capture the fixture.
+	if (didMutate) {
+		await locator.evaluate(async (el) => {
+			const images = Array.from(el.querySelectorAll('img'));
+			await Promise.all(
+				images.map((img) => {
+					if (img.complete && img.naturalWidth > 0) {
+						return Promise.resolve();
+					}
+
+					return new Promise((resolve) => {
+						img.addEventListener('load', resolve, { once: true });
+						img.addEventListener('error', resolve, { once: true });
+					});
+				})
+			);
+		});
+	}
 }
 
 /**
