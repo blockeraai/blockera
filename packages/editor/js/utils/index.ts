@@ -13,4 +13,9 @@ export type { ParsedUrl } from './parseUrl';
 
 // Editor utilities
 export { focusPostTitle } from './focusPostTitle';
-export { requestWordPressInspectorTab } from './block-editor-private-apis';
+export {
+	getEditedContentOnlySection,
+	requestWordPressInspectorTab,
+	stopEditingContentOnlySection,
+	unlockBlockEditorSelect,
+} from './block-editor-private-apis';
