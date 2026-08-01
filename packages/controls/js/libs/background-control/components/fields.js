@@ -69,8 +69,8 @@ const Fields: FieldItem = memo<FieldItem>(
 		const { getActiveComplementaryArea = () => undefined } =
 			select('core/interface') || {};
 
-		const activeComplementaryArea =
-			getActiveComplementaryArea('core/edit-site');
+		// WP 6.6+: interface scope is `core` (edit-post/edit-site merge).
+		const activeComplementaryArea = getActiveComplementaryArea('core');
 
 		if ('edit-site/global-styles' === activeComplementaryArea) {
 			name = getSelectedBlockStyle();
