@@ -5,6 +5,7 @@ import { getControlValue } from '../../../store/selectors';
 import { controlReducer } from '../../../store/reducers/control-reducer';
 import { modifyControlValue } from '../../../store/actions';
 import { select } from '@wordpress/data';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 describe('transition control component testing', () => {
 	const value = {
@@ -106,27 +107,31 @@ describe('transition control component testing', () => {
 			cy.get('@onChange').should('have.been.called');
 		});
 
-		it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <TransitionControl label="Transition" />,
-				value,
-				store: STORE_NAME,
-				name,
-			});
+		describe('pro item limit', () => {
+			useCompanionPluginInstalledForComponentTests();
 
-			cy.get('button[aria-label="Add New Transition"]').click();
+			it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <TransitionControl label="Transition" />,
+					value,
+					store: STORE_NAME,
+					name,
+				});
 
-			cy.get('.blockera-component-upgrade-prompt')
-				.find('a')
-				.contains(/upgrade/i)
-				.should('be.visible');
+				cy.get('button[aria-label="Add New Transition"]').click();
 
-			//Check data provider value
-			cy.get('body').then(() => {
-				expect(1).to.be.equal(
-					Object.keys(getControlValue(name, STORE_NAME)).length
-				);
+				cy.get('.blockera-component-upgrade-prompt')
+					.find('a')
+					.contains(/upgrade/i)
+					.should('be.visible');
+
+				//Check data provider value
+				cy.get('body').then(() => {
+					expect(1).to.be.equal(
+						Object.keys(getControlValue(name, STORE_NAME)).length
+					);
+				});
 			});
 		});
 

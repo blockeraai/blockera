@@ -5,8 +5,11 @@ import { select } from '@wordpress/data';
 import { modifyControlValue } from '../../../store/actions';
 import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 describe('attributes-control component testing', () => {
+	useCompanionPluginInstalledForComponentTests();
+
 	describe('rendering test', () => {
 		it('should render correctly with label', () => {
 			cy.withDataProvider({
