@@ -27,6 +27,7 @@ const controlsStylesCss = path.resolve(
 		? 'dist/controls-styles/style.min.css'
 		: 'dist/controls-styles/style.css'
 );
+const emptyWpModule = path.resolve(__dirname, 'stubs/empty-wp-module.js');
 
 module.exports = {
 	mode: 'development',
@@ -57,6 +58,10 @@ module.exports = {
 				__dirname,
 				'../../controls/js/libs/feature-wrapper/constants/testIds.js'
 			),
+			// CT does not exercise these packages; nested installs often break webpack
+			// export resolution and block the whole component suite.
+			'@wordpress/dataviews': emptyWpModule,
+			'@wordpress/commands': emptyWpModule,
 		},
 	},
 	module: {
@@ -148,5 +153,10 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			React: 'react',
 		}),
+		// Catch `@wordpress/dataviews/*` and `@wordpress/commands/*` subpath imports.
+		new webpack.NormalModuleReplacementPlugin(
+			/^@wordpress\/(dataviews|commands)(\/.*)?$/,
+			emptyWpModule
+		),
 	],
 };
