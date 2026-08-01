@@ -1,0 +1,33 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?m=year-month-day"
+		},
+		{
+			"search": ">(?:January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}<",
+			"replace": ">Month Year<"
+		}
+	],
+	"editor-search-replace": [
+		{
+			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?m=year-month-day"
+		},
+		{
+			"search": "(?:January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}",
+			"replace": "Month Year"
+		}
+	],
+	"frontend-search-replace": [
+		{
+			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?m=year-month-day"
+		},
+		{
+			"search": "(?:January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}",
+			"replace": "Month Year"
+		}
+	]
+}
