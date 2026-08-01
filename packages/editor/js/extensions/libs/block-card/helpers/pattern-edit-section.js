@@ -3,10 +3,14 @@
 /**
  * External dependencies
  */
-import { dispatch, select } from '@wordpress/data';
+import { select } from '@wordpress/data';
 import { isReusableBlock } from '@wordpress/blocks';
-import { store as blockEditorStore } from '@wordpress/block-editor';
 import { store as editorStore } from '@wordpress/editor';
+
+/**
+ * Internal dependencies
+ */
+import { stopEditingContentOnlySection } from '../../../../utils/block-editor-private-apis';
 
 /**
  * Whether a block represents a pattern / content-only section container.
@@ -123,7 +127,7 @@ export function shouldDeferBlockInspectorCardPortal(
 			clientId: string,
 			ascending?: boolean
 		) => Array<string>,
-		getTemporarilyEditingAsBlocks?: () => string | null,
+		getEditedContentOnlySection?: () => string | null,
 	}
 ): boolean {
 	if (!clientId) {
@@ -134,10 +138,10 @@ export function shouldDeferBlockInspectorCardPortal(
 		return false;
 	}
 
-	const { getBlock, getBlockParents, getTemporarilyEditingAsBlocks } =
+	const { getBlock, getBlockParents, getEditedContentOnlySection } =
 		storeSelectors;
 
-	const editedSection = getTemporarilyEditingAsBlocks?.() || null;
+	const editedSection = getEditedContentOnlySection?.() || null;
 
 	if (
 		editedSection &&
@@ -254,7 +258,8 @@ export function clickCoreExitPatternButton(
 }
 
 /**
- * Leaves pattern (content-only section) edit mode using public actions when available.
+ * Leaves pattern (content-only section) edit mode via private store action,
+ * falling back to clicking core's inspector exit control.
  *
  * @param {Function} translate `__` from `@wordpress/i18n`.
  * @return {boolean} Whether exit was triggered.
@@ -262,20 +267,8 @@ export function clickCoreExitPatternButton(
 export function stopPatternContentOnlyEdit(
 	translate: (text: string) => string
 ): boolean {
-	const blockEditorDispatch = dispatch(blockEditorStore);
-
-	if (
-		typeof blockEditorDispatch.stopEditingContentOnlySection === 'function'
-	) {
-		blockEditorDispatch.stopEditingContentOnlySection();
-		return true;
-	}
-
-	if (
-		typeof blockEditorDispatch.__unstableSetTemporarilyEditingAsBlocks ===
-		'function'
-	) {
-		blockEditorDispatch.__unstableSetTemporarilyEditingAsBlocks(false);
+	// Private replacement for deprecated __unstableSetTemporarilyEditingAsBlocks.
+	if (stopEditingContentOnlySection()) {
 		return true;
 	}
 

@@ -55,8 +55,9 @@ export function getGlobalStylesPanelFallbackClientId(
 export function isGlobalStylesPanelOpen(select: Function): boolean {
 	const { getActiveComplementaryArea } = select('core/interface') || {};
 
+	// WP 6.6+: interface scope is `core` (edit-post/edit-site merge).
 	return (
-		getActiveComplementaryArea?.('core/edit-site') ===
+		getActiveComplementaryArea?.('core') ===
 		GLOBAL_STYLES_COMPLEMENTARY_AREA
 	);
 }

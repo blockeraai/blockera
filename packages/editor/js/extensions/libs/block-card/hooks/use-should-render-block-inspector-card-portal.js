@@ -12,6 +12,7 @@ import { store as editorStore } from '@wordpress/editor';
 /**
  * Internal dependencies
  */
+import { getEditedContentOnlySection } from '../../../../utils/block-editor-private-apis';
 import {
 	shouldDeferBlockInspectorCardPortal,
 	isCoreExitPatternEditModeVisible,
@@ -41,8 +42,8 @@ export function useShouldRenderBlockInspectorCardPortal(
 			return shouldDeferBlockInspectorCardPortal(clientId, {
 				getBlock: blockEditor.getBlock,
 				getBlockParents: blockEditor.getBlockParents,
-				getTemporarilyEditingAsBlocks:
-					blockEditor.__unstableGetTemporarilyEditingAsBlocks,
+				getEditedContentOnlySection: () =>
+					getEditedContentOnlySection(select),
 			});
 		},
 		[clientId]

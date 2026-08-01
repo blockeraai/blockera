@@ -64,6 +64,29 @@ const blockeraSupports = {
 	...(typography?.supports || {}),
 };
 
+/**
+ * Drop blockeraDisplay when none of the owner attr objects set it.
+ * Prevents parent/block defaults (e.g. gallery flex) from leaking into
+ * inner blocks or content pseudo-states (before/after).
+ */
+const omitUnownedBlockeraDisplay = (
+	mergedAttrs: Object,
+	...owners: Array<?Object>
+): Object => {
+	for (let i = 0; i < owners.length; i++) {
+		const owner = owners[i];
+		if (
+			owner &&
+			Object.prototype.hasOwnProperty.call(owner, 'blockeraDisplay')
+		) {
+			return mergedAttrs;
+		}
+	}
+
+	delete mergedAttrs.blockeraDisplay;
+	return mergedAttrs;
+};
+
 const appendStyles = ({
 	settings,
 	disabledStyles,
@@ -257,16 +280,20 @@ export const getComputedCssProps = ({
 								masterState,
 								currentStateHasSelectors,
 								selectors: calculatedSelectors,
-								attributes: {
-									...defaultAttributes,
-									blockeraBlockStates: {
-										[stateType]: {
-											content: stateItem?.content || '',
+								attributes: omitUnownedBlockeraDisplay(
+									{
+										...defaultAttributes,
+										blockeraBlockStates: {
+											[stateType]: {
+												content:
+													stateItem?.content || '',
+											},
 										},
-									},
-									className:
-										params?.attributes?.className || '',
-								},
+										className:
+											params?.attributes?.className || '',
+									}
+									// content-only: no owner for display
+								),
 							},
 							disabledStyles,
 						})
@@ -284,6 +311,10 @@ export const getComputedCssProps = ({
 						continue;
 					}
 
+					const baseInnerForState =
+						params?.attributes?.blockeraInnerBlocks?.[blockType]
+							?.attributes || {};
+
 					stylesStack.push(
 						appendStyles({
 							settings: {
@@ -292,32 +323,34 @@ export const getComputedCssProps = ({
 								masterState,
 								currentStateHasSelectors,
 								selectors: calculatedSelectors,
-								attributes: {
-									...defaultAttributes,
-									...(!hasContent
-										? {
-												...(params?.attributes
-													?.blockeraInnerBlocks?.[
-													blockType
-												]?.attributes || {}),
-												...restAttributes,
-											}
-										: {}),
-									...breakpointItem?.attributes,
-									...(hasContent
-										? {
-												blockeraBlockStates: {
-													[stateType]: {
-														content:
-															stateItem?.content ||
-															'',
+								attributes: omitUnownedBlockeraDisplay(
+									{
+										...defaultAttributes,
+										...(!hasContent
+											? {
+													...baseInnerForState,
+													...restAttributes,
+												}
+											: {}),
+										...breakpointItem?.attributes,
+										...(hasContent
+											? {
+													blockeraBlockStates: {
+														[stateType]: {
+															content:
+																stateItem?.content ||
+																'',
+														},
 													},
-												},
-											}
-										: {}),
-									className:
-										params?.attributes?.className || '',
-								},
+												}
+											: {}),
+										className:
+											params?.attributes?.className || '',
+									},
+									breakpointItem?.attributes,
+									hasContent ? null : baseInnerForState,
+									hasContent ? null : restAttributes
+								),
 								currentBlock: blockType,
 								device: breakpointType,
 							},
@@ -350,14 +383,18 @@ export const getComputedCssProps = ({
 			const baseInnerAttrs =
 				params?.attributes?.blockeraInnerBlocks?.[blockType]
 					?.attributes || {};
-			const mergedInnerAttrs = {
-				...defaultAttributes,
-				// Only merge full base inner attrs on the base breakpoint so we do
-				// not re-emit every base declaration into responsive media queries.
-				...(isBaseDevice ? baseInnerAttrs : {}),
-				...attributes,
-				className: params?.attributes?.className || '',
-			};
+			const mergedInnerAttrs = omitUnownedBlockeraDisplay(
+				{
+					...defaultAttributes,
+					// Only merge full base inner attrs on the base breakpoint so we do
+					// not re-emit every base declaration into responsive media queries.
+					...(isBaseDevice ? baseInnerAttrs : {}),
+					...attributes,
+					className: params?.attributes?.className || '',
+				},
+				attributes,
+				isBaseDevice ? baseInnerAttrs : null
+			);
 
 			// Mirror PHP WithDisplayValueTrait: non-base breakpoints often set
 			// flex/grid layout without repeating blockeraDisplay. Pass the base
@@ -475,7 +512,7 @@ export const getComputedCssProps = ({
 							device: getBaseBreakpoint(),
 							currentStateHasSelectors,
 							selectors: calculatedSelectors,
-							attributes: {
+							attributes: omitUnownedBlockeraDisplay({
 								...defaultAttributes,
 								blockeraBlockStates: {
 									// $FlowFixMe
@@ -483,7 +520,7 @@ export const getComputedCssProps = ({
 										content: stateItem?.content || '',
 									},
 								},
-							},
+							}),
 						},
 						disabledStyles,
 					})
@@ -504,29 +541,33 @@ export const getComputedCssProps = ({
 					continue;
 				}
 
+				const masterStateAttrs = omitUnownedBlockeraDisplay(
+					{
+						...defaultAttributes,
+						...(hasContent ? {} : params.attributes),
+						...breakpoint?.attributes,
+						...(hasContent
+							? {
+									blockeraBlockStates: {
+										// $FlowFixMe
+										[state]: {
+											content: stateItem?.content || '',
+										},
+									},
+								}
+							: {}),
+					},
+					breakpoint?.attributes,
+					hasContent ? null : params.attributes
+				);
+
 				stylesStack.push(
 					appendStyles({
 						settings: {
 							...calculatedProps,
 							currentStateHasSelectors,
 							selectors: calculatedSelectors,
-							attributes: {
-								...defaultAttributes,
-								...(hasContent ? {} : params.attributes),
-								...breakpoint?.attributes,
-								...(hasContent
-									? {
-											blockeraBlockStates: {
-												// $FlowFixMe
-												[state]: {
-													content:
-														stateItem?.content ||
-														'',
-												},
-											},
-										}
-									: {}),
-							},
+							attributes: masterStateAttrs,
 							currentBlock: 'master',
 							device: breakpointType,
 						},
