@@ -348,10 +348,10 @@ class DirectoryRegistrar {
 	 *
 	 * Adapted from WP_Theme::scandir().
 	 *
-	 * @param string            $path          Absolute directory path.
-	 * @param string|string[]|null $extensions Extension(s) to include, or null for all.
-	 * @param int               $depth         Recursion depth; -1 for unlimited.
-	 * @param string            $relative_path Relative path prefix for keys.
+	 * @param string               $path          Absolute directory path.
+	 * @param string|string[]|null $extensions    Extension(s) to include, or null for all.
+	 * @param int                  $depth         Recursion depth; -1 for unlimited.
+	 * @param string               $relative_path Relative path prefix for keys.
 	 *
 	 * @return array<string, string>|false Map of relative => absolute paths, or false if not a dir.
 	 */
