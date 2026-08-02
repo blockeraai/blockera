@@ -34,14 +34,17 @@ export const registerComponentCommands = () => {
 	});
 
 	Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
-		const fallbackLabel = args[0];
+		// Second arg may be a string fallback label or Cypress options (e.g. { timeout }).
+		// Only treat strings as fallback labels — objects must pass through as options.
+		const maybeFallbackOrOptions = args[0];
+		const hasFallbackLabel = typeof maybeFallbackOrOptions === 'string';
+		const fallbackLabel = hasFallbackLabel ? maybeFallbackOrOptions : null;
+		const options = hasFallbackLabel ? args.slice(1) : args;
 
 		if (fallbackLabel) {
-			delete args[0];
-
 			return cy.get(
 				`[aria-label="${selector}"], [aria-label="${fallbackLabel}"]`,
-				...args
+				...options
 			);
 		}
 
@@ -56,16 +59,18 @@ export const registerComponentCommands = () => {
 
 			if (parsedLabel?.length > 1) {
 				return cy.get(
-					`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`
+					`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`,
+					...options
 				);
 			}
 
 			return cy.get(
-				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`
+				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`,
+				...options
 			);
 		}
 
-		return cy.get(`[aria-label="${selector}"]`, ...args);
+		return cy.get(`[aria-label="${selector}"]`, ...options);
 	});
 
 	// get parent container to have isolate aria for testing
