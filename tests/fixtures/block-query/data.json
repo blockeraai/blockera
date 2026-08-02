@@ -1,0 +1,26 @@
+{
+	"posts": [
+		{
+			"post_type": "post",
+			"post_title": "ZZZ Static Query Post 2",
+			"post_name": "zzz-static-query-post-2",
+			"post_status": "publish",
+			"post_content": "Static content for query fixture post 2. This paragraph keeps the Query Loop post content and reading time stable across CI runs.",
+			"post_date": "2024-06-02 12:00:00"
+		},
+		{
+			"post_type": "post",
+			"post_title": "ZZZ Static Query Post 1",
+			"post_name": "zzz-static-query-post-1",
+			"post_status": "publish",
+			"post_content": "Static content for query fixture post 1. This paragraph keeps the Query Loop post content and reading time stable across CI runs.",
+			"post_date": "2024-06-01 12:00:00"
+		}
+	],
+	"host_post": {
+		"post_type": "page",
+		"post_title": "Test Design: block-query",
+		"post_name": "test-design-block-query",
+		"post_status": "publish"
+	}
+}
