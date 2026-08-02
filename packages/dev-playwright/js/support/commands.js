@@ -1186,7 +1186,7 @@ async function applyDomSearchReplace(locator, operations) {
 		return;
 	}
 
-	const didMutate = await locator.evaluate((el, ops) => {
+	await locator.evaluate((el, ops) => {
 		let html = el.innerHTML;
 
 		for (const operation of ops) {
@@ -1211,7 +1211,7 @@ async function applyDomSearchReplace(locator, operations) {
 		}
 
 		if (html === el.innerHTML) {
-			return false;
+			return;
 		}
 
 		const tmp = document.createElement('div');
@@ -1247,6 +1247,15 @@ async function applyDomSearchReplace(locator, operations) {
 			return true;
 		};
 
+		// Ignore whitespace-only text nodes — live SSR trees often disagree
+		// with a re-parsed HTML string on insignificant whitespace.
+		const significantChildren = (node) =>
+			Array.from(node.childNodes).filter(
+				(child) =>
+					child.nodeType !== Node.TEXT_NODE ||
+					(child.nodeValue && child.nodeValue.trim() !== '')
+			);
+
 		/**
 		 * Apply sanitised nodes onto the live tree without replacing ancestors.
 		 *
@@ -1267,8 +1276,8 @@ async function applyDomSearchReplace(locator, operations) {
 
 			syncAttrs(liveNode, nextNode);
 
-			const liveChildren = Array.from(liveNode.childNodes);
-			const nextChildren = Array.from(nextNode.childNodes);
+			const liveChildren = significantChildren(liveNode);
+			const nextChildren = significantChildren(nextNode);
 
 			if (
 				liveChildren.length === nextChildren.length &&
@@ -1282,12 +1291,21 @@ async function applyDomSearchReplace(locator, operations) {
 				return;
 			}
 
-			// Structure diverged at this subtree — replace only here.
-			liveNode.innerHTML = nextNode.innerHTML;
+			// Never wipe element subtrees that host React/SSR (breaks Blockera
+			// styles). Patch matching <time> nodes inside this subtree only.
+			const liveTimes = liveNode.querySelectorAll('time');
+			const nextTimes = nextNode.querySelectorAll('time');
+			const n = Math.min(liveTimes.length, nextTimes.length);
+			for (let i = 0; i < n; i++) {
+				syncAttrs(liveTimes[i], nextTimes[i]);
+				if (liveTimes[i].textContent !== nextTimes[i].textContent) {
+					liveTimes[i].textContent = nextTimes[i].textContent;
+				}
+			}
 		};
 
-		const liveChildren = Array.from(el.childNodes);
-		const nextChildren = Array.from(tmp.childNodes);
+		const liveChildren = significantChildren(el);
+		const nextChildren = significantChildren(tmp);
 
 		if (
 			liveChildren.length === nextChildren.length &&
@@ -1296,31 +1314,20 @@ async function applyDomSearchReplace(locator, operations) {
 			liveChildren.forEach((child, i) => {
 				syncNode(child, nextChildren[i]);
 			});
-			return true;
+			return;
 		}
 
-		el.innerHTML = html;
-		return true;
+		// Root structure diverged — never assign el.innerHTML (destroys React).
+		const liveTimes = el.querySelectorAll('time');
+		const nextTimes = tmp.querySelectorAll('time');
+		const n = Math.min(liveTimes.length, nextTimes.length);
+		for (let i = 0; i < n; i++) {
+			syncAttrs(liveTimes[i], nextTimes[i]);
+			if (liveTimes[i].textContent !== nextTimes[i].textContent) {
+				liveTimes[i].textContent = nextTimes[i].textContent;
+			}
+		}
 	}, operations);
-
-	// Avatar/src sanitizers may swap image URLs; wait so screenshots capture the fixture.
-	if (didMutate) {
-		await locator.evaluate(async (el) => {
-			const images = Array.from(el.querySelectorAll('img'));
-			await Promise.all(
-				images.map((img) => {
-					if (img.complete && img.naturalWidth > 0) {
-						return Promise.resolve();
-					}
-
-					return new Promise((resolve) => {
-						img.addEventListener('load', resolve, { once: true });
-						img.addEventListener('error', resolve, { once: true });
-					});
-				})
-			);
-		});
-	}
 }
 
 /**
