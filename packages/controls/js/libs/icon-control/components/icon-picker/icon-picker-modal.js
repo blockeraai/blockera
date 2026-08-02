@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useCallback, useContext } from '@wordpress/element';
+import { useState, useCallback, useContext, useRef } from '@wordpress/element';
 import { useInstanceId } from '@wordpress/compose';
 import { DropZone } from '@wordpress/components';
 
@@ -25,10 +25,12 @@ import {
 	getCustomSvgDraft,
 	sanitizeRawSVGString,
 	readSvgFromDroppedFiles,
+	isCustomIconUploadLocked,
 	getLibraryIconDisplayName,
 	getLibraryDisplayName,
 	libraryIconToSvgStringAsync,
 } from '../../utils';
+import CustomIconUploadCompanionPrompt from './custom-icon-upload-companion-prompt';
 import { default as Search } from './search';
 import IconLibraries, { DEFAULT_LIBRARIES } from './icon-libraries';
 import LibraryFilters from './library-filters';
@@ -73,6 +75,10 @@ export default function IconPickerModal({
 	const [draftUploadSVG, setDraftUploadSVG] = useState(
 		initialDraft.uploadSVG
 	);
+	const [isCompanionInstallOpen, setIsCompanionInstallOpen] = useState(false);
+	const isCompanionInstallOpenRef = useRef(false);
+	// Ignore one spurious picker close while the nested companion modal dismisses.
+	const closingCompanionInstallRef = useRef(false);
 
 	const sanitizedDraft = sanitizeRawSVGString(draftSvgString);
 	const hasValidDraft = sanitizedDraft !== '';
@@ -133,6 +139,12 @@ export default function IconPickerModal({
 				return;
 			}
 
+			if (isCustomIconUploadLocked()) {
+				isCompanionInstallOpenRef.current = true;
+				setIsCompanionInstallOpen(true);
+				return;
+			}
+
 			readSvgFromDroppedFiles(files, (svgString) => {
 				setActiveTab(TAB_CUSTOM);
 				handleDraftChange({ svgString, uploadSVG: null });
@@ -140,6 +152,28 @@ export default function IconPickerModal({
 		},
 		[handleDraftChange]
 	);
+
+	const handleCompanionInstallPromptClose = useCallback(() => {
+		closingCompanionInstallRef.current = true;
+		isCompanionInstallOpenRef.current = false;
+		setIsCompanionInstallOpen(false);
+		window.setTimeout(() => {
+			closingCompanionInstallRef.current = false;
+		}, 0);
+	}, []);
+
+	const handleIconPickerClose = useCallback(() => {
+		if (closingCompanionInstallRef.current) {
+			return;
+		}
+
+		if (isCompanionInstallOpenRef.current || isCompanionInstallOpen) {
+			// Nested modal open triggers a spurious picker close — ignore it.
+			return;
+		}
+
+		onClose();
+	}, [isCompanionInstallOpen, onClose]);
 
 	const handleUseIcon = useCallback(() => {
 		if (!hasValidDraft) {
@@ -351,82 +385,91 @@ export default function IconPickerModal({
 	}
 
 	return (
-		<Modal
-			headerIcon={<Icon icon={'icon'} library={'ui'} iconSize={24} />}
-			className={controlInnerClassNames('icon-picker-modal')}
-			headerTitle={
-				<>
-					{__('Icon library', 'blockera')}
-
-					<div
-						className={controlInnerClassNames(
-							'icon-picker-modal-header-tabs',
-							'blockera-component-tabs',
-							'design-modern',
-							'fit-width-tabs'
-						)}
-					>
-						<TabMenu
-							tabs={modalTabs}
-							selected={activeTab}
-							instanceId={instanceId}
-							design="modern"
-							orientation="horizontal"
-							onTabClick={setActiveTab}
-						/>
-					</div>
-				</>
-			}
-			isDismissible={true}
-			onRequestClose={onClose}
-			actions={modalTabFooter}
-		>
-			<DropZone onFilesDrop={handleModalFilesDrop} />
-
-			<div className={controlInnerClassNames('icon-picker-modal-body')}>
-				{activeTab === TAB_LIBRARY ? (
-					<div
-						className={controlInnerClassNames(
-							'icon-picker-modal-layout'
-						)}
-					>
-						<LibraryFilters
-							libraries={libraries}
-							selected={activeFilter}
-							onFilterClick={handleFilterClick}
-						/>
+		<>
+			<Modal
+				headerIcon={<Icon icon={'icon'} library={'ui'} iconSize={24} />}
+				className={controlInnerClassNames('icon-picker-modal')}
+				headerTitle={
+					<>
+						{__('Icon library', 'blockera')}
 
 						<div
 							className={controlInnerClassNames(
-								'icon-picker-modal-content'
+								'icon-picker-modal-header-tabs',
+								'blockera-component-tabs',
+								'design-modern',
+								'fit-width-tabs'
 							)}
 						>
-							{search && (
-								<Search
-									key={searchKey}
-									libraries={libraries}
-									onSearchChange={handleSearchChange}
-								/>
-							)}
-
-							{!isSearching && <RecentIcons />}
-
-							{!isSearching && (
-								<IconLibraries
-									libraries={libraries}
-									activeFilter={activeFilter}
-								/>
-							)}
+							<TabMenu
+								tabs={modalTabs}
+								selected={activeTab}
+								instanceId={instanceId}
+								design="modern"
+								orientation="horizontal"
+								onTabClick={setActiveTab}
+							/>
 						</div>
-					</div>
-				) : (
-					<CustomIconTab
-						draftSvgString={draftSvgString}
-						draftUploadSVG={draftUploadSVG}
-						onDraftChange={handleDraftChange}
-					/>
-				)}
-			</div>
-		</Modal>
+					</>
+				}
+				isDismissible={true}
+				onRequestClose={handleIconPickerClose}
+				actions={modalTabFooter}
+			>
+				<DropZone onFilesDrop={handleModalFilesDrop} />
+
+				<div
+					className={controlInnerClassNames('icon-picker-modal-body')}
+				>
+					{activeTab === TAB_LIBRARY ? (
+						<div
+							className={controlInnerClassNames(
+								'icon-picker-modal-layout'
+							)}
+						>
+							<LibraryFilters
+								libraries={libraries}
+								selected={activeFilter}
+								onFilterClick={handleFilterClick}
+							/>
+
+							<div
+								className={controlInnerClassNames(
+									'icon-picker-modal-content'
+								)}
+							>
+								{search && (
+									<Search
+										key={searchKey}
+										libraries={libraries}
+										onSearchChange={handleSearchChange}
+									/>
+								)}
+
+								{!isSearching && <RecentIcons />}
+
+								{!isSearching && (
+									<IconLibraries
+										libraries={libraries}
+										activeFilter={activeFilter}
+									/>
+								)}
+							</div>
+						</div>
+					) : (
+						<CustomIconTab
+							draftSvgString={draftSvgString}
+							draftUploadSVG={draftUploadSVG}
+							onDraftChange={handleDraftChange}
+						/>
+					)}
+				</div>
+			</Modal>
+
+			<CustomIconUploadCompanionPrompt
+				isOpen={isCompanionInstallOpen}
+				onClose={handleCompanionInstallPromptClose}
+			/>
+		</>
 	);
 }

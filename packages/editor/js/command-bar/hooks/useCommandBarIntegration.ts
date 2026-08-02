@@ -66,6 +66,11 @@ export interface UseCommandBarIntegrationParams {
 	tabs: Tab[];
 	/** Optional handler when a document cannot be opened from the command bar. */
 	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
+	/**
+	 * When false (companion plugin inactive), leave WordPress navigation loaders
+	 * unwrapped so Cmd+K behaves like core.
+	 */
+	enabled?: boolean;
 }
 
 /**
@@ -81,6 +86,7 @@ export function useCommandBarIntegration({
 	prefetchEntity,
 	tabs,
 	onDocumentInaccessible,
+	enabled = true,
 }: UseCommandBarIntegrationParams): void {
 	const { registerCommandLoader, unregisterCommandLoader } = useDispatch(
 		commandsStore
@@ -105,6 +111,23 @@ export function useCommandBarIntegration({
 				onDocumentInaccessible,
 			}),
 	};
+
+	const restoreOriginalLoaders = useCallback((): void => {
+		wrappedLoadersRef.current.forEach((loaderName) => {
+			const originalHook = originalHooksRef.current.get(loaderName);
+			if (!originalHook) {
+				return;
+			}
+
+			unregisterCommandLoader(loaderName);
+			registerCommandLoader({
+				name: loaderName,
+				hook: originalHook,
+			});
+		});
+		wrappedLoadersRef.current.clear();
+		originalHooksRef.current.clear();
+	}, [registerCommandLoader, unregisterCommandLoader]);
 
 	// Wrap a single loader
 	const wrapLoader = useCallback(
@@ -162,9 +185,18 @@ export function useCommandBarIntegration({
 		return wrapped;
 	}, [wrapLoader]);
 
+	// When companion is off, restore any previously wrapped loaders and skip wrapping.
+	useEffect(() => {
+		if (enabled) {
+			return;
+		}
+
+		restoreOriginalLoaders();
+	}, [enabled, restoreOriginalLoaders]);
+
 	// Effect to wrap loaders after Gutenberg registers them
 	useEffect(() => {
-		if (!isEditorPage()) {
+		if (!enabled || !isEditorPage()) {
 			return;
 		}
 
@@ -192,11 +224,15 @@ export function useCommandBarIntegration({
 			clearTimeout(timeoutId);
 			clearInterval(intervalId);
 		};
-	}, [wrapNavigationLoaders]);
+	}, [enabled, wrapNavigationLoaders]);
 
 	// Re-wrap when tabs change
 	useEffect(() => {
-		if (!isEditorPage() || wrappedLoadersRef.current.size === 0) {
+		if (
+			!enabled ||
+			!isEditorPage() ||
+			wrappedLoadersRef.current.size === 0
+		) {
 			return;
 		}
 
@@ -214,5 +250,5 @@ export function useCommandBarIntegration({
 			unregisterCommandLoader(loaderName);
 			registerCommandLoader({ name: loaderName, hook: wrappedHook });
 		});
-	}, [tabs, registerCommandLoader, unregisterCommandLoader]);
+	}, [enabled, tabs, registerCommandLoader, unregisterCommandLoader]);
 }

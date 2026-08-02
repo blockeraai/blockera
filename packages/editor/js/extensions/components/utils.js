@@ -13,7 +13,7 @@ import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
 import {
 	ignoreBlockeraAttributeKeysRegExp,
 	ignoreDefaultBlockAttributeKeysRegExp,
-} from '../libs/utils';
+} from '../libs/attribute-key-patterns';
 
 export const propsAreEqual = (perv: Object, next: Object): boolean => {
 	const excludeKeys = ['content', 'text'];

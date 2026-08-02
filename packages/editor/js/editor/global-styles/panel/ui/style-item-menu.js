@@ -29,6 +29,7 @@ import { DeleteModal } from './delete-modal';
 import { DuplicateModal } from './duplicate-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 import { useStyleItemMenuContext } from '../context';
+import { useCompanionGatedVariationAction } from './use-companion-gated-variation-action';
 
 export const StyleItemMenu = (): MixedElement => {
 	const {
@@ -60,6 +61,8 @@ export const StyleItemMenu = (): MixedElement => {
 		anchorRef,
 		variationAllowsMultipleBlocks,
 	} = useStyleItemMenuContext();
+	const { gateVariationAction, companionInstallModal } =
+		useCompanionGatedVariationAction();
 
 	const inactiveLabel = variationAllowsMultipleBlocks
 		? __('Inactive Style', 'blockera')
@@ -71,6 +74,7 @@ export const StyleItemMenu = (): MixedElement => {
 
 	return (
 		<>
+			{companionInstallModal}
 			{isOpenRenameModal && !style?.isDefault && (
 				<RenameModal
 					style={style}
@@ -141,12 +145,14 @@ export const StyleItemMenu = (): MixedElement => {
 							contentAlign="left"
 							className={controlInnerClassNames('menu-item')}
 							onClick={() => {
-								const canDuplicateItem =
-									handlePromotionPopover();
+								gateVariationAction(() => {
+									const canDuplicateItem =
+										handlePromotionPopover();
 
-								if (canDuplicateItem) {
-									setIsOpenDuplicateModal(true);
-								}
+									if (canDuplicateItem) {
+										setIsOpenDuplicateModal(true);
+									}
+								});
 							}}
 						>
 							<Icon icon="duplicate" iconSize="24" />

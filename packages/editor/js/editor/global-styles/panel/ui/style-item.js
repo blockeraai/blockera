@@ -28,6 +28,7 @@ import { getDefaultStyle } from './utils';
 import { type T_STYLE_ITEM_PROPS } from './types';
 import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
+import { useCompanionGatedVariationAction } from './use-companion-gated-variation-action';
 import { useUserCan } from '../../../../hooks/use-user-can';
 import { STORE_NAME as BLOCKERA_EDITOR_STORE } from '../../../../store/constants';
 import {
@@ -170,6 +171,8 @@ export const StyleItem = ({
 		useState(false);
 
 	const styleItemContextMenuAnchorRef = useRef(null);
+	const { gateVariationAction, companionInstallModal } =
+		useCompanionGatedVariationAction();
 
 	const setStyleItemRef = (node: HTMLElement | null) => {
 		styleItemContextMenuAnchorRef.current = node;
@@ -503,6 +506,7 @@ export const StyleItem = ({
 
 	return (
 		<>
+			{companionInstallModal}
 			<div
 				ref={setStyleItemRef}
 				role="button"
@@ -941,12 +945,14 @@ export const StyleItem = ({
 							)}
 							variant="tertiary"
 							onClick={() => {
-								const canDuplicateItem =
-									handlePromotionPopover();
+								gateVariationAction(() => {
+									const canDuplicateItem =
+										handlePromotionPopover();
 
-								if (canDuplicateItem) {
-									setIsOpenDuplicateModal(true);
-								}
+									if (canDuplicateItem) {
+										setIsOpenDuplicateModal(true);
+									}
+								});
 							}}
 							size="input"
 							data-test={'duplicate-item'}

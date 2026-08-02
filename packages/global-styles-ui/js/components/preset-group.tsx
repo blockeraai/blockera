@@ -364,6 +364,7 @@ const Presets = ({
 					? (count: number) => String(count)
 					: undefined
 			}
+			companionGateAllRepeaterActions={true}
 			{...props}
 		/>
 	);

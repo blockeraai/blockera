@@ -5,12 +5,13 @@
  */
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { Button, Flex } from '@blockera/controls';
+import { Button, Flex, CompanionPluginModal } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -19,6 +20,7 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { AddNewStyleModal } from './add-new-style-modal';
 import { useBlockStylesPickerContext } from '../context';
 import { useUserCan } from '../../../../hooks/use-user-can';
+import { VARIATION_SURFACE_SIZE } from '../variation-surfaces';
 
 export const AddNewStyleButton = ({
 	label,
@@ -44,7 +46,30 @@ export const AddNewStyleButton = ({
 		variationSurface,
 	} = useBlockStylesPickerContext();
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isCompanionModalOpen, setIsCompanionModalOpen] = useState(false);
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
+	const isCompanionPlugin = applyFilters(
+		'blockera.products.isCompanionPlugin',
+		false
+	);
+	const isSizeSurface = variationSurface === VARIATION_SURFACE_SIZE;
+	const addVariationTestId = isSizeSurface
+		? 'add-new-block-size-variation'
+		: 'add-new-block-style-variation';
+
+	const handleAddClick = () => {
+		if (!isCompanionPlugin) {
+			setIsCompanionModalOpen(true);
+			return;
+		}
+
+		const canAddNewStyle = handlePromotionPopover();
+
+		if (canAddNewStyle) {
+			setIsModalOpen(true);
+		}
+	};
+
 	return (
 		<Flex justifyContent={'space-between'} style={style}>
 			{'no-label' === design &&
@@ -61,12 +86,7 @@ export const AddNewStyleButton = ({
 				<Button
 					size="extra-small"
 					className={controlInnerClassNames('btn-add')} // blockera-is-not-active
-					onClick={() => {
-						const canAddNewStyle = handlePromotionPopover();
-						if (canAddNewStyle) {
-							setIsModalOpen(true);
-						}
-					}}
+					onClick={handleAddClick}
 					style={
 						'no-label' === design
 							? {
@@ -80,7 +100,7 @@ export const AddNewStyleButton = ({
 									gap: '2px',
 								}
 					}
-					data-test={'add-new-block-style-variation'}
+					data-test={addVariationTestId}
 				>
 					<Icon icon="plus" iconSize="20" />
 
@@ -89,6 +109,13 @@ export const AddNewStyleButton = ({
 						label?.length > 0 &&
 						label}
 				</Button>
+			)}
+
+			{isCompanionModalOpen && (
+				<CompanionPluginModal
+					isOpen={isCompanionModalOpen}
+					onRequestClose={() => setIsCompanionModalOpen(false)}
+				/>
 			)}
 
 			{isModalOpen && (

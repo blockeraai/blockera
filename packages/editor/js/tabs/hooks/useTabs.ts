@@ -28,6 +28,7 @@ import {
 	hasReachedLimit,
 	resolveTabsConfig,
 	isCompanionPlugin,
+	shouldSkipCompanionTabLimits,
 } from '../utils';
 import { isPostNewEditorPage } from '../../utils/isEditorPage';
 import type {
@@ -52,7 +53,7 @@ function getWorkspaceTabCount(workspaceTabs: WorkspaceTabs): number {
 }
 
 function getInitialWorkspaceTabs(limits: TabsLimitsConfig): WorkspaceTabs {
-	if (isPostNewEditorPage()) {
+	if (isPostNewEditorPage() || !isCompanionPlugin()) {
 		return {
 			'pinned-tabs': [],
 			tabs: [],
@@ -378,7 +379,7 @@ export function useTabs({
 
 			let outcome: 'existed' | 'added' | 'blocked' = 'existed';
 			let blockReason: 'companion' | 'regular' | null = null;
-			let evictedUnpinnedTab: Tab | undefined;
+			let evictedTabs: Tab[] = [];
 			const current = workspaceTabsRef.current;
 			let next = current;
 
@@ -387,6 +388,16 @@ export function useTabs({
 				current.tabs.find((tab) => tab.key === key)
 			) {
 				outcome = 'existed';
+			} else if (
+				options?.replaceUnpinnedForCompanionSync &&
+				!isCompanionPlugin()
+			) {
+				evictedTabs = [...current['pinned-tabs'], ...current.tabs];
+				outcome = 'added';
+				next = {
+					'pinned-tabs': [],
+					tabs: [newTab],
+				};
 			} else if (options?.skipTabLimits) {
 				outcome = 'added';
 				next = {
@@ -394,6 +405,7 @@ export function useTabs({
 					tabs: [...current.tabs, newTab],
 				};
 			} else if (
+				!shouldSkipCompanionTabLimits(options) &&
 				!isCompanionPlugin() &&
 				getWorkspaceTabCount(current) > 0
 			) {
@@ -406,7 +418,7 @@ export function useTabs({
 					options?.evictLastUnpinnedIfAtLimit &&
 					current.tabs.length > 0
 				) {
-					evictedUnpinnedTab = current.tabs[current.tabs.length - 1];
+					evictedTabs = [current.tabs[current.tabs.length - 1]];
 					const updatedTabs = [...current.tabs.slice(0, -1), newTab];
 					outcome = 'added';
 					next = {
@@ -433,8 +445,10 @@ export function useTabs({
 				}
 			}
 
-			if (evictedUnpinnedTab && options?.onEvictedUnpinned) {
-				options.onEvictedUnpinned(evictedUnpinnedTab);
+			if (evictedTabs.length > 0 && options?.onEvictedUnpinned) {
+				evictedTabs.forEach((tab) => {
+					options.onEvictedUnpinned?.(tab);
+				});
 			}
 
 			if (outcome === 'blocked' && blockReason) {
@@ -700,7 +714,7 @@ export function useTabs({
 	}, []);
 
 	const guardOpenAddTab = useCallback((): boolean => {
-		if (!isCompanionPlugin()) {
+		if (!shouldSkipCompanionTabLimits() && !isCompanionPlugin()) {
 			showLimitExceeded('companion');
 			return false;
 		}

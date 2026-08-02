@@ -7,6 +7,9 @@ import { renderHook } from '@testing-library/react';
 /**
  * Internal dependencies
  */
+// Side-effect: register controls stores before ControlContextProvider selects them.
+import '../../store';
+import '../../libs/repeater-control/store';
 import { useControlContext } from '../hooks';
 import { ControlContextProvider } from '../index';
 import { registerControl } from '../../api/index';

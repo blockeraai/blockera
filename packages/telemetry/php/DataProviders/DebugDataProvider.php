@@ -9,6 +9,12 @@ class DebugDataProvider implements DataProvider {
 	 */
 	public function getData(): array {
 
+		// REST/cron/frontend do not bootstrap wp-admin. WP_Debug_Data::get_wp_server()
+		// calls get_home_path(), which lives in file.php.
+		if ( ! function_exists( 'get_home_path' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
 		if ( ! class_exists( 'WP_Debug_Data' ) ) {
 
 			require_once ABSPATH . 'wp-admin/includes/misc.php';

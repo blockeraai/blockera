@@ -5,6 +5,7 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useCallback } from '@wordpress/element';
 import { getBlockTypes } from '@wordpress/blocks';
 
 /**
@@ -18,6 +19,7 @@ import { componentInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { SearchBlockTypes } from './search-block-types';
+import { useCompanionGatedVariationAction } from './use-companion-gated-variation-action';
 
 export const UsageForMultipleBlocksModal = ({
 	style,
@@ -38,6 +40,34 @@ export const UsageForMultipleBlocksModal = ({
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
 }): MixedElement => {
 	const blocks = getBlockTypes();
+	const { gateVariationAction, companionInstallModal, isCompanionModalOpen } =
+		useCompanionGatedVariationAction();
+
+	const gatedHandleOnUsageForMultipleBlocks = useCallback(
+		(styleParam: Object, action: 'add' | 'delete') => {
+			gateVariationAction(() => {
+				handleOnUsageForMultipleBlocks(styleParam, action);
+			});
+		},
+		[gateVariationAction, handleOnUsageForMultipleBlocks]
+	);
+
+	const gatedHandleOnSaveUsageForMultipleBlocks = useCallback(
+		(params: Object) => {
+			gateVariationAction(() => {
+				handleOnSaveUsageForMultipleBlocks(params);
+			});
+		},
+		[gateVariationAction, handleOnSaveUsageForMultipleBlocks]
+	);
+
+	const handleShareModalClose = useCallback(() => {
+		if (isCompanionModalOpen) {
+			return;
+		}
+
+		setIsOpenUsageForMultipleBlocks(false);
+	}, [isCompanionModalOpen, setIsOpenUsageForMultipleBlocks]);
 
 	return (
 		<Modal
@@ -50,21 +80,27 @@ export const UsageForMultipleBlocksModal = ({
 				style.label
 			)}
 			isDismissible={true}
-			onRequestClose={() => setIsOpenUsageForMultipleBlocks(false)}
+			onRequestClose={handleShareModalClose}
+			shouldCloseOnClickOutside={!isCompanionModalOpen}
+			shouldCloseOnEsc={!isCompanionModalOpen}
 		>
 			<SearchBlockTypes
 				style={style}
 				blocks={blocks}
 				blockName={blockName}
 				blockTitle={blockTitle}
+				gateVariationAction={gateVariationAction}
 				setIsOpenUsageForMultipleBlocks={
 					setIsOpenUsageForMultipleBlocks
 				}
-				handleOnUsageForMultipleBlocks={handleOnUsageForMultipleBlocks}
+				handleOnUsageForMultipleBlocks={
+					gatedHandleOnUsageForMultipleBlocks
+				}
 				handleOnSaveUsageForMultipleBlocks={
-					handleOnSaveUsageForMultipleBlocks
+					gatedHandleOnSaveUsageForMultipleBlocks
 				}
 			/>
+			{companionInstallModal}
 		</Modal>
 	);
 };

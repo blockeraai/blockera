@@ -210,6 +210,10 @@ export interface UseOpenTabsCommandsParams {
 	) => Promise<unknown>;
 	/** Optional handler when the tab target cannot be loaded. */
 	onDocumentInaccessible?: (info: DocumentInaccessibleInfo) => void;
+	/**
+	 * When false (companion plugin inactive), do not register open-tabs commands.
+	 */
+	enabled?: boolean;
 }
 
 /**
@@ -223,6 +227,7 @@ export function useOpenTabsCommands({
 	switchDocument,
 	prefetchEntity,
 	onDocumentInaccessible,
+	enabled = true,
 }: UseOpenTabsCommandsParams): void {
 	// Create a stable reference to tab actions
 	const tabActions = useMemo(
@@ -247,5 +252,6 @@ export function useOpenTabsCommands({
 		name: 'blockera-tabs/open-tabs-commands',
 		hook: loaderHook,
 		context: ENTITY_EDIT_CONTEXT,
+		disabled: !enabled,
 	});
 }

@@ -18,6 +18,7 @@ import { useCommandBarIntegration } from '../hooks/useCommandBarIntegration';
 import { useAddTabCommandBar } from '../hooks/useAddTabCommandBar';
 import { useCreateEntityCommands } from '../hooks/useCreateEntityCommands';
 import { useOpenTabsCommands } from '../hooks/useOpenTabsCommands';
+import { isCompanionPlugin } from '../../tabs/utils/isCompanionPlugin';
 import type { DocumentInaccessibleInfo, Tab } from '../../tabs/types';
 
 /**
@@ -66,6 +67,9 @@ export default function CommandBarIntegration({
 	onDocumentInaccessible,
 	children,
 }: CommandBarIntegrationProps): ReactNode {
+	// Theme mode (companion off): leave Cmd+K as WordPress core; + / Ctrl+T still gated in tabs.
+	const companionEnabled = isCompanionPlugin();
+
 	// Intercept command bar entity navigation commands and open as tabs
 	useCommandBarIntegration({
 		addTab,
@@ -73,6 +77,7 @@ export default function CommandBarIntegration({
 		prefetchEntity,
 		tabs,
 		onDocumentInaccessible,
+		enabled: companionEnabled,
 	});
 
 	// Hook for opening command bar in "add tab mode" (navigation commands only)
@@ -93,6 +98,7 @@ export default function CommandBarIntegration({
 			postType: string,
 			postId: number
 		) => Promise<unknown>,
+		enabled: companionEnabled,
 	});
 
 	// Register commands for all open tabs
@@ -101,6 +107,7 @@ export default function CommandBarIntegration({
 		switchDocument,
 		prefetchEntity,
 		onDocumentInaccessible,
+		enabled: companionEnabled,
 	});
 
 	// Render children with openAddTabCommandBar function
