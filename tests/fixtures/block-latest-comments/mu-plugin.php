@@ -1,8 +1,10 @@
 <?php
 /**
  * Temporary mu-plugin for latest-comments block visual snapshot tests.
- * Replaces every Gravatar URL with the local Blockera logo fixture so
+ * Replaces every Gravatar URL with the local Blockera logo PNG fixture so
  * editor/frontend screenshots do not depend on secure.gravatar.com.
+ * Uses the filled PNG (not the outline SVG) so avatar width/height/border
+ * styles still paint a solid square like a real gravatar.
  *
  * This file is loaded via a stub in wp-content/mu-plugins by the Playwright/PHPUnit harness.
  *
@@ -16,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Relative path from the Blockera plugin root to the avatar logo fixture. */
 if ( ! function_exists( 'blockera_test_block_latest_comments_avatar_fixture_rel_path' ) ) {
 	function blockera_test_block_latest_comments_avatar_fixture_rel_path() {
-		return 'packages/dev-cypress/js/fixtures/icon-blockera.svg';
+		return 'packages/dev-cypress/js/fixtures/bg-extension-test.png';
 	}
 }
 

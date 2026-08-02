@@ -2,7 +2,7 @@
 	"$schema": "../../fixtures.config.schema.json",
 	"html-search-replace": [
 		{
-			"search": "src=['\"][^'\"]*packages/dev-cypress/js/fixtures/icon-blockera\\.svg[^'\"]*['\"]",
+			"search": "src=['\"][^'\"]*packages/dev-cypress/js/fixtures/bg-extension-test\\.png[^'\"]*['\"]",
 			"replace": "src='https://blockera.ai/avatar.png'"
 		}
 	],
@@ -14,28 +14,12 @@
 		{
 			"search": "datetime=([\"'])[^\"']*\\1",
 			"replace": "datetime=\"Month Day, Year\""
-		},
-		{
-			"search": "srcset=([\"'])https://secure\\.gravatar\\.com/avatar/[^\"']*\\1",
-			"replace": ""
-		},
-		{
-			"search": "src=([\"'])https://secure\\.gravatar\\.com/avatar/[^\"']*\\1",
-			"replace": "src=\"/wp-content/plugins/blockera/packages/dev-cypress/js/fixtures/icon-blockera.svg\""
 		}
 	],
 	"frontend-search-replace": [
 		{
 			"search": "<time datetime=\"[^\"]+\"( class=\"[^\"]+\")?>(<a[^>]*>)?[^<]*(</a>)?</time>",
 			"replace": "<time datetime=\"Month Day, Year\"$1>$2Month Day, Year$3</time>"
-		},
-		{
-			"search": "srcset=([\"'])https://secure\\.gravatar\\.com/avatar/[^\"']*\\1",
-			"replace": ""
-		},
-		{
-			"search": "src=([\"'])https://secure\\.gravatar\\.com/avatar/[^\"']*\\1",
-			"replace": "src=\"/wp-content/plugins/blockera/packages/dev-cypress/js/fixtures/icon-blockera.svg\""
 		}
 	]
 }
