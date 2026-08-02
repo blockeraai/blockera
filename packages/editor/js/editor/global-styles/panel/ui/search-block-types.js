@@ -31,6 +31,7 @@ export const SearchBlockTypes = ({
 	blockName,
 	blockTitle,
 	blocks: _blocks,
+	gateVariationAction,
 	handleOnUsageForMultipleBlocks,
 	handleOnSaveUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
@@ -161,6 +162,7 @@ export const SearchBlockTypes = ({
 					blockName={blockName}
 					blockTitle={blockTitle}
 					enabledItems={enabledItems}
+					gateVariationAction={gateVariationAction}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}

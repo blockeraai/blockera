@@ -645,3 +645,8 @@ h6{
 :root :where(.wp-block-post-title a:where(:not(.wp-element-button)):hover){
 	text-decoration: underline;
 }
+
+:root :where(.wp-block-query-pagination){
+	font-size: var(--wp--preset--font-size--medium);
+	font-weight: 500;
+}

@@ -61,6 +61,7 @@ export default function RepeaterItemActions({
 		actionButtonVisibility,
 		shouldConfirmDeleteModal,
 		confirmDeleteModalProps,
+		runRepeaterCompanionGatedAction,
 	} = useContext(RepeaterContext);
 
 	const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
@@ -230,29 +231,38 @@ export default function RepeaterItemActions({
 		event.stopPropagation();
 		closeMenu(event);
 
-		if (
-			isRepeaterPromoActive(
-				PromoComponent,
-				repeaterItems,
-				disableProHints
-			)
-		) {
-			setCount(count + 1);
-			setDisableAddNewItem(true);
+		const performClone = (): void => {
+			if (
+				isRepeaterPromoActive(
+					PromoComponent,
+					repeaterItems,
+					disableProHints
+				)
+			) {
+				setCount(count + 1);
+				setDisableAddNewItem(true);
 
+				return;
+			}
+
+			cloneRepeaterItem({
+				itemId,
+				onChange,
+				controlId,
+				repeaterId,
+				value: item,
+				overrideItem,
+				valueCleanup,
+				itemIdGenerator,
+			});
+		};
+
+		if ('function' === typeof runRepeaterCompanionGatedAction) {
+			runRepeaterCompanionGatedAction(performClone);
 			return;
 		}
 
-		cloneRepeaterItem({
-			itemId,
-			onChange,
-			controlId,
-			repeaterId,
-			value: item,
-			overrideItem,
-			valueCleanup,
-			itemIdGenerator,
-		});
+		performClone();
 	}
 
 	const showVisibility = actionButtonVisibility && item?.visibilitySupport;

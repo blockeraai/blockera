@@ -5,6 +5,7 @@ import { modifyControlValue } from '../../../store/actions';
 import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 import { nanoid } from 'nanoid';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 describe(
 	'box-shadow-control component testing',
@@ -169,40 +170,45 @@ describe(
 					});
 			});
 
-			it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
-				const name = nanoid();
-				cy.withDataProvider({
-					component: <BoxShadowControl label={'Box Shadow'} />,
-					value: {
-						'outer-0': {
-							type: 'outer',
-							x: '10px',
-							y: '10px',
-							order: 0,
-							blur: '10px',
-							spread: '10px',
-							color: '#cccccc',
-							isVisible: true,
+			describe('pro item limit', () => {
+				useCompanionPluginInstalledForComponentTests();
+
+				it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <BoxShadowControl label={'Box Shadow'} />,
+						value: {
+							'outer-0': {
+								type: 'outer',
+								x: '10px',
+								y: '10px',
+								order: 0,
+								blur: '10px',
+								spread: '10px',
+								color: '#cccccc',
+								isVisible: true,
+							},
 						},
-					},
-					store: STORE_NAME,
-					name,
-				});
+						store: STORE_NAME,
+						name,
+					});
 
-				cy.get('button[aria-label="Add New Box Shadow"]').click();
+					cy.get('button[aria-label="Add New Box Shadow"]').click();
 
-				cy.get('.blockera-component-upgrade-prompt')
-					.find('a')
-					.contains(/upgrade/i)
-					.should('be.visible');
+					cy.get('.blockera-component-upgrade-prompt')
+						.find('a')
+						.contains(/upgrade/i)
+						.should('be.visible');
 
-				cy.getByDataCy('repeater-item').should('have.length', '1');
+					cy.getByDataCy('repeater-item').should('have.length', '1');
 
-				//Check data provider value
-				cy.get('body').then(() => {
-					expect(1).to.be.equal(
-						Object.keys(getControlValue(name, STORE_NAME)).length
-					);
+					//Check data provider value
+					cy.get('body').then(() => {
+						expect(1).to.be.equal(
+							Object.keys(getControlValue(name, STORE_NAME))
+								.length
+						);
+					});
 				});
 			});
 

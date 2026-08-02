@@ -162,34 +162,35 @@ export const registerCommands = () => {
 
 	// get block by name for testing
 	Cypress.Commands.add('getBlock', (blockName, blockTag = '') => {
-		// by passing default it clicks on editor that creates a paragraph block
-		if (blockName === 'default') {
-			if (Cypress.$('iframe[name="editor-canvas"]').length) {
-				return cy.getIframeBody().then((body) => {
-					const $paragraph = Cypress.$(body).find(
-						'[data-type="core/paragraph"]'
+		const canvasIframeSelector = 'iframe[name="editor-canvas"]';
+		const blockSelector = `${blockTag}[data-type="${blockName}"]`;
+
+		const getDefaultBlockFromIframe = () =>
+			cy.getIframeBody().then((body) => {
+				const $paragraph = Cypress.$(body).find(
+					'[data-type="core/paragraph"]'
+				);
+
+				if ($paragraph.length) {
+					return cy.wrap($paragraph.first());
+				}
+
+				return cy
+					.getIframeBody()
+					.find('[aria-label="Add default block"]', {
+						timeout: 20000,
+					})
+					.click()
+					.then(() =>
+						cy
+							.getIframeBody()
+							.find('[data-type="core/paragraph"]')
+							.first()
 					);
+			});
 
-					if ($paragraph.length) {
-						return cy.wrap($paragraph.first());
-					}
-
-					return cy
-						.getIframeBody()
-						.find(`[aria-label="Add default block"]`, {
-							timeout: 20000,
-						})
-						.click()
-						.then(() =>
-							cy
-								.getIframeBody()
-								.find('[data-type="core/paragraph"]')
-								.first()
-						);
-				});
-			}
-
-			return cy.get('body').then(($body) => {
+		const getDefaultBlockFromTopDocument = () =>
+			cy.get('body').then(($body) => {
 				const $paragraph = $body.find('[data-type="core/paragraph"]');
 
 				if ($paragraph.length) {
@@ -201,14 +202,38 @@ export const registerCommands = () => {
 					.click()
 					.then(() => cy.get('[data-type="core/paragraph"]').first());
 			});
+
+		// by passing default it clicks on editor that creates a paragraph block
+		if (blockName === 'default') {
+			// Wait for canvas iframe or top-level appender/paragraph — avoids sync
+			// Cypress.$ iframe checks racing editor mount after createPost().
+			return cy
+				.get(
+					`${canvasIframeSelector}, [aria-label="Add default block"], [data-type="core/paragraph"]`,
+					{ timeout: 20000 }
+				)
+				.should('exist')
+				.then(() => {
+					if (Cypress.$(canvasIframeSelector).length) {
+						return getDefaultBlockFromIframe();
+					}
+
+					return getDefaultBlockFromTopDocument();
+				});
 		}
 
-		if (Cypress.$('iframe[name="editor-canvas"]').length) {
-			return cy
-				.getIframeBody()
-				.find(`${blockTag}[data-type="${blockName}"]`);
-		}
-		return cy.get(`${blockTag}[data-type="${blockName}"]`);
+		return cy
+			.get(`${canvasIframeSelector}, ${blockSelector}`, {
+				timeout: 20000,
+			})
+			.should('exist')
+			.then(() => {
+				if (Cypress.$(canvasIframeSelector).length) {
+					return cy.getIframeBody().find(blockSelector);
+				}
+
+				return cy.get(blockSelector);
+			});
 	});
 
 	Cypress.Commands.add('getSelectedBlock', () => {
@@ -1181,10 +1206,12 @@ export const registerCommands = () => {
 		});
 	});
 
-	/** Dispatch Ctrl/Cmd+T for the workspace add-tab shortcut. */
+	/**
+	 * Dispatch Ctrl+T for the workspace add-tab shortcut.
+	 * Matches `blockera/tabs/open-add-tab` which registers modifier `ctrl`
+	 * (literal Control), not WordPress `primary` (Cmd on macOS).
+	 */
 	Cypress.Commands.add('tabsPressAddTabShortcut', () => {
-		const isMac = Cypress.platform === 'darwin';
-
 		cy.window().then((win) => {
 			win.document.dispatchEvent(
 				new win.KeyboardEvent('keydown', {
@@ -1192,11 +1219,33 @@ export const registerCommands = () => {
 					code: 'KeyT',
 					bubbles: true,
 					cancelable: true,
-					metaKey: isMac,
-					ctrlKey: !isMac,
+					ctrlKey: true,
+					metaKey: false,
 				})
 			);
 		});
+	});
+
+	/**
+	 * Opens the WordPress core command palette (Cmd/Ctrl+K), not add-tab mode.
+	 * Prefer store `open()` so Electron/Cypress keyboard quirks do not matter.
+	 */
+	Cypress.Commands.add('tabsOpenCoreCommandBar', () => {
+		cy.window({ timeout: 20000 }).then((win) => {
+			const dispatch = win.wp?.data?.dispatch?.('core/commands');
+
+			if (!dispatch?.open) {
+				throw new Error(
+					'core/commands open() is required (command palette not loaded).'
+				);
+			}
+
+			dispatch.open();
+		});
+
+		cy.get('.commands-command-menu [cmdk-input]', {
+			timeout: 20000,
+		}).should('be.visible');
 	});
 
 	/** Click add tab without stubbing companion (theme-mode limit tests). */

@@ -277,6 +277,10 @@ export interface UseCreateEntityCommandsParams {
 	switchDocument: (postType: string, postId: number) => Promise<boolean>;
 	/** Function to prefetch entity before switching. */
 	prefetchEntity: (postType: string, postId: number) => Promise<unknown>;
+	/**
+	 * When false (companion plugin inactive), do not register create-entity commands.
+	 */
+	enabled?: boolean;
 }
 
 /**
@@ -289,6 +293,7 @@ export function useCreateEntityCommands({
 	addTab,
 	switchDocument,
 	prefetchEntity,
+	enabled = true,
 }: UseCreateEntityCommandsParams): void {
 	// Create a stable reference to tab actions
 	const tabActions = useMemo(
@@ -313,5 +318,6 @@ export function useCreateEntityCommands({
 		name: 'blockera-tabs/create-entity-commands',
 		hook: loaderHook,
 		context: ENTITY_EDIT_CONTEXT,
+		disabled: !enabled,
 	});
 }

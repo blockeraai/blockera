@@ -180,6 +180,13 @@ export type RepeaterControlProps = {
 		} | null
 	) => (() => void) | void,
 	/**
+	 * When true, companion gate blocks every add/clone in theme mode (not only 2+ items).
+	 * Used by global styles preset repeaters.
+	 *
+	 * @default false
+	 */
+	companionGateAllRepeaterActions?: boolean,
+	/**
 	 * Specifies the visibility or activation control should be shown for repeater items.
 	 *
 	 * @default true

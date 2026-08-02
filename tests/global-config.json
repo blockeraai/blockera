@@ -18,6 +18,10 @@
 			"replace": "?p=post-id"
 		},
 		{
+			"search": "(?:&#038;|&amp;|&)p=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "&p=post-id"
+		},
+		{
 			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
 			"replace": "?m=year-month-day"
 		},
@@ -26,8 +30,16 @@
 			"replace": "?page_id=page-id"
 		},
 		{
+			"search": "(?:&#038;|&amp;|&)page_id=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "&page_id=page-id"
+		},
+		{
 			"search": "\\?attachment_id=\\d+(?=[\\s\"'#&]|$)",
 			"replace": "?attachment_id=attachment-id"
+		},
+		{
+			"search": "(?:&#038;|&amp;|&)attachment_id=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "&attachment_id=attachment-id"
 		},
 		{
 			"search": "(?<=[\\s\"'])post-\\d+(?=[\\s\"'#&]|$)",

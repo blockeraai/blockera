@@ -34,7 +34,12 @@ import {
 	repeaterOnChange,
 	resolveAddedRepeaterItemId,
 } from './store/reducers/utils';
-import { cleanupRepeater, isRepeaterPromoActive } from './utils';
+import {
+	cleanupRepeater,
+	isRepeaterPromoActive,
+	isRepeaterCompanionGateActive,
+} from './utils';
+import { CompanionPluginModal } from '../feature-wrapper';
 
 /**
  * Types
@@ -118,6 +123,7 @@ export default function RepeaterControl(
 		customProps = {},
 		enablePromoCountOnRepeaterItemHeader = true,
 		onRegisterAddNewAction,
+		companionGateAllRepeaterActions = false,
 		...additionalPropsForRepeaterContext
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
@@ -203,6 +209,7 @@ export default function RepeaterControl(
 	);
 
 	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
+	const [isCompanionModalOpen, setIsCompanionModalOpen] = useState(false);
 
 	let normalizedVariableTypes: string[] = [];
 	if (Array.isArray(variableTypes)) {
@@ -284,6 +291,24 @@ export default function RepeaterControl(
 			onChange,
 			valueCleanup,
 		]
+	);
+
+	const runRepeaterCompanionGatedAction = useCallback(
+		(onAllowed: () => void): void => {
+			if (
+				isRepeaterCompanionGateActive(
+					repeaterItems,
+					undefined,
+					companionGateAllRepeaterActions
+				)
+			) {
+				setIsCompanionModalOpen(true);
+				return;
+			}
+
+			onAllowed();
+		},
+		[repeaterItems, companionGateAllRepeaterActions]
 	);
 
 	const disabledAddNewItemForRegister =
@@ -478,9 +503,10 @@ export default function RepeaterControl(
 		markCreatingStepPopoverClosed,
 		clearCreatingStepPopoverClosed,
 		isCreatingStepPopoverCloseGuarded,
+		runRepeaterCompanionGatedAction,
 	};
 
-	const addNewButtonOnClick = () => {
+	const performAddNew = (): void => {
 		if (
 			isRepeaterPromoActive(
 				PromoComponent,
@@ -629,6 +655,10 @@ export default function RepeaterControl(
 		});
 
 		queueEditPopoverForAddedItem(defaultRepeaterItemValue);
+	};
+
+	const addNewButtonOnClick = (): void => {
+		runRepeaterCompanionGatedAction(performAddNew);
 	};
 
 	const hasRepeaterItems = Object.keys(repeaterItems || {}).length > 0;
@@ -964,6 +994,12 @@ export default function RepeaterControl(
 						})}
 					</div>
 				)}
+			{isCompanionModalOpen && (
+				<CompanionPluginModal
+					isOpen={isCompanionModalOpen}
+					onRequestClose={() => setIsCompanionModalOpen(false)}
+				/>
+			)}
 		</RepeaterContextProvider>
 	);
 }

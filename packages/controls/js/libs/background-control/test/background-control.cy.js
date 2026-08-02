@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid';
 import BackgroundControl from '../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { getControlValue } from '../../../store/selectors';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 describe(
 	'background control',
@@ -16,6 +17,8 @@ describe(
 		defaultCommandTimeout: 20000,
 	},
 	() => {
+		useCompanionPluginInstalledForComponentTests();
+
 		beforeEach(() => {
 			cy.viewport(1280, 720);
 		});

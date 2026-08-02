@@ -19,6 +19,8 @@ import { Icon } from '@blockera/icons';
  */
 import { FEATURE_WRAPPER_TEST_ID } from './constants/testIds';
 
+export { CompanionPluginModal } from './components/CompanionPluginModal';
+
 const LazyCompanionPluginModal = lazy(() =>
 	import('./components/CompanionPluginModal').then((module) => ({
 		default: module.CompanionPluginModal,

@@ -3,8 +3,11 @@
 import { nanoid } from 'nanoid';
 import { LinkControl } from '../../..';
 import { getControlValue } from '../../../store/selectors';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 describe('link control component testing', () => {
+	useCompanionPluginInstalledForComponentTests();
+
 	beforeEach(() => {
 		// run these tests as if in a desktop
 		// browser with a 720p monitor

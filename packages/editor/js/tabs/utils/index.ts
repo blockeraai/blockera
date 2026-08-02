@@ -14,6 +14,7 @@ export {
 	getCurrentEditorContext,
 	getEditorContextForPostType,
 	isCrossBoundaryNavigation,
+	shouldSkipCompanionTabLimits,
 } from './editorContext';
 export type { EditorContext } from './editorContext';
 

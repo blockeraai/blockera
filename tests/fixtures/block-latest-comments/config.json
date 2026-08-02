@@ -1,5 +1,11 @@
 {
 	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "src=['\"][^'\"]*packages/dev-cypress/js/fixtures/bg-extension-test\\.png[^'\"]*['\"]",
+			"replace": "src='https://blockera.ai/avatar.png'"
+		}
+	],
 	"editor-search-replace": [
 		{
 			"search": "<time([^>]*)>[\\s\\S]*?</time>",

@@ -21,6 +21,7 @@ import { default as InputControl } from '../../input-control';
 import { default as ToggleSelectControl } from '../../toggle-select-control';
 import AccordionCustomOpenIcon from './icons/accordion-custom-open-icon';
 import AccordionCustomCloseIcon from './icons/accordion-custom-close-icon';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 function RepeaterFilledItemChildren({ itemId, item }) {
 	const {
@@ -91,6 +92,8 @@ const RepeaterItemChildrenType = ({ itemId, item }) => {
 };
 
 describe('repeater control component testing', () => {
+	useCompanionPluginInstalledForComponentTests();
+
 	beforeEach(() => {
 		// run these tests as if in a desktop
 		// browser with a 720p monitor

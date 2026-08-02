@@ -22,6 +22,7 @@ import {
 	UpgradePrompt,
 	RepeaterControl,
 	cleanupRepeaterItem,
+	CompanionPluginModal,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control/default-item-value';
@@ -154,6 +155,27 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 								onClose = () => {},
 								isOpen = false,
 							}): MixedElement | null => {
+								// Theme-only: install companion. Companion plugin: upgrade to Pro.
+								// Return an empty fragment when closed so isEnabledPromote still
+								// detects this PromoComponent (null would disable the gate).
+								if (
+									!applyFilters(
+										'blockera.products.isCompanionPlugin',
+										false
+									)
+								) {
+									if (!isOpen) {
+										return <></>;
+									}
+
+									return (
+										<CompanionPluginModal
+											isOpen={isOpen}
+											onRequestClose={onClose}
+										/>
+									);
+								}
+
 								return (
 									<UpgradePrompt
 										lockedFeature={{

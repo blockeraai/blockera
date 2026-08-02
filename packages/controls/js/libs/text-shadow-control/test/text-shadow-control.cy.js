@@ -9,8 +9,10 @@ import { nanoid } from 'nanoid';
 import { TextShadowControl } from '../../..';
 import { STORE_NAME } from '../../repeater-control/store';
 import { getControlValue } from '../../../store/selectors';
+import { useCompanionPluginInstalledForComponentTests } from '@blockera/dev-cypress/js/helpers/stub-companion-plugin-for-component';
 
 describe('ext shadow control component testing', () => {
+	useCompanionPluginInstalledForComponentTests();
 	beforeEach(() => {
 		// run these tests as if in a desktop
 		// browser with a 720p monitor
