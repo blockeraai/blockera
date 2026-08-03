@@ -20,10 +20,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import {
-	BreakpointsSettings,
-	getSortedBreakpoints,
-} from '@blockera/editor/js/editor/header-ui';
+import { BreakpointsSettings } from '@blockera/editor/js/editor/header-ui';
 import type { BreakpointTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 
 /**
@@ -92,12 +89,9 @@ export const GeneralPanel = (): MixedElement => {
 			});
 	};
 
-	// Memoize the sorted breakpoints to prevent re-creation on every render.
-	const sortedBreakpoints = useMemo(() => {
-		return getSortedBreakpoints(generalSettings.breakpoints, {
-			output: 'objects',
-		});
-	}, [generalSettings.breakpoints]);
+	// Breakpoints repeater manages row order internally via each item's `order` field.
+	// Avoid re-sorting here so parent echoes do not churn object references on delete.
+	const breakpointsForSettings = generalSettings.breakpoints;
 
 	// Memoize the default value to prevent re-creation.
 	const breakpointsDefaultValue = useMemo(() => {
@@ -105,20 +99,14 @@ export const GeneralPanel = (): MixedElement => {
 	}, [defaultSettings?.general?.breakpoints]);
 
 	const memoizedCallback = useCallback((newValue: Object) => {
-		newValue = getSortedBreakpoints(newValue, {
-			output: 'objects',
-		});
-
-		newValue = Object.fromEntries(
+		const normalizedValue = Object.fromEntries(
 			Object.entries((newValue: Object)).map(
 				([key, breakpoint]: [string, BreakpointTypes | Object]) => {
-					return [
-						key,
-						{
-							...breakpoint,
-							...('' === breakpoint.type ? { type: key } : {}),
-						},
-					];
+					if ('' === breakpoint.type) {
+						return [key, { ...breakpoint, type: key }];
+					}
+
+					return [key, breakpoint];
 				}
 			)
 		);
@@ -126,7 +114,10 @@ export const GeneralPanel = (): MixedElement => {
 			added: savedAdded,
 			deleted: savedDeleted,
 			updated: savedUpdated,
-		} = detailedDiff(window.blockeraSettings.general.breakpoints, newValue);
+		} = detailedDiff(
+			window.blockeraSettings.general.breakpoints,
+			normalizedValue
+		);
 
 		setHasUpdates(
 			Object.keys(savedAdded).length > 0 ||
@@ -138,7 +129,7 @@ export const GeneralPanel = (): MixedElement => {
 			...settings,
 			general: {
 				...generalSettings,
-				breakpoints: newValue,
+				breakpoints: normalizedValue,
 			},
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,7 +175,7 @@ export const GeneralPanel = (): MixedElement => {
 				>
 					<BreakpointsSettings
 						onChange={memoizedCallback}
-						breakpoints={sortedBreakpoints}
+						breakpoints={breakpointsForSettings}
 						defaultValue={breakpointsDefaultValue}
 					/>
 				</div>

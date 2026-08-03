@@ -117,10 +117,7 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 				);
 				const previous = stableContextRef.current;
 
-				if (
-					previous &&
-					isEquals(previous.value, nextValue)
-				) {
+				if (previous && isEquals(previous.value, nextValue)) {
 					return previous;
 				}
 
