@@ -5,13 +5,13 @@
  */
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
-import { useMemo, memo } from '@wordpress/element';
+import { useMemo, memo, useCallback, useRef } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
+import { mergeObject, isEquals } from '@blockera/utils';
 import {
 	controlInnerClassNames,
 	controlClassNames,
@@ -61,6 +61,11 @@ const defaultRepeaterItemValue = {
 	attributes: {},
 };
 
+const filteredDefaultRepeaterItemValue = applyFilters(
+	'blockera.breakpoints.defaultRepeaterItemValue',
+	defaultRepeaterItemValue
+);
+
 const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 	memo(
 		({
@@ -68,8 +73,23 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 			breakpoints,
 			defaultValue,
 		}: BreakpointSettingsComponentProps): MixedElement => {
-			breakpoints = useMemo(() => {
-				return Object.fromEntries(
+			const customBreakpointIdRef = useRef(
+				Object.keys(breakpoints).reduce((maxId, key) => {
+					const match = /^custom-(\d+)$/.exec(key);
+
+					if (!match) {
+						return maxId;
+					}
+
+					return Math.max(maxId, parseInt(match[1], 10));
+				}, 0)
+			);
+			const stableContextRef = useRef(null);
+
+			const stableMergedRef = useRef(null);
+
+			const mergedBreakpoints = useMemo(() => {
+				const next = Object.fromEntries(
 					Object.entries(breakpoints).map(([key, value]) => [
 						key,
 						mergeObject(defaultRepeaterItemValue, {
@@ -79,18 +99,84 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 						}),
 					])
 				);
-				// eslint-disable-next-line react-hooks/exhaustive-deps
+				const previous = stableMergedRef.current;
+
+				if (previous && isEquals(previous, next)) {
+					return previous;
+				}
+
+				stableMergedRef.current = next;
+
+				return next;
 			}, [breakpoints]);
+
+			const controlContextValue = useMemo(() => {
+				const nextValue = applyFilters(
+					'blockera.breakpoints.value',
+					mergedBreakpoints
+				);
+				const previous = stableContextRef.current;
+
+				if (previous && isEquals(previous.value, nextValue)) {
+					return previous;
+				}
+
+				const next = {
+					name: 'canvas-editor-breakpoints',
+					value: nextValue,
+					// Keep the repeater store as the editing source of truth.
+					// Parent onChange echoes would otherwise re-sync and remount rows.
+					skipSyncValue: true,
+				};
+
+				stableContextRef.current = next;
+
+				return next;
+			}, [mergedBreakpoints]);
+
+			const valueCleanup = useCallback((value) => {
+				return Object.fromEntries(
+					Object.entries(value).map(([key, item]) => {
+						const cleanRepeaterItem = cleanupRepeaterItem(item);
+
+						if (!item.isDefault) {
+							return [
+								key,
+								{
+									...cleanRepeaterItem,
+									deletable: true,
+								},
+							];
+						}
+
+						return [
+							key,
+							{
+								...cleanRepeaterItem,
+								deletable: false,
+							},
+						];
+					})
+				);
+			}, []);
+
+			const itemIdGenerator = useCallback((): string => {
+				customBreakpointIdRef.current += 1;
+
+				return `custom-${customBreakpointIdRef.current}`;
+			}, []);
+
+			const popoverTitle = useCallback((itemId, item) => {
+				if (getBaseBreakpoint() === itemId) {
+					return item.label;
+				}
+
+				return __('Breakpoint Settings', 'blockera');
+			}, []);
 
 			return (
 				<ControlContextProvider
-					value={{
-						name: 'canvas-editor-breakpoints',
-						value: applyFilters(
-							'blockera.breakpoints.value',
-							breakpoints
-						),
-					}}
+					value={controlContextValue}
 					storeName={REPEATER_STORE_NAME}
 				>
 					<BaseControl
@@ -100,50 +186,18 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 						<RepeaterControl
 							id="breakpoints"
 							mode={'accordion'}
+							// Prop name is inverted in repeater reducers: false keeps stable
+							// slug keys (desktop, tablet, custom-N) when deleting rows.
 							disableRegenerateId={false}
-							popoverTitle={(itemId, item) => {
-								if (getBaseBreakpoint() === itemId) {
-									return item.label;
-								}
-
-								return __('Breakpoint Settings', 'blockera');
-							}}
-							valueCleanup={(value) => {
-								return Object.fromEntries(
-									Object.entries(value).map(([key, item]) => {
-										const cleanRepeaterItem =
-											cleanupRepeaterItem(item);
-
-										if (!item.isDefault) {
-											return [
-												key,
-												{
-													...cleanRepeaterItem,
-													deletable: true,
-												},
-											];
-										}
-
-										return [
-											key,
-											{
-												...cleanRepeaterItem,
-												deletable: false,
-											},
-										];
-									})
-								);
-							}}
-							itemIdGenerator={(itemsCount) => {
-								return `custom-${itemsCount}`;
-							}}
+							popoverTitle={popoverTitle}
+							valueCleanup={valueCleanup}
+							itemIdGenerator={itemIdGenerator}
 							className={controlInnerClassNames(
 								'breakpoints-repeater'
 							)}
-							defaultRepeaterItemValue={applyFilters(
-								'blockera.breakpoints.defaultRepeaterItemValue',
-								defaultRepeaterItemValue
-							)}
+							defaultRepeaterItemValue={
+								filteredDefaultRepeaterItemValue
+							}
 							repeaterItemHeader={Header}
 							repeaterItemChildren={Fields}
 							onChange={onChange}
