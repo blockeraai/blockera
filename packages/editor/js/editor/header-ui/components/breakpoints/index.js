@@ -20,6 +20,7 @@ import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 import PickedBreakpoints from './picked-breakpoints';
 import type { BreakpointsComponentProps } from './types';
 import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
+import { applyBreakpointPreviewSize } from './get-breakpoint-preview-size';
 import { subscribeToEditorModeChanges } from './editor-mode-subscription';
 import { useStoreSelectors } from '../../../../hooks/use-store-selectors';
 import { useStoreDispatchers } from '../../../../hooks/use-store-dispatchers';
@@ -68,8 +69,10 @@ export const BreakpointsUI = ({
 	className,
 	editorMode,
 }: BreakpointsComponentProps): MixedElement => {
-	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
-		useSelect((select) => select('blockera/editor'), []);
+	const { getDeviceType, getBreakpoints, getCanvasSettings } = useSelect(
+		(select) => select('blockera/editor'),
+		[]
+	);
 	const {
 		setDeviceType,
 		setCanvasSettings,
@@ -109,16 +112,7 @@ export const BreakpointsUI = ({
 			}
 
 			if (editorWrapper) {
-				// Get breakpoint settings for current device.
-				const {
-					settings: { min, max },
-				} = {
-					settings: {
-						min: '',
-						max: '',
-					},
-					...getBreakpoint(deviceType),
-				};
+				const breakpoints = getBreakpoints();
 
 				// Add base canvas class.
 				if (!editorWrapper.classList.contains('blockera-canvas')) {
@@ -138,9 +132,11 @@ export const BreakpointsUI = ({
 						editorWrapper.parentElement.style.background = '';
 
 						if (iframe) {
-							iframe.style.width = '100%';
-							iframe.style.minWidth = '';
-							iframe.style.maxWidth = '';
+							applyBreakpointPreviewSize(
+								iframe,
+								deviceType,
+								breakpoints
+							);
 							iframe.style.transform = '';
 							iframe.parentElement.style.background = '';
 						}
@@ -154,16 +150,12 @@ export const BreakpointsUI = ({
 					}
 
 					if (iframe) {
-						// Set width constraints based on breakpoint settings.
-						if (min && max) {
-							iframe.style.width = max;
-							iframe.style.minWidth = '';
-							iframe.style.maxWidth = max;
-						} else if (min || max) {
-							iframe.style.width = min || max;
-							iframe.style.minWidth = '';
-							iframe.style.maxWidth = '';
-						}
+						// Match iframe viewport to style-engine media query bounds.
+						applyBreakpointPreviewSize(
+							iframe,
+							deviceType,
+							breakpoints
+						);
 
 						// Scale down non-base breakpoints for better preview.
 						if (deviceType !== getBaseBreakpoint()) {

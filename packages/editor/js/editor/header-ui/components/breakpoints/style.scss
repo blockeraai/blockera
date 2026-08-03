@@ -1,4 +1,10 @@
 .editor-visual-editor iframe[name="editor-canvas"].blockera-in-breakpoint {
+	// content-box keeps the declared width as the iframe viewport so min-width
+	// media queries match the same values used by the style-engine.
+	box-sizing: content-box;
 	border-radius: 5px;
 	border: 1px solid #c3c3c3 !important;
+	width: var(--blockera-breakpoint-preview-width, 100%) !important;
+	min-width: var(--blockera-breakpoint-preview-min-width, auto);
+	max-width: var(--blockera-breakpoint-preview-max-width, none) !important;
 }
