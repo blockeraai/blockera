@@ -14,6 +14,7 @@ export type BreakpointPreviewSize = {
 	width: string,
 	minWidth: string,
 	maxWidth: string,
+	isMinWidthPreview: boolean,
 };
 
 /**
@@ -47,6 +48,7 @@ export const getBreakpointPreviewSize = (
 			width: max,
 			minWidth: '',
 			maxWidth: max,
+			isMinWidthPreview: false,
 		};
 	}
 
@@ -55,6 +57,7 @@ export const getBreakpointPreviewSize = (
 			width: max,
 			minWidth: '',
 			maxWidth: max,
+			isMinWidthPreview: false,
 		};
 	}
 
@@ -63,6 +66,7 @@ export const getBreakpointPreviewSize = (
 			width: min,
 			minWidth: min,
 			maxWidth: max || min,
+			isMinWidthPreview: true,
 		};
 	}
 
@@ -72,12 +76,9 @@ export const getBreakpointPreviewSize = (
 		width,
 		minWidth: min || '',
 		maxWidth: max || width,
+		isMinWidthPreview: Boolean(min && !max),
 	};
 };
-
-const PREVIEW_WIDTH_VAR = '--blockera-breakpoint-preview-width';
-const PREVIEW_MIN_WIDTH_VAR = '--blockera-breakpoint-preview-min-width';
-const PREVIEW_MAX_WIDTH_VAR = '--blockera-breakpoint-preview-max-width';
 
 /**
  * Apply or clear breakpoint preview sizing on the canvas iframe element.
@@ -99,25 +100,20 @@ export const applyBreakpointPreviewSize = (
 	const previewSize = getBreakpointPreviewSize(breakpointId, breakpoints);
 
 	if (!previewSize) {
-		iframe.style.removeProperty(PREVIEW_WIDTH_VAR);
-		iframe.style.removeProperty(PREVIEW_MIN_WIDTH_VAR);
-		iframe.style.removeProperty(PREVIEW_MAX_WIDTH_VAR);
 		iframe.style.width = '100%';
 		iframe.style.minWidth = '';
 		iframe.style.maxWidth = '';
+		iframe.style.boxSizing = '';
 		return;
 	}
 
-	iframe.style.setProperty(PREVIEW_WIDTH_VAR, previewSize.width);
-	iframe.style.setProperty(
-		PREVIEW_MIN_WIDTH_VAR,
-		previewSize.minWidth || 'auto'
-	);
-	iframe.style.setProperty(
-		PREVIEW_MAX_WIDTH_VAR,
-		previewSize.maxWidth || 'none'
-	);
-	iframe.style.removeProperty('width');
-	iframe.style.removeProperty('min-width');
-	iframe.style.removeProperty('max-width');
+	iframe.style.width = previewSize.width;
+	iframe.style.minWidth = previewSize.minWidth || '';
+	iframe.style.maxWidth = previewSize.maxWidth || '';
+
+	// Gutenberg sets border-box on the canvas iframe. Min-width media queries
+	// need the viewport to match the declared min bound, so only those previews
+	// opt into content-box. Max-width previews keep border-box to preserve
+	// existing editor and visual snapshot layouts.
+	iframe.style.boxSizing = previewSize.isMinWidthPreview ? 'content-box' : '';
 };
