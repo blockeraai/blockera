@@ -19,6 +19,7 @@ describe('getBreakpointPreviewSize', () => {
 			width: '991px',
 			minWidth: '',
 			maxWidth: '991px',
+			isMinWidthPreview: false,
 		});
 	});
 
@@ -36,6 +37,7 @@ describe('getBreakpointPreviewSize', () => {
 				width: '1280px',
 				minWidth: '1280px',
 				maxWidth: '1439px',
+				isMinWidthPreview: true,
 			}
 		);
 	});
@@ -55,25 +57,37 @@ describe('getBreakpointPreviewSize', () => {
 			width: '1920px',
 			minWidth: '1920px',
 			maxWidth: '1920px',
+			isMinWidthPreview: true,
 		});
 	});
 });
 
 describe('applyBreakpointPreviewSize', () => {
-	it('sets CSS variables for non-base breakpoints', () => {
+	it('sets inline width for max-width breakpoints without content-box', () => {
 		const iframe = document.createElement('iframe');
 		const breakpoints = defaultBreakpoints();
 
 		applyBreakpointPreviewSize(iframe, 'tablet', breakpoints);
 
-		expect(
-			iframe.style.getPropertyValue('--blockera-breakpoint-preview-width')
-		).toBe('991px');
-		expect(
-			iframe.style.getPropertyValue(
-				'--blockera-breakpoint-preview-max-width'
-			)
-		).toBe('991px');
+		expect(iframe.style.width).toBe('991px');
+		expect(iframe.style.maxWidth).toBe('991px');
+		expect(iframe.style.boxSizing).toBe('');
+	});
+
+	it('uses content-box for min-width breakpoints', () => {
+		const iframe = document.createElement('iframe');
+		const breakpoints = {
+			...defaultBreakpoints(),
+			'l-desktop': {
+				...defaultBreakpoints()['l-desktop'],
+				status: true,
+			},
+		};
+
+		applyBreakpointPreviewSize(iframe, 'l-desktop', breakpoints);
+
+		expect(iframe.style.width).toBe('1280px');
+		expect(iframe.style.boxSizing).toBe('content-box');
 	});
 
 	it('clears preview sizing for the base breakpoint', () => {
@@ -83,9 +97,7 @@ describe('applyBreakpointPreviewSize', () => {
 		applyBreakpointPreviewSize(iframe, 'tablet', breakpoints);
 		applyBreakpointPreviewSize(iframe, 'desktop', breakpoints);
 
-		expect(
-			iframe.style.getPropertyValue('--blockera-breakpoint-preview-width')
-		).toBe('');
 		expect(iframe.style.width).toBe('100%');
+		expect(iframe.style.boxSizing).toBe('');
 	});
 });
