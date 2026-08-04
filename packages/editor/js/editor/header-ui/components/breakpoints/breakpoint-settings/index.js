@@ -66,6 +66,22 @@ const filteredDefaultRepeaterItemValue = applyFilters(
 	defaultRepeaterItemValue
 );
 
+const newBreakpointRepeaterItemDefaults = {
+	...filteredDefaultRepeaterItemValue,
+	deletable: true,
+	native: false,
+	isDefault: false,
+	status: true,
+};
+
+const isBreakpointDeletable = (item: Object, breakpointId: string): boolean => {
+	if (item?.isDefault || breakpointId === getBaseBreakpoint()) {
+		return false;
+	}
+
+	return true;
+};
+
 const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 	memo(
 		({
@@ -96,6 +112,7 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 							...value,
 							// $FlowFixMe
 							native: value?.native || false,
+							deletable: isBreakpointDeletable(value, key),
 						}),
 					])
 				);
@@ -196,7 +213,7 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 								'breakpoints-repeater'
 							)}
 							defaultRepeaterItemValue={
-								filteredDefaultRepeaterItemValue
+								newBreakpointRepeaterItemDefaults
 							}
 							repeaterItemHeader={Header}
 							repeaterItemChildren={Fields}
