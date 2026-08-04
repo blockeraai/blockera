@@ -9,16 +9,13 @@
 import { useSyncExternalStore } from '@wordpress/element';
 import { getQueryArgs } from '@wordpress/url';
 
-const SITE_EDITOR_PATH = 'site-editor.php';
+/**
+ * Blockera dependencies
+ */
+import { isSiteEditorUrl } from '@blockera/utils';
+
 const LAYOUT_SELECTOR = '.edit-site-layout';
 const EDIT_CANVAS_CLASS = 'is-full-canvas';
-
-function isSiteEditorUrl(): boolean {
-	if (typeof window === 'undefined') {
-		return false;
-	}
-	return window.location.pathname.includes(SITE_EDITOR_PATH);
-}
 
 /**
  * Returns true when the secondary sidebar should be shown.

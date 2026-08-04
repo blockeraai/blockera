@@ -7,6 +7,7 @@ export * from './color';
 export * from './css-length';
 export * from './angle';
 export * from './editor';
+export * from './site-editor';
 export * from './portal';
 export * from './object';
 export * from './string';
