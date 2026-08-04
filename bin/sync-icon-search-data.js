@@ -229,7 +229,18 @@ function getGeneratedIconsObjectNames(iconsJsPath, exportName) {
 		return [];
 	}
 
-	return Object.keys(JSON.parse(match[1]));
+	// Tabler icons.js uses JS object literals (single-quoted / bare keys),
+	// not JSON — extract keys with a regex instead of JSON.parse.
+	const objectBody = match[1];
+	const keyPattern = /(?:^|\n)\s*(?:'([^']+)'|([A-Za-z_$][\w$]*))\s*:/g;
+	const names = [];
+	let keyMatch;
+
+	while ((keyMatch = keyPattern.exec(objectBody)) !== null) {
+		names.push(keyMatch[1] || keyMatch[2]);
+	}
+
+	return names;
 }
 
 /**
