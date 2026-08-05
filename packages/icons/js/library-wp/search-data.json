@@ -2024,5 +2024,65 @@
 		"title": "Tabs",
 		"library": "wp",
 		"tags": ["tab", "panel"]
+	},
+	{
+		"iconName": "pause",
+		"title": "Pause",
+		"library": "wp",
+		"tags": ["play", "stop", "music"]
+	},
+	{
+		"iconName": "play",
+		"title": "Play",
+		"library": "wp",
+		"tags": ["pause", "play", "music"]
+	},
+	{
+		"iconName": "playlist",
+		"title": "Playlist",
+		"library": "wp",
+		"tags": ["music"]
+	},
+	{
+		"iconName": "repeat",
+		"title": "Repeat",
+		"library": "wp",
+		"tags": ["replay", "loop", "music"]
+	},
+	{
+		"iconName": "repeat-all",
+		"title": "Repeat All",
+		"library": "wp",
+		"tags": ["replay", "loop", "music"]
+	},
+	{
+		"iconName": "replay",
+		"title": "Replay",
+		"library": "wp",
+		"tags": ["replay", "loop", "music"]
+	},
+	{
+		"iconName": "sites",
+		"title": "Sites",
+		"library": "wp",
+		"tags": ["website", "site", "domain"]
+	},
+	{
+		"iconName": "skip-back",
+		"title": "Skip Back",
+		"library": "wp",
+		"tags": ["skip", "back", "music"]
+	},
+	{
+		"iconName": "skip-forward",
+		"title": "Skip Forward",
+		"library": "wp",
+		"tags": ["skip", "forward", "music"]
+	},
+	{
+		"iconName": "time",
+		"title": "Time",
+		"library": "wp",
+		"tags": ["time", "duration", "clock"]
 	}
 ]

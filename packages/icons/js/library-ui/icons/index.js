@@ -391,4 +391,5 @@ export { default as WpTypography } from './wp-typography.svg';
 export { default as ExpandAll } from './expand-all.svg';
 export { default as CollapseAll } from './collapse-all.svg';
 export { default as FocusMode } from './focus-mode.svg';
+export { default as ZapFastFlat } from './zap-fast-flat.svg';
 export { default as ZapFast } from './zap-fast.svg';
