@@ -25,7 +25,28 @@ if (! defined('ABSPATH')) {
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
 require_once __DIR__ . '/packages/autoloader-coordinator/bootstrap.php';
-blockera_bootstrap_shared_autoloader('blockera', __DIR__, 10, ! defined('BLOCKERA_SB_FILE') || BLOCKERA_SB_FILE === __FILE__);
+blockera_bootstrap_shared_autoloader(
+	'blockera',
+	__DIR__,
+	[
+		'priority'       => 10,
+		'default'        => ! defined('BLOCKERA_SB_FILE') || BLOCKERA_SB_FILE === __FILE__,
+		'file'           => __FILE__,
+		'entry_constant' => 'BLOCKERA_SB_FILE',
+		'companions'     => [
+			[
+				'slug'           => 'blockera-pro',
+				'plugin_file'    => 'blockera-pro/blockera-pro.php',
+				'entry_constant' => 'BLOCKERA_PRO_FILE',
+			],
+			[
+				'slug'             => 'blockera-one',
+				'type'             => 'theme',
+				'theme_stylesheet' => 'blockera-one',
+			],
+		],
+	]
+);
 ### END AUTO-GENERATED AUTOLOADER
 
 if (file_exists(__DIR__ . '/.env')) {
