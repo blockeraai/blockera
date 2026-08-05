@@ -27,8 +27,16 @@ if (! \class_exists(Coordinator::class)) {
 		 */
 		protected string $coordinator_ref = '';
 
-        /** @var array<string,array{plugin_dir:string,vendor_dir:string}> */
+        /** @var array<string,array{slug:string,plugin_dir:string,vendor_dir:string,packages_dir:string,priority:int,default:bool,type:string,entry_constant:string,plugin_file:string,theme_stylesheet:string,defer_files_until:array<int,string>}> */
         private array $plugins = [];
+
+		/**
+		 * Product identity descriptors from consumers (self + declared companions).
+		 * Used to detect active-but-not-yet-registered products without hardcoding slugs.
+		 *
+		 * @var array<string,array{slug:string,type:string,entry_constant:string,plugin_file:string,theme_stylesheet:string}>
+		 */
+		private array $product_descriptors = [];
 
         /** @var bool */
         private bool $bootstrapped = false;
@@ -174,17 +182,79 @@ if (! \class_exists(Coordinator::class)) {
         public function registerPlugin(): void {
 			$dependencies = apply_filters('blockera/autoloader-coordinator/plugins/dependencies', []);
 
+			$this->plugins             = [];
+			$this->product_descriptors = [];
+
 			foreach ($dependencies as $dependency => $config) {
-				$normalized                   = rtrim($config['dir'], '/\\');
+				if (! is_array($config) || empty($config['dir'])) {
+					continue;
+				}
+
+				$normalized = rtrim( (string) $config['dir'], '/\\');
+				$type       = ( 'theme' === ( $config['type'] ?? 'plugin' ) ) ? 'theme' : 'plugin';
+
 				$this->plugins[ $dependency ] = [
-					'slug'         => $dependency,
-					'plugin_dir'   => $normalized,
-					'vendor_dir'   => $normalized . '/vendor',
-					'priority' 	   => $config['priority'] ?? 10,
-					'default'      => $config['default'] ?? false,
-					'packages_dir' => $normalized . '/vendor/blockera',
+					'slug'              => $dependency,
+					'plugin_dir'        => $normalized,
+					'vendor_dir'        => $normalized . '/vendor',
+					'priority'          => (int) ( $config['priority'] ?? 10 ),
+					'default'           => (bool) ( $config['default'] ?? false ),
+					'packages_dir'      => $normalized . '/vendor/blockera',
+					'type'              => $type,
+					'entry_constant'    => (string) ( $config['entry_constant'] ?? '' ),
+					'plugin_file'       => (string) ( $config['plugin_file'] ?? '' ),
+					'theme_stylesheet'  => (string) ( $config['theme_stylesheet'] ?? '' ),
+					'defer_files_until' => array_values(
+						array_filter(
+							(array) ( $config['defer_files_until'] ?? [] ),
+							'is_string'
+						)
+					),
 				];
+
+				$this->storeProductDescriptor(
+					[
+						'slug'             => $dependency,
+						'type'             => $type,
+						'entry_constant'   => (string) ( $config['entry_constant'] ?? '' ),
+						'plugin_file'      => (string) ( $config['plugin_file'] ?? '' ),
+						'theme_stylesheet' => (string) ( $config['theme_stylesheet'] ?? '' ),
+					]
+				);
+
+				foreach ( (array) ( $config['companions'] ?? [] ) as $companion ) {
+					if (! is_array($companion) || empty($companion['slug']) || ! is_string($companion['slug'])) {
+						continue;
+					}
+
+					// Registered products keep their own descriptor; do not overwrite with a peer hint.
+					if (isset($this->plugins[ $companion['slug'] ])) {
+						continue;
+					}
+
+					$this->storeProductDescriptor(
+						[
+							'slug'             => $companion['slug'],
+							'type'             => ( 'theme' === ( $companion['type'] ?? 'plugin' ) ) ? 'theme' : 'plugin',
+							'entry_constant'   => (string) ( $companion['entry_constant'] ?? '' ),
+							'plugin_file'      => (string) ( $companion['plugin_file'] ?? '' ),
+							'theme_stylesheet' => (string) ( $companion['theme_stylesheet'] ?? '' ),
+						]
+					);
+				}
 			}
+
+			/**
+			 * Filter discovered product descriptors (registered products + consumer-declared companions).
+			 *
+			 * @param array $descriptors Descriptor map keyed by product slug.
+			 * @param array $plugins     Currently registered products.
+			 */
+			$this->product_descriptors = apply_filters(
+				'blockera/autoloader-coordinator/product-descriptors',
+				$this->product_descriptors,
+				$this->plugins
+			);
 
 			// Invalidate autoload manifest.
 			$this->autoload_manifest             = null;
@@ -207,21 +277,32 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
+			// Native vendor/autoload.php is single-product only. When a companion joins after
+			// that fast path, reset coordinator flags so classmaps/files can be merged.
+			if ($this->native_composer_bootstrapped && 2 <= $plugin_count) {
+				$this->resetNativeAutoloadForCoordination();
+			}
+
 			if (2 <= $plugin_count && ! $this->bootstrapped) {
 				$this->bootstrapped = true;
 
-				// Find default plugin reference.
-				$defaultKey  = array_search(true, array_column($this->plugins, 'default'), true);
-				$default_ref = ( false !== $defaultKey && isset($this->plugins[ $defaultKey ]) )
-					? $this->plugins[ $defaultKey ]['slug']
-					: 'blockera';
+				// Prefer the consumer marked default; otherwise first registered product slug.
+				$first_slug  = array_key_first($this->plugins);
+				$default_ref = null !== $first_slug ? $first_slug : '';
+				foreach ($this->plugins as $plugin) {
+					if (! empty($plugin['default']) && ! empty($plugin['slug'])) {
+						$default_ref = $plugin['slug'];
+						break;
+					}
+				}
 				// Get the coordinator reference from the environment variable.
 				$env_ref = isset($_ENV['AUTOLOADER_COORDINATOR_REF']) ? sanitize_text_field($_ENV['AUTOLOADER_COORDINATOR_REF']) : null;
 				// Set the coordinator reference.
 				$this->coordinator_ref = $env_ref ?? $default_ref;
 
 				// Sort plugins by priority and preferred coordinator reference.
-				usort(
+				// uasort keeps slug keys required by manifest / preferred-plugin lookups.
+				uasort(
 					$this->plugins,
 					function ( $a, $b) {
 						if ($a['slug'] === $this->coordinator_ref) {
@@ -257,6 +338,23 @@ if (! \class_exists(Coordinator::class)) {
         }
 
 		/**
+		 * Clear native fast-path flags so a second product can use coordinated bootstrap.
+		 *
+		 * Composer's already-registered ClassLoader stays in the autoload stack; the
+		 * coordinated loader registers with prepend=true and wins for Blockera lookups.
+		 * Files already required by vendor/autoload.php are skipped via require_once / guards.
+		 */
+		private function resetNativeAutoloadForCoordination(): void {
+			$this->native_composer_bootstrapped  = false;
+			$this->autoloader_registered         = false;
+			$this->bootstrapped                  = false;
+			$this->class_loader                  = null;
+			$this->autoload_manifest             = null;
+			$this->prepared_packages_files_cache = null;
+			$this->package_manifest_cache        = null;
+		}
+
+		/**
 		 * Whether the native Composer autoloader can replace manual bootstrap.
 		 * Single-product installs with matching Composer metadata use vendor/autoload.php
 		 * (same path as pre-coordinator Blockera) with near-zero coordinator overhead.
@@ -267,6 +365,12 @@ if (! \class_exists(Coordinator::class)) {
 			}
 
 			if ($this->shouldDeferFileInclusionUntilCompanionRegisters()) {
+				return false;
+			}
+
+			// Another Blockera product is active but not registered yet — stay coordinated
+			// so the later bootstrap can merge classmaps and autoload files.
+			if ($this->hasUnregisteredActiveCompanion()) {
 				return false;
 			}
 
@@ -1040,10 +1144,14 @@ if (! \class_exists(Coordinator::class)) {
 				$this->autoload_manifest = [];
 			}
 
-			foreach ($this->plugins as $slug => $plugin) {
-				if (! isset($this->autoload_manifest[ $slug ])) {
-					$this->loadAutoloadDataForPlugin($slug, $plugin);
+			foreach ($this->plugins as $plugin) {
+				$slug = $plugin['slug'] ?? '';
+
+				if ('' === $slug || isset($this->autoload_manifest[ $slug ])) {
+					continue;
 				}
+
+				$this->loadAutoloadDataForPlugin($slug, $plugin);
 			}
 		}
 
@@ -1061,8 +1169,23 @@ if (! \class_exists(Coordinator::class)) {
 		}
 
 		/**
-		 * Defer autoload file inclusion when Pro bootstraps alone but Free is active.
-		 * Free must bootstrap immediately because it calls shared helpers at load time.
+		 * Store a consumer-provided product identity descriptor.
+		 *
+		 * @param array{slug:string,type:string,entry_constant:string,plugin_file:string,theme_stylesheet:string} $descriptor Product descriptor.
+		 */
+		private function storeProductDescriptor( array $descriptor): void {
+			$slug = $descriptor['slug'];
+
+			if (isset($this->product_descriptors[ $slug ])) {
+				return;
+			}
+
+			$this->product_descriptors[ $slug ] = $descriptor;
+		}
+
+		/**
+		 * Defer autoload file inclusion until consumer-declared companions register.
+		 * Example: Pro defers while Free is active but has not bootstrapped yet.
 		 *
 		 * @return bool
 		 */
@@ -1071,14 +1194,129 @@ if (! \class_exists(Coordinator::class)) {
 				return false;
 			}
 
-			$slug = array_key_first($this->plugins);
+			$plugin = reset($this->plugins);
 
-			if ( 'blockera-pro' !== $slug ) {
+			if (! is_array($plugin)) {
 				return false;
 			}
 
-			// Free plugin already bootstrapped if its entry constant exists.
-			return defined( 'BLOCKERA_SB_FILE' );
+			foreach ( (array) ( $plugin['defer_files_until'] ?? [] ) as $companion_slug ) {
+				if (isset($this->plugins[ $companion_slug ])) {
+					continue;
+				}
+
+				if ($this->isProductActive($companion_slug)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Whether a consumer-declared companion is active but has not registered yet.
+		 */
+		private function hasUnregisteredActiveCompanion(): bool {
+			foreach ($this->product_descriptors as $slug => $descriptor) {
+				if (isset($this->plugins[ $slug ])) {
+					continue;
+				}
+
+				if ($this->isProductActiveByDescriptor($descriptor)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Detect whether a product slug is active using consumer-provided descriptors.
+		 *
+		 * @param string $productSlug Product slug.
+		 */
+		private function isProductActive( string $productSlug): bool {
+			if (isset($this->plugins[ $productSlug ])) {
+				return true;
+			}
+
+			if (! isset($this->product_descriptors[ $productSlug ])) {
+				return false;
+			}
+
+			return $this->isProductActiveByDescriptor($this->product_descriptors[ $productSlug ]);
+		}
+
+		/**
+		 * Detect activity from a consumer-provided descriptor (constant / plugin / theme).
+		 *
+		 * @param array{slug:string,type:string,entry_constant:string,plugin_file:string,theme_stylesheet:string} $descriptor Product descriptor.
+		 */
+		private function isProductActiveByDescriptor( array $descriptor): bool {
+			$type = $descriptor['type'] ?? 'plugin';
+
+			// Themes load after plugins; detect via stylesheet/template options only.
+			if ('theme' === $type) {
+				return $this->isThemeStylesheetActive( (string) ( $descriptor['theme_stylesheet'] ?? '' ) );
+			}
+
+			$entry_constant = (string) ( $descriptor['entry_constant'] ?? '' );
+
+			if ('' !== $entry_constant && defined($entry_constant)) {
+				return true;
+			}
+
+			return $this->isPluginFileActive( (string) ( $descriptor['plugin_file'] ?? '' ) );
+		}
+
+		/**
+		 * Whether a theme stylesheet/template is the active theme.
+		 *
+		 * @param string $stylesheet Theme stylesheet slug.
+		 */
+		private function isThemeStylesheetActive( string $stylesheet): bool {
+			if ('' === $stylesheet || ! function_exists('get_option')) {
+				return false;
+			}
+
+			return get_option('stylesheet') === $stylesheet || get_option('template') === $stylesheet;
+		}
+
+		/**
+		 * Whether a plugin basename is active (site or network).
+		 *
+		 * @param string $plugin_file Plugin basename (e.g. from plugin_basename()).
+		 */
+		private function isPluginFileActive( string $plugin_file): bool {
+			if ('' === $plugin_file || ! function_exists('get_option')) {
+				return false;
+			}
+
+			$active_plugins = get_option('active_plugins', []);
+
+			if (! is_array($active_plugins)) {
+				$active_plugins = [];
+			}
+
+			if (function_exists('get_site_option')) {
+				$network_plugins = get_site_option('active_sitewide_plugins', []);
+
+				if (is_array($network_plugins)) {
+					foreach (array_keys($network_plugins) as $network_plugin) {
+						if (is_string($network_plugin)) {
+							$active_plugins[] = $network_plugin;
+						}
+					}
+				}
+			}
+
+			foreach ($active_plugins as $plugin) {
+				if ($plugin === $plugin_file) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		/**
@@ -1469,7 +1707,7 @@ if (! \class_exists(Coordinator::class)) {
 			$exclusive       = $package_groups[0];
 			$shared          = $package_groups[1];
 
-			// Always load plugin-exclusive dependencies (e.g. blockera/blockera on free, blockera/blockera-pro on pro).
+			// Always load product-exclusive package files (present in only one registered product).
 			foreach ($exclusive as $files) {
 				foreach ($files as $file) {
 					$this->includeFile($file['identifier'], $file['path']);
@@ -1675,7 +1913,8 @@ if (! \class_exists(Coordinator::class)) {
 			$this->included_file_paths[ $normalized ]               = true;
 			$GLOBALS['blockera_autoload_files'][ $identifier ]      = true;
 			$GLOBALS['blockera_autoload_file_paths'][ $normalized ] = true;
-			require $file;
+			// require_once: safe when re-including files already loaded via native vendor/autoload.php.
+			require_once $file;
 		}
 
 		/**
