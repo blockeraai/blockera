@@ -95,6 +95,14 @@ Cypress.Commands.add('getBlockeraStylesWrapper', () => {
 	return cy.get('#blockera-styles-wrapper');
 });
 
+// realHover can hang headless Chrome in CI; scroll + center pointer first.
+Cypress.Commands.add('safeRealHover', { prevSubject: 'element' }, (subject) => {
+	cy.wrap(subject)
+		.scrollIntoView()
+		.should('be.visible')
+		.realHover({ position: 'center', scrollBehavior: 'center' });
+});
+
 after(() => {
 	//custom task to generate report
 	cy.task('generateReport');
