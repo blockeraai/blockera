@@ -297,7 +297,7 @@ class CompatibilityCheck {
 	 * Check the plugin versions with the callback.
 	 * 
 	 * @param callable $callback the callback.
-	 * @param bool     $status the status. default is false.
+	 * @param bool     $status the status indicate the plugin is activated or not. default is false.
 	 *
 	 * @return void
 	 */
@@ -310,7 +310,7 @@ class CompatibilityCheck {
 				
 				call_user_func($callback);
 			}
-        } elseif ($status) {
+        } elseif ($status || ( $this->required_plugin_version && $this->requires_at_least ) && version_compare($this->required_plugin_version, $this->requires_at_least, '>')) {
 
 			if ($callback && is_callable($callback)) {
 			

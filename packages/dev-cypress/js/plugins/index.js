@@ -462,6 +462,9 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 	);
 
 	on('task', {
+		generateReport() {
+			return null;
+		},
 		logToCi(message) {
 			// @debug-ignore
 			console.log(String(message));
@@ -650,6 +653,9 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 			launchOptions.args.push('--disable-gpu');
 			// Increase shared memory usage in Docker or constrained environments
 			launchOptions.args.push('--disable-dev-shm-usage');
+			if (process.env.CI) {
+				launchOptions.args.push('--headless=new');
+			}
 		}
 		return launchOptions;
 	});
