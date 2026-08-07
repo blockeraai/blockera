@@ -7,6 +7,19 @@ import { __, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 import { createRoot } from '@wordpress/element';
 
+/**
+ * Mirror PHP Utils::pascalCaseWithSpace for force-run slug labels.
+ *
+ * @param {string} value Plugin slug or label.
+ * @return {string} Human-readable label.
+ */
+const pascalCaseWithSpace = (value: string): string =>
+	String(value || '')
+		.split('-')
+		.filter(Boolean)
+		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+		.join(' ');
+
 const App = () => {
 	const {
 		blockeraPluginName,
@@ -24,9 +37,41 @@ const App = () => {
 		blockeraPluginUpdateUrl
 	);
 
-	const requiredPluginType = blockeraPluginRequiredPluginSlug.endsWith('-pro')
+	const requiredPluginSlug = blockeraPluginRequiredPluginSlug || '';
+
+	// Force run passes raw compatible_with_slug as names (see CompatibilityCheck::adminMenus).
+	const isForceRun =
+		Boolean(requiredPluginSlug) &&
+		(blockeraPluginRequiredName === requiredPluginSlug ||
+			blockeraPluginName === requiredPluginSlug);
+
+	const pluginDisplayName = isForceRun
+		? pascalCaseWithSpace(blockeraPluginName || requiredPluginSlug)
+		: blockeraPluginName;
+
+	const requiredDisplayName = isForceRun
+		? pascalCaseWithSpace(blockeraPluginRequiredName || requiredPluginSlug)
+		: blockeraPluginRequiredName;
+
+	const requiredPluginType = requiredPluginSlug.endsWith('-pro')
 		? 'pro'
 		: 'free';
+
+	const hasVersionDetails = Boolean(
+		blockeraPluginRequiredVersion && blockeraPluginRequiredPluginVersion
+	);
+
+	const title = isForceRun
+		? sprintf(
+				// translators: %s: The required product name
+				__('Required Plugin Missing or Outdated: %s', 'blockera'),
+				requiredDisplayName
+			)
+		: sprintf(
+				// translators: %s: The product name (a theme or plugin name)
+				__('Update Required for %s', 'blockera'),
+				requiredDisplayName
+			);
 
 	return (
 		<div className="blockera-compatibility-notice">
@@ -107,13 +152,7 @@ const App = () => {
 						<path d="M30.0018 6.56604C31.4371 6.56604 32.7553 7.35694 33.4387 8.61651L54.5293 47.6731C55.1835 48.8839 55.1542 50.3485 54.4512 51.5299C53.7482 52.7114 52.4691 53.434 51.0923 53.434H8.9112C7.53445 53.434 6.26511 52.7114 5.55233 51.5299C4.83955 50.3485 4.82002 48.8839 5.47422 47.6731L26.5648 8.61651C27.2483 7.35694 28.5664 6.56604 30.0018 6.56604ZM30.0018 22.9698C28.7031 22.9698 27.6584 24.0146 27.6584 25.3132V36.2491C27.6584 37.5477 28.7031 38.5925 30.0018 38.5925C31.3004 38.5925 32.3452 37.5477 32.3452 36.2491V25.3132C32.3452 24.0146 31.3004 22.9698 30.0018 22.9698ZM32.6088 44.0604C32.6306 43.7052 32.5794 43.3494 32.4585 43.0148C32.3375 42.6802 32.1494 42.3739 31.9056 42.1147C31.6619 41.8556 31.3676 41.649 31.041 41.5079C30.7145 41.3667 30.3624 41.2939 30.0066 41.2939C29.6509 41.2939 29.2988 41.3667 28.9722 41.5079C28.6457 41.649 28.3514 41.8556 28.1077 42.1147C27.8639 42.3739 27.6757 42.6802 27.5548 43.0148C27.4339 43.3494 27.3827 43.7052 27.4045 44.0604C27.3827 44.4155 27.4339 44.7713 27.5548 45.1059C27.6757 45.4405 27.8639 45.7469 28.1077 46.006C28.3514 46.2652 28.6457 46.4717 28.9722 46.6129C29.2988 46.754 29.6509 46.8269 30.0066 46.8269C30.3624 46.8269 30.7145 46.754 31.041 46.6129C31.3676 46.4717 31.6619 46.2652 31.9056 46.006C32.1494 45.7469 32.3375 45.4405 32.4585 45.1059C32.5794 44.7713 32.6306 44.4155 32.6088 44.0604Z" />
 					</svg>
 
-					<h1>
-						{sprintf(
-							// translators: %s: The product name (a theme or plugin name)
-							__('Update Required for %s', 'blockera'),
-							blockeraPluginRequiredName
-						)}
-					</h1>
+					<h1>{title}</h1>
 
 					<div
 						style={{
@@ -124,92 +163,130 @@ const App = () => {
 							gap: '5px',
 						}}
 					>
-						<p>
-							{requiredPluginType === 'free'
-								? sprintf(
-										// translators: %s: The product name (a theme or plugin name)
+						{isForceRun ? (
+							<>
+								<p>
+									{!blockeraIsActiveCompatiblePlugin
+										? sprintf(
+												// translators: %s: The required product name
+												__(
+													'%s is required and must be installed and activated before Pro features can run.',
+													'blockera'
+												),
+												requiredDisplayName
+											)
+										: sprintf(
+												// translators: %s: The required product name
+												__(
+													'%s (or a companion product) is outdated and cannot complete a mutual compatibility check. Pro features have been temporarily deactivated.',
+													'blockera'
+												),
+												requiredDisplayName
+											)}
+								</p>
+								<p>
+									{sprintf(
+										// translators: %s: The required product name
 										__(
-											'Your %s plugin is out of date and the Pro plugin has been temporarily deactivated.',
+											'Please install or update %s to a compatible version, then reload this page.',
 											'blockera'
 										),
-										blockeraPluginRequiredPluginSlug
-									)
-								: sprintf(
-										// translators: %s: The product name (a theme or plugin name)
-										__(
-											'Your %s plugin is out of date and has been temporarily deactivated.',
-											'blockera'
-										),
-										blockeraPluginRequiredPluginSlug
+										requiredDisplayName
 									)}
-						</p>
-						<p>
-							{sprintf(
-								// translators: 1: The product type (Free or Pro), 2: The product type (Free or Pro)
-								__(
-									'Your %1$s version is older than the %2$s version you just installed and needs to be updated.',
-									'blockera'
-								),
-								requiredPluginType === 'pro'
-									? __('Pro', 'blockera')
-									: __('Free', 'blockera'),
-								requiredPluginType === 'pro'
-									? __('Free', 'blockera')
-									: __('Pro', 'blockera')
-							)}
-						</p>
+								</p>
+							</>
+						) : (
+							<>
+								<p>
+									{requiredPluginType === 'free'
+										? sprintf(
+												// translators: %s: The product name (a theme or plugin name)
+												__(
+													'Your %s plugin is out of date and the Pro plugin has been temporarily deactivated.',
+													'blockera'
+												),
+												requiredPluginSlug
+											)
+										: sprintf(
+												// translators: %s: The product name (a theme or plugin name)
+												__(
+													'Your %s plugin is out of date and has been temporarily deactivated.',
+													'blockera'
+												),
+												requiredPluginSlug
+											)}
+								</p>
+								<p>
+									{sprintf(
+										// translators: 1: The product type (Free or Pro), 2: The product type (Free or Pro)
+										__(
+											'Your %1$s version is older than the %2$s version you just installed and needs to be updated.',
+											'blockera'
+										),
+										requiredPluginType === 'pro'
+											? __('Pro', 'blockera')
+											: __('Free', 'blockera'),
+										requiredPluginType === 'pro'
+											? __('Free', 'blockera')
+											: __('Pro', 'blockera')
+									)}
+								</p>
+							</>
+						)}
 					</div>
 				</div>
 
-				<ul>
-					<li>
-						<svg
-							width="25"
-							height="24"
-							viewBox="0 0 25 24"
-							fill="#008F0A"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path d="M12.25 4C16.6683 4 20.25 7.58172 20.25 12C20.25 16.4183 16.6683 20 12.25 20C7.83172 20 4.25 16.4183 4.25 12C4.25 7.58172 7.83172 4 12.25 4ZM15.9746 9.57324C15.6072 9.25295 15.0111 9.25313 14.6436 9.57324L11.0732 12.6855L9.85645 11.625C9.48888 11.3047 8.89291 11.3046 8.52539 11.625C8.1581 11.9454 8.15814 12.4648 8.52539 12.7852L10.4082 14.4268C10.5846 14.5804 10.8239 14.6669 11.0732 14.667C11.3228 14.667 11.5628 14.5806 11.7393 14.4268L15.9746 10.7344C16.3422 10.4139 16.3422 9.89367 15.9746 9.57324Z" />
-						</svg>
+				{hasVersionDetails && (
+					<ul>
+						<li>
+							<svg
+								width="25"
+								height="24"
+								viewBox="0 0 25 24"
+								fill="#008F0A"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path d="M12.25 4C16.6683 4 20.25 7.58172 20.25 12C20.25 16.4183 16.6683 20 12.25 20C7.83172 20 4.25 16.4183 4.25 12C4.25 7.58172 7.83172 4 12.25 4ZM15.9746 9.57324C15.6072 9.25295 15.0111 9.25313 14.6436 9.57324L11.0732 12.6855L9.85645 11.625C9.48888 11.3047 8.89291 11.3046 8.52539 11.625C8.1581 11.9454 8.15814 12.4648 8.52539 12.7852L10.4082 14.4268C10.5846 14.5804 10.8239 14.6669 11.0732 14.667C11.3228 14.667 11.5628 14.5806 11.7393 14.4268L15.9746 10.7344C16.3422 10.4139 16.3422 9.89367 15.9746 9.57324Z" />
+							</svg>
 
-						{sprintf(
-							// translators: %s: The product type (Free or Pro)
-							__('Required %s Version:', 'blockera'),
-							requiredPluginType === 'pro'
-								? __('Pro', 'blockera')
-								: __('Free', 'blockera')
-						)}
+							{sprintf(
+								// translators: %s: The product type (Free or Pro)
+								__('Required %s Version:', 'blockera'),
+								requiredPluginType === 'pro'
+									? __('Pro', 'blockera')
+									: __('Free', 'blockera')
+							)}
 
-						<strong style={{ color: '#008F0A' }}>
-							v{blockeraPluginRequiredVersion}
-						</strong>
-					</li>
+							<strong style={{ color: '#008F0A' }}>
+								v{blockeraPluginRequiredVersion}
+							</strong>
+						</li>
 
-					<li>
-						<svg
-							width="25"
-							height="24"
-							viewBox="0 0 25 24"
-							fill="#B80000"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path d="M12.75 4C17.1683 4 20.75 7.58172 20.75 12C20.75 16.4183 17.1683 20 12.75 20C8.33172 20 4.75 16.4183 4.75 12C4.75 7.58172 8.33172 4 12.75 4ZM16.0293 8.7207C15.6908 8.38225 15.1422 8.38225 14.8037 8.7207L12.75 10.7744L10.6963 8.7207C10.3578 8.38226 9.80916 8.38227 9.4707 8.7207C9.13225 9.05916 9.13225 9.60783 9.4707 9.94629L11.5244 12L9.4707 14.0537C9.13225 14.3922 9.13225 14.9408 9.4707 15.2793C9.80916 15.6177 10.3578 15.6177 10.6963 15.2793L12.75 13.2256L14.8037 15.2793C15.1422 15.6178 15.6908 15.6178 16.0293 15.2793C16.3677 14.9408 16.3677 14.3922 16.0293 14.0537L13.9756 12L16.0293 9.94629C16.3677 9.60784 16.3677 9.05916 16.0293 8.7207Z" />
-						</svg>
+						<li>
+							<svg
+								width="25"
+								height="24"
+								viewBox="0 0 25 24"
+								fill="#B80000"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path d="M12.75 4C17.1683 4 20.75 7.58172 20.75 12C20.75 16.4183 17.1683 20 12.75 20C8.33172 20 4.75 16.4183 4.75 12C4.75 7.58172 8.33172 4 12.75 4ZM16.0293 8.7207C15.6908 8.38225 15.1422 8.38225 14.8037 8.7207L12.75 10.7744L10.6963 8.7207C10.3578 8.38226 9.80916 8.38227 9.4707 8.7207C9.13225 9.05916 9.13225 9.60783 9.4707 9.94629L11.5244 12L9.4707 14.0537C9.13225 14.3922 9.13225 14.9408 9.4707 15.2793C9.80916 15.6177 10.3578 15.6177 10.6963 15.2793L12.75 13.2256L14.8037 15.2793C15.1422 15.6178 15.6908 15.6178 16.0293 15.2793C16.3677 14.9408 16.3677 14.3922 16.0293 14.0537L13.9756 12L16.0293 9.94629C16.3677 9.60784 16.3677 9.05916 16.0293 8.7207Z" />
+							</svg>
 
-						{sprintf(
-							// translators: %s: The product type (Free or Pro)
-							__('Current %s Version:', 'blockera'),
-							requiredPluginType === 'pro'
-								? __('Pro', 'blockera')
-								: __('Free', 'blockera')
-						)}
+							{sprintf(
+								// translators: %s: The product type (Free or Pro)
+								__('Current %s Version:', 'blockera'),
+								requiredPluginType === 'pro'
+									? __('Pro', 'blockera')
+									: __('Free', 'blockera')
+							)}
 
-						<strong style={{ color: '#B80000' }}>
-							v{blockeraPluginRequiredPluginVersion}
-						</strong>
-					</li>
-				</ul>
+							<strong style={{ color: '#B80000' }}>
+								v{blockeraPluginRequiredPluginVersion}
+							</strong>
+						</li>
+					</ul>
+				)}
 
 				<div
 					style={{
@@ -240,7 +317,7 @@ const App = () => {
 										'Install or Update %s Plugin',
 										'blockera'
 									),
-									blockeraPluginName
+									pluginDisplayName
 								)}
 							</a>
 						)}
@@ -261,23 +338,33 @@ const App = () => {
 								href={'https://blockera.ai/my-account/licenses'}
 								rel="noreferrer"
 							>
-								{__('Download and Update Manually', 'blockera')}
+								{isForceRun && !blockeraIsActiveCompatiblePlugin
+									? __('Download Required Plugin', 'blockera')
+									: __(
+											'Download and Update Manually',
+											'blockera'
+										)}
 							</a>
 						)}
 
 						<a
 							className="button"
-							href={`${window.location.origin}/wp-admin/plugins.php?s=${blockeraPluginRequiredPluginSlug}`}
+							href={`${window.location.origin}/wp-admin/plugins.php?s=${requiredPluginSlug}`}
 						>
 							{__('Manage Plugin', 'blockera')}
 						</a>
 					</p>
 
 					<p>
-						{__(
-							'Once updated, Pro features will return instantly.',
-							'blockera'
-						)}
+						{isForceRun
+							? __(
+									'Once the required plugin is installed and compatible, Pro features will return instantly.',
+									'blockera'
+								)
+							: __(
+									'Once updated, Pro features will return instantly.',
+									'blockera'
+								)}
 					</p>
 				</div>
 
