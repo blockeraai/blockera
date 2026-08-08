@@ -24,7 +24,27 @@ plugins/blockera/
 plugins/blockera-global-packages/
 ```
 
-GitHub Actions check this out via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and pass `secrets.BLOCKERABOT_PAT` when the shared repo is private. Matching branch names on both repos are preferred; otherwise the shared repo default branch is used.
+GitHub Actions check this out via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and pass `secrets.BLOCKERABOT_PAT` when the shared repo is private.
+
+### Pin a global-packages branch for a PR
+
+Commit `.pr-global-packages.env.json` on the Blockera PR branch (copy from `.pr-global-packages.env-example.json`):
+
+```json
+{
+	"ref": "feat/your-global-packages-branch",
+	"repository": "blockeraai/blockera-global-packages"
+}
+```
+
+Ref resolution order:
+
+1. Workflow `global-packages-ref` input (if set)
+2. `.pr-global-packages.env.json` → `ref`
+3. Same branch name as the Blockera PR, when it exists on global-packages
+4. global-packages default branch
+
+`repository` in the PR config is optional (defaults to `blockeraai/blockera-global-packages`). Remove `.pr-global-packages.env.json` before merging to `master` (enforced by the Check PR Config Files workflow).
 
 Because `actions/checkout` cannot write outside `GITHUB_WORKSPACE`, CI clones into `.blockera-global-packages/` and symlinks `../blockera-global-packages` to that directory so consumer `file:` / Composer path deps keep working.
 
