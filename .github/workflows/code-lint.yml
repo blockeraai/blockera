@@ -26,6 +26,8 @@ jobs:
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Running the lint:js
               run: npm run lint:js
@@ -42,6 +44,8 @@ jobs:
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Running the lint:css
               run: npm run lint:css
@@ -58,6 +62,8 @@ jobs:
 
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Make Composer packages available globally
               run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH

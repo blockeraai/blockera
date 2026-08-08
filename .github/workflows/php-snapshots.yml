@@ -71,10 +71,13 @@ jobs:
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
               with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
                   php-version: ${{ matrix.php }}
 
             - name: Npm build
