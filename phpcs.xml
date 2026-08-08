@@ -16,7 +16,7 @@
     <rule ref="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed">
         <exclude-pattern>*</exclude-pattern>
     </rule>
-    <rule ref="WordPress.WhiteSpace.DisallowInlineTabs.NonIndentTabsUsed">
+    <rule ref="Universal.WhiteSpace.DisallowInlineTabs.NonIndentTabsUsed">
         <exclude-pattern>*</exclude-pattern>
     </rule>
     <rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
@@ -70,9 +70,6 @@
     <rule ref="Squiz.Commenting.InlineComment.WrongStyle">
         <exclude-pattern>*</exclude-pattern>
     </rule>
-    <rule ref="WordPress.WP.TimezoneChange.DeprecatedSniff">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
     <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
         <exclude-pattern>*</exclude-pattern>
     </rule>
@@ -81,7 +78,7 @@
         <exclude-pattern>*</exclude-pattern>
     </rule>
 
-    <rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
+    <rule ref="Generic.CodeAnalysis.EmptyPHPStatement"/>
 
     <rule ref="PEAR.Functions.FunctionCallSignature">
         <properties>
@@ -108,6 +105,7 @@
     <exclude-pattern>./bin/*</exclude-pattern>
     <exclude-pattern>./packages/**/tests/*</exclude-pattern>
     <exclude-pattern>./packages/dev-phpunit/*</exclude-pattern>
+    <exclude-pattern>./packages/dev-cypress/*</exclude-pattern>
     <exclude-pattern>./packages/bootstrap/*</exclude-pattern>
     <exclude-pattern>.patch/*</exclude-pattern>
     <exclude-pattern>./tests/*</exclude-pattern>
@@ -134,6 +132,10 @@
     <rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
         <exclude-pattern>*</exclude-pattern>
     </rule>
+    <!-- WPCS 3.x moved short-array checks to Universal; keep parity with Generic exclude above. -->
+    <rule ref="Universal.Arrays.DisallowShortArraySyntax.Found">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
     <rule ref="Generic.Files.LineEndings.InvalidEOLChar">
         <exclude-pattern>*</exclude-pattern>
     </rule>
@@ -142,5 +144,55 @@
     </rule>
     <rule ref="Squiz.Commenting.ClosingDeclarationComment.Missing">
         <exclude-pattern>/*</exclude-pattern>
+    </rule>
+
+    <!-- WPCS 3.x / PHPCSExtra sniffs that conflict with the existing codebase style. -->
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceBeforeBrace">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeReturnType">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Traits.UseDeclaration.MultipleImport">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR2.Files.EndFileNewline.TooMany">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR2.Classes.PropertyDeclaration.ScopeMissing">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Universal.Operators.DisallowStandalonePostIncrementDecrement">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Modernize.FunctionCalls.Dirname.Nested">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Generic.CodeAnalysis.AssignmentInCondition">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Generic.WhiteSpace.LanguageConstructSpacing.IncorrectSingle">
+        <exclude-pattern>*</exclude-pattern>
     </rule>
 </ruleset>

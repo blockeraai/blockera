@@ -216,7 +216,7 @@ class Mask extends BaseStyleDefinition implements Repeater {
 		foreach ( $maskShapes as $key => $val ) {
 			if ( $val['id'] === $setting['shape']['id'] ) {
 				$selectedShape = $val['formattedSvg'];
-			};
+			}
 		}
 
 		$widthSize  = $setting['size-width'] ? $setting['size-width'] : 'auto';
