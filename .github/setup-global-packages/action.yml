@@ -1,0 +1,125 @@
+name: 'Setup blockera-global-packages'
+description: >
+    Checkout blockera-global-packages as a sibling of the consumer checkout
+    (../blockera-global-packages) so file:/path Composer and npm dependencies resolve
+    the same way as local development.
+inputs:
+    repository:
+        description: 'GitHub repository for global packages (owner/name).'
+        required: false
+        default: 'blockeraai/blockera-global-packages'
+    ref:
+        description: >
+            Optional git ref/branch/tag/SHA. When empty, uses a branch matching the
+            consumer head ref when it exists on the global-packages repo; otherwise
+            the repository default branch.
+        required: false
+        default: ''
+    token:
+        description: >
+            Token with read access to the global-packages repository. Required when
+            that repository is private (use BLOCKERABOT_PAT). Defaults to github.token.
+        required: false
+        default: ''
+    path:
+        description: >
+            Checkout path relative to GITHUB_WORKSPACE. Default places the repo as a
+            sibling: ../blockera-global-packages.
+        required: false
+        default: '../blockera-global-packages'
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Resolve global-packages ref
+          id: resolve
+          shell: bash
+          env:
+              INPUT_REF: ${{ inputs.ref }}
+              INPUT_REPOSITORY: ${{ inputs.repository }}
+              INPUT_PATH: ${{ inputs.path }}
+              INPUT_TOKEN: ${{ inputs.token }}
+              FALLBACK_TOKEN: ${{ github.token }}
+          run: |
+              set -euo pipefail
+
+              # path is relative to GITHUB_WORKSPACE (may include ..).
+              TARGET_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
+              echo "target-path=${TARGET_PATH}" >> "${GITHUB_OUTPUT}"
+
+              if [ -d "${TARGET_PATH}/packages" ]; then
+                  echo "Global packages already present at ${TARGET_PATH}"
+                  echo "skip-checkout=true" >> "${GITHUB_OUTPUT}"
+                  echo "ref=existing" >> "${GITHUB_OUTPUT}"
+                  exit 0
+              fi
+
+              echo "skip-checkout=false" >> "${GITHUB_OUTPUT}"
+
+              TOKEN="${INPUT_TOKEN:-${FALLBACK_TOKEN}}"
+              AUTH_HEADER="Authorization: Bearer ${TOKEN}"
+              ACCEPT_HEADER="Accept: application/vnd.github+json"
+
+              if [ -n "${INPUT_REF}" ]; then
+                  RESOLVED_REF="${INPUT_REF}"
+              else
+                  CANDIDATE_REF="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-}}"
+                  DEFAULT_BRANCH="$(curl -fsSL \
+                      -H "${AUTH_HEADER}" \
+                      -H "${ACCEPT_HEADER}" \
+                      "https://api.github.com/repos/${INPUT_REPOSITORY}" \
+                      | jq -r '.default_branch // "master"')"
+
+                  RESOLVED_REF="${DEFAULT_BRANCH}"
+                  if [ -n "${CANDIDATE_REF}" ]; then
+                      ENCODED_REF="$(printf %s "${CANDIDATE_REF}" | jq -sRr @uri)"
+                      STATUS="$(curl -s -o /dev/null -w '%{http_code}' \
+                          -H "${AUTH_HEADER}" \
+                          -H "${ACCEPT_HEADER}" \
+                          "https://api.github.com/repos/${INPUT_REPOSITORY}/branches/${ENCODED_REF}")"
+                      if [ "${STATUS}" = "200" ]; then
+                          RESOLVED_REF="${CANDIDATE_REF}"
+                      fi
+                  fi
+              fi
+
+              echo "Resolved ${INPUT_REPOSITORY}@${RESOLVED_REF} -> ${INPUT_PATH}"
+              echo "ref=${RESOLVED_REF}" >> "${GITHUB_OUTPUT}"
+
+        - name: Checkout blockera-global-packages
+          if: ${{ steps.resolve.outputs.skip-checkout != 'true' }}
+          uses: actions/checkout@v4
+          with:
+              repository: ${{ inputs.repository }}
+              ref: ${{ steps.resolve.outputs.ref }}
+              path: ${{ inputs.path }}
+              token: ${{ inputs.token != '' && inputs.token || github.token }}
+              persist-credentials: false
+
+        - name: Verify global packages layout
+          id: verify
+          shell: bash
+          env:
+              INPUT_PATH: ${{ inputs.path }}
+          run: |
+              set -euo pipefail
+              TARGET_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
+              if [ ! -d "${TARGET_PATH}/packages" ]; then
+                  echo "::error::Expected packages/ under ${TARGET_PATH} (consumer path ${INPUT_PATH})."
+                  ls -la "$(dirname "${TARGET_PATH}")" || true
+                  exit 1
+              fi
+              echo "Using global packages at ${TARGET_PATH}"
+              echo "target-path=${TARGET_PATH}" >> "${GITHUB_OUTPUT}"
+              ls "${TARGET_PATH}/packages" | head
+
+        - name: Link global packages into consumer packages/
+          shell: bash
+          env:
+              INPUT_PATH: ${{ inputs.path }}
+          run: |
+              set -euo pipefail
+              TARGET_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
+              bash "${GITHUB_WORKSPACE}/.github/scripts/link-global-packages.sh" \
+                  "${GITHUB_WORKSPACE}" \
+                  "${TARGET_PATH}"
