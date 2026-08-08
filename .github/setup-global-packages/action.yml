@@ -88,7 +88,7 @@ runs:
 
         - name: Checkout blockera-global-packages
           if: ${{ steps.resolve.outputs.skip-checkout != 'true' }}
-          uses: actions/checkout@v4
+          uses: actions/checkout@v5
           with:
               repository: ${{ inputs.repository }}
               ref: ${{ steps.resolve.outputs.ref }}
