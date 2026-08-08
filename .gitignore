@@ -114,3 +114,10 @@ playwright-env.json
 
 # Docs temporary for ai assistant
 docs-temp-ai/
+
+# Shared packages live in ../blockera-global-packages and are linked into
+# packages/ by .github/scripts/link-global-packages.sh (local + CI).
+/packages/*
+!/packages/autoloader-coordinator/
+!/packages/autoloader-coordinator/**
+!/packages/index.php
