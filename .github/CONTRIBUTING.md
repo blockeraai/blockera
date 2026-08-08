@@ -26,6 +26,8 @@ plugins/blockera-global-packages/
 
 GitHub Actions check this out via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and pass `secrets.BLOCKERABOT_PAT` when the shared repo is private. Matching branch names on both repos are preferred; otherwise the shared repo default branch is used.
 
+Because `actions/checkout` cannot write outside `GITHUB_WORKSPACE`, CI clones into `.blockera-global-packages/` and symlinks `../blockera-global-packages` to that directory so consumer `file:` / Composer path deps keep working.
+
 After checkout, `.github/scripts/link-global-packages.sh` symlinks missing entries under `packages/` to the shared repo so existing `packages/**` test/lint globs keep working.
 
 ## Making Changes

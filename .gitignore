@@ -121,3 +121,6 @@ docs-temp-ai/
 !/packages/autoloader-coordinator/
 !/packages/autoloader-coordinator/**
 !/packages/index.php
+
+# CI checkout of blockera-global-packages (sibling path is a symlink to this).
+/.blockera-global-packages/
