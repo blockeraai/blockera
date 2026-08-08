@@ -16,7 +16,7 @@
     <rule ref="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed">
         <exclude-pattern>*</exclude-pattern>
     </rule>
-    <rule ref="WordPress.WhiteSpace.DisallowInlineTabs.NonIndentTabsUsed">
+    <rule ref="Universal.WhiteSpace.DisallowInlineTabs.NonIndentTabsUsed">
         <exclude-pattern>*</exclude-pattern>
     </rule>
     <rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
@@ -70,9 +70,6 @@
     <rule ref="Squiz.Commenting.InlineComment.WrongStyle">
         <exclude-pattern>*</exclude-pattern>
     </rule>
-    <rule ref="WordPress.WP.TimezoneChange.DeprecatedSniff">
-        <exclude-pattern>*</exclude-pattern>
-    </rule>
     <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
         <exclude-pattern>*</exclude-pattern>
     </rule>
@@ -81,7 +78,7 @@
         <exclude-pattern>*</exclude-pattern>
     </rule>
 
-    <rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
+    <rule ref="Generic.CodeAnalysis.EmptyPHPStatement"/>
 
     <rule ref="PEAR.Functions.FunctionCallSignature">
         <properties>
