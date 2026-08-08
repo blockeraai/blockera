@@ -184,7 +184,7 @@ function blockera_init(): void {
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
     }
-    require BLOCKERA_SB_PATH . 'packages/blockera/php/app.php';
+    require BLOCKERA_SB_PATH . 'vendor/blockera/blockera/php/app.php';
     ### END AUTO-GENERATED FRONT CONTROLLERS
 
     /**

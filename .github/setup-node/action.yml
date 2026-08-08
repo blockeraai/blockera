@@ -4,12 +4,31 @@ inputs:
     node-version:
         description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
         required: false
+    global-packages-token:
+        description: 'Token with read access to blockera-global-packages (use secrets.BLOCKERABOT_PAT when private).'
+        required: false
+        default: ''
+    global-packages-ref:
+        description: 'Optional ref for blockera-global-packages. Empty enables matching-branch / default-branch resolution.'
+        required: false
+        default: ''
+    skip-global-packages:
+        description: 'Set to true to skip checking out blockera-global-packages.'
+        required: false
+        default: 'false'
 
 runs:
     using: 'composite'
     steps:
+        - name: Setup blockera-global-packages
+          if: ${{ inputs.skip-global-packages != 'true' }}
+          uses: ./.github/setup-global-packages
+          with:
+              token: ${{ inputs.global-packages-token }}
+              ref: ${{ inputs.global-packages-ref }}
+
         - name: Setup Node.js with built-in npm cache
-          uses: actions/setup-node@v4
+          uses: actions/setup-node@v5
           with:
               node-version-file: '.nvmrc'
               node-version: ${{ inputs.node-version }}
@@ -23,7 +42,7 @@ runs:
 
         - name: Cache node_modules
           id: cache-node_modules
-          uses: actions/cache@v4
+          uses: actions/cache@v5
           with:
               path: '**/node_modules'
               key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}

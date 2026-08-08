@@ -1,0 +1,188 @@
+name: 'Setup blockera-global-packages'
+description: >
+    Checkout blockera-global-packages inside the consumer workspace, then expose it
+    as the sibling path ../blockera-global-packages so file:/path Composer and npm
+    dependencies resolve the same way as local development.
+    (actions/checkout cannot write outside GITHUB_WORKSPACE.)
+inputs:
+    repository:
+        description: 'GitHub repository for global packages (owner/name).'
+        required: false
+        default: 'blockeraai/blockera-global-packages'
+    ref:
+        description: >
+            Optional git ref/branch/tag/SHA. When empty, resolution order is:
+            .pr-global-packages.env.json ref, matching consumer branch (if it exists
+            on global-packages), then the repository default branch.
+        required: false
+        default: ''
+    token:
+        description: >
+            Token with read access to the global-packages repository. Required when
+            that repository is private (use BLOCKERABOT_PAT). Defaults to github.token.
+        required: false
+        default: ''
+    path:
+        description: >
+            Checkout path relative to GITHUB_WORKSPACE. Must stay under the workspace
+            (actions/checkout restriction). Default: .blockera-global-packages.
+        required: false
+        default: '.blockera-global-packages'
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Resolve global-packages ref
+          id: resolve
+          shell: bash
+          env:
+              INPUT_REF: ${{ inputs.ref }}
+              INPUT_REPOSITORY: ${{ inputs.repository }}
+              INPUT_PATH: ${{ inputs.path }}
+              INPUT_TOKEN: ${{ inputs.token }}
+              FALLBACK_TOKEN: ${{ github.token }}
+          run: |
+              set -euo pipefail
+
+              CHECKOUT_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
+              SIBLING_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'blockera-global-packages'))")"
+              PR_CONFIG="${GITHUB_WORKSPACE}/.pr-global-packages.env.json"
+
+              # checkout@v5 rejects paths outside GITHUB_WORKSPACE.
+              case "${CHECKOUT_PATH}/" in
+                  "${GITHUB_WORKSPACE}/"*) ;;
+                  *)
+                      echo "::error::path must resolve under GITHUB_WORKSPACE (got ${CHECKOUT_PATH})."
+                      exit 1
+                      ;;
+              esac
+
+              echo "checkout-path=${CHECKOUT_PATH}" >> "${GITHUB_OUTPUT}"
+              echo "sibling-path=${SIBLING_PATH}" >> "${GITHUB_OUTPUT}"
+
+              if [ -d "${CHECKOUT_PATH}/packages" ] || [ -d "${SIBLING_PATH}/packages" ]; then
+                  echo "Global packages already present"
+                  echo "skip-checkout=true" >> "${GITHUB_OUTPUT}"
+                  echo "ref=existing" >> "${GITHUB_OUTPUT}"
+                  echo "repository=${INPUT_REPOSITORY}" >> "${GITHUB_OUTPUT}"
+                  exit 0
+              fi
+
+              echo "skip-checkout=false" >> "${GITHUB_OUTPUT}"
+
+              RESOLVED_REPOSITORY="${INPUT_REPOSITORY}"
+              PR_CONFIG_REF=""
+              PR_CONFIG_REPOSITORY=""
+
+              # PR branch interface: commit .pr-global-packages.env.json to pin a shared-packages ref.
+              if [ -f "${PR_CONFIG}" ]; then
+                  echo "Found ${PR_CONFIG}"
+                  PR_CONFIG_REF="$(jq -r '.ref // empty' "${PR_CONFIG}")"
+                  PR_CONFIG_REPOSITORY="$(jq -r '.repository // empty' "${PR_CONFIG}")"
+                  if [ -n "${PR_CONFIG_REPOSITORY}" ]; then
+                      RESOLVED_REPOSITORY="${PR_CONFIG_REPOSITORY}"
+                  fi
+              fi
+
+              TOKEN="${INPUT_TOKEN:-${FALLBACK_TOKEN}}"
+              AUTH_HEADER="Authorization: Bearer ${TOKEN}"
+              ACCEPT_HEADER="Accept: application/vnd.github+json"
+
+              # Priority: workflow input ref > PR config ref > matching branch > default branch.
+              if [ -n "${INPUT_REF}" ]; then
+                  RESOLVED_REF="${INPUT_REF}"
+                  RESOLVED_SOURCE="workflow-input"
+              elif [ -n "${PR_CONFIG_REF}" ]; then
+                  RESOLVED_REF="${PR_CONFIG_REF}"
+                  RESOLVED_SOURCE="pr-config"
+              else
+                  CANDIDATE_REF="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-}}"
+                  DEFAULT_BRANCH="$(curl -fsSL \
+                      -H "${AUTH_HEADER}" \
+                      -H "${ACCEPT_HEADER}" \
+                      "https://api.github.com/repos/${RESOLVED_REPOSITORY}" \
+                      | jq -r '.default_branch // "master"')"
+
+                  RESOLVED_REF="${DEFAULT_BRANCH}"
+                  RESOLVED_SOURCE="default-branch"
+                  if [ -n "${CANDIDATE_REF}" ]; then
+                      ENCODED_REF="$(printf %s "${CANDIDATE_REF}" | jq -sRr @uri)"
+                      STATUS="$(curl -s -o /dev/null -w '%{http_code}' \
+                          -H "${AUTH_HEADER}" \
+                          -H "${ACCEPT_HEADER}" \
+                          "https://api.github.com/repos/${RESOLVED_REPOSITORY}/branches/${ENCODED_REF}")"
+                      if [ "${STATUS}" = "200" ]; then
+                          RESOLVED_REF="${CANDIDATE_REF}"
+                          RESOLVED_SOURCE="matching-branch"
+                      fi
+                  fi
+              fi
+
+              echo "Resolved ${RESOLVED_REPOSITORY}@${RESOLVED_REF} (${RESOLVED_SOURCE}) -> ${INPUT_PATH}"
+              echo "ref=${RESOLVED_REF}" >> "${GITHUB_OUTPUT}"
+              echo "repository=${RESOLVED_REPOSITORY}" >> "${GITHUB_OUTPUT}"
+              echo "source=${RESOLVED_SOURCE}" >> "${GITHUB_OUTPUT}"
+
+        - name: Checkout blockera-global-packages
+          if: ${{ steps.resolve.outputs.skip-checkout != 'true' }}
+          uses: actions/checkout@v5
+          with:
+              repository: ${{ steps.resolve.outputs.repository }}
+              ref: ${{ steps.resolve.outputs.ref }}
+              path: ${{ inputs.path }}
+              token: ${{ inputs.token != '' && inputs.token || github.token }}
+              persist-credentials: false
+
+        - name: Expose sibling ../blockera-global-packages
+          shell: bash
+          env:
+              CHECKOUT_PATH: ${{ steps.resolve.outputs.checkout-path }}
+              SIBLING_PATH: ${{ steps.resolve.outputs.sibling-path }}
+              INPUT_PATH: ${{ inputs.path }}
+          run: |
+              set -euo pipefail
+
+              # Recompute when skip-checkout reused an existing tree without outputs from a prior job.
+              if [ -z "${CHECKOUT_PATH}" ] || [ -z "${SIBLING_PATH}" ]; then
+                  CHECKOUT_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
+                  SIBLING_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'blockera-global-packages'))")"
+              fi
+
+              if [ ! -d "${CHECKOUT_PATH}/packages" ] && [ -d "${SIBLING_PATH}/packages" ]; then
+                  # Already available at the sibling path (e.g. local/dev runner layout).
+                  echo "Using existing sibling global packages at ${SIBLING_PATH}"
+              else
+                  if [ ! -d "${CHECKOUT_PATH}/packages" ]; then
+                      echo "::error::Expected packages/ under checkout path ${CHECKOUT_PATH}."
+                      ls -la "${GITHUB_WORKSPACE}" || true
+                      exit 1
+                  fi
+
+                  # Consumer package.json / composer.json use ../blockera-global-packages.
+                  # checkout@v5 cannot write there, so symlink from the in-workspace clone.
+                  mkdir -p "$(dirname "${SIBLING_PATH}")"
+                  ln -sfn "${CHECKOUT_PATH}" "${SIBLING_PATH}"
+                  echo "Linked ${SIBLING_PATH} -> ${CHECKOUT_PATH}"
+              fi
+
+              if [ ! -d "${SIBLING_PATH}/packages" ]; then
+                  echo "::error::Sibling path ${SIBLING_PATH} is missing packages/."
+                  exit 1
+              fi
+
+              echo "Using global packages at ${SIBLING_PATH}"
+              ls "${SIBLING_PATH}/packages" | head
+
+        - name: Link global packages into consumer packages/
+          shell: bash
+          env:
+              SIBLING_PATH: ${{ steps.resolve.outputs.sibling-path }}
+              INPUT_PATH: ${{ inputs.path }}
+          run: |
+              set -euo pipefail
+              if [ -z "${SIBLING_PATH}" ]; then
+                  SIBLING_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'blockera-global-packages'))")"
+              fi
+              bash "${GITHUB_WORKSPACE}/.github/scripts/link-global-packages.sh" \
+                  "${GITHUB_WORKSPACE}" \
+                  "${SIBLING_PATH}"

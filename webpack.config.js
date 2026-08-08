@@ -10,7 +10,7 @@ const {
  * Internal dependencies
  */
 const { dependencies } = require('./package');
-const packagesConfig = require('./packages/dev-tools/js/webpack/packages');
+const packagesConfig = require('./vendor/blockera/dev-tools/js/webpack/packages');
 
 const exportDefaultPackages = [];
 
@@ -19,7 +19,7 @@ module.exports = (env = {}, argv) => {
 		return require(
 			path.resolve(
 				process.cwd(),
-				'packages/dev-cypress/js/webpack.config.js'
+				'vendor/blockera/dev-cypress/js/webpack.config.js'
 			)
 		);
 	}
@@ -41,8 +41,13 @@ module.exports = (env = {}, argv) => {
 				parentDirectory = 'features-library/';
 			}
 
+			// Remove the trailing slash from the parent directory. because it is a library and includes multiple packages inside it.
+			if (parentDirectory.endsWith('s-library/')) {
+				parentDirectory = parentDirectory.replace('s-library/', '-');
+			}
+
 			const { version } = require(
-				`./packages/${parentDirectory}${name}/package.json`
+				`./vendor/blockera/${parentDirectory}${name}/package.json`
 			);
 
 			return [packageName, version.replace(/\./g, '_')];
@@ -52,17 +57,6 @@ module.exports = (env = {}, argv) => {
 		// Exclude dev packages.
 		if (-1 !== packageName.indexOf('dev-')) {
 			return memo;
-		}
-
-		let _packageName = packageName;
-		let parentDirectory = '';
-
-		if (-1 !== packageName.indexOf('block-')) {
-			_packageName = _packageName.split('block-')[1];
-			parentDirectory = 'blocks-library/';
-		} else if (-1 !== packageName.indexOf('feature-')) {
-			_packageName = _packageName.split('feature-')[1];
-			parentDirectory = 'features-library/';
 		}
 
 		if (!blockeraPackagesVersion[packageName]) {
@@ -84,7 +78,7 @@ module.exports = (env = {}, argv) => {
 		return {
 			...memo,
 			[packageName]: {
-				import: `./packages/${parentDirectory}${_packageName}`,
+				import: `./vendor/blockera/${packageName}`,
 				library: {
 					name,
 					type: 'var',
@@ -98,6 +92,7 @@ module.exports = (env = {}, argv) => {
 
 	return packagesConfig(env, {
 		...argv,
+		projectRoot: process.cwd(),
 		entry: blockeraEntries,
 		devtoolNamespace: 'blockera',
 		mode: argv?.mode || 'production',

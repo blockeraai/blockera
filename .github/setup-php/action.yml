@@ -9,10 +9,29 @@ inputs:
         description: 'Optional. The options to use on composer install. When not specified, the options is empty'
         required: false
         default: ''
+    global-packages-token:
+        description: 'Token with read access to blockera-global-packages (use secrets.BLOCKERABOT_PAT when private).'
+        required: false
+        default: ''
+    global-packages-ref:
+        description: 'Optional ref for blockera-global-packages. Empty enables matching-branch / default-branch resolution.'
+        required: false
+        default: ''
+    skip-global-packages:
+        description: 'Set to true to skip checking out blockera-global-packages.'
+        required: false
+        default: 'false'
 
 runs:
     using: 'composite'
     steps:
+        - name: Setup blockera-global-packages
+          if: ${{ inputs.skip-global-packages != 'true' }}
+          uses: ./.github/setup-global-packages
+          with:
+              token: ${{ inputs.global-packages-token }}
+              ref: ${{ inputs.global-packages-ref }}
+
         ##
         # This allows Composer dependencies to be installed using a single step.
         #
@@ -37,7 +56,7 @@ runs:
         # Since Composer dependencies are installed using `composer update` and no lock file is in version control,
         # passing a custom cache suffix ensures that the cache is flushed at least once per week.
         - name: Install Composer dependencies
-          uses: ramsey/composer-install@v2
+          uses: ramsey/composer-install@v4
           with:
               custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
               composer-options: '${{ inputs.composer-options }}'

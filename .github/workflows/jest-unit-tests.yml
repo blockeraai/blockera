@@ -30,6 +30,8 @@ jobs:
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Npm build
               run: npm run build
