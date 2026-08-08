@@ -15,6 +15,19 @@ When contributing please ensure you follow the guidelines below so that we can k
     -   Clearly describe the issue including steps to reproduce the bug.
     -   Make sure you fill in the earliest version that you know has the issue as well as the version of WordPress you're using.
 
+## Shared packages (blockera-global-packages)
+
+CI and local installs expect `blockera-global-packages` as a **sibling** of this repository:
+
+```
+plugins/blockera/
+plugins/blockera-global-packages/
+```
+
+GitHub Actions check this out via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and pass `secrets.BLOCKERABOT_PAT` when the shared repo is private. Matching branch names on both repos are preferred; otherwise the shared repo default branch is used.
+
+After checkout, `.github/scripts/link-global-packages.sh` symlinks missing entries under `packages/` to the shared repo so existing `packages/**` test/lint globs keep working.
+
 ## Making Changes
 
 -   Check out the [Getting Started](../docs/contributors/getting-started.md) guide for additional development information
