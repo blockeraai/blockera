@@ -112,17 +112,17 @@ echo "Creating worktree for ${MASTER_REF} at ${MASTER_PLUGIN_DIR}..."
 git worktree add --detach "${MASTER_PLUGIN_DIR}" "${MASTER_REF}"
 
 # Master worktree lives under blockera-perf-baseline/blockera, so
-# ../blockera-global-packages must exist beside that worktree too.
-PR_GLOBAL_PACKAGES="${ROOT_DIR}/../blockera-global-packages"
-MASTER_GLOBAL_PACKAGES="$(cd "${MASTER_PLUGIN_DIR}/.." && pwd)/blockera-global-packages"
-if [[ -d "${PR_GLOBAL_PACKAGES}" && ! -e "${MASTER_GLOBAL_PACKAGES}" ]]; then
-	echo "Linking global packages for master worktree: ${MASTER_GLOBAL_PACKAGES}"
-	ln -sfn "${PR_GLOBAL_PACKAGES}" "${MASTER_GLOBAL_PACKAGES}"
+# sibling ../packages must exist beside that worktree too.
+PR_PACKAGES="${ROOT_DIR}/../packages"
+MASTER_PACKAGES="$(cd "${MASTER_PLUGIN_DIR}/.." && pwd)/packages"
+if [[ -d "${PR_PACKAGES}" && ! -e "${MASTER_PACKAGES}" ]]; then
+	echo "Linking global packages for master worktree: ${MASTER_PACKAGES}"
+	ln -sfn "${PR_PACKAGES}" "${MASTER_PACKAGES}"
 fi
 if [[ -f "${ROOT_DIR}/.github/scripts/link-global-packages.sh" ]]; then
 	bash "${ROOT_DIR}/.github/scripts/link-global-packages.sh" \
 		"${MASTER_PLUGIN_DIR}" \
-		"${PR_GLOBAL_PACKAGES}"
+		"${PR_PACKAGES}"
 fi
 
 echo "Installing and building master plugin in worktree..."

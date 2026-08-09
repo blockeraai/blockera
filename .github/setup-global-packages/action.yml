@@ -1,9 +1,9 @@
 name: 'Setup blockera-global-packages'
 description: >
-    Checkout blockera-global-packages inside the consumer workspace, then expose it
-    as the sibling path ../blockera-global-packages so file:/path Composer and npm
-    dependencies resolve the same way as local development.
-    (actions/checkout cannot write outside GITHUB_WORKSPACE.)
+    Checkout blockera-global-packages inside the consumer workspace, then expose
+    its packages/ directory as the sibling ../packages (e.g.
+    /home/runner/work/blockera/packages) so file:/path Composer and npm
+    dependencies resolve. actions/checkout cannot write outside GITHUB_WORKSPACE.
 inputs:
     repository:
         description: 'GitHub repository for global packages (owner/name).'
@@ -45,7 +45,8 @@ runs:
               set -euo pipefail
 
               CHECKOUT_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
-              SIBLING_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'blockera-global-packages'))")"
+              # Consumer deps use ../packages → /home/runner/work/<repo>/packages
+              PACKAGES_SIBLING="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'packages'))")"
               PR_CONFIG="${GITHUB_WORKSPACE}/.pr-global-packages.env.json"
 
               # checkout@v5 rejects paths outside GITHUB_WORKSPACE.
@@ -58,9 +59,9 @@ runs:
               esac
 
               echo "checkout-path=${CHECKOUT_PATH}" >> "${GITHUB_OUTPUT}"
-              echo "sibling-path=${SIBLING_PATH}" >> "${GITHUB_OUTPUT}"
+              echo "packages-sibling=${PACKAGES_SIBLING}" >> "${GITHUB_OUTPUT}"
 
-              if [ -d "${CHECKOUT_PATH}/packages" ] || [ -d "${SIBLING_PATH}/packages" ]; then
+              if [ -d "${CHECKOUT_PATH}/packages" ] || [ -d "${PACKAGES_SIBLING}/blockera" ] || [ -d "${PACKAGES_SIBLING}/editor" ]; then
                   echo "Global packages already present"
                   echo "skip-checkout=true" >> "${GITHUB_OUTPUT}"
                   echo "ref=existing" >> "${GITHUB_OUTPUT}"
@@ -133,56 +134,57 @@ runs:
               token: ${{ inputs.token != '' && inputs.token || github.token }}
               persist-credentials: false
 
-        - name: Expose sibling ../blockera-global-packages
+        - name: Expose sibling ../packages
           shell: bash
           env:
               CHECKOUT_PATH: ${{ steps.resolve.outputs.checkout-path }}
-              SIBLING_PATH: ${{ steps.resolve.outputs.sibling-path }}
+              PACKAGES_SIBLING: ${{ steps.resolve.outputs.packages-sibling }}
               INPUT_PATH: ${{ inputs.path }}
           run: |
               set -euo pipefail
 
-              # Recompute when skip-checkout reused an existing tree without outputs from a prior job.
-              if [ -z "${CHECKOUT_PATH}" ] || [ -z "${SIBLING_PATH}" ]; then
+              if [ -z "${CHECKOUT_PATH}" ] || [ -z "${PACKAGES_SIBLING}" ]; then
                   CHECKOUT_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, process.env.INPUT_PATH))")"
-                  SIBLING_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'blockera-global-packages'))")"
+                  PACKAGES_SIBLING="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'packages'))")"
               fi
 
-              if [ ! -d "${CHECKOUT_PATH}/packages" ] && [ -d "${SIBLING_PATH}/packages" ]; then
-                  # Already available at the sibling path (e.g. local/dev runner layout).
-                  echo "Using existing sibling global packages at ${SIBLING_PATH}"
-              else
-                  if [ ! -d "${CHECKOUT_PATH}/packages" ]; then
+              PACKAGES_SOURCE="${CHECKOUT_PATH}/packages"
+
+              if [ ! -d "${PACKAGES_SOURCE}" ]; then
+                  # Already available via sibling (e.g. local/dev runner layout).
+                  if [ -d "${PACKAGES_SIBLING}" ]; then
+                      echo "Using existing sibling packages at ${PACKAGES_SIBLING}"
+                  else
                       echo "::error::Expected packages/ under checkout path ${CHECKOUT_PATH}."
                       ls -la "${GITHUB_WORKSPACE}" || true
                       exit 1
                   fi
-
-                  # Consumer package.json / composer.json use ../blockera-global-packages.
-                  # checkout@v5 cannot write there, so symlink from the in-workspace clone.
-                  mkdir -p "$(dirname "${SIBLING_PATH}")"
-                  ln -sfn "${CHECKOUT_PATH}" "${SIBLING_PATH}"
-                  echo "Linked ${SIBLING_PATH} -> ${CHECKOUT_PATH}"
+              else
+                  # Consumer package.json / composer.json use ../packages.
+                  # checkout@v5 cannot write outside the workspace, so symlink.
+                  mkdir -p "$(dirname "${PACKAGES_SIBLING}")"
+                  ln -sfn "${PACKAGES_SOURCE}" "${PACKAGES_SIBLING}"
+                  echo "Linked ${PACKAGES_SIBLING} -> ${PACKAGES_SOURCE}"
               fi
 
-              if [ ! -d "${SIBLING_PATH}/packages" ]; then
-                  echo "::error::Sibling path ${SIBLING_PATH} is missing packages/."
+              if [ ! -d "${PACKAGES_SIBLING}" ]; then
+                  echo "::error::Sibling path ${PACKAGES_SIBLING} is missing."
                   exit 1
               fi
 
-              echo "Using global packages at ${SIBLING_PATH}"
-              ls "${SIBLING_PATH}/packages" | head
+              echo "Using global packages at ${PACKAGES_SIBLING}"
+              ls "${PACKAGES_SIBLING}" | head
 
         - name: Link global packages into consumer packages/
           shell: bash
           env:
-              SIBLING_PATH: ${{ steps.resolve.outputs.sibling-path }}
+              PACKAGES_SIBLING: ${{ steps.resolve.outputs.packages-sibling }}
               INPUT_PATH: ${{ inputs.path }}
           run: |
               set -euo pipefail
-              if [ -z "${SIBLING_PATH}" ]; then
-                  SIBLING_PATH="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'blockera-global-packages'))")"
+              if [ -z "${PACKAGES_SIBLING}" ]; then
+                  PACKAGES_SIBLING="$(node -e "const path=require('path'); process.stdout.write(path.resolve(process.env.GITHUB_WORKSPACE, '..', 'packages'))")"
               fi
               bash "${GITHUB_WORKSPACE}/.github/scripts/link-global-packages.sh" \
                   "${GITHUB_WORKSPACE}" \
-                  "${SIBLING_PATH}"
+                  "${PACKAGES_SIBLING}"
