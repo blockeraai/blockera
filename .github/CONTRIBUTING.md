@@ -15,45 +15,40 @@ When contributing please ensure you follow the guidelines below so that we can k
     -   Clearly describe the issue including steps to reproduce the bug.
     -   Make sure you fill in the earliest version that you know has the issue as well as the version of WordPress you're using.
 
-## Shared packages (blockera-global-packages)
+## Shared packages (git submodule)
 
-Consumer `file:` / Composer deps resolve via a sibling **`../packages`** directory (on GitHub Actions: `/home/runner/work/blockera/packages`).
-
-Local layout:
+Shared packages live in a sparse submodule:
 
 ```
-plugins/blockera/
-plugins/blockera-global-packages/packages/   # clone / source of truth
-plugins/packages → blockera-global-packages/packages
+packages/global-packages/          # submodule → blockeraai/blockera-global-packages
+  packages/                        # only tree checked out (sparse)
+    editor/
+    blockera/
+    ...
+packages/autoloader-coordinator/   # still owned by Blockera
 ```
 
-Run `.github/scripts/link-global-packages.sh` once to create `../packages` if it is missing.
+### Local setup
 
-GitHub Actions clones the shared repo via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and passes `secrets.BLOCKERABOT_PAT` when that repo is private.
+```bash
+git clone --recurse-submodules <blockera-url>
+cd blockera
+# If you cloned without --recurse-submodules:
+git submodule update --init packages/global-packages
+bash .github/scripts/ensure-global-packages-sparse.sh
 
-### Pin a global-packages branch for a PR
-
-Commit `.pr-global-packages.env.json` on the Blockera PR branch (copy from `.pr-global-packages.env-example.json`):
-
-```json
-{
-	"ref": "feat/your-global-packages-branch",
-	"repository": "blockeraai/blockera-global-packages"
-}
+composer install
+npm ci
 ```
 
-Ref resolution order:
+npm `file:` deps and Composer path repos point at `packages/global-packages/packages/*` (no symlinks).
 
-1. Workflow `global-packages-ref` input (if set)
-2. `.pr-global-packages.env.json` → `ref`
-3. Same branch name as the Blockera PR, when it exists on global-packages
-4. global-packages default branch
+### Updating shared packages
 
-`repository` in the PR config is optional (defaults to `blockeraai/blockera-global-packages`). Remove `.pr-global-packages.env.json` before merging to `master` (enforced by the Check PR Config Files workflow).
+1. Work inside `packages/global-packages` (commit/push on that repo)
+2. In Blockera: `git add packages/global-packages && git commit` to bump the gitlink SHA
 
-Because `actions/checkout` cannot write outside `GITHUB_WORKSPACE`, CI clones into `.blockera-global-packages/` and symlinks sibling `../packages` → `.blockera-global-packages/packages` so consumer deps keep working.
-
-After checkout, `.github/scripts/link-global-packages.sh` also symlinks missing entries under consumer `packages/` so existing `packages/**` test/lint globs keep working.
+CI checks out the submodule with `secrets.BLOCKERABOT_PAT` and re-applies sparse-checkout via `ensure-global-packages-sparse.sh` (from `setup-node` / `setup-php`).
 
 ## Making Changes
 
@@ -66,7 +61,6 @@ After checkout, `.github/scripts/link-global-packages.sh` also symlinks missing 
 -   Push the changes to your fork
 -   Submit a pull request to the 'develop' branch of the Blockera repository
 -   Check unit and E2E tests to make sure they pass and have not any conflicts
-
 
 ## Code Documentation
 
