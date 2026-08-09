@@ -4,14 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7627b3b6e46ac6c4d687996881573874",
+    "content-hash": "824c01a2c55a5e9d1cc43cac35fe84a7",
     "packages": [
         {
             "name": "blockera/blockera",
             "version": "1.3.3",
             "dist": {
                 "type": "path",
-                "url": "../packages/blockera",
+                "url": "packages/global-packages/packages/blockera",
                 "reference": "aeaca43fcac9e942bfe458b45c27ae4f849ff29e"
             },
             "type": "library",
@@ -47,7 +47,7 @@
             "version": "1.3.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/blockera-admin",
+                "url": "packages/global-packages/packages/blockera-admin",
                 "reference": "ca014894aa642c0cbbf46111a596740fcd8d7412"
             },
             "type": "library",
@@ -70,7 +70,7 @@
             "version": "1.4.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/blocks-core",
+                "url": "packages/global-packages/packages/blocks-core",
                 "reference": "8ed1ca395f3c28ee7fd4de915ebd4a8740a80e15"
             },
             "type": "library",
@@ -93,7 +93,7 @@
             "version": "1.0.2",
             "dist": {
                 "type": "path",
-                "url": "../packages/bootstrap",
+                "url": "packages/global-packages/packages/bootstrap",
                 "reference": "c030cb60aa6ce80395072f6e400859113ea86b68"
             },
             "type": "library",
@@ -113,7 +113,7 @@
             "version": "1.0.1",
             "dist": {
                 "type": "path",
-                "url": "../packages/classnames",
+                "url": "packages/global-packages/packages/classnames",
                 "reference": "262e4e68987f5dec133cfbdd0f36edbb209e375f"
             },
             "type": "library",
@@ -138,7 +138,7 @@
             "version": "1.4.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/controls",
+                "url": "packages/global-packages/packages/controls",
                 "reference": "6f7251f323f8467b3a198e6a17c18fcdc736ff9d"
             },
             "type": "library",
@@ -163,7 +163,7 @@
             "version": "1.1.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/data",
+                "url": "packages/global-packages/packages/data",
                 "reference": "8ab2915466f9d9a323c2de96681149d8dddc2195"
             },
             "type": "library",
@@ -186,7 +186,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/data-editor",
+                "url": "packages/global-packages/packages/data-editor",
                 "reference": "fcb397fd40265411906a3035f19351d458a9df1d"
             },
             "type": "library",
@@ -206,8 +206,8 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/dev-cypress",
-                "reference": "36f406b534fbf4b25407471a49efe3bc36d13d1c"
+                "url": "packages/global-packages/packages/dev-cypress",
+                "reference": "fb768011009c8761482489827e1ae324da671629"
             },
             "type": "library",
             "autoload": {
@@ -229,8 +229,8 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/dev-tools",
-                "reference": "f595644afb2b55da731acb78e7bb6c69719fdb6a"
+                "url": "packages/global-packages/packages/dev-tools",
+                "reference": "e84cf97898e5e1336d0c7b52ffbd5d7be8ea5724"
             },
             "type": "library",
             "autoload": {
@@ -252,7 +252,7 @@
             "version": "2.0.1",
             "dist": {
                 "type": "path",
-                "url": "../packages/editor",
+                "url": "packages/global-packages/packages/editor",
                 "reference": "1c5e3fbc6dda26129f23b9f4446bb332363cdee7"
             },
             "type": "library",
@@ -280,7 +280,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/env",
+                "url": "packages/global-packages/packages/env",
                 "reference": "590052e7765858f6d6bd2d437ce6a6d76afb66f1"
             },
             "type": "library",
@@ -303,7 +303,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/exceptions",
+                "url": "packages/global-packages/packages/exceptions",
                 "reference": "d2167e16259172cbfe0d3b1ac9c5a7875c3c8b98"
             },
             "type": "library",
@@ -323,7 +323,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/features-library/icon",
+                "url": "packages/global-packages/packages/features-library/icon",
                 "reference": "8b92cec4f7b0defe06c7896eb6909337c22c00db"
             },
             "type": "library",
@@ -352,7 +352,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/features-core",
+                "url": "packages/global-packages/packages/features-core",
                 "reference": "38b7f5b229b89f1e1453584843332e75bef44456"
             },
             "type": "library",
@@ -380,7 +380,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/global-styles-ui",
+                "url": "packages/global-packages/packages/global-styles-ui",
                 "reference": "e0693cc23f887bc468d2bdc7e09b62915daddb82"
             },
             "type": "library",
@@ -403,7 +403,7 @@
             "version": "1.1.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/http",
+                "url": "packages/global-packages/packages/http",
                 "reference": "24909127a8f4628e68b36da922a468381bd8d7a6"
             },
             "type": "library",
@@ -423,7 +423,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/icons",
+                "url": "packages/global-packages/packages/icons",
                 "reference": "a405a06b8728076857b8d50f10f4ee682929a73e"
             },
             "type": "library",
@@ -448,7 +448,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/plugin-compatibility",
+                "url": "packages/global-packages/packages/plugin-compatibility",
                 "reference": "a90a46d5bdf7c47443be661159621682659a8ab7"
             },
             "type": "library",
@@ -473,7 +473,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "../packages/storage",
+                "url": "packages/global-packages/packages/storage",
                 "reference": "d5e7b81277c04cbb4a8a95334f57035039d803a4"
             },
             "type": "library",
@@ -493,7 +493,7 @@
             "version": "1.0.2",
             "dist": {
                 "type": "path",
-                "url": "../packages/telemetry",
+                "url": "packages/global-packages/packages/telemetry",
                 "reference": "6c8930956a1510337a33714f8c482eef6038546e"
             },
             "type": "library",
@@ -521,7 +521,7 @@
             "version": "1.2.1",
             "dist": {
                 "type": "path",
-                "url": "../packages/utils",
+                "url": "packages/global-packages/packages/utils",
                 "reference": "f505e5e55abc84fd7a2c508d7e5064aa708971e0"
             },
             "type": "library",
@@ -549,7 +549,7 @@
             "version": "1.1.6",
             "dist": {
                 "type": "path",
-                "url": "../packages/wordpress",
+                "url": "packages/global-packages/packages/wordpress",
                 "reference": "810395b2ebe26967414c2c40c4c8e31f8ead3ce3"
             },
             "type": "library",
@@ -1354,7 +1354,7 @@
             "version": "1.0.1",
             "dist": {
                 "type": "path",
-                "url": "../packages/dev-phpunit",
+                "url": "packages/global-packages/packages/dev-phpunit",
                 "reference": "377a7f6b0137be7f26dd5f0968510fd16612a927"
             },
             "type": "library",

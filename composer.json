@@ -6,14 +6,14 @@
 	"repositories": [
 		{
 			"type": "path",
-			"url": "../packages/*",
+			"url": "packages/global-packages/packages/*",
 			"options": {
 				"symlink": true
 			}
 		},
 		{
 			"type": "path",
-			"url": "../packages/features-library/*",
+			"url": "packages/global-packages/packages/features-library/*",
 			"options": {
 				"symlink": true
 			}
