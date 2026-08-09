@@ -17,14 +17,19 @@ When contributing please ensure you follow the guidelines below so that we can k
 
 ## Shared packages (blockera-global-packages)
 
-CI and local installs expect `blockera-global-packages` as a **sibling** of this repository:
+Consumer `file:` / Composer deps resolve via a sibling **`../packages`** directory (on GitHub Actions: `/home/runner/work/blockera/packages`).
+
+Local layout:
 
 ```
 plugins/blockera/
-plugins/blockera-global-packages/
+plugins/blockera-global-packages/packages/   # clone / source of truth
+plugins/packages → blockera-global-packages/packages
 ```
 
-GitHub Actions check this out via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and pass `secrets.BLOCKERABOT_PAT` when the shared repo is private.
+Run `.github/scripts/link-global-packages.sh` once to create `../packages` if it is missing.
+
+GitHub Actions clones the shared repo via `.github/setup-global-packages` (used by `setup-node` and `setup-php`) and passes `secrets.BLOCKERABOT_PAT` when that repo is private.
 
 ### Pin a global-packages branch for a PR
 
@@ -46,9 +51,9 @@ Ref resolution order:
 
 `repository` in the PR config is optional (defaults to `blockeraai/blockera-global-packages`). Remove `.pr-global-packages.env.json` before merging to `master` (enforced by the Check PR Config Files workflow).
 
-Because `actions/checkout` cannot write outside `GITHUB_WORKSPACE`, CI clones into `.blockera-global-packages/` and symlinks `../blockera-global-packages` to that directory so consumer `file:` / Composer path deps keep working.
+Because `actions/checkout` cannot write outside `GITHUB_WORKSPACE`, CI clones into `.blockera-global-packages/` and symlinks sibling `../packages` → `.blockera-global-packages/packages` so consumer deps keep working.
 
-After checkout, `.github/scripts/link-global-packages.sh` symlinks missing entries under `packages/` to the shared repo so existing `packages/**` test/lint globs keep working.
+After checkout, `.github/scripts/link-global-packages.sh` also symlinks missing entries under consumer `packages/` so existing `packages/**` test/lint globs keep working.
 
 ## Making Changes
 
