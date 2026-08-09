@@ -31,6 +31,10 @@ jobs:
             - name: Install Cypress
               run: npx cypress install
 
+            # webpack.config.js requires vendor/blockera/dev-tools (Composer path repo).
+            - name: Install Composer Packages
+              run: composer install --no-dev -o --apcu-autoloader -a
+
             - name: Build plugin assets
               run: npm run build
 
