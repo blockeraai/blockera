@@ -48,7 +48,7 @@ npm `file:` deps and Composer path repos point at `packages/global-packages/pack
 1. Work inside `packages/global-packages` (commit/push on that repo)
 2. In Blockera: `git add packages/global-packages && git commit` to bump the gitlink SHA
 
-CI checks out the submodule with `secrets.BLOCKERABOT_PAT` and re-applies sparse-checkout via `ensure-global-packages-sparse.sh` (from `setup-node` / `setup-php`).
+CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead `setup-node` / `setup-php` run `ensure-global-packages-sparse.sh` with `secrets.BLOCKERABOT_PAT` to `git submodule update --init` over HTTPS and apply sparse-checkout.
 
 ## Making Changes
 

@@ -23,16 +23,18 @@ jobs:
             - uses: actions/checkout@v5
               with:
                   fetch-depth: 1
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
               with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
                   composer-options: '--no-dev -o --apcu-autoloader -a'
 
             - name: Build Plugin Zip File

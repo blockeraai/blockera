@@ -49,11 +49,12 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v5
               with:
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Install Composer Packages
               run: composer install --no-dev -o --apcu-autoloader -a

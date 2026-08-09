@@ -24,11 +24,12 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v5
               with:
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Running the lint:js
               run: npm run lint:js
@@ -43,11 +44,12 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v5
               with:
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Running the lint:css
               run: npm run lint:css
@@ -62,11 +64,12 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v5
               with:
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Make Composer packages available globally
               run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH

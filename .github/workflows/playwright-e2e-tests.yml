@@ -25,11 +25,12 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v5
               with:
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Check if .pr-playwright.env.json exists
               id: check_env_file
@@ -102,11 +103,12 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v5
               with:
-                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Install Playwright dependencies
               run: |

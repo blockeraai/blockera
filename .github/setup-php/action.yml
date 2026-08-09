@@ -9,12 +9,18 @@ inputs:
         description: 'Optional. The options to use on composer install. When not specified, the options is empty'
         required: false
         default: ''
+    global-packages-token:
+        description: 'PAT with read access to blockera-global-packages (secrets.BLOCKERABOT_PAT).'
+        required: false
+        default: ''
 
 runs:
     using: 'composite'
     steps:
-        - name: Ensure global-packages sparse checkout
+        - name: Ensure global-packages submodule (sparse)
           shell: bash
+          env:
+              BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ inputs.global-packages-token }}
           run: bash "${GITHUB_WORKSPACE}/.github/scripts/ensure-global-packages-sparse.sh" "${GITHUB_WORKSPACE}"
 
         ##
