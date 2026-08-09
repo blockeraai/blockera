@@ -1,5 +1,5 @@
 ---
-description: Source-routing rule: use uncompiled Gutenberg for editor JS/React and WordPress core source for PHP + non-editor behavior.
+description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress core for PHP + non-editor behavior, and WooCommerce source for WooCommerce work.
 alwaysApply: true
 ---
 
@@ -21,6 +21,10 @@ These trees live only in the **Blockera plugin** repo root (gitignored local clo
 - **WordPress core source**
     - `source-codes/wordpress/`
     - Contains PHP core and server-side behavior; also includes compiled editor artifacts that MUST NOT be used as the primary reference for editor internals.
+
+- **WooCommerce source**
+    - `source-codes/woocommerce/`
+    - Contains WooCommerce PHP, blocks, admin, REST API, and related frontend/packages source (preferred for WooCommerce features and compatibility work).
 
 If the `blockera` workspace folder is not open, ask the user to add it, or resolve via the standard WP layout:
 `wp-content/plugins/blockera/source-codes/...`
@@ -51,7 +55,16 @@ Includes anything involving:
 - Admin screens, capability checks, rewrite rules, database queries
 - Anything not specific to Gutenberg’s React UI code
 
-If you must bridge editor ↔ server behavior, consult **both** directories.
+### C) If the task is WooCommerce related → use `source-codes/woocommerce/` FIRST
+
+Includes anything involving:
+
+- WooCommerce products, cart, checkout, orders, Coupons, taxes, shipping
+- WooCommerce Blocks / Cart & Checkout blocks, product blocks, mini-cart
+- WooCommerce REST API, admin screens, settings, emails, payment gateways
+- WooCommerce hooks/filters, data stores, and compatibility with Blockera
+
+If you must bridge editor ↔ server ↔ WooCommerce behavior, consult the relevant directories together (start with the most specific: WooCommerce, then block-editor or wordpress as needed).
 
 ---
 
@@ -63,7 +76,8 @@ Start by stating which bucket the task is in:
 
 - “Editor JS/React (Gutenberg)” → search `source-codes/block-editor/`
 - “Core PHP/server-side” → search `source-codes/wordpress/`
-- “Mixed/bridge” → search both, starting with the most relevant one
+- “WooCommerce” → search `source-codes/woocommerce/`
+- “Mixed/bridge” → search the relevant trees, starting with the most specific one
 
 ### 2) Search locally before writing code
 
@@ -85,6 +99,7 @@ Example:
 
 - `source-codes/block-editor/packages/editor/src/components/...`
 - `source-codes/wordpress/wp-includes/blocks.php`
+- `source-codes/woocommerce/plugins/woocommerce/includes/...`
 
 ### 4) Prefer extension points, minimize patching
 
@@ -103,6 +118,8 @@ Example:
 
 Never base a design on minified/compiled bundles if the source exists in `source-codes/block-editor/`.
 
+The same idea applies to WooCommerce: prefer `source-codes/woocommerce/` over installed/minified plugin assets when researching behavior.
+
 ---
 
 ## Performance + React safety guardrails
@@ -119,7 +136,7 @@ Never base a design on minified/compiled bundles if the source exists in `source
 
 When implementing or proposing a solution:
 
-- Start with the routing choice (A/B/Mixed).
+- Start with the routing choice (A/B/C/Mixed).
 - List the local files you consulted.
 - Provide the implementation plan and the code.
 - Call out upgrade risks and how you mitigated them.

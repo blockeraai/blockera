@@ -14,6 +14,7 @@ In-scope paths include:
 - Local reference trees (read-only unless the task says otherwise):
   - `source-codes/block-editor/`
   - `source-codes/wordpress/`
+  - `source-codes/woocommerce/`
 
 ## Out of scope
 
