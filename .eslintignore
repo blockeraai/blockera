@@ -3,7 +3,8 @@
 /node_modules/*
 /packages/dev-cypress/*
 /packages/dev-playwright/*
-/packages/freemius-sdk/*
+/blockera-global-packages/packages/dev-cypress/*
+/blockera-global-packages/packages/dev-playwright/*
 /.patch/*
 /.storybook/*
 build/*
