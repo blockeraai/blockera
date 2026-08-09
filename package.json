@@ -72,7 +72,8 @@
 		"react-window": "^1.8.11",
 		"rememo": "^4.0.2",
 		"tinycolor2": "^1.6.0",
-		"use-draggable": "^2.0.0"
+		"use-draggable": "^2.0.0",
+		"@monaco-editor/react": "^4.7.0"
 	},
 	"devDependencies": {
 		"@10up/cypress-wp-utils": "^0.4.0",
