@@ -13,8 +13,7 @@ node_modules/*
 vendor/*
 assets/*
 wordpress*
-source-code-block-editor
-source-code-wordpress
+source-codes
 **/test/*
 **/stories/*
 /bin/plugin/**

@@ -57,8 +57,7 @@
 	"exclude": [
 		"node_modules",
 		"build",
-		"source-code-block-editor",
-		"source-code-wordpress"
+		"source-codes"
 	]
 }
 

@@ -103,8 +103,7 @@ Scratch
 .github/wp-env-configs/development.json
 
 # development helper folders
-source-code-block-editor/
-source-code-wordpress/
+source-codes/
 wordpress-develop
 
 # playwright environment variables

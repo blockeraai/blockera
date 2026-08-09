@@ -12,8 +12,8 @@ In-scope paths include:
 
 - Plugin source (`packages/`, `blockera.php`, build/config, tests, docs)
 - Local reference trees (read-only unless the task says otherwise):
-  - `source-code-block-editor/`
-  - `source-code-wordpress/`
+  - `source-codes/block-editor/`
+  - `source-codes/wordpress/`
 
 ## Out of scope
 

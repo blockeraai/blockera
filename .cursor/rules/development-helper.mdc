@@ -8,17 +8,22 @@ alwaysApply: true
 You are developing a WordPress plugin that deeply extends the WordPress Block Editor (Gutenberg) to behave like a website builder + IDE.
 Your #1 goal is **maximum compatibility with WordPress core + Gutenberg**, with **performance** and **upgrade-safety** as top priorities.
 
-We keep two local source trees because WordPress bundles compiled editor assets:
+We keep local source trees because WordPress bundles compiled editor assets.
 
 ## Source directories (must be used)
 
+These trees live only in the **Blockera plugin** repo root (gitignored local clones). Paths are always relative to the `blockera` workspace folder root. Never use absolute user paths (`/Users/...`, `/home/...`).
+
 - **Uncompiled Block Editor (Gutenberg) source**
-    - `./blockera/source-code-block-editor/`
+    - `source-codes/block-editor/`
     - Contains the real React/JS/TS/CSS sources (preferred for editor features).
 
 - **WordPress core source**
-    - `./blockera/source-code-wordpress/`
+    - `source-codes/wordpress/`
     - Contains PHP core and server-side behavior; also includes compiled editor artifacts that MUST NOT be used as the primary reference for editor internals.
+
+If the `blockera` workspace folder is not open, ask the user to add it, or resolve via the standard WP layout:
+`wp-content/plugins/blockera/source-codes/...`
 
 ---
 
@@ -26,7 +31,7 @@ We keep two local source trees because WordPress bundles compiled editor assets:
 
 When researching or implementing:
 
-### A) If the task is Block Editor / Gutenberg front-end related → use `blockera/source-code-block-editor/` FIRST
+### A) If the task is Block Editor / Gutenberg front-end related → use `source-codes/block-editor/` FIRST
 
 Includes anything involving:
 
@@ -37,7 +42,7 @@ Includes anything involving:
 
 **Do NOT** use compiled WP editor bundles as your reference when the uncompiled source exists.
 
-### B) If the task is PHP / WordPress core behavior / server-side rendering → use `blockera/source-code-wordpress/` FIRST
+### B) If the task is PHP / WordPress core behavior / server-side rendering → use `source-codes/wordpress/` FIRST
 
 Includes anything involving:
 
@@ -56,8 +61,8 @@ If you must bridge editor ↔ server behavior, consult **both** directories.
 
 Start by stating which bucket the task is in:
 
-- “Editor JS/React (Gutenberg)” → search `blockera/source-code-block-editor/`
-- “Core PHP/server-side” → search `blockera/source-code-wordpress/`
+- “Editor JS/React (Gutenberg)” → search `source-codes/block-editor/`
+- “Core PHP/server-side” → search `source-codes/wordpress/`
 - “Mixed/bridge” → search both, starting with the most relevant one
 
 ### 2) Search locally before writing code
@@ -78,8 +83,8 @@ In your answer, always include:
 
 Example:
 
-- `blockera/source-code-block-editor/packages/editor/src/components/...`
-- `blockera/source-code-wordpress/wp-includes/blocks.php`
+- `source-codes/block-editor/packages/editor/src/components/...`
+- `source-codes/wordpress/wp-includes/blocks.php`
 
 ### 4) Prefer extension points, minimize patching
 
@@ -93,10 +98,10 @@ Example:
 
 - Treat WordPress’s bundled editor JS as **compiled output**.
 - Only consult it when:
-    1. You cannot find the behavior in `blockera/source-code-block-editor/`, OR
+    1. You cannot find the behavior in `source-codes/block-editor/`, OR
     2. You are verifying packaging/integration details (handles, script loading, dependencies).
 
-Never base a design on minified/compiled bundles if the source exists in `blockera/source-code-block-editor/`.
+Never base a design on minified/compiled bundles if the source exists in `source-codes/block-editor/`.
 
 ---
 
