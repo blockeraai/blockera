@@ -151,7 +151,10 @@ module.exports = {
 	overrides: [
 		{
 			// Only @blockera/storage may touch native browser storage backends.
-			files: ['packages/storage/js/**'],
+			files: [
+				'packages/storage/js/**',
+				'packages/global-packages/packages/storage/js/**',
+			],
 			rules: {
 				'no-restricted-globals': 'off',
 				'no-restricted-syntax': [
@@ -191,7 +194,10 @@ module.exports = {
 			},
 		},
 		{
-			files: ['packages/classnames/js/**'],
+			files: [
+				'packages/classnames/js/**',
+				'packages/global-packages/packages/classnames/js/**',
+			],
 			rules: {
 				'no-restricted-imports': [
 					'error',

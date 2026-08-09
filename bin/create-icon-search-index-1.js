@@ -17,7 +17,7 @@ function resolveProjectPath(relativePath) {
  * Load search libraries from the configuration file
  */
 const searchLibrariesPath = resolveProjectPath(
-	'./packages/icons/js/search-libraries.json'
+	'./packages/global-packages/packages/icons/js/search-libraries.json'
 );
 let searchLibraries = [];
 try {
@@ -34,7 +34,7 @@ try {
  * Load search configuration from the config file
  */
 const searchConfigPath = resolveProjectPath(
-	'./packages/icons/js/search-config.json'
+	'./packages/global-packages/packages/icons/js/search-config.json'
 );
 let searchConfig = {};
 try {
@@ -51,7 +51,8 @@ try {
  * Generate jsonFiles array based on search libraries
  */
 const jsonFiles = searchLibraries.map(
-	(library) => `./packages/icons/js/library-${library}/search-data.json`
+	(library) =>
+		`./packages/global-packages/packages/icons/js/library-${library}/search-data.json`
 );
 
 /**
@@ -99,7 +100,7 @@ const index = Fuse.createIndex(keys, icons);
  * Write the index to the specified destination file.
  */
 const destinationFile = resolveProjectPath(
-	`./packages/icons/js/search-index.json`
+	`./packages/global-packages/packages/icons/js/search-index.json`
 );
 
 try {

@@ -106,7 +106,10 @@
     <exclude-pattern>./packages/**/tests/*</exclude-pattern>
     <exclude-pattern>./packages/dev-phpunit/*</exclude-pattern>
     <exclude-pattern>./packages/dev-cypress/*</exclude-pattern>
+    <exclude-pattern>./packages/global-packages/packages/dev-phpunit/*</exclude-pattern>
+    <exclude-pattern>./packages/global-packages/packages/dev-cypress/*</exclude-pattern>
     <exclude-pattern>./packages/bootstrap/*</exclude-pattern>
+    <exclude-pattern>./packages/global-packages/packages/bootstrap/*</exclude-pattern>
     <exclude-pattern>.patch/*</exclude-pattern>
     <exclude-pattern>./tests/*</exclude-pattern>
     <exclude-pattern>**/test/**</exclude-pattern>

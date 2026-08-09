@@ -19,7 +19,7 @@ const {
 
 const BACKGROUND_IMAGE_FIXTURE = path.join(
 	process.cwd(),
-	'packages/dev-cypress/js/fixtures/bg-extension-test.png'
+	'packages/global-packages/packages/dev-cypress/js/fixtures/bg-extension-test.png'
 );
 
 const BORDER_PRESET_ADD_DATA_TEST =

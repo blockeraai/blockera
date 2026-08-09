@@ -68,7 +68,9 @@ const config = defineConfig({
 				['list'], // Shows test names and progress in real-time
 				['github'], // GitHub Actions integration
 				['html', { outputFolder: 'playwright-report', open: 'never' }], // HTML report
-				['./packages/dev-playwright/js/config/flaky-tests-report.ts'],
+				[
+					'./packages/global-packages/packages/dev-playwright/js/config/flaky-tests-report.ts',
+				],
 				[
 					'json',
 					{ outputFile: 'artifacts/playwright-e2e-summary.json' },

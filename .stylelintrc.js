@@ -28,9 +28,12 @@ module.exports = {
 		'coverage/**/*.css',
 		'packages/dev-cypress/**/*.css',
 		'packages/dev-cypress/**/*.scss',
+		'packages/global-packages/packages/dev-cypress/**/*.css',
+		'packages/global-packages/packages/dev-cypress/**/*.scss',
 		'packages/dev-storybook/**/*.css',
 		'packages/dev-storybook/**/*.scss',
 		'packages/blockera-admin/js/style.scss',
+		'packages/global-packages/packages/blockera-admin/js/style.scss',
 	],
 	customSyntax: postcssScss, // MUST be last to prevent override
 };

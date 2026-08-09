@@ -1,10 +1,10 @@
 # lint top level dot files
 !.*
 /node_modules/*
+# Shared packages live in the submodule; lint them in blockera-global-packages.
+/packages/global-packages/**
 /packages/dev-cypress/*
 /packages/dev-playwright/*
-/blockera-global-packages/packages/dev-cypress/*
-/blockera-global-packages/packages/dev-playwright/*
 /.patch/*
 /.storybook/*
 build/*

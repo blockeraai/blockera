@@ -1,14 +1,14 @@
 /**
  * Sync missing icon entries into each library's search-data.json.
  *
- * Uses the same exported-icon sources as packages/icons/js/.patch/icons.js
+ * Uses the same exported-icon sources as packages/global-packages/packages/icons/js/.patch/icons.js
  * without importing SVG/React modules (safe for plain Node execution).
  */
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const ICONS_JS = path.join(ROOT, 'packages/icons/js');
+const ICONS_JS = path.join(ROOT, 'packages/global-packages/packages/icons/js');
 
 const FA_PREFIXES = {
 	faregular: 'far',
