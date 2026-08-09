@@ -15,9 +15,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
-                  ref: develop
+                  submodules: true
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Run wp-tut-updater-action
               uses: AlecRust/wp-tut-updater-action@main

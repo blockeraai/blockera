@@ -15,9 +15,10 @@ jobs:
 
         steps:
             - name: Checkout Blockera
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
-                  path: blockera
+                  submodules: true
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Get Package Versions
               id: package_versions
@@ -58,11 +59,10 @@ jobs:
                   echo "versions=$(echo "$VERSIONS" | jq -c .)" >> $GITHUB_OUTPUT
 
             - name: Checkout Blockera Pro
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
-                  repository: blockeraai/blockera-pro
+                  submodules: true
                   token: ${{ secrets.BLOCKERABOT_PAT }}
-                  path: blockera-pro
 
             - name: Update dependencies.json
               id: update_dependencies

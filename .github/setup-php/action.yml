@@ -9,28 +9,13 @@ inputs:
         description: 'Optional. The options to use on composer install. When not specified, the options is empty'
         required: false
         default: ''
-    global-packages-token:
-        description: 'Token with read access to blockera-global-packages (use secrets.BLOCKERABOT_PAT when private).'
-        required: false
-        default: ''
-    global-packages-ref:
-        description: 'Optional ref for blockera-global-packages. Empty enables matching-branch / default-branch resolution.'
-        required: false
-        default: ''
-    skip-global-packages:
-        description: 'Set to true to skip checking out blockera-global-packages.'
-        required: false
-        default: 'false'
 
 runs:
     using: 'composite'
     steps:
-        - name: Setup blockera-global-packages
-          if: ${{ inputs.skip-global-packages != 'true' }}
-          uses: ./.github/setup-global-packages
-          with:
-              token: ${{ inputs.global-packages-token }}
-              ref: ${{ inputs.global-packages-ref }}
+        - name: Ensure global-packages sparse checkout
+          shell: bash
+          run: bash "${GITHUB_WORKSPACE}/.github/scripts/ensure-global-packages-sparse.sh" "${GITHUB_WORKSPACE}"
 
         ##
         # This allows Composer dependencies to be installed using a single step.

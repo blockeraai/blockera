@@ -21,12 +21,13 @@ jobs:
 
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
+              with:
+                  submodules: true
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Install Cypress
               run: npx cypress install

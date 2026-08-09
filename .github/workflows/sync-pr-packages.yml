@@ -12,9 +12,10 @@ jobs:
 
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
-                  ref: ${{ github.event.pull_request.head.sha || github.sha }}
+                  submodules: true
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Check if .pr-sync-env.json exists
               id: check-sync-file

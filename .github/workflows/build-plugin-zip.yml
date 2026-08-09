@@ -137,8 +137,6 @@ jobs:
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Update the changelog of packages
               id: update_packages
@@ -198,20 +196,19 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+              uses: actions/checkout@v5
               with:
                   ref: ${{ needs.bump-version.outputs.release_branch || github.ref }}
+                  submodules: true
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
               with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
                   composer-options: '--no-dev -o --apcu-autoloader -a'
 
             - name: Build Plugin Zip File

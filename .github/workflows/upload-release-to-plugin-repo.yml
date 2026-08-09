@@ -82,7 +82,10 @@ jobs:
                    --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
+              with:
+                  submodules: true
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
             # - name: Update assets/readme
             #   uses: ./.github/update-assets
