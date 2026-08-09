@@ -169,6 +169,7 @@ module.exports = {
 			// Cypress / Jest harnesses clear or seed native storage via win.localStorage.
 			files: [
 				'packages/dev-cypress/**',
+				'packages/global-packages/packages/dev-cypress/**',
 				'**/*.spec.js',
 				'**/*.spec.ts',
 				'**/*.test.js',

@@ -40,8 +40,10 @@ env = {
 	...process.env,
 };
 
+const DEV_CYPRESS = './packages/global-packages/packages/dev-cypress/js';
+
 const setupE2ENodeEvents = (on, config) => {
-	require('./packages/dev-cypress/js/plugins/index.js')(on, config, 'e2e');
+	require(`${DEV_CYPRESS}/plugins/index.js`)(on, config, 'e2e');
 
 	//Requires and imports the main plugin function from the cypress-image-diff-js NPM package
 	const getCompareSnapshotsPlugin = require('cypress-image-diff-js/plugin');
@@ -52,11 +54,7 @@ const setupE2ENodeEvents = (on, config) => {
 };
 
 const setupComponentNodeEvents = (on, config) => {
-	require('./packages/dev-cypress/js/plugins/index.js')(
-		on,
-		config,
-		'component'
-	);
+	require(`${DEV_CYPRESS}/plugins/index.js`)(on, config, 'component');
 
 	return config;
 };
@@ -77,10 +75,11 @@ module.exports = defineConfig({
 				'tests/performance/**',
 			])
 		),
-		supportFile: 'packages/dev-cypress/js/support/e2e.js',
+		supportFile:
+			'packages/global-packages/packages/dev-cypress/js/support/e2e.js',
 	},
 	env,
-	fixturesFolder: 'packages/dev-cypress/js/fixtures',
+	fixturesFolder: 'packages/global-packages/packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
 	projectId: 'blockera',
 	// CI only: runMode 2 => up to 3 attempts per test (1 run + 2 retries on failure).
@@ -90,8 +89,9 @@ module.exports = defineConfig({
 	},
 	coverage: isCi,
 	screenshotOnRunFailure: false,
-	screenshotsFolder: 'packages/dev-cypress/js/screenshots',
-	videosFolder: 'packages/dev-cypress/js/videos',
+	screenshotsFolder:
+		'packages/global-packages/packages/dev-cypress/js/screenshots',
+	videosFolder: 'packages/global-packages/packages/dev-cypress/js/videos',
 	viewportHeight: 1440,
 	viewportWidth: 2560,
 	component: {
@@ -99,11 +99,12 @@ module.exports = defineConfig({
 		devServer: {
 			framework: 'react',
 			bundler: 'webpack',
-			webpackConfig: require('./packages/dev-cypress/js/webpack.config.js'),
+			webpackConfig: require(`${DEV_CYPRESS}/webpack.config.js`),
 		},
 		specPattern: 'packages/**/test/*.cy.js',
 		excludeSpecPattern: ['**/*.e2e.cy.js', '**/*.visual.cy.js'],
-		supportFile: 'packages/dev-cypress/js/support/component.js',
+		supportFile:
+			'packages/global-packages/packages/dev-cypress/js/support/component.js',
 		viewportHeight: 900,
 		viewportWidth: 1280,
 	},

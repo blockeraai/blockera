@@ -47,14 +47,11 @@ if [ -z "$NO_CHECKS" ]; then
 	# Do a dry run of the repository reset. Prompting the user for a list of all
 	# files that will be removed should prevent them from losing important files!
 	#
-	# Keep shared-package checkout/links: packages/* (except tracked leftovers) and
-	# .blockera-global-packages live outside this repo's source of truth now.
+	# Keep the sparse global-packages submodule working tree intact.
 	status "Resetting the repository to pristine condition. ✨"
 	git_clean_excludes=(
-		--exclude=.blockera-global-packages
-		--exclude=.blockera-global-packages/**
-		--exclude=packages
-		--exclude=packages/**
+		--exclude=packages/global-packages
+		--exclude=packages/global-packages/**
 	)
 	to_clean=$(git clean -xdf --dry-run "${git_clean_excludes[@]}")
 	if [ ! -z "$to_clean" ]; then
@@ -90,19 +87,16 @@ fi
 status "Generating build... 🗂"
 npm run build
 
-# Shared packages live in the monorepo (../packages) and are consumed via Composer
-# path repos under vendor/blockera/*. Prefer vendor for packaging; fall back to
-# local packages/ symlinks or the sibling monorepo checkout.
+# Shared packages live in packages/global-packages/packages and are consumed via
+# Composer path repos under vendor/blockera/*. Prefer vendor for packaging.
 resolve_shared_package_file () {
 	local relative_path="$1"
 	local candidate
 	for candidate in \
 		"vendor/blockera/${relative_path}" \
-		"packages/${relative_path}" \
-		"../packages/${relative_path}"
+		"packages/global-packages/packages/${relative_path}"
 	do
 		if [ -f "${candidate}" ]; then
-			# Resolve symlinks so strip/restore touch the real monorepo file once.
 			php -r 'echo realpath($argv[1]);' "${candidate}"
 			return 0
 		fi
@@ -172,7 +166,7 @@ backup_and_replace "config/panel.php" "config/panel.tmp.php"
 
 ENV_FUNCTIONS_FILE="$(resolve_shared_package_file "env/php/functions.php" || true)"
 if [ -z "${ENV_FUNCTIONS_FILE}" ]; then
-	error "ERROR: Could not find env/php/functions.php under vendor/blockera, packages/, or ../packages."
+	error "ERROR: Could not find env/php/functions.php under vendor/blockera or packages/global-packages/packages."
 	exit 1
 fi
 status "Using env functions at ${ENV_FUNCTIONS_FILE}"
@@ -184,7 +178,7 @@ status "Generating inc/app.php 📝"
 mkdir -p "inc"
 APP_PHP_FILE="$(resolve_shared_package_file "blockera/php/app.php" || true)"
 if [ -z "${APP_PHP_FILE}" ]; then
-	error "ERROR: Could not find blockera/php/app.php under vendor/blockera, packages/, or ../packages."
+	error "ERROR: Could not find blockera/php/app.php under vendor/blockera or packages/global-packages/packages."
 	exit 1
 fi
 cp "${APP_PHP_FILE}" inc/app.php

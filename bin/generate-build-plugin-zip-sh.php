@@ -9,23 +9,10 @@
  */
 
 $f = fopen(dirname(__DIR__) . '/bin/build-plugin-zip.sh', 'r');
+$packages_root = dirname(__DIR__) . '/packages/global-packages/packages';
 $filtered_packages = array_filter(
-    (function() {
-        $consumer_packages = dirname(__DIR__) . '/packages';
-        $sibling_packages  = dirname(__DIR__) . '/../packages';
-
-        // Prefer the monorepo sibling when present; fall back to consumer packages/
-        // (local symlinks created by link-global-packages.sh).
-        $packages_dir = $consumer_packages;
-        if (
-            is_dir($sibling_packages . '/env') ||
-            is_dir($sibling_packages . '/blockera') ||
-            is_dir($sibling_packages . '/editor')
-        ) {
-            $packages_dir = realpath($sibling_packages) ?: $sibling_packages;
-        }
-
-        $all_dirs = glob($packages_dir . '/*') ?: [];
+    (function () use ($packages_root) {
+        $all_dirs = glob($packages_root . '/*') ?: [];
         $result = [];
         foreach ($all_dirs as $dir) {
             if (is_dir($dir)) {
@@ -66,27 +53,19 @@ $filtered_packages = array_filter(
     }
 );
 $packages = array_map(
-    function (string $package_name) {
+    function (string $package_name) use ($packages_root) {
 
-        // Normalize absolute package dirs from either consumer packages/ or ../packages.
-        $package_name = preg_replace(
-            '#^.*/(?:packages)/#',
-            '',
-            str_replace('\\', '/', $package_name)
-        );
+        $root_dir = (realpath($packages_root) ?: $packages_root) . '/';
+        $package_name = str_replace('\\', '/', $package_name);
+        $package_name = str_replace($root_dir, '', $package_name);
+        $package_name = preg_replace('#^.*/packages/global-packages/packages/#', '', $package_name);
 
         if (preg_match('/\bblocks-library\b/', $package_name) || preg_match('/\bfeatures-library\b/', $package_name)) {
-            $sibling_packages  = dirname(__DIR__) . '/../packages/';
-            $consumer_packages = dirname(__DIR__) . '/packages/';
-            $root_dir          = is_dir($sibling_packages . 'env') || is_dir($sibling_packages . 'blockera')
-                ? (realpath(rtrim($sibling_packages, '/')) ?: rtrim($sibling_packages, '/')) . '/'
-                : $consumer_packages;
-
             ob_start();
             include $root_dir . $package_name . '/composer.json';
             $composer_package_name = str_replace('blockera/', '', json_decode(ob_get_clean(), true)['name']);
 
-            $package_name = str_replace($root_dir, '', $composer_package_name);
+            $package_name = $composer_package_name;
         }
 
         return $package_name;

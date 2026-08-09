@@ -111,18 +111,11 @@ cleanup_worktree
 echo "Creating worktree for ${MASTER_REF} at ${MASTER_PLUGIN_DIR}..."
 git worktree add --detach "${MASTER_PLUGIN_DIR}" "${MASTER_REF}"
 
-# Master worktree lives under blockera-perf-baseline/blockera, so
-# sibling ../packages must exist beside that worktree too.
-PR_PACKAGES="${ROOT_DIR}/../packages"
-MASTER_PACKAGES="$(cd "${MASTER_PLUGIN_DIR}/.." && pwd)/packages"
-if [[ -d "${PR_PACKAGES}" && ! -e "${MASTER_PACKAGES}" ]]; then
-	echo "Linking global packages for master worktree: ${MASTER_PACKAGES}"
-	ln -sfn "${PR_PACKAGES}" "${MASTER_PACKAGES}"
-fi
-if [[ -f "${ROOT_DIR}/.github/scripts/link-global-packages.sh" ]]; then
-	bash "${ROOT_DIR}/.github/scripts/link-global-packages.sh" \
-		"${MASTER_PLUGIN_DIR}" \
-		"${PR_PACKAGES}"
+# Master worktree needs its own submodule checkout (same gitlink as that commit).
+if [[ -f "${MASTER_PLUGIN_DIR}/.gitmodules" ]]; then
+	echo "Initializing global-packages submodule in master worktree..."
+	git -C "${MASTER_PLUGIN_DIR}" submodule update --init --depth 1 packages/global-packages
+	bash "${ROOT_DIR}/.github/scripts/ensure-global-packages-sparse.sh" "${MASTER_PLUGIN_DIR}"
 fi
 
 echo "Installing and building master plugin in worktree..."
