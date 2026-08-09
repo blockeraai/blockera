@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "824c01a2c55a5e9d1cc43cac35fe84a7",
+    "content-hash": "75577e89052b644546ab298c018f6636",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -196,52 +196,6 @@
                 }
             },
             "description": "Blockera Data Editor package to access all property value with tokenized string.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/dev-cypress",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/dev-cypress",
-                "reference": "fb768011009c8761482489827e1ae324da671629"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\DevCypress\\": "php/"
-                },
-                "files": [
-                    "php/functions.php"
-                ]
-            },
-            "description": "Blockera Cypress config and helpers",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/dev-tools",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/dev-tools",
-                "reference": "e84cf97898e5e1336d0c7b52ffbd5d7be8ea5724"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\DevTools\\": "php/"
-                },
-                "files": [
-                    "php/functions.php"
-                ]
-            },
-            "description": "Blockera DevTools for developers",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -1350,6 +1304,29 @@
             "time": "2025-09-17T09:00:56+00:00"
         },
         {
+            "name": "blockera/dev-cypress",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/global-packages/packages/dev-cypress",
+                "reference": "fb768011009c8761482489827e1ae324da671629"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\DevCypress\\": "php/"
+                },
+                "files": [
+                    "php/functions.php"
+                ]
+            },
+            "description": "Blockera Cypress config and helpers",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "blockera/dev-phpunit",
             "version": "1.0.1",
             "dist": {
@@ -1364,6 +1341,29 @@
                 }
             },
             "description": "The development phpunit package of blockera",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/dev-tools",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/global-packages/packages/dev-tools",
+                "reference": "e84cf97898e5e1336d0c7b52ffbd5d7be8ea5724"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\DevTools\\": "php/"
+                },
+                "files": [
+                    "php/functions.php"
+                ]
+            },
+            "description": "Blockera DevTools for developers",
             "transport-options": {
                 "symlink": true,
                 "relative": true

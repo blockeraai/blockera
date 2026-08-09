@@ -10,7 +10,7 @@ const {
  * Internal dependencies
  */
 const { dependencies } = require('./package');
-const packagesConfig = require('./vendor/blockera/dev-tools/js/webpack/packages');
+const packagesConfig = require('./packages/global-packages/packages/dev-tools/js/webpack/packages');
 
 const exportDefaultPackages = [];
 
@@ -19,7 +19,7 @@ module.exports = (env = {}, argv) => {
 		return require(
 			path.resolve(
 				process.cwd(),
-				'vendor/blockera/dev-cypress/js/webpack.config.js'
+				'packages/global-packages/packages/dev-cypress/js/webpack.config.js'
 			)
 		);
 	}

@@ -28,8 +28,6 @@
 	"require": {
 		"php": ">=7.4",
 		"blockera/blockera": "*",
-		"blockera/dev-tools": "*",
-		"blockera/dev-cypress": "*",
 		"blockera/features-core": "*",
 		"blockera/feature-icon": "*",
 		"blockera/blockera-admin": "*",
@@ -55,6 +53,8 @@
 		"enshrined/svg-sanitize": "^0.22"
 	},
 	"require-dev": {
+		"blockera/dev-tools": "*",
+		"blockera/dev-cypress": "*",
 		"blockera/dev-phpunit": "*",
 		"symfony/dom-crawler": "5.4.x-dev",
 		"symfony/css-selector": "5.4.x-dev",
