@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Create a same-named blockera-global-packages branch from master when a new
+# Blockera branch is created. Skip: BLOCKERA_SKIP_SUBMODULE_BRANCH=1
+bash "$(dirname -- "$0")/../.github/scripts/ensure-global-packages-mirror-branch.sh" "$@"
