@@ -1,0 +1,3 @@
+[submodule "packages/global-packages"]
+	path = packages/global-packages
+	url = git@github.com:blockeraai/blockera-global-packages.git
