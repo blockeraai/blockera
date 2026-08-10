@@ -18,9 +18,9 @@ TOKEN="${BLOCKERA_GLOBAL_PACKAGES_TOKEN:-${GITHUB_TOKEN:-}}"
 cd "${ROOT}"
 
 # Map .gitmodules URL (ssh or https) → https://x-access-token:TOKEN@github.com/...
-# `url.*.insteadOf` alone is unreliable here: plain `git config` without --add
-# overwrites prior insteadOf values, and scp-like git@host:path often still
-# invokes SSH during `git submodule update`.
+# Prefer rewriting submodule.*.url over url.*.insteadOf: insteadOf is not
+# idempotent when setup-node and setup-php both run this script (multi-value
+# overwrite errors), and scp-like git@host:path often still invokes SSH.
 configure_ci_submodule_https() {
 	local token="$1"
 	local raw https_path authed
@@ -45,11 +45,6 @@ configure_ci_submodule_https() {
 	esac
 
 	authed="https://x-access-token:${token}@github.com/${https_path}"
-
-	git config --global url."https://x-access-token:${token}@github.com/".insteadOf "https://github.com/"
-	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "http://github.com/"
-	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "git@github.com:"
-	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "ssh://git@github.com/"
 
 	# Pin the live submodule URL after sync so clone/fetch never use SSH on CI.
 	git config "submodule.${SUBMODULE_PATH}.url" "${authed}"

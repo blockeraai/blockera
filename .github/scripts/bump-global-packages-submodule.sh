@@ -51,11 +51,7 @@ configure_ci_submodule_https() {
 
 	authed="https://x-access-token:${token}@github.com/${https_path}"
 
-	git config --global url."https://x-access-token:${token}@github.com/".insteadOf "https://github.com/"
-	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "http://github.com/"
-	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "git@github.com:"
-	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "ssh://git@github.com/"
-
+	# Explicit URL only — avoid url.*.insteadOf (not idempotent across setup steps).
 	git config "submodule.${SUBMODULE_PATH}.url" "${authed}"
 }
 
