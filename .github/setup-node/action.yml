@@ -1,11 +1,16 @@
 name: 'Setup Node.js and install npm dependencies'
-description: 'Configure Node.js and install npm dependencies while managing all aspects of caching.'
+description: >
+    Bootstrap sparse global-packages, then run the shared setup-node composite.
 inputs:
     node-version:
         description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
         required: false
     global-packages-token:
         description: 'PAT with read access to blockera-global-packages (secrets.BLOCKERABOT_PAT).'
+        required: false
+        default: ''
+    chdir:
+        description: 'Optional directory to run npm ci in.'
         required: false
         default: ''
 
@@ -18,27 +23,9 @@ runs:
               BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ inputs.global-packages-token }}
           run: bash "${GITHUB_WORKSPACE}/.github/scripts/ensure-global-packages-sparse.sh" "${GITHUB_WORKSPACE}"
 
-        - name: Setup Node.js with built-in npm cache
-          uses: actions/setup-node@v5
+        - name: Setup Node (shared)
+          uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-node
           with:
-              node-version-file: '.nvmrc'
               node-version: ${{ inputs.node-version }}
-              cache: npm
-
-        - name: Get Node.js and npm version
-          id: node-version
-          run: |
-              echo "NODE_VERSION=$(node -v)" >> $GITHUB_OUTPUT
-          shell: bash
-
-        - name: Cache node_modules
-          id: cache-node_modules
-          uses: actions/cache@v5
-          with:
-              path: '**/node_modules'
-              key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
-
-        - name: Install npm dependencies
-          if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' || cancelled() }}
-          run: bash .github/scripts/retry-npm-ci.sh
-          shell: bash
+              chdir: ${{ inputs.chdir }}
+              cache-key-suffix: ${{ inputs.chdir }}

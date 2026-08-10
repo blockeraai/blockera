@@ -1,5 +1,6 @@
 name: 'Setup PHP and Install Composer Dependencies'
-description: 'Composer Install while managing all aspects of caching.'
+description: >
+    Bootstrap sparse global-packages, then run the shared setup-php composite.
 inputs:
     php-version:
         description: 'Optional. The PHP version to use. When not specified, the version is 7.4'
@@ -23,31 +24,8 @@ runs:
               BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ inputs.global-packages-token }}
           run: bash "${GITHUB_WORKSPACE}/.github/scripts/ensure-global-packages-sparse.sh" "${GITHUB_WORKSPACE}"
 
-        ##
-        # This allows Composer dependencies to be installed using a single step.
-        #
-        # Since the tests are currently run within the Docker containers where the PHP version varies,
-        # the same PHP version needs to be configured for the action runner machine so that the correct
-        # dependency versions are installed and cached.
-        ##
-        - name: Set up PHP
-          uses: shivammathur/setup-php@v2
+        - name: Setup PHP (shared)
+          uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-php
           with:
-              php-version: '${{ inputs.php-version }}'
-              ini-file: development
-              coverage: none
-              tools: cs2pr
-              ini-values: memory_limit=128M, max_execution_time=30, max_input_time=60, max_input_vars=1000
-
-        # Ensure that Composer installs the correct versions of packages.
-        - name: Override PHP version in composer.json
-          run: composer config platform.php ${{ inputs.php-version }}
-          shell: bash
-
-        # Since Composer dependencies are installed using `composer update` and no lock file is in version control,
-        # passing a custom cache suffix ensures that the cache is flushed at least once per week.
-        - name: Install Composer dependencies
-          uses: ramsey/composer-install@v4
-          with:
-              custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
-              composer-options: '${{ inputs.composer-options }}'
+              php-version: ${{ inputs.php-version }}
+              composer-options: ${{ inputs.composer-options }}

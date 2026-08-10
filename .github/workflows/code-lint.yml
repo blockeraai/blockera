@@ -6,10 +6,7 @@ on:
 
     workflow_dispatch:
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
@@ -31,8 +28,11 @@ jobs:
               with:
                   global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Running the lint:js
-              run: npm run lint:js
+            - name: Lint JS
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/code-lint
+              with:
+                  suite: js
+                  config-path: .github/blockera-ci.json
 
     stylelint:
         name: CSS coding standards
@@ -51,8 +51,11 @@ jobs:
               with:
                   global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Running the lint:css
-              run: npm run lint:css
+            - name: Lint CSS
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/code-lint
+              with:
+                  suite: css
+                  config-path: .github/blockera-ci.json
 
     phpcs:
         name: PHP coding standards
@@ -71,19 +74,8 @@ jobs:
               with:
                   global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Make Composer packages available globally
-              run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
-
-            - name: Run PHPCS on all Blockera files
-              id: phpcs-blockera
-              run: |
-                  pwd
-                  mkdir -p .cache
-                  phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml
-
-            - name: Show PHPCS results in PR
-              if: ${{ always() && steps.phpcs-blockera.outcome == 'failure' }}
-              run: cs2pr ./.cache/phpcs-report.xml
-
-            - name: Ensure version-controlled files are not modified during the tests
-              run: git diff --exit-code
+            - name: Lint PHP
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/code-lint
+              with:
+                  suite: php
+                  config-path: .github/blockera-ci.json

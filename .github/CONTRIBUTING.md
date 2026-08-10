@@ -69,7 +69,11 @@ Husky `post-checkout` mirrors new consumer branches into the submodule as `<repo
 
 Husky `pre-push` verifies the pinned `packages/global-packages` SHA exists on origin (and pushes the mirrored submodule branch when needed). Skip with `BLOCKERA_SKIP_SUBMODULE_PUSH=1`.
 
-CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead `setup-node` / `setup-php` run `ensure-global-packages-sparse.sh` with `secrets.BLOCKERABOT_PAT`, rewrite the SSH `.gitmodules` URL to HTTPS + PAT, then `git submodule update --init` and apply sparse-checkout.
+CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead thin `.github/setup-node` / `.github/setup-php` bootstrap via `ensure-global-packages-sparse.sh` (SSH → HTTPS + `secrets.BLOCKERABOT_PAT`), then call shared composites under `packages/global-packages/packages/dev-tools/github/`. Consumer settings live in `.github/blockera-ci.json` (schema in that package). Sync bootstrap scripts after submodule bumps:
+
+```bash
+bash packages/global-packages/packages/dev-tools/github/scripts/sync-consumer-bootstrap.sh
+```
 
 **Note:** `repository_dispatch` only runs workflows that exist on Blockera’s **default branch**. Merge the sync workflow to `master` once for automation to go live.
 

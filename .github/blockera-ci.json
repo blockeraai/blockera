@@ -1,0 +1,35 @@
+{
+	"pluginSlug": "blockera",
+	"repository": "blockeraai/blockera",
+	"productType": "plugin",
+	"submodule": {
+		"path": "packages/global-packages"
+	},
+	"lint": {
+		"js": {
+			"command": "npm run lint:js"
+		},
+		"css": {
+			"command": "npm run lint:css",
+			"scssRoot": "./packages",
+			"scssGlob": "*.scss"
+		},
+		"php": {
+			"command": "phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml",
+			"reportPath": "./.cache/phpcs-report.xml"
+		}
+	},
+	"test": {
+		"jest": {
+			"command": "npm run test:js -- --ci --maxWorkers=2 --cacheDirectory=\"$HOME/.jest-cache\"",
+			"build": true,
+			"buildCommand": "npm run build",
+			"composerInstall": true,
+			"composerCommand": "composer install --no-dev -o --apcu-autoloader -a"
+		}
+	},
+	"workflows": {
+		"codeLint": true,
+		"jest": true
+	}
+}

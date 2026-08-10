@@ -6,10 +6,7 @@ on:
 
     workflow_dispatch:
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
@@ -34,13 +31,9 @@ jobs:
               uses: ./.github/setup-node
               with:
                   global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
+                  node-version: ${{ matrix.node }}
 
-            # webpack.config.js requires vendor/blockera/dev-tools (Composer path repo).
-            - name: Install Composer Packages
-              run: composer install --no-dev -o --apcu-autoloader -a
-
-            - name: Npm build
-              run: npm run build
-
-            - name: Running the tests
-              run: npm run test:js -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
+            - name: Jest unit tests
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/jest-unit-tests
+              with:
+                  config-path: .github/blockera-ci.json
