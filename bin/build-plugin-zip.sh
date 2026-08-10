@@ -183,6 +183,15 @@ if [ -z "${APP_PHP_FILE}" ]; then
 fi
 cp "${APP_PHP_FILE}" inc/app.php
 
+COORDINATOR_BOOTSTRAP="$(resolve_shared_package_file "autoloader-coordinator/bootstrap.php" || true)"
+COORDINATOR_CLASS="$(resolve_shared_package_file "autoloader-coordinator/class-shared-autoload-coordinator.php" || true)"
+if [ -z "${COORDINATOR_BOOTSTRAP}" ] || [ -z "${COORDINATOR_CLASS}" ]; then
+	error "ERROR: Could not find autoloader-coordinator under vendor/blockera or packages/global-packages/packages."
+	exit 1
+fi
+cp "${COORDINATOR_CLASS}" inc/class-shared-autoload-coordinator.php
+cp "${COORDINATOR_BOOTSTRAP}" inc/bootstrap.php
+
 build_files=$(
 	ls dist/*/*.{min.js,min.css,asset.php} \
 )

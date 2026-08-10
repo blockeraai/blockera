@@ -22,10 +22,10 @@ Shared packages live in a sparse submodule:
 ```
 packages/global-packages/          # submodule → blockeraai/blockera-global-packages
   packages/                        # only tree checked out (sparse)
+    autoloader-coordinator/
     editor/
     blockera/
     ...
-inc/bootstrap.php                  # shared autoload coordinator (tracked)
 ```
 
 ### Local setup

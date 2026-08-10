@@ -87,10 +87,8 @@ playwright-report/
 playwright/.cache/
 playwright.env.json
 
-# includes directory (coordinator bootstrap is tracked; build may add app.php)
-/inc/**
-!/inc/bootstrap.php
-!/inc/class-shared-autoload-coordinator.php
+# includes directory
+inc
 cypress.env.json
 .pr-github-playground.example.json
 .pr-cypress.env.exanple.json
