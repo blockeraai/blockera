@@ -112,9 +112,9 @@ echo "Creating worktree for ${MASTER_REF} at ${MASTER_PLUGIN_DIR}..."
 git worktree add --detach "${MASTER_PLUGIN_DIR}" "${MASTER_REF}"
 
 # Master worktree needs its own submodule checkout (same gitlink as that commit).
+# ensure-global-packages-sparse.sh rewrites SSH .gitmodules urls to HTTPS+PAT on CI.
 if [[ -f "${MASTER_PLUGIN_DIR}/.gitmodules" ]]; then
 	echo "Initializing global-packages submodule in master worktree..."
-	git -C "${MASTER_PLUGIN_DIR}" submodule update --init --depth 1 packages/global-packages
 	bash "${ROOT_DIR}/.github/scripts/ensure-global-packages-sparse.sh" "${MASTER_PLUGIN_DIR}"
 fi
 

@@ -13,6 +13,8 @@
 #
 # Env:
 #   BLOCKERA_GLOBAL_PACKAGES_TOKEN / GITHUB_TOKEN — optional HTTPS auth for private fetch
+#
+# Compatible with SSH or HTTPS .gitmodules urls (CI rewrites to HTTPS + PAT).
 set -euo pipefail
 
 EXPLICIT_REF="${1:-}"
@@ -24,19 +26,57 @@ MAX_COMMITS=5
 
 cd "${ROOT}"
 
-if [ -n "${TOKEN}" ]; then
-	git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
-	git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "git@github.com:"
-	git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
-fi
+configure_ci_submodule_https() {
+	local token="$1"
+	local raw https_path authed
+
+	raw="$(git config -f .gitmodules --get "submodule.${SUBMODULE_PATH}.url" 2>/dev/null || true)"
+	case "${raw}" in
+		git@github.com:*)
+			https_path="${raw#git@github.com:}"
+			;;
+		ssh://git@github.com/*)
+			https_path="${raw#ssh://git@github.com/}"
+			;;
+		https://github.com/*)
+			https_path="${raw#https://github.com/}"
+			;;
+		http://github.com/*)
+			https_path="${raw#http://github.com/}"
+			;;
+		*)
+			https_path="blockeraai/blockera-global-packages.git"
+			;;
+	esac
+
+	authed="https://x-access-token:${token}@github.com/${https_path}"
+
+	git config --global url."https://x-access-token:${token}@github.com/".insteadOf "https://github.com/"
+	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "http://github.com/"
+	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "git@github.com:"
+	git config --global --add url."https://x-access-token:${token}@github.com/".insteadOf "ssh://git@github.com/"
+
+	git config "submodule.${SUBMODULE_PATH}.url" "${authed}"
+}
 
 # Previous pin from the parent repo HEAD (before we move the submodule).
 PREV_SHA="$(git rev-parse "HEAD:${SUBMODULE_PATH}" 2>/dev/null || true)"
 
 git submodule sync -- "${SUBMODULE_PATH}"
 
+if [ -n "${TOKEN}" ]; then
+	configure_ci_submodule_https "${TOKEN}"
+fi
+
 if [ ! -e "${SUBMODULE}/.git" ]; then
 	git submodule update --init --force -- "${SUBMODULE_PATH}"
+fi
+
+if [ -n "${TOKEN}" ]; then
+	ORIGIN_URL="$(git config --get "submodule.${SUBMODULE_PATH}.url" 2>/dev/null || true)"
+	if [ -n "${ORIGIN_URL}" ]; then
+		git -C "${SUBMODULE}" remote set-url origin "${ORIGIN_URL}" 2>/dev/null || true
+	fi
 fi
 
 git -C "${SUBMODULE}" fetch --force --prune origin "+refs/heads/*:refs/remotes/origin/*" "+refs/tags/*:refs/tags/*"
