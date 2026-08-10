@@ -20,9 +20,11 @@ If the user is still mid-implementation, do NOT run the full checklist—only gi
 - Make sure do not break things.
 - If there is duplicate codes or not used then remove them.
 - The code under review is the code generated/edited in the **current Cursor chat**, plus any files it touched.
-- When referencing Gutenberg/block-editor internals:
-  - Prefer `block-editor-source-code/` for React/JS/TS/CSS lookups.
-  - Prefer `wordpress-source-code/` for PHP and non-block-editor core lookups.
+- When referencing Gutenberg/block-editor internals or related local source trees:
+  - Prefer `source-codes/block-editor/` for React/JS/TS/CSS lookups.
+  - Prefer `source-codes/wordpress/` for PHP and non-block-editor core lookups.
+  - Prefer `source-codes/woocommerce/` for WooCommerce features and compatibility work.
+  - Prefer `source-codes/create-block-theme/` as a secondary reference for block-theme tooling (theme.json, templates, style variations, theme export/create) after checking `block-editor` / `wordpress`.
 
 ## Output format (what you must produce)
 When this role is activated, respond with:
