@@ -1,5 +1,5 @@
 ---
-description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress core for PHP + non-editor behavior, and WooCommerce source for WooCommerce work.
+description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress core for PHP + non-editor behavior, WooCommerce for WooCommerce work, and Create Block Theme as a secondary block-theme reference.
 alwaysApply: true
 ---
 
@@ -25,6 +25,11 @@ These trees live only in the **Blockera plugin** repo root (gitignored local clo
 - **WooCommerce source**
     - `source-codes/woocommerce/`
     - Contains WooCommerce PHP, blocks, admin, REST API, and related frontend/packages source (preferred for WooCommerce features and compatibility work).
+
+- **Create Block Theme source**
+    - `source-codes/create-block-theme/`
+    - WordPress plugin for creating and working with block themes (theme.json, templates, style variations, theme export/create, and related tooling).
+    - **Secondary reference only:** for block-theme work, start with `block-editor` / `wordpress` first, then consult this tree when relevant.
 
 If the `blockera` workspace folder is not open, ask the user to add it, or resolve via the standard WP layout:
 `wp-content/plugins/blockera/source-codes/...`
@@ -64,7 +69,11 @@ Includes anything involving:
 - WooCommerce REST API, admin screens, settings, emails, payment gateways
 - WooCommerce hooks/filters, data stores, and compatibility with Blockera
 
-If you must bridge editor ↔ server ↔ WooCommerce behavior, consult the relevant directories together (start with the most specific: WooCommerce, then block-editor or wordpress as needed).
+### Secondary: Create Block Theme (after A/B as needed)
+
+If the task involves **block theme development or tooling** (creating/exporting themes, theme.json authoring helpers, style variations, template/part workflows beyond core APIs), still route with **A** and/or **B** first, then also search `source-codes/create-block-theme/` for proven patterns.
+
+If you must bridge editor ↔ server ↔ WooCommerce ↔ block-theme tooling, consult the relevant directories together (start with the most specific primary tree, then secondary references as needed).
 
 ---
 
@@ -77,6 +86,7 @@ Start by stating which bucket the task is in:
 - “Editor JS/React (Gutenberg)” → search `source-codes/block-editor/`
 - “Core PHP/server-side” → search `source-codes/wordpress/`
 - “WooCommerce” → search `source-codes/woocommerce/`
+- “Block theme tooling” → search `block-editor` / `wordpress` first, then `source-codes/create-block-theme/`
 - “Mixed/bridge” → search the relevant trees, starting with the most specific one
 
 ### 2) Search locally before writing code
@@ -100,6 +110,7 @@ Example:
 - `source-codes/block-editor/packages/editor/src/components/...`
 - `source-codes/wordpress/wp-includes/blocks.php`
 - `source-codes/woocommerce/plugins/woocommerce/includes/...`
+- `source-codes/create-block-theme/includes/...`
 
 ### 4) Prefer extension points, minimize patching
 
@@ -118,7 +129,7 @@ Example:
 
 Never base a design on minified/compiled bundles if the source exists in `source-codes/block-editor/`.
 
-The same idea applies to WooCommerce: prefer `source-codes/woocommerce/` over installed/minified plugin assets when researching behavior.
+The same idea applies to WooCommerce and Create Block Theme: prefer `source-codes/woocommerce/` and `source-codes/create-block-theme/` over installed/minified plugin assets when researching behavior.
 
 ---
 
@@ -136,7 +147,7 @@ The same idea applies to WooCommerce: prefer `source-codes/woocommerce/` over in
 
 When implementing or proposing a solution:
 
-- Start with the routing choice (A/B/C/Mixed).
+- Start with the routing choice (A/B/C/Mixed; mention Create Block Theme when used as secondary).
 - List the local files you consulted.
 - Provide the implementation plan and the code.
 - Call out upgrade risks and how you mitigated them.
