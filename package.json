@@ -265,6 +265,7 @@
 		"env:destroy": "npm run env destroy",
 		"env:tests-cli:bash": "npm run env run tests-cli bash",
 		"packages:update": "wp-scripts packages-update",
+		"submodule:bump": "bash .github/scripts/bump-global-packages-submodule.sh",
 		"plugin:activate": "wp-env run tests-cli wp plugin activate blockera",
 		"plugin:deactivate": "wp-env run tests-cli wp plugin deactivate blockera"
 	},
