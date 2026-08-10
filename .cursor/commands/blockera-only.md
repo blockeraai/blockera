@@ -15,6 +15,7 @@ In-scope paths include:
   - `source-codes/block-editor/`
   - `source-codes/wordpress/`
   - `source-codes/woocommerce/`
+  - `source-codes/create-block-theme/`
 
 ## Out of scope
 

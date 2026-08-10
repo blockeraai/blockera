@@ -10,7 +10,7 @@ The primary project is the Blockera WordPress plugin at `wp-content/plugins/bloc
 ## In scope
 
 - All plugin source, tests, configs, and tooling under `wp-content/plugins/blockera/`
-- Read-only reference inside Blockera: `source-codes/block-editor/`, `source-codes/wordpress/`, `source-codes/woocommerce/`
+- Read-only reference inside Blockera: `source-codes/block-editor/`, `source-codes/wordpress/`, `source-codes/woocommerce/`, `source-codes/create-block-theme/`
 
 ## Out of scope
 
