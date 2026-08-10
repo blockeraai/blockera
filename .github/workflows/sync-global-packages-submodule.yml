@@ -1,0 +1,203 @@
+name: Sync global-packages submodule
+
+# Automation model:
+# 1) blockera-global-packages notifies this workflow (repository_dispatch)
+# 2) master tip → open/update a bump PR (CI gates the pin)
+# 3) matching feature branch → push pin bump onto that Blockera branch
+# 4) workflow_dispatch + daily schedule for catch-up / manual pins
+on:
+    repository_dispatch:
+        types: [global-packages-updated]
+    schedule:
+        - cron: '0 6 * * *'
+    workflow_dispatch:
+        inputs:
+            source_ref:
+                description: 'global-packages branch or SHA to pin'
+                required: true
+                default: 'master'
+            target_branch:
+                description: 'Blockera branch to update (empty = auto)'
+                required: false
+                default: ''
+            mode:
+                description: 'How to land the bump'
+                required: true
+                default: 'auto'
+                type: choice
+                options:
+                    - auto
+                    - pr
+                    - push
+
+concurrency:
+    group: sync-global-packages-${{ github.event.client_payload.branch || github.event.inputs.source_ref || 'master' }}
+    cancel-in-progress: true
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    sync:
+        name: Bump packages/global-packages pin
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'blockeraai/blockera' }}
+
+        steps:
+            - name: Resolve sync targets
+              id: targets
+              env:
+                  EVENT_NAME: ${{ github.event_name }}
+                  DISPATCH_SHA: ${{ github.event.client_payload.sha }}
+                  DISPATCH_BRANCH: ${{ github.event.client_payload.branch }}
+                  DISPATCH_MESSAGE: ${{ github.event.client_payload.message }}
+                  INPUT_SOURCE_REF: ${{ github.event.inputs.source_ref }}
+                  INPUT_TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
+                  INPUT_MODE: ${{ github.event.inputs.mode }}
+              run: |
+                  set -euo pipefail
+
+                  if [[ "${EVENT_NAME}" == "repository_dispatch" ]]; then
+                    SOURCE_REF="${DISPATCH_SHA}"
+                    SOURCE_BRANCH="${DISPATCH_BRANCH}"
+                    SOURCE_MESSAGE="${DISPATCH_MESSAGE}"
+                  elif [[ "${EVENT_NAME}" == "schedule" ]]; then
+                    SOURCE_REF="master"
+                    SOURCE_BRANCH="master"
+                    SOURCE_MESSAGE="scheduled sync"
+                  else
+                    SOURCE_REF="${INPUT_SOURCE_REF}"
+                    SOURCE_BRANCH="${INPUT_SOURCE_REF}"
+                    SOURCE_MESSAGE="manual sync"
+                  fi
+
+                  TARGET_BRANCH="${INPUT_TARGET_BRANCH:-}"
+                  if [[ -z "${TARGET_BRANCH}" ]]; then
+                    if [[ "${SOURCE_BRANCH}" == "master" || "${SOURCE_BRANCH}" == "main" ]]; then
+                      TARGET_BRANCH="master"
+                    else
+                      TARGET_BRANCH="${SOURCE_BRANCH}"
+                    fi
+                  fi
+
+                  MODE="${INPUT_MODE:-auto}"
+                  if [[ "${MODE}" == "auto" ]]; then
+                    if [[ "${TARGET_BRANCH}" == "master" || "${TARGET_BRANCH}" == "main" ]]; then
+                      MODE="pr"
+                    else
+                      MODE="push"
+                    fi
+                  fi
+
+                  {
+                    echo "source_ref=${SOURCE_REF}"
+                    echo "source_branch=${SOURCE_BRANCH}"
+                    echo "target_branch=${TARGET_BRANCH}"
+                    echo "mode=${MODE}"
+                    echo "source_message<<EOF"
+                    printf '%s\n' "${SOURCE_MESSAGE}"
+                    echo "EOF"
+                  } >> "$GITHUB_OUTPUT"
+
+            - name: Checkout Blockera target branch
+              id: checkout
+              uses: actions/checkout@v5
+              with:
+                  ref: ${{ steps.targets.outputs.target_branch }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+              continue-on-error: true
+
+            - name: Skip when Blockera branch is missing
+              if: ${{ steps.checkout.outcome != 'success' }}
+              run: |
+                  echo "Blockera branch '${{ steps.targets.outputs.target_branch }}' does not exist; skipping submodule sync."
+                  echo "skip=true" >> "$GITHUB_ENV"
+
+            - name: Configure git user
+              if: ${{ env.skip != 'true' }}
+              run: |
+                  git config user.name "blockerabot"
+                  git config user.email "blockeraai+githubbot@gmail.com"
+
+            - name: Bump submodule pin
+              if: ${{ env.skip != 'true' }}
+              id: bump
+              env:
+                  BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+              run: |
+                  set -euo pipefail
+                  chmod +x .github/scripts/bump-global-packages-submodule.sh
+                  OUTPUT="$(bash .github/scripts/bump-global-packages-submodule.sh "${{ steps.targets.outputs.source_ref }}")"
+                  echo "${OUTPUT}"
+                  SHORT_SHA="$(echo "${OUTPUT}" | sed -n 's/^short_sha=//p' | tail -n1)"
+                  FULL_SHA="$(echo "${OUTPUT}" | sed -n 's/^sha=//p' | tail -n1)"
+                  echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+                  echo "sha=${FULL_SHA}" >> "$GITHUB_OUTPUT"
+
+                  if git diff --cached --quiet -- packages/global-packages; then
+                    echo "changed=false" >> "$GITHUB_OUTPUT"
+                    echo "Submodule already at ${SHORT_SHA}; nothing to do."
+                  else
+                    echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Commit pin bump
+              if: ${{ env.skip != 'true' && steps.bump.outputs.changed == 'true' }}
+              id: commit
+              run: |
+                  git commit -m "submodule: bump global-packages to ${{ steps.bump.outputs.short_sha }}"
+                  echo "commit=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+            - name: Push directly to feature branch
+              if: ${{ env.skip != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'push' }}
+              run: |
+                  git push origin "HEAD:${{ steps.targets.outputs.target_branch }}"
+
+            - name: Open or update bump PR (master)
+              if: ${{ env.skip != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'pr' }}
+              env:
+                  GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  SOURCE_MESSAGE: ${{ steps.targets.outputs.source_message }}
+              run: |
+                  set -euo pipefail
+                  PR_BRANCH="chore/bump-global-packages"
+                  BASE_BRANCH="${{ steps.targets.outputs.target_branch }}"
+                  SHORT_SHA="${{ steps.bump.outputs.short_sha }}"
+                  FULL_SHA="${{ steps.bump.outputs.sha }}"
+                  SOURCE_BRANCH="${{ steps.targets.outputs.source_branch }}"
+
+                  git checkout -B "${PR_BRANCH}"
+                  git push --force-with-lease origin "${PR_BRANCH}"
+
+                  BODY="$(cat <<EOF
+                  ## Summary
+                  - Auto-bump \`packages/global-packages\` to [\`${SHORT_SHA}\`](https://github.com/blockeraai/blockera-global-packages/commit/${FULL_SHA})
+                  - Source branch: \`${SOURCE_BRANCH}\`
+
+                  ## Source commit
+                  \`\`\`
+                  ${SOURCE_MESSAGE}
+                  \`\`\`
+
+                  ## Test plan
+                  - [ ] CI on this PR is green
+                  - [ ] Smoke editor load after merge
+                  EOF
+                  )"
+
+                  EXISTING_PR="$(gh pr list --head "${PR_BRANCH}" --base "${BASE_BRANCH}" --json number --jq '.[0].number // empty')"
+                  if [[ -n "${EXISTING_PR}" ]]; then
+                    gh pr edit "${EXISTING_PR}" \
+                      --title "submodule: bump global-packages to ${SHORT_SHA}" \
+                      --body "${BODY}"
+                    echo "Updated PR #${EXISTING_PR}"
+                  else
+                    gh pr create \
+                      --base "${BASE_BRANCH}" \
+                      --head "${PR_BRANCH}" \
+                      --title "submodule: bump global-packages to ${SHORT_SHA}" \
+                      --body "${BODY}" \
+                      --label "dependencies"
+                  fi

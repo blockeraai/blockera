@@ -43,12 +43,27 @@ npm ci
 
 npm `file:` deps and Composer path repos point at `packages/global-packages/packages/*` (no symlinks).
 
-### Updating shared packages
+### Updating shared packages (automated)
 
-1. Work inside `packages/global-packages` (commit/push on that repo)
-2. In Blockera: `git add packages/global-packages && git commit` to bump the gitlink SHA
+You usually **do not** bump the submodule pin by hand.
+
+1. Push to `blockeraai/blockera-global-packages` (any branch).
+2. That repo’s `notify-blockera-submodule` workflow dispatches `global-packages-updated` to Blockera.
+3. Blockera’s `sync-global-packages-submodule` workflow bumps `packages/global-packages`:
+   - **master** → opens/updates PR `chore/bump-global-packages` (CI gates the pin)
+   - **matching feature branch** (created by Husky mirror) → pushes the pin bump onto that Blockera branch
+4. Manual catch-up: Actions → **Sync global-packages submodule** (`workflow_dispatch`), or wait for the daily schedule.
+
+Local emergency bump:
+
+```bash
+bash .github/scripts/bump-global-packages-submodule.sh master   # or a SHA / branch
+git commit -m "submodule: bump global-packages"
+```
 
 CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead `setup-node` / `setup-php` run `ensure-global-packages-sparse.sh` with `secrets.BLOCKERABOT_PAT` to `git submodule update --init` over HTTPS and apply sparse-checkout.
+
+**Note:** `repository_dispatch` only runs workflows that exist on Blockera’s **default branch**. Merge the sync workflow to `master` once for automation to go live.
 
 ## Making Changes
 
