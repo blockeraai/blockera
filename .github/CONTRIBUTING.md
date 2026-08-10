@@ -59,10 +59,11 @@ To add/remove a consumer, edit `blockera-global-packages/.github/global-packages
 Local emergency bump:
 
 ```bash
-npm run submodule:bump                 # pin to master tip
-npm run submodule:bump -- fix/issues   # or any branch / SHA
-git commit -m "submodule: bump global-packages"
+npm run submodule:bump                 # advance current pin’s branch tip and commit
+npm run submodule:bump -- fix/issues   # or any branch / SHA (explicit override)
 ```
+
+With no arg, the local bump keeps the pin on the same lineage: `master` if the current SHA is on master, otherwise the single remote branch that contains it (errors if the SHA is on no remote branch).
 
 CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead `setup-node` / `setup-php` run `ensure-global-packages-sparse.sh` with `secrets.BLOCKERABOT_PAT` to `git submodule update --init` over HTTPS and apply sparse-checkout.
 
