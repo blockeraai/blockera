@@ -13,9 +13,27 @@ concurrency:
 jobs:
     unit-js:
         name: JavaScript
+        runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
-        uses: blockeraai/blockera-global-packages/.github/workflows/consumer-jest-unit-tests.yml@62823172fad194c7621d583b6683a6d3923b09a7
-        secrets:
-            BLOCKERABOT_PAT: ${{ secrets.BLOCKERABOT_PAT }}
-        with:
-            config-path: .github/blockera-ci.json
+
+        strategy:
+            fail-fast: false
+            matrix:
+                node: ['18.3.0']
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+              with:
+                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
+                  node-version: ${{ matrix.node }}
+
+            - name: Jest unit tests
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/jest-unit-tests
+              with:
+                  config-path: .github/blockera-ci.json
