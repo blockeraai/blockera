@@ -25,7 +25,7 @@ packages/global-packages/          # submodule → blockeraai/blockera-global-pa
     editor/
     blockera/
     ...
-packages/autoloader-coordinator/   # still owned by Blockera
+inc/bootstrap.php                  # shared autoload coordinator (tracked)
 ```
 
 ### Local setup

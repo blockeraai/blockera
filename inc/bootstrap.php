@@ -2,7 +2,7 @@
 /**
  * Bootstrap the shared Blockera autoload coordinator.
  *
- * @package blockera/autoloader-coordinator
+ * @package blockera
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

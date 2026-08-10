@@ -24,7 +24,7 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-require_once __DIR__ . '/packages/autoloader-coordinator/bootstrap.php';
+require_once __DIR__ . '/inc/bootstrap.php';
 blockera_bootstrap_shared_autoloader(
 	'blockera',
 	__DIR__,

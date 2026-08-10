@@ -182,8 +182,6 @@ if [ -z "${APP_PHP_FILE}" ]; then
 	exit 1
 fi
 cp "${APP_PHP_FILE}" inc/app.php
-cp packages/autoloader-coordinator/class-shared-autoload-coordinator.php inc/class-shared-autoload-coordinator.php
-cp packages/autoloader-coordinator/bootstrap.php inc/bootstrap.php
 
 build_files=$(
 	ls dist/*/*.{min.js,min.css,asset.php} \

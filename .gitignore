@@ -87,8 +87,10 @@ playwright-report/
 playwright/.cache/
 playwright.env.json
 
-# includes directory
-inc
+# includes directory (coordinator bootstrap is tracked; build may add app.php)
+/inc/**
+!/inc/bootstrap.php
+!/inc/class-shared-autoload-coordinator.php
 cypress.env.json
 .pr-github-playground.example.json
 .pr-cypress.env.exanple.json
@@ -115,9 +117,7 @@ playwright-env.json
 docs-temp-ai/
 
 # Shared packages live in the sparse submodule packages/global-packages.
-# Only autoloader-coordinator + index.php are owned by this repo under packages/.
+# Only index.php is owned by this repo under packages/.
 /packages/*
-!/packages/autoloader-coordinator/
-!/packages/autoloader-coordinator/**
 !/packages/index.php
 !/packages/global-packages
