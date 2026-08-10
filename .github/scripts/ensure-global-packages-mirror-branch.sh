@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-# When a new Blockera branch is created, create a same-named branch in
+# When a new consumer branch is created, create a prefixed mirror branch in
 # packages/global-packages from origin/master (fallback: master) and check it out.
+#
+# Mirror name: <repo>/<branch>  (e.g. blockera-pro/fix/foo)
+# Repo is derived from `origin` remote basename (fallback: directory name).
 #
 # Skip with: BLOCKERA_SKIP_SUBMODULE_BRANCH=1
 # Invoked from .husky/post-checkout with: prev_head new_head is_branch_checkout
@@ -53,6 +56,20 @@ if [ -n "${REFLOG_TS}" ]; then
 	fi
 fi
 
+REPO_NAME="$(basename -s .git "$(git remote get-url origin 2>/dev/null || true)" 2>/dev/null || true)"
+if [ -z "${REPO_NAME}" ]; then
+	REPO_NAME="$(basename "${ROOT}")"
+fi
+
+case "${BRANCH}" in
+	"${REPO_NAME}/"*)
+		MIRROR_BRANCH="${BRANCH}"
+		;;
+	*)
+		MIRROR_BRANCH="${REPO_NAME}/${BRANCH}"
+		;;
+esac
+
 SUBMODULE_PATH="packages/global-packages"
 SUBMODULE="${ROOT}/${SUBMODULE_PATH}"
 
@@ -87,22 +104,22 @@ if [ -z "${BASE_REF}" ]; then
 fi
 
 CURRENT_SUB_BRANCH="$(git -C "${SUBMODULE}" branch --show-current 2>/dev/null || true)"
-if [ "${CURRENT_SUB_BRANCH}" = "${BRANCH}" ]; then
+if [ "${CURRENT_SUB_BRANCH}" = "${MIRROR_BRANCH}" ]; then
 	exit 0
 fi
 
-if git -C "${SUBMODULE}" show-ref --verify --quiet "refs/heads/${BRANCH}"; then
-	echo "husky: checking out existing global-packages branch '${BRANCH}'"
-	git -C "${SUBMODULE}" checkout --quiet "${BRANCH}"
+if git -C "${SUBMODULE}" show-ref --verify --quiet "refs/heads/${MIRROR_BRANCH}"; then
+	echo "husky: checking out existing global-packages branch '${MIRROR_BRANCH}'"
+	git -C "${SUBMODULE}" checkout --quiet "${MIRROR_BRANCH}"
 	exit 0
 fi
 
-if git -C "${SUBMODULE}" show-ref --verify --quiet "refs/remotes/origin/${BRANCH}"; then
-	echo "husky: checking out remote-tracking global-packages branch '${BRANCH}'"
-	git -C "${SUBMODULE}" checkout --quiet -B "${BRANCH}" "origin/${BRANCH}"
+if git -C "${SUBMODULE}" show-ref --verify --quiet "refs/remotes/origin/${MIRROR_BRANCH}"; then
+	echo "husky: checking out remote-tracking global-packages branch '${MIRROR_BRANCH}'"
+	git -C "${SUBMODULE}" checkout --quiet -B "${MIRROR_BRANCH}" "origin/${MIRROR_BRANCH}"
 	exit 0
 fi
 
-echo "husky: creating global-packages mirror branch '${BRANCH}' from ${BASE_REF}"
-git -C "${SUBMODULE}" checkout --quiet -b "${BRANCH}" "${BASE_REF}"
-echo "husky: submodule is now on '${BRANCH}' (pin dirty until you commit packages/global-packages)"
+echo "husky: creating global-packages mirror branch '${MIRROR_BRANCH}' from ${BASE_REF}"
+git -C "${SUBMODULE}" checkout --quiet -b "${MIRROR_BRANCH}" "${BASE_REF}"
+echo "husky: submodule is now on '${MIRROR_BRANCH}' (pin dirty until you commit packages/global-packages)"

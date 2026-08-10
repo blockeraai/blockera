@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Ensure packages/global-packages pin SHAs being pushed exist on origin.
-# If the pin is local-only and the submodule is on a matching feature branch,
-# push that branch first so CI can fetch the pin.
+# If the pin is local-only and the submodule is on the prefixed mirror branch
+# (<repo>/<consumer-branch>), push that branch first so CI can fetch the pin.
 #
 # Skip with: BLOCKERA_SKIP_SUBMODULE_PUSH=1
 # Husky pre-push feeds: <local_ref> <local_sha> <remote_ref> <remote_sha>
@@ -26,6 +26,11 @@ if ! git -C "${SUBMODULE}" diff --quiet || ! git -C "${SUBMODULE}" diff --cached
 	exit 1
 fi
 
+REPO_NAME="$(basename -s .git "$(git -C "${ROOT}" remote get-url origin 2>/dev/null || true)" 2>/dev/null || true)"
+if [ -z "${REPO_NAME}" ]; then
+	REPO_NAME="$(basename "${ROOT}")"
+fi
+
 ensure_pin_on_origin() {
 	local pin_sha="$1"
 
@@ -47,8 +52,19 @@ ensure_pin_on_origin() {
 	sub_branch="$(git -C "${SUBMODULE}" branch --show-current 2>/dev/null || true)"
 	local consumer_branch
 	consumer_branch="$(git -C "${ROOT}" branch --show-current 2>/dev/null || true)"
+	local expected_mirror=""
+	if [ -n "${consumer_branch}" ]; then
+		case "${consumer_branch}" in
+			"${REPO_NAME}/"*)
+				expected_mirror="${consumer_branch}"
+				;;
+			*)
+				expected_mirror="${REPO_NAME}/${consumer_branch}"
+				;;
+		esac
+	fi
 
-	if [ -n "${sub_branch}" ] && [ "${sub_branch}" = "${consumer_branch}" ]; then
+	if [ -n "${sub_branch}" ] && [ -n "${expected_mirror}" ] && [ "${sub_branch}" = "${expected_mirror}" ]; then
 		if ! git -C "${SUBMODULE}" merge-base --is-ancestor "${pin_sha}" HEAD 2>/dev/null; then
 			echo "husky: pin ${pin_sha} is not on submodule branch '${sub_branch}'" >&2
 			exit 1

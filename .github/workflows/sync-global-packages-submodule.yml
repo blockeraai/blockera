@@ -72,12 +72,23 @@ jobs:
                     SOURCE_MESSAGE="manual sync"
                   fi
 
+                  # Husky mirrors consumer branches as <repo>/<branch> in global-packages.
+                  # Only sync onto this consumer when the source branch uses our prefix
+                  # (or is master/main).
+                  REPO_NAME="${GITHUB_REPOSITORY##*/}"
+                  REPO_PREFIX="${REPO_NAME}/"
+
                   TARGET_BRANCH="${INPUT_TARGET_BRANCH:-}"
+                  SKIP_SYNC="false"
                   if [[ -z "${TARGET_BRANCH}" ]]; then
                     if [[ "${SOURCE_BRANCH}" == "master" || "${SOURCE_BRANCH}" == "main" ]]; then
                       TARGET_BRANCH="master"
+                    elif [[ "${SOURCE_BRANCH}" == "${REPO_PREFIX}"* ]]; then
+                      TARGET_BRANCH="${SOURCE_BRANCH#"${REPO_PREFIX}"}"
                     else
-                      TARGET_BRANCH="${SOURCE_BRANCH}"
+                      echo "Source branch '${SOURCE_BRANCH}' is not prefixed with '${REPO_PREFIX}'; skipping."
+                      SKIP_SYNC="true"
+                      TARGET_BRANCH=""
                     fi
                   fi
 
@@ -95,13 +106,19 @@ jobs:
                     echo "source_branch=${SOURCE_BRANCH}"
                     echo "target_branch=${TARGET_BRANCH}"
                     echo "mode=${MODE}"
+                    echo "skip_sync=${SKIP_SYNC}"
                     echo "source_message<<EOF"
                     printf '%s\n' "${SOURCE_MESSAGE}"
                     echo "EOF"
                   } >> "$GITHUB_OUTPUT"
 
-            - name: Checkout Blockera target branch
+                  if [[ "${SKIP_SYNC}" == "true" ]]; then
+                    echo "skip=true" >> "$GITHUB_ENV"
+                  fi
+
+            - name: Checkout target branch
               id: checkout
+              if: ${{ steps.targets.outputs.skip_sync != 'true' }}
               uses: actions/checkout@v5
               with:
                   ref: ${{ steps.targets.outputs.target_branch }}
@@ -109,10 +126,10 @@ jobs:
                   fetch-depth: 0
               continue-on-error: true
 
-            - name: Skip when Blockera branch is missing
-              if: ${{ steps.checkout.outcome != 'success' }}
+            - name: Skip when target branch is missing
+              if: ${{ steps.targets.outputs.skip_sync != 'true' && steps.checkout.outcome != 'success' }}
               run: |
-                  echo "Blockera branch '${{ steps.targets.outputs.target_branch }}' does not exist; skipping submodule sync."
+                  echo "Target branch '${{ steps.targets.outputs.target_branch }}' does not exist; skipping submodule sync."
                   echo "skip=true" >> "$GITHUB_ENV"
 
             - name: Configure git user
