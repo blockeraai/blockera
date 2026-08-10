@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Ensure pinned global-packages SHAs exist on origin before pushing this repo.
+# Skip: BLOCKERA_SKIP_SUBMODULE_PUSH=1
+bash "$(dirname -- "$0")/../.github/scripts/ensure-global-packages-pre-push.sh"
