@@ -65,6 +65,8 @@ npm run submodule:bump -- fix/issues   # or any branch / SHA (explicit override)
 
 With no arg, the local bump keeps the pin on the same lineage: `master` if the current SHA is on master, otherwise the single remote branch that contains it (errors if the SHA is on no remote branch).
 
+Husky `pre-push` verifies the pinned `packages/global-packages` SHA exists on origin (and pushes the mirrored submodule branch when needed). Skip with `BLOCKERA_SKIP_SUBMODULE_PUSH=1`.
+
 CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead `setup-node` / `setup-php` run `ensure-global-packages-sparse.sh` with `secrets.BLOCKERABOT_PAT` to `git submodule update --init` over HTTPS and apply sparse-checkout.
 
 **Note:** `repository_dispatch` only runs workflows that exist on Blockera’s **default branch**. Merge the sync workflow to `master` once for automation to go live.
