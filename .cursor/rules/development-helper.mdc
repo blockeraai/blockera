@@ -1,5 +1,5 @@
 ---
-description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress core for PHP + non-editor behavior, WooCommerce for WooCommerce work, and Create Block Theme as a secondary block-theme reference.
+description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress develop (src/) for PHP, WooCommerce monorepo for Woo work, and Create Block Theme as a secondary block-theme reference.
 alwaysApply: true
 ---
 
@@ -8,27 +8,34 @@ alwaysApply: true
 You are developing a WordPress plugin that deeply extends the WordPress Block Editor (Gutenberg) to behave like a website builder + IDE.
 Your #1 goal is **maximum compatibility with WordPress core + Gutenberg**, with **performance** and **upgrade-safety** as top priorities.
 
-We keep local source trees because WordPress bundles compiled editor assets.
+We keep local **GitHub repo clones** under `source-codes/` (gitignored). These are **not** the installed/build layout of a running WordPress site—paths often differ. For the full clone layout map, follow `.cursor/commands/source-code.md`.
 
 ## Source directories (must be used)
 
-These trees live only in the **Blockera plugin** repo root (gitignored local clones). Paths are always relative to the `blockera` workspace folder root. Never use absolute user paths (`/Users/...`, `/home/...`).
+Paths are always relative to the `blockera` workspace folder root. Never use absolute user paths (`/Users/...`, `/home/...`).
 
-- **Uncompiled Block Editor (Gutenberg) source**
+- **Uncompiled Block Editor (Gutenberg)** — `WordPress/gutenberg`
     - `source-codes/block-editor/`
-    - Contains the real React/JS/TS/CSS sources (preferred for editor features).
+    - JS: `packages/<package>/src/` (e.g. `packages/block-editor/src/`, `packages/editor/src/`)
+    - PHP shims: `lib/`
+    - Preferred for editor features.
 
-- **WordPress core source**
+- **WordPress core** — `WordPress/wordpress-develop`
     - `source-codes/wordpress/`
-    - Contains PHP core and server-side behavior; also includes compiled editor artifacts that MUST NOT be used as the primary reference for editor internals.
+    - **Runtime code is under `src/`** (e.g. `src/wp-includes/blocks.php`, `src/wp-admin/...`)
+    - Do **not** use `source-codes/wordpress/wp-includes/...` (installed-site shape; wrong for this clone).
+    - Preferred for PHP core and server-side behavior. Bundled/compiled editor artifacts here are not the primary reference for editor internals.
 
-- **WooCommerce source**
+- **WooCommerce** — `woocommerce/woocommerce` **monorepo**
     - `source-codes/woocommerce/`
-    - Contains WooCommerce PHP, blocks, admin, REST API, and related frontend/packages source (preferred for WooCommerce features and compatibility work).
+    - Core plugin: `plugins/woocommerce/` (`includes/`, `src/`, `client/` especially `client/blocks/`, `templates/`)
+    - Shared packages: `packages/js/`, `packages/php/`
+    - Also present: `plugins/woocommerce-beta-tester/`, `docs/`, `tools/`
+    - Preferred for WooCommerce features and compatibility work; search the most specific monorepo subtree.
 
-- **Create Block Theme source**
+- **Create Block Theme** — `WordPress/create-block-theme`
     - `source-codes/create-block-theme/`
-    - WordPress plugin for creating and working with block themes (theme.json, templates, style variations, theme export/create, and related tooling).
+    - PHP: `includes/`; JS/UI: `src/`
     - **Secondary reference only:** for block-theme work, start with `block-editor` / `wordpress` first, then consult this tree when relevant.
 
 If the `blockera` workspace folder is not open, ask the user to add it, or resolve via the standard WP layout:
@@ -49,6 +56,8 @@ Includes anything involving:
 - Block rendering pipeline _in the editor_, block controls, inserter, inspector
 - JS/TS/CSS that affects editor behavior or layout
 
+Start in `packages/<package>/src/`. Use `lib/` for Gutenberg PHP/theme.json shims.
+
 **Do NOT** use compiled WP editor bundles as your reference when the uncompiled source exists.
 
 ### B) If the task is PHP / WordPress core behavior / server-side rendering → use `source-codes/wordpress/` FIRST
@@ -60,6 +69,8 @@ Includes anything involving:
 - Admin screens, capability checks, rewrite rules, database queries
 - Anything not specific to Gutenberg’s React UI code
 
+Start under `source-codes/wordpress/src/` (`wp-includes/`, `wp-admin/`, etc.).
+
 ### C) If the task is WooCommerce related → use `source-codes/woocommerce/` FIRST
 
 Includes anything involving:
@@ -69,9 +80,15 @@ Includes anything involving:
 - WooCommerce REST API, admin screens, settings, emails, payment gateways
 - WooCommerce hooks/filters, data stores, and compatibility with Blockera
 
+Search order:
+
+1. `plugins/woocommerce/` (`includes/`, `src/`, `client/`)
+2. `packages/js/` or `packages/php/` when logic lives in a shared package
+3. `docs/` for extension/theming guidance
+
 ### Secondary: Create Block Theme (after A/B as needed)
 
-If the task involves **block theme development or tooling** (creating/exporting themes, theme.json authoring helpers, style variations, template/part workflows beyond core APIs), still route with **A** and/or **B** first, then also search `source-codes/create-block-theme/` for proven patterns.
+If the task involves **block theme development or tooling** (creating/exporting themes, theme.json authoring helpers, style variations, template/part workflows beyond core APIs), still route with **A** and/or **B** first, then also search `source-codes/create-block-theme/` (`includes/`, `src/`) for proven patterns.
 
 If you must bridge editor ↔ server ↔ WooCommerce ↔ block-theme tooling, consult the relevant directories together (start with the most specific primary tree, then secondary references as needed).
 
@@ -83,34 +100,37 @@ If you must bridge editor ↔ server ↔ WooCommerce ↔ block-theme tooling, co
 
 Start by stating which bucket the task is in:
 
-- “Editor JS/React (Gutenberg)” → search `source-codes/block-editor/`
-- “Core PHP/server-side” → search `source-codes/wordpress/`
-- “WooCommerce” → search `source-codes/woocommerce/`
+- “Editor JS/React (Gutenberg)” → search `source-codes/block-editor/packages/.../src/` (and `lib/` if PHP shim)
+- “Core PHP/server-side” → search `source-codes/wordpress/src/`
+- “WooCommerce” → search `source-codes/woocommerce/plugins/woocommerce/` then `packages/` as needed
 - “Block theme tooling” → search `block-editor` / `wordpress` first, then `source-codes/create-block-theme/`
 - “Mixed/bridge” → search the relevant trees, starting with the most specific one
 
 ### 2) Search locally before writing code
 
-You MUST search the correct directory before proposing APIs or architecture.
+You MUST search the correct **clone** directory before proposing APIs or architecture.
 Use ripgrep-style thinking:
 
-- Look for the closest existing implementation in core
+- Look for the closest existing implementation in upstream source
 - Identify the real function/component/store names from source
-- Confirm the current patterns used in core (do not guess)
+- Confirm the current patterns used upstream (do not guess)
+- If a remembered path looks like an installed site (`wp-includes/...` without `src/`, or bare `woocommerce/includes/...`), rewrite it to the clone layout first
 
 ### 3) Cite what you found
 
 In your answer, always include:
 
-- The file paths you opened (relative to the repo)
+- The file paths you opened (relative to the Blockera repo, using clone paths)
 - The key symbols used (function/class/component/store name)
 
 Example:
 
 - `source-codes/block-editor/packages/editor/src/components/...`
-- `source-codes/wordpress/wp-includes/blocks.php`
+- `source-codes/wordpress/src/wp-includes/blocks.php`
 - `source-codes/woocommerce/plugins/woocommerce/includes/...`
-- `source-codes/create-block-theme/includes/...`
+- `source-codes/woocommerce/plugins/woocommerce/client/blocks/...`
+- `source-codes/woocommerce/packages/js/components/...`
+- `source-codes/create-block-theme/includes/create-theme/...`
 
 ### 4) Prefer extension points, minimize patching
 
@@ -129,7 +149,7 @@ Example:
 
 Never base a design on minified/compiled bundles if the source exists in `source-codes/block-editor/`.
 
-The same idea applies to WooCommerce and Create Block Theme: prefer `source-codes/woocommerce/` and `source-codes/create-block-theme/` over installed/minified plugin assets when researching behavior.
+The same idea applies to WooCommerce and Create Block Theme: prefer the git clones under `source-codes/` over installed/minified plugin assets when researching behavior.
 
 ---
 
@@ -148,7 +168,7 @@ The same idea applies to WooCommerce and Create Block Theme: prefer `source-code
 When implementing or proposing a solution:
 
 - Start with the routing choice (A/B/C/Mixed; mention Create Block Theme when used as secondary).
-- List the local files you consulted.
+- List the local clone files you consulted (correct `src/` / monorepo subpaths).
 - Provide the implementation plan and the code.
 - Call out upgrade risks and how you mitigated them.
 
