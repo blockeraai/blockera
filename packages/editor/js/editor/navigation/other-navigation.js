@@ -72,22 +72,6 @@ export const OtherNavigation = (): MixedElement => {
 				label={__('HTML & JS Codes', 'blockera')}
 				isComingSoon={true}
 			/>
-			<NavItemButton
-				className={navItemClassName({ 'coming-soon': true })}
-				id={'back-to-top-button'}
-				path={'back-to-top'}
-				icon={
-					<Flex
-						alignItems="center"
-						justifyContent="center"
-						style={{ width: '22px', height: '22px' }}
-					>
-						<Icon icon="back-to-top" iconSize={22} />
-					</Flex>
-				}
-				label={__('Back To Top Button', 'blockera')}
-				isComingSoon={true}
-			/>
 		</div>
 	);
 };

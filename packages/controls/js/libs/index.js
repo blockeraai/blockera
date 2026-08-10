@@ -111,4 +111,4 @@ export { RendererControl } from './renderer-control';
 export { default as CodeControl } from './code-control';
 export { BlockeraLoading } from './blockera-loading';
 export { default as DropdownMenu, MenuItem, MenuGroup } from './dropdown-menu';
-export { PoweredBy, getDefaultPoweredByText } from './powered-by';
+export { PoweredBy, getDefaultPoweredByText, PoweredByOne } from './powered-by';

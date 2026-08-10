@@ -370,7 +370,8 @@ function activateMuPluginInContainer(muPluginPath, targetName, force = false) {
 		: `if (file_exists($targetFile) && md5_file($targetFile) === md5_file($sourceFile)) { echo 'already_active'; exit(0); } `;
 	const successToken = force ? 'forced_copy' : 'installed';
 
-	const activatePhp = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } ${forcePhp}${skipIfActivePhp}file_put_contents($targetFile, file_get_contents($sourceFile)); echo file_exists($targetFile) ? '${successToken}' : 'not_installed';`;
+	// Prefer plugins/{slug}/… then themes/{slug}/… (blockera-one is theme-only).
+	const activatePhp = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $pluginSource = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $themeSource = ABSPATH . 'wp-content/themes/${WP_PLUGIN_SLUG}/${muPluginPath}'; $sourceFile = file_exists($pluginSource) ? $pluginSource : $themeSource; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } ${forcePhp}${skipIfActivePhp}file_put_contents($targetFile, file_get_contents($sourceFile)); echo file_exists($targetFile) ? '${successToken}' : 'not_installed';`;
 	const result = runWpEval(activatePhp);
 
 	if (result === 'source_missing') {
@@ -460,7 +461,7 @@ function verifyMuPluginInContainer(muPluginPath, targetName) {
 		};
 	}
 
-	const verifyPhp = `$sourceFile = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($targetFile)) { echo 'missing'; exit(0); } if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } echo md5_file($targetFile) === md5_file($sourceFile) ? 'verified' : 'hash_mismatch';`;
+	const verifyPhp = `$pluginSource = ABSPATH . 'wp-content/plugins/${WP_PLUGIN_SLUG}/${muPluginPath}'; $themeSource = ABSPATH . 'wp-content/themes/${WP_PLUGIN_SLUG}/${muPluginPath}'; $sourceFile = file_exists($pluginSource) ? $pluginSource : $themeSource; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (!file_exists($targetFile)) { echo 'missing'; exit(0); } if (!file_exists($sourceFile)) { echo 'source_missing'; exit(1); } echo md5_file($targetFile) === md5_file($sourceFile) ? 'verified' : 'hash_mismatch';`;
 	const result = runWpEval(verifyPhp);
 
 	if (result === 'source_missing') {
@@ -731,6 +732,176 @@ module.exports = (on, config, testingType = config.testingType || 'e2e') => {
 			);
 
 			return result;
+		},
+		/**
+		 * Hide/show a theme block template by renaming `templates/{slug}.html`
+		 * ↔ `templates/-{slug}.html` (same convention as `-front-page.html`).
+		 * Theme directory is bind-mounted into wp-env, so this is reliable.
+		 *
+		 * @param {{ slug: string, hidden: boolean }} options
+		 */
+		themeTemplateSetHidden({ slug, hidden }) {
+			const safeSlug = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+			if (!safeSlug) {
+				throw new Error('themeTemplateSetHidden requires slug');
+			}
+
+			const templatesDir = path.join(BLOCKERA_PLUGIN_ROOT, 'templates');
+			const visible = path.join(templatesDir, `${safeSlug}.html`);
+			const hiddenPath = path.join(templatesDir, `-${safeSlug}.html`);
+
+			if (hidden) {
+				if (fs.existsSync(visible)) {
+					fs.renameSync(visible, hiddenPath);
+					return { ok: true, message: `hidden:${safeSlug}` };
+				}
+				if (fs.existsSync(hiddenPath)) {
+					return { ok: true, message: `already_hidden:${safeSlug}` };
+				}
+				return {
+					ok: false,
+					message: `missing:${safeSlug}.html`,
+				};
+			}
+
+			if (fs.existsSync(hiddenPath)) {
+				fs.renameSync(hiddenPath, visible);
+				return { ok: true, message: `shown:${safeSlug}` };
+			}
+			if (fs.existsSync(visible)) {
+				return { ok: true, message: `already_visible:${safeSlug}` };
+			}
+			return {
+				ok: false,
+				message: `missing:-${safeSlug}.html`,
+			};
+		},
+		/**
+		 * Install a theme template HTML file from a fixture (overwrite).
+		 *
+		 * @param {{ slug: string, fixturePath: string }} options
+		 */
+		themeTemplateInstallFixture({ slug, fixturePath }) {
+			const safeSlug = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+			if (!safeSlug || !fixturePath) {
+				throw new Error(
+					'themeTemplateInstallFixture requires slug and fixturePath'
+				);
+			}
+
+			const source = path.join(BLOCKERA_PLUGIN_ROOT, fixturePath);
+			const target = path.join(
+				BLOCKERA_PLUGIN_ROOT,
+				'templates',
+				`${safeSlug}.html`
+			);
+
+			if (!fs.existsSync(source)) {
+				return {
+					ok: false,
+					message: `fixture_missing:${fixturePath}`,
+				};
+			}
+
+			fs.mkdirSync(path.dirname(target), { recursive: true });
+			fs.copyFileSync(source, target);
+			return { ok: true, message: `installed:${safeSlug}` };
+		},
+		/**
+		 * Remove an installed theme template HTML file (does not touch `-slug.html`).
+		 *
+		 * @param {{ slug: string }} options
+		 */
+		themeTemplateRemoveFile({ slug }) {
+			const safeSlug = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+			if (!safeSlug) {
+				throw new Error('themeTemplateRemoveFile requires slug');
+			}
+
+			const target = path.join(
+				BLOCKERA_PLUGIN_ROOT,
+				'templates',
+				`${safeSlug}.html`
+			);
+
+			if (fs.existsSync(target)) {
+				fs.unlinkSync(target);
+				return { ok: true, message: `removed:${safeSlug}` };
+			}
+
+			return { ok: true, message: `already_absent:${safeSlug}` };
+		},
+		/**
+		 * Delete custom `wp_template` posts by slug via WP-CLI eval (DB cleanup).
+		 *
+		 * @param {{ slug: string }} options
+		 */
+		wpTemplateDeleteBySlug({ slug }) {
+			const safeSlug = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+			if (!safeSlug) {
+				throw new Error('wpTemplateDeleteBySlug requires slug');
+			}
+
+			const php = `$posts = get_posts(array('post_type'=>'wp_template','name'=>'${safeSlug}','post_status'=>'any','numberposts'=>-1,'suppress_filters'=>true)); $n=0; foreach ($posts as $p) { wp_delete_post($p->ID, true); $n++; } echo 'deleted:'.$n;`;
+			const result = runWpEval(php);
+			return { ok: true, message: result || `deleted:0` };
+		},
+		/**
+		 * Hide/show a theme template part by renaming `parts/{slug}.html`
+		 * ↔ `parts/-{slug}.html`.
+		 *
+		 * @param {{ slug: string, hidden: boolean }} options
+		 */
+		themePartSetHidden({ slug, hidden }) {
+			const safeSlug = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+			if (!safeSlug) {
+				throw new Error('themePartSetHidden requires slug');
+			}
+
+			const partsDir = path.join(BLOCKERA_PLUGIN_ROOT, 'parts');
+			const visible = path.join(partsDir, `${safeSlug}.html`);
+			const hiddenPath = path.join(partsDir, `-${safeSlug}.html`);
+
+			if (hidden) {
+				if (fs.existsSync(visible)) {
+					fs.renameSync(visible, hiddenPath);
+					return { ok: true, message: `hidden:${safeSlug}` };
+				}
+				if (fs.existsSync(hiddenPath)) {
+					return { ok: true, message: `already_hidden:${safeSlug}` };
+				}
+				return {
+					ok: false,
+					message: `missing:${safeSlug}.html`,
+				};
+			}
+
+			if (fs.existsSync(hiddenPath)) {
+				fs.renameSync(hiddenPath, visible);
+				return { ok: true, message: `shown:${safeSlug}` };
+			}
+			if (fs.existsSync(visible)) {
+				return { ok: true, message: `already_visible:${safeSlug}` };
+			}
+			return {
+				ok: false,
+				message: `missing:-${safeSlug}.html`,
+			};
+		},
+		/**
+		 * Delete custom `wp_template_part` posts by slug via WP-CLI eval.
+		 *
+		 * @param {{ slug: string }} options
+		 */
+		wpTemplatePartDeleteBySlug({ slug }) {
+			const safeSlug = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+			if (!safeSlug) {
+				throw new Error('wpTemplatePartDeleteBySlug requires slug');
+			}
+
+			const php = `$posts = get_posts(array('post_type'=>'wp_template_part','name'=>'${safeSlug}','post_status'=>'any','numberposts'=>-1,'suppress_filters'=>true)); $n=0; foreach ($posts as $p) { wp_delete_post($p->ID, true); $n++; } echo 'deleted:'.$n;`;
+			const result = runWpEval(php);
+			return { ok: true, message: result || `deleted:0` };
 		},
 		simulateLegacyBlockeraFree() {
 			return mutateFreeRequiresProHeader('simulate');

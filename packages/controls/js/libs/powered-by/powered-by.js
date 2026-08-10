@@ -18,7 +18,7 @@ import DynamicHtmlFormatter from '../dynamic-html-formatter';
 import Flex from '../flex';
 import { Tooltip } from '../tooltip';
 
-type PoweredByProps = {
+export type PoweredByProps = {
 	preText?: string,
 	postText?: string,
 	tooltipText?: string | MixedElement,
@@ -31,6 +31,7 @@ type PoweredByProps = {
 	tooltipDelay?: number,
 	tooltipBg?: string,
 	primaryColor?: string,
+	brandName?: string,
 	className?: string,
 	linkTabIndex?: number,
 	style?: Object,
@@ -39,16 +40,20 @@ type PoweredByProps = {
 const DEFAULT_HREF =
 	'https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link';
 
+const DEFAULT_BRAND_NAME = 'Blockera Site Builder';
+
 export function getDefaultPoweredByText({
 	type = 'powered-by',
 	icon,
 	iconLibrary,
 	iconSize,
+	brandName = DEFAULT_BRAND_NAME,
 }: {
 	type?: 'powered-by' | 'empowered-by',
 	icon: string,
 	iconLibrary: string,
 	iconSize: number,
+	brandName?: string,
 }): MixedElement {
 	let template =
 		type === 'empowered-by'
@@ -84,7 +89,7 @@ export function getDefaultPoweredByText({
 								library={iconLibrary}
 								iconSize={iconSize}
 							/>
-							Blockera Site Builder
+							{brandName}
 						</>
 					),
 				},
@@ -106,6 +111,7 @@ export function PoweredBy({
 	tooltipDelay = 0,
 	tooltipBg = '#0051e7',
 	primaryColor = '#0051e7',
+	brandName = DEFAULT_BRAND_NAME,
 	className = '',
 	style = {},
 	linkTabIndex,
@@ -117,6 +123,7 @@ export function PoweredBy({
 				icon,
 				iconLibrary,
 				iconSize,
+				brandName,
 			});
 
 	const linkProps =
