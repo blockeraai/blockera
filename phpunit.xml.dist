@@ -1,4 +1,8 @@
-<!--@see: https://github.com/wp-phpunit/docs to configuration project for wp phpunit testing-->
+<!--
+	Synced from packages/global-packages/packages/dev-tools/php/phpunit.plugin.xml.dist
+	(PHPUnit has no config includes — keep a real root copy).
+	@see https://github.com/wp-phpunit/docs
+-->
 <phpunit
         bootstrap="./packages/global-packages/packages/dev-phpunit/php/bootstrap.php"
         backupGlobals="false"

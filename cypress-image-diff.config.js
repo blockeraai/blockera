@@ -1,5 +1,1 @@
-const config = {
-	SCREENSHOTS_DIR: 'visual-screenshots',
-};
-
-module.exports = config;
+module.exports = require('./packages/global-packages/packages/dev-tools/js/cypress/image-diff-config');
