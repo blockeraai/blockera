@@ -35,7 +35,9 @@ git clone --recurse-submodules <blockera-url>
 cd blockera
 # If you cloned without --recurse-submodules:
 git submodule update --init packages/global-packages
-bash .github/scripts/ensure-global-packages-sparse.sh
+bash .github/actions/ensure-global-packages/ensure.sh
+# or (after submodule content exists):
+# bash packages/global-packages/packages/dev-tools/github/scripts/ensure-global-packages-sparse.sh
 
 composer install
 npm ci
@@ -69,7 +71,9 @@ Husky `post-checkout` mirrors new consumer branches into the submodule as `<repo
 
 Husky `pre-push` verifies the pinned `packages/global-packages` SHA exists on origin (and pushes the mirrored submodule branch when needed). Skip with `BLOCKERA_SKIP_SUBMODULE_PUSH=1`.
 
-CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Instead thin `.github/setup-node` / `.github/setup-php` bootstrap via `ensure-global-packages-sparse.sh` (SSH → HTTPS + `secrets.BLOCKERABOT_PAT`), then call shared composites under `packages/global-packages/packages/dev-tools/github/`. Consumer settings live in `.github/blockera-ci.json` (schema in that package). Sync bootstrap scripts after submodule bumps:
+CI does **not** use `actions/checkout` `submodules:` (shallow SHA fetches fail for non-default-branch pins). Jobs check out the repo, run `./.github/actions/ensure-global-packages` (SSH → HTTPS + `secrets.BLOCKERABOT_PAT`), then call shared composites under `packages/global-packages/packages/dev-tools/github/actions/` (e.g. `setup-node`, `setup-php`, `update-assets`) and helpers/job scripts under `…/scripts/` (override defaults with step `env:`).
+
+Consumer `.github/scripts/` is removed. The only bootstrap that must live in the consumer (before the submodule exists) is `.github/actions/ensure-global-packages/`. Sync it after submodule bumps:
 
 ```bash
 bash packages/global-packages/packages/dev-tools/github/scripts/sync-consumer-bootstrap.sh
