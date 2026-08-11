@@ -10,15 +10,20 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             release_branch: ${{ steps.get_release_branch.outputs.release_branch }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Compute release branch name
-              id: get_release_branch
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: get_release_branch
               env:
                   TAG: ${{ github.event.release.tag_name }}
-              run: |
-                  IFS='.' read -r -a VERSION_ARRAY <<< "${TAG#v}"
-                  RELEASE_BRANCH="release/${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}.${VERSION_ARRAY[2]}"
-                  echo "release_branch=${RELEASE_BRANCH}" >> $GITHUB_OUTPUT
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/upload-release-to-plugin-repo/compute-release-branch.sh
 
     upload:
         name: Publish as trunk (and tag)
@@ -27,67 +32,18 @@ jobs:
         needs: [get-release-branch]
         if: ${{ !github.event.release.prerelease && github.event.release.assets[0] }}
         env:
-            PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
-            STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            BLOCKERA_UPLOAD_PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
             SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
             SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
             VERSION: ${{ github.event.release.name }}
-
+            PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
         steps:
-            - name: Install SVN
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y subversion
-
-            - name: Check out Blockera trunk from WP.org plugin repo
-              run: svn checkout "$PLUGIN_REPO_URL/trunk" --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-            - name: Delete everything
-              working-directory: ./trunk
-              run: find . -maxdepth 1 -not -name ".svn" -not -name "." -not -name ".." -exec rm -rf {} +
-
-            - name: Download and unzip Blockera plugin asset into trunk folder
-              env:
-                  PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
-              run: |
-                  curl -L -o blockera.zip $PLUGIN_URL
-                  unzip blockera.zip -d trunk
-                  rm blockera.zip
-
-            - name: Replace the stable tag placeholder with the existing stable tag on the SVN repository
-              env:
-                  STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
-              run: |
-                  sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" ./trunk/readme.txt
-
-            - name: Commit the content changes
-              working-directory: ./trunk
-              run: |
-                  svn st | grep '^?' | awk '{print $2}' | xargs -r svn add
-                  svn st | grep '^!' | awk '{print $2}' | xargs -r svn rm
-                  svn commit -m "Committing version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-            - name: Create the SVN tag
-              working-directory: ./trunk
-              run: |
-                  svn copy "$PLUGIN_REPO_URL/trunk" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Tagging version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-            - name: Update the plugin's stable version
-              working-directory: ./trunk
-              run: |
-                  sed -i "s/Stable tag: ${STABLE_VERSION_REGEX}/Stable tag: ${VERSION}/g" ./readme.txt
-                  svn commit -m "Releasing version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-            - name: Checkout code
-              uses: actions/checkout@v5
+            - uses: actions/checkout@v5
               with:
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            # - name: Update assets/readme
-            #   uses: ./.github/update-assets
-            #   with:
-            #       svn-username: ${{ secrets.SVN_USERNAME }}
-            #       svn-password: ${{ secrets.SVN_PASSWORD }}
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/upload-release-to-plugin-repo/publish-to-svn.sh

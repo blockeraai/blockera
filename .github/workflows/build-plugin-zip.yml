@@ -23,10 +23,7 @@ on:
                     - 'minor'
                     - 'patch'
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
@@ -37,20 +34,21 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         outputs:
             next_stable_branch: ${{ steps.get_branches.outputs.next_stable_branch }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Get current and next stable release branches
-              id: get_branches
-              run: |
-                  LATEST_STABLE_TAG=$(git tag --list 'v*' | sort -V | tail -n 1)
-                  IFS='.' read LATEST_STABLE_MAJOR LATEST_STABLE_MINOR LATEST_STABLE_PATCH <<< "${LATEST_STABLE_TAG#v}"
-                  VERSION_TYPE="${{ github.event.inputs.version_type }}"
-                  if [[ $VERSION_TYPE == "major" ]]; then
-                    echo "next_stable_branch=release/$((LATEST_STABLE_MAJOR + 1)).0" >> $GITHUB_OUTPUT
-                  elif [[ $VERSION_TYPE == "minor" ]]; then
-                    echo "next_stable_branch=release/${LATEST_STABLE_MAJOR}.$((LATEST_STABLE_MINOR + 1))" >> $GITHUB_OUTPUT
-                  else
-                    echo "next_stable_branch=release/${LATEST_STABLE_MAJOR}.${LATEST_STABLE_MINOR}.$((LATEST_STABLE_PATCH + 1))" >> $GITHUB_OUTPUT
-                  fi
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: get_branches
+              env:
+                  VERSION_TYPE: ${{ github.event.inputs.version_type }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/compute-next-stable-branch.sh
 
     bump-version:
         name: Bump version
@@ -76,112 +74,56 @@ jobs:
             release_branch: ${{ steps.get_version.outputs.release_branch }}
             release_branch_commit: ${{ steps.commit_version_bump_to_release_branch.outputs.version_bump_commit }}
             master_commit: ${{ steps.commit_version_bump_to_master.outputs.version_bump_commit }}
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Checkout code
-              uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+            - uses: actions/checkout@v5
               with:
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  fetch-depth: 0
 
-            - name: Compute old and new version
-              id: get_version
-              run: |
-                  OLD_VERSION=$(jq --raw-output '.version' package.json)
-                  echo "old_version=${OLD_VERSION}" >> $GITHUB_OUTPUT
-                  if [[ ${{ github.event.inputs.release_type }} == 'stable' ]]; then
-                    IFS='.' read -r -a OLD_VERSION_ARRAY <<< "$OLD_VERSION"
-                    if [[ ${{ github.event.inputs.version_type }} == "major" ]]; then
-                      NEW_VERSION=$(npx semver $OLD_VERSION -i major)
-                    elif [[ ${{ github.event.inputs.version_type }} == "minor" ]]; then
-                      NEW_VERSION=$(npx semver $OLD_VERSION -i minor)
-                    else
-                      NEW_VERSION=$(npx semver $OLD_VERSION -i patch)
-                    fi
-                  else
-                    if [[ $OLD_VERSION == *"rc"* ]]; then
-                      NEW_VERSION=$(npx semver $OLD_VERSION -i prerelease)
-                    else
-                      if [[ ${{ github.event.inputs.version_type }} == "major" ]]; then
-                        NEW_VERSION="$(npx semver $OLD_VERSION -i major)-rc.1"
-                      elif [[ ${{ github.event.inputs.version_type }} == "minor" ]]; then
-                        NEW_VERSION="$(npx semver $OLD_VERSION -i minor)-rc.1"
-                      else
-                        NEW_VERSION="$(npx semver $OLD_VERSION -i patch)-rc.1"
-                      fi
-                    fi
-                  fi
-                  echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
-                  IFS='.' read -r -a NEW_VERSION_ARRAY <<< "$NEW_VERSION"
-                  RELEASE_BRANCH="release/${NEW_VERSION_ARRAY[0]}.${NEW_VERSION_ARRAY[1]}.${NEW_VERSION_ARRAY[2]}"
-                  echo "release_branch=${RELEASE_BRANCH}" >> $GITHUB_OUTPUT
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-            - name: Configure git user name and email
-              run: |
-                  git config user.name "blockerabot"
-                  git config user.email blockeraai+githubbot@gmail.com
-
-            - name: Create and switch to release branch
-              if: |
-                  github.event.inputs.release_type == 'rc' &&
-                  ! contains( steps.get_version.outputs.old_version, 'rc' )
-              run: git checkout -b "${{ steps.get_version.outputs.release_branch }}"
-
-            - name: Switch to release branch
-              if: |
-                  github.event.inputs.release_type == 'stable' ||
-                  contains( steps.get_version.outputs.old_version, 'rc' )
-              run: |
-                  git fetch --depth=1 origin "${{ steps.get_version.outputs.release_branch }}"
-                  git checkout "${{ steps.get_version.outputs.release_branch }}"
-
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Update the changelog of packages
-              id: update_packages
-              run: |
-                  npm run update:changelogs -- --version="${{ steps.get_version.outputs.new_version }}"
-                  CHANGELOG=$(cat changelog.txt | awk '{printf "%s\\n", $0}')
-                  echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
-                  git add .
-                  git commit -m "Update Changelog for ${{ steps.get_version.outputs.new_version }}"
-                  echo "has_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
-
-            - name: Update plugin version
+            - id: get_version
               env:
-                  VERSION: ${{ steps.get_version.outputs.new_version }}
-              run: |
-                  cat <<< $(jq --tab --arg version "${VERSION}" '.version = $version' package.json) > package.json
-                  cat <<< $(jq --tab --arg version "${VERSION}" '.version = $version | .packages[""].version = $version' package-lock.json) > package-lock.json
-                  sed -i "s/${{ steps.get_version.outputs.old_version }}/${VERSION}/g" blockera.php
+                  RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+                  VERSION_TYPE: ${{ github.event.inputs.version_type }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/compute-versions.sh
 
-            - name: Commit the version bump to the release branch
-              id: commit_version_bump_to_release_branch
-              run: |
-                  git add blockera.php package.json package-lock.json
-                  git commit -m "Bump plugin version to ${{ steps.get_version.outputs.new_version }}"
-                  git push --set-upstream origin "${{ steps.get_version.outputs.release_branch }}"
-                  echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
 
-            - name: Fetch master
-              if: ${{ github.ref != 'refs/heads/master' }}
-              run: git fetch --depth=1 origin master
+            - env:
+                  RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+                  RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/prepare-release-branch.sh
 
-            - name: Cherry-pick the version bump commit to master
-              id: commit_version_bump_to_master
-              run: |
-                  git checkout master
-                  git pull
-                  MASTER_VERSION=$(jq --raw-output '.version' package.json)
-                  if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
-                    git cherry-pick "${{ steps.update_packages.outputs.has_commit }}"
-                    git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
-                    git push
-                    echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
-                  fi
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-node
+
+            - id: update_packages
+              env:
+                  NEW_VERSION: ${{ steps.get_version.outputs.new_version }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/update-changelogs.sh
+
+            - env:
+                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+                  NEW_VERSION: ${{ steps.get_version.outputs.new_version }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/bump-plugin-version-files.sh
+
+            - id: commit_version_bump_to_release_branch
+              env:
+                  NEW_VERSION: ${{ steps.get_version.outputs.new_version }}
+                  RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/commit-push-release-bump.sh
+
+            - id: commit_version_bump_to_master
+              env:
+                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+                  CHANGELOG_COMMIT: ${{ steps.update_packages.outputs.has_commit }}
+                  RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/cherry-pick-to-master.sh
 
     build:
         name: Build Release Artifact
@@ -195,56 +137,27 @@ jobs:
             )
         outputs:
             job_status: ${{ job.status }}
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v5
+            - uses: actions/checkout@v5
               with:
                   ref: ${{ needs.bump-version.outputs.release_branch || github.ref }}
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-            - name: Setup PHP Composer install dependencies
-              uses: ./.github/setup-php
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/build-plugin-zip
 
-            - name: Build Plugin Zip File
-              uses: ./.github/build-plugin-zip
-
-            - name: Upload artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: blockera
-                  path: ./blockera.zip
-
-            - name: Build release notes draft
-              if: ${{ needs.bump-version.outputs.new_version }}
+            - if: ${{ needs.bump-version.outputs.new_version }}
               env:
-                  VERSION: ${{ needs.bump-version.outputs.new_version }}
-              run: |
-                  IFS='.' read -r -a VERSION_ARRAY <<< "${VERSION}"
-                  MILESTONE="Blockera ${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}"
-                  echo "${{ needs.bump-version.outputs.changelog }}" | sed 's/\\n/\n/g' > release-note.txt
+                  NEW_VERSION: ${{ needs.bump-version.outputs.new_version }}
+                  CHANGELOG: ${{ needs.bump-version.outputs.changelog }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/build-release-notes.sh
 
-                  # Continue to creating release notes with preparing other changelogs
-                  npm run other:changelog -- --milestone="$MILESTONE" --unreleased --file="release-note.txt" --version="${{ needs.bump-version.outputs.new_version }}" > release-notes.txt
-                  sed -ie '1,6d' release-notes.txt
-                  if [[ ${{ needs.bump-version.outputs.new_version }} != *"rc"* ]]; then
-                    # Include previous RCs' release notes, if any
-                    CHANGELOG_REGEX="=\s[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?\s="
-                    RC_REGEX="=\s${VERSION}(-rc\.[0-9]+)?\s="
-                    awk "/${RC_REGEX}/ {found=1;print;next} /${CHANGELOG_REGEX}/ {found=0} found" changelog.txt >> release-notes.txt
-                  fi
-
-            - name: Upload release notes artifact
-              if: ${{ needs.bump-version.outputs.new_version }}
+            - if: ${{ needs.bump-version.outputs.new_version }}
               uses: actions/upload-artifact@v4
               with:
                   name: release-notes
@@ -258,68 +171,69 @@ jobs:
             always() &&
             ( needs.build.outputs.job_status == 'failure' ) &&
             needs.bump-version.outputs.release_branch_commit
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Checkout code
-              uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 2
                   ref: ${{ needs.bump-version.outputs.release_branch }}
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
-            - name: Configure git user name and email
-              run: |
-                  git config user.name "blockerabot"
-                  git config user.email blockeraai+githubbot@gmail.com
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-            - name: Revert version bump commit on release branch
-              if: |
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
+
+            - if: |
                   github.event.inputs.release_type == 'stable' ||
                   contains( needs.bump-version.outputs.old_version, 'rc' )
-              run: |
-                  git revert --no-edit ${{ needs.bump-version.outputs.release_branch_commit }}
-                  git push --set-upstream origin "${{ needs.bump-version.outputs.release_branch }}"
+              env:
+                  RELEASE_BRANCH_COMMIT: ${{ needs.bump-version.outputs.release_branch_commit }}
+                  RELEASE_BRANCH: ${{ needs.bump-version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/revert-release-branch-bump.sh
 
-            - name: Delete release branch if it was only just created for the RC
-              if: |
+            - if: |
                   github.event.inputs.release_type == 'rc' &&
                   ! contains( needs.bump-version.outputs.old_version, 'rc' )
-              run: |
-                  git push origin :"${{ needs.bump-version.outputs.release_branch }}"
+              env:
+                  RELEASE_BRANCH: ${{ needs.bump-version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/delete-release-branch.sh
 
-            - name: Revert version bump on master
-              if: ${{ needs.bump-version.outputs.master_commit }}
-              run: |
-                  git fetch --depth=2 origin master
-                  git checkout master
-                  git revert --no-edit ${{ needs.bump-version.outputs.master_commit }}
-                  git push --set-upstream origin master
+            - if: ${{ needs.bump-version.outputs.master_commit }}
+              env:
+                  MASTER_COMMIT: ${{ needs.bump-version.outputs.master_commit }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/revert-master-bump.sh
 
     create-release:
         name: Create Release Draft and Attach Asset
         needs: [bump-version, build]
         runs-on: ubuntu-latest
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Set Release Version
-              id: get_release_version
-              env:
-                  VERSION: ${{ needs.bump-version.outputs.new_version }}
-              run: echo "version=$(echo $VERSION | cut -d / -f 3 | sed 's/-rc./ RC/' )" >> $GITHUB_OUTPUT
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Download Plugin Zip Artifact
-              uses: actions/download-artifact@v4
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: get_release_version
+              env:
+                  NEW_VERSION: ${{ needs.bump-version.outputs.new_version }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/format-release-name.sh
+
+            - uses: actions/download-artifact@v4
               with:
                   name: blockera
 
-            - name: Download Release Notes Artifact
-              uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@v4
               with:
                   name: release-notes
 
-            - name: Create Release Draft
-              id: create_release
+            - id: create_release
               uses: actions/create-release@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
@@ -331,9 +245,7 @@ jobs:
                   prerelease: ${{ contains(needs.bump-version.outputs.new_version, 'rc') }}
                   body_path: release-notes.txt
 
-            - name: Upload Release Asset
-              id: upload-release-asset
-              uses: actions/upload-release-asset@v1
+            - uses: actions/upload-release-asset@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
               with:
