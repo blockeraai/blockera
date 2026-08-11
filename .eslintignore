@@ -6,14 +6,13 @@
 /packages/dev-cypress/*
 /packages/dev-playwright/*
 /.patch/*
-/.storybook/*
+**/.patch/*
 build/*
 dist/*
 node_modules/*
 vendor/*
 assets/*
-wordpress*
-source-codes
+source-codes/**
 **/test/*
 **/stories/*
 /bin/plugin/**

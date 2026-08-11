@@ -5,7 +5,6 @@
 <PROJECT_ROOT>/node_modules/module-deps/.*
 <PROJECT_ROOT>/node_modules/resolve/.*
 <PROJECT_ROOT>/packages/dev-cypress/js/.*
-<PROJECT_ROOT>/.storybook/.*
 <PROJECT_ROOT>/.patch/.*
 <PROJECT_ROOT>/packages/.*/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/js/\.patch/.*

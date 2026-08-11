@@ -43,9 +43,6 @@
 			"./types"
 		],
 
-		// Base URL for imports
-		"baseUrl": ".",
-
 		// Include DOM types
 		"lib": ["ES2021", "DOM", "DOM.Iterable"]
 	},
