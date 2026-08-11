@@ -1,0 +1,16 @@
+name: 'Ensure global-packages submodule'
+description: >
+    Init/update packages/global-packages with sparse checkout and CI HTTPS auth.
+    This action is bootstrapped into the consumer at .github/actions/ensure-global-packages/
+    so it can run before the submodule tree is available.
+inputs:
+    root:
+        description: 'Consumer repository root'
+        required: false
+        default: ${{ github.workspace }}
+runs:
+    using: 'composite'
+    steps:
+        - name: Ensure global-packages submodule
+          shell: bash
+          run: bash "${GITHUB_ACTION_PATH}/ensure.sh" "${{ inputs.root }}"
