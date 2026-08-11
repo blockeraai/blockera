@@ -252,7 +252,7 @@
 		"version": "grunt version && grunt update-pot",
 		"icons:generate-untitledui": "node packages/global-packages/packages/icons/js/library-untitledui/bin/generate-icons-index.js && node packages/global-packages/packages/icons/js/library-untitledui/bin/generate-search-data.js",
 		"icons:tabler:generate": "node packages/global-packages/packages/icons/js/library-tabler/bin/generate-icons.js --variant=outline && node packages/global-packages/packages/icons/js/library-tabler/bin/generate-icons.js --variant=filled && node packages/global-packages/packages/icons/js/library-tabler/bin/generate-search-data.js --variant=outline && node packages/global-packages/packages/icons/js/library-tabler/bin/generate-search-data.js --variant=filled",
-		"icons:indexing": "node bin/create-icon-search-index.js",
+		"icons:indexing": "node packages/global-packages/packages/dev-tools/bin/create-icon-search-index.js",
 		"icons:sync-search-data": "node bin/sync-icon-search-data.js",
 		"icons:update": "npm install @wordpress/icons@latest && npm run icons:sync-search-data && npm run icons:indexing",
 		"env": "wp-env",
