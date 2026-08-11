@@ -7,12 +7,14 @@ alwaysApply: true
 # Pre-Commit Gatekeeper (Cursor Role)
 
 ## When to activate this role
-Activate whenever the user says (or clearly implies) they are about to commit/merge/release, or asks for:
-- “review before commit”, “pre-commit review”, “final review”, “ready to commit”, “can I commit this?”
-If the user is still mid-implementation, do NOT run the full checklist—only give targeted review feedback.
 
+Activate whenever the user says (or clearly implies) they are about to commit/merge/release, or asks for:
+
+- “review before commit”, “pre-commit review”, “final review”, “ready to commit”, “can I commit this?”
+  If the user is still mid-implementation, do NOT run the full checklist—only give targeted review feedback.
 
 ## What you should do?
+
 - Refactor and optimize code but do not break existing behavior.
 - Improve codes runtime performance & memory.
 - Check codes and find performance botel necks or high process need codes that can be simplified and suggest them to me.
@@ -20,17 +22,20 @@ If the user is still mid-implementation, do NOT run the full checklist—only gi
 - Make sure do not break things.
 - If there is duplicate codes or not used then remove them.
 - The code under review is the code generated/edited in the **current Cursor chat**, plus any files it touched.
-- When referencing Gutenberg/block-editor internals or related local source trees (git clones; not installed-site paths):
-  - Prefer `source-codes/block-editor/packages/*/src/` (and `lib/` for Gutenberg PHP shims).
-  - Prefer `source-codes/wordpress/src/` for PHP and non-block-editor core lookups (note the `src/` prefix).
-  - Prefer `source-codes/woocommerce/` monorepo: usually `plugins/woocommerce/`, then `packages/js/` or `packages/php/` as needed.
-  - Prefer `source-codes/create-block-theme/` as a secondary reference for block-theme tooling after checking `block-editor` / `wordpress`.
-  - Follow `.cursor/commands/source-code.md` for the full clone layout map.
+- When referencing Gutenberg/block-editor internals or related local source trees (git clones / Blocksy build copies; not installed-site paths):
+    - Prefer `source-codes/block-editor/packages/*/src/` (and `lib/` for Gutenberg PHP shims).
+    - Prefer `source-codes/wordpress/src/` for PHP and non-block-editor core lookups (note the `src/` prefix).
+    - Prefer `source-codes/woocommerce/` monorepo: usually `plugins/woocommerce/`, then `packages/js/` or `packages/php/` as needed.
+    - Prefer `source-codes/create-block-theme/` as a secondary reference for block-theme tooling after checking `block-editor` / `wordpress`.
+    - For Blocksy-related work: prefer `source-codes/blocksy-theme/` and `source-codes/blocksy-companion/` **PHP** first (JS may be bundled/hard to read).
+    - Follow `.cursor/commands/source-code.md` for the full clone layout map.
 
 ## Output format (what you must produce)
+
 When this role is activated, respond with:
 **Summary**
-- What changed + high-level risk (Low/Med/High) + why. 
+
+- What changed + high-level risk (Low/Med/High) + why.
 - Commit:
-  - Commit Subject: We use conventional commit type for subjects check (./git-conventional-commits.yaml). Do it in a block that i can copy it easily.
-  - Commit Message: Short list of changes in list mode. Do it in a block that i can copy it easily.
+    - Commit Subject: We use conventional commit type for subjects check (./git-conventional-commits.yaml). Do it in a block that i can copy it easily.
+    - Commit Message: Short list of changes in list mode. Do it in a block that i can copy it easily.

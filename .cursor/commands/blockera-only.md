@@ -12,17 +12,19 @@ In-scope paths include:
 
 - Plugin source (`packages/`, `blockera.php`, build/config, tests, docs)
 - Local reference trees (read-only unless the task says otherwise):
-  - `source-codes/block-editor/`
-  - `source-codes/wordpress/`
-  - `source-codes/woocommerce/`
-  - `source-codes/create-block-theme/`
+    - `source-codes/block-editor/`
+    - `source-codes/wordpress/`
+    - `source-codes/woocommerce/`
+    - `source-codes/create-block-theme/`
+    - `source-codes/blocksy-theme/` (Blocksy-related work only; prefer PHP)
+    - `source-codes/blocksy-companion/` (Blocksy-related work only; prefer PHP)
 
 ## Out of scope
 
 Do NOT read, edit, search, stage, or run commands against:
 
-- Sibling plugins (`blockera-pro`, `blockera-demo-*`, `akismet`, `blocksy-companion`, etc.)
-- `wp-content/themes/`
+- Sibling plugins (`blockera-pro`, `blockera-demo-*`, `akismet`, installed `blocksy-companion`, etc.)
+- `wp-content/themes/` (including installed Blocksy — use `source-codes/blocksy-theme/` instead)
 - WordPress/site files outside Blockera unless the user explicitly asks
 
 If a task seems to require an out-of-scope path, stop and ask before leaving Blockera scope.
@@ -40,7 +42,7 @@ If a task seems to require an out-of-scope path, stop and ask before leaving Blo
 
 Follow Blockera rules in `.cursor/rules/`, especially:
 
-- `development-helper.mdc` — Gutenberg vs WordPress core source routing
+- `development-helper.mdc` — Gutenberg / WordPress / Woo / Blocksy / Create Block Theme source routing
 - `final-review-generated-codes.mdc` — pre-commit review
 
 ## Session confirmation

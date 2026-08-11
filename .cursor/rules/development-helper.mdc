@@ -1,5 +1,5 @@
 ---
-description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress develop (src/) for PHP, WooCommerce monorepo for Woo work, and Create Block Theme as a secondary block-theme reference.
+description: Source-routing rule: use uncompiled Gutenberg for editor JS/React, WordPress develop (src/) for PHP, WooCommerce monorepo for Woo work, Create Block Theme as a secondary block-theme reference, and Blocksy theme/companion (PHP-first) for Blocksy compatibility work.
 alwaysApply: true
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: true
 You are developing a WordPress plugin that deeply extends the WordPress Block Editor (Gutenberg) to behave like a website builder + IDE.
 Your #1 goal is **maximum compatibility with WordPress core + Gutenberg**, with **performance** and **upgrade-safety** as top priorities.
 
-We keep local **GitHub repo clones** under `source-codes/` (gitignored). These are **not** the installed/build layout of a running WordPress site—paths often differ. For the full clone layout map, follow `.cursor/commands/source-code.md`.
+We keep local reference trees under `source-codes/` (gitignored). Most are **GitHub repo clones**; Blocksy trees are **distributed/build copies**. These are **not** the installed/build layout of a running WordPress site—paths often differ. For the full layout map, follow `.cursor/commands/source-code.md`.
 
 ## Source directories (must be used)
 
@@ -37,6 +37,16 @@ Paths are always relative to the `blockera` workspace folder root. Never use abs
     - `source-codes/create-block-theme/`
     - PHP: `includes/`; JS/UI: `src/`
     - **Secondary reference only:** for block-theme work, start with `block-editor` / `wordpress` first, then consult this tree when relevant.
+
+- **Blocksy Theme** — distributed/build copy
+    - `source-codes/blocksy-theme/`
+    - Use only for **Blocksy-related** compatibility / integration features.
+    - Prefer PHP (`inc/`, `admin/`, templates); JS under `static/` may be bundled and hard to read.
+
+- **Blocksy Companion** — distributed/build copy
+    - `source-codes/blocksy-companion/`
+    - Use only for **Blocksy-related** compatibility / integration features.
+    - Prefer PHP (`framework/`); JS under `static/` may be bundled and hard to read.
 
 If the `blockera` workspace folder is not open, ask the user to add it, or resolve via the standard WP layout:
 `wp-content/plugins/blockera/source-codes/...`
@@ -86,11 +96,23 @@ Search order:
 2. `packages/js/` or `packages/php/` when logic lives in a shared package
 3. `docs/` for extension/theming guidance
 
+### D) If the task is Blocksy related → use Blocksy trees FIRST
+
+Includes anything involving **Blocksy compatibility / integration** (theme options, Companion features, Blocksy hooks/filters, header/footer builder integration, Blocksy-specific CSS/options bridges). Do **not** open these trees for general theme work.
+
+Search order:
+
+1. `source-codes/blocksy-theme/` PHP (`inc/`, `admin/`, templates) and/or `source-codes/blocksy-companion/` PHP (`framework/`)
+2. `source-codes/wordpress/` and/or `source-codes/block-editor/` when bridging core or the editor
+3. Blocksy JS (`static/js/`, `static/bundle/`) only when PHP is insufficient — expect limited readability (build output)
+
+**PHP is the source of truth** in Blocksy trees. Treat JS cautiously.
+
 ### Secondary: Create Block Theme (after A/B as needed)
 
 If the task involves **block theme development or tooling** (creating/exporting themes, theme.json authoring helpers, style variations, template/part workflows beyond core APIs), still route with **A** and/or **B** first, then also search `source-codes/create-block-theme/` (`includes/`, `src/`) for proven patterns.
 
-If you must bridge editor ↔ server ↔ WooCommerce ↔ block-theme tooling, consult the relevant directories together (start with the most specific primary tree, then secondary references as needed).
+If you must bridge editor ↔ server ↔ WooCommerce ↔ Blocksy ↔ block-theme tooling, consult the relevant directories together (start with the most specific primary tree, then secondary references as needed).
 
 ---
 
@@ -103,12 +125,13 @@ Start by stating which bucket the task is in:
 - “Editor JS/React (Gutenberg)” → search `source-codes/block-editor/packages/.../src/` (and `lib/` if PHP shim)
 - “Core PHP/server-side” → search `source-codes/wordpress/src/`
 - “WooCommerce” → search `source-codes/woocommerce/plugins/woocommerce/` then `packages/` as needed
+- “Blocksy” → search `source-codes/blocksy-theme/` and/or `source-codes/blocksy-companion/` PHP first, then WP/editor as needed
 - “Block theme tooling” → search `block-editor` / `wordpress` first, then `source-codes/create-block-theme/`
 - “Mixed/bridge” → search the relevant trees, starting with the most specific one
 
 ### 2) Search locally before writing code
 
-You MUST search the correct **clone** directory before proposing APIs or architecture.
+You MUST search the correct **local reference** directory before proposing APIs or architecture.
 Use ripgrep-style thinking:
 
 - Look for the closest existing implementation in upstream source
@@ -120,7 +143,7 @@ Use ripgrep-style thinking:
 
 In your answer, always include:
 
-- The file paths you opened (relative to the Blockera repo, using clone paths)
+- The file paths you opened (relative to the Blockera repo, using clone/reference paths)
 - The key symbols used (function/class/component/store name)
 
 Example:
@@ -131,6 +154,8 @@ Example:
 - `source-codes/woocommerce/plugins/woocommerce/client/blocks/...`
 - `source-codes/woocommerce/packages/js/components/...`
 - `source-codes/create-block-theme/includes/create-theme/...`
+- `source-codes/blocksy-theme/inc/...`
+- `source-codes/blocksy-companion/framework/...`
 
 ### 4) Prefer extension points, minimize patching
 
@@ -151,6 +176,8 @@ Never base a design on minified/compiled bundles if the source exists in `source
 
 The same idea applies to WooCommerce and Create Block Theme: prefer the git clones under `source-codes/` over installed/minified plugin assets when researching behavior.
 
+For Blocksy, the trees themselves are distributed/build copies: prefer PHP; do not treat Blocksy JS as clean uncompiled source.
+
 ---
 
 ## Performance + React safety guardrails
@@ -167,8 +194,8 @@ The same idea applies to WooCommerce and Create Block Theme: prefer the git clon
 
 When implementing or proposing a solution:
 
-- Start with the routing choice (A/B/C/Mixed; mention Create Block Theme when used as secondary).
-- List the local clone files you consulted (correct `src/` / monorepo subpaths).
+- Start with the routing choice (A/B/C/D/Mixed; mention Create Block Theme when used as secondary).
+- List the local reference files you consulted (correct `src/` / monorepo / Blocksy PHP subpaths).
 - Provide the implementation plan and the code.
 - Call out upgrade risks and how you mitigated them.
 
