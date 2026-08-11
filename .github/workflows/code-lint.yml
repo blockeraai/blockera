@@ -3,7 +3,6 @@ name: Code Lint
 on:
     pull_request:
         types: [opened, synchronize, ready_for_review]
-
     workflow_dispatch:
 
 concurrency:
@@ -11,71 +10,38 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    jslint:
-        name: JavaScript coding standards
+    lint:
+        name: ${{ matrix.name }}
         runs-on: ubuntu-latest
         timeout-minutes: 20
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: JavaScript coding standards
+                      setup: node
+                      suite: js
+                    - name: CSS coding standards
+                      setup: node
+                      suite: css
+                    - name: PHP coding standards
+                      setup: php
+                      suite: php
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v5
+            - uses: actions/checkout@v5
               with:
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-            - name: Lint JS
-              uses: ./packages/global-packages/packages/dev-tools/github/actions/code-lint
-              with:
-                  suite: js
-                  config-path: .github/blockera-ci.json
+            - if: matrix.setup == 'node'
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-node
 
-    stylelint:
-        name: CSS coding standards
-        runs-on: ubuntu-latest
-        timeout-minutes: 20
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+            - if: matrix.setup == 'php'
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-php
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v5
-              with:
-                  token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Lint CSS
-              uses: ./packages/global-packages/packages/dev-tools/github/actions/code-lint
-              with:
-                  suite: css
-                  config-path: .github/blockera-ci.json
-
-    phpcs:
-        name: PHP coding standards
-        runs-on: ubuntu-latest
-        timeout-minutes: 20
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
-
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v5
-              with:
-                  token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Setup PHP Composer install dependencies
-              uses: ./.github/setup-php
-              with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Lint PHP
-              uses: ./packages/global-packages/packages/dev-tools/github/actions/code-lint
-              with:
-                  suite: php
-                  config-path: .github/blockera-ci.json
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/code-lint/${{ matrix.suite }}.sh

@@ -16,7 +16,7 @@ performance.json ───┤
 ```
 
 1. **Environment** — [`.github/wp-env-configs/performance.json`](../../.github/wp-env-configs/performance.json) enables `BLOCKERA_PERF_BENCHMARK`, maps CI MU-plugins, and activates Twenty Twenty-Five.
-2. **Server-Timing** — [`.github/performance/mu-plugins/server-timing.php`](../../.github/performance/mu-plugins/server-timing.php) emits `wp-total` (and front-end `wp-before-template` / `wp-template`, memory, DB queries). [`clear-cache.php`](../../.github/performance/mu-plugins/clear-cache.php) clears caches between iterations via `/?clear_cache`.
+2. **Server-Timing** — [`packages/global-packages/.../performance/mu-plugins/server-timing.php`](../../packages/global-packages/packages/dev-tools/github/performance/mu-plugins/server-timing.php) emits `wp-total` (and front-end `wp-before-template` / `wp-template`, memory, DB queries). [`clear-cache.php`](../../packages/global-packages/packages/dev-tools/github/performance/mu-plugins/clear-cache.php) clears caches between iterations via `/?clear_cache`.
 3. **Server-Timing scenarios** — [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json) lists URLs (home, page-1, admin screens, block editor shell). Setup publishes the page-1 page and writes `.github/performance/results/resolved-scenarios.json`.
 4. **Editor scenarios** — [`.github/performance/editor-scenarios.json`](../../.github/performance/editor-scenarios.json) lists client interaction suites (selecting blocks, switching Blockera workspace tabs).
 5. **Playwright suites** — [`tests/performance/`](../../tests/performance/)  
@@ -37,8 +37,8 @@ Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale 
 | `.github/wp-env-configs/performance.json` | wp-env config for benchmarks |
 | `.github/performance/scenarios.json` | Server-Timing URLs + thresholds |
 | `.github/performance/editor-scenarios.json` | Editor interaction scenarios + thresholds |
-| `.github/performance/mu-plugins/` | Server-Timing + cache clear + update-check hardening |
-| `.github/performance/scripts/` | setup / run helpers |
+| `packages/global-packages/.../performance/mu-plugins/` | Server-Timing + cache clear + update-check hardening (toolkit) |
+| `packages/global-packages/.../performance/scripts/` | setup / run helpers (toolkit) |
 | `tests/performance/` | Playwright suites + compare scripts |
 | `.github/performance/results/report.md` | Server-Timing compare report |
 | `.github/performance/results/editor-report.md` | Block editor compare report |
@@ -169,7 +169,7 @@ Report output:
 
 #### Important: `WP_ENV_CONFIG=performance`
 
-`npm run env:start` runs [`.github/scripts/setup-wp-env.js`](../../.github/scripts/setup-wp-env.js), which copies a config from `.env` (`WP_ENV_CONFIG`, often `base` / `development`) onto `.wp-env.json`. That **overwrites** `performance.json` and drops MU-plugin mappings.
+`npm run env:start` runs [`packages/global-packages/packages/dev-tools/github/scripts/setup-wp-env.js`](../../packages/global-packages/packages/dev-tools/github/scripts/setup-wp-env.js), which copies a config from `.env` (`WP_ENV_CONFIG`, often `base` / `development`) onto `.wp-env.json`. That **overwrites** `performance.json` and drops MU-plugin mappings.
 
 The Server-Timing local runner always starts with:
 
@@ -189,9 +189,9 @@ curl -sD - -o /dev/null "http://localhost:8888/" | grep -i server-timing
 WP_ENV_CONFIG=performance npm run env:start
 npm run build
 npx playwright install chromium
-bash .github/performance/scripts/setup-server-timing.sh
-bash .github/performance/scripts/setup-content.sh
-TEST_RUNS=5 bash .github/performance/scripts/run-benchmarks.sh
+bash packages/global-packages/packages/dev-tools/github/performance/scripts/setup-server-timing.sh
+bash packages/global-packages/packages/dev-tools/github/performance/scripts/setup-content.sh
+TEST_RUNS=5 bash packages/global-packages/packages/dev-tools/github/performance/scripts/run-benchmarks.sh
 npm run test:performance:compare
 ```
 

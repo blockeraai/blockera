@@ -3,13 +3,9 @@ name: Build Blockera Plugin Tests
 on:
     pull_request:
         types: [opened, synchronize, ready_for_review]
-
     workflow_dispatch:
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
@@ -22,79 +18,16 @@ jobs:
             fail-fast: true
             matrix:
                 php: ['7.4', '8.0', '8.1', '8.2']
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Checkout
-              uses: actions/checkout@v5
+            - uses: actions/checkout@v5
               with:
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/build-plugin-zip-tests
               with:
-                  global-packages-token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Install Composer dependencies
-              uses: ramsey/composer-install@v4
-              with:
-                  custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
-
-            - name: Build Plugin Zip File
-              uses: ./.github/build-plugin-zip
-
-            - name: Extract blockera.zip to build directory
-              run: |
-                  mkdir build
-                  unzip blockera.zip -d ./build/blockera
-                  rm -rf blockera.zip
-
-            - name: Create Requirements
-              run: |
-                  cd ./build/blockera
-                  mkdir packages
-                  mkdir packages/blockera
-                  mkdir packages/blockera/tests
-                  mkdir -p .github/scripts
-                  mkdir -p .github/wp-env-configs
-
-                  # Copy the setup script and configs
-                  cp ../../.github/scripts/setup-wp-env.js .github/scripts/
-                  cp ../../.github/scripts/retry-wp-env-start.sh .github/scripts/
-                  cp ../../.github/wp-env-configs/base.json .github/wp-env-configs/
-
-                  # Copy the base configuration and add PHP version
-                  cp .github/wp-env-configs/base.json .wp-env.json
-                  jq --arg php "${{ matrix.php }}" '. + {"phpVersion": $php}' .wp-env.json > .wp-env.json.tmp && mv .wp-env.json.tmp .wp-env.json
-
-                  cat .wp-env.json
-                  touch cypress.env.json
-                  echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": [],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
-                  cat cypress.env.json
-                  cd ../..
-                  cp -r ./cypress ./build/blockera
-                  cp ./package.json ./build/blockera
-                  cp -r ./node_modules ./build/blockera
-                  cp ./cypress.config.js ./build/blockera
-                  # Cypress webpack babel-loader resolves babel.config.js from plugin root.
-                  cp ./babel.config.js ./build/blockera
-                  mkdir -p ./build/blockera/packages/global-packages/packages
-                  cp -r ./packages/global-packages/packages/dev-cypress ./build/blockera/packages/global-packages/packages/
-                  # Cypress webpack aliases resolve to packages/.../testIds; the zip
-                  # extract does not include source packages, so mirror the minimal files.
-                  mkdir -p ./build/blockera/packages/global-packages/packages/editor/js/tabs/constants
-                  mkdir -p ./build/blockera/packages/global-packages/packages/editor/js/preview-mode/constants
-                  mkdir -p ./build/blockera/packages/global-packages/packages/controls/js/libs/feature-wrapper/constants
-                  cp ./packages/global-packages/packages/editor/js/tabs/constants/testIds.ts ./build/blockera/packages/global-packages/packages/editor/js/tabs/constants/
-                  cp ./packages/global-packages/packages/editor/js/preview-mode/constants/testIds.ts ./build/blockera/packages/global-packages/packages/editor/js/preview-mode/constants/
-                  cp ./packages/global-packages/packages/controls/js/libs/feature-wrapper/constants/testIds.js ./build/blockera/packages/global-packages/packages/controls/js/libs/feature-wrapper/constants/
-                  mkdir -p ./build/blockera/packages/global-packages/packages/blockera/tests
-                  find ./packages/global-packages/packages -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/global-packages/packages/blockera/tests \;
-
-            - name: Setup and Run E2E tests on Blockera build
-              run: |
-                  cd ./build/blockera
-                  npx cypress install
-                  bash .github/scripts/retry-wp-env-start.sh
-                  npm run test:e2e
-                  npm run env:stop
+                  php-version: ${{ matrix.php }}

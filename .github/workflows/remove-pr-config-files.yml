@@ -1,6 +1,5 @@
 name: Remove PR Config Files
 
-# Trigger on push to master (this will happen after a pull request is merged)
 on:
     push:
         branches:
@@ -9,31 +8,14 @@ on:
 jobs:
     update-file:
         runs-on: ubuntu-latest
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            # Step 1: Checkout the repository
-            - name: Checkout code
-              uses: actions/checkout@v5
+            - uses: actions/checkout@v5
               with:
                   token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Remove Pull Request env files
-              run: |
-                  find . -name ".pr-*" ! -name "*.env-example*" ! -name "*.example.*" -delete
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-            # Step 3: Configure Git (required for committing changes)
-            - name: Set up Git
-              run: |
-                  git config user.name "blockerabot"
-                  git config user.email blockeraai+githubbot@gmail.com
-
-            # Step 4: Commit and push changes
-            - name: Commit and push changes
-              run: |
-                  if [ -n "$(git status --porcelain)" ]; then
-                      git add .
-                      git commit -m "chore: remove PR config files"
-                      git push origin master
-                  else
-                      echo "No PR config files found to remove and It is OK ✅"
-                  fi
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/remove-pr-config-files/run.sh
