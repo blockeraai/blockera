@@ -1,9 +1,0 @@
-{
-	"pluginSlug": "blockera",
-	"repository": "blockeraai/blockera",
-	"test": {
-		"jest": {
-			"composerInstall": true
-		}
-	}
-}
