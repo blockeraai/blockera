@@ -1,1 +1,3 @@
+# Shared Blockera Browserslist (source of truth in @blockera/dev-tools).
+# Consumers keep a real root .browserslistrc copy of this file.
 extends @wordpress/browserslist-config
