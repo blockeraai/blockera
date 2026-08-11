@@ -5,6 +5,9 @@ name: Sync global-packages submodule
 # 2) master tip → open/update a bump PR (CI gates the pin)
 # 3) matching feature branch → push pin bump onto that Blockera branch
 # 4) workflow_dispatch + daily schedule for catch-up / manual pins
+#
+# Bootstrap: ./.github/actions/ensure-global-packages (consumer-local).
+# Job logic: packages/global-packages/.../scripts/jobs/sync-global-packages-submodule/
 on:
     repository_dispatch:
         types: [global-packages-updated]
@@ -43,8 +46,20 @@ jobs:
         name: Bump packages/global-packages pin
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' }}
-
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            GP_SCRIPTS: packages/global-packages/packages/dev-tools/github/scripts
+            GP_SYNC_JOB: packages/global-packages/packages/dev-tools/github/scripts/jobs/sync-global-packages-submodule
         steps:
+            - name: Checkout repository (bootstrap action)
+              uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
             - name: Resolve sync targets
               id: targets
               env:
@@ -55,66 +70,24 @@ jobs:
                   INPUT_SOURCE_REF: ${{ github.event.inputs.source_ref }}
                   INPUT_TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
                   INPUT_MODE: ${{ github.event.inputs.mode }}
+              run: bash "${GP_SYNC_JOB}/resolve-targets.sh"
+
+            # Feature branches may not have the latest toolkit/action yet — stash
+            # helpers + bootstrap action from this checkout before switching.
+            - name: Stash sync helpers and bootstrap action
+              if: ${{ steps.targets.outputs.skip_sync != 'true' }}
               run: |
-                  set -euo pipefail
-
-                  if [[ "${EVENT_NAME}" == "repository_dispatch" ]]; then
-                    SOURCE_REF="${DISPATCH_SHA}"
-                    SOURCE_BRANCH="${DISPATCH_BRANCH}"
-                    SOURCE_MESSAGE="${DISPATCH_MESSAGE}"
-                  elif [[ "${EVENT_NAME}" == "schedule" ]]; then
-                    SOURCE_REF="master"
-                    SOURCE_BRANCH="master"
-                    SOURCE_MESSAGE="scheduled sync"
-                  else
-                    SOURCE_REF="${INPUT_SOURCE_REF}"
-                    SOURCE_BRANCH="${INPUT_SOURCE_REF}"
-                    SOURCE_MESSAGE="manual sync"
-                  fi
-
-                  # Husky mirrors consumer branches as <repo>/<branch> in global-packages.
-                  # Only sync onto this consumer when the source branch uses our prefix
-                  # (or is master/main).
-                  REPO_NAME="${GITHUB_REPOSITORY##*/}"
-                  REPO_PREFIX="${REPO_NAME}/"
-
-                  TARGET_BRANCH="${INPUT_TARGET_BRANCH:-}"
-                  SKIP_SYNC="false"
-                  if [[ -z "${TARGET_BRANCH}" ]]; then
-                    if [[ "${SOURCE_BRANCH}" == "master" || "${SOURCE_BRANCH}" == "main" ]]; then
-                      TARGET_BRANCH="master"
-                    elif [[ "${SOURCE_BRANCH}" == "${REPO_PREFIX}"* ]]; then
-                      TARGET_BRANCH="${SOURCE_BRANCH#"${REPO_PREFIX}"}"
-                    else
-                      echo "Source branch '${SOURCE_BRANCH}' is not prefixed with '${REPO_PREFIX}'; skipping."
-                      SKIP_SYNC="true"
-                      TARGET_BRANCH=""
-                    fi
-                  fi
-
-                  MODE="${INPUT_MODE:-auto}"
-                  if [[ "${MODE}" == "auto" ]]; then
-                    if [[ "${TARGET_BRANCH}" == "master" || "${TARGET_BRANCH}" == "main" ]]; then
-                      MODE="pr"
-                    else
-                      MODE="push"
-                    fi
-                  fi
-
-                  {
-                    echo "source_ref=${SOURCE_REF}"
-                    echo "source_branch=${SOURCE_BRANCH}"
-                    echo "target_branch=${TARGET_BRANCH}"
-                    echo "mode=${MODE}"
-                    echo "skip_sync=${SKIP_SYNC}"
-                    echo "source_message<<EOF"
-                    printf '%s\n' "${SOURCE_MESSAGE}"
-                    echo "EOF"
-                  } >> "$GITHUB_OUTPUT"
-
-                  if [[ "${SKIP_SYNC}" == "true" ]]; then
-                    echo "skip=true" >> "$GITHUB_ENV"
-                  fi
+                  mkdir -p "$RUNNER_TEMP/blockera-sync-gp-scripts"
+                  mkdir -p "$RUNNER_TEMP/blockera-sync-gp-ensure-action"
+                  cp "${GP_SCRIPTS}/bump-global-packages-submodule.sh" \
+                    "${GP_SYNC_JOB}/resolve-targets.sh" \
+                    "${GP_SYNC_JOB}/run-bump.sh" \
+                    "${GP_SYNC_JOB}/commit-bump.sh" \
+                    "${GP_SYNC_JOB}/open-or-update-pr.sh" \
+                    "$RUNNER_TEMP/blockera-sync-gp-scripts/"
+                  chmod +x "$RUNNER_TEMP/blockera-sync-gp-scripts/"*
+                  cp -R .github/actions/ensure-global-packages/. \
+                    "$RUNNER_TEMP/blockera-sync-gp-ensure-action/"
 
             - name: Checkout target branch
               id: checkout
@@ -132,89 +105,44 @@ jobs:
                   echo "Target branch '${{ steps.targets.outputs.target_branch }}' does not exist; skipping submodule sync."
                   echo "skip=true" >> "$GITHUB_ENV"
 
-            - name: Configure git user
-              if: ${{ env.skip != 'true' }}
+            - name: Restore bootstrap ensure action on target branch
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
               run: |
-                  git config user.name "blockerabot"
-                  git config user.email "blockeraai+githubbot@gmail.com"
+                  mkdir -p .github/actions/ensure-global-packages
+                  cp -R "$RUNNER_TEMP/blockera-sync-gp-ensure-action/." \
+                    .github/actions/ensure-global-packages/
+                  chmod +x .github/actions/ensure-global-packages/ensure.sh
+
+            - name: Ensure global-packages on target branch
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
+              uses: ./.github/actions/ensure-global-packages
 
             - name: Bump submodule pin
-              if: ${{ env.skip != 'true' }}
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
               id: bump
               env:
-                  BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
-              run: |
-                  set -euo pipefail
-                  chmod +x .github/scripts/bump-global-packages-submodule.sh
-                  OUTPUT="$(bash .github/scripts/bump-global-packages-submodule.sh "${{ steps.targets.outputs.source_ref }}")"
-                  echo "${OUTPUT}"
-                  SHORT_SHA="$(echo "${OUTPUT}" | sed -n 's/^short_sha=//p' | tail -n1)"
-                  FULL_SHA="$(echo "${OUTPUT}" | sed -n 's/^sha=//p' | tail -n1)"
-                  echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
-                  echo "sha=${FULL_SHA}" >> "$GITHUB_OUTPUT"
-
-                  if git diff --cached --quiet -- packages/global-packages; then
-                    echo "changed=false" >> "$GITHUB_OUTPUT"
-                    echo "Submodule already at ${SHORT_SHA}; nothing to do."
-                  else
-                    echo "changed=true" >> "$GITHUB_OUTPUT"
-                  fi
+                  SOURCE_REF: ${{ steps.targets.outputs.source_ref }}
+                  BLOCKERA_SYNC_GP_BUMP_SCRIPT: ${{ runner.temp }}/blockera-sync-gp-scripts/bump-global-packages-submodule.sh
+              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/run-bump.sh"
 
             - name: Commit pin bump
-              if: ${{ env.skip != 'true' && steps.bump.outputs.changed == 'true' }}
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' }}
               id: commit
-              run: |
-                  git commit -m "submodule: bump global-packages to ${{ steps.bump.outputs.short_sha }}"
-                  echo "commit=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+              env:
+                  SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
+              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/commit-bump.sh"
 
             - name: Push directly to feature branch
-              if: ${{ env.skip != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'push' }}
-              run: |
-                  git push origin "HEAD:${{ steps.targets.outputs.target_branch }}"
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'push' }}
+              run: git push origin "HEAD:${{ steps.targets.outputs.target_branch }}"
 
             - name: Open or update bump PR (master)
-              if: ${{ env.skip != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'pr' }}
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'pr' }}
               env:
                   GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
+                  SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
+                  FULL_SHA: ${{ steps.bump.outputs.sha }}
+                  SOURCE_BRANCH: ${{ steps.targets.outputs.source_branch }}
                   SOURCE_MESSAGE: ${{ steps.targets.outputs.source_message }}
-              run: |
-                  set -euo pipefail
-                  PR_BRANCH="chore/bump-global-packages"
-                  BASE_BRANCH="${{ steps.targets.outputs.target_branch }}"
-                  SHORT_SHA="${{ steps.bump.outputs.short_sha }}"
-                  FULL_SHA="${{ steps.bump.outputs.sha }}"
-                  SOURCE_BRANCH="${{ steps.targets.outputs.source_branch }}"
-
-                  git checkout -B "${PR_BRANCH}"
-                  git push --force-with-lease origin "${PR_BRANCH}"
-
-                  BODY="$(cat <<EOF
-                  ## Summary
-                  - Auto-bump \`packages/global-packages\` to [\`${SHORT_SHA}\`](https://github.com/blockeraai/blockera-global-packages/commit/${FULL_SHA})
-                  - Source branch: \`${SOURCE_BRANCH}\`
-
-                  ## Source commit
-                  \`\`\`
-                  ${SOURCE_MESSAGE}
-                  \`\`\`
-
-                  ## Test plan
-                  - [ ] CI on this PR is green
-                  - [ ] Smoke editor load after merge
-                  EOF
-                  )"
-
-                  EXISTING_PR="$(gh pr list --head "${PR_BRANCH}" --base "${BASE_BRANCH}" --json number --jq '.[0].number // empty')"
-                  if [[ -n "${EXISTING_PR}" ]]; then
-                    gh pr edit "${EXISTING_PR}" \
-                      --title "submodule: bump global-packages to ${SHORT_SHA}" \
-                      --body "${BODY}"
-                    echo "Updated PR #${EXISTING_PR}"
-                  else
-                    gh pr create \
-                      --base "${BASE_BRANCH}" \
-                      --head "${PR_BRANCH}" \
-                      --title "submodule: bump global-packages to ${SHORT_SHA}" \
-                      --body "${BODY}" \
-                      --label "dependencies"
-                  fi
+              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/open-or-update-pr.sh"
