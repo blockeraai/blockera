@@ -9,11 +9,17 @@ You are in chat and we made changes into the codebase in this chat and we want t
 
 ## Commit message
 
+Allowed conventional commit types and changelog rules live in the shared global-packages config (not a root YAML):
+
+`packages/global-packages/packages/dev-tools/git-conventional-commits.yaml`
+
+Husky `commit-msg` validates against that file via `--config`. Use only types listed there when writing subjects.
+
 1. If the chat already has a final commit subject and message → use them and commit immediately.
 2. If the user sent a subject/message → use that and commit immediately.
 3. Otherwise → generate a conventional subject/message from the chat changes and **commit immediately** (no confirmation / wait for accept).
 
-Follow the repo’s conventional commit style and the usual git commit safety protocol (no force, no amend unless rules allow, no secrets, HEREDOC for messages, etc.).
+Follow the repo’s conventional commit style (types from the shared YAML above) and the usual git commit safety protocol (no force, no amend unless rules allow, no secrets, HEREDOC for messages, etc.).
 
 ## `packages/global-packages` submodule
 
