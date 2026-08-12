@@ -37,5 +37,5 @@ When this role is activated, respond with:
 
 - What changed + high-level risk (Low/Med/High) + why.
 - Commit:
-    - Commit Subject: We use conventional commit type for subjects check (./git-conventional-commits.yaml). Do it in a block that i can copy it easily.
+    - Commit Subject: We use conventional commit type for subjects check (`packages/global-packages/packages/dev-tools/git-conventional-commits.yaml`). Do it in a block that i can copy it easily.
     - Commit Message: Short list of changes in list mode. Do it in a block that i can copy it easily.
