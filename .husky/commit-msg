@@ -4,4 +4,7 @@ commit_message="$1"
 # exit with a non zero exit code incase of an invalid commit message
 
 # use git-conventional-commits, see https://github.com/qoomon/git-conventional-commits
-node_modules/git-conventional-commits/cli.js commit-msg-hook "$commit_message"
+# Config source of truth: @blockera/dev-tools (synced via global-packages).
+node_modules/git-conventional-commits/cli.js commit-msg-hook \
+	--config packages/global-packages/packages/dev-tools/git-conventional-commits.yaml \
+	"$commit_message"
