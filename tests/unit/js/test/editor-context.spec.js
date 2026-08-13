@@ -1,4 +1,21 @@
 /**
+ * editorContext imports the editor hooks barrel; stub it so this file does not
+ * load @wordpress/editor in jsdom.
+ */
+jest.mock(
+	'../../../../packages/global-packages/packages/editor/js/hooks',
+	() => ({
+		isSiteEditorPostType: (postType) =>
+			[
+				'wp_template',
+				'wp_template_part',
+				'wp_navigation',
+				'wp_block',
+			].includes(postType),
+	})
+);
+
+/**
  * Internal dependencies
  */
 import {
@@ -9,7 +26,6 @@ import {
 	getCurrentEditorContext,
 	shouldSkipCompanionTabLimits,
 } from '../../../../packages/global-packages/packages/editor/js/tabs/utils/editorContext';
-import { isSiteEditorPostType } from '../../../../packages/global-packages/packages/editor/js/hooks/urlUtils';
 
 describe('isEditorPage', () => {
 	it('is true for the site editor and post editors', () => {
@@ -62,12 +78,5 @@ describe('shouldSkipCompanionTabLimits', () => {
 			false
 		);
 		expect(shouldSkipCompanionTabLimits({ skipTabLimits: true })).toBe(true);
-	});
-});
-
-describe('cross-boundary editor types', () => {
-	it('treats templates as site editor and pages as post editor', () => {
-		expect(isSiteEditorPostType('wp_template')).toBe(true);
-		expect(isSiteEditorPostType('page')).toBe(false);
 	});
 });

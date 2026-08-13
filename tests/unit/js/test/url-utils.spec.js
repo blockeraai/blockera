@@ -1,4 +1,19 @@
 /**
+ * Keep these helpers off the @wordpress/editor graph so the suite stays fast
+ * and does not re-register core stores in jsdom.
+ */
+jest.mock('@wordpress/api-fetch', () => jest.fn());
+jest.mock('@wordpress/data', () => ({
+	select: jest.fn(),
+}));
+jest.mock('@wordpress/core-data', () => ({
+	store: 'core',
+}));
+jest.mock('@wordpress/editor', () => ({
+	store: 'core/editor',
+}));
+
+/**
  * Internal dependencies
  */
 import {

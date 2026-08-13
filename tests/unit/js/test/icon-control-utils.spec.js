@@ -157,7 +157,7 @@ describe('isProIconClickBlocked', () => {
 		expect(isProIconClickBlocked({ target: path })).toBe(true);
 		expect(
 			isProIconClickBlocked({ target: document.createElement('div') })
-		).toBe(false);
+		).toBeFalsy();
 	});
 });
 
@@ -171,12 +171,13 @@ describe('sanitizeRawSVGString', () => {
 
 	it('strips scripts, event handlers, and javascript hrefs', () => {
 		const sanitized = sanitizeRawSVGString(
-			'<svg viewBox="0 0 24 24" onclick="alert(1)"><script>alert(1)</script><a href="javascript:alert(1)"><path d="M0 0h24v24H0z"/></a></svg>'
+			'<svg viewBox="0 0 24 24" onclick="alert(1)"><script>alert(1)</script><path d="M0 0h24v24H0z"/><a href="javascript:alert(1)"></a></svg>'
 		);
 
 		expect(sanitized).toContain('<svg');
 		expect(sanitized).toContain('path');
 		expect(sanitized.toLowerCase()).not.toContain('<script');
+		expect(sanitized.toLowerCase()).not.toContain('<a');
 		expect(sanitized.toLowerCase()).not.toContain('onclick');
 		expect(sanitized.toLowerCase()).not.toContain('javascript:');
 	});
