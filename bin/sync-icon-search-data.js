@@ -382,12 +382,23 @@ function syncMissingIconsToSearchData() {
 	return { totalAdded, byLibrary };
 }
 
-const result = syncMissingIconsToSearchData();
+module.exports = {
+	getGeneratedIconsObjectNames,
+	getIconKebabId,
+	iconNameToTitle,
+	faIconNameToTitle,
+	createSearchDataEntry,
+	getExportedNamesFromIndex,
+};
 
-if (result.totalAdded === 0) {
-	console.log('\nAll icon libraries have complete search data.');
-} else {
-	console.log(
-		`\nAdded ${result.totalAdded} missing icon(s) across ${Object.keys(result.byLibrary).length} library/libraries.`
-	);
+if (require.main === module) {
+	const result = syncMissingIconsToSearchData();
+
+	if (result.totalAdded === 0) {
+		console.log('\nAll icon libraries have complete search data.');
+	} else {
+		console.log(
+			`\nAdded ${result.totalAdded} missing icon(s) across ${Object.keys(result.byLibrary).length} library/libraries.`
+		);
+	}
 }
