@@ -130,6 +130,8 @@ jobs:
               id: commit
               env:
                   SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
+                  COMMITS: ${{ steps.bump.outputs.commits }}
+                  COMMIT_SUBJECT: ${{ steps.bump.outputs.commit_subject }}
               run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/commit-bump.sh"
 
             - name: Push directly to feature branch
@@ -143,6 +145,8 @@ jobs:
                   BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
                   SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
                   FULL_SHA: ${{ steps.bump.outputs.sha }}
+                  COMMITS: ${{ steps.bump.outputs.commits }}
+                  COMMIT_SUBJECT: ${{ steps.bump.outputs.commit_subject }}
                   SOURCE_BRANCH: ${{ steps.targets.outputs.source_branch }}
                   SOURCE_MESSAGE: ${{ steps.targets.outputs.source_message }}
               run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/open-or-update-pr.sh"
