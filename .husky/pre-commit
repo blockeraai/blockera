@@ -2,3 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx lint-staged
+
+# TypeScript + Flow when JS/TS is staged. Skip: BLOCKERA_SKIP_TYPECHECK=1
+bash "$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/run-typecheck-pre-commit.sh"

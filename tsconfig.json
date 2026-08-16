@@ -1,5 +1,9 @@
 {
 	"extends": "./packages/global-packages/packages/dev-tools/js/typescript/tsconfig.base.json",
-	"include": ["packages/**/js/**/*.ts", "packages/**/js/**/*.tsx"],
+	"include": [
+		"packages/**/js/**/*.ts",
+		"packages/**/js/**/*.tsx",
+		"packages/global-packages/packages/dev-tools/types/**/*.d.ts"
+	],
 	"exclude": ["node_modules", "build", "source-codes"]
 }
