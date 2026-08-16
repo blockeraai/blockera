@@ -1,16 +1,47 @@
 # Edit packages/global-packages/packages/dev-tools/root-configs/.flowconfig
 # project:bootstrap copies this to the host repo root.
+#
+# Keep this crawl small. Flow walks every non-ignored file during init; a full
+# node_modules + vendor + source-codes tree OOMs the CI server (~500k files).
 [ignore]
 <PROJECT_ROOT>/app/.*
 <PROJECT_ROOT>/node_modules/eslint-plugin-import/.*
 <PROJECT_ROOT>/node_modules/eslint-plugin-react/.*
 <PROJECT_ROOT>/node_modules/module-deps/.*
 <PROJECT_ROOT>/node_modules/resolve/.*
+<PROJECT_ROOT>/node_modules/.*/test/.*
+<PROJECT_ROOT>/node_modules/.*/tests/.*
+<PROJECT_ROOT>/node_modules/.*/__tests__/.*
+<PROJECT_ROOT>/source-codes/.*
+<PROJECT_ROOT>/vendor/.*
+<PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/build/.*
+<PROJECT_ROOT>/@build/.*
+<PROJECT_ROOT>/artifacts/.*
+<PROJECT_ROOT>/test-results/.*
+<PROJECT_ROOT>/coverage/.*
+<PROJECT_ROOT>/Scratch/.*
+<PROJECT_ROOT>/wordpress/.*
+<PROJECT_ROOT>/wordpress-develop/.*
+<PROJECT_ROOT>/php-coverage/.*
+<PROJECT_ROOT>/visual-screenshots/.*
+<PROJECT_ROOT>/storybook-static/.*
+<PROJECT_ROOT>/html-report/.*
+<PROJECT_ROOT>/docs-temp-ai/.*
+<PROJECT_ROOT>/.git/.*
+<PROJECT_ROOT>/.cache/.*
+<PROJECT_ROOT>/.nyc_output/.*
+<PROJECT_ROOT>/.cursor/.*
 <PROJECT_ROOT>/packages/dev-cypress/js/.*
 <PROJECT_ROOT>/.patch/.*
 <PROJECT_ROOT>/packages/.*/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/js/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/\.patch/.*
+
+# Dependencies stay resolvable (imports are `any`) but are not parsed/typechecked.
+[untyped]
+<PROJECT_ROOT>/node_modules/.*
+
 [include]
 
 [libs]
