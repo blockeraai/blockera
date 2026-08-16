@@ -8,6 +8,7 @@ jobs:
     get-release-branch:
         name: Get release branch name
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         outputs:
             release_branch: ${{ steps.get_release_branch.outputs.release_branch }}
         env:
@@ -28,6 +29,7 @@ jobs:
     upload:
         name: Publish as trunk (and tag)
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         environment: wp.org plugin
         needs: [get-release-branch]
         if: ${{ !github.event.release.prerelease && github.event.release.assets[0] }}

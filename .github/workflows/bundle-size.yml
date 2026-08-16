@@ -12,6 +12,7 @@ jobs:
     build:
         name: Building and Give Sizes
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         env:
             BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}

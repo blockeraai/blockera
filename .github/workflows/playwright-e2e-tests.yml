@@ -38,7 +38,7 @@ jobs:
         name: Test
         needs: detect_categories
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 30
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: false

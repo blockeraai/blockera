@@ -13,6 +13,7 @@ jobs:
     detect_categories:
         name: Detecting E2E Test Categories
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         outputs:
             categories: ${{ steps.detect.outputs.categories }}
         env:
@@ -34,6 +35,7 @@ jobs:
         name: Test
         needs: detect_categories
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: false

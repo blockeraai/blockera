@@ -24,7 +24,7 @@ jobs:
     performance_benchmark:
         name: ${{ matrix.name }}
         runs-on: ubuntu-latest
-        timeout-minutes: 120
+        timeout-minutes: 30
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: false
