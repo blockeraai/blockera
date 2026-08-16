@@ -1,0 +1,16 @@
+---
+description: Shared ambient TypeScript declarations live in global-packages, not project-root types/
+globs: "**/*.{ts,tsx,d.ts}"
+alwaysApply: false
+---
+
+# Shared ambient TypeScript types
+
+Ambient / `declare module` types belong in:
+
+`packages/global-packages/packages/dev-tools/types/blockera/`
+
+- Never add or edit a project-root `types/` folder.
+- Edit the submodule only from the **blockera-one** checkout of `packages/global-packages`.
+- Other host repos get updates via a global-packages submodule bump.
+- Do not stub packages that already ship TypeScript types (for example `@dnd-kit/*` or `overlayscrollbars`).
