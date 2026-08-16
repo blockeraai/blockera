@@ -30,6 +30,12 @@ jobs:
                     - name: PHP coding standards
                       setup: php
                       suite: php
+                    - name: TypeScript type check
+                      setup: node
+                      suite: ts
+                    - name: Flow type check
+                      setup: node
+                      suite: flow
         steps:
             - uses: actions/checkout@v5
               with:
