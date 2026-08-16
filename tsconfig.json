@@ -1,12 +1,5 @@
 {
 	"extends": "./packages/global-packages/packages/dev-tools/js/typescript/tsconfig.base.json",
-	"compilerOptions": {
-		"typeRoots": ["./node_modules/@types", "./types"]
-	},
-	"include": [
-		"packages/**/js/**/*.ts",
-		"packages/**/js/**/*.tsx",
-		"types/**/*.d.ts"
-	],
+	"include": ["packages/**/js/**/*.ts", "packages/**/js/**/*.tsx"],
 	"exclude": ["node_modules", "build", "source-codes"]
 }
