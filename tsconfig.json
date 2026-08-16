@@ -7,5 +7,11 @@
 		"packages/**/js/**/*.tsx",
 		"packages/global-packages/packages/dev-tools/types/**/*.d.ts"
 	],
-	"exclude": ["node_modules", "build", "dist", "source-codes"]
+	"exclude": [
+		"node_modules",
+		"build",
+		"dist",
+		"source-codes",
+		"packages/global-packages/packages/dev-playwright"
+	]
 }
