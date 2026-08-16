@@ -1,8 +1,14 @@
+# Edit packages/global-packages/packages/dev-tools/root-configs/.prettierignore
+# project:bootstrap copies this to the host repo root.
+
 # Ignore artifacts:
 dist
 example
 vendor
 source-codes
+
+# Generated from theme-config/ via npm run theme-json:merge — keep merge output byte-stable.
+theme.json
 
 # Ignore test fixtures
 tests/**/input.html

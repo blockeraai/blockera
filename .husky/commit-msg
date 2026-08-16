@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+# Edit packages/global-packages/packages/dev-tools/root-configs/.husky/commit-msg
+# project:bootstrap copies this to the host .husky/ folder.
 
 commit_message="$1"
 # exit with a non zero exit code incase of an invalid commit message

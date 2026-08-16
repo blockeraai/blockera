@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Coding Standards for Blockera Core Packages">
-    <description>Consumer ruleset: shared Blockera PHPCS + plugin text_domain and scan roots.</description>
+<!-- Edit packages/global-packages/packages/dev-tools/root-configs/phpcs.xml -->
+<!-- project:bootstrap copies this to the host repo root and fills the project id. -->
+<ruleset name="WordPress Coding Standards for blockera">
+    <description>Consumer ruleset: shared Blockera PHPCS + blockera text_domain and scan roots.</description>
 
     <rule ref="./packages/global-packages/packages/dev-tools/php/phpcs.xml"/>
 
-    <config name="text_domain" value="blockera,default"/>
+    <config name="text_domain" value="blockera,blockera,default"/>
     <file>./packages</file>
 
-    <!-- Cache path is relative to this consumer ruleset (project root). -->
     <arg name="cache" value=".cache/phpcs.json"/>
 </ruleset>

@@ -1,4 +1,5 @@
 // @flow
+// Edit packages/global-packages/packages/dev-tools/root-configs/flow/TypeScriptModule.js.flow
 // Stub for TypeScript modules imported from Flow-typed JS files.
 // Flow cannot parse TypeScript, so we provide a generic stub.
 declare module.exports: any;

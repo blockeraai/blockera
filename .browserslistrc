@@ -1,3 +1,3 @@
-# Shared Blockera Browserslist (source of truth in @blockera/dev-tools).
-# Consumers keep a real root .browserslistrc copy of this file.
+# Edit packages/global-packages/packages/dev-tools/root-configs/.browserslistrc
+# project:bootstrap copies this to the host repo root.
 extends @wordpress/browserslist-config

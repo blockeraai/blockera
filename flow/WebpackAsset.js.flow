@@ -1,3 +1,4 @@
 // @flow
+// Edit packages/global-packages/packages/dev-tools/root-configs/flow/WebpackAsset.js.flow
 
 declare module.exports: string;

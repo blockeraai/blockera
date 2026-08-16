@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+# Edit packages/global-packages/packages/dev-tools/root-configs/.husky/pre-push
+# project:bootstrap copies this to the host .husky/ folder.
 . "$(dirname -- "$0")/_/husky.sh"
 
 # Ensure pinned global-packages SHAs exist on origin before pushing this repo.

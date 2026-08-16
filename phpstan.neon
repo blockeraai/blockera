@@ -1,2 +1,4 @@
+# Edit packages/global-packages/packages/dev-tools/root-configs/phpstan.neon
+# project:bootstrap copies this to the host repo root.
 includes:
 	- packages/global-packages/packages/dev-tools/php/phpstan.neon
