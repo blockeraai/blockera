@@ -6,6 +6,9 @@ dist
 example
 vendor
 source-codes
+Scratch
+artifacts
+test-results
 
 # Generated from theme-config/ via npm run theme-json:merge — keep merge output byte-stable.
 theme.json
