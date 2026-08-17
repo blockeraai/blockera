@@ -11,6 +11,11 @@ concurrency:
 
 env:
     VISUAL_SNAPSHOT_BATCH_SIZE: '15'
+    BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+    BLOCKERA_PLAYWRIGHT_SCAN_ROOTS: packages,tests
+    BLOCKERA_PLAYWRIGHT_GENERAL_CATEGORY: general-1
+    BLOCKERA_PLAYWRIGHT_MU_PLUGIN_PREFIX: wp-content/plugins/blockera/
+    BLOCKERA_PLAYWRIGHT_VISUAL_SPEC: tests/visual.block-screenshots.ply.js
 
 jobs:
     detect_categories:
@@ -19,8 +24,6 @@ jobs:
         timeout-minutes: 10
         outputs:
             categories: ${{ steps.detect.outputs.categories }}
-        env:
-            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
             - uses: actions/checkout@v5
               with:
@@ -45,7 +48,6 @@ jobs:
             matrix:
                 category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
         env:
-            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
             BLOCKERA_PLAYWRIGHT_CATEGORY: ${{ matrix.category }}
         steps:
             - uses: actions/checkout@v5
