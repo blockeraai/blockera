@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75577e89052b644546ab298c018f6636",
+    "content-hash": "9a31d81633f0f563b790bf1955db03c9",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -417,6 +417,35 @@
                 }
             },
             "description": "Handles version plugin compatibility checking between Blockera and Blockera Pro plugins to ensure proper functionality",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/products",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/global-packages/packages/products",
+                "reference": "b2a7a7fa544181705a3d5e245b32ac6813496fa1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Products\\": "php/"
+                },
+                "files": [
+                    "php/functions.php",
+                    "php/hooks.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Blockera\\Products\\Tests\\": "php/tests/"
+                }
+            },
+            "description": "The Blockera products details registry, providing an object store api and localization for javascript consumers.",
             "transport-options": {
                 "symlink": true,
                 "relative": true

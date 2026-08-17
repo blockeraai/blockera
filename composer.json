@@ -39,6 +39,7 @@
 		"blockera/icons": "*",
 		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
+		"blockera/products": "*",
 		"blockera/storage": "*",
 		"blockera/global-styles-ui": "*",
 		"blockera/utils": "*",

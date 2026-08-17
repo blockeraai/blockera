@@ -13,6 +13,7 @@ return [
 	'editor' => [
 		'list'      => [
 			'utils',
+			'products',
 			'storage',
 			'classnames',
 			'icons',
@@ -40,6 +41,7 @@ return [
 	'admin'  => [
 		'list'      => [
 			'utils',
+			'products',
 			'storage',
 			'classnames',
 			'icons',
