@@ -1,5 +1,5 @@
 # Shared Blockera EditorConfig (source of truth in @blockera/dev-tools).
-# Consumers keep a real root .editorconfig copy of this file (synced with global-packages).
+# project:bootstrap copies this to the host repo root as `.editorconfig`.
 # EditorConfig has no extends/include.
 root = true
 
