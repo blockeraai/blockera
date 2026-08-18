@@ -49,5 +49,7 @@ jobs:
 
             - if: matrix.setup == 'php'
               uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-php
+              with:
+                  composer-options: ''
 
             - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/code-lint/${{ matrix.suite }}.sh
