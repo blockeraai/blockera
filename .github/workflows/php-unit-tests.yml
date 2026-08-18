@@ -51,6 +51,7 @@ jobs:
             WP_ENV_CORE: ${{ matrix.wordpress == '' && 'https://wordpress.org/wordpress-latest.zip' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
             BLOCKERA_PHP_UNIT_PHP_VERSION: ${{ matrix.php }}
             BLOCKERA_PHP_UNIT_MULTISITE: ${{ matrix.multisite }}
+            BLOCKERA_PHP_UNIT_MIN_TESTS: '35'
         steps:
             - uses: actions/checkout@v5
               with:
