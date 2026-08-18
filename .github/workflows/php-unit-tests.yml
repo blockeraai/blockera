@@ -64,6 +64,5 @@ jobs:
             - uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-php
               with:
                   php-version: ${{ matrix.php }}
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
 
             - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/php-unit-tests/run.sh
