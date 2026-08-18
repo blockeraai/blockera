@@ -6170,12 +6170,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/entity-command.git",
-                "reference": "44d584bb85ab47c71f191d4873358b932a2c6c41"
+                "reference": "5dc9619ecf4f11f30b6b61926eb61ad56ee216a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/entity-command/zipball/44d584bb85ab47c71f191d4873358b932a2c6c41",
-                "reference": "44d584bb85ab47c71f191d4873358b932a2c6c41",
+                "url": "https://api.github.com/repos/wp-cli/entity-command/zipball/5dc9619ecf4f11f30b6b61926eb61ad56ee216a1",
+                "reference": "5dc9619ecf4f11f30b6b61926eb61ad56ee216a1",
                 "shasum": ""
             },
             "require": {
@@ -6457,7 +6457,7 @@
                 "issues": "https://github.com/wp-cli/entity-command/issues",
                 "source": "https://github.com/wp-cli/entity-command/tree/main"
             },
-            "time": "2026-08-17T12:44:13+00:00"
+            "time": "2026-08-17T20:35:48+00:00"
         },
         {
             "name": "wp-cli/eval-command",
@@ -7810,12 +7810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli-bundle.git",
-                "reference": "18e39e06610d314e43e274ad1ad6ede7111d1bbf"
+                "reference": "3cac37f1820e9d280294efa175cb3575df132805"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/18e39e06610d314e43e274ad1ad6ede7111d1bbf",
-                "reference": "18e39e06610d314e43e274ad1ad6ede7111d1bbf",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/3cac37f1820e9d280294efa175cb3575df132805",
+                "reference": "3cac37f1820e9d280294efa175cb3575df132805",
                 "shasum": ""
             },
             "require": {
@@ -7881,7 +7881,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli-bundle/issues",
                 "source": "https://github.com/wp-cli/wp-cli-bundle"
             },
-            "time": "2026-08-17T10:09:06+00:00"
+            "time": "2026-08-18T05:09:29+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",
@@ -8136,5 +8136,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
