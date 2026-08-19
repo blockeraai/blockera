@@ -650,11 +650,11 @@ h6{
 	border-color:var(--wp--preset--color--accent-6);
 }
 
-:root :where(.wp-block-search .wp-element-button,.wp-block-search .wp-block-button__link){
+:root :where(.wp-block-search .wp-element-button, .wp-block-search .wp-block-button__link){
 	border-radius: 3.125rem;
 	margin-left: 1.125rem;
 }
 
-:root :where(.wp-block-search .wp-element-button:hover,.wp-block-search .wp-block-button__link:hover){
+:root :where(.wp-block-search .wp-element-button:hover, .wp-block-search .wp-block-button__link:hover){
 	border-color: transparent;
 }
