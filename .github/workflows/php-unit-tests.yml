@@ -10,8 +10,30 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
+    pr-workflow-gate:
+        name: PR workflow filter
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.gate.outputs.run }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: gate
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
+              with:
+                  workflow-file: php-unit-tests.yml
+
     compute-previous-wordpress-version:
         name: Compute previous WordPress version
+        needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
         runs-on: ubuntu-latest
         timeout-minutes: 30
         outputs:
@@ -31,10 +53,10 @@ jobs:
 
     test-php:
         name: PHP ${{ matrix.php }}${{ matrix.multisite && ' multisite' || '' }}${{ matrix.wordpress != '' && format( ' (WP {0}) ', matrix.wordpress ) || '' }} on ubuntu-latest
-        needs: compute-previous-wordpress-version
+        needs: [pr-workflow-gate, compute-previous-wordpress-version]
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request') }}
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: true
             matrix:
