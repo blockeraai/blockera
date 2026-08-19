@@ -47,6 +47,40 @@ function camelCaseDashes(str) {
 	});
 }
 
+const PERF_DIFF_FASTER_COLOR = '#00b000';
+const PERF_DIFF_SLOWER_COLOR = '#e60100';
+
+/**
+ * Color a Diff ms / Diff % cell when `|deltaPercent|` exceeds the threshold.
+ * Negative (faster) is green; positive (slower) is red. Passing rows and
+ * missing percents are left unchanged.
+ *
+ * @param {string} text Cell text.
+ * @param {number|null|undefined} deltaPercent Percent change (Blockera − baseline).
+ * @param {number} thresholdPercent Scenario threshold.
+ * @return {string} Plain or HTML-wrapped cell.
+ */
+function formatThresholdDiffCell(text, deltaPercent, thresholdPercent) {
+	if (
+		text === '' ||
+		deltaPercent === null ||
+		deltaPercent === undefined ||
+		Number.isNaN(deltaPercent) ||
+		typeof thresholdPercent !== 'number'
+	) {
+		return text;
+	}
+
+	if (Math.abs(deltaPercent) <= thresholdPercent) {
+		return text;
+	}
+
+	const color =
+		deltaPercent < 0 ? PERF_DIFF_FASTER_COLOR : PERF_DIFF_SLOWER_COLOR;
+
+	return `<span style="color:${color}"><strong>${text}</strong></span>`;
+}
+
 /**
  * @param {Array<Object>} rows
  * @return {string} Markdown table.
@@ -274,6 +308,7 @@ module.exports = {
 	sum,
 	camelCaseDashes,
 	formatAsMarkdownTable,
+	formatThresholdDiffCell,
 	formatValue,
 	standardDeviation,
 	medianAbsoluteDeviation,
