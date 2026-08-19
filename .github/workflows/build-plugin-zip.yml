@@ -53,7 +53,7 @@ jobs:
         needs: pr-workflow-gate
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event_name == 'workflow_dispatch') }}
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         outputs:
             next_stable_branch: ${{ steps.get_branches.outputs.next_stable_branch }}
         env:
@@ -90,7 +90,7 @@ jobs:
                   )
                 )
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         outputs:
             changelog: ${{ steps.update_packages.outputs.changelog }}
             old_version: ${{ steps.get_version.outputs.old_version }}
@@ -160,7 +160,7 @@ jobs:
                   github.repository == 'blockeraai/blockera'
                 )
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         outputs:
             job_status: ${{ job.status }}
         env:
@@ -198,7 +198,7 @@ jobs:
                 ( needs.build.outputs.job_status == 'failure' ) &&
                 needs.bump-version.outputs.release_branch_commit
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         env:
             BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
@@ -239,7 +239,7 @@ jobs:
         needs: [pr-workflow-gate, bump-version, build]
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         env:
             BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:

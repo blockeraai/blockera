@@ -43,7 +43,7 @@ jobs:
         needs: pr-workflow-gate
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
         runs-on: ubuntu-latest
-        timeout-minutes: 10
+        timeout-minutes: 60
         outputs:
             categories: ${{ steps.detect.outputs.categories }}
         steps:
@@ -64,7 +64,7 @@ jobs:
         needs: [pr-workflow-gate, detect_categories]
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request') }}
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         strategy:
             fail-fast: false
             matrix:

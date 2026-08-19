@@ -30,7 +30,7 @@ jobs:
         needs: pr-workflow-gate
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         outputs:
             release_branch: ${{ steps.get_release_branch.outputs.release_branch }}
         env:
@@ -53,7 +53,7 @@ jobs:
         needs: [pr-workflow-gate, get-release-branch]
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (!github.event.release.prerelease && github.event.release.assets[0]) }}
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         environment: wp.org plugin
         env:
             BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
