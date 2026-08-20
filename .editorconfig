@@ -1,6 +1,5 @@
-# Shared Blockera EditorConfig (source of truth in @blockera/dev-tools).
-# project:bootstrap copies this to the host repo root as `.editorconfig`.
-# EditorConfig has no extends/include.
+# Edit packages/global-packages/packages/dev-tools/root-configs/.editorconfig
+# project:bootstrap copies this to the host repo root.
 root = true
 
 [*]
