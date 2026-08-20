@@ -2,7 +2,6 @@
 	background-color: #ffd7d7;
 	transition: all 500ms ease 0ms;
 	width: 300px;
-	aspect-ratio: 9/16;
 	object-fit: cover;
 	padding: 20px 20px 20px 20px;
 }
@@ -10,19 +9,20 @@
 .blockera-block.blockera-block-1.wp-block-post-featured-image img {
 	border: 3px solid #ff0000;
 	border-radius: 50px;
+	aspect-ratio: 9/16;
 }
 
 @media screen and (max-width: 478px) and (min-width: 0px) {
-	.blockera-block.blockera-block-1.wp-block-post-featured-image {
+	.blockera-block.blockera-block-1.wp-block-post-featured-image img {
 		aspect-ratio: 1;
+		border-radius: 10px;
+	}
+
+	.blockera-block.blockera-block-1.wp-block-post-featured-image {
 		width: 200px;
 		display: flex !important;
 		flex-direction: column;
 		gap: 20px;
-	}
-
-	.blockera-block.blockera-block-1.wp-block-post-featured-image img {
-		border-radius: 10px;
 	}
 
 }
