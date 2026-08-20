@@ -99,10 +99,6 @@ playwright-env.json
 # includes directory
 inc
 cypress.env.json
-.pr-github-playground.example.json
-.pr-cypress.env.json
-.pr-playwright.env.json
-.pr-workflows.json
 visual-screenshots/diff
 visual-screenshots/comparison
 cypress-image-diff-html-report
@@ -110,9 +106,6 @@ html-report
 cypress/downloads
 Scratch
 .jest-test-results.json
-
-# .github some subdirectories
-.github/wp-env-configs/development.json
 
 # development helper folders
 .cursor
