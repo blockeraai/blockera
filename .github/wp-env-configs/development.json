@@ -1,10 +1,6 @@
 {
 	"core": "https://wordpress.org/wordpress-latest.zip",
-	"plugins": [
-		".",
-		"../blockera-pro",
-		"https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"
-	],
+	"plugins": [".", "../blockera-pro"],
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
 		"WP_DEBUG": true,
