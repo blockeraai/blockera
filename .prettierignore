@@ -14,5 +14,11 @@ test-results
 theme.json
 
 # Ignore test fixtures
-tests/**/input.html
-tests/**/*.css
+tests/fixtures/**/input.html
+tests/fixtures/**/output.html
+tests/fixtures/**/*.css
+
+# Ignore theme patterns and templates files
+templates/**/*.html
+patterns/**/*.php
+
