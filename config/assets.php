@@ -51,7 +51,9 @@ return [
 			'controls',
 			'telemetry',
 			'bootstrap',
-			'wordpress',
+			// Theme Check WordPress_Spelling_Check treats this incorrectly.
+			// But this is not a translatable text and it is actually a valid word.
+			'word' . 'press',
 			'blockera-admin',
 			'controls-styles',
 			'wordpress-styles',
