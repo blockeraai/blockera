@@ -48,7 +48,7 @@
 	"prettier.requireConfig": true,
 	"prettier.resolveGlobalModules": false,
 	"prettier.documentSelectors": [
-		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml,svg,xml}"
+		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml,svg,xml,html}"
 	],
 	"prettier.useEditorConfig": false,
 	"prettier.ignorePath": ".prettierignore",
