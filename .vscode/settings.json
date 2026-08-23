@@ -13,7 +13,7 @@
 	"less.validate": false,
 	"stylelint.enable": true,
 	"stylelint.validate": ["css", "scss", "less"],
-	"stylelint.configFile": ".stylelintrc.js",
+	"stylelint.configFile": "${workspaceFolder}/.stylelintrc.js",
 	"stylelint.snippet": ["css", "scss", "less"],
 	"files.associations": {
 		"*.scss": "scss",
