@@ -10,14 +10,16 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+
+/**
+ * Get the Blockera logo as a base64 encoded string.
+ * Because the logo is a SVG file, and base64 to make sure it inherits color in the menu.
+ * 
+ * @return string
+ */
 ob_start();
-
-include BLOCKERA_SB_PATH . 'assets/menu-logo.svg';
-
-global $blockera_logo;
-
-$blockera_logo = ob_get_clean();
-$blockera_logo = base64_encode($blockera_logo);
+require BLOCKERA_SB_PATH . 'assets/menu-logo.base64.svg';
+$blockera_logo = 'data:image/svg+xml;base64,' . ob_get_clean();
 
 return apply_filters(
     'blockera.config.menu',
@@ -27,7 +29,7 @@ return apply_filters(
         'capability' => 'manage_options',
         'menu_slug'  => 'blockera-settings-dashboard',
         'callback'   => 'blockera_settings_page_template',
-        'icon_url'   => 'data:image/svg+xml;base64,' . $blockera_logo,
+        'icon_url'   => $blockera_logo,
         'submenus'   => [
             'dashboard'        => [
                 'page_title' => __('Blockera Dashboard', 'blockera'),
