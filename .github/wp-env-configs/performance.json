@@ -9,7 +9,9 @@
 		"SCRIPT_DEBUG": false,
 		"WP_DEBUG": false,
 		"WP_DEBUG_DISPLAY": false,
-		"SAVEQUERIES": false
+		"SAVEQUERIES": false,
+		"WP_MEMORY_LIMIT": "256M",
+		"WP_MAX_MEMORY_LIMIT": "256M"
 	},
 	"mappings": {
 		"wp-content/mu-plugins": "./packages/global-packages/packages/dev-tools/github/performance/mu-plugins"
