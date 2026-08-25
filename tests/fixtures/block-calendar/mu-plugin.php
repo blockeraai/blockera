@@ -86,6 +86,7 @@ function blockera_get_calendar_static_output() {
 				<td>13</td>
 				<td><a href="https://site-blockera.test/?m=20251114"
 						aria-label="Posts published on November 14, 2025">14</a></td>
+				<td>15</td>
 				<td><a href="https://site-blockera.test/?m=20251116"
 						aria-label="Posts published on November 16, 2025">16</a></td>
 			</tr>
