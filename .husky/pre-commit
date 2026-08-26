@@ -6,4 +6,8 @@
 npx lint-staged
 
 # TypeScript + Flow when JS/TS is staged. Skip: BLOCKERA_SKIP_TYPECHECK=1
-bash "$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/run-typecheck-pre-commit.sh"
+# Skip when the submodule pin predates this script (e.g. a master rewind).
+TYPECHECK_SH="$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/run-typecheck-pre-commit.sh"
+if [ -f "${TYPECHECK_SH}" ]; then
+	bash "${TYPECHECK_SH}"
+fi

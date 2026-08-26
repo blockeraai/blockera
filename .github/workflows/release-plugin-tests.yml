@@ -28,7 +28,7 @@ jobs:
             - id: gate
               uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
               with:
-                  workflow-file: build-plugin-zip-tests.yml
+                  workflow-file: release-plugin-tests.yml
 
     build_tests:
         name: Building and Run E2E Tests (PHP ${{ matrix.php }})

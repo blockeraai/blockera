@@ -4,8 +4,39 @@
  * This file is automatically loaded by WordPress on every request.
  * Allows the original render function to run, then replaces the output with static HTML.
  *
+ * Visual snapshots paste the fixture through the editor, which remints `blockeraId`.
+ * The static table keeps deterministic dates, but the unique `blockera-block-{id}`
+ * class is copied from the live render so generated CSS still matches.
+ *
  * @phpstan-ignore-next-line
  */
+
+/**
+ * Unique Blockera class from saved attrs or live markup (`blockera-block-{id}`).
+ *
+ * @param string $block_content Rendered calendar HTML before this filter.
+ * @param array  $block         Parsed block.
+ * @return string Class token, e.g. `blockera-block-1`.
+ */
+function blockera_calendar_unique_blockera_class( $block_content, $block ) {
+	$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+	$class_name = isset( $attrs['className'] ) ? (string) $attrs['className'] : '';
+
+	// Style engine unique selector comes from className, then blockeraId.
+	if ( preg_match( '/\b(blockera-block-[\w-]+)\b/', $class_name, $match ) ) {
+		return $match[1];
+	}
+
+	if ( ! empty( $attrs['blockeraId'] ) && is_string( $attrs['blockeraId'] ) ) {
+		return 'blockera-block-' . $attrs['blockeraId'];
+	}
+
+	if ( is_string( $block_content ) && preg_match( '/\b(blockera-block-[\w-]+)\b/', $block_content, $match ) ) {
+		return $match[1];
+	}
+
+	return 'blockera-block-1';
+}
 
 /**
  * Get the static HTML output embedded in this file.
@@ -106,13 +137,18 @@ HTML;
  * @return string Modified block content.
  */
 function blockera_replace_calendar_block_output( $block_content, $block, $instance ) {
-	// Check if this is a calendar block
-	if ( isset( $block['blockName'] ) && 'core/calendar' === $block['blockName'] ) {
-		// Replace the rendered output with static HTML
-		return blockera_get_calendar_static_output();
+	if ( ! isset( $block['blockName'] ) || 'core/calendar' !== $block['blockName'] ) {
+		return $block_content;
 	}
-	
-	return $block_content;
+
+	$html   = blockera_get_calendar_static_output();
+	$unique = blockera_calendar_unique_blockera_class( $block_content, $block );
+
+	if ( 'blockera-block-1' !== $unique ) {
+		$html = preg_replace( '/\bblockera-block-1\b/', $unique, $html, 1 );
+	}
+
+	return $html;
 }
 
 // Hook into render_block filter to replace output after original render runs
