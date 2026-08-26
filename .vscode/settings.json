@@ -1,9 +1,9 @@
 {
 	"files.eol": "\n",
 	"cSpell.customDictionaries": {
-		"custom-dictionary-folder-blockera": {
-			"name": "custom-dictionary-folder-blockera",
-			"path": "${workspaceFolder:blockera}/.cspell/custom-dictionary-folder-blockera.txt",
+		"blockera": {
+			"name": "blockera",
+			"path": "${workspaceFolder}/.cspell/words.txt",
 			"addWords": true,
 			"scope": "folder"
 		}
@@ -13,7 +13,7 @@
 	"less.validate": false,
 	"stylelint.enable": true,
 	"stylelint.validate": ["css", "scss", "less"],
-	"stylelint.configFile": ".stylelintrc.js",
+	"stylelint.configFile": "${workspaceFolder}/.stylelintrc.js",
 	"stylelint.snippet": ["css", "scss", "less"],
 	"files.associations": {
 		"*.scss": "scss",
@@ -43,10 +43,12 @@
 		"editor.formatOnSave": true
 	},
 	"prettier.enable": true,
+	"prettier.prettierPath": "./node_modules/prettier",
 	"prettier.configPath": ".prettierrc.js",
 	"prettier.requireConfig": true,
+	"prettier.resolveGlobalModules": false,
 	"prettier.documentSelectors": [
-		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml,svg,xml}"
+		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml,svg,xml,html}"
 	],
 	"prettier.useEditorConfig": false,
 	"prettier.ignorePath": ".prettierignore",

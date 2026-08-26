@@ -46,8 +46,14 @@ if [ -z "$NO_CHECKS" ]; then
 
 	# Do a dry run of the repository reset. Prompting the user for a list of all
 	# files that will be removed should prevent them from losing important files!
+	#
+	# Keep the sparse global-packages submodule working tree intact.
 	status "Resetting the repository to pristine condition. ✨"
-	to_clean=$(git clean -xdf --dry-run)
+	git_clean_excludes=(
+		--exclude=packages/global-packages
+		--exclude=packages/global-packages/**
+	)
+	to_clean=$(git clean -xdf --dry-run "${git_clean_excludes[@]}")
 	if [ ! -z "$to_clean" ]; then
 		echo $to_clean
 		warning "🚨 About to delete everything above! Is this okay? 🚨"
@@ -57,7 +63,7 @@ if [ -z "$NO_CHECKS" ]; then
 			# Remove ignored files to reset repository to pristine condition. Previous
 			# test ensures that changed files abort the plugin build.
 			status "Cleaning working directory... 🛀"
-			git clean -xdf
+			git clean -xdf "${git_clean_excludes[@]}"
 		else
 			error "Fair enough; aborting. Tidy up your repo and try again. 🙂"
 			exit 1
@@ -81,52 +87,110 @@ fi
 status "Generating build... 🗂"
 npm run build
 
+# Shared packages live in packages/global-packages/packages and are consumed via
+# Composer path repos under vendor/blockera/*. Prefer vendor for packaging.
+resolve_shared_package_file () {
+	local relative_path="$1"
+	local candidate
+	for candidate in \
+		"vendor/blockera/${relative_path}" \
+		"packages/global-packages/packages/${relative_path}"
+	do
+		if [ -f "${candidate}" ]; then
+			php -r 'echo realpath($argv[1]);' "${candidate}"
+			return 0
+		fi
+	done
+	return 1
+}
+
+strip_dev_only_local_experimental_config () {
+	local input_file="$1"
+	local output_file="$2"
+
+	php -r '
+		$in = $argv[1];
+		$out = $argv[2];
+		$c = file_get_contents($in);
+		if ($c === false) { fwrite(STDERR, "Failed to read: $in\n"); exit(1); }
+		$re = "/^[ \\t]*### BEGIN DEV-ONLY LOCAL EXPERIMENTAL CONFIG\\R[\\s\\S]*?^[ \\t]*### END DEV-ONLY LOCAL EXPERIMENTAL CONFIG\\R?/m";
+		$c2 = preg_replace($re, "", $c);
+		if ($c2 === null) { fwrite(STDERR, "preg_replace failed for: $in\n"); exit(1); }
+		if (file_put_contents($out, $c2) === false) { fwrite(STDERR, "Failed to write: $out\n"); exit(1); }
+	' "$input_file" "$output_file"
+}
+
+# Track temporary production edits so cleanup can always restore them
+# (env package is no longer in this git repo).
+ZIP_BUILD_BACKUPS=()
+restore_zip_build_backups () {
+	local backup
+	local original
+	for backup in "${ZIP_BUILD_BACKUPS[@]:-}"; do
+		[ -n "${backup}" ] || continue
+		original="${backup%.zip-build.bak}"
+		if [ -f "${backup}" ]; then
+			mv -f "${backup}" "${original}"
+		fi
+	done
+	ZIP_BUILD_BACKUPS=()
+}
+trap restore_zip_build_backups EXIT
+
+backup_and_replace () {
+	local target_file="$1"
+	local next_file="$2"
+
+	cp "${target_file}" "${target_file}.zip-build.bak"
+	ZIP_BUILD_BACKUPS+=("${target_file}.zip-build.bak")
+	mv "${next_file}" "${target_file}"
+}
 
 # Temporarily modify `blockera.php` with production constants defined.
 # Use a temp file because `bin/generate-blockera-php.php` reads from `blockera.php`
 # so we need to avoid writing to that file at the same time.
 status "Generating blockera.php 📝"
 php bin/generate-blockera-php.php > blockera.tmp.php
-mv blockera.tmp.php blockera.php
-
+backup_and_replace "blockera.php" "blockera.tmp.php"
 
 # Temporarily modify `readme.txt`.
 # Use a temp file because `bin/generate-readme-txt.php` reads from `readme.txt`
 # so we need to avoid writing to that file at the same time.
 status "Generating readme.txt 📝"
 php bin/generate-readme-txt.php > readme.tmp.txt
-mv readme.tmp.txt readme.txt
-
-strip_dev_only_local_experimental_config () {
-  local input_file="$1"
-  local output_file="$2"
-
-  php -r '
-    $in = $argv[1];
-    $out = $argv[2];
-    $c = file_get_contents($in);
-    if ($c === false) { fwrite(STDERR, "Failed to read: $in\n"); exit(1); }
-    $re = "/^[ \\t]*### BEGIN DEV-ONLY LOCAL EXPERIMENTAL CONFIG\\R[\\s\\S]*?^[ \\t]*### END DEV-ONLY LOCAL EXPERIMENTAL CONFIG\\R?/m";
-    $c2 = preg_replace($re, "", $c);
-    if ($c2 === null) { fwrite(STDERR, "preg_replace failed for: $in\n"); exit(1); }
-    if (file_put_contents($out, $c2) === false) { fwrite(STDERR, "Failed to write: $out\n"); exit(1); }
-  ' "$input_file" "$output_file"
-}
+backup_and_replace "readme.txt" "readme.tmp.txt"
 
 status "Stripping dev-only local experimental config 🧽"
 strip_dev_only_local_experimental_config "config/panel.php" "config/panel.tmp.php"
-mv "config/panel.tmp.php" "config/panel.php"
+backup_and_replace "config/panel.php" "config/panel.tmp.php"
 
-strip_dev_only_local_experimental_config "packages/env/php/functions.php" "packages/env/php/functions.tmp.php"
-mv "packages/env/php/functions.tmp.php" "packages/env/php/functions.php"
-
+ENV_FUNCTIONS_FILE="$(resolve_shared_package_file "env/php/functions.php" || true)"
+if [ -z "${ENV_FUNCTIONS_FILE}" ]; then
+	error "ERROR: Could not find env/php/functions.php under vendor/blockera or packages/global-packages/packages."
+	exit 1
+fi
+status "Using env functions at ${ENV_FUNCTIONS_FILE}"
+strip_dev_only_local_experimental_config "${ENV_FUNCTIONS_FILE}" "${ENV_FUNCTIONS_FILE}.tmp"
+backup_and_replace "${ENV_FUNCTIONS_FILE}" "${ENV_FUNCTIONS_FILE}.tmp"
 
 # Temporary copy some PHP files into "inc" directory.
 status "Generating inc/app.php 📝"
 mkdir -p "inc"
-cp packages/blockera/php/app.php inc/app.php
-cp packages/autoloader-coordinator/class-shared-autoload-coordinator.php inc/class-shared-autoload-coordinator.php
-cp packages/autoloader-coordinator/bootstrap.php inc/bootstrap.php
+APP_PHP_FILE="$(resolve_shared_package_file "blockera/php/app.php" || true)"
+if [ -z "${APP_PHP_FILE}" ]; then
+	error "ERROR: Could not find blockera/php/app.php under vendor/blockera or packages/global-packages/packages."
+	exit 1
+fi
+cp "${APP_PHP_FILE}" inc/app.php
+
+COORDINATOR_BOOTSTRAP="$(resolve_shared_package_file "autoloader-coordinator/bootstrap.php" || true)"
+COORDINATOR_CLASS="$(resolve_shared_package_file "autoloader-coordinator/class-shared-autoload-coordinator.php" || true)"
+if [ -z "${COORDINATOR_BOOTSTRAP}" ] || [ -z "${COORDINATOR_CLASS}" ]; then
+	error "ERROR: Could not find autoloader-coordinator under vendor/blockera or packages/global-packages/packages."
+	exit 1
+fi
+cp "${COORDINATOR_CLASS}" inc/class-shared-autoload-coordinator.php
+cp "${COORDINATOR_BOOTSTRAP}" inc/bootstrap.php
 
 build_files=$(
 	ls dist/*/*.{min.js,min.css,asset.php} \
@@ -163,15 +227,12 @@ zip -r -q blockera.zip \
   && echo "blockera.zip created successfully ✅" || echo "blockera.zip creation failed ❌"
 
 status "Cleaning up... 🧹"
+restore_zip_build_backups
+trap - EXIT
 
-# Reset `blockera.php`.
-git checkout blockera.php
-
-# Reset `readme.txt`.
-git checkout readme.txt
-
-# Reset stripped files.
-git checkout config/panel.php
-git checkout packages/env/php/functions.php
+# Drop generated main-file copy when a custom suffix was used.
+if [ -n "${MAIN_FILE_SUFFIX:-}" ] && [ -f "${main_plugin_file}" ] && [ "${main_plugin_file}" != "blockera.php" ]; then
+	rm -f "${main_plugin_file}"
+fi
 
 success "Done ✅ You've built Blockera! 🎉 "

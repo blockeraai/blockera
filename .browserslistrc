@@ -1,1 +1,3 @@
+# Edit packages/global-packages/packages/dev-tools/root-configs/.browserslistrc
+# project:bootstrap copies this to the host repo root.
 extends @wordpress/browserslist-config

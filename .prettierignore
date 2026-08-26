@@ -1,10 +1,23 @@
+# Edit packages/global-packages/packages/dev-tools/root-configs/.prettierignore
+# project:bootstrap copies this to the host repo root.
+
 # Ignore artifacts:
 dist
 example
 vendor
-source-code-block-editor
-source-code-wordpress
+source-codes
+Scratch
+artifacts
+test-results
 
-# Ignore test fixtures
-tests/**/input.html
-tests/**/*.css
+# Generated from theme-config/ via npm run theme-json:merge — keep merge output byte-stable.
+theme.json
+
+# Snapshot/fixture HTML uses block-markup prettier (npm run block-markup:prettier), not Prettier on save.
+tests/fixtures/**/*.html
+tests/fixtures/**/*.css
+
+# Ignore theme patterns and templates files
+templates/**/*.html
+patterns/**/*.php
+

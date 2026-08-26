@@ -1,20 +1,4 @@
-parameters:
-	level: 5
-	paths:
-		- packages
-	excludePaths:
-		analyse:
-			- packages/*/tests
-			- packages/*/vendor
-			- packages/*/js
-			- packages/dev-phpunit
-			- packages/bootstrap
-			- vendor
-			- node_modules
-			- dist
-			- tests
-			- source-code-block-editor
-			- source-code-wordpress
-	bootstrapFiles:
-		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
-
+# Edit packages/global-packages/packages/dev-tools/root-configs/phpstan.neon
+# project:bootstrap copies this to the host repo root.
+includes:
+	- packages/global-packages/packages/dev-tools/php/phpstan.neon

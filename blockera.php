@@ -4,7 +4,7 @@
  * Plugin URI: https://blockera.ai/products/site-builder/
  * Description: Blockera Site Builder is transforming the block editor into a powerful page builder by adding responsive blocks, block states, and more.
  * Requires at least: 6.6
- * Tested up to: 7.0
+ * Tested up to: 7.1
  * Requires PHP: 7.4
  * Requires at least blockera-pro: 1.1.1
  * Author: Blockera AI
@@ -24,7 +24,7 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-require_once __DIR__ . '/packages/autoloader-coordinator/bootstrap.php';
+require_once __DIR__ . '/packages/global-packages/packages/autoloader-coordinator/bootstrap.php';
 blockera_bootstrap_shared_autoloader(
 	'blockera',
 	__DIR__,
@@ -184,7 +184,7 @@ function blockera_init(): void {
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
     }
-    require BLOCKERA_SB_PATH . 'packages/blockera/php/app.php';
+    require BLOCKERA_SB_PATH . 'vendor/blockera/blockera/php/app.php';
     ### END AUTO-GENERATED FRONT CONTROLLERS
 
     /**

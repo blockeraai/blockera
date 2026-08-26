@@ -13,6 +13,7 @@ const {
 	parseFile,
 	median,
 	formatAsMarkdownTable,
+	formatThresholdDiffCell,
 	formatValue,
 	standardDeviation,
 	medianAbsoluteDeviation,
@@ -177,6 +178,8 @@ function main() {
 					metric !== 'wpExtObjCache' &&
 					prevValue !== null &&
 					!Number.isNaN(percentage);
+				const diffAbs = showDiff ? formatValue(metric, delta) : '';
+				const diffPct = showDiff ? `${percentage.toFixed(2)} %` : '';
 
 				rows.push({
 					Metric: metric,
@@ -185,8 +188,16 @@ function main() {
 							? formatValue(metric, prevValue)
 							: 'N/A',
 					Blockera: formatValue(metric, value),
-					'Diff abs.': showDiff ? formatValue(metric, delta) : '',
-					'Diff %': showDiff ? `${percentage.toFixed(2)} %` : '',
+					'Diff abs.': formatThresholdDiffCell(
+						diffAbs,
+						percentage,
+						threshold
+					),
+					'Diff %': formatThresholdDiffCell(
+						diffPct,
+						percentage,
+						threshold
+					),
 					STD: formatValue(metric, standardDeviation(values)),
 					MAD: formatValue(metric, medianAbsoluteDeviation(values)),
 				});
@@ -340,7 +351,7 @@ function buildReport({
 			status = '⏭️ skip';
 		}
 		lines.push(
-			`| ${r.label} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${fmtSigned(r.deltaMs)} | ${fmtSigned(r.deltaPercent, '%')} | ${r.thresholdPercent}% | ${status} |`
+			`| ${r.label} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${r.thresholdPercent}% | ${status} |`
 		);
 	}
 

@@ -1,1 +1,0 @@
-export { ScrollAnimationExtension } from './extension';

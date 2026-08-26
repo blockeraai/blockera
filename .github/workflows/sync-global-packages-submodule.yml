@@ -1,0 +1,174 @@
+name: Sync global-packages submodule
+
+# Automation model:
+# 1) blockera-global-packages notifies this workflow (repository_dispatch)
+# 2) master tip → open/update a bump PR (CI gates the pin)
+# 3) matching feature branch → push pin bump onto that Blockera branch
+# 4) workflow_dispatch + daily schedule for catch-up / manual pins
+#
+# Bootstrap: ./.github/actions/ensure-global-packages (consumer-local).
+# Job logic: packages/global-packages/.../scripts/jobs/sync-global-packages-submodule/
+on:
+    repository_dispatch:
+        types: [global-packages-updated]
+    schedule:
+        - cron: '0 6 * * *'
+    workflow_dispatch:
+        inputs:
+            source_ref:
+                description: 'global-packages branch or SHA to pin'
+                required: true
+                default: 'master'
+            target_branch:
+                description: 'Blockera branch to update (empty = auto)'
+                required: false
+                default: ''
+            mode:
+                description: 'How to land the bump'
+                required: true
+                default: 'auto'
+                type: choice
+                options:
+                    - auto
+                    - pr
+                    - push
+
+concurrency:
+    group: sync-global-packages-${{ github.event.client_payload.branch || github.event.inputs.source_ref || 'master' }}
+    cancel-in-progress: true
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    pr-workflow-gate:
+        name: PR workflow filter
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.gate.outputs.run }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: gate
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
+              with:
+                  workflow-file: sync-global-packages-submodule.yml
+
+    sync:
+        name: Bump packages/global-packages pin
+        needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.repository == 'blockeraai/blockera') }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            GP_SCRIPTS: packages/global-packages/packages/dev-tools/github/scripts
+            GP_SYNC_JOB: packages/global-packages/packages/dev-tools/github/scripts/jobs/sync-global-packages-submodule
+        steps:
+            - name: Checkout repository (bootstrap action)
+              uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - name: Resolve sync targets
+              id: targets
+              env:
+                  EVENT_NAME: ${{ github.event_name }}
+                  DISPATCH_SHA: ${{ github.event.client_payload.sha }}
+                  DISPATCH_BRANCH: ${{ github.event.client_payload.branch }}
+                  DISPATCH_MESSAGE: ${{ github.event.client_payload.message }}
+                  INPUT_SOURCE_REF: ${{ github.event.inputs.source_ref }}
+                  INPUT_TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
+                  INPUT_MODE: ${{ github.event.inputs.mode }}
+              run: bash "${GP_SYNC_JOB}/resolve-targets.sh"
+
+            # Feature branches may not have the latest toolkit/action yet — stash
+            # helpers + bootstrap action from this checkout before switching.
+            - name: Stash sync helpers and bootstrap action
+              if: ${{ steps.targets.outputs.skip_sync != 'true' }}
+              run: |
+                  mkdir -p "$RUNNER_TEMP/blockera-sync-gp-scripts"
+                  mkdir -p "$RUNNER_TEMP/blockera-sync-gp-ensure-action"
+                  cp "${GP_SCRIPTS}/bump-global-packages-submodule.sh" \
+                    "${GP_SYNC_JOB}/resolve-targets.sh" \
+                    "${GP_SYNC_JOB}/run-bump.sh" \
+                    "${GP_SYNC_JOB}/commit-bump.sh" \
+                    "${GP_SYNC_JOB}/open-or-update-pr.sh" \
+                    "$RUNNER_TEMP/blockera-sync-gp-scripts/"
+                  chmod +x "$RUNNER_TEMP/blockera-sync-gp-scripts/"*
+                  cp -R .github/actions/ensure-global-packages/. \
+                    "$RUNNER_TEMP/blockera-sync-gp-ensure-action/"
+
+            - name: Checkout target branch
+              id: checkout
+              if: ${{ steps.targets.outputs.skip_sync != 'true' }}
+              uses: actions/checkout@v5
+              with:
+                  ref: ${{ steps.targets.outputs.target_branch }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+              continue-on-error: true
+
+            - name: Skip when target branch is missing
+              if: ${{ steps.targets.outputs.skip_sync != 'true' && steps.checkout.outcome != 'success' }}
+              run: |
+                  echo "Target branch '${{ steps.targets.outputs.target_branch }}' does not exist; skipping submodule sync."
+                  echo "skip=true" >> "$GITHUB_ENV"
+
+            - name: Restore bootstrap ensure action on target branch
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
+              run: |
+                  mkdir -p .github/actions/ensure-global-packages
+                  cp -R "$RUNNER_TEMP/blockera-sync-gp-ensure-action/." \
+                    .github/actions/ensure-global-packages/
+                  chmod +x .github/actions/ensure-global-packages/ensure.sh
+
+            - name: Ensure global-packages on target branch
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
+              uses: ./.github/actions/ensure-global-packages
+
+            - name: Bump submodule pin
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
+              id: bump
+              env:
+                  SOURCE_REF: ${{ steps.targets.outputs.source_ref }}
+                  BLOCKERA_SYNC_GP_BUMP_SCRIPT: ${{ runner.temp }}/blockera-sync-gp-scripts/bump-global-packages-submodule.sh
+              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/run-bump.sh"
+
+            - name: Commit pin bump
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' }}
+              id: commit
+              env:
+                  SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
+                  COMMITS: ${{ steps.bump.outputs.commits }}
+                  COMMIT_SUBJECT: ${{ steps.bump.outputs.commit_subject }}
+              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/commit-bump.sh"
+
+            - name: Push directly to feature branch
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'push' }}
+              run: git push origin "HEAD:${{ steps.targets.outputs.target_branch }}"
+
+            - name: Open or update bump PR (master)
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'pr' }}
+              env:
+                  GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
+                  SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
+                  FULL_SHA: ${{ steps.bump.outputs.sha }}
+                  COMMITS: ${{ steps.bump.outputs.commits }}
+                  COMMIT_SUBJECT: ${{ steps.bump.outputs.commit_subject }}
+                  SOURCE_BRANCH: ${{ steps.targets.outputs.source_branch }}
+                  SOURCE_MESSAGE: ${{ steps.targets.outputs.source_message }}
+              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/open-or-update-pr.sh"

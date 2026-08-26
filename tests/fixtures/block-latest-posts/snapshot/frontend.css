@@ -59,6 +59,13 @@ html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element
 }
 
 @media screen and (max-width: 478px) and (min-width: 0px) {
+	.blockera-block.blockera-block-1.wp-block-latest-posts {
+		flex-direction: column;
+		align-items: stretch !important;
+		justify-content: center !important;
+		gap: 25px;
+	}
+
 	html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button))::after {
 		padding: 10px 5px 10px 5px;
 		content: "After";

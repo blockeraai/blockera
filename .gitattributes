@@ -1,3 +1,5 @@
+# Edit packages/global-packages/packages/dev-tools/root-configs/.gitattributes
+# project:bootstrap copies this to the host repo root.
 * text=auto eol=lf
 *.sh text
 core.autocrlf=false

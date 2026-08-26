@@ -8,7 +8,7 @@
  *
  * Pattern mirrors block-post-excerpt (render_callback override) and block-calendar
  * (deterministic markup). Markup shape follows render_block_core_rss in
- * source-code-block-editor/packages/block-library/src/rss/index.php.
+ * source-codes/block-editor/packages/block-library/src/rss/index.php.
  *
  * @phpstan-ignore-next-line
  */

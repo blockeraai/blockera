@@ -1,0 +1,285 @@
+name: Release Blockera Plugin
+
+on:
+    pull_request:
+    push:
+        branches: [master]
+    workflow_dispatch:
+        inputs:
+            release_type:
+                description: 'Your release type?'
+                required: true
+                type: 'choice'
+                options:
+                    - 'rc'
+                    - 'stable'
+            version_type:
+                description: 'Your version type?'
+                required: true
+                default: 'patch'
+                type: 'choice'
+                options:
+                    - 'major'
+                    - 'minor'
+                    - 'patch'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    pr-workflow-gate:
+        name: PR workflow filter
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.gate.outputs.run }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: gate
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
+              with:
+                  workflow-file: release-plugin.yml
+
+    compute-next-stable-branch:
+        name: Compute next stable release branches
+        needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event_name == 'workflow_dispatch') }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        outputs:
+            next_stable_branch: ${{ steps.get_branches.outputs.next_stable_branch }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: get_branches
+              env:
+                  VERSION_TYPE: ${{ github.event.inputs.version_type }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/compute-next-stable-branch.sh
+
+    bump-version:
+        name: Bump version
+        needs: [pr-workflow-gate, compute-next-stable-branch]
+        if: |
+            needs.pr-workflow-gate.outputs.run == 'true' &&
+                github.event_name == 'workflow_dispatch' && (
+                  (
+                    github.ref == 'refs/heads/master' ||
+                    endsWith( github.ref, needs.compute-next-stable-branch.outputs.next_stable_branch )
+                  ) && (
+                    github.event.inputs.release_type == 'rc' ||
+                    github.event.inputs.release_type == 'stable'
+                  ) || (
+                    startsWith( github.ref, 'refs/heads/release/' ) &&
+                    github.event.inputs.release_type == 'stable'
+                  )
+                )
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        outputs:
+            changelog: ${{ steps.update_packages.outputs.changelog }}
+            old_version: ${{ steps.get_version.outputs.old_version }}
+            new_version: ${{ steps.get_version.outputs.new_version }}
+            release_branch: ${{ steps.get_version.outputs.release_branch }}
+            release_branch_commit: ${{ steps.commit_version_bump_to_release_branch.outputs.version_bump_commit }}
+            master_commit: ${{ steps.commit_version_bump_to_master.outputs.version_bump_commit }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: get_version
+              env:
+                  RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+                  VERSION_TYPE: ${{ github.event.inputs.version_type }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/compute-versions.sh
+
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
+
+            - env:
+                  RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+                  RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/prepare-release-branch.sh
+
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-node
+
+            - id: update_packages
+              env:
+                  NEW_VERSION: ${{ steps.get_version.outputs.new_version }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/update-changelogs.sh
+
+            - env:
+                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+                  NEW_VERSION: ${{ steps.get_version.outputs.new_version }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/bump-plugin-version-files.sh
+
+            - id: commit_version_bump_to_release_branch
+              env:
+                  NEW_VERSION: ${{ steps.get_version.outputs.new_version }}
+                  RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/commit-push-release-bump.sh
+
+            - id: commit_version_bump_to_master
+              env:
+                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+                  CHANGELOG_COMMIT: ${{ steps.update_packages.outputs.has_commit }}
+                  RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/cherry-pick-to-master.sh
+
+    build:
+        name: Build Release Artifact
+        needs: [pr-workflow-gate, bump-version]
+        if: |
+            needs.pr-workflow-gate.outputs.run == 'true' &&
+                always() && (
+                  github.event_name == 'pull_request' ||
+                  github.event_name == 'workflow_dispatch' ||
+                  github.repository == 'blockeraai/blockera'
+                )
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        outputs:
+            job_status: ${{ job.status }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  ref: ${{ needs.bump-version.outputs.release_branch || github.ref }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/build-plugin-zip
+
+            - if: ${{ needs.bump-version.outputs.new_version }}
+              env:
+                  NEW_VERSION: ${{ needs.bump-version.outputs.new_version }}
+                  CHANGELOG: ${{ needs.bump-version.outputs.changelog }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/build-release-notes.sh
+
+            - if: ${{ needs.bump-version.outputs.new_version }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: release-notes
+                  path: ./release-notes.txt
+
+    revert-version-bump:
+        name: Revert version bump if build failed
+        needs: [pr-workflow-gate, bump-version, build]
+        if: |
+            needs.pr-workflow-gate.outputs.run == 'true' &&
+                always() &&
+                ( needs.build.outputs.job_status == 'failure' ) &&
+                needs.bump-version.outputs.release_branch_commit
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  fetch-depth: 2
+                  ref: ${{ needs.bump-version.outputs.release_branch }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
+
+            - if: |
+                  github.event.inputs.release_type == 'stable' ||
+                  contains( needs.bump-version.outputs.old_version, 'rc' )
+              env:
+                  RELEASE_BRANCH_COMMIT: ${{ needs.bump-version.outputs.release_branch_commit }}
+                  RELEASE_BRANCH: ${{ needs.bump-version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/revert-release-branch-bump.sh
+
+            - if: |
+                  github.event.inputs.release_type == 'rc' &&
+                  ! contains( needs.bump-version.outputs.old_version, 'rc' )
+              env:
+                  RELEASE_BRANCH: ${{ needs.bump-version.outputs.release_branch }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/delete-release-branch.sh
+
+            - if: ${{ needs.bump-version.outputs.master_commit }}
+              env:
+                  MASTER_COMMIT: ${{ needs.bump-version.outputs.master_commit }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/revert-master-bump.sh
+
+    create-release:
+        name: Create Release Draft and Attach Asset
+        needs: [pr-workflow-gate, bump-version, build]
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: get_release_version
+              env:
+                  NEW_VERSION: ${{ needs.bump-version.outputs.new_version }}
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/format-release-name.sh
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: blockera
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: release-notes
+
+            - id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+              with:
+                  tag_name: 'v${{ needs.bump-version.outputs.new_version }}'
+                  release_name: ${{ steps.get_release_version.outputs.version }}
+                  commitish: ${{ needs.bump-version.outputs.release_branch || github.ref }}
+                  draft: true
+                  prerelease: ${{ contains(needs.bump-version.outputs.new_version, 'rc') }}
+                  body_path: release-notes.txt
+
+            - uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./blockera.zip
+                  asset_name: blockera.zip
+                  asset_content_type: application/zip

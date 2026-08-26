@@ -2,7 +2,7 @@
 	"$schema": "../../fixtures.config.schema.json",
 	"html-search-replace": [
 		{
-			"search": "src=['\"][^'\"]*packages/dev-cypress/js/fixtures/bg-extension-test\\.png[^'\"]*['\"]",
+			"search": "src=['\"][^'\"]*packages/global-packages/packages/dev-cypress/js/fixtures/bg-extension-test\\.png[^'\"]*['\"]",
 			"replace": "src='https://blockera.ai/avatar.png'"
 		}
 	],

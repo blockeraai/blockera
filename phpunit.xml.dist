@@ -1,6 +1,10 @@
-<!--@see: https://github.com/wp-phpunit/docs to configuration project for wp phpunit testing-->
+<!--
+	Synced from packages/global-packages/packages/dev-tools/php/phpunit.plugin.xml.dist
+	(PHPUnit has no config includes — keep a real root copy).
+	@see https://github.com/wp-phpunit/docs
+-->
 <phpunit
-        bootstrap="./packages/dev-phpunit/php/bootstrap.php"
+        bootstrap="./packages/global-packages/packages/dev-phpunit/php/bootstrap.php"
         backupGlobals="false"
         colors="true"
         convertErrorsToExceptions="true"
@@ -16,27 +20,27 @@
 
     <testsuites>
         <testsuite name="units">
-            <directory suffix=".php">./packages/dev-phpunit/php/</directory>
-            <directory suffix=".php">./packages/blockera/php/tests/</directory>
-            <directory suffix=".php">./packages/blockera-admin/php/tests/</directory>
-            <directory suffix=".php">./packages/data/php/tests/</directory>
-            <directory suffix=".php">./packages/editor/php/Tests/</directory>
-            <directory suffix=".php">./packages/wordpress/php/tests/</directory>
-            <directory suffix=".php">./packages/utils/php/tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/dev-phpunit/php/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/blockera/php/tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/blockera-admin/php/tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/data/php/tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/editor/php/Tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/wordpress/php/tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/utils/php/tests/</directory>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
-            <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/Tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
+            <exclude>./packages/global-packages/packages/blockera/php/tests/Fixtures/</exclude>
+            <exclude>./packages/global-packages/packages/editor/php/Tests/Fixtures/</exclude>
+            <exclude>./packages/global-packages/packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
         <testsuite name="snapshots">
-            <directory suffix=".php">./packages/dev-phpunit/php/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/dev-phpunit/php/</directory>
             <directory suffix=".php">./tests/phpunit/main/</directory>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
-            <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/Tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
+            <exclude>./packages/global-packages/packages/blockera/php/tests/Fixtures/</exclude>
+            <exclude>./packages/global-packages/packages/editor/php/Tests/Fixtures/</exclude>
+            <exclude>./packages/global-packages/packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
@@ -44,9 +48,8 @@
         <env name="VERSION" value="1.0-beta" />
         <const name="PHPUNIT_PLUGIN_TEST" value="true"/>
         <env name="__BLOCKERA_DIR__" value="blockera" />
-        <env name="WP_PHPUNIT__TESTS_CONFIG" value="./packages/dev-phpunit/php/config.php" />
-        <env name="WP_TESTS_CONFIG_FILE_PATH" value="./packages/dev-phpunit/php/config.php" />
+        <env name="WP_PHPUNIT__TESTS_CONFIG" value="./packages/global-packages/packages/dev-phpunit/php/config.php" />
+        <env name="WP_TESTS_CONFIG_FILE_PATH" value="./packages/global-packages/packages/dev-phpunit/php/config.php" />
     </php>
 
 </phpunit>
-

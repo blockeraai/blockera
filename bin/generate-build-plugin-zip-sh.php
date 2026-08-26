@@ -9,10 +9,10 @@
  */
 
 $f = fopen(dirname(__DIR__) . '/bin/build-plugin-zip.sh', 'r');
+$packages_root = dirname(__DIR__) . '/packages/global-packages/packages';
 $filtered_packages = array_filter(
-    (function() {
-        $packages_dir = dirname(__DIR__) . '/packages';
-        $all_dirs = glob($packages_dir . '/*');
+    (function () use ($packages_root) {
+        $all_dirs = glob($packages_root . '/*') ?: [];
         $result = [];
         foreach ($all_dirs as $dir) {
             if (is_dir($dir)) {
@@ -53,18 +53,19 @@ $filtered_packages = array_filter(
     }
 );
 $packages = array_map(
-    function (string $package_name) {
+    function (string $package_name) use ($packages_root) {
 
-        $package_name = str_replace(dirname(__DIR__) . '/packages/', '', $package_name);
+        $root_dir = (realpath($packages_root) ?: $packages_root) . '/';
+        $package_name = str_replace('\\', '/', $package_name);
+        $package_name = str_replace($root_dir, '', $package_name);
+        $package_name = preg_replace('#^.*/packages/global-packages/packages/#', '', $package_name);
 
         if (preg_match('/\bblocks-library\b/', $package_name) || preg_match('/\bfeatures-library\b/', $package_name)) {
-            $root_dir = dirname(__DIR__) . '/packages/';
-
             ob_start();
             include $root_dir . $package_name . '/composer.json';
             $composer_package_name = str_replace('blockera/', '', json_decode(ob_get_clean(), true)['name']);
 
-            $package_name = str_replace($root_dir, '', $composer_package_name);
+            $package_name = $composer_package_name;
         }
 
         return $package_name;
@@ -106,7 +107,7 @@ while (true) {
             echo implode(PHP_EOL, array_map(function (string $name): string {
 
                 return sprintf(
-                    '	$(find ./vendor/blockera/%1$s/ -type f \( -name "*.php" -o -name "*.json" -o -name "*.css" \)) \\',
+                    '	$(find ./vendor/blockera/%1$s/ -type f ! -path "*/tests/*" \( -name "*.php" -o -name "*.json" -o -name "*.css" \)) \\',
                     $name
                 );
             }, $internal_packages));
@@ -120,7 +121,7 @@ while (true) {
                 array_map(function (string $name): string {
 
                     return sprintf(
-                        '	$(find ./vendor/blockera/%1$s/) \\',
+                        '	$(find ./vendor/blockera/%1$s/ ! -path "*/tests/*") \\',
                         $name
                     );
                 }, $sdks)

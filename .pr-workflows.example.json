@@ -1,0 +1,7 @@
+{
+	"allowedActions": [
+		"code-lint.yml",
+		"jest-unit-tests.yml",
+		"php-unit-tests.yml"
+	]
+}

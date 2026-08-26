@@ -4,22 +4,26 @@ on:
     pull_request:
         branches:
             - master
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
 
 jobs:
     check-files:
+        name: Check PR Config Files
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         runs-on: ubuntu-latest
-
+        timeout-minutes: 5
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Check for PR config files
-              run: |
-                  if find . -name ".pr-*" ! -name "*.env-example*" ! -name "*.example.*" | grep -q .; then
-                    echo "❌ PR config files found. Please remove all PR-related config files and wait to all tests pass before merging to master."
-                    echo "Found files:"
-                    find . -name ".pr-*" ! -name "*.env-example*" ! -name "*.example.*"
-                    exit 1
-                  else
-                    echo "✅ No PR config files found. You can proceed with merging."
-                  fi
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/check-pr-config-files/run.sh

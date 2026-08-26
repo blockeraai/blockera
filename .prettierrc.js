@@ -1,33 +1,3 @@
-const wpConfig = require('@wordpress/prettier-config');
-
-module.exports = {
-	...wpConfig,
-	endOfLine: 'auto',
-	useTabs: true,
-	overrides: [
-		{
-			files: '*.{css,sass,scss}',
-			options: {
-				singleQuote: false,
-			},
-		},
-		{
-			files: '*.svg',
-			options: {
-				parser: 'html',
-				printWidth: 80,
-				tabWidth: 2,
-				useTabs: true,
-			},
-		},
-		{
-			files: '*.xml',
-			options: {
-				parser: 'html',
-				printWidth: 80,
-				tabWidth: 2,
-				useTabs: true,
-			},
-		},
-	],
-};
+// Edit packages/global-packages/packages/dev-tools/root-configs/.prettierrc.js
+// project:bootstrap copies this to the host repo root.
+module.exports = require('./packages/global-packages/packages/dev-tools/js/prettier/config');

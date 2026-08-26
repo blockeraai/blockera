@@ -1,1 +1,0 @@
-export { ConditionsExtension } from './extension';

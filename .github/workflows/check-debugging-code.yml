@@ -3,142 +3,26 @@ name: Check for Debugging Code
 on:
     pull_request:
         types: [opened, synchronize, ready_for_review]
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
 
 jobs:
     check-debugging:
         name: Check for Debugging Code
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         runs-on: ubuntu-latest
+        timeout-minutes: 5
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Check for Debugging Code
-              shell: bash
-              run: |
-                  # Initialize error flag in a file to handle subshell issues
-                  echo "0" > /tmp/error_found
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-                  echo "Checking PHP files for debugging code..."
-                  echo "============================================"
-                  while IFS= read -r file; do
-                    # Skip test files, .github folder, and bin folder
-                    if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
-                    
-                    while IFS=: read -r line_number line; do
-                      # Skip if this is a function definition (not a function call)
-                      # Check if line contains "function" followed by "exit(" which indicates a method definition
-                      # This matches common patterns: "function exit(", "public function exit(", "static function exit(", etc.
-                      if echo "$line" | grep -qE "(^|[^a-zA-Z_])function\s+exit\("; then
-                        continue
-                      fi
-                      # Skip if the line itself is a comment (PHP: //, #, /*, */, or * at start)
-                      if echo "$line" | grep -qE "^\s*(//|#|/\*|\*/|\*)"; then
-                        continue
-                      fi
-                      # Check for @debug-ignore in previous comment lines (up to 10 lines back)
-                      has_ignore=false
-                      start_line=$((line_number > 10 ? line_number - 10 : 1))
-                      for ((i=line_number; i>=start_line; i--)); do
-                        prev_line=$(sed -n "${i}p" "$file")
-                        # Check if line is a comment line (PHP: //, #, or /* */ block comments)
-                        if echo "$prev_line" | grep -qE "^\s*(//|#|/\*.*\*/)"; then
-                          if echo "$prev_line" | grep -q "@debug-ignore"; then
-                            has_ignore=true
-                            break
-                          fi
-                        # If we hit a non-comment, non-empty line, stop looking (unless it's the current line)
-                        elif [ "$i" -ne "$line_number" ] && ! echo "$prev_line" | grep -qE "^\s*$"; then
-                          break
-                        fi
-                      done
-                      if [ "$has_ignore" = false ]; then
-                        echo "⚠️ Found PHP debugging code:"
-                        echo "📁 File: $file:$line_number"
-                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-                        echo "----------------------------------------"
-                        echo "1" > /tmp/error_found
-                      fi
-                    done < <(grep -n -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" || true)
-                  done < <(find . -type f -name "*.php" -not -path "*/.patch/*")
-
-                  echo "Checking JavaScript/TypeScript files for debugging code..."
-                  echo "============================================"
-                  while IFS= read -r file; do
-                    # Skip test files, .github folder, and bin folder
-                    if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
-                    
-                    while IFS=: read -r line_number line; do
-                      # Skip if the line itself is a comment (JS/TS: //, /*, */, or * at start for JSDoc)
-                      if echo "$line" | grep -qE "^\s*(//|/\*|\*/|\*)"; then
-                        continue
-                      fi
-                      # Check for @debug-ignore in previous comment lines (up to 10 lines back)
-                      has_ignore=false
-                      start_line=$((line_number > 10 ? line_number - 10 : 1))
-                      for ((i=line_number; i>=start_line; i--)); do
-                        prev_line=$(sed -n "${i}p" "$file")
-                        # Check if line is a comment line (JS/TS: // or /* */ block comments)
-                        if echo "$prev_line" | grep -qE "^\s*(//|/\*.*\*/)"; then
-                          if echo "$prev_line" | grep -q "@debug-ignore"; then
-                            has_ignore=true
-                            break
-                          fi
-                        # If we hit a non-comment, non-empty line, stop looking (unless it's the current line)
-                        elif [ "$i" -ne "$line_number" ] && ! echo "$prev_line" | grep -qE "^\s*$"; then
-                          break
-                        fi
-                      done
-                      if [ "$has_ignore" = false ]; then
-                        echo "⚠️ Found JavaScript debugging code:"
-                        echo "📁 File: $file:$line_number"
-                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-                        echo "----------------------------------------"
-                        echo "1" > /tmp/error_found
-                      fi
-                    done < <(grep -n -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" || true)
-                  done < <(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) -not -path "*/.patch/*")
-
-                  echo "Checking test files for .skip/.only..."
-                  echo "============================================"
-                  while IFS= read -r file; do
-                    # Skip test files, .github folder, and bin folder
-                    if [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
-                    
-                    while IFS=: read -r line_number line; do
-                      # Skip if the line itself is a comment (JS/TS: //, /*, */, or * at start for JSDoc)
-                      if echo "$line" | grep -qE "^\s*(//|/\*|\*/|\*)"; then
-                        continue
-                      fi
-                      # Check for @debug-ignore in previous comment lines (up to 10 lines back)
-                      has_ignore=false
-                      start_line=$((line_number > 10 ? line_number - 10 : 1))
-                      for ((i=line_number; i>=start_line; i--)); do
-                        prev_line=$(sed -n "${i}p" "$file")
-                        # Check if line is a comment line (JS/TS: // or /* */ block comments)
-                        if echo "$prev_line" | grep -qE "^\s*(//|/\*.*\*/)"; then
-                          if echo "$prev_line" | grep -q "@debug-ignore"; then
-                            has_ignore=true
-                            break
-                          fi
-                        # If we hit a non-comment, non-empty line, stop looking (unless it's the current line)
-                        elif [ "$i" -ne "$line_number" ] && ! echo "$prev_line" | grep -qE "^\s*$"; then
-                          break
-                        fi
-                      done
-                      if [ "$has_ignore" = false ]; then
-                        echo "⚠️ Found test skip/only:"
-                        echo "📁 File: $file:$line_number"
-                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-                        echo "----------------------------------------"
-                        echo "1" > /tmp/error_found
-                      fi
-                    done < <(grep -n -E "\.(skip|only)\(" "$file" || true)
-                  done < <(find . -type f \( -name "*.test.*" -o -name "*.spec.*" -o -name "*.cy.js" \) -not -path "*/.patch/*")
-
-                  # Final status check
-                  if [ "$(cat /tmp/error_found)" -eq "1" ]; then
-                    echo "❌ Found debugging code that needs to be removed or marked with @debug-ignore"
-                    exit 1
-                  else
-                    echo "✅ No unauthorized debugging code found"
-                    exit 0
-                  fi
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/check-debugging-code/run.sh

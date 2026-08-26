@@ -1,1 +1,0 @@
-export { AdvancedSettingsExtension } from './extension';

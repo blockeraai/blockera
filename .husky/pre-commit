@@ -1,4 +1,13 @@
 #!/usr/bin/env sh
+# Edit packages/global-packages/packages/dev-tools/root-configs/.husky/pre-commit
+# project:bootstrap copies this to the host .husky/ folder.
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx lint-staged
+
+# TypeScript + Flow when JS/TS is staged. Skip: BLOCKERA_SKIP_TYPECHECK=1
+# Skip when the submodule pin predates this script (e.g. a master rewind).
+TYPECHECK_SH="$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/run-typecheck-pre-commit.sh"
+if [ -f "${TYPECHECK_SH}" ]; then
+	bash "${TYPECHECK_SH}"
+fi

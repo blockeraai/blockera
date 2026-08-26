@@ -1,4 +1,0 @@
-.blockera-block.wp-block-accordion
-	:where(.wp-block-accordion-heading > button) {
-	overflow: visible;
-}

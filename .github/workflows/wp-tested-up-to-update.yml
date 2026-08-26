@@ -2,7 +2,7 @@ name: 'WP "Tested up to" Check'
 
 on:
     schedule:
-        - cron: '0 0 * * 0' # Every Sunday at midnight
+        - cron: '0 0 * * 0'
     workflow_dispatch:
 
 permissions:
@@ -10,18 +10,42 @@ permissions:
     pull-requests: write
 
 jobs:
+    pr-workflow-gate:
+        name: PR workflow filter
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.gate.outputs.run }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: gate
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
+              with:
+                  workflow-file: wp-tested-up-to-update.yml
+
     tut-check:
         name: Check for new "Tested up to" version
+        needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
         runs-on: ubuntu-latest
+        timeout-minutes: 60
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
-                  ref: develop
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
 
-            - name: Run wp-tut-updater-action
-              uses: AlecRust/wp-tut-updater-action@main
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/wp-tested-up-to-update
               with:
-                  file-paths: blockera.php
+                  github-token: ${{ secrets.GITHUB_TOKEN }}

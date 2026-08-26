@@ -3,45 +3,51 @@ name: Virus Total Scan
 on:
     pull_request:
         types: [opened, synchronize, ready_for_review]
-
     workflow_dispatch:
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
 jobs:
+    pr-workflow-gate:
+        name: PR workflow filter
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.gate.outputs.run }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: gate
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
+              with:
+                  workflow-file: virus-total.yml
+
     build:
         name: Building and Scan Files
+        needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request') }}
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
-
+        timeout-minutes: 60
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 1
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
 
-            - name: Setup PHP Composer install dependencies
-              uses: ./.github/setup-php
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/virus-total
               with:
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
-
-            - name: Build Plugin Zip File
-              uses: ./.github/build-plugin-zip
-              with:
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
-
-            - name: VirusTotal Scan
-              uses: crazy-max/ghaction-virustotal@v4
-              with:
-                  vt_api_key: ${{ secrets.VT_API_KEY }}
-                  files: |
-                      ./blockera.zip
-                      ./
+                  vt-api-key: ${{ secrets.VT_API_KEY }}

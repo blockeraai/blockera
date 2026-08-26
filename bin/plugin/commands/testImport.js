@@ -9,7 +9,10 @@ const glob = require('fast-glob');
 /**
  * Internal dependencies
  */
-const { log, formats } = require('../lib/logger');
+const {
+	log,
+	formats,
+} = require('../../../packages/global-packages/packages/dev-tools/bin/plugin/lib/logger');
 
 /**
  * Import test HTML files as WordPress posts.
@@ -75,7 +78,7 @@ async function testImport() {
 					const num = parseInt(id, 10);
 					// Filter out numbers that are too large to be post IDs (like timestamps)
 					return num > 0 && num < 1000000;
-			  })
+				})
 			: [];
 
 		if (ids.length > 0) {

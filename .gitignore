@@ -1,3 +1,15 @@
+# Edit packages/global-packages/packages/dev-tools/root-configs/.gitignore.blockera
+# project:bootstrap prepends these extras, then the shared gitignore.
+
+# Shared packages live in the sparse submodule packages/global-packages.
+# Only index.php is owned by this repo under packages/.
+/packages/*
+!/packages/index.php
+!/packages/global-packages
+
+# Shared gitignore — edit packages/global-packages/packages/dev-tools/root-configs/.gitignore
+# project:bootstrap copies this section to every product.
+
 # Logs
 logs
 *.log
@@ -5,8 +17,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Coverage directory used by tools like istanbul
+# Coverage
 coverage
+php-coverage/
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
@@ -38,19 +51,16 @@ node_modules/
 # .idea directory of idea
 .idea
 
-# .env file
-.env
-
 # lib directory
 @build
 
 # OS files
 .DS_Store
 
-#Examples stories
+# Examples stories
 /stories
 
-#Dist Directory
+# Dist Directory
 dist
 
 # phpunit cache
@@ -68,17 +78,15 @@ storybook-static
 # nyc plugin of cypress
 .nyc_output
 
-# Cypress screenshots
+# Cypress screenshots / downloads / videos (legacy path + submodule)
 packages/dev-cypress/js/screenshots
-
-# Cypress downloads
 packages/dev-cypress/js/downloads
-
-# Cypress videos
 packages/dev-cypress/js/videos
-
-# Cypress component-test webpack cache
 packages/dev-cypress/js/.webpack-cache
+packages/global-packages/packages/dev-cypress/js/screenshots
+packages/global-packages/packages/dev-cypress/js/downloads
+packages/global-packages/packages/dev-cypress/js/videos
+packages/global-packages/packages/dev-cypress/js/.webpack-cache
 
 # Playwright artifacts
 artifacts/
@@ -86,31 +94,26 @@ test-results/
 playwright-report/
 playwright/.cache/
 playwright.env.json
+playwright-env.json
 
 # includes directory
 inc
 cypress.env.json
-.pr-github-playground.example.json
-.pr-cypress.env.exanple.json
 visual-screenshots/diff
 visual-screenshots/comparison
 cypress-image-diff-html-report
 html-report
 cypress/downloads
 Scratch
-
-# .github some subdirectories
-.github/wp-env-configs/development.json
+.jest-test-results.json
 
 # development helper folders
-source-code-block-editor/
-source-code-wordpress/
+.cursor
+source-codes
 wordpress-develop
 
-# playwright environment variables
-playwright-env.json
-/images
-
+# images
+images
 
 # Docs temporary for ai assistant
 docs-temp-ai/
