@@ -106,6 +106,7 @@ jobs:
                     "${GP_SYNC_JOB}/run-bump.sh" \
                     "${GP_SYNC_JOB}/commit-bump.sh" \
                     "${GP_SYNC_JOB}/open-or-update-pr.sh" \
+                    "${GP_SYNC_JOB}/delete-bump-branch.sh" \
                     "$RUNNER_TEMP/blockera-sync-gp-scripts/"
                   chmod +x "$RUNNER_TEMP/blockera-sync-gp-scripts/"*
                   cp -R .github/actions/ensure-global-packages/. \
@@ -161,6 +162,7 @@ jobs:
               run: git push origin "HEAD:${{ steps.targets.outputs.target_branch }}"
 
             - name: Open or update bump PR (master)
+              id: open_pr
               if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.bump.outputs.changed == 'true' && steps.targets.outputs.mode == 'pr' }}
               env:
                   GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
@@ -172,3 +174,19 @@ jobs:
                   SOURCE_BRANCH: ${{ steps.targets.outputs.source_branch }}
                   SOURCE_MESSAGE: ${{ steps.targets.outputs.source_message }}
               run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/open-or-update-pr.sh"
+
+            - name: Delete leftover bump branch
+              if: ${{ always() && steps.open_pr.outcome != 'success' }}
+              env:
+                  GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
+                  MODE: ${{ steps.targets.outputs.mode }}
+                  SKIP_SYNC: ${{ steps.targets.outputs.skip_sync }}
+              run: |
+                  if [[ -f "${GP_SYNC_JOB}/delete-bump-branch.sh" ]]; then
+                    bash "${GP_SYNC_JOB}/delete-bump-branch.sh"
+                  elif [[ -f "$RUNNER_TEMP/blockera-sync-gp-scripts/delete-bump-branch.sh" ]]; then
+                    bash "$RUNNER_TEMP/blockera-sync-gp-scripts/delete-bump-branch.sh"
+                  else
+                    echo "sync-gp/cleanup: delete-bump-branch.sh not present; skip"
+                  fi
