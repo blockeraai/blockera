@@ -47,25 +47,25 @@ npm `file:` deps and Composer path repos point at `packages/global-packages/pack
 
 ### Updating shared packages (automated)
 
-You usually **do not** bump the submodule pin by hand.
+Master pins are automated; **feature-branch pins are local**.
 
 1. Push to `blockeraai/blockera-global-packages` (any branch).
 2. That repo’s `notify-blockera-submodule` workflow reads `.github/global-packages-consumers.json` and dispatches `global-packages-updated` to **every enabled consumer** (Blockera, Blockera Pro, Blockera One, …).
-3. Each consumer’s `sync-global-packages-submodule` workflow bumps `packages/global-packages`:
+3. Each consumer’s `sync-global-packages-submodule` workflow:
    - **master** → opens/updates PR `chore/bump-global-packages` (CI gates the pin)
-   - **matching feature branch** (Husky mirror as `<repo>/<branch>`, e.g. `blockera-pro/fix/foo`) → pushes the pin bump onto that consumer branch
-4. Manual catch-up: Actions → **Sync global-packages submodule** (`workflow_dispatch`), or wait for the daily schedule.
+   - **matching feature branch** (Husky mirror as `<repo>/<branch>`, e.g. `blockera/fix/foo`) → **skipped**. Pin on the consumer with a local bump (not auto-pushed to origin).
+4. Manual remote catch-up: Actions → **Sync global-packages submodule** (`workflow_dispatch` with `mode=pr` or `mode=push`), or wait for the daily schedule (master only).
 
 To add/remove a consumer, edit `blockera-global-packages/.github/global-packages-consumers.json` (set `"enabled": false` to pause without deleting).
 
-Local emergency bump:
+Feature-branch gitlink bump (commits **locally**, does not `git push`; uncommitted submodule files are kept):
 
 ```bash
 npm run submodule:bump                 # advance current pin’s branch tip and commit
 npm run submodule:bump -- fix/issues   # or any branch / SHA (explicit override)
 ```
 
-With no arg, the local bump keeps the pin on the same lineage: `master` if the current SHA is on master, otherwise the single remote branch that contains it (errors if the SHA is on no remote branch).
+With no arg, the local bump keeps the pin on the same lineage: `master` if the current SHA is on master, otherwise the single remote branch that contains it (errors if the SHA is on no remote branch). Push the consumer branch yourself when you are ready.
 
 Husky `post-checkout` mirrors new consumer branches into the submodule as `<repo>/<branch>` (from the `origin` remote name).
 
