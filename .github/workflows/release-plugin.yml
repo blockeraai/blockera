@@ -110,7 +110,9 @@ jobs:
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/commit-push-release-bump.sh
 
             - id: commit_version_bump_to_master
+              if: ${{ github.event.inputs.release_type == 'stable' }}
               env:
+                  RELEASE_TYPE: ${{ github.event.inputs.release_type }}
                   OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
                   CHANGELOG_COMMIT: ${{ steps.update_packages.outputs.has_commit }}
                   RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
