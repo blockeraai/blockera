@@ -48,47 +48,14 @@ jobs:
               with:
                   workflow-file: release-plugin.yml
 
-    compute-next-stable-branch:
-        name: Compute next stable release branches
-        needs: pr-workflow-gate
-        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event_name == 'workflow_dispatch') }}
-        runs-on: ubuntu-latest
-        timeout-minutes: 60
-        outputs:
-            next_stable_branch: ${{ steps.get_branches.outputs.next_stable_branch }}
-        env:
-            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
-        steps:
-            - uses: actions/checkout@v5
-              with:
-                  token: ${{ secrets.BLOCKERABOT_PAT }}
-                  fetch-depth: 0
-
-            - name: Ensure global-packages submodule
-              uses: ./.github/actions/ensure-global-packages
-
-            - id: get_branches
-              env:
-                  VERSION_TYPE: ${{ github.event.inputs.version_type }}
-              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/compute-next-stable-branch.sh
-
     bump-version:
         name: Bump version
-        needs: [pr-workflow-gate, compute-next-stable-branch]
+        needs: pr-workflow-gate
         if: |
             needs.pr-workflow-gate.outputs.run == 'true' &&
-                github.event_name == 'workflow_dispatch' && (
-                  (
-                    github.ref == 'refs/heads/master' ||
-                    endsWith( github.ref, needs.compute-next-stable-branch.outputs.next_stable_branch )
-                  ) && (
-                    github.event.inputs.release_type == 'rc' ||
-                    github.event.inputs.release_type == 'stable'
-                  ) || (
-                    startsWith( github.ref, 'refs/heads/release/' ) &&
-                    github.event.inputs.release_type == 'stable'
-                  )
-                )
+                github.event_name == 'workflow_dispatch' &&
+                (github.event.inputs.release_type == 'rc' || github.event.inputs.release_type == 'stable') &&
+                (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/release/'))
         runs-on: ubuntu-latest
         timeout-minutes: 60
         outputs:
@@ -96,6 +63,7 @@ jobs:
             old_version: ${{ steps.get_version.outputs.old_version }}
             new_version: ${{ steps.get_version.outputs.new_version }}
             release_branch: ${{ steps.get_version.outputs.release_branch }}
+            release_branch_created: ${{ steps.prepare_release_branch.outputs.created }}
             release_branch_commit: ${{ steps.commit_version_bump_to_release_branch.outputs.version_bump_commit }}
             master_commit: ${{ steps.commit_version_bump_to_master.outputs.version_bump_commit }}
         env:
@@ -118,9 +86,8 @@ jobs:
 
             - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
 
-            - env:
-                  RELEASE_TYPE: ${{ github.event.inputs.release_type }}
-                  OLD_VERSION: ${{ steps.get_version.outputs.old_version }}
+            - id: prepare_release_branch
+              env:
                   RELEASE_BRANCH: ${{ steps.get_version.outputs.release_branch }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/prepare-release-branch.sh
 
@@ -214,17 +181,13 @@ jobs:
 
             - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
 
-            - if: |
-                  github.event.inputs.release_type == 'stable' ||
-                  contains( needs.bump-version.outputs.old_version, 'rc' )
+            - if: ${{ needs.bump-version.outputs.release_branch_created != 'true' }}
               env:
                   RELEASE_BRANCH_COMMIT: ${{ needs.bump-version.outputs.release_branch_commit }}
                   RELEASE_BRANCH: ${{ needs.bump-version.outputs.release_branch }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/revert-release-branch-bump.sh
 
-            - if: |
-                  github.event.inputs.release_type == 'rc' &&
-                  ! contains( needs.bump-version.outputs.old_version, 'rc' )
+            - if: ${{ needs.bump-version.outputs.release_branch_created == 'true' }}
               env:
                   RELEASE_BRANCH: ${{ needs.bump-version.outputs.release_branch }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/delete-release-branch.sh
