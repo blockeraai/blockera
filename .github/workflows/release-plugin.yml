@@ -89,6 +89,7 @@ jobs:
             - id: prepare_release_branch
               env:
                   RELEASE_BRANCH: ${{ steps.get_branch.outputs.release_branch }}
+                  SOURCE_BRANCH: ${{ steps.get_branch.outputs.source_branch }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/prepare-release-branch.sh
 
             - uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-node
