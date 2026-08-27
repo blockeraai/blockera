@@ -3,8 +3,8 @@ name: Sync global-packages submodule
 # Automation model:
 # 1) blockera-global-packages notifies this workflow (repository_dispatch)
 # 2) master tip → open/update a bump PR (CI gates the pin)
-# 3) matching feature branch → push pin bump onto that Blockera branch
-# 4) workflow_dispatch + daily schedule for catch-up / manual pins
+# 3) matching feature branch → skip (pin locally with npm run submodule:bump)
+# 4) workflow_dispatch (mode=pr|push) + daily schedule for catch-up / manual pins
 #
 # Bootstrap: ./.github/actions/ensure-global-packages (consumer-local).
 # Job logic: packages/global-packages/.../scripts/jobs/sync-global-packages-submodule/
@@ -94,10 +94,19 @@ jobs:
                   INPUT_MODE: ${{ github.event.inputs.mode }}
               run: bash "${GP_SYNC_JOB}/resolve-targets.sh"
 
+            # Defense in depth: default-branch workflow runs before the GP pin
+            # that contains the resolve-targets skip. Do not auto-push feature
+            # pins (local `npm run submodule:bump` owns that commit).
+            - name: Skip feature-branch auto sync
+              if: ${{ steps.targets.outputs.skip_sync != 'true' && steps.targets.outputs.mode == 'push' && github.event_name != 'workflow_dispatch' }}
+              run: |
+                  echo "Feature branch '${{ steps.targets.outputs.target_branch }}' pin is local (npm run submodule:bump); skipping auto sync."
+                  echo "skip=true" >> "$GITHUB_ENV"
+
             # Feature branches may not have the latest toolkit/action yet — stash
             # helpers + bootstrap action from this checkout before switching.
             - name: Stash sync helpers and bootstrap action
-              if: ${{ steps.targets.outputs.skip_sync != 'true' }}
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
               run: |
                   mkdir -p "$RUNNER_TEMP/blockera-sync-gp-scripts"
                   mkdir -p "$RUNNER_TEMP/blockera-sync-gp-ensure-action"
@@ -114,7 +123,7 @@ jobs:
 
             - name: Checkout target branch
               id: checkout
-              if: ${{ steps.targets.outputs.skip_sync != 'true' }}
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' }}
               uses: actions/checkout@v5
               with:
                   ref: ${{ steps.targets.outputs.target_branch }}
@@ -123,7 +132,7 @@ jobs:
               continue-on-error: true
 
             - name: Skip when target branch is missing
-              if: ${{ steps.targets.outputs.skip_sync != 'true' && steps.checkout.outcome != 'success' }}
+              if: ${{ env.skip != 'true' && steps.targets.outputs.skip_sync != 'true' && steps.checkout.outcome != 'success' }}
               run: |
                   echo "Target branch '${{ steps.targets.outputs.target_branch }}' does not exist; skipping submodule sync."
                   echo "skip=true" >> "$GITHUB_ENV"
