@@ -7,7 +7,7 @@
 	},
 	"landingPage": "/wp-admin/admin.php?page=blockera-settings-dashboard",
 	"preferredVersions": {
-		"wp": "beta",
+		"wp": "latest",
 		"php": "8.0"
 	},
 	"features": {
