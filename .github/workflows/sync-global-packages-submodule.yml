@@ -3,8 +3,8 @@ name: Sync global-packages submodule
 # Automation model:
 # 1) blockera-global-packages notifies this workflow (repository_dispatch)
 # 2) master tip → open/update a bump PR (CI gates the pin)
-# 3) matching feature branch → skip (pin locally with npm run submodule:bump)
-# 4) workflow_dispatch (mode=pr|push) + daily schedule for catch-up / manual pins
+# 3) matching feature branch → push pin bump onto that Blockera branch
+# 4) workflow_dispatch + daily schedule for catch-up / manual pins
 #
 # Bootstrap: ./.github/actions/ensure-global-packages (consumer-local).
 # Job logic: packages/global-packages/.../scripts/jobs/sync-global-packages-submodule/
