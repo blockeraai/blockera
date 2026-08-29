@@ -23,10 +23,44 @@ on:
                     - 'minor'
                     - 'patch'
             source_branch:
-                description: 'Fork from this branch (empty = master). For a hotfix, use the previous release/* so later master PRs are excluded. Run the workflow from master.'
-                required: false
-                type: string
-                default: ''
+                description: 'Fork source. master is the current line. Pick a release/* for a hotfix (excludes later master PRs). Run this workflow from master.'
+                required: true
+                type: choice
+                default: master
+                options:
+                    # BEGIN SOURCE_BRANCH_OPTIONS
+                    - master
+                    - release/1.12.2
+                    - release/1.12.1
+                    - release/1.12.0
+                    - release/1.11.5
+                    - release/1.11.4
+                    - release/1.11.3
+                    - release/1.11.2
+                    - release/1.11.1
+                    - release/1.11.0
+                    - release/1.10.1
+                    - release/1.10.0
+                    - release/1.9.2
+                    - release/1.9.1
+                    - release/1.9.0
+                    - release/1.8.0
+                    - release/1.7.1
+                    - release/1.7.0
+                    - release/1.6.0
+                    - release/1.5.1
+                    - release/1.5.0
+                    - release/1.4.2
+                    - release/1.4.1
+                    - release/1.4.0
+                    - release/1.3.2
+                    - release/1.3.0
+                    - release/1.2.2
+                    - release/1.2.1
+                    - release/1.2.0
+                    - release/1.1.0
+                    - release/1.0
+                    # END SOURCE_BRANCH_OPTIONS
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
