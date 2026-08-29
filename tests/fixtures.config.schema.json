@@ -14,6 +14,11 @@
 			"minimum": 1,
 			"description": "Playwright test timeout in milliseconds for this fixture. Omit to use the suite default."
 		},
+		"timeoutEditor": {
+			"type": "integer",
+			"minimum": 1,
+			"description": "Cypress test timeout in milliseconds for the editor. Omit to use the suite default."
+		},
 		"snapshot": {
 			"type": "boolean",
 			"default": true,

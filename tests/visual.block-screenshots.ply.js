@@ -202,6 +202,7 @@ test.describe('Sections Visual Snapshots', () => {
 		const frontendSetupFn = sectionData?.frontendSetupFn;
 		const config = sectionData?.config;
 		const timeout = Number(config?.timeout);
+		const timeoutEditor = Number(config?.timeoutEditor) || 40000;
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
 			if (Number.isFinite(timeout) && timeout > 0) {
@@ -242,7 +243,7 @@ test.describe('Sections Visual Snapshots', () => {
 				}
 
 				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(4000);
+				await page.waitForTimeout(timeoutEditor);
 
 				// Editor Desktop Snapshot
 				const iframeBody = await getIframeBody(page);
