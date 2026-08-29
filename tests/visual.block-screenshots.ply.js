@@ -201,8 +201,13 @@ test.describe('Sections Visual Snapshots', () => {
 		const setupFn = sectionData?.setupFn;
 		const frontendSetupFn = sectionData?.frontendSetupFn;
 		const config = sectionData?.config;
+		const timeout = Number(config?.timeout);
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
+			if (Number.isFinite(timeout) && timeout > 0) {
+				test.setTimeout(timeout);
+			}
+
 			if (!sectionContent) {
 				return;
 			}

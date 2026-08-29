@@ -9,6 +9,11 @@
 			"default": true,
 			"description": "Whether to take a screenshot of the block."
 		},
+		"timeout": {
+			"type": "integer",
+			"minimum": 1,
+			"description": "Playwright test timeout in milliseconds for this fixture. Omit to use the suite default."
+		},
 		"snapshot": {
 			"type": "boolean",
 			"default": true,
