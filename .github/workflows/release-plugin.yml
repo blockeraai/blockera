@@ -1,6 +1,7 @@
 name: Release Blockera Plugin
 
 on:
+    # Fork source is "Use workflow from" (GitHub lists branches live). master or release/*.
     pull_request:
     push:
         branches: [master]
@@ -22,11 +23,6 @@ on:
                     - 'major'
                     - 'minor'
                     - 'patch'
-            source_branch:
-                description: 'Fork from this branch (empty = master). For a hotfix, use the previous release/* so later master PRs are excluded. Run the workflow from master.'
-                required: false
-                type: string
-                default: ''
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -92,7 +88,6 @@ jobs:
                   RELEASE_TYPE: ${{ github.event.inputs.release_type }}
                   VERSION_TYPE: ${{ github.event.inputs.version_type }}
                   BLOCKERA_BUILD_ZIP_DEFAULT_BRANCH: master
-                  BLOCKERA_BUILD_ZIP_SOURCE_BRANCH: ${{ github.event.inputs.source_branch }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/resolve-release-branch.sh
 
             - id: prepare_release_branch
