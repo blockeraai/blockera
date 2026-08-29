@@ -23,7 +23,7 @@ on:
                     - 'minor'
                     - 'patch'
             source_branch:
-                description: 'Fork source. master is the current line. Pick a release/* for a hotfix (excludes later master PRs). Run this workflow from master.'
+                description: 'Source branch'
                 required: true
                 type: choice
                 default: master
