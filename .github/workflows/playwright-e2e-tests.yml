@@ -84,12 +84,12 @@ jobs:
             - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/playwright-e2e-tests/run.sh
 
             - name: Collect new visual baselines
-              if: ${{ !cancelled() }}
+              if: ${{ failure() }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/playwright-e2e-tests/collect-baselines.sh
 
             - name: Archive debug artifacts (screenshots, traces)
               uses: actions/upload-artifact@v4
-              if: ${{ !cancelled() }}
+              if: ${{ failure() }}
               with:
                   name: playwright-artifacts--${{ matrix.category }}
                   path: |
