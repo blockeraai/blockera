@@ -4,29 +4,36 @@
 const {
 	editPost,
 } = require('@blockera/dev-playwright/js/utils/site-navigation');
-const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
+const {
+	appendBlocks,
+	closeWelcomeGuide,
+	stopPendingFrameLoads,
+} = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
-// Store postId for frontendSetup to use
 let storedPostId = null;
 
-/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-comments test
- * Creates a post with comments and edits it
+ * Creates a post with comments, then opens an empty editor and pastes blocks.
+ *
+ * Do not put the comments markup on the post before the editor boots: comment
+ * template SSR can prevent the canvas iframe from ever appearing.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
-/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
+	if (!sectionContent) {
+		throw new Error('block-comments setup requires input.html content');
+	}
+
 	const dataPath = path.join(__dirname, 'data.json');
 	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-	// Step 1: Create a post and get its ID
 	const {
 		post_type: postType,
 		post_title: postTitle,
@@ -34,7 +41,6 @@ async function setup(page, sectionContent) {
 		post_date: postDate,
 	} = data.post;
 
-	// Escape single quotes in post title and date for shell
 	const escapedTitle = postTitle.replace(/'/g, "'\\''");
 	const escapedDate = postDate.replace(/'/g, "'\\''");
 
@@ -75,12 +81,13 @@ async function setup(page, sectionContent) {
 	}
 
 	await editPost(page, { postID: postId });
+	await closeWelcomeGuide(page);
 	await appendBlocks(page, sectionContent);
+	await stopPendingFrameLoads(page);
 
 	return false;
 }
 
-/* eslint-disable jsdoc/valid-types */
 /**
  * Frontend setup function for block-comments test
  * Navigates to page 3 of comments pagination (`cpage=3`)
@@ -88,7 +95,6 @@ async function setup(page, sectionContent) {
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
  */
-/* eslint-enable jsdoc/valid-types */
 async function frontendSetup(page) {
 	if (!storedPostId) {
 		throw new Error(
@@ -96,9 +102,6 @@ async function frontendSetup(page) {
 		);
 	}
 
-	// Check if we're already on the post page (has post ID in path or query)
-	// If not, we need to navigate to the post first
-	// Try to get post permalink via wpCli
 	const permalinkResult = await wpCli(
 		page,
 		`wp post get ${storedPostId} --field=url`,
@@ -113,14 +116,10 @@ async function frontendSetup(page) {
 	const postUrl = permalinkResult.stdout.trim();
 	const postUrlObj = new URL(postUrl);
 
-	// Add cpage=3 query parameter for comments pagination
 	postUrlObj.searchParams.set('cpage', '3');
 
-	// Avoid `networkidle` (often never settles on WP) and `load` (can hang if a
-	// subresource never finishes). `domcontentloaded` is enough for server-rendered HTML.
 	await page.goto(postUrlObj.toString(), { waitUntil: 'domcontentloaded' });
-
-	// Wait a bit for comments to load
+	await stopPendingFrameLoads(page);
 	await page.waitForTimeout(500);
 }
 
