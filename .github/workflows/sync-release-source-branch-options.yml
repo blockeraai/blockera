@@ -1,0 +1,54 @@
+name: Sync release source_branch options
+
+on:
+    create:
+    delete:
+    workflow_dispatch:
+
+concurrency:
+    group: sync-release-source-branch-options
+    cancel-in-progress: true
+
+jobs:
+    sync:
+        name: Update source_branch dropdown
+        if: |
+            github.event_name == 'workflow_dispatch' ||
+            (github.event_name == 'create' && github.event.ref_type == 'branch' && (
+                github.ref == 'refs/heads/master' ||
+                startsWith(github.ref, 'refs/heads/release/')
+            )) ||
+            (github.event_name == 'delete' && github.event.ref_type == 'branch' && (
+                github.event.ref == 'master' ||
+                github.event.ref == 'refs/heads/master' ||
+                startsWith(github.event.ref, 'release/') ||
+                startsWith(github.event.ref, 'refs/heads/release/')
+            ))
+        runs-on: ubuntu-latest
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            BLOCKERA_BUILD_ZIP_DEFAULT_BRANCH: master
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  ref: master
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/configure-git-user.sh
+
+            - run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/sync-release-source-branch-options.sh
+
+            - name: Commit dropdown if it changed
+              run: |
+                  FILE="${BLOCKERA_RELEASE_WORKFLOW_FILE:-.github/workflows/release-plugin.yml}"
+                  git add "${FILE}"
+                  if git diff --cached --quiet; then
+                      echo "source_branch options already current"
+                      exit 0
+                  fi
+                  git commit -m "ci: sync source_branch dropdown from origin release branches"
+                  git push origin master
