@@ -1,8 +1,8 @@
 <?php
 /**
- * Temporary mu-plugin for avatar block visual snapshot tests.
- * For user email hello@blockera.ai, replaces the Gravatar URL with a local
- * JPEG fixture so snapshots do not depend on secure.gravatar.com.
+ * Temporary mu-plugin for comments block visual snapshot tests.
+ * Replaces every Gravatar URL with a local PNG fixture so editor/frontend
+ * screenshots (and canvas iframe `load`) do not depend on secure.gravatar.com.
  *
  * This file is copied to wp-content/mu-plugins by the Playwright snapshot harness.
  *
@@ -21,67 +21,53 @@ if ( ! function_exists( 'blockera_test_block_comments_avatar_fixture_rel_path' )
 }
 
 /**
- * Resolve an email from the value passed to get_avatar_data().
+ * Public URL for the local avatar fixture.
  *
- * @param mixed $id_or_email User ID, email string, WP_User, or comment-like object.
- * @return string Email or empty string.
+ * @return string Empty when the file is unreadable.
  */
-if ( ! function_exists( 'blockera_test_block_comments_avatar_resolve_email' ) ) {
-	function blockera_test_block_comments_avatar_resolve_email( $id_or_email ) {
-		if ( is_numeric( $id_or_email ) ) {
-			$user = get_user_by( 'id', (int) $id_or_email );
+if ( ! function_exists( 'blockera_test_block_comments_avatar_fixture_url' ) ) {
+	function blockera_test_block_comments_avatar_fixture_url() {
+		static $url = null;
 
-			return $user ? (string) $user->user_email : '';
+		if ( null !== $url ) {
+			return $url;
 		}
 
-		if ( is_string( $id_or_email ) && is_email( $id_or_email ) ) {
-			return $id_or_email;
+		$rel  = blockera_test_block_comments_avatar_fixture_rel_path();
+		$file = WP_PLUGIN_DIR . '/blockera/' . $rel;
+
+		if ( ! is_readable( $file ) ) {
+			$url = '';
+
+			return $url;
 		}
 
-		if ( is_object( $id_or_email ) ) {
-			if ( isset( $id_or_email->user_email ) && is_string( $id_or_email->user_email ) ) {
-				return $id_or_email->user_email;
-			}
-			// WP_Comment: core get_avatar_data() uses user_id before comment_author_email; comments
-			// created with only user_id (e.g. Playwright setup.js) have empty comment_author_email.
-			if ( isset( $id_or_email->user_id ) && (int) $id_or_email->user_id > 0 ) {
-				$user = get_user_by( 'id', (int) $id_or_email->user_id );
+		$plugin_file = WP_PLUGIN_DIR . '/blockera/blockera.php';
+		$url         = plugins_url( $rel, $plugin_file );
 
-				return $user ? (string) $user->user_email : '';
-			}
-			if ( isset( $id_or_email->comment_author_email ) && is_string( $id_or_email->comment_author_email ) ) {
-				return $id_or_email->comment_author_email;
-			}
-		}
-
-		return '';
+		return $url;
 	}
 }
 
 /**
- * Use the local fixture image instead of Gravatar for the test email.
+ * Use the local fixture image instead of Gravatar for every avatar.
+ *
+ * Email-agnostic: comments created with only user_id, admin bar avatars, and
+ * canvas iframe images must not hit secure.gravatar.com (pending requests
+ * prevent the editor canvas blob iframe from firing `load`).
  *
  * @param array $args        Avatar arguments including url, found, size.
  * @param mixed $id_or_email Same as get_avatar_data().
  * @return array
  */
 if ( ! function_exists( 'blockera_test_block_comments_avatar_filter_data' ) ) {
-	function blockera_test_block_comments_avatar_filter_data( $args, $id_or_email ) {
-		$email = strtolower( trim( blockera_test_block_comments_avatar_resolve_email( $id_or_email ) ) );
-		if ( '' === $email || 'hello@blockera.ai' !== $email ) {
+	function blockera_test_block_comments_avatar_filter_data( $args, $id_or_email ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		$fixture_url = blockera_test_block_comments_avatar_fixture_url();
+		if ( '' === $fixture_url ) {
 			return $args;
 		}
 
-		$rel  = blockera_test_block_comments_avatar_fixture_rel_path();
-		$root = WP_PLUGIN_DIR . '/blockera/';
-		$file = $root . $rel;
-
-		if ( ! is_readable( $file ) ) {
-			return $args;
-		}
-
-		$plugin_file   = WP_PLUGIN_DIR . '/blockera/blockera.php';
-		$args['url']   = plugins_url( $rel, $plugin_file );
+		$args['url']   = $fixture_url;
 		$args['found'] = true;
 
 		return $args;

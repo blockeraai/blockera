@@ -40,65 +40,23 @@ async function setup(page, sectionContent) {
 
 	const result = await wpCli(
 		page,
-		`wp post create --post_type=${postType} --post_title='${escapedTitle}' --post_status=${postStatus} --post_date='${escapedDate}'`,
+		`wp post create --post_type=${postType} --post_title='${escapedTitle}' --post_status=${postStatus} --post_date='${escapedDate}' --comment_status=open --ping_status=open --porcelain`,
 		false,
 		true
 	);
 
-	// Extract post ID from stdout message like "Success: Created post 22."
-	const match = result.stdout.match(/post (\d+)/);
-	const postId = match ? parseInt(match[1], 10) : null;
+	const postId = parseInt(String(result.stdout).trim(), 10);
 
 	if (!postId) {
 		throw new Error(`Failed to get post ID from output: ${result.stdout}`);
 	}
 
-	// Store postId for frontendSetup to use
 	storedPostId = postId;
 
-	// Verify post was created successfully
-	const verifyPostResult = await wpCli(
-		page,
-		`wp post get ${postId} --field=ID`,
-		false,
-		false
-	);
-
-	if (verifyPostResult.stdout.trim() !== String(postId)) {
-		throw new Error(
-			`Post ${postId} was not created successfully. Verification failed.`
-		);
-	}
-
-	// Enable comments on the post (ensure comment_status is 'open')
-	await wpCli(
-		page,
-		`wp post update ${postId} --comment_status=open --ping_status=open`,
-		false,
-		false
-	);
-
-	// Configure WordPress to paginate comments with 2 comments per page
 	await wpCli(page, `wp option update page_comments 1`, false, false);
 	await wpCli(page, `wp option update comments_per_page 2`, false, false);
 
-	// Step 2: Create comments for the post
 	const commentsToCreate = data.comments;
-	const createdCommentIds = [];
-
-	// Verify user exists before creating comments
-	const userCheckResult = await wpCli(
-		page,
-		`wp user get ${data.comments[0].comment_author} --field=ID`,
-		true,
-		false
-	);
-
-	if (!userCheckResult.stdout || !userCheckResult.stdout.trim()) {
-		throw new Error(
-			`User ID ${data.comments[0].comment_author} does not exist. Cannot create comments.`
-		);
-	}
 
 	for (let i = 0; i < commentsToCreate.length; i++) {
 		const comment = commentsToCreate[i];
@@ -106,98 +64,16 @@ async function setup(page, sectionContent) {
 			comment_author: commentAuthor,
 			comment_content: commentContent,
 		} = comment;
+		const escapedComment = commentContent.replace(/'/g, "'\\''");
 
-		// Ensure postId is a number
-		const numericPostId = parseInt(postId, 10);
-		if (isNaN(numericPostId)) {
-			throw new Error(`Invalid post ID: ${postId}`);
-		}
-
-		// Use WordPress PHP API directly via wp eval to bypass shell quoting issues
-		// This is the same approach used in bin/plugin/commands/testImport.js for creating posts
-		// It avoids all command-line parsing issues by executing PHP directly
-		const escapedContent = commentContent
-			.replace(/\\/g, '\\\\')
-			.replace(/'/g, "\\'");
-		const phpCode = `$comment_id = wp_insert_comment(array('comment_post_ID' => ${numericPostId}, 'user_id' => ${commentAuthor}, 'comment_content' => '${escapedContent}', 'comment_approved' => 1)); echo is_wp_error($comment_id) ? 'Error: ' . $comment_id->get_error_message() : 'Success: Created comment ' . $comment_id . '.';`;
-		const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
-		const commentCommand = `wp eval '${escapedPhpCode}'`;
-
-		try {
-			const commentResult = await wpCli(
-				page,
-				commentCommand,
-				false,
-				true
-			);
-
-			// Check stdout for success message
-			if (
-				!commentResult.stdout ||
-				!commentResult.stdout.includes('Success')
-			) {
-				const errorMsg =
-					commentResult.stderr ||
-					commentResult.stdout ||
-					'Unknown error';
-				throw new Error(
-					`Comment creation did not succeed. stdout: "${
-						commentResult.stdout || '(empty)'
-					}", stderr: "${errorMsg}"`
-				);
-			}
-
-			// Extract comment ID from output like "Success: Created comment 123."
-			const commentMatch = commentResult.stdout.match(/comment (\d+)/);
-			if (commentMatch) {
-				const commentId = parseInt(commentMatch[1], 10);
-				createdCommentIds.push(commentId);
-			} else if (commentResult.stdout.includes('Success')) {
-				// If we can't extract ID but command succeeded, count it as created
-				createdCommentIds.push(null); // Placeholder to track count
-			}
-		} catch (error) {
-			throw new Error(
-				`Failed to create comment ${i + 1} (${commentContent}): ${
-					error.message
-				}`
-			);
-		}
-	}
-
-	// Verify comments were created
-	if (createdCommentIds.length !== commentsToCreate.length) {
-		throw new Error(
-			`Expected to create ${commentsToCreate.length} comments, but only ${createdCommentIds.length} were created.`
+		await wpCli(
+			page,
+			`wp comment create --comment_post_ID=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1`,
+			false,
+			true
 		);
 	}
 
-	// Small delay to ensure comments are fully committed
-	await new Promise((resolve) => setTimeout(resolve, 500));
-
-	// Verify comments are associated with the correct post
-	const verifyCommentsResult = await wpCli(
-		page,
-		`wp comment list --post_id=${postId} --format=ids --status=approve`,
-		false,
-		false
-	);
-
-	const commentIds = verifyCommentsResult.stdout
-		.trim()
-		.split(/\s+/)
-		.filter((id) => id.trim() !== '')
-		.map((id) => parseInt(id.trim(), 10))
-		.filter((id) => !isNaN(id));
-
-	const commentCount = commentIds.length;
-	if (commentCount !== commentsToCreate.length) {
-		throw new Error(
-			`Expected ${commentsToCreate.length} comments on post ${postId}, but found ${commentCount}.`
-		);
-	}
-
-	// Step 3: Edit the post
 	await editPost(page, { postID: postId });
 	await appendBlocks(page, sectionContent);
 
