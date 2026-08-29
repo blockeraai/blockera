@@ -1,6 +1,7 @@
 name: Release Blockera Plugin
 
 on:
+    # Fork source is "Use workflow from" (GitHub lists branches live). master or release/*.
     pull_request:
     push:
         branches: [master]
@@ -22,45 +23,6 @@ on:
                     - 'major'
                     - 'minor'
                     - 'patch'
-            source_branch:
-                description: 'Source branch'
-                required: true
-                type: choice
-                default: master
-                options:
-                    # BEGIN SOURCE_BRANCH_OPTIONS
-                    - master
-                    - release/1.12.2
-                    - release/1.12.1
-                    - release/1.12.0
-                    - release/1.11.5
-                    - release/1.11.4
-                    - release/1.11.3
-                    - release/1.11.2
-                    - release/1.11.1
-                    - release/1.11.0
-                    - release/1.10.1
-                    - release/1.10.0
-                    - release/1.9.2
-                    - release/1.9.1
-                    - release/1.9.0
-                    - release/1.8.0
-                    - release/1.7.1
-                    - release/1.7.0
-                    - release/1.6.0
-                    - release/1.5.1
-                    - release/1.5.0
-                    - release/1.4.2
-                    - release/1.4.1
-                    - release/1.4.0
-                    - release/1.3.2
-                    - release/1.3.0
-                    - release/1.2.2
-                    - release/1.2.1
-                    - release/1.2.0
-                    - release/1.1.0
-                    - release/1.0
-                    # END SOURCE_BRANCH_OPTIONS
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -126,7 +88,6 @@ jobs:
                   RELEASE_TYPE: ${{ github.event.inputs.release_type }}
                   VERSION_TYPE: ${{ github.event.inputs.version_type }}
                   BLOCKERA_BUILD_ZIP_DEFAULT_BRANCH: master
-                  BLOCKERA_BUILD_ZIP_SOURCE_BRANCH: ${{ github.event.inputs.source_branch }}
               run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/build-plugin-zip/resolve-release-branch.sh
 
             - id: prepare_release_branch
