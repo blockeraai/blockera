@@ -213,7 +213,6 @@
 		"lint:css:fix": "npm run lint:css -- --fix",
 		"lint:php": "composer run lint",
 		"update:changelogs": "node ./bin/plugin/cli.js update-packages-changelog",
-		"other:changelog": "node ./bin/plugin/cli.js changelog",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"project:bootstrap": "node packages/global-packages/packages/dev-tools/js/bootstrap/bootstrap-project.js --project=blockera",
 		"project:bootstrap:watch": "npm run project:bootstrap -- --watch",
