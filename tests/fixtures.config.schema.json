@@ -17,7 +17,7 @@
 		"timeoutEditor": {
 			"type": "integer",
 			"minimum": 1,
-			"description": "Cypress test timeout in milliseconds for the editor. Omit to use the suite default."
+			"description": "Maximum milliseconds to wait for images, media, fonts, and AJAX to settle before editor and frontend screenshots. Omit to use the suite default (5000)."
 		},
 		"snapshot": {
 			"type": "boolean",

@@ -82,6 +82,21 @@ async function setup(page, sectionContent) {
 
 	await editPost(page, { postID: postId });
 	await closeWelcomeGuide(page);
+
+	// Gravatar never finishes on the blob canvas, so Playwright waits forever
+	// for iframe `load`. Serve a 1×1 PNG so images complete and `load` can fire.
+	const avatarPng = Buffer.from(
+		'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+		'base64'
+	);
+	await page.route(/gravatar\.com/i, async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: 'image/png',
+			body: avatarPng,
+		});
+	});
+
 	await appendBlocks(page, sectionContent);
 	await stopPendingFrameLoads(page);
 

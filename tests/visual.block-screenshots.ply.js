@@ -12,6 +12,7 @@ const {
 	deactivateMuPlugin,
 	redirectToFrontPage,
 	getIframeBody,
+	waitForContentReady,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const { expect } = require('@playwright/test');
 const {
@@ -245,9 +246,6 @@ test.describe('Sections Visual Snapshots', () => {
 					await appendBlocks(page, sectionContent);
 				}
 
-				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(timeoutEditor);
-
 				// Editor Desktop Snapshot
 				const iframeBody = await getIframeBody(page);
 				const editorContainer =
@@ -258,8 +256,9 @@ test.describe('Sections Visual Snapshots', () => {
 				const frontendSearchReplace =
 					config?.['frontend-search-replace'] || null;
 
-				// Set viewport and adjust iframe height for full element capture
 				await setEditorViewportForScreenshot(page, 'desktop');
+
+				await waitForContentReady(page, { timeout: timeoutEditor });
 
 				await applyDomSearchReplace(
 					editorContainer,
@@ -277,6 +276,8 @@ test.describe('Sections Visual Snapshots', () => {
 
 				// Set viewport and adjust iframe height for full element capture (mobile)
 				await setEditorViewportForScreenshot(page, 'mobile');
+
+				await waitForContentReady(page, { timeout: timeoutEditor });
 
 				await applyDomSearchReplace(
 					editorContainer,
@@ -301,10 +302,9 @@ test.describe('Sections Visual Snapshots', () => {
 					await frontendSetupFn(page);
 				}
 
-				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(500);
-
 				await setFrontendViewportForScreenshot(page, 'desktop');
+
+				await waitForContentReady(page, { timeout: timeoutEditor });
 
 				// Frontend Desktop Snapshot
 				const entryContent = page.locator('.entry-content').first();
@@ -323,6 +323,8 @@ test.describe('Sections Visual Snapshots', () => {
 					);
 
 				await setFrontendViewportForScreenshot(page, 'mobile');
+
+				await waitForContentReady(page, { timeout: timeoutEditor });
 
 				// Frontend Mobile Snapshot
 				await entryContent.scrollIntoViewIfNeeded();
