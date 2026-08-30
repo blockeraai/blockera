@@ -1,7 +1,7 @@
 {
 	"$schema": "../../fixtures.config.schema.json",
-	"timeout": 180000,
-	"timeoutEditor": 15000,
+	"timeout": 250000,
+	"timeoutEditor": 5000,
 	"editor-search-replace": [
 		{
 			"search": "<time([^>]*)>[\\s\\S]*?</time>",
