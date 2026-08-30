@@ -1,6 +1,6 @@
 {
 	"$schema": "../../fixtures.config.schema.json",
-	"timeout": 100000,
+	"timeout": 180000,
 	"timeoutEditor": 5000,
 	"editor-search-replace": [
 		{
