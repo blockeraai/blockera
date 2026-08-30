@@ -188,6 +188,9 @@ const sections = loadFixtures();
  * maxDiffPixels: Chromium sub-pixel font AA can flip a handful of fringe pixels
  * (e.g. buttons `::after` label) between runs with no visible change. threshold
  * stays strict for color; allow a tiny absolute pixel count for that noise.
+ *
+ * Baseline files are `tests/screenshots/{name}-actual.png` (see Playwright
+ * `snapshotPathTemplate` in `@blockera/dev-tools` playwright config).
  */
 const screenshotOptions = {
 	threshold: 0.02,
