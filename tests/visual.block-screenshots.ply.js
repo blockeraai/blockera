@@ -205,7 +205,7 @@ test.describe('Sections Visual Snapshots', () => {
 		const frontendSetupFn = sectionData?.frontendSetupFn;
 		const config = sectionData?.config;
 		const timeout = Number(config?.timeout);
-		const timeoutEditor = Number(config?.timeoutEditor) || 40000;
+		const timeoutEditor = Number(config?.timeoutEditor) || 5000;
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
 			if (Number.isFinite(timeout) && timeout > 0) {
