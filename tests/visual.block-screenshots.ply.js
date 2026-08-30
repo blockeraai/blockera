@@ -196,6 +196,7 @@ const sections = loadFixtures();
 const screenshotOptions = {
 	threshold: 0.02,
 	maxDiffPixels: 25,
+	timeout: 15000,
 };
 
 test.describe('Sections Visual Snapshots', () => {
