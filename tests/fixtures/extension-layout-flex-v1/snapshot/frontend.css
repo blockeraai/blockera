@@ -1,0 +1,251 @@
+.blockera-block.blockera-block--1.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-start !important;
+	justify-content: flex-start !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--1) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--2.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-start !important;
+	justify-content: center !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--2) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--3.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-start !important;
+	justify-content: flex-end !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--3) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--4.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--4) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--5.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--5) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--6.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: flex-end !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--6) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--7.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-end !important;
+	justify-content: flex-start !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--7) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--8.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-end !important;
+	justify-content: center !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--8) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--9.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-end !important;
+	justify-content: flex-end !important;
+	height: 200px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--9) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--10.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-start !important;
+	justify-content: flex-start !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--10) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--11.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-start !important;
+	justify-content: center !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--11) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--12.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-start !important;
+	justify-content: flex-end !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--12) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--13.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--13) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--14.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: center !important;
+	justify-content: center !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--14) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--15.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: center !important;
+	justify-content: flex-end !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--15) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--16.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-end !important;
+	justify-content: flex-start !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--16) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--17.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-end !important;
+	justify-content: center !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--17) :where(p) {
+	background-color: #ffe0e0;
+}
+
+.blockera-block.blockera-block--18.wp-block-group {
+	background-color: #e8e8e8;
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-end !important;
+	justify-content: flex-end !important;
+	height: 300px;
+	padding: 20px 20px 20px 20px;
+}
+
+html:root body :where(.blockera-block.blockera-block--18) :where(p) {
+	background-color: #ffe0e0;
+}
