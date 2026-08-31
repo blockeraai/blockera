@@ -9,6 +9,11 @@
 			"default": true,
 			"description": "Whether to take a screenshot of the block."
 		},
+		"skipEditor": {
+			"type": "boolean",
+			"default": false,
+			"description": "When true, create the post via PHP (WP-CLI wp_insert_post) and capture frontend screenshots only. Do not open the block editor or assert editor screenshots."
+		},
 		"timeout": {
 			"type": "integer",
 			"minimum": 1,
