@@ -1,0 +1,74 @@
+name: Resolve PR merge conflicts
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened, ready_for_review]
+    workflow_dispatch:
+        inputs:
+            base_branch:
+                description: 'Branch to merge into the head (consumer base)'
+                required: true
+                default: 'master'
+            head_branch:
+                description: 'PR head branch to update'
+                required: true
+                default: ''
+
+concurrency:
+    group: resolve-pr-conflicts-${{ github.head_ref || github.event.inputs.head_branch }}
+    cancel-in-progress: true
+
+permissions:
+    contents: write
+    pull-requests: read
+
+jobs:
+    pr-workflow-gate:
+        name: PR workflow filter
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.gate.outputs.run }}
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - id: gate
+              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
+              with:
+                  workflow-file: resolve-pr-merge-conflicts.yml
+
+    resolve:
+        name: Merge base / resolve gitlink
+        needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event.inputs.head_branch != '' || github.event_name != 'workflow_dispatch') && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            BLOCKERA_CONFLICT_BASE_BRANCH: ${{ github.event.pull_request.base.ref || github.event.inputs.base_branch }}
+            BLOCKERA_CONFLICT_HEAD_BRANCH: ${{ github.event.pull_request.head.ref || github.event.inputs.head_branch }}
+            BLOCKERA_CONFLICT_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  ref: ${{ github.head_ref || github.event.inputs.head_branch }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  fetch-depth: 0
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - name: Merge base / resolve gitlink
+              run: |
+                  SCRIPT=packages/global-packages/packages/dev-tools/github/scripts/jobs/resolve-pr-merge-conflicts/run.sh
+                  if [[ ! -f "${SCRIPT}" ]]; then
+                    echo 'resolve-pr-conflicts: toolkit pin has no job script yet; skip'
+                    exit 0
+                  fi
+                  bash "${SCRIPT}"
