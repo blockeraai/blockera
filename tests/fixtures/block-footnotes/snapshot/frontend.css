@@ -4,8 +4,8 @@
 	border-radius: 10px;
 	display: flex !important;
 	flex-direction: column;
-	align-items: center !important;
-	justify-content: flex-start !important;
+	align-items: flex-start !important;
+	justify-content: center !important;
 	gap: 30px;
 	padding: 20px 50px 20px 50px;
 }
