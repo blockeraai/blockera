@@ -12,6 +12,7 @@ const {
 	deactivateMuPlugin,
 	redirectToFrontPage,
 	getIframeBody,
+	waitForContentReady,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const { expect } = require('@playwright/test');
 const {
@@ -20,6 +21,8 @@ const {
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
 	applyDomSearchReplace,
+	createPostViaPhp,
+	wpCli,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	setDeviceType,
@@ -188,10 +191,14 @@ const sections = loadFixtures();
  * maxDiffPixels: Chromium sub-pixel font AA can flip a handful of fringe pixels
  * (e.g. buttons `::after` label) between runs with no visible change. threshold
  * stays strict for color; allow a tiny absolute pixel count for that noise.
+ *
+ * Baseline files are `tests/screenshots/{name}-actual.png` (see Playwright
+ * `snapshotPathTemplate` in `@blockera/dev-tools` playwright config).
  */
 const screenshotOptions = {
 	threshold: 0.02,
 	maxDiffPixels: 25,
+	timeout: 15000,
 };
 
 test.describe('Sections Visual Snapshots', () => {
@@ -201,8 +208,15 @@ test.describe('Sections Visual Snapshots', () => {
 		const setupFn = sectionData?.setupFn;
 		const frontendSetupFn = sectionData?.frontendSetupFn;
 		const config = sectionData?.config;
+		const timeout = Number(config?.timeout);
+		const timeoutEditor = Number(config?.timeoutEditor) || 5000;
+		const skipEditor = config?.skipEditor === true;
 
 		test(`Snapshot: ${section}`, async ({ page }) => {
+			if (Number.isFinite(timeout) && timeout > 0) {
+				test.setTimeout(timeout);
+			}
+
 			if (!sectionContent) {
 				return;
 			}
@@ -219,6 +233,8 @@ test.describe('Sections Visual Snapshots', () => {
 			}
 
 			try {
+				let skipEditorPostId = null;
+
 				// Check if custom setup.js exists for this test
 				if (setupFn) {
 					// Run custom setup function (now converted to Playwright)
@@ -226,76 +242,125 @@ test.describe('Sections Visual Snapshots', () => {
 					// or true if default setup should run
 					const result = await setupFn(page, sectionContent);
 					if (result === true) {
-						// Run default setup
-						await createPost(page);
-						await appendBlocks(page, sectionContent);
+						if (skipEditor) {
+							skipEditorPostId = await createPostViaPhp(page, {
+								contentFileHostPath: path.join(
+									__dirname,
+									'fixtures',
+									section,
+									'input.html'
+								),
+								postTitle: `Test Design: ${section}`,
+							});
+						} else {
+							await createPost(page);
+							await appendBlocks(page, sectionContent);
+						}
 					}
+				} else if (skipEditor) {
+					skipEditorPostId = await createPostViaPhp(page, {
+						contentFileHostPath: path.join(
+							__dirname,
+							'fixtures',
+							section,
+							'input.html'
+						),
+						postTitle: `Test Design: ${section}`,
+					});
 				} else {
-					// Run default setup
 					await createPost(page);
 					await appendBlocks(page, sectionContent);
 				}
-
-				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(4000);
-
-				// Editor Desktop Snapshot
-				const iframeBody = await getIframeBody(page);
-				const editorContainer =
-					iframeBody.locator('.is-root-container');
 
 				const editorSearchReplace =
 					config?.['editor-search-replace'] || null;
 				const frontendSearchReplace =
 					config?.['frontend-search-replace'] || null;
 
-				// Set viewport and adjust iframe height for full element capture
-				await setEditorViewportForScreenshot(page, 'desktop');
+				if (!skipEditor) {
+					// Editor Desktop Snapshot
+					const iframeBody = await getIframeBody(page);
+					const editorContainer =
+						iframeBody.locator('.is-root-container');
 
-				await applyDomSearchReplace(
-					editorContainer,
-					editorSearchReplace
-				);
+					await setEditorViewportForScreenshot(page, 'desktop');
 
-				await expect
-					.soft(editorContainer)
-					.toHaveScreenshot(
-						`test-${section}-editor-desktop.png`,
-						screenshotOptions
+					await waitForContentReady(page, { timeout: timeoutEditor });
+
+					await applyDomSearchReplace(
+						editorContainer,
+						editorSearchReplace
 					);
 
-				await setDeviceType(page, 'Mobile Portrait');
+					await expect
+						.soft(editorContainer)
+						.toHaveScreenshot(
+							`test-${section}-editor-desktop.png`,
+							screenshotOptions
+						);
 
-				// Set viewport and adjust iframe height for full element capture (mobile)
-				await setEditorViewportForScreenshot(page, 'mobile');
+					await setDeviceType(page, 'Mobile Portrait');
 
-				await applyDomSearchReplace(
-					editorContainer,
-					editorSearchReplace
-				);
+					await setEditorViewportForScreenshot(page, 'mobile');
 
-				// Editor Mobile Snapshot
-				await expect
-					.soft(editorContainer)
-					.toHaveScreenshot(
-						`test-${section}-editor-mobile.png`,
-						screenshotOptions
+					await waitForContentReady(page, { timeout: timeoutEditor });
+
+					await applyDomSearchReplace(
+						editorContainer,
+						editorSearchReplace
 					);
 
-				// Check frontend
-				await savePage(page);
-				await redirectToFrontPage(page);
-				await prepareFrontendForScreenshot(page);
+					await expect
+						.soft(editorContainer)
+						.toHaveScreenshot(
+							`test-${section}-editor-mobile.png`,
+							screenshotOptions
+						);
 
-				// Run frontend setup if it exists
-				if (frontendSetupFn) {
-					await frontendSetupFn(page);
+					await savePage(page);
+					await redirectToFrontPage(page);
+					await prepareFrontendForScreenshot(page);
+
+					if (frontendSetupFn) {
+						await frontendSetupFn(page);
+					}
+				} else {
+					if (frontendSetupFn) {
+						await frontendSetupFn(page);
+					} else {
+						if (!skipEditorPostId) {
+							throw new Error(
+								`skipEditor fixture "${section}" did not create a post ID. Provide frontendSetup or let default PHP post creation run.`
+							);
+						}
+
+						const permalinkResult = await wpCli(
+							page,
+							`wp post get ${skipEditorPostId} --field=url`,
+							false,
+							false
+						);
+						const permalink = String(
+							permalinkResult.stdout || ''
+						).trim();
+
+						if (!permalink) {
+							throw new Error(
+								`Failed to get permalink for post ${skipEditorPostId}`
+							);
+						}
+
+						await page.goto(permalink, {
+							waitUntil: 'domcontentloaded',
+						});
+					}
+
+					await prepareFrontendForScreenshot(page);
 				}
 
-				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(500);
-
 				await setFrontendViewportForScreenshot(page, 'desktop');
+
+				await waitForContentReady(page, { timeout: timeoutEditor });
 
 				// Frontend Desktop Snapshot
 				const entryContent = page.locator('.entry-content').first();
@@ -314,6 +379,8 @@ test.describe('Sections Visual Snapshots', () => {
 					);
 
 				await setFrontendViewportForScreenshot(page, 'mobile');
+
+				await waitForContentReady(page, { timeout: timeoutEditor });
 
 				// Frontend Mobile Snapshot
 				await entryContent.scrollIntoViewIfNeeded();

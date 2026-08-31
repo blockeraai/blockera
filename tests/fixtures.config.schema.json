@@ -9,6 +9,21 @@
 			"default": true,
 			"description": "Whether to take a screenshot of the block."
 		},
+		"skipEditor": {
+			"type": "boolean",
+			"default": false,
+			"description": "When true, create the post via PHP (WP-CLI wp_insert_post) and capture frontend screenshots only. Do not open the block editor or assert editor screenshots."
+		},
+		"timeout": {
+			"type": "integer",
+			"minimum": 1,
+			"description": "Playwright test timeout in milliseconds for this fixture. Omit to use the suite default."
+		},
+		"timeoutEditor": {
+			"type": "integer",
+			"minimum": 1,
+			"description": "Maximum milliseconds to wait for images, media, fonts, and AJAX to settle before editor and frontend screenshots. Omit to use the suite default (5000)."
+		},
 		"snapshot": {
 			"type": "boolean",
 			"default": true,
