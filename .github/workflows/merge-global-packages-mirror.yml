@@ -1,7 +1,7 @@
 name: Merge global-packages mirror
 
 # After a consumer PR merges to master, open a PR on global-packages:
-# <consumer-repo>/<merged-head> → master.
+# <consumer-repo>/<merged-head> → master, then auto-merge when checks pass.
 on:
     pull_request:
         types: [closed]
@@ -45,7 +45,7 @@ jobs:
             - name: Ensure global-packages submodule
               uses: ./.github/actions/ensure-global-packages
 
-            - name: Merge global-packages mirror
+            - name: Open GP mirror PR (auto-merge when checks pass)
               run: |
                   SCRIPT=packages/global-packages/packages/dev-tools/github/scripts/jobs/merge-global-packages-mirror/run.sh
                   if [[ ! -f "${SCRIPT}" ]]; then
