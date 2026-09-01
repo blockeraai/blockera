@@ -46,7 +46,7 @@ jobs:
     resolve:
         name: Merge base / resolve gitlink
         needs: pr-workflow-gate
-        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event.inputs.head_branch != '' || github.event_name != 'workflow_dispatch') && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event.inputs.head_branch != '' || github.event_name != 'workflow_dispatch') && (github.event_name != 'pull_request' || github.event.pull_request.mergeable == false) && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
         runs-on: ubuntu-latest
         timeout-minutes: 15
         env:
@@ -57,7 +57,8 @@ jobs:
         steps:
             - uses: actions/checkout@v5
               with:
-                  ref: ${{ github.head_ref || github.event.inputs.head_branch }}
+                  repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+                  ref: ${{ github.event.pull_request.head.sha || github.event.inputs.head_branch }}
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   fetch-depth: 0
 
