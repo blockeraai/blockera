@@ -3,6 +3,7 @@
 # project:bootstrap copies this to the host .husky/ folder.
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Create a same-named blockera-global-packages branch from master when a new
-# host branch is created. Skip: BLOCKERA_SKIP_SUBMODULE_BRANCH=1
+# Create a prefixed global-packages mirror from master when a new host branch
+# is created, then push that mirror to origin. Skip: BLOCKERA_SKIP_SUBMODULE_BRANCH=1
+# Skip push: BLOCKERA_SKIP_SUBMODULE_PUSH=1
 bash "$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/ensure-global-packages-mirror-branch.sh" "$@"

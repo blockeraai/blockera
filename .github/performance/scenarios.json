@@ -25,7 +25,7 @@
 			"label": "Admin: Dashboard",
 			"path": "/wp-admin/",
 			"auth": true,
-			"thresholdPercent": 20
+			"thresholdPercent": 25
 		},
 		{
 			"id": "admin-posts",
@@ -33,7 +33,7 @@
 			"label": "Admin: Posts list",
 			"path": "/wp-admin/edit.php",
 			"auth": true,
-			"thresholdPercent": 20
+			"thresholdPercent": 25
 		},
 		{
 			"id": "admin-media",
@@ -41,7 +41,7 @@
 			"label": "Admin: Media library",
 			"path": "/wp-admin/upload.php",
 			"auth": true,
-			"thresholdPercent": 20
+			"thresholdPercent": 25
 		},
 		{
 			"id": "admin-block-editor",

@@ -23,6 +23,7 @@ const {
 	applyDomSearchReplace,
 	createPostViaPhp,
 	wpCli,
+	hideCanvasHeaderForScreenshot,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	setDeviceType,
@@ -292,6 +293,8 @@ test.describe('Sections Visual Snapshots', () => {
 						editorSearchReplace
 					);
 
+					await hideCanvasHeaderForScreenshot(page);
+
 					await expect
 						.soft(editorContainer)
 						.toHaveScreenshot(
@@ -309,6 +312,8 @@ test.describe('Sections Visual Snapshots', () => {
 						editorContainer,
 						editorSearchReplace
 					);
+
+					await hideCanvasHeaderForScreenshot(page);
 
 					await expect
 						.soft(editorContainer)
