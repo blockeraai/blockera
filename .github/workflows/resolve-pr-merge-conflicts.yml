@@ -1,71 +1,56 @@
 name: Resolve PR merge conflicts
 
+# Ops job (not a PR test): after master moves, open feature PRs often conflict
+# on the global-packages gitlink. pull_request is the wrong trigger (other PRs
+# do not get an event; mergeable is often UNKNOWN). Same shape as
+# merge-global-packages-mirror.yml — no pr-workflow-gate.
 on:
-    pull_request:
-        types: [opened, synchronize, reopened, ready_for_review]
+    push:
+        branches:
+            - master
     workflow_dispatch:
         inputs:
             base_branch:
-                description: 'Branch to merge into the head (consumer base)'
+                description: 'Consumer base to merge into PR heads'
                 required: true
                 default: 'master'
             head_branch:
-                description: 'PR head branch to update'
-                required: true
+                description: 'Limit to this PR head (empty = all locally conflicted PRs)'
+                required: false
                 default: ''
 
 concurrency:
-    group: resolve-pr-conflicts-${{ github.head_ref || github.event.inputs.head_branch }}
-    cancel-in-progress: true
+    group: resolve-pr-conflicts
+    cancel-in-progress: false
 
 permissions:
     contents: write
     pull-requests: read
 
 jobs:
-    pr-workflow-gate:
-        name: PR workflow filter
-        runs-on: ubuntu-latest
-        outputs:
-            run: ${{ steps.gate.outputs.run }}
-        env:
-            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
-        steps:
-            - uses: actions/checkout@v5
-              with:
-                  token: ${{ secrets.BLOCKERABOT_PAT }}
-
-            - name: Ensure global-packages submodule
-              uses: ./.github/actions/ensure-global-packages
-
-            - id: gate
-              uses: ./packages/global-packages/packages/dev-tools/github/actions/pr-workflow-gate
-              with:
-                  workflow-file: resolve-pr-merge-conflicts.yml
-
     resolve:
-        name: Merge base / resolve gitlink
-        needs: pr-workflow-gate
-        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.event.inputs.head_branch != '' || github.event_name != 'workflow_dispatch') && (github.event_name != 'pull_request' || github.event.pull_request.mergeable == false) && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
+        name: Merge GP mirror, then bump PR
+        if: ${{ github.repository == 'blockeraai/blockera' }}
         runs-on: ubuntu-latest
-        timeout-minutes: 15
+        timeout-minutes: 20
         env:
             BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
-            BLOCKERA_CONFLICT_BASE_BRANCH: ${{ github.event.pull_request.base.ref || github.event.inputs.base_branch }}
-            BLOCKERA_CONFLICT_HEAD_BRANCH: ${{ github.event.pull_request.head.ref || github.event.inputs.head_branch }}
-            BLOCKERA_CONFLICT_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+            GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            BLOCKERA_CONFLICT_BASE_BRANCH: ${{ github.event.inputs.base_branch || github.event.repository.default_branch }}
+            BLOCKERA_CONFLICT_HEAD_BRANCH: ${{ github.event.inputs.head_branch }}
+            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+            SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         steps:
             - uses: actions/checkout@v5
               with:
-                  repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-                  ref: ${{ github.event.pull_request.head.sha || github.event.inputs.head_branch }}
+                  ref: ${{ github.event.inputs.base_branch || github.event.repository.default_branch }}
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   fetch-depth: 0
 
             - name: Ensure global-packages submodule
               uses: ./.github/actions/ensure-global-packages
 
-            - name: Merge base / resolve gitlink
+            - name: Merge GP mirror, then bump PR
               run: |
                   SCRIPT=packages/global-packages/packages/dev-tools/github/scripts/jobs/resolve-pr-merge-conflicts/run.sh
                   if [[ ! -f "${SCRIPT}" ]]; then
