@@ -11,3 +11,10 @@ TYPECHECK_SH="$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/
 if [ -f "${TYPECHECK_SH}" ]; then
 	bash "${TYPECHECK_SH}"
 fi
+
+# Push the GP mirror branch if it exists locally and is not on origin yet.
+# Skip: BLOCKERA_SKIP_SUBMODULE_PUSH=1
+MIRROR_SH="$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/ensure-global-packages-mirror-branch.sh"
+if [ -f "${MIRROR_SH}" ]; then
+	bash "${MIRROR_SH}" --ensure-pushed
+fi
