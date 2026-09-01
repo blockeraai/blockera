@@ -96,8 +96,8 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-post-terms__se
 @media screen and (max-width: 478px) and (min-width: 0px) {
 	.blockera-block.blockera-block-2.wp-block-post-terms {
 		flex-direction: column;
-		align-items: center !important;
-		justify-content: flex-start !important;
+		align-items: flex-start !important;
+		justify-content: center !important;
 	}
 
 	html:root body :where(.blockera-block.blockera-block-2) a {
