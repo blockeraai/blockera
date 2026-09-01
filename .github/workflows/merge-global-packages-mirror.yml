@@ -1,0 +1,55 @@
+name: Merge global-packages mirror
+
+# After a consumer PR merges to master, open a PR on global-packages:
+# <consumer-repo>/<merged-head> → master.
+on:
+    pull_request:
+        types: [closed]
+        branches:
+            - master
+    workflow_dispatch:
+        inputs:
+            head_branch:
+                description: 'Merged consumer head (mirror is <repo>/<head>)'
+                required: true
+                default: ''
+
+concurrency:
+    group: merge-global-packages-mirror-${{ github.event.pull_request.head.ref || github.event.inputs.head_branch }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+    pull-requests: read
+
+jobs:
+    merge:
+        name: Merge global-packages mirror
+        if: ${{ (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && (github.event.inputs.head_branch != '' || github.event_name != 'workflow_dispatch') && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        env:
+            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            BLOCKERA_GP_PR_HEAD_BRANCH: ${{ github.event.pull_request.head.ref || github.event.inputs.head_branch }}
+            BLOCKERA_GP_PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+            BLOCKERA_GP_PR_CONSUMER_REPO: ${{ github.repository }}
+            BLOCKERA_GP_PR_URL: ${{ github.event.pull_request.html_url }}
+            BLOCKERA_GP_PR_NUMBER: ${{ github.event.pull_request.number }}
+            BLOCKERA_GP_PR_TITLE: ${{ github.event.pull_request.title }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - name: Merge global-packages mirror
+              run: |
+                  SCRIPT=packages/global-packages/packages/dev-tools/github/scripts/jobs/merge-global-packages-mirror/run.sh
+                  if [[ ! -f "${SCRIPT}" ]]; then
+                    echo 'merge-global-packages-mirror: toolkit pin has no job script yet; skip'
+                    exit 0
+                  fi
+                  bash "${SCRIPT}"
