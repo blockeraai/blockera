@@ -2,7 +2,8 @@ name: Sync global-packages submodule
 
 # Automation model:
 # 1) blockera-global-packages notifies this workflow (repository_dispatch)
-# 2) master tip → open/update a bump PR (CI gates the pin)
+# 2) master tip → open/update one bump PR (stable title; later GP master
+#    commits add a pin commit on that same PR branch — do not close it)
 # 3) matching feature branch → skip (pin locally with npm run submodule:bump)
 # 4) workflow_dispatch (mode=pr|push) + daily schedule for catch-up / manual pins
 #
@@ -154,6 +155,9 @@ jobs:
               id: bump
               env:
                   SOURCE_REF: ${{ steps.targets.outputs.source_ref }}
+                  MODE: ${{ steps.targets.outputs.mode }}
+                  BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
+                  GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   BLOCKERA_SYNC_GP_BUMP_SCRIPT: ${{ runner.temp }}/blockera-sync-gp-scripts/bump-global-packages-submodule.sh
               run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/run-bump.sh"
 
@@ -162,8 +166,6 @@ jobs:
               id: commit
               env:
                   SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
-                  COMMITS: ${{ steps.bump.outputs.commits }}
-                  COMMIT_SUBJECT: ${{ steps.bump.outputs.commit_subject }}
               run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/commit-bump.sh"
 
             - name: Push directly to feature branch
@@ -178,14 +180,19 @@ jobs:
                   BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
                   SHORT_SHA: ${{ steps.bump.outputs.short_sha }}
                   FULL_SHA: ${{ steps.bump.outputs.sha }}
-                  COMMITS: ${{ steps.bump.outputs.commits }}
-                  COMMIT_SUBJECT: ${{ steps.bump.outputs.commit_subject }}
                   SOURCE_BRANCH: ${{ steps.targets.outputs.source_branch }}
                   SOURCE_MESSAGE: ${{ steps.targets.outputs.source_message }}
-              run: bash "$RUNNER_TEMP/blockera-sync-gp-scripts/open-or-update-pr.sh"
+              run: |
+                  # Prefer the script from the bumped pin so label/PR fixes ship
+                  # on the same notify that lands them (stash is a fallback).
+                  if [[ -f "${GP_SYNC_JOB}/open-or-update-pr.sh" ]]; then
+                    bash "${GP_SYNC_JOB}/open-or-update-pr.sh"
+                  else
+                    bash "$RUNNER_TEMP/blockera-sync-gp-scripts/open-or-update-pr.sh"
+                  fi
 
             - name: Delete leftover bump branch
-              if: ${{ always() && steps.open_pr.outcome != 'success' }}
+              if: ${{ always() && steps.open_pr.outcome == 'failure' }}
               env:
                   GH_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   BASE_BRANCH: ${{ steps.targets.outputs.target_branch }}
