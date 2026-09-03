@@ -456,6 +456,7 @@ class EditorPerfUtils {
 	async getBackgroundColorContainer() {
 		return this.page
 			.locator('[data-cy="base-control"]:has([aria-label="BG Color"])')
+			.filter({ visible: true })
 			.last();
 	}
 
