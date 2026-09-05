@@ -1,0 +1,25 @@
+# Edit packages/dev-tools/root-configs/.docker/Dockerfile.wordpress
+# (consumers: packages/global-packages/packages/dev-tools/root-configs/.docker/).
+# project:bootstrap copies this folder to the host `.docker/`.
+#
+# Source of truth for apt-get flags injected into wp-env's generated
+# WordPress.Dockerfile and Tests-WordPress.Dockerfile (see
+# github/scripts/inject-wp-env-dockerfile.js). wp-env still chooses
+# FROM wordpress:php${phpVersion} from .wp-env.json; this ARG is for
+# manual builds of this file.
+#
+# Retarget apt off deb.debian.org (Fastly POPs 404 debian-security pool
+# files such as bullseye sudo) then wipe lists, update, and install.
+
+ARG PHP_VERSION=8.2
+FROM wordpress:php${PHP_VERSION}
+
+RUN find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) -exec sed -i \
+		-e 's|https\?://deb.debian.org/debian-security|http://security.debian.org/debian-security|g' \
+		-e 's|https\?://deb.debian.org/debian|http://ftp.debian.org/debian|g' \
+		{} + && \
+	rm -rf /var/lib/apt/lists/* && \
+	apt-get update --allow-releaseinfo-change && \
+	apt-get -qy install -o Apt::Get::AllowUnauthenticated=true -o Acquire::Retries=5 \
+		$PHPIZE_DEPS && \
+	touch /usr/local/etc/php/php.ini
