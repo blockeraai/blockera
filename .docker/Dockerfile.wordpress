@@ -8,14 +8,17 @@
 # FROM wordpress:php${phpVersion} from .wp-env.json; this ARG is for
 # manual builds of this file.
 #
-# Wipe apt lists then update+install in one layer. Cached WordPress image
-# layers leave InRelease Hits that still 404 debian-security pool files
-# (e.g. sudo on bullseye / wordpress:php7.4).
+# Retarget apt off deb.debian.org (Fastly POPs 404 debian-security pool
+# files such as bullseye sudo) then wipe lists, update, and install.
 
 ARG PHP_VERSION=8.2
 FROM wordpress:php${PHP_VERSION}
 
-RUN rm -rf /var/lib/apt/lists/* && \
+RUN find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) -exec sed -i \
+		-e 's|https\?://deb.debian.org/debian-security|http://security.debian.org/debian-security|g' \
+		-e 's|https\?://deb.debian.org/debian|http://ftp.debian.org/debian|g' \
+		{} + && \
+	rm -rf /var/lib/apt/lists/* && \
 	apt-get update --allow-releaseinfo-change && \
 	apt-get -qy install -o Apt::Get::AllowUnauthenticated=true -o Acquire::Retries=5 \
 		$PHPIZE_DEPS && \
