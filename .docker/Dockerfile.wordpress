@@ -1,0 +1,20 @@
+# Edit packages/dev-tools/root-configs/.docker/Dockerfile.wordpress
+# (consumers: packages/global-packages/packages/dev-tools/root-configs/.docker/).
+# project:bootstrap copies this folder to the host `.docker/`.
+#
+# Source of truth for apt-get flags injected into wp-env's generated
+# WordPress.Dockerfile and Tests-WordPress.Dockerfile (see
+# github/scripts/inject-wp-env-dockerfile.js). wp-env still chooses
+# FROM wordpress:php${phpVersion} from .wp-env.json; this ARG is for
+# manual builds of this file.
+#
+# Combine apt-get update with install in one layer so Docker cache cannot
+# reuse a stale Debian index (404 on debian-security packages).
+
+ARG PHP_VERSION=8.2
+FROM wordpress:php${PHP_VERSION}
+
+RUN apt-get update --allow-releaseinfo-change && \
+	apt-get -qy install --fix-missing -o Apt::Get::AllowUnauthenticated=true \
+		$PHPIZE_DEPS && \
+	touch /usr/local/etc/php/php.ini
