@@ -343,7 +343,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Opens the background layer popover and uploads an image via Media Library
-	 * (mirrors background-image.general-4.e2e.cy.js + media-image.general-4.e2e.cy.js).
+	 * (mirrors background-image.general.e2e.cy.js + media-image.general.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 * @param {Object} [options]
@@ -376,7 +376,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Adds a background image layer via Image & Gradient repeater
-	 * (see background-image.general-4.e2e.cy.js).
+	 * (see background-image.general.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
@@ -514,7 +514,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Waits until the selected block stores an uploaded background image
-	 * (mirrors background-image.general-4.e2e.cy.js assertBlockData).
+	 * (mirrors background-image.general.e2e.cy.js assertBlockData).
 	 */
 	async expectSelectedBlockBackgroundImage() {
 		await this.page.waitForFunction(
@@ -707,7 +707,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Resets global styles and opens the Default style variation for a block type
-	 * (see background-color.global-styles.e2e.cy.js).
+	 * (see background-color.gs.e2e.cy.js).
 	 *
 	 * @param {string} [blockType] Block name, e.g. core/paragraph.
 	 */
@@ -924,7 +924,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Opens Block Style Variations for a block type in Global Styles
-	 * (see shared-style-variation.global-styles.e2e.cy.js).
+	 * (see shared-style-variation.gs.e2e.cy.js).
 	 *
 	 * @param {string} [blockType] Block name, e.g. core/paragraph.
 	 */
@@ -1184,10 +1184,10 @@ class EditorPerfUtils {
 
 	/**
 	 * Duplicates a Global Styles shared style variation via block card menu
-	 * (see shared-style-variation.global-styles.e2e.cy.js duplicate test).
+	 * (see shared-style-variation.gs.e2e.cy.js duplicate test).
 	 *
 	 * On Blockera Free, only the first duplicate opens the save modal; later
-	 * attempts show the upgrade modal instead (style-variations.global-styles.e2e.cy.js).
+	 * attempts show the upgrade modal instead (style-variations.gs.e2e.cy.js).
 	 *
 	 * @param {string} styleSlug Source variation slug to duplicate.
 	 * @return {Promise<'duplicated'|'upgrade-blocked'>} Which modal path opened.
