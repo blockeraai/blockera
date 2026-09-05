@@ -343,7 +343,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Opens the background layer popover and uploads an image via Media Library
-	 * (mirrors background-image.general-4.e2e.cy.js + media-image.general-4.e2e.cy.js).
+	 * (mirrors background-image.general.e2e.cy.js + media-image.general.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 * @param {Object} [options]
@@ -376,7 +376,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Adds a background image layer via Image & Gradient repeater
-	 * (see background-image.general-4.e2e.cy.js).
+	 * (see background-image.general.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
@@ -513,7 +513,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Waits until the selected block stores an uploaded background image
-	 * (mirrors background-image.general-4.e2e.cy.js assertBlockData).
+	 * (mirrors background-image.general.e2e.cy.js assertBlockData).
 	 */
 	async expectSelectedBlockBackgroundImage() {
 		await this.page.waitForFunction(
