@@ -644,7 +644,7 @@ test.describe('Editor', () => {
 		}) => {
 			// Theme preset shared across core/paragraph + core/heading (TT5 text-display).
 			// Blockera Free allows one duplicate; further Duplicate clicks open the
-			// upgrade modal (see style-variations.global-styles.e2e.cy.js).
+			// upgrade modal (see style-variations.gs.e2e.cy.js).
 			const styleSlug = 'text-display';
 
 			await admin.visitSiteEditor({
