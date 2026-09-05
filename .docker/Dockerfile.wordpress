@@ -8,13 +8,15 @@
 # FROM wordpress:php${phpVersion} from .wp-env.json; this ARG is for
 # manual builds of this file.
 #
-# Combine apt-get update with install in one layer so Docker cache cannot
-# reuse a stale Debian index (404 on debian-security packages).
+# Wipe apt lists then update+install in one layer. Cached WordPress image
+# layers leave InRelease Hits that still 404 debian-security pool files
+# (e.g. sudo on bullseye / wordpress:php7.4).
 
 ARG PHP_VERSION=8.2
 FROM wordpress:php${PHP_VERSION}
 
-RUN apt-get update --allow-releaseinfo-change && \
-	apt-get -qy install --fix-missing -o Apt::Get::AllowUnauthenticated=true \
+RUN rm -rf /var/lib/apt/lists/* && \
+	apt-get update --allow-releaseinfo-change && \
+	apt-get -qy install -o Apt::Get::AllowUnauthenticated=true -o Acquire::Retries=5 \
 		$PHPIZE_DEPS && \
 	touch /usr/local/etc/php/php.ini
