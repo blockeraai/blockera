@@ -25,6 +25,35 @@ const BACKGROUND_IMAGE_FIXTURE = path.join(
 const BORDER_PRESET_ADD_DATA_TEST =
 	'global-styles-preset-add-border-preset-presets-custom';
 
+/**
+ * Instant nearest-scroll without Playwright's layout-stability wait.
+ * GS overlay observers make scrollIntoViewIfNeeded sit for hundreds of ms.
+ *
+ * @param {import('@playwright/test').Locator} locator Target.
+ * @return {Promise<void>}
+ */
+async function scrollLocatorNearest(locator) {
+	await locator.evaluate((el) => {
+		const viewRoot =
+			el.closest(
+				'.interface-complementary-area, .components-panel, .blockera-sidebar-pane'
+			) || el.ownerDocument.documentElement;
+		const rect = el.getBoundingClientRect();
+		const view = viewRoot.getBoundingClientRect();
+		const fullyVisible =
+			rect.top >= view.top &&
+			rect.bottom <= view.bottom &&
+			rect.left >= view.left &&
+			rect.right <= view.right;
+
+		if (fullyVisible) {
+			return;
+		}
+
+		el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+	});
+}
+
 class EditorPerfUtils {
 	/**
 	 * @param {{ page: import('@playwright/test').Page, editor?: import('@wordpress/e2e-test-utils-playwright').Editor }} args
@@ -1159,7 +1188,7 @@ class EditorPerfUtils {
 			.first();
 
 		await expect(styleRow).toBeAttached({ timeout: 20000 });
-		await styleRow.scrollIntoViewIfNeeded();
+		await scrollLocatorNearest(styleRow);
 		await styleRow.click({ force: true });
 	}
 
@@ -1195,9 +1224,9 @@ class EditorPerfUtils {
 	async duplicateGlobalStylesSharedStyleVariation(styleSlug) {
 		const contextMenu = this.page
 			.locator(`[data-test="open-${styleSlug}-block-card-contextmenu"]`)
-			.filter({ visible: true })
 			.first();
-		await contextMenu.scrollIntoViewIfNeeded();
+		await expect(contextMenu).toBeAttached({ timeout: 20000 });
+		await scrollLocatorNearest(contextMenu);
 		await contextMenu.click({ force: true });
 
 		const popover = this.page
@@ -1225,7 +1254,7 @@ class EditorPerfUtils {
 		}
 
 		await expect(saveButton).toBeEnabled({ timeout: 20000 });
-		await saveButton.click();
+		await saveButton.click({ force: true });
 
 		await expect(
 			this.page.getByRole('dialog', { name: /Duplicate/i })
