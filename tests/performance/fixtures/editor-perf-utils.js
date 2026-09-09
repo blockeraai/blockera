@@ -1615,11 +1615,33 @@ class EditorPerfUtils {
 		await widthInput.click({ force: true });
 		await this.page.keyboard.press('ControlOrMeta+A');
 		await widthInput.pressSequentially(String(widthPx), { delay: 0 });
+
+		const presetPopover = this.page
+			.locator('.blockera-component-popover')
+			.filter({
+				has: this.page.locator(
+					'[data-test="border-control-width"]:visible'
+				),
+			})
+			.last();
+
 		await this.page.keyboard.press('Escape');
 
-		await expect(
-			this.page.locator('[data-test="repeater-item-creating-step"]')
-		).toHaveCount(0, { timeout: 20000 });
+		const creatingStep = this.page.locator(
+			'[data-test="repeater-item-creating-step"]'
+		);
+
+		if ((await creatingStep.count()) > 0) {
+			const closeButton = presetPopover.locator(
+				'[data-test="close-popover"]'
+			);
+
+			if ((await closeButton.count()) > 0) {
+				await closeButton.click({ force: true });
+			}
+		}
+
+		await expect(creatingStep).toHaveCount(0, { timeout: 20000 });
 	}
 
 	/**
