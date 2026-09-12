@@ -6,7 +6,7 @@
  * - `core` (default) — PR Blockera vs WordPress Core (plugin off).
  *   Gates scenarios without requiresBlockera (or requiresBlockera: false).
  * - `master` — PR Blockera vs Blockera on master.
- *   Gates scenarios with requiresBlockera: true.
+ *   Gates scenarios with requiresBlockera: true, plus compareAgainstMaster.
  *
  * Gate: fail when abs((current - baseline) / baseline * 100) > thresholdPercent
  * on each scenario's primaryMetric (focus, switchTab, …).
@@ -26,6 +26,10 @@ const {
 	toResultMetricKey,
 	scenarioIdFromTitle,
 } = require('./utils');
+const {
+	scenarioMatchesBaseline,
+	scenarioThresholdPercent,
+} = require('./editor-scenario-policy');
 
 const root = process.cwd();
 const outDir = process.env.PERF_RESULTS_DIR || '.github/performance/results';
@@ -94,22 +98,6 @@ function indexByScenarioId(stats) {
 		map.set(scenarioIdFromTitle(row.title), row);
 	}
 	return map;
-}
-
-/**
- * Whether a scenario should be gated for the active baseline.
- *
- * @param {{requiresBlockera?: boolean}} scenario
- * @param {string} mode
- * @return {boolean} True when the scenario belongs in this baseline report.
- */
-function scenarioMatchesBaseline(scenario, mode) {
-	const requiresBlockera = Boolean(scenario.requiresBlockera);
-	if (mode === 'master') {
-		return requiresBlockera;
-	}
-	// core (and any future non-master baseline that compares to WP Core)
-	return !requiresBlockera;
 }
 
 /**
@@ -200,10 +188,11 @@ function main() {
 	}
 
 	for (const scenario of scenarios) {
-		const threshold =
-			typeof scenario.thresholdPercent === 'number'
-				? scenario.thresholdPercent
-				: defaultThreshold;
+		const threshold = scenarioThresholdPercent(
+			scenario,
+			baselineMode,
+			defaultThreshold
+		);
 		const primaryMetric =
 			scenario.primaryMetric || defaults.primaryMetric || 'focus';
 		const primaryKey = toResultMetricKey(primaryMetric);
@@ -403,7 +392,7 @@ function buildReport({
 		);
 		lines.push('');
 		lines.push(
-			'Only scenarios with `requiresBlockera: true` are gated in this report.'
+			'Only Blockera-only scenarios (`requiresBlockera`) and scenarios marked `compareAgainstMaster` are gated in this report.'
 		);
 	} else {
 		lines.push(

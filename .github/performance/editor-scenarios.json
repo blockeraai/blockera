@@ -7,7 +7,9 @@
 			"id": "editor-select-blocks",
 			"label": "Select blocks",
 			"primaryMetric": "focus",
-			"thresholdPercent": 1000
+			"thresholdPercent": 1000,
+			"compareAgainstMaster": true,
+			"thresholdPercentMaster": 20
 		},
 		{
 			"id": "editor-workspace-tabs",
