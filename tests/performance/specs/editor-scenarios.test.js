@@ -21,7 +21,7 @@
  * Scenario scope (`PERF_SCENARIO_SCOPE`):
  * - `all` (default) — every scenario (local)
  * - `core-comparable` — scenarios without requiresBlockera (PR vs Core CI)
- * - `blockera-only` — scenarios with requiresBlockera (PR vs Master CI)
+ * - `blockera-only` — requiresBlockera, plus `compareAgainstMaster` (PR vs Master CI)
  */
 
 const path = require('node:path');
@@ -36,6 +36,7 @@ const {
 const {
 	closeWelcomeGuide,
 } = require('@blockera/dev-playwright/js/utils/editor');
+const { shouldSkipScenario } = require('../editor-scenario-policy');
 
 const scenariosConfig = require(
 	path.join(process.cwd(), '.github/performance/editor-scenarios.json')
@@ -57,32 +58,13 @@ const scenarioScope = process.env.PERF_SCENARIO_SCOPE || 'all';
  * @param {string} scenarioId
  * @return {{skip: boolean, reason: string}} Skip decision for the active subject/scope.
  */
-function shouldSkipScenario(scenarioId) {
-	const scenario = scenarioById.get(scenarioId);
-	const requiresBlockera = Boolean(scenario?.requiresBlockera);
-
-	if (subject === 'core' && requiresBlockera) {
-		return {
-			skip: true,
-			reason: `${scenarioId} requires Blockera (PERF_SUBJECT=blockera)`,
-		};
-	}
-
-	if (scenarioScope === 'core-comparable' && requiresBlockera) {
-		return {
-			skip: true,
-			reason: `${scenarioId} skipped (PERF_SCENARIO_SCOPE=core-comparable)`,
-		};
-	}
-
-	if (scenarioScope === 'blockera-only' && !requiresBlockera) {
-		return {
-			skip: true,
-			reason: `${scenarioId} skipped (PERF_SCENARIO_SCOPE=blockera-only)`,
-		};
-	}
-
-	return { skip: false, reason: '' };
+function skipScenario(scenarioId) {
+	return shouldSkipScenario({
+		scenario: scenarioById.get(scenarioId),
+		scenarioId,
+		subject,
+		scenarioScope,
+	});
 }
 
 test.describe('Editor', () => {
@@ -97,7 +79,7 @@ test.describe('Editor', () => {
 			focus: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario('editor-select-blocks');
+		const { skip, reason } = skipScenario('editor-select-blocks');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -173,7 +155,7 @@ test.describe('Editor', () => {
 			switchTab: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario('editor-workspace-tabs');
+		const { skip, reason } = skipScenario('editor-workspace-tabs');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -262,7 +244,7 @@ test.describe('Editor', () => {
 			blockBgColor: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario('editor-block-bg-color');
+		const { skip, reason } = skipScenario('editor-block-bg-color');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -348,7 +330,7 @@ test.describe('Editor', () => {
 			blockBgImage: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario('editor-block-bg-image');
+		const { skip, reason } = skipScenario('editor-block-bg-image');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -439,9 +421,7 @@ test.describe('Editor', () => {
 			gsVariationBgColor: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario(
-			'editor-gs-variation-bg-color'
-		);
+		const { skip, reason } = skipScenario('editor-gs-variation-bg-color');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -530,9 +510,7 @@ test.describe('Editor', () => {
 			gsVariationBgImage: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario(
-			'editor-gs-variation-bg-image'
-		);
+		const { skip, reason } = skipScenario('editor-gs-variation-bg-image');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -620,9 +598,7 @@ test.describe('Editor', () => {
 			gsVariationDuplicate: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario(
-			'editor-gs-variation-duplicate'
-		);
+		const { skip, reason } = skipScenario('editor-gs-variation-duplicate');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -716,9 +692,7 @@ test.describe('Editor', () => {
 			gsDefaultBgColor: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario(
-			'editor-gs-default-bg-color'
-		);
+		const { skip, reason } = skipScenario('editor-gs-default-bg-color');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
@@ -804,7 +778,7 @@ test.describe('Editor', () => {
 			gsDefaultBgColorVariable: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario(
+		const { skip, reason } = skipScenario(
 			'editor-gs-default-bg-color-variable'
 		);
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
@@ -883,9 +857,7 @@ test.describe('Editor', () => {
 			gsSeedBorderPreset: [],
 		};
 
-		const { skip, reason } = shouldSkipScenario(
-			'editor-gs-seed-border-preset'
-		);
+		const { skip, reason } = skipScenario('editor-gs-seed-border-preset');
 		// @debug-ignore — conditional skip via PERF_SUBJECT / PERF_SCENARIO_SCOPE
 		test.skip(skip, reason);
 
