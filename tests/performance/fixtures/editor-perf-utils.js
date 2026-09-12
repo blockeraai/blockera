@@ -11,7 +11,6 @@ const {
 	openGlobalStylesPanel,
 	openValueAddon,
 	selectValueAddonItem,
-	getParentContainer,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	closeWelcomeGuide,
@@ -372,7 +371,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Opens the background layer popover and uploads an image via Media Library
-	 * (mirrors background-image.general.e2e.cy.js + media-image.general.e2e.cy.js).
+	 * (mirrors background-image.e2e.cy.js + media-image.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 * @param {Object} [options]
@@ -405,7 +404,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Adds a background image layer via Image & Gradient repeater
-	 * (see background-image.general.e2e.cy.js).
+	 * (see background-image.e2e.cy.js).
 	 *
 	 * @param {string} [filePath] Absolute path to the upload fixture.
 	 */
@@ -543,7 +542,7 @@ class EditorPerfUtils {
 
 	/**
 	 * Waits until the selected block stores an uploaded background image
-	 * (mirrors background-image.general.e2e.cy.js assertBlockData).
+	 * (mirrors background-image.e2e.cy.js assertBlockData).
 	 */
 	async expectSelectedBlockBackgroundImage() {
 		await this.page.waitForFunction(
@@ -1543,6 +1542,7 @@ class EditorPerfUtils {
 		if (reset) {
 			await this.clearBlockeraGlobalStylesStore();
 			await this.resetGlobalStylesEntityRecord();
+			await this.clearGlobalStylesCustomBorderPresets();
 		}
 
 		const bordersPresets = this.page.locator('.blockera-borders-presets');
@@ -1558,13 +1558,109 @@ class EditorPerfUtils {
 			.waitFor({ state: 'attached', timeout: 30000 });
 
 		const bordersNavButton = this.page
-			.locator('#borders-panel, [data-test="borders"]')
+			.locator(
+				'button[id="/borders"], #borders-panel, [data-test="borders"]'
+			)
 			.first();
 
 		await expect(bordersNavButton).toBeVisible({ timeout: 20000 });
 		await bordersNavButton.click({ force: true });
 
 		await bordersPresets.waitFor({ state: 'visible', timeout: 20000 });
+	}
+
+	/**
+	 * Clears in-memory custom border presets so the next Add is the free-tier first item.
+	 * Stays on the Borders screen (does not re-navigate).
+	 */
+	async clearGlobalStylesCustomBorderPresets() {
+		await this.page.waitForFunction(() => window?.wp?.data);
+
+		await this.page.evaluate(() => {
+			const registry = window.wp?.data;
+			const store = window.wp?.coreData?.store;
+
+			if (!registry || !store) {
+				return;
+			}
+
+			const select = registry.select(store);
+			let recordId;
+
+			if (
+				typeof select.__experimentalGetCurrentGlobalStylesId ===
+				'function'
+			) {
+				recordId = select.__experimentalGetCurrentGlobalStylesId();
+			} else if (typeof select.getCurrentGlobalStylesId === 'function') {
+				recordId = select.getCurrentGlobalStylesId();
+			}
+
+			if (
+				recordId === undefined ||
+				recordId === null ||
+				recordId === ''
+			) {
+				return;
+			}
+
+			const record =
+				select.getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					recordId
+				) || {};
+			const settings = JSON.parse(JSON.stringify(record.settings || {}));
+
+			settings.border = settings.border || {};
+			settings.border.blockeraBorder =
+				settings.border.blockeraBorder || {};
+			settings.border.blockeraBorder.presets =
+				settings.border.blockeraBorder.presets || {};
+			settings.border.blockeraBorder.presets.custom = [];
+
+			registry
+				.dispatch(store)
+				.editEntityRecord('root', 'globalStyles', recordId, {
+					settings,
+				});
+		});
+
+		await this.page.waitForFunction(
+			() => {
+				const select = window.wp?.data?.select('core');
+				let gsId;
+
+				if (
+					typeof select?.__experimentalGetCurrentGlobalStylesId ===
+					'function'
+				) {
+					gsId = select.__experimentalGetCurrentGlobalStylesId();
+				} else if (
+					typeof select?.getCurrentGlobalStylesId === 'function'
+				) {
+					gsId = select.getCurrentGlobalStylesId();
+				}
+
+				if (!gsId) {
+					return false;
+				}
+
+				const rawCustoms = select.getEditedEntityRecord(
+					'root',
+					'globalStyles',
+					gsId
+				)?.settings?.border?.blockeraBorder?.presets?.custom;
+
+				const customs = Array.isArray(rawCustoms)
+					? rawCustoms
+					: Object.values(rawCustoms || {});
+
+				return customs.length === 0;
+			},
+			undefined,
+			{ timeout: 20000 }
+		);
 	}
 
 	/**
@@ -1577,28 +1673,65 @@ class EditorPerfUtils {
 		presetName,
 		closePopover = true,
 	}) {
-		const customVariables = await getParentContainer(
-			this.page,
-			'Custom variables'
+		const customVariables = this.page
+			.locator('.blockera-borders-presets [data-cy="base-control"]')
+			.filter({
+				has: this.page.locator('[aria-label="Custom variables"]'),
+			})
+			.last();
+
+		const addButton = customVariables.locator(
+			`[data-test="${addDataTest}"]`
 		);
 
-		await customVariables
-			.locator(`[data-test="${addDataTest}"]`)
-			.click({ force: true });
+		await expect(addButton).toBeVisible({ timeout: 20000 });
+		await addButton.click({ force: true });
 
-		await expect(
-			customVariables.locator('[data-cy="repeater-item"]').last()
-		).toBeVisible({ timeout: 20000 });
-
-		await expect(
-			this.page
-				.locator('[data-test="repeater-item-creating-step"]')
-				.first()
-		).toBeAttached({ timeout: 20000 });
-
+		const creatingStep = this.page.locator(
+			'[data-test="repeater-item-creating-step"]'
+		);
 		const nameField = this.page
 			.locator('[data-test="global-styles-preset-name-field"]')
 			.first();
+
+		try {
+			await expect(creatingStep.first()).toBeAttached({
+				timeout: 20000,
+			});
+			await expect(nameField).toBeVisible({ timeout: 20000 });
+		} catch (error) {
+			const dump = await this.page.evaluate((dataTest) => {
+				const addButtons = [
+					...document.querySelectorAll(`[data-test="${dataTest}"]`),
+				].map((el) => ({
+					disabled: Boolean(el.disabled),
+					hidden: el.offsetParent === null,
+					label: el.getAttribute('aria-label'),
+				}));
+
+				return {
+					addButtons,
+					creatingStep: document.querySelectorAll(
+						'[data-test="repeater-item-creating-step"]'
+					).length,
+					nameField: document.querySelectorAll(
+						'[data-test="global-styles-preset-name-field"]'
+					).length,
+					customLabels: document.querySelectorAll(
+						'[aria-label="Custom variables"]'
+					).length,
+					hasUpgradeText:
+						document.body.innerText.includes('Unlimited Custom'),
+				};
+			}, addDataTest);
+
+			// eslint-disable-next-line no-console
+			console.log(
+				'nameNewGlobalStylesCustomPreset dump',
+				JSON.stringify(dump)
+			);
+			throw error;
+		}
 
 		await nameField.click({ force: true });
 		await this.page.keyboard.press('ControlOrMeta+A');
@@ -1645,11 +1778,33 @@ class EditorPerfUtils {
 		await widthInput.click({ force: true });
 		await this.page.keyboard.press('ControlOrMeta+A');
 		await widthInput.pressSequentially(String(widthPx), { delay: 0 });
+
+		const presetPopover = this.page
+			.locator('.blockera-component-popover')
+			.filter({
+				has: this.page.locator(
+					'[data-test="border-control-width"]:visible'
+				),
+			})
+			.last();
+
 		await this.page.keyboard.press('Escape');
 
-		await expect(
-			this.page.locator('[data-test="repeater-item-creating-step"]')
-		).toHaveCount(0, { timeout: 20000 });
+		const creatingStep = this.page.locator(
+			'[data-test="repeater-item-creating-step"]'
+		);
+
+		if ((await creatingStep.count()) > 0) {
+			const closeButton = presetPopover.locator(
+				'[data-test="close-popover"]'
+			);
+
+			if ((await closeButton.count()) > 0) {
+				await closeButton.click({ force: true });
+			}
+		}
+
+		await expect(creatingStep).toHaveCount(0, { timeout: 20000 });
 	}
 
 	/**
@@ -1734,12 +1889,13 @@ class EditorPerfUtils {
 	/**
 	 * Seeds a border box preset in Global Styles (border-picker.variables seedBorderPreset).
 	 *
-	 * @param {{ presetName: string, widthPx?: string, reset?: boolean }} options
+	 * @param {{ presetName: string, widthPx?: string, reset?: boolean, save?: boolean }} options
 	 */
 	async seedGlobalStylesBorderPreset({
 		presetName,
 		widthPx = '2',
 		reset = true,
+		save = true,
 	}) {
 		await this.openGlobalStylesBordersScreen({ reset });
 		await this.nameNewGlobalStylesCustomPreset({
@@ -1754,6 +1910,11 @@ class EditorPerfUtils {
 			presetName,
 			widthPx,
 		});
+
+		if (!save) {
+			return;
+		}
+
 		try {
 			await this.waitForGlobalStylesEntityDirty();
 		} catch {

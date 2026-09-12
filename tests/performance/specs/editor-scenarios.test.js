@@ -912,6 +912,8 @@ test.describe('Editor', () => {
 			await admin.waitForSiteEditor();
 			await closeWelcomeGuide(page);
 
+			await perfUtils.openGlobalStylesBordersScreen({ reset: true });
+
 			const samples = 10;
 			const throwaway = 1;
 			const iterations = samples + throwaway;
@@ -926,6 +928,8 @@ test.describe('Editor', () => {
 				await perfUtils.seedGlobalStylesBorderPreset({
 					presetName,
 					widthPx,
+					reset: false,
+					save: false,
 				});
 				await perfUtils.expectGlobalStylesBorderPresetSeeded({
 					presetName,
@@ -947,6 +951,12 @@ test.describe('Editor', () => {
 							return acc + sum(eventDurations);
 						}, 0)
 					);
+				}
+
+				// Free allows one custom variable; clear outside the trace
+				// so the next sample can add again without the upgrade prompt.
+				if (i < iterations) {
+					await perfUtils.clearGlobalStylesCustomBorderPresets();
 				}
 			}
 		});
