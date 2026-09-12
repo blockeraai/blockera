@@ -9,8 +9,11 @@
 # manual builds of this file.
 #
 # Retarget apt off deb.debian.org (Fastly POPs 404 debian-security pool
-# files). EOL suites (stretch, buster, bullseye — LTS ended 2026-08-31)
-# use archive.debian.org; current suites use ftp.debian.org /
+# files). stretch/buster use archive.debian.org for debian and
+# debian-security. bullseye (LTS ended 2026-08-31) uses archive.debian.org
+# for debian only and drops *-security/*-updates: archive has no
+# debian-security/dists/bullseye-security, and security.debian.org still
+# 404s pool files (libc6). Current suites use ftp.debian.org /
 # security.debian.org. Ignore expired InRelease files, wipe lists, update,
 # and install.
 
@@ -19,12 +22,22 @@ FROM wordpress:php${PHP_VERSION}
 
 RUN . /etc/os-release && \
 	if echo "${VERSION_CODENAME}" | grep -Eq '^(stretch|buster|bullseye)$'; then \
-		find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) -exec sed -i \
-			-e 's|https\?://[^/]*/debian-security|http://archive.debian.org/debian-security|g' \
-			-e 's|https\?://deb.debian.org/debian|http://archive.debian.org/debian|g' \
-			-e 's|https\?://ftp.debian.org/debian|http://archive.debian.org/debian|g' \
-			-e 's|https\?://security.debian.org\(/debian-security\)\?|http://archive.debian.org/debian-security|g' \
-			{} +; \
+		if echo "${VERSION_CODENAME}" | grep -Eq '^bullseye$'; then \
+			find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) -exec sed -i \
+				-e '/debian-security/d' \
+				-e '/bullseye-security/d' \
+				-e '/bullseye-updates/d' \
+				-e 's|https\?://deb.debian.org/debian|http://archive.debian.org/debian|g' \
+				-e 's|https\?://ftp.debian.org/debian|http://archive.debian.org/debian|g' \
+				{} +; \
+		else \
+			find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) -exec sed -i \
+				-e 's|https\?://[^/]*/debian-security|http://archive.debian.org/debian-security|g' \
+				-e 's|https\?://deb.debian.org/debian|http://archive.debian.org/debian|g' \
+				-e 's|https\?://ftp.debian.org/debian|http://archive.debian.org/debian|g' \
+				-e 's|https\?://security.debian.org\(/debian-security\)\?|http://archive.debian.org/debian-security|g' \
+				{} +; \
+		fi; \
 	else \
 		find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) -exec sed -i \
 			-e 's|https\?://deb.debian.org/debian-security|http://security.debian.org/debian-security|g' \
