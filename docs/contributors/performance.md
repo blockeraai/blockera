@@ -25,7 +25,9 @@ performance.json ───┤
 6. **Compare + gate** —  
    - [`compare-results.js`](../../tests/performance/compare-results.js) → `report.md` (gate on `wp-total`)  
    - [`compare-editor-results.js`](../../tests/performance/compare-editor-results.js) → `editor-report.md` (gate on per-scenario metric, e.g. `focus`)  
-   Scenarios with `requiresBlockera: true` are informational only (no Core gate).
+   Scenarios with `requiresBlockera: true` skip the Core gate and are compared
+   on PR vs Master. Scenarios with `compareAgainstMaster: true` are also
+   measured and gated on PR vs Master (in addition to PR vs Core).
 
 Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale matrix).
 
@@ -89,12 +91,13 @@ Edit [`.github/performance/editor-scenarios.json`](../../.github/performance/edi
 
 | Scenario id | Metric | Notes |
 | --- | --- | --- |
-| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern; Blockera vs Core gated (default threshold 1000% — Blockera’s inspector makes selection much slower than Core; tighten as optimizations land) |
+| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern; Blockera vs Core gated (threshold 1000% — Blockera’s inspector makes selection much slower than Core). Also measured and gated on PR vs Master (`compareAgainstMaster`, 20%) |
 | `editor-switch-workspace-tabs` | `switchTab` | Blockera workspace document tabs; `requiresBlockera` (informational) |
 
 - Per-scenario `primaryMetric` — result key to gate/report.
 - Per-scenario `thresholdPercent` — override (default 20%).
-- `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate.
+- `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate (PR vs Master instead).
+- `compareAgainstMaster: true` — also run and gate on PR vs Master (use `thresholdPercentMaster` when the Core threshold is not appropriate).
 
 More editor metrics (typing, inserter, loading) can be added later as new describe blocks + scenario rows.
 
