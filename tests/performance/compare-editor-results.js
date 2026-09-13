@@ -426,9 +426,9 @@ function buildReport({
 		lines.push('');
 	}
 	lines.push(
-		`| Scenario | Metric | ${baselineLabel} | Blockera (PR) | Diff ms | Diff % | Threshold | Status |`
+		`| Scenario | ${baselineLabel} | Blockera (PR) | Diff ms | Diff % | Threshold | Status |`
 	);
-	lines.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |');
+	lines.push('| --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
 	for (const r of gateResults) {
 		let status = '❌ fail';
@@ -437,8 +437,9 @@ function buildReport({
 		} else if (r.status === 'skip') {
 			status = '⏭️ skip';
 		}
+		const scenarioCell = `${r.label}<br>\`${r.metricKey}\``;
 		lines.push(
-			`| ${r.label} | \`${r.metricKey}\` | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${r.thresholdPercent}% | ${status} |`
+			`| ${scenarioCell} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${r.thresholdPercent}% | ${status} |`
 		);
 	}
 
