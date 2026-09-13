@@ -6,7 +6,7 @@
  * - `core` (default) — PR Blockera vs WordPress Core (plugin off).
  *   Gates scenarios without requiresBlockera (or requiresBlockera: false).
  * - `master` — PR Blockera vs Blockera on master.
- *   Gates scenarios with requiresBlockera: true.
+ *   Gates scenarios with requiresBlockera: true, plus compareToMaster.
  *
  * Gate: fail when abs((current - baseline) / baseline * 100) > thresholdPercent
  * on each scenario's primaryMetric (focus, switchTab, …).
@@ -99,17 +99,42 @@ function indexByScenarioId(stats) {
 /**
  * Whether a scenario should be gated for the active baseline.
  *
- * @param {{requiresBlockera?: boolean}} scenario
+ * @param {{requiresBlockera?: boolean, compareToMaster?: boolean}} scenario
  * @param {string} mode
  * @return {boolean} True when the scenario belongs in this baseline report.
  */
 function scenarioMatchesBaseline(scenario, mode) {
 	const requiresBlockera = Boolean(scenario.requiresBlockera);
 	if (mode === 'master') {
-		return requiresBlockera;
+		return requiresBlockera || Boolean(scenario.compareToMaster);
 	}
 	// core (and any future non-master baseline that compares to WP Core)
 	return !requiresBlockera;
+}
+
+/**
+ * Percent gate for a scenario on the active baseline.
+ *
+ * Core uses `thresholdPercent` (select-blocks is intentionally loose vs Core).
+ * Master uses `masterThresholdPercent` when set so the same scenario can have
+ * a tight PR-vs-master regression gate.
+ *
+ * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} scenario
+ * @param {number} defaultThreshold
+ * @param {string} mode
+ * @return {number} Threshold percent.
+ */
+function scenarioThresholdPercent(scenario, defaultThreshold, mode) {
+	if (
+		mode === 'master' &&
+		typeof scenario.masterThresholdPercent === 'number'
+	) {
+		return scenario.masterThresholdPercent;
+	}
+	if (typeof scenario.thresholdPercent === 'number') {
+		return scenario.thresholdPercent;
+	}
+	return defaultThreshold;
 }
 
 /**
@@ -200,10 +225,11 @@ function main() {
 	}
 
 	for (const scenario of scenarios) {
-		const threshold =
-			typeof scenario.thresholdPercent === 'number'
-				? scenario.thresholdPercent
-				: defaultThreshold;
+		const threshold = scenarioThresholdPercent(
+			scenario,
+			defaultThreshold,
+			baselineMode
+		);
 		const primaryMetric =
 			scenario.primaryMetric || defaults.primaryMetric || 'focus';
 		const primaryKey = toResultMetricKey(primaryMetric);
@@ -216,6 +242,7 @@ function main() {
 			label: scenario.label || scenario.id,
 			thresholdPercent: threshold,
 			requiresBlockera: Boolean(scenario.requiresBlockera),
+			compareToMaster: Boolean(scenario.compareToMaster),
 			baseline: baselineMode,
 			primaryMetric,
 			metricKey: primaryKey,
@@ -403,7 +430,7 @@ function buildReport({
 		);
 		lines.push('');
 		lines.push(
-			'Only scenarios with `requiresBlockera: true` are gated in this report.'
+			'Scenarios with `requiresBlockera: true` or `compareToMaster: true` are gated in this report.'
 		);
 	} else {
 		lines.push(

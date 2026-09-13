@@ -25,7 +25,7 @@ performance.json ───┤
 6. **Compare + gate** —  
    - [`compare-results.js`](../../tests/performance/compare-results.js) → `report.md` (gate on `wp-total`)  
    - [`compare-editor-results.js`](../../tests/performance/compare-editor-results.js) → `editor-report.md` (gate on per-scenario metric, e.g. `focus`)  
-   Scenarios with `requiresBlockera: true` are informational only (no Core gate).
+   Scenarios with `requiresBlockera: true` skip the Core gate and are compared on the PR vs master job. Core-comparable scenarios can opt into that job with `compareToMaster`.
 
 Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale matrix).
 
@@ -64,7 +64,8 @@ Suites run as a **matrix in parallel** (`fail-fast: false`) so Server-Timing and
 | Matrix job | Script | Sticky comment header | Artifact |
 | --- | --- | --- | --- |
 | Server-Timing (Blockera vs Core) | `run-benchmarks.sh` | `blockera-perf-benchmark` | `performance-benchmark-server-timing` |
-| Block Editor (Blockera vs Core) | `run-editor-benchmarks.sh` | `blockera-editor-perf-benchmark` | `performance-benchmark-editor` |
+| Block Editor (PR vs Core) | `run-editor-benchmarks.sh` | `blockera-editor-perf-benchmark-core` | `performance-benchmark-editor-core-*` |
+| Block Editor (PR vs Master) | `run-editor-benchmarks.sh` + `run-editor-master-baseline.sh` | `blockera-editor-perf-benchmark-master` | `performance-benchmark-editor-master-*` |
 
 Shared per-job setup: performance wp-env, build, Chromium. Server-Timing also runs content setup + Server-Timing MU-plugin checks. Each job posts its own sticky PR comment and fails independently on its threshold gate.
 
@@ -89,12 +90,14 @@ Edit [`.github/performance/editor-scenarios.json`](../../.github/performance/edi
 
 | Scenario id | Metric | Notes |
 | --- | --- | --- |
-| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern; Blockera vs Core gated (default threshold 1000% — Blockera’s inspector makes selection much slower than Core; tighten as optimizations land) |
-| `editor-switch-workspace-tabs` | `switchTab` | Blockera workspace document tabs; `requiresBlockera` (informational) |
+| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern. Gated vs Core (`thresholdPercent` 1000% — Blockera’s inspector makes selection much slower than Core) and vs master (`compareToMaster` + `masterThresholdPercent` 20%) |
+| `editor-workspace-tabs` | `switchTab` | Blockera workspace document tabs; `requiresBlockera` (PR vs master) |
 
 - Per-scenario `primaryMetric` — result key to gate/report.
-- Per-scenario `thresholdPercent` — override (default 20%).
-- `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate.
+- Per-scenario `thresholdPercent` — Core (or default) gate override.
+- Per-scenario `masterThresholdPercent` — PR vs master gate when it should differ from Core (e.g. select-blocks).
+- `compareToMaster: true` — also run and gate on the PR vs master job (even without `requiresBlockera`).
+- `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate; included in PR vs master.
 
 More editor metrics (typing, inserter, loading) can be added later as new describe blocks + scenario rows.
 
