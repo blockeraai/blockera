@@ -9,6 +9,14 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
+# Shared list-test-categories.js / run.sh. This repo scans packages for *.cy.js.
+env:
+    BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+    BLOCKERA_CT_SCAN_ROOTS: packages
+    BLOCKERA_CT_GENERAL_CATEGORY: general-1
+    BLOCKERA_CT_SHARD_SIZE: '400'
+    BLOCKERA_CT_EXCLUDE_SUFFIXES: e2e.cy.js,visual.cy.js
+
 jobs:
     pr-workflow-gate:
         name: PR workflow filter
@@ -30,14 +38,39 @@ jobs:
               with:
                   workflow-file: cypress-components-tests.yml
 
-    cypress_components_tests:
-        name: Cypress Components Tests
+    detect_categories:
+        name: Detecting Component Test Categories
         needs: pr-workflow-gate
+        if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        outputs:
+            categories: ${{ steps.detect.outputs.categories }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+
+            - name: Ensure global-packages submodule
+              uses: ./.github/actions/ensure-global-packages
+
+            - uses: ./packages/global-packages/packages/dev-tools/github/actions/setup-node
+
+            - id: detect
+              run: bash packages/global-packages/packages/dev-tools/github/scripts/jobs/cypress-components-tests/detect-categories.sh
+
+    cypress_components_tests:
+        name: Test
+        needs: [pr-workflow-gate, detect_categories]
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request') }}
         runs-on: ubuntu-latest
         timeout-minutes: 60
+        strategy:
+            fail-fast: false
+            matrix:
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
         env:
-            BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+            BLOCKERA_CT_CATEGORY: ${{ matrix.category }}
         steps:
             - uses: actions/checkout@v5
               with:
