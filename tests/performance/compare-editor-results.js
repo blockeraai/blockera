@@ -34,6 +34,7 @@ const artifactsPath =
 process.env.WP_ARTIFACTS_PATH = artifactsPath;
 
 const baselineMode = (process.env.PERF_BASELINE || 'core').toLowerCase();
+const masterSource = (process.env.PERF_MASTER_SOURCE || 'live').toLowerCase();
 const currentPrefix = process.env.PERF_CURRENT_PREFIX || 'blockera-editor';
 const baselinePrefix =
 	process.env.PERF_BASELINE_PREFIX ||
@@ -143,14 +144,17 @@ function scenarioThresholdPercent(scenario, defaultThreshold, mode) {
  */
 function baselineMeta(mode) {
 	if (mode === 'master') {
+		const staticMaster = masterSource === 'static';
 		return {
-			label: 'Master',
+			label: staticMaster ? 'Master (static)' : 'Master',
 			artifact: `${baselinePrefix}-performance-results.json`,
+			staticMaster,
 		};
 	}
 	return {
 		label: 'Core',
 		artifact: `${baselinePrefix}-performance-results.json`,
+		staticMaster: false,
 	};
 }
 
@@ -357,6 +361,7 @@ function main() {
 		failed,
 		baselineLabel: meta.label,
 		baselineMode,
+		staticMaster: meta.staticMaster,
 	});
 
 	fs.mkdirSync(path.join(root, outDir), { recursive: true });
@@ -368,6 +373,7 @@ function main() {
 			{
 				baseline: baselineMode,
 				baselineLabel: meta.label,
+				masterSource: meta.staticMaster ? 'static' : 'live',
 				defaults,
 				results: gateResults,
 				failed,
@@ -413,6 +419,7 @@ function buildReport({
 	failed,
 	baselineLabel,
 	baselineMode,
+	staticMaster,
 }) {
 	const lines = [];
 	const commentMarker =
@@ -425,9 +432,19 @@ function buildReport({
 	lines.push('');
 
 	if (baselineMode === 'master') {
-		lines.push(
-			'Compare **Blockera on this PR** vs **Blockera on master** using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
-		);
+		if (staticMaster) {
+			lines.push(
+				'Compare **Blockera on this PR** vs **static Master times** (live `origin/master` run skipped via `BLOCKERA_PERF_ENABLE_LIVE_MASTER=false`).'
+			);
+			lines.push('');
+			lines.push(
+				'Static numbers come from `.github/performance/editor-master-static.json` (`BLOCKERA_PERF_STATIC_MASTER_FILE` overrides the path).'
+			);
+		} else {
+			lines.push(
+				'Compare **Blockera on this PR** vs **Blockera on master** using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
+			);
+		}
 		lines.push('');
 		lines.push(
 			'Scenarios with `requiresBlockera: true` or `compareToMaster: true` are gated in this report.'
