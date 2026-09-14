@@ -98,7 +98,7 @@ Edit [`.github/performance/editor-scenarios.json`](../../.github/performance/edi
 
 - Per-scenario `primaryMetric` — result key to gate/report.
 - Per-scenario `thresholdPercent` — Core (or default) gate override.
-- Per-scenario `masterThresholdPercent` — PR vs master gate when it should differ from Core (e.g. select-blocks).
+- `defaults.masterThresholdPercent` — PR vs master gate for every Master column (20%). Per-scenario `masterThresholdPercent` overrides that.
 - `compareToMaster: true` — also run and gate on the PR vs master job (even without `requiresBlockera`).
 - `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate; included in PR vs master.
 
