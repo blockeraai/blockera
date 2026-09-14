@@ -38,6 +38,8 @@ Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale 
 | `.github/performance/scenarios.json` | Server-Timing URLs + thresholds |
 | `.github/performance/editor-scenarios.json` | Editor interaction scenarios + thresholds |
 | `.github/performance/editor-master-static.json` | Static Master column times when `BLOCKERA_PERF_ENABLE_LIVE_MASTER=false` |
+| `.github/performance/editor-core-static.json` | Static Core column times for Block Editor when `BLOCKERA_PERF_ENABLE_LIVE_CORE=false` |
+| `.github/performance/server-timing-core-static.json` | Static Core column times for Server-Timing when `BLOCKERA_PERF_ENABLE_LIVE_CORE=false` |
 | `packages/global-packages/.../performance/mu-plugins/` | Server-Timing + cache clear + update-check hardening (toolkit) |
 | `packages/global-packages/.../performance/scripts/` | setup / run helpers (toolkit) |
 | `tests/performance/` | Playwright suites + compare scripts |
@@ -64,11 +66,13 @@ Suites run as a **matrix in parallel** (`fail-fast: false`) so Server-Timing and
 
 | Matrix job | Script | Sticky comment header | Artifact |
 | --- | --- | --- | --- |
-| Server-Timing (Blockera vs Core) | `run-benchmarks.sh` | `blockera-perf-benchmark` | `performance-benchmark-server-timing` |
-| Block Editor (PR vs Core) | `run-editor-benchmarks.sh` | `blockera-editor-perf-benchmark-core` | `performance-benchmark-editor-core-default` |
+| Server-Timing (Blockera vs Core) | PR Blockera + live or static Core | `blockera-perf-benchmark` | `performance-benchmark-server-timing` |
+| Block Editor (PR vs Core) | PR harness + live or static Core | `blockera-editor-perf-benchmark-core` | `performance-benchmark-editor-core-default` |
 | Block Editor (PR vs Master) | PR harness + live `origin/master` **or** static Master times | `blockera-editor-perf-benchmark-master` | `performance-benchmark-editor-master-default` |
 
-`BLOCKERA_PERF_ENABLE_LIVE_MASTER` on the workflow `env` (default `true`) controls the Master column on **PR vs Master**. Set it to `false` to skip the master worktree and compare the PR run to `.github/performance/editor-master-static.json` (`BLOCKERA_PERF_STATIC_MASTER_FILE` overrides the path). **PR vs Core** still measures WordPress Core live.
+`BLOCKERA_PERF_ENABLE_LIVE_MASTER` on the workflow `env` (default `true`) controls the Master column on **PR vs Master**. Set it to `false` to skip the master worktree and compare the PR run to `.github/performance/editor-master-static.json` (`BLOCKERA_PERF_STATIC_MASTER_FILE` overrides the path).
+
+`BLOCKERA_PERF_ENABLE_LIVE_CORE` (default `true`) controls the Core column on **PR vs Core** (editor) and **Server-Timing**. Set it to `false` to skip the live plugin-off Core run and compare against `.github/performance/editor-core-static.json` / `.github/performance/server-timing-core-static.json` (`BLOCKERA_PERF_STATIC_CORE_FILE` overrides the path).
 
 Shared per-job setup: performance wp-env, build, Chromium. Server-Timing also runs content setup + Server-Timing MU-plugin checks. Each job posts its own sticky PR comment and fails independently on its threshold gate.
 
