@@ -1,0 +1,20 @@
+{
+	"front-home": {
+		"wpTotal": 387.77
+	},
+	"front-page-1": {
+		"wpTotal": 388.12
+	},
+	"admin-dashboard": {
+		"wpTotal": 435.54
+	},
+	"admin-posts": {
+		"wpTotal": 439.44
+	},
+	"admin-media": {
+		"wpTotal": 433.68
+	},
+	"admin-block-editor": {
+		"wpTotal": 535.79
+	}
+}
