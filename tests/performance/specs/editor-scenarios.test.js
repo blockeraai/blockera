@@ -21,7 +21,7 @@
  * Scenario scope (`PERF_SCENARIO_SCOPE`):
  * - `all` (default) — every scenario (local)
  * - `core-comparable` — scenarios without requiresBlockera (PR vs Core CI)
- * - `blockera-only` — scenarios with requiresBlockera (PR vs Master CI)
+ * - `blockera-only` — requiresBlockera and/or compareToMaster (PR vs Master CI)
  */
 
 const path = require('node:path');
@@ -75,7 +75,13 @@ function shouldSkipScenario(scenarioId) {
 		};
 	}
 
-	if (scenarioScope === 'blockera-only' && !requiresBlockera) {
+	const compareToMaster = Boolean(scenario?.compareToMaster);
+
+	if (
+		scenarioScope === 'blockera-only' &&
+		!requiresBlockera &&
+		!compareToMaster
+	) {
 		return {
 			skip: true,
 			reason: `${scenarioId} skipped (PERF_SCENARIO_SCOPE=blockera-only)`,
