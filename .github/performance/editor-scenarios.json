@@ -1,6 +1,7 @@
 {
 	"defaults": {
-		"thresholdPercent": 20
+		"thresholdPercent": 20,
+		"masterThresholdPercent": 20
 	},
 	"scenarios": [
 		{

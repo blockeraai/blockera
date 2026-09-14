@@ -34,6 +34,8 @@ const artifactsPath =
 process.env.WP_ARTIFACTS_PATH = artifactsPath;
 
 const baselineMode = (process.env.PERF_BASELINE || 'core').toLowerCase();
+const masterSource = (process.env.PERF_MASTER_SOURCE || 'live').toLowerCase();
+const coreSource = (process.env.PERF_CORE_SOURCE || 'live').toLowerCase();
 const currentPrefix = process.env.PERF_CURRENT_PREFIX || 'blockera-editor';
 const baselinePrefix =
 	process.env.PERF_BASELINE_PREFIX ||
@@ -116,21 +118,31 @@ function scenarioMatchesBaseline(scenario, mode) {
  * Percent gate for a scenario on the active baseline.
  *
  * Core uses `thresholdPercent` (select-blocks is intentionally loose vs Core).
- * Master uses `masterThresholdPercent` when set so the same scenario can have
- * a tight PR-vs-master regression gate.
+ * Master uses `masterThresholdPercent` (scenario, then defaults, default 20)
+ * so PR-vs-master is not loosened by a Core-only threshold.
  *
  * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} scenario
- * @param {number} defaultThreshold
+ * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} defaults
  * @param {string} mode
  * @return {number} Threshold percent.
  */
-function scenarioThresholdPercent(scenario, defaultThreshold, mode) {
-	if (
-		mode === 'master' &&
-		typeof scenario.masterThresholdPercent === 'number'
-	) {
-		return scenario.masterThresholdPercent;
+function scenarioThresholdPercent(scenario, defaults, mode) {
+	const defaultThreshold =
+		typeof defaults.thresholdPercent === 'number'
+			? defaults.thresholdPercent
+			: 20;
+	const defaultMaster =
+		typeof defaults.masterThresholdPercent === 'number'
+			? defaults.masterThresholdPercent
+			: defaultThreshold;
+
+	if (mode === 'master') {
+		if (typeof scenario.masterThresholdPercent === 'number') {
+			return scenario.masterThresholdPercent;
+		}
+		return defaultMaster;
 	}
+
 	if (typeof scenario.thresholdPercent === 'number') {
 		return scenario.thresholdPercent;
 	}
@@ -143,14 +155,20 @@ function scenarioThresholdPercent(scenario, defaultThreshold, mode) {
  */
 function baselineMeta(mode) {
 	if (mode === 'master') {
+		const staticMaster = masterSource === 'static';
 		return {
-			label: 'Master',
+			label: staticMaster ? 'Master (static)' : 'Master',
 			artifact: `${baselinePrefix}-performance-results.json`,
+			staticMaster,
+			staticCore: false,
 		};
 	}
+	const staticCore = coreSource === 'static';
 	return {
-		label: 'Core',
+		label: staticCore ? 'Core (static)' : 'Core',
 		artifact: `${baselinePrefix}-performance-results.json`,
+		staticMaster: false,
+		staticCore,
 	};
 }
 
@@ -169,10 +187,6 @@ function main() {
 	);
 	const config = JSON.parse(fs.readFileSync(scenariosPath, 'utf8'));
 	const defaults = config.defaults || {};
-	const defaultThreshold =
-		typeof defaults.thresholdPercent === 'number'
-			? defaults.thresholdPercent
-			: 20;
 
 	const meta = baselineMeta(baselineMode);
 	const currentArtifact = `${currentPrefix}-performance-results.json`;
@@ -227,7 +241,7 @@ function main() {
 	for (const scenario of scenarios) {
 		const threshold = scenarioThresholdPercent(
 			scenario,
-			defaultThreshold,
+			defaults,
 			baselineMode
 		);
 		const primaryMetric =
@@ -357,6 +371,8 @@ function main() {
 		failed,
 		baselineLabel: meta.label,
 		baselineMode,
+		staticMaster: meta.staticMaster,
+		staticCore: meta.staticCore,
 	});
 
 	fs.mkdirSync(path.join(root, outDir), { recursive: true });
@@ -368,6 +384,8 @@ function main() {
 			{
 				baseline: baselineMode,
 				baselineLabel: meta.label,
+				masterSource: meta.staticMaster ? 'static' : 'live',
+				coreSource: meta.staticCore ? 'static' : 'live',
 				defaults,
 				results: gateResults,
 				failed,
@@ -413,6 +431,8 @@ function buildReport({
 	failed,
 	baselineLabel,
 	baselineMode,
+	staticMaster,
+	staticCore,
 }) {
 	const lines = [];
 	const commentMarker =
@@ -425,17 +445,37 @@ function buildReport({
 	lines.push('');
 
 	if (baselineMode === 'master') {
-		lines.push(
-			'Compare **Blockera on this PR** vs **Blockera on master** using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
-		);
+		if (staticMaster) {
+			lines.push(
+				'Compare **Blockera on this PR** vs **static Master times** (live `origin/master` run skipped via `BLOCKERA_PERF_ENABLE_LIVE_MASTER=false`).'
+			);
+			lines.push('');
+			lines.push(
+				'Static numbers come from `.github/performance/editor-master-static.json` (`BLOCKERA_PERF_STATIC_MASTER_FILE` overrides the path).'
+			);
+		} else {
+			lines.push(
+				'Compare **Blockera on this PR** vs **Blockera on master** using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
+			);
+		}
 		lines.push('');
 		lines.push(
 			'Scenarios with `requiresBlockera: true` or `compareToMaster: true` are gated in this report.'
 		);
 	} else {
-		lines.push(
-			'Compare **Blockera** vs **Core** (plugin off) using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
-		);
+		if (staticCore) {
+			lines.push(
+				'Compare **Blockera on this PR** vs **static Core times** (live plugin-off Core run skipped via `BLOCKERA_PERF_ENABLE_LIVE_CORE=false`).'
+			);
+			lines.push('');
+			lines.push(
+				'Static numbers come from `.github/performance/editor-core-static.json` (`BLOCKERA_PERF_STATIC_CORE_FILE` overrides the path).'
+			);
+		} else {
+			lines.push(
+				'Compare **Blockera** vs **Core** (plugin off) using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
+			);
+		}
 		lines.push('');
 		lines.push(
 			'Only scenarios without `requiresBlockera` (or `requiresBlockera: false`) are gated in this report.'
@@ -475,7 +515,9 @@ function buildReport({
 		'- Theme: Twenty Twenty-Five · Locale: en_US · samples: 10 (+1 throwaway) per Gutenberg pattern'
 	);
 	lines.push(
-		'- Gate: fail if `|Diff %|` exceeds per-scenario `thresholdPercent` (either direction)'
+		baselineMode === 'master'
+			? '- Gate: fail if `|Diff %|` exceeds per-scenario `masterThresholdPercent` (default 20%, either direction)'
+			: '- Gate: fail if `|Diff %|` exceeds per-scenario `thresholdPercent` (either direction)'
 	);
 	lines.push(
 		`- Diff is **Blockera (PR) − ${baselineLabel}** (positive means PR is slower)`
@@ -511,7 +553,15 @@ function buildReport({
 		lines.push('');
 	}
 
-	if (defaults.thresholdPercent !== undefined) {
+	if (
+		baselineMode === 'master' &&
+		defaults.masterThresholdPercent !== undefined
+	) {
+		lines.push(
+			`_Default Master threshold: ${defaults.masterThresholdPercent}% (from editor-scenarios.json)._`
+		);
+		lines.push('');
+	} else if (defaults.thresholdPercent !== undefined) {
 		lines.push(
 			`_Default threshold: ${defaults.thresholdPercent}% (from editor-scenarios.json)._`
 		);
