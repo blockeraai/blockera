@@ -20,9 +20,9 @@ env:
     TEST_RUNS: '20'
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
     # false: skip origin/master worktree; Master column uses editor-master-static.json
-    BLOCKERA_PERF_ENABLE_LIVE_MASTER: 'false'
+    BLOCKERA_PERF_ENABLE_LIVE_MASTER: 'true'
     # false: skip live plugin-off Core; Core column uses *-core-static.json
-    BLOCKERA_PERF_ENABLE_LIVE_CORE: 'false'
+    BLOCKERA_PERF_ENABLE_LIVE_CORE: 'true'
 
 jobs:
     pr-workflow-gate:
