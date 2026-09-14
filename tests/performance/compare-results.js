@@ -28,6 +28,8 @@ const artifactsPath =
 	process.env.WP_ARTIFACTS_PATH || path.join(root, 'artifacts');
 process.env.WP_ARTIFACTS_PATH = artifactsPath;
 
+const coreSource = (process.env.PERF_CORE_SOURCE || 'live').toLowerCase();
+const coreLabel = coreSource === 'static' ? 'Core (static)' : 'Core';
 const summaryArg = process.argv[2];
 
 /**
@@ -183,7 +185,7 @@ function main() {
 
 				rows.push({
 					Metric: metric,
-					Core:
+					[coreLabel]:
 						prevValue !== null
 							? formatValue(metric, prevValue)
 							: 'N/A',
@@ -279,6 +281,8 @@ function main() {
 			{
 				primaryMetric,
 				primaryKey,
+				coreSource,
+				coreLabel,
 				defaults,
 				results: gateResults,
 				failed,
@@ -324,9 +328,19 @@ function buildReport({
 	lines.push('<!-- blockera-perf-benchmark -->');
 	lines.push('# 📈 Performance Report');
 	lines.push('');
-	lines.push(
-		'Compare **Blockera** vs **Core** (plugin off) using the WordPress Playwright Server-Timing harness.'
-	);
+	if (coreSource === 'static') {
+		lines.push(
+			'Compare **Blockera** vs **static Core times** (live plugin-off Core run skipped via `BLOCKERA_PERF_ENABLE_LIVE_CORE=false`).'
+		);
+		lines.push('');
+		lines.push(
+			'Static numbers come from `.github/performance/server-timing-core-static.json` (`BLOCKERA_PERF_STATIC_CORE_FILE` overrides the path).'
+		);
+	} else {
+		lines.push(
+			'Compare **Blockera** vs **Core** (plugin off) using the WordPress Playwright Server-Timing harness.'
+		);
+	}
 	lines.push('');
 	lines.push(
 		'Numbers in the table are how long WordPress takes on the server to fully process each page (median, in milliseconds). Lower is faster.'
@@ -339,7 +353,7 @@ function buildReport({
 		lines.push('');
 	}
 	lines.push(
-		'| Scenario | Core | Blockera | Diff ms | Diff % | Threshold | Status |'
+		`| Scenario | ${coreLabel} | Blockera | Diff ms | Diff % | Threshold | Status |`
 	);
 	lines.push('| --- | ---: | ---: | ---: | ---: | ---: | --- |');
 
@@ -363,7 +377,7 @@ function buildReport({
 		`- Gate: fail if \`|Diff %|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
 	);
 	lines.push(
-		'- Diff is **Blockera − Core** (positive means Blockera is slower)'
+		`- Diff is **Blockera − ${coreLabel}** (positive means Blockera is slower)`
 	);
 	lines.push('');
 

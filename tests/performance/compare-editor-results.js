@@ -35,6 +35,7 @@ process.env.WP_ARTIFACTS_PATH = artifactsPath;
 
 const baselineMode = (process.env.PERF_BASELINE || 'core').toLowerCase();
 const masterSource = (process.env.PERF_MASTER_SOURCE || 'live').toLowerCase();
+const coreSource = (process.env.PERF_CORE_SOURCE || 'live').toLowerCase();
 const currentPrefix = process.env.PERF_CURRENT_PREFIX || 'blockera-editor';
 const baselinePrefix =
 	process.env.PERF_BASELINE_PREFIX ||
@@ -159,12 +160,15 @@ function baselineMeta(mode) {
 			label: staticMaster ? 'Master (static)' : 'Master',
 			artifact: `${baselinePrefix}-performance-results.json`,
 			staticMaster,
+			staticCore: false,
 		};
 	}
+	const staticCore = coreSource === 'static';
 	return {
-		label: 'Core',
+		label: staticCore ? 'Core (static)' : 'Core',
 		artifact: `${baselinePrefix}-performance-results.json`,
 		staticMaster: false,
+		staticCore,
 	};
 }
 
@@ -368,6 +372,7 @@ function main() {
 		baselineLabel: meta.label,
 		baselineMode,
 		staticMaster: meta.staticMaster,
+		staticCore: meta.staticCore,
 	});
 
 	fs.mkdirSync(path.join(root, outDir), { recursive: true });
@@ -380,6 +385,7 @@ function main() {
 				baseline: baselineMode,
 				baselineLabel: meta.label,
 				masterSource: meta.staticMaster ? 'static' : 'live',
+				coreSource: meta.staticCore ? 'static' : 'live',
 				defaults,
 				results: gateResults,
 				failed,
@@ -426,6 +432,7 @@ function buildReport({
 	baselineLabel,
 	baselineMode,
 	staticMaster,
+	staticCore,
 }) {
 	const lines = [];
 	const commentMarker =
@@ -456,9 +463,19 @@ function buildReport({
 			'Scenarios with `requiresBlockera: true` or `compareToMaster: true` are gated in this report.'
 		);
 	} else {
-		lines.push(
-			'Compare **Blockera** vs **Core** (plugin off) using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
-		);
+		if (staticCore) {
+			lines.push(
+				'Compare **Blockera on this PR** vs **static Core times** (live plugin-off Core run skipped via `BLOCKERA_PERF_ENABLE_LIVE_CORE=false`).'
+			);
+			lines.push('');
+			lines.push(
+				'Static numbers come from `.github/performance/editor-core-static.json` (`BLOCKERA_PERF_STATIC_CORE_FILE` overrides the path).'
+			);
+		} else {
+			lines.push(
+				'Compare **Blockera** vs **Core** (plugin off) using Chromium tracing metrics adapted from the Gutenberg post-editor performance suite.'
+			);
+		}
 		lines.push('');
 		lines.push(
 			'Only scenarios without `requiresBlockera` (or `requiresBlockera: false`) are gated in this report.'
