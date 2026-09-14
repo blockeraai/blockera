@@ -57,6 +57,7 @@ Theme is fixed to **Twenty Twenty-Five**. Locales are **en_US only** (no locale 
 | `npm run test:performance:editor:compare` | Compare editor artifacts → `editor-report.md` |
 | `npm run test:performance:editor:local` | Full local editor Core vs Blockera pipeline (see below) |
 | `npm run test:performance:local` | Full local Server-Timing Core vs Blockera pipeline (see below) |
+| `npm run test:performance:fetch-pr` | Pull Core/Master milliseconds from this branch’s PR performance run and write static JSON maps |
 
 ### CI usage
 
@@ -212,3 +213,12 @@ npm run test:performance:compare
 - Keep the machine quiet while measuring; treat local numbers as relative (Blockera vs Core on the same run), not absolute CI parity.
 - Use higher `--runs` when validating a suspected Server-Timing regression; use `5` for quick iteration.
 - Do not commit `.github/performance/results/` or `artifacts/` outputs (they are gitignored / ephemeral).
+
+#### Refresh static maps from a PR run
+
+`npm run test:performance:fetch-pr` uses `gh` to download this branch’s latest successful `performance-benchmark` artifacts and writes Core/Master `withoutMs` values into the static JSON files. Requires a live Core/Master run (static-mode artifacts just copy the previous maps).
+
+```bash
+npm run test:performance:fetch-pr -- --dry-run
+npm run test:performance:fetch-pr -- --only=core,master
+```
