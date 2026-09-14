@@ -117,21 +117,31 @@ function scenarioMatchesBaseline(scenario, mode) {
  * Percent gate for a scenario on the active baseline.
  *
  * Core uses `thresholdPercent` (select-blocks is intentionally loose vs Core).
- * Master uses `masterThresholdPercent` when set so the same scenario can have
- * a tight PR-vs-master regression gate.
+ * Master uses `masterThresholdPercent` (scenario, then defaults, default 20)
+ * so PR-vs-master is not loosened by a Core-only threshold.
  *
  * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} scenario
- * @param {number} defaultThreshold
+ * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} defaults
  * @param {string} mode
  * @return {number} Threshold percent.
  */
-function scenarioThresholdPercent(scenario, defaultThreshold, mode) {
-	if (
-		mode === 'master' &&
-		typeof scenario.masterThresholdPercent === 'number'
-	) {
-		return scenario.masterThresholdPercent;
+function scenarioThresholdPercent(scenario, defaults, mode) {
+	const defaultThreshold =
+		typeof defaults.thresholdPercent === 'number'
+			? defaults.thresholdPercent
+			: 20;
+	const defaultMaster =
+		typeof defaults.masterThresholdPercent === 'number'
+			? defaults.masterThresholdPercent
+			: defaultThreshold;
+
+	if (mode === 'master') {
+		if (typeof scenario.masterThresholdPercent === 'number') {
+			return scenario.masterThresholdPercent;
+		}
+		return defaultMaster;
 	}
+
 	if (typeof scenario.thresholdPercent === 'number') {
 		return scenario.thresholdPercent;
 	}
@@ -173,10 +183,6 @@ function main() {
 	);
 	const config = JSON.parse(fs.readFileSync(scenariosPath, 'utf8'));
 	const defaults = config.defaults || {};
-	const defaultThreshold =
-		typeof defaults.thresholdPercent === 'number'
-			? defaults.thresholdPercent
-			: 20;
 
 	const meta = baselineMeta(baselineMode);
 	const currentArtifact = `${currentPrefix}-performance-results.json`;
@@ -231,7 +237,7 @@ function main() {
 	for (const scenario of scenarios) {
 		const threshold = scenarioThresholdPercent(
 			scenario,
-			defaultThreshold,
+			defaults,
 			baselineMode
 		);
 		const primaryMetric =
@@ -492,7 +498,9 @@ function buildReport({
 		'- Theme: Twenty Twenty-Five · Locale: en_US · samples: 10 (+1 throwaway) per Gutenberg pattern'
 	);
 	lines.push(
-		'- Gate: fail if `|Diff %|` exceeds per-scenario `thresholdPercent` (either direction)'
+		baselineMode === 'master'
+			? '- Gate: fail if `|Diff %|` exceeds per-scenario `masterThresholdPercent` (default 20%, either direction)'
+			: '- Gate: fail if `|Diff %|` exceeds per-scenario `thresholdPercent` (either direction)'
 	);
 	lines.push(
 		`- Diff is **Blockera (PR) − ${baselineLabel}** (positive means PR is slower)`
@@ -528,7 +536,15 @@ function buildReport({
 		lines.push('');
 	}
 
-	if (defaults.thresholdPercent !== undefined) {
+	if (
+		baselineMode === 'master' &&
+		defaults.masterThresholdPercent !== undefined
+	) {
+		lines.push(
+			`_Default Master threshold: ${defaults.masterThresholdPercent}% (from editor-scenarios.json)._`
+		);
+		lines.push('');
+	} else if (defaults.thresholdPercent !== undefined) {
 		lines.push(
 			`_Default threshold: ${defaults.thresholdPercent}% (from editor-scenarios.json)._`
 		);
