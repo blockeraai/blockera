@@ -26,6 +26,7 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
+		"@blockera/auth": "file:./packages/global-packages/packages/auth",
 		"@blockera/blockera": "file:./packages/global-packages/packages/blockera",
 		"@blockera/blockera-admin": "file:./packages/global-packages/packages/blockera-admin",
 		"@blockera/blocks-core": "file:./packages/global-packages/packages/blocks-core",

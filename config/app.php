@@ -37,6 +37,7 @@ return [
     'providers'      => apply_filters(
         'blockera.application.providers',
         [
+            \Blockera\Auth\Providers\AuthProvider::class,
             \Blockera\Admin\Providers\AdminProvider::class,
             \Blockera\Setup\Providers\EditorAssetsProvider::class,
             \Blockera\Setup\Providers\RestAPIProvider::class,

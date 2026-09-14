@@ -59,6 +59,13 @@ return apply_filters(
                 'menu_slug'  => 'blockera-settings-experimental-lab',
                 'callback'   => 'blockera_settings_page_template',
             ],
+            'account' => [
+                'page_title' => __('Blockera Account', 'blockera'),
+                'menu_title' => __('Account', 'blockera'),
+                'capability' => 'manage_options',
+                'menu_slug'  => 'blockera-settings-account',
+                'callback'   => 'blockera_settings_page_template',
+            ],
             'upgrade-to-pro' => [
                 'page_title' => __('Upgrade to Pro', 'blockera'),
                 'menu_title' => __('Upgrade to Pro', 'blockera'),
