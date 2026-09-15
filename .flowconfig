@@ -38,6 +38,7 @@
 <PROJECT_ROOT>/packages/global-packages/packages/.*/js/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/\.patch/.*
 # Overlay packages may appear after a GP bump; they are not this product.
+# `[^/]` is a valid ignore regex. Only a whole line `[name]` starts a section.
 <PROJECT_ROOT>/packages/[^/]*-pro/.*
 <PROJECT_ROOT>/packages/[^/]*-pro-[^/]+/.*
 <PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro/.*
