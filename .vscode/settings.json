@@ -12,10 +12,10 @@
 	"scss.validate": false,
 	"less.validate": false,
 	"stylelint.enable": true,
-	"stylelint.validate": [ "css", "scss", "less" ],
+	"stylelint.validate": ["css", "scss", "less"],
 	"stylelint.configFile": "${workspaceFolder}/.stylelintrc.js",
 	"stylelint.ignoreDisables": false,
-	"stylelint.snippet": [ "css", "scss", "less" ],
+	"stylelint.snippet": ["css", "scss", "less"],
 	"files.associations": {
 		"*.scss": "scss",
 		"*.svg": "html"
@@ -85,7 +85,7 @@
 	"phpstan.clearCacheOnSave": false,
 	"phpstan.memoryLimit": "2G",
 	"phpstan.level": 5,
-	"phpstan.paths": [ "packages" ],
+	"phpstan.paths": ["packages"],
 	"phpstan.errorFormatter": "table",
 	"phpstan.fullMessage": true,
 	"[html]": {
@@ -99,7 +99,7 @@
 		"typescript",
 		"typescriptreact"
 	],
-	"eslint.workingDirectories": [ "${workspaceFolder}" ],
+	"eslint.workingDirectories": ["${workspaceFolder}"],
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true,
