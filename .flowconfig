@@ -1,5 +1,5 @@
-# Edit packages/global-packages/packages/dev-tools/root-configs/.flowconfig
-# project:bootstrap copies this to the host repo root.
+# Edit packages/global-packages/packages/dev-tools/root-configs/.flowconfig.blockera
+# project:bootstrap copies this to the host repo root for --project=blockera.
 #
 # Keep this crawl small. Flow walks every non-ignored file during init; a full
 # node_modules + vendor + source-codes tree OOMs the CI server (~500k files).
@@ -37,6 +37,11 @@
 <PROJECT_ROOT>/packages/.*/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/js/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/\.patch/.*
+# Pro overlay packages may appear after a GP bump; they are not this product.
+<PROJECT_ROOT>/packages/[^/]*-pro/.*
+<PROJECT_ROOT>/packages/[^/]*-pro-[^/]+/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro-[^/]+/.*
 
 # Dependencies stay resolvable (imports are `any`) but are not parsed/typechecked.
 [untyped]
