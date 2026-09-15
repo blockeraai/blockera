@@ -11,6 +11,8 @@
 
     <exclude-pattern>*/packages/[^/]*-pro/</exclude-pattern>
     <exclude-pattern>*/packages/[^/]*-pro-[^/]+/</exclude-pattern>
+    <exclude-pattern>*/packages/[^/]*-one/</exclude-pattern>
+    <exclude-pattern>*/packages/[^/]*-one-[^/]+/</exclude-pattern>
 
     <arg name="cache" value=".cache/phpcs.json"/>
 </ruleset>

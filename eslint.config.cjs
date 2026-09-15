@@ -10,5 +10,9 @@ module.exports = createConfig( {
 		'packages/*-pro-*/**',
 		'packages/global-packages/packages/**/*-pro/**',
 		'packages/global-packages/packages/**/*-pro-*/**',
+		'packages/*-one/**',
+		'packages/*-one-*/**',
+		'packages/global-packages/packages/**/*-one/**',
+		'packages/global-packages/packages/**/*-one-*/**',
 	],
 } );

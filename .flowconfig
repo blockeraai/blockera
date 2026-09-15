@@ -37,11 +37,15 @@
 <PROJECT_ROOT>/packages/.*/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/js/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/\.patch/.*
-# Pro overlay packages may appear after a GP bump; they are not this product.
+# Overlay packages may appear after a GP bump; they are not this product.
 <PROJECT_ROOT>/packages/[^/]*-pro/.*
 <PROJECT_ROOT>/packages/[^/]*-pro-[^/]+/.*
 <PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro/.*
 <PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro-[^/]+/.*
+<PROJECT_ROOT>/packages/[^/]*-one/.*
+<PROJECT_ROOT>/packages/[^/]*-one-[^/]+/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-one/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-one-[^/]+/.*
 
 # Dependencies stay resolvable (imports are `any`) but are not parsed/typechecked.
 [untyped]

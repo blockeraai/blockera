@@ -1,10 +1,14 @@
 // Edit packages/global-packages/packages/dev-tools/root-configs/cypress.config.blockera.js
 // project:bootstrap copies this to the host repo root for --project=blockera.
-const PRO_PACKAGE_GLOBS = [
+const OVERLAY_PACKAGE_GLOBS = [
 	'packages/*-pro/**',
 	'packages/*-pro-*/**',
 	'packages/global-packages/packages/**/*-pro/**',
 	'packages/global-packages/packages/**/*-pro-*/**',
+	'packages/*-one/**',
+	'packages/*-one-*/**',
+	'packages/global-packages/packages/**/*-one/**',
+	'packages/global-packages/packages/**/*-one-*/**',
 ];
 
 module.exports =
@@ -15,12 +19,12 @@ module.exports =
 			alwaysExcludeSpecPattern: [
 				'packages/**/*.build.e2e.js',
 				'tests/performance/**',
-				...PRO_PACKAGE_GLOBS,
+				...OVERLAY_PACKAGE_GLOBS,
 			],
 			componentExcludeSpecPattern: [
 				'**/*.e2e.cy.js',
 				'**/*.visual.cy.js',
-				...PRO_PACKAGE_GLOBS,
+				...OVERLAY_PACKAGE_GLOBS,
 			],
 		}
 	);
