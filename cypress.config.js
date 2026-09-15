@@ -5,5 +5,17 @@ module.exports =
 		{
 			rootDir: __dirname,
 			projectId: 'blockera',
+			e2eExcludeSpecPattern: [
+				'packages/**/*.build.e2e.js',
+				'tests/performance/**',
+				'**/packages/**/*-pro/**',
+				'**/packages/**/*-pro-*/**',
+			],
+			componentExcludeSpecPattern: [
+				'**/*.e2e.cy.js',
+				'**/*.visual.cy.js',
+				'**/packages/**/*-pro/**',
+				'**/packages/**/*-pro-*/**',
+			],
 		}
 	);

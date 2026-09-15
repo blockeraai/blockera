@@ -8,6 +8,8 @@
 
     <config name="text_domain" value="blockera,blockera,default"/>
     <file>./packages</file>
+    <exclude-pattern>*/packages/[^/]*-pro/</exclude-pattern>
+    <exclude-pattern>*/packages/[^/]*-pro-[^/]+/</exclude-pattern>
 
     <arg name="cache" value=".cache/phpcs.json"/>
 </ruleset>

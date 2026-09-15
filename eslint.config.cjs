@@ -4,4 +4,9 @@ const {
 	createConfig,
 } = require( './packages/global-packages/packages/dev-tools/js/eslint/config' );
 
-module.exports = createConfig();
+module.exports = createConfig({
+	extraIgnores: [
+		'packages/global-packages/packages/**/*-pro/**',
+		'packages/global-packages/packages/**/*-pro-*/**',
+	],
+});
