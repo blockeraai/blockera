@@ -15,7 +15,7 @@ WordPress plugin that extends the block editor. Host is thin: `blockera.php`, `c
 - After a task: Unreleased changelog + README if the public contract changed — [`…/ai/workflows/changelog-and-readme.md`](packages/global-packages/packages/dev-tools/ai/workflows/changelog-and-readme.md)
 - Do not install deps. Tests: `npm run test:e2e`, `test:js`, `test:unit:php` — [`…/ai/workflows/product-scripts-and-deps.md`](packages/global-packages/packages/dev-tools/ai/workflows/product-scripts-and-deps.md)
 - Ask before editing blockera-pro.
-- Skip Pro overlay packages (`*-pro`) in this product’s tests and lint. They may appear on disk after a GP bump.
+- Skip Pro overlay packages (`*-pro`) and One overlay packages (`*-one`) in this product’s tests and lint. They may appear on disk after a GP bump.
 
 ## Validate
 
