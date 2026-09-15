@@ -45,7 +45,7 @@ npm ci
 
 npm `file:` deps and Composer path repos point at `packages/global-packages/packages/*` (no symlinks).
 
-CI skips Pro overlay packages (`*-pro`, `*-pro-*`) via `BLOCKERA_E2E_EXCLUDE_PACKAGES` / `BLOCKERA_CT_EXCLUDE_PACKAGES` / `BLOCKERA_PLAYWRIGHT_EXCLUDE_PACKAGES`. Do not add those packages to this product’s npm or Composer manifests.
+CI skips Pro overlay packages (`*-pro`, `*-pro-*`) via `BLOCKERA_E2E_EXCLUDE_PACKAGES` / `BLOCKERA_CT_EXCLUDE_PACKAGES` / `BLOCKERA_PLAYWRIGHT_EXCLUDE_PACKAGES`. Local Flow, ESLint, Stylelint, PHPCS, Cypress, and Jest ignore the same package directories. Do not add those packages to this product’s npm or Composer manifests.
 
 ### Updating shared packages (automated)
 
