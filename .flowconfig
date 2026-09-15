@@ -50,6 +50,8 @@
 
 [options]
 react.runtime=automatic
+module.name_mapper='^@blockera/auth$' -> '<PROJECT_ROOT>/packages/global-packages/packages/auth/js/index.js'
+module.name_mapper='^@blockera/auth$' -> '<PROJECT_ROOT>/packages/global-packages/packages/auth/js/index.js'
 module.name_mapper='^@blockera/global-styles-ui\(/.*\)?$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper='^@blockera/experimental-config$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper='^@wordpress/core-data$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
