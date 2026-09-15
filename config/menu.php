@@ -72,19 +72,19 @@ $menu = apply_filters(
     ]
 );
 
-$pro_active = false;
+$blockera_pro_active = false;
 
 if ( function_exists( 'blockera_auth_is_pro_plugin_active' ) ) {
-	$pro_active = blockera_auth_is_pro_plugin_active();
+	$blockera_pro_active = blockera_auth_is_pro_plugin_active();
 } elseif ( defined( 'ABSPATH' ) ) {
 	if ( ! function_exists( 'is_plugin_active' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
 
-	$pro_active = is_plugin_active( 'blockera-pro/blockera-pro.php' );
+	$blockera_pro_active = is_plugin_active( 'blockera-pro/blockera-pro.php' );
 }
 
-if ( ! $pro_active && is_array( $menu ) ) {
+if ( ! $blockera_pro_active && is_array( $menu ) ) {
 	if ( ! isset( $menu['submenus'] ) || ! is_array( $menu['submenus'] ) ) {
 		$menu['submenus'] = [];
 	}
