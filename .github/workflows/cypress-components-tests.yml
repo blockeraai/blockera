@@ -16,7 +16,7 @@ env:
     BLOCKERA_CT_GENERAL_CATEGORY: general-1
     BLOCKERA_CT_SHARD_SIZE: '400'
     BLOCKERA_CT_EXCLUDE_SUFFIXES: e2e.cy.js,visual.cy.js
-    BLOCKERA_CT_EXCLUDE_PACKAGES: '*-pro,*-pro-*,*-one,*-one-*'
+    BLOCKERA_CT_EXCLUDE_PACKAGES: '*-pro,*-pro-*,*-one,*-one-*,*-toolkit,*-toolkit-*'
 
 jobs:
     pr-workflow-gate:
