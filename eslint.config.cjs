@@ -14,5 +14,9 @@ module.exports = createConfig( {
 		'packages/*-one-*/**',
 		'packages/global-packages/packages/**/*-one/**',
 		'packages/global-packages/packages/**/*-one-*/**',
+		'packages/*-toolkit/**',
+		'packages/*-toolkit-*/**',
+		'packages/global-packages/packages/**/*-toolkit/**',
+		'packages/global-packages/packages/**/*-toolkit-*/**',
 	],
 } );

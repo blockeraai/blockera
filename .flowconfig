@@ -46,6 +46,10 @@
 <PROJECT_ROOT>/packages/[^/]*-one-[^/]+/.*
 <PROJECT_ROOT>/packages/global-packages/packages/[^/]*-one/.*
 <PROJECT_ROOT>/packages/global-packages/packages/[^/]*-one-[^/]+/.*
+<PROJECT_ROOT>/packages/[^/]*-toolkit/.*
+<PROJECT_ROOT>/packages/[^/]*-toolkit-[^/]+/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-toolkit/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-toolkit-[^/]+/.*
 
 # Dependencies stay resolvable (imports are `any`) but are not parsed/typechecked.
 [untyped]
