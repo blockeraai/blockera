@@ -263,13 +263,13 @@
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
 		"test:generate-output:dev": "jest --json --outputFile=.jest-test-results.json -- --watch",
 		"test:unit:php:setup": "npm run env:start",
-		"test:unit:php:base": "wp-env run --env-cwd='wp-content/plugins/blockera' tests-wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose --testsuite units",
+		"test:unit:php:base": "wp-env run --env-cwd='wp-content/plugins/blockera' wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose --testsuite units",
 		"test:snapshots:ensure-node": "node ./packages/global-packages/packages/dev-tools/js/block-markup/ensure-wp-env-node.js",
-		"test:snapshots:php:base": "npm run test:snapshots:ensure-node && wp-env run --env-cwd='wp-content/plugins/blockera' tests-wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose --testsuite snapshots",
+		"test:snapshots:php:base": "npm run test:snapshots:ensure-node && wp-env run --env-cwd='wp-content/plugins/blockera' wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose --testsuite snapshots",
 		"test:unit:php": "npm-run-all test:unit:php:setup test:unit:php:base",
 		"test:snapshots:php": "npm-run-all test:unit:php:setup test:snapshots:php:base",
 		"test:unit:php:composer": "composer run-script test",
-		"test:snapshots:update": "npm run test:snapshots:ensure-node && wp-env run --env-cwd='wp-content/plugins/blockera' tests-wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose --testsuite snapshots -d --update-snapshots",
+		"test:snapshots:update": "npm run test:snapshots:ensure-node && wp-env run --env-cwd='wp-content/plugins/blockera' wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose --testsuite snapshots -d --update-snapshots",
 		"test:snapshots:import": "node ./bin/plugin/cli.js test:snapshots:import",
 		"version": "grunt version && grunt update-pot",
 		"icons:generate-untitledui": "node packages/global-packages/packages/icons/js/library-untitledui/bin/generate-icons-index.js && node packages/global-packages/packages/icons/js/library-untitledui/bin/generate-search-data.js",
@@ -285,11 +285,11 @@
 		"env:clean": "npm run env clean all",
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:destroy": "npm run env destroy",
-		"env:tests-cli:bash": "npm run env run tests-cli bash",
+		"env:tests-cli:bash": "npm run env run cli bash",
 		"packages:update": "wp-scripts packages-update",
 		"submodule:bump": "bash packages/global-packages/packages/dev-tools/github/scripts/bump-global-packages-submodule.sh",
-		"plugin:activate": "wp-env run tests-cli wp plugin activate blockera",
-		"plugin:deactivate": "wp-env run tests-cli wp plugin deactivate blockera"
+		"plugin:activate": "wp-env run cli wp plugin activate blockera",
+		"plugin:deactivate": "wp-env run cli wp plugin deactivate blockera"
 	},
 	"lint-staged": {
 		"*.{js,json,ts,tsx,yml,yaml}": [

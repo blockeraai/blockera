@@ -1,6 +1,6 @@
 {
 	"core": "https://wordpress.org/wordpress-latest.zip",
-	"plugins": ["."],
+	"plugins": [ "." ],
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
 		"BLOCKERA_PERF_BENCHMARK": true,
@@ -13,6 +13,7 @@
 		"WP_MEMORY_LIMIT": "256M",
 		"WP_MAX_MEMORY_LIMIT": "256M"
 	},
+	"testsEnvironment": false,
 	"mappings": {
 		"wp-content/mu-plugins": "./packages/global-packages/packages/dev-tools/github/performance/mu-plugins"
 	},
