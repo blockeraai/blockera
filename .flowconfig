@@ -1,5 +1,5 @@
-# Edit packages/global-packages/packages/dev-tools/root-configs/.flowconfig
-# project:bootstrap copies this to the host repo root.
+# Edit packages/global-packages/packages/dev-tools/root-configs/.flowconfig.blockera
+# project:bootstrap copies this to the host repo root for --project=blockera.
 #
 # Keep this crawl small. Flow walks every non-ignored file during init; a full
 # node_modules + vendor + source-codes tree OOMs the CI server (~500k files).
@@ -37,6 +37,20 @@
 <PROJECT_ROOT>/packages/.*/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/js/\.patch/.*
 <PROJECT_ROOT>/packages/global-packages/packages/.*/\.patch/.*
+# Overlay packages may appear after a GP bump; they are not this product.
+# `[^/]` is a valid ignore regex. Only a whole line `[name]` starts a section.
+<PROJECT_ROOT>/packages/[^/]*-pro/.*
+<PROJECT_ROOT>/packages/[^/]*-pro-[^/]+/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-pro-[^/]+/.*
+<PROJECT_ROOT>/packages/[^/]*-one/.*
+<PROJECT_ROOT>/packages/[^/]*-one-[^/]+/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-one/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-one-[^/]+/.*
+<PROJECT_ROOT>/packages/[^/]*-toolkit/.*
+<PROJECT_ROOT>/packages/[^/]*-toolkit-[^/]+/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-toolkit/.*
+<PROJECT_ROOT>/packages/global-packages/packages/[^/]*-toolkit-[^/]+/.*
 
 # Dependencies stay resolvable (imports are `any`) but are not parsed/typechecked.
 [untyped]
@@ -50,6 +64,7 @@
 
 [options]
 react.runtime=automatic
+module.name_mapper='^@blockera/auth$' -> '<PROJECT_ROOT>/packages/global-packages/packages/auth/js/index.js'
 module.name_mapper='^@blockera/global-styles-ui\(/.*\)?$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper='^@blockera/experimental-config$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper='^@wordpress/core-data$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'

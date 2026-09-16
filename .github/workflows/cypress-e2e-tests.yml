@@ -15,6 +15,10 @@ env:
     BLOCKERA_E2E_SCAN_ROOTS: packages,tests
     BLOCKERA_E2E_GENERAL_CATEGORY: general-1
     BLOCKERA_E2E_SHARD_SIZE: '60'
+    BLOCKERA_E2E_EXCLUDE_PACKAGES: '*-pro,*-pro-*,*-one,*-one-*,*-toolkit,*-toolkit-*'
+    BLOCKERA_E2E_WRITE_CYPRESS_ENV: 'true'
+    BLOCKERAAI_USERNAME: ${{ secrets.BLOCKERAAI_USERNAME }}
+    BLOCKERAAI_USER_PASSWORD: ${{ secrets.BLOCKERAAI_USER_PASSWORD }}
 
 jobs:
     pr-workflow-gate:

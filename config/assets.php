@@ -49,17 +49,30 @@ return [
 			'env',
 			'data',
 			'controls',
+			'auth',
 			'telemetry',
 			'bootstrap',
 			// Theme Check WordPress_Spelling_Check treats this incorrectly.
 			// But this is not a translatable text and it is actually a valid word.
 			'word' . 'press',
 			'blockera-admin',
+			'auth-styles',
 			'controls-styles',
 			'wordpress-styles',
 			'telemetry-styles',
 			'blockera-admin-styles',
 		],
-		'with-deps' => [],
+		'with-deps' => [
+			'@blockera/auth' => [
+				'@blockera/utils',
+				'@blockera/classnames',
+				'@blockera/icons',
+				'@blockera/products',
+				'@blockera/controls',
+			],
+			'@blockera/blockera-admin' => [
+				'@blockera/auth',
+			],
+		],
 	],
 ];
