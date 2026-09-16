@@ -16,19 +16,17 @@ const OVERLAY_PACKAGE_GLOBS = [
 ];
 
 module.exports =
-	require( './packages/global-packages/packages/dev-tools/js/cypress/config' )(
-		{
-			rootDir: __dirname,
-			projectId: 'blockera',
-			alwaysExcludeSpecPattern: [
-				'packages/**/*.build.e2e.js',
-				'tests/performance/**',
-				...OVERLAY_PACKAGE_GLOBS,
-			],
-			componentExcludeSpecPattern: [
-				'**/*.e2e.cy.js',
-				'**/*.visual.cy.js',
-				...OVERLAY_PACKAGE_GLOBS,
-			],
-		}
-	);
+	require('./packages/global-packages/packages/dev-tools/js/cypress/config')({
+		rootDir: __dirname,
+		projectId: 'blockera',
+		alwaysExcludeSpecPattern: [
+			'packages/**/*.build.e2e.js',
+			'tests/performance/**',
+			...OVERLAY_PACKAGE_GLOBS,
+		],
+		componentExcludeSpecPattern: [
+			'**/*.e2e.cy.js',
+			'**/*.visual.cy.js',
+			...OVERLAY_PACKAGE_GLOBS,
+		],
+	});

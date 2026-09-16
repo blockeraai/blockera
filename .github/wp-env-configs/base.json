@@ -1,6 +1,6 @@
 {
 	"core": "https://wordpress.org/wordpress-latest.zip",
-	"plugins": [ "." ],
+	"plugins": ["."],
 	"testsEnvironment": false,
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
