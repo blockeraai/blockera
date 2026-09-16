@@ -282,7 +282,7 @@
 		"env:start:spx": "node packages/global-packages/packages/dev-tools/github/scripts/setup-wp-env.js && node packages/global-packages/packages/dev-tools/github/scripts/run-wp-env-start.js --spx",
 		"env:start:xd": "node packages/global-packages/packages/dev-tools/github/scripts/setup-wp-env.js && node packages/global-packages/packages/dev-tools/github/scripts/run-wp-env-start.js --xdebug=profile",
 		"env:start": "node packages/global-packages/packages/dev-tools/github/scripts/setup-wp-env.js && node packages/global-packages/packages/dev-tools/github/scripts/run-wp-env-start.js",
-		"env:clean": "npm run env clean all",
+		"env:clean": "npm run env reset all",
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:destroy": "npm run env destroy",
 		"env:tests-cli:bash": "npm run env run cli bash",
