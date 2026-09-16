@@ -5,39 +5,37 @@
  * Uses existing wp-env on :8888 (started by CI / `npm run env:start`).
  */
 
-const path = require('node:path');
-const { defineConfig } = require('@playwright/test');
-const baseConfig = require('@wordpress/scripts/config/playwright.config.js');
+const path = require( 'node:path' );
+const { defineConfig } = require( '@playwright/test' );
+const baseConfig = require( '@wordpress/scripts/config/playwright.config.js' );
 
 process.env.WP_BASE_URL ??= 'http://localhost:8888';
-process.env.WP_ARTIFACTS_PATH ??= path.join(process.cwd(), 'artifacts');
+process.env.WP_ARTIFACTS_PATH ??= path.join( process.cwd(), 'artifacts' );
 process.env.STORAGE_STATE_PATH ??= path.join(
 	process.env.WP_ARTIFACTS_PATH,
 	'storage-states/admin.json'
 );
 process.env.TEST_RUNS ??= '20';
 
-const baseUrl = new URL(process.env.WP_BASE_URL);
+const baseUrl = new URL( process.env.WP_BASE_URL );
 
-const config = defineConfig({
+const config = defineConfig( {
 	...baseConfig,
-	testDir: path.join(__dirname, 'specs'),
+	testDir: path.join( __dirname, 'specs' ),
 	testMatch: '**/scenarios.test.js',
-	globalSetup: require.resolve('./config/global-setup.js'),
-	reporter: [['list'], [require.resolve('./config/performance-reporter.js')]],
-	forbidOnly: !!process.env.CI,
+	globalSetup: require.resolve( './config/global-setup.js' ),
+	reporter: [
+		[ 'list' ],
+		[ require.resolve( './config/performance-reporter.js' ) ],
+	],
+	forbidOnly: !! process.env.CI,
 	workers: 1,
 	retries: 0,
 	repeatEach: 2,
-	timeout: parseInt(process.env.TIMEOUT || '', 10) || 600_000,
+	timeout: parseInt( process.env.TIMEOUT || '', 10 ) || 600_000,
 	reportSlowTests: null,
 	preserveOutput: 'never',
-	webServer: {
-		...baseConfig.webServer,
-		command: 'npm run env:start',
-		port: Number(baseUrl.port) || 8888,
-		reuseExistingServer: true,
-	},
+	webServer: undefined,
 	use: {
 		...baseConfig.use,
 		baseURL: baseUrl.href,
@@ -45,6 +43,6 @@ const config = defineConfig({
 		trace: 'off',
 		screenshot: 'off',
 	},
-});
+} );
 
 module.exports = config;
