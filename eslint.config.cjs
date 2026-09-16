@@ -2,9 +2,9 @@
 // project:bootstrap copies this to the host repo root for --project=blockera.
 const {
 	createConfig,
-} = require( './packages/global-packages/packages/dev-tools/js/eslint/config' );
+} = require('./packages/global-packages/packages/dev-tools/js/eslint/config');
 
-module.exports = createConfig( {
+module.exports = createConfig({
 	extraIgnores: [
 		'packages/*-pro/**',
 		'packages/*-pro-*/**',
@@ -19,4 +19,4 @@ module.exports = createConfig( {
 		'packages/global-packages/packages/**/*-toolkit/**',
 		'packages/global-packages/packages/**/*-toolkit-*/**',
 	],
-} );
+});
