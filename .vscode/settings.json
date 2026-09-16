@@ -27,7 +27,9 @@
 		"*.svg": "default"
 	},
 	"editor.formatOnSave": true,
+	"editor.formatOnPaste": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"javascript.format.enable": false,
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},
@@ -45,14 +47,13 @@
 	},
 	"prettier.enable": true,
 	"prettier.prettierPath": "./node_modules/prettier",
-	"prettier.configPath": ".prettierrc.js",
 	"prettier.requireConfig": true,
 	"prettier.resolveGlobalModules": false,
+	"prettier.useEditorConfig": false,
+	"prettier.ignorePath": ".prettierignore",
 	"prettier.documentSelectors": [
 		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml,svg,xml,html}"
 	],
-	"prettier.useEditorConfig": false,
-	"prettier.ignorePath": ".prettierignore",
 	"[php]": {
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "valeryanm.vscode-phpsab",
@@ -103,6 +104,8 @@
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true,
+		"editor.formatOnPaste": false,
+		"javascript.format.enable": false,
 		"editor.codeActionsOnSave": {
 			"source.fixAll.eslint": "explicit"
 		}
@@ -110,6 +113,8 @@
 	"[javascriptreact]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true,
+		"editor.formatOnPaste": false,
+		"javascript.format.enable": false,
 		"editor.codeActionsOnSave": {
 			"source.fixAll.eslint": "explicit"
 		}
