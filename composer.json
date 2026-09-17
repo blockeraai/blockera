@@ -27,7 +27,6 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
-		"blockera/auth": "*",
 		"blockera/blockera": "*",
 		"blockera/features-core": "*",
 		"blockera/feature-icon": "*",
@@ -50,7 +49,6 @@
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
-		"league/oauth2-client": "dev-master",
 		"vlucas/phpdotenv": "^5.5@dev",
 		"voku/simple_html_dom": "dev-master",
 		"enshrined/svg-sanitize": "^0.22"
@@ -98,9 +96,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Blockera\\Tests\\": "tests/phpunit/main/",
-			"Blockera\\SharedAutoload\\Tests\\": "packages/global-packages/packages/autoloader-coordinator/php/tests/",
-			"Blockera\\Products\\Tests\\": "packages/global-packages/packages/products/php/tests/"
+			"Blockera\\Tests\\": "tests/phpunit/main/"
 		},
 		"files": [
 			"tests/phpunit/main/helpers.php"
