@@ -15,8 +15,13 @@ WordPress plugin that extends the block editor. Host is thin: `blockera.php`, `c
 - After a task: Unreleased changelog + README if the public contract changed — [`…/ai/workflows/changelog-and-readme.md`](packages/global-packages/packages/dev-tools/ai/workflows/changelog-and-readme.md)
 - Do not install deps. Tests: `npm run test:e2e`, `test:js`, `test:unit:php` — [`…/ai/workflows/product-scripts-and-deps.md`](packages/global-packages/packages/dev-tools/ai/workflows/product-scripts-and-deps.md)
 - Ask before editing blockera-pro.
-- Skip Pro overlay packages (`*-pro`), One overlay packages (`*-one`), and toolkit overlay packages (`*-toolkit`) in this product’s tests and lint. They may appear on disk after a GP bump.
 
 ## Validate
 
 From this repo root, use `package.json` scripts. Cypress: `npm run test:e2e -- --spec <spec>`.
+
+## Declared GP packages
+
+<!-- generated:declared-gp-packages -->
+Read [`.ai/declared-gp-packages.md`](.ai/declared-gp-packages.md) before changing PHPUnit, Jest, PHPCS, ESLint, Stylelint, or CI package filters. `project:bootstrap` rewrites that file from `package.json` `dependencies` and `composer.json` `require`. Do **not** add a GP package to those setups if it is missing from the generated list.
+<!-- /generated:declared-gp-packages -->
