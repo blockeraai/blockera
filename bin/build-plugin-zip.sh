@@ -224,6 +224,7 @@ zip -r -q blockera.zip \
 	$vendor_without_blockera \
   ### BEGIN AUTO-GENERATED VENDOR PACKAGES PATH PATTERN
   ### END AUTO-GENERATED VENDOR PACKAGES PATH PATTERN
+  -x "*.zip-build.bak" \
   && echo "blockera.zip created successfully ✅" || echo "blockera.zip creation failed ❌"
 
 status "Cleaning up... 🧹"
