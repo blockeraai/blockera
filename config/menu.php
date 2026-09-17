@@ -74,9 +74,7 @@ $menu = apply_filters(
 
 $blockera_pro_active = false;
 
-if ( function_exists( 'blockera_auth_is_pro_plugin_active' ) ) {
-	$blockera_pro_active = blockera_auth_is_pro_plugin_active();
-} elseif ( defined( 'ABSPATH' ) ) {
+if ( defined( 'ABSPATH' ) ) {
 	if ( ! function_exists( 'is_plugin_active' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
