@@ -24,7 +24,10 @@ function declaredPackageRoots(rootDir) {
 	const pkg = JSON.parse(
 		fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8')
 	);
-	const roots = Object.entries(pkg.dependencies || {})
+	const roots = Object.entries({
+		...(pkg.dependencies || {}),
+		...(pkg.devDependencies || {}),
+	})
 		.filter(
 			([name, spec]) =>
 				name.startsWith('@blockera/') &&
