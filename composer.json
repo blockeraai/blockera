@@ -38,6 +38,7 @@
 		"blockera/classnames": "*",
 		"blockera/controls": "*",
 		"blockera/icons": "*",
+		"blockera/interact": "*",
 		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
 		"blockera/products": "*",

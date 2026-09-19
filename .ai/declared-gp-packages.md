@@ -25,6 +25,7 @@ Autoloader-coordinator and products are always on the PHPUnit/PHPCS list (bootst
 - `@blockera/features-core` — `packages/global-packages/packages/features-core`
 - `@blockera/global-styles-ui` — `packages/global-packages/packages/global-styles-ui`
 - `@blockera/icons` — `packages/global-packages/packages/icons`
+- `@blockera/interact` — `packages/global-packages/packages/interact`
 - `@blockera/plugin-compatibility` — `packages/global-packages/packages/plugin-compatibility`
 - `@blockera/products` — `packages/global-packages/packages/products`
 - `@blockera/storage` — `packages/global-packages/packages/storage`
@@ -51,6 +52,7 @@ Autoloader-coordinator and products are always on the PHPUnit/PHPCS list (bootst
 - `blockera/global-styles-ui` — `packages/global-packages/packages/global-styles-ui`
 - `blockera/http` — `packages/global-packages/packages/http`
 - `blockera/icons` — `packages/global-packages/packages/icons`
+- `blockera/interact` — `packages/global-packages/packages/interact`
 - `blockera/plugin-compatibility` — `packages/global-packages/packages/plugin-compatibility`
 - `blockera/products` — `packages/global-packages/packages/products`
 - `blockera/storage` — `packages/global-packages/packages/storage`

@@ -17,6 +17,7 @@ return [
 			'storage',
 			'classnames',
 			'icons',
+			'interact-editor',
 			'data-editor',
 			'env',
 			'data',

@@ -26,6 +26,7 @@
             <directory suffix="Test.php">./packages/global-packages/packages/blockera/php/tests</directory>
             <directory suffix="Test.php">./packages/global-packages/packages/data/php/tests</directory>
             <directory suffix="Test.php">./packages/global-packages/packages/editor/php/Tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/interact/php/tests</directory>
             <directory suffix="Test.php">./packages/global-packages/packages/products/php/tests</directory>
             <directory suffix="Test.php">./packages/global-packages/packages/utils/php/tests</directory>
             <directory suffix="Test.php">./packages/global-packages/packages/wordpress/php/tests</directory>
