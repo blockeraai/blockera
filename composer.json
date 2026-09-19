@@ -27,6 +27,7 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
+		"blockera/auth": "*",
 		"blockera/blockera": "*",
 		"blockera/features-core": "*",
 		"blockera/feature-icon": "*",
@@ -37,6 +38,7 @@
 		"blockera/classnames": "*",
 		"blockera/controls": "*",
 		"blockera/icons": "*",
+		"blockera/interact": "*",
 		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
 		"blockera/products": "*",
@@ -49,6 +51,7 @@
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
+		"league/oauth2-client": "dev-master",
 		"vlucas/phpdotenv": "^5.5@dev",
 		"voku/simple_html_dom": "dev-master",
 		"enshrined/svg-sanitize": "^0.22"
@@ -72,7 +75,9 @@
 		"spatie/phpunit-snapshot-assertions": "v4.x-dev",
 		"phpstan/phpstan": "2.1.x-dev",
 		"php-stubs/wordpress-stubs": "dev-master",
-		"10up/wp_mock": "dev-trunk"
+		"10up/wp_mock": "dev-trunk",
+		"brain/monkey": "^2.0@dev",
+		"mockery/mockery": "1.7.x-dev"
 	},
 	"config": {
 		"process-timeout": 0,

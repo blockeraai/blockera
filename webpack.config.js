@@ -36,6 +36,8 @@ module.exports = createRootWebpackConfig({
 	resolvePackageDir,
 	getExternals: (blockeraPackagesVersion) => ({
 		'@blockera/icons': 'blockeraIcons',
+		'@blockera/interact':
+			'blockeraInteract_' + blockeraPackagesVersion.interact,
 		'@blockera/env': 'blockeraEnv_' + blockeraPackagesVersion.env,
 		'@blockera/telemetry':
 			'blockeraTelemetry_' + blockeraPackagesVersion.telemetry,
@@ -43,6 +45,7 @@ module.exports = createRootWebpackConfig({
 			'blockeraStorage_' + blockeraPackagesVersion.storage,
 		'@blockera/products':
 			'blockeraProducts_' + blockeraPackagesVersion.products,
+		'@blockera/auth': 'blockeraAuth_' + blockeraPackagesVersion.auth,
 		'@blockera/data': 'blockeraData_' + blockeraPackagesVersion.data,
 		'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
 		'@blockera/editor': 'blockeraEditor_' + blockeraPackagesVersion.editor,

@@ -13,6 +13,7 @@
 		"WP_MEMORY_LIMIT": "256M",
 		"WP_MAX_MEMORY_LIMIT": "256M"
 	},
+	"testsEnvironment": false,
 	"mappings": {
 		"wp-content/mu-plugins": "./packages/global-packages/packages/dev-tools/github/performance/mu-plugins"
 	},
