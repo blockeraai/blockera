@@ -11,6 +11,7 @@ Autoloader-coordinator and products are always on the PHPUnit/PHPCS list (bootst
 
 ## Jest (`package.json` `dependencies`)
 
+- `@blockera/auth` — `packages/global-packages/packages/auth`
 - `@blockera/blockera` — `packages/global-packages/packages/blockera`
 - `@blockera/blockera-admin` — `packages/global-packages/packages/blockera-admin`
 - `@blockera/blocks-core` — `packages/global-packages/packages/blocks-core`
@@ -35,6 +36,7 @@ Autoloader-coordinator and products are always on the PHPUnit/PHPCS list (bootst
 
 ## PHPUnit / PHPCS (`composer.json` `require` + coordinator/products)
 
+- `blockera/auth` — `packages/global-packages/packages/auth`
 - `blockera/autoloader-coordinator` — `packages/global-packages/packages/autoloader-coordinator`
 - `blockera/blockera` — `packages/global-packages/packages/blockera`
 - `blockera/blockera-admin` — `packages/global-packages/packages/blockera-admin`

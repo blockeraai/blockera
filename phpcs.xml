@@ -8,7 +8,7 @@
 
     <config name="text_domain" value="blockera,default"/>
     <file>./packages/global-packages/packages</file>
-    <exclude-pattern>./packages/global-packages/packages/(auth|auth-pro|blockera-one|blockera-pro|blockera-pro-admin|blocks-pro/core|console-pro|controls-pro|dev-cypress|dev-jest|dev-phpunit|dev-playwright|dev-tools|editor-pro|guard-pro|plugin-compatibility-pro|site-toolkit|validator-pro)/*</exclude-pattern>
+    <exclude-pattern>./packages/global-packages/packages/(auth-pro|blockera-one|blockera-pro|blockera-pro-admin|blocks-pro/core|console-pro|controls-pro|dev-cypress|dev-jest|dev-phpunit|dev-playwright|dev-tools|editor-pro|guard-pro|plugin-compatibility-pro|site-toolkit|validator-pro)/*</exclude-pattern>
 
     <arg name="cache" value=".cache/phpcs.json"/>
 </ruleset>
