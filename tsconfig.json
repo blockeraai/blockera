@@ -1,5 +1,6 @@
 // Edit packages/global-packages/packages/dev-tools/root-configs/tsconfig.json.template
-// project:bootstrap copies this to the host repo root as tsconfig.json.
+// project:bootstrap generates host tsconfig.json from this file and adds
+// exclude entries for GP packages not in package.json dependencies.
 {
 	"extends": "./packages/global-packages/packages/dev-tools/js/typescript/tsconfig.base.json",
 	"include": [
