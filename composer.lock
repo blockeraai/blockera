@@ -1771,16 +1771,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.18.4",
+            "version": "2.18.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "d2102955e48b9fd9ab24280a7ad12ed552752c4d"
+                "reference": "baec851ad6ae00db8bd0fdd30d208afc1b71c56e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/d2102955e48b9fd9ab24280a7ad12ed552752c4d",
-                "reference": "d2102955e48b9fd9ab24280a7ad12ed552752c4d",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/baec851ad6ae00db8bd0fdd30d208afc1b71c56e",
+                "reference": "baec851ad6ae00db8bd0fdd30d208afc1b71c56e",
                 "shasum": ""
             },
             "require": {
@@ -1789,8 +1789,8 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
-                "phpunit/phpunit": "^7.5.20 || ^8.5.8 || ^9.3.3",
-                "symfony/var-dumper": "^4.0 || ^5.0"
+                "phpunit/phpunit": "^7.5.20 || ^8.5.8 || ^9.3.3 || ^10.5.58",
+                "symfony/var-dumper": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
             },
             "suggest": {
                 "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
@@ -1830,7 +1830,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.18.4"
+                "source": "https://github.com/filp/whoops/tree/2.18.5"
             },
             "funding": [
                 {
@@ -1838,7 +1838,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-08T12:00:00+00:00"
+            "time": "2026-09-18T12:00:00+00:00"
         },
         {
             "name": "gettext/gettext",
@@ -3336,12 +3336,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e92e3686af2b556c6debf37287da72bf7d05e61f"
+                "reference": "7da909d26c16e87d6b3f59cbb920f636c7854820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e92e3686af2b556c6debf37287da72bf7d05e61f",
-                "reference": "e92e3686af2b556c6debf37287da72bf7d05e61f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7da909d26c16e87d6b3f59cbb920f636c7854820",
+                "reference": "7da909d26c16e87d6b3f59cbb920f636c7854820",
                 "shasum": ""
             },
             "require": {
@@ -3423,7 +3423,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-09-16T21:19:40+00:00"
+            "time": "2026-09-18T15:18:31+00:00"
         },
         {
             "name": "psr/log",
@@ -7898,12 +7898,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli-bundle.git",
-                "reference": "14e49c909373b02b12ad6dad99ce33c5eb6de54f"
+                "reference": "9463b2b222ee445b5975ebae84f986af54a151fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/14e49c909373b02b12ad6dad99ce33c5eb6de54f",
-                "reference": "14e49c909373b02b12ad6dad99ce33c5eb6de54f",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/9463b2b222ee445b5975ebae84f986af54a151fa",
+                "reference": "9463b2b222ee445b5975ebae84f986af54a151fa",
                 "shasum": ""
             },
             "require": {
@@ -7972,7 +7972,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli-bundle/issues",
                 "source": "https://github.com/wp-cli/wp-cli-bundle"
             },
-            "time": "2026-09-17T07:27:22+00:00"
+            "time": "2026-09-17T17:21:02+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",
