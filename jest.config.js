@@ -2,8 +2,8 @@
 // project:bootstrap copies this to every consumer root.
 /**
  * Consumer Jest: GP packages listed in this product's package.json
- * `dependencies` (`@blockera/*` file:). Overlay packages that only exist on
- * disk after a submodule bump are not included.
+ * `dependencies` and `devDependencies` (`@blockera/*` file:). Overlay
+ * packages that only exist on disk after a submodule bump are not included.
  */
 const fs = require('fs');
 const path = require('path');

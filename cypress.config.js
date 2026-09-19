@@ -1,7 +1,7 @@
 // Edit packages/global-packages/packages/dev-tools/root-configs/cypress.config.blockera.js
 // project:bootstrap copies this to the host repo root for --project=blockera.
 // Undeclared GP packages are excluded by the shared Cypress factory from
-// package.json `dependencies` (`@blockera/*` `file:`).
+// package.json `dependencies` and `devDependencies` (`@blockera/*` `file:`).
 module.exports =
 	require('./packages/global-packages/packages/dev-tools/js/cypress/config')({
 		rootDir: __dirname,

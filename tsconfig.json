@@ -1,6 +1,7 @@
 // Edit packages/global-packages/packages/dev-tools/root-configs/tsconfig.json.template
-// project:bootstrap generates host tsconfig.json from this file and adds
-// exclude entries for GP packages not in package.json dependencies.
+// Extra exclude paths are generated from package.json dependencies and
+// devDependencies (@blockera/* file:).
+// project:bootstrap rewrites this file.
 {
 	"extends": "./packages/global-packages/packages/dev-tools/js/typescript/tsconfig.base.json",
 	"include": [
@@ -13,6 +14,17 @@
 		"build",
 		"dist",
 		"source-codes",
-		"packages/global-packages/packages/dev-playwright"
+		"packages/global-packages/packages/auth-pro/js",
+		"packages/global-packages/packages/blockera-one/js",
+		"packages/global-packages/packages/blockera-pro/js",
+		"packages/global-packages/packages/blockera-pro-admin/js",
+		"packages/global-packages/packages/blocks-pro/core/js",
+		"packages/global-packages/packages/console-pro/js",
+		"packages/global-packages/packages/controls-pro/js",
+		"packages/global-packages/packages/editor-pro/js",
+		"packages/global-packages/packages/guard-pro/js",
+		"packages/global-packages/packages/plugin-compatibility-pro/js",
+		"packages/global-packages/packages/site-toolkit/js",
+		"packages/global-packages/packages/validator-pro/js"
 	]
 }
