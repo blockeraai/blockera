@@ -49,8 +49,8 @@ blockera_bootstrap_shared_autoloader(
 );
 ### END AUTO-GENERATED AUTOLOADER
 
-if (file_exists(__DIR__ . '/.env')) {
-    // Env Loading ...
+if (file_exists(__DIR__ . '/.env') && class_exists(\Dotenv\Dotenv::class)) {
+    // Env Loading ... Coordinator already hydrated `.env` without Composer autoload.
     $blockera_dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $blockera_dotenv->safeLoad();
 }
