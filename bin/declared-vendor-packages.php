@@ -1,13 +1,20 @@
 <?php
 /**
- * Composer-required `blockera/*` slugs for production zip packing.
+ * Host copy of GP DeclaredVendorPackages. Zip generators prefer this file so
+ * production packing works before the product pins a GP revision with the
+ * same helper.
  *
- * Zip generators must not glob every GP package on disk. Production archives
- * follow `composer.json` `require` only (not `require-dev`).
+ * @package Blockera\\DevTools
+ */
+
+/**
+ * Composer-required `blockera/*` slugs and production third-party vendor paths
+ * for zip packing.
  *
- * Host copy of `packages/dev-tools/php/Zip/DeclaredVendorPackages.php` so zip
- * generation works before this product pins a GP revision that includes the
- * helper. Prefer the GP path when it exists.
+ * Zip generators must not glob every GP package on disk. `vendor/blockera`
+ * follows `composer.json` `require` only (not `require-dev`). Third-party
+ * Composer dirs follow `composer.lock` `packages` (production), never
+ * `packages-dev`.
  *
  * @package Blockera\DevTools
  */
@@ -120,5 +127,104 @@ class DeclaredVendorPackages {
 			'internal' => array_values( $internal ),
 			'sdks'     => array_values( $sdks ),
 		);
+	}
+
+	/**
+	 * Production third-party Composer packages (`composer.lock` `packages`,
+	 * excluding `blockera/*`). Falls back to `composer.json` `require`.
+	 *
+	 * @param string $consumer_root Product root.
+	 * @return string[] Names such as `vlucas/phpdotenv`.
+	 */
+	public static function fromComposerLockThirdParty( $consumer_root ) {
+		$lock_file = $consumer_root . '/composer.lock';
+
+		if ( is_readable( $lock_file ) ) {
+			$lock = json_decode( (string) file_get_contents( $lock_file ), true );
+
+			if ( is_array( $lock ) ) {
+				$names = array();
+
+				foreach ( (array) ( $lock['packages'] ?? array() ) as $package ) {
+					$name = (string) ( $package['name'] ?? '' );
+
+					if ( '' === $name || 0 === strpos( $name, 'blockera/' ) ) {
+						continue;
+					}
+
+					$names[] = $name;
+				}
+
+				$names = array_values( array_unique( $names ) );
+				sort( $names );
+
+				return $names;
+			}
+		}
+
+		return self::fromComposerJsonThirdPartyRequire( $consumer_root );
+	}
+
+	/**
+	 * Direct `composer.json` `require` names that are not PHP or `blockera/*`.
+	 *
+	 * @param string $consumer_root Product root.
+	 * @return string[] Composer package names.
+	 */
+	public static function fromComposerJsonThirdPartyRequire( $consumer_root ) {
+		$composer_file = $consumer_root . '/composer.json';
+
+		if ( ! is_readable( $composer_file ) ) {
+			return array();
+		}
+
+		$composer = json_decode( (string) file_get_contents( $composer_file ), true );
+
+		if ( ! is_array( $composer ) ) {
+			return array();
+		}
+
+		$names = array();
+
+		foreach ( array_keys( (array) ( $composer['require'] ?? array() ) ) as $requirement ) {
+			$requirement = (string) $requirement;
+
+			if ( 'php' === $requirement || 0 === strpos( $requirement, 'ext-' ) ) {
+				continue;
+			}
+
+			if ( 0 === strpos( $requirement, 'blockera/' ) ) {
+				continue;
+			}
+
+			$names[] = $requirement;
+		}
+
+		$names = array_values( array_unique( $names ) );
+		sort( $names );
+
+		return $names;
+	}
+
+	/**
+	 * Zip path lines for Composer runtime plus production third-party vendor dirs.
+	 *
+	 * @param string $consumer_root Product root.
+	 * @return string[] Bash `zip` continuation lines.
+	 */
+	public static function thirdPartyZipPathLines( $consumer_root ) {
+		$lines = array(
+			'	vendor/autoload.php \\',
+			'	$(find ./vendor/composer -type f ! -name "*.md" 2>/dev/null) \\',
+		);
+
+		foreach ( self::fromComposerLockThirdParty( $consumer_root ) as $name ) {
+			$lines[] = sprintf(
+				'	$(find ./vendor/%1$s -type f ! -path "*/tests/*" ! -path "*/Tests/*" ! -path "*/test/*" ! -path "*/docs/*" ! -path "*/.github/*" ! -name "*.md" 2>/dev/null) \\',
+				$name
+			);
+		}
+
+		return $lines;
 	}
 }

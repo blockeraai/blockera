@@ -10,10 +10,10 @@
  */
 
 $root   = dirname( __DIR__ );
-$helper = $root . '/packages/global-packages/packages/dev-tools/php/Zip/DeclaredVendorPackages.php';
+$helper = __DIR__ . '/declared-vendor-packages.php';
 
 if ( ! is_readable( $helper ) ) {
-	$helper = __DIR__ . '/declared-vendor-packages.php';
+	$helper = $root . '/packages/global-packages/packages/dev-tools/php/Zip/DeclaredVendorPackages.php';
 }
 
 require_once $helper;
@@ -26,7 +26,8 @@ $split              = \Blockera\DevTools\Zip\DeclaredVendorPackages::partition(
 $internal_packages = $split['internal'];
 $sdks               = $split['sdks'];
 
-$inside_pattern_block = false;
+$inside_pattern_block      = false;
+$inside_third_party_block = false;
 
 while ( true ) {
 	$line = fgets( $f );
@@ -35,6 +36,15 @@ while ( true ) {
 	}
 
 	switch ( trim( $line ) ) {
+
+		case '### END AUTO-GENERATED THIRD-PARTY VENDOR PATH PATTERN':
+			$inside_third_party_block = false;
+			break;
+
+		case '### BEGIN AUTO-GENERATED THIRD-PARTY VENDOR PATH PATTERN':
+			$inside_third_party_block = true;
+			echo implode( PHP_EOL, \Blockera\DevTools\Zip\DeclaredVendorPackages::thirdPartyZipPathLines( $root ) ) . PHP_EOL;
+			break;
 
 		case '### END AUTO-GENERATED VENDOR PACKAGES PATH PATTERN':
 			$inside_pattern_block = false;
@@ -68,7 +78,7 @@ while ( true ) {
 			break;
 
 		default:
-			if ( ! $inside_pattern_block ) {
+			if ( ! $inside_pattern_block && ! $inside_third_party_block ) {
 				echo $line;
 			}
 			break;
