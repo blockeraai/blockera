@@ -17,6 +17,13 @@
 			"options": {
 				"symlink": true
 			}
+		},
+		{
+			"type": "path",
+			"url": "packages/global-packages/packages/blocks-pro/*",
+			"options": {
+				"symlink": true
+			}
 		}
 	],
 	"authors": [
@@ -28,29 +35,36 @@
 	"require": {
 		"php": ">=7.4",
 		"blockera/auth": "*",
+		"blockera/auth-pro": "*",
 		"blockera/blockera": "*",
-		"blockera/features-core": "*",
-		"blockera/feature-icon": "*",
 		"blockera/blockera-admin": "*",
+		"blockera/blockera-one": "*",
+		"blockera/blockera-pro": "*",
+		"blockera/blockera-pro-admin": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
-		"blockera/env": "*",
 		"blockera/classnames": "*",
 		"blockera/controls": "*",
+		"blockera/data": "*",
+		"blockera/data-editor": "*",
+		"blockera/editor": "*",
+		"blockera/editor-pro": "*",
+		"blockera/env": "*",
+		"blockera/exceptions": "*",
+		"blockera/feature-icon": "*",
+		"blockera/features-core": "*",
+		"blockera/global-styles-ui": "*",
+		"blockera/guard-pro": "*",
+		"blockera/http": "*",
 		"blockera/icons": "*",
 		"blockera/interact": "*",
 		"blockera/plugin-compatibility": "*",
-		"blockera/editor": "*",
+		"blockera/plugin-compatibility-pro": "*",
 		"blockera/products": "*",
 		"blockera/storage": "*",
-		"blockera/global-styles-ui": "*",
+		"blockera/telemetry": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
-		"blockera/exceptions": "*",
-		"blockera/data": "*",
-		"blockera/data-editor": "*",
-		"blockera/http": "*",
-		"blockera/telemetry": "*",
 		"league/oauth2-client": "dev-master",
 		"vlucas/phpdotenv": "^5.5@dev",
 		"voku/simple_html_dom": "dev-master",
