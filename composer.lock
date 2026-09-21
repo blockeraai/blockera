@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6b086651a320ae1a2d6ceeefccc0ae7",
+    "content-hash": "c3bd683356f3c23e8874e52aceaac8da",
     "packages": [
         {
             "name": "blockera/auth",
@@ -29,34 +29,6 @@
                 }
             },
             "description": "Login-only OAuth connect session for Blockera.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/auth-pro",
-            "version": "1.1.2",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/auth-pro",
-                "reference": "1629cfc361e588afd575bca99cd52b026d6c6d40"
-            },
-            "require": {
-                "blockera/auth": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\AuthPro\\": "php/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\AuthPro\\Tests\\": "php/tests/"
-                }
-            },
-            "description": "License UI and Pro update transients on top of the shared Blockera auth session",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -144,54 +116,6 @@
                 }
             },
             "description": "The bootstrapper for blockera one theme php application for WordPress in admin and front-end sides.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/blockera-pro",
-            "version": "1.1.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/blockera-pro",
-                "reference": "11918ba885724fff3b1846568928cfec983fcd02"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\Pro\\": "php/"
-                },
-                "files": [
-                    "php/functions.php"
-                ]
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\Pro\\Tests\\": "php/tests/"
-                }
-            },
-            "description": "The bootstrapper for blockera PRO php application for WordPress in admin and front-end sides.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/blockera-pro-admin",
-            "version": "1.2.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/blockera-pro-admin",
-                "reference": "33917dea5783dc8993f7f64c3fe3bf1fbec741f7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\Pro\\Admin\\": "php/"
-                }
-            },
-            "description": "The bootstrapper for blockera PRO Admin php application for WordPress for WordPress admin panel.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -362,31 +286,6 @@
             }
         },
         {
-            "name": "blockera/editor-pro",
-            "version": "1.0.1",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/editor-pro",
-                "reference": "51c778482f4ace28960b276a1299e39e27e417fb"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\SiteBuilder\\": "php/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\SiteBuilder\\Tests\\": "php/tests/"
-                }
-            },
-            "description": "Editor Pro functionality implementation",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
             "name": "blockera/env",
             "version": "1.0.0",
             "dist": {
@@ -510,31 +409,6 @@
             }
         },
         {
-            "name": "blockera/guard-pro",
-            "version": "1.0.1",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/guard-pro",
-                "reference": "ab108b5c1afc43583f7826388acc0b3a20fcf4a3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\Guard\\": "php/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\Guard\\Tests\\": "php/tests/"
-                }
-            },
-            "description": "The Blockera Guard of pro features versus hackers.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
             "name": "blockera/http",
             "version": "1.1.0",
             "dist": {
@@ -624,31 +498,6 @@
             "autoload-dev": {
                 "psr-4": {
                     "Blockera\\PluginCompatibility\\": "php/tests/"
-                }
-            },
-            "description": "Handles version plugin compatibility checking between Blockera and Blockera Pro plugins to ensure proper functionality",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/plugin-compatibility-pro",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/global-packages/packages/plugin-compatibility-pro",
-                "reference": "e3f8fc4883402931f2eabd6181ba1a0d33658c01"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\PluginCompatibilityPro\\": "php/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\PluginCompatibilityPro\\": "php/tests/"
                 }
             },
             "description": "Handles version plugin compatibility checking between Blockera and Blockera Pro plugins to ensure proper functionality",
@@ -8779,12 +8628,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli-bundle.git",
-                "reference": "4415fefdbbbd9a23cd4ef4cc2dd9ca78bd29ad63"
+                "reference": "13e84e4d2109b8ce80e70b1b0b581e6af94f70ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/4415fefdbbbd9a23cd4ef4cc2dd9ca78bd29ad63",
-                "reference": "4415fefdbbbd9a23cd4ef4cc2dd9ca78bd29ad63",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/13e84e4d2109b8ce80e70b1b0b581e6af94f70ac",
+                "reference": "13e84e4d2109b8ce80e70b1b0b581e6af94f70ac",
                 "shasum": ""
             },
             "require": {
@@ -8853,7 +8702,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli-bundle/issues",
                 "source": "https://github.com/wp-cli/wp-cli-bundle"
             },
-            "time": "2026-09-21T13:08:13+00:00"
+            "time": "2026-09-21T14:16:01+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",
