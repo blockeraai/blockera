@@ -76,4 +76,11 @@ return [
 			],
 		],
 	],
+	'compat' => [
+		'list'      => [
+			'plugin-compatibility',
+			'plugin-compatibility-styles',
+		],
+		'with-deps' => [],
+	],
 ];
