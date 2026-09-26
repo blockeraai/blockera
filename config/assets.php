@@ -37,7 +37,13 @@ return [
 			'blocks-core-styles',
 			'global-styles-ui-styles',
 		],
-		'with-deps' => [],
+		'with-deps' => [
+			'@blockera/blockera' => [
+				'@blockera/blocks-core',
+				'@blockera/bootstrap',
+				'@blockera/editor',
+			],
+		],
 	],
 	'admin'  => [
 		'list'      => [

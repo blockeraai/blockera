@@ -59,6 +59,13 @@ $menu = apply_filters(
                 'menu_slug'  => 'blockera-settings-experimental-lab',
                 'callback'   => 'blockera_settings_page_template',
             ],
+            'login-page'       => [
+                'page_title' => __('Auth Pages Customizer', 'blockera'),
+                'menu_title' => __('Auth Pages Customizer', 'blockera'),
+                'capability' => 'manage_options',
+                'menu_slug'  => 'blockera-login-page',
+                'callback'   => 'blockera_login_page_menu_callback',
+            ],
             // Registered so OAuth and the settings rail can open it. Hidden from
             // the wp-admin menu unless Pro is active (see blockera-admin hooks).
             'account' => [

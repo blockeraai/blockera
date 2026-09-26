@@ -44,6 +44,7 @@ return [
             \Blockera\Setup\Providers\AppServiceProvider::class,
 			\Blockera\Editor\Providers\StyleDefinitionsProvider::class,
             \Blockera\Admin\Providers\AdminAssetsProvider::class,
+            \Blockera\Setup\Providers\LoginPageProvider::class,
         ]
     ),
 ];
