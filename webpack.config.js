@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-const { dependencies } = require('./package');
+const packageJson = require('./package.json');
 const packagesConfig = require('./packages/global-packages/packages/dev-tools/js/webpack/packages');
 const createRootWebpackConfig = require('./packages/global-packages/packages/dev-tools/js/webpack/create-root-config');
 
@@ -31,11 +31,14 @@ function resolvePackageDir(packageName) {
 }
 
 module.exports = createRootWebpackConfig({
-	dependencies,
+	packageJson,
+	dependencies: packageJson.dependencies,
 	packagesConfig,
 	resolvePackageDir,
 	getExternals: (blockeraPackagesVersion) => ({
 		'@blockera/icons': 'blockeraIcons',
+		'@blockera/interact':
+			'blockeraInteract_' + blockeraPackagesVersion.interact,
 		'@blockera/env': 'blockeraEnv_' + blockeraPackagesVersion.env,
 		'@blockera/telemetry':
 			'blockeraTelemetry_' + blockeraPackagesVersion.telemetry,
@@ -43,6 +46,7 @@ module.exports = createRootWebpackConfig({
 			'blockeraStorage_' + blockeraPackagesVersion.storage,
 		'@blockera/products':
 			'blockeraProducts_' + blockeraPackagesVersion.products,
+		'@blockera/auth': 'blockeraAuth_' + blockeraPackagesVersion.auth,
 		'@blockera/data': 'blockeraData_' + blockeraPackagesVersion.data,
 		'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
 		'@blockera/editor': 'blockeraEditor_' + blockeraPackagesVersion.editor,

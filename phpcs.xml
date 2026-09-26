@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
-<!-- Edit packages/global-packages/packages/dev-tools/root-configs/phpcs.xml -->
-<!-- project:bootstrap copies this to the host repo root and fills the project id. -->
+<!-- Generated from config/assets.php (fallback: composer require / require-dev) plus autoloader-coordinator. -->
+<!-- Excludes undeclared GP packages and packages with no PHP. project:bootstrap rewrites this file. -->
 <ruleset name="WordPress Coding Standards for blockera">
-    <description>Consumer ruleset: shared Blockera PHPCS + blockera text_domain and scan roots.</description>
+    <description>Consumer ruleset: shared Blockera PHPCS + blockera text_domain. Scan the GP packages tree; exclude undeclared packages and packages with no PHP.</description>
 
     <rule ref="./packages/global-packages/packages/dev-tools/php/phpcs.xml"/>
 
-    <config name="text_domain" value="blockera,blockera,default"/>
-    <file>./packages</file>
+    <config name="text_domain" value="blockera,default"/>
+    <file>./packages/global-packages/packages</file>
+    <exclude-pattern>./packages/global-packages/packages/(auth-pro|blockera-one|blockera-pro|blockera-pro-admin|blocks-pro/core|console-pro|controls-pro|dev-jest|dev-playwright|editor-pro|guard-pro|plugin-compatibility-pro|site-toolkit|validator-pro)/*</exclude-pattern>
 
     <arg name="cache" value=".cache/phpcs.json"/>
 </ruleset>

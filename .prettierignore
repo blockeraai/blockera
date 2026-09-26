@@ -13,6 +13,10 @@ test-results
 # Generated from theme-config/ via npm run theme-json:merge — keep merge output byte-stable.
 theme.json
 
+# Generated icon search indexes — keep machine output byte-stable.
+**/icons/js/search-index.json
+**/icons/js/search-index-2.json
+
 # Snapshot/fixture HTML uses block-markup prettier (npm run block-markup:prettier), not Prettier on save.
 tests/fixtures/**/*.html
 tests/fixtures/**/*.css
