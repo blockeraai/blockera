@@ -29,7 +29,6 @@
 		"@blockera/auth": "file:./packages/global-packages/packages/auth",
 		"@blockera/blockera": "file:./packages/global-packages/packages/blockera",
 		"@blockera/blockera-admin": "file:./packages/global-packages/packages/blockera-admin",
-		"@blockera/blockera-one": "file:./packages/global-packages/packages/blockera-one",
 		"@blockera/blocks-core": "file:./packages/global-packages/packages/blocks-core",
 		"@blockera/bootstrap": "file:./packages/global-packages/packages/bootstrap",
 		"@blockera/classnames": "file:./packages/global-packages/packages/classnames",

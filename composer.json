@@ -30,7 +30,6 @@
 		"blockera/auth": "*",
 		"blockera/blockera": "*",
 		"blockera/blockera-admin": "*",
-		"blockera/blockera-one": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/classnames": "*",
