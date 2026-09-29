@@ -1648,11 +1648,20 @@ class EditorPerfUtils {
 					settings,
 				});
 
+			const repeaterSelect = registry.select(
+				'blockera/controls/repeater'
+			);
 			const repeaterDispatch = registry.dispatch(
 				'blockera/controls/repeater'
 			);
+			const hasRepeaterControl =
+				typeof repeaterSelect?.getControl === 'function' &&
+				repeaterSelect.getControl(controlName);
 
-			if (typeof repeaterDispatch?.modifyControlValue === 'function') {
+			if (
+				hasRepeaterControl &&
+				typeof repeaterDispatch?.modifyControlValue === 'function'
+			) {
 				repeaterDispatch.modifyControlValue({
 					controlId: controlName,
 					value: {},
@@ -1701,13 +1710,26 @@ class EditorPerfUtils {
 				const repeaterSelect = window.wp?.data?.select(
 					'blockera/controls/repeater'
 				);
-				const value = repeaterSelect?.getControl?.(controlName)?.value;
+				const control = repeaterSelect?.getControl?.(controlName);
 
-				return Object.keys(value || {}).length === 0;
+				if (!control) {
+					return true;
+				}
+
+				return Object.keys(control.value || {}).length === 0;
 			},
 			BORDER_PRESET_CUSTOM_CONTROL_NAME,
 			{ timeout: 20000 }
 		);
+
+		const bordersPresetsVisible = await this.page
+			.locator('.blockera-borders-presets')
+			.isVisible()
+			.catch(() => false);
+
+		if (!bordersPresetsVisible) {
+			return;
+		}
 
 		const customVariables = await getParentContainer(
 			this.page,
