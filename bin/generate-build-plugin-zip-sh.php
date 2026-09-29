@@ -3,8 +3,9 @@
 /**
  * Generates the production (plugin build) version of `./bin/build-plugin-zip.sh`.
  *
- * GP vendor paths come from composer.json `require` (`blockera/*`), not every
- * package directory on disk after a submodule bump.
+ * GP vendor paths come from `composer.json` `require` (`blockera/*`) union
+ * `config/assets.php` `list` handles, not every package directory on disk
+ * after a submodule bump.
  *
  * @package blockera-build
  */

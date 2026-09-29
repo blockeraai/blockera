@@ -12,8 +12,8 @@
  * for zip packing.
  *
  * Zip generators must not glob every GP package on disk. `vendor/blockera`
- * follows `config/assets.php` `list` handles when that file exists, otherwise
- * `composer.json` `require` only (not `require-dev`). Third-party Composer dirs follow
+ * is the union of `composer.json` `require` (`blockera/*`, not `require-dev`)
+ * and `config/assets.php` `list` handles when that file exists. Third-party Composer dirs follow
  * `composer.lock` `packages` (production), never `packages-dev`.
  *
  * @package Blockera\DevTools
@@ -27,19 +27,33 @@ namespace Blockera\DevTools\Zip;
 class DeclaredVendorPackages {
 
 	/**
-	 * Vendor slugs from `config/assets.php` when present, otherwise
-	 * `require` (`blockera/*`).
+	 * Vendor slugs: `composer.json` `require` (`blockera/*`) merged with
+	 * `config/assets.php` `list` handles when that file exists.
 	 *
 	 * @param string $consumer_root Product root that contains composer.json.
 	 * @return string[] Sorted unique names such as `editor`, `feature-icon`.
 	 */
 	public static function fromComposerRequire( $consumer_root ) {
+		$names       = self::fromComposerJsonBlockeraRequire( $consumer_root );
 		$from_assets = self::fromAssetsPhp( $consumer_root );
 
 		if ( is_array( $from_assets ) ) {
-			return $from_assets;
+			$names = array_merge( $names, $from_assets );
 		}
 
+		$names = array_values( array_unique( $names ) );
+		sort( $names );
+
+		return $names;
+	}
+
+	/**
+	 * `blockera/*` slugs from `composer.json` `require` only (not `require-dev`).
+	 *
+	 * @param string $consumer_root Product root.
+	 * @return string[] Sorted unique slugs.
+	 */
+	public static function fromComposerJsonBlockeraRequire( $consumer_root ) {
 		$composer_file = $consumer_root . '/composer.json';
 
 		if ( ! is_readable( $composer_file ) ) {
@@ -150,9 +164,9 @@ class DeclaredVendorPackages {
 				break;
 			}
 
-			$found      = true;
-			$close      = self::findMatchingBracket( $source, $open );
-			$offset     = $open + 1;
+			$found  = true;
+			$close  = self::findMatchingBracket( $source, $open );
+			$offset = $open + 1;
 
 			if ( false === $close ) {
 				continue;
@@ -172,7 +186,7 @@ class DeclaredVendorPackages {
 	 * @return int|false
 	 */
 	private static function findMatchingBracket( $source, $open_index ) {
-		$depth = 0;
+		$depth  = 0;
 		$length = strlen( $source );
 
 		for ( $index = $open_index; $index < $length; $index++ ) {
