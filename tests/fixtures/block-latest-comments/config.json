@@ -22,12 +22,24 @@
 		{
 			"search": "^\\d{4}-\\d{2}-\\d{2}(?:T.*)?$",
 			"replace": "Month Day, Year"
+		},
+		{
+			"search": "^(?:Blockera Author|A WordPress Commenter)$",
+			"replace": "admin"
 		}
 	],
 	"frontend-search-replace": [
 		{
 			"search": "<time datetime=\"[^\"]+\"( class=\"[^\"]+\")?>(<a[^>]*>)?[^<]*(</a>)?</time>",
 			"replace": "<time datetime=\"Month Day, Year\"$1>$2Month Day, Year$3</time>"
+		},
+		{
+			"search": "(?:January|February|March|April|May|June|July|August|September|October|November|December) \\d{1,2}, \\d{4}",
+			"replace": "Month Day, Year"
+		},
+		{
+			"search": "^(?:Blockera Author|A WordPress Commenter)$",
+			"replace": "admin"
 		}
 	]
 }
