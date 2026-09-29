@@ -55,10 +55,9 @@ async function setup(page, sectionContent) {
 			comment_content: commentContent,
 		} = commentData;
 
-		// Calculate seconds ago for this comment (5 seconds per index)
-		// First comment (index 0) is the most recent (0 seconds ago)
+		// Pin comment dates so SSR output is stable before editor normalizers run.
 		const secondsAgo = i * 5;
-		const commentDate = new Date();
+		const commentDate = new Date('2020-01-15T12:00:00Z');
 		commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
 		const commentDateStr = commentDate
 			.toISOString()

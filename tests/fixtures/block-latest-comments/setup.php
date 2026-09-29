@@ -45,11 +45,10 @@ foreach ($data['comments'] as $index => $comment_data) {
 		throw new \Exception('User with ID ' . $comment_author_id . ' not found');
 	}
 
-	// Calculate comment date: most recent comment first, then subtract 5 seconds for each subsequent comment
-	// First comment (index 0) is the most recent (0 seconds ago), last comment is the oldest
+	// Pin comment dates so SSR output is stable before editor normalizers run.
 	$seconds_ago = $index * 5;
-	$comment_date = date('Y-m-d H:i:s', strtotime("-{$seconds_ago} seconds"));
-	$comment_date_gmt = gmdate('Y-m-d H:i:s', strtotime("-{$seconds_ago} seconds"));
+	$comment_date = date('Y-m-d H:i:s', strtotime('2020-01-15 12:00:00') - $seconds_ago);
+	$comment_date_gmt = gmdate('Y-m-d H:i:s', strtotime('2020-01-15 12:00:00 UTC') - $seconds_ago);
 
 	$comment_id = $this->factory()->comment->create([
 		'comment_post_ID' => $post_id,
