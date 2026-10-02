@@ -6,7 +6,7 @@ WordPress plugin that extends the block editor. Host is thin: `blockera.php`, `c
 
 - Shared architecture: [`packages/global-packages/packages/dev-tools/ai/index.md`](packages/global-packages/packages/dev-tools/ai/index.md)
 - Product notes: [`.ai/index.md`](.ai/index.md)
-- Gutenberg: `source-codes/block-editor/` · WordPress: `source-codes/wordpress/src/` (Cursor `development-helper`)
+- Gutenberg: `source-codes/block-editor/` · WordPress: `source-codes/wordpress/src/` · Wix Interact: `source-codes/interact/` (Cursor `development-helper` / `source-code`)
 - Cursor templates are generated into `.cursor/` from GP `dev-tools/cursor/` — do not hand-edit `.cursor/`
 
 ## Constraints

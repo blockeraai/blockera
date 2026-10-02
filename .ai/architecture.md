@@ -24,4 +24,4 @@ PHPUnit units for packages on [declared-gp-packages.md](declared-gp-packages.md)
 
 ## Source-codes
 
-`source-codes/` is a gitignored symlink (`BLOCKERA_EXTERNAL_SOURCE_CODES_PATH`). Read-only. Gutenberg first for editor JS; WordPress `src/` for PHP.
+`source-codes/` is a gitignored symlink (`BLOCKERA_EXTERNAL_SOURCE_CODES_PATH`). Read-only. Gutenberg first for editor JS; WordPress `src/` for PHP; Wix Interact `interact/` for upstream animation APIs (after `@blockera/interact`).
