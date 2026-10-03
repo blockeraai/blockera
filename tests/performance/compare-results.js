@@ -3,8 +3,7 @@
  * Compare Core vs Blockera Playwright performance artifacts and enforce thresholds.
  *
  * Table style adapted from WordPress core tests/performance/compare-results.js.
- * Gate logic preserved from Blockera's previous compare-results.js:
- * fail when abs((blockera - core) / core * 100) > thresholdPercent on primaryMetric.
+ * Gate logic: fail when deltaPercent is outside [-faster, +slower] on primaryMetric.
  */
 
 const fs = require('node:fs');
@@ -12,6 +11,9 @@ const path = require('node:path');
 const {
 	parseFile,
 	median,
+	parseThresholdPercent,
+	evaluateThreshold,
+	formatThresholdLabel,
 	formatAsMarkdownTable,
 	formatThresholdDiffCell,
 	formatValue,
@@ -96,10 +98,10 @@ function main() {
 	const defaults = config.defaults || {};
 	const primaryMetric = defaults.primaryMetric || 'wp-total';
 	const primaryKey = toResultMetricKey(primaryMetric);
-	const defaultThreshold =
-		typeof defaults.thresholdPercent === 'number'
-			? defaults.thresholdPercent
-			: 10;
+	const defaultThreshold = parseThresholdPercent(
+		defaults.thresholdPercent,
+		'defaults.thresholdPercent'
+	);
 
 	const blockeraStats = parseFile('blockera-performance-results.json');
 	const coreStats = parseFile('core-performance-results.json');
@@ -130,10 +132,12 @@ function main() {
 	}
 
 	for (const scenario of config.scenarios || []) {
-		const threshold =
-			typeof scenario.thresholdPercent === 'number'
-				? scenario.thresholdPercent
-				: defaultThreshold;
+		const threshold = scenario.thresholdPercent
+			? parseThresholdPercent(
+					scenario.thresholdPercent,
+					`scenario "${scenario.id}".thresholdPercent`
+				)
+			: defaultThreshold;
 
 		const blockeraRow = blockeraById.get(scenario.id);
 		const coreRow = coreById.get(scenario.id);
@@ -250,11 +254,11 @@ function main() {
 		}
 
 		entry.deltaPercent = round2(((withMs - withoutMs) / withoutMs) * 100);
-		const absPct = Math.abs(entry.deltaPercent);
+		const gate = evaluateThreshold(entry.deltaPercent, threshold);
 
-		if (absPct > threshold) {
+		if (!gate.pass) {
 			entry.status = 'fail';
-			entry.note = `${fmtSigned(entry.deltaPercent, '%')} exceeds ±${threshold}%`;
+			entry.note = `${fmtSigned(entry.deltaPercent, '%')} ${gate.reason}`;
 			failed++;
 		} else {
 			entry.status = 'pass';
@@ -365,7 +369,7 @@ function buildReport({
 			status = '⏭️ skip';
 		}
 		lines.push(
-			`| ${r.label} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${r.thresholdPercent}% | ${status} |`
+			`| ${r.label} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdLabel(r.thresholdPercent)} | ${status} |`
 		);
 	}
 
@@ -374,7 +378,7 @@ function buildReport({
 		`- Theme: Twenty Twenty-Five · Locale: en_US · \`TEST_RUNS\` default from harness`
 	);
 	lines.push(
-		`- Gate: fail if \`|Diff %|\` exceeds per-scenario \`thresholdPercent\` (either direction)`
+		`- Gate: fail if \`Diff %\` is outside per-scenario \`thresholdPercent\` pass band (\`-faster\` to \`+slower\`)`
 	);
 	lines.push(
 		`- Diff is **Blockera − ${coreLabel}** (positive means Blockera is slower)`
@@ -432,8 +436,14 @@ function buildReport({
 
 	// Keep defaults reference for debugging without implying wpp-research.
 	if (defaults.thresholdPercent !== undefined) {
+		const defaultLabel = formatThresholdLabel(
+			parseThresholdPercent(
+				defaults.thresholdPercent,
+				'defaults.thresholdPercent'
+			)
+		);
 		lines.push(
-			`_Default threshold: ${defaults.thresholdPercent}% (from scenarios.json)._`
+			`_Default threshold: ${defaultLabel} (from scenarios.json)._`
 		);
 		lines.push('');
 	}
