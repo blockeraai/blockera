@@ -1,4 +1,20 @@
 # Edit packages/global-packages/packages/dev-tools/root-configs/phpstan.neon
-# project:bootstrap copies this to the host repo root.
+# Extra excludePaths are generated from composer.json require and require-dev
+# (blockera/*). project:bootstrap rewrites this file.
 includes:
 	- packages/global-packages/packages/dev-tools/php/phpstan.neon
+parameters:
+	excludePaths:
+		analyse:
+			- %currentWorkingDirectory%/packages/global-packages/packages/auth-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/blockera-one
+			- %currentWorkingDirectory%/packages/global-packages/packages/blockera-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/blockera-pro-admin
+			- %currentWorkingDirectory%/packages/global-packages/packages/blocks-pro/core
+			- %currentWorkingDirectory%/packages/global-packages/packages/console-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/controls-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/editor-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/guard-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/plugin-compatibility-pro
+			- %currentWorkingDirectory%/packages/global-packages/packages/site-toolkit
+			- %currentWorkingDirectory%/packages/global-packages/packages/validator-pro

@@ -3,13 +3,37 @@
 # project:bootstrap copies this to the host .husky/ folder.
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx lint-staged
+# Point the GP submodule git hook at this file so `git -C packages/global-packages
+# commit` still runs consumer PHPCS (lint-staged only sees the current index).
+HUSKY_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+GP_DIR="${HUSKY_DIR}/../packages/global-packages"
+if [ -e "${GP_DIR}" ] && git -C "${GP_DIR}" rev-parse --git-dir >/dev/null 2>&1; then
+	GP_GIT="$(git -C "${GP_DIR}" rev-parse --absolute-git-dir)"
+	mkdir -p "${GP_GIT}/hooks"
+	cat > "${GP_GIT}/hooks/pre-commit" <<EOF
+#!/bin/sh
+# Installed by consumer husky so global-packages commits run PHPCS.
+exec "${HUSKY_DIR}/pre-commit"
+EOF
+	chmod +x "${GP_GIT}/hooks/pre-commit"
+fi
+
+if [ -f package.json ]; then
+	npx lint-staged
+fi
 
 # TypeScript + Flow when JS/TS is staged. Skip: BLOCKERA_SKIP_TYPECHECK=1
 # Skip when the submodule pin predates this script (e.g. a master rewind).
 TYPECHECK_SH="$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/run-typecheck-pre-commit.sh"
 if [ -f "${TYPECHECK_SH}" ]; then
 	bash "${TYPECHECK_SH}"
+fi
+
+# PHPCS on staged PHP in this repo and the global-packages submodule.
+# Skip: BLOCKERA_SKIP_PHPCS=1
+PHPCS_SH="$(dirname -- "$0")/../packages/global-packages/packages/dev-tools/github/scripts/run-phpcs-pre-commit.sh"
+if [ -f "${PHPCS_SH}" ]; then
+	bash "${PHPCS_SH}"
 fi
 
 # Push the GP mirror branch if it exists locally and is not on origin yet.

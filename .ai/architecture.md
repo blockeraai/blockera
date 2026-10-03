@@ -20,8 +20,8 @@ Shared package edits belong under `packages/global-packages/` (submodule of `blo
 | PHP snapshots | `npm run test:snapshots:php` |
 | Playwright | `npm run test:e2e:base` |
 
-PHPUnit units for shared packages often live in GP `php/tests`; host `tests/phpunit/main/` holds product snapshots.
+PHPUnit units for packages on [declared-gp-packages.md](declared-gp-packages.md) (`composer.json` `require` plus autoloader-coordinator and products). Jest for `package.json` `dependencies`. Host `tests/phpunit/main/` holds product snapshots. Do not add undeclared GP packages to those configs.
 
 ## Source-codes
 
-`source-codes/` is a gitignored symlink (`BLOCKERA_EXTERNAL_SOURCE_CODES_PATH`). Read-only. Gutenberg first for editor JS; WordPress `src/` for PHP.
+`source-codes/` is a gitignored symlink (`BLOCKERA_EXTERNAL_SOURCE_CODES_PATH`). Read-only. Gutenberg first for editor JS; WordPress `src/` for PHP; Wix Interact `interact/` for upstream animation APIs (after `@blockera/interact`).

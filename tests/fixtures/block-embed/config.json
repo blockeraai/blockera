@@ -7,7 +7,7 @@
 		},
 		{
 			"search": "src=([\"'])[^\"']+\\1",
-			"replace": "src=\"https://example.com/video\""
+			"replace": "src=\"https://blockera.test/embed-video\""
 		}
 	]
 }

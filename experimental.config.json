@@ -17,7 +17,9 @@
 		"optimizeStyleGenerationOnEditor": false,
 		"optimizeStyleGenerationOnEditorStatus": "alpha",
 		"enableSvgUpload": true,
-		"enableSvgUploadStatus": "pre-release"
+		"enableSvgUploadStatus": "pre-release",
+		"enableAuthPageCustomizer": false,
+		"enableAuthPageCustomizerStatus": "alpha"
 	},
 	"ai": {
 		"experimentalTools": false

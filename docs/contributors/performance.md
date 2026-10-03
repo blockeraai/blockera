@@ -5,7 +5,7 @@ Blockera CI compares **WordPress Core** (Blockera deactivated) vs **Blockera act
 1. **Server-Timing** — PHP / request-path overhead (`wp-total`, TTFB, LCP on the front end).
 2. **Block editor (client)** — Chromium tracing metrics adapted from the Gutenberg post-editor performance suite (block selection, workspace tab switching).
 
-Each comparable scenario has a `%` overhead threshold. If Blockera’s median exceeds Core by more than that threshold (either direction), that matrix job fails. Server-Timing and editor each get their own sticky PR comment and artifact upload, and run **in parallel** on CI.
+Each comparable scenario has asymmetric `%` overhead thresholds (`slower` / `faster`). If Blockera’s median percent change vs the baseline falls outside the pass band (`-faster` to `+slower`), that matrix job fails. Server-Timing and editor each get their own sticky PR comment and artifact upload, and run **in parallel** on CI.
 
 ### How it works
 
@@ -84,8 +84,9 @@ CI uses `TEST_RUNS=20` for Server-Timing. Editor suites use a fixed 10 (+1 throw
 Edit [`.github/performance/scenarios.json`](../../.github/performance/scenarios.json):
 
 - `defaults.primaryMetric` — gate metric (`wp-total`).
-- `defaults.thresholdPercent` — fallback threshold.
-- Per-scenario `thresholdPercent` — override.
+- `defaults.thresholdPercent` — fallback pass band, e.g. `{ "slower": 25, "faster": 50 }`.
+- Per-scenario `thresholdPercent` — override. Both `slower` and `faster` are required.
+- **Pass band:** `-faster <= Diff % <= +slower`. Positive diff = Blockera slower; negative diff = Blockera faster.
 - `auth: true` — admin / logged-in paths (Playwright storageState).
 - `requiresBlockera: true` — skip Core run / skip gate (report Blockera-only).
 - `path` / fixtures — content under test (`{POST_ID}` resolved at setup).
@@ -98,16 +99,22 @@ Edit [`.github/performance/editor-scenarios.json`](../../.github/performance/edi
 
 | Scenario id | Metric | Notes |
 | --- | --- | --- |
-| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern. Gated vs Core (`thresholdPercent` 1000% — Blockera’s inspector makes selection much slower than Core) and vs master (`compareToMaster` + `masterThresholdPercent` 20%) |
+| `editor-select-blocks` | `focus` | Gutenberg “Selecting blocks” pattern. Gated vs Core (`thresholdPercent` `{ slower: 1000, faster: 1000 }` — Blockera’s inspector makes selection much slower than Core) and vs master (`compareToMaster` + `masterThresholdPercent` `{ slower: 20, faster: 50 }`) |
 | `editor-workspace-tabs` | `switchTab` | Blockera workspace document tabs; `requiresBlockera` (PR vs master) |
 
 - Per-scenario `primaryMetric` — result key to gate/report.
-- Per-scenario `thresholdPercent` — Core (or default) gate override.
-- `defaults.masterThresholdPercent` — PR vs master gate for every Master column (20%). Per-scenario `masterThresholdPercent` overrides that.
+- Per-scenario `thresholdPercent` — Core (or default) pass band override (`{ slower, faster }`).
+- `defaults.masterThresholdPercent` — PR vs master pass band for every Master column (`{ slower: 20, faster: 50 }`). Per-scenario `masterThresholdPercent` overrides that.
 - `compareToMaster: true` — also run and gate on the PR vs master job (even without `requiresBlockera`).
 - `requiresBlockera: true` — skip when `PERF_SUBJECT=core`; no Core gate; included in PR vs master.
 
 More editor metrics (typing, inserter, loading) can be added later as new describe blocks + scenario rows.
+
+#### Threshold unit tests
+
+```bash
+npx wp-scripts test-unit-js --roots tests/performance --testMatch '**/*.spec.js' tests/performance/threshold.utils.spec.js
+```
 
 ### Using it on local
 

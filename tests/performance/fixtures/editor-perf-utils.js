@@ -11,6 +11,7 @@ const {
 	openGlobalStylesPanel,
 	openValueAddon,
 	selectValueAddonItem,
+	getParentContainer,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	closeWelcomeGuide,
@@ -23,6 +24,7 @@ const BACKGROUND_IMAGE_FIXTURE = path.join(
 
 const BORDER_PRESET_ADD_DATA_TEST =
 	'global-styles-preset-add-border-preset-presets-custom';
+const BORDER_PRESET_CUSTOM_CONTROL_NAME = 'border-preset-presets-custom';
 
 /**
  * Instant nearest-scroll without Playwright's layout-stability wait.
@@ -1570,13 +1572,34 @@ class EditorPerfUtils {
 	}
 
 	/**
+	 * Closes the repeater UpgradePrompt modal when the free-tier limit blocks Add.
+	 */
+	async closeRepeaterUpgradePromptIfOpen() {
+		const upgradePrompt = this.page
+			.locator('.blockera-component-upgrade-prompt')
+			.filter({ visible: true })
+			.first();
+
+		if (!(await upgradePrompt.isVisible().catch(() => false))) {
+			return;
+		}
+
+		await upgradePrompt.getByRole('button', { name: 'Close' }).click({
+			force: true,
+		});
+		await expect(upgradePrompt).toBeHidden({ timeout: 20000 });
+	}
+
+	/**
 	 * Clears in-memory custom border presets so the next Add is the free-tier first item.
 	 * Stays on the Borders screen (does not re-navigate).
 	 */
 	async clearGlobalStylesCustomBorderPresets() {
+		await this.page.keyboard.press('Escape');
+		await this.closeRepeaterUpgradePromptIfOpen();
 		await this.page.waitForFunction(() => window?.wp?.data);
 
-		await this.page.evaluate(() => {
+		await this.page.evaluate((controlName) => {
 			const registry = window.wp?.data;
 			const store = window.wp?.coreData?.store;
 
@@ -1624,7 +1647,27 @@ class EditorPerfUtils {
 				.editEntityRecord('root', 'globalStyles', recordId, {
 					settings,
 				});
-		});
+
+			const repeaterSelect = registry.select(
+				'blockera/controls/repeater'
+			);
+			const repeaterDispatch = registry.dispatch(
+				'blockera/controls/repeater'
+			);
+			const hasRepeaterControl =
+				typeof repeaterSelect?.getControl === 'function' &&
+				repeaterSelect.getControl(controlName);
+
+			if (
+				hasRepeaterControl &&
+				typeof repeaterDispatch?.modifyControlValue === 'function'
+			) {
+				repeaterDispatch.modifyControlValue({
+					controlId: controlName,
+					value: {},
+				});
+			}
+		}, BORDER_PRESET_CUSTOM_CONTROL_NAME);
 
 		await this.page.waitForFunction(
 			() => {
@@ -1661,6 +1704,41 @@ class EditorPerfUtils {
 			undefined,
 			{ timeout: 20000 }
 		);
+
+		await this.page.waitForFunction(
+			(controlName) => {
+				const repeaterSelect = window.wp?.data?.select(
+					'blockera/controls/repeater'
+				);
+				const control = repeaterSelect?.getControl?.(controlName);
+
+				if (!control) {
+					return true;
+				}
+
+				return Object.keys(control.value || {}).length === 0;
+			},
+			BORDER_PRESET_CUSTOM_CONTROL_NAME,
+			{ timeout: 20000 }
+		);
+
+		const bordersPresetsVisible = await this.page
+			.locator('.blockera-borders-presets')
+			.isVisible()
+			.catch(() => false);
+
+		if (!bordersPresetsVisible) {
+			return;
+		}
+
+		const customVariables = await getParentContainer(
+			this.page,
+			'Custom variables'
+		);
+
+		await expect(
+			customVariables.locator('[data-cy="repeater-item"]')
+		).toHaveCount(0, { timeout: 20000 });
 	}
 
 	/**
@@ -1673,32 +1751,36 @@ class EditorPerfUtils {
 		presetName,
 		closePopover = true,
 	}) {
-		const customVariables = this.page
-			.locator('.blockera-borders-presets [data-cy="base-control"]')
-			.filter({
-				has: this.page.locator('[aria-label="Custom variables"]'),
-			})
-			.last();
-
+		const customVariables = await getParentContainer(
+			this.page,
+			'Custom variables'
+		);
 		const addButton = customVariables.locator(
 			`[data-test="${addDataTest}"]`
 		);
 
 		await expect(addButton).toBeVisible({ timeout: 20000 });
+		await scrollLocatorNearest(addButton);
 		await addButton.click({ force: true });
 
-		const creatingStep = this.page.locator(
-			'[data-test="repeater-item-creating-step"]'
-		);
 		const nameField = this.page
 			.locator('[data-test="global-styles-preset-name-field"]')
 			.first();
+		const upgradePrompt = this.page
+			.locator('.blockera-component-upgrade-prompt')
+			.filter({ visible: true })
+			.first();
 
 		try {
-			await expect(creatingStep.first()).toBeAttached({
+			await expect(nameField.or(upgradePrompt)).toBeVisible({
 				timeout: 20000,
 			});
-			await expect(nameField).toBeVisible({ timeout: 20000 });
+
+			if (await upgradePrompt.isVisible()) {
+				throw new Error(
+					'Repeater upgrade prompt blocked custom preset add'
+				);
+			}
 		} catch (error) {
 			const dump = await this.page.evaluate((dataTest) => {
 				const addButtons = [
@@ -1722,6 +1804,9 @@ class EditorPerfUtils {
 					).length,
 					hasUpgradeText:
 						document.body.innerText.includes('Unlimited Custom'),
+					upgradePrompts: document.querySelectorAll(
+						'.blockera-component-upgrade-prompt'
+					).length,
 				};
 			}, addDataTest);
 
