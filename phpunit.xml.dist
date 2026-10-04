@@ -1,7 +1,7 @@
 <!--
-	Synced from packages/global-packages/packages/dev-tools/php/phpunit.plugin.xml.dist
-	(PHPUnit has no config includes — keep a real root copy).
-	@see https://github.com/wp-phpunit/docs
+	Generated from composer.json require (blockera/*) plus autoloader-coordinator
+	and products. project:bootstrap rewrites this file.
+	@see packages/dev-tools/ai/workflows/consumer-test-roots.md
 -->
 <phpunit
         bootstrap="./packages/global-packages/packages/dev-phpunit/php/bootstrap.php"
@@ -20,27 +20,30 @@
 
     <testsuites>
         <testsuite name="units">
-            <directory suffix=".php">./packages/global-packages/packages/dev-phpunit/php/</directory>
-            <directory suffix=".php">./packages/global-packages/packages/blockera/php/tests/</directory>
-            <directory suffix=".php">./packages/global-packages/packages/blockera-admin/php/tests/</directory>
-            <directory suffix=".php">./packages/global-packages/packages/data/php/tests/</directory>
-            <directory suffix=".php">./packages/global-packages/packages/editor/php/Tests/</directory>
-            <directory suffix=".php">./packages/global-packages/packages/wordpress/php/tests/</directory>
-            <directory suffix=".php">./packages/global-packages/packages/utils/php/tests/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/dev-phpunit/php</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/auth/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/autoloader-coordinator/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/blockera-admin/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/blockera/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/data/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/dev-tools/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/editor/php/Tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/interact/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/products/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/utils/php/tests</directory>
+            <directory suffix="Test.php">./packages/global-packages/packages/wordpress/php/tests</directory>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
+            <exclude>./packages/global-packages/packages/autoloader-coordinator/php/tests/Fixtures/</exclude>
             <exclude>./packages/global-packages/packages/blockera/php/tests/Fixtures/</exclude>
             <exclude>./packages/global-packages/packages/editor/php/Tests/Fixtures/</exclude>
-            <exclude>./packages/global-packages/packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
+            <exclude>./packages/global-packages/packages/wordpress/php/tests/Fixtures/</exclude>
         </testsuite>
         <testsuite name="snapshots">
-            <directory suffix=".php">./packages/global-packages/packages/dev-phpunit/php/</directory>
+            <directory suffix=".php">./packages/global-packages/packages/dev-phpunit/php</directory>
             <directory suffix=".php">./tests/phpunit/main/</directory>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
-            <exclude>./packages/global-packages/packages/blockera/php/tests/Fixtures/</exclude>
-            <exclude>./packages/global-packages/packages/editor/php/Tests/Fixtures/</exclude>
-            <exclude>./packages/global-packages/packages/editor/php/Tests/StyleDefinitionTestCase.php</exclude>
         </testsuite>
     </testsuites>
 

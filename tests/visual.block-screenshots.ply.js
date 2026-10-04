@@ -288,12 +288,12 @@ test.describe('Sections Visual Snapshots', () => {
 
 					await waitForContentReady(page, { timeout: timeoutEditor });
 
+					await hideCanvasHeaderForScreenshot(page);
+
 					await applyDomSearchReplace(
 						editorContainer,
 						editorSearchReplace
 					);
-
-					await hideCanvasHeaderForScreenshot(page);
 
 					await expect
 						.soft(editorContainer)
@@ -308,12 +308,12 @@ test.describe('Sections Visual Snapshots', () => {
 
 					await waitForContentReady(page, { timeout: timeoutEditor });
 
+					await hideCanvasHeaderForScreenshot(page);
+
 					await applyDomSearchReplace(
 						editorContainer,
 						editorSearchReplace
 					);
-
-					await hideCanvasHeaderForScreenshot(page);
 
 					await expect
 						.soft(editorContainer)

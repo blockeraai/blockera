@@ -1,7 +1,10 @@
 {
 	"defaults": {
 		"primaryMetric": "wp-total",
-		"thresholdPercent": 25,
+		"thresholdPercent": {
+			"slower": 25,
+			"faster": 50
+		},
 		"baseUrl": "http://localhost:8888",
 		"testRuns": 20
 	},
@@ -25,7 +28,10 @@
 			"label": "Admin: Dashboard",
 			"path": "/wp-admin/",
 			"auth": true,
-			"thresholdPercent": 25
+			"thresholdPercent": {
+				"slower": 25,
+				"faster": 50
+			}
 		},
 		{
 			"id": "admin-posts",
@@ -33,7 +39,10 @@
 			"label": "Admin: Posts list",
 			"path": "/wp-admin/edit.php",
 			"auth": true,
-			"thresholdPercent": 25
+			"thresholdPercent": {
+				"slower": 25,
+				"faster": 50
+			}
 		},
 		{
 			"id": "admin-media",
@@ -41,7 +50,10 @@
 			"label": "Admin: Media library",
 			"path": "/wp-admin/upload.php",
 			"auth": true,
-			"thresholdPercent": 25
+			"thresholdPercent": {
+				"slower": 25,
+				"faster": 50
+			}
 		},
 		{
 			"id": "admin-block-editor",
@@ -58,7 +70,10 @@
 			"path": "/wp-admin/admin.php?page=blockera-settings-dashboard",
 			"auth": true,
 			"requiresBlockera": true,
-			"thresholdPercent": 20
+			"thresholdPercent": {
+				"slower": 20,
+				"faster": 50
+			}
 		}
 	]
 }

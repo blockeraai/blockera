@@ -21,7 +21,7 @@ ob_start();
 require BLOCKERA_SB_PATH . 'assets/menu-logo.base64.svg';
 $blockera_logo = 'data:image/svg+xml;base64,' . ob_get_clean();
 
-return apply_filters(
+$menu = apply_filters(
     'blockera.config.menu',
     [
         'page_title' => __('Blockera Settings', 'blockera'),
@@ -59,12 +59,49 @@ return apply_filters(
                 'menu_slug'  => 'blockera-settings-experimental-lab',
                 'callback'   => 'blockera_settings_page_template',
             ],
-            'upgrade-to-pro' => [
-                'page_title' => __('Upgrade to Pro', 'blockera'),
-                'menu_title' => __('Upgrade to Pro', 'blockera'),
+            'login-page'       => [
+                'page_title' => __('Auth Pages Customizer', 'blockera'),
+                'menu_title' => __('Auth Pages Customizer', 'blockera'),
                 'capability' => 'manage_options',
-                'menu_slug'  => blockera_core_config('app.upgrade_url'),
+                'menu_slug'  => 'blockera-login-page',
+                'callback'   => 'blockera_login_page_menu_callback',
+            ],
+            // Registered so OAuth and the settings rail can open it. Hidden from
+            // the wp-admin menu unless Pro is active (see blockera-admin hooks).
+            'account' => [
+                'page_title' => __('Blockera Account', 'blockera'),
+                'menu_title' => __('Account', 'blockera'),
+                'capability' => 'manage_options',
+                'menu_slug'  => 'blockera-settings-account',
+                'callback'   => 'blockera_settings_page_template',
             ],
         ],
     ]
 );
+
+$blockera_pro_active = false;
+
+if ( function_exists( 'blockera_auth_is_pro_plugin_active' ) ) {
+	$blockera_pro_active = blockera_auth_is_pro_plugin_active();
+} elseif ( defined( 'ABSPATH' ) ) {
+	if ( ! function_exists( 'is_plugin_active' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+
+	$blockera_pro_active = is_plugin_active( 'blockera-pro/blockera-pro.php' );
+}
+
+if ( ! $blockera_pro_active && is_array( $menu ) ) {
+	if ( ! isset( $menu['submenus'] ) || ! is_array( $menu['submenus'] ) ) {
+		$menu['submenus'] = [];
+	}
+
+	$menu['submenus']['upgrade-to-pro'] = [
+		'page_title' => __( 'Upgrade to Pro', 'blockera' ),
+		'menu_title' => __( 'Upgrade to Pro', 'blockera' ),
+		'capability' => 'manage_options',
+		'menu_slug'  => blockera_core_config( 'app.upgrade_url' ),
+	];
+}
+
+return $menu;

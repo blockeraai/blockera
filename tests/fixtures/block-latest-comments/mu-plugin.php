@@ -97,3 +97,36 @@ if ( ! function_exists( 'blockera_test_block_latest_comments_avatar_filter_data'
 if ( ! has_filter( 'get_avatar_data', 'blockera_test_block_latest_comments_avatar_filter_data' ) ) {
 	add_filter( 'get_avatar_data', 'blockera_test_block_latest_comments_avatar_filter_data', 10, 2 );
 }
+
+/**
+ * Scope Latest Comments output to the fixture post when it exists.
+ *
+ * The block queries site-wide comments; without this, default Hello World
+ * comments from the CI WordPress install can appear above fixture data.
+ *
+ * @param array $args     Arguments passed to get_comments().
+ * @param array $instance Widget instance (unused).
+ * @return array
+ */
+if ( ! function_exists( 'blockera_test_block_latest_comments_limit_widget_comments' ) ) {
+	function blockera_test_block_latest_comments_limit_widget_comments( $args, $instance ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		global $wpdb;
+
+		$post_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'post' AND post_status != 'trash' ORDER BY ID DESC LIMIT 1",
+				'Test Post for Latest Comments'
+			)
+		);
+
+		if ( $post_id ) {
+			$args['post_id'] = (int) $post_id;
+		}
+
+		return $args;
+	}
+}
+
+if ( ! has_filter( 'widget_comments_args', 'blockera_test_block_latest_comments_limit_widget_comments' ) ) {
+	add_filter( 'widget_comments_args', 'blockera_test_block_latest_comments_limit_widget_comments', 10, 2 );
+}

@@ -4,6 +4,10 @@
 		".",
 		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
 	],
+	"testsEnvironment": false,
+	"mappings": {
+		"wp-content/mu-plugins/blockera-woocommerce-e2e.php": "./.github/wp-env-configs/woocommerce/mu-plugin-woocommerce-e2e.php"
+	},
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
 		"SCRIPT_DEBUG": false,
@@ -12,6 +16,6 @@
 		"WP_MAX_MEMORY_LIMIT": "256M"
 	},
 	"lifecycleScripts": {
-		"afterStart": "wp-env run cli -- wp theme activate twentytwentyfive && wp-env run cli -- wp option update blogname 'Blockera Test' && wp-env run cli -- wp user update 1 --display_name='Blockera Author' --user_email='hello@blockera.ai' --user_url='https://blockera.ai' --description='We shape the future of how block editor can change the web!'"
+		"afterStart": "wp-env run cli -- wp theme activate twentytwentyfive && wp-env run cli -- wp option update blogname 'Blockera Test' && wp-env run cli -- wp user update 1 --display_name='Blockera Author' --user_email='hello@blockera.ai' --user_url='https://blockera.ai' --description='We shape the future of how block editor can change the web!' && wp-env run cli -- wp eval-file wp-content/plugins/blockera/.github/wp-env-configs/woocommerce/seed-woocommerce.php"
 	}
 }

@@ -51,27 +51,92 @@ const PERF_DIFF_FASTER_COLOR = '#00b000';
 const PERF_DIFF_SLOWER_COLOR = '#e60100';
 
 /**
- * Color a Diff ms / Diff % cell when `|deltaPercent|` exceeds the threshold.
+ * @typedef {{ slower: number, faster: number }} ThresholdPercent
+ */
+
+/**
+ * Parse asymmetric threshold config `{ slower, faster }`.
+ *
+ * @param {unknown} value Config value from scenarios.json.
+ * @param {string} fieldName Field label for error messages.
+ * @return {ThresholdPercent} Parsed thresholds.
+ */
+function parseThresholdPercent(value, fieldName) {
+	if (
+		!value ||
+		typeof value !== 'object' ||
+		Array.isArray(value) ||
+		typeof value.slower !== 'number' ||
+		typeof value.faster !== 'number'
+	) {
+		throw new Error(
+			`${fieldName} must be an object with numeric "slower" and "faster" keys (e.g. { "slower": 25, "faster": 50 }).`
+		);
+	}
+
+	return {
+		slower: value.slower,
+		faster: value.faster,
+	};
+}
+
+/**
+ * Gate on asymmetric percent bounds: -faster <= delta <= slower.
+ *
+ * @param {number} deltaPercent Percent change (Blockera − baseline).
+ * @param {ThresholdPercent} thresholds Scenario thresholds.
+ * @return {{ pass: boolean, reason?: string }} Gate result.
+ */
+function evaluateThreshold(deltaPercent, thresholds) {
+	if (deltaPercent > thresholds.slower) {
+		return {
+			pass: false,
+			reason: `+${deltaPercent}% exceeds slower limit +${thresholds.slower}%`,
+		};
+	}
+
+	if (deltaPercent < -thresholds.faster) {
+		return {
+			pass: false,
+			reason: `${deltaPercent}% exceeds faster limit -${thresholds.faster}%`,
+		};
+	}
+
+	return { pass: true };
+}
+
+/**
+ * @param {ThresholdPercent} thresholds Scenario thresholds.
+ * @return {string} Report column label (faster / slower).
+ */
+function formatThresholdLabel(thresholds) {
+	return `-${thresholds.faster}% / +${thresholds.slower}%`;
+}
+
+/**
+ * Color a Diff ms / Diff % cell when deltaPercent is outside the pass band.
  * Negative (faster) is green; positive (slower) is red. Passing rows and
  * missing percents are left unchanged.
  *
  * @param {string} text Cell text.
  * @param {number|null|undefined} deltaPercent Percent change (Blockera − baseline).
- * @param {number} thresholdPercent Scenario threshold.
+ * @param {ThresholdPercent|null|undefined} thresholds Scenario thresholds.
  * @return {string} Plain or HTML-wrapped cell.
  */
-function formatThresholdDiffCell(text, deltaPercent, thresholdPercent) {
+function formatThresholdDiffCell(text, deltaPercent, thresholds) {
 	if (
 		text === '' ||
 		deltaPercent === null ||
 		deltaPercent === undefined ||
 		Number.isNaN(deltaPercent) ||
-		typeof thresholdPercent !== 'number'
+		!thresholds ||
+		typeof thresholds.slower !== 'number' ||
+		typeof thresholds.faster !== 'number'
 	) {
 		return text;
 	}
 
-	if (Math.abs(deltaPercent) <= thresholdPercent) {
+	if (evaluateThreshold(deltaPercent, thresholds).pass) {
 		return text;
 	}
 
@@ -307,6 +372,9 @@ module.exports = {
 	median,
 	sum,
 	camelCaseDashes,
+	parseThresholdPercent,
+	evaluateThreshold,
+	formatThresholdLabel,
 	formatAsMarkdownTable,
 	formatThresholdDiffCell,
 	formatValue,

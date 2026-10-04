@@ -31,12 +31,7 @@ const config = defineConfig({
 	timeout: parseInt(process.env.TIMEOUT || '', 10) || 600_000,
 	reportSlowTests: null,
 	preserveOutput: 'never',
-	webServer: {
-		...baseConfig.webServer,
-		command: 'npm run env:start',
-		port: Number(baseUrl.port) || 8888,
-		reuseExistingServer: true,
-	},
+	webServer: undefined,
 	use: {
 		...baseConfig.use,
 		baseURL: baseUrl.href,
@@ -51,7 +46,9 @@ const config = defineConfig({
 	projects: [
 		{
 			name: 'chromium',
-			use: { ...require('@playwright/test').devices['Desktop Chrome'] },
+			use: {
+				...require('@playwright/test').devices['Desktop Chrome'],
+			},
 		},
 	],
 });

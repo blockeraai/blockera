@@ -46,6 +46,31 @@ async function setup(page, sectionContent) {
 		throw new Error(`Failed to get post ID from output: ${result.stdout}`);
 	}
 
+	// Latest Comments is site-wide — drop existing comments so CI defaults
+	// (e.g. Hello world) cannot appear above fixture data.
+	const existingCommentIds = String(
+		(
+			await wpCli(
+				page,
+				'wp comment list --status=approve --format=ids',
+				false,
+				true
+			)
+		).stdout || ''
+	).trim();
+
+	if (existingCommentIds) {
+		await wpCli(
+			page,
+			`wp comment delete ${existingCommentIds} --force`,
+			false,
+			true
+		);
+	}
+
+	// Match snapshot/frontend.html author label regardless of site user profile.
+	await wpCli(page, 'wp user update 1 --display_name=admin', false, true);
+
 	// Step 2: Create all comments sequentially with dates
 	// WP-CLI expects --comment_post_ID (not --post_id, which is ignored).
 	for (let i = 0; i < data.comments.length; i++) {
@@ -55,10 +80,9 @@ async function setup(page, sectionContent) {
 			comment_content: commentContent,
 		} = commentData;
 
-		// Calculate seconds ago for this comment (5 seconds per index)
-		// First comment (index 0) is the most recent (0 seconds ago)
+		// Fixed future epoch keeps ordering stable and above any leftover site data.
 		const secondsAgo = i * 5;
-		const commentDate = new Date();
+		const commentDate = new Date('2099-06-15T12:00:00Z');
 		commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
 		const commentDateStr = commentDate
 			.toISOString()

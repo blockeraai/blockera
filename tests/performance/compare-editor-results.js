@@ -8,8 +8,8 @@
  * - `master` — PR Blockera vs Blockera on master.
  *   Gates scenarios with requiresBlockera: true, plus compareToMaster.
  *
- * Gate: fail when abs((current - baseline) / baseline * 100) > thresholdPercent
- * on each scenario's primaryMetric (focus, switchTab, …).
+ * Gate: fail when deltaPercent is outside [-faster, +slower] on each scenario's
+ * primaryMetric (focus, switchTab, …).
  */
 
 const fs = require('node:fs');
@@ -17,6 +17,9 @@ const path = require('node:path');
 const {
 	parseFile,
 	median,
+	parseThresholdPercent,
+	evaluateThreshold,
+	formatThresholdLabel,
 	formatAsMarkdownTable,
 	formatThresholdDiffCell,
 	formatValue,
@@ -115,36 +118,44 @@ function scenarioMatchesBaseline(scenario, mode) {
 }
 
 /**
- * Percent gate for a scenario on the active baseline.
+ * Asymmetric percent gate for a scenario on the active baseline.
  *
  * Core uses `thresholdPercent` (select-blocks is intentionally loose vs Core).
- * Master uses `masterThresholdPercent` (scenario, then defaults, default 20)
+ * Master uses `masterThresholdPercent` (scenario, then defaults)
  * so PR-vs-master is not loosened by a Core-only threshold.
  *
- * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} scenario
- * @param {{thresholdPercent?: number, masterThresholdPercent?: number}} defaults
+ * @param {{thresholdPercent?: {slower: number, faster: number}, masterThresholdPercent?: {slower: number, faster: number}}} scenario
+ * @param {{thresholdPercent?: {slower: number, faster: number}, masterThresholdPercent?: {slower: number, faster: number}}} defaults
  * @param {string} mode
- * @return {number} Threshold percent.
+ * @return {{slower: number, faster: number}} Threshold bounds.
  */
 function scenarioThresholdPercent(scenario, defaults, mode) {
-	const defaultThreshold =
-		typeof defaults.thresholdPercent === 'number'
-			? defaults.thresholdPercent
-			: 20;
-	const defaultMaster =
-		typeof defaults.masterThresholdPercent === 'number'
-			? defaults.masterThresholdPercent
-			: defaultThreshold;
+	const defaultThreshold = parseThresholdPercent(
+		defaults.thresholdPercent,
+		'defaults.thresholdPercent'
+	);
+	const defaultMaster = defaults.masterThresholdPercent
+		? parseThresholdPercent(
+				defaults.masterThresholdPercent,
+				'defaults.masterThresholdPercent'
+			)
+		: defaultThreshold;
 
 	if (mode === 'master') {
-		if (typeof scenario.masterThresholdPercent === 'number') {
-			return scenario.masterThresholdPercent;
+		if (scenario.masterThresholdPercent) {
+			return parseThresholdPercent(
+				scenario.masterThresholdPercent,
+				`scenario "${scenario.id}".masterThresholdPercent`
+			);
 		}
 		return defaultMaster;
 	}
 
-	if (typeof scenario.thresholdPercent === 'number') {
-		return scenario.thresholdPercent;
+	if (scenario.thresholdPercent) {
+		return parseThresholdPercent(
+			scenario.thresholdPercent,
+			`scenario "${scenario.id}".thresholdPercent`
+		);
 	}
 	return defaultThreshold;
 }
@@ -349,11 +360,11 @@ function main() {
 		}
 
 		entry.deltaPercent = round2(((withMs - withoutMs) / withoutMs) * 100);
-		const absPct = Math.abs(entry.deltaPercent);
+		const gate = evaluateThreshold(entry.deltaPercent, threshold);
 
-		if (absPct > threshold) {
+		if (!gate.pass) {
 			entry.status = 'fail';
-			entry.note = `${fmtSigned(entry.deltaPercent, '%')} exceeds ±${threshold}%`;
+			entry.note = `${fmtSigned(entry.deltaPercent, '%')} ${gate.reason}`;
 			failed++;
 		} else {
 			entry.status = 'pass';
@@ -506,7 +517,7 @@ function buildReport({
 		}
 		const scenarioCell = `${r.label}<br>\`${r.metricKey}\``;
 		lines.push(
-			`| ${scenarioCell} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${r.thresholdPercent}% | ${status} |`
+			`| ${scenarioCell} | ${fmtMs(r.withoutMs)} | ${fmtMs(r.withMs)} | ${formatThresholdDiffCell(fmtSigned(r.deltaMs), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdDiffCell(fmtSigned(r.deltaPercent, '%'), r.deltaPercent, r.thresholdPercent)} | ${formatThresholdLabel(r.thresholdPercent)} | ${status} |`
 		);
 	}
 
@@ -516,8 +527,8 @@ function buildReport({
 	);
 	lines.push(
 		baselineMode === 'master'
-			? '- Gate: fail if `|Diff %|` exceeds per-scenario `masterThresholdPercent` (default 20%, either direction)'
-			: '- Gate: fail if `|Diff %|` exceeds per-scenario `thresholdPercent` (either direction)'
+			? '- Gate: fail if `Diff %` is outside per-scenario `masterThresholdPercent` pass band (`-faster` to `+slower`)'
+			: '- Gate: fail if `Diff %` is outside per-scenario `thresholdPercent` pass band (`-faster` to `+slower`)'
 	);
 	lines.push(
 		`- Diff is **Blockera (PR) − ${baselineLabel}** (positive means PR is slower)`
@@ -558,12 +569,22 @@ function buildReport({
 		defaults.masterThresholdPercent !== undefined
 	) {
 		lines.push(
-			`_Default Master threshold: ${defaults.masterThresholdPercent}% (from editor-scenarios.json)._`
+			`_Default Master threshold: ${formatThresholdLabel(
+				parseThresholdPercent(
+					defaults.masterThresholdPercent,
+					'defaults.masterThresholdPercent'
+				)
+			)} (from editor-scenarios.json)._`
 		);
 		lines.push('');
 	} else if (defaults.thresholdPercent !== undefined) {
 		lines.push(
-			`_Default threshold: ${defaults.thresholdPercent}% (from editor-scenarios.json)._`
+			`_Default threshold: ${formatThresholdLabel(
+				parseThresholdPercent(
+					defaults.thresholdPercent,
+					'defaults.thresholdPercent'
+				)
+			)} (from editor-scenarios.json)._`
 		);
 		lines.push('');
 	}

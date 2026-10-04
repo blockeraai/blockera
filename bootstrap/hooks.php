@@ -57,6 +57,14 @@ if (! blockera_is_frontend_request() && ! blockera_is_editor_request()) {
 $blockera_setup_render_block = Setup::getInstance();
 $blockera_setup_render_block->setPluginPath(blockera_core_config('app.vendor_path'));
 $blockera_available_blocks = blockera_get_available_blocks();
+
+if ( function_exists( 'blockera_get_login_page_block_types' ) ) {
+	$blockera_available_blocks = array_merge(
+		$blockera_available_blocks,
+		blockera_get_login_page_block_types()
+	);
+}
+
 $blockera_setup_render_block->setAvailableBlocks( $blockera_available_blocks );
 add_action(
 	'wp_loaded',

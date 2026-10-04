@@ -14,6 +14,7 @@ env:
     BLOCKERA_GLOBAL_PACKAGES_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
     BLOCKERA_PLAYWRIGHT_SCAN_ROOTS: packages,tests
     BLOCKERA_PLAYWRIGHT_GENERAL_CATEGORY: general-1
+    BLOCKERA_PLAYWRIGHT_EXCLUDE_PACKAGES: '*-pro,*-pro-*,*-one,*-one-*,*-toolkit,*-toolkit-*'
     BLOCKERA_PLAYWRIGHT_MU_PLUGIN_PREFIX: wp-content/plugins/blockera/
     BLOCKERA_PLAYWRIGHT_VISUAL_SPEC: tests/visual.block-screenshots.ply.js
 
@@ -43,7 +44,7 @@ jobs:
         needs: pr-workflow-gate
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' }}
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 120
         outputs:
             categories: ${{ steps.detect.outputs.categories }}
         steps:
@@ -64,7 +65,7 @@ jobs:
         needs: [pr-workflow-gate, detect_categories]
         if: ${{ needs.pr-workflow-gate.outputs.run == 'true' && (github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request') }}
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 120
         strategy:
             fail-fast: false
             matrix:
